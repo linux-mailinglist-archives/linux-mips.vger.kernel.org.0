@@ -2,113 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64B46B034E
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 10:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAD16B0426
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 11:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjCHJob (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Mar 2023 04:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
+        id S230089AbjCHK0e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Mar 2023 05:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjCHJoP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 04:44:15 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABD14DE01
-        for <linux-mips@vger.kernel.org>; Wed,  8 Mar 2023 01:43:09 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-33-CAryPP8kPFqZSO2VJYhQlQ-1; Wed, 08 Mar 2023 09:42:45 +0000
-X-MC-Unique: CAryPP8kPFqZSO2VJYhQlQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Wed, 8 Mar
- 2023 09:42:43 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Wed, 8 Mar 2023 09:42:43 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Keguang Zhang' <keguang.zhang@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Subject: RE: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
-Thread-Topic: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
-Thread-Index: AQHZUKdVlp3MaV2isEWZMPAiZIsbQK7woloA
-Date:   Wed, 8 Mar 2023 09:42:43 +0000
-Message-ID: <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
-References: <20230302125215.214014-1-keguang.zhang@gmail.com>
- <20230302125215.214014-3-keguang.zhang@gmail.com>
- <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
- <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com>
-In-Reply-To: <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S230417AbjCHK02 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 05:26:28 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51762B78B5
+        for <linux-mips@vger.kernel.org>; Wed,  8 Mar 2023 02:26:26 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id f13so14932813vsg.6
+        for <linux-mips@vger.kernel.org>; Wed, 08 Mar 2023 02:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678271185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGmotPoG2120yB70tKLvm/NcUMvlY8fYIwzXAE2sT5E=;
+        b=ikmN3FQLY36alaZWM7yikv6mQnHmAO0CBsIMnVSL0SKNv8lQ6Jgck86pX0+z/SNheX
+         fCJpcMd2Vri0U8uNDvBhlt5K6RP4f5Vnwp9pQT2iv6C8jSHQUMxtQL9muBb/2qclAi5N
+         0lNXLlkl5sisMB6TrhuNIjxJTyj2kvySbMn3Uz9wbex7OfKBYn7WSpF+BwkzjZgH8oQM
+         NldSecCcEDlHOQeZEqoaRbIogSqOeSnMLcANZ2iDNUX1f1f2nX5F9YL5bQk/i3yn9NUj
+         0z3V6I6y0HT02asXaBJam4cjb768Whr+HEQXJ9BJZZv6MeFI/uP8qoVkA7uxVch2JQnB
+         0V7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678271185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AGmotPoG2120yB70tKLvm/NcUMvlY8fYIwzXAE2sT5E=;
+        b=qk6l1AmEvkKoCWZvD3305L+Qo133bST5abgKS78/yw6XQzTnAbSPxIUCM05Li+JL1z
+         zr4zKkKf+tUKGryJ9rptDIp+9R8flTpC78lERmoyCxPD5I2rjcRXX8e5LjRbbw1bqnPB
+         mNF8eUrKQGxpdMcMU3de5zRHgkT8qEqohu9QXoUMH/VjSKmxZTu9mHU54TaQD1FyQOq9
+         tXcKAgAmDlVfRrR3KUgZHzhfu6BDV9VVIU1DMv2PirnzWWVQMKrgr1dTRdfun37VGSyC
+         mdKW6gN3c1NW9xnvXcrvw9YgGSteiezf3eFoInD5wvHZnVhuOTXINdEqmxXMsRnzZnQT
+         7PPw==
+X-Gm-Message-State: AO0yUKXD1mglcHoaeZe6r5E56DE4GMXwhSXFAbz5hi1xklY885QgcW2Z
+        tfoO73zFVWyZjXknBWXbIinwwcGM7W6WGzR3ui+/GQ==
+X-Google-Smtp-Source: AK7set+nfFCDXVga6XlswqORZjNQ+XvGO2KUTaYGALjfouQWJGkZeidT1GEBY8YrejCjCD/g0wbdlikML4iY6myTQWA=
+X-Received: by 2002:a67:ea49:0:b0:411:a740:c3ea with SMTP id
+ r9-20020a67ea49000000b00411a740c3eamr11948516vso.0.1678271185398; Wed, 08 Mar
+ 2023 02:26:25 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230306151532.23246-1-sensor1010@163.com> <ZAZvH6CFtH4I1BOm@surfacebook>
+In-Reply-To: <ZAZvH6CFtH4I1BOm@surfacebook>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 8 Mar 2023 11:26:14 +0100
+Message-ID: <CAMRc=MemEXVcqL0axaduTrAZhT1Zx6APCY_qo2TM2E-aD=Seqw@mail.gmail.com>
+Subject: Re: [PATCH v1] drivers/gpio: remove redundant platform_set_drvdata()
+To:     andy.shevchenko@gmail.com
+Cc:     Lizhe <sensor1010@163.com>, linus.walleij@linaro.org,
+        geert+renesas@glider.be, info@metux.net, shc_work@mail.ru,
+        j-keerthy@ti.com, hoan@os.amperecomputing.com,
+        fancer.lancer@gmail.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        kaloz@openwrt.org, khalasa@piap.pl, keguang.zhang@gmail.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogS2VndWFuZyBaaGFuZw0KPiBTZW50OiAwNyBNYXJjaCAyMDIzIDAzOjQ2DQo+IA0KPiBP
-biBNb24sIE1hciA2LCAyMDIzIGF0IDU6MzDigK9QTSBCYXJ0b3N6IEdvbGFzemV3c2tpIDxicmds
-QGJnZGV2LnBsPiB3cm90ZToNCj4gPg0KPiA+IE9uIFRodSwgTWFyIDIsIDIwMjMgYXQgMTo1MuKA
-r1BNIEtlZ3VhbmcgWmhhbmcgPGtlZ3VhbmcuemhhbmdAZ21haWwuY29tPiB3cm90ZToNCj4gPiA+
-DQo+ID4gPiBUaGlzIHBhdGNoIHJlcGxhY2UgX19yYXdfcmVhZGwoKSAmIF9fcmF3X3dyaXRlbCgp
-IHdpdGggcmVhZGwoKSAmIHdyaXRlbCgpLg0KPiA+ID4NCj4gPg0KPiA+IFBsZWFzZSBzYXkgV0hZ
-IHlvdSdyZSBkb2luZyB0aGlzLg0KPiA+DQo+IHJlYWRsICYgd3JpdGVsIGNvbnRhaW4gbWVtb3J5
-IGJhcnJpZXJzIHdoaWNoIGNhbiBndWFyYW50ZWUgYWNjZXNzIG9yZGVyLg0KDQpTbyB3aGF0Li4u
-DQoNClRoZXJlIGlzIGEgZGF0YSBkZXBlbmRlbmN5IGJldHdlZW4gdGhlIHJlYWQgYW5kIHdyaXRl
-Lg0KVGhlIHJlYWQgY2FuJ3QgYmUgc2NoZWR1bGVkIGJlZm9yZSB0aGUgbG9jayBpcyBhY3F1aXJl
-ZC4NClRoZSB3cml0ZSBjYW4ndCBiZSBzY2hlZHVsZWQgYWZ0ZXIgdGhlIGxvY2sgaXMgcmVsZWFz
-ZWQuDQoNClNvIGFueSBiYXJyaWVycyBpbiByZWFkbCgpL3dyaXRlbCgpIGFyZW4ndCBuZWVkZWQu
-DQoNCklmIHRoZXkgYXJlIG9ubHkgY29tcGlsZSBiYXJyaWVycyB0aGV5J2xsIGhhdmUgbm8gcmVh
-bCBlZmZlY3QuDQpPVE9IIGlmIHRoZSBjcHUgbmVlZHMgYWN0dWFsIHN5bmNocm9uaXNpbmcgaW5z
-dHJ1Y3Rpb25zIChhcyBzb21lDQpwcGMgZG8pIHRoZW4gdGhleSB3aWxsIHNsb3cgdGhpbmdzIGRv
-d24uDQoNCglEYXZpZA0KDQo+IA0KPiA+IEJhcnQNCj4gPg0KPiA+ID4gU2lnbmVkLW9mZi1ieTog
-S2VndWFuZyBaaGFuZyA8a2VndWFuZy56aGFuZ0BnbWFpbC5jb20+DQo+ID4gPiAtLS0NCj4gPiA+
-IFYxIC0+IFYyOiBTcGxpdCB0aGlzIGNoYW5nZSB0byBhIHNlcGFyYXRlIHBhdGNoDQo+ID4gPiAt
-LS0NCj4gPiA+ICBkcml2ZXJzL2dwaW8vZ3Bpby1sb29uZ3NvbjEuYyB8IDggKysrKy0tLS0NCj4g
-PiA+ICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiA+
-ID4NCj4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwaW8vZ3Bpby1sb29uZ3NvbjEuYyBiL2Ry
-aXZlcnMvZ3Bpby9ncGlvLWxvb25nc29uMS5jDQo+ID4gPiBpbmRleCA4ODYyYzllYTBkNDEuLmI2
-YzExY2FhM2FkZSAxMDA2NDQNCj4gPiA+IC0tLSBhL2RyaXZlcnMvZ3Bpby9ncGlvLWxvb25nc29u
-MS5jDQo+ID4gPiArKysgYi9kcml2ZXJzL2dwaW8vZ3Bpby1sb29uZ3NvbjEuYw0KPiA+ID4gQEAg
-LTIzLDggKzIzLDggQEAgc3RhdGljIGludCBsczF4X2dwaW9fcmVxdWVzdChzdHJ1Y3QgZ3Bpb19j
-aGlwICpnYywgdW5zaWduZWQgaW50IG9mZnNldCkNCj4gPiA+ICAgICAgICAgdW5zaWduZWQgbG9u
-ZyBmbGFnczsNCj4gPiA+DQo+ID4gPiAgICAgICAgIHJhd19zcGluX2xvY2tfaXJxc2F2ZSgmZ2Mt
-PmJncGlvX2xvY2ssIGZsYWdzKTsNCj4gPiA+IC0gICAgICAgX19yYXdfd3JpdGVsKF9fcmF3X3Jl
-YWRsKGdwaW9fcmVnX2Jhc2UgKyBHUElPX0NGRykgfCBCSVQob2Zmc2V0KSwNCj4gPiA+IC0gICAg
-ICAgICAgICAgICAgICAgIGdwaW9fcmVnX2Jhc2UgKyBHUElPX0NGRyk7DQo+ID4gPiArICAgICAg
-IHdyaXRlbChyZWFkbChncGlvX3JlZ19iYXNlICsgR1BJT19DRkcpIHwgQklUKG9mZnNldCksDQo+
-ID4gPiArICAgICAgICAgICAgICBncGlvX3JlZ19iYXNlICsgR1BJT19DRkcpOw0KPiA+ID4gICAg
-ICAgICByYXdfc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZ2MtPmJncGlvX2xvY2ssIGZsYWdzKTsN
-Cj4gPiA+DQo+ID4gPiAgICAgICAgIHJldHVybiAwOw0KPiA+ID4gQEAgLTM1LDggKzM1LDggQEAg
-c3RhdGljIHZvaWQgbHMxeF9ncGlvX2ZyZWUoc3RydWN0IGdwaW9fY2hpcCAqZ2MsIHVuc2lnbmVk
-IGludCBvZmZzZXQpDQo+ID4gPiAgICAgICAgIHVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+ID4gPg0K
-PiA+ID4gICAgICAgICByYXdfc3Bpbl9sb2NrX2lycXNhdmUoJmdjLT5iZ3Bpb19sb2NrLCBmbGFn
-cyk7DQo+ID4gPiAtICAgICAgIF9fcmF3X3dyaXRlbChfX3Jhd19yZWFkbChncGlvX3JlZ19iYXNl
-ICsgR1BJT19DRkcpICYgfkJJVChvZmZzZXQpLA0KPiA+ID4gLSAgICAgICAgICAgICAgICAgICAg
-Z3Bpb19yZWdfYmFzZSArIEdQSU9fQ0ZHKTsNCj4gPiA+ICsgICAgICAgd3JpdGVsKHJlYWRsKGdw
-aW9fcmVnX2Jhc2UgKyBHUElPX0NGRykgJiB+QklUKG9mZnNldCksDQo+ID4gPiArICAgICAgICAg
-ICAgICBncGlvX3JlZ19iYXNlICsgR1BJT19DRkcpOw0KPiA+ID4gICAgICAgICByYXdfc3Bpbl91
-bmxvY2tfaXJxcmVzdG9yZSgmZ2MtPmJncGlvX2xvY2ssIGZsYWdzKTsNCj4gPiA+ICB9DQo+ID4g
-Pg0KPiA+ID4gLS0NCj4gPiA+IDIuMzQuMQ0KPiA+ID4NCj4gDQo+IA0KPiANCj4gLS0NCj4gQmVz
-dCByZWdhcmRzLA0KPiANCj4gS2VsdmluIENoZXVuZw0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
-TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
-VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Mon, Mar 6, 2023 at 11:54=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
+>
+> Mon, Mar 06, 2023 at 11:15:32PM +0800, Lizhe kirjoitti:
+> > remove redundant platform_set_drvdata(),
+> > Because there is no place to use the platform_get_drvdata
+>
+> The commit message has to be improved:
+> - English grammar and punctuation
+> - style of func()
+> - clearer wording on what it all means
+>
+> Note, to get driver data the dev_get_drvdata() can be used. Do you aware =
+about
+> this? And hHow did you check these drivers?
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
+I would also add to that: you need to use your full first and family
+name in SoB because I assume you don't just go by "Lizhe".
+
+Bartosz
