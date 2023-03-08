@@ -2,112 +2,220 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B796B07E5
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 14:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740786B0809
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 14:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjCHNEm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Mar 2023 08:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S231162AbjCHNLL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Mar 2023 08:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbjCHNEZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 08:04:25 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6951C85AD;
-        Wed,  8 Mar 2023 05:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678280521; x=1709816521;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cwwPgUT/6iCi8/PdF/JupDJbGBv9MyxIHRz/u56mKO4=;
-  b=Z5+tIfPokxHQ6Z1A3KDB3x9JApa6j89SsQnE/U5BiRgqD5JFcyOgSb6h
-   h/hgC1CHrKh7EwEU87SHWLxsf5gVnmDgw0sXjgmJiSTXzgtLOzmdtdq3R
-   UHsJSSDylg+7MNeNk9cDt25PcRTyG6MtTbCse4+++n0k3VtBxOD0kXo8z
-   b8G+KNcmrMMxjGCPEG0UIkRYlghZXCYZkbZmsvrxbVqvJMKPWeNF0zoxE
-   yIlyzxr6upIM01eVeeYf793Mwj4rN+aqfspreq4k2CrcIOFXI1h0osMYe
-   QsP3q40t2duCRROId2bSe6e/DRv/PfRC0Pr8KD1oo1qwYCL9oHFdC70hW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="337662496"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="337662496"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 05:00:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="787114848"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="787114848"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2023 05:00:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZtPS-00HQtx-0K;
-        Wed, 08 Mar 2023 15:00:46 +0200
-Date:   Wed, 8 Mar 2023 15:00:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S231192AbjCHNKq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 08:10:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50633838A5
+        for <linux-mips@vger.kernel.org>; Wed,  8 Mar 2023 05:08:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678280855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QTt8B6xdpie3JQtkOGQkvv8PGf5htHiQBmIwsiz6QFE=;
+        b=DIop1s5cTi6V/wwiX8zzL2aSs32Vy5PG336FZWT190J2tNomCJbdmDmkB2RDNuHqrlB0we
+        IVQaOUggkiuWvdUvhPDBWP1LEpEKWlv4nFFVknkQWryu2l7p1LUwh3f/J+NoPgCdJHxxAn
+        BYvqTAXxJR2ZyFlcT4ujJLUm81iKGts=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-61-zmKLBDpnNMKup2LB2LatPQ-1; Wed, 08 Mar 2023 08:07:34 -0500
+X-MC-Unique: zmKLBDpnNMKup2LB2LatPQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B469857D07;
+        Wed,  8 Mar 2023 13:07:33 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-137.pek2.redhat.com [10.72.12.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0CAC32166B26;
+        Wed,  8 Mar 2023 13:07:25 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        mpe@ellerman.id.au, geert@linux-m68k.org, mcgrof@kernel.org,
+        hch@infradead.org, Baoquan He <bhe@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
+        Helge Deller <deller@gmx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Phil =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Subject: Re: next: arch/mips/ar7/gpio.c:19:33: error: field 'chip' has
- incomplete type
-Message-ID: <ZAiG/fy0BQ7aP6Qq@smile.fi.intel.com>
-References: <CA+G9fYvX8W6R6FtxZbCmdeKhSikmdD9Tten8U5qXX4cG3+-1VQ@mail.gmail.com>
- <76be6056-2057-4199-9dd2-52d28bbb37e8@app.fastmail.com>
+        linux-mips@vger.kernel.org
+Subject: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
+Date:   Wed,  8 Mar 2023 21:07:08 +0800
+Message-Id: <20230308130710.368085-3-bhe@redhat.com>
+In-Reply-To: <20230308130710.368085-1-bhe@redhat.com>
+References: <20230308130710.368085-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76be6056-2057-4199-9dd2-52d28bbb37e8@app.fastmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 07:46:26PM +0100, Arnd Bergmann wrote:
-> On Tue, Mar 7, 2023, at 18:10, Naresh Kamboju wrote:
-> > Following build regression found while building mips ar7_defconfig
-> > on Linux next-20230307 tag.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Please find the build log and details below.
-> >
-> > build log:
-> > --------
-> > arch/mips/ar7/gpio.c:19:33: error: field 'chip' has incomplete type
-> >    19 |         struct gpio_chip        chip;
-> 
-> It sounds like a result of 21d9526d13b5 ("gpiolib: Make the
-> legacy <linux/gpio.h> consumer-only"). I haven't tried it,
-> but I think this should fix it, unless there is another bug:
-> 
-> --- a/arch/mips/ar7/gpio.c
-> +++ b/arch/mips/ar7/gpio.c
-> @@ -7,7 +7,7 @@
->  
->  #include <linux/init.h>
->  #include <linux/export.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/driver.h>
->  
->  #include <asm/mach-ar7/ar7.h>
+With the adding, some default ioremap_xx methods defined in
+asm-generic/io.h can be used. E.g the default ioremap_uc() returning
+NULL.
 
-Thank you!
-Can you send this as a formal patch?
+Signed-off-by: Baoquan He <bhe@redhat.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Serge Semin <fancer.lancer@gmail.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org
+---
+ arch/mips/include/asm/io.h | 78 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 70 insertions(+), 8 deletions(-)
 
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index cec8347f0b85..6756baadba6c 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -126,6 +126,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
+  *     almost all conceivable cases a device driver should not be using
+  *     this function
+  */
++#define phys_to_virt phys_to_virt
+ static inline void * phys_to_virt(unsigned long address)
+ {
+ 	return __va(address);
+@@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
+ __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
+ #endif
+ 
++#define readb readb
++#define readw readw
++#define readl readl
++#define writeb writeb
++#define writew writew
++#define writel writel
++
++#ifdef CONFIG_64BIT
++#define readq readq
++#define writeq writeq
++#define __raw_readq __raw_readq
++#define __raw_writeq __raw_writeq
++#endif
++
++#define __raw_readb __raw_readb
++#define __raw_readw __raw_readw
++#define __raw_readl __raw_readl
++#define __raw_writeb __raw_writeb
++#define __raw_writew __raw_writew
++#define __raw_writel __raw_writel
++
+ #define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
+ 	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
+ 	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
+@@ -374,6 +396,27 @@ BUILDIO_IOPORT(l, u32)
+ BUILDIO_IOPORT(q, u64)
+ #endif
+ 
++#define inb inb
++#define inw inw
++#define inl inl
++#define inb_p inb_p
++#define inw_p inw_p
++#define inl_p inl_p
++
++#define outb outb
++#define outw outw
++#define outl outl
++#define outb_p outb_p
++#define outw_p outw_p
++#define outl_p outl_p
++
++#ifdef CONFIG_64BIT
++#define inq inq
++#define outq outq
++#define inq_p inq_p
++#define outq_p outq_p
++#endif
++
+ #define __BUILDIO(bwlq, type)						\
+ 									\
+ __BUILD_MEMORY_SINGLE(____raw_, bwlq, type, 1, 0, 0)
+@@ -412,14 +455,6 @@ __BUILDIO(q, u64)
+ #define writeq_be(val, addr)						\
+ 	__raw_writeq(cpu_to_be64((val)), (__force unsigned *)(addr))
+ 
+-/*
+- * Some code tests for these symbols
+- */
+-#ifdef CONFIG_64BIT
+-#define readq				readq
+-#define writeq				writeq
+-#endif
+-
+ #define __BUILD_MEMORY_STRING(bwlq, type)				\
+ 									\
+ static inline void writes##bwlq(volatile void __iomem *mem,		\
+@@ -480,14 +515,39 @@ BUILDSTRING(l, u32)
+ BUILDSTRING(q, u64)
+ #endif
+ 
++#define insb insb
++#define insw insw
++#define insl insl
++#define outsb outsb
++#define outsw outsw
++#define outsl outsl
++
++#define readsb readsb
++#define readsw readsw
++#define readsl readsl
++#define writesb writesb
++#define writesw writesw
++#define writesl writesl
++
++#ifdef CONFIG_64BIT
++#define insq insq
++#define readsq readsq
++#define readsq readsq
++#define writesq writesq
++#endif
++
++
++#define memset_io memset_io
+ static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
+ {
+ 	memset((void __force *) addr, val, count);
+ }
++#define memcpy_fromio memcpy_fromio
+ static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
+ {
+ 	memcpy(dst, (void __force *) src, count);
+ }
++#define memcpy_toio memcpy_toio
+ static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
+ {
+ 	memcpy((void __force *) dst, src, count);
+@@ -556,4 +616,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
+ 
+ void __ioread64_copy(void *to, const void __iomem *from, size_t count);
+ 
++#include <asm-generic/io.h>
++
+ #endif /* _ASM_IO_H */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
