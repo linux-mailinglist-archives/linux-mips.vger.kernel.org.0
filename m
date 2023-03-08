@@ -2,123 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C086B10DA
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 19:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3ED56B1347
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 21:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCHSPd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Mar 2023 13:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
+        id S230367AbjCHUmr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Mar 2023 15:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjCHSPc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 13:15:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F54282362
-        for <linux-mips@vger.kernel.org>; Wed,  8 Mar 2023 10:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678299241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oqVUMBgLdWuWEkEiWBuCdYbN5kgycGc8p0MkzJipZw8=;
-        b=GPeTbRNinbIQjNht+2WkSJvZjMljWhc3tvMCLobN+t7xTVl0036sptF60yhErT4VnZzL8u
-        TWY0d7l2ZGdyKKdjVmZScWt2N6mpnNhizTIsG3QiDXWVg/aJRLUUGA3T5dwphREjcUjpu0
-        OjZxZq/JVQhsNjMeEZsc4Q4970A8Org=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-250-J4c3GMsuM5CvkSq_QtBHug-1; Wed, 08 Mar 2023 13:13:59 -0500
-X-MC-Unique: J4c3GMsuM5CvkSq_QtBHug-1
-Received: by mail-wr1-f69.google.com with SMTP id 15-20020a056000156f00b002ca79db6d42so3063883wrz.18
-        for <linux-mips@vger.kernel.org>; Wed, 08 Mar 2023 10:13:59 -0800 (PST)
+        with ESMTP id S230151AbjCHUmq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Mar 2023 15:42:46 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D1B1F91A;
+        Wed,  8 Mar 2023 12:42:45 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id m25-20020a05683026d900b006941a2838caso9701855otu.7;
+        Wed, 08 Mar 2023 12:42:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678299239;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oqVUMBgLdWuWEkEiWBuCdYbN5kgycGc8p0MkzJipZw8=;
-        b=XPoLMVdAj2FLrKDFTk6imnm6IWWSXZr0826J6zKaXvGdyYV8KxiRWEr+ysvip2UnZP
-         S7hO1WIP4rBupSRtXlI6F67cHlzHH64tX8w5AX3OSi7VV4DYrvEJgkQZ0ucPxSYWFmZq
-         Quj+EdJwVbqZuYYduzdNqhOFZlsC2yv4g+SPA8VbMFWyjkeBGb3WgZ3lrtaXYQmNTZEb
-         3LZwf5iZxCI7motOUDFa0jTmbF393moIElGIY1jn3CkOkfYJ9vr/ShFYRngY9b3M7y8b
-         2ZDrWp9iQvSD2ETR9LjM1pGLFBBt29YOnyhfeAjELyjxPEJwi1bNxO+i30+fWFVWHpdY
-         acVg==
-X-Gm-Message-State: AO0yUKUTW/8JBQkkqcUgrUbT4bLnJWHC298CFAzLncaEu2Wj3pGbZJ3Z
-        lieDYLuq9VdIVQPFPaHtGR++z7pjm1r7LFZ/BP4FN69ntvjU9tSc9A+FCMII0gKHLzsDsBttEI6
-        TfRrLIMIfxLJFGiNijplJVw==
-X-Received: by 2002:a05:600c:1e8d:b0:3e2:669:757 with SMTP id be13-20020a05600c1e8d00b003e206690757mr16617466wmb.10.1678299238876;
-        Wed, 08 Mar 2023 10:13:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set+WPqgI4NzGQjNxiuwyUBe8i9sylAhAstDgZK0opmz/cBRzcC+hzIeoGWHq+f4Os0qszuvRgQ==
-X-Received: by 2002:a05:600c:1e8d:b0:3e2:669:757 with SMTP id be13-20020a05600c1e8d00b003e206690757mr16617435wmb.10.1678299238573;
-        Wed, 08 Mar 2023 10:13:58 -0800 (PST)
-Received: from ?IPV6:2003:cb:c71b:cb00:d372:1da8:9e9e:422d? (p200300cbc71bcb00d3721da89e9e422d.dip0.t-ipconnect.de. [2003:cb:c71b:cb00:d372:1da8:9e9e:422d])
-        by smtp.gmail.com with ESMTPSA id n4-20020a05600c4f8400b003e20fa01a86sm201680wmq.13.2023.03.08.10.13.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 10:13:58 -0800 (PST)
-Message-ID: <a5c9b925-57ac-eeab-6258-0ff9fed16af7@redhat.com>
-Date:   Wed, 8 Mar 2023 19:13:56 +0100
+        d=1e100.net; s=20210112; t=1678308165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bx+D/aRg96Xv1xhHfuRNJtHE/XSALiBjprbVX5obgUQ=;
+        b=rxQW0f5eIhURPWzSXRSyjSVNKFitYo26dPH05Kc188yNwXPVAsUJZVvrRE7yuFzWV7
+         S+UpO7FEhOE9uUBeQivc0MbPtGnHXEoTg0KEgYDfWG+NT/5koebXSJmKyXS9QzIkMlus
+         x0afi4fdLVzi3ivzvigR3TMiDqBhGDPaTFO02n0nv5B8ixGp4DMBQcHEHqhYPms5JhPh
+         9Vy1Ypdf0lMsqSvUQo+wnxigZS0N/xc9hL7u7SoSGWbuskfMev8U1si9acd0ECpa0FS6
+         rHEsBGJhT7NmuipiW9pRlvb3+OkdbZBZIodf6ruyAhYklaPIrmR+CMIQU6xjMV+GuP47
+         Qtbw==
+X-Gm-Message-State: AO0yUKV+TuoTbMDZ7wpJS2mvMQAEBVZkwQ/eCUjPmBnGoySCdWW4KIuO
+        rPmejdI4isI8u41h+L6ySdcIHqMWsA==
+X-Google-Smtp-Source: AK7set/6BsPdujjJq8G0YkPgYq2OeOO2li/rSi30P2jJIG98XFB0DpAns146xxM0NNpmfpFIsy83JQ==
+X-Received: by 2002:a05:6830:565:b0:694:88f5:f5ed with SMTP id f5-20020a056830056500b0069488f5f5edmr2829378otc.24.1678308164741;
+        Wed, 08 Mar 2023 12:42:44 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k3-20020a9d4b83000000b00690e6d56670sm6980752otf.25.2023.03.08.12.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 12:42:44 -0800 (PST)
+Received: (nullmailer pid 3744004 invoked by uid 1000);
+        Wed, 08 Mar 2023 20:42:43 -0000
+Date:   Wed, 8 Mar 2023 14:42:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH 07/20] dt-bindings: pinctrl: ralink: improve bindings
+Message-ID: <20230308204243.GA3735537-robh@kernel.org>
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+ <20230303002850.51858-8-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm: add PTE pointer parameter to
- flush_tlb_fix_spurious_fault()
-Content-Language: en-US
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-x86 <x86@kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-References: <20230306161548.661740-1-gerald.schaefer@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230306161548.661740-1-gerald.schaefer@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303002850.51858-8-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 06.03.23 17:15, Gerald Schaefer wrote:
-> s390 can do more fine-grained handling of spurious TLB protection faults,
-> when there also is the PTE pointer available.
+On Fri, Mar 03, 2023 at 03:28:36AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Therefore, pass on the PTE pointer to flush_tlb_fix_spurious_fault() as
-> an additional parameter.
+> Move additionalProperties to the top. It's easier to read than after a long
+> indented section.
 > 
-> This will add no functional change to other architectures, but those with
-> private flush_tlb_fix_spurious_fault() implementations need to be made
-> aware of the new parameter.
+> Drop the quotes from the referred schemas.
+
+Not the greatest subject as every change improves something and bindings 
+is stated twice. Hard to come up with something better since you've 
+combined 2 different kinds of changes which you shouldn't do either. So 
+I'd split this patch into 2.
+
 > 
-> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
-> Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+>  .../bindings/pinctrl/ralink,mt7620-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,mt7621-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml          | 9 ++++-----
+>  5 files changed, 20 insertions(+), 25 deletions(-)
