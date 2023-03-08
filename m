@@ -2,63 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DA06AFCFC
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 03:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8165A6AFD13
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Mar 2023 03:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCHCqj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Mar 2023 21:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S229651AbjCHCyL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Mar 2023 21:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjCHCqi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 21:46:38 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65404617C;
-        Tue,  7 Mar 2023 18:46:36 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id j11so40781504edq.4;
-        Tue, 07 Mar 2023 18:46:36 -0800 (PST)
+        with ESMTP id S229579AbjCHCyK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Mar 2023 21:54:10 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0665C24491;
+        Tue,  7 Mar 2023 18:54:09 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so60265413edb.10;
+        Tue, 07 Mar 2023 18:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678243595;
+        d=gmail.com; s=20210112; t=1678244047;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RrKMiwGYeVx1STAfxRYkJBqPZfFoqtzB1W9N4+PknWc=;
-        b=NywrVP/0Lx73MjbKGOcCV1MT5EUgqxwK3D+U9hPTdWfVPUmv/DrF39ocdb0BKdYY05
-         y+HJuEhSfvLSoPE761mXyXSU9dHpFvVVbMdb6MNnbrxyRdnGKagWTbP6Zvew6CsJZdQU
-         AqAQDia5yNhbyvl1rrB62puySOAWBt2oyG4moNlV1jT0S7FAeTMgvQc+wSuJkAItJN2y
-         j8MsbA0mT0Epv61gRpuyWIapgj6N+ehBA14lVThzhZf4dHV8w6kEPT5rvCa1Qp/ehl2D
-         KptjFgO/CPYf8EUPHYj1hTnKaiYgxvQ+j2I0bZG3JGPpGHuAKJ+UT3L/xhwZEsu8y9nt
-         utCw==
+        bh=BiXxl4yublkr4NofbHFzE7KSc7LE/+7BUAxLqu/b6HI=;
+        b=SPCuiHS3/Cul4e+pzd0NFK5eBb2FYG0wBr+VS7XcHRFkTO/vVwlrrjV2oMJYSvb9l7
+         zr4TIdp8Ne3A11VLT0cvgADcNaCOw5zvwG2xIEt7glmtRTFUnSOP9sNJ/pNw2yD9KxYZ
+         64IVBObFGcwtiaBHcQjkF4HY4Z9CJq0NQC9kqD+iicJc8EOKCLElUWY1pBKw0R5TLAQe
+         oUl18Ce0Vxg1ZRYuqBAeDpNYyboIh5xXexqAjAhAEQaCwgUQdau32bW9Z3sI1LhsAYQy
+         GH43rBnwKeYLFlEdZwPCSIeyo7UpN1uNfFR7sruaKCWqBdbwPJSHc7QNkRr3Q+45uT91
+         1cEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678243595;
+        d=1e100.net; s=20210112; t=1678244047;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RrKMiwGYeVx1STAfxRYkJBqPZfFoqtzB1W9N4+PknWc=;
-        b=Bb22urqu2twdVrqrScXcsjnMm6JRHaeskBapDCjurw5Suzrw+LJIicEXjF83rTSuDc
-         E/PZSmgUKra0G89130EmjI4JJfxf7TX2fk3ycSEXQsT5KN56uqxRq7BGTqk989xcSGRo
-         bs+5NC8II3V9UbuW/isqJf3V8eUGtHN4YW+Zj4N4aQ//1f/hvgRFHpVmgNXfG1nnRwtH
-         f25jbLd/mOZoxp5DH9GCUKUlFZfF/VcLZT0G3BkPVP4g2er7hui8aSI8SEj3YVaUs6sR
-         lo07IxvzMjQSlz7l1SN4hQQUGB2378FH3Rdt/mBM49UPUpB3PDGbmhLb3Vjsj5CkJfs9
-         FpOA==
-X-Gm-Message-State: AO0yUKU3y+oDhGU+f7xa2+npbqaQCrOxR0KLSBkZuylhhFc2SNl2Ch5X
-        c6gHfoazW5KAGE7dVzqaJl2sBskjtoA1dpYHi5RhbwYjU4NP+A==
-X-Google-Smtp-Source: AK7set9aFJDvx+U0Z7Cj5PrVkC8DU9/0MT+LP7J1ksieiqbJxabr8nWd5xbsIEKQlqhz+YGs0xMRfS6oVwr0nKVoPV8=
+        bh=BiXxl4yublkr4NofbHFzE7KSc7LE/+7BUAxLqu/b6HI=;
+        b=2Ij1dN7828XAEjmhrUKkbSOb408MYP+kUxNirWxgmlh8p5CvoOlfvBv/pgOrltFvVi
+         mrBr2cSwGLkCvR7R5Zkn/iyWVGCoaZexpe/XX/GaJ9IwGPUd/+mN0AoR29SPcCh8sv9U
+         P3xS9vJ6m5oOCGB3HkmdnhtIa+1b6E/Snwr5zrf0HCdv1WuLIqc0pMcbUJZm89kUy+op
+         K1ziXUpUp3VQqqxTaTkMXp1FeRn+xb1C13ueZHDpOjmjaiu2hHzfZX9kj1uwv8ewzCNR
+         /cRkbBlXGG3j5+sYI3zUCcSeO95MhV02aou0MVN1ntaM6ya9Hu+Vw8MLFZ5TQBSucauL
+         gJfw==
+X-Gm-Message-State: AO0yUKU56TKtPMaabYZl3xmDR+Mf2389RPOmHY9Gpe1rxh7gJGmAGAiv
+        rpHBop59namxl1kILuS80LXtiM5UMZHNcxyD63U=
+X-Google-Smtp-Source: AK7set+EaCmlBw9yTmg007/wl/oizsGLSx3NxukJsTKz417BW8rt7+ijWCCigRN2ZGOwhcIjTS9lK7t5j3DiuUok61Y=
 X-Received: by 2002:a17:906:498e:b0:901:e556:6e23 with SMTP id
- p14-20020a170906498e00b00901e5566e23mr8310102eju.0.1678243595008; Tue, 07 Mar
- 2023 18:46:35 -0800 (PST)
+ p14-20020a170906498e00b00901e5566e23mr8318026eju.0.1678244047392; Tue, 07 Mar
+ 2023 18:54:07 -0800 (PST)
 MIME-Version: 1.0
 References: <20230302125215.214014-1-keguang.zhang@gmail.com>
  <20230302125215.214014-2-keguang.zhang@gmail.com> <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
- <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com> <CACRpkda_y1Hz69XyDjcDPd=gEi_n2PChJOgKsonXcvYyxQzg4w@mail.gmail.com>
-In-Reply-To: <CACRpkda_y1Hz69XyDjcDPd=gEi_n2PChJOgKsonXcvYyxQzg4w@mail.gmail.com>
+ <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com> <CAMRc=Me3Lnf0W=Y0oMkUGJ59rVCRb+qGq2Eb3vqRZm5gQUwOxQ@mail.gmail.com>
+In-Reply-To: <CAMRc=Me3Lnf0W=Y0oMkUGJ59rVCRb+qGq2Eb3vqRZm5gQUwOxQ@mail.gmail.com>
 From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Wed, 8 Mar 2023 10:46:18 +0800
-Message-ID: <CAJhJPsXLs6OqHEUrCwoybDP4MiKE1D050Dj2auZ4fdQ-Rb+BWA@mail.gmail.com>
+Date:   Wed, 8 Mar 2023 10:53:50 +0800
+Message-ID: <CAJhJPsX1PRN_KKVMXNaEbPKfAc+PKbyir07pmkvLFVVUBcK=Mg@mail.gmail.com>
 Subject: Re: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -72,13 +73,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 9:31=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
-org> wrote:
+On Wed, Mar 8, 2023 at 12:49=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
 >
-> On Tue, Mar 7, 2023 at 3:25 AM Keguang Zhang <keguang.zhang@gmail.com> wr=
-ote:
+> On Tue, Mar 7, 2023 at 3:25=E2=80=AFAM Keguang Zhang <keguang.zhang@gmail=
+.com> wrote:
+> >
 > > On Mon, Mar 6, 2023 at 5:29=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.=
 pl> wrote:
+> > >
 > > > On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@g=
 mail.com> wrote:
 > > > >
@@ -86,36 +89,51 @@ mail.com> wrote:
 > > > > update the author information.
 > > > >
 > > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > > > ---
+> > > > V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> > > > ---
+> > > >  drivers/gpio/gpio-loongson1.c | 9 +++------
+> > > >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loon=
+gson1.c
+> > > > index 5d90b3bc5a25..8862c9ea0d41 100644
+> > > > --- a/drivers/gpio/gpio-loongson1.c
+> > > > +++ b/drivers/gpio/gpio-loongson1.c
+> > > > @@ -1,11 +1,8 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > >  /*
+> > > >   * GPIO Driver for Loongson 1 SoC
+> > > >   *
+> > > > - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com=
 >
+> > > > - *
+> > > > - * This file is licensed under the terms of the GNU General Public
+> > > > - * License version 2. This program is licensed "as is" without any
+> > > > - * warranty of any kind, whether express or implied.
+> > > > + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+> > > >   */
+> > > >
+> > > >  #include <linux/module.h>
+> > > > @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =
+=3D {
+> > > >
+> > > >  module_platform_driver(ls1x_gpio_driver);
+> > > >
+> > > > -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
+> > >
 > > > Why are you removing credits of the old author?
->
 > > Kelvin Cheung and Keguang Zhang are the same person.
 > > This change is to keep pace with the related entry of MAINTAINERS.
+> >
 >
-> That's a pretty interesting change!
+> Even so - how could I have possibly known this? Please put it into the
+> commit message, it's crucial information for this change.
 >
-> Is Kelvin Cheung the "westernized" name and Keguang Zhang the
-> closer to the real name, such as pinyin form? That would make
-> a lot of sense.
->
-Exactly.
-Kelvin Cheung is easy to pronounce, but has no direct relationship
-with my real name.
-Keguang Zhang, the Pinyin form of my real name, is the official name.
-That is why I'd like to make this change.
+Sure. I will amend the commit message.
+In addition, should I update this patch only? Or the whole patch series?
 
-> I think some authors even use the native characters these days,
-> as git and all tools and terminals should support Unicode now.
-> It might make it hard for us to answer mails (not knowing which
-> characters to refer to as given name) but I kind of like it when I
-> see it.
->
-Yes, I did see the names written in native characters.
-But it's even harder for western people to identify.
-Maybe the real name with native characters + "westernized" name is better.
-
-> Yours,
-> Linus Walleij
+> Bart
 
 
 
