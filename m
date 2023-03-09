@@ -2,96 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8116B3029
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Mar 2023 23:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C596B317B
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Mar 2023 23:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjCIWEa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Mar 2023 17:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S231374AbjCIWzQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Mar 2023 17:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjCIWE3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Mar 2023 17:04:29 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5EEE63CD;
-        Thu,  9 Mar 2023 14:04:27 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id r16so3744538qtx.9;
-        Thu, 09 Mar 2023 14:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678399466;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dm82Um1MW3rzQWYywkLIx1xdA+mI1QGfFbckRkmr28o=;
-        b=GsDEw+81LxDbAgFAHQKNr6El8lmUE0Q4axdTxhcZWCWFt93vFt1PWi7adrrrjuWq/4
-         XsHRdQbHkaSAGiiay1oqMU5l0iN+stw7CrFYx1UVqXMV57RoUHr3w4OmYaYaR/j8bk+e
-         c09mR+JkgKbdwQnuMfrD1zxZ37RMxcN5rWrFS4DN94gWzmqgtpPxeq10QS99J2+v8Y3n
-         aL7hXkcznTS2tvK7JZDHakvzd9f2fRqBFvgmMSclQWBAqvk19m2xiBmHC5Wq3246c/7n
-         TyDq4sPSzfpvwOThetHdCt6PYEcTeg9KXqITY9zY7bDwcJrESRicNTcfp+onC1S9o75u
-         uL1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678399466;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dm82Um1MW3rzQWYywkLIx1xdA+mI1QGfFbckRkmr28o=;
-        b=AnUnVklK3J+L8PVQRq6p6yWCFroHIG2bq1Mf0vHP1eXCr4Spgo0oV7GCCucmOAr4Mv
-         ZLAYKcZHCc7vxlWpUgY0ZyKahbO/+oDJ6wRLstxEz1uEM+ii0Kgm6/WvJ9fyM+R3M0l0
-         hRSn5Mu299tleFM5Mr78ncAbSpufQZOSn4Mkt+e3+H1Q3QUi3aorLFX0Dc8vKlU7sB1J
-         nJNbnA61W2YTgtyssFKtpBeRJejECals/z4bUOSxK1UppOzVo/VORBO0eeFRSofuiKlR
-         BpHgjWaqKcL5uh+mdEu9TDWnBgrO9kRevshox8VpvwokPvm+sFNNGIwB8vGCDLORQO0x
-         WAvg==
-X-Gm-Message-State: AO0yUKV0iZpZpvMWcpw5U5iRHPsqc26JNbjubpWA/mUTxjOnLVI/NjDR
-        djHrJez1DZtv9bmWAHbap50=
-X-Google-Smtp-Source: AK7set9n6SkaDNFA5+16m9a8UMRc8Fj/4I/jlqAQPRfiyOBBGLI8OlB9Y+lI/D1+wjVDELuDyL+e1Q==
-X-Received: by 2002:ac8:5d8a:0:b0:3bf:a1f0:4bf with SMTP id d10-20020ac85d8a000000b003bfa1f004bfmr40547862qtx.56.1678399466338;
-        Thu, 09 Mar 2023 14:04:26 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w7-20020a05620a444700b0073bb00eb0besm84131qkp.22.2023.03.09.14.04.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 14:04:25 -0800 (PST)
-Message-ID: <b313d7af-2e1a-07a9-8680-4588fcf6a2d2@gmail.com>
-Date:   Thu, 9 Mar 2023 14:04:23 -0800
+        with ESMTP id S230494AbjCIWzK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Mar 2023 17:55:10 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520653CE03;
+        Thu,  9 Mar 2023 14:54:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXkyW6RNvz4x7s;
+        Fri, 10 Mar 2023 09:54:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1678402469;
+        bh=HnGqhsJTeGjqlPVUTmz3g9ouF0ULtGaBV4DNsEeVxsY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=qtChMEayOa7BG3gV8biPN1UquvZjKKHH1PLnOktZLFk+z7+30lmoHFQWG/ybTGOfV
+         Msn+vq0214G/5bCC5sK8YEWC4SONYn3IjVV2gLKa55Cy0vLJqZpwyIgKHr5xpyRlRO
+         2B59x+JG32iD6Ll1IeACkY+jSFZ42uC6mHr940GQ8rZCqsWJ73oUfODgJNTU1QA4cH
+         /Zt2BN0brA6nfVHnuvaamrjV+75syVJwmQZUAWs6jzdNGb6ONfyH1iskU2QALlqqJR
+         fcr5fnsHZCG3RA30SBInWnaih8rWQ8VzjneqbRw1yHLKc3Q/ihjyNUCZJzzzjHFnUd
+         puglrrgtkl1qg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
+        Baoquan He <bhe@redhat.com>, linux-alpha@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] arch/*/io.h: remove ioremap_uc in some
+ architectures
+In-Reply-To: <20230308130710.368085-4-bhe@redhat.com>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-4-bhe@redhat.com>
+Date:   Fri, 10 Mar 2023 09:54:27 +1100
+Message-ID: <874jqtpmcc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mips: ar71: include linux/gpio/driver.h
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230308145303.826942-1-arnd@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230308145303.826942-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/8/23 06:52, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The change to remove the implicit gpio/driver.h include was done
-> after fixing all the other users, but the ar7 file still needs
-> the same change.
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 21d9526d13b5 ("gpiolib: Make the legacy <linux/gpio.h> consumer-only")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Baoquan He <bhe@redhat.com> writes:
+> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
+> extension, and on ia64 with its slightly unconventional ioremap()
+> behavior. So remove the ioremap_uc() definition in architecutures
+> other than x86 and ia64. These architectures all have asm-generic/io.h
+> included and will have the default ioremap_uc() definition which
+> returns NULL.
+>
+> This changes the existing behaviour, while no need to worry about
+> any breakage because in the only callsite of ioremap_uc(), code
+> has been adjusted to eliminate the impact. Please see
+> atyfb_setup_generic() of drivers/video/fbdev/aty/atyfb_base.c.
+>
+> If any new invocation of ioremap_uc() need be added, please consider
+> using ioremap() intead or adding a ARCH specific version if necessary.
+>
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: linux-alpha@vger.kernel.org
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> ---
+>  Documentation/driver-api/device-io.rst | 9 +++++----
+>  arch/alpha/include/asm/io.h            | 1 -
+>  arch/hexagon/include/asm/io.h          | 3 ---
+>  arch/m68k/include/asm/kmap.h           | 1 -
+>  arch/mips/include/asm/io.h             | 1 -
+>  arch/parisc/include/asm/io.h           | 2 --
+>  arch/powerpc/include/asm/io.h          | 1 -
 
-s/ar71/ar7/ in the subject, with that:
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+cheers
