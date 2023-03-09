@@ -2,48 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC216B1D03
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Mar 2023 08:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6906B2099
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Mar 2023 10:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjCIHyd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Mar 2023 02:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S230094AbjCIJtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Mar 2023 04:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjCIHyN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Mar 2023 02:54:13 -0500
-X-Greylist: delayed 37824 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 23:53:54 PST
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48EE6B957;
-        Wed,  8 Mar 2023 23:53:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678348406; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=nzz/SZmrVGDdioH8gd2ceSR5S33TJJH1SOWXyGiilM4kIIYmJDlDBzMtTQ+VoPAiKa3na2dZEWt10SamAIAm3IPtth/hbtRgABWsXdeh9IeTC6iRNqa5Hux+9ShYkfPMJySSKZ9LNs6+nEOV6pkV734PZyM+f/b2WWup8sN71wU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1678348406; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=1fd7a9BQQqeefatGkptmpq6+Xp+BD4kDPIyZZcKeqWo=; 
-        b=PBivApT/Xh8cQ5OYjSTQ4L1H1J0tTBWlnsbY/K9fFNglEdtqU0KiZzIqwrSWCami65hEklncFHjgkGy/Qc4bC918kPplGxjcw0qkFYby4bh6jt8LIBJVdvGIePL+H8cqr8GS8kHC49i9+BTx+6P1WSHL6MBqdyeYAZdKMqt+6uU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678348406;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=1fd7a9BQQqeefatGkptmpq6+Xp+BD4kDPIyZZcKeqWo=;
-        b=LCrfBHk2uzlnL8inI09VTobjR/W4aJWYPiPnu+/P5ig6K+WNHIsWVAL1LpengfMp
-        xulJpbe0jGodtkiggMHWyMmT8ZDaz/PLdOrFsk3hIL1/5qpiouFgb5iZKoNMSi6EeVd
-        kp28eEcce2u0hDMWNR4OU0pboJv2ub6Fai1hlLjk=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 167834840432473.9346941163709; Wed, 8 Mar 2023 23:53:24 -0800 (PST)
-Message-ID: <ccdfd262-eaf3-dbbe-7a3c-a911a5ec0fc4@arinc9.com>
-Date:   Thu, 9 Mar 2023 10:53:17 +0300
+        with ESMTP id S231311AbjCIJsz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Mar 2023 04:48:55 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D52C4EBC
+        for <linux-mips@vger.kernel.org>; Thu,  9 Mar 2023 01:48:52 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id x3so4525696edb.10
+        for <linux-mips@vger.kernel.org>; Thu, 09 Mar 2023 01:48:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678355331;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KqM9tPbk85fkSamrIGtF+aGGKkrU9G+V8TUF+yeEv8A=;
+        b=SOGx0RpyMsiXOR6INiKJFbpBvSFe9w7i05zm2lXlR/T2TKa8QylkB7e9C+MQuPWhO/
+         Ku/H+APnyg5V/why7CWDcRyCYN1EUTaAy7gUz8MgMug30Oroj1hx2lt4hjJXzJ4L+smS
+         Gl9GOre6r+id+4BvTzvCBZiFzsiuWufrylwoWWv1JKjLeRh2ebzdoMrEgZEa/ISGRQCK
+         suwRxZsk4QME0pgnBm3ErfIfs5rWuFyHeKyNi+8KHgjZ3KVHYTidsMbkOrKNcU13+CyF
+         8dpMQhVRryLJFV3L/NNAJH3yHfPOzd5bizHY4ltfMiJelw/cK3gSw7K/UOYRp0bg2qnj
+         +iIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678355331;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqM9tPbk85fkSamrIGtF+aGGKkrU9G+V8TUF+yeEv8A=;
+        b=1NYmruPs3u+24YwnwmYxz4HP979yz/wuxWIyZzDjqTv9GAiDFEosJfwgPog9xIFmcI
+         +ISmCbRjwz8Ssvksq5xHXr/p5JIN6DkzuGhS0W5pouFwI6VU+qrupf+y62vY8SXScGic
+         cPODuitgc5RwNrbIYoXCZC7Mmq3YPWgkLneZry0GbUMbQQdkwIhwbk1Z7lZO01r7jUhR
+         xU7ogrnCcFO368e2BjgvHvp+BT+cusU70nxvi0PHIofOrh0iURZewuILRyb0lOmBDnP+
+         szlFsOL7MICG8YnyBCghGOTa+V+bivGkQsSjD3Tt2Z4h3Dnzv3Wx2Cbm8BodW154BhqZ
+         svuw==
+X-Gm-Message-State: AO0yUKWItwezpBnvGpEYz53RPHWN8Bd2AujI5bAAAQdwV6Htfv7eYXKA
+        ByGuOhgBDqlIALmm29LGxvvlmg==
+X-Google-Smtp-Source: AK7set+LdAcJf2k76HO3Ko/pAiaiYsVO6swO8CiLqUtf9WOiHED+3AcF+H/mT/wOUS2xwh46rEkt0Q==
+X-Received: by 2002:a17:906:da82:b0:88f:9f5e:f40 with SMTP id xh2-20020a170906da8200b0088f9f5e0f40mr30594330ejb.68.1678355330988;
+        Thu, 09 Mar 2023 01:48:50 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id 23-20020a170906005700b008e3e2b6a9adsm8646897ejg.94.2023.03.09.01.48.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 01:48:50 -0800 (PST)
+Message-ID: <38eaed94-647d-a25b-f1ed-8e2d1b6e8852@linaro.org>
+Date:   Thu, 9 Mar 2023 10:48:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 09/20] dt-bindings: pinctrl: ralink: {mt7620,mt7621}:
- rename to mediatek
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Rob Herring <robh@kernel.org>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 08/20] dt-bindings: pinctrl: ralink: add new compatible
+ strings
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Rob Herring <robh@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
@@ -61,56 +76,43 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         DENG Qingfang <dqfext@gmail.com>,
         Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
 References: <20230303002850.51858-1-arinc.unal@arinc9.com>
- <20230303002850.51858-10-arinc.unal@arinc9.com>
- <20230308210514.GA3767521-robh@kernel.org>
- <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20230303002850.51858-9-arinc.unal@arinc9.com>
+ <20230308210017.GA3744272-robh@kernel.org>
+ <1c704ea4-2241-ef21-dc6c-d2d243d3bbad@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1c704ea4-2241-ef21-dc6c-d2d243d3bbad@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9.03.2023 00:19, Arınç ÜNAL wrote:
-> On 9.03.2023 00:05, Rob Herring wrote:
->> On Fri, Mar 03, 2023 at 03:28:38AM +0300, arinc9.unal@gmail.com wrote:
->>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> This platform from Ralink was acquired by MediaTek in 2011. Then, 
->>> MediaTek
->>> introduced these SoCs which utilise this platform. Rename the schemas to
->>> mediatek to address the incorrect naming.
->>
->> I said we don't do renames due to acquistions, you said that wasn't the
->> reason, but then that's your reasoning here.
-> 
-> It's not a marketing/acquistion rename as the name of these SoCs were 
-> wrong from the get go. The information on the first sentence is to give 
-> the idea of why these SoCs were wrongfully named as the base platform 
-> that these new MediaTek SoCs share code with was called Ralink.
+On 08/03/2023 22:19, Arınç ÜNAL wrote:
 > 
 >>
->> To give you another example, *new* i.MX things are still called
->> 'fsl,imx...' and it has been how many years since merging with NXP?
+>> If you want to break the ABI (do you??, because the commit message
+>> still doesn't say), then you don't need "ralink,mt7620-pinctrl".
 > 
-> Ok this is a point I see now. Though, I fail to see how this is called 
-> renaming when there's only new SoCs (from NXP in this case) to be added.
+> I don't want to break the ABI. But I deprecate ralink,mt7620-pinctrl on 
+> later patches.
 
-If I understand correctly, i.MX is a family from Freescale so the name 
-was kept the same on new SoC releases from NXP. I believe it's different 
-in this case here. There's no family name. The closest thing on the name 
-of the SoC model is, it's RT for Ralink, MT for MediaTek.
+Deprecation should happen here. Otherwise you have now two valid
+compatibles which contradicts previous Rob's comments.
 
-On top of that, mediatek strings already exist for MT SoCs already, at 
-least for MT7621.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/devicetree/bindings/mips/ralink.yaml?id=dd3cb467ebb5659d6552999d6f16a616653f9933#n83
+> The driver still has it though, so old DTs will keep 
+> working. That keeps the ABI intact regardless of deprecating strings on 
+> the dt-binding schema, right?
 
-Arınç
+Yes, but deprecation is missing.
+
+
+Best regards,
+Krzysztof
+
