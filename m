@@ -2,85 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D2D6B26A8
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Mar 2023 15:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7656B2711
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Mar 2023 15:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjCIOVx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Mar 2023 09:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S231890AbjCIOhO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Mar 2023 09:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjCIOVx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Mar 2023 09:21:53 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F63588D86
-        for <linux-mips@vger.kernel.org>; Thu,  9 Mar 2023 06:21:51 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536c2a1cc07so37946187b3.5
-        for <linux-mips@vger.kernel.org>; Thu, 09 Mar 2023 06:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678371711;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iafJZnGixciBIJiE6m5EiTSjxv4EI/PwHYeMlRsAhQ4=;
-        b=RH3d8+9m0PaOPRNA6QFcjWe9nyYCPQccxdKGXGBTmP5ThOw8Dc7il3J4i2yk0mynO1
-         atdNjRYJVb52NBqd4PVr6WyI4TFGTDYeKUgT2ggbPB1sY1IXVYhSrmW8pMXjuI3pSxg6
-         tCUOn0YOitSMo7KZIEiFAmic6RjUGitG/9KYbVC7lScrvDdHEcs3s4LRWOnwzSUL7TZM
-         AZHz3uIRb2tFJxjzIIohukwNg7viX8Wd1k6wCLHgif2K44C+ZPRfpgBefNRGbglWZ3T1
-         FuKQrbWqoG7/IscnFZf5pIifrI0NVOVoII4SuCK1ZaIw4mPIC5fbtOebLmo6giaEO1ef
-         9nkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678371711;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iafJZnGixciBIJiE6m5EiTSjxv4EI/PwHYeMlRsAhQ4=;
-        b=PsRR1Yx+v0Q0/AUIaawEnW3cHuYyK26BCZtEpl22K2Vy+UCqK8gjmc1Rr3cZQd2oQb
-         8c2RYFwzmHM6EDjLPegXX+MRYOKqbDmTrBmQOCh+L1giY7i1kxCAg3uG+z+Zhmjwr7gP
-         Q61M0CLfhFofpw5ZJq52l86ZHa6hcHs1P4b2DQzH8H7vOzef36KHLDbEzr7UVyBx4Rlx
-         CyF/pvXq2h+0U+iMACG2+l/nNt1zDQMT450aaShT8ByKpwTEBL7Fm+KeWRS4cM8a5S87
-         MWS98mgc6l4VbGB5DzCZeivK1em4or7oX0NR2fAHxn9rOf1LFTe5WCiqvzqjB0mQhVkj
-         Zllw==
-X-Gm-Message-State: AO0yUKVM5Er8mX1UWVLujNXyVbhe60rKbX5XByaR3EK7yUwOMa1iYvIC
-        N/mJfAJKUERlJzv1Hw9gfSR4lqoSSM1n0s4XAv9L3w==
-X-Google-Smtp-Source: AK7set+m0LG2zwrv2ra5H/2MqKHhYnb/GA0KhFZkZ+CP90teyFtZBj+ePS1tAkcB4HR58mr3QukEhaoLNM7xjKop6D4=
-X-Received: by 2002:a81:ad63:0:b0:52a:9f66:80c6 with SMTP id
- l35-20020a81ad63000000b0052a9f6680c6mr13582945ywk.9.1678371710871; Thu, 09
- Mar 2023 06:21:50 -0800 (PST)
+        with ESMTP id S231897AbjCIOgt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Mar 2023 09:36:49 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB4FAF4D9E;
+        Thu,  9 Mar 2023 06:36:43 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1paHNg-000885-00; Thu, 09 Mar 2023 15:36:32 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6CA12C123A; Thu,  9 Mar 2023 15:36:21 +0100 (CET)
+Date:   Thu, 9 Mar 2023 15:36:21 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
+        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] arch/*/io.h: remove ioremap_uc in some
+ architectures
+Message-ID: <20230309143621.GA12350@alpha.franken.de>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-4-bhe@redhat.com>
 MIME-Version: 1.0
-References: <20230308145303.826942-1-arnd@kernel.org> <CACRpkdZAJJr5+f8wiEhnAAV8mLjzYCBMDC9GXwQOAmsQLfShoA@mail.gmail.com>
- <ZAnnv/1ETFTRH8Qi@smile.fi.intel.com>
-In-Reply-To: <ZAnnv/1ETFTRH8Qi@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Mar 2023 15:21:39 +0100
-Message-ID: <CACRpkdYsZhoT4iCigrj=Q728GAmJ3+vF6dnbzZ9fX5WusM4rAg@mail.gmail.com>
-Subject: Re: [PATCH] mips: ar71: include linux/gpio/driver.h
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308130710.368085-4-bhe@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 3:14 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Wed, Mar 08, 2023 at 09:07:09PM +0800, Baoquan He wrote:
+> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
+> extension, and on ia64 with its slightly unconventional ioremap()
+> behavior. So remove the ioremap_uc() definition in architecutures
+> other than x86 and ia64. These architectures all have asm-generic/io.h
+> included and will have the default ioremap_uc() definition which
+> returns NULL.
+> 
+> This changes the existing behaviour, while no need to worry about
+> any breakage because in the only callsite of ioremap_uc(), code
+> has been adjusted to eliminate the impact. Please see
+> atyfb_setup_generic() of drivers/video/fbdev/aty/atyfb_base.c.
+> 
+> If any new invocation of ioremap_uc() need be added, please consider
+> using ioremap() intead or adding a ARCH specific version if necessary.
+> 
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: linux-alpha@vger.kernel.org
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> ---
+>  Documentation/driver-api/device-io.rst | 9 +++++----
+>  arch/alpha/include/asm/io.h            | 1 -
+>  arch/hexagon/include/asm/io.h          | 3 ---
+>  arch/m68k/include/asm/kmap.h           | 1 -
+>  arch/mips/include/asm/io.h             | 1 -
+>  arch/parisc/include/asm/io.h           | 2 --
+>  arch/powerpc/include/asm/io.h          | 1 -
+>  arch/sh/include/asm/io.h               | 2 --
+>  arch/sparc/include/asm/io_64.h         | 1 -
+>  9 files changed, 5 insertions(+), 16 deletions(-)
 
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> >
-> > If this is the only problem merging this set was amazingly painless.
->
-> Too early to celebrate. We have one more patch on the same matters.
+this doesn't apply to v6.3-rc1... what tree is this based on ?
 
-Yeah I would expect some more noise, I had a similar patch in one
-of my kernelorg branches and the zeroday robot would spit some
-weird bugs like this at me after a few days of randconfig builds.
+Thomas.
 
-Yours,
-Linus Walleij
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
