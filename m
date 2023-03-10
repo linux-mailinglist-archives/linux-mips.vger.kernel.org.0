@@ -2,82 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785E46B37B2
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 08:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045966B3EE1
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 13:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjCJHrP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Mar 2023 02:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
+        id S229453AbjCJMNb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Mar 2023 07:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjCJHqi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 02:46:38 -0500
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A4D59F1;
-        Thu,  9 Mar 2023 23:46:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678434342; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Ru7IYBxv1TeMY1HDSIbcbhxUNtx0dao2F3QOW2pbVrTwW8MMATPUUfhpbPFDqiDvMQKahq7ri2Mjiem2lj9SCcw7TkhylZSmeax3MK2J/VXzpVq0e8LoVw6F0Lyc+GVikjDwhJ+02yn6gCRLlLwrAU8XmJgfer7Iz/t5NdVBCVs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1678434342; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5U8jD0mceNdxMH5d+XXNMoLuXyA0CAviMCHpJ7kQo4A=; 
-        b=Nlr0Yw6/VEg6XyZsWZZjN5V+6CSnxtknPmaDq4A1F1Aq0jElIB0fJixzWdmEx39LOFK24K6DTfFAd0WuZflWOJs9fZXNuYm3ByHDcJ0sC+fsJVPd0N5srafRM1XWvuVrVQ8pY4FF5jJKqm8UdH+LKfiUUxXn5dZAzJT3cTpeXqM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678434342;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=5U8jD0mceNdxMH5d+XXNMoLuXyA0CAviMCHpJ7kQo4A=;
-        b=JUSLKQwACAis7T3MVKl2xbQaFmgnTQo32wE1WLFdrJdA3G0c59CgRzZ19UN+6JQh
-        MwtY0l61oqaAqNpV7FUhS0MXf2b1ywfgpncP3s5GnBaNnVlNwq7QzsVNhAA00kLHeZc
-        rJLu4yaNfejgJibc+I4PLJsuL2k//ZaEdZRqu7XI=
-Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
-        with SMTPS id 1678434340115989.170333737338; Thu, 9 Mar 2023 23:45:40 -0800 (PST)
-Message-ID: <6019d3ff-3fdf-543f-c5fb-cba512582fb3@arinc9.com>
-Date:   Fri, 10 Mar 2023 10:45:33 +0300
+        with ESMTP id S229885AbjCJMNR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 07:13:17 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF3C311D0;
+        Fri, 10 Mar 2023 04:13:10 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso5879107wmb.0;
+        Fri, 10 Mar 2023 04:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678450389;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SA/Uf4V++NswwW9O2kSqPWP7Kc6Kc0XD4HdyXMjml3E=;
+        b=LUIjiou6NjJw5SrfBboTkj0wMPrVhXtlGzJoObiukkb8ZbaQWxQlfj4UItxGuxouHK
+         MvDVgyvUMIHrSfPzZZKcaG9Q81ksWTEjR73UoOcqVtVEzLXBbwPOMInjs2mdKmu3RX6S
+         4I+tw9F/kr5HUKHZ1SufA6+MwSf+0038Ygy3u9aSfr33ugZhb1AQt7CTNBOSiwkxansZ
+         GmvmPj5Im9tpWkpLT7i4kDPbD2LG5VhB920AqLgmlJMO583S94Oo7d8P6RWf8m65FPUS
+         oYr54J9q7xIkGZLxs/hVEaVpHmzAAThfOup1kyHYHS5fIHtZu+gDTYGBjzrWDQkGGME5
+         ONSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678450389;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SA/Uf4V++NswwW9O2kSqPWP7Kc6Kc0XD4HdyXMjml3E=;
+        b=18f5K0oKj2NiWl0mxsZczGVAfwrDuGmdYKhQOedJZ7KPjNduAQ2HdDZFWeC7senlxK
+         Pf+0jfirslHyBrAIZ4ozVImzDHHMjAqwJtp7yFBsrPgvsPk35o+VE8POGayHF/F3F7U5
+         TXSRQXIZrTk7QvovQDWiICFcTyD0M5/wWkxXxytjway+BSaFpZSM/rO1wHqU3ukDxNzH
+         nvDoJYJBawQ75SnsjX3YXW4P372Zh7ME83RqNyiWyzm0Swgl6YE2iLTD9plQpIR7DtbG
+         ktDqmOFROZeh1rH1GagKRkr6OsWHOdexC4ceBfS+mo+UjNefJUE8hk1xdsPpvLEKbcRF
+         3GUQ==
+X-Gm-Message-State: AO0yUKUYPtzZkzlvw07/TjFJrKDCZlAd98GEBnGMmW4P2lZlkt1OJCCX
+        GLPJ7vmi69nB3Cp44N/WyVAR2Nlpb1xLFg==
+X-Google-Smtp-Source: AK7set+Zqd5Vmfwt94sd7Ti0Ln0Pg1W6KJjGVFXdf5pNqcsyQLTKlXlBCbvUpYBJ/bkXdG190aQ4xQ==
+X-Received: by 2002:a05:600c:548e:b0:3eb:2708:86ca with SMTP id iv14-20020a05600c548e00b003eb270886camr2435067wmb.28.1678450389227;
+        Fri, 10 Mar 2023 04:13:09 -0800 (PST)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id n6-20020a5d4c46000000b002c55de1c72bsm1975108wrt.62.2023.03.10.04.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 04:13:08 -0800 (PST)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
+Date:   Fri, 10 Mar 2023 13:13:06 +0100
+Message-Id: <20230310121306.4632-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 09/20] dt-bindings: pinctrl: ralink: {mt7620,mt7621}:
- rename to mediatek
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-References: <20230303002850.51858-1-arinc.unal@arinc9.com>
- <20230303002850.51858-10-arinc.unal@arinc9.com>
- <20230308210514.GA3767521-robh@kernel.org>
- <12be053e-b70a-faca-71c8-d8eef69a3b73@arinc9.com>
- <ccdfd262-eaf3-dbbe-7a3c-a911a5ec0fc4@arinc9.com>
- <9663817e-7f6f-c3b1-8bf9-321f9b067e96@linaro.org>
- <deca532a-bdf5-c49e-1422-ce6124b61882@arinc9.com>
- <CAMhs-H8M3ir+DshHF60W=QMn9WG3Jgbo8GgXZnDKCLhs=+WBoQ@mail.gmail.com>
- <81cf9e50-d626-cbb3-ebb1-56d080eca66d@arinc9.com>
- <CAMhs-H_YkdacZXE2xqn=_JQtitLvqRFB20s7rjS63dFabAL4qw@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAMhs-H_YkdacZXE2xqn=_JQtitLvqRFB20s7rjS63dFabAL4qw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,84 +72,95 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10.03.2023 10:05, Sergio Paracuellos wrote:
-> On Thu, Mar 9, 2023 at 10:09 PM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>
->> On 9.03.2023 14:33, Sergio Paracuellos wrote:
->>> On Thu, Mar 9, 2023 at 11:34 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>>>
->>>> On 9.03.2023 12:52, Krzysztof Kozlowski wrote:
->>>>> On 09/03/2023 08:53, Arınç ÜNAL wrote:
->>>>>> On 9.03.2023 00:19, Arınç ÜNAL wrote:
->>>>>>> On 9.03.2023 00:05, Rob Herring wrote:
->>>>>>>> On Fri, Mar 03, 2023 at 03:28:38AM +0300, arinc9.unal@gmail.com wrote:
->>>>>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>>>>>
->>>>>>>>> This platform from Ralink was acquired by MediaTek in 2011. Then,
->>>>>>>>> MediaTek
->>>>>>>>> introduced these SoCs which utilise this platform. Rename the schemas to
->>>>>>>>> mediatek to address the incorrect naming.
->>>>>>>>
->>>>>>>> I said we don't do renames due to acquistions, you said that wasn't the
->>>>>>>> reason, but then that's your reasoning here.
->>>>>>>
->>>>>>> It's not a marketing/acquistion rename as the name of these SoCs were
->>>>>>> wrong from the get go. The information on the first sentence is to give
->>>>>>> the idea of why these SoCs were wrongfully named as the base platform
->>>>>>> that these new MediaTek SoCs share code with was called Ralink.
->>>>>>>
->>>>>>>>
->>>>>>>> To give you another example, *new* i.MX things are still called
->>>>>>>> 'fsl,imx...' and it has been how many years since merging with NXP?
->>>>>>>
->>>>>>> Ok this is a point I see now. Though, I fail to see how this is called
->>>>>>> renaming when there's only new SoCs (from NXP in this case) to be added.
->>>>>>
->>>>>> If I understand correctly, i.MX is a family from Freescale so the name
->>>>>
->>>>> It's the same "family" as your platform, because as you said:
->>>>> "introduced these SoCs which utilise this platform"
->>>>>
->>>>>> was kept the same on new SoC releases from NXP. I believe it's different
->>>>>> in this case here. There's no family name. The closest thing on the name
->>>>>> of the SoC model is, it's RT for Ralink, MT for MediaTek.
->>>>>
->>>>> It's not about the name. NXP took Freescale platform and since many
->>>>> years makes entirely new products, currently far, far away from original
->>>>> platform.
->>>>>
->>>>> That's the same case you have here - Mediatek took existing platform and
->>>>> started making new products with it.
->>>>>
->>>>>>
->>>>>> On top of that, mediatek strings already exist for MT SoCs already, at
->>>>>> least for MT7621.
->>>>>>
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/devicetree/bindings/mips/ralink.yaml?id=dd3cb467ebb5659d6552999d6f16a616653f9933#n83
->>>>>
->>>>> NXP also has compatibles with nxp, thus still not that good reason.
->>>>
->>>> Ok, makes sense. Am I free to call the SoCs MediaTek, change the schema
->>>> name from ralink,mtXXXX-pinctrl.yaml to mediatek,mtXXXX-pinctrl.yaml
->>>> whilst keeping the compatible string ralink?
->>>>
->>>> I plan to do some cleanup on ralink.yaml as well. From what I
->>>> understand, I should change the mediatek,mt7621-soc compatible string to
->>>> ralink,mt7621-soc?
->>>
->>> You have to take care of these SoC strings since they are used in the
->>> very beginning of the ralink startup platforms for any single ralink
->>> SoC. See for example [0] and [1] (but they are in all soc init code).
->>> I think it is better to maintain the ralink.yaml file as it is.
->>
->> I'd really rather address this inconsistency everywhere possible. The
->> code you pointed out looks different than what I did on the pinctrl
->> driver but, surely it's possible on the code to introduce ralink and
->> keep the mediatek string for the sake of old DTs, no?
-> 
-> In any case, the changes you might have in mind for this should be a
-> different patch series.
+arch_sync_dma_for_cpu_all() causes kernel panics on BCM6358 with EHCI/OHCI:
+[    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
+[    3.895011] Reserved instruction in kernel code[#1]:
+[    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
+[    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
+[    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
+[    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
+[    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
+[    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
+[    3.932848] $20   : 00000000 00000000 55590000 77d70000
+[    3.938251] $24   : 00000018 00000010
+[    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
+[    3.949058] Hi    : 00000000
+[    3.952013] Lo    : 00000000
+[    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
+[    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
+[    3.965913] Status: 10008703	KERNEL EXL IE
+[    3.970216] Cause : 00800028 (ExcCode 0a)
+[    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
+[    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
+[    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
+[    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
+[    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
+[    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
+[    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
+[    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
+[    4.044196]         ...
+[    4.046706] Call Trace:
+[    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
+[    4.054356] [<80015c70>] setup_frame+0xdc/0x124
+[    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
+[    4.064207] [<80011b50>] work_notifysig+0x10/0x18
+[    4.069036]
+[    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
+[    4.080686]
+[    4.082517] ---[ end trace 22a8edb41f5f983b ]---
+[    4.087374] Kernel panic - not syncing: Fatal exception
+[    4.092753] Rebooting in 1 seconds..
 
-Agreed.
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ arch/mips/bmips/dma.c   | 5 +++++
+ arch/mips/bmips/setup.c | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-Arınç
+diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
+index 33788668cbdb..3769d5efdede 100644
+--- a/arch/mips/bmips/dma.c
++++ b/arch/mips/bmips/dma.c
+@@ -5,11 +5,16 @@
+ #include <asm/bmips.h>
+ #include <asm/io.h>
+ 
++int bmips_dma_sync_enabled = 1;
++
+ void arch_sync_dma_for_cpu_all(void)
+ {
+ 	void __iomem *cbr = BMIPS_GET_CBR();
+ 	u32 cfg;
+ 
++	if (!bmips_dma_sync_enabled)
++		return;
++
+ 	if (boot_cpu_type() != CPU_BMIPS3300 &&
+ 	    boot_cpu_type() != CPU_BMIPS4350 &&
+ 	    boot_cpu_type() != CPU_BMIPS4380)
+diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+index e95b3f78e7cd..825e85e14010 100644
+--- a/arch/mips/bmips/setup.c
++++ b/arch/mips/bmips/setup.c
+@@ -35,6 +35,8 @@
+ #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
+ #define BCM6328_TP1_DISABLED	BIT(9)
+ 
++extern int bmips_dma_sync_enabled;
++
+ static const unsigned long kbase = VMLINUX_LOAD_ADDRESS & 0xfff00000;
+ 
+ struct bmips_quirk {
+@@ -104,6 +106,9 @@ static void bcm6358_quirks(void)
+ 	 * disable SMP for now
+ 	 */
+ 	bmips_smp_enabled = 0;
++
++	/* ARCH_HAS_SYNC_DMA_FOR_CPU_ALL causes kernel panics on BCM6358 */
++	bmips_dma_sync_enabled = 0;
+ }
+ 
+ static void bcm6368_quirks(void)
+-- 
+2.30.2
+
