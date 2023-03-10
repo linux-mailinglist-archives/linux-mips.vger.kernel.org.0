@@ -2,165 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045966B3EE1
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 13:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31CC6B4116
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 14:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCJMNb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Mar 2023 07:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S230417AbjCJNtd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Mar 2023 08:49:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCJMNR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 07:13:17 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF3C311D0;
-        Fri, 10 Mar 2023 04:13:10 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso5879107wmb.0;
-        Fri, 10 Mar 2023 04:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678450389;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SA/Uf4V++NswwW9O2kSqPWP7Kc6Kc0XD4HdyXMjml3E=;
-        b=LUIjiou6NjJw5SrfBboTkj0wMPrVhXtlGzJoObiukkb8ZbaQWxQlfj4UItxGuxouHK
-         MvDVgyvUMIHrSfPzZZKcaG9Q81ksWTEjR73UoOcqVtVEzLXBbwPOMInjs2mdKmu3RX6S
-         4I+tw9F/kr5HUKHZ1SufA6+MwSf+0038Ygy3u9aSfr33ugZhb1AQt7CTNBOSiwkxansZ
-         GmvmPj5Im9tpWkpLT7i4kDPbD2LG5VhB920AqLgmlJMO583S94Oo7d8P6RWf8m65FPUS
-         oYr54J9q7xIkGZLxs/hVEaVpHmzAAThfOup1kyHYHS5fIHtZu+gDTYGBjzrWDQkGGME5
-         ONSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678450389;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SA/Uf4V++NswwW9O2kSqPWP7Kc6Kc0XD4HdyXMjml3E=;
-        b=18f5K0oKj2NiWl0mxsZczGVAfwrDuGmdYKhQOedJZ7KPjNduAQ2HdDZFWeC7senlxK
-         Pf+0jfirslHyBrAIZ4ozVImzDHHMjAqwJtp7yFBsrPgvsPk35o+VE8POGayHF/F3F7U5
-         TXSRQXIZrTk7QvovQDWiICFcTyD0M5/wWkxXxytjway+BSaFpZSM/rO1wHqU3ukDxNzH
-         nvDoJYJBawQ75SnsjX3YXW4P372Zh7ME83RqNyiWyzm0Swgl6YE2iLTD9plQpIR7DtbG
-         ktDqmOFROZeh1rH1GagKRkr6OsWHOdexC4ceBfS+mo+UjNefJUE8hk1xdsPpvLEKbcRF
-         3GUQ==
-X-Gm-Message-State: AO0yUKUYPtzZkzlvw07/TjFJrKDCZlAd98GEBnGMmW4P2lZlkt1OJCCX
-        GLPJ7vmi69nB3Cp44N/WyVAR2Nlpb1xLFg==
-X-Google-Smtp-Source: AK7set+Zqd5Vmfwt94sd7Ti0Ln0Pg1W6KJjGVFXdf5pNqcsyQLTKlXlBCbvUpYBJ/bkXdG190aQ4xQ==
-X-Received: by 2002:a05:600c:548e:b0:3eb:2708:86ca with SMTP id iv14-20020a05600c548e00b003eb270886camr2435067wmb.28.1678450389227;
-        Fri, 10 Mar 2023 04:13:09 -0800 (PST)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id n6-20020a5d4c46000000b002c55de1c72bsm1975108wrt.62.2023.03.10.04.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 04:13:08 -0800 (PST)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
-Date:   Fri, 10 Mar 2023 13:13:06 +0100
-Message-Id: <20230310121306.4632-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230407AbjCJNt0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 08:49:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75FE15CB5;
+        Fri, 10 Mar 2023 05:49:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28F3E617B4;
+        Fri, 10 Mar 2023 13:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05249C433EF;
+        Fri, 10 Mar 2023 13:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678456161;
+        bh=pv8blzxQ/MeEGjtsb1NAa7l3avihZdu1oc42qxEyTAU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=g7TeDbrBj1ibL9fLHcM1IuVtG7WiEZeRA/zYWdcq5/UdYWaP1GfqMD+vft45pNuEL
+         YnAlqUrzhyheoZo8ZkYCv13HVjCUK1SyNy0aQhZMPj/L/Pl3Vy3Ytz8VltFAHlkdiY
+         O4pHLkeRWjoSkcdpSTTonESX7Ei0cWX38mLc8PJ0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        "Steven J. Hill" <Steven.Hill@imgtec.com>,
+        Qais Yousef <Qais.Yousef@imgtec.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 071/193] MIPS: vpe-mt: drop physical_memsize
+Date:   Fri, 10 Mar 2023 14:37:33 +0100
+Message-Id: <20230310133713.399921999@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230310133710.926811681@linuxfoundation.org>
+References: <20230310133710.926811681@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-arch_sync_dma_for_cpu_all() causes kernel panics on BCM6358 with EHCI/OHCI:
-[    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
-[    3.895011] Reserved instruction in kernel code[#1]:
-[    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
-[    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
-[    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
-[    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
-[    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
-[    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
-[    3.932848] $20   : 00000000 00000000 55590000 77d70000
-[    3.938251] $24   : 00000018 00000010
-[    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
-[    3.949058] Hi    : 00000000
-[    3.952013] Lo    : 00000000
-[    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
-[    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
-[    3.965913] Status: 10008703	KERNEL EXL IE
-[    3.970216] Cause : 00800028 (ExcCode 0a)
-[    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
-[    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
-[    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
-[    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
-[    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
-[    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
-[    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
-[    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
-[    4.044196]         ...
-[    4.046706] Call Trace:
-[    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
-[    4.054356] [<80015c70>] setup_frame+0xdc/0x124
-[    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
-[    4.064207] [<80011b50>] work_notifysig+0x10/0x18
-[    4.069036]
-[    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
-[    4.080686]
-[    4.082517] ---[ end trace 22a8edb41f5f983b ]---
-[    4.087374] Kernel panic - not syncing: Fatal exception
-[    4.092753] Rebooting in 1 seconds..
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+[ Upstream commit 91dc288f4edf0d768e46c2c6d33e0ab703403459 ]
+
+When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
+declared. This causes the build to fail with:
+
+mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
+arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
+
+LANTIQ is not using 'physical_memsize' and MIPS_MALTA's use of it is
+self-contained in mti-malta/malta-dtshim.c.
+Use of physical_memsize in vpe-mt.c appears to be unused, so eliminate
+this loader mode completely and require VPE programs to be compiled with
+DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
+
+Fixes: 9050d50e2244 ("MIPS: lantiq: Set physical_memsize")
+Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
+Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+Cc: John Crispin <john@phrozen.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
+Cc: "Steven J. Hill" <Steven.Hill@imgtec.com>
+Cc: Qais Yousef <Qais.Yousef@imgtec.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bmips/dma.c   | 5 +++++
- arch/mips/bmips/setup.c | 5 +++++
- 2 files changed, 10 insertions(+)
+ arch/mips/include/asm/vpe.h | 1 -
+ arch/mips/kernel/vpe-mt.c   | 7 +++----
+ arch/mips/lantiq/prom.c     | 6 ------
+ 3 files changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
-index 33788668cbdb..3769d5efdede 100644
---- a/arch/mips/bmips/dma.c
-+++ b/arch/mips/bmips/dma.c
-@@ -5,11 +5,16 @@
- #include <asm/bmips.h>
- #include <asm/io.h>
+diff --git a/arch/mips/include/asm/vpe.h b/arch/mips/include/asm/vpe.h
+index 80e70dbd1f641..012731546cf60 100644
+--- a/arch/mips/include/asm/vpe.h
++++ b/arch/mips/include/asm/vpe.h
+@@ -104,7 +104,6 @@ struct vpe_control {
+ 	struct list_head tc_list;       /* Thread contexts */
+ };
  
-+int bmips_dma_sync_enabled = 1;
-+
- void arch_sync_dma_for_cpu_all(void)
- {
- 	void __iomem *cbr = BMIPS_GET_CBR();
- 	u32 cfg;
+-extern unsigned long physical_memsize;
+ extern struct vpe_control vpecontrol;
+ extern const struct file_operations vpe_fops;
  
-+	if (!bmips_dma_sync_enabled)
-+		return;
-+
- 	if (boot_cpu_type() != CPU_BMIPS3300 &&
- 	    boot_cpu_type() != CPU_BMIPS4350 &&
- 	    boot_cpu_type() != CPU_BMIPS4380)
-diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
-index e95b3f78e7cd..825e85e14010 100644
---- a/arch/mips/bmips/setup.c
-+++ b/arch/mips/bmips/setup.c
-@@ -35,6 +35,8 @@
- #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
- #define BCM6328_TP1_DISABLED	BIT(9)
+diff --git a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
+index 9fd7cd48ea1d2..496ed8f362f62 100644
+--- a/arch/mips/kernel/vpe-mt.c
++++ b/arch/mips/kernel/vpe-mt.c
+@@ -92,12 +92,11 @@ int vpe_run(struct vpe *v)
+ 	write_tc_c0_tchalt(read_tc_c0_tchalt() & ~TCHALT_H);
  
-+extern int bmips_dma_sync_enabled;
-+
- static const unsigned long kbase = VMLINUX_LOAD_ADDRESS & 0xfff00000;
- 
- struct bmips_quirk {
-@@ -104,6 +106,9 @@ static void bcm6358_quirks(void)
- 	 * disable SMP for now
+ 	/*
+-	 * The sde-kit passes 'memsize' to __start in $a3, so set something
+-	 * here...  Or set $a3 to zero and define DFLT_STACK_SIZE and
+-	 * DFLT_HEAP_SIZE when you compile your program
++	 * We don't pass the memsize here, so VPE programs need to be
++	 * compiled with DFLT_STACK_SIZE and DFLT_HEAP_SIZE defined.
  	 */
- 	bmips_smp_enabled = 0;
-+
-+	/* ARCH_HAS_SYNC_DMA_FOR_CPU_ALL causes kernel panics on BCM6358 */
-+	bmips_dma_sync_enabled = 0;
- }
++	mttgpr(7, 0);
+ 	mttgpr(6, v->ntcs);
+-	mttgpr(7, physical_memsize);
  
- static void bcm6368_quirks(void)
+ 	/* set up VPE1 */
+ 	/*
+diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
+index a26322ff57e01..8cf1868540312 100644
+--- a/arch/mips/lantiq/prom.c
++++ b/arch/mips/lantiq/prom.c
+@@ -25,12 +25,6 @@
+ DEFINE_SPINLOCK(ebu_lock);
+ EXPORT_SYMBOL_GPL(ebu_lock);
+ 
+-/*
+- * This is needed by the VPE loader code, just set it to 0 and assume
+- * that the firmware hardcodes this value to something useful.
+- */
+-unsigned long physical_memsize = 0L;
+-
+ /*
+  * this struct is filled by the soc specific detection code and holds
+  * information about the specific soc type, revision and name
 -- 
-2.30.2
+2.39.2
+
+
 
