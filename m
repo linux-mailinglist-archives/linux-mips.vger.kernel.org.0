@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA9E6B4585
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 15:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319D96B4402
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 15:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbjCJOee (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Mar 2023 09:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S232214AbjCJOUo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Mar 2023 09:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbjCJOeP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 09:34:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD63F741;
-        Fri, 10 Mar 2023 06:34:14 -0800 (PST)
+        with ESMTP id S231893AbjCJOU0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 09:20:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D4A1184D8;
+        Fri, 10 Mar 2023 06:18:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A971561745;
-        Fri, 10 Mar 2023 14:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C77BC433EF;
-        Fri, 10 Mar 2023 14:34:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63F63B822BA;
+        Fri, 10 Mar 2023 14:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9090AC433D2;
+        Fri, 10 Mar 2023 14:18:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678458853;
-        bh=0c03yv2yV54bjuZYZpO/e8nXYQRtPfKHOb0arqMEtQo=;
+        s=korg; t=1678457934;
+        bh=2uL77yoXW7d+No2Z1+Gc0AOKw3r6sunhT8N2HSr/S48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EBc1wJXzp/g/AZbRgHZq/FlUuxkwG9WIP7eOKQCQJwjLrCf9LE1qhNv+gbx5j8NQ6
-         9z/ydcw+zWLDM1L2MJGorvABh+OUR0bTHKUwUjc1zpi6xSLyU5+ZIRaz3yqO8IwgE2
-         Tm7KQVetAoL8n+HkAsk8578nv9C0+L5T9aCxjk/s=
+        b=Hd6wqaisDRpvWM1Pda472IX3dvI/xtunI0YJOS/T+WjRspOLga9tuTPynPs3fbf34
+         i9WpJx++qXyHKEiEYLrswJq+RgWo2IEVHd2K2Wxt3/MHaB7fuPkLHccqxA8T+hnXqr
+         LNEXyTZAeEmfVDkBo9/kaGU6i3+inetWth/c4Xus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,18 +43,18 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hauke Mehrtens <hauke@hauke-m.de>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 166/357] MIPS: vpe-mt: drop physical_memsize
-Date:   Fri, 10 Mar 2023 14:37:35 +0100
-Message-Id: <20230310133742.039605755@linuxfoundation.org>
+Subject: [PATCH 4.19 107/252] MIPS: vpe-mt: drop physical_memsize
+Date:   Fri, 10 Mar 2023 14:37:57 +0100
+Message-Id: <20230310133722.043506424@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230310133733.973883071@linuxfoundation.org>
-References: <20230310133733.973883071@linuxfoundation.org>
+In-Reply-To: <20230310133718.803482157@linuxfoundation.org>
+References: <20230310133718.803482157@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -135,10 +135,10 @@ index 9fd7cd48ea1d2..496ed8f362f62 100644
  	/* set up VPE1 */
  	/*
 diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
-index 3f568f5aae2d1..2729a4b63e187 100644
+index dceab67e481a8..02cf9b27b7859 100644
 --- a/arch/mips/lantiq/prom.c
 +++ b/arch/mips/lantiq/prom.c
-@@ -22,12 +22,6 @@
+@@ -24,12 +24,6 @@
  DEFINE_SPINLOCK(ebu_lock);
  EXPORT_SYMBOL_GPL(ebu_lock);
  
