@@ -2,185 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CC96B5C7F
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Mar 2023 14:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BE66B5EDB
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Mar 2023 18:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCKNyx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Mar 2023 08:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
+        id S229767AbjCKRce (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Mar 2023 12:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjCKNyu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Mar 2023 08:54:50 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A10964224;
-        Sat, 11 Mar 2023 05:54:39 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so5863478wms.0;
-        Sat, 11 Mar 2023 05:54:39 -0800 (PST)
+        with ESMTP id S229502AbjCKRcd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Mar 2023 12:32:33 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DF1E3A9;
+        Sat, 11 Mar 2023 09:32:32 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id a2so8796783plm.4;
+        Sat, 11 Mar 2023 09:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678542877;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6VNgsWjX3Wuvimz8g5dmkPK1Cy/m4ikAbDoLw6beJQ=;
-        b=EgpADp9mPyWPriOHQHt/ftRejPRpNulP0dfOXzeleBhIPgj1NGQIJbytBzJ2k1iF4R
-         CyITUZOvJLHKAPxgRdheh7BTJmNg+LH8xo7nE4cpnK/TrtstTxkyuMZEe6QB0uKZbsho
-         bha6cNC4l0ab+HfNrdxjVgcV4nNCXjrWHLvd5AgmtK0unzXSSZWpk338fqWEaWfbfDXc
-         gS8s4MTSvK5KviuS4DzupSZgdAs7GDKSC97xY/DJNQkr+LExD4sU3rKuRX3/o8kJ1rWj
-         n5Cc6BbMqxbQX9xXF/Ai+zkDgJk3y+PUHE9rOyhjFvIaxai7o22SnhvFxKXJxhQbJB/I
-         C2Xg==
+        d=gmail.com; s=20210112; t=1678555952;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=emS1LBwBoHuhYGFUci2z1irYt1S8GC/5X4q8lweHYJI=;
+        b=P+hKKAXIcyIe53GDB0xlCrwkeDaJDa3twbFSsSrX21pMZCqffJiIAQvhtL/3mtxZYf
+         L9BdM1mJ1S4CfHtmv8syUayzWENohFF97kGOE9WxHzAi+Ct5/U/5hN8ECu7GWTBMcY0y
+         VfZKlIoz2jlnsoqWsrWwkZ2xufO1FvyNzSnRJoC7nJbuayo77Xg1f/Ywcoij3/XPYldC
+         WZ9agXccFlbtQsKJtbIn4/4jHGR7ohr+pLGVIb31t0m0lJH66LP1ivSKxyj2nTi0JMTo
+         9F9xefiEfR+W3beGhUsjHLLqCD3HVrIF4Vq2GFWsUdcpw5ohpCnK8fIJjPTGMeKwNMor
+         0xyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678542877;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6VNgsWjX3Wuvimz8g5dmkPK1Cy/m4ikAbDoLw6beJQ=;
-        b=a3dkdY3JHp9tA+W/1PBX+HQ4G+w2k6Gn7htDt/LSL7i5cOuFA52jsR6r+T5H0egSEU
-         A27J63ae2kPlly/hpy1k4kofYGA9ah7D5WTNu2Y3phHZNMNOEiOfQKIwHvBCi/YDyFCq
-         gTO78UlUeBjlN3rfA8FAOc0nMw/HOMcT2Cg1l2OHbrch61YkZs9ZHTFqMmUNsP4snO8J
-         ggF3UFYjVtKKYnhEI5mmk3pgrBgRZlKaiZvg/kwV9phXVqRi42EHo0L5GKb8RoCCSXxK
-         cr+owDq1kgTomiZdpIexbxwOMhBR/R3kh3ShAfU/xFVu2MsVMDRPvrtqTlWfWTAlqwgz
-         XIuw==
-X-Gm-Message-State: AO0yUKXk9tihcJGnRJqdVqbSKj9/D62g4LHTh1qtqfpqtghXyOp4ozed
-        gRoXUQn88X/9NiZLHTIOaVY=
-X-Google-Smtp-Source: AK7set8Q/kmI9mpEEdXrr7E14surqp2hrZc9WFbOGPYrv2F11V19h1lecKjCq/bjwK7VwWka+od15A==
-X-Received: by 2002:a05:600c:4e8c:b0:3eb:4cb5:dfa with SMTP id f12-20020a05600c4e8c00b003eb4cb50dfamr5440417wmq.31.1678542877399;
-        Sat, 11 Mar 2023 05:54:37 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id hn4-20020a05600ca38400b003dc1d668866sm2899772wmb.10.2023.03.11.05.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 05:54:37 -0800 (PST)
-Date:   Sat, 11 Mar 2023 16:54:32 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v4 1/4] PCI: Introduce pci_dev_for_each_resource()
-Message-ID: <d057ac5c-5947-41e1-abc7-9428fbd2fbe2@kili.mountain>
+        d=1e100.net; s=20210112; t=1678555952;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=emS1LBwBoHuhYGFUci2z1irYt1S8GC/5X4q8lweHYJI=;
+        b=RvylzrywtzOy2EonkL1g2b8dFnvu53vFXjJ36mKuvkuaoCOuaTb96O/WVuR6S/8jg6
+         oc19jMTAAyHXl5gLFqVuN/3G6y23uixm3c3mC5/kFKP2paNEILENgmBgPvEr+kgINgKF
+         +4Ul71WK5i42pjy2gWtkb4DkcWsjAdqxFaoJFy3+Iw049FqvN3qmPEd+jWC/+8CvBtAP
+         Yg3fWZ2yAJsvohW2K5rcY1k3isFs0+gQkXvJzE283OokNuu/etwUdvFSwbnq0bujVYk1
+         uS/1ixzLPpYiPczqvBtMzTMvGHew/JgJ64g9K9mLwMB+rGdzHlX+JafZXME1pjp1KY6v
+         e2dQ==
+X-Gm-Message-State: AO0yUKXuVR9WX+1Fc5XoKszzMUYARaA3DXcJzHvobK17u+bPw/bcKV9g
+        Douw5uEIaT/nWRePmHhbtKBcU0e282s=
+X-Google-Smtp-Source: AK7set/5QAZUKsPydgXzzd5BBUW5OfCHAN0N4qwYxg/rvQKVKdjGx0t+gDuFaqn30BWCekLUjVhg7w==
+X-Received: by 2002:a05:6a20:4283:b0:c6:bb08:a7ab with SMTP id o3-20020a056a20428300b000c6bb08a7abmr6258912pzj.28.1678555951870;
+        Sat, 11 Mar 2023 09:32:31 -0800 (PST)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q26-20020a62ae1a000000b005d663989ccfsm1710846pff.200.2023.03.11.09.32.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 09:32:31 -0800 (PST)
+Message-ID: <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
+Date:   Sat, 11 Mar 2023 09:32:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310171416.23356-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230310121306.4632-1-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230310121306.4632-1-noltari@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andy,
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/PCI-Introduce-pci_dev_for_each_resource/20230311-011642
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230310171416.23356-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v4 1/4] PCI: Introduce pci_dev_for_each_resource()
-config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230311/202303112149.xD47qKOY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+On 3/10/2023 4:13 AM, Álvaro Fernández Rojas wrote:
+> arch_sync_dma_for_cpu_all() causes kernel panics on BCM6358 with EHCI/OHCI:
+> [    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
+> [    3.895011] Reserved instruction in kernel code[#1]:
+> [    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
+> [    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
+> [    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
+> [    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
+> [    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
+> [    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
+> [    3.932848] $20   : 00000000 00000000 55590000 77d70000
+> [    3.938251] $24   : 00000018 00000010
+> [    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
+> [    3.949058] Hi    : 00000000
+> [    3.952013] Lo    : 00000000
+> [    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
+> [    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
+> [    3.965913] Status: 10008703	KERNEL EXL IE
+> [    3.970216] Cause : 00800028 (ExcCode 0a)
+> [    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
+> [    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
+> [    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
+> [    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
+> [    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
+> [    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
+> [    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
+> [    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
+> [    4.044196]         ...
+> [    4.046706] Call Trace:
+> [    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
+> [    4.054356] [<80015c70>] setup_frame+0xdc/0x124
+> [    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
+> [    4.064207] [<80011b50>] work_notifysig+0x10/0x18
+> [    4.069036]
+> [    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
+> [    4.080686]
+> [    4.082517] ---[ end trace 22a8edb41f5f983b ]---
+> [    4.087374] Kernel panic - not syncing: Fatal exception
+> [    4.092753] Rebooting in 1 seconds..
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202303112149.xD47qKOY-lkp@intel.com/
+Did you pinpoint which specific instruction within 
+arch_sync_dma_for_cpu_all() is causing the reserved instruction exception?
 
-smatch warnings:
-drivers/pnp/quirks.c:248 quirk_system_pci_resources() warn: was && intended here instead of ||?
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>   arch/mips/bmips/dma.c   | 5 +++++
+>   arch/mips/bmips/setup.c | 5 +++++
+>   2 files changed, 10 insertions(+)
+> 
+> diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
+> index 33788668cbdb..3769d5efdede 100644
+> --- a/arch/mips/bmips/dma.c
+> +++ b/arch/mips/bmips/dma.c
+> @@ -5,11 +5,16 @@
+>   #include <asm/bmips.h>
+>   #include <asm/io.h>
+>   
+> +int bmips_dma_sync_enabled = 1;
 
-vim +248 drivers/pnp/quirks.c
+bool bmips_dma_sync_disabled;
 
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  229  static void quirk_system_pci_resources(struct pnp_dev *dev)
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  230  {
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  231  	struct pci_dev *pdev = NULL;
-059b4a086017fb Mika Westerberg 2023-03-10  232  	struct resource *res, *r;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  233  	int i, j;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  234  
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  235  	/*
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  236  	 * Some BIOSes have PNP motherboard devices with resources that
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  237  	 * partially overlap PCI BARs.  The PNP system driver claims these
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  238  	 * motherboard resources, which prevents the normal PCI driver from
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  239  	 * requesting them later.
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  240  	 *
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  241  	 * This patch disables the PNP resources that conflict with PCI BARs
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  242  	 * so they won't be claimed by the PNP system driver.
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  243  	 */
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  244  	for_each_pci_dev(pdev) {
-059b4a086017fb Mika Westerberg 2023-03-10  245  		pci_dev_for_each_resource(pdev, r, i) {
-059b4a086017fb Mika Westerberg 2023-03-10  246  			unsigned long type = resource_type(r);
-999ed65ad12e37 Rene Herman     2008-07-25  247  
-059b4a086017fb Mika Westerberg 2023-03-10 @248  			if (type != IORESOURCE_IO || type != IORESOURCE_MEM ||
-                                                                                                  ^^
-This || needs to be &&.  This loop will always hit the continue path
-without doing anything.
+> +
+>   void arch_sync_dma_for_cpu_all(void)
+>   {
+>   	void __iomem *cbr = BMIPS_GET_CBR();
+>   	u32 cfg;
+>   
+> +	if (!bmips_dma_sync_enabled)
+> +		return;
 
-059b4a086017fb Mika Westerberg 2023-03-10  249  			    resource_size(r) == 0)
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  250  				continue;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  251  
-059b4a086017fb Mika Westerberg 2023-03-10  252  			if (r->flags & IORESOURCE_UNSET)
-f7834c092c4299 Bjorn Helgaas   2015-03-03  253  				continue;
-f7834c092c4299 Bjorn Helgaas   2015-03-03  254  
-95ab3669f78306 Bjorn Helgaas   2008-04-28  255  			for (j = 0;
-999ed65ad12e37 Rene Herman     2008-07-25  256  			     (res = pnp_get_resource(dev, type, j)); j++) {
-aee3ad815dd291 Bjorn Helgaas   2008-06-27  257  				if (res->start == 0 && res->end == 0)
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  258  					continue;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  259  
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  260  				/*
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  261  				 * If the PNP region doesn't overlap the PCI
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  262  				 * region at all, there's no problem.
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  263  				 */
-059b4a086017fb Mika Westerberg 2023-03-10  264  				if (!resource_overlaps(res, r))
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  265  					continue;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  266  
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  267  				/*
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  268  				 * If the PNP region completely encloses (or is
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  269  				 * at least as large as) the PCI region, that's
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  270  				 * also OK.  For example, this happens when the
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  271  				 * PNP device describes a bridge with PCI
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  272  				 * behind it.
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  273  				 */
-059b4a086017fb Mika Westerberg 2023-03-10  274  				if (res->start <= r->start && res->end >= r->end)
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  275  					continue;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  276  
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  277  				/*
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  278  				 * Otherwise, the PNP region overlaps *part* of
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  279  				 * the PCI region, and that might prevent a PCI
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  280  				 * driver from requesting its resources.
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  281  				 */
-c7dabef8a2c59e Bjorn Helgaas   2009-10-27  282  				dev_warn(&dev->dev,
-059b4a086017fb Mika Westerberg 2023-03-10  283  					 "disabling %pR because it overlaps %s BAR %d %pR\n",
-059b4a086017fb Mika Westerberg 2023-03-10  284  					 res, pci_name(pdev), i, r);
-4b34fe156455d2 Bjorn Helgaas   2008-06-02  285  				res->flags |= IORESOURCE_DISABLED;
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  286  			}
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  287  		}
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  288  	}
-0509ad5e1a7d92 Bjorn Helgaas   2008-03-11  289  }
+if (bmips_dma_sync_disabled)
+
+> +
+>   	if (boot_cpu_type() != CPU_BMIPS3300 &&
+>   	    boot_cpu_type() != CPU_BMIPS4350 &&
+>   	    boot_cpu_type() != CPU_BMIPS4380)
+> diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+> index e95b3f78e7cd..825e85e14010 100644
+> --- a/arch/mips/bmips/setup.c
+> +++ b/arch/mips/bmips/setup.c
+> @@ -35,6 +35,8 @@
+>   #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
+>   #define BCM6328_TP1_DISABLED	BIT(9)
+>   
+> +extern int bmips_dma_sync_enabled;
+> +
+>   static const unsigned long kbase = VMLINUX_LOAD_ADDRESS & 0xfff00000;
+>   
+>   struct bmips_quirk {
+> @@ -104,6 +106,9 @@ static void bcm6358_quirks(void)
+>   	 * disable SMP for now
+>   	 */
+>   	bmips_smp_enabled = 0;
+> +
+> +	/* ARCH_HAS_SYNC_DMA_FOR_CPU_ALL causes kernel panics on BCM6358 */
+> +	bmips_dma_sync_enabled = 0;
+
+bmips_dma_sync_disabled = true;
+
+>   }
+>   
+>   static void bcm6368_quirks(void)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+Florian
