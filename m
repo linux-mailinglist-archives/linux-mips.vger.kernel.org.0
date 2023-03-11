@@ -2,102 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429AE6B540C
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Mar 2023 23:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1095B6B5986
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Mar 2023 09:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjCJWPu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Mar 2023 17:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S229621AbjCKIlW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Mar 2023 03:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjCJWPs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Mar 2023 17:15:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA8E115DE5;
-        Fri, 10 Mar 2023 14:15:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC28FB82400;
-        Fri, 10 Mar 2023 22:15:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749CFC433EF;
-        Fri, 10 Mar 2023 22:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678486543;
-        bh=DBl3XYhVnPnvHREV6khsX0zced8HUvT1CffAKeLd3Ro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OfS4jME/FTj7znUmYf295mHvCJSGHW15meDAWvWzrPF00ribhkkR54Qzq1xN8JWLo
-         4ifTzybHNa9ZODC6VxC42vmMGTVR8rpuWOM6tKK420xu8RHuuxnRruXC7YKzvCsgbR
-         u/3W/J52kt+Sw35gEY+GHE+yc90z2JKYQ8ziYt9KjcC+XD8bNVo3dAsYq1L9Dq9Z0P
-         F78mqifIRtEWY9l2xPq1eww1JPlj0DytsnzKq9XlcZ3XWB4shMaJ1Gp356DNbpjhAm
-         fT6kd6cAHwWNZ9v/mPpirze0bthx/rOXMwvra8reVtn+1Ve3YO1CPCN4cOH1gbnOxg
-         +A+CV4nR0FY6w==
-Date:   Fri, 10 Mar 2023 15:15:38 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v4 1/4] PCI: Introduce pci_dev_for_each_resource()
-Message-ID: <ZAusCnLSXeEcpQs+@kbusch-mbp.dhcp.thefacebook.com>
-References: <20230310171416.23356-1-andriy.shevchenko@linux.intel.com>
- <20230310171416.23356-2-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229693AbjCKIlV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Mar 2023 03:41:21 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE82812DC39
+        for <linux-mips@vger.kernel.org>; Sat, 11 Mar 2023 00:41:17 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id by13so6792046vsb.3
+        for <linux-mips@vger.kernel.org>; Sat, 11 Mar 2023 00:41:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678524077;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8+CEZRZEOJVmAfb07UohKPHalX/8xKQCW3mCwVUhKXY=;
+        b=nAg3aRYpKJ/hSn+VSxABMDRWPWo6y0rzV3xB6/sc+X4rRL05pskCAJzzNJ208lTKk7
+         SQIZ3i8CgA3o7Qg/+Q1TRJcJ/L2IxaWGfx2SLPKmH13wfPWzKaVm2ZgXwBZWk0Mi6nbI
+         MBKodwEgtI03EmYwCcR1n4sXPPYVSOYls/ihTA7pFpvwy6ZSDtMWtG6vmJxR6qvjcgNX
+         IEeL++7g3f7WsQZmDoMyo3WjcIJxoELZTbUlgaRDkzHtUF08eREiTiZQe+AF3vmOCnhD
+         oZGsbMgBqyHz79V9m/NM2xR/JdspjC+HIm8z3iLnWWGO2r8l9zomtTjPDgzOlZYHwm6/
+         /V8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678524077;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8+CEZRZEOJVmAfb07UohKPHalX/8xKQCW3mCwVUhKXY=;
+        b=35F9L9SdZS4Q2PW33y4TVdJv/KApU1z5bS2axQq3cbpLa2AvA5+tLItzP5UZ+4nZN6
+         Mt8kwWmKcbxmB0g+7YBZUYsSuo6dhW/+UK6mI7NfPF8pMwqK3f+QDHQhEa38aMfIeVCM
+         1EgxnOvzdAwSlY0zCBLiPVKUSjGfvTAMhknp47ySWtjTQHGDtHDWPvG98sRX+dCt9UHv
+         Us5wTQoBzaHB6EknBoaxhgufMOAWZlQp+8V710bOVQm6Us7fQFLq0W5zt02XToMfgdei
+         wdA/zAf/baUy/61dznKpxICBujMqIASdaxy/wDXZnMvnheEKRgmVbY0+Pcvshboj+gKg
+         rfMw==
+X-Gm-Message-State: AO0yUKU75xfISp+HdSwkwzOZrolBM0G72OFNoFghzGc1+iDcTzxldu1o
+        Tjo/o1lk4Jp1PxqxLEe7cl1v6qKo8mwlImjXTHY=
+X-Google-Smtp-Source: AK7set/qyTDdlZmmHNBS8kaPfxi8HjbCGQztkWTWoK3AziyJ63Rg+SkSjIjEAJRb7PtIstZtpdoQImtqXTcugcpKEC0=
+X-Received: by 2002:a67:e902:0:b0:416:2ad3:35ba with SMTP id
+ c2-20020a67e902000000b004162ad335bamr18502895vso.1.1678524076711; Sat, 11 Mar
+ 2023 00:41:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310171416.23356-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:c90f:0:b0:3af:2d22:adb1 with HTTP; Sat, 11 Mar 2023
+ 00:41:16 -0800 (PST)
+Reply-To: godwinrichard700@gmail.com
+From:   Richard Godwin <wr9236251@gmail.com>
+Date:   Sat, 11 Mar 2023 00:41:16 -0800
+Message-ID: <CABx9BKDCK1aN0AZmuJbadU5BVQN7ynat=eTEBDbqvGiFVBuUzA@mail.gmail.com>
+Subject: URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: ear.so]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e33 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5066]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [wr9236251[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wr9236251[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [godwinrichard700[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 07:14:13PM +0200, Andy Shevchenko wrote:
-> +#define __pci_dev_for_each_resource(dev, res, __i, vartype)		\
-> +	for (vartype __i = 0;						\
-> +		res = &(dev)->resource[__i], __i < PCI_NUM_RESOURCES;	\
-> +		__i++)
+-- 
+Hello Dear Good Day,
 
-...
+I hope you are doing great,
 
-> +#define pci_dev_for_each_resource_p(dev, res)				\
-> +	__pci_dev_for_each_resource(dev, res, i, unsigned int)
+I have something important to discuss with you
 
-It looks dangerous to have a macro declare a variable when starting a new
-scope. How do you know the name 'i' won't clash with something defined above?
+if you give me a listening ear.so that I can
+
+write you in details thank you as i wait for
+
+your reply.
+
+Mr Richard Godwin
