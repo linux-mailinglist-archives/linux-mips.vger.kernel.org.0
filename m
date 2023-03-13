@@ -2,87 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988CD6B83A5
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Mar 2023 22:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B8D6B8415
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Mar 2023 22:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjCMVC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Mar 2023 17:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S229885AbjCMVjh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Mar 2023 17:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjCMVCA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 17:02:00 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60C8C955;
-        Mon, 13 Mar 2023 14:00:56 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id j11so54046627edq.4;
-        Mon, 13 Mar 2023 14:00:56 -0700 (PDT)
+        with ESMTP id S229901AbjCMVjf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 17:39:35 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5798B302;
+        Mon, 13 Mar 2023 14:39:31 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-541a05e4124so80089287b3.1;
+        Mon, 13 Mar 2023 14:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678741244;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678743570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=DiOQ7LpQ9BueYA5S5WwnImfMJeB+W428SPYWHW2VPcXaBWdV53EPgkhu8Uunn2HLDX
-         H3l+hmiEN6HwBhf+Bk80dRnMkuOp2Dd+bZwsDGFGfZiYxBqzAIpJf7yPEQHIsA+yoSNp
-         Mj6SHaJJs4wlgjhEdiWuol833lJWGTgED9Nri7CGIr1cYgeicyOw/FDN+oYemLy52Zhj
-         WGTVC2Td3pK4CBvNPuXlNv+7rbvTM8kAP/pJufiN6g4LQ2Y63kzC/A2V3IX1DIqkvrM/
-         KWoG/vb/GelWeH5k1uP5n60zzE8pPCe8SQQgyKAGOQFjwkhG7KLB3GZM6yYfHW9Tc8NI
-         gS/g==
+        bh=6JXlbj1faTAj8EHCq7W4vAIdTKPi8yA3Zju7BfiDTic=;
+        b=RHdGsjoy1dll6IdiStmheyksBtAqRtxsXGBKDpVRGr2GcpN9reO/LAhKAOwJ6kl4sb
+         jYbOGWAZgDfJiAg1RKqHN72zz55N4672/SifWa9RTiftbGjxwjq0LG2lW/6CzJxY8zzF
+         Jw2k4ZKdgRPwzctl2BPv7ueKVDuLpA4SKfuTn6//klpbCuwvUSI6DybJhdwYAEFeJ4Hh
+         fkaMUYHxTuOvQOQqdv2FQsSfpdtAe9SmrDaWc5pqmnVbfORJtl2tWPv/TG6bDWudju1U
+         XHBuAQYhgTXfPd+KBjyWhrWVQw/4hLamYe3eQSpEeHrGN26Fmwapq0BAIalRvsFF0XL9
+         mMpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678741244;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678743570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=ZeQrmvDYd6OvSSweVU+6FsxB8gvlr54m2DXuhh5OXB9T6lTv7ONgxgsd0+hup2PwqQ
-         jWTssI373U++h7BlZU6hNT7w5aGEEZNUXuMcBx3lZs65UtSrJtWGS4GbxvaZanNc6DRa
-         wgLBh9FpWWuih9Xis7pUcq2F1OgkPxING3EHSqL6NECqjv5yChbruAcEES6pCc5x/ceV
-         mOKNMFoihDEMNIWUcZYjhJrut6lmpoqVi9ikV61/MVBIsEbCNlrAVYmABCFhyjIZWfKm
-         D5BXPIIWWM4fd0z4rXvA0a/Hg5hD5o+vTTRklCdSvAzneNyRS/0a45s40u2WYcDwjvT+
-         1r7w==
-X-Gm-Message-State: AO0yUKVALl31+aAUE2s1DAbqEkk+TjFa2sy4WtAp6F2YWsKhjhaI50OF
-        b0cNOVehpakYpZD08Z6RSCA=
-X-Google-Smtp-Source: AK7set+xc/A2AUsEpnkeSAPo/NefGhegXt8FflrkGyYZI98MGsPQwOInyI7rwtArMe68neAJkvQ48A==
-X-Received: by 2002:a17:907:7241:b0:884:fd73:8053 with SMTP id ds1-20020a170907724100b00884fd738053mr46136247ejc.9.1678741244643;
-        Mon, 13 Mar 2023 14:00:44 -0700 (PDT)
-Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170906830b00b008ee5356801dsm219853ejx.187.2023.03.13.14.00.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 14:00:44 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 21/21] MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
-Date:   Mon, 13 Mar 2023 23:59:21 +0300
-Message-Id: <20230313205921.35342-22-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230313205921.35342-1-arinc.unal@arinc9.com>
-References: <20230313205921.35342-1-arinc.unal@arinc9.com>
+        bh=6JXlbj1faTAj8EHCq7W4vAIdTKPi8yA3Zju7BfiDTic=;
+        b=oqekwlLW300Hr5p8bpur2JiFc/VAUfmukr4F2Ffi1ceuFNCC0+UashPwA7lf0yHOOb
+         cH13L0BUMrd71Ld/BH9K+oLC0xi5BzqsJo+BdzB1PDddl+pk/qrYOVi8ElqctmaA27B4
+         VnA6FhZv/bMEWR4s5jUFMOBrkCrosxdHGvPArj0WHFEffNgUpCPSbapRAuwoV9uBIbh7
+         CN7wDRr2iB8O0eEEH/ELz7RpkYAjRNZHdi8Tj5SFkP4f2EXjG97m6FUOvOSwx741SQ/B
+         wIEKusa8L1BaAoIWWnb+ohX0NtJOTMj+m8dMGBtACEE/oi8yFXqRm0FOhzyYIUrgtI2I
+         nluA==
+X-Gm-Message-State: AO0yUKXYxES0OCWJ97WxKcjJO68ShZKUxw39e3krhC40q5ojh6MsmS8z
+        Yuyfshj/MK+x9WYzQrCuGMFj8Mv8d8PBLj4IKnc=
+X-Google-Smtp-Source: AK7set8gyoVgmVJ0bH1A0Ukh8d5UbesQp5whWIp9pFhSPf6sWaCkuiCgI2nVLCio4rpycn/kTDVe2uX6kCgFCktWM/w=
+X-Received: by 2002:a81:a782:0:b0:541:6763:3ce1 with SMTP id
+ e124-20020a81a782000000b0054167633ce1mr5823421ywh.2.1678743570108; Mon, 13
+ Mar 2023 14:39:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230310121306.4632-1-noltari@gmail.com> <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
+ <CAOiHx=njCvfVju9BAe7gTzMq0vybQF-gy4SRZrhEJFULGLhC7w@mail.gmail.com>
+ <5b4d3eef-ff80-29e8-9be0-d487aee5e4e2@broadcom.com> <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
+ <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com> <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com>
+In-Reply-To: <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Mon, 13 Mar 2023 22:39:19 +0100
+Message-ID: <CAKR-sGcyMF26NGoeEApKuKDe6=14nCGKwRYx-o68LHAcmUNXhA@mail.gmail.com>
+Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     William Zhang <william.zhang@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -93,66 +73,72 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+Hi Florian,
 
-The Ralink pinctrl driver is now under the name of MediaTek MIPS pin
-controller. Move the maintainer information accordingly. Add dt-binding
-schema files. Add linux-mediatek@lists.infradead.org as an associated
-mailing list.
+I did another test changing from TP1 to TP0 and this is the result:
+[ 0.000000] Linux version 5.15.98 (noltari@atlantis)
+(mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
+12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
+[ 0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
+[ 0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x2a00015
+[ 0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+And there were no exceptions with EHCI/OHCI as opposed to TP1.
+So the issue is only happening when booting from TP1.
+Maybe it's due to the fact that BCM6358 has a shared TLB?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6048bbe0e672..f4ee11dab1ab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16521,6 +16521,28 @@ F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
- F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
- F:	drivers/pinctrl/mediatek/
- 
-+PIN CONTROLLER - MEDIATEK MIPS
-+M:	Arınç ÜNAL <arinc.unal@arinc9.com>
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-mips@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7620.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7621.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt76x8.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mtmips.*
-+F:	drivers/pinctrl/mediatek/pinctrl-rt2880.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt305x.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt3883.c
-+
- PIN CONTROLLER - MICROCHIP AT91
- M:	Ludovic Desroches <ludovic.desroches@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -17496,13 +17518,6 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/boot/dts/ralink/mt7621*
- 
--RALINK PINCTRL DRIVER
--M:	Arınç ÜNAL <arinc.unal@arinc9.com>
--M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
--L:	linux-mips@vger.kernel.org
--S:	Maintained
--F:	drivers/pinctrl/ralink/
--
- RALINK RT2X00 WIRELESS LAN DRIVER
- M:	Stanislaw Gruszka <stf_xl@wp.pl>
- M:	Helmut Schaa <helmut.schaa@googlemail.com>
--- 
-2.37.2
+Maybe the correct way of solving the issue would be by adding the
+following code at bcm6358_quirks():
+if (read_c0_brcm_cmt_local() & (1 << 31))
+    bmips_dma_sync_disabled =3D 1;
 
+BTW, if I understood it correctly, you want me to reverse the logic,
+so bmips_dma_sync_disabled instead of bmips_dma_sync_enabled.
+Is this correct?
+
+Best regards,
+=C3=81lvaro.
+
+
+El lun, 13 mar 2023 a las 18:37, Florian Fainelli
+(<f.fainelli@gmail.com>) escribi=C3=B3:
+>
+> On 3/12/23 11:50, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+> > Hi Florian,
+> >
+> > I tried what you suggested but it stil panics on EHCI:
+> >
+> > [    0.000000] Linux version 5.15.98 (noltari@atlantis)
+> > (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
+> > 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
+> > [    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
+> > [    0.000000] bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x3c1b8041
+> > [    0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
+> >
+> > It looks like bit 29 is set so RAC should be present.
+> > And RAC_I seems to be set, but not RAC_D...
+> >
+> > BTW, this is what I added to bmips_cpu_setup:
+> >
+> > case CPU_BMIPS4350:
+> > cfg =3D read_c0_brcm_config_0();
+> > pr_info("bmips_cpu_setup: read_c0_brcm_config_0() =3D 0x%x\n", cfg);
+> >
+> > cfg =3D __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> > pr_info("bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x%x\n", cfg);
+> > __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
+> > __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> > break;
+>
+> Thanks for running those experiments, I cannot explain what you are
+> seeing, so there must be some sort of erratum applicable to the
+> BMIPS4380 revision used on the 6358 somehow...
+>
+> If you can make the suggested change to use negative logic in order to
+> disable the RAC flushing, that would work for me, also maybe add a
+> Fixes: tag so it gets backported to stable trees?
+>
+> Thanks!
+> --
+> Florian
+>
