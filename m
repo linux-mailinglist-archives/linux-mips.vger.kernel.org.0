@@ -2,321 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365C86B7FCB
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Mar 2023 18:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8FE6B834B
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Mar 2023 22:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCMRzo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Mar 2023 13:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S229700AbjCMVAT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Mar 2023 17:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCMRzo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 13:55:44 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B49D929162;
-        Mon, 13 Mar 2023 10:55:40 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pbmOT-0002OB-00; Mon, 13 Mar 2023 18:55:33 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id ABE78C1252; Mon, 13 Mar 2023 18:55:21 +0100 (CET)
-Date:   Mon, 13 Mar 2023 18:55:21 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
-        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <20230313175521.GA14404@alpha.franken.de>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
+        with ESMTP id S229797AbjCMVAS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 17:00:18 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0028F84808;
+        Mon, 13 Mar 2023 13:59:53 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x13so6733088edd.1;
+        Mon, 13 Mar 2023 13:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678741192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=clG8kMvKt8WSjuvF5NCWvQYiJ04cwb/jYow6A+hKr4E=;
+        b=KtD/In2gR0Za9xDMzjRferPOBx/btX4MyGerGbdhQVIIS95VrhGki8CA14iF/5pYBZ
+         jFztYdpwDGH7SjLbmhUuAiXZsGaJl6L3wCEuJWrwHw8x/YHHy9z2qZngLlbj3qAYyP0k
+         wRIFZinNF5irrpMxU1Nl5ZRxImJc8YYbOIiyTurdVgAQJIguRuWy9V0jcdPEyRFknqjv
+         jo8gk9/pDn5f6zYo/+CxvSF3+QuEOBsAgXFtpSoHAhAN8e78E2/rSRHwIOGlj+oS2oRj
+         j0EpnpRsHTqqLkKOdlVrRguM3bm+Nrg+2qW5BTgXF3qBJGT4ED5QR1uurhKMOFbkQos4
+         YC7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678741192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=clG8kMvKt8WSjuvF5NCWvQYiJ04cwb/jYow6A+hKr4E=;
+        b=uTJP3GeDoeWD3XMDiibTQKo86BHSwY1gYDdzf5D3E4UZXI6Scq83LtTJ2CGCsCgjCd
+         l56DAb3HX2gG3vjYGj6UZ1jD83NTvKZmxadD3KnbvO3ccT19HeT1+0dHfGjGi6vnU61N
+         GN12hQO5cULwQIphVKwvpOMinven4Ns5qbdKv6dqTtlM4xmJ9TYcItDAocrr9/qnq3u/
+         15eNHYCQXMtVx11wbkyAA3ICx5zkjHZc2IWuX1wX86GK6/Zk4E0WDBz4JBo3xLwd+uJK
+         Sn0z2tiPR4fde4Gc6EzpCO2F166fYOCn+Z9q21aVzUPcC8Ys2fbieVPb1HcdFKZK71ix
+         ekFw==
+X-Gm-Message-State: AO0yUKVBmjNFevGckzYO/CrgtB3LSr6zxDQP2fU7aobg9WqhOsPE7y9X
+        wVTjj3XF12m6VwOpArjfCFSd+7gQlO3en6Yn
+X-Google-Smtp-Source: AK7set8LdIjCZD10owBtNeRy8tit/0u7lbXw3YqjC210RIL5GUaWh1N8ZA+yROCO+JoF/SpRl01dSQ==
+X-Received: by 2002:a17:907:3e2a:b0:929:bd3:eab4 with SMTP id hp42-20020a1709073e2a00b009290bd3eab4mr6017338ejc.68.1678741192216;
+        Mon, 13 Mar 2023 13:59:52 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170906830b00b008ee5356801dsm219853ejx.187.2023.03.13.13.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 13:59:51 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        William Dean <williamsukatube@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Hui Liu <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: [PATCH 00/21] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
+Date:   Mon, 13 Mar 2023 23:59:00 +0300
+Message-Id: <20230313205921.35342-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308130710.368085-3-bhe@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 09:07:08PM +0800, Baoquan He wrote:
-> With the adding, some default ioremap_xx methods defined in
-> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> NULL.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: linux-mips@vger.kernel.org
-> ---
->  arch/mips/include/asm/io.h | 78 ++++++++++++++++++++++++++++++++++----
->  1 file changed, 70 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-> index cec8347f0b85..6756baadba6c 100644
-> --- a/arch/mips/include/asm/io.h
-> +++ b/arch/mips/include/asm/io.h
-> @@ -126,6 +126,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
->   *     almost all conceivable cases a device driver should not be using
->   *     this function
->   */
-> +#define phys_to_virt phys_to_virt
->  static inline void * phys_to_virt(unsigned long address)
->  {
->  	return __va(address);
-> @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
->  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
->  #endif
->  
-> +#define readb readb
-> +#define readw readw
-> +#define readl readl
-> +#define writeb writeb
-> +#define writew writew
-> +#define writel writel
-> +
-> +#ifdef CONFIG_64BIT
-> +#define readq readq
-> +#define writeq writeq
-> +#define __raw_readq __raw_readq
-> +#define __raw_writeq __raw_writeq
-> +#endif
-> +
-> +#define __raw_readb __raw_readb
-> +#define __raw_readw __raw_readw
-> +#define __raw_readl __raw_readl
-> +#define __raw_writeb __raw_writeb
-> +#define __raw_writew __raw_writew
-> +#define __raw_writel __raw_writel
-> +
->  #define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
->  	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
->  	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
-> @@ -374,6 +396,27 @@ BUILDIO_IOPORT(l, u32)
->  BUILDIO_IOPORT(q, u64)
->  #endif
->  
-> +#define inb inb
-> +#define inw inw
-> +#define inl inl
-> +#define inb_p inb_p
-> +#define inw_p inw_p
-> +#define inl_p inl_p
-> +
-> +#define outb outb
-> +#define outw outw
-> +#define outl outl
-> +#define outb_p outb_p
-> +#define outw_p outw_p
-> +#define outl_p outl_p
-> +
-> +#ifdef CONFIG_64BIT
-> +#define inq inq
-> +#define outq outq
-> +#define inq_p inq_p
-> +#define outq_p outq_p
-> +#endif
-> +
->  #define __BUILDIO(bwlq, type)						\
->  									\
->  __BUILD_MEMORY_SINGLE(____raw_, bwlq, type, 1, 0, 0)
-> @@ -412,14 +455,6 @@ __BUILDIO(q, u64)
->  #define writeq_be(val, addr)						\
->  	__raw_writeq(cpu_to_be64((val)), (__force unsigned *)(addr))
->  
-> -/*
-> - * Some code tests for these symbols
-> - */
-> -#ifdef CONFIG_64BIT
-> -#define readq				readq
-> -#define writeq				writeq
-> -#endif
-> -
->  #define __BUILD_MEMORY_STRING(bwlq, type)				\
->  									\
->  static inline void writes##bwlq(volatile void __iomem *mem,		\
-> @@ -480,14 +515,39 @@ BUILDSTRING(l, u32)
->  BUILDSTRING(q, u64)
->  #endif
->  
-> +#define insb insb
-> +#define insw insw
-> +#define insl insl
-> +#define outsb outsb
-> +#define outsw outsw
-> +#define outsl outsl
-> +
-> +#define readsb readsb
-> +#define readsw readsw
-> +#define readsl readsl
-> +#define writesb writesb
-> +#define writesw writesw
-> +#define writesl writesl
-> +
-> +#ifdef CONFIG_64BIT
-> +#define insq insq
-> +#define readsq readsq
-> +#define readsq readsq
-> +#define writesq writesq
-> +#endif
-> +
-> +
-> +#define memset_io memset_io
->  static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
->  {
->  	memset((void __force *) addr, val, count);
->  }
-> +#define memcpy_fromio memcpy_fromio
->  static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
->  {
->  	memcpy(dst, (void __force *) src, count);
->  }
-> +#define memcpy_toio memcpy_toio
->  static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
->  {
->  	memcpy((void __force *) dst, src, count);
-> @@ -556,4 +616,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
->  
->  void __ioread64_copy(void *to, const void __iomem *from, size_t count);
->  
-> +#include <asm-generic/io.h>
+This is an ambitious effort I've been wanting to do for months.
 
-this #include blows up builds with:
+Straight off the bat, I'm fixing the ABI that I broke a while back, by
+reintroducing the ralink,rt2880-pinmux compatible string.
 
-  GEN     Makefile
-  Checking missing-syscalls for N32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CC      init/version.o
-In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-   ^~~~~~~~~~~~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-                     ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-                    ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
-  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-  ^~~~~~~~~~~~~~
-  GEN     Makefile
-  Checking missing-syscalls for N32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CC      init/version.o
-In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-   ^~~~~~~~~~~~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-                     ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-                    ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
-  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-  ^~~~~~~~~~~~~~
-  GEN     Makefile
-  Checking missing-syscalls for N32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CC      init/version.o
-In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-   ^~~~~~~~~~~~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-                     ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-                    ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
-  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-  ^~~~~~~~~~~~~~
-[...]
+If you take a look at the schema for mt7620 and rt305x, some functions got
+multiple lists for groups. Like refclk on mt7620. Because mt7620 and
+mt7628/mt7688 SoCs use the same compatible string, it's impossible to
+differentiate on the binding which SoC a devicetree is actually for.
+Therefore, the binding will allow all groups listed for that function. For
+example, if the SoC is mt7620, only the refclk function for the mdio group
+can be used. If one were to put "spi cs1" as the function there, there
+wouldn't be a warning.
 
-I've cut the compiler output. Removing the asm-generic doesn't show this
-problem, but so far I fail to see the reason...
+I address this by introducing new compatible strings for these SoCs, then
+split the schemas. I also separate mt7628/mt7688 from mt7620 pinctrl
+subdriver in the process.
 
-Thomas.
+I wanted to split the rt305x driver too but too much code would be reused
+so I backed down from that.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTek
+introduced new SoCs which utilise this platform. We're moving the Ralink
+pinctrl driver to MediaTek, and rename the schemas for MediaTek SoCs to
+mediatek.
+
+I've renamed the ralink core driver to mtmips. I decided to call the core
+mtmips as I've seen folks from MediaTek use the same name when they added
+support for MT7621 pinctrl on U-Boot. Feel free to comment on this.
+
+Arınç
+
+v2:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More more cleanups, hooray!
+- Don't add new mediatek compatible strings, we don't do that here. RIP
+Chadwick Boseman.
+- Don't deprecate ralink,mt7620-pinctrl, we need it now.
+- More slight changes I can't currently remember to mention.
+
+RFC to v1:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More cleanups, hooray!
+- Keep ralink,rt2880-pinmux deprecated.
+- Deprecate ralink,mt7620-pinctrl. Another one bites the dust!
+- More slight changes I can't currently remember to mention.
+
+Arınç ÜNAL (21):
+  pinctrl: ralink: reintroduce ralink,rt2880-pinmux compatible string
+  pinctrl: ralink: rt305x: add new compatible string for every SoC
+  pinctrl: ralink: mt7620: split out to mt76x8
+  pinctrl: ralink: move to mediatek as mtmips
+  pinctrl: mediatek: remove OF_GPIO as reverse dependency
+  dt-bindings: pinctrl: ralink: move additionalProperties to top
+  dt-bindings: pinctrl: ralink: drop quotes from referred schemas
+  dt-bindings: pinctrl: ralink: add new compatible strings
+  dt-bindings: pinctrl: ralink: {mt7620,mt7621}: rename to mediatek
+  dt-bindings: pinctrl: mediatek: mt6795: rename to mediatek,mt6795-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8186: rename to mediatek,mt8186-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8192: rename to mediatek,mt8192-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8195: rename to mediatek,mt8195-pinctrl
+  dt-bindings: pinctrl: mediatek: fix naming inconsistency
+  dt-bindings: pinctrl: {mediatek,ralink}: fix formatting
+  dt-bindings: pinctrl: mediatek: fix pinmux header location
+  dt-bindings: pinctrl: mediatek: drop quotes from referred schemas
+  dt-bindings: pinctrl: mediatek: mt7986: fix patternProperties regex
+  dt-bindings: pinctrl: ralink: rt305x: split binding
+  dt-bindings: pinctrl: mediatek: mt7620: split binding
+  MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
+
+ .../pinctrl/mediatek,mt65xx-pinctrl.yaml        |  32 +-
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml        |  39 +-
+ ...mt6795.yaml => mediatek,mt6795-pinctrl.yaml} |  43 +-
+ .../pinctrl/mediatek,mt7620-pinctrl.yaml        | 298 ++++++++++++++
+ ...inctrl.yaml => mediatek,mt7621-pinctrl.yaml} |  17 +-
+ .../pinctrl/mediatek,mt7622-pinctrl.yaml        |  34 +-
+ ...inctrl.yaml => mediatek,mt76x8-pinctrl.yaml} | 252 ++----------
+ .../pinctrl/mediatek,mt7981-pinctrl.yaml        |  35 +-
+ .../pinctrl/mediatek,mt7986-pinctrl.yaml        |  80 ++--
+ .../pinctrl/mediatek,mt8183-pinctrl.yaml        |  32 +-
+ ...mt8186.yaml => mediatek,mt8186-pinctrl.yaml} |  55 ++-
+ .../pinctrl/mediatek,mt8188-pinctrl.yaml        |  80 ++--
+ ...mt8192.yaml => mediatek,mt8192-pinctrl.yaml} |  57 +--
+ ...mt8195.yaml => mediatek,mt8195-pinctrl.yaml} |  51 ++-
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml        |  30 +-
+ .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml |  89 +----
+ .../bindings/pinctrl/ralink,rt3352-pinctrl.yaml | 243 ++++++++++++
+ .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt5350-pinctrl.yaml | 206 ++++++++++
+ MAINTAINERS                                     |  29 +-
+ drivers/pinctrl/Kconfig                         |   1 -
+ drivers/pinctrl/Makefile                        |   1 -
+ drivers/pinctrl/mediatek/Kconfig                |  54 ++-
+ drivers/pinctrl/mediatek/Makefile               |  63 +--
+ drivers/pinctrl/mediatek/pinctrl-mt7620.c       | 137 +++++++
+ .../{ralink => mediatek}/pinctrl-mt7621.c       |  31 +-
+ drivers/pinctrl/mediatek/pinctrl-mt76x8.c       | 283 ++++++++++++++
+ .../pinctrl-mtmips.c}                           |  90 ++---
+ .../pinctrl-mtmips.h}                           |  16 +-
+ .../{ralink => mediatek}/pinctrl-rt2880.c       |  21 +-
+ .../{ralink => mediatek}/pinctrl-rt305x.c       |  47 +--
+ .../{ralink => mediatek}/pinctrl-rt3883.c       |  29 +-
+ drivers/pinctrl/ralink/Kconfig                  |  35 --
+ drivers/pinctrl/ralink/Makefile                 |   8 -
+ drivers/pinctrl/ralink/pinctrl-mt7620.c         | 391 -------------------
+ 36 files changed, 1738 insertions(+), 1193 deletions(-)
+
+
