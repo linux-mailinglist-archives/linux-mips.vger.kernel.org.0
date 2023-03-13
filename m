@@ -2,66 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3960D6B74FA
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Mar 2023 12:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833156B7F97
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Mar 2023 18:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjCMLAA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Mar 2023 07:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S229516AbjCMRh3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Mar 2023 13:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjCMK7y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 06:59:54 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2BA34C35;
-        Mon, 13 Mar 2023 03:59:25 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id y189so2459178pgb.10;
-        Mon, 13 Mar 2023 03:59:25 -0700 (PDT)
+        with ESMTP id S229477AbjCMRh2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 13:37:28 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A24430D0;
+        Mon, 13 Mar 2023 10:37:27 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id cu4so4959751qvb.3;
+        Mon, 13 Mar 2023 10:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678705158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vsy2LwxeFUk+ZOJmYzV0ZLx3OS9N/i1hwSUV0kkdxCM=;
-        b=bGuZD/VLxXcb3aGciJIohMPcL7qBZxHLur9yZGiHL7e3FcGESx3W0w2U5CH+lOz7ql
-         GAVxl5ckJKkz/aumySGqDDs9kVdMaaB0zOCwdCegFhftcGvXO9qCWZ9A49/IHaDAOr5u
-         7A8kkbvZHC/PSNJO7y7lMZTNqhimTZs3O2su+S3EjmqtaUwSTmxCuLWtaKrWQRXW+e5d
-         pBh0vrjTfreRS/p5qO5eqfNbLc+B74PqNv2sPBE2f2xP1xTL4bPfHB2rQL1I14u9Uf6A
-         guQ027QE7frLarMNqZk1eFV/6Zs1S/9M2Sp3t8oafiY4BG3c+2mWQp7mlgkpnkbUVc3i
-         pQVA==
+        d=gmail.com; s=20210112; t=1678729046;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4VBxk32WXQYbcs9sGRGUzUJUIa6Pw7Q1PNFTVgQx2lw=;
+        b=YSt8hBr5Y80mZ97RShggVMcx3Oty80UQ+8EwxZ1LG05uDtr17VD4rsFf+LD79QciO9
+         bQVl1h4Rk0ch5bbGPn3tjYCbhJYquiVlgA0L36trWyYfQ8VFl1XkaMxPXiZJihKF8pfq
+         rcVtG0S+K+PE+/MFJkUX4uUDQlbMiz25uU2TRvwQbI+OGw3mVjWLCtzQ2tX/S9qIm6VO
+         MVzIBLRIjQv8n9vXj0E0D1NSoKvBewCE/quuJEvCdQsXhXLxilmrQI7KauzfLo2/9pb5
+         8U4Gctb9bF6jpMvo5BJ5+WQtuo5WbtFWoUlmNOABkQYzQ73ooYDtjwVymCcm1+NmUf9R
+         /uuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678705158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vsy2LwxeFUk+ZOJmYzV0ZLx3OS9N/i1hwSUV0kkdxCM=;
-        b=qx9lAnHEqlvgxpmzEHUvey7Uoctp30INvZvJZWtfX4dmFda53k16Ny4HMGLNVC7ymd
-         AsEmbxn4hmXR8tvs3s6rkGsMUYNf76ZhsYkKc2fvGhm7EVHyb1Zt9XosL+C69Es2odZB
-         lhijNi8HyDkE1fA7kOgGByzWMObAgs5mNoDpik4PgCW44KAu84ffPHRUMgVHMLMzTH56
-         YLSu0k/1bKwkfs/j/qEBBkQivPZT4Xt2OBTnUnWTtnTcBE/ygVgaXgIHQPkU0/VUD1h7
-         hlJ2MNG/DjsBqitYioBQ+xtWz19ZgOemfELNZ08yuB4OYwkgtCU09FB6xuQvzpeBqQ3Y
-         UEfw==
-X-Gm-Message-State: AO0yUKXA8DFo9neqRkb/Nm+uGH1WIZ6oPjNikK9D9HpQto86qp8O7oj2
-        qEA38iDxW9EOHTlM1fkoEl18i28PKp0W6vqqqZA=
-X-Google-Smtp-Source: AK7set9Ehv9CzLEw3Sa0anMtfKyS2uQ3vqf1+BmUiwQX01+JeYZP96vMT79fOk02aIOJdh8qCoKrQCbVt6qSSsI447k=
-X-Received: by 2002:a05:6a00:14d6:b0:5aa:310c:e65b with SMTP id
- w22-20020a056a0014d600b005aa310ce65bmr14168933pfu.2.1678705158151; Mon, 13
- Mar 2023 03:59:18 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678729046;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4VBxk32WXQYbcs9sGRGUzUJUIa6Pw7Q1PNFTVgQx2lw=;
+        b=4GVZmnIrRQUcYD2CKmCKBhGLhrN4oeUbsOVO3YZpuPjzWJg6Fz1LPd5yTG1bUvj2B1
+         iX36T8dSaruVykp4it35n9gaoiMsYoVHRsRpCuKP9X6uW+A+MqKDklnkaA5WdcB1SKDP
+         OIGXUxyS9xKUZdxJFqOJ0YRYAl/eAtyH83vFOFnC+g+Yo/0W4qW/saXuIFO8lu7TpuHr
+         PW8ygzxRqyK1UbOGayhiflXglOchqo033sY98vj5R0GZJ8PBvip3ubdIFJH8QpkyyILB
+         Ia3cCCtu5d5n20vETWc8ylZ+MzWnnb5M6DbSrguDs0drxGoQ67DNDRKllfOZh7WDGMx/
+         Fj0g==
+X-Gm-Message-State: AO0yUKVenWt+p0oklj1yaBrC++lwFF+w48//T2cE3G0nfPGhlPMIWLe/
+        cILSqJeVHtLUpPk4lyuJrmQ=
+X-Google-Smtp-Source: AK7set8PjuyWfhXfdCmvXDXX6P+PAPf4fHuMYR+90AMOGKswRTmL5cvDnRyCaSXjycGFin7DeH5qlQ==
+X-Received: by 2002:a05:6214:4014:b0:5aa:fd43:1fcd with SMTP id kd20-20020a056214401400b005aafd431fcdmr1824542qvb.42.1678729046712;
+        Mon, 13 Mar 2023 10:37:26 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c137-20020a379a8f000000b0073baa5ec0besm82499qke.115.2023.03.13.10.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 10:37:25 -0700 (PDT)
+Message-ID: <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com>
+Date:   Mon, 13 Mar 2023 10:37:23 -0700
 MIME-Version: 1.0
-References: <20230310144656.1540950-1-robh@kernel.org> <c2191745-714c-7cdc-ba2d-a254245bbdac@linaro.org>
-In-Reply-To: <c2191745-714c-7cdc-ba2d-a254245bbdac@linaro.org>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Mon, 13 Mar 2023 11:59:06 +0100
-Message-ID: <CAOiHx=m+q8ALpESkudkTPL3XKWz2O0-JGGVD0CqWbq3xQ-6dng@mail.gmail.com>
-Subject: Re: [PATCH] mips: Use of_property_read_bool() for boolean properties
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     William Zhang <william.zhang@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230310121306.4632-1-noltari@gmail.com>
+ <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
+ <CAOiHx=njCvfVju9BAe7gTzMq0vybQF-gy4SRZrhEJFULGLhC7w@mail.gmail.com>
+ <5b4d3eef-ff80-29e8-9be0-d487aee5e4e2@broadcom.com>
+ <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
+ <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,51 +82,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On 3/12/23 11:50, Álvaro Fernández Rojas wrote:
+> Hi Florian,
+> 
+> I tried what you suggested but it stil panics on EHCI:
+> 
+> [    0.000000] Linux version 5.15.98 (noltari@atlantis)
+> (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
+> 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
+> [    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() = 0xe30e1006
+> [    0.000000] bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG = 0x3c1b8041
+> [    0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
+> 
+> It looks like bit 29 is set so RAC should be present.
+> And RAC_I seems to be set, but not RAC_D...
+> 
+> BTW, this is what I added to bmips_cpu_setup:
+> 
+> case CPU_BMIPS4350:
+> cfg = read_c0_brcm_config_0();
+> pr_info("bmips_cpu_setup: read_c0_brcm_config_0() = 0x%x\n", cfg);
+> 
+> cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> pr_info("bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG = 0x%x\n", cfg);
+> __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
+> __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> break;
 
-On Mon, 13 Mar 2023 at 09:31, Philippe Mathieu-Daud=C3=A9 <philmd@linaro.or=
-g> wrote:
->
-> Hi Rob,
->
-> On 10/3/23 15:46, Rob Herring wrote:
-> > It is preferred to use typed property access functions (i.e.
-> > of_property_read_<type> functions) rather than low-level
-> > of_get_property/of_find_property functions for reading properties.
-> > Convert reading boolean properties to to of_property_read_bool().
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   arch/mips/pci/pci-lantiq.c | 2 +-
-> >   arch/mips/pci/pci-rt3883.c | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
-> > index d967e4c0cf24..79e29bf42a24 100644
-> > --- a/arch/mips/pci/pci-lantiq.c
-> > +++ b/arch/mips/pci/pci-lantiq.c
-> > @@ -118,7 +118,7 @@ static int ltq_pci_startup(struct platform_device *=
-pdev)
-> >
-> >       /* and enable the clocks */
-> >       clk_enable(clk_pci);
-> > -     if (of_find_property(node, "lantiq,external-clock", NULL))
-> > +     if (of_property_read_bool(node, "lantiq,external-clock"))
->
-> Just curious, is this property correct? I can't find it and wonder if
-> this is dead code (always disabling the clock)... I'm probably missing
-> something obvious :/
->
-> >               clk_enable(clk_external);
-> >       else
-> >               clk_disable(clk_external);
+Thanks for running those experiments, I cannot explain what you are 
+seeing, so there must be some sort of erratum applicable to the 
+BMIPS4380 revision used on the 6358 somehow...
 
-The (whole) binding does seem to be undocumented, at least a quick
-grep didn't find anything for "lantiq,pci-xway" in bindings :-/
+If you can make the suggested change to use negative logic in order to 
+disable the RAC flushing, that would work for me, also maybe add a 
+Fixes: tag so it gets backported to stable trees?
 
-The property itself is used in OpenWrt though, e.g.
-https://github.com/openwrt/openwrt/blob/master/target/linux/lantiq/files/ar=
-ch/mips/boot/dts/lantiq/danube_arcadyan_arv7518pw.dts#L209
+Thanks!
+-- 
+Florian
 
-Regards
-Jonas
