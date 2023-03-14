@@ -2,157 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46836B88C8
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Mar 2023 03:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A236B8F44
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Mar 2023 11:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjCNC5f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Mar 2023 22:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
+        id S230025AbjCNKJc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 14 Mar 2023 06:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCNC5f (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Mar 2023 22:57:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086388F734
-        for <linux-mips@vger.kernel.org>; Mon, 13 Mar 2023 19:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678762608;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JyrIGLqX2YJPW6IWpAt0DsDXF+2ApyDZOpSw0P/BqXc=;
-        b=A7/MoJ2TMv6ZrqviwJJqlItiX6QZT0Ns1y45J1IzkTq0spZUthBVuQ0qOdgE04J84aX7jJ
-        DIQ3OLnrjgXdqlzS0AZ48yGNv4oPsL1PC/vLewD1nLMuQfbh59MxmJO7UKDLQQjshwWcic
-        DESexuwYfsHtuEzAd70HJAjANEcOzzc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-YTYGE28YOkKWi1CSSHqk2g-1; Mon, 13 Mar 2023 22:56:42 -0400
-X-MC-Unique: YTYGE28YOkKWi1CSSHqk2g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A64B4100F909;
-        Tue, 14 Mar 2023 02:56:41 +0000 (UTC)
-Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 51E402A68;
-        Tue, 14 Mar 2023 02:56:39 +0000 (UTC)
-Date:   Tue, 14 Mar 2023 10:56:36 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
-        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
- <20230313175521.GA14404@alpha.franken.de>
+        with ESMTP id S229793AbjCNKJb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Mar 2023 06:09:31 -0400
+X-Greylist: delayed 2400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Mar 2023 03:09:23 PDT
+Received: from ns.iliad.fr (ns.iliad.fr [212.27.33.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEEA126EF;
+        Tue, 14 Mar 2023 03:09:22 -0700 (PDT)
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id C1ECC20449;
+        Tue, 14 Mar 2023 09:53:09 +0100 (CET)
+Received: from [192.168.108.4] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id AA0F320126;
+        Tue, 14 Mar 2023 09:53:09 +0100 (CET)
+Message-ID: <ea21b14025085e7934ddfbb84bee0a5020d67d4d.camel@freebox.fr>
+Subject: Re: [RFC 1/6] pccard: remove bcm63xx socket driver
+From:   Maxime Bizon <mbizon@freebox.fr>
+Reply-To: mbizon@freebox.fr
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Olof Johansson <olof@lixom.net>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Date:   Tue, 14 Mar 2023 09:53:09 +0100
+In-Reply-To: <8d6896f5-3710-0b35-582a-fb482e5f4196@gmail.com>
+References: <20230227133457.431729-1-arnd@kernel.org>
+         <20230227133457.431729-2-arnd@kernel.org>
+         <8d6896f5-3710-0b35-582a-fb482e5f4196@gmail.com>
+Organization: Freebox
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230313175521.GA14404@alpha.franken.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/13/23 at 06:55pm, Thomas Bogendoerfer wrote:
-......
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
->   LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
->   ^~~~~~~~~~~~~~
->   GEN     Makefile
->   Checking missing-syscalls for N32
->   CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
->   Checking missing-syscalls for O32
->   CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
->   CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
->   CC      init/version.o
-> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
->                  from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
->                  from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
->                  from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
->                  from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
->                  from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
->                  from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
->                  from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
->                  from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
->                  from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
->                  from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
->                  from /local/tbogendoerfer/korg/linux/init/version.c:17:
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
->    spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
->    ^~~~~~~~~~~~
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
->    spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
->                      ^~
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
->   spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
->                     ^~
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
->   LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
->   ^~~~~~~~~~~~~~
-> [...]
-> 
-> I've cut the compiler output. Removing the asm-generic doesn't show this
-> problem, but so far I fail to see the reason...
 
-Thanks for trying this.
+On Mon, 2023-02-27 at 13:33 -0800, Florian Fainelli wrote:
 
-Do you have the kernel config file, I can try to reproduce on my local
-machine. And by the way, it could be fixed with below patch, not very
-sure. Earlier, Arnd suggested this to fix a similar case.
+Hello Florian,
 
 
-From b3310e58c063b695ba7ab3966c57269f57f16585 Mon Sep 17 00:00:00 2001
-From: Baoquan He <bhe@redhat.com>
-Date: Tue, 14 Mar 2023 08:53:15 +0800
-Subject: [PATCH] mips: use wmb() instead to replace iobarrier_w()
-Content-type: text/plain
+> This is probably fine because PCMCIA on BCM63xx was only needed for
+> the very old and early devices like the 6348 which modern kernels are
+> unlikely to be able to run on since they are usually RAM constrained 
+> with 16MB or 32MB of DRAM populated. Maxime, do you care if this
+> driver gets removed?
 
-Otherwise nested including of asm/io.h and asm/mmiowb.h will cause
-compiling error.
+Not at all, thanks for asking.
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/mips/include/asm/mmiowb.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
-index a40824e3ef8e..dd206792abed 100644
---- a/arch/mips/include/asm/mmiowb.h
-+++ b/arch/mips/include/asm/mmiowb.h
-@@ -2,9 +2,7 @@
- #ifndef _ASM_MMIOWB_H
- #define _ASM_MMIOWB_H
- 
--#include <asm/io.h>
--
--#define mmiowb()	iobarrier_w()
-+#define mmiowb()	wmb()
- 
- #include <asm-generic/mmiowb.h>
- 
 -- 
-2.34.1
+Maxime
+
+
 
