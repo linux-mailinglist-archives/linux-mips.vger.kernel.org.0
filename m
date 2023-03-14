@@ -2,123 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4196B965B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Mar 2023 14:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4878D6B9750
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Mar 2023 15:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjCNNeO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Mar 2023 09:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        id S231819AbjCNOKd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Mar 2023 10:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjCNNdv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Mar 2023 09:33:51 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16271A42D9;
-        Tue, 14 Mar 2023 06:30:10 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2920B5821F5;
-        Tue, 14 Mar 2023 09:29:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 14 Mar 2023 09:29:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678800583; x=1678807783; bh=Qn
-        n6+IRlA6XmC3RNcByM4d2mBBa6FJzTP5+rNGAmgqQ=; b=l0eyk2SscWqQXi3nN9
-        vnwKklkDMOBbio3FURjn+Bpy5ZCCHqD7SXA2v+BUfjXe1BbzLFjcfb25/BruINog
-        onaH7av+oru1iinokD5UUiEeYIqtJ4Kg0Aaw3Jyu7kJoa5hC/ryiPqpqD0+X+sOJ
-        FieL8AvIjoBwxof4E0o5p50Mh1gFkpKmOnVN7D2n9Uo7ZdDZdYgQe9cUfOWE+JrW
-        p86l7w+sGr28aPa453rQaedXZDe/hyiWohR4p5mmcdQIt2qWYJ0VXYA2LYqe1OUd
-        JQPYZToHVlFK+fVirY5mU41ejN0XAs/2b+rjU+KutLPBpwek3GAYJy77YAE7Bo9E
-        Ns8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678800583; x=1678807783; bh=Qnn6+IRlA6XmC
-        3RNcByM4d2mBBa6FJzTP5+rNGAmgqQ=; b=muI3krkr5ue5EMCztpZtmQZ230dlq
-        NHJXMizg7ZDVutrIItwGB3wj5a9w+UVr7DQ4IRcR6wKCtDHeZsdDsh9rziRf2XAH
-        mxxqap5mBCxs0lC4pBrZPd7JOP9kd1YX5PiiJcYQt2onJXwxplgJCBwSAbYMb6Cq
-        fGyUaX9Uinp4emKXQz5EIRdpmipCqp8W8d08in+y59gcZSY9E4OJJsj4As+eTHoo
-        3PY9CHhQINjCiLqGfmfYfGTWB1j+eIKEGGz3FJr4TbBVq9Wyb/fTeXqVAsmompxu
-        RfCJU/jqTWOgjK8AJTMoV28vA4VEkIhF2lTUuA8m7IO/NIt9HpIky6etQ==
-X-ME-Sender: <xms:w3YQZJSCb_3giOoPBWmGdJr0v16f8dcQcUyLiL5zfPo8VxsKkn1OtA>
-    <xme:w3YQZCytMRjTg7DeqcEY6RSZcXj2S4T9q459zn3UFhxGuhfYt5e6kx6BMIPfSWSIc
-    CzuGYJb2CPQ0iocqrU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:w3YQZO2brLJWdo_vKkMgJR0vGT5zuZpiucx8_gOIXgOjsEC1U806IA>
-    <xmx:w3YQZBC-9LDWKmMu9X3tsMNXrvS3UAJaFDikuMJ42dcXA8yygsg0uQ>
-    <xmx:w3YQZCgR-43tuZG_it8C2HtSXGcNWkn1DTX5oVxBCvzRpCe7LvzoRA>
-    <xmx:x3YQZPL08u_hWRCsNR2T79xmO1vK9oix1JlS8BCuoOiWur93kzZQiw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 99DEBB60086; Tue, 14 Mar 2023 09:29:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <f8bdc245-38b0-4973-bd01-34f594a0ede4@app.fastmail.com>
-In-Reply-To: <20230314121216.413434-2-schnelle@linux.ibm.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-2-schnelle@linux.ibm.com>
-Date:   Tue, 14 Mar 2023 14:29:18 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        with ESMTP id S231797AbjCNOKc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Mar 2023 10:10:32 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B606B943;
+        Tue, 14 Mar 2023 07:10:25 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id bp11so3289177ilb.3;
+        Tue, 14 Mar 2023 07:10:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678803025;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jb3jd9QxsRsLJ8mV/izIiGcWUXWwUUz8ucCbW5sEHYY=;
+        b=JmmXWhSqx0TTEF7PLiModP37qDnagAAZpl700vdVuIagZCqrjt8i6cWCElmKHNb8ZN
+         C/y0MVWzIR2N1FieTVVaeMc/W1IeiQ11YTXFBl4Ik7U5CK79VHrJEfgHx/JMG3RJRR4a
+         Mt26R+cGruV+KIHTmlTRsAn/GAYCkWQXfTl9qUTypKJvqSadcieifQCuybQ/MjDOuYYI
+         I2UzpRO3W0uvuma4z0Owuc2SrU7ZGih2IHor+fAEp9Wp6Jd256DjY5o/Z5vorPbf23ph
+         Am37iHLx/mAlLOCRHMQONXL2X4Rd6TOGX5o91FAjbMHA3yaDGuVidZpjggwa6X5vXOS7
+         Cgnw==
+X-Gm-Message-State: AO0yUKVBbbUwzu4U1cnrtOWhfzHw7ejCHalFKSiBLkxWIYG/ULdatSAO
+        AplulVB2OWlLrSGWF8rHmw==
+X-Google-Smtp-Source: AK7set/C7amwGFeHRUFPDzlExsB01ebv5mvmuf1x3ysE5SdsiW2XBUuzF4UQBXDhcxObt4XEamwj3g==
+X-Received: by 2002:a92:d6d2:0:b0:317:980d:970 with SMTP id z18-20020a92d6d2000000b00317980d0970mr2268506ilp.7.1678803025065;
+        Tue, 14 Mar 2023 07:10:25 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id o8-20020a056e02102800b00317f477b039sm845734ilj.4.2023.03.14.07.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 07:10:24 -0700 (PDT)
+Received: (nullmailer pid 83787 invoked by uid 1000);
+        Tue, 14 Mar 2023 14:10:19 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hui Liu <hui.liu@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
         linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH v3 01/38] Kconfig: introduce HAS_IOPORT option and select it as
- necessary
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        William Dean <williamsukatube@gmail.com>,
+        devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        DENG Qingfang <dqfext@gmail.com>
+In-Reply-To: <20230313205921.35342-16-arinc.unal@arinc9.com>
+References: <20230313205921.35342-1-arinc.unal@arinc9.com>
+ <20230313205921.35342-16-arinc.unal@arinc9.com>
+Message-Id: <167880254685.25972.15349420182231511267.robh@kernel.org>
+Subject: Re: [PATCH v2 15/21] dt-bindings: pinctrl: {mediatek,ralink}: fix
+ formatting
+Date:   Tue, 14 Mar 2023 09:10:19 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,124 +87,61 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 14, 2023, at 13:11, Niklas Schnelle wrote:
-> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/O
-> Port access. In a future patch HAS_IOPORT=n will disable compilation of
-> the I/O accessor functions inb()/outb() and friends on architectures
-> which can not meaningfully support legacy I/O spaces such as s390. Also
-> add dependencies on HAS_IOPORT for the ISA and HAVE_EISA config options
-> as these busses always go along with HAS_IOPORT.
->
-> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
-> for HAS_IOPORT specific sections will be added in subsequent patches on
-> a per subsystem basis.
 
-I think it would be helpful to enumerate which architectures
-do not get HAS_IOPORT added, as they will be affected more.
-
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-
-If there are no objections, I could send this first patch for the
-asm-generic tree as a preparation for 6.3, so we are able to merge
-the other patches through subsystem maintainer tree for 6.4.
-
-arch/loongarch/ will now also need to select HAS_IOPORT
-uncontitionally, this architecture was added after you
-sent v2.
-
-> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-> index a98940e64243..5eeacc72e4da 100644
-> --- a/arch/parisc/Kconfig
-> +++ b/arch/parisc/Kconfig
-> @@ -47,6 +47,7 @@ config PARISC
->  	select MODULES_USE_ELF_RELA
->  	select CLONE_BACKWARDS
->  	select TTY # Needed for pdc_cons.c
-> +	select HAS_IOPORT if PCI
-
-It's also needed for EISA and I think you should select it
-from CONFIG_GSC in drivers/parisc/Kconfig for this purpose.
-
-This could also be 'select HAS_IOPORT if PCI || EISA', but
-that would require removing the 'depends on HAS_IOPORT'
-under drivers/eisa/.
-
->  	select HAVE_DEBUG_STACKOVERFLOW
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_HASH
-> @@ -131,6 +132,7 @@ config STACKTRACE_SUPPORT
+On Mon, 13 Mar 2023 23:59:15 +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
->  config ISA_DMA_API
->  	bool
-> +	depends on HAS_IOPORT
+> Change the style of description properties to plain style where there's no
+> need to preserve the line endings, and vice versa.
+> 
+> Fit the schemas to 80 columns for each line.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../pinctrl/mediatek,mt65xx-pinctrl.yaml      | 22 +++---
+>  .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 33 +++++----
+>  .../pinctrl/mediatek,mt6795-pinctrl.yaml      | 33 +++++----
+>  .../pinctrl/mediatek,mt7620-pinctrl.yaml      |  2 +-
+>  .../pinctrl/mediatek,mt7621-pinctrl.yaml      |  2 +-
+>  .../pinctrl/mediatek,mt7622-pinctrl.yaml      | 26 +++----
+>  .../pinctrl/mediatek,mt7981-pinctrl.yaml      | 33 +++++----
+>  .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 68 ++++++++---------
+>  .../pinctrl/mediatek,mt8183-pinctrl.yaml      | 26 ++++---
+>  .../pinctrl/mediatek,mt8186-pinctrl.yaml      | 47 ++++++------
+>  .../pinctrl/mediatek,mt8188-pinctrl.yaml      | 74 ++++++++++---------
+>  .../pinctrl/mediatek,mt8192-pinctrl.yaml      | 47 ++++++------
+>  .../pinctrl/mediatek,mt8195-pinctrl.yaml      | 41 +++++-----
+>  .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 28 +++----
+>  .../pinctrl/ralink,rt2880-pinctrl.yaml        |  2 +-
+>  .../pinctrl/ralink,rt305x-pinctrl.yaml        |  2 +-
+>  .../pinctrl/ralink,rt3883-pinctrl.yaml        |  2 +-
+>  17 files changed, 254 insertions(+), 234 deletions(-)
 > 
 
-This line is not really needed since there is no way to
-enable ISA_DMA_API.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index a6c4407d3ec8..f7de646c074a 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -188,6 +188,7 @@ config PPC
->  	select GENERIC_SMP_IDLE_THREAD
->  	select GENERIC_TIME_VSYSCALL
->  	select GENERIC_VDSO_TIME_NS
-> +	select HAS_IOPORT			if PCI
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
->  	select HAVE_ARCH_HUGE_VMAP		if PPC_RADIX_MMU || PPC_8xx
-> @@ -1070,7 +1071,6 @@ menu "Bus options"
-> 
->  config ISA
->  	bool "Support for ISA-bus hardware"
-> -	depends on PPC_CHRP
->  	select PPC_I8259
->  	help
->  	  Find out whether you have ISA slots on your motherboard.  ISA is the
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml:103:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
+./Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml:113:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
 
-This line looks wrong, I think we should keep that dependency.
-Did you get a circular dependency if you leave it in?
+dtschema/dtc warnings/errors:
 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index a825bf031f49..634dd42532f3 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -162,6 +162,7 @@ config X86
->  	select GUP_GET_PXX_LOW_HIGH		if X86_PAE
->  	select HARDIRQS_SW_RESEND
->  	select HARDLOCKUP_CHECK_TIMESTAMP	if X86_64
-> +	select HAS_IOPORT
->  	select HAVE_ACPI_APEI			if ACPI
->  	select HAVE_ACPI_APEI_NMI		if ACPI
->  	select HAVE_ALIGNED_STRUCT_PAGE		if SLUB
-> @@ -2893,6 +2894,7 @@ if X86_32
-> 
->  config ISA
->  	bool "ISA support"
-> +	depends on HAS_IOPORT
->  	help
+doc reference errors (make refcheckdocs):
 
-HAS_IOPORT is selected unconditionally already, so this doesn't
-really do anything.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230313205921.35342-16-arinc.unal@arinc9.com
 
-> diff --git a/lib/Kconfig.kgdb b/lib/Kconfig.kgdb
-> index 3b9a44008433..c68e4d9dcecb 100644
-> --- a/lib/Kconfig.kgdb
-> +++ b/lib/Kconfig.kgdb
-> @@ -121,7 +121,8 @@ config KDB_DEFAULT_ENABLE
-> 
->  config KDB_KEYBOARD
->  	bool "KGDB_KDB: keyboard as input device"
-> -	depends on VT && KGDB_KDB && !PARISC
-> +	depends on HAS_IOPORT
-> +	depends on VT && KGDB_KDB
->  	default n
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-This loses the !PARISC dependency, which I don't think is
-intentional. The added HAS_IOPORT dependency makes sense
-here, but I think this should be in a different patch
-and not in the preparation.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-    Arnd
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
