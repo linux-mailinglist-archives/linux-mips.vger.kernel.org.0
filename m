@@ -2,148 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0B06BAED6
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Mar 2023 12:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E386BB3F7
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Mar 2023 14:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjCOLKD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Mar 2023 07:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
+        id S231716AbjCONKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Mar 2023 09:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbjCOLJR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Mar 2023 07:09:17 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF72D8B053;
-        Wed, 15 Mar 2023 04:07:22 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso3226778pjf.0;
-        Wed, 15 Mar 2023 04:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678878440;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y9Xe7G0mUprolJIwH6MJzsVRZJv7ADzG9ZALSt3qn7I=;
-        b=bnlcAHsnJ4trii4aCzzIEel+4/5DQsER6/JTZL5KRxvcnFIvy+SHL0ICtnSnNvLA6G
-         Qo6rtncYrZnNuagheheDLAbDFfQSrPW2CwEvkEcow494V0zxgnnYIAg5yx0JqFo8r0fu
-         BjjNrAt0yyNOg0i+FrIRhcjUg7cQLV8n0E+PDHc9tHBsvQXQxmYocWj+iGduLVQzawnY
-         Bd78sI5+psvQjm3jSilslwd1O6vkJ7R+qDYksjRyhcZC7xQbiNxiYyU6vMhIaAktGYg7
-         9EjktWCLeOov+70/Hftb/eoI9eshHpi1a/+6xmxJrj2vIxbmhndClulTsSywPbQvTJ4j
-         KpxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678878440;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y9Xe7G0mUprolJIwH6MJzsVRZJv7ADzG9ZALSt3qn7I=;
-        b=bzT8fRemRi4vtWxo0It+A0psyzYu9PyeaQXj6574Hd9GnzbBSH3eaRso6rqK4F+RMf
-         OucQDZ5dGL5V/lKFpUE8TVKsvfrYsFda2cmczu7cGsGHatvjUW9iyyCYMt7egs4ZL4Sz
-         fEgpnDqQC46cBpi2fBntgWavAKX81d224WiSML0cszURjy4VjJ4BlNDkIKOaXuvltvS/
-         wXJ2ayh9qavwL7qZPVMXI+zo90MLJtEqG2gaADsceN8V/LErOhs0YiC7qynszHOcele5
-         UCQrGu4jvY48oQ3fQ0bAcoW+YW+yDKAWbszluIJv3ygqaEYoivbk5qywsTZoV7he4D9B
-         pNhQ==
-X-Gm-Message-State: AO0yUKUiYkPpv7FHJm76mpdixZPeVUSvGCMvUh9cw6Hie+JxHMfmnIM3
-        SqTRMFad6O/ITmxgBb2MtjGRwJyo15KJOQ==
-X-Google-Smtp-Source: AK7set9sqKEiYZykBR5KsaGrFDgczaih/so64Py9emYlckhNQJ57WA1xmCZS8OAdFvUMLn7DhqaBpA==
-X-Received: by 2002:a05:6a21:328a:b0:cd:5334:e240 with SMTP id yt10-20020a056a21328a00b000cd5334e240mr46959597pzb.5.1678878439968;
-        Wed, 15 Mar 2023 04:07:19 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
-        by smtp.gmail.com with ESMTPSA id v4-20020aa78084000000b005892ea4f092sm3337489pff.95.2023.03.15.04.07.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 04:07:19 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 4/4] dt-bindings: gpio: Add Loongson-1 GPIO
-Date:   Wed, 15 Mar 2023 19:06:50 +0800
-Message-Id: <20230315110650.142577-5-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230315110650.142577-1-keguang.zhang@gmail.com>
-References: <20230315110650.142577-1-keguang.zhang@gmail.com>
+        with ESMTP id S229769AbjCONKt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Mar 2023 09:10:49 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9382A67706;
+        Wed, 15 Mar 2023 06:10:40 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pcQtk-0006KN-00; Wed, 15 Mar 2023 14:10:32 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 1A279C1AB5; Wed, 15 Mar 2023 13:52:16 +0100 (CET)
+Date:   Wed, 15 Mar 2023 13:52:16 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Helge Deller <deller@gmx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
+Message-ID: <20230315125216.GA12532@alpha.franken.de>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-3-bhe@redhat.com>
+ <20230313175521.GA14404@alpha.franken.de>
+ <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
+ <20230314153421.GA13322@alpha.franken.de>
+ <7f39daad-05b0-46f8-bc89-185b336d8fd4@gmail.com>
+ <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
+ <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add devicetree binding document for Loongson-1 GPIO.
+On Wed, Mar 15, 2023 at 08:49:53AM +0800, Baoquan He wrote:
+> On 03/14/23 at 06:19pm, Arnd Bergmann wrote:
+> > On Tue, Mar 14, 2023, at 17:31, Florian Fainelli wrote:
+> > > On 3/14/23 08:34, Thomas Bogendoerfer wrote:
+> > >> On Tue, Mar 14, 2023 at 10:56:36AM +0800, Baoquan He wrote:
+> > >>>> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
+> > >>>>                   from /local/tbogendoerfer/korg/linux/init/version.c:17:
+> > >> 
+> > >> already tried it, but it doesn't fix the issue. I've attached the
+> > >> config.
+> > >
+> > > I had attempted a similar approach before as Baoquan did, but met the 
+> > > same build issue as Thomas that was not immediately clear to me why it 
+> > > popped up. I would be curious to see how this can be resolved.
+> > 
+> > I think this is the result of recursive header inclusion:
+> > spinlock.h includes lockdep.h, but its header guard is already
+> > there from the include chain.
+> > 
+> > There is probably something in one of the mips asm/*.h headers that
+> > causes this recursion that is not present elsewhere.
+> > 
+> > I think this should fix it, but is likely to cause another problem elsewhere:
+> > 
+> > --- a/arch/mips/include/asm/smp-ops.h
+> > +++ b/arch/mips/include/asm/smp-ops.h
+> > @@ -13,8 +13,6 @@
+> >  
+> >  #include <linux/errno.h>
+> >  
+> > -#include <asm/mips-cps.h>
+> > -
+> >  #ifdef CONFIG_SMP
+> >  
+> >  #include <linux/cpumask.h>
+> 
+> Will meet below compiling error after appllying above patch. Adding
+> asm/mips-cps.h including in arch/mips/kernel/setup.c will fix it as below.
+> 
+> arch/mips/kernel/setup.c: In function ‘setup_arch’:
+> arch/mips/kernel/setup.c:781:9: error: implicit declaration of function ‘mips_cm_probe’ [-Werror=implicit-function-declaration]
+>   781 |         mips_cm_probe();
+>       |         ^~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> 
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index f1c88f8a1dc5..e8c4020ef367 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -43,6 +43,7 @@
+>  #include <asm/smp-ops.h>
+>  #include <asm/prom.h>
+>  #include <asm/fw/fw.h>
+> +#include <asm/mips-cps.h>
+>  
+>  #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
+>  char __section(".appended_dtb") __appended_dtb[0x100000];
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-V2 -> V3: Add Reviewed-by tag from Krzysztof Kozlowski
-V1 -> V2: Use the same consistent quotes
-          Delete superfluous examples
----
- .../bindings/gpio/loongson,ls1x-gpio.yaml     | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
+with
 
-diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
-new file mode 100644
-index 000000000000..1a472c05697c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/loongson,ls1x-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
+index d85cbf84e41c..973faea61cad 100644
+--- a/arch/mips/pci/pci-ip27.c
++++ b/arch/mips/pci/pci-ip27.c
+@@ -7,6 +7,9 @@
+  * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
+  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
+  */
 +
-+title: Loongson-1 GPIO controller
++#include <linux/io.h>
 +
-+maintainers:
-+  - Keguang Zhang <keguang.zhang@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls1x-gpio
-+
-+  reg:
-+    maxItems: 1
-+
-+  gpio-controller: true
-+
-+  "#gpio-cells":
-+    const: 2
-+
-+  ngpios:
-+    minimum: 1
-+    maximum: 32
-+
-+required:
-+  - compatible
-+  - reg
-+  - gpio-controller
-+  - "#gpio-cells"
-+  - ngpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpio0: gpio@1fd010c0 {
-+        compatible = "loongson,ls1x-gpio";
-+        reg = <0x1fd010c0 0x4>;
-+
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+
-+        ngpios = <32>;
-+    };
-+
-+...
+ #include <asm/sn/addrs.h>
+ #include <asm/sn/types.h>
+ #include <asm/sn/klconfig.h>
+
+on top, all my builds are ok. But my malta qemu setup crashes:
+
+Unhandled kernel unaligned access[#1]:
+CPU: 0 PID: 1 Comm: systemd Not tainted 6.3.0-rc1-00022-gff6bffcfbf9e #290
+$ 0   : 00000000 00000001 81000640 00000001
+$ 4   : 80bd8641 00000001 00000000 00000000
+$ 8   : 00000001 00000001 77c5abae ffffffff
+$12   : 00000000 7b3eeedb 820f7380 bdd54e39
+$16   : 80bd8641 820fbdc4 81000640 80ad0000
+$20   : 00000008 80ad0000 80ad0000 80ad0000
+$24   : 00000000 f592e7d4                  
+$28   : 820f8000 820fbd48 80c20000 801c44f4
+Hi    : 001f93e2
+Lo    : 18073cf3
+epc   : 80902188 _raw_spin_lock+0xc/0x54
+ra    : 801c44f4 add_timer_on+0x94/0x1b0
+Status: 1400a402	KERNEL EXL 
+Cause : 10800010 (ExcCode 04)
+BadVA : 80bd8641
+PrId  : 00019300 (MIPS 24Kc)
+Modules linked in:
+Process systemd (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=76f2b6e0)
+Stack : 80bd8641 820fbdc4 80ad0000 80ad0000 00000008 80ad0000 80ad0000 801c44f4
+        80ad0000 80ad0000 820f8000 820fbd98 00000001 f01a83f8 00000008 820fbdc0
+        80ad0000 820fbdc4 80ad0000 808f4f20 00000001 822f7640 822f7940 f01a83f8
+        00000000 820fbec0 00000001 00000001 00000001 77d3fafc 3e01e433 00000122
+        00000000 ffff8c77 808f513c 0dc40000 00000001 00000001 00000001 82a1f900
+        ...
+Call Trace:
+[<80902188>] _raw_spin_lock+0xc/0x54
+[<801c44f4>] add_timer_on+0x94/0x1b0
+[<808f4f20>] try_to_generate_entropy+0x1e8/0x270
+[<805c7408>] urandom_read_iter+0x10c/0x114
+[<802d77f8>] vfs_read+0x21c/0x2bc
+[<802d8284>] ksys_read+0x7c/0x118
+[<8011b130>] syscall_common+0x34/0x58
+
+Code: 27bdffe0  afbf001c  24030001 <c0850000> 14a00005  00000000  00600825  e0810000  1020fffa 
+
+---[ end trace 0000000000000000 ]---
+
+I guess this has something to do with the removal of #include <asm/mips-cps.h>
+
+Thomas.
+
 -- 
-2.34.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
