@@ -2,75 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF876BA448
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Mar 2023 01:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A9E6BA500
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Mar 2023 03:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjCOAvD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Mar 2023 20:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S230063AbjCOCIC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Mar 2023 22:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjCOAvC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Mar 2023 20:51:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932362DE5F
-        for <linux-mips@vger.kernel.org>; Tue, 14 Mar 2023 17:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678841410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H+V2OenhBTZO+D4X2yTvwE20arRuy3dfWbSmOimZmE0=;
-        b=Mtzj7ZfMXC8+Qf8wXwy079LyweeSWC66EwvFa4qv7GdWsaO43zi1rbv4FMi0/0ov1syeeD
-        qunAUbd7B/zp/WA8Barzhfsk5FDp0Eowa2tFL1IECMOy6sShZepKbB8LSDU9C3ABnlxJ9v
-        ZBwaBIA7+5p4vUbaYxanq91fGvgEteg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-221-lAQsurbtNuCcZXpZ9h2LkQ-1; Tue, 14 Mar 2023 20:50:06 -0400
-X-MC-Unique: lAQsurbtNuCcZXpZ9h2LkQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 151B3857A87;
-        Wed, 15 Mar 2023 00:50:05 +0000 (UTC)
-Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19BE0400F52;
-        Wed, 15 Mar 2023 00:49:57 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 08:49:53 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
- <20230313175521.GA14404@alpha.franken.de>
- <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
- <20230314153421.GA13322@alpha.franken.de>
- <7f39daad-05b0-46f8-bc89-185b336d8fd4@gmail.com>
- <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        with ESMTP id S229447AbjCOCIB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Mar 2023 22:08:01 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E951A95C
+        for <linux-mips@vger.kernel.org>; Tue, 14 Mar 2023 19:07:59 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso365987pjs.3
+        for <linux-mips@vger.kernel.org>; Tue, 14 Mar 2023 19:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678846079;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UqJu2BEDPepML92DLQ5OvgUAstRMzlQ9eysHMa3CrAA=;
+        b=aHXf6zaUqySAf91usVWsf/WPytJ4oo/lfPrjMEou8J7jlCioJJeomAO3TJ0SF+P2/j
+         qsCSNUhsTR/Z2z030RVnKEFmTuo0uTA3ussyQY+I/iEvHM+AdQdQRPxsd7+joss3SxvX
+         7s1xa2PoRXTmeO9NJLI7tapu+jtfRK74DUiMc+33O3nhyTWPQUYtBVUs6hsTwgG3K5Bd
+         sBRRA8JIkvIQ40yMTQ4RAz7yHXH2+KBETJHXuXjm1asXSDM02eKCMNFV9r9vJ8fqhS3B
+         Lvw6Q0GmvlDhElQXD1UKYjST0kh/VoRQ8ufQ4YZqly44ZaISBLXOPjSE0cXB+yNTk88x
+         N2Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678846079;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UqJu2BEDPepML92DLQ5OvgUAstRMzlQ9eysHMa3CrAA=;
+        b=cL6l1kYuAcmRq6x93xg9F9kpeOOSiTI5FxFxpMGMakVyhhvmqj+J/agoiRS2qXgjbA
+         q8lE5o5qVBF2ueazEbGhy7pNofKxVajeR4LlP6YF/MQd1PHGbrmFLcLmfNxuAYVQOpM+
+         hnruEPvG7pJ58RDS+SHgSFKVkvTvJFUu70Qg99hMNSoRwM9WTqpalQ0EflIBEE3SvoGM
+         eEY9H7qNP3xdA+9WJTjeE0De03oaNeAT2o53tyeBSAWHZmCwvMftjn6F13puMrceleG5
+         fr+lDlJzMHvK7DJidL3hX9cOnxXnmXoKYmqJqc4crYnUdIH8qaCLYVV20B3f6NehBvwF
+         rJeA==
+X-Gm-Message-State: AO0yUKWD0IhEQsMWux7YusbmVwhRiMf15/CVxKn8O4iCh1Ehp869JCux
+        yzd7J1boIrQM6RbEKsx5cFF7mw==
+X-Google-Smtp-Source: AK7set/4d4meE0FaW+MSNz3OomO/EWSt91fL4Ho/JVwVfKyJpvpuMlf/6fPVmbw8HNSfdZgm+emhBQ==
+X-Received: by 2002:a17:902:e54c:b0:1a0:428b:d8c5 with SMTP id n12-20020a170902e54c00b001a0428bd8c5mr1055599plf.45.1678846078774;
+        Tue, 14 Mar 2023 19:07:58 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id a23-20020a170902b59700b00192aa53a7d5sm2400503pls.8.2023.03.14.19.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 19:07:58 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 19:07:58 -0700 (PDT)
+X-Google-Original-Date: Tue, 14 Mar 2023 19:07:05 PDT (-0700)
+Subject:     Re: [PATCH v2 4/5] riscv: Select ARCH_DMA_DEFAULT_COHERENT
+In-Reply-To: <Y/fmqwboOv/JhWf/@spud>
+CC:     jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org,
+        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-9bf3f6be-12f9-466e-90b8-50f2d96971fe@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,75 +74,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/14/23 at 06:19pm, Arnd Bergmann wrote:
-> On Tue, Mar 14, 2023, at 17:31, Florian Fainelli wrote:
-> > On 3/14/23 08:34, Thomas Bogendoerfer wrote:
-> >> On Tue, Mar 14, 2023 at 10:56:36AM +0800, Baoquan He wrote:
-> >>>> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-> >>>>                   from /local/tbogendoerfer/korg/linux/init/version.c:17:
-> >> 
-> >> already tried it, but it doesn't fix the issue. I've attached the
-> >> config.
-> >
-> > I had attempted a similar approach before as Baoquan did, but met the 
-> > same build issue as Thomas that was not immediately clear to me why it 
-> > popped up. I would be curious to see how this can be resolved.
-> 
-> I think this is the result of recursive header inclusion:
-> spinlock.h includes lockdep.h, but its header guard is already
-> there from the include chain.
-> 
-> There is probably something in one of the mips asm/*.h headers that
-> causes this recursion that is not present elsewhere.
-> 
-> I think this should fix it, but is likely to cause another problem elsewhere:
-> 
-> --- a/arch/mips/include/asm/smp-ops.h
-> +++ b/arch/mips/include/asm/smp-ops.h
-> @@ -13,8 +13,6 @@
->  
->  #include <linux/errno.h>
->  
-> -#include <asm/mips-cps.h>
-> -
->  #ifdef CONFIG_SMP
->  
->  #include <linux/cpumask.h>
+On Thu, 23 Feb 2023 14:20:27 PST (-0800), Conor Dooley wrote:
+> On Thu, Feb 23, 2023 at 11:36:43AM +0000, Jiaxun Yang wrote:
+>> For riscv our assumption is unless a device states it is non-coherent,
+>> we take it to be DMA coherent.
+>> 
+>> Select ARCH_DMA_DEFAULT_COHERENT to ensure dma_default_coherent
+>> is always initialized to true.
+>> 
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>>  arch/riscv/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 1d46a268ce16..b71ce992c0c0 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -233,6 +233,7 @@ config LOCKDEP_SUPPORT
+>>  
+>>  config RISCV_DMA_NONCOHERENT
+>>  	bool
+>> +	select ARCH_DMA_DEFAULT_COHERENT
+>
+> Since we are always coherent by default, I feel like you should put this
+> in the main "config RISCV" section, where OF_DMA_DEFAULT_COHERENT
+> currently is, no?
 
-Will meet below compiling error after appllying above patch. Adding
-asm/mips-cps.h including in arch/mips/kernel/setup.c will fix it as below.
+Seems reasonable to me.  With that
 
-arch/mips/kernel/setup.c: In function ‘setup_arch’:
-arch/mips/kernel/setup.c:781:9: error: implicit declaration of function ‘mips_cm_probe’ [-Werror=implicit-function-declaration]
-  781 |         mips_cm_probe();
-      |         ^~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
+as I'm assuming these should all stay together.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f1c88f8a1dc5..e8c4020ef367 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -43,6 +43,7 @@
- #include <asm/smp-ops.h>
- #include <asm/prom.h>
- #include <asm/fw/fw.h>
-+#include <asm/mips-cps.h>
- 
- #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
- char __section(".appended_dtb") __appended_dtb[0x100000];
+Thanks!
 
+>
+> Wouldn't bother respinning for that unless the dma folk have comments
+> for you.
+>
+>>  	select ARCH_HAS_DMA_PREP_COHERENT
+>>  	select ARCH_HAS_SETUP_DMA_OPS
+>>  	select ARCH_HAS_SYNC_DMA_FOR_CPU
+>> -- 
+>> 2.37.1 (Apple Git-137.1)
+>> 
