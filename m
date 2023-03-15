@@ -2,67 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28816BA71C
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Mar 2023 06:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FCF6BAC2D
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Mar 2023 10:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCOFc3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Mar 2023 01:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S231986AbjCOJaI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Mar 2023 05:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCOFc2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Mar 2023 01:32:28 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5638B1CAD6;
-        Tue, 14 Mar 2023 22:31:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VdumAc3_1678858288;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VdumAc3_1678858288)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Mar 2023 13:31:29 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     ulf.hansson@linaro.org
-Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] mmc: jz4740: Use devm_platform_get_and_ioremap_resource()
-Date:   Wed, 15 Mar 2023 13:31:27 +0800
-Message-Id: <20230315053127.33855-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S232109AbjCOJ3u (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Mar 2023 05:29:50 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03DB1591FE;
+        Wed, 15 Mar 2023 02:29:45 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pcNS2-0004H0-00; Wed, 15 Mar 2023 10:29:42 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4C4A0C1421; Wed, 15 Mar 2023 10:29:10 +0100 (CET)
+Date:   Wed, 15 Mar 2023 10:29:10 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] MIPS: loongson32: Update the clock initialization
+Message-ID: <20230315092910.GA8008@alpha.franken.de>
+References: <20230210111141.1379645-1-keguang.zhang@gmail.com>
+ <a3e6f6038511ad48258627dbf4c335e2.sboyd@kernel.org>
+ <CAJhJPsUQN5Lo_rVUbbmGY68gorwkcQT=9AXfcEh371cP97Wj_A@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJhJPsUQN5Lo_rVUbbmGY68gorwkcQT=9AXfcEh371cP97Wj_A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-According to commit 890cc39a8799 ("drivers: provide
-devm_platform_get_and_ioremap_resource()"), convert
-platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+On Wed, Mar 15, 2023 at 11:07:23AM +0800, Keguang Zhang wrote:
+> On Sat, Feb 11, 2023 at 7:31 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> > Quoting Keguang Zhang (2023-02-10 03:11:41)
+> > > The Loongson-1 clock driver is under re-implementation
+> > > to add DT support. As a result, ls1x_clk_init() will be dropped soon.
+> > > Therefore, call of_clk_init() for clock initialization instead.
+> > >
+> > > Link: https://lore.kernel.org/all/20230209132614.1079198-3-keguang.zhang@gmail.com
+> > > Link: https://lore.kernel.org/all/20230209132614.1079198-4-keguang.zhang@gmail.com
+> 
+> Hi Thomas,
+> Sorry to bother you.
+> For fear of raising build error, is it possible to merge this patch
+> before the above two patches getting applied?
+> Or is there anything to improve?
+> Thanks very much!
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/mmc/host/jz4740_mmc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+the IMHO best way would be to let this patch go the same way as
+the other patch set. So Stephen could you take this into your
+tree, too ?
 
-diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-index 698450afa7bb..1846a05210e3 100644
---- a/drivers/mmc/host/jz4740_mmc.c
-+++ b/drivers/mmc/host/jz4740_mmc.c
-@@ -1079,8 +1079,7 @@ static int jz4740_mmc_probe(struct platform_device* pdev)
- 		goto err_free_host;
- 	}
- 
--	host->mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	host->base = devm_ioremap_resource(&pdev->dev, host->mem_res);
-+	host->base = devm_platform_get_and_ioremap_resource(pdev, 0, &host->mem_res);
- 	if (IS_ERR(host->base)) {
- 		ret = PTR_ERR(host->base);
- 		goto err_free_host;
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+
 -- 
-2.20.1.7.g153144c
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
