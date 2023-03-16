@@ -2,74 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67036BD8A8
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Mar 2023 20:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17506BD923
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Mar 2023 20:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjCPTKg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Mar 2023 15:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S230076AbjCPT2l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Mar 2023 15:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCPTKf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Mar 2023 15:10:35 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637FE1CBC3;
-        Thu, 16 Mar 2023 12:10:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id ja10so2854659plb.5;
-        Thu, 16 Mar 2023 12:10:34 -0700 (PDT)
+        with ESMTP id S230039AbjCPT2k (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Mar 2023 15:28:40 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7259B7D9F;
+        Thu, 16 Mar 2023 12:28:38 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id y14so2539231wrq.4;
+        Thu, 16 Mar 2023 12:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678993834;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+E8Ixd1Y68qyEsWPw4FyeSyxTc5J30wWegUf92YG+Yw=;
-        b=Pu3ozm4mDjsfIsoSUODeAcc1jOpn19dMCDeXDxF5C2NN+vbXCzPYuQw3Up5X9/lnpi
-         1hAf26MMB8eZcVuSebpszZFwvQtMounR4b/hUHWqJq5Gg+Azfib97HUexBIi5/g37Cki
-         l0R4QunbKsx+4qNAuKursSV1RQb4atUc3jltxANanV78NgqMUsbhjVJ9NRp/Po0bT6OW
-         Fo5D9anEy5/sOYyQMjNaOOnsUVdtZ2gmfI/VWdVUY8SidXFRa93HHSlA/Vm/IzlTA58A
-         cf5sXHCbcjIvaxxJq0gvvuCOI9ngYL71dKK0fX79dOindsJdberUBDLmpLNBI5xJHQmJ
-         JdXQ==
+        d=gmail.com; s=20210112; t=1678994917;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j8afldfRZftLeVmekmQfoh01jVdumsVP7nkKoPaU3Q0=;
+        b=FzMRr5ekh/fDiJqTlezNj6nLjzvn5z92FtYeB8MquVSMB8PuvarccnyqAzsXiccf+v
+         uwRFIomnTWNLGVjzc1xrB2hGiCKD3jBo5n1u8p/yEV6rpolbxVjfM7eTHXyAHXGXz7ZJ
+         TPeVbWfAlxiSD6+BPtXr/efehcdI64fIoL6G/U1WHNMo01Tzr/Obf3y5tug17N0fGcXg
+         CH6E5a2HguZUtwrm26LcK9IOV/7xEx5eIE1cOvTLMxPbGWaZwEjjP16HylJr06xRLhaf
+         RpiYBT3mXwwuOx0jLOhqavY/2kZ9GVbZRWMMwZrZv9xNO13SBwc1VUVgD4k3FntnSk7Z
+         AaOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678993834;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+E8Ixd1Y68qyEsWPw4FyeSyxTc5J30wWegUf92YG+Yw=;
-        b=AYsOstsuKLTPf05th28yP6YrQ9BeuUm5YrNBWiFs8Fkxex2bokzC2vQ7yiRai2ui/3
-         zbWRIfg4hMFhs6g+WcfTbjvxxUfd90ywTfM9P4TwvE9Rop/TjzRQlbzQ80q5UjVo1OYE
-         /BqGHuTU6ED26gV6pr1liDjZ8nCmunxUcC4VOLGGDDxsGW0S9cQSTF5OS6is68ptrxkg
-         NQdMO4G1+q6cicV4GFpdtw8cZY+yHgvxT0ulMzTYVLNEI4FMRhutL9VV6oieK1QKWy9E
-         jJMBJlS1YXJFl99LneCLLhHl4aH99+LAIc0Pp9XJ0dSSr+v9kJJPdNvsR3ihKlyDqkBk
-         bANQ==
-X-Gm-Message-State: AO0yUKUSi6VLh9OKwyOxaJW0dWImeM6sYCEFm9btxTtMJRjl7PD03tOU
-        Ynodb1HhbRGBo+aoNz/FXRk=
-X-Google-Smtp-Source: AK7set9lCtfnYzOx1Y6KOMDTExwYEt+wT068NQm9Yk+BXMXEinlYPlmg020GJqrQxamutvtg4ZeQCw==
-X-Received: by 2002:a17:902:e38b:b0:19f:3b86:4715 with SMTP id g11-20020a170902e38b00b0019f3b864715mr3742408ple.8.1678993833700;
-        Thu, 16 Mar 2023 12:10:33 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id je19-20020a170903265300b0019f3e339fb4sm47339plb.187.2023.03.16.12.10.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 12:10:32 -0700 (PDT)
-Message-ID: <cf868119-31e4-480e-6ebc-531f0686f664@gmail.com>
-Date:   Thu, 16 Mar 2023 12:10:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] irqchip/bcm-6345-l1: show MMIO address
-Content-Language: en-US
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1678994917;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j8afldfRZftLeVmekmQfoh01jVdumsVP7nkKoPaU3Q0=;
+        b=OaA5DMgqalrfqO5iOtmmxFPsH90MkN7l4EJpyVnzuiO1Wd6rSCpqPOR7xpxZno8OPP
+         tdfm4vzn9Ie4AUDbFKDTUlPG+tgkmIruo3K9C0VnY9DD2PRZMEYBbWaJKU1otqKt0NKu
+         IAAHNvxvQvCESKzbXFLYwWbRKFScOSMGmGBTDfgThz51A18Ff1hJy/BmnuZk7M2TLgHO
+         wQpy9t7oeB/Hkxl41y46emLc/nESsvwvAG/fx/zPzCe9UiaQLrdZq+BKeOwSBedktzK5
+         U/ZTfgzU2UGSI67aGRqqGnI0uXq+MAJMK18qzM0VByxj6W+AXJ6BJr5P0quljeQ8upSg
+         bEUg==
+X-Gm-Message-State: AO0yUKWnqTlccBDnqwCSRdqOBGc2FyfiLy1Tg7EjPENlISpzXuDYwW/R
+        lJSI06rrfq+Vel/SigfpGJI=
+X-Google-Smtp-Source: AK7set/jYfYl9ttVzIXJO+ZQVfa6cE/yOsP8fx4teiTmGNNWyVlIJRzMAlF3IUGqRAXAmY3hAabIuQ==
+X-Received: by 2002:a5d:40ce:0:b0:2cd:ceab:df1a with SMTP id b14-20020a5d40ce000000b002cdceabdf1amr381006wrq.32.1678994916642;
+        Thu, 16 Mar 2023 12:28:36 -0700 (PDT)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b002cfea3c49d5sm180041wrt.52.2023.03.16.12.28.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 12:28:35 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tglx@linutronix.de,
+        maz@kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v2] irqchip/bcm-6345-l1: request memory region
+Date:   Thu, 16 Mar 2023 20:28:33 +0100
+Message-Id: <20230316192833.1603149-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230316180701.783785-1-noltari@gmail.com>
 References: <20230316180701.783785-1-noltari@gmail.com>
- <aa72bcfb-b366-f373-60c5-99404109c482@gmail.com>
- <CAKR-sGcuKoDyZSmprbFPHoHdKjk9N=q1SDLE0+qTVuXmuF=saA@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAKR-sGcuKoDyZSmprbFPHoHdKjk9N=q1SDLE0+qTVuXmuF=saA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,82 +76,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/16/23 12:04, Álvaro Fernández Rojas wrote:
-> El jue, 16 mar 2023 a las 19:13, Florian Fainelli
-> (<f.fainelli@gmail.com>) escribió:
->>
->> On 3/16/23 11:07, Álvaro Fernández Rojas wrote:
->>> It's safe to show MMIO address.
->>>
->>> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
->>
->> This is going to be the kernel virtual address, and while on MIPS it is
->> easy to resolve to the physical address because these platforms map
->> registers through KSEG0/1, on other platforms like ARM/ARM64 the kernel
->> virtual addresses are pretty meaningless unless what you want to debug
->> is how ioremap() mapped the address.
->>
->> I would rather do the following change:
->>
->> diff --git a/drivers/irqchip/irq-bcm6345-l1.c
->> b/drivers/irqchip/irq-bcm6345-l1.c
->> index 1bd0621c4ce2..832957d363a4 100644
->> --- a/drivers/irqchip/irq-bcm6345-l1.c
->> +++ b/drivers/irqchip/irq-bcm6345-l1.c
->> @@ -261,6 +261,8 @@ static int __init bcm6345_l1_init_one(struct
->> device_node *dn,
->>           if (!cpu->map_base)
->>                   return -ENOMEM;
->>
->> +       request_mem_region(res.start, sz, res.name);
->> +
->>           for (i = 0; i < n_words; i++) {
->>                   cpu->enable_cache[i] = 0;
->>                   __raw_writel(0, cpu->map_base + reg_enable(intc, i));
->>
->> such that this shows up in /proc/iomem. WDYT?
-> 
-> I tried doing it that way, but it still shows (ptrval):
-> [    0.000000] irq_bcm6345_l1: registered BCM6345 L1 intc (IRQs: 32)
-> [    0.000000] irq_bcm6345_l1:   CPU0 at MMIO 0x(ptrval) (irq = 2)
+Request memory region in order to display it in /proc/iomem.
+Also stop printing the MMIO address since it just displays (ptrval).
 
-Well yes, if you don't remove the pr_info() you are still going to be 
-printing it, and because map_base is the return of ioremap() which is a 
-kernel virtual address, it is still hashed, also see Marc's message that 
-came in. I guess I should have been way more explicit and also provide a 
-tentative patch that also took out the pr_info().
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ v2: request memory region and stop displaying MMIO address.
 
-> 
-> I checked /proc/iomem and it's shown:
-> root@OpenWrt:/# cat /proc/iomem
-> 00000000-03ffffff : System RAM
->    00010000-0068e96f : Kernel code
->    0068e970-008834ff : Kernel data
->    01610000-016458e7 : Kernel bss
-> 08000000-0800ffff : BCM6348 PCI IO space
-> 1e000000-1fffffff : 1e000000.nor nor@1e000000
-> 30000000-37ffffff : pci@fffe1000
->    30000000-3000ffff : 0000:00:01.0
->      30000000-3000ffff : ath9k
-> fffe0004-fffe0007 : fffe0004.clock-controller clock-controller@fffe0004
-> fffe000c-fffe0013 : interrupt-controller@fffe000c
-> fffe0034-fffe0037 : fffe0034.reset-controller reset-controller@fffe0034
-> fffe005c-fffe0067 : fffe005c.watchdog watchdog@fffe005c
-> fffe0100-fffe0117 : fffe0100.serial serial@fffe0100
-> fffe1000-fffe11ff : fffe1000.pci pci
-> fffe1300-fffe13ff : fffe1300.usb usb@fffe1300
-> fffe1400-fffe14ff : fffe1400.usb usb@fffe1400
-> fffe1500-fffe1537 : fffe1500.usb-phy usb-phy@fffe1500
-> 
-> Any idea why this could be hapenning?
+ drivers/irqchip/irq-bcm6345-l1.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-We now have the desired resource listed using its physical address:
-
-fffe000c-fffe0013 : interrupt-controller@fffe000c
-
-There could be a variety of improvements to how request_mem_region() is 
-called if you want to provide a break down of each resource on a per-CPU 
-basis.
+diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
+index 6899e37810a8..fa113cb2529a 100644
+--- a/drivers/irqchip/irq-bcm6345-l1.c
++++ b/drivers/irqchip/irq-bcm6345-l1.c
+@@ -257,6 +257,9 @@ static int __init bcm6345_l1_init_one(struct device_node *dn,
+ 	if (!cpu->map_base)
+ 		return -ENOMEM;
+ 
++	if (!request_mem_region(res.start, sz, res.name))
++		pr_err("failed to request intc memory");
++
+ 	for (i = 0; i < n_words; i++) {
+ 		cpu->enable_cache[i] = 0;
+ 		__raw_writel(0, cpu->map_base + reg_enable(intc, i));
+@@ -335,8 +338,7 @@ static int __init bcm6345_l1_of_init(struct device_node *dn,
+ 	for_each_cpu(idx, &intc->cpumask) {
+ 		struct bcm6345_l1_cpu *cpu = intc->cpus[idx];
+ 
+-		pr_info("  CPU%u at MMIO 0x%p (irq = %d)\n", idx,
+-				cpu->map_base, cpu->parent_irq);
++		pr_info("  CPU%u (irq = %d)\n", idx, cpu->parent_irq);
+ 	}
+ 
+ 	return 0;
 -- 
-Florian
+2.30.2
 
