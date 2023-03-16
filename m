@@ -2,165 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D556BD884
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Mar 2023 20:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2456BD88E
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Mar 2023 20:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjCPTEA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Mar 2023 15:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S229758AbjCPTFG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Mar 2023 15:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCPTD6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Mar 2023 15:03:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E882E2517;
-        Thu, 16 Mar 2023 12:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678993428; x=1710529428;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zUzkGxrqKDPR6SroJseKwSx7MVAGnpL/Grdhlw6b7UE=;
-  b=GGGcwcWFhVNUPqlV5cS7jhSo++oAJJeSo+qf8YGM9dLprFCOO90c7NMm
-   e8AhBjSiTxfCcsA0O81ZpHm5F4j+gpsUAI9H1C81Sv7zAKj5/fHr1lai4
-   hEbgqNKOh6T2ENt2DM/sliOpWhZNXF1cX+UNrAZYnmO59Wa+ehb4oCZJd
-   bQ6irRFzgXO/MfQ1FFy326yiwnl/C2t1daZQ4tx/KhKcHBV7DzcLjin0g
-   3ddESbDNI/pjbsLY+8U2qN/0vrXedmDzmX7lS/nykk7GfmB6WVFfSiZmh
-   zoOpHKx6VD5zBdoQp5tLxiS4ZMFiN3xNtXzlWPkv8RD4F3aXnH27TcJ5N
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="321944554"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="321944554"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 12:03:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="925864625"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="925864625"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 12:03:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcst1-0008hW-1B;
-        Thu, 16 Mar 2023 19:03:39 +0000
-Date:   Fri, 17 Mar 2023 03:03:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v5 1/4] PCI: Introduce pci_dev_for_each_resource()
-Message-ID: <202303170223.V0xQhs1V-lkp@intel.com>
-References: <20230314192634.63531-2-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229707AbjCPTFF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Mar 2023 15:05:05 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF17B61A2;
+        Thu, 16 Mar 2023 12:05:02 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-541a05e4124so50932487b3.1;
+        Thu, 16 Mar 2023 12:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678993502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VuyknMvK5V+CI6DL3PUJ12Wt1esd6FJ5jCcVSEGJreg=;
+        b=fP5BSWSLDDmGEOr/jNM6hTZ/vcsMsTgr+kBPsNT9XUFUY5SeYd/jB3hcl5lAixXw6B
+         Z0zMvBKjBCQ3R1Bl5B42WOMHUm1DZQrs7Cav2YAd0gDKvTyNBQkE/48G+viI4Db/XJgj
+         J0CjwdhNefpv9bjuMLvPSupRhCmAawdQqPvMswKgtQK2WRhpmkZhNB6M2t+Fj8J7KZ45
+         4dXepWlZ/AM48uDtAyw+H7E5vEAyIfHeed6XplrCMTpr/OBIBKtCOiPiejO9ZLEZ0swc
+         YASDWBN98AgmOlI0Cp+9QDLc3iFcJFukCSySV8tmHDX7t7JqSg9Top6HIsMKR9JDbXd4
+         Wjpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678993502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VuyknMvK5V+CI6DL3PUJ12Wt1esd6FJ5jCcVSEGJreg=;
+        b=P4RvXSUWT8/Z9LzQoWeWXjtaLmGRdmPCK89eA9bE/FttqoyFgvWU6BdUr/BXE8LSg8
+         P84QH14tp/aGCgFupcKpOnVq6CemTXCmA/4kJP9Orggjp83Ek4AyPqXzkj5AJtzrHfZ2
+         vC7oC1kGn1JQ/GbPIIVQd6lUnWUQ5B/fHbufqyCkjwq68WgGrybf+66QhdnbItaNG6kj
+         YGvU1VwQlUDcgqXTdJk82vc72GCc/QevYhLdm/TT65EF6Yybb1wxx6FgOiRLxVutmv73
+         LfVilBlggKY6iA488T0fvxq1CjQJ+4XFsExK70dY+dB6kGQrXca2p3p+14ZWDNd1RbWd
+         k7OA==
+X-Gm-Message-State: AO0yUKWhL6TdMAJI1MQ9Q5FkpSLzqkfEXdTRaAyc/KOkZ+GS7lhHETtJ
+        g25+g/Ox73s9SIPQ6myYzblHdwY4dpxBY1H1Bo4=
+X-Google-Smtp-Source: AK7set+/PKWbW0wVZ49bnFrcsTy1LnVP9Qsyjf+l+2Uypcw4MuR1jPwWWVT2tjcsFNK9Gr/x2fL5YBMx0HOJgAqsBzo=
+X-Received: by 2002:a81:b3c8:0:b0:544:b7ff:b0db with SMTP id
+ r191-20020a81b3c8000000b00544b7ffb0dbmr881924ywh.2.1678993501933; Thu, 16 Mar
+ 2023 12:05:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314192634.63531-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230316180701.783785-1-noltari@gmail.com> <aa72bcfb-b366-f373-60c5-99404109c482@gmail.com>
+In-Reply-To: <aa72bcfb-b366-f373-60c5-99404109c482@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Thu, 16 Mar 2023 20:04:51 +0100
+Message-ID: <CAKR-sGcuKoDyZSmprbFPHoHdKjk9N=q1SDLE0+qTVuXmuF=saA@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/bcm-6345-l1: show MMIO address
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andy,
+El jue, 16 mar 2023 a las 19:13, Florian Fainelli
+(<f.fainelli@gmail.com>) escribi=C3=B3:
+>
+> On 3/16/23 11:07, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+> > It's safe to show MMIO address.
+> >
+> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+>
+> This is going to be the kernel virtual address, and while on MIPS it is
+> easy to resolve to the physical address because these platforms map
+> registers through KSEG0/1, on other platforms like ARM/ARM64 the kernel
+> virtual addresses are pretty meaningless unless what you want to debug
+> is how ioremap() mapped the address.
+>
+> I would rather do the following change:
+>
+> diff --git a/drivers/irqchip/irq-bcm6345-l1.c
+> b/drivers/irqchip/irq-bcm6345-l1.c
+> index 1bd0621c4ce2..832957d363a4 100644
+> --- a/drivers/irqchip/irq-bcm6345-l1.c
+> +++ b/drivers/irqchip/irq-bcm6345-l1.c
+> @@ -261,6 +261,8 @@ static int __init bcm6345_l1_init_one(struct
+> device_node *dn,
+>          if (!cpu->map_base)
+>                  return -ENOMEM;
+>
+> +       request_mem_region(res.start, sz, res.name);
+> +
+>          for (i =3D 0; i < n_words; i++) {
+>                  cpu->enable_cache[i] =3D 0;
+>                  __raw_writel(0, cpu->map_base + reg_enable(intc, i));
+>
+> such that this shows up in /proc/iomem. WDYT?
 
-I love your patch! Yet something to improve:
+I tried doing it that way, but it still shows (ptrval):
+[    0.000000] irq_bcm6345_l1: registered BCM6345 L1 intc (IRQs: 32)
+[    0.000000] irq_bcm6345_l1:   CPU0 at MMIO 0x(ptrval) (irq =3D 2)
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus powerpc/next powerpc/fixes linus/master v6.3-rc2 next-20230316]
-[cannot apply to soc/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I checked /proc/iomem and it's shown:
+root@OpenWrt:/# cat /proc/iomem
+00000000-03ffffff : System RAM
+  00010000-0068e96f : Kernel code
+  0068e970-008834ff : Kernel data
+  01610000-016458e7 : Kernel bss
+08000000-0800ffff : BCM6348 PCI IO space
+1e000000-1fffffff : 1e000000.nor nor@1e000000
+30000000-37ffffff : pci@fffe1000
+  30000000-3000ffff : 0000:00:01.0
+    30000000-3000ffff : ath9k
+fffe0004-fffe0007 : fffe0004.clock-controller clock-controller@fffe0004
+fffe000c-fffe0013 : interrupt-controller@fffe000c
+fffe0034-fffe0037 : fffe0034.reset-controller reset-controller@fffe0034
+fffe005c-fffe0067 : fffe005c.watchdog watchdog@fffe005c
+fffe0100-fffe0117 : fffe0100.serial serial@fffe0100
+fffe1000-fffe11ff : fffe1000.pci pci
+fffe1300-fffe13ff : fffe1300.usb usb@fffe1300
+fffe1400-fffe14ff : fffe1400.usb usb@fffe1400
+fffe1500-fffe1537 : fffe1500.usb-phy usb-phy@fffe1500
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/PCI-Introduce-pci_dev_for_each_resource/20230315-032821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230314192634.63531-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v5 1/4] PCI: Introduce pci_dev_for_each_resource()
-config: powerpc-randconfig-r032-20230312 (https://download.01.org/0day-ci/archive/20230317/202303170223.V0xQhs1V-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/85cdf4746b716f7b6c14d7dc5cd907c3c2a1fb0c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/PCI-Introduce-pci_dev_for_each_resource/20230315-032821
-        git checkout 85cdf4746b716f7b6c14d7dc5cd907c3c2a1fb0c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Any idea why this could be hapenning?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170223.V0xQhs1V-lkp@intel.com/
+>
+> > ---
+> >   drivers/irqchip/irq-bcm6345-l1.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm=
+6345-l1.c
+> > index 6899e37810a8..55a2d9b31597 100644
+> > --- a/drivers/irqchip/irq-bcm6345-l1.c
+> > +++ b/drivers/irqchip/irq-bcm6345-l1.c
+> > @@ -335,7 +335,7 @@ static int __init bcm6345_l1_of_init(struct device_=
+node *dn,
+> >       for_each_cpu(idx, &intc->cpumask) {
+> >               struct bcm6345_l1_cpu *cpu =3D intc->cpus[idx];
+> >
+> > -             pr_info("  CPU%u at MMIO 0x%p (irq =3D %d)\n", idx,
+> > +             pr_info("  CPU%u at MMIO 0x%px (irq =3D %d)\n", idx,
+> >                               cpu->map_base, cpu->parent_irq);
+> >       }
+> >
+>
+> --
+> Florian
+>
 
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/platforms/52xx/mpc52xx_pci.c:331:6: error: unused variable 'i' [-Werror,-Wunused-variable]
-           int i;
-               ^
-   1 error generated.
-
-
-vim +/i +331 arch/powerpc/platforms/52xx/mpc52xx_pci.c
-
-f42963f8646540 Grant Likely    2006-12-12  326  
-f42963f8646540 Grant Likely    2006-12-12  327  static void
-f42963f8646540 Grant Likely    2006-12-12  328  mpc52xx_pci_fixup_resources(struct pci_dev *dev)
-f42963f8646540 Grant Likely    2006-12-12  329  {
-85cdf4746b716f Mika Westerberg 2023-03-14  330  	struct resource *res;
-f42963f8646540 Grant Likely    2006-12-12 @331  	int i;
-f42963f8646540 Grant Likely    2006-12-12  332  
-59510820fff76f Randy Dunlap    2021-04-28  333  	pr_debug("%s() %.4x:%.4x\n", __func__, dev->vendor, dev->device);
-f42963f8646540 Grant Likely    2006-12-12  334  
-f42963f8646540 Grant Likely    2006-12-12  335  	/* We don't rely on boot loader for PCI and resets all
-f42963f8646540 Grant Likely    2006-12-12  336  	   devices */
-85cdf4746b716f Mika Westerberg 2023-03-14  337  	pci_dev_for_each_resource_p(dev, res) {
-f42963f8646540 Grant Likely    2006-12-12  338  		if (res->end > res->start) {	/* Only valid resources */
-f42963f8646540 Grant Likely    2006-12-12  339  			res->end -= res->start;
-f42963f8646540 Grant Likely    2006-12-12  340  			res->start = 0;
-f42963f8646540 Grant Likely    2006-12-12  341  			res->flags |= IORESOURCE_UNSET;
-f42963f8646540 Grant Likely    2006-12-12  342  		}
-f42963f8646540 Grant Likely    2006-12-12  343  	}
-f42963f8646540 Grant Likely    2006-12-12  344  
-f42963f8646540 Grant Likely    2006-12-12  345  	/* The PCI Host bridge of MPC52xx has a prefetch memory resource
-f42963f8646540 Grant Likely    2006-12-12  346  	   fixed to 1Gb. Doesn't fit in the resource system so we remove it */
-f42963f8646540 Grant Likely    2006-12-12  347  	if ( (dev->vendor == PCI_VENDOR_ID_MOTOROLA) &&
-f42963f8646540 Grant Likely    2006-12-12  348  	     (   dev->device == PCI_DEVICE_ID_MOTOROLA_MPC5200
-f42963f8646540 Grant Likely    2006-12-12  349  	      || dev->device == PCI_DEVICE_ID_MOTOROLA_MPC5200B) ) {
-f42963f8646540 Grant Likely    2006-12-12  350  		struct resource *res = &dev->resource[1];
-f42963f8646540 Grant Likely    2006-12-12  351  		res->start = res->end = res->flags = 0;
-f42963f8646540 Grant Likely    2006-12-12  352  	}
-f42963f8646540 Grant Likely    2006-12-12  353  }
-f42963f8646540 Grant Likely    2006-12-12  354  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+=C3=81lvaro
