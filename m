@@ -2,159 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F2C6BF02F
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 18:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6106BF118
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 19:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCQRwk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Mar 2023 13:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S229838AbjCQSyH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Mar 2023 14:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCQRwj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 13:52:39 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6793D3E1C1;
-        Fri, 17 Mar 2023 10:52:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679075524; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=X0J4EYxYIVPhTMYsdMCQ/bOf3JPwMJPq2Bww0bVG/WzKdchpPqBQ6MsXfYrVwouRzHUCiCnxiZ1/GQIcKB00GcOd8Caa+mNM1SmnMuTNmqGDBuXfVFmBzvcFcJyJrrxelgjNI4qCgEYTukVGTCV8VRAw37a9YWsvNa62UpDVYUU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1679075524; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=HboPBjjnAW7lExCT3DDX52v29WYH5jeE8ulOkVKDL0Y=; 
-        b=GGLKaviRG5rETCqxAwvdy5dVln06W8cZ46sGLupCY6sq72TbljuJQXVPYMoT0MWLr8aKsrs1/XRCcH63kqsXHBYFCke4vbuSBqPJ4gmFjMAkQXkA1Xyjvt/OxlKygdpN5AWN1qsA3LkV5POhcGTgitYeB83dkurUqaB/kNOtaF8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679075524;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=HboPBjjnAW7lExCT3DDX52v29WYH5jeE8ulOkVKDL0Y=;
-        b=ceosCciEBnu79CIoBxUtyCwsRoYpjA2pjeX30QSUJqBKiRu8ymEcw3zOAZD0ltn0
-        OCKNt5HuFi2wiplDnqvGiLTlwuCgD4otYeLRlCj/R5wJGfOMa5XYsS2gUaW+qodcyd3
-        yMH1JiYS6OkBoDdm+fIfoJ4ILLwZw9DRcMWRihNw=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1679075522087770.3623448757124; Fri, 17 Mar 2023 10:52:02 -0700 (PDT)
-Message-ID: <690e29ee-5e40-5f57-59d7-7c1167852cfb@arinc9.com>
-Date:   Fri, 17 Mar 2023 20:51:54 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 15/21] dt-bindings: pinctrl: {mediatek,ralink}: fix
- formatting
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hui Liu <hui.liu@mediatek.com>,
+        with ESMTP id S229621AbjCQSyF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 14:54:05 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887E59013;
+        Fri, 17 Mar 2023 11:54:03 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id s4so2704928ioj.11;
+        Fri, 17 Mar 2023 11:54:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679079243;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WNSHz0dzaPcGaUhlIQ9DFb3eNhyN85VR7QYislCiJVQ=;
+        b=cqQAuLyUOQuo65JmSkqVZ/Vr2Pkb2Iup09ibiiCD3TZEZnoZjOlNy0zijcl4hQZilB
+         e036pqpA5UkTOwSJxnvtvF8Fuewsj4LuZxADyl1WMNRiQS20Lx4008GoNaGQYE0tFuOd
+         NfAn5PYBYDeT8ZapTYCnlzlOQzxgHnhvUvNlpShFy+4bB0n+2V1nyBkqwLp2M3K1RlcR
+         ROw2BFrFhD0fq7Y1Bf3As26ybm7AO17Rglh6X/utkEo/pA2fVLbkwJVIu6zdppfdtMjR
+         DRdSjbAtqxaReVLulYWIRiWbAWAERNSYTQIboQGB390pA8EB5lC2voR0gqqBV/0Li+Us
+         P7KQ==
+X-Gm-Message-State: AO0yUKVgBmEwiqNr76Gwk+Oeq5i6n7wCZJql+WZgJmzJ5lcbdb5Vekjq
+        m1drzzCeeh6xxoGKh1rQFA==
+X-Google-Smtp-Source: AK7set/gD0bGTFLwn5DkoYxx6k8UNj0sDqJd4mHH7QgY1nqHumy8NlPpI/IcSPxvF032BSb1iUq40A==
+X-Received: by 2002:a6b:e406:0:b0:74e:3b0f:4498 with SMTP id u6-20020a6be406000000b0074e3b0f4498mr400547iog.7.1679079242821;
+        Fri, 17 Mar 2023 11:54:02 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id b44-20020a0295af000000b004035b26b6d8sm912267jai.2.2023.03.17.11.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 11:54:02 -0700 (PDT)
+Received: (nullmailer pid 2618097 invoked by uid 1000);
+        Fri, 17 Mar 2023 18:54:00 -0000
+Date:   Fri, 17 Mar 2023 13:54:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Teng <andy.teng@mediatek.com>,
         Landen Chao <Landen.Chao@mediatek.com>,
         linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
         Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, DENG Qingfang <dqfext@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hui Liu <hui.liu@mediatek.com>,
         Daniel Santos <daniel.santos@pobox.com>,
+        linux-mediatek@lists.infradead.org,
         Frank Wunderlich <frank-w@public-files.de>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        William Dean <williamsukatube@gmail.com>,
-        devicetree@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        DENG Qingfang <dqfext@gmail.com>
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com, William Dean <williamsukatube@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>
+Subject: Re: [PATCH v2 06/21] dt-bindings: pinctrl: ralink: move
+ additionalProperties to top
+Message-ID: <167907923981.2618031.9946159444970518703.robh@kernel.org>
 References: <20230313205921.35342-1-arinc.unal@arinc9.com>
- <20230313205921.35342-16-arinc.unal@arinc9.com>
- <167880254685.25972.15349420182231511267.robh@kernel.org>
- <c64d9f88-75ca-3a6c-b5c2-6e4b1a161d5f@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <c64d9f88-75ca-3a6c-b5c2-6e4b1a161d5f@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20230313205921.35342-7-arinc.unal@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230313205921.35342-7-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14.03.2023 18:38, Arınç ÜNAL wrote:
-> On 14.03.2023 17:10, Rob Herring wrote:
->>
->> On Mon, 13 Mar 2023 23:59:15 +0300, arinc9.unal@gmail.com wrote:
->>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> Change the style of description properties to plain style where 
->>> there's no
->>> need to preserve the line endings, and vice versa.
->>>
->>> Fit the schemas to 80 columns for each line.
->>>
->>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>> ---
->>>   .../pinctrl/mediatek,mt65xx-pinctrl.yaml      | 22 +++---
->>>   .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 33 +++++----
->>>   .../pinctrl/mediatek,mt6795-pinctrl.yaml      | 33 +++++----
->>>   .../pinctrl/mediatek,mt7620-pinctrl.yaml      |  2 +-
->>>   .../pinctrl/mediatek,mt7621-pinctrl.yaml      |  2 +-
->>>   .../pinctrl/mediatek,mt7622-pinctrl.yaml      | 26 +++----
->>>   .../pinctrl/mediatek,mt7981-pinctrl.yaml      | 33 +++++----
->>>   .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 68 ++++++++---------
->>>   .../pinctrl/mediatek,mt8183-pinctrl.yaml      | 26 ++++---
->>>   .../pinctrl/mediatek,mt8186-pinctrl.yaml      | 47 ++++++------
->>>   .../pinctrl/mediatek,mt8188-pinctrl.yaml      | 74 ++++++++++---------
->>>   .../pinctrl/mediatek,mt8192-pinctrl.yaml      | 47 ++++++------
->>>   .../pinctrl/mediatek,mt8195-pinctrl.yaml      | 41 +++++-----
->>>   .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 28 +++----
->>>   .../pinctrl/ralink,rt2880-pinctrl.yaml        |  2 +-
->>>   .../pinctrl/ralink,rt305x-pinctrl.yaml        |  2 +-
->>>   .../pinctrl/ralink,rt3883-pinctrl.yaml        |  2 +-
->>>   17 files changed, 254 insertions(+), 234 deletions(-)
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->> ./Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml:103:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
->> ./Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml:113:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
->>
->> dtschema/dtc warnings/errors:
->>
->> doc reference errors (make refcheckdocs):
->>
->> See 
->> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230313205921.35342-16-arinc.unal@arinc9.com
->>
->> The base for the series is generally the latest rc1. A different 
->> dependency
->> should be noted in *this* patch.
->>
->> If you already ran 'make dt_binding_check' and didn't see the above
->> error(s), then make sure 'yamllint' is installed and dt-schema is up to
->> date:
->>
->> pip3 install dtschema --upgrade
->>
->> Please check and re-submit after running the above command yourself. Note
->> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
->> your schema. However, it must be unset to test all examples with your 
->> schema.
-> 
-> I do see the warning. Looks like the wrong indentation was there before 
-> my patch series. I'll address that as well on this patch on v3.
-> 
-> Will you review the rest of v2?
 
-I guess that's a no. I'll send v3 soon.
+On Mon, 13 Mar 2023 23:59:06 +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Move additionalProperties to the top. It's easier to read than after a long
+> indented section.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++----
+>  .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 7 +++----
+>  .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml | 7 +++----
+>  .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 7 +++----
+>  .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml | 7 +++----
+>  5 files changed, 15 insertions(+), 20 deletions(-)
+> 
 
-Arınç
+Reviewed-by: Rob Herring <robh@kernel.org>
+
