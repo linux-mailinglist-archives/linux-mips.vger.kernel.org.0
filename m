@@ -2,33 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DD46BE6A5
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 11:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5796BECEA
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 16:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjCQKZw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Mar 2023 06:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S230094AbjCQPaH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Mar 2023 11:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjCQKZu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 06:25:50 -0400
+        with ESMTP id S229967AbjCQPaG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 11:30:06 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58EE5E4C60;
-        Fri, 17 Mar 2023 03:25:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 938BB9E04F;
+        Fri, 17 Mar 2023 08:29:41 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pd7HN-0002Ik-04; Fri, 17 Mar 2023 11:25:45 +0100
+        id 1pdC1O-0004S1-00; Fri, 17 Mar 2023 16:29:34 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1A1D4C1B05; Fri, 17 Mar 2023 11:23:55 +0100 (CET)
-Date:   Fri, 17 Mar 2023 11:23:55 +0100
+        id 203E8C1B05; Fri, 17 Mar 2023 16:29:20 +0100 (CET)
+Date:   Fri, 17 Mar 2023 16:29:20 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: sibyte: Replace BCM1125H with SB1250 option
-Message-ID: <20230317102355.GE7054@alpha.franken.de>
-References: <20230315142124.110732-1-tsbogend@alpha.franken.de>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 16/36] mips: Implement the new page table range API
+Message-ID: <20230317152920.GA11653@alpha.franken.de>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-17-willy@infradead.org>
+ <20230315105022.GA9850@alpha.franken.de>
+ <ZBIrkW5EB/uHj4sm@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230315142124.110732-1-tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZBIrkW5EB/uHj4sm@casper.infradead.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -38,16 +44,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 03:21:24PM +0100, Thomas Bogendoerfer wrote:
-> SIBYTE_BCM1125H is identical to SIBYTE_SB1250, so remove one of them.
+On Wed, Mar 15, 2023 at 08:33:21PM +0000, Matthew Wilcox wrote:
+> On Wed, Mar 15, 2023 at 11:50:22AM +0100, Thomas Bogendoerfer wrote:
+> > On Wed, Mar 15, 2023 at 05:14:24AM +0000, Matthew Wilcox (Oracle) wrote:
+> > > Rename _PFN_SHIFT to PFN_PTE_SHIFT.  Convert a few places
+> > > to call set_pte() instead of set_pte_at().  Add set_ptes(),
+> > > update_mmu_cache_range(), flush_icache_pages() and flush_dcache_folio().
+> > 
+> > /local/tbogendoerfer/korg/linux/mm/memory.c: In function ‘set_pte_range’:
+> > /local/tbogendoerfer/korg/linux/mm/memory.c:4290:2: error: implicit declaration of function ‘update_mmu_cache_range’ [-Werror=implicit-function-declaration]
+> >   update_mmu_cache_range(vma, addr, vmf->pte, nr);
+> > 
+> > update_mmu_cache_range() is missing in this patch.
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/Kconfig        |  2 +-
->  arch/mips/sibyte/Kconfig | 11 -----------
->  2 files changed, 1 insertion(+), 12 deletions(-)
+> Oops.  And mips was one of the arches I did a test build for!
+> 
+> Looks like we could try to gain some efficiency by passing 'nr' to
+> __update_tlb(), but as far as I can tell, that's only called for r3k and
+> r4k, so maybe it's not worth optimising at this point?
 
-applied to mips-next.
+hmm, not sure if that would help. R4k style TLB has two PTEs mapped
+per TLB entry. So by advancing per page __update_tlb() is called more
+often than needed.
+
+> Anyway, this add-on makes the mips build compile for me and I'll fold
+> it into v5.
+
+tested your v4 with the add-on on QEMU Malta and real hardware without
+problems so far. I'll give v5 another spin.
 
 Thomas.
 
