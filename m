@@ -2,49 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D6B6BF160
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 20:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949EB6BF2C8
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 21:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjCQTDj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Mar 2023 15:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S230198AbjCQUi7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Mar 2023 16:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCQTDi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 15:03:38 -0400
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FCB2D158;
-        Fri, 17 Mar 2023 12:03:34 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id bp11so3251435ilb.3;
-        Fri, 17 Mar 2023 12:03:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679079813;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QA6US2iEQS7WVb5Tu7I2HnyasBrHjBowuMV4CxZo+lY=;
-        b=VwT5AGTxxMVbVykUiaOLqc+wPNAYDtKzyKRXCjfjYXOD8PQSx2n+Ht3F/G6cG5Ifk5
-         6UUMb8qCfp5B9Y5UW3782CCtlIW8tKagWftG/DkjY4fZRZMdtp46u0HfhGbQ8WCatjym
-         FCNZX+7BuwECEhtT177KTm3pMvKXY9Ol3ztqR4PEWSctztG0bTlF2V8TmMJaXqT8tOtu
-         rVmodNHGLmP+Z9Z+E46gwuCe+GPC5Bo2kOYLCJFAlz1gXZt8pfd4VXoCCZZ5Y47rMaTX
-         958Q+gwq4p/jW4pJEcMUfNQkkTgILCMCSltL5CKCvYvWXu/zWnNmv+WNCciB0DCNBv77
-         DSyw==
-X-Gm-Message-State: AO0yUKUXpdyF/veHRpFdRptQAyGU/SYwauQfpJ87g8Wc+rxDQdrnsLV3
-        HjKVcLKpB7seI3Gac1o+Kg==
-X-Google-Smtp-Source: AK7set9bB4NJOxOyCqNiGWCfZXmoAvBml08ZXNwdEoqMoufqX6wiMlft0ZCPwbnmvDM8kYUZndNjUg==
-X-Received: by 2002:a92:c8c5:0:b0:315:365d:5358 with SMTP id c5-20020a92c8c5000000b00315365d5358mr324058ilq.10.1679079813708;
-        Fri, 17 Mar 2023 12:03:33 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id v5-20020a056e020f8500b00317b8e2c2b4sm804326ilo.39.2023.03.17.12.03.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 12:03:33 -0700 (PDT)
-Received: (nullmailer pid 2631711 invoked by uid 1000);
-        Fri, 17 Mar 2023 19:03:31 -0000
-Date:   Fri, 17 Mar 2023 14:03:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     arinc9.unal@gmail.com
+        with ESMTP id S230146AbjCQUi6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 16:38:58 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C9F2D6D;
+        Fri, 17 Mar 2023 13:38:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679085506; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Xw/JmgIpXeWcbao/wk4KwQ4Jquj/5Ho6qfNyIdO4Ur9aMayyP5TrN4EJzDccCEWYKoi4giSEwrW8C7YmlUOx5lLKRARF5SvcfAOUPlUqOtzkuvyJxE0ICjHeIj6/XOEN0YueD64oXSDgmxlcsfdP12Ve3Tut9SiH7UwHypfT2tI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679085506; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=WjIwrwxKeq5Ld9Ij9H2Gbwf8PRvgEpDh113K4y969wE=; 
+        b=LMni3nsGFnG2FVnh6j6xH22hvSZ6yIBCrpnLHfsA/dr1HxdNGBW3iVIQHTXhOVPzKYUuycLznExUjo8h5UKKTL/SF/44yWFqQpXVvYb5NDnuILezptc2szB91vBW92Xc0Q/ToflYp23Z/AovR6QALoXUAsa/VJTtN1VCOY34Cnc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679085506;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=WjIwrwxKeq5Ld9Ij9H2Gbwf8PRvgEpDh113K4y969wE=;
+        b=h2jZZs7IRiH7FdUfBugzOWe/DM0kpKGcr02Mcdb8/PX8HJ9rm3kNyMUqKb9N9t/b
+        oYooBgEjewh5KXrq5ufHqBSB8F1msv9f8aEqaMtg8Eu518AB6iU0gnkQrohkv1nRhQp
+        8vPyCEZaBehcCPGd5eKq36itLWJWYLFZ757aLLkI=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679085504453905.0224911165027; Fri, 17 Mar 2023 13:38:24 -0700 (PDT)
+Message-ID: <022c66f3-75d4-5ab4-4a4d-e8260fd70904@arinc9.com>
+Date:   Fri, 17 Mar 2023 23:38:16 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 20/21] dt-bindings: pinctrl: mediatek: mt7620: split
+ binding
+To:     Rob Herring <robh@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         William Dean <williamsukatube@gmail.com>,
         Sean Wang <sean.wang@kernel.org>,
         Andy Teng <andy.teng@mediatek.com>,
@@ -52,7 +51,7 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Daniel Golle <daniel@makrotopia.org>,
         Hui Liu <hui.liu@mediatek.com>,
         Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Daniel Santos <daniel.santos@pobox.com>,
         Luiz Angelo Daros de Luca <luizluca@gmail.com>,
@@ -64,55 +63,60 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 20/21] dt-bindings: pinctrl: mediatek: mt7620: split
- binding
-Message-ID: <20230317190331.GA2628708-robh@kernel.org>
 References: <20230313205921.35342-1-arinc.unal@arinc9.com>
  <20230313205921.35342-21-arinc.unal@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <20230317190331.GA2628708-robh@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230317190331.GA2628708-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230313205921.35342-21-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:59:20PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 17.03.2023 22:03, Rob Herring wrote:
+> On Mon, Mar 13, 2023 at 11:59:20PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> The MT7628 and MT7688 SoCs contain different pin muxing information,
+>> therefore, should be split. This can be done now that there are compatible
+>> strings to distinguish them from other SoCs.
+>>
+>> Split the schema out to mediatek,mt76x8-pinctrl.yaml.
+>>
+>> Remove mediatek,mt76x8-pinctrl from mt7620.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 379 +--------------
+>>   .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 450 ++++++++++++++++++
+>>   2 files changed, 459 insertions(+), 370 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+>> index 808dd8bd276f..591bc0664ec6 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+>> @@ -11,15 +11,13 @@ maintainers:
+>>     - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>   
+>>   description: |
+>> -  MediaTek MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
+>> +  MediaTek MT7620 pin controller for MT7620 SoC.
 > 
-> The MT7628 and MT7688 SoCs contain different pin muxing information,
-> therefore, should be split. This can be done now that there are compatible
-> strings to distinguish them from other SoCs.
+> Saying MT7620 twice is redundant. Otherwise,
 > 
-> Split the schema out to mediatek,mt76x8-pinctrl.yaml.
-> 
-> Remove mediatek,mt76x8-pinctrl from mt7620.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 379 +--------------
->  .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 450 ++++++++++++++++++
->  2 files changed, 459 insertions(+), 370 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-> index 808dd8bd276f..591bc0664ec6 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-> @@ -11,15 +11,13 @@ maintainers:
->    - Sergio Paracuellos <sergio.paracuellos@gmail.com>
->  
->  description: |
-> -  MediaTek MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
-> +  MediaTek MT7620 pin controller for MT7620 SoC.
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Saying MT7620 twice is redundant. Otherwise,
+It's not always a one to one relation so I'd rather explicitly point the 
+SoC out like on other schemas like MT7621. Thanks for reviewing!
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Arınç
