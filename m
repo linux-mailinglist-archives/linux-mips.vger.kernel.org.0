@@ -2,145 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67FF6BF81A
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Mar 2023 06:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445C16BFA49
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Mar 2023 14:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCRFqk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 18 Mar 2023 01:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S229618AbjCRNiZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 Mar 2023 09:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCRFqj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Mar 2023 01:46:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DBF4E5D3;
-        Fri, 17 Mar 2023 22:46:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679118397; x=1710654397;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XwBj/9hfmpagIdGRdqZJjnfQeY4udKL5fw//ppbl99Q=;
-  b=nNtEEeg7ihrityF+2dHDLh0r79oIXGeELFDs7OPMnurVWyKdcyeK2Fek
-   Awhs4K6YygjX9MlqZYxkERZ/Gm0B+cEHNRY7aq4OeO4KfVz+tqt5M3mg3
-   0eFVzgOY8uV87XSaxSkVFRgInOTNr+52V3+LVjvGJGkXNgTWHwh8NJnt1
-   cXgE+1im+LA+h6hurivDD47+e3hp2C6VTNMpjl7TAk4c+/bc11XPiwnT9
-   46TcIIFm3+KstovY07dR1f99JJ8g9KwYC+niVnCwEak5qGTVVQED43pSA
-   f7I+/eSe2TWAbPzovvYQCA+Y/QLTN4DdtRl6jbiWyVVDcE9R7bw4h41Fi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424685487"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="424685487"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 22:46:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="790989675"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="790989675"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Mar 2023 22:46:35 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdPOk-0009pm-1D;
-        Sat, 18 Mar 2023 05:46:34 +0000
-Date:   Sat, 18 Mar 2023 13:46:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        with ESMTP id S229516AbjCRNiY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Mar 2023 09:38:24 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EFBD2821E;
+        Sat, 18 Mar 2023 06:38:22 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pdWlD-0005NA-00; Sat, 18 Mar 2023 14:38:15 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 642E9C1B07; Sat, 18 Mar 2023 14:38:07 +0100 (CET)
+Date:   Sat, 18 Mar 2023 14:38:07 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
+Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: Re: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
-Message-ID: <202303181358.BXLJVMkh-lkp@intel.com>
-References: <20230316104707.236034-4-keguang.zhang@gmail.com>
+Subject: Re: [PATCH v3] mips: bmips: BCM6358: disable RAC flush for TP1
+Message-ID: <20230318133807.GA4619@alpha.franken.de>
+References: <20230316180518.783613-1-noltari@gmail.com>
+ <20230317102004.235879-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230316104707.236034-4-keguang.zhang@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317102004.235879-1-noltari@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Keguang,
+On Fri, Mar 17, 2023 at 11:20:04AM +0100, Álvaro Fernández Rojas wrote:
+> RAC flush causes kernel panics on BCM6358 with EHCI/OHCI when booting from TP1:
+> [    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
+> [    3.895011] Reserved instruction in kernel code[#1]:
+> [    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
+> [    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
+> [    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
+> [    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
+> [    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
+> [    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
+> [    3.932848] $20   : 00000000 00000000 55590000 77d70000
+> [    3.938251] $24   : 00000018 00000010
+> [    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
+> [    3.949058] Hi    : 00000000
+> [    3.952013] Lo    : 00000000
+> [    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
+> [    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
+> [    3.965913] Status: 10008703	KERNEL EXL IE
+> [    3.970216] Cause : 00800028 (ExcCode 0a)
+> [    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
+> [    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
+> [    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
+> [    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
+> [    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
+> [    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
+> [    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
+> [    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
+> [    4.044196]         ...
+> [    4.046706] Call Trace:
+> [    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
+> [    4.054356] [<80015c70>] setup_frame+0xdc/0x124
+> [    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
+> [    4.064207] [<80011b50>] work_notifysig+0x10/0x18
+> [    4.069036]
+> [    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
+> [    4.080686]
+> [    4.082517] ---[ end trace 22a8edb41f5f983b ]---
+> [    4.087374] Kernel panic - not syncing: Fatal exception
+> [    4.092753] Rebooting in 1 seconds..
+> 
+> Because the bootloader (CFE) is not initializing the Read-ahead cache properly
+> on the second thread (TP1). Since the RAC was not initialized properly, we
+> should avoid flushing it at the risk of corrupting the instruction stream as
+> seen in the trace above.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>  v3: add changes suggested by Florian:
+>    - Switch to a bool and remove unneeded initialization.
+>    - Remove if from bcm6358_quirks().
+>    - Improve commit description and bcm6358_quirks() comment.
+>  v2: check if we're running on TP1 and invert logic.
+> 
+>  arch/mips/bmips/dma.c   | 5 +++++
+>  arch/mips/bmips/setup.c | 8 ++++++++
+>  2 files changed, 13 insertions(+)
 
-I love your patch! Yet something to improve:
+applied to mips-fixes with the Fixes tag added.
 
-[auto build test ERROR on 6f173737e1b5670c200329677e821cce1d3d755e]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-clock-Add-Loongson-1-clock/20230316-185026
-base:   6f173737e1b5670c200329677e821cce1d3d755e
-patch link:    https://lore.kernel.org/r/20230316104707.236034-4-keguang.zhang%40gmail.com
-patch subject: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
-config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20230318/202303181358.BXLJVMkh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/de00eab744ddc82edb1853048dd5d50aa8220115
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-clock-Add-Loongson-1-clock/20230316-185026
-        git checkout de00eab744ddc82edb1853048dd5d50aa8220115
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181358.BXLJVMkh-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/clk-loongson1.c:300:15: error: expected parameter declarator
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-                 ^
->> drivers/clk/clk-loongson1.c:300:15: error: expected ')'
-   drivers/clk/clk-loongson1.c:300:14: note: to match this '('
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-                ^
->> drivers/clk/clk-loongson1.c:300:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-   ^
-   int
->> drivers/clk/clk-loongson1.c:300:14: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-                ^
-                                                          void
-   drivers/clk/clk-loongson1.c:301:20: error: expected parameter declarator
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-                      ^
-   drivers/clk/clk-loongson1.c:301:20: error: expected ')'
-   drivers/clk/clk-loongson1.c:301:19: note: to match this '('
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-                     ^
-   drivers/clk/clk-loongson1.c:301:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-   ^
-   int
-   drivers/clk/clk-loongson1.c:301:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-                     ^
-                                              void
-   8 errors generated.
-
-
-vim +300 drivers/clk/clk-loongson1.c
-
-   299	
- > 300	MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+Thomas.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
