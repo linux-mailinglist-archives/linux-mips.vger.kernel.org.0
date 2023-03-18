@@ -2,157 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB156BF42D
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Mar 2023 22:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67FF6BF81A
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Mar 2023 06:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjCQVcT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Mar 2023 17:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S229738AbjCRFqk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 Mar 2023 01:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjCQVbu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Mar 2023 17:31:50 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0319BE1939;
-        Fri, 17 Mar 2023 14:31:19 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x3so25370210edb.10;
-        Fri, 17 Mar 2023 14:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=SzjAbA2qsawtxmUxI1XuRk4mZffC5q2hSDgqbFtLfE49cZ3+PZdeenZnNp7Y0SBOll
-         gYrqyca7M465hBdEXzA2swDdCSxwjoQGx16kwpodEGCMXhItidBxbQIdeDd+m68DL6IN
-         KY413kGA430d3GTBArcfyP+B84Ar+FhdVcHpujv5QISjot37GImrKvG+B5RDPFYTtIXh
-         TSPaSyo6kcV+TfMngTjm4bL6p/nbNf+Gb0ihJiz/nUqReMQG03I+/2myV/yfVspGEls+
-         8fCOtkdytqKI0nxCMFe34xpIO+Sx/kwa3OAL1sUBGA3AHy/259Um2vaW/ny9E4AzeyCI
-         OvBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=u7wjs6O3SMBFmI7TH3Fo72X9Ees3AtKp5njAPqBgmheyL0E+oDyMAFV9iZi/Se/Aow
-         u3ztwJcnkQQkRele4OEIT8URxL/8zj28DCuibwk7YXirT2E1ULqPgnVJSjO/OH5U2jDw
-         s9cUkBh6r9sy/WMS2EnfqG8i7PZkHxPPZMKGKHJavuoZ98/fuc+PgfHDLDj3lNbbnbhb
-         hlb26yld4RFawLPwSfHhL5ePJpNfFsyvFh4mH7Ql4xVeI0ptOypd34mVwNbNXpvY+eJi
-         jhi7zEZnhtDq/iR5+2Q3C5xZzJ1mvv3ZMFMaPE+QWs8XJs5+M0FgD7MB7Y274jT4Vi6q
-         4gWg==
-X-Gm-Message-State: AO0yUKWzfErOeWsgV/aV2ryVkAyzioRdWDRYA7iM7AzeSJFl7kTfcdih
-        rR+Mhxr+twxy19/3puNhy7c=
-X-Google-Smtp-Source: AK7set/PsH37vV26HFz0DUNVPwUSw8kToM24rwlbs1ygRWWocDwys742MwLTFeeRwnWp9Vpfbez3bA==
-X-Received: by 2002:a17:906:5017:b0:92a:3709:e872 with SMTP id s23-20020a170906501700b0092a3709e872mr859654ejj.19.1679088669349;
-        Fri, 17 Mar 2023 14:31:09 -0700 (PDT)
-Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id v19-20020a17090651d300b0092b86d41dbasm1404683ejk.114.2023.03.17.14.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:31:09 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S229602AbjCRFqj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Mar 2023 01:46:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DBF4E5D3;
+        Fri, 17 Mar 2023 22:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679118397; x=1710654397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XwBj/9hfmpagIdGRdqZJjnfQeY4udKL5fw//ppbl99Q=;
+  b=nNtEEeg7ihrityF+2dHDLh0r79oIXGeELFDs7OPMnurVWyKdcyeK2Fek
+   Awhs4K6YygjX9MlqZYxkERZ/Gm0B+cEHNRY7aq4OeO4KfVz+tqt5M3mg3
+   0eFVzgOY8uV87XSaxSkVFRgInOTNr+52V3+LVjvGJGkXNgTWHwh8NJnt1
+   cXgE+1im+LA+h6hurivDD47+e3hp2C6VTNMpjl7TAk4c+/bc11XPiwnT9
+   46TcIIFm3+KstovY07dR1f99JJ8g9KwYC+niVnCwEak5qGTVVQED43pSA
+   f7I+/eSe2TWAbPzovvYQCA+Y/QLTN4DdtRl6jbiWyVVDcE9R7bw4h41Fi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424685487"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="424685487"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 22:46:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="790989675"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="790989675"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Mar 2023 22:46:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdPOk-0009pm-1D;
+        Sat, 18 Mar 2023 05:46:34 +0000
+Date:   Sat, 18 Mar 2023 13:46:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: [PATCH v3 21/21] MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
-Date:   Sat, 18 Mar 2023 00:30:11 +0300
-Message-Id: <20230317213011.13656-22-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230317213011.13656-1-arinc.unal@arinc9.com>
-References: <20230317213011.13656-1-arinc.unal@arinc9.com>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: Re: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
+Message-ID: <202303181358.BXLJVMkh-lkp@intel.com>
+References: <20230316104707.236034-4-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316104707.236034-4-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+Hi Keguang,
 
-The Ralink pinctrl driver is now under the name of MediaTek MIPS pin
-controller. Move the maintainer information accordingly. Add dt-binding
-schema files. Add linux-mediatek@lists.infradead.org as an associated
-mailing list.
+I love your patch! Yet something to improve:
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+[auto build test ERROR on 6f173737e1b5670c200329677e821cce1d3d755e]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6048bbe0e672..f4ee11dab1ab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16521,6 +16521,28 @@ F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
- F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
- F:	drivers/pinctrl/mediatek/
- 
-+PIN CONTROLLER - MEDIATEK MIPS
-+M:	Arınç ÜNAL <arinc.unal@arinc9.com>
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-mips@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7620.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7621.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt76x8.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mtmips.*
-+F:	drivers/pinctrl/mediatek/pinctrl-rt2880.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt305x.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt3883.c
-+
- PIN CONTROLLER - MICROCHIP AT91
- M:	Ludovic Desroches <ludovic.desroches@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -17496,13 +17518,6 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/boot/dts/ralink/mt7621*
- 
--RALINK PINCTRL DRIVER
--M:	Arınç ÜNAL <arinc.unal@arinc9.com>
--M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
--L:	linux-mips@vger.kernel.org
--S:	Maintained
--F:	drivers/pinctrl/ralink/
--
- RALINK RT2X00 WIRELESS LAN DRIVER
- M:	Stanislaw Gruszka <stf_xl@wp.pl>
- M:	Helmut Schaa <helmut.schaa@googlemail.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-clock-Add-Loongson-1-clock/20230316-185026
+base:   6f173737e1b5670c200329677e821cce1d3d755e
+patch link:    https://lore.kernel.org/r/20230316104707.236034-4-keguang.zhang%40gmail.com
+patch subject: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20230318/202303181358.BXLJVMkh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/de00eab744ddc82edb1853048dd5d50aa8220115
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-clock-Add-Loongson-1-clock/20230316-185026
+        git checkout de00eab744ddc82edb1853048dd5d50aa8220115
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181358.BXLJVMkh-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/clk-loongson1.c:300:15: error: expected parameter declarator
+   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+                 ^
+>> drivers/clk/clk-loongson1.c:300:15: error: expected ')'
+   drivers/clk/clk-loongson1.c:300:14: note: to match this '('
+   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+                ^
+>> drivers/clk/clk-loongson1.c:300:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+   ^
+   int
+>> drivers/clk/clk-loongson1.c:300:14: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+                ^
+                                                          void
+   drivers/clk/clk-loongson1.c:301:20: error: expected parameter declarator
+   MODULE_DESCRIPTION("Loongson1 clock driver");
+                      ^
+   drivers/clk/clk-loongson1.c:301:20: error: expected ')'
+   drivers/clk/clk-loongson1.c:301:19: note: to match this '('
+   MODULE_DESCRIPTION("Loongson1 clock driver");
+                     ^
+   drivers/clk/clk-loongson1.c:301:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   MODULE_DESCRIPTION("Loongson1 clock driver");
+   ^
+   int
+   drivers/clk/clk-loongson1.c:301:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   MODULE_DESCRIPTION("Loongson1 clock driver");
+                     ^
+                                              void
+   8 errors generated.
+
+
+vim +300 drivers/clk/clk-loongson1.c
+
+   299	
+ > 300	MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
