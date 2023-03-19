@@ -2,62 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341F06C04F3
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Mar 2023 21:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65ECF6C0516
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Mar 2023 22:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCSUtv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Mar 2023 16:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S230026AbjCSVAf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Mar 2023 17:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjCSUtt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Mar 2023 16:49:49 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6856144A9
-        for <linux-mips@vger.kernel.org>; Sun, 19 Mar 2023 13:49:47 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id x198so1126933ybe.9
-        for <linux-mips@vger.kernel.org>; Sun, 19 Mar 2023 13:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679258987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zrqBLpgMvGAw26DRaowqtZ6KNMhJt4QDsaLfvV/8J2M=;
-        b=hcVlyh6SCc01tHQEQKl+rMRkXdRlZaBR4PAhhkEscLByfqRTPISUDdvRSlA5rhmVVl
-         sthqa0S2nU+jceZDprhsd0t7PBSto5gQblrnyO+mFunTfH+7zT2SHpA4c3HoBI4hI8IE
-         8HPXCMvMV/3MqFjwnD9pIPu8B+/kZt8jR2cihllfOHlSnCymg1XkkC9YluVHeYuWeXoo
-         IsjCiVSDPun7MF60EXMPWmudtUj5UjGdlsmGVCZj7CD1S8xEQQ8o9bG58eDECB5cR1IV
-         InMCxoDbSJyW2nf8uwuTZMEF8pZ4ZP/U2JswAboP/a7fc731qPbcUMwumSeVaXNIVvhj
-         79+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679258987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zrqBLpgMvGAw26DRaowqtZ6KNMhJt4QDsaLfvV/8J2M=;
-        b=gaf+LucUUbaCsy+mEw4WlWrBXgbaxEo+G0dAZxSL5yYr9buw10IpwsQE/Sgqzwfwzm
-         x+K6GGsdqAzncnBnpyOIb9PVboW2wdsTaF0aGEpjqA/cMVUB+jdgEQvykLSZYBMo0niK
-         GYhuZewuZM3q3JomQMSm8yFuTI+lybL7qyv8wmlQk4MKI09Xsula+EqwoYfWQDIJupZc
-         vYBLc53PvklFp8+5FjOjHaB8c1I4NkvKPSxY3qY5JDPEwYUaa+JjBRWUjkxb9v/MeuVR
-         CzCmRg3ffhqupibxOoD265U8tjv32RuKcHvge1yahNhUbQFetcftA9pqUvxRL3ls09GZ
-         btSg==
-X-Gm-Message-State: AO0yUKWI9+3fQfGj7Wg7zjWqgLupx91Q+opffZ2+wM457sdHob1Fw1pA
-        zQutEIFcn7gF0cTWo+Gx0TeW/cTtWuP+vbEaGGs8gQ==
-X-Google-Smtp-Source: AK7set9UmCKLhMhtD1XyfXAykvchqeWDh0btzTty+BysNe0ltmHg+QaEhAeymn18rA2vpcmu4EmZo8R4MRqI+S7yupE=
-X-Received: by 2002:a05:6902:102d:b0:a6b:bc64:a0af with SMTP id
- x13-20020a056902102d00b00a6bbc64a0afmr4087551ybt.4.1679258987014; Sun, 19 Mar
- 2023 13:49:47 -0700 (PDT)
+        with ESMTP id S229665AbjCSVAe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Mar 2023 17:00:34 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96BE6A72;
+        Sun, 19 Mar 2023 14:00:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679259590; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=naJvgxfc7mo6cG95E8IVzExgl38hmPTl3Dg8QD7cpxvy/GOj++FhCIUTQpJvoK7WF+tv7MhFrDCtJFzfRffDGNK3PjzuGjNjYHPNx7BtPc+c1F/zF4QoGtBP0qVVJ9//7BR5mL1byBcu3M9Lly52bmY2Bc06wL5C3QD8w65UV+k=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679259590; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=jwAO0z9En6mLxOF3Ju75lHjUXBw+TZ9xk9DabZ0leYY=; 
+        b=mN3SK0xIJuOmOEaGxG6TGO/YhSRERPCOXaeAqYuQtPnACHI6CxvJ+2vttCI804IbvYFx2wFlgLGuEbk417ZC7QGEh4/jHEWGW7bqGWyTHZYWEb2e/qbqLAne8fn62OOyzPPn919pAyCcYU3q/YA/oNAYg36LGv6WkfN/vrt5s4I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679259590;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=jwAO0z9En6mLxOF3Ju75lHjUXBw+TZ9xk9DabZ0leYY=;
+        b=S1gNH/qjIJ3Rn11Tb0cC4wAdVehaPSBKBzmHCyDXSzUHUXSqRG50yIG4gFcoL43w
+        QDMy2Q6jQSpUtVynindMK846Id2HgMVmxybXSmKJiNLpU0rl3IF85VclIE3tsG7de+O
+        8Wn9cJa7DAZXqv/FOsuJGjyZrj54OrDMI5pVFj7M=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679259589012624.8771487940448; Sun, 19 Mar 2023 13:59:49 -0700 (PDT)
+Message-ID: <e9e6ad87-2db5-9767-ff39-64a302b06185@arinc9.com>
+Date:   Sun, 19 Mar 2023 23:59:40 +0300
 MIME-Version: 1.0
-References: <20230317213011.13656-1-arinc.unal@arinc9.com>
-In-Reply-To: <20230317213011.13656-1-arinc.unal@arinc9.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 19 Mar 2023 21:49:35 +0100
-Message-ID: <CACRpkdbWmtBtpkW2=DUX2v6CR7aJz52R6y5mJ=W+VDena+Fzng@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Subject: Re: [PATCH v3 00/21] pinctrl: ralink: fix ABI, improve driver, move
  to mediatek, improve dt-bindings
-To:     arinc9.unal@gmail.com
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         William Dean <williamsukatube@gmail.com>,
         Sean Wang <sean.wang@kernel.org>,
         Andy Teng <andy.teng@mediatek.com>,
@@ -65,7 +51,7 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Daniel Golle <daniel@makrotopia.org>,
         Hui Liu <hui.liu@mediatek.com>,
         Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Daniel Santos <daniel.santos@pobox.com>,
         Luiz Angelo Daros de Luca <luizluca@gmail.com>,
@@ -77,26 +63,37 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20230317213011.13656-1-arinc.unal@arinc9.com>
+ <CACRpkdbWmtBtpkW2=DUX2v6CR7aJz52R6y5mJ=W+VDena+Fzng@mail.gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CACRpkdbWmtBtpkW2=DUX2v6CR7aJz52R6y5mJ=W+VDena+Fzng@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:30=E2=80=AFPM <arinc9.unal@gmail.com> wrote:
+On 19.03.2023 23:49, Linus Walleij wrote:
+> On Fri, Mar 17, 2023 at 10:30 PM <arinc9.unal@gmail.com> wrote:
+> 
+>> This is an ambitious effort I've been wanting to do for months.
+> 
+> I don't see any major missing ACKs so I just applied the patches, we
+> can fix any remaining issues in-tree.
+> 
+> Good work!
 
-> This is an ambitious effort I've been wanting to do for months.
+Music to my ears. It was pretty final so I don't expect more issues.
 
-I don't see any major missing ACKs so I just applied the patches, we
-can fix any remaining issues in-tree.
+Thanks for applying them.
 
-Good work!
-
-Yours,
-Linus Walleij
+Cheers.
+Arınç
