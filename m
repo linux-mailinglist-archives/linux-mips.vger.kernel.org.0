@@ -2,103 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155A56C0564
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Mar 2023 22:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9798F6C05CB
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Mar 2023 23:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjCSVUu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Mar 2023 17:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S229632AbjCSWA2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Mar 2023 18:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjCSVUs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Mar 2023 17:20:48 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8DA10A9B
-        for <linux-mips@vger.kernel.org>; Sun, 19 Mar 2023 14:20:46 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5416b0ab0ecso192912637b3.6
-        for <linux-mips@vger.kernel.org>; Sun, 19 Mar 2023 14:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679260846;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1xVIksZcR76edI4z8mmPrpSpOfu0/pVV80WudQ/Vavs=;
-        b=yxYOpG1BTRH8mP4CO9pabOiIVp8JZr5VwAuFO8HU6vbaqpTxWmCE4iIgG/OVL1bC1K
-         h3LhfvJ9Emngr37qgSs4y3135OyBRvx5CQrGOhqBQ1h52Thw6LlPUCXerXAafRWoy3r/
-         FDFDT9ERbcJkGc+2G4eLkbvA5KcKtQ6KYbmnVg4lq1vniUExZ2sFYpXbvCD7hKDVMLon
-         QLx20N80Tf488Dgbj44gJ9XeDYP2w0y+6+La+/a0ASo0Dh+zkjSg2/P4RcnR2PKoZR8Z
-         jdQ+VbU+0FFOQcGsff14UjVnV15EfKcDuX6yib3W9b/IG0H6KARxUCDOXylMZHreZLWk
-         0npg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679260846;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1xVIksZcR76edI4z8mmPrpSpOfu0/pVV80WudQ/Vavs=;
-        b=kAsqJAGtdIX/PiSNR9zMPH2PNjqTO+FM1omoageaQSXO26SX1OBoEG/68gkTMeVhzI
-         VOcdR9Pkc311ySAiZCyHGGkg4EAIvMUIY+WAjh9x4vG3XhIVD9e9Htp8UpMtcFyL6wUt
-         rWi+e9jtUjJddqAvdw3NCbHIqtv0MlHcEdOrnF9KhL36QEczjUsCVqofe5eCGig3fF7a
-         flOClmfBGaMI1tDabfPO3bGqpmL9f+hcW9nxtVxT7VxoOFRRKCwN3IERYaD3Fe0SXLrz
-         6eOrWJorI5Z09aK1lwZ3DS86N87k4UaEme9z6YssT3B4JDAoJ6e0EaEl+JRpPLZIgTQC
-         8TzA==
-X-Gm-Message-State: AO0yUKWXDmh/8IW8GyPPCvX9mwdiueOVSzkCNXCpVuhk+aLMnoSDY+yw
-        ncaX/ymTcpfGPbJE1sWI8YcCZNpj7zJAqlmlc5Dpbg==
-X-Google-Smtp-Source: AK7set/4tcKb2KcMcmhkFSECkX9UEXl6Q7CPyM6DmVWY/gBDswc6Du79KNPC9UhC3cNpQzNAw1FAAnNdRAYmdab1914=
-X-Received: by 2002:a81:ae5f:0:b0:532:e887:2c23 with SMTP id
- g31-20020a81ae5f000000b00532e8872c23mr9029129ywk.9.1679260846054; Sun, 19 Mar
- 2023 14:20:46 -0700 (PDT)
+        with ESMTP id S229572AbjCSWA1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Mar 2023 18:00:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0156E14239;
+        Sun, 19 Mar 2023 15:00:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76A7FB80D28;
+        Sun, 19 Mar 2023 22:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24974C433D2;
+        Sun, 19 Mar 2023 22:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679263222;
+        bh=n5dARZfFatcR/h3JAA/9fYzmvZk45a19M/lZTBw1xvI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Kk5f+/gwsjcbiOO1/wCvoyl4Anptv1hWH8xJESI5zcw3p2CsjLWtDdmR9QdQM+3LJ
+         48ck9Nbm7HCsv1BIhG0z68FKMnc+paUE4nNp8CBGtz2wXTUGG4xufiBddp5daENesA
+         FQveh29Cd8GoMFH5KgVOfc/xAYlta53sbHuynvA2gW4zAcVZzL1Q+M2DEKtPvBBV59
+         yQHCYCnIbS95lr+op+v93shUF7mcTAU5sabWijpg3+CfGSUEuAmbmMW/Y0uf2fPUD1
+         yLw4uhA7DGldAgR2Rjl/gSBJw2t+xBv4/+fuSE7ivbtFZ//GlqgeEG925HAm/9hBOl
+         99zYcrRdV3eEg==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 00/15] mm: move core MM initialization to mm/mm_init.c
+Date:   Sun, 19 Mar 2023 23:59:53 +0200
+Message-Id: <20230319220008.2138576-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20230319115925.1317654-1-sensor1010@163.com>
-In-Reply-To: <20230319115925.1317654-1-sensor1010@163.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 19 Mar 2023 22:20:35 +0100
-Message-ID: <CACRpkdbxSNCKNfous7h2dBQ_AW9KS9qyxPfPxOO=3PMDsDxcng@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers/gpio : Remove redundant platform_set_drvdata().
-To:     Lizhe <sensor1010@163.com>
-Cc:     brgl@bgdev.pl, geert+renesas@glider.be, info@metux.net,
-        rjui@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        f.fainelli@gmail.com, sbranden@broadcom.com, shc_work@mail.ru,
-        j-keerthy@ti.com, hoan@os.amperecomputing.com,
-        fancer.lancer@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, kaloz@openwrt.org,
-        khalasa@piap.pl, keguang.zhang@gmail.com, daniel@thingy.jp,
-        romain.perier@gmail.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, grygorii.strashko@ti.com,
-        ssantosh@kernel.org, khilman@kernel.org, mani@kernel.org,
-        ludovic.desroches@microchip.com, andy@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, jonathanh@nvidia.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        michal.simek@xilinx.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-unisoc@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 1:02=E2=80=AFPM Lizhe <sensor1010@163.com> wrote:
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-> platform_set_drvdata() is redundant in these functions.
-> the purpose of calling this function is to place data
-> in *driver_data. but the data is not retrieved in these
-> functions
->
-> Signed-off-by: Lizhe <sensor1010@163.com>
+Also in git:
+https://git.kernel.org/rppt/h/mm-init/v1
 
-You have to also ascertain that the data is not used elsewhere
-like in some callbacks or even in other drivers in some odd cases.
+This set moves most of the core MM initialization to mm/mm_init.c.
 
-Yours,
-Linus Walleij
+This largely includes free_area_init() and its helpers, functions used at
+boot time, mm_init() from init/main.c and some of the functions it calls.
+
+Aside from gaining some more space before mm/page_alloc.c hits 10k lines,
+this makes mm/page_alloc.c to be mostly about buddy allocator and moves the
+init code out of the way, which IMO improves maintainability.
+
+Besides, this allows to move a couple of declarations out of include/linux
+and make them private to mm/.
+
+And as an added bonus there a slight decrease in vmlinux size.
+For tinyconfig and defconfig on x86 I've got
+
+tinyconfig:
+   text	   data	    bss	    dec	    hex	filename
+ 853206	 289376	1200128	2342710	 23bf36	a/vmlinux
+ 853198	 289344	1200128	2342670	 23bf0e	b/vmlinux
+
+defconfig:
+    text   	   data	    bss	    dec	    	    hex	filename
+26152959	9730634	2170884	38054477	244aa4d	a/vmlinux
+26152945	9730602	2170884	38054431	244aa1f	b/vmlinux
+
+Mike Rapoport (IBM) (15):
+  mips: fix comment about pgtable_init()
+  mm/cma: move init_cma_reserved_pages() to cma.c and make it static
+  mm/page_alloc: add helper for checking if check_pages_enabled
+  mm: move most of core MM initialization to mm/mm_init.c
+  mm: handle hashdist initialization in mm/mm_init.c
+  mm/page_alloc: rename page_alloc_init() to page_alloc_init_cpuhp()
+  init: fold build_all_zonelists() and page_alloc_init_cpuhp() to mm_init()
+  init,mm: move mm_init() to mm/mm_init.c and rename it to mm_core_init()
+  mm: move pgtable_init() to mm/mm_init.c and make it static
+  mm: move init_mem_debugging_and_hardening() to mm/mm_init.c
+  init,mm: fold late call to page_ext_init() to page_alloc_init_late()
+  mm: move mem_init_print_info() to mm_init.c
+  mm: move kmem_cache_init() declaration to mm/slab.h
+  mm: move vmalloc_init() declaration to mm/internal.h
+  MAINTAINERS: extend memblock entry to include MM initialization
+
+ MAINTAINERS                    |    3 +-
+ arch/mips/include/asm/fixmap.h |    2 +-
+ include/linux/gfp.h            |    7 +-
+ include/linux/mm.h             |    9 +-
+ include/linux/page_ext.h       |    2 -
+ include/linux/slab.h           |    1 -
+ include/linux/vmalloc.h        |    4 -
+ init/main.c                    |   74 +-
+ mm/cma.c                       |   21 +
+ mm/internal.h                  |   45 +
+ mm/mm_init.c                   | 2532 +++++++++++++++++++++++++++
+ mm/page_alloc.c                | 2981 +++-----------------------------
+ mm/slab.h                      |    1 +
+ 13 files changed, 2855 insertions(+), 2827 deletions(-)
+
+base-commit: 4018ab1f7cec061b8425737328edefebdc0ab832
+-- 
+2.35.1
+
