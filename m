@@ -2,67 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52566C0F0E
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 11:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F256C0F11
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 11:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjCTKgs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Mar 2023 06:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S229959AbjCTKha (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Mar 2023 06:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjCTKgc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 06:36:32 -0400
+        with ESMTP id S230368AbjCTKhE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 06:37:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465AD1A48A
-        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:35:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9294825E22
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679308500;
+        s=mimecast20190719; t=1679308539;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7xiGdM8qiWWcZc5Y3ojCQP7Km8IWAa3x8WZuiHZfb+w=;
-        b=LNZWYb8O8KWLFz6HrSsUzt989Wt1YZOx9GM6/3fQxjU7Hj00j7l9jeMOoFp765sZFkfc44
-        DfceCFllPD7BMCLGd7k1yy2aMpiBlZWpgRI40RuJEZJ89+/+EEMndizTqaWzIKtdXBVBLh
-        EydkLI61vTZE6GBIKHKhkrPJzCUqkxI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=pe6rkmEk2ADSmdXI3iCMoR7JpcLeyJRJ5+kiT86CYAg=;
+        b=BPTpTn9uAD+MFthaKSEJfesfSlbtszIoXGaNOw6QowUVI3YNlt7uwdBk1GoOXDRUaL2L/r
+        /ivd7IZM0WGoXQKpqpmQs26TIuxcTbwUgUtJ8oIoomwl8XMtd0nCpDpGVaPD2jn00yYYSL
+        c7VQR+dd8wVu45ghf8IvJ5u8SOlZmoE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-621-VJNkpMLZMnKiUa7vxnTOVA-1; Mon, 20 Mar 2023 06:34:59 -0400
-X-MC-Unique: VJNkpMLZMnKiUa7vxnTOVA-1
-Received: by mail-wm1-f72.google.com with SMTP id l18-20020a05600c4f1200b003ed35ab903aso7817124wmq.6
-        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:34:59 -0700 (PDT)
+ us-mta-527--Gr3Pu57Mf6CXEt7DaxDYA-1; Mon, 20 Mar 2023 06:35:38 -0400
+X-MC-Unique: -Gr3Pu57Mf6CXEt7DaxDYA-1
+Received: by mail-wm1-f70.google.com with SMTP id o7-20020a05600c4fc700b003edf85f6bb1so1158093wmq.3
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:35:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308498;
+        d=1e100.net; s=20210112; t=1679308537;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7xiGdM8qiWWcZc5Y3ojCQP7Km8IWAa3x8WZuiHZfb+w=;
-        b=hM7ZOaxgwuxfXQBCAgM/eT4Lcgzx4cLCZeQfYbcyczYTYWsbr9oy7VNaOInDZsArlA
-         B3ZTQ6OQVjE8iD+/HMQY62umNYyl1GkN7JjXMNwNNNUUHSwtQRNO2Z8D1Z+vif/DrELJ
-         HveU/eR0w9UXMUZtAIeVpvM6TdlBGLMQm9bWPjQXiVYdd5Nrx4WTidnv1Yy+2u37m+ie
-         98Vxb2Ct3nRJ4xszd99Q5yUO0s8M2dQVAD3Ih1ln4MzggylxkPzW9R7N+yZ1pMXv8DtD
-         njn34++KwXQhTvtcIeDl1iE7WsnOHBgJRtXMcgDIeqnY5z0wJtWWIg9rRFW/bgc3X/Q/
-         Ckrg==
-X-Gm-Message-State: AO0yUKUg/wyaQGujBPUuHM6wXVy+PdPTg9mrMQwIE9C42riNKmxvI3cO
-        1xJ/iL7KwsILX5o9IdcB6QB8phyZ73ToUN88ogfpouvEHb2KO1mD0YjZszPTk+rq1zOb8g+JoG8
-        h6LjumY3+T0VjwVl2yOudPA==
-X-Received: by 2002:a05:600c:3ac8:b0:3eb:3f2d:f237 with SMTP id d8-20020a05600c3ac800b003eb3f2df237mr32646780wms.6.1679308498325;
-        Mon, 20 Mar 2023 03:34:58 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9cavkyeFK3piIOBCtuEs5AUwXm5PrMQ/83PE0I5uSMw3B5E8ySror6anfmRavZagCW6dcC/w==
-X-Received: by 2002:a05:600c:3ac8:b0:3eb:3f2d:f237 with SMTP id d8-20020a05600c3ac800b003eb3f2df237mr32646764wms.6.1679308498009;
-        Mon, 20 Mar 2023 03:34:58 -0700 (PDT)
+        bh=pe6rkmEk2ADSmdXI3iCMoR7JpcLeyJRJ5+kiT86CYAg=;
+        b=NowxpoWs7RHmlyBQAp0KEHbNRMVy7hYv2zveJqW/q+IWZqbOoe1qmw0GK7HnEMuQmJ
+         OMPtsJNhAYxLM2gEEAQ+SFpxDerg2E25tKWga79IzG4QinvpzoqsXvbI1gp+/UAJVADq
+         Rr+XnRbhV0Pkk/HpXp9/XM3P3bDja/LF3wYx14nBp/jQnpbvW6hs9VrUUsXBQxgHVZZM
+         SSL6Aa9u/oEEqrrYDqPKO5HNPF2d6eRzapGw/oGSpcNrksHLBYePmII7buJov9Rb0d+9
+         2cUGHp3uvi9ierqQWk3hN/ugdGrKSevMpb3XnxG9YS1RcHm/dh2dDwCiafL5yy7Z9baN
+         dC2g==
+X-Gm-Message-State: AO0yUKX6taBBowViEdGzdhqqI39KYkKRbUNZImTnZ0/J2uVLYAuIdIHk
+        eAa8IIJKEh92OnU8vCRMcvHgB8FF5pg7+SBnCW9oe5BAZZpuQeot0YSPVixxte9N85l/twCHye6
+        mEGVSGx91mi4IZANEWnJ1zrY0bZvcmw==
+X-Received: by 2002:a7b:cb95:0:b0:3ed:a07b:c58f with SMTP id m21-20020a7bcb95000000b003eda07bc58fmr7056889wmi.28.1679308537190;
+        Mon, 20 Mar 2023 03:35:37 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/3TPR1DrWAdFp/goD2HID6TlG6sfz5sBEnIyBEIyWBMsfX8EYUU5WgNJIDfi6JKJYrz0M+ng==
+X-Received: by 2002:a7b:cb95:0:b0:3ed:a07b:c58f with SMTP id m21-20020a7bcb95000000b003eda07bc58fmr7056867wmi.28.1679308536883;
+        Mon, 20 Mar 2023 03:35:36 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id f12-20020a1cc90c000000b003e20cf0408esm10087783wmb.40.2023.03.20.03.34.56
+        by smtp.gmail.com with ESMTPSA id 3-20020a05600c020300b003eddefd8792sm4044642wmi.14.2023.03.20.03.35.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:34:57 -0700 (PDT)
-Message-ID: <dbd54710-a030-ff08-bd66-1a42c1934138@redhat.com>
-Date:   Mon, 20 Mar 2023 11:34:56 +0100
+        Mon, 20 Mar 2023 03:35:36 -0700 (PDT)
+Message-ID: <f9f9d306-ed51-de48-c622-b7e7b5df2821@redhat.com>
+Date:   Mon, 20 Mar 2023 11:35:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 06/15] mm/page_alloc: rename page_alloc_init() to
- page_alloc_init_cpuhp()
+Subject: Re: [PATCH 07/15] init: fold build_all_zonelists() and
+ page_alloc_init_cpuhp() to mm_init()
 Content-Language: en-US
 To:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -72,10 +72,10 @@ Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
         Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-mm@kvack.org
 References: <20230319220008.2138576-1-rppt@kernel.org>
- <20230319220008.2138576-7-rppt@kernel.org>
+ <20230319220008.2138576-8-rppt@kernel.org>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20230319220008.2138576-7-rppt@kernel.org>
+In-Reply-To: <20230319220008.2138576-8-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,19 +88,18 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19.03.23 22:59, Mike Rapoport wrote:
+On 19.03.23 23:00, Mike Rapoport wrote:
 > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> The page_alloc_init() name is really misleading because all this
-> function does is sets up CPU hotplug callbacks for the page allocator.
+> Both build_all_zonelists() and page_alloc_init_cpuhp() must be called
+> after SMP setup is complete but before the page allocator is set up.
 > 
-> Rename it to page_alloc_init_cpuhp() so that name will reflect what the
-> function does.
+> Still, they both are a part of memory management initialization, so move
+> them to mm_init().
 > 
 > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Thanks,
