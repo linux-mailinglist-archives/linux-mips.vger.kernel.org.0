@@ -2,114 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194076C0E5A
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 11:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD666C0ED0
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 11:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCTKMF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Mar 2023 06:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
+        id S230363AbjCTK3m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Mar 2023 06:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjCTKMC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 06:12:02 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75C793EE;
-        Mon, 20 Mar 2023 03:11:56 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id n13so523046qkh.5;
-        Mon, 20 Mar 2023 03:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679307115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VEHX2H3FPvonaNoZg4d3ZXKZZZCxjwbRPNv3Abil3kY=;
-        b=pGRG8DR8czC6mIySn8c+XY/QyPsxNJby0FDmm6hU8zH3srOc1pzYmcAtzW++zTsVST
-         oIKxOe+AVWw3Q/vF2tZU81xD0VZuk+6u66OpAtC8p6jZyD8wmZhAZSJFOAuerqDP/Vo7
-         TBo9jbf5dZR5AvNjqQ8y4q31DORWt/TGC1jexEA460NOlL8vYpwY1zSiFzLLTZMDoQuI
-         2IZbSZnw6mQl4D81ehGAV4TERB7EvlqTNvfy4Mr9ntcUMQjf2WYyzSa68Nbzy2ZU3Koa
-         P3KZ1aMChHLD6su7o5vLa3LQ+d2V6OaFKe2DagbmdM9TKAlM4Ol7RHA3UY53SbomsUy8
-         z5cw==
+        with ESMTP id S230148AbjCTK31 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 06:29:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0754C1FEA
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679308117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A2ZIMLXtTrOT8NgoolFPGGVIokNVmwALp7gLh6bdD2w=;
+        b=W8n5UTOcrAy/sf3IB7KwRAL8wj9xI/cjxHzCEl7xgALzNaxFFQqkIywSNMjTbeQ5DtkQ38
+        7FGN7Eu3JilB0syU0bA94gxG52OHn0ZPgeEX7OJ7vob90kIxzJRWutLYpy9EdoPjjGTFcB
+        koxpYsAHNAeOsWO0KMmtc2xFS+JPqAo=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-627-VaYbSC4kPC6cqXJ_KRlSkg-1; Mon, 20 Mar 2023 06:28:35 -0400
+X-MC-Unique: VaYbSC4kPC6cqXJ_KRlSkg-1
+Received: by mail-wr1-f70.google.com with SMTP id m5-20020a056000024500b002ceaa6f78a0so1388018wrz.12
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:28:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679307115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VEHX2H3FPvonaNoZg4d3ZXKZZZCxjwbRPNv3Abil3kY=;
-        b=gDMwWkABYDLCxNPiH5+aIukMq1V+wLK91mhRjvPoKjbljqOMLTNbW6YuYWn0zYfUjv
-         emJ/dF791PAyftOp8O8ExSDI1rntFMUJhtSNgZAHBywTPlU197fnvFPwEyfj6wi5FRUZ
-         9TWFF3qUYzxOGCkiMK6TxxgR0hpSmjxsKaxmblnWSpC6NhSE0w1+73kCecUrYMXcNWUz
-         DMakMW5Ljaovd+95gtsF7jfRwGPN+l/vj/a2HzSN5Pbzmrns2t+BNO0/ux6NHvug5eoE
-         cV9GXAv4r8WyRK5pJJpebd8yvq4YC9d0N0obT7DtsEO3XGVbItDZHxT9Lh8qoC7kdC2e
-         wWTQ==
-X-Gm-Message-State: AO0yUKVkMmSu/PayECjGngfBMkS2RuR0k333lfE5Jwh/eYeFFZHpJL0b
-        MvPNKBsbG1UtMBgsG7HGsrcAQHNH/HQ6tzHVG9M=
-X-Google-Smtp-Source: AK7set/7f2o3MXyyuIp0oW2dzmomSD1AeJIwa/bkGf1KaepstcBoZ2oGQTq2OW/QrKdEOrRxx9NAQwjPPU8J1KTvGK8=
-X-Received: by 2002:a37:e119:0:b0:746:3c7f:7524 with SMTP id
- c25-20020a37e119000000b007463c7f7524mr2618315qkm.14.1679307115447; Mon, 20
- Mar 2023 03:11:55 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679308114;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A2ZIMLXtTrOT8NgoolFPGGVIokNVmwALp7gLh6bdD2w=;
+        b=PO+QuysEmg6+unEJGsdsQSUC0sC1o48ZKGBfBZ/09dQQ7oYf37mtjrPacDW9lc6AoR
+         CyKC8dP3DerzJ8rvzAffZ0KbajtNi4y+x/moBfpRT8HX9TDY2Ox6nBarIcdiCETZ9077
+         9ujQ0cMX045Vg73MU7dJgsijMjKFulNkaGfp6ClXe5yKmu8klMLJxo3SUz3HDe4aM0sj
+         0HQJ3Q5RjTEmphuzUySdA1CAyfyCrq+gosKnvqXyG2Iw1zHOrjs+OKNz+g8bl/WNb2aI
+         wmb0k+lnAc2gYgJQYOrHnPbfS9G5QNL3HYNO+E2yGUe+oXFvDfnRLmzTciMfKGAx/opg
+         z5Jw==
+X-Gm-Message-State: AO0yUKVl4gfDQubZ1pU7Uj9vt+7V5SC0Sm6MCYBVZqDjWUnx5fn7Eu5F
+        p7n/vmsB/GENdI316oUtEdDIPEgiCsgRFfK3cE2VcfrrAi6u5Pmx6GXLcInBeFHcUYbgPiTu2Zb
+        LtRoYTfo4OMniiKk85o5qkg==
+X-Received: by 2002:a1c:770f:0:b0:3ed:a86c:3fff with SMTP id t15-20020a1c770f000000b003eda86c3fffmr6337695wmi.31.1679308114686;
+        Mon, 20 Mar 2023 03:28:34 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+7luEApA33dTRq2dp7wzv2fLDxIrS/qrcTZ5smU6+ZWum0te1Quot0o/YABt4CbNIPc62FNw==
+X-Received: by 2002:a1c:770f:0:b0:3ed:a86c:3fff with SMTP id t15-20020a1c770f000000b003eda86c3fffmr6337684wmi.31.1679308114363;
+        Mon, 20 Mar 2023 03:28:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id d15-20020a05600c3acf00b003ede2c59a54sm3859892wms.37.2023.03.20.03.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:28:33 -0700 (PDT)
+Message-ID: <8aba2dc2-25db-001a-270c-9ccfe24f8bc1@redhat.com>
+Date:   Mon, 20 Mar 2023 11:28:32 +0100
 MIME-Version: 1.0
-References: <20230319115925.1317654-1-sensor1010@163.com> <CAHp75Vf9kwhbZaGjZeN5Jq0Wr_yJtDdj9N48-3o79AMORqmS3w@mail.gmail.com>
-In-Reply-To: <CAHp75Vf9kwhbZaGjZeN5Jq0Wr_yJtDdj9N48-3o79AMORqmS3w@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Mar 2023 12:11:19 +0200
-Message-ID: <CAHp75VeLoMPtTU8TCuPjXD_YTY-_V-TmVJYeZiBB_BPqh8EVrQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers/gpio : Remove redundant platform_set_drvdata().
-To:     Lizhe <sensor1010@163.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, geert+renesas@glider.be,
-        info@metux.net, rjui@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
-        sbranden@broadcom.com, shc_work@mail.ru, j-keerthy@ti.com,
-        hoan@os.amperecomputing.com, fancer.lancer@gmail.com,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        kaloz@openwrt.org, khalasa@piap.pl, keguang.zhang@gmail.com,
-        daniel@thingy.jp, romain.perier@gmail.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, grygorii.strashko@ti.com,
-        ssantosh@kernel.org, khilman@kernel.org, mani@kernel.org,
-        ludovic.desroches@microchip.com, andy@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, jonathanh@nvidia.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        michal.simek@xilinx.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-unisoc@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/15] mips: fix comment about pgtable_init()
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
+        Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230319220008.2138576-1-rppt@kernel.org>
+ <20230319220008.2138576-2-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230319220008.2138576-2-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:10=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Sun, Mar 19, 2023 at 2:01=E2=80=AFPM Lizhe <sensor1010@163.com> wrote:
-> >
-> > platform_set_drvdata() is redundant in these functions.
-> > the purpose of calling this function is to place data
-> > in *driver_data. but the data is not retrieved in these
-> > functions
->
-> You need to:
-> 1) split the series on per driver basis (not all of the drivers are
-> going thru the same subsystem);
+On 19.03.23 22:59, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Comment about fixrange_init() says that its called from pgtable_init()
+> while the actual caller is pagetabe_init().
+> 
+> Update comment to match the code.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>   arch/mips/include/asm/fixmap.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/include/asm/fixmap.h b/arch/mips/include/asm/fixmap.h
+> index beea14761cef..b037718d7e8b 100644
+> --- a/arch/mips/include/asm/fixmap.h
+> +++ b/arch/mips/include/asm/fixmap.h
+> @@ -70,7 +70,7 @@ enum fixed_addresses {
+>   #include <asm-generic/fixmap.h>
+>   
+>   /*
+> - * Called from pgtable_init()
+> + * Called from pagetable_init()
+>    */
+>   extern void fixrange_init(unsigned long start, unsigned long end,
+>   	pgd_t *pgd_base);
 
-s/subsystem/tree/
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-> 2) improve English grammar and style in your commit message;
-> 3) carefully explain in the cover letter your methods of finding the
-> places you think need to be improved.
->
-> Before that it's a waste of time to look at your contributions.
+-- 
+Thanks,
 
+David / dhildenb
 
---=20
-With Best Regards,
-Andy Shevchenko
