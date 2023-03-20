@@ -2,109 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42DB6C100C
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 12:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F586C0F6F
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 11:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjCTLAi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Mar 2023 07:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S231163AbjCTKmr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Mar 2023 06:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjCTLAQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 07:00:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9393B28233
-        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679309640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZO4MUoeLtjuclC4IgasEW8PXFINyJxVwxeCYDhy+TRc=;
-        b=Ut7DUSAHsV7EmE4YT9Xp4ciponyH78UqOZoQlwfl6+BzfmY7Mtg4ZrnPNgNnfZAzBGi5/6
-        XmmdusyOs86Kd6TPkrX+TzPD2qR/ecbNjcNqIlv9PKH24NYCSjFiiwbmV/Evmf9iyoGyHv
-        Pk2rmLI+aYZ0q8tBH5qRYKzyipjLqbg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-35--WlRRtPHMh-iErat86FA1Q-1; Mon, 20 Mar 2023 06:39:56 -0400
-X-MC-Unique: -WlRRtPHMh-iErat86FA1Q-1
-Received: by mail-wm1-f69.google.com with SMTP id r35-20020a05600c322300b003edce6ff3b4so1326160wmp.4
-        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 03:39:56 -0700 (PDT)
+        with ESMTP id S229786AbjCTKmY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 06:42:24 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C451D26CC9;
+        Mon, 20 Mar 2023 03:40:31 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id k2so11926352pll.8;
+        Mon, 20 Mar 2023 03:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679308810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ytodzSMqKI+g6vziElNMEkt2Uz4MK0qBsUvh5kc4oY0=;
+        b=aVBcSvaWtaFyKL45eHS55ASyUBgV5hhFSlWXe/FsfV8IvzxFyee8V/j4n+ZXr0cA8h
+         ZVO2KBURAWTx2sUgqY4G8Ljf25jjf0Y6HIDXcyB7YvRQGkw0Sh5T1+SvoFSwmWjobvks
+         QdM8Sp+gEDAYzFGmYlS6aUYGI3/nbVRQ5KRxBhe/Z/XPBb7JjsonC28RDfnFDjMX73cb
+         CXMPSorHzThl8TuhJ0P5QdTG6RvDljh+uBZOSaKN5lHngSq8Kv9/V9jo8hCbVN18KvlG
+         6eT4AVsfw9ulFNRBoqJxRYRzmQO657hP6slEvoeZWBff7wJzglbmd/KaG7ZAZRrd88JH
+         dH4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308795;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679308810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZO4MUoeLtjuclC4IgasEW8PXFINyJxVwxeCYDhy+TRc=;
-        b=3Za5HrQ1UiWvxJap5khc1ckqkE+t4GwLgIMuODNa5XeSph5Up9kCOLtQ4cmX2lqjGI
-         EFSMLbMfCInohwDjApcFesLzPWMgGDug++aoYt7G6Vh0NPUPoHKaP4O0DVOA2GciZUKV
-         9I5kFotFtn1hdi7bAKj2cAQyodkKO3rRh6ZzdXy6ngyR8mrcHkQL95eBNZtNFYhAZMWe
-         IUBWK4Ds9qsx5WD2g9PYayle/ELFlpP8UZlf9+DKNnAc83EmY9/Wl1W2mVaieGKmjLLR
-         3SUoSQUSKKN7hQ/+GKS3qyQ86dQTkODpdvlLTKIfBnZqv5Soix3atTkE0loJdl3mN8yu
-         x+qA==
-X-Gm-Message-State: AO0yUKU0+AuIm9eYCZtXx6Wu7Dj37LotgsQRndwbSJ2dEtO9hKbOaJka
-        89KboBSeLa1OzCYQVDuVRJUzcEhCvKXhTfemEQ5mJ2UQXE3Z/ldkkkxbf0vclAv5Xne/8/pYaQc
-        ocL1untKNUoQnlneA2/VpAA==
-X-Received: by 2002:adf:dc51:0:b0:2cf:ea5d:f607 with SMTP id m17-20020adfdc51000000b002cfea5df607mr13275620wrj.17.1679308795754;
-        Mon, 20 Mar 2023 03:39:55 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+aFiFmynk07qyywt6B8QhkodUnWOCgklLUU0oFHRWH7B4MoXZR6V1fEuEUm9GaNTsT0EPSnA==
-X-Received: by 2002:adf:dc51:0:b0:2cf:ea5d:f607 with SMTP id m17-20020adfdc51000000b002cfea5df607mr13275609wrj.17.1679308795562;
-        Mon, 20 Mar 2023 03:39:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id bl13-20020adfe24d000000b002d84f0266b0sm189659wrb.18.2023.03.20.03.39.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:39:55 -0700 (PDT)
-Message-ID: <685de938-79e2-1120-daba-74bc541a1766@redhat.com>
-Date:   Mon, 20 Mar 2023 11:39:53 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 11/15] init,mm: fold late call to page_ext_init() to
- page_alloc_init_late()
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
+        bh=ytodzSMqKI+g6vziElNMEkt2Uz4MK0qBsUvh5kc4oY0=;
+        b=LNyoPqbq8mpUAVlFIgJ5aZEFi7/+dhpyzkhsAy/Lpl36euktrsuu1Ly67kiVZYRxKj
+         4dTwqXR3NYRXUtGVkiF6JqWPQJu46FLXWd+4jCsI0qdVvVf8Bai+6zc4h0GDt/kaGbvw
+         aIBziinUV1RHL56vSDm8wTkvUNvxbxfNsfjtYBQy4OvBjo4j2ouTGtwBfJxUOy7R68Om
+         gjgqKtxSSIwcsrwTWr4p9bxd/Mncd/0/XWpLOlcQ1+i/K5XofYWh372EkX87H6DcGB2S
+         WWb+eUz1N6cSoVLTJb27a1MrPO/+6LTfGsnD2M5UECCMQ/8kyy3lyJs/iKCCh0uXWmru
+         yMCw==
+X-Gm-Message-State: AO0yUKUqEVahlWpqxXiY28y8p3b61iCF0k+/E2Cj9cLEqCV0crG2q6EJ
+        3Seq1vP6CmAWs97sFNhj/sT0kLY4OpI=
+X-Google-Smtp-Source: AK7set9p7RaTki583fnEIoXwiT2hgRfy0b/tvJDJntOFblX1CVmcZ4gFnxZPOBptOMTfENV0EHIrrw==
+X-Received: by 2002:a05:6a20:4321:b0:cd:1367:3b69 with SMTP id h33-20020a056a20432100b000cd13673b69mr19206208pzk.17.1679308810517;
+        Mon, 20 Mar 2023 03:40:10 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id e17-20020a63ee11000000b00478c48cf73csm5922535pgi.82.2023.03.20.03.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 03:40:10 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230319220008.2138576-1-rppt@kernel.org>
- <20230319220008.2138576-12-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230319220008.2138576-12-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v4 0/4] Devicetree support for Loongson-1 clock
+Date:   Mon, 20 Mar 2023 18:39:59 +0800
+Message-Id: <20230320104003.407844-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19.03.23 23:00, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> When deferred initialization of struct pages is enabled, page_ext_init()
-> must be called after all the deferred initialization is done, but there
-> is no point to keep it a separate call from kernel_init_freeable() right
-> after page_alloc_init_late().
-> 
-> Fold the call to page_ext_init() into page_alloc_init_late() and
-> localize deferred_struct_pages variable.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Removes the old Loongson-1 clock driver and related code
+mainly because of no DT support and outdated implementation.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Then, re-implement it to solve the above issues,
+along with the devicetree binding document.
 
+Changelog
+V3 -> V4: Fix the build error of missing linux/module.h
+          Add Reviewed-by tag from Krzysztof Kozlowski
+V2 -> V3: Add 'reg' property into the 'required' field
+          Delete the unnecessary property 'clock-names'
+          Use the same license as binding document for the header file.
+          Add MODULE_AUTHOR and MODULE_DESCRIPTION info
+          Add patch "MIPS: loongson32: Update the clock initialization" into this series
+	  Add Acked-by tag from Stephen Boyd and Thomas Bogendoerfer
+V1 -> V2: Change to one clock controller (suggested by Krzysztof Kozlowski)
+          Add clock-related dt-binding header file
+          Fix the warning of dt_binding_check
+          Split the driver removal to a separate patch
+          Implement one clock controller instead of single clocks
+          (suggested by Krzysztof Kozlowski)
+
+Keguang Zhang (4):
+  dt-bindings: clock: Add Loongson-1 clock
+  clk: loongson1: Remove the outdated driver
+  clk: loongson1: Re-implement the clock driver
+  MIPS: loongson32: Update the clock initialization
+
+ .../bindings/clock/loongson,ls1x-clk.yaml     |  45 +++
+ .../include/asm/mach-loongson32/platform.h    |   1 -
+ arch/mips/loongson32/common/time.c            |   3 +-
+ drivers/clk/Makefile                          |   2 +-
+ drivers/clk/clk-loongson1.c                   | 302 ++++++++++++++++++
+ drivers/clk/loongson1/Makefile                |   4 -
+ drivers/clk/loongson1/clk-loongson1b.c        | 118 -------
+ drivers/clk/loongson1/clk-loongson1c.c        |  95 ------
+ drivers/clk/loongson1/clk.c                   |  41 ---
+ drivers/clk/loongson1/clk.h                   |  15 -
+ include/dt-bindings/clock/loongson,ls1x-clk.h |  19 ++
+ 11 files changed, 369 insertions(+), 276 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
+ create mode 100644 drivers/clk/clk-loongson1.c
+ delete mode 100644 drivers/clk/loongson1/Makefile
+ delete mode 100644 drivers/clk/loongson1/clk-loongson1b.c
+ delete mode 100644 drivers/clk/loongson1/clk-loongson1c.c
+ delete mode 100644 drivers/clk/loongson1/clk.c
+ delete mode 100644 drivers/clk/loongson1/clk.h
+ create mode 100644 include/dt-bindings/clock/loongson,ls1x-clk.h
+
+
+base-commit: d8bb7bcf754c39de7347b746766ed45932e787d1
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 
