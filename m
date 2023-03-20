@@ -2,282 +2,270 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EBD6C1DF1
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 18:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB6A6C1E4A
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 18:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjCTRaU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Mar 2023 13:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S232479AbjCTRkl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Mar 2023 13:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbjCTR3i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 13:29:38 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3426728849;
-        Mon, 20 Mar 2023 10:25:15 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id be16so9309224oib.0;
-        Mon, 20 Mar 2023 10:25:14 -0700 (PDT)
+        with ESMTP id S233705AbjCTRkV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 13:40:21 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4ADD2107
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 10:36:34 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id b20so16940734edd.1
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 10:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679333111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NwYte0FtFZG8eWczHimoVeVFmR0OVT3lcfyLXk0qH2w=;
-        b=lt8aqP1FG+udw9Q0/RUbLn7xO+AXDEEHgOy0GEzotsWIO46JdEynu5tSbCUvL5hvlj
-         lNrbc5NBciW4S2IL+rnhZVEJIhBqgRAwS8lOZadDrRxviiQSmqfU9yJPpyuXgI2+25GK
-         PBS7Ajy6XHt2RNS+zVDeGBmCeHqc5v//d6svifqwrh8r09RjXf9jQL21Fu5zZVwaxYkj
-         Qxccob0dDvGAWAT/dzk++RokW06JXgLzxJ+3L96R6mYD0Ngu38y28nXuFl6Z7oWBnkxh
-         kCKuG1h3VZ9ph20ToNww8pk8+JoZYYgI99ton40oOz/fWGlinIivhCjN/TSuCj9JmR35
-         kQTQ==
+        d=linaro.org; s=google; t=1679333763;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=10xWNgDnBn9HWAoKf1x27IbTNeZL1I1uGesMn8NoWH8=;
+        b=JWhOPgDSc6WZ3jUWEhnC8MC7SFHhH2CnG61pBRzeGjsAlhWMGBMh1xN2LfnJy7TlZg
+         poMrgE++XyUo3+Wjai89l5l599R6sIS5txLvzUrWSPWIWMpyIhVxPAuNp1kZ1mpZkwNR
+         79HkjdapSecp5GqTlKbicdtrw47JOIHLAfnSoyIFdFK1mNSwkoB/AHIrGk1S2Vnk3exU
+         y+U5CCE0TqiRVZLrYFKp7avit1Q7NUOOCcLnRxLZhxF/cHDpaLnvVarI3D/rHjTHFuZ6
+         hlGcfJpk92By8aB/BHuyVccYd2deOb6j/ZBiTmrtEFuqckVpVnsELTvi/XE2+zlIvoGm
+         ha/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NwYte0FtFZG8eWczHimoVeVFmR0OVT3lcfyLXk0qH2w=;
-        b=25ymYnxjeCJxwXmXxyTsoexKfRsmbk81aLpNxMBP74FfrWDZTz6c/m+LbEypmjMPsB
-         jEjdwnwufMdfaGTmsAt7EspoxdiOjPSEnS03jbLo/bR1qs4L4ZMPDrju81FVWZeJnpnT
-         eXI4g7tdjgLiDx0Q6inFo9Xy/vY7UB3XxLjX8tTScy5LeDtoqL5qKA6gbWEDtejSstex
-         omWxh5n6R1Fti+AXGk9zCFNhU881ryUzND4A8K0wvfH0dbgn6baVAsGg4c3lEZlhr1L/
-         z5sNLs2m/abi1drJZ1s6mk9EOlmPNRSJ4Jht+fJ0YAV1jVT3ZkHIJKe7GoEujx9SXIqo
-         NRsw==
-X-Gm-Message-State: AO0yUKXed1qUBADpkz2KoKhq6YonBFQksGUTfGSYxqef+c4F2jQEktle
-        1QBWncUvUkIM6sJ6Cd95DhSBQd9IGcPQjTFuDdE=
-X-Google-Smtp-Source: AK7set99nLRMGCaQsMXfUkkwGjfD2VCHlH+V3NU0HwtldQphI2vEN5ve+Togabn0vKIkTaR9VNRPgOMJ+6xUlQVL8m0=
-X-Received: by 2002:a05:6808:2117:b0:386:a829:48d4 with SMTP id
- r23-20020a056808211700b00386a82948d4mr235548oiw.0.1679333109557; Mon, 20 Mar
- 2023 10:25:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679333763;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=10xWNgDnBn9HWAoKf1x27IbTNeZL1I1uGesMn8NoWH8=;
+        b=Nec/XISoT4yogKRl3SHteBDqkOSb1ESVOx2Ra6AHwePr4sbvWdHbtyrtFIfnYB3g6c
+         5RV8+O0tWlesSZNv+B+2lFEPjQOfmFiUF3UEfPeJB+Jaech1FwjFcsJByC3GbsbLgOwj
+         7ojX1nRRC2DUNcuH47b6Oj+Je34bUTfFp07JXyizlwnKANj+WpZu7fC+xV0Ej4zbfIGM
+         hB920V6glH4HBvaz75NSA3t/KJkBtlDyjIgZrMK2GFllDJ2Jt2qVMnSUh7Jgz5z35U8N
+         9scdce5Jp1Efc8xXIa6vT7KXAE0zCLghFi4d8OoQQ5SqYk2lqNN60ueZpueVztuseZBg
+         a7Mw==
+X-Gm-Message-State: AO0yUKXpBIotp7422gKdcV2RUSji1G16g8JTbfneih/6yST9skw1Y3iy
+        JoT7ZRAz86ZjRINxq4iva5Yp3g==
+X-Google-Smtp-Source: AK7set/MlByRdbFbJOXEd4KRuZdeTqmwH3+eue8VMWmWR7leLFe8X2XSYZwCNt3OjyXEuvzbf8yo3A==
+X-Received: by 2002:a17:906:7311:b0:939:5720:a2db with SMTP id di17-20020a170906731100b009395720a2dbmr1026902ejc.8.1679333763637;
+        Mon, 20 Mar 2023 10:36:03 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
+        by smtp.gmail.com with ESMTPSA id pv15-20020a170907208f00b0091ec885e016sm4671279ejb.54.2023.03.20.10.36.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 10:36:03 -0700 (PDT)
+Message-ID: <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+Date:   Mon, 20 Mar 2023 18:36:02 +0100
 MIME-Version: 1.0
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com> <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
-In-Reply-To: <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 20 Mar 2023 18:24:56 +0100
-Message-ID: <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
 Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
  tree binding documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
 Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
         tsbogend@alpha.franken.de, john@phrozen.org,
         linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         devicetree@vger.kernel.org, arinc.unal@arinc9.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Krzysztof,
+On 20/03/2023 18:24, Sergio Paracuellos wrote:
+> Hi Krzysztof,
+> 
+> On Mon, Mar 20, 2023 at 5:36 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 20/03/2023 17:18, Sergio Paracuellos wrote:
+>>> Adds device tree binding documentation for clocks and resets in the
+>>> Mediatek MIPS and Ralink SOCs. This covers RT2880, RT3050, RT3052, RT3350,
+>>> RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
+>>
+>> Use subject prefixes matching the subsystem (which you can get for
+>> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+>> your patch is touching).
+>>
+>> Subject: drop second/last, redundant "device tree binding
+>> documentation". The "dt-bindings" prefix is already stating that these
+>> are bindings.
+> 
+> Sure, will do. Sorry for the inconvenience.
+> 
+>> (BTW, that's the longest redundant component I ever saw)
+> 
+> I thought it was better to just list compatible strings inside one
+> single file than adding the same binding in multiple files.
 
-On Mon, Mar 20, 2023 at 5:36=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/03/2023 17:18, Sergio Paracuellos wrote:
-> > Adds device tree binding documentation for clocks and resets in the
-> > Mediatek MIPS and Ralink SOCs. This covers RT2880, RT3050, RT3052, RT33=
-50,
-> > RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
->
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
->
-> Subject: drop second/last, redundant "device tree binding
-> documentation". The "dt-bindings" prefix is already stating that these
-> are bindings.
+I don't understand how this is answers about redundant piece of subject.
+Amount of files are not related to repeating pieces of subject prefix.
 
-Sure, will do. Sorry for the inconvenience.
+> 
+>>
+>>>
+>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>> ---
+>>>  .../bindings/clock/mtmips-clock.yaml          | 68 +++++++++++++++++++
+>>>  1 file changed, 68 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/mtmips-clock.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/mtmips-clock.yaml b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
+>>> new file mode 100644
+>>> index 000000000000..c92969ce231d
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
+>>
+>> Filename matching compatible, so vendor prefix and device name (or
+>> family of names).
+> 
+> I used mtmips here but list compatibles starting with ralink. As I
+> have said in the cover letter I am inspired by the last merged pinctrl
+> series for these SoCs.
+> See:
+> - https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06185@arinc9.com/T/#t
 
-> (BTW, that's the longest redundant component I ever saw)
+21 patches, so what exactly I should see (except that I was involved in
+that discussions)?
 
-I thought it was better to just list compatible strings inside one
-single file than adding the same binding in multiple files.
+Plus nothing from this thread warrants here exception from naming style.
 
->
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  .../bindings/clock/mtmips-clock.yaml          | 68 +++++++++++++++++++
-> >  1 file changed, 68 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/mtmips-cloc=
-k.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/mtmips-clock.yaml =
-b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
-> > new file mode 100644
-> > index 000000000000..c92969ce231d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
->
-> Filename matching compatible, so vendor prefix and device name (or
-> family of names).
 
-I used mtmips here but list compatibles starting with ralink. As I
-have said in the cover letter I am inspired by the last merged pinctrl
-series for these SoCs.
-See:
-- https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06185@a=
-rinc9.com/T/#t
+> 
+> Not all of compatible currently exist. 
 
-Not all of compatible currently exist. All of these are at the end the
-way we can properly match compatible-data to write a proper driver.
-The current ralink dtsi files which are in tree now
-are totally incomplete and not documented so we are planning to align
-all of this with openWRT used files and others soon. That's the reason
-we are not touching
-'arch/mips/boot/dts' at all now. I don't think anybody is using any of
-this but mt7621 which is properly completed and documented.
+Then clearly state this.
 
->
-> > @@ -0,0 +1,68 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/mtmips-clock.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MTMIPS SoCs Clock
->
-> One clock? Are you sure these describe exactly one clock?
+> All of these are at the end the
+> way we can properly match compatible-data to write a proper driver.
+> The current ralink dtsi files which are in tree now
+> are totally incomplete and not documented so we are planning to align
 
-I will change this to 'Clocks'.
+Nothing like this was said in commit msg, so how can we know?
 
->
-> > +
-> > +maintainers:
-> > +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > +
-> > +description: |
-> > +  MediaTek MIPS and Ralink SoCs have an XTAL from where the cpu clock =
-is
-> > +  provided as well as derived clocks for the bus and the peripherals.
-> > +
-> > +  Each clock is assigned an identifier and client nodes use this ident=
-ifier
-> > +  to specify the clock which they consume.
->
-> Drop useless or obvious pieces of description. Describe the hardware.
->
-> > +
-> > +  The clocks are provided inside a system controller node.
+> all of this with openWRT used files and others soon. That's the reason
+> we are not touching
+> 'arch/mips/boot/dts' at all now. I don't think anybody is using any of
+> this but mt7621 which is properly completed and documented.
 
->
-> ???
+Anyway, none of this explains exception from naming convention - vendor,
+device or family name.
 
-I meant, this node is a syscon from where both clock and reset related
-registers are used. I think writing in this way was enough since it
-has a pretty similar description like the one in
-'mediatek,mt7621-sysc.yaml'.
+> 
+>>
+>>> @@ -0,0 +1,68 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/clock/mtmips-clock.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: MTMIPS SoCs Clock
+>>
+>> One clock? Are you sure these describe exactly one clock?
+> 
+> I will change this to 'Clocks'.
 
->
-> > +
-> > +  This node is also a reset provider for all the peripherals.
->
-> ??? Does it mean it is not only "Clock" but also reset controller?
+Then clock provider, but are you sure? You included there syscon and
+reset controller.
 
-Yes, this node is a clock and reset controller for all the SoC.
+> 
+>>
+>>> +
+>>> +maintainers:
+>>> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>> +
+>>> +description: |
+>>> +  MediaTek MIPS and Ralink SoCs have an XTAL from where the cpu clock is
+>>> +  provided as well as derived clocks for the bus and the peripherals.
+>>> +
+>>> +  Each clock is assigned an identifier and client nodes use this identifier
+>>> +  to specify the clock which they consume.
+>>
+>> Drop useless or obvious pieces of description. Describe the hardware.
+>>
+>>> +
+>>> +  The clocks are provided inside a system controller node.
+> 
+>>
+>> ???
+> 
+> I meant, this node is a syscon from where both clock and reset related
+> registers are used. I think writing in this way was enough since it
+> has a pretty similar description like the one in
+> 'mediatek,mt7621-sysc.yaml'.
 
->
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - ralink,rt2880-sysc
-> > +          - ralink,rt3050-sysc
-> > +          - ralink,rt3052-sysc
-> > +          - ralink,rt3352-sysc
-> > +          - ralink,rt3883-sysc
-> > +          - ralink,rt5350-sysc
-> > +          - ralink,mt7620-sysc
-> > +          - ralink,mt7620a-sysc
-> > +          - ralink,mt7628-sysc'
-> > +          - ralink,mt7688-sysc
-> > +          - ralink,rt2880-reset
->
-> That's odd. rt2880 is sysc and reset? One device with two compatibles?
+But what is a system controller node? Some separate device? This is
+description for this device - called "Clock" or "Clocks" - and "system
+controller" appears for the first time.
 
-This 'ralink,rt2880-reset' is for compatibility reasons. Reset related
-code was inside 'arch/mips/ralink' folder reset.c file but it is moved
-to this new driver, so we have maintained this reset stuff for the
-reset compatibility. All of the rest are the new possible stuff for
-both reset and clocks. Clock driver is instantiated in two phases. The
-earlier one set up the clocks via CLK_OF_DECLARE macro. Resets are set
-up as a platform driver. Is only inside this where
-'ralink,rt2880-reset' is used. See patch 2 of the series for details.
+> 
+>>
+>>> +
+>>> +  This node is also a reset provider for all the peripherals.
+>>
+>> ??? Does it mean it is not only "Clock" but also reset controller?
+> 
+> Yes, this node is a clock and reset controller for all the SoC.
+> 
+>>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - ralink,rt2880-sysc
+>>> +          - ralink,rt3050-sysc
+>>> +          - ralink,rt3052-sysc
+>>> +          - ralink,rt3352-sysc
+>>> +          - ralink,rt3883-sysc
+>>> +          - ralink,rt5350-sysc
+>>> +          - ralink,mt7620-sysc
+>>> +          - ralink,mt7620a-sysc
+>>> +          - ralink,mt7628-sysc'
+>>> +          - ralink,mt7688-sysc
+>>> +          - ralink,rt2880-reset
+>>
+>> That's odd. rt2880 is sysc and reset? One device with two compatibles?
+> 
+> This 'ralink,rt2880-reset' is for compatibility reasons. 
 
->
-> Also, order these by name.
+I don't understand why. It is used in DTS, so what this node represents
+there?
 
-All are ordered but I maintained the  'ralink,rt2880-reset' at the end.
+> Reset related
+> code was inside 'arch/mips/ralink' folder reset.c file but it is moved
+> to this new driver, so we have maintained this reset stuff for the
+> reset compatibility. All of the rest are the new possible stuff for
+> both reset and clocks. 
 
->
->
-> > +      - const: syscon
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#clock-cells':
-> > +    description:
-> > +      The first cell indicates the clock number.
-> > +    const: 1
-> > +
-> > +  '#reset-cells':
-> > +    description:
-> > +      The first cell indicates the reset bit within the register.
-> > +    const: 1
->
-> Wait, only rt2880-reset is reset controller? This is confusing.
+We talk here about hardware, not drivers, so moving driver code around
+does not help me understand the rationale behind bindings.
 
-No, that is the reset compatibility one. All the rest are both clock
-and reset controllers from now on.
+> Clock driver is instantiated in two phases. The
+> earlier one set up the clocks via CLK_OF_DECLARE macro. Resets are set
+> up as a platform driver. Is only inside this where
+> 'ralink,rt2880-reset' is used. See patch 2 of the series for details.
 
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - '#clock-cells'
-> > +  - '#reset-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    sysc: sysc@0 {
->
-> Drop label.
+Sure, but it is not related to bindings.
 
-Sure, thanks.
+> 
+>>
+>> Also, order these by name.
+> 
+> All are ordered but I maintained the  'ralink,rt2880-reset' at the end.
 
->
-> Node names should be generic, clock-controller or reset-controller or
-> system-controller sometimes.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-device=
-tree-basics.html#generic-names-recommendation
->
-> > +      compatible =3D "ralink,rt5350-sysc", "syscon";
-> > +      reg =3D <0x0 0x100>;
-> > +      #clock-cells =3D <1>;
-> > +      #reset-cells =3D <1>;
-> > +    };
-
-Ok, so I will set this as 'syscon@' if you are ok with it.
-
->
-> Best regards,
-> Krzysztof
->
-
-Thanks to you for the review.
+No, it is not. m is before r in alphabet.
 
 Best regards,
-    Sergio Paracuellos
+Krzysztof
+
