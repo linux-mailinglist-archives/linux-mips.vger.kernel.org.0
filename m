@@ -2,81 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33286C2033
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 19:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9A86C213A
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Mar 2023 20:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjCTSnw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Mar 2023 14:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
+        id S231421AbjCTTVl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Mar 2023 15:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjCTSn2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 14:43:28 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDBED31E;
-        Mon, 20 Mar 2023 11:36:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679337260; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=anXf6Am1T9NK86qA90SdIAMl71YV8UEjW1td0WDHnxZ/E/dRM8Q3BCorHNS/IC15sfb/AdecuYXdTOvasyAXXqoFo9AtM2RRcrd0mGma9tPv20CqJKO6S7vWT9FhvMruTMUzob08GI+BiIlT8jQjHoAWaJZBu0B89lqz5eug/4U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1679337260; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=a9RwxvXHbJPa9t8iHG3Uau7EBpBE/ftRSWJKTpfTPy4=; 
-        b=LfgwroXGyHQYOGq7lkQNQRDzCEIOMW8Qv9hSef7taXVC7lX+Ckc7UZDSQKL9vR85ot3EuUx74IcjOGRWjIerz0PNk8mYnpfi8dhy0myKYhGCujbCPgnXCxiyfQSMTh+Yhx8ccuAeKYZfENcj1poDw7023RN6jomoobkk5bNe2C4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679337260;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=a9RwxvXHbJPa9t8iHG3Uau7EBpBE/ftRSWJKTpfTPy4=;
-        b=N0LHOty5yjqwZcpgt8lT3Im2xOyWYTyvJAYjCNapnpQ9stZeI4pyeIfY3v3Y46Wm
-        2WEWlmfRt7pplAwSkSI5A2s0H1bKWNlMxFpeF8wp9FyGS51QpTHLvrZJA9pqMJatVdN
-        F/g0nIyL8NC2kCzZc5MOKV+lLxnUpJLg/kOMIqyk=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 16793372581171015.9762932646127; Mon, 20 Mar 2023 11:34:18 -0700 (PDT)
-Message-ID: <4eed7059-128c-f614-625a-5ab596351ce8@arinc9.com>
-Date:   Mon, 20 Mar 2023 21:34:10 +0300
+        with ESMTP id S231486AbjCTTVM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Mar 2023 15:21:12 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55D49D2;
+        Mon, 20 Mar 2023 12:13:19 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so9038641pjl.4;
+        Mon, 20 Mar 2023 12:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679339599;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7s4+d2xWt406APG3wRaoC6OPOVdCpVfU3Vzs0598DdE=;
+        b=nWIhlpdVn9X/rafBumS94oat56jB+7pklSvZnGj8qyNxhGHhJaQmaKMZwaGI7dmLWf
+         N1DZ/eyMLh/k2XkMLrz+YWkUaN/AJaUVzMfED8I+KJts1bMf3Ic/521/1lwuVmrfJVym
+         K0gneeVelf0mfmAKHSxeXIO/fz21j89Hx9QoLQBQra5HYHMBjjM8Esl6ou5SgzSinu1G
+         NeKlk5pOvB0FBQiXL4d+uZPJkI5jkFSIFoLqBOoBCJ3i/KXpSe55mYzKnP9XDaxTOk3Q
+         1xQ9vfCLrTAS5g9ZlwZPirvIJ/IfwrOZoK/TaRxCUp9VbXzimPaEsfXVE4xSEl+uo0V/
+         uZ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679339599;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7s4+d2xWt406APG3wRaoC6OPOVdCpVfU3Vzs0598DdE=;
+        b=tDp64iKmw+WzIsmgrCkaoz+2+MeD6KiH9sV3IuP5ygJVx8byzH+bsmffCn6XgypF04
+         rh6kRtfiQRDlqbjq9tuCMJaeGlPnPpQjrkwYBWJCz1n7YEAftADmmryvlHm0stt88BzY
+         8A6AluGk39m25usImPqEsLILPTz0rEn8g6nUbnB0kyurs85mqIpgPbsIhMp7xTrY5Ig8
+         p/veKw1lMu+74HP0g0FQ41Xwd6sM/1D9H6NxegucgxC/+xf1Lb50n9xkYpVqTx7mfd+W
+         k0foMrqQhO5RooIVsGTzOVS2W4F78/EImhNrOHRqKd1lAlzfo1qgxpAsqk7s5EH/aeyC
+         2WoQ==
+X-Gm-Message-State: AO0yUKVyxddc5JNWFlxcdWTL4j7a8Qkhcg+CLnNLarpIKAKehT+SR1T6
+        kEW+VHDHtxNXsA8KzueBtfnKo+Xj2gA=
+X-Google-Smtp-Source: AK7set/om+UCx0oTBIvEc6pC8uk/9sYk4ebSnIZZLGaZ/Qi2rk9tEIfP5oc57UH1akcWeHNeolR7Pg==
+X-Received: by 2002:a17:903:5c7:b0:1a1:d219:eaf with SMTP id kf7-20020a17090305c700b001a1d2190eafmr4258951plb.5.1679339598744;
+        Mon, 20 Mar 2023 12:13:18 -0700 (PDT)
+Received: from [10.69.67.31] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170902728d00b001994fc55998sm7032001pll.217.2023.03.20.12.12.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 12:13:18 -0700 (PDT)
+Message-ID: <a0ff714c-5d75-953e-3ce5-31ad2b116965@gmail.com>
+Date:   Mon, 20 Mar 2023 12:12:34 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 20/21] dt-bindings: pinctrl: mediatek: mt7620: split
- binding
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 02/15] mm/cma: move init_cma_reserved_pages() to cma.c and
+ make it static
+To:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230319220008.2138576-1-rppt@kernel.org>
+ <20230319220008.2138576-3-rppt@kernel.org>
+ <8a461e44-7d24-5b5d-db04-e7fa85beeaa7@redhat.com>
+ <ZBg/SCbVBAqNCU+F@kernel.org>
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20230317213011.13656-1-arinc.unal@arinc9.com>
- <20230317213011.13656-21-arinc.unal@arinc9.com>
- <1d0c0e49-4f50-7fc8-d514-b19cf4054066@collabora.com>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <1d0c0e49-4f50-7fc8-d514-b19cf4054066@collabora.com>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <ZBg/SCbVBAqNCU+F@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +83,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 20.03.2023 18:00, AngeloGioacchino Del Regno wrote:
-> Il 17/03/23 22:30, arinc9.unal@gmail.com ha scritto:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 3/20/2023 4:11 AM, Mike Rapoport wrote:
+> On Mon, Mar 20, 2023 at 11:30:20AM +0100, David Hildenbrand wrote:
+>> On 19.03.23 22:59, Mike Rapoport wrote:
+>>> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>>>
+>>> init_cma_reserved_pages() only used in cma.c, no point of having it in
+>>> page_alloc.c.
+>>>
+>>> Move init_cma_reserved_pages() to cma.c and make it static.
 >>
->> The MT7628 and MT7688 SoCs contain different pin muxing information,
->> therefore, should be split. This can be done now that there are 
->> compatible
->> strings to distinguish them from other SoCs.
->>
->> Split the schema out to mediatek,mt76x8-pinctrl.yaml.
->>
->> Remove mediatek,mt76x8-pinctrl from mt7620.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->>   .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 379 +--------------
->>   .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 450 ++++++++++++++++++
+>> I guess the motivation is to avoid letting too many subsystems mess with
+>> pageblock migratetypes, managed pages, PG_reserved ...
 > 
-> AFAIK, wildcards aren't allowed, so the new file should instead be called
-> "mediatek,mt7628-pinctrl.yaml", the compatible string 
-> "ralink,mt76x8-pinctrl"
-> should be deprecated (but still present as to not break ABI), and the 
-> driver
-> updated to accept the compatible string "ralink,mt7628-pinctrl".
+> Judging by the git log it just ended up in page_alloc.c because
+> set_pageblock_migratetype() was static back then ;)
+>   
+>> So it kind of makes sense to have these low-level details out of common CMA
+>> code, no?
 > 
-> At that point, you could update the devicetrees as well: for MT7628, you'd
-> have a node using
-> 
-> compatible = "ralink,mt7628-pinctrl";
-> 
-> while for MT7688, you'd have
-> 
-> compatible = "ralink,mt7688-pinctrl", "ralink,mt7628-pinctrl";
-> 
-> If you don't want to go through those lengths, you could still do the
-> cleanup that you wanted to perform, but with a filename containing no
-> wildcards - anyway.
+> I don't mind keeping it out of cma and folding this into "grand move"
+> patch.
+Just an FYI, this conflicts with my patch:
+https://lore.kernel.org/lkml/20230311003855.645684-6-opendmb@gmail.com/
 
-I was able to have it accepted by Rob, and the patches are already 
-applied so I'm going to leave it as is for now.
+So it would work better for me if it was folded into your "grand move" 
+(assuming that refers to your patch 4) and init_cma_reserved_pageblock() 
+could be retained as a wrapper there in my patch if we want to still 
+keep set_pageblock_migratetype() out of the common CMA code.
 
-Arınç
+--
+Thanks,
+     Doug
+
