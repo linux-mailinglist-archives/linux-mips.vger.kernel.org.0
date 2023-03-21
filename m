@@ -2,94 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357276C2FAD
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 11:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE2F6C2FC5
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 12:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjCUK6i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 06:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S229648AbjCULI1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 07:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjCUK6g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 06:58:36 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CC42366E;
-        Tue, 21 Mar 2023 03:58:33 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id o12so57942119edb.9;
-        Tue, 21 Mar 2023 03:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679396312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+xlekolJZJNpYqeRZP2jE+3o7E56WL7sl6ehOjJfpv8=;
-        b=h6ShNJs3ppB1oKzTgjzc7MAp2E1KgvjVgCoQPdAJrMR1poEuCuPf+HWYJUsikwwQSz
-         VpTZyJLNecrlMrnece1Pdy/yh61uw34J9QoTGgWppJFHaofTnD4780CMU4zB5mSy7mSs
-         AlKD/xhvsBxxmWo9/dDnpUOz1Bm9qVcF9QJbK/Lap/rhM2wCSko9zc6uxWyW9JVAD7PG
-         ApyU2Oede9idH1ghPuah3+TA1XuAJbO8/MsgawYGzqACX7BGeIARsosZQnJjITmPmA0S
-         5D/lxO0QZzlVzJqZ2hwOU8xMcJ82Kr8s3weydfOcK75YcZ/kvYPF0osEILfAE3FCAKD9
-         KdfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679396312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+xlekolJZJNpYqeRZP2jE+3o7E56WL7sl6ehOjJfpv8=;
-        b=yE+Ek6nK3PUFRotQHjWuJXdFoOfpi9mH2e+vtjSqxP7DqJSIEu8HiCfzNOjpeEDlQ6
-         OzTWduG4AcC0Y/WKCwjyaXATcfEtvxJ/WPNXxY4rTezZqBeYfNLOgCbi1tiW502eTkaS
-         w8o4xJLJ09g0VBP4IICZYMPlqYKUBRLgGzh6aFypofcUD9tVnxZKs8V+6m7+7BuBQh3y
-         fKUk9bqNjmev5NJFo1YoIrg3ZY8tqN7jRxmxJHs858j80lfVey+DE1Ofc7P0YVM9LMyl
-         wEgUWhJ1hG5mNl7n79zeztF+3uI6PBhXQ0o+Jfr5YcqYfx59C2bzmvY8kdaebubvvlhN
-         btmg==
-X-Gm-Message-State: AO0yUKW92dIPFS+Uwk2Umdw6f0PfmKmeQia3fwrmnMbnMXv4M2nVcFUI
-        5tCYECooMh4/+i9nAIajL8igyndyyjFfWWJbC/0=
-X-Google-Smtp-Source: AK7set+6s92yKhF8P7ciNAdRReIw2l1D6bnTwlkstvWmOS0XOu11vT/w2cyLDcHtnC10WTyzOr7wfAE3UCqGjxZsCsM=
-X-Received: by 2002:a50:bb2d:0:b0:501:d3a2:b4b3 with SMTP id
- y42-20020a50bb2d000000b00501d3a2b4b3mr1419083ede.0.1679396311722; Tue, 21 Mar
- 2023 03:58:31 -0700 (PDT)
+        with ESMTP id S229487AbjCULI0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 07:08:26 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F704E1A1;
+        Tue, 21 Mar 2023 04:08:24 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C02795C00F7;
+        Tue, 21 Mar 2023 07:08:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 21 Mar 2023 07:08:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1679396903; x=1679483303; bh=ucFVl0jvwB
+        lsXTpy6dY8aDYX2Et9XXdL45q62ViNUpY=; b=MP2/yNnJwKFYsmKk1GbdT7UVeY
+        MnhDuCdn1Kh4b2i30s1NhE/BYCYizfM05wY6thE+2qaGzGZBKp15ThJ7yNCLgSrP
+        4iMF/POris7Y8iJS1wWEtFf4qUcMiZ2Pg3FEE4kwDGiKBiDTk639tIFa8UWnfwl9
+        nLUl8fExahyFqIHl5kdewXHTpmhqRLhtBRcFa7LGSr1ODNoGYXJlMg38rwPGOxoE
+        nKsOfFecPQkdCbULJ72em/Omlw3vHwC6FJIFXpVE2VVLWkhSLpNppCUizeDb/ng3
+        RI8kyQuPpCEiHW8r3E+aJrWMWSA461FlDmp8J3aIfh0u/8wyLyVztkNNqa+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679396903; x=1679483303; bh=ucFVl0jvwBlsX
+        Tpy6dY8aDYX2Et9XXdL45q62ViNUpY=; b=ed3m8O4t8pDFP9uG31nTqH5E2Fsy6
+        /MavdnRrUBaf2UNs1gaPi5dNuwxHhUpgYeRAinYx3J0Nb2FDGfjQqk84WKvGHSJ/
+        80zUxHQPox/V9110zRXfbe/xDXS7RjIRikXMliPJnEnFkfNJjV2j49UzUt4wwoKI
+        zPbqMw/Z8NT6kb7Epm8CkH0Y4cLyuG4S4LMGBre9rGQMd2Uf1NQicJewK3gCCj4i
+        WU0o8/XH0hhrTudrNetEoeEs70Kllwmeb3h6sdxDZXFzHhw043SIMN20RMvgdsR7
+        zQm0fePwbqF+Y7NWK8zE4bt2xrQ7xj74+sofkRTjVCIE+gngSi+lBIvbQ==
+X-ME-Sender: <xms:J5AZZK03El-5nGoBsBpePoSmLiN92j4n6qoNUt6xz5wSYB-45y2eDw>
+    <xme:J5AZZNE-OXpdylxmJ6nKWlW69GpksBi3vUejOPBHcMkBIeuA5Wj4dvD9QKw59KvUH
+    xM64MqqfRmsX0NKnuI>
+X-ME-Received: <xmr:J5AZZC7d25YEi7AA12sY20Bb0Mw7pJ3yhE-2w-0-doGTkMmIUahSCW4sWzxAxuThxpXrb0EzHUg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:J5AZZL3sn9PE5Xr9gRZ2P-Ak79OVg5NFOyIKOyFrtx5erx2k47N70w>
+    <xmx:J5AZZNFeSSpL6Q8C-W13zwenlKv9eRCqZEavZqss0oeSjyk9wCm2aA>
+    <xmx:J5AZZE_B_xO-_xStaW5k6Qoz_bgBs6pOie5pW3kVP2tqRLAiizs9iw>
+    <xmx:J5AZZM_F1InuLsw4qyd4uwdWQLTQt4smF3QZ2OKiZ0Wt05OjtA87Rg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Mar 2023 07:08:20 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-riscv@lists.infradead.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 0/4] Use dma_default_coherent for devicetree default coherency
+Date:   Tue, 21 Mar 2023 11:08:09 +0000
+Message-Id: <20230321110813.26808-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-References: <20230320104003.407844-1-keguang.zhang@gmail.com>
- <20230320104003.407844-4-keguang.zhang@gmail.com> <591123c5b80d12cf861cc5392688da41.sboyd@kernel.org>
-In-Reply-To: <591123c5b80d12cf861cc5392688da41.sboyd@kernel.org>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Tue, 21 Mar 2023 18:58:15 +0800
-Message-ID: <CAJhJPsWhwSzCMMaox6VoKZL7NGretnrYb+YS8pvg9BH1hip8Yw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] clk: loongson1: Re-implement the clock driver
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 4:07=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
-te:
->
-> Quoting Keguang Zhang (2023-03-20 03:40:02)
-> > Re-implement the clock driver for Loongson-1 to
-> > add devicetree support and fit into the clock framework.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > V3 -> V4: Fix the build error of missing linux/module.h
->
-> Most of my review on v3 still applies. This needs a resend.
+Hi all,
 
-Will send v5 along with the modifications suggested on v3.
-Thanks for your time!
+This series split out second half of my previous series
+"[PATCH 0/4] MIPS DMA coherence fixes".
 
---=20
-Best regards,
+It intends to use dma_default_coherent to determine the default coherency of
+devicetree probed devices instead of hardcoding it with Kconfig options.
 
-Keguang Zhang
+For some MIPS systems, dma_default_coherent is determined with either
+bootloader or hardware registers in platform initilization code, and devicetree
+does not explicility specify the coherency of the device, so we need the ability
+to change the default coherency of devicetree probed devices.
+
+For other platforms that supports noncoherent, dma_default_coherent is a fixed
+value set by arch code. It's defaulted to false for most archs except RISC-V.
+
+Thanks
+- Jiaxun
+---
+v2:
+  - Add PATCH 1 to help with backporting
+  - Use Kconfig option to set dma_default_coherent 
+
+v3:
+  - Style fixes
+  - Squash setting ARCH_DMA_DEFAULT_COHERENT into PATCH 4
+  - Setting ARCH_DMA_DEFAULT_COHERENT for PowerPC
+
+Jiaxun Yang (4):
+  of: address: Fix default coherency for MIPS
+  dma-mapping: Provide a fallback dma_default_coherent
+  dma-mapping: Provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
+  of: address: Always use dma_default_coherent for default coherency
+
+ arch/powerpc/Kconfig        | 2 +-
+ arch/riscv/Kconfig          | 2 +-
+ drivers/of/Kconfig          | 4 ----
+ drivers/of/address.c        | 2 +-
+ include/linux/dma-map-ops.h | 2 ++
+ kernel/dma/Kconfig          | 7 +++++++
+ kernel/dma/mapping.c        | 6 +++++-
+ 7 files changed, 17 insertions(+), 8 deletions(-)
+
+-- 
+2.37.1 (Apple Git-137.1)
+
