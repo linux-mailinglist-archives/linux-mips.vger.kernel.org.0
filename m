@@ -2,103 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0A96C2971
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 06:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913F86C2A6E
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 07:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjCUFBQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 01:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S229828AbjCUGd3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 02:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjCUFBF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 01:01:05 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7131E19;
-        Mon, 20 Mar 2023 22:00:51 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso8729175wmo.0;
-        Mon, 20 Mar 2023 22:00:51 -0700 (PDT)
+        with ESMTP id S229743AbjCUGd2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 02:33:28 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8253B212
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 23:33:01 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id h8so55595185ede.8
+        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 23:33:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679374848;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ENURxkCD4SFoaP6aebwo/q0vo0bcMItJOR8Kmmrb9B8=;
-        b=MzDi76ThSJ8I2UkP/1F3yZstqxOBzhMRm8kTOdg93unOq72ahgfP3W5Ulb0xwBZP+j
-         EikY+r0Rvr+oAzMBNm1hsM2pVmZkhoe8vrWeiJvB3E56/WBg9o+LTMkYDpu3wrIgEa9O
-         BlNq2mLNyFfjSfPX8eMbinPcw15IgQ+1yGUm8ZuFHLgJgeTyJI+2UJwQdx/4Egs7FO6u
-         BRqaD1JbmAXUT6Ff4yv8PURggJngN7R9cS1hawx7RZeYnwbmeHCbbnKdEl02QtTPbnAj
-         PTZtHB5Yu8IlAhnGRt9bkx56cPi9yMuuRQ/x3N7drBUJ6W3hOBPBTTNOuC+cVJLJbKJ9
-         q41g==
+        d=linaro.org; s=google; t=1679380380;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+HtQTr70p9g0PFqB21eWyfcsMG//fwSOn6c9K2QaLZg=;
+        b=U0naptLlEpIIIPIujtsOPbCXgtUTGWKYTvhXhVRe0+VrDYAC1jzdgU8unYp+1fWM+a
+         K4s9mQWcd9Fn1xPdQhA70P6yAMxmkXr0MKWS/Aeq6WaKV4Xd0zWw+6FaZMyDHg2IjdgI
+         xvin3/erA8RN5zf2AGuo20nWq7ptInWL+iZC1Q5WBsSFzunxx8rhuySAhR5YoXqBZ0+q
+         xiWd4wr9EGF7jEJRyzJp5ziCZNdy94gtKLqGjvzamsH4wIJFQlZ3DxYWuKrmYz8cGCjp
+         Kht/hVbxz/6z0EpfI+bDtXVah7uiYbSF7kNK8IFD6EtVE2vZU05bF6x9RkVkLZISNlFr
+         Xy2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679374848;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ENURxkCD4SFoaP6aebwo/q0vo0bcMItJOR8Kmmrb9B8=;
-        b=UZEV3eGwYh9cKYA71l3txjzxDz9XJm5Ui0xKyko84o41Ff70M7/KoHmDDixzZUMq9L
-         6Y81Ei0C4VPqh52HQfJvD+Dd3CAKLMkWvJB6FvjSKyvkSJ41Y/u1UJQIwv61gt+isyEC
-         fPzVxK5Wj0g1gf+LUR+TNKHH4paiyS6Gbo/L1kC48jnctQ5W790aYiC/7Ktr0knjCiu+
-         1OFKTc6MZCrQOEG/paA48B/yIoIPt4UvdC6senF2H/gpmMhimO5wV8V80ZUtREvz/4JZ
-         46wIP0W9BX8bkf+ghq/uwYk6krxMKlDCgNeS/1AA27feClRvlqRHPsZDpXSzkc9Zh351
-         /XmA==
-X-Gm-Message-State: AO0yUKXVRclGd2AMnTOGldZ2XesbTfr8kZUOShjJISHG7WdEAIRNVTsu
-        mK60EOG315ZN+JtlAmBqXhRrLnjsJ9s=
-X-Google-Smtp-Source: AK7set/nSITNOfKlnwangQvWZxYyjfmmynvUdRicYyvRkVc2yJbushi7SPSbH8E30up/WyxNbmzEwg==
-X-Received: by 2002:a7b:c3c8:0:b0:3dc:4fd7:31f7 with SMTP id t8-20020a7bc3c8000000b003dc4fd731f7mr1143547wmj.41.1679374848699;
-        Mon, 20 Mar 2023 22:00:48 -0700 (PDT)
-Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c020300b003eddefd8792sm6238432wmi.14.2023.03.20.22.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 22:00:48 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
-Subject: [PATCH v2 9/9] MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-Date:   Tue, 21 Mar 2023 06:00:34 +0100
-Message-Id: <20230321050034.1431379-10-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
-References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+        d=1e100.net; s=20210112; t=1679380380;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+HtQTr70p9g0PFqB21eWyfcsMG//fwSOn6c9K2QaLZg=;
+        b=I4eGvoZZnGOcYLPaGMi2R1e0aWCV1DxlwBvAeXSEnbxVl51QZUt3qA/QRkWq1jSs4a
+         2bXxrknnfKWrhNj5eBsuYMZL0KiD2/1Wzfd6WW1E3VkYsKqJcNyj+i8KzmJsXUzSibty
+         lfETcs9jr/GET/udYjDLV+jyL6f/Iw2/xlq4q+bbw9c99oZgzodWWAO9gR/ZaDgQTZSM
+         PmhgjfWynNqCzHFTxBLwValHztFQM5Pm4+QqSLXBK/QBAviQUkAavCSDuFovg4ABHOAp
+         ThxCTSGu/Fh6PuLSeKy6fIUfl2yNG4xVUHFVXkH06nosfb/0d3+7DntyKQWOe16adlxL
+         z3wA==
+X-Gm-Message-State: AO0yUKV02VuwNHcSsbbKyqJ7JmgHUyC9tHolgerDcNytVhgPwQ2CM295
+        PEEns5GttCNehXJjbgbmZQCxIg==
+X-Google-Smtp-Source: AK7set+X26OM3FXuIWXm2jm5XGPMTjCpHNvsswvRWpweqJQXypouCjDAycl742Es0v6RCKzFZmHJAw==
+X-Received: by 2002:a17:906:86cd:b0:878:545b:e540 with SMTP id j13-20020a17090686cd00b00878545be540mr1633577ejy.51.1679380379982;
+        Mon, 20 Mar 2023 23:32:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id a11-20020a17090680cb00b00930d22474dbsm5358277ejx.97.2023.03.20.23.32.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 23:32:59 -0700 (PDT)
+Message-ID: <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
+Date:   Tue, 21 Mar 2023 07:32:58 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+ <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+ <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
+ <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+ <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
+ <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adding myself as maintainer for Mediatek MTMIPS clock driver.
+On 21/03/2023 05:34, Sergio Paracuellos wrote:
+> On Mon, Mar 20, 2023 at 7:15 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 20/03/2023 19:09, Arınç ÜNAL wrote:
+>>>>> Would mediatek,mtmips-clock.yaml make sense?
+>>>>
+>>>> More, except:
+>>>> 1. This is not clock, but sysc.
+>>>
+>>> Sergio, beware.
+>>
+>> I meant, that's what I understood from what Sergio said. :)
+> 
+> Yes, you understood properly. I will use 'sysc' instead.
+> 
+>>
+>>>
+>>>> 2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which are ARM?
+>>>
+>>> All of the SoCs, RTXXXX, MT7620, MT7621, MT7628, MT7688 are MIPS. So I
+>>> decided to call this platform MTMIPS as I've seen MediaTek use this on
+>>> other projects like U-Boot. This is what I did on my pinctrl patch
+>>> series as well.
+>>
+>> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs which are
+>> ARM, so mediatek,mtmips-sysc would work.
+> 
+> I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles will
+> start with ralink. There are already some existent compatibles for
+> mt762x already having ralink as prefix, so to be coherent ralink
+> should be maintained as prefix.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+The compatibles I mentioned start already with mediatek, so why do you
+want to introduce incorrect vendor name for these?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..581234dfa735 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13137,6 +13137,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml
- F:	drivers/phy/ralink/phy-mt7621-pci.c
- 
-+MEDIATEK MTMIPS CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-+F:	drivers/clk/ralink/clk-mtmips.c
-+
- MEDIATEK NAND CONTROLLER DRIVER
- L:	linux-mtd@lists.infradead.org
- S:	Orphan
--- 
-2.25.1
+Best regards,
+Krzysztof
 
