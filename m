@@ -2,130 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7416C2A75
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 07:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6B06C2A89
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 07:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCUGe4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 02:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S230367AbjCUGjG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 02:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjCUGey (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 02:34:54 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B3734329
-        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 23:34:17 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so55570514edb.11
-        for <linux-mips@vger.kernel.org>; Mon, 20 Mar 2023 23:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679380455;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I7y6CEKyo9f4ym50W2J1VElNR4r7uzh+824EqBJttEg=;
-        b=Mm5SHrWvt/C11CxBWPSs8OB5e0OmziG7kCV6tRt0IbilF4n0xQZSLrcCAvBOZAUCdD
-         uyUEaL1w+TtX4rK16Epy3/9mHFp5wKyHv71UKR89yxpggDPaRjvzfgkYMPWJS7hvIRar
-         /N0cgAMvBKGQgqAui1Pcl1ht41Qv5LHZmMWeJOLfIbkGpGVEeAexbHKlJDXLVpXqCXFr
-         fnB82qAJ3FEwx3TkSnMNIcfajhVapOosI8LzCw3ajeLvfGckc389k0MG5p7QnwN9J0Da
-         UAfNgQajaEmLOEQiYk4WVirZyD5BmXVpEWX/YOc6jelX8k+npy6gAmom9VSAWxn6tCPY
-         P40Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679380455;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I7y6CEKyo9f4ym50W2J1VElNR4r7uzh+824EqBJttEg=;
-        b=wGzPQ/xbauZd+WVdPfI+7fQSpb/T+6hSZ6IdrmWl4A4XBoTG1nMrr/N7gYuYpTWqJM
-         HeQIn3HLd8/nvF8+GpvRYqHk8LKMQGp67jgW0uSM0J3ztUZCG/gu6VllbOC80FNMpaYU
-         KwqIC02vIcu5DE1MzqcEIM1HmaV1a9uYmnelb7lHUC3MBrJO7royQM9Qk4zd1qPNuj3A
-         elzKOq2JzD910UHOD0vzjL5MJfCuCNu8QXQMr6V2su4cu9H729ICzZVRL4C7i2/r8bOJ
-         PWrWyShwyYvSOovLHTzfdiwwPvhAeMH5176idHPegKGRU4Vz45XaK03aN4kl+Y5AWcwC
-         hv9w==
-X-Gm-Message-State: AO0yUKXEfjJ2remgJ7jujay0DbrwVZ0PQ1zyt4/ZTECdkxay051C8xNH
-        YoRWWAN1lLflePJDg3KgWQbwNA==
-X-Google-Smtp-Source: AK7set+rivmM7028r39gA06BxStCr476bAgL3eYIZfoGXmza0rkmeJjO0OTLxMLISJVbixQsjd443Q==
-X-Received: by 2002:a17:906:2a90:b0:8aa:1f89:122e with SMTP id l16-20020a1709062a9000b008aa1f89122emr1426902eje.39.1679380455530;
-        Mon, 20 Mar 2023 23:34:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id z24-20020a1709060ad800b0092ffc83cc27sm5353883ejf.5.2023.03.20.23.34.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 23:34:15 -0700 (PDT)
-Message-ID: <b3365947-5567-2fd7-1bb7-34052c40e5f6@linaro.org>
-Date:   Tue, 21 Mar 2023 07:34:14 +0100
+        with ESMTP id S230047AbjCUGjF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 02:39:05 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EDB2D75;
+        Mon, 20 Mar 2023 23:38:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679380705; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=HgjfFrQ21rle45rF7u9dVNU//yzNvqpj36S5yrhVXcJnJH9rU400kLaMT49PzCzIF/md0A1pteBT+Tjl63s+oOTXd2CHUye0cQx0n52UJomcdRU7wlAeRVx2zJP3Euy1rJmxin3/Tx2gqmcMZFdLs3JeHwK1/Z9AXGMorGA/huU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679380705; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=MtqhAiVzYsXN8NBYdM8JpEnwguRTzgJMuNA/bO2XA4o=; 
+        b=PWxhhk8K9R/wC+JfBTs1f0l6FXFE6/Dcis2lqxEP4gXWzWZCc5kiVYpNpR6ogwd1oDD0lZpFZ78050JzRUVO3aQp7EuDxX0Ya9YD22/SnUWPeO0W0zvx5RXOlwqtGeZHKkxfVu5Ir/BoXPM5aJDYmZ+kSnrwFsyyJs3nAPER5/w=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679380705;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=MtqhAiVzYsXN8NBYdM8JpEnwguRTzgJMuNA/bO2XA4o=;
+        b=BgyIkyqCvSJo2UtncNvZZPJtrn4L7nivhg9S279FfTyyFzlUrGXVwlRfG7/QtB9T
+        EzWlGS49MZJqUz7P74aOH5Q1pYbDo/QWrj2jEmcN0JKJ7bNUitujPXgu2Obc+lw+AKc
+        9dMVGNg6t7SsYnIhc6eCMxqZbGYeF3vud9A5noIU=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679380702839868.114840000752; Mon, 20 Mar 2023 23:38:22 -0700 (PDT)
+Message-ID: <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
+Date:   Tue, 21 Mar 2023 09:38:17 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
+ Thunderbird/102.8.0
 Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
  tree binding documentation
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
 References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
  <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
- <5109c01b-48bd-2854-3f42-bf8ef8b4a821@linaro.org>
- <9cfd5bc1-64e9-5250-5a8d-18ac4c205584@arinc9.com>
- <f323f1bc-1d91-f8bb-2c1f-2f1b93fe1b3e@linaro.org>
- <6a8989c5-f12d-a4cb-9b20-29049dee016e@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6a8989c5-f12d-a4cb-9b20-29049dee016e@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+ <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+ <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
+ <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+ <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
+ <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+ <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 20/03/2023 19:23, Arınç ÜNAL wrote:
-> On 20.03.2023 21:11, Krzysztof Kozlowski wrote:
->> On 20/03/2023 19:07, Arınç ÜNAL wrote:
->>> On 20.03.2023 21:01, Krzysztof Kozlowski wrote:
->>>> On 20/03/2023 17:18, Sergio Paracuellos wrote:
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    items:
->>>>> +      - enum:
->>>>> +          - ralink,rt2880-sysc
->>>>> +          - ralink,rt3050-sysc
->>>>> +          - ralink,rt3052-sysc
->>>>> +          - ralink,rt3352-sysc
->>>>> +          - ralink,rt3883-sysc
->>>>> +          - ralink,rt5350-sysc
->>>>> +          - ralink,mt7620-sysc
->>>>> +          - ralink,mt7620a-sysc
->>>>> +          - ralink,mt7628-sysc
->>>>> +          - ralink,mt7688-sysc
->>>>
->>>> One more comment - this and maybe other compatibles - have wrong vendor
->>>> prefix. This is mediatek, not ralink.
+On 21.03.2023 09:32, Krzysztof Kozlowski wrote:
+> On 21/03/2023 05:34, Sergio Paracuellos wrote:
+>> On Mon, Mar 20, 2023 at 7:15 PM Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
 >>>
->>> This platform was acquired from Ralink by MediaTek. I couldn't change
->>> some existing ralink compatible strings to mediatek as Rob explained on
->>> my pinctrl patch series that we don't do that. The compatible strings on
->>> this patch series here are new but I'd rather keep the compatible
->>> strings ralink to keep things consistent.
+>>> On 20/03/2023 19:09, Arınç ÜNAL wrote:
+>>>>>> Would mediatek,mtmips-clock.yaml make sense?
+>>>>>
+>>>>> More, except:
+>>>>> 1. This is not clock, but sysc.
+>>>>
+>>>> Sergio, beware.
+>>>
+>>> I meant, that's what I understood from what Sergio said. :)
 >>
->> The comment that you cannot change existing compatibles does not apply
->> to these, because these are new. However indeed some SoCs have already
->> compatibles with ralink, so it's fine for these. mt7620 and mt7628 are
->> already used with mediatek, so these should be rather corrected to new
->> prefix.
+>> Yes, you understood properly. I will use 'sysc' instead.
+>>
+>>>
+>>>>
+>>>>> 2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which are ARM?
+>>>>
+>>>> All of the SoCs, RTXXXX, MT7620, MT7621, MT7628, MT7688 are MIPS. So I
+>>>> decided to call this platform MTMIPS as I've seen MediaTek use this on
+>>>> other projects like U-Boot. This is what I did on my pinctrl patch
+>>>> series as well.
+>>>
+>>> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs which are
+>>> ARM, so mediatek,mtmips-sysc would work.
+>>
+>> I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles will
+>> start with ralink. There are already some existent compatibles for
+>> mt762x already having ralink as prefix, so to be coherent ralink
+>> should be maintained as prefix.
 > 
-> If you're talking about the pinctrl schemas for MT7620 and MT7628, it's 
-> just the name of the yaml files that have mediatek. The compatible 
-> string is still ralink so it should be kept ralink here as well.
+> The compatibles I mentioned start already with mediatek, so why do you
+> want to introduce incorrect vendor name for these?
 
-No, I am talking about compatibles.
+Can you point out where these compatible strings for mt7620 and mt7628 are?
 
-Best regards,
-Krzysztof
-
+Arınç
