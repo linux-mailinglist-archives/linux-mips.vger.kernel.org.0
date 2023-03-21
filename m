@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DC06C2F74
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 11:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F3C6C2F79
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 11:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjCUKtY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 06:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S229927AbjCUKt2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 06:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCUKtU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 06:49:20 -0400
+        with ESMTP id S229939AbjCUKtZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 06:49:25 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F094ACC29
-        for <linux-mips@vger.kernel.org>; Tue, 21 Mar 2023 03:49:09 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 82EA83200C5B;
-        Tue, 21 Mar 2023 06:49:08 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02E37DA6
+        for <linux-mips@vger.kernel.org>; Tue, 21 Mar 2023 03:49:11 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 9C15D3200C5E;
+        Tue, 21 Mar 2023 06:49:10 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 21 Mar 2023 06:49:08 -0400
+  by compute3.internal (MEProxy); Tue, 21 Mar 2023 06:49:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679395748; x=
-        1679482148; bh=eAsPTvVEioK0QszbY/FDpc0oedKcpD+iJBaaQUCaDB4=; b=3
-        ghdxPSh4r8qyremRyB9Q5/8JtofCv4CzpDnStzv7glQTQGJsO54sF5Je+X7AEPtE
-        AEUMwKQBSkUfAnoXHijFKwnXUJazsCDU2fN2vtohvIs3anMfd8h1HcdqWOZ91UER
-        +OrVIVYpgD2dg8cQ55ffGtNgojAheqPIZ8vxZe/CZp2OmtrXHuAV7XM5Z44kwzCr
-        POteH8VTG0WflZ9knRUvRYDlmA0OgdnLbMogZnhvMlgQgkiMbhYSivEpuIjw9Cex
-        tdHsGCS7j2j0gMTPia1nzWcNtd7CjdgZWWAFI7ew1wEWyMxtdAgV62/hjam1E6CD
-        A9yPCM/XfMBn85Byh2Ghg==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679395750; x=
+        1679482150; bh=qgAcqWfJH8k4dZH9u5DnU2Q7Vf0M5QmfxHEtvd37dZs=; b=Q
+        4FOSQIHb/IXO/z+bOx8QEEEd6zmgze+I5BQzByWKzGM1zGlAvJSwNvgvJnk7lSBH
+        G3WwVwAGOQxFv+kFgMQFMej8WMCazKvEeYVk1XJTs56BHizqpPixG78VjuwVwr1E
+        uMiWkV5liyAzAVLXK9h98+n1Ra0VsnVs1ZYhhLRld0MNxQY4PK98efpgZcizK78t
+        TWVHmTQnH5SQdAibatjDfRyht+7VXLm8wHjF7xX9c1P60/5B0Mb471WNn2wDfX3r
+        3XPhQZQxxXUTjxO0l2eKNyf99K3N8dhhlz3qNyHeqS+IuVM0MKIgCdRWzrxuNaKm
+        Prum3ST9mxs6iKCIfCfGg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679395748; x=
-        1679482148; bh=eAsPTvVEioK0QszbY/FDpc0oedKcpD+iJBaaQUCaDB4=; b=h
-        V3R2qvs37wUJfenvO6xjYYywW9SUaHDwDSVp4vDDBEUm7W7DJmTxqcGg8Qy4Ftrp
-        BrdlAFMP19r4fHM9FUsWpgAel3wm+K20joXIlBXYrUHTs+I+yVi1cbgEt0kqPOjM
-        1PfGvbblcozPfhQyiQN59DZ/GdgvsILieQJTG6A9sKiN28Q+WssbQ/k3TJ4q+OLX
-        +kYDxpGlMBTM2B5WS9OpqrpCa7CDjgX3HqjkDqacYB+r3EuhSd9wZux2Xos/YHRz
-        tp3dJ+xfzoCy1q1BX1huPomxBK82FQU0XX88vqwCfg8MzdyNfip9/du7vBHxQNTo
-        dV7qUnkDcYCQDkq7+bcfg==
-X-ME-Sender: <xms:o4sZZGDkTeGjkWSNNG7jLnR1-SZ2NaWkPDSt-QxbcatjNf3Y1EGPFQ>
-    <xme:o4sZZAiZzvlF2svRdhr0w9gb7bPyPpp2sNQ_BguBA3PjjS0VNiFTZKfDcqG3GCq9J
-    crel9G59JIIpCtsfZw>
-X-ME-Received: <xmr:o4sZZJmwNPUAgM-kT8r5X59E-hryNN3_fs3PkOB541DIFmyNd52rl1lD6EIcfS63ridZYelQ5cI>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679395750; x=
+        1679482150; bh=qgAcqWfJH8k4dZH9u5DnU2Q7Vf0M5QmfxHEtvd37dZs=; b=b
+        9EqL3Pyri7ynF9amdRejkJ1tZP0y+MBZG8xC1I/snwitDVkKhFlfhmum2kIkXMgC
+        F4L83wsicb6ZalWlcD+wayvrnCnMthGvjVEsa2bwHo4Ri873lHqYmd5HCAO9qx94
+        ev+3NMmrKyFyxC/zzt9G48wiJKKHZR1XtsEjwycR07S0Mo8sRxdZf0ktSUewvJos
+        P2joYY7eur7xMqhHPtKT/tNdwGs2Oza0RFTNM/ZeI3jEL7+SWcBOc2q64Uuu/Hcr
+        objwJsO+weeF591cG2B5GFq8eBPNaocDchN7vqFx31jh56jgSHFKtNxDzMJjmVPI
+        hrjYvBSV6/hPgRXLU4Aug==
+X-ME-Sender: <xms:posZZF_pHKkXHQ5qjLqMKGmhCL_tioplIY9fC4JmAHptawUMBBQbTw>
+    <xme:posZZJvThMjJ6eSyyIP0jtlBDWSYFU-rdMSFr1HC5LFINuFZMCia5vzpLoulFEOJJ
+    qUxPPBA7OK0e1UXJEI>
+X-ME-Received: <xmr:posZZDCz7ypM-UfDItthTnHYy0ulLV3fw6Duxs-OcSJfYwMdphPDmMjxYTAJFAuwPFEWM5POMEQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgvddtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
@@ -55,21 +55,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgvddtucetufdoteggod
     dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
     vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomh
-X-ME-Proxy: <xmx:pIsZZEwTCH6SExbQEw2k9-o7YLoQbJE-0T7pcG8dhz55Z2rprj-LXQ>
-    <xmx:pIsZZLRDGtmdihA6kEsNy5qUYuRXjnlwRGV5YpO7PhkMX9wKyOP9IQ>
-    <xmx:pIsZZPYn2Qum8j9zDWYQozl7D63WQSY0fEYRatkyuXuzUxAJPijT5w>
-    <xmx:pIsZZJOMDLD4Y2-ckOBkbrJALEbNYyoVTU9akB7JYAd0yTEzwuMBfw>
+X-ME-Proxy: <xmx:posZZJfXL7g_gu2SDmjySRtVjsj6Og82HF_YgnzpdB5BJ_904MT09w>
+    <xmx:posZZKM5iFVI2FpSUqS9tYdS3cOMWT0XHLwmca9CHFDBgbZROTx9lw>
+    <xmx:posZZLmY88t2qu673rSbUzWVEVckW2C-M_xV1BCXqX3IWbztrdXTQg>
+    <xmx:posZZHq7-oMqu-fp5jWkk2tv0wfP6pLF-05oPBotSkSEXBxJNYJMaA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Mar 2023 06:49:07 -0400 (EDT)
+ 21 Mar 2023 06:49:09 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, philmd@linaro.org,
         sergei.shtylyov@gmail.com, aleksander.lobakin@intel.com,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 04/12] MIPS: Octeon: Opt-out 4k_cache feature
-Date:   Tue, 21 Mar 2023 10:48:44 +0000
-Message-Id: <20230321104852.25284-5-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 05/12] MIPS: cpu-features: Enable octeon_cache by cpu_type
+Date:   Tue, 21 Mar 2023 10:48:45 +0000
+Message-Id: <20230321104852.25284-6-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 In-Reply-To: <20230321104852.25284-1-jiaxun.yang@flygoat.com>
 References: <20230321104852.25284-1-jiaxun.yang@flygoat.com>
@@ -84,44 +84,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Octeon has a different cache interface with traditional R4K one,
-just opt-out this flag for octeon to avoid run R4K cache initialization
-code accidentally.
+cpu_has_octeon_cache was tied to 0 for generic cpu-features,
+whith this generic kernel built for octeon CPU won't boot.
 
-Also remove ISA level assumption for 4k cache.
+Just enable this flag by cpu_type. It won't hurt orther platforms
+because compiler will eliminate the code path on other processors.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/include/asm/cpu-features.h | 2 +-
- arch/mips/kernel/cpu-probe.c         | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/mips/include/asm/cpu-features.h | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-index c0983130a44c..c613426b0bfc 100644
+index c613426b0bfc..51a1737b03d0 100644
 --- a/arch/mips/include/asm/cpu-features.h
 +++ b/arch/mips/include/asm/cpu-features.h
-@@ -118,7 +118,7 @@
- #define cpu_has_3k_cache	__isa_lt_and_opt(1, MIPS_CPU_3K_CACHE)
- #endif
- #ifndef cpu_has_4k_cache
--#define cpu_has_4k_cache	__isa_ge_or_opt(1, MIPS_CPU_4K_CACHE)
-+#define cpu_has_4k_cache	__opt(MIPS_CPU_4K_CACHE)
+@@ -121,7 +121,24 @@
+ #define cpu_has_4k_cache	__opt(MIPS_CPU_4K_CACHE)
  #endif
  #ifndef cpu_has_octeon_cache
- #define cpu_has_octeon_cache	0
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 7ddf07f255f3..6d15a398d389 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1602,6 +1602,8 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
- static inline void cpu_probe_cavium(struct cpuinfo_mips *c, unsigned int cpu)
- {
- 	decode_configs(c);
-+	/* Octeon has different cache interface */
-+	c->options &= ~MIPS_CPU_4K_CACHE;
- 	switch (c->processor_id & PRID_IMP_MASK) {
- 	case PRID_IMP_CAVIUM_CN38XX:
- 	case PRID_IMP_CAVIUM_CN31XX:
+-#define cpu_has_octeon_cache	0
++#define cpu_has_octeon_cache						\
++({									\
++	int __res;							\
++									\
++	switch (current_cpu_type()) {					\
++	case CPU_CAVIUM_OCTEON:						\
++	case CPU_CAVIUM_OCTEON_PLUS:					\
++	case CPU_CAVIUM_OCTEON2:					\
++	case CPU_CAVIUM_OCTEON3:					\
++		__res = 1;						\
++		break;							\
++									\
++	default:							\
++		__res = 0;						\
++	}								\
++									\
++	__res;								\
++})
+ #endif
+ /* Don't override `cpu_has_fpu' to 1 or the "nofpu" option won't work.  */
+ #ifndef cpu_has_fpu
 -- 
 2.37.1 (Apple Git-137.1)
 
