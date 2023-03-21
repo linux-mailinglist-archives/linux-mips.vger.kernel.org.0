@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331896C34B5
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 15:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB746C37AE
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 18:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjCUOtH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 10:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        id S230419AbjCURFw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 13:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCUOtE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 10:49:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1224233;
-        Tue, 21 Mar 2023 07:49:02 -0700 (PDT)
+        with ESMTP id S230337AbjCURFh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 13:05:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D5E17CE9;
+        Tue, 21 Mar 2023 10:05:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29F9FB812A7;
-        Tue, 21 Mar 2023 14:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87FFC433EF;
-        Tue, 21 Mar 2023 14:48:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D59D261D3D;
+        Tue, 21 Mar 2023 17:05:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB75C433EF;
+        Tue, 21 Mar 2023 17:05:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679410139;
-        bh=I9y2VS2sujmV0QDCgNwqn2cmquxP68oIIJXpFeZ8zWQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MZgDx47LSq2yqkO1jLsajANmgKICCKk9x4MJFUx9toTpI5owdL1eGrNvQgeVzbgJX
-         DEmFUvN5LWoPvbaAAnlBlAlSY2RCq4ca/07rb/402pUA5fJNz7GySo/gDhi/M7dScg
-         OgDq60S3orSH2+/tKgz3D2nz0kz5c/SNWGgGgq4bQIJGVIb8SL2r5RYUq3Bub6EMCf
-         8wfA8dxMbY2Gs3hBjIFOv5ROJ/+HOB9rwccvJDJfIve6MSAke2z+8vOMvz/yP/jMiG
-         kIlAH/vnKOmn2cKLwJAKnEGT8QUznBwKtmay97mFbCU5w3b6ShXv2zNK6P+sG53wo7
-         QVbYmbCdj7WCQ==
+        s=k20201202; t=1679418327;
+        bh=jlgHU9SCJxg4qa7O1zwTnf+v78Uv+aUw7L56oscbVn4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SR//Z3es/uwPV/FylYLKutrPpcqB+cPpuUl7i4+EYeHAiWOyzte/q5CE0uFzEMCc6
+         Tl8W6Mm6EGyewcT/4H3YaBKW3fFGERVvWHB9EjlgGFrXEhOkY1Ro91rC3TcA/kP8hf
+         5el/RQT0rmijOmgowXMYvlaZCDhd/nTZ+RD4hDdGwEIC1ILNlv2BYzQP/InXBBv4tW
+         3lQUHYg74e+GwNYXAq18WY0Vq7lEpNJYq9u4M3TFXj5+giR1Zwd9gOM3Qc91FqHq9V
+         5kz/HmxIbxrWgOhuL4XVyusBy/sWOl+5Ki2yioS0PR23DdRYCYzaKKpv3L2MQtNooJ
+         chpznnjMxOTJw==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -41,12 +41,10 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 02/14] mm/page_alloc: add helper for checking if check_pages_enabled
-Date:   Tue, 21 Mar 2023 16:48:42 +0200
-Message-Id: <20230321144842.2401182-2-rppt@kernel.org>
+Subject: [PATCH v2 00/14] mm: move core MM initialization to mm/mm_init.c
+Date:   Tue, 21 Mar 2023 19:04:59 +0200
+Message-Id: <20230321170513.2401534-1-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230321144842.2401182-1-rppt@kernel.org>
-References: <20230321144842.2401182-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -60,58 +58,77 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Instead of duplicating long static_branch_enabled(&check_pages_enabled)
-wrap it in a helper function is_check_pages_enabled()
+Also in git:
+https://git.kernel.org/rppt/h/mm-init/v2
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Reviewed-by: David Hildenbrand <david@redhat.com>
----
- mm/page_alloc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+v2:
+* move init_cma_reserved_pageblock() from cma.c to mm_init.c
+* rename init_mem_debugging_and_hardening() to
+  mem_debugging_and_hardening_init()
+* inline pgtable_init() into mem_core_init()
+* add Acked and Reviewed tags (thanks David, hopefully I've picked them
+  right)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 87d760236dba..e1149d54d738 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -245,6 +245,11 @@ EXPORT_SYMBOL(init_on_free);
- /* perform sanity checks on struct pages being allocated or freed */
- static DEFINE_STATIC_KEY_MAYBE(CONFIG_DEBUG_VM, check_pages_enabled);
- 
-+static inline bool is_check_pages_enabled(void)
-+{
-+	return static_branch_unlikely(&check_pages_enabled);
-+}
-+
- static bool _init_on_alloc_enabled_early __read_mostly
- 				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
- static int __init early_init_on_alloc(char *buf)
-@@ -1443,7 +1448,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
- 		for (i = 1; i < (1 << order); i++) {
- 			if (compound)
- 				bad += free_tail_pages_check(page, page + i);
--			if (static_branch_unlikely(&check_pages_enabled)) {
-+			if (is_check_pages_enabled()) {
- 				if (unlikely(free_page_is_bad(page + i))) {
- 					bad++;
- 					continue;
-@@ -1456,7 +1461,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
- 		page->mapping = NULL;
- 	if (memcg_kmem_online() && PageMemcgKmem(page))
- 		__memcg_kmem_uncharge_page(page, order);
--	if (static_branch_unlikely(&check_pages_enabled)) {
-+	if (is_check_pages_enabled()) {
- 		if (free_page_is_bad(page))
- 			bad++;
- 		if (bad)
-@@ -2366,7 +2371,7 @@ static int check_new_page(struct page *page)
- 
- static inline bool check_new_pages(struct page *page, unsigned int order)
- {
--	if (static_branch_unlikely(&check_pages_enabled)) {
-+	if (is_check_pages_enabled()) {
- 		for (int i = 0; i < (1 << order); i++) {
- 			struct page *p = page + i;
- 
+v1: https://lore.kernel.org/all/20230319220008.2138576-1-rppt@kernel.org
+This set moves most of the core MM initialization to mm/mm_init.c.
+
+This largely includes free_area_init() and its helpers, functions used at
+boot time, mm_init() from init/main.c and some of the functions it calls.
+
+Aside from gaining some more space before mm/page_alloc.c hits 10k lines,
+this makes mm/page_alloc.c to be mostly about buddy allocator and moves the
+init code out of the way, which IMO improves maintainability.
+
+Besides, this allows to move a couple of declarations out of include/linux
+and make them private to mm/.
+
+And as an added bonus there a slight decrease in vmlinux size.
+For tinyconfig and defconfig on x86 I've got
+
+tinyconfig:
+   text	   data	    bss	    dec	    hex	filename
+ 853206	 289376	1200128	2342710	 23bf36	a/vmlinux
+ 853198	 289344	1200128	2342670	 23bf0e	b/vmlinux
+
+defconfig:
+    text   	   data	    bss	    dec	    	    hex	filename
+26152959	9730634	2170884	38054477	244aa4d	a/vmlinux
+26152945	9730602	2170884	38054431	244aa1f	b/vmlinux
+
+
+Mike Rapoport (IBM) (14):
+  mips: fix comment about pgtable_init()
+  mm/page_alloc: add helper for checking if check_pages_enabled
+  mm: move most of core MM initialization to mm/mm_init.c
+  mm: handle hashdist initialization in mm/mm_init.c
+  mm/page_alloc: rename page_alloc_init() to page_alloc_init_cpuhp()
+  init: fold build_all_zonelists() and page_alloc_init_cpuhp() to mm_init()
+  init,mm: move mm_init() to mm/mm_init.c and rename it to mm_core_init()
+  mm: call {ptlock,pgtable}_cache_init() directly from mm_core_init()
+  mm: move init_mem_debugging_and_hardening() to mm/mm_init.c
+  init,mm: fold late call to page_ext_init() to page_alloc_init_late()
+  mm: move mem_init_print_info() to mm_init.c
+  mm: move kmem_cache_init() declaration to mm/slab.h
+  mm: move vmalloc_init() declaration to mm/internal.h
+  MAINTAINERS: extend memblock entry to include MM initialization
+
+ MAINTAINERS                    |    3 +-
+ arch/mips/include/asm/fixmap.h |    2 +-
+ include/linux/gfp.h            |    7 +-
+ include/linux/mm.h             |    9 +-
+ include/linux/page_ext.h       |    2 -
+ include/linux/slab.h           |    1 -
+ include/linux/vmalloc.h        |    4 -
+ init/main.c                    |   74 +-
+ mm/cma.c                       |    1 +
+ mm/internal.h                  |   52 +-
+ mm/mm_init.c                   | 2547 +++++++++++++++++++++++++++
+ mm/page_alloc.c                | 2981 +++-----------------------------
+ mm/slab.h                      |    1 +
+ 13 files changed, 2856 insertions(+), 2828 deletions(-)
+
+
+base-commit: 4018ab1f7cec061b8425737328edefebdc0ab832
 -- 
 2.35.1
 
