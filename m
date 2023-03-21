@@ -2,74 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887D56C2F7D
+	by mail.lfdr.de (Postfix) with ESMTP id D4A3B6C2F7E
 	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 11:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjCUKuB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 06:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S229672AbjCUKuC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 06:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjCUKta (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 06:49:30 -0400
+        with ESMTP id S230272AbjCUKte (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 06:49:34 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE1E144A7
-        for <linux-mips@vger.kernel.org>; Tue, 21 Mar 2023 03:49:15 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 0570B3200C60;
-        Tue, 21 Mar 2023 06:49:14 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D18F12589
+        for <linux-mips@vger.kernel.org>; Tue, 21 Mar 2023 03:49:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 3CE583200C3C;
+        Tue, 21 Mar 2023 06:49:17 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 21 Mar 2023 06:49:15 -0400
+  by compute2.internal (MEProxy); Tue, 21 Mar 2023 06:49:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679395754; x=
-        1679482154; bh=fmG8dWXQ7pHMMP2xYjVfIWmx6wEOq6Ki/8U5IymqAo4=; b=n
-        +AZ9aWe2Jaaw07L3iwZMfGenZvgB74DE1n+53ZnLHM172gYrYQSNyG1RSnPoByei
-        qAgFaDyVNEQaICQEzH54JfPZYr24aIJ27j/8Ey3N+KOokwe8y90zPvZrOSw4WNnC
-        a32Ikes01FsWy3IsqV/rH4Q4Eonh9qYggaHDH6sDHEN4M+sCIiT04M5tBV4pJuVU
-        B+EIikBp+iud7PEuOUmvk2KsGPhxTqvkAgkuwpJoecRepZQVO6cQqChG3XqT70yR
-        cuPeNgu//hdFvsm/9VrP5IqMNiFlXhlz/v+LKcElOyALFxdC6yclp2nbUZm8vEoy
-        ZAYZC7XBj6e9/vA9t0WiA==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679395756; x=
+        1679482156; bh=iuMqHBbvWlN1XBbi+EUdunseY59VP/7nnMxvV9GYKJ0=; b=E
+        SHSRiSxoGyvo42alTTGUL0JKLDxKhz/DSEyOZLHH8+z9HpwH0C40Rc7xc0tam5zC
+        pdAFmP00jvTmRoOCJT/8jQTxfd7zPMegoe9I0HVq2Cz/gK5+F38qbLKFjL5iqU0I
+        aTqpMaMm4/+6XbUG+gQ4c5pHKuAuqeIcHpyc/svXDYvONUZ/dV8Nf+8Gx4dwHT0Z
+        YzQLGc/Cw2xMbVu38BA6QC7C5tylBQo3HBDuIqm/QVaVWhVgqsgBrlOeVvTPe6Ps
+        JLjMZU8TOvJf7BMJ2WbrfQn8/lsfxM+C2ryyPbFal2W9I0KGl67y4EknfGcaIXDr
+        kwJU7UhF186iAQ4zMK/DA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679395754; x=
-        1679482154; bh=fmG8dWXQ7pHMMP2xYjVfIWmx6wEOq6Ki/8U5IymqAo4=; b=B
-        Qhw+J8HpVkDH2rJhglRM8EoQq00S+kW3/7D6Z/BpT6CtHbunop6YfbjY/k4RcpoX
-        Ot0GTpUgOiMj/29nIbjuz270ayHrIRlF4xL0dJlksLdaSIhxT00PWaW8pVPv42y2
-        1DqXK/N9N21wknIiBPv1UrYK+8jGT2JzI1Ytpko5Y5/Pzia7P0enZCkA7I8OhMW5
-        pP4YccTDGi+YB3abbgj2een6wwkqNYV9E6LMJh5XaV0W/F7te54AbEW7bl2K9N+m
-        bSY934hlYxMwJAJGjrH3jSCQWYbjRqks8lfZYRECx285uoiViCrYm2x4+YLtosKq
-        c2kj1m3sLUyPmYKhy2XwA==
-X-ME-Sender: <xms:qosZZHTjNv-sr2zwVV-78pvADzauEy2SN0tjxNIHNukrUCDzEMOdcg>
-    <xme:qosZZIwsn4mHD0JJpZmbAxxfK68HKfTCijQTkX5LBHr5Dczi4hjwaTQw0AV-vdKFY
-    f0kJjIZic-l0c6_zPk>
-X-ME-Received: <xmr:qosZZM0XPAtM47_1upF-FVkiWzNMdeLykboLRdBV0DkMvWoWzYVoyLYnUVnciVGiTeY81cbIp2I>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679395756; x=
+        1679482156; bh=iuMqHBbvWlN1XBbi+EUdunseY59VP/7nnMxvV9GYKJ0=; b=Z
+        /ICw94R6CUh0ycgbvSNBdrIK1/rXPjO58HT/ZbJx+26X0Jx+0BwVm+vYO9yYE3lg
+        wjIRoBeI7Ex1vCPk7W14JDrKL5dEr5o5yEOdaUaM54oNibTlTkiBT+T+YUIPTAx3
+        oRRhOdrPA8w057b8cncUs8euwIJ6Kdc4QcWUJoNmLU08cPx9j+gyR4uFheqi7uG1
+        lDvXZKvGDEq24Gi6qmb19wTYUl6Pjm+WN6eHMLDo/4Ys3d2F2p/TNRtdUbH69wUy
+        TWeglBWwgIpaQp1s/H+IBL8beLA8+Jyfu2TGZcuWEmxIPNLsDFpNThRcFl47HB7B
+        CQ4t0LdvLsnEPil7hBcFg==
+X-ME-Sender: <xms:rIsZZB8QhBsPQ6i7TsnnUfP0kTZxPTdRGxAnhE1jVatByCD6oohQHQ>
+    <xme:rIsZZFvTQGRFL4GYdleo4FNQj71af8UZ9biVTBfQgscQM0mYZXrbZfMtFBOcaEIh2
+    62P-vgbEazQRSi6AII>
+X-ME-Received: <xmr:rIsZZPAXwqYfv6I_jOjAL8Wmb2ZBF88sraRZu9OiGmE8u36KJe9MXQCTuYCztmA5c1mN53ty2A8>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgvddtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
     ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
     dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
-    vgepvdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
+    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomh
-X-ME-Proxy: <xmx:qosZZHC818HtsNBR1812uSVgRSLeJYlSqoIQ9o8Uy9Kl-t5h1vTi8g>
-    <xmx:qosZZAigq29cIXGAF78wfbHdS2XXQMIf2-AznYR3A-9Qhvkytap2ZA>
-    <xmx:qosZZLrvILbF1NIDWdEvyuJUkjTuuXP8ZdR30iUzNMg0tG_6_U4bkA>
-    <xmx:qosZZIeNsd4EX01V6ksMZPvIF8Hmh8BrXwBA_uWouDrjplZ29h3sWA>
+X-ME-Proxy: <xmx:rIsZZFc9SdgLYEiwWIS3gV_RhjlJHGcQh8jz1ZN6zZISp3_UXoyRug>
+    <xmx:rIsZZGMMwx680BphIHAi6XU3o3xza4Br92Cm6o99pYOsG6mIyRsH7A>
+    <xmx:rIsZZHnUVxwLTNE3P1poxy94-iIyxjZvF0FV6J8TN1iHNg2ekAD8tQ>
+    <xmx:rIsZZDoEHDNWnXzfNtJuSkR9v2y5xGNT-BQ9mUEu-UeRCLtsGfpk6A>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Mar 2023 06:49:13 -0400 (EDT)
+ 21 Mar 2023 06:49:15 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, philmd@linaro.org,
         sergei.shtylyov@gmail.com, aleksander.lobakin@intel.com,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 07/12] MIPS: Octeon: Allow CVMSEG to be disabled
-Date:   Tue, 21 Mar 2023 10:48:47 +0000
-Message-Id: <20230321104852.25284-8-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 08/12] MIPS: Loongson: Move arch cflags to MIPS top level Makefile
+Date:   Tue, 21 Mar 2023 10:48:48 +0000
+Message-Id: <20230321104852.25284-9-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 In-Reply-To: <20230321104852.25284-1-jiaxun.yang@flygoat.com>
 References: <20230321104852.25284-1-jiaxun.yang@flygoat.com>
@@ -84,62 +84,137 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Don't include cvmseg states into thread_status when
-CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE is not defined or 0.
-
-Fix compile for kernel without this feature.
+Arch cflags should be independent to Platform.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/include/asm/processor.h | 7 ++++++-
- arch/mips/kernel/asm-offsets.c    | 3 +++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ arch/mips/Makefile             | 38 ++++++++++++++++++++++++++++++++++
+ arch/mips/loongson2ef/Platform | 35 -------------------------------
+ arch/mips/loongson64/Platform  | 16 --------------
+ 3 files changed, 38 insertions(+), 51 deletions(-)
 
-diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
-index 3fde1ff72bd1..ae2cd37a38f0 100644
---- a/arch/mips/include/asm/processor.h
-+++ b/arch/mips/include/asm/processor.h
-@@ -202,11 +202,13 @@ struct octeon_cop2_state {
- #define COP2_INIT						\
- 	.cp2			= {0,},
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 04e46ec24319..a7a4ee66a9d3 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -181,9 +181,47 @@ endif
+ cflags-$(CONFIG_CAVIUM_CN63XXP1) += -Wa,-mfix-cn63xxp1
+ cflags-$(CONFIG_CPU_BMIPS)	+= -march=mips32 -Wa,-mips32 -Wa,--trap
  
-+#if defined(CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE) && \
-+	CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE > 0
- struct octeon_cvmseg_state {
- 	unsigned long cvmseg[CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE]
- 			    [cpu_dcache_line_size() / sizeof(unsigned long)];
- };
++cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e -Wa,--trap
++cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f -Wa,--trap
++# Some -march= flags enable MMI instructions, and GCC complains about that
++# support being enabled alongside -msoft-float. Thus explicitly disable MMI.
++cflags-$(CONFIG_CPU_LOONGSON2EF) += $(call cc-option,-mno-loongson-mmi)
++ifdef CONFIG_CPU_LOONGSON64
++cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
++cflags-$(CONFIG_CC_IS_GCC) += -march=loongson3a
++cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
++endif
++cflags-$(CONFIG_CPU_LOONGSON64) += $(call cc-option,-mno-loongson-mmi)
++
+ cflags-$(CONFIG_CPU_R4000_WORKAROUNDS)	+= $(call cc-option,-mfix-r4000,)
+ cflags-$(CONFIG_CPU_R4400_WORKAROUNDS)	+= $(call cc-option,-mfix-r4400,)
+ cflags-$(CONFIG_CPU_DADDI_WORKAROUNDS)	+= $(call cc-option,-mno-daddi,)
++ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
++cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa,-mfix-loongson2f-nop
++cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa,-mfix-loongson2f-jump
++endif
++
++#
++# Some versions of binutils, not currently mainline as of 2019/02/04, support
++# an -mfix-loongson3-llsc flag which emits a sync prior to each ll instruction
++# to work around a CPU bug (see __SYNC_loongson3_war in asm/sync.h for a
++# description).
++#
++# We disable this in order to prevent the assembler meddling with the
++# instruction that labels refer to, ie. if we label an ll instruction:
++#
++# 1: ll v0, 0(a0)
++#
++# ...then with the assembler fix applied the label may actually point at a sync
++# instruction inserted by the assembler, and if we were using the label in an
++# exception table the table would no longer contain the address of the ll
++# instruction.
++#
++# Avoid this by explicitly disabling that assembler behaviour. If upstream
++# binutils does not merge support for the flag then we can revisit & remove
++# this later - for now it ensures vendor toolchains don't cause problems.
++#
++cflags-$(CONFIG_CPU_LOONGSON64)	+= $(call as-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
+ 
+ # For smartmips configurations, there are hundreds of warnings due to ISA overrides
+ # in assembly and header files. smartmips is only supported for MIPS32r1 onwards
+diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
+index c6f7a4b95997..d446b705fba4 100644
+--- a/arch/mips/loongson2ef/Platform
++++ b/arch/mips/loongson2ef/Platform
+@@ -2,41 +2,6 @@
+ # Loongson Processors' Support
+ #
+ 
+-cflags-$(CONFIG_CPU_LOONGSON2EF)	+= -Wa,--trap
+-cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e
+-cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
+-#
+-# Some versions of binutils, not currently mainline as of 2019/02/04, support
+-# an -mfix-loongson3-llsc flag which emits a sync prior to each ll instruction
+-# to work around a CPU bug (see __SYNC_loongson3_war in asm/sync.h for a
+-# description).
+-#
+-# We disable this in order to prevent the assembler meddling with the
+-# instruction that labels refer to, ie. if we label an ll instruction:
+-#
+-# 1: ll v0, 0(a0)
+-#
+-# ...then with the assembler fix applied the label may actually point at a sync
+-# instruction inserted by the assembler, and if we were using the label in an
+-# exception table the table would no longer contain the address of the ll
+-# instruction.
+-#
+-# Avoid this by explicitly disabling that assembler behaviour. If upstream
+-# binutils does not merge support for the flag then we can revisit & remove
+-# this later - for now it ensures vendor toolchains don't cause problems.
+-#
+-cflags-$(CONFIG_CPU_LOONGSON2EF)	+= $(call cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
 -
-+#endif
- #else
- #define COP2_INIT
- #endif
-@@ -263,7 +265,10 @@ struct thread_struct {
- 	unsigned long trap_nr;
- #ifdef CONFIG_CPU_CAVIUM_OCTEON
- 	struct octeon_cop2_state cp2 __attribute__ ((__aligned__(128)));
-+#if defined(CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE) && \
-+	CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE > 0
- 	struct octeon_cvmseg_state cvmseg __attribute__ ((__aligned__(128)));
-+#endif
- #endif
- 	struct mips_abi *abi;
- };
-diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
-index c4501897b870..40fd4051bb3d 100644
---- a/arch/mips/kernel/asm-offsets.c
-+++ b/arch/mips/kernel/asm-offsets.c
-@@ -306,7 +306,10 @@ void output_octeon_cop2_state_defines(void)
- 	OFFSET(OCTEON_CP2_HSH_IVW,	octeon_cop2_state, cop2_hsh_ivw);
- 	OFFSET(OCTEON_CP2_SHA3,		octeon_cop2_state, cop2_sha3);
- 	OFFSET(THREAD_CP2,	task_struct, thread.cp2);
-+#if defined(CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE) && \
-+    CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE > 0
- 	OFFSET(THREAD_CVMSEG,	task_struct, thread.cvmseg.cvmseg);
-+#endif
- 	BLANK();
- }
- #endif
+-# Enable the workarounds for Loongson2f
+-ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
+-cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa,-mfix-loongson2f-nop
+-cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa,-mfix-loongson2f-jump
+-endif
+-
+-# Some -march= flags enable MMI instructions, and GCC complains about that
+-# support being enabled alongside -msoft-float. Thus explicitly disable MMI.
+-cflags-y += $(call cc-option,-mno-loongson-mmi)
+-
+ #
+ # Loongson Machines' Support
+ #
+diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+index 473404cae1c4..49c9889e3d56 100644
+--- a/arch/mips/loongson64/Platform
++++ b/arch/mips/loongson64/Platform
+@@ -1,19 +1,3 @@
+-#
+-# Loongson Processors' Support
+-#
+-
+-
+-cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
+-
+-ifdef CONFIG_CPU_LOONGSON64
+-cflags-$(CONFIG_CC_IS_GCC) += -march=loongson3a
+-cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
+-endif
+-
+-# Some -march= flags enable MMI instructions, and GCC complains about that
+-# support being enabled alongside -msoft-float. Thus explicitly disable MMI.
+-cflags-y += $(call cc-option,-mno-loongson-mmi)
+-
+ #
+ # Loongson Machines' Support
+ #
 -- 
 2.37.1 (Apple Git-137.1)
 
