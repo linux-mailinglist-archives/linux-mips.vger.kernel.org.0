@@ -2,100 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02516C2D77
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 10:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD306C2F6F
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Mar 2023 11:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjCUJE3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Mar 2023 05:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S230409AbjCUKtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Mar 2023 06:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjCUJEO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 05:04:14 -0400
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5CE497CE;
-        Tue, 21 Mar 2023 02:03:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679389375; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=WqRN3QzU/H7CaDpyz81HgDFIkuUMULXko1qK+O+0z29BUNDrIhGPK3QqY3tfkvJs0fEMjoY8lR8RtPbczIE9J87IdJn87deu4cme5ydsQavkHZU2us1W4Jfufj5ixCmx6xloQSdhIBGELL6SKgkNP26z1YwEYDcPgSErnnimVTA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1679389375; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=sB3XH7Ovi9XCs+7jQmmSOIgLMpgr0aqXAXi1VknrLAU=; 
-        b=h7/UY7O9kNpcsBI3wTGm9bh6zGM9SYpYrfK7cX0m4HhEaRSPiCFdYpwIrWgrjOFCEQw/IyLpnokvkAMvz9p1memBfVzWuORRh4Y0upaQvND86V+5NlWVKNpIjruybNt28hMvsYgTA2/Gyn+8pT6m3q0OI1wFpanfyVFY2s0JpCA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679389375;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=sB3XH7Ovi9XCs+7jQmmSOIgLMpgr0aqXAXi1VknrLAU=;
-        b=cWA94N13PqvOSF08RkF11GPjZqAX0mPMweYC254siqNGr7+QHGaKmvnb7TA9o4QV
-        Hh+2uuWV1+sx/jHM49gZzCj+dIXUU7sMdXl+L0NYe4t/tFnsEh12BoOvF84ctIgntd8
-        66sIdn8RAOsjFJa3FTOd+0BEZVfhNSu7VPMqT2Iw=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1679389372126149.2113472793228; Tue, 21 Mar 2023 02:02:52 -0700 (PDT)
-Message-ID: <6ed317bc-ce3a-2da2-1d96-f0ea8ff0b48c@arinc9.com>
-Date:   Tue, 21 Mar 2023 12:02:47 +0300
+        with ESMTP id S230348AbjCUKtJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Mar 2023 06:49:09 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2858E125A4
+        for <linux-mips@vger.kernel.org>; Tue, 21 Mar 2023 03:49:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id A220D3200C5D;
+        Tue, 21 Mar 2023 06:48:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 21 Mar 2023 06:49:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1679395739; x=1679482139; bh=Wa9XqqJF7m
+        HfL/+1pD7rFqFP7r6yFt9oRA/0BTTDMog=; b=4LpMgYBlD9J4WP3MbBpdQdmZqr
+        8Z1VvM+YJ7pcXSkf2gkU8uZyjOq4nNyBucaQrqBbbzoZ7X2ElZjgB8E1HmHISPn5
+        42WGHE1E1v7gyNA5EXz5jm7j8sDdgVhxxSL90Y9ZhExo19o8Aac/SOV8n8phI4II
+        Hiq4YUMy32Gihk99JzsHCJcSWOKD0SdvBpAob/RTvka/OAh+cUHnZR1Uc50BsjwR
+        2Is27nE8/HS3JwsP+I01NLfqMXxW4yPUXA2m3tiZuYAUKRiO6BTICFDdUL3k1Hkn
+        b8Tiz0gRcZQAXZi7wn2RIPAsd30j4WwOkyeNQOSL6+qarC9fPLV1ASe+31bw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679395739; x=1679482139; bh=Wa9XqqJF7mHfL
+        /+1pD7rFqFP7r6yFt9oRA/0BTTDMog=; b=mFUYQ4JYK9IlOu/vzJ/0skCy0D1C4
+        uL0xyD7TLvGiibDFLYPPZeqYPWgF/7hCqIg/GXZSZT9HKOW8pomOlX/WLUZheIfD
+        Y6MCpXXPgWom+cd0tfhogqOeC1tuvSBOLSIDQUwzbVX16FKh6klDolyH551cq5jI
+        lQSoGJA5hZqZcBndepwZjO5pYAqfdHh+D4QjniFCfkKRMan/6fzFHmSYFSH8cMM0
+        Ib0yOjzlDaNSpbtuUyPViu6K02K5vH+R0hAIPWksuzLYctt6/A8rTlt5WBWok90F
+        bbOE1/jymtAY+Cj88Hde1cWC4wwljMZ6wDLY8PPcOdV4Lokt4v7rEp11w==
+X-ME-Sender: <xms:mosZZMw2qBwVPiHH9b-OZPNzzMdONoLGkBcB0DsJ_8kykx5J34VLvg>
+    <xme:mosZZAS54Aj2wFfIbmH4jNZsTLCGwMMZeh3jECQedCbYiKKkA5BVe1JUmqrV9JrCo
+    9ka_SiY_bdyY1KeDis>
+X-ME-Received: <xmr:mosZZOW2-KwnYVbpTJDdX8zA9tkaMeMehfW4G2kra8YJIhafctkk0AT0iCrhwXk1fOS3ZS4ha7s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdeuteekleeuudfgueethe
+    dtuddthfdtleffgefhieehfeeigedvtdeuveetiedunecuffhomhgrihhnpehkvghrnhgv
+    lhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:mosZZKgJN5AoIV2sZOGmBe-p_WXn7HmBDNYhN3nRI-AlIRMDvohgzw>
+    <xmx:mosZZODQP62bZHjZdAbdZ0XfYfJlgqDtATVcu3JVltu8BHukdkO9hA>
+    <xmx:mosZZLLLO2lAscth0xLQGdRnyXHiNA7zgoW2sHyrHKZ4Nk9lem-Piw>
+    <xmx:m4sZZB-BTyK-7vl67WSVeY8d3mh-qQX4F9hHFP6piopyePKVAfa_eA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Mar 2023 06:48:57 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, philmd@linaro.org,
+        sergei.shtylyov@gmail.com, aleksander.lobakin@intel.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 00/12] MIPS Virt board support
+Date:   Tue, 21 Mar 2023 10:48:40 +0000
+Message-Id: <20230321104852.25284-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
- <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
- <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
- <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
- <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
- <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
- <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
- <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
- <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
- <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
- <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
- <82f517b5-6697-3379-8d71-163b0d17735d@linaro.org>
- <d640a929-b6a0-1552-e66a-3a7bbabbc69f@arinc9.com>
- <2150938b-5433-6f51-c404-2c0f6976f864@linaro.org>
- <1c279b0a-c814-2fe3-0432-2aa6b3dff16e@arinc9.com>
- <9f8e7a74-35c6-6db5-4960-1efa79a23983@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <9f8e7a74-35c6-6db5-4960-1efa79a23983@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21.03.2023 12:01, Krzysztof Kozlowski wrote:
-> On 21/03/2023 09:53, Arınç ÜNAL wrote:
->>>
->>> I do not see how choosing one variant for compatibles having two
->>> variants of prefixes, complicates things. Following this argument
->>> choosing "ralink" also complicates!
->>
->> The idea is to make every compatible string of MTMIPS to have the ralink
->> prefix so it's not mediatek on some schemas and ralink on others. Simpler.
-> 
-> Which is an ABI break, so you cannot do it.
+Hi all,
 
-No, both strings stay on the driver, it's the schemas that will only 
-keep ralink.
+This patchset adds support for the MIPS Virt board, which is based
+on my QEMU patch [1].
 
-Arınç
+It can work with all CPUs from MIPS Technologies, and also Loongson-2E,
+Loongson-2F, Cavium Octeon, R4000.
+
+Thanks to generic platform, there is nothing much to do for the platform
+support, mostly decoupling CPU features with platform features, except for
+last two patches.
+
+Note that due to QEMU limitation, SMP support is currently broken for all
+processors other than MIPS I6400/I6500. This is because QEMU is now treatiing
+secundary CPUs as a VPE (MIPS Release 6 VP). I'm going to fix that after getting
+virt board support merged in QEMU.
+
+Thanks.
+
+- Jiaxun
+[1]: https://lore.kernel.org/qemu-devel/20230308000745.56394-1-philmd@linaro.org/
+
+Jiaxun Yang (12):
+  MIPS: Move declaration of bcache ops to cache.c
+  MIPS: smp-cps: Disable coherence setup for unsupported ISA
+  MIPS: mips-cm: Check availability of config registers
+  MIPS: Octeon: Opt-out 4k_cache feature
+  MIPS: cpu-features: Enable octeon_cache by cpu_type
+  MIPS: c-octeon: Provide alternative SMP cache flush function
+  MIPS: Octeon: Allow CVMSEG to be disabled
+  MIPS: Loongson: Move arch cflags to MIPS top level Makefile
+  MIPS: Loongson: Don't select platform features with CPU
+  MIPS: Octeon: Disable CVMSEG by default on other platforms
+  MIPS: Add board config for virt board
+  MIPS: generic: Enable all CPUs supported by virt board in Kconfig
+
+ arch/mips/Kconfig                           |  6 ++--
+ arch/mips/Makefile                          | 38 +++++++++++++++++++++
+ arch/mips/cavium-octeon/Kconfig             |  3 +-
+ arch/mips/configs/generic/board-virt.config | 38 +++++++++++++++++++++
+ arch/mips/include/asm/cpu-features.h        | 21 ++++++++++--
+ arch/mips/include/asm/processor.h           |  7 +++-
+ arch/mips/kernel/asm-offsets.c              |  3 ++
+ arch/mips/kernel/cps-vec.S                  |  5 +++
+ arch/mips/kernel/cpu-probe.c                |  2 ++
+ arch/mips/kernel/mips-cm.c                  |  9 +++--
+ arch/mips/kernel/smp-cps.c                  |  5 +++
+ arch/mips/loongson2ef/Kconfig               |  3 ++
+ arch/mips/loongson2ef/Platform              | 35 -------------------
+ arch/mips/loongson64/Platform               | 16 ---------
+ arch/mips/mm/c-octeon.c                     |  5 +++
+ arch/mips/mm/c-r4k.c                        | 14 --------
+ arch/mips/mm/cache.c                        | 17 +++++++++
+ 17 files changed, 154 insertions(+), 73 deletions(-)
+ create mode 100644 arch/mips/configs/generic/board-virt.config
+
+-- 
+2.37.1 (Apple Git-137.1)
+
