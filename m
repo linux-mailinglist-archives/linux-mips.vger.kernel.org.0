@@ -2,110 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A985D6C472B
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 11:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691036C473E
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 11:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjCVKDX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 06:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
+        id S229852AbjCVKJK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 06:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjCVKDP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 06:03:15 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F4429155;
-        Wed, 22 Mar 2023 03:03:13 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 7F9D5320024A;
-        Wed, 22 Mar 2023 06:03:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 22 Mar 2023 06:03:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679479392; x=
-        1679565792; bh=aD1YIpUAa25QM2vuMLDfbqJJy4ZVEI7gALNgRAtV62M=; b=m
-        IWnEzzwVmjE0SLnbRans3uxqxIOl+LUGhThMm3aTg539LQNogEPmItSOoC9xAwDW
-        wxCmDjwIqVVfTXBVGYd4jSf1dARwGgyFJkyZrUkv7GVo8NgoUzpOGLi4a819nRc7
-        ljkUaxJUE56hUh5n7RKxSI+5ROs2xQDej5D3OgF+hxnpX8PDOGVZiokGiIVcRyWo
-        chYLNaXQBYoTqXoGFNUrd9mhYEoqeAy4HEZ8OKwFMDJbETqir3FPFdl3ti2hExMR
-        cWCdoWqC8YX3pdXqiW2PKAMY/wkk26WOOxwVxX2hL2zYwiEMmJcH6XvfsM9tvWwV
-        fLLoqRT0N32s13ZZ5qUAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679479392; x=1679565792; bh=aD1YIpUAa25QM
-        2vuMLDfbqJJy4ZVEI7gALNgRAtV62M=; b=BJyLOtByEwChh7v1QLbjVOrX2wqmL
-        Ien77v6Pg+m4cQkYOg4OHc297QYzeviQdqgNeRMPoyv2zDXUHW6gJx7MnO8xj3vk
-        94/+e2UikiOB5prZHmjr1sTYNg9AqzDXjS5LSJXjd/cPPqDQ6xActnplgIthhXC6
-        sQ64lOm42YyF6GwZcKNG80Y67iB0DS9hkUFkjYcdcXmMFfvm/z2pboWFgd/F4hFD
-        yMl+avVtwWb+hLJilvhqg5RwJiMMET2CcM+pnPXUSOo5ihkWx5yn//5EMlZnViXh
-        349c54nacGtuowuOUrxKtHCvM8s6aA7To1RHKArNGEGRiffF38p/LdnHQ==
-X-ME-Sender: <xms:X9IaZDS3LWO01xs_x3cN1GTo99NifgNvRudh5MIJtE94eLBwE-fmQQ>
-    <xme:X9IaZEzV9ZBHIScjZYoS0AOOQ2eLgnOwCjG2Y1JE17oD3wQzUqGjwNLJXNATsbwxv
-    4K-ZGEXbM8sTjOXJEU>
-X-ME-Received: <xmr:X9IaZI1xvhcNn1qUY1vllQRUJg-evj6lJZvOTrrz5yI3_E85IcKQM9q-2QbzbMFMpqKJaQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeekvddvjeffheetgedtvdfgieejiedvgeejieet
-    jeehieehveffueekfeehffdvveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:X9IaZDBz-m6wJSJkfOtwllYUqqQ6YjLHPPQB-urEQe-PhwhreFoXKg>
-    <xmx:X9IaZMjvo1AHTrz-HzmxZGDnlYfvtAk8_05U7QsHzaxajyVvpQdWRA>
-    <xmx:X9IaZHpkgZxmiYXfWk-7G5kBI1VzwwoJbkh685U8TDJDJbpPSzjBuQ>
-    <xmx:YNIaZHVRB7n2YHQ3RNNtdz704m4SyOm9S7-TYF5X9E2LXJ6jJ9mW9w>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Mar 2023 06:03:11 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id F3C1810A603; Wed, 22 Mar 2023 13:03:09 +0300 (+03)
-Date:   Wed, 22 Mar 2023 13:03:09 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] loongarch: drop ranges for definition of
- ARCH_FORCE_MAX_ORDER
-Message-ID: <20230322100309.lefchtsrvtsyboln@box>
-References: <20230322081727.2516291-1-rppt@kernel.org>
+        with ESMTP id S229847AbjCVKJJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 06:09:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6385AB55;
+        Wed, 22 Mar 2023 03:09:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92C2961291;
+        Wed, 22 Mar 2023 10:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DA9C433EF;
+        Wed, 22 Mar 2023 10:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679479748;
+        bh=zgcC6CFHZEkI+Y2u0uiAz37vl2FpD8zXEz7zQwJ3YgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mBldOBrrjEJQyxaaZp7OQNB1SSqzEmP3LPBASeMLFq0NxHJmyy8pb62xgPTuT2rrl
+         6K8u9Y1zqQsnpQNjWOjqedrMPvF8Ypo1JOQyHcV3iZmDCTNcgSenm66S3/vV/eZCe5
+         NO8+Sg8q0OXzMRCkokx03NpJ38tNXVfmxv4EyRljot5UFqB3fTTN/zABBuocnmCFUO
+         48I7P+cBAHwLRO0bfnYpe8HnrTETSbOT6/UUrcOQ1MiJgQsljMY/ULuROdwFH/Uy7o
+         f+DA0TznZBkO3xGTPxfNMjQCylCW0GGRUysXlecbKAq2nUlUo0tzBF2nc5vWiaraJ2
+         MBpKTrjx2sUtg==
+Date:   Wed, 22 Mar 2023 12:08:53 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 08/14] mm: call {ptlock,pgtable}_cache_init() directly
+ from mm_core_init()
+Message-ID: <ZBrTtQKe7SowXSKb@kernel.org>
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-9-rppt@kernel.org>
+ <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322081727.2516291-1-rppt@kernel.org>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:17:27AM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Wed, Mar 22, 2023 at 12:06:18PM +0300, Sergei Shtylyov wrote:
+> On 3/21/23 8:05 PM, Mike Rapoport wrote:
 > 
-> LoongArch defines insane ranges for ARCH_FORCE_MAX_ORDER allowing
-> MAX_ORDER up to 63, which implies maximal contiguous allocation size of
-> 2^63 pages.
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > and drop pgtable_init() as it has no real value and it's name is
 > 
-> Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
-> simple integer with sensible defaults.
-> 
-> Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
-> will be able to do so but they won't be mislead by the bogus ranges.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+>    Its name.
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+oops :)
+
+Andrew, can you replace this patch with the updated version, please?
+ 
+From 52420723c9bfa84aa48f666330e96f9e5b2f3248 Mon Sep 17 00:00:00 2001
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Date: Sat, 18 Mar 2023 13:55:28 +0200
+Subject: [PATCH v3] mm: call {ptlock,pgtable}_cache_init() directly from
+ mm_core_init()
+
+and drop pgtable_init() as it has no real value and its name is
+misleading.
+
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+---
+ include/linux/mm.h | 6 ------
+ mm/mm_init.c       | 3 ++-
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 2d7f095136fc..c3c67d8bc833 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2782,12 +2782,6 @@ static inline bool ptlock_init(struct page *page) { return true; }
+ static inline void ptlock_free(struct page *page) {}
+ #endif /* USE_SPLIT_PTE_PTLOCKS */
+ 
+-static inline void pgtable_init(void)
+-{
+-	ptlock_cache_init();
+-	pgtable_cache_init();
+-}
+-
+ static inline bool pgtable_pte_page_ctor(struct page *page)
+ {
+ 	if (!ptlock_init(page))
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index bba73f1fb277..f1475413394d 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -2584,7 +2584,8 @@ void __init mm_core_init(void)
+ 	 */
+ 	page_ext_init_flatmem_late();
+ 	kmemleak_init();
+-	pgtable_init();
++	ptlock_cache_init();
++	pgtable_cache_init();
+ 	debug_objects_mem_init();
+ 	vmalloc_init();
+ 	/* If no deferred init page_ext now, as vmap is fully initialized */
+-- 
+2.35.1
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Sincerely yours,
+Mike.
