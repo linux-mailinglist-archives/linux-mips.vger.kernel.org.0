@@ -2,97 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D150E6C51B2
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 18:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0576C5201
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 18:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCVRDX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 13:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S231335AbjCVRPf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 13:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjCVRDV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 13:03:21 -0400
+        with ESMTP id S231374AbjCVRPc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 13:15:32 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E483C14EB2
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 10:02:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41633CD1
+        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 10:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679504484;
+        s=mimecast20190719; t=1679505289;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2ZS63eR35hQQpuztlWGnGcv/jaBVlYMjTvbdWWfPWAY=;
-        b=R3wXvEy72H8DcVvRWZo9a//6v+b5En0EzBxfc4xHkMLClw1tc78evZr3GgYrWXhBrKPOXg
-        PEwV9S3IIQ+BoQp1ZiT51WCfYq0YSGMMCv6TBC3xop+CgRumdNECwRpYwXSVkF+1+n4K0G
-        +R5bCoOdVHpe8s7wie3+uVSMT3ivBYQ=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fhcQx2NxtkDvsHqlKyViRVKylH4cYj+8iP0eb4uVraM=;
+        b=TF//jagikZYkWAtOfUVPPqr4Z7UgGOJ3+OzYNMXj/LWEpWR0ph4l5gvrVlCmWrQHV6tVOu
+        tf8CG5z57rDrXydTWg/2UQqhiCx42RDj0acsF+BYfmgJYE8eoBTYgr95BliX+233eZV1cf
+        hOmoiqfayQdiFcHQjb4Bu6ug0vkQ8lg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-35-QNY-eFdSN0GUIBaHx60_yw-1; Wed, 22 Mar 2023 13:01:23 -0400
-X-MC-Unique: QNY-eFdSN0GUIBaHx60_yw-1
-Received: by mail-oi1-f198.google.com with SMTP id w11-20020a0568080d4b00b00386d5b8445dso6116395oik.1
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 10:01:23 -0700 (PDT)
+ us-mta-9-F6gmRPNFOFm4fzzkNAUeuA-1; Wed, 22 Mar 2023 13:14:48 -0400
+X-MC-Unique: F6gmRPNFOFm4fzzkNAUeuA-1
+Received: by mail-wm1-f69.google.com with SMTP id k1-20020a05600c1c8100b003ee6dbceb81so806253wms.5
+        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 10:14:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679504482;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ZS63eR35hQQpuztlWGnGcv/jaBVlYMjTvbdWWfPWAY=;
-        b=S1GsF1oCiBXv8v2DlbydzXVLKD1rZ3RJq0JFvwfo67ihLiU52lt3W8BDo8rHeQZkyX
-         PWZ2cN8QQyOBOv/+FxjII/wGSiAEZ3vAPFE0hHQGUnrpNe3wE7CqXgZPzXySL6+mJlPh
-         m202keEYoQ11cquSAIQ0npfz2DzojX7YMx1KOLagd2jNeYBX5g71SdaXgmm37c3/MBw/
-         +QYtKmGazMLP+3FuHJKTLk4MWD3JYeAgtAjanjTraF53/sVUQ0U9kojV0hfG4MMxTiOG
-         hE3/fsDKkhZuk/PBjfBfqJWsVxYeAtQhJbuBJveouh4LG9Kh7kfbm3iQGElC8rsaaIRx
-         fgNQ==
-X-Gm-Message-State: AO0yUKUEjXK7ZEnJXBCMm5350/yiyoI2K++mrAY+yej4ep78ib1EvyNS
-        QwMhDZpvb3qLhaLhrE/ZlW19gmp1WRc9hzijBW6ijnp3uFIwL3f5dSm6qzPG6ojVcfuktZHwPUc
-        Xg+Bi7/v858PAmPxcr+b0GQ==
-X-Received: by 2002:a05:6830:1397:b0:69b:c665:95ef with SMTP id d23-20020a056830139700b0069bc66595efmr1849094otq.32.1679504481964;
-        Wed, 22 Mar 2023 10:01:21 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9OhxWG20qH1i/Yp6i2el5aA4zIJA9CTIhUo/MbvkBAyasdde0EdhDBEsgwB6QV+kPj7JTH5w==
-X-Received: by 2002:a05:6830:1397:b0:69b:c665:95ef with SMTP id d23-20020a056830139700b0069bc66595efmr1849034otq.32.1679504481408;
-        Wed, 22 Mar 2023 10:01:21 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id g19-20020a05620a40d300b007290be5557bsm11733172qko.38.2023.03.22.10.01.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:01:20 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
-In-Reply-To: <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-8-vschneid@redhat.com>
- <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
- <xhsmhmt45c703.mognet@vschneid.remote.csb>
- <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
-Date:   Wed, 22 Mar 2023 17:01:13 +0000
-Message-ID: <xhsmhjzz8d8km.mognet@vschneid.remote.csb>
+        d=1e100.net; s=20210112; t=1679505285;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fhcQx2NxtkDvsHqlKyViRVKylH4cYj+8iP0eb4uVraM=;
+        b=l76hJyZmYlxs371r09OOfPT4O1KNKlPMcci9lZqqtHOXJhPl662kEQTK8jJTuvETxr
+         xd+oXfNUxby/Nt84BM5+i1HKdA02S52WRYkHz1Y9OVVvpwwNKxQ8V8hO+tRFlWrqplb6
+         lnn8cXzdA38Za9tzI5SAkb2fwvK9VTVJwSwOUL/jS+acNZ4Gf83MAvE9z2Ock0zuNDGJ
+         VTn4eUENB0NipINFlhPkU4jhpV7w6N/bMVPBonBx/LRUkJ6FFTHXSHyMWagfqXxrgu6K
+         44LBqGB+3Rhl7FycT+8rvZxAJrLDyLfMf9U4GO9qxvzts27tuwU9Zuile9okaBXH8MpU
+         lNuA==
+X-Gm-Message-State: AO0yUKXNQdYf54SSlPhw7iBmY3gMNcpxcHSQtetlLQ3wK6XHxijQ0d4T
+        zRORFAcgp2R+MLVOkVouE+8pbJb4ppvNYI4jZz1xm+XOT3T/ly1dQ4LCUW4m/JPSdlK1ccU7SlF
+        LZqgbQp+wnWxWmKkO226JYifCabl5wg==
+X-Received: by 2002:a05:600c:21c6:b0:3e2:1368:e395 with SMTP id x6-20020a05600c21c600b003e21368e395mr191860wmj.33.1679505285754;
+        Wed, 22 Mar 2023 10:14:45 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8ktA60W5SATyyrsmfQ99IK3ZDV+uvMG2CKK0dUg+fqy5KgjxxPddfBPOT/AJ0lUW89XuBWog==
+X-Received: by 2002:a05:600c:21c6:b0:3e2:1368:e395 with SMTP id x6-20020a05600c21c600b003e21368e395mr191841wmj.33.1679505285384;
+        Wed, 22 Mar 2023 10:14:45 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id r6-20020a05600c35c600b003ed29189777sm24112940wmq.47.2023.03.22.10.14.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 10:14:44 -0700 (PDT)
+Message-ID: <ef94f19a-4754-6b19-1042-b7c9bca98035@redhat.com>
+Date:   Wed, 22 Mar 2023 18:14:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] mips: drop ranges for definition of ARCH_FORCE_MAX_ORDER
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-mips@vger.kernel.org
+References: <20230322081520.2516226-1-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230322081520.2516226-1-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,142 +87,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/03/23 15:04, Peter Zijlstra wrote:
-> On Wed, Mar 22, 2023 at 12:20:28PM +0000, Valentin Schneider wrote:
->> On 22/03/23 10:53, Peter Zijlstra wrote:
->
->> > Hurmph... so we only really consume @func when we IPI. Would it not be
->> > more useful to trace this thing for *every* csd enqeued?
->>
->> It's true that any CSD enqueued on that CPU's call_single_queue in the
->> [first CSD llist_add()'ed, IPI IRQ hits] timeframe is a potential source of
->> interference.
->>
->> However, can we be sure that first CSD isn't an indirect cause for the
->> following ones? say the target CPU exits RCU EQS due to the IPI, there's a
->> bit of time before it gets to flush_smp_call_function_queue() where some other CSD
->> could be enqueued *because* of that change in state.
->>
->> I couldn't find a easy example of that, I might be biased as this is where
->> I'd like to go wrt IPI'ing isolated CPUs in usermode. But regardless, when
->> correlating an IPI IRQ with its source, we'd always have to look at the
->> first CSD in that CSD stack.
->
-> So I was thinking something like this:
->
+On 22.03.23 09:15, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> MIPS defines insane ranges for ARCH_FORCE_MAX_ORDER allowing MAX_ORDER
+> up to 63, which implies maximal contiguous allocation size of 2^63
+> pages.
+> 
+> Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
+> simple integer with sensible defaults.
+> 
+> Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
+> will be able to do so but they won't be mislead by the bogus ranges.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 > ---
-> Subject: trace,smp: Trace all smp_function_call*() invocations
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Wed Mar 22 14:58:36 CET 2023
->
-> (Ab)use the trace_ipi_send_cpu*() family to trace all
-> smp_function_call*() invocations, not only those that result in an
-> actual IPI.
->
-> The queued entries log their callback function while the actual IPIs
-> are traced on generic_smp_call_function_single_interrupt().
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/smp.c |   58 ++++++++++++++++++++++++++++++----------------------------
->  1 file changed, 30 insertions(+), 28 deletions(-)
->
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -106,18 +106,20 @@ void __init call_function_init(void)
->  }
->
->  static __always_inline void
-> -send_call_function_single_ipi(int cpu, smp_call_func_t func)
-> +send_call_function_single_ipi(int cpu)
->  {
->       if (call_function_single_prep_ipi(cpu)) {
-> -		trace_ipi_send_cpu(cpu, _RET_IP_, func);
-> +		trace_ipi_send_cpu(cpu, _RET_IP_,
-> +				   generic_smp_call_function_single_interrupt);
+>   arch/mips/Kconfig | 4 ----
+>   1 file changed, 4 deletions(-)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 3e8b765b8c7b..a0f6e9d0a561 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -2137,13 +2137,9 @@ endchoice
+>   
+>   config ARCH_FORCE_MAX_ORDER
+>   	int "Maximum zone order"
+> -	range 13 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+>   	default "13" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+> -	range 12 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
+>   	default "12" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
+> -	range 11 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
+>   	default "11" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
+> -	range 0 63
+>   	default "10"
+>   	help
+>   	  The kernel memory allocator divides physically contiguous memory
 
-Hm, this does get rid of the func being passed down the helpers, but this
-means the trace events are now stateful, i.e. I need the first and last
-events in a CSD stack to figure out which one actually caused the IPI.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-It also requires whoever is looking at the trace to be aware of which IPIs
-are attached to a CSD, and which ones aren't. ATM that's only the resched
-IPI, but per the cover letter there's more to come (e.g. tick_broadcast()
-for arm64/riscv and a few others). For instance:
+-- 
+Thanks,
 
-       hackbench-157   [001]    10.894320: ipi_send_cpu:         cpu=3 callsite=check_preempt_curr+0x37 callback=0x0
-       hackbench-157   [001]    10.895068: ipi_send_cpu:         cpu=3 callsite=try_to_wake_up+0x29e callback=sched_ttwu_pending+0x0
-       hackbench-157   [001]    10.895068: ipi_send_cpu:         cpu=3 callsite=try_to_wake_up+0x29e callback=generic_smp_call_function_single_interrupt+0x0
-
-That first one sent a RESCHEDULE IPI, the second one a CALL_FUNCTION one,
-but you really have to know what you're looking at...
-
-Are you worried about the @func being pushed down? Staring at x86 asm is
-not good for the soul, but AFAICT this does cause an extra register to be
-popped in the prologue because all of the helpers are __always_inline, so
-both paths of the static key(s) are in the same stackframe.
-
-I can "improve" this with:
-
----
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 5cd680a7e78ef..55f120dae1713 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -511,6 +511,26 @@ raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func
- 
- static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
- 
-+static noinline void __smp_call_single_queue_trace(int cpu, struct llist_node *node)
-+{
-+	call_single_data_t *csd;
-+	smp_call_func_t func;
-+
-+
-+	/*
-+	 * We have to check the type of the CSD before queueing it, because
-+	 * once queued it can have its flags cleared by
-+	 *   flush_smp_call_function_queue()
-+	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
-+	 * executes migration_cpu_stop() on the remote CPU).
-+	 */
-+	csd = container_of(node, call_single_data_t, node.llist);
-+	func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
-+		sched_ttwu_pending : csd->func;
-+
-+	raw_smp_call_single_queue(cpu, node, func);
-+}
-+
- void __smp_call_single_queue(int cpu, struct llist_node *node)
- {
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
-@@ -525,25 +545,10 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
- 		}
- 	}
- #endif
--	/*
--	 * We have to check the type of the CSD before queueing it, because
--	 * once queued it can have its flags cleared by
--	 *   flush_smp_call_function_queue()
--	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
--	 * executes migration_cpu_stop() on the remote CPU).
--	 */
--	if (trace_ipi_send_cpumask_enabled()) {
--		call_single_data_t *csd;
--		smp_call_func_t func;
--
--		csd = container_of(node, call_single_data_t, node.llist);
--		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
--			sched_ttwu_pending : csd->func;
--
--		raw_smp_call_single_queue(cpu, node, func);
--	} else {
-+	if (trace_ipi_send_cpumask_enabled())
-+		__smp_call_single_queue_trace(cpu, node);
-+	else
- 		raw_smp_call_single_queue(cpu, node, NULL);
--	}
- }
- 
- /*
+David / dhildenb
 
