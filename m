@@ -2,86 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE2C6C4E97
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 15:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DBA6C4EC7
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 16:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjCVOym (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 10:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S229973AbjCVPBP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 11:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjCVOyZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 10:54:25 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AFB1E5F7
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 07:53:05 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso765755wmo.0
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 07:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679496784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XlAbqyMQyxvunTln8KVLdMQBh24n7pyXjoPD37FQIJ8=;
-        b=wz3ob0KdC9zZBP6ei6sp+d/mpFckZr0/hViQ//b8sN62MIIJ7+8lx1+LDKLGJBB1T1
-         C2kQjK97cHrBCrdcPRSYS3uP8tjDz1sN9UgyfBoMvi1KN0EpfpkQ61npHseheyeDlxYf
-         Ffxe3YwmU4S4KOZxk4R7cSATKWD2fniFxZE2RydgrfVEPg5mSlQfd7LGat11Lm4aVYjn
-         fz0uOn1eW+MRsQkwEzRfy2rEJoHvbCeKz/eNFt/OGZdOj3/ZQpO5RNxgGPWkP/1xQPjK
-         4m5enW1LjZ38V6iYbexEJ+NGu5M0DCq8SHlxtWAJslIMpy1KUiqEAgzDhuSJoraUE04J
-         6iFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679496784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XlAbqyMQyxvunTln8KVLdMQBh24n7pyXjoPD37FQIJ8=;
-        b=d2W1g6pXX8RjX/dVTfzAKh1lVqIxR8bAkiSm3UzNLUI+zH04aTGL1fcir5GA15FEI1
-         b3KYmR8lekAbkuBLw+7L7COwfbDjF6oSZBqyX3khI+ofyDFIMpY3LXNsqceaDczRq9Qo
-         PCcX1ETOsQpL/NsqrGSBly23yaKysOVdwDmg9nWr9gzCPAjg3zpoW9ufZ9FozcREbDkh
-         Idgy2/pO7qoxXCaoaJjAy7gGLfOBwcYw0ugRBI1umjqWAGBj6gGI7fqUjmYeNMsmospa
-         VqslqD2Hzpz4bXwl/xn8nfdTVEL0kWLSAHu7prD+Cljw+aXmbP2F2FjF3lYoqycYRD+v
-         mjaw==
-X-Gm-Message-State: AO0yUKVrhk1+dICNXzLG73ZnGNmZbzGIn5k0si32ThBNwC4skuHQ5o6u
-        XwZprcQHow3/RfnCpmIN2u05/fjFAEcQuGVR1GaH9g==
-X-Google-Smtp-Source: AK7set/DMAStdErTYYhNuy3JUmz+4R9vEeWDoXAl/2dC87kqGFZgRKL8gCrpdOx7N5Y0j+9f/uZRKQ==
-X-Received: by 2002:a1c:7216:0:b0:3ee:5754:f139 with SMTP id n22-20020a1c7216000000b003ee5754f139mr2393005wmc.13.1679496784074;
-        Wed, 22 Mar 2023 07:53:04 -0700 (PDT)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id he12-20020a05600c540c00b003ee7169d57dsm890106wmb.40.2023.03.22.07.53.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 07:53:03 -0700 (PDT)
-Message-ID: <82fd9d68-7dcf-efcc-ba5d-99563770c728@linaro.org>
-Date:   Wed, 22 Mar 2023 15:53:02 +0100
+        with ESMTP id S230328AbjCVPBM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 11:01:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C51915557;
+        Wed, 22 Mar 2023 08:01:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0492B81CF4;
+        Wed, 22 Mar 2023 15:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7036AC433EF;
+        Wed, 22 Mar 2023 15:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679497264;
+        bh=rK4fyj+3bFI3UORG7apfsrTb82JTbZ64Z4g0fMI2vnw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JYwOpSXlIN5RJomg9drFUx2vQ9A1FIwpMJJj+jIZJnC0cpiClSkUb30pJZARvG9NS
+         +wvSQkt0iZp/xLOWqCihJUOjCuNpug1wTHldt2eCzEOZ7WaaQO2Tew4SJCWAm/xA+1
+         d7ZpLgkCz91H/cmsBzNIEXGLbsOZ/XIg2DdQjLHo5uhaiP6C5XoqkynRV+t02OKvqU
+         ylGiRXI83yigTTWx3DJBU/IvKwUiFIE0AH/rcCqtuP4S8FWRX74PGUvg+PnBqLNAIi
+         OM7KaY0l4ep0U2crJqPBDnDnc/16og4esog0Co2NoXnH1tlBf+F/OXVIp/Px4Gmgwe
+         JQLPAnw8c/6qA==
+Date:   Wed, 22 Mar 2023 17:00:49 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2 04/14] mm: handle hashdist initialization in
+ mm/mm_init.c
+Message-ID: <ZBsYIeIEjuYwyiTO@kernel.org>
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-5-rppt@kernel.org>
+ <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH] MIPS: octeon: Use of_address_to_resource()
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230319163148.225443-1-robh@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230319163148.225443-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19/3/23 17:31, Rob Herring wrote:
-> Replace of_get_address() and of_translate_address() calls with single
-> call to of_address_to_resource().
+On Wed, Mar 22, 2023 at 03:49:24PM +0100, Vlastimil Babka wrote:
+> On 3/21/23 18:05, Mike Rapoport wrote:
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > The hashdist variable must be initialized before the first call to
+> > alloc_large_system_hash() and free_area_init() looks like a better place
+> > for it than page_alloc_init().
+> > 
+> > Move hashdist handling to mm/mm_init.c
+> > 
+> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > Acked-by: David Hildenbrand <david@redhat.com>
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   arch/mips/cavium-octeon/octeon-irq.c | 35 ++++++++++++----------------
->   1 file changed, 15 insertions(+), 20 deletions(-)
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> 
+> Looks like this will move the fixup_hashdist() call earlier, but can't
+> result in seeing less N_MEMORY nodes than before, right?
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+hashdist must be set before the first call to alloc_large_system_hash() and
+after the nodes present at boot time are initialized, so setting it in the
+end of free_area_init() is Ok.
 
+> I wonder if the whole thing lacks hotplug support anyway, what if system
+> boots with one node and more are added later? Hmm.
+
+alloc_large_system_hash() is called really early even for !HASH_EARLY
+cases. Not sure it's feasible to redistribute the hashes allocated with it
+when new node is added.
+ 
+> > ---
+> >  mm/mm_init.c    | 22 ++++++++++++++++++++++
+> >  mm/page_alloc.c | 18 ------------------
+> >  2 files changed, 22 insertions(+), 18 deletions(-)
+> > 
+> > diff --git a/mm/mm_init.c b/mm/mm_init.c
+> > index 68d0187c7886..2e60c7186132 100644
+> > --- a/mm/mm_init.c
+> > +++ b/mm/mm_init.c
+> > @@ -607,6 +607,25 @@ int __meminit early_pfn_to_nid(unsigned long pfn)
+> >  
+> >  	return nid;
+> >  }
+> > +
+> > +int hashdist = HASHDIST_DEFAULT;
+> > +
+> > +static int __init set_hashdist(char *str)
+> > +{
+> > +	if (!str)
+> > +		return 0;
+> > +	hashdist = simple_strtoul(str, &str, 0);
+> > +	return 1;
+> > +}
+> > +__setup("hashdist=", set_hashdist);
+> > +
+> > +static inline void fixup_hashdist(void)
+> > +{
+> > +	if (num_node_state(N_MEMORY) == 1)
+> > +		hashdist = 0;
+> > +}
+> > +#else
+> > +static inline void fixup_hashdist(void) {}
+> >  #endif /* CONFIG_NUMA */
+> >  
+> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> > @@ -1855,6 +1874,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+> >  	}
+> >  
+> >  	memmap_init();
+> > +
+> > +	/* disable hash distribution for systems with a single node */
+> > +	fixup_hashdist();
+> >  }
+> >  
+> >  /**
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index c56c147bdf27..ff6a2fff2880 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -6383,28 +6383,10 @@ static int page_alloc_cpu_online(unsigned int cpu)
+> >  	return 0;
+> >  }
+> >  
+> > -#ifdef CONFIG_NUMA
+> > -int hashdist = HASHDIST_DEFAULT;
+> > -
+> > -static int __init set_hashdist(char *str)
+> > -{
+> > -	if (!str)
+> > -		return 0;
+> > -	hashdist = simple_strtoul(str, &str, 0);
+> > -	return 1;
+> > -}
+> > -__setup("hashdist=", set_hashdist);
+> > -#endif
+> > -
+> >  void __init page_alloc_init(void)
+> >  {
+> >  	int ret;
+> >  
+> > -#ifdef CONFIG_NUMA
+> > -	if (num_node_state(N_MEMORY) == 1)
+> > -		hashdist = 0;
+> > -#endif
+> > -
+> >  	ret = cpuhp_setup_state_nocalls(CPUHP_PAGE_ALLOC,
+> >  					"mm/page_alloc:pcp",
+> >  					page_alloc_cpu_online,
+> 
+
+-- 
+Sincerely yours,
+Mike.
