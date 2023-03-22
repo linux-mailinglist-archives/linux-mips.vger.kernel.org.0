@@ -2,79 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A566C45A1
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 10:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FA46C45B7
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 10:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjCVJGc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 05:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S230273AbjCVJIJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 05:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjCVJG2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 05:06:28 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90AE5DCA6;
-        Wed, 22 Mar 2023 02:06:22 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id g18so18146549ljl.3;
-        Wed, 22 Mar 2023 02:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679475981;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B37GRcVLF1b1+pD+dUSBHo5HFxRZdJXBgKi6iaJTmuM=;
-        b=UltHazn2sTziDGYHazVsxjJCYKirhJWuQ+bFybY/p3DyPON4HkSOiLQQTMeDuWDg6N
-         zmaGQieryWnTc1FjetDjcs75C7nVxK8hkIHySF3pUIsp6FavsKnkmsi+B0H9HgCVvcIU
-         8r2rBIT56mLC1icGbOT/vXfNsF96s973c/LAvsbjbXYPD7NLu0hVomDfSBVj3aVSnmuR
-         SkdqaPKEp37BXvQGc7E7Csk39kDAe/xvQdfxHjKUk8+CCigk0H6z33ISxBbWEjuSgW9l
-         pPdWfMg3mj74Lz5Jhx/thdi+22/B+BDJRunbxgEwr6BOCwYDZpPth3YOyxIduH2/l3NK
-         XBZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679475981;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B37GRcVLF1b1+pD+dUSBHo5HFxRZdJXBgKi6iaJTmuM=;
-        b=Yv4o15Z0kEkM2ozZzL+OrBkhE/BJmxiRrW31QK469g4ArBUpqQZ2PnlS9jb0VYdA+C
-         US54O4huYrvIq4e0czqCNlbIzgzDsQwalUVR/agr/dVUwaLEFchHgPC/wLVM9p6YFk6C
-         /UQ4Ql2u6RhGVUCA86/Sr9AR5hGhmCPP2GoS+xT9BtNP5icsNkukPijpRN1CbZ+sRMr3
-         oE/JU9IU4AIMU2/04tRoh/COHCIXIeJymzEp2sWYFae6y6KDQAdhTZYFtxMtIx/TXgnR
-         R/Br7p3c1OvEKEy9JkTG0WLoclGn0ki+ko0NmNNymdYyg7PFVsI+IrDXyDU/KBc9YUkO
-         BEvg==
-X-Gm-Message-State: AO0yUKUkql48arlIOdjpiwTii9NfbwUrnsbbT5Ty8HCkyth9V4qvLYfI
-        n1z1d9V9vEZsx/m686wUoUa1RaV5UhI=
-X-Google-Smtp-Source: AK7set9zcMWn75el33gW5LDV9jaBRE1xysy0o4ZjMvJzfpOpDh45J/wSQZt7CpxTgr9mYQa81v+AUg==
-X-Received: by 2002:a2e:9b4d:0:b0:29e:e9f6:3b99 with SMTP id o13-20020a2e9b4d000000b0029ee9f63b99mr1909106ljj.46.1679475981032;
-        Wed, 22 Mar 2023 02:06:21 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.72.74])
-        by smtp.gmail.com with ESMTPSA id i21-20020a2e8095000000b0029c92214148sm1324709ljg.73.2023.03.22.02.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 02:06:20 -0700 (PDT)
-Subject: Re: [PATCH v2 08/14] mm: call {ptlock,pgtable}_cache_init() directly
- from mm_core_init()
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-9-rppt@kernel.org>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
-Date:   Wed, 22 Mar 2023 12:06:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20230321170513.2401534-9-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        with ESMTP id S230296AbjCVJIB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 05:08:01 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31D85DEFC;
+        Wed, 22 Mar 2023 02:07:38 -0700 (PDT)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PhN0S4y60z8QrkZ;
+        Wed, 22 Mar 2023 17:07:36 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.99.176])
+        by mse-fl2.zte.com.cn with SMTP id 32M96wPo059116;
+        Wed, 22 Mar 2023 17:06:58 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 22 Mar 2023 17:07:01 +0800 (CST)
+Date:   Wed, 22 Mar 2023 17:07:01 +0800 (CST)
+X-Zmail-TransId: 2afa641ac535fffffffff6a-21bb6
+X-Mailer: Zmail v1.0
+Message-ID: <202303221707010277273@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <ulf.hansson@linaro.org>
+Cc:     <paul@crapouillou.net>, <linux-mips@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBtbWM6IGp6NDc0MDogVXNlIGRldl9lcnJfcHJvYmUoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 32M96wPo059116
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 641AC558.001 by FangMail milter!
+X-FangMail-Envelope: 1679476056/4PhN0S4y60z8QrkZ/641AC558.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 641AC558.001/4PhN0S4y60z8QrkZ
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,17 +53,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/21/23 8:05 PM, Mike Rapoport wrote:
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> and drop pgtable_init() as it has no real value and it's name is
+Replace the open-code with dev_err_probe() to simplify the code.
 
-   Its name.
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/mmc/host/jz4740_mmc.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> misleading.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-[...]
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 698450afa7bb..a6ad03b24add 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -232,10 +232,7 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
+ 	if (!IS_ERR(host->dma_tx))
+ 		return 0;
 
-MBR, Sergey
+-	if (PTR_ERR(host->dma_tx) != -ENODEV) {
+-		dev_err(dev, "Failed to get dma tx-rx channel\n");
+-		return PTR_ERR(host->dma_tx);
+-	}
++	return dev_err_probe(dev, PTR_ERR(host->dma_tx), "Failed to get dma tx-rx channel\n");
+
+ 	host->dma_tx = dma_request_chan(mmc_dev(host->mmc), "tx");
+ 	if (IS_ERR(host->dma_tx)) {
+-- 
+2.25.1
