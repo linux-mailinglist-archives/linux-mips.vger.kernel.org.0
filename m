@@ -2,134 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38366C5203
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 18:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7F56C5262
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 18:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCVRPq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 13:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S230499AbjCVRYJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 13:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbjCVRPn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 13:15:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149B064878
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 10:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679505301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vBppRhOrRBmo4SnTGVUqBOXa70ZawMCQKN6tcvrZ2lw=;
-        b=fGf3CWLdLciBbnc59toFTUP5wEwFZge+Fsh4bKIdy56hFfxb9ER32vvD5anmit81c4wh7W
-        jHwrkvurPQVl+lSXw7OWTnjeeh9UhkW8e9jhOzP474mYQlkQX20/f3hikET6vA+qA5N70f
-        vz1kIGWc2VRqWa7vAeGSt8PBbbMxzfQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-507-azoIymrlN8GeW2W6bwp7Hw-1; Wed, 22 Mar 2023 13:14:59 -0400
-X-MC-Unique: azoIymrlN8GeW2W6bwp7Hw-1
-Received: by mail-wm1-f70.google.com with SMTP id bi7-20020a05600c3d8700b003edecc610abso5237077wmb.7
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 10:14:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505298;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vBppRhOrRBmo4SnTGVUqBOXa70ZawMCQKN6tcvrZ2lw=;
-        b=Nhrifof57NXI4uiASX3dsZ6XcJAmSVw1x4zmRSg9Is20kAL6a3Lijx9s/ghe6iJIKl
-         hlI3Zkbp2M4Il7pYBFQaV7E6zpTh/oYrSW9oX5DXLbRtu895za4h+ldt9/P9t0/bhBdp
-         8vnRlSSCJyoj8V7eNsFFMVxgxztup+kt28lswkcZduZhS80WQPEQt7UX/1xmq2C2U1G5
-         pU3MloofiHz50EvftJg+SDGvDo4kvjqognLUlAD/OwCP74AW1blvPmGWHBc6eD0IRLZh
-         KsI+VvBL+0oCTI3ZB5QmXAhOdbUbHrv0hysVnWv31r43KB8bhqCdZH0mV8G8E9vpkDyp
-         XuJA==
-X-Gm-Message-State: AAQBX9f+dOPjy7Sd7hgAZTzRsjykxhqOxwrQ05nHCyEekFDiYiGhowDd
-        iolkfGEikeUiMuQ2SS8QCdqr65vTvHkvux1pMhpgck0Qeu2QkJUmWk6PNTXRZ6xxWfB7DO18tuw
-        EvG28/Va4MJ06S+160wjtVg==
-X-Received: by 2002:adf:eac3:0:b0:2d1:6104:76af with SMTP id o3-20020adfeac3000000b002d1610476afmr435264wrn.28.1679505297940;
-        Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YsyeX98944Y42ANtbCd1Si/fvtvfwMtr422hgZd2KEDMQKJqDia4iR2kzSJPSt4GGwSrvF0A==
-X-Received: by 2002:adf:eac3:0:b0:2d1:6104:76af with SMTP id o3-20020adfeac3000000b002d1610476afmr435247wrn.28.1679505297615;
-        Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
-        by smtp.gmail.com with ESMTPSA id e13-20020a056000120d00b002d7a75a2c20sm6918238wrx.80.2023.03.22.10.14.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
-Message-ID: <f2729e78-bb8b-b1b7-7a5e-0e7d5075d33c@redhat.com>
-Date:   Wed, 22 Mar 2023 18:14:55 +0100
+        with ESMTP id S230419AbjCVRXy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 13:23:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9CF1E9F1;
+        Wed, 22 Mar 2023 10:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HnYLxxQqsoSk7nx4q+NwD1PkqBw2pnBv/8dY5LfvgsA=; b=vKlpYO9J+SAy1WEvcIK14Yjf/L
+        ynXvDY79SlwKJanrwgzYEOXnnioQBgLUy3CrFk50zk6gexGOR1WBu1U+8z0ez8ooEunmN+/ckV8u/
+        fy6I/cTWTP+4yMLeJuJFSHIWQ42bpQDS+bJQxNOOStKEvKo3a2qnMtBXerFw3bacxs/V9jZatrsWt
+        uJV0KmhWKaEXSUc4+JDi8NPaOVbgXp0+gUnCEyoIpshljJbDcPWNCZ4z8pkm1g7PNfXMezXN9THbL
+        CZ6PxxMDhbKXM9wqJQTkrqybw+bklZDk0F+1b+Uh49FUnabKcm7orMqSW89DJ5taY4bb5wRmuPYfj
+        wjzBDEmQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pf2Ag-003CAY-SR; Wed, 22 Mar 2023 17:22:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 333E830030F;
+        Wed, 22 Mar 2023 18:22:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1C3D4205D08C3; Wed, 22 Mar 2023 18:22:42 +0100 (CET)
+Date:   Wed, 22 Mar 2023 18:22:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
+Message-ID: <20230322172242.GH2357380@hirez.programming.kicks-ass.net>
+References: <20230307143558.294354-1-vschneid@redhat.com>
+ <20230307143558.294354-8-vschneid@redhat.com>
+ <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+ <xhsmhmt45c703.mognet@vschneid.remote.csb>
+ <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
+ <xhsmhjzz8d8km.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] loongarch: drop ranges for definition of
- ARCH_FORCE_MAX_ORDER
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org
-References: <20230322081727.2516291-1-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230322081727.2516291-1-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhjzz8d8km.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22.03.23 09:17, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> LoongArch defines insane ranges for ARCH_FORCE_MAX_ORDER allowing
-> MAX_ORDER up to 63, which implies maximal contiguous allocation size of
-> 2^63 pages.
-> 
-> Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
-> simple integer with sensible defaults.
-> 
-> Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
-> will be able to do so but they won't be mislead by the bogus ranges.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
-> 
-> This applies to akpm/mm-unstable tree
-> 
->   arch/loongarch/Kconfig | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 272a3a12c98d..e1e3a3828962 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -420,11 +420,8 @@ config NODES_SHIFT
->   
->   config ARCH_FORCE_MAX_ORDER
->   	int "Maximum zone order"
-> -	range 13 63 if PAGE_SIZE_64KB
->   	default "13" if PAGE_SIZE_64KB
-> -	range 11 63 if PAGE_SIZE_16KB
->   	default "11" if PAGE_SIZE_16KB
-> -	range 10 63
->   	default "10"
->   	help
->   	  The kernel memory allocator divides physically contiguous memory
+On Wed, Mar 22, 2023 at 05:01:13PM +0000, Valentin Schneider wrote:
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+> > So I was thinking something like this:
 
--- 
-Thanks,
+> Hm, this does get rid of the func being passed down the helpers, but this
+> means the trace events are now stateful, i.e. I need the first and last
+> events in a CSD stack to figure out which one actually caused the IPI.
 
-David / dhildenb
+Isn't much of tracing stateful? I mean, why am I always writing awk
+programs to parse trace output?
+
+The one that is directly followed by
+generic_smp_call_function_single_interrupt() (horrible name that), is
+the one that tripped the IPI.
+
+> It also requires whoever is looking at the trace to be aware of which IPIs
+> are attached to a CSD, and which ones aren't. ATM that's only the resched
+> IPI, but per the cover letter there's more to come (e.g. tick_broadcast()
+> for arm64/riscv and a few others). For instance:
+> 
+>        hackbench-157   [001]    10.894320: ipi_send_cpu:         cpu=3 callsite=check_preempt_curr+0x37 callback=0x0
+
+Arguably we should be setting callback to scheduler_ipi(), except
+ofcourse, that's not an actual function...
+
+Maybe we can do "extern inline" for the actual users and provide a dummy
+function for the symbol when tracing.
+
+>        hackbench-157   [001]    10.895068: ipi_send_cpu:         cpu=3 callsite=try_to_wake_up+0x29e callback=sched_ttwu_pending+0x0
+>        hackbench-157   [001]    10.895068: ipi_send_cpu:         cpu=3 callsite=try_to_wake_up+0x29e callback=generic_smp_call_function_single_interrupt+0x0
+> 
+> That first one sent a RESCHEDULE IPI, the second one a CALL_FUNCTION one,
+> but you really have to know what you're looking at...
+
+But you have to know that anyway, you can't do tracing and not know wtf
+you're doing. Or rather, if you do, I don't give a crap and you can keep
+the pieces :-)
+
+Grepping the callback should be pretty quick resolution at to what trips
+it, no?
+
+(also, if you *realllllly* can't manage, we can always add yet another
+argument that gives a type thingy)
+
+> Are you worried about the @func being pushed down?
+
+Not really, I was finding it odd that only the first csd was being
+logged. Either you should log them all (after all, the target CPU will
+run them all and you might still wonder where the heck they came from)
+or it should log none and always report that hideous long function name
+I can't be arsed to type again :-)
+
+> Staring at x86 asm is not good for the soul,
+
+Scarred for life :-) What's worse, due to being exposed to Intel syntax
+at a young age, I'm now permantently confused as to the argument order
+of x86 asm.
 
