@@ -2,77 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4716C4E84
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 15:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE2C6C4E97
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 15:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCVOwU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 10:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S230228AbjCVOym (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 10:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjCVOwC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 10:52:02 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9052465C6A;
-        Wed, 22 Mar 2023 07:50:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DF90B20ED8;
-        Wed, 22 Mar 2023 14:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679496626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V/1b+lUImqchwctHYvwFdftZc6h6aA5n3zMAKNVMaV4=;
-        b=IO3cQVGFlvqDW6ZyGcdGTEGcrVoU+lFnGGdVxdblELxXQ8C+7Mx9vYTG9ZyP81FIx3wFYP
-        NxKky5I0KbMgrgW+ZD7PthJn5RhNsYe2ioG0lh81ggFZZtzGim+qv+SCd6xX6OgJpv0PFH
-        zC5SdKHQnt/Ky7F5U6F/EeVl+2J6anY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679496626;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V/1b+lUImqchwctHYvwFdftZc6h6aA5n3zMAKNVMaV4=;
-        b=+iAL7cCRrrBwt1PYzay5Usw9GyrCJmiAwc0v+DILaDEAHuDT3a+KJhTUXdWebqT/FpMVOq
-        OK80Ln6U6IIYANCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5685138E9;
-        Wed, 22 Mar 2023 14:50:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ch52K7IVG2RZNgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 14:50:26 +0000
-Message-ID: <f7aa436a-4bf2-66d8-4742-0a724cb95797@suse.cz>
-Date:   Wed, 22 Mar 2023 15:50:26 +0100
+        with ESMTP id S229999AbjCVOyZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 10:54:25 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AFB1E5F7
+        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 07:53:05 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso765755wmo.0
+        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 07:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679496784;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XlAbqyMQyxvunTln8KVLdMQBh24n7pyXjoPD37FQIJ8=;
+        b=wz3ob0KdC9zZBP6ei6sp+d/mpFckZr0/hViQ//b8sN62MIIJ7+8lx1+LDKLGJBB1T1
+         C2kQjK97cHrBCrdcPRSYS3uP8tjDz1sN9UgyfBoMvi1KN0EpfpkQ61npHseheyeDlxYf
+         Ffxe3YwmU4S4KOZxk4R7cSATKWD2fniFxZE2RydgrfVEPg5mSlQfd7LGat11Lm4aVYjn
+         fz0uOn1eW+MRsQkwEzRfy2rEJoHvbCeKz/eNFt/OGZdOj3/ZQpO5RNxgGPWkP/1xQPjK
+         4m5enW1LjZ38V6iYbexEJ+NGu5M0DCq8SHlxtWAJslIMpy1KUiqEAgzDhuSJoraUE04J
+         6iFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679496784;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XlAbqyMQyxvunTln8KVLdMQBh24n7pyXjoPD37FQIJ8=;
+        b=d2W1g6pXX8RjX/dVTfzAKh1lVqIxR8bAkiSm3UzNLUI+zH04aTGL1fcir5GA15FEI1
+         b3KYmR8lekAbkuBLw+7L7COwfbDjF6oSZBqyX3khI+ofyDFIMpY3LXNsqceaDczRq9Qo
+         PCcX1ETOsQpL/NsqrGSBly23yaKysOVdwDmg9nWr9gzCPAjg3zpoW9ufZ9FozcREbDkh
+         Idgy2/pO7qoxXCaoaJjAy7gGLfOBwcYw0ugRBI1umjqWAGBj6gGI7fqUjmYeNMsmospa
+         VqslqD2Hzpz4bXwl/xn8nfdTVEL0kWLSAHu7prD+Cljw+aXmbP2F2FjF3lYoqycYRD+v
+         mjaw==
+X-Gm-Message-State: AO0yUKVrhk1+dICNXzLG73ZnGNmZbzGIn5k0si32ThBNwC4skuHQ5o6u
+        XwZprcQHow3/RfnCpmIN2u05/fjFAEcQuGVR1GaH9g==
+X-Google-Smtp-Source: AK7set/DMAStdErTYYhNuy3JUmz+4R9vEeWDoXAl/2dC87kqGFZgRKL8gCrpdOx7N5Y0j+9f/uZRKQ==
+X-Received: by 2002:a1c:7216:0:b0:3ee:5754:f139 with SMTP id n22-20020a1c7216000000b003ee5754f139mr2393005wmc.13.1679496784074;
+        Wed, 22 Mar 2023 07:53:04 -0700 (PDT)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id he12-20020a05600c540c00b003ee7169d57dsm890106wmb.40.2023.03.22.07.53.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 07:53:03 -0700 (PDT)
+Message-ID: <82fd9d68-7dcf-efcc-ba5d-99563770c728@linaro.org>
+Date:   Wed, 22 Mar 2023 15:53:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 05/14] mm/page_alloc: rename page_alloc_init() to
- page_alloc_init_cpuhp()
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH] MIPS: octeon: Use of_address_to_resource()
 Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-6-rppt@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230321170513.2401534-6-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Rob Herring <robh@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230319163148.225443-1-robh@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230319163148.225443-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,63 +74,14 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/21/23 18:05, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 19/3/23 17:31, Rob Herring wrote:
+> Replace of_get_address() and of_translate_address() calls with single
+> call to of_address_to_resource().
 > 
-> The page_alloc_init() name is really misleading because all this
-> function does is sets up CPU hotplug callbacks for the page allocator.
-> 
-> Rename it to page_alloc_init_cpuhp() so that name will reflect what the
-> function does.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  include/linux/gfp.h | 2 +-
->  init/main.c         | 2 +-
->  mm/page_alloc.c     | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index 7c554e4bd49f..ed8cb537c6a7 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -319,7 +319,7 @@ extern void page_frag_free(void *addr);
->  #define __free_page(page) __free_pages((page), 0)
->  #define free_page(addr) free_pages((addr), 0)
->  
-> -void page_alloc_init(void);
-> +void page_alloc_init_cpuhp(void);
->  void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp);
->  void drain_all_pages(struct zone *zone);
->  void drain_local_pages(struct zone *zone);
-> diff --git a/init/main.c b/init/main.c
-> index 4425d1783d5c..b2499bee7a3c 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -969,7 +969,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
->  	boot_cpu_hotplug_init();
->  
->  	build_all_zonelists(NULL);
-> -	page_alloc_init();
-> +	page_alloc_init_cpuhp();
->  
->  	pr_notice("Kernel command line: %s\n", saved_command_line);
->  	/* parameters may set static keys */
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index ff6a2fff2880..d1276bfe7a30 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6383,7 +6383,7 @@ static int page_alloc_cpu_online(unsigned int cpu)
->  	return 0;
->  }
->  
-> -void __init page_alloc_init(void)
-> +void __init page_alloc_init_cpuhp(void)
->  {
->  	int ret;
->  
+>   arch/mips/cavium-octeon/octeon-irq.c | 35 ++++++++++++----------------
+>   1 file changed, 15 insertions(+), 20 deletions(-)
+
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
