@@ -2,77 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197C06C470D
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 10:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952F76C476D
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 11:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCVJzU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 05:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S229597AbjCVKVB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 06:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjCVJys (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 05:54:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004DE367C8;
-        Wed, 22 Mar 2023 02:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dfqJs0p1KTlCgT/AzQPPoQtSmUdmtzuztLmCgmrMzTI=; b=CzzNDRhr38Kip/OFg6dq3dQ4EV
-        +GktrtbeR8GTSIKCXFNIi+R0Uog/v4u3G/O25UfC/mgZT3ndlGcMabgm6LrFN6fGis9ydvHcppxLT
-        VwY3AmsL8HPpn5zrgxUXGj6CeuAuLVZoJ7UhzkhlIInAFBW3QLRk/B/v7JvwmMujV1bNxp++Hjosy
-        wZt5vtgdBxpEoKGx18nO98pgqPhFFQBy0Pj+s5w9JmrOA97n6Bu/+USPMl8ce2eWJVbxbyQjTP6hs
-        mqyM/HOaIsbNgCi2gGUWk2nA/SAiwaMSIlKMsEneUn3H6IgrNoG7/6DpUd9PIcenBZzlTeCjIrCVD
-        xEhMpymQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pev9u-002tfl-CF; Wed, 22 Mar 2023 09:53:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B96773001F7;
-        Wed, 22 Mar 2023 10:53:29 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A09DA205D08C3; Wed, 22 Mar 2023 10:53:29 +0100 (CET)
-Date:   Wed, 22 Mar 2023 10:53:29 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
-Message-ID: <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-8-vschneid@redhat.com>
+        with ESMTP id S230116AbjCVKUz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 06:20:55 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5F95D747;
+        Wed, 22 Mar 2023 03:20:53 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 3B7282B06B3B;
+        Wed, 22 Mar 2023 06:02:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 22 Mar 2023 06:02:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679479320; x=1679486520; bh=Gt
+        a6DeZfb/Xau68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=NorTwVKQADW6KDf4kx
+        gTnHWfLbpN0EHokeoC3DrOhiZ8CU+KJABXVU+NCa4piYXo6HpTy5HuzRNiFF7tvk
+        kS1uF/ZP394MUuAXVna9Fpn5iDdg0QWtevomnrNhpIe8AFZeNrF8jhIQTLTrI4Ez
+        F8Qq3dke4/3ZmogeOMWjTD3G0qEPqcWsVr1d4vEZWddG5PYi4J+p82qo/RJd1+Pc
+        D0wApM8Ce7YBSMxA8ajCR6phnmYRwiQ+O0944pCsdBUvTlzEsCNbSTwkGxjs5mkS
+        NFc+f7bGpNjIchGEdl3yn7/xBjiqmaS6rxVy3+SCY/EzwAAydjJ28Yv1QCgqUXW5
+        bw3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679479320; x=1679486520; bh=Gta6DeZfb/Xau
+        68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=hSHnolcwH3t3bdKswDish1u/kHXRm
+        GBRI+wa61UtRx0Zfrdsmq8CnsjhuT0V4tk4WhsMm/dY76LIFlaULjvwZ2Is4sByR
+        wnxq6k16NmOke2GgTmcYxC0a6B4M8NbJbdxhf7RYClD05krVRz4oMtNmPPFUz6R8
+        X7AoD2/fmudieEE2qro35wOUjhLadWUNt4yny+XeRhuzuTRtnQEOj4VK4BUdxU/D
+        zi0g/ITaWRhuRN9kFMW6pQhMC12Gxcd91h/lhV8gMs1zfdQ6CWUNBs/ZUdzW133y
+        7r1y/0Q0UW2r7+wW+iKmkbtAUEOh+P4wH5qpItfTivzwuUxdDObXugLGA==
+X-ME-Sender: <xms:FtIaZH_cP3JOYJvAj5oXSd2OXcDDKRtpMgnneLT8maCrLgFT1uQ4nw>
+    <xme:FtIaZDsYVbTOawAhmoa1oHa1uoPNqdzfMuj7H8tTDpE_F1DWS5baFq1_V5RMtYsKY
+    9ZpEjgEFQHUDWVr4rk>
+X-ME-Received: <xmr:FtIaZFCrxLPEjFjrYQZiYYmsseQcWkD9OS0c3-ySi7agJ-uGVLqJDI9_JpnBVpkVO-euEIby8gsGmxPlhwdU9mKdE7Bvs1g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:FtIaZDc9Ss_19xgb6mhlQrLE2QXKvFoiIL34VGbsSSZIH4FlYiJYkQ>
+    <xmx:FtIaZMM-k1IhWCLqsm0aMt16t2CzF1nOejsm53Durk41tY8K7upzcA>
+    <xmx:FtIaZFmHv-kP0VetVBA3YfQuGBF9hqOu-s8l7lOOTdqLpGXLYmgqsQ>
+    <xmx:GNIaZAV9AZ4qhuQDCpvviTReJqZxJZ2jgJo22F_udVCHmNFQ2Gz5SS1iyA8>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Mar 2023 06:01:56 -0400 (EDT)
+Date:   Wed, 22 Mar 2023 11:01:53 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        David Lechner <david@lechnology.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sekhar Nori <nsekhar@ti.com>, Shawn Guo <shawnguo@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 00/65] clk: Make determine_rate mandatory for muxes
+Message-ID: <20230322100153.gzyznaukbdngcvko@houat>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vv4zkvfgrnplpmur"
 Content-Disposition: inline
-In-Reply-To: <20230307143558.294354-8-vschneid@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,61 +137,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 02:35:58PM +0000, Valentin Schneider wrote:
 
-> @@ -477,6 +490,25 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
->  	smp_store_release(&csd->node.u_flags, 0);
->  }
->  
-> +static __always_inline void
-> +raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
-> +{
-> +	/*
-> +	 * The list addition should be visible to the target CPU when it pops
-> +	 * the head of the list to pull the entry off it in the IPI handler
-> +	 * because of normal cache coherency rules implied by the underlying
-> +	 * llist ops.
-> +	 *
-> +	 * If IPIs can go out of order to the cache coherency protocol
-> +	 * in an architecture, sufficient synchronisation should be added
-> +	 * to arch code to make it appear to obey cache coherency WRT
-> +	 * locking and barrier primitives. Generic code isn't really
-> +	 * equipped to do the right thing...
-> +	 */
-> +	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
-> +		send_call_function_single_ipi(cpu, func);
-> +}
-> +
->  static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
->  
->  void __smp_call_single_queue(int cpu, struct llist_node *node)
-> @@ -493,21 +525,25 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
->  		}
->  	}
->  #endif
->  	/*
-> +	 * We have to check the type of the CSD before queueing it, because
-> +	 * once queued it can have its flags cleared by
-> +	 *   flush_smp_call_function_queue()
-> +	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
-> +	 * executes migration_cpu_stop() on the remote CPU).
->  	 */
-> +	if (trace_ipi_send_cpumask_enabled()) {
-> +		call_single_data_t *csd;
-> +		smp_call_func_t func;
-> +
-> +		csd = container_of(node, call_single_data_t, node.llist);
-> +		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
-> +			sched_ttwu_pending : csd->func;
-> +
-> +		raw_smp_call_single_queue(cpu, node, func);
-> +	} else {
-> +		raw_smp_call_single_queue(cpu, node, NULL);
-> +	}
->  }
+--vv4zkvfgrnplpmur
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hurmph... so we only really consume @func when we IPI. Would it not be
-more useful to trace this thing for *every* csd enqeued?
+Hi Stephen,
 
+On Tue, Mar 21, 2023 at 04:55:03PM -0700, Stephen Boyd wrote:
+> Quoting Maxime Ripard (2022-11-04 06:17:17)
+> > Hi,
+> >=20
+> > This is a follow-up to a previous series that was printing a warning
+> > when a mux has a set_parent implementation but is missing
+> > determine_rate().
+> >=20
+> > The rationale is that set_parent() is very likely to be useful when
+> > changing the rate, but it's determine_rate() that takes the parenting
+> > decision. If we're missing it, then the current parent is always going
+> > to be used, and thus set_parent() will not be used. The only exception
+> > being a direct call to clk_set_parent(), but those are fairly rare
+> > compared to clk_set_rate().
+> >=20
+> > Stephen then asked to promote the warning to an error, and to fix up all
+> > the muxes that are in that situation first. So here it is :)
+> >=20
+> > Let me know what you think,
+>=20
+> What's the plan here? Are you going to resend?
 
+It wasn't clear to me whether or not this was something that you wanted,
+and I got some pushback on the drivers so I kind of forgot about it.
 
+If you do want it (and it looks like you do), I'll resend it.
+
+Maxime
+
+--vv4zkvfgrnplpmur
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBrSEQAKCRDj7w1vZxhR
+xbTqAQDfuo+7won5pWzakHyWfnltaYo2jqEYfAWn/jNs6cp2QwD9EUEVxPQOk0xp
+CPNSu0go9roDa7ZOHrlkqTVTbZM0DQo=
+=JaLV
+-----END PGP SIGNATURE-----
+
+--vv4zkvfgrnplpmur--
