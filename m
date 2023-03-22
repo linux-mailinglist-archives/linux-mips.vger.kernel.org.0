@@ -2,174 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DBA6C4EC7
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 16:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3FF6C5038
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 17:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjCVPBP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 11:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S229955AbjCVQKT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 12:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjCVPBM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 11:01:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C51915557;
-        Wed, 22 Mar 2023 08:01:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230372AbjCVQKN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 12:10:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D2C136FB;
+        Wed, 22 Mar 2023 09:10:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0492B81CF4;
-        Wed, 22 Mar 2023 15:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7036AC433EF;
-        Wed, 22 Mar 2023 15:01:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679497264;
-        bh=rK4fyj+3bFI3UORG7apfsrTb82JTbZ64Z4g0fMI2vnw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYwOpSXlIN5RJomg9drFUx2vQ9A1FIwpMJJj+jIZJnC0cpiClSkUb30pJZARvG9NS
-         +wvSQkt0iZp/xLOWqCihJUOjCuNpug1wTHldt2eCzEOZ7WaaQO2Tew4SJCWAm/xA+1
-         d7ZpLgkCz91H/cmsBzNIEXGLbsOZ/XIg2DdQjLHo5uhaiP6C5XoqkynRV+t02OKvqU
-         ylGiRXI83yigTTWx3DJBU/IvKwUiFIE0AH/rcCqtuP4S8FWRX74PGUvg+PnBqLNAIi
-         OM7KaY0l4ep0U2crJqPBDnDnc/16og4esog0Co2NoXnH1tlBf+F/OXVIp/Px4Gmgwe
-         JQLPAnw8c/6qA==
-Date:   Wed, 22 Mar 2023 17:00:49 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7A3B533CCD;
+        Wed, 22 Mar 2023 16:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679501410; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1+7eyTKeVn1sl0E1m2LZkECMl7RTMp0jt5zZuoqxsew=;
+        b=UvU8A7W2avxjunPSL/m9XAmogri1XixdGqLj+DBNKVOD0L07rFrG2jTryRX9BvxuqWx+qv
+        GhuA27cWKfkYQnbgQJiLelw8eHrykrPOhoFt9GwHiqbzUh7lLlg3y0CEALMkLhkkG4VzAO
+        KSn+bmx8CE3l9VKh7mLK2TJKP41Vas0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679501410;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1+7eyTKeVn1sl0E1m2LZkECMl7RTMp0jt5zZuoqxsew=;
+        b=pFtujWUPfcX+V8RK3RYZdmSAUw6NzcCwQFRSbCSR0ziPmuupZpSCXyE6okiXw0rEZUsPlR
+        CZoVYZtJPHd8ATBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C15E13416;
+        Wed, 22 Mar 2023 16:10:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Q47WEWIoG2TIZQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 16:10:10 +0000
+Message-ID: <f712fa24-91f7-38e7-fd6e-b33ab52ce88c@suse.cz>
+Date:   Wed, 22 Mar 2023 17:10:10 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 06/14] init: fold build_all_zonelists() and
+ page_alloc_init_cpuhp() to mm_init()
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
         Doug Berger <opendmb@gmail.com>,
         Matthew Wilcox <willy@infradead.org>,
         Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-mm@kvack.org
-Subject: Re: [PATCH v2 04/14] mm: handle hashdist initialization in
- mm/mm_init.c
-Message-ID: <ZBsYIeIEjuYwyiTO@kernel.org>
 References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-5-rppt@kernel.org>
- <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+ <20230321170513.2401534-7-rppt@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230321170513.2401534-7-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 03:49:24PM +0100, Vlastimil Babka wrote:
-> On 3/21/23 18:05, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > The hashdist variable must be initialized before the first call to
-> > alloc_large_system_hash() and free_area_init() looks like a better place
-> > for it than page_alloc_init().
-> > 
-> > Move hashdist handling to mm/mm_init.c
-> > 
-> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > Acked-by: David Hildenbrand <david@redhat.com>
+On 3/21/23 18:05, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> Both build_all_zonelists() and page_alloc_init_cpuhp() must be called
+> after SMP setup is complete but before the page allocator is set up.
 > 
-> Looks like this will move the fixup_hashdist() call earlier, but can't
-> result in seeing less N_MEMORY nodes than before, right?
+> Still, they both are a part of memory management initialization, so move
+> them to mm_init().
 
-hashdist must be set before the first call to alloc_large_system_hash() and
-after the nodes present at boot time are initialized, so setting it in the
-end of free_area_init() is Ok.
+Well, logic grouping is one thing, but not breaking a functional order is
+more important. So this moves both calls to happen later than theyw ere. I
+guess it could only matter for page_alloc_init_cpuhp() in case cpu hotplugs
+would be processed in some of the calls we "skipped" over by moving this
+later. And one of them is setup_arch()... so are we sure no arch does some
+cpu hotplug for non-boot cpus there?
 
-> I wonder if the whole thing lacks hotplug support anyway, what if system
-> boots with one node and more are added later? Hmm.
-
-alloc_large_system_hash() is called really early even for !HASH_EARLY
-cases. Not sure it's feasible to redistribute the hashes allocated with it
-when new node is added.
- 
-> > ---
-> >  mm/mm_init.c    | 22 ++++++++++++++++++++++
-> >  mm/page_alloc.c | 18 ------------------
-> >  2 files changed, 22 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/mm/mm_init.c b/mm/mm_init.c
-> > index 68d0187c7886..2e60c7186132 100644
-> > --- a/mm/mm_init.c
-> > +++ b/mm/mm_init.c
-> > @@ -607,6 +607,25 @@ int __meminit early_pfn_to_nid(unsigned long pfn)
-> >  
-> >  	return nid;
-> >  }
-> > +
-> > +int hashdist = HASHDIST_DEFAULT;
-> > +
-> > +static int __init set_hashdist(char *str)
-> > +{
-> > +	if (!str)
-> > +		return 0;
-> > +	hashdist = simple_strtoul(str, &str, 0);
-> > +	return 1;
-> > +}
-> > +__setup("hashdist=", set_hashdist);
-> > +
-> > +static inline void fixup_hashdist(void)
-> > +{
-> > +	if (num_node_state(N_MEMORY) == 1)
-> > +		hashdist = 0;
-> > +}
-> > +#else
-> > +static inline void fixup_hashdist(void) {}
-> >  #endif /* CONFIG_NUMA */
-> >  
-> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> > @@ -1855,6 +1874,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> >  	}
-> >  
-> >  	memmap_init();
-> > +
-> > +	/* disable hash distribution for systems with a single node */
-> > +	fixup_hashdist();
-> >  }
-> >  
-> >  /**
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index c56c147bdf27..ff6a2fff2880 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -6383,28 +6383,10 @@ static int page_alloc_cpu_online(unsigned int cpu)
-> >  	return 0;
-> >  }
-> >  
-> > -#ifdef CONFIG_NUMA
-> > -int hashdist = HASHDIST_DEFAULT;
-> > -
-> > -static int __init set_hashdist(char *str)
-> > -{
-> > -	if (!str)
-> > -		return 0;
-> > -	hashdist = simple_strtoul(str, &str, 0);
-> > -	return 1;
-> > -}
-> > -__setup("hashdist=", set_hashdist);
-> > -#endif
-> > -
-> >  void __init page_alloc_init(void)
-> >  {
-> >  	int ret;
-> >  
-> > -#ifdef CONFIG_NUMA
-> > -	if (num_node_state(N_MEMORY) == 1)
-> > -		hashdist = 0;
-> > -#endif
-> > -
-> >  	ret = cpuhp_setup_state_nocalls(CPUHP_PAGE_ALLOC,
-> >  					"mm/page_alloc:pcp",
-> >  					page_alloc_cpu_online,
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> ---
+>  init/main.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
+> diff --git a/init/main.c b/init/main.c
+> index b2499bee7a3c..4423906177c1 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -833,6 +833,10 @@ static void __init report_meminit(void)
+>   */
+>  static void __init mm_init(void)
+>  {
+> +	/* Initializations relying on SMP setup */
+> +	build_all_zonelists(NULL);
+> +	page_alloc_init_cpuhp();
+> +
+>  	/*
+>  	 * page_ext requires contiguous pages,
+>  	 * bigger than MAX_ORDER unless SPARSEMEM.
+> @@ -968,9 +972,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>  	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
+>  	boot_cpu_hotplug_init();
+>  
+> -	build_all_zonelists(NULL);
+> -	page_alloc_init_cpuhp();
+> -
+>  	pr_notice("Kernel command line: %s\n", saved_command_line);
+>  	/* parameters may set static keys */
+>  	jump_label_init();
 
--- 
-Sincerely yours,
-Mike.
