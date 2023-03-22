@@ -2,92 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E099B6C4581
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 10:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A566C45A1
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 10:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjCVJAT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 05:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S230216AbjCVJGc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 05:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCVJAS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 05:00:18 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25BCB50713;
-        Wed, 22 Mar 2023 02:00:10 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1peuKE-0004ZM-00; Wed, 22 Mar 2023 10:00:06 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 540DCC1B28; Wed, 22 Mar 2023 09:59:53 +0100 (CET)
-Date:   Wed, 22 Mar 2023 09:59:53 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] mips: drop ranges for definition of ARCH_FORCE_MAX_ORDER
-Message-ID: <20230322085953.GA3910@alpha.franken.de>
-References: <20230322081520.2516226-1-rppt@kernel.org>
+        with ESMTP id S230185AbjCVJG2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 05:06:28 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90AE5DCA6;
+        Wed, 22 Mar 2023 02:06:22 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id g18so18146549ljl.3;
+        Wed, 22 Mar 2023 02:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679475981;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B37GRcVLF1b1+pD+dUSBHo5HFxRZdJXBgKi6iaJTmuM=;
+        b=UltHazn2sTziDGYHazVsxjJCYKirhJWuQ+bFybY/p3DyPON4HkSOiLQQTMeDuWDg6N
+         zmaGQieryWnTc1FjetDjcs75C7nVxK8hkIHySF3pUIsp6FavsKnkmsi+B0H9HgCVvcIU
+         8r2rBIT56mLC1icGbOT/vXfNsF96s973c/LAvsbjbXYPD7NLu0hVomDfSBVj3aVSnmuR
+         SkdqaPKEp37BXvQGc7E7Csk39kDAe/xvQdfxHjKUk8+CCigk0H6z33ISxBbWEjuSgW9l
+         pPdWfMg3mj74Lz5Jhx/thdi+22/B+BDJRunbxgEwr6BOCwYDZpPth3YOyxIduH2/l3NK
+         XBZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679475981;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B37GRcVLF1b1+pD+dUSBHo5HFxRZdJXBgKi6iaJTmuM=;
+        b=Yv4o15Z0kEkM2ozZzL+OrBkhE/BJmxiRrW31QK469g4ArBUpqQZ2PnlS9jb0VYdA+C
+         US54O4huYrvIq4e0czqCNlbIzgzDsQwalUVR/agr/dVUwaLEFchHgPC/wLVM9p6YFk6C
+         /UQ4Ql2u6RhGVUCA86/Sr9AR5hGhmCPP2GoS+xT9BtNP5icsNkukPijpRN1CbZ+sRMr3
+         oE/JU9IU4AIMU2/04tRoh/COHCIXIeJymzEp2sWYFae6y6KDQAdhTZYFtxMtIx/TXgnR
+         R/Br7p3c1OvEKEy9JkTG0WLoclGn0ki+ko0NmNNymdYyg7PFVsI+IrDXyDU/KBc9YUkO
+         BEvg==
+X-Gm-Message-State: AO0yUKUkql48arlIOdjpiwTii9NfbwUrnsbbT5Ty8HCkyth9V4qvLYfI
+        n1z1d9V9vEZsx/m686wUoUa1RaV5UhI=
+X-Google-Smtp-Source: AK7set9zcMWn75el33gW5LDV9jaBRE1xysy0o4ZjMvJzfpOpDh45J/wSQZt7CpxTgr9mYQa81v+AUg==
+X-Received: by 2002:a2e:9b4d:0:b0:29e:e9f6:3b99 with SMTP id o13-20020a2e9b4d000000b0029ee9f63b99mr1909106ljj.46.1679475981032;
+        Wed, 22 Mar 2023 02:06:21 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.72.74])
+        by smtp.gmail.com with ESMTPSA id i21-20020a2e8095000000b0029c92214148sm1324709ljg.73.2023.03.22.02.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 02:06:20 -0700 (PDT)
+Subject: Re: [PATCH v2 08/14] mm: call {ptlock,pgtable}_cache_init() directly
+ from mm_core_init()
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-9-rppt@kernel.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
+Date:   Wed, 22 Mar 2023 12:06:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322081520.2516226-1-rppt@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230321170513.2401534-9-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:15:20AM +0200, Mike Rapoport wrote:
+On 3/21/23 8:05 PM, Mike Rapoport wrote:
+
 > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> MIPS defines insane ranges for ARCH_FORCE_MAX_ORDER allowing MAX_ORDER
-> up to 63, which implies maximal contiguous allocation size of 2^63
-> pages.
-> 
-> Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
-> simple integer with sensible defaults.
-> 
-> Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
-> will be able to do so but they won't be mislead by the bogus ranges.
+> and drop pgtable_init() as it has no real value and it's name is
+
+   Its name.
+
+> misleading.
 > 
 > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/mips/Kconfig | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 3e8b765b8c7b..a0f6e9d0a561 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -2137,13 +2137,9 @@ endchoice
->  
->  config ARCH_FORCE_MAX_ORDER
->  	int "Maximum zone order"
-> -	range 13 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
->  	default "13" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
-> -	range 12 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
->  	default "12" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
-> -	range 11 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
->  	default "11" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
-> -	range 0 63
->  	default "10"
->  	help
->  	  The kernel memory allocator divides physically contiguous memory
-> -- 
-> 2.35.1
+[...]
 
-Thank you for cleaning this up.
-
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+MBR, Sergey
