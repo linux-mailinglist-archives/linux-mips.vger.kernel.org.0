@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242E16C4D90
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 15:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6B56C4E7F
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 15:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjCVO0F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 10:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S230330AbjCVOvR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 10:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjCVO0E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 10:26:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EE5273E;
-        Wed, 22 Mar 2023 07:26:03 -0700 (PDT)
+        with ESMTP id S230396AbjCVOvA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 10:51:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6F316AD6;
+        Wed, 22 Mar 2023 07:49:26 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 32CEE33BD9;
-        Wed, 22 Mar 2023 14:26:02 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B0F8B20EDA;
+        Wed, 22 Mar 2023 14:49:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679495162; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679496564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/1T5hw9qpuG2AOImWSDWD8F5+eu1OUARaI87Jeroo5M=;
-        b=x4MgX53mVKT0FLfchSPpT80TU/Nx9lsedKAL+STO/UH6xpGUjBxZixJ+f3grGw+I142wgD
-        sL5t05agVfFyNEpM/Mt+aN1jCJFp9Ri9a23FRIl3fyv7MttKXbeGci9gcfEGKVrY3dAUa6
-        kDH38przr24unL5Qu7DKBBpg27HqzY8=
+        bh=WStsIEd2k7RdaTJPjgss3dQsnOiCKbIVzQh6g0XMjJw=;
+        b=keua6vrzqFvD9d24VxKeN+P/9uXoYODOqtrErIG/mFeIbZVehzKEskAJmBFCi0Y8xj7WKJ
+        pmcGiXtk38EgR4HUZMpxbVMjRpbT/7Vrs/+Ks0XGUOUlTjb50+aaMtBeacMHGQzY1kN1mf
+        FM6J86xeBjnsaz6TLcApLK3UK5S0+us=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679495162;
+        s=susede2_ed25519; t=1679496564;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/1T5hw9qpuG2AOImWSDWD8F5+eu1OUARaI87Jeroo5M=;
-        b=BJyaCwp7Vc7NTXtN/Ep4eXUEG0u5BFdokqGUPXP6RKChTIaBTw3ZZExPQawzBLDA86LAoA
-        eNaf/L+Q0p+fRXBA==
+        bh=WStsIEd2k7RdaTJPjgss3dQsnOiCKbIVzQh6g0XMjJw=;
+        b=XDCCaVhwYzaOWYZn/gP36NSxpReGq7etaOQhGQ5VLmoob+pUe/n+MnmvWWMlCIgQIM3z77
+        KSRc22i5edVyCsBQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08B8813416;
-        Wed, 22 Mar 2023 14:26:02 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 806FB138E9;
+        Wed, 22 Mar 2023 14:49:24 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id EdCTAfoPG2R6JQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 14:26:02 +0000
-Message-ID: <a116a23a-747c-f0f7-8aa8-1f336254d5f3@suse.cz>
-Date:   Wed, 22 Mar 2023 15:26:01 +0100
+        id OzqNHnQVG2RpNQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 14:49:24 +0000
+Message-ID: <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
+Date:   Wed, 22 Mar 2023 15:49:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 03/14] mm: move most of core MM initialization to
+Subject: Re: [PATCH v2 04/14] mm: handle hashdist initialization in
  mm/mm_init.c
 Content-Language: en-US
 To:     Mike Rapoport <rppt@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-mm@kvack.org
 References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-4-rppt@kernel.org>
+ <20230321170513.2401534-5-rppt@kernel.org>
 From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230321170513.2401534-4-rppt@kernel.org>
+In-Reply-To: <20230321170513.2401534-5-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -84,18 +84,98 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On 3/21/23 18:05, Mike Rapoport wrote:
 > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> The bulk of memory management initialization code is spread all over
-> mm/page_alloc.c and makes navigating through page allocator
-> functionality difficult.
+> The hashdist variable must be initialized before the first call to
+> alloc_large_system_hash() and free_area_init() looks like a better place
+> for it than page_alloc_init().
 > 
-> Move most of the functions marked __init and __meminit to mm/mm_init.c
-> to make it better localized and allow some more spare room before
-> mm/page_alloc.c reaches 10k lines.
-> 
-> No functional changes.
+> Move hashdist handling to mm/mm_init.c
 > 
 > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 > Acked-by: David Hildenbrand <david@redhat.com>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+Looks like this will move the fixup_hashdist() call earlier, but can't
+result in seeing less N_MEMORY nodes than before, right?
+I wonder if the whole thing lacks hotplug support anyway, what if system
+boots with one node and more are added later? Hmm.
+
+> ---
+>  mm/mm_init.c    | 22 ++++++++++++++++++++++
+>  mm/page_alloc.c | 18 ------------------
+>  2 files changed, 22 insertions(+), 18 deletions(-)
+> 
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 68d0187c7886..2e60c7186132 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -607,6 +607,25 @@ int __meminit early_pfn_to_nid(unsigned long pfn)
+>  
+>  	return nid;
+>  }
+> +
+> +int hashdist = HASHDIST_DEFAULT;
+> +
+> +static int __init set_hashdist(char *str)
+> +{
+> +	if (!str)
+> +		return 0;
+> +	hashdist = simple_strtoul(str, &str, 0);
+> +	return 1;
+> +}
+> +__setup("hashdist=", set_hashdist);
+> +
+> +static inline void fixup_hashdist(void)
+> +{
+> +	if (num_node_state(N_MEMORY) == 1)
+> +		hashdist = 0;
+> +}
+> +#else
+> +static inline void fixup_hashdist(void) {}
+>  #endif /* CONFIG_NUMA */
+>  
+>  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> @@ -1855,6 +1874,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+>  	}
+>  
+>  	memmap_init();
+> +
+> +	/* disable hash distribution for systems with a single node */
+> +	fixup_hashdist();
+>  }
+>  
+>  /**
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index c56c147bdf27..ff6a2fff2880 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6383,28 +6383,10 @@ static int page_alloc_cpu_online(unsigned int cpu)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_NUMA
+> -int hashdist = HASHDIST_DEFAULT;
+> -
+> -static int __init set_hashdist(char *str)
+> -{
+> -	if (!str)
+> -		return 0;
+> -	hashdist = simple_strtoul(str, &str, 0);
+> -	return 1;
+> -}
+> -__setup("hashdist=", set_hashdist);
+> -#endif
+> -
+>  void __init page_alloc_init(void)
+>  {
+>  	int ret;
+>  
+> -#ifdef CONFIG_NUMA
+> -	if (num_node_state(N_MEMORY) == 1)
+> -		hashdist = 0;
+> -#endif
+> -
+>  	ret = cpuhp_setup_state_nocalls(CPUHP_PAGE_ALLOC,
+>  					"mm/page_alloc:pcp",
+>  					page_alloc_cpu_online,
 
