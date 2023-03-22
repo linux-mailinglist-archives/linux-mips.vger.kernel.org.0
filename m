@@ -2,149 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11F06C57BF
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 21:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862846C5A22
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Mar 2023 00:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjCVUfR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 16:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S229846AbjCVXPv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 19:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCVUfB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 16:35:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C61A7339D;
-        Wed, 22 Mar 2023 13:26:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52401B81DE2;
-        Wed, 22 Mar 2023 20:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72244C433EF;
-        Wed, 22 Mar 2023 20:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679516784;
-        bh=d2Ig0qp9C4JQPK9LopAdYR68a+310yC5P6WoSDTJOgQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lRiPLodAq6f4uCSI3TC/00b08o49Tfq6FViXnn68WMduZEVdp0rBhKGBRcjoD5sz7
-         wMvnfTAwIKlRSvUqVl67wbpBP8Q9cQGlJ+QDCk6jInemOvwhPVz56qq+tG+mdBYel/
-         JT/2SmAAcan/O1+n+FGGc1lY3dAfIuXWr7DUZlzf17U70VyqIlizhTeCGfG8gouLSY
-         3Fkyre5yFoiEgOei9aNJweDRam1X4YoBB9moNRgNS2pJereEDBS+/XIASFzs258FEk
-         Tov3cpttLPwXXKPJCKkSSO/iu29h3W6dSlzUuSnZlXNh4TvCFdfxPP9DYLlCHdapca
-         aNVKYaeDdvYgg==
-Date:   Wed, 22 Mar 2023 22:26:09 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 06/14] init: fold build_all_zonelists() and
- page_alloc_init_cpuhp() to mm_init()
-Message-ID: <ZBtkYQyxulcNV8gG@kernel.org>
-References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-7-rppt@kernel.org>
- <f712fa24-91f7-38e7-fd6e-b33ab52ce88c@suse.cz>
+        with ESMTP id S229436AbjCVXPu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 19:15:50 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB061910F;
+        Wed, 22 Mar 2023 16:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hKMA4pE4ZC1WEjwlMS0oahB5WbuLzi761bi+OVXv/X8=; b=k4/hIANBdxC2Z8c++HmkBPk16F
+        hq1n4vi1aFY7d/izKMGpm0/zkTd++0c77IZs+Q5bV257Gjkiy34yMSDd8L7TKq46+CV0zDSHb27H+
+        4KSIRSylcgYZ2OMei78Bb1gC7STjWled8MJkcwhhG29tpOAa6HtPIFWPyA9seeGrRiJr3vWUYPsTp
+        3Vu3FPyPpiLcCMVxhaxuIGSboSf1mmZy7nxDek09nDmg/P6bBJA5M4EMw//9ErW/pvBC1TxeGCDAY
+        4DGmD2DpR96GbtKoxaTV3TYyxFMIuFbNKoIU/LaGvb2xuytoT+Rk3V4s2DX53haN44indyDWk1fXo
+        N1G/mBcw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf7f5-004hB6-38;
+        Wed, 22 Mar 2023 23:14:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9046D30035F;
+        Thu, 23 Mar 2023 00:14:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 73D47202F7F60; Thu, 23 Mar 2023 00:14:28 +0100 (CET)
+Date:   Thu, 23 Mar 2023 00:14:28 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
+Message-ID: <20230322231428.GV2017917@hirez.programming.kicks-ass.net>
+References: <20230307143558.294354-1-vschneid@redhat.com>
+ <20230307143558.294354-8-vschneid@redhat.com>
+ <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+ <xhsmhmt45c703.mognet@vschneid.remote.csb>
+ <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
+ <xhsmhjzz8d8km.mognet@vschneid.remote.csb>
+ <20230322172242.GH2357380@hirez.programming.kicks-ass.net>
+ <xhsmhh6ucd4t7.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f712fa24-91f7-38e7-fd6e-b33ab52ce88c@suse.cz>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <xhsmhh6ucd4t7.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 05:10:10PM +0100, Vlastimil Babka wrote:
-> On 3/21/23 18:05, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > Both build_all_zonelists() and page_alloc_init_cpuhp() must be called
-> > after SMP setup is complete but before the page allocator is set up.
-> > 
-> > Still, they both are a part of memory management initialization, so move
-> > them to mm_init().
+On Wed, Mar 22, 2023 at 06:22:28PM +0000, Valentin Schneider wrote:
+> On 22/03/23 18:22, Peter Zijlstra wrote:
+
+> >>        hackbench-157   [001]    10.894320: ipi_send_cpu:         cpu=3 callsite=check_preempt_curr+0x37 callback=0x0
+> >
+> > Arguably we should be setting callback to scheduler_ipi(), except
+> > ofcourse, that's not an actual function...
+> >
+> > Maybe we can do "extern inline" for the actual users and provide a dummy
+> > function for the symbol when tracing.
+> >
 > 
-> Well, logic grouping is one thing, but not breaking a functional order is
-> more important. So this moves both calls to happen later than theyw ere. I
-> guess it could only matter for page_alloc_init_cpuhp() in case cpu hotplugs
-> would be processed in some of the calls we "skipped" over by moving this
-> later. And one of them is setup_arch()... so are we sure no arch does some
-> cpu hotplug for non-boot cpus there?
+> Huh, I wasn't aware that was an option, I'll look into that. I did scribble
+> down a comment next to smp_send_reschedule(), but having a decodable
+> function name would be better!
 
-mm_init() happens after the point build_all_zonelists() and
-page_alloc_init_cpuhp() were originally, so they are essentially moved
-later in the init sequence and in either case called after setup_arch().
+So clang-15 builds the below (and generates the expected code), but
+gcc-12 vomits nonsense about a non-static inline calling a static inline
+or somesuch bollocks :-/
 
-We skip the code below and it does not do neither cpu hotplug nor
-non-memblock allocations.
-
-	jump_label_init();
-	parse_early_param();
-	after_dashes = parse_args("Booting kernel",
-				  static_command_line, __start___param,
-				  __stop___param - __start___param,
-				  -1, -1, NULL, &unknown_bootoption);
-	print_unknown_bootoptions();
-	if (!IS_ERR_OR_NULL(after_dashes))
-		parse_args("Setting init args", after_dashes, NULL, 0, -1, -1,
-			   NULL, set_init_arg);
-	if (extra_init_args)
-		parse_args("Setting extra init args", extra_init_args,
-			   NULL, 0, -1, -1, NULL, set_init_arg);
-
-	/* Architectural and non-timekeeping rng init, before allocator init */
-	random_init_early(command_line);
-
-	/*
-	 * These use large bootmem allocations and must precede
-	 * kmem_cache_init()
-	 */
-	setup_log_buf(0);
-	vfs_caches_init_early();
-	sort_main_extable();
-	trap_init();
-
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1991,7 +1991,7 @@ extern char *__get_task_comm(char *to, s
+ })
  
-> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > Acked-by: David Hildenbrand <david@redhat.com>
-> > ---
-> >  init/main.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/init/main.c b/init/main.c
-> > index b2499bee7a3c..4423906177c1 100644
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -833,6 +833,10 @@ static void __init report_meminit(void)
-> >   */
-> >  static void __init mm_init(void)
-> >  {
-> > +	/* Initializations relying on SMP setup */
-> > +	build_all_zonelists(NULL);
-> > +	page_alloc_init_cpuhp();
-> > +
-> >  	/*
-> >  	 * page_ext requires contiguous pages,
-> >  	 * bigger than MAX_ORDER unless SPARSEMEM.
-> > @@ -968,9 +972,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
-> >  	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
-> >  	boot_cpu_hotplug_init();
-> >  
-> > -	build_all_zonelists(NULL);
-> > -	page_alloc_init_cpuhp();
-> > -
-> >  	pr_notice("Kernel command line: %s\n", saved_command_line);
-> >  	/* parameters may set static keys */
-> >  	jump_label_init();
-> 
-
--- 
-Sincerely yours,
-Mike.
+ #ifdef CONFIG_SMP
+-static __always_inline void scheduler_ipi(void)
++extern __always_inline void scheduler_ipi(void)
+ {
+ 	/*
+ 	 * Fold TIF_NEED_RESCHED into the preempt_count; anybody setting
+--- a/include/linux/smp.h
++++ b/include/linux/smp.h
+@@ -130,9 +130,9 @@ extern void arch_smp_send_reschedule(int
+  * scheduler_ipi() is inline so can't be passed as callback reason, but the
+  * callsite IP should be sufficient for root-causing IPIs sent from here.
+  */
+-#define smp_send_reschedule(cpu) ({		  \
+-	trace_ipi_send_cpu(cpu, _RET_IP_, NULL);  \
+-	arch_smp_send_reschedule(cpu);		  \
++#define smp_send_reschedule(cpu) ({				\
++	trace_ipi_send_cpu(cpu, _RET_IP_, &scheduler_ipi);	\
++	arch_smp_send_reschedule(cpu);				\
+ })
+ 
+ /*
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3790,6 +3790,15 @@ static int ttwu_runnable(struct task_str
+ }
+ 
+ #ifdef CONFIG_SMP
++void scheduler_ipi(void)
++{
++	/*
++	 * Actual users should end up using the extern inline, this is only
++	 * here for the symbol.
++	 */
++	BUG();
++}
++
+ void sched_ttwu_pending(void *arg)
+ {
+ 	struct llist_node *llist = arg;
