@@ -2,232 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4506C47A6
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 11:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E64F6C48EC
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 12:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjCVKae (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 06:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S230257AbjCVLTm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 07:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjCVKab (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 06:30:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38065A926;
-        Wed, 22 Mar 2023 03:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HoRvkd+LKj4dGdGLlCXof2DCgR7hulEC2e5UJ4bAaXY=; b=nWUnvkKpFDRoWjs9u2AzwYMtJ7
-        aenibCcG9GWoRWHfBMx1W3UNq1sJn93PyZxuygGUkDBzBh6zn9TRHrL+I7ZYcL3lgqjY8VAa+udBm
-        kIShoJMH6uEX2pe1htwgzEWCW0pxMY/WPULPz/LxY6CZFOp/eLwj+k6ki5q6N/i9vq3nJ5a9LKzhW
-        d21VTjejO9uEV7WREfd/52Y2FOCBZdKennKdjG8Gt17Dc4Z05ACBMFZQln9tGX2Z0Mu/Lm6PdQ+Oo
-        sXexlVoadXfFPb02yVG1fVEWDquekMFyR6ShCOCO7j+Y6R9vIbc1v6vAfeqAIVqFl8FQCC/8FvGmi
-        xMJbNNrA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pevjK-002vC8-My; Wed, 22 Mar 2023 10:30:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C12CA3002FC;
-        Wed, 22 Mar 2023 11:30:04 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A6E332394C189; Wed, 22 Mar 2023 11:30:04 +0100 (CET)
-Date:   Wed, 22 Mar 2023 11:30:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/7] trace: Add trace_ipi_send_cpumask()
-Message-ID: <20230322103004.GA571242@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-2-vschneid@redhat.com>
- <20230322093955.GR2017917@hirez.programming.kicks-ass.net>
+        with ESMTP id S230416AbjCVLTl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 07:19:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBD43FB96
+        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 04:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679483937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4PBeFJVq5sXMm2kVcvHwookT+3r5JXG0gTDh8oEJNU=;
+        b=OAnggRhZWUz/8+ZektwMDgmcCAKxwSpCSgG/UFKt86RzyQlVGiqm1erQEVJVDIv2dqLq/y
+        +Qc7OQr0cc3Qn58oECT3o1qvC+xTlRZK4Pn1a3xMIYHjeQ9J/roQgBwInMFoUlPQLhhhWY
+        QGNn+BC04T75C4xNUgPiCtFrtcY2T2M=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-449-S7ENbpdUNg6GhcFcuBYbzA-1; Wed, 22 Mar 2023 07:18:56 -0400
+X-MC-Unique: S7ENbpdUNg6GhcFcuBYbzA-1
+Received: by mail-wm1-f71.google.com with SMTP id j13-20020a05600c190d00b003ed26189f44so11451036wmq.8
+        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 04:18:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679483935;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4PBeFJVq5sXMm2kVcvHwookT+3r5JXG0gTDh8oEJNU=;
+        b=2rQQCMSYydTrj9a9FZ6/C7N4J8D49W5Jo0VyVJG9a/Z9ASfLaYNx/FZEMLqmrAZ90B
+         5ge163mQnuj0rTYGS3kohItlMETpaut4LArAA5nk4RS0keMTzVT+C+vTQzZ3DBnoxPFQ
+         01CEg2BrK8837+K+5cy04im57LDa4BVODVk9iUwtWhazz6KLEe2+45Jgpm3/P4T54zsc
+         H89yt65f/aGFwftHqTPLZHWL9vKgg9OSAJocg8yY/ShTMmt7HfJCG7+u56m1tpwn+Hy5
+         b34xNB+aInWTl4aiQWrZh3UIuNTk/p5THkkPLeT+IqaA5/D314Z5z0DpG1T9gXJPdAZe
+         QrDw==
+X-Gm-Message-State: AO0yUKUGrP2JhxdqvWRGkB6JDVrmByGLi9uxvqdqE88td0Xsn3hBJ8ZN
+        f7XiTkULRc0/PrvsC29Y2r68kxxhX1o5qBby5gORG7MkBbg3cXLU+cG1RzycJb1l2upuuoE2k3R
+        VQrpAmjeCFLcokQ1BDDGxNg==
+X-Received: by 2002:adf:ebcf:0:b0:2cf:f35b:9aa2 with SMTP id v15-20020adfebcf000000b002cff35b9aa2mr5083031wrn.19.1679483935293;
+        Wed, 22 Mar 2023 04:18:55 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8NWBavpXfZJCtR0zWMvJ2tk+TF3CcC7KjKh7fqSTp3IiRzYiIqIqJFR2gpzL1SxrRhG0XTEw==
+X-Received: by 2002:adf:ebcf:0:b0:2cf:f35b:9aa2 with SMTP id v15-20020adfebcf000000b002cff35b9aa2mr5083014wrn.19.1679483934972;
+        Wed, 22 Mar 2023 04:18:54 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id k2-20020a5d6e82000000b002c55b0e6ef1sm13808154wrz.4.2023.03.22.04.18.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 04:18:54 -0700 (PDT)
+Message-ID: <d17ab016-661f-498b-6b50-19c7fc5f04b7@redhat.com>
+Date:   Wed, 22 Mar 2023 12:18:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322093955.GR2017917@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 08/14] mm: call {ptlock,pgtable}_cache_init() directly
+ from mm_core_init()
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-9-rppt@kernel.org>
+ <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
+ <ZBrTtQKe7SowXSKb@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZBrTtQKe7SowXSKb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:39:55AM +0100, Peter Zijlstra wrote:
-> On Tue, Mar 07, 2023 at 02:35:52PM +0000, Valentin Schneider wrote:
-> > trace_ipi_raise() is unsuitable for generically tracing IPI sources due to
-> > its "reason" argument being an uninformative string (on arm64 all you get
-> > is "Function call interrupts" for SMP calls).
-> > 
-> > Add a variant of it that exports a target cpumask, a callsite and a callback.
-> > 
-> > Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > ---
-> >  include/trace/events/ipi.h | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
-> > index 0be71dad6ec03..b1125dc27682c 100644
-> > --- a/include/trace/events/ipi.h
-> > +++ b/include/trace/events/ipi.h
-> > @@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
-> >  	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
-> >  );
-> >  
-> > +TRACE_EVENT(ipi_send_cpumask,
-> > +
-> > +	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
-> > +
-> > +	TP_ARGS(cpumask, callsite, callback),
-> > +
-> > +	TP_STRUCT__entry(
-> > +		__cpumask(cpumask)
-> > +		__field(void *, callsite)
-> > +		__field(void *, callback)
-> > +	),
-> > +
-> > +	TP_fast_assign(
-> > +		__assign_cpumask(cpumask, cpumask_bits(cpumask));
-> > +		__entry->callsite = (void *)callsite;
-> > +		__entry->callback = callback;
-> > +	),
-> > +
-> > +	TP_printk("cpumask=%s callsite=%pS callback=%pS",
-> > +		  __get_cpumask(cpumask), __entry->callsite, __entry->callback)
-> > +);
+On 22.03.23 11:08, Mike Rapoport wrote:
+> On Wed, Mar 22, 2023 at 12:06:18PM +0300, Sergei Shtylyov wrote:
+>> On 3/21/23 8:05 PM, Mike Rapoport wrote:
+>>
+>>> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>>>
+>>> and drop pgtable_init() as it has no real value and it's name is
+>>
+>>     Its name.
 > 
-> Would it make sense to add a variant like: ipi_send_cpu() that records a
-> single cpu instead of a cpumask. A lot of sites seems to do:
-> cpumask_of(cpu) for that first argument, and it seems to me it is quite
-> daft to have to memcpy a full multi-word cpumask in those cases.
+> oops :)
 > 
-> Remember, nr_possible_cpus > 64 is quite common these days.
+> Andrew, can you replace this patch with the updated version, please?
+>   
+>  From 52420723c9bfa84aa48f666330e96f9e5b2f3248 Mon Sep 17 00:00:00 2001
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> Date: Sat, 18 Mar 2023 13:55:28 +0200
+> Subject: [PATCH v3] mm: call {ptlock,pgtable}_cache_init() directly from
+>   mm_core_init()
+> 
+> and drop pgtable_init() as it has no real value and its name is
+> misleading.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>   include/linux/mm.h | 6 ------
+>   mm/mm_init.c       | 3 ++-
+>   2 files changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 2d7f095136fc..c3c67d8bc833 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2782,12 +2782,6 @@ static inline bool ptlock_init(struct page *page) { return true; }
+>   static inline void ptlock_free(struct page *page) {}
+>   #endif /* USE_SPLIT_PTE_PTLOCKS */
+>   
+> -static inline void pgtable_init(void)
+> -{
+> -	ptlock_cache_init();
+> -	pgtable_cache_init();
+> -}
+> -
+>   static inline bool pgtable_pte_page_ctor(struct page *page)
+>   {
+>   	if (!ptlock_init(page))
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index bba73f1fb277..f1475413394d 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -2584,7 +2584,8 @@ void __init mm_core_init(void)
+>   	 */
+>   	page_ext_init_flatmem_late();
+>   	kmemleak_init();
+> -	pgtable_init();
+> +	ptlock_cache_init();
+> +	pgtable_cache_init();
+>   	debug_objects_mem_init();
+>   	vmalloc_init();
+>   	/* If no deferred init page_ext now, as vmap is fully initialized */
 
-Something we litte bit like so...
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
----
-Subject: trace: Add trace_ipi_send_cpu()
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Wed Mar 22 11:28:36 CET 2023
+-- 
+Thanks,
 
-Because copying cpumasks around when targeting a single CPU is a bit
-daft...
+David / dhildenb
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/linux/smp.h        |    6 +++---
- include/trace/events/ipi.h |   22 ++++++++++++++++++++++
- kernel/irq_work.c          |    6 ++----
- kernel/smp.c               |    4 ++--
- 4 files changed, 29 insertions(+), 9 deletions(-)
-
---- a/include/linux/smp.h
-+++ b/include/linux/smp.h
-@@ -130,9 +130,9 @@ extern void arch_smp_send_reschedule(int
-  * scheduler_ipi() is inline so can't be passed as callback reason, but the
-  * callsite IP should be sufficient for root-causing IPIs sent from here.
-  */
--#define smp_send_reschedule(cpu) ({				  \
--	trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);  \
--	arch_smp_send_reschedule(cpu);				  \
-+#define smp_send_reschedule(cpu) ({		  \
-+	trace_ipi_send_cpu(cpu, _RET_IP_, NULL);  \
-+	arch_smp_send_reschedule(cpu);		  \
- })
- 
- /*
---- a/include/trace/events/ipi.h
-+++ b/include/trace/events/ipi.h
-@@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
- 	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
- );
- 
-+TRACE_EVENT(ipi_send_cpu,
-+
-+	TP_PROTO(const unsigned int cpu, unsigned long callsite, void *callback),
-+
-+	TP_ARGS(cpu, callsite, callback),
-+
-+	TP_STRUCT__entry(
-+		__field(unsigned int, cpu)
-+		__field(void *, callsite)
-+		__field(void *, callback)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->cpu = cpu;
-+		__entry->callsite = (void *)callsite;
-+		__entry->callback = callback;
-+	),
-+
-+	TP_printk("cpu=%s callsite=%pS callback=%pS",
-+		  __entry->cpu, __entry->callsite, __entry->callback)
-+);
-+
- TRACE_EVENT(ipi_send_cpumask,
- 
- 	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
---- a/kernel/irq_work.c
-+++ b/kernel/irq_work.c
-@@ -78,10 +78,8 @@ void __weak arch_irq_work_raise(void)
- 
- static __always_inline void irq_work_raise(struct irq_work *work)
- {
--	if (trace_ipi_send_cpumask_enabled() && arch_irq_work_has_interrupt())
--		trace_ipi_send_cpumask(cpumask_of(smp_processor_id()),
--				       _RET_IP_,
--				       work->func);
-+	if (trace_ipi_send_cpu_enabled() && arch_irq_work_has_interrupt())
-+		trace_ipi_send_cpu(smp_processor_id(), _RET_IP_, work->func);
- 
- 	arch_irq_work_raise();
- }
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -109,7 +109,7 @@ static __always_inline void
- send_call_function_single_ipi(int cpu, smp_call_func_t func)
- {
- 	if (call_function_single_prep_ipi(cpu)) {
--		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
-+		trace_ipi_send_cpu(cpu, _RET_IP_, func);
- 		arch_send_call_function_single_ipi(cpu);
- 	}
- }
-@@ -348,7 +348,7 @@ void __smp_call_single_queue(int cpu, st
- 	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
- 	 * executes migration_cpu_stop() on the remote CPU).
- 	 */
--	if (trace_ipi_send_cpumask_enabled()) {
-+	if (trace_ipi_send_cpu_enabled()) {
- 		call_single_data_t *csd;
- 		smp_call_func_t func;
- 
