@@ -2,144 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882B36C5129
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 17:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B4F6C52AD
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Mar 2023 18:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjCVQsu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Mar 2023 12:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
+        id S229522AbjCVRkU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Mar 2023 13:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCVQss (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 12:48:48 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1367D567BF
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 09:48:42 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id x33so13078471uaf.12
-        for <linux-mips@vger.kernel.org>; Wed, 22 Mar 2023 09:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679503721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2w0LAtw9cPfSNM4qX5A/16NLh+XxymxwSqd/uu1gfQU=;
-        b=RyjBxDPR9Gaa2RWhPtZwOgt/F7XlwPMCS9VUiT2DPq+iirNmsZnpWZUIFrFJo7YSid
-         OTI4uancfUSnhPkwaehBVH+XRm32vttS69BLXU/wY/gWONf+Wxr1HdQoJmRmBLepuIMG
-         c3B9YgQTrYX9KGhqMlwANDi8yY5dJVd4cf6zFbtg91qD8/0tTA87NAAbaXBQOjwHeFaS
-         i1ZlwAWQ40NjAlIDGmBcKdym3nD79WlUE8ZRSvfu6N7l1numhTv/q8SxQow1kmRetpm1
-         pkk4gx35heDUY/1HkanuMYR3dqdBfSzdIiWVBJvVNDrJ3fApnCjTNSqxxefzkZZQlrlE
-         z1HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679503721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2w0LAtw9cPfSNM4qX5A/16NLh+XxymxwSqd/uu1gfQU=;
-        b=gVNwcZ1i0M9PcfKJxQsVuB8SZ78z3x21JlcPsvJMF1esCCIHFIhfdbwzAax7wb9FBx
-         CT3VGGf/RAiTMZ1RGSQrYUFD8cNgU1+R2Yg3faQvi6jZvm5P9Ntgmz8PTZHL1sEgFrBR
-         yAhEfBbf7xax/H9VRDBvrZsU4vCttsAboPI3v+vCVvR5IhNak97Lw2DqPpK0ENoSLpWO
-         8yC1gk4ODal2cB86ZsFDiarlM0jr2IKzaIL3lMQmb0YiSxC3aYYijlg/MPsPapvPK8nk
-         QUmzUA6KEwvZvxhDMp9aY5MHbjJRZdt+b9vv0SP75CNPWOauxCl6QS76IoMDvQc1fiOH
-         F+jw==
-X-Gm-Message-State: AAQBX9dhSffMZgEhdj2OnP3PlDK44j79MpDjyxppirqlBJa6583KUg81
-        YrKF1+QYD2V33u0EDCzISbj4J1qW1wOHpdULkrfYHA==
-X-Google-Smtp-Source: AKy350ZLZo/F6L7OujzYN41ze3NYo682Vo6dkHIwnotz4DMq72LZxaPffaxLlojXIZ4FO8//leYaf4FE/3yOtteccKU=
-X-Received: by 2002:a05:6130:290:b0:688:d612:2024 with SMTP id
- q16-20020a056130029000b00688d6122024mr3518649uac.2.1679503721140; Wed, 22 Mar
- 2023 09:48:41 -0700 (PDT)
+        with ESMTP id S229646AbjCVRkT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Mar 2023 13:40:19 -0400
+X-Greylist: delayed 1669 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Mar 2023 10:40:18 PDT
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDCED310;
+        Wed, 22 Mar 2023 10:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=j4kDtes5yQEhSaRkdjJ6fUBQBcvH3mVXdZYGKrFGxjk=; b=Um6Hi4/teqDwXcPpVqXZfqL9wl
+        rh9z89rWSr1ADTHi6PGRDt/QxiPhbq7Iq8QI9A2wBV8PFwp42Io8KM42i52LXmGiOwXbuZ6iIFLDt
+        M9n2s3vJvqLDUVMhvctvvzqw04J8y8PpWQsnuSVQjsYjdQ43HTNd+K9Ii/PfSBRLnYuctDrXyCuTt
+        oNhxRsPJMyYDKKv5m6r9ONErfTbEWJiF4+It3HJ/sEYr+oxhnoBylIDGVDD65Iei9iZCX4quZXRwO
+        6eAvWcHmPUAHoL1b5h033pm/YwiF9dOWu5WdmPNLGh/GErdDP0sMHJv1KlbMhn+RVnrObJLIJC3S1
+        Q6AtSM0g==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1pf1jJ-000O2z-6W; Wed, 22 Mar 2023 17:54:29 +0100
+Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1pf1jI-000RWx-Qu; Wed, 22 Mar 2023 17:54:28 +0100
+Message-ID: <997596d9-dc80-4aff-2875-869a54442e36@metafoo.de>
+Date:   Wed, 22 Mar 2023 09:54:26 -0700
 MIME-Version: 1.0
-References: <20230315110650.142577-1-keguang.zhang@gmail.com> <20230315110650.142577-4-keguang.zhang@gmail.com>
-In-Reply-To: <20230315110650.142577-4-keguang.zhang@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 22 Mar 2023 17:48:30 +0100
-Message-ID: <CAMRc=MezbVO93WYw2PPV-0qTFid5BE01dfPptNWS4Kc9AXL+fA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] gpio: loongson1: Add DT support
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] mmc: jz4740: Use dev_err_probe()
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        ye.xingchen@zte.com.cn, ulf.hansson@linaro.org
+Cc:     linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202303221707010277273@zte.com.cn>
+ <d91d6e3c-da8c-0601-0cd7-45bfe7c4ad50@gmail.com>
+ <6aa6d80cb587c98dba5c04b47cd78f93bb3bafec.camel@crapouillou.net>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <6aa6d80cb587c98dba5c04b47cd78f93bb3bafec.camel@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26851/Wed Mar 22 08:22:49 2023)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 12:07=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail=
-.com> wrote:
->
-> This patch adds DT support for Loongson-1 GPIO driver.
->
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V2 -> V3: None
-> V1 -> V2: Let gpiolib parse ngpios property
->           Remove unnecessary alias id parsing
->           Remove superfluous initialization done by bgpio_init()
->           Add MODULE_DEVICE_TABLE()
->           Other minor fixes
-> ---
->  drivers/gpio/gpio-loongson1.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
-c
-> index dddfc71f0e10..6ca3b969db4d 100644
-> --- a/drivers/gpio/gpio-loongson1.c
-> +++ b/drivers/gpio/gpio-loongson1.c
-> @@ -68,25 +68,38 @@ static int ls1x_gpio_probe(struct platform_device *pd=
-ev)
->         ls1x_gc->gc.owner =3D THIS_MODULE;
->         ls1x_gc->gc.request =3D ls1x_gpio_request;
->         ls1x_gc->gc.free =3D ls1x_gpio_free;
-> -       ls1x_gc->gc.base =3D pdev->id * 32;
-> +       /*
-> +        * Clear ngpio to let gpiolib get the correct number
-> +        * by reading ngpios property
-> +        */
-> +       ls1x_gc->gc.ngpio =3D 0;
->
->         ret =3D devm_gpiochip_add_data(dev, &ls1x_gc->gc, ls1x_gc);
->         if (ret)
->                 goto err;
->
->         platform_set_drvdata(pdev, ls1x_gc);
-> -       dev_info(dev, "Loongson1 GPIO driver registered\n");
-> +
-> +       dev_info(dev, "GPIO controller registered with %d pins\n",
-> +                ls1x_gc->gc.ngpio);
->
->         return 0;
->  err:
-> -       dev_err(dev, "failed to register GPIO device\n");
-> +       dev_err(dev, "failed to register GPIO controller\n");
->         return ret;
->  }
->
-> +static const struct of_device_id ls1x_gpio_dt_ids[] =3D {
-> +       { .compatible =3D "loongson,ls1x-gpio" },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ls1x_gpio_dt_ids);
-> +
->  static struct platform_driver ls1x_gpio_driver =3D {
->         .probe  =3D ls1x_gpio_probe,
->         .driver =3D {
->                 .name   =3D "ls1x-gpio",
-> +               .of_match_table =3D ls1x_gpio_dt_ids,
->         },
->  };
->
-> --
-> 2.34.1
->
+On 3/22/23 02:25, Paul Cercueil wrote:
+> Le mercredi 22 mars 2023 à 12:18 +0300, Sergei Shtylyov a écrit :
+>> On 3/22/23 12:07 PM, ye.xingchen@zte.com.cn wrote:
+>>
+>>> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>>>
+>>> Replace the open-code with dev_err_probe() to simplify the code.
+>>>
+>>> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+>>> ---
+>>>   drivers/mmc/host/jz4740_mmc.c | 5 +----
+>>>   1 file changed, 1 insertion(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/mmc/host/jz4740_mmc.c
+>>> b/drivers/mmc/host/jz4740_mmc.c
+>>> index 698450afa7bb..a6ad03b24add 100644
+>>> --- a/drivers/mmc/host/jz4740_mmc.c
+>>> +++ b/drivers/mmc/host/jz4740_mmc.c
+>>> @@ -232,10 +232,7 @@ static int
+>>> jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
+>>>          if (!IS_ERR(host->dma_tx))
+>>>                  return 0;
+>>>
+>>> -       if (PTR_ERR(host->dma_tx) != -ENODEV) {
+>>> -               dev_err(dev, "Failed to get dma tx-rx channel\n");
+>>> -               return PTR_ERR(host->dma_tx);
+>>> -       }
+>>> +       return dev_err_probe(dev, PTR_ERR(host->dma_tx), "Failed to
+>>> get dma tx-rx channel\n");
+>>     I'm afraid this makes the following code unreachable...
+> Also, this is not a probe(), so I don't see a point of using
+> dev_err_probe() here.
+The function is only called from probe(), I think it makes sense to use 
+dev_err_probe() here.
 
-I applied this and the last one but switched patches 3 and 4 as it's
-customary to have bindings in the tree before DT support.
 
-Bart
