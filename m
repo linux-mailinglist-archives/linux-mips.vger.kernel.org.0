@@ -2,40 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0EC6C7EDA
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 14:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5426C7F94
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 15:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjCXNc7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Mar 2023 09:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S232080AbjCXONU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Mar 2023 10:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjCXNc5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 09:32:57 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C118D23A6C
-        for <linux-mips@vger.kernel.org>; Fri, 24 Mar 2023 06:32:34 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pfhWt-0001BF-01; Fri, 24 Mar 2023 14:32:27 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 49AFEC1B91; Fri, 24 Mar 2023 14:31:16 +0100 (CET)
-Date:   Fri, 24 Mar 2023 14:31:16 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, philmd@linaro.org,
-        sergei.shtylyov@gmail.com, aleksander.lobakin@intel.com
-Subject: Re: [PATCH v2 06/12] MIPS: c-octeon: Provide alternative SMP cache
- flush function
-Message-ID: <20230324133116.GB15949@alpha.franken.de>
-References: <20230321104852.25284-1-jiaxun.yang@flygoat.com>
- <20230321104852.25284-7-jiaxun.yang@flygoat.com>
+        with ESMTP id S231394AbjCXONT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 10:13:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EEC930E4;
+        Fri, 24 Mar 2023 07:13:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A1AF11FB;
+        Fri, 24 Mar 2023 07:14:02 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.55.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 367B43F71E;
+        Fri, 24 Mar 2023 07:13:16 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 14:13:13 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
+ fallbacks
+Message-ID: <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+References: <20230305205628.27385-1-ubizjak@gmail.com>
+ <20230305205628.27385-2-ubizjak@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321104852.25284-7-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230305205628.27385-2-ubizjak@gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,43 +47,127 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:48:46AM +0000, Jiaxun Yang wrote:
-> Curretly c-octeon relies on octeon's own smp function to flush
+On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
+> Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
 
-typo
+Can you give an example of where we are passing an incompatible pointer?
 
-> I-Cache. However this function is not available on generic platform.
-> 
-> Just use smp_call_function_many on generic platform.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+That sounds indicative of a bug in the caller, but maybe I'm missing some
+reason this is necessary due to some indirection.
+
+> Fixes: 29f006fdefe6 ("asm-generic/atomic: Add try_cmpxchg() fallbacks")
+
+I'm not sure that this needs a fixes tag. Does anything go wrong today, or only
+later in this series?
+
+Thanks,
+Mark.
+
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 > ---
-> v2: Style fix
-> ---
->  arch/mips/mm/c-octeon.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  include/linux/atomic/atomic-arch-fallback.h | 18 +++++++++---------
+>  scripts/atomic/gen-atomic-fallback.sh       |  2 +-
+>  2 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
-> index c7ed589de882..b7393b61cfa7 100644
-> --- a/arch/mips/mm/c-octeon.c
-> +++ b/arch/mips/mm/c-octeon.c
-> @@ -83,8 +83,13 @@ static void octeon_flush_icache_all_cores(struct vm_area_struct *vma)
->  	else
->  		mask = *cpu_online_mask;
->  	cpumask_clear_cpu(cpu, &mask);
-> +#ifdef CONFIG_CAVIUM_OCTEON_SOC
->  	for_each_cpu(cpu, &mask)
->  		octeon_send_ipi_single(cpu, SMP_ICACHE_FLUSH);
-> +#else
-> +	smp_call_function_many(&mask, (smp_call_func_t)octeon_local_flush_icache,
-> +			       NULL, 1);
-> +#endif
->  
->  	preempt_enable();
+> diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+> index 77bc5522e61c..19debd501ee7 100644
+> --- a/include/linux/atomic/atomic-arch-fallback.h
+> +++ b/include/linux/atomic/atomic-arch-fallback.h
+> @@ -87,7 +87,7 @@
+>  #ifndef arch_try_cmpxchg
+>  #define arch_try_cmpxchg(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -98,7 +98,7 @@
+>  #ifndef arch_try_cmpxchg_acquire
+>  #define arch_try_cmpxchg_acquire(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg_acquire((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -109,7 +109,7 @@
+>  #ifndef arch_try_cmpxchg_release
+>  #define arch_try_cmpxchg_release(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg_release((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -120,7 +120,7 @@
+>  #ifndef arch_try_cmpxchg_relaxed
+>  #define arch_try_cmpxchg_relaxed(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg_relaxed((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -157,7 +157,7 @@
+>  #ifndef arch_try_cmpxchg64
+>  #define arch_try_cmpxchg64(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg64((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -168,7 +168,7 @@
+>  #ifndef arch_try_cmpxchg64_acquire
+>  #define arch_try_cmpxchg64_acquire(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg64_acquire((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -179,7 +179,7 @@
+>  #ifndef arch_try_cmpxchg64_release
+>  #define arch_try_cmpxchg64_release(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg64_release((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -190,7 +190,7 @@
+>  #ifndef arch_try_cmpxchg64_relaxed
+>  #define arch_try_cmpxchg64_relaxed(_ptr, _oldp, _new) \
+>  ({ \
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \
+>  	___r = arch_cmpxchg64_relaxed((_ptr), ___o, (_new)); \
+>  	if (unlikely(___r != ___o)) \
+>  		*___op = ___r; \
+> @@ -2456,4 +2456,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
 >  #endif
+>  
+>  #endif /* _LINUX_ATOMIC_FALLBACK_H */
+> -// b5e87bdd5ede61470c29f7a7e4de781af3770f09
+> +// 1b4d4c82ae653389cd1538d5b07170267d9b3837
+> diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
+> index 3a07695e3c89..39f447161108 100755
+> --- a/scripts/atomic/gen-atomic-fallback.sh
+> +++ b/scripts/atomic/gen-atomic-fallback.sh
+> @@ -171,7 +171,7 @@ cat <<EOF
+>  #ifndef arch_try_${cmpxchg}${order}
+>  #define arch_try_${cmpxchg}${order}(_ptr, _oldp, _new) \\
+>  ({ \\
+> -	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \\
+> +	typeof(*(_ptr)) *___op = (typeof(_ptr))(_oldp), ___o = *___op, ___r; \\
+>  	___r = arch_${cmpxchg}${order}((_ptr), ___o, (_new)); \\
+>  	if (unlikely(___r != ___o)) \\
+>  		*___op = ___r; \\
 > -- 
-> 2.37.1 (Apple Git-137.1)
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> 2.39.2
+> 
