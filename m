@@ -2,110 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52CF6C734F
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Mar 2023 23:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164AF6C7A9B
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 10:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjCWWu5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Mar 2023 18:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
+        id S231630AbjCXJAY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Mar 2023 05:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjCWWuy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Mar 2023 18:50:54 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C0BEC4B
-        for <linux-mips@vger.kernel.org>; Thu, 23 Mar 2023 15:50:52 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e23-20020a25e717000000b00b66ab374ba1so122620ybh.22
-        for <linux-mips@vger.kernel.org>; Thu, 23 Mar 2023 15:50:52 -0700 (PDT)
+        with ESMTP id S231983AbjCXJAW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 05:00:22 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F82F4203
+        for <linux-mips@vger.kernel.org>; Fri, 24 Mar 2023 02:00:17 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso2709847wmb.0
+        for <linux-mips@vger.kernel.org>; Fri, 24 Mar 2023 02:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679611851;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=74Bca3+J0Cb4vQ6fen5CaUBDEj5b5vV7i4MEot6v9Ds=;
-        b=YH7MTbm9mvyot6ZU2+XkcDSlj10Nsc7kiE+CaqrEGoRHP+5Wp1aXsacMGgUuC+9V/C
-         WVpEYg6CLbPyr+dvSfXfFo9SzojYnPgv2zPNeoMiLzTDGGi4AOX40qM/0GVJy3TDdzri
-         /A1NFKBZszV6ih13Bp4d8BSvUXewKzg6VmXODUInfnB0TEN6hYV85WwJX+9wI/qq4era
-         0a3SNXpZRFkv2GXJSpRTaAfqAeuXeGfauq4Kc6Df39oJSG3g/+pwfT0MoMzqhhdMMan2
-         GnM5KMzJNUIZtfs56MGTlzzcI0yeX13rZ0t+OMLFxMcw4SONq0Zz6RyW2BIHRmVknLv5
-         Kafg==
+        d=linaro.org; s=google; t=1679648415;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5xxjybCBQ7FBka5nE6E8+uHXCIz/6b/SCGTHJfPcbCM=;
+        b=a1FBd8hdYt0yM0X/QMw5JK93/6fmZkvcvOaCpGAhllGD9kZY3ocWprh/fBfy2T2rod
+         YkjH4UdxH2uedUuCvo+EkF57N3c7HVf3QBOceSd07Mza5R+OpESBolPUbeS2d8fEsBnh
+         OQSDXwfd2956PoRvrlESlWmo04/2c61Xl/bDa7ICS7G31P3ZvNNxX5D0+ZOcZrZ5tdVJ
+         2S9NsPv6/2vlegpFew239TZL4Ndvj2ZSLHjydzAhHLKc0SUYXBptCAACw1ytjJlvXLD2
+         ngcfW35TYBHM51xRfg++jvURD69Dmc0jU2GT+32k16t0vBRoghLroNVWI9Q6WKBRZRnc
+         Sc/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679611851;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=74Bca3+J0Cb4vQ6fen5CaUBDEj5b5vV7i4MEot6v9Ds=;
-        b=NEBvfh6aCIaay4qPOfVaQF1YRXknk3uVFaGiEJ60o/Bi3R0/pgecXJ1tLuQRQA6D2L
-         aQ3po2NS3QAtcwrxmeel6xeQWakUOSfCDU38YYFucXyB9o7Hv7uGhtW59zakWdo2Rqjh
-         dxtqXE6Vv57c9ToqbbYDQC4bdXPzCFjrGmymELmCIv8Zs1Pyj5ie4lkcLS2CqRX3Ipte
-         6hIQ3EtOanBCXxFig4Lq6tYTQpSVTQcZ3H4nlHDG/TeyTRb07HHBRBF3KnUop9oMssYH
-         9SbV6/+GRPiYWrjghTCRDN4kIEjfJAjMzfN9d4eQELW9JRt68wkRKmDqU35g3IM8t5pt
-         3v/w==
-X-Gm-Message-State: AAQBX9exa3J+6UjiuKUphTHJU6Jiuk0DPfNP5h4Vbc7+S6b+iBgSv+to
-        dS3neWyqQVZMuMNO19zkC0O4hf/RCA4=
-X-Google-Smtp-Source: AKy350ZsIJuSNQoMPlJ5+eoOr2kgPIQRx9B3zNmq76T9BVO+0ZLsWEOoUS4XgvR/h7pV3ogslqbmAO1mcEk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4426:0:b0:544:5aa0:e212 with SMTP id
- r38-20020a814426000000b005445aa0e212mr87638ywa.6.1679611851706; Thu, 23 Mar
- 2023 15:50:51 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 15:50:28 -0700
-In-Reply-To: <20230126184025.2294823-1-dmatlack@google.com>
-Mime-Version: 1.0
-References: <20230126184025.2294823-1-dmatlack@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <167934082066.1939558.14724526021018063522.b4-ty@google.com>
-Subject: Re: [PATCH v2 0/7] KVM: Add a common API for range-based TLB invalidation
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Matlack <dmatlack@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Raghavendra Rao Ananta <rananta@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679648415;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xxjybCBQ7FBka5nE6E8+uHXCIz/6b/SCGTHJfPcbCM=;
+        b=hRTQ5MbCOeB5pBvlpoWZON9fJUijvLuB1+PQTk6m65ThqxPy9wdxaOCCdfWdZeGNOs
+         3Rfur/y2KyWvsui36PBWO1f/k9AAWAmbVOuCvAguq+csmFCrf0SEs5lkqpCpK5oK6MSf
+         CMoNMjSIldadXatmE0YmOrcPfxivNQW4tETdn+VYeAjKUyc2DSx6ob08R0ycVcsU2aDu
+         LCiOAoGk6cOmL2gk7/pRYOL32QhFwFFgzl30FP1tpkMUMFejNPkMfJUU5Thq/yKwkiCh
+         zdFKYn4MnS6BBdLpmV6Gcj8Pj7t1feoGraP6AQCWO45BhnaUNAw9aMM/CoZXIp95v4x/
+         6jcA==
+X-Gm-Message-State: AO0yUKUnuYAKrQLWRPoM8/TQcNBkqQ11YMuzyfBNGBOhlApkuNz+GUts
+        IuFeIUHoMTkeYsZrn/D2l4Xr/Q==
+X-Google-Smtp-Source: AK7set/G+BrnIBHzdKAcJLIchyTJ1+8LJ+VqEzbQ4F0KmkhucSNebeQVHkqJ+K4tuv21EwA1IHVe7Q==
+X-Received: by 2002:a7b:c459:0:b0:3eb:a4e:a2b2 with SMTP id l25-20020a7bc459000000b003eb0a4ea2b2mr1815337wmi.4.1679648415689;
+        Fri, 24 Mar 2023 02:00:15 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.152.149])
+        by smtp.gmail.com with ESMTPSA id n20-20020a7bc5d4000000b003ee10fb56ebsm4302953wmk.9.2023.03.24.02.00.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 02:00:15 -0700 (PDT)
+Message-ID: <78a9e002-ba18-c580-fe89-46f5653ea49d@linaro.org>
+Date:   Fri, 24 Mar 2023 10:00:10 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v7 3/6] PCI: Allow pci_bus_for_each_resource() to take
+ less arguments
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anatolij Gustschin <agust@denx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+References: <20230323173610.60442-1-andriy.shevchenko@linux.intel.com>
+ <20230323173610.60442-4-andriy.shevchenko@linux.intel.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230323173610.60442-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 26 Jan 2023 10:40:18 -0800, David Matlack wrote:
-> This series introduces a common API for performing range-based TLB
-> invalidation. This is then used to supplant
-> kvm_arch_flush_remote_tlbs_memslot() and pave the way for two other
-> patch series:
+On 23/3/23 18:36, Andy Shevchenko wrote:
+> Refactor pci_bus_for_each_resource() in the same way as it's done in
+> pci_dev_for_each_resource() case. This will allow to hide iterator
+> inside the loop, where it's not used otherwise.
 > 
-> 1. https://lore.kernel.org/kvm/20230109215347.3119271-1-rananta@google.com/
+> No functional changes intended.
 > 
-> [...]
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+> ---
+>   drivers/pci/bus.c                  |  7 +++----
+>   drivers/pci/hotplug/shpchp_sysfs.c |  8 ++++----
+>   drivers/pci/pci.c                  |  3 +--
+>   drivers/pci/probe.c                |  2 +-
+>   drivers/pci/setup-bus.c            | 10 ++++------
+>   include/linux/pci.h                | 17 +++++++++++++----
+>   6 files changed, 26 insertions(+), 21 deletions(-)
 
-Applied the x86 specific cleanups to kvm-x86 mmu.  They're good changes on their
-own, I'm quite confident that this series a whole won't be going into 6.4, and I
-suspect/hope that getting these into 6.4 will make David's life easier (there are
-more cleanups in the related x86 code that I want to get into 6.4).  David, if
-I'm wrong, you'll have plenty of time to think of an appropriate punishment ;-)
+Nice.
 
-[3/7] KVM: x86/mmu: Collapse kvm_flush_remote_tlbs_with_{range,address}() together
-      https://github.com/kvm-x86/linux/commit/28e4b4597d65
-[4/7] KVM: x86/mmu: Rename kvm_flush_remote_tlbs_with_address()
-      https://github.com/kvm-x86/linux/commit/8c63e8c21765
-[5/7] KVM: x86/MMU: Use gfn_t in kvm_flush_remote_tlbs_range()
-      https://github.com/kvm-x86/linux/commit/9d4655da1a4c
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
