@@ -2,44 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F856C8825
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 23:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0BC6C882D
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 23:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjCXWLI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Mar 2023 18:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
+        id S232054AbjCXWNz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Mar 2023 18:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbjCXWLG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 18:11:06 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9673320544;
-        Fri, 24 Mar 2023 15:10:36 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id ca2-20020a056830610200b006a11ab58c3fso954332otb.4;
-        Fri, 24 Mar 2023 15:10:36 -0700 (PDT)
+        with ESMTP id S231277AbjCXWNy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 18:13:54 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF7310EB;
+        Fri, 24 Mar 2023 15:13:53 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-17997ccf711so3212802fac.0;
+        Fri, 24 Mar 2023 15:13:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679695832;
+        d=1e100.net; s=20210112; t=1679696033;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fEZB0Nh/4O/z/XC92VKOaEMymhD7WgSbKx5bfGMzpjo=;
-        b=a6zxQiGAwCfZdkJpOYG+7nWpnTsubLe2SytfDE0PnTFSHJ9gJLWZuecwBKVIpd4jBD
-         yrp1Do8zBkVRXGkIgIh7I0+qnM4IKumriz67c7xt0Quyhe83xQtv18bijHb0C+54AUyS
-         ETO+jhFF8+E0R3FIURzoqEMYx59TYllkApEn2oO56Ajki/eiGGtccEUxqWuSDmBOcg/8
-         iHaQl6rsthmAkfysLoHHKR+slJLjpN104RtVV12vhb4NY6ItJ1LuHQuERVUjrKH5+DZC
-         61il5K9VEyY2CYXG0xANT2g4AVLA/XNg2yEAi+oRsGm8LiE68vcnLlWLB9bYk8RGux3y
-         oT0w==
-X-Gm-Message-State: AO0yUKXP49E71naKqVTc0ytqvpBJr40GRAvVENLn8F0lf1hEhBrwON6I
-        ZR5Vw2gTjxSrW/pFpNGb7g==
-X-Google-Smtp-Source: AK7set9vW0zHsHlJLlEylX6XKKkb0rXZiJfoBOVqeOno3AFH8R3gs0Y/UTdHNrqBt92x+oWHzPN07w==
-X-Received: by 2002:a05:6830:1db6:b0:69f:91eb:87da with SMTP id z22-20020a0568301db600b0069f91eb87damr2486443oti.16.1679695832134;
-        Fri, 24 Mar 2023 15:10:32 -0700 (PDT)
+        bh=vACwuYnAVhIZI9nNwlQgZZpN4O9w4KOf+4WlyTKmG+k=;
+        b=Y/aPf61zIIVTuDunjBKoT/eSjJIH+W1Z5wY1tzLBEpuPC2ZTCjMo1gwBmSLVNFCByQ
+         w3hSNRVnqemBt4JnS9M/FdG/vGt+0/VbqSyij2wbIB1F8Nm4h58P18WCo1p0MUaLssZ2
+         JwI5MVNywkgSh8gVPrf8CMRfSNC4xlP4ZQG0xUVqbxx/T29zwuJvGhwFbzoDEoDGPurN
+         7hQktRg1prxUZEap2QbfTPYpgpZ9uiL6ou2jBwW/n8eEuxOi64Mh3Y+kBpZQJHhnPclO
+         XN/LRqlD0WxgrmoYNUAW3ybE8nHqwD3j/90ZaAQUS3Nv2z/i1f7rKx1iQ/3vj12PYPNP
+         1pbw==
+X-Gm-Message-State: AAQBX9cHc8uMCB8HNr0AQCgmLu97gVT9SmfiX1RCSgPf0Bog9SKq69d7
+        pgFkcDpjz4Z5SKQ4WrzL8g==
+X-Google-Smtp-Source: AK7set9ma3RprepVdiheoXzE7TxJmGFq75ItLwdBerYU9aH/Z82lDB5uXWt52Rfq8pV+svWaUeV7bA==
+X-Received: by 2002:a05:6870:524a:b0:17a:bc23:5f8b with SMTP id o10-20020a056870524a00b0017abc235f8bmr3372767oai.13.1679696033152;
+        Fri, 24 Mar 2023 15:13:53 -0700 (PDT)
 Received: from robh_at_kernel.org ([2605:ef80:80f9:92f0:b372:78c0:69c1:66d6])
-        by smtp.gmail.com with ESMTPSA id n16-20020a9d6f10000000b0069fa641bd25sm2976890otq.8.2023.03.24.15.10.30
+        by smtp.gmail.com with ESMTPSA id h5-20020a9d6405000000b0069b82311f27sm9033901otl.74.2023.03.24.15.13.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 15:10:31 -0700 (PDT)
-Received: (nullmailer pid 69197 invoked by uid 1000);
-        Fri, 24 Mar 2023 22:10:29 -0000
-Date:   Fri, 24 Mar 2023 17:10:29 -0500
+        Fri, 24 Mar 2023 15:13:52 -0700 (PDT)
+Received: (nullmailer pid 73704 invoked by uid 1000);
+        Fri, 24 Mar 2023 22:13:50 -0000
+Date:   Fri, 24 Mar 2023 17:13:50 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -52,7 +52,7 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         devicetree@vger.kernel.org
 Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
  tree binding documentation
-Message-ID: <20230324221029.GA64664-robh@kernel.org>
+Message-ID: <20230324221350.GA70836-robh@kernel.org>
 References: <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
  <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
  <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
@@ -94,9 +94,8 @@ On Tue, Mar 21, 2023 at 12:02:47PM +0300, Arınç ÜNAL wrote:
 > No, both strings stay on the driver, it's the schemas that will only keep
 > ralink.
 
-But you are adding one of the strings to the driver, right? Still an ABI 
-break, but only if you have an old kernel and new DT. That can be 
-somewhat mitigated with a stable backport of the new id, but still an 
-ABI break.
+Whatever is in the driver should be in the schema too. 'make 
+dt_compatible_check' will check this. And some day, I'd like that list 
+to get to 0.
 
 Rob
