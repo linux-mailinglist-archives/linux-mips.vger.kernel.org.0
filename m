@@ -2,141 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C176C7B2A
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 10:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600C66C7C3F
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Mar 2023 11:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjCXJV4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Mar 2023 05:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
+        id S229508AbjCXKLE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Mar 2023 06:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjCXJVz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 05:21:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C75233DE;
-        Fri, 24 Mar 2023 02:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679649689; x=1711185689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Zv6p5PxBUIwRGR/FQTKCtRGfcJDPVTzeoNo7mhbkHhY=;
-  b=PxRGiXTN6YBrH7uOleNvHOd8rB72J+4Q2yPZ0B6bIgU1pGI5oLsKcUnR
-   N8IOmGHHOzoifXTutOmGi93xQUOT2/R+WV60Xut0UN4taXyZosJPESPnx
-   RIBj3kthGQNoGA2XQ0l/LEIYhzaXATqBcBP5Z37Bkqu+DhStx4R6x5Y+R
-   vQYOuMU26Moz8COz9eXSflZGu2AARC54Cy0MFqjFZACGV+J1TnXsSoN/h
-   iIF2aCYzgknrrPEyrK0/hlFrLCM4+9iMUeNskvxgqzhni2j7pRGRax60L
-   8CLYisxfLm85EmrzhZJVJvbRcmJnjb4WLuDDQUl0cRPM46Yx6vAmE4byS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="320129732"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="320129732"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 02:21:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="771814725"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="771814725"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Mar 2023 02:20:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pfdbS-007qWb-1l;
-        Fri, 24 Mar 2023 11:20:54 +0200
-Date:   Fri, 24 Mar 2023 11:20:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v7 6/6] PCI: Make use of pci_resource_n()
-Message-ID: <ZB1rdkOgwwSC2Pxf@smile.fi.intel.com>
-References: <20230323173610.60442-1-andriy.shevchenko@linux.intel.com>
- <20230323173610.60442-7-andriy.shevchenko@linux.intel.com>
- <1722e75c-bc06-4a34-5e12-fa3622ed86a3@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1722e75c-bc06-4a34-5e12-fa3622ed86a3@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231444AbjCXKLD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Mar 2023 06:11:03 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03726C2F;
+        Fri, 24 Mar 2023 03:11:02 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w9so5821824edc.3;
+        Fri, 24 Mar 2023 03:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679652660;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=evdlK2TGBDUZwBoMd27PncFntPqf8dN29Q/MhkQ6Vbw=;
+        b=dznHZO7lkSFUK+s8WndyI4DcgrTjLCpfT275eZ9bhSwMycl8lbNnKvNh9mLJk9Yk/c
+         cUdP6wFYQJzpe9lFAWcn7NpZD9VUsF5AAWkkX9CpeTk9qQ8Jb+ujNW9Y5XeR18PGbJdI
+         wogjwWk8T7mSjyiFZXuS3iP8i/3d74PAFRbUhxt5oBG8Qy5xMfd2e7N4RX12NvYhb4Wx
+         q0gqGXBKo8JyInrtcryQ/yt2sCgb8qepY+8OSX6R3BQlTi7hSE0yu1u+c558mj4gBfDR
+         I6lK8LeiT38pLnzTemwlcqzrQ6uziBwV9DnnwuJ2rloSB94rW6iX/9F7do4fDeCFvqoV
+         xkyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679652660;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=evdlK2TGBDUZwBoMd27PncFntPqf8dN29Q/MhkQ6Vbw=;
+        b=L8yQFQtkNP7JK3jeR3zSWkNRiLajpz92n57uzgb3lDm0/7KgK61Bc29xIt1LplanyQ
+         YXjhKTpUP/DFF23NNtM/oAZu9ud7VZpSzzwJgpcZcePdtpnXsOfPJHHjpBQEJei8QAGL
+         lUmXXoUmIJPN3vlHLajc+MtxK5XSCaHPmR9BEAfiKXmr/Ap5EMr+k4CIsWwOT5joUz+Q
+         rhWaLZ4tPqepRAV+tFbJbVemsZiu+71IL+HBcvXHeXN/IvOfvegztPn/Z1eahAEh+i0D
+         U7vcC6jQytPaVUvLmcs+u30w4pUrHCc8rJ1gYp7aCtexj4bf0DA6vR1R9qSFyYxy3R3t
+         PbrQ==
+X-Gm-Message-State: AAQBX9e4NnqmaM8iWt2Mtf5SFSsWN9o6/uQky/nS6TLZXRJZDnMG7zUh
+        wJJX5S/+e/Uuo9Wnz56+Sn4=
+X-Google-Smtp-Source: AKy350bSSu9MVW+4h7wFp+T2skX/v4XOI6/R0Pczs/23rI98NSiFTL7j4g1U1znI9HPwZfhgyOK5GA==
+X-Received: by 2002:aa7:d7d3:0:b0:501:d542:4d0c with SMTP id e19-20020aa7d7d3000000b00501d5424d0cmr2432392eds.22.1679652660688;
+        Fri, 24 Mar 2023 03:11:00 -0700 (PDT)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id u20-20020a50c054000000b004aeeb476c5bsm10351126edd.24.2023.03.24.03.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 03:11:00 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] mips: Remove obsolete configs IRQ_MSP_CIC and IRQ_MSP_SLP
+Date:   Fri, 24 Mar 2023 11:08:48 +0100
+Message-Id: <20230324100848.13127-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:08:39AM +0100, Philippe Mathieu-Daudé wrote:
-> On 23/3/23 18:36, Andy Shevchenko wrote:
-> > Replace open-coded implementations of pci_resource_n() in pci.h.
+Commit 1b00767fd8e1 ("MIPS: Remove PMC MSP71xx platform") removes all uses
+of the config IRQ_MSP_CIC and IRQ_MSP_SLP.
 
-...
+Remove these two obsolete configs IRQ_MSP_CIC and IRQ_MSP_SLP.
 
-> >   #define pci_resource_n(dev, bar)	(&(dev)->resource[(bar)])
-> > -#define pci_resource_start(dev, bar)	((dev)->resource[(bar)].start)
-> > -#define pci_resource_end(dev, bar)	((dev)->resource[(bar)].end)
-> > -#define pci_resource_flags(dev, bar)	((dev)->resource[(bar)].flags)
-> > -#define pci_resource_len(dev,bar) \
-> > -	((pci_resource_end((dev), (bar)) == 0) ? 0 :	\
-> > -							\
-> > -	 (pci_resource_end((dev), (bar)) -		\
-> > -	  pci_resource_start((dev), (bar)) + 1))
-> > +#define pci_resource_start(dev, bar)	(pci_resource_n(dev, bar)->start)
-> > +#define pci_resource_end(dev, bar)	(pci_resource_n(dev, bar)->end)
-> > +#define pci_resource_flags(dev, bar)	(pci_resource_n(dev, bar)->flags)
-> > +#define pci_resource_len(dev,bar)					\
-> > +	(pci_resource_end((dev), (bar)) ? 				\
-> > +	 resource_size(pci_resource_n((dev), (bar))) : 0)
-> 
-> Seems (to me) more logical to have this patch as "PCI: Introduce
-> pci_resource_n()" ordered before your patch #2 "PCI: Introduce
-> pci_dev_for_each_resource()".
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/mips/Kconfig | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Either way works for me. Bjorn, what do you like?
-
-> Here as #6 or as #2:
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-
-Thank you!
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index f1dfc2fe2acb..26d254d125b6 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1179,12 +1179,6 @@ config SYS_SUPPORTS_LITTLE_ENDIAN
+ config MIPS_HUGE_TLB_SUPPORT
+ 	def_bool HUGETLB_PAGE || TRANSPARENT_HUGEPAGE
+ 
+-config IRQ_MSP_SLP
+-	bool
+-
+-config IRQ_MSP_CIC
+-	bool
+-
+ config IRQ_TXX9
+ 	bool
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
