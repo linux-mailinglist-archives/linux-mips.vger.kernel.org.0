@@ -2,48 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6636CA53D
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Mar 2023 15:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D736CA611
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Mar 2023 15:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjC0NLE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Mar 2023 09:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S232065AbjC0Nhj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Mar 2023 09:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC0NLD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Mar 2023 09:11:03 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34BA270D;
-        Mon, 27 Mar 2023 06:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FP/g5MMoh+bWH6/vaV4x7gdcx8r1AfO8OwzqUj0gats=; b=BYOMa7b7myCi6QMrt+S21c5RGt
-        YZDhEXdlYS9/d40xW81RY3VSFHod0WMESd9MiyZKORnxnEZFeVJJs7K9EQpCCJNgACyCDiWwXsPpF
-        2ncxKuwaEj+3S6ea0k5rIgw856TBVM7SFtMKupTw4OZBsMh//aO6uH7zbUx8Sbaq5V1oENeXmR4Vh
-        loGRRUxL9sZTfR/yJHmBKGHA4OwzrrWY32nZcUlyLJv+oeCwO/EaBTazPTgD3adb6YTVyS8/5GbNt
-        xTGhL00gRXzdrhq16LpLYea53LMoH2KCDQ7kcOIb5YUjAGGqvLHrMH1gd6RuV30JD6ZwdzzKEiLDp
-        jETc+EDQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50576)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pgmcV-0003kT-41; Mon, 27 Mar 2023 14:10:43 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pgmcK-0005Rv-Ob; Mon, 27 Mar 2023 14:10:32 +0100
-Date:   Mon, 27 Mar 2023 14:10:32 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+        with ESMTP id S232102AbjC0Nhh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Mar 2023 09:37:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9E1BC6;
+        Mon, 27 Mar 2023 06:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D5E61286;
+        Mon, 27 Mar 2023 13:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B4CC433AE;
+        Mon, 27 Mar 2023 13:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679924255;
+        bh=sKw5GnPYWTx1tEo+IYG63yzmzH5uUSkHi5W70RXeiXE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=me5d4slZ7BQwLYQm0UbRAC2iVqyUYiUxghqwGTfCH/vpOgHLgDekGA1TBK2dJnpUc
+         9WkLB4v/ufSmAfgCCV5YSuoaGaKiOwCqLyqumjx5XyRbF9dJBFFSs6HLt7PEmp891n
+         XwMOQwvU37TpfHRmLM6F2Wu2rjJcr08TSj+OfMLw3e/eYNtc8Ff3gi22phENHfgyn4
+         DNtHVC4q96uONAXntDKuUBjVgg2LmxrGjTx5EvWUGZrk2TnDCWrxinTYGMaEa37yw+
+         smAD8fYPQMq6WbMRXe/30WkwvLcPhMLKpDQqlLl5O9Eqp+HZa9Zv6aqE9YRxyDLRSD
+         1UErhgcXn+Ddg==
+Received: by mail-ed1-f52.google.com with SMTP id r11so36361759edd.5;
+        Mon, 27 Mar 2023 06:37:35 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eEu4XKsmRvh0JrG+LYiYn12N/qN/lZiehJvyNIK6uUwrxWSZIa
+        fogXil5VslYgdYJZExPp8pksxJBCtWLuhtdig5k=
+X-Google-Smtp-Source: AKy350aPL1uQ3r2MblLdeWPWx+R7rA3ZaUJTGPp0hWqhXUlS0wDj97jvk8gg6F5BBuMMpzVJHH5p6CMaiE85EcR30Es=
+X-Received: by 2002:a17:906:4746:b0:8ab:b606:9728 with SMTP id
+ j6-20020a170906474600b008abb6069728mr5893837ejs.5.1679924253534; Mon, 27 Mar
+ 2023 06:37:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-11-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-11-arnd@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 27 Mar 2023 21:37:22 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT73KBZ01N2fr8z6=9XWFKo4D7cGKOtZLZeXN9NrscCXg@mail.gmail.com>
+Message-ID: <CAJF2gTT73KBZ01N2fr8z6=9XWFKo4D7cGKOtZLZeXN9NrscCXg@mail.gmail.com>
+Subject: Re: [PATCH 10/21] csky: dma-mapping: skip invalidating before DMA
+ from device
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
+        Will Deacon <will@kernel.org>, Brian Cain <bcain@quicinc.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -70,34 +82,63 @@ Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 16/21] ARM: dma-mapping: bring back dmac_{clean,inv}_range
-Message-ID: <ZCGVyB+Sdve78LrK@shell.armlinux.org.uk>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-17-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327121317.4081816-17-arnd@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 02:13:12PM +0200, Arnd Bergmann wrote:
+On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
 > From: Arnd Bergmann <arnd@arndb.de>
-> 
-> These were remove ages ago in commit 702b94bff3c5 ("ARM: dma-mapping:
-> remove dmac_clean_range and dmac_inv_range") in an effort to sanitize
-> the dma-mapping API.
+>
+> csky is the only architecture that does a full flush for the
+> dma_sync_*_for_device(..., DMA_FROM_DEVICE) operation. The requirement
+> is only make sure there are no dirty cache lines for the buffer,
+> which can be either done through an invalidate operation (as on most
+> architectures including arm32, mips and arc), or a writeback (as on
+> arm64 and riscv). The cache also has to be invalidated eventually but
+> csky already does that after the transfer.
+>
+> Use a 'clean' operation here for consistency with arm64 and riscv.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/csky/mm/dma-mapping.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> index 82447029feb4..c90f912e2822 100644
+> --- a/arch/csky/mm/dma-mapping.c
+> +++ b/arch/csky/mm/dma-mapping.c
+> @@ -60,11 +60,9 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_=
+t size,
+>  {
+>         switch (dir) {
+>         case DMA_TO_DEVICE:
+> -               cache_op(paddr, size, dma_wb_range);
+> -               break;
+>         case DMA_FROM_DEVICE:
+>         case DMA_BIDIRECTIONAL:
+> -               cache_op(paddr, size, dma_wbinv_range);
+> +               cache_op(paddr, size, dma_wb_range);
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-Really no, please no. Let's not go back to this, let's keep the
-buffer ownership model that came at around that time.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>                 break;
+>         default:
+>                 BUG();
+> --
+> 2.39.2
+>
+
+
+--=20
+Best Regards
+ Guo Ren
