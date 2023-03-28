@@ -2,109 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117C06CBA72
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Mar 2023 11:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA026CBE82
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Mar 2023 14:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjC1JYT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Mar 2023 05:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S230478AbjC1MFo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Mar 2023 08:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjC1JYS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 05:24:18 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448FB5B9C;
-        Tue, 28 Mar 2023 02:24:13 -0700 (PDT)
-Received: from [192.168.1.155] ([92.225.143.37]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MGi6m-1pc5Lj18Gw-00DswJ; Tue, 28 Mar 2023 11:23:17 +0200
-Message-ID: <716362db-7355-7f10-6b8b-ee59ad22db41@metux.net>
-Date:   Tue, 28 Mar 2023 11:23:10 +0200
+        with ESMTP id S230280AbjC1MFn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 08:05:43 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D277DB1;
+        Tue, 28 Mar 2023 05:05:17 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o2so11413515plg.4;
+        Tue, 28 Mar 2023 05:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680005117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nPmXX1hgKpt/BYBMC6yN1gahjjJEjANZpQyVziEPpes=;
+        b=ST4nocriMAAXBAacSI1ZwetD0Femj7VgBRIjRFPGLYGn7klPoTVq3Sfn5CvaIZQjgR
+         nWUk/l6PWtl9uezfCCSC5EDPyIT4FOsd31j2VeOfesy9AeHwGGga3qvN87/nQo4Eoto5
+         cx38g5oZb49oh/pHnf5FyYb06fQadrLr0l7Chnw7MHQhlSs3CPYBNGkwSE00R45iTjg/
+         AL6Ss8uumL7ynJL6RVW1hsQTA4naoVjpQ3DzP2DMnKWkahwEtrxG/vJ9ea1HVBpXa0M1
+         YSRWodEpr/rttG3N4dw2yHiHzb1KgFV8YyHADn88pTwwsFwZtAkD1SBRWbWSMHaDiWl3
+         dbKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680005117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nPmXX1hgKpt/BYBMC6yN1gahjjJEjANZpQyVziEPpes=;
+        b=eakc3HVnDXxkQgkvvpT6k7Cq9V8udxn0eb4bHcR0Et2RhFkfXmFhXJWFt7DrSnM7MX
+         K6kXfZv7ov761t6xLi/0xummq7Qdp5HnQknkH3ZmGgMFSf5sD+Zy95r3h2s0dXN0HCp/
+         CXoI4oTM2l49f7/tsyu9i3ehN2pN27twSVzXGGEcnRyJuwLyK1Qyl0YhVW67Xce0FJZq
+         bAv1vSZyImyVgfjp4zZ7CmJUMq36G8l0n+6h3Pccnk/8DO3HGU1u6CDlwta46wOTNlO5
+         dA4VVvAk4oGA0ceFCepGQOHyjRnCzMZyKWhxMVbCyUSA3SjWcBTAtHGmZFjLtKnFb+Ij
+         eBAw==
+X-Gm-Message-State: AAQBX9cEq92J/GF42PE1VF/Djtg6TM1B0RZ76z/NrzxJxePytB9vAPa5
+        y1rJ0qxNTdD6xTpIjPtDG+3jIZ/Pf+/qVA==
+X-Google-Smtp-Source: AKy350ZgxWbNC6s6F1wnOqlzm1o/JQ1Ze0KdehbawRAn6htMsNtoi2+0+LeJiPJMiAByZ/zbgilhcg==
+X-Received: by 2002:a17:902:f2ca:b0:1a1:c54c:1a36 with SMTP id h10-20020a170902f2ca00b001a1c54c1a36mr12338427plc.63.1680005116895;
+        Tue, 28 Mar 2023 05:05:16 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id ju10-20020a170903428a00b0019a83f2c99bsm21013956plb.28.2023.03.28.05.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 05:05:16 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH 0/3] Move Loongson1 PWM timer to clocksource framework
+Date:   Tue, 28 Mar 2023 20:05:03 +0800
+Message-Id: <20230328120506.375864-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] drivers/gpio : Remove redundant
- platform_set_drvdata().
-Content-Language: tl
-To:     Lizhe <sensor1010@163.com>, linus.walleij@linaro.org,
-        brgl@bgdev.pl, geert+renesas@glider.be, info@metux.net,
-        rjui@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        f.fainelli@gmail.com, sbranden@broadcom.com, shc_work@mail.ru,
-        j-keerthy@ti.com, hoan@os.amperecomputing.com,
-        fancer.lancer@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, kaloz@openwrt.org,
-        khalasa@piap.pl, keguang.zhang@gmail.com, daniel@thingy.jp,
-        romain.perier@gmail.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, grygorii.strashko@ti.com,
-        ssantosh@kernel.org, khilman@kernel.org, mani@kernel.org,
-        ludovic.desroches@microchip.com, andy@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, jonathanh@nvidia.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, michal.simek@xilinx.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-tegra@vger.kernel.org
-References: <20230319115925.1317654-1-sensor1010@163.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-In-Reply-To: <20230319115925.1317654-1-sensor1010@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:ujdla9v/iyjL3L1Cm+XjJDsalTUKxgU24jiOGfnRDDlv+6BxEBk
- 28H46E0XI7p7p9qVjalxDWlIy6xfzIDACEQPVcoEKmfJeBTZUDYzWzsBgiTF5sK7xKSXsMU
- 6Ne5GFLPg3iF8SZpcov4SyijjbvxZuHNNahhvxW/b6vh/XwvP38kR4/h5+o9k+BYKi+yuY4
- IR9s2WsFAuBtirUVyTm1A==
-UI-OutboundReport: notjunk:1;M01:P0:MoGEpRKG1bo=;5T7PdYmcLG5pYfzDf8wQM6gX+1u
- u6+1T7eGv8suLuqhFsVIQetTiIHhQeLdoWrYLOJykRD4kcwK9iIB1R2Ca6YAta5bggT8ITXWp
- kcxl0zTa4ujpJwuro9HKDULm2lmwI2kytGe/Zytpl54o/yMIIfUHys1TRdUugR2GX5JoEVusy
- m7NL6/bKinALAavCcvyl+yWz8iEFkUCGAjBkwRq6GcK+Vfn59Qf7Ix0NssyHKIRXiJfCpVcYl
- 7WLb8jY8RcqzNuiTT5NZi/D4uEktukiHS3sOhJzbf5a+yfLg8nyEdQeUaPxU7XogDjK1cGIM/
- bC0jFNv8FWtQgNYeKhBQsMaLJlgnU4mLgu4ZlCnW0VNCVrkT/t77bdnYZ+KGrOMV1hX+5ytNP
- dsbmjC+D8CuFxyPhuO51HbjyV24/bG7u/ai8V0eGP7FsUxZTQ90poeILm6KZOgK51Kw3FAQBc
- gUDTVLam3E6T6uEH35Ub1whNqJ/lmrSwrzT+Z+ytclVP+A6Y5ePVGynFAYBCpEsZ7qgJECWYH
- 1haSxsR64jHGcikbbyr5rWTWWvJo93rP4HizhuoFUdiHRjpcjDIhHCAMJ/uu+wWQ+3GznrxTb
- PuQWQXNZ9dTYb627WNCdmUGhCKlnju8FIAE5EJGm2qPT8TFuZldhrSZWZ1sdxgKTFRe7VoUBk
- AGpHH9uEKGUANhP09xvX5f9fbGpGuwMmmasM0yXdMA==
-X-Spam-Status: No, score=0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19.03.23 12:59, Lizhe wrote:
+Move Loongson1 PWM timer to clocksource framework
+and update the Kconfig/Makefile options accordingly.
 
-Hi,
+Keguang Zhang (3):
+  MIPS: Loongson32: Remove deprecated PWM timer clocksource
+  dt-bindings: timer: Add Loongson-1 clocksource
+  clocksource: loongson1: Move PWM timer to clocksource framework
 
-> platform_set_drvdata() is redundant in these functions.
-> the purpose of calling this function is to place data
-> in *driver_data. but the data is not retrieved in these
-> functions
-
-I appreciate your contribution, but I have to NAK for the gpio-amd-fch 
-driver: it would at least create a memleak (driver core can't free the
-driver_data when the driver is unloaded).
-
-In general, patches to drivers should be splitted per driver, unless 
-there's a hard reason to do otherwise. That's important for the
-individual maintainers being able to review patches to their drivers.
-If each maintainer can only ack on pieces of the patch, somebody else
-would need to split out those things that could be picked. Really too
-complicated.
+ .../timer/loongson,ls1x-pwmtimer.yaml         |  48 ++++
+ arch/mips/loongson32/Kconfig                  |  37 ---
+ arch/mips/loongson32/common/time.c            | 210 ----------------
+ drivers/clocksource/Kconfig                   |   9 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-loongson1-pwm.c     | 236 ++++++++++++++++++
+ 6 files changed, 294 insertions(+), 247 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+ create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
 
 
---mtx
-
+base-commit: f7b5a248213f0976c7944925f3f3ab7ff199e581
 -- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+2.34.1
+
