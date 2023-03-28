@@ -2,367 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC036CBE90
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Mar 2023 14:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD6B6CC00E
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Mar 2023 15:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbjC1MGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Mar 2023 08:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S230313AbjC1NC7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Mar 2023 09:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjC1MGH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 08:06:07 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E92193F9;
-        Tue, 28 Mar 2023 05:05:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso12247780pjb.2;
-        Tue, 28 Mar 2023 05:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680005131;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BSwVJnmt8b45SnByJtoBpZI8yP1oPog/3K70qzHc98Q=;
-        b=Nisx7RU8wYdia8KcMec128ZYwYnL0AugSs0UOFvO7tfLXOw2UdyYH/5g75B4DzpuBY
-         2xYG8zakRkgJHJLwglWmPX58cWvjncUL8iN2VZYeK0xjysnGvqVZC0Fc1zsBVQnJMX65
-         tZZxdrk3MMMqo3HYyLRJVOsdljIuxI+NpbxT3TH27Q1QdQ0HLeYrMp1G5k+G56TibFmu
-         AHAuezMliynxiVM9bqS7UnyIC+Ng4Omf7c6zi1Jy/egxtz+oQ9MMmcvktzRTHZEeFUdE
-         GQ9hqT5EwhNvTfbk3YRVsjCzw/Jmr1gKKbjin7yZh2TXWblu9hSbygh5d0/F4dqmKv91
-         bEfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680005131;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BSwVJnmt8b45SnByJtoBpZI8yP1oPog/3K70qzHc98Q=;
-        b=rQ+2n70lCCp8MQvyCLRaxOaD1Gn7fKvUNyl3D2xsRfY3r3dfdFazO/18mAOaBE4wpn
-         4o2HLYA0d1ZwV6usz0Tpgd9E0AtXFatw9abXg9uyM9Uprff+u5DeFepiC0DkyJzWLgyy
-         oaoUrbpujpkwpgo7bNqO4l8bo0yX5zeyTJvAWhw0e7RrRFEggjeDoJir36/LljIaZ4PM
-         bfUpF2WoN/WnFEih61CtreRx/5IWETrpj/tpUvM5j2o5ISiw0ec2Se+fH178fzoPZRf/
-         0GcV1J6Io+hz1YEY6RYPKRnmutO6WVZH9Ro/9Iuu9TKjsEAJnfLaD+tF+M8DNs+AkT4+
-         zqpg==
-X-Gm-Message-State: AAQBX9frrxs/8FiNxYyf91ZEP474rTIVMndblBs7jDv4IGbPW2KwPJCi
-        pxTKpYU4dZuq1angthwC+ynqhtM3a80BRw==
-X-Google-Smtp-Source: AKy350b9X5xUdtBgeQCRHIz6vU74B8Eqzv49/BTMB3xKF67DVuKwKMts4rFb0Yku2/Vix+M176iEIQ==
-X-Received: by 2002:a17:902:e0d5:b0:19d:abd:bb7e with SMTP id e21-20020a170902e0d500b0019d0abdbb7emr11272552pla.34.1680005131312;
-        Tue, 28 Mar 2023 05:05:31 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
-        by smtp.gmail.com with ESMTPSA id ju10-20020a170903428a00b0019a83f2c99bsm21013956plb.28.2023.03.28.05.05.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 05:05:31 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH 3/3] clocksource: loongson1: Move PWM timer to clocksource framework
-Date:   Tue, 28 Mar 2023 20:05:06 +0800
-Message-Id: <20230328120506.375864-4-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230328120506.375864-1-keguang.zhang@gmail.com>
-References: <20230328120506.375864-1-keguang.zhang@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+        with ESMTP id S230093AbjC1NC6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 09:02:58 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ABD1BDC;
+        Tue, 28 Mar 2023 06:02:30 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2497E5C0068;
+        Tue, 28 Mar 2023 09:02:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 28 Mar 2023 09:02:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1680008547; x=1680094947; bh=RgfOcRz7Y9eemhhj/K9vB90mPZhFUINw5BF
+        WLJTEWvg=; b=XT1bkKRGOh2E/x5JAYAuMLyNiDnIUuvpodvt5driju1aWi80oeN
+        mPc0FqqTR2bqYsXBLvTzWR/01JPImuxllDpvWUHmHHbK6ccdBe4cs1pCTptd/4C6
+        Cai74nhcYmf7d1MGKvueVSauZ1D5LyaEREBsyJy5pKdN0Mv5h1LHjHc3JZKMyOs/
+        1OpH4tfi2KLvjPWyOjiTrRyGnabyS1zzk1qo/3H8c9l6Yc8QNYdFbHLxP/JIH0Xg
+        fjAB+m3OG1Cy4jAsWMBQ3j/3LpGA2tH7LYxwDPG1Pw1E9S54FBLwr+VN/qhb1QzY
+        43YM4j4NrQTCpmO+XA4Ho2pHKstjkg9QQgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680008547; x=1680094947; bh=RgfOcRz7Y9eemhhj/K9vB90mPZhFUINw5BF
+        WLJTEWvg=; b=Ng4ehF7ju2al1N83yAu1TPFPrqY8x8L44K+/SjGec6oyQfK57hp
+        BAOLQ0pPp1sE0oealjiVsj/Gou+YqDkaT9UZJ0SJGpnQgfQ52iI5RmKL4CRneZL1
+        KTyarNnWIpXVVAJAGXpQNJSmXJUCcQcc9JCfKpzU5YrBxqFR2fA0lMCzDxUuDSyb
+        yMjn2VwXBQDc9MZGRqLd+eFg/8cWcSRjr5aTECiN1I58+CT4zNKyFfwecDrrcu5k
+        L+WZ4ejxgDmPFJyqtcbqQ45pQxwzAlUUwZw9gbdGcpX952vig83kp8ddce4W0/Z0
+        c9EnQ7uUQOH2mRigkfDEIr1RrR9M0Ghg4Pg==
+X-ME-Sender: <xms:YeUiZDu9OG480fT8HAXyiUJiwyAATFHVvxjH3VB-CAFjpZ5PMUZpHA>
+    <xme:YeUiZEewhcybDReytqiXw6s8ezwnOSY7ApkZ9Edsx7gI-RH7AsBnrVtohaavhR7oP
+    E_iA20oDhTblJazl-k>
+X-ME-Received: <xmr:YeUiZGwwIDzGdySRBP3SKo_ItGOA5wjfWoYSHxwydHxCBqvOupm3j-ybPCDBmS-YbuLO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:YeUiZCMSqRV3eaooG1vh72OUOb3OZZBs1PGMZo9g9r4L0XtLzOst5w>
+    <xmx:YeUiZD_vz22qEpX_9pGKYk4PlQSqSh6Tt5h8OlIYeOoF7aFlfvvDvg>
+    <xmx:YeUiZCUUdkNhGjeBz3hWAHzJA5R__gsxJcWyeg1v1L7QnBsYIekjdw>
+    <xmx:Y-UiZGXDEOYvSE_eKUnGgZOtc9OvLtb-xcYXbTgnhv2pd44pm-_4lw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Mar 2023 09:02:23 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH v3 0/4] Use dma_default_coherent for devicetree default
+ coherency
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230328074511.GA6188@alpha.franken.de>
+Date:   Tue, 28 Mar 2023 14:02:12 +0100
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        frowand.list@gmail.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9CCE7638-91FE-4B1F-9EAC-17362C041CE9@flygoat.com>
+References: <20230321110813.26808-1-jiaxun.yang@flygoat.com>
+ <20230323072944.GA18524@lst.de>
+ <60D7FE31-D708-4495-949F-3F64DDC11377@flygoat.com>
+ <20230323213930.GA7730@lst.de>
+ <CB41D3AF-20F6-42F3-9168-C0D6E716431A@flygoat.com>
+ <20230328011812.GA21977@lst.de> <20230328074511.GA6188@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch moves most part of arch/mips/loongson32/common/time.c
-into drivers/clocksource.
 
-Adapt the driver to clocksource framework and
-updates the Kconfig/Makefile options.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
- drivers/clocksource/Kconfig               |   9 +
- drivers/clocksource/Makefile              |   1 +
- drivers/clocksource/timer-loongson1-pwm.c | 236 ++++++++++++++++++++++
- 3 files changed, 246 insertions(+)
- create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
+> 2023=E5=B9=B43=E6=9C=8828=E6=97=A5 08:45=EF=BC=8CThomas Bogendoerfer =
+<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Tue, Mar 28, 2023 at 03:18:12AM +0200, Christoph Hellwig wrote:
+>> On Fri, Mar 24, 2023 at 09:17:38AM +0000, Jiaxun Yang wrote:
+>>>>=20
+>>>> Is patch a 6.3 candidate or should all of it go into 6.4?
+>>>=20
+>>> Please leave it for 6.4, as corresponding MIPS arch part will be a =
+part of 6.4.
+>>=20
+>> Ok.  I'll really need review from the MIPS and drivers/of/ =
+maintainers,
+>> through.
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 5fc8f0e7fb38..6e37b26d532d 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -603,6 +603,15 @@ config TIMER_IMX_SYS_CTR
- 	  Enable this option to use i.MX system counter timer as a
- 	  clockevent.
- 
-+config CLKSRC_LOONGSON1_PWM
-+	bool "Clocksource using Loongson1 PWM"
-+	depends on MACH_LOONGSON32 || COMPILE_TEST
-+	select MIPS_EXTERNAL_TIMER
-+	select TIMER_OF
-+	help
-+	  Enable this option to use Loongson1 PWM timer as clocksource
-+	  instead of the performance counter.
-+
- config CLKSRC_ST_LPC
- 	bool "Low power clocksource found in the LPC" if COMPILE_TEST
- 	select TIMER_OF if OF
-diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-index 64ab547de97b..f969a9eedfca 100644
---- a/drivers/clocksource/Makefile
-+++ b/drivers/clocksource/Makefile
-@@ -88,3 +88,4 @@ obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
- obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
- obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
- obj-$(CONFIG_GXP_TIMER)			+= timer-gxp.o
-+obj-$(CONFIG_CLKSRC_LOONGSON1_PWM)	+= timer-loongson1-pwm.o
-diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
-new file mode 100644
-index 000000000000..fe94c08afce2
---- /dev/null
-+++ b/drivers/clocksource/timer-loongson1-pwm.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Clocksource driver for Loongson-1 SoC
-+ *
-+ * Copyright (c) 2023 Keguang Zhang <keguang.zhang@gmail.com>
-+ */
-+
-+#include <linux/clockchips.h>
-+#include <linux/interrupt.h>
-+#include <linux/sizes.h>
-+#include "timer-of.h"
-+
-+/* Loongson-1 PWM Timer Register Definitions */
-+#define PWM_CNTR		0x0
-+#define PWM_HRC			0x4
-+#define PWM_LRC			0x8
-+#define PWM_CTRL		0xc
-+
-+/* PWM Control Register Bits */
-+#define INT_LRC_EN		BIT(11)
-+#define INT_HRC_EN		BIT(10)
-+#define CNTR_RST		BIT(7)
-+#define INT_SR			BIT(6)
-+#define INT_EN			BIT(5)
-+#define PWM_SINGLE		BIT(4)
-+#define PWM_OE			BIT(3)
-+#define CNT_EN			BIT(0)
-+
-+#define CNTR_WIDTH		24
-+
-+DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
-+
-+struct ls1x_clocksource {
-+	void __iomem *reg_base;
-+	unsigned long ticks_per_jiffy;
-+	struct clocksource clksrc;
-+};
-+
-+static inline struct ls1x_clocksource *to_ls1x_clksrc(struct clocksource *c)
-+{
-+	return container_of(c, struct ls1x_clocksource, clksrc);
-+}
-+
-+static inline void ls1x_pwmtimer_set_period(unsigned int period,
-+					    struct timer_of *to)
-+{
-+	writel(period, timer_of_base(to) + PWM_LRC);
-+	writel(period, timer_of_base(to) + PWM_HRC);
-+}
-+
-+static inline void ls1x_pwmtimer_clear(struct timer_of *to)
-+{
-+	writel(0, timer_of_base(to) + PWM_CNTR);
-+}
-+
-+static inline void ls1x_pwmtimer_start(struct timer_of *to)
-+{
-+	writel((INT_EN | PWM_OE | CNT_EN), timer_of_base(to) + PWM_CTRL);
-+}
-+
-+static inline void ls1x_pwmtimer_stop(struct timer_of *to)
-+{
-+	writel(0, timer_of_base(to) + PWM_CTRL);
-+}
-+
-+static inline void ls1x_pwmtimer_irq_ack(struct timer_of *to)
-+{
-+	int val;
-+
-+	val = readl(timer_of_base(to) + PWM_CTRL);
-+	val |= INT_SR;
-+	writel(val, timer_of_base(to) + PWM_CTRL);
-+}
-+
-+static irqreturn_t ls1x_clockevent_isr(int irq, void *dev_id)
-+{
-+	struct clock_event_device *clkevt = dev_id;
-+	struct timer_of *to = to_timer_of(clkevt);
-+
-+	ls1x_pwmtimer_irq_ack(to);
-+	ls1x_pwmtimer_clear(to);
-+	ls1x_pwmtimer_start(to);
-+
-+	clkevt->event_handler(clkevt);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ls1x_clockevent_set_state_periodic(struct clock_event_device *clkevt)
-+{
-+	struct timer_of *to = to_timer_of(clkevt);
-+
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_set_period(timer_of_period(to), to);
-+	ls1x_pwmtimer_clear(to);
-+	ls1x_pwmtimer_start(to);
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static int ls1x_clockevent_tick_resume(struct clock_event_device *clkevt)
-+{
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_start(to_timer_of(clkevt));
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static int ls1x_clockevent_set_state_shutdown(struct clock_event_device *clkevt)
-+{
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_stop(to_timer_of(clkevt));
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static int ls1x_clockevent_set_next(unsigned long evt,
-+				    struct clock_event_device *clkevt)
-+{
-+	struct timer_of *to = to_timer_of(clkevt);
-+
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_set_period(evt, to);
-+	ls1x_pwmtimer_clear(to);
-+	ls1x_pwmtimer_start(to);
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static struct timer_of ls1x_to = {
-+	.flags = TIMER_OF_IRQ | TIMER_OF_BASE | TIMER_OF_CLOCK,
-+	.clkevt = {
-+		.name			= "ls1x-pwmtimer",
-+		.features		= CLOCK_EVT_FEAT_PERIODIC |
-+					  CLOCK_EVT_FEAT_ONESHOT,
-+		.rating			= 300,
-+		.set_next_event		= ls1x_clockevent_set_next,
-+		.set_state_periodic	= ls1x_clockevent_set_state_periodic,
-+		.set_state_oneshot	= ls1x_clockevent_set_state_shutdown,
-+		.set_state_shutdown	= ls1x_clockevent_set_state_shutdown,
-+		.tick_resume		= ls1x_clockevent_tick_resume,
-+	},
-+	.of_irq = {
-+		.handler		= ls1x_clockevent_isr,
-+		.flags			= IRQF_TIMER,
-+	},
-+};
-+
-+/*
-+ * Since the PWM timer overflows every two ticks, its not very useful
-+ * to just read by itself. So use jiffies to emulate a free
-+ * running counter:
-+ */
-+static u64 ls1x_clocksource_read(struct clocksource *cs)
-+{
-+	struct ls1x_clocksource *ls1x_cs = to_ls1x_clksrc(cs);
-+	unsigned long flags;
-+	int count;
-+	u32 jifs;
-+	static int old_count;
-+	static u32 old_jifs;
-+
-+	raw_spin_lock_irqsave(&ls1x_timer_lock, flags);
-+	/*
-+	 * Although our caller may have the read side of xtime_lock,
-+	 * this is now a seqlock, and we are cheating in this routine
-+	 * by having side effects on state that we cannot undo if
-+	 * there is a collision on the seqlock and our caller has to
-+	 * retry.  (Namely, old_jifs and old_count.)  So we must treat
-+	 * jiffies as volatile despite the lock.  We read jiffies
-+	 * before latching the timer count to guarantee that although
-+	 * the jiffies value might be older than the count (that is,
-+	 * the counter may underflow between the last point where
-+	 * jiffies was incremented and the point where we latch the
-+	 * count), it cannot be newer.
-+	 */
-+	jifs = jiffies;
-+	/* read the count */
-+	count = readl(ls1x_cs->reg_base + PWM_CNTR);
-+
-+	/*
-+	 * It's possible for count to appear to go the wrong way for this
-+	 * reason:
-+	 *
-+	 *  The timer counter underflows, but we haven't handled the resulting
-+	 *  interrupt and incremented jiffies yet.
-+	 *
-+	 * Previous attempts to handle these cases intelligently were buggy, so
-+	 * we just do the simple thing now.
-+	 */
-+	if (count < old_count && jifs == old_jifs)
-+		count = old_count;
-+
-+	old_count = count;
-+	old_jifs = jifs;
-+
-+	raw_spin_unlock_irqrestore(&ls1x_timer_lock, flags);
-+
-+	return (u64)(jifs * ls1x_cs->ticks_per_jiffy) + count;
-+}
-+
-+static struct ls1x_clocksource ls1x_clocksource = {
-+	.clksrc = {
-+		.name           = "ls1x-pwmtimer",
-+		.rating		= 300,
-+		.read           = ls1x_clocksource_read,
-+		.mask           = CLOCKSOURCE_MASK(CNTR_WIDTH),
-+		.flags          = CLOCK_SOURCE_IS_CONTINUOUS,
-+	},
-+};
-+
-+static int __init ls1x_pwm_clocksource_init(struct device_node *np)
-+{
-+	struct timer_of *to = &ls1x_to;
-+	int ret;
-+
-+	ret = timer_of_init(np, to);
-+	if (ret)
-+		return ret;
-+
-+	clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
-+					0x1, GENMASK(CNTR_WIDTH - 1, 0));
-+
-+	ls1x_clocksource.reg_base = timer_of_base(to);
-+	ls1x_clocksource.ticks_per_jiffy = timer_of_period(to);
-+
-+	return clocksource_register_hz(&ls1x_clocksource.clksrc,
-+				       timer_of_rate(to));
-+}
-+
-+TIMER_OF_DECLARE(ls1x_pwm_clocksource, "loongson,ls1x-pwmtimer",
-+		 ls1x_pwm_clocksource_init);
--- 
-2.34.1
++cc devicetree foks.
+
+>=20
+> I don't see any MIPS changes in the series besides the ifdef =
+CONFIG_MIPS
+> part in patch 1, which gets removed again in patch 4 (chance to drop
+> that completely ?).
+
+It was suggested by DMA folks to have that patch.
+
+> I've merged the corresponding MIPS patches into mips-next last week.
+
+Thanks
+- Jiaxun
+
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
 
