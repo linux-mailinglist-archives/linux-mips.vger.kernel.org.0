@@ -2,99 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F706CCBDD
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Mar 2023 23:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9906CD05D
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Mar 2023 04:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjC1VG5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Mar 2023 17:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S230009AbjC2CvO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Mar 2023 22:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC1VG4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 17:06:56 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EFBE2;
-        Tue, 28 Mar 2023 14:06:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680037585; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=K3l+6cKlXTkJUHIja2qwDUU7cu+a8Rz+Gdw24HGBpKoIzOJ8vfmxi5gomdSRo3hB+ftJsTbY6mDeK9XzqG3ffCHE/07KCrn+FBaF08SbFGiC62IMJ+cJmBvf8cxCYobLT06itKX22R/XHnDvEa/JfKa6u6ajhSfLx5UjqXIkZZE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1680037585; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=dtkb18ovKMaH43unnBPf7khKxODc/lZ7PabQ5gaNQy4=; 
-        b=S9FSj28Nsi6/etwDQlZ5k9YJE4DWFkN43BNMr4YzGYq7DIBj+qaV9IPabOSM8EIK4Ap3BYCvnzhmfWqpMC3N54quSqk52tK6qQFWCSaCrtcAr1Ty2+k943NrNgcAc2kTnc1hqjgT6lVTklKVNh8dMorDvuUHmcj0LVpvzoIGkEo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680037585;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=dtkb18ovKMaH43unnBPf7khKxODc/lZ7PabQ5gaNQy4=;
-        b=PKmlQKkw4hyHAu+5NoHDphTDP0scndRBlGhQYcooVl0W1DLiU524odRu62YuKRAz
-        hqFKtH3egX7y6vaU9CSe0+KQa5gjR2jmDe6d8GRT1q0tElvBczSJoj8QQapFc6XoaaQ
-        UvmqYhmj6Lw55tHg5hFbk6BpIfeuX3133huAvmNM=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1680037584024831.8337484799076; Tue, 28 Mar 2023 14:06:24 -0700 (PDT)
-Message-ID: <c12d50aa-7485-9ee4-3af1-8374de64eb07@arinc9.com>
-Date:   Wed, 29 Mar 2023 00:06:15 +0300
+        with ESMTP id S230007AbjC2CvN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 22:51:13 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CBC2D7F;
+        Tue, 28 Mar 2023 19:51:11 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eh3so57549389edb.11;
+        Tue, 28 Mar 2023 19:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680058270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dIzil1J+XzZVkE7VYxYF65ET2u5OaR0BuUTGA5SK+3A=;
+        b=lGNK9Nvogi60ODmJUdGqiRoAeG692JLaGSJPxyyPBqDx6p3s8leRhzxDJ+/XjXFa5x
+         lyIVL4hM5fAs8w3aSnbYjP2+Jj+BJXOH0o4vj7p+xw/8UoRy43jp3lBXduKr5WFFi37f
+         z7HOHN6w+6nMgaK7eYnmpvJ5zKSHVPvvv8bgQNaIn7HlmstcUwCZSIX0GG/GtgG4SeYX
+         e1kseVRdrS+IvArSeB3bO3nelYX/jn96Io1Ton3GMjyOg8aI8IzWDhuAK7gLL4/N5LX/
+         J6q6Uger7FaAHkNlVtiVDsSpYhqDka1Gapt89RgNCWfO5oXsaKtqTlRphbV7Z3UskFYI
+         YjXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680058270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dIzil1J+XzZVkE7VYxYF65ET2u5OaR0BuUTGA5SK+3A=;
+        b=45GB1uLwG8mWHI+g4yAJzPq1jWNjo5GMaX7NaO0YPQnebOvqMEN6Hn8G1w6q8TS3yF
+         YH6e7f48tj2sPiG/uQJ5dz84qwT1OpAOpByj/uy7Qd2PZsG0KzhLhgh10Su2KNFrzMRg
+         FUQJCbytR44S9RMW5ODFIAndTUZJp7UtbK97kXjJoK3gVa+Wqn9UmDVMfLPFlqY2cojv
+         3yq5x6S5D2z1I6CKZJIqQrgcTs54lDOTOVjtnUVn5EtjRvKnSfhJO10Td4z/NsYnAGfX
+         N7CzECueZOc+ohMjJiw8qsiYY8bk0szdgtm6l+UyYKmTSdy8KV/UJ5dwyHCGv2etnFxd
+         8/iw==
+X-Gm-Message-State: AAQBX9fX6qux6Lrv9yu9b2hyznpSPFmsEILm4pRcUXqLUV8yaUi3WvkQ
+        R/mI4yWZb9h9wBX4g8nmRwP/OO/QxuKDY/Fl17YHogyhj/hlUQ==
+X-Google-Smtp-Source: AKy350bsrVpBT2/hOrtU+Hcf6gmZmN9zv4UBYcj7fxKuRxjEcKxZzyOpQIU+ffxGL6Wgjcnn1vA4rB+hEVxrZs8F96M=
+X-Received: by 2002:a50:875e:0:b0:501:d2f5:7da9 with SMTP id
+ 30-20020a50875e000000b00501d2f57da9mr8498486edv.0.1680058269743; Tue, 28 Mar
+ 2023 19:51:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 01/21] pinctrl: ralink: reintroduce
- ralink,rt2880-pinmux compatible string
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+References: <20230328120506.375864-1-keguang.zhang@gmail.com>
+ <20230328120506.375864-3-keguang.zhang@gmail.com> <168002881746.3753096.11245437677389006840.robh@kernel.org>
+In-Reply-To: <168002881746.3753096.11245437677389006840.robh@kernel.org>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 29 Mar 2023 10:50:53 +0800
+Message-ID: <CAJhJPsXBsP9akD9x++r7YCs_P-n2SpKJnJcDoJv93_=8+r1C-Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: timer: Add Loongson-1 clocksource
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20230317213011.13656-1-arinc.unal@arinc9.com>
- <20230317213011.13656-2-arinc.unal@arinc9.com>
- <CAL_JsqLDRHs=TfcLsc0RJzF6rj84eXZooejmhx4hBDnpvCTk5A@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CAL_JsqLDRHs=TfcLsc0RJzF6rj84eXZooejmhx4hBDnpvCTk5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28/03/2023 23:59, Rob Herring wrote:
-> On Fri, Mar 17, 2023 at 4:30 PM <arinc9.unal@gmail.com> wrote:
->>
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> There have been stable releases with the ralink,rt2880-pinmux compatible
->> string included. Having it removed breaks the ABI. Reintroduce it.
-> 
-> ralink,rt2880-pinmux now shows up as an undocumented compatible string
-> in linux-next. Where's the binding for it?
+Hi Rob,
 
-This is exactly what I was talking about here:
+On Wed, Mar 29, 2023 at 2:52=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
+>
+>
+> On Tue, 28 Mar 2023 20:05:05 +0800, Keguang Zhang wrote:
+> > Add devicetree binding document for Loongson-1 clocksource.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> >  .../timer/loongson,ls1x-pwmtimer.yaml         | 48 +++++++++++++++++++
+> >  1 file changed, 48 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls=
+1x-pwmtimer.yaml
+> >
+>
+> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dt=
+s:21:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file o=
+r directory
+>    21 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-https://lore.kernel.org/linux-devicetree/3fdc7db4-0df3-f922-3dbf-9f9250c271aa@arinc9.com/
+This file is contained in commit
+12de2f50244efdbc8e98f89a340255c3c847e1dc, which is already available
+in 6.3-rc4.
 
-Arınç
+> compilation terminated.
+> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings=
+/timer/loongson,ls1x-pwmtimer.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1512: dt_binding_check] Error 2
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202303=
+28120506.375864-3-keguang.zhang@gmail.com
+>
+> The base for the series is generally the latest rc1. A different dependen=
+cy
+> should be noted in *this* patch.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your sch=
+ema.
+>
+
+
+--=20
+Best regards,
+
+Keguang Zhang
