@@ -2,64 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817EC6CEEB5
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Mar 2023 18:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FCC6CEF2F
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Mar 2023 18:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjC2QHK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Mar 2023 12:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S229775AbjC2QWZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Mar 2023 12:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjC2QGr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 12:06:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6E665BE;
-        Wed, 29 Mar 2023 09:06:02 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eg48so65316238edb.13;
-        Wed, 29 Mar 2023 09:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680105931;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oXQRlBCYnqGo9Fi48YDM5Iz/n3EKV6wgfQDls4v49ZQ=;
-        b=ZP8azEYR3T/kmocgq8bSZlNTouSdAv0pqNbONNvK6pjIOYfvW0EWRaDVO44E5sowbA
-         4MGZKJiXz7VE108ciJQNXn5/hHquTqMqhb6tRaq9zC55es7aV4eyXx5sWcvFrwBw8u31
-         DcptBNfTU6x5mTKuHF7vCiSdOphP7f1dZ5xyT7jA8pE036EK0r7Mwyj+wpf0qOtr4/dO
-         PtsdhtBZV/jUZWdd6KSP5EkVxa9qFL2fQNK4V/Imeno6KN+BWXvR2ysex446RXd1SjcJ
-         RuPjjhn8s3ln2xq7NpQb+o1cGn+mn2pwwyW/FTHZVbW4BbukRommLkvptqsBpXQc4gTR
-         WTBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680105931;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oXQRlBCYnqGo9Fi48YDM5Iz/n3EKV6wgfQDls4v49ZQ=;
-        b=Bbh9UL2Re6XbSbaYcMh3fAwCaCC1EP33Yp8IXh7/JfAGGVEqF3VQQoEAVXKAdKsq3V
-         /rWzdv9nDVKZXSsueEXewWP1uS/3EohRrzfjgFrmKcvbwtoquM3ggKo8YWDfvkQFkmfj
-         nvSFp4JxMgKklXpPaw/rhFFPonVbP2DTarrC3UgQuDaxieh/DGpYs2hFJh/jOjkaZ0gW
-         JY6FfdUxs0gj0kIysxHYoasIE6vKyeB8BJyEp8oWpdJa8iPdjcrUuRJALNKemtck2ALM
-         7QJHaxYiUYAFXsGFIgDL7SQK8stCdT0WdOzkm23414I8VsQPZhy1tnkJJW1ZME4PrIg8
-         eedw==
-X-Gm-Message-State: AAQBX9fezxGL/+NnpystWuV1EgrAhMw9/cNKlAir6oDjKlGpOwm71qz0
-        wMPhanEUiNvMNJuyWrzKxzw=
-X-Google-Smtp-Source: AKy350Y0SxvEseTuQQeEwplPrjnDboy+i5rUViT0BUXK5Dv5qulkowom3JNTJJ/XP46pJIz4L/hzEA==
-X-Received: by 2002:a17:906:f1c7:b0:933:c474:420b with SMTP id gx7-20020a170906f1c700b00933c474420bmr20841888ejb.19.1680105930843;
-        Wed, 29 Mar 2023 09:05:30 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id l19-20020a170906079300b00932ed432475sm15417251ejc.124.2023.03.29.09.05.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 09:05:30 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S229800AbjC2QWX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 12:22:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39CD1AC;
+        Wed, 29 Mar 2023 09:22:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE06BB8238F;
+        Wed, 29 Mar 2023 16:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59034C4339B;
+        Wed, 29 Mar 2023 16:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680106937;
+        bh=BeBWudnFSsiVzY/XlA8t6ty5AObYn0Ada11HTQX3T+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u77tBwSS5bosw8PvckswT9NhtXRstnMxAy7Krq+Abf7i3tkpUwr6drporyQLSvXtT
+         BCvaZ5mRgUkrF8Y8zhtgEhfhsvlF2lzrP+gYl5jlH4LfSa3L8n2CSNIB+unlcfrkqG
+         7NTDsu7EcBbp717SiI4mSEHcjZWUE8a9cr7163R4=
+Date:   Wed, 29 Mar 2023 18:22:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -87,50 +68,38 @@ To:     "David S. Miller" <davem@davemloft.net>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Marc Zyngier <maz@kernel.org>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
-Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 15/19] cpufreq: sun50i: Add explicit include for cpu.h
-Date:   Wed, 29 Mar 2023 18:05:27 +0200
-Message-ID: <2672894.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-15-581e2605fe47@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 10/19] cacheinfo: Adjust includes to remove of_device.h
+Message-ID: <ZCRltUZOTDsmLJsE@kroah.com>
 References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
- <20230329-dt-cpu-header-cleanups-v1-15-581e2605fe47@kernel.org>
+ <20230329-dt-cpu-header-cleanups-v1-10-581e2605fe47@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-10-581e2605fe47@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dne sreda, 29. marec 2023 ob 17:52:12 CEST je Rob Herring napisal(a):
-> Removing the include of cpu.h from of_device.h causes an error:
->=20
-> drivers/cpufreq/sun50i-cpufreq-nvmem.c:42:19: error: implicit declaration=
- of
-> function =E2=80=98get_cpu_device=E2=80=99; did you mean =E2=80=98get_devi=
-ce=E2=80=99?
-> [-Werror=3Dimplicit-function-declaration]
->=20
-> As of_device.h is not otherwise needed, it can be replaced with of.h
-> (also implicitly included).
->=20
+On Wed, Mar 29, 2023 at 10:52:07AM -0500, Rob Herring wrote:
+> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
+> implicitly including other includes, and is no longer needed. Update the
+> includes to use of.h instead of of_device.h.
+> 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
+> Please ack and I will take the series via the DT tree.
+> ---
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
