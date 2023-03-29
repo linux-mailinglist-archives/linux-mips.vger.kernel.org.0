@@ -2,156 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024696CF5A3
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Mar 2023 23:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BF36CF678
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 00:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjC2VwM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Mar 2023 17:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S230419AbjC2WiI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Mar 2023 18:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjC2VwK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 17:52:10 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCFE5BAF
-        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 14:51:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so6990763wmq.3
-        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 14:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1680126716;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mR/Zj1PB00aaXey9QznQEyL9cgsnbEviFfaDBojU/PA=;
-        b=X0RSiXgHE7YkzJiBvPfuECvjvZh/j9OCTlp5vS9G1kUZuHyE1mJThY46uxE8TkBE8F
-         26YKvU03kRSEEbihp0nG/r6HBhciobPuGf3L9XG5lP7LIGmFx1xuZOCywjcKmPOmTu8N
-         GYJA3eb2b0Q6VlUVpDCKV/9pvTj9LkixTX22pUdw50wCneJbfivXkkSI84dON9P5F9zR
-         aPsg4Jeh3iGHabX4d9hb5dRKHYvbcqGCgHjWCSflhUWkYsO9R2cu9K7Yx5HZpgAK9C+P
-         FR/T+Ct46EkosCoWvECTXbDfM4FfGO3jzQMNS58kzGepVwnhUrHOmPZqrc1qrzv6vlJT
-         efvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680126716;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mR/Zj1PB00aaXey9QznQEyL9cgsnbEviFfaDBojU/PA=;
-        b=CJw28Wig2FXWmU9uls4W61wvNvRNpVMmf/LZvI4Y6r3qncn7mRxLmR3SxMYAicnRvN
-         2gGPL6FaFgH7AKK5exix0C1jL/nBdp11+qmrAbRy0v4dA2usAIdk44RqkNPQfKOYVugj
-         7CI/JEB8z8rnrJrvlE0YEPQchmU86K/4GD1mPVEvzm0OTyqancaUnH8p0SeQjdgu5gNT
-         RbRt9V99x0mfcSUb0UFZZOMQ2MRyvwYeomyi/aiBuPGfeYavr+HYgCqhKX5ob6CycRvt
-         CWyl8fVedhLq6Ek7gh1v718e9MGptUulu9HDyYpco7bZ5zHTD7NC9H0YHl20IsHW4t5L
-         BXpA==
-X-Gm-Message-State: AO0yUKVsFrCDvNhHp0Q1PywkYT7Bgk+GG7cI6FgD2rAkL3rq1Y2cxLGT
-        nHxmZgftw5EAk3LtxXjGgO7qvA==
-X-Google-Smtp-Source: AK7set8QoMq1gGRgzzGqEiUi0STo43D8VYRH41LQHDT7NbD/gZR3RJOV/DBadJ5PrJGjWGmEaVtwcg==
-X-Received: by 2002:a7b:c413:0:b0:3ee:4531:8448 with SMTP id k19-20020a7bc413000000b003ee45318448mr17263952wmi.39.1680126716518;
-        Wed, 29 Mar 2023 14:51:56 -0700 (PDT)
-Received: from smtpclient.apple (global-5-144.n-2.net.cam.ac.uk. [131.111.5.144])
-        by smtp.gmail.com with ESMTPSA id a18-20020a1cf012000000b003ed4f6c6234sm3437896wmb.23.2023.03.29.14.51.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Mar 2023 14:51:55 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 08/21] riscv: dma-mapping: only invalidate after DMA, not
- flush
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230327121317.4081816-9-arnd@kernel.org>
-Date:   Wed, 29 Mar 2023 22:51:54 +0100
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
+        with ESMTP id S230414AbjC2WiC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 18:38:02 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A944619F
+        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 15:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1680129471; x=1711665471;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=8mC4BypXl60HzEDMOes6JdsHqZokNKJxPcubhfSExuE=;
+  b=TQT3Ih20NXAljMih9VuI0JZuaXoaSs4Of+jGHhVTdKZffuVP1Ps5P/p0
+   XLXgJTeiu276fxHVDabw+FwRaexhXuXKjofJ74lbUIbL0IItNl7AOkD3U
+   ydLJmCrTStMkXnylC9DBZ/hcAbPNYKpDd1oQ097d3thFDCpa615f8Nref
+   Fvr5JzrP7mDZ0zNDesXoFYsdFwHm9MDou5fvviYIUJr/98d72KclG1NEt
+   tEApLP0uEJO6g9gNZ5vLxlYKkldAkVzLzy+g4nyzYQTjH6p0MecuJ37pO
+   TO3moO+G8J4lDoqongad+TwJm6bjJuq5+5fuN/7/MQjOrpHxZgmK+1glh
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,301,1673884800"; 
+   d="scan'208";a="226645315"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Mar 2023 06:35:01 +0800
+IronPort-SDR: lSYgupYJK5PiAtyxa/Ufm/JgNlROPMcOEuyl0i3uMZXBbzwm6wW+VvrnFWxafZBTObWNffW+00
+ Iq6FOQKWDxIy+iKmu7HxV7yumAfyM5Tj0NZhvMdFcHOShT2mKH5TRISfam8crJit8gAh9Vn8F8
+ DQox6LDqiK9qX1ymcMWjgWba4L58zMc9G2bXnUB2JviOFSBC2mildy7QVD5ACjnDSLvOM1Q/pG
+ Lenjmb6KFxX0m5TPKVpAjpNlXreWGZpXHXEGVJUzXyoG78KJlB8HYgaW523lna5p3O/TIe96EA
+ ryc=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 14:45:29 -0700
+IronPort-SDR: pFZl9GeSpv/+0d+CBPiB/MCUZxJFbqBTe2CiAyV6MC+vkyZsTeno7eZ8omPxgqLQVUi+XbQPsD
+ HqcqzqHkd0ro0Y9EiN9fqoCbRQN2Ciot/FEm2O2WNIPq87xruKKZCSna8NjuKqsunYU0cOl+Or
+ JqsKzlI0q1LWHUHLIcWe8VmA7Fdku1x3fDzJyTPXyvhEgyK8rx3eLHfAzuXoday2sbsYwinAJB
+ WJ+cC39lGBhZlg3kiKAme/lDagmiwjxXeRbN1XafPnfZXa+1m3K2NcV20np4pTF3ekvZWlB6Pe
+ a5c=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 15:35:01 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pn1Zs1wCmz1RtVt
+        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 15:35:01 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1680129300; x=1682721301; bh=8mC4BypXl60HzEDMOes6JdsHqZokNKJxPcu
+        bhfSExuE=; b=Zok4WYhcroENZvLPiiffuiL0wIhaaRMSE93p6mIUiG5P1+ftd2L
+        q1g4BSW3yDCKYTtjxpyxP4yTyI5aihR+osGu3NHW33Fq3jncg3Qe7xNY4F/zwHCv
+        etW1Nmc+YdHa6MKI4hd5xELhEGqsNDzfy7V+nuAUqZ9fc7RzMMfrtfJiNcSB4ANF
+        pv7W16xNgr9XsLPJlP+2wNhoirGRaSfwNKtWLeK1SbCOjj5Lw5yzhhURWBT08bOc
+        VuNZw5622X4vF6VjgAxro3fJgQJCUlPlSKztiYuxIJWi6gMTBHsKGitpZ4T4QUfn
+        usPw+D9cS59VkGHy8R3Zh6mURJpGmFM4MSw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id dfSaGfTph50L for <linux-mips@vger.kernel.org>;
+        Wed, 29 Mar 2023 15:35:00 -0700 (PDT)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pn1Zq4BbJz1RtVm;
+        Wed, 29 Mar 2023 15:34:59 -0700 (PDT)
+Message-ID: <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
+Date:   Thu, 30 Mar 2023 07:34:58 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: Multiple undefined configuration options are dependent in Kconfig
+ under the v6.3-rc4 drivers directory
+Content-Language: en-US
+To:     =?UTF-8?B?5a2Z5rui?= <sunying@nj.iscas.ac.cn>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greybus-dev@lists.linaro.org,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-oxnas@groups.io, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
+        linux-mips@vger.kernel.org
+References: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <837F1B2F-7090-4F9F-A894-594ACF6A8DB2@jrtc27.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-9-arnd@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 27 Mar 2023, at 13:13, Arnd Bergmann <arnd@kernel.org> wrote:
+On 3/29/23 16:52, =E5=AD=99=E6=BB=A2 wrote:
+> It has been discovered that the following configuration options are und=
+efined in the current latest version, v6.3-rc4, yet they are being relied=
+ upon by other configuration options in multiple Kconfig files:
 >=20
-> From: Arnd Bergmann <arnd@arndb.de>
+> MIPS_BAIKAL_T1 is undefined, used as a 'depends on' condition in multip=
+le files such as drivers/ata/Kconfig, drivers/hwmon/Kconfig, drivers/bus/=
+Kconfig, and drivers/memory/Kconfig.
+> MFD_MAX597X is undefined, used as a 'depends on' condition in Kconfig f=
+ile drivers/regulator/Kconfig.
+> MFD_SM5703 is undefined, used as a 'depends on' condition in Kconfig fi=
+le drivers/regulator/Kconfig.
+> ARCH_THUNDERBAY is undefined, used as a 'depends on' condition in Kconf=
+ig files drivers/pinctrl/Kconfig and drivers/phy/intel/Kconfig.
+> ARCH_BCM4908 is undefined, used as a 'depends on' condition in Kconfig =
+file drivers/leds/blink/Kconfig.
+> MFD_TN48M_CPLD is undefined, used as a 'depends on' condition in Kconfi=
+g files drivers/gpio/Kconfig and drivers/reset/Kconfig.=20
+> USB_HSIC_USB3613 is undefined, used as a 'depends on' condition in driv=
+ers/staging/greybus/Kconfig and drivers/staging/greybus/arche-platform.c.
 >=20
-> No other architecture intentionally writes back dirty cache lines into
-> a buffer that a device has just finished writing into. If the cache is
-> clean, this has no effect at all, but if a cacheline in the buffer has
-> actually been written by the CPU,  there is a drive bug that is likely
-> made worse by overwriting that buffer.
+> If these 7 configuration options are deprecated, it is recommended to r=
+emove the dependencies on them in the Kconfig files.=20
+> If they are still useful, it is recommended to define them.
 
-FYI [1] proposed this same change a while ago but its justification was
-flawed (which was my objection at the time, not the diff itself).
++ linux-arm & linux-mips
 
-Jess
+What about you send patches to fix this ?
 
-[1] =
-https://lore.kernel.org/all/20220818165105.99746-1-s.miroshnichenko@yadro.=
-com
-
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> arch/riscv/mm/dma-noncoherent.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/riscv/mm/dma-noncoherent.c =
-b/arch/riscv/mm/dma-noncoherent.c
-> index d919efab6eba..640f4c496d26 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -42,7 +42,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t =
-size,
-> 		break;
-> 	case DMA_FROM_DEVICE:
-> 	case DMA_BIDIRECTIONAL:
-> -		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +		ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
-> 		break;
-> 	default:
-> 		break;
-> --=20
-> 2.39.2
 >=20
 >=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Best regards,
+> Ying Sun
+> Pengpeng Hou
+> Yanjie Ren
+
+--=20
+Damien Le Moal
+Western Digital Research
 
