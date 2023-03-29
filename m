@@ -2,428 +2,325 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF9A6CD0EF
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Mar 2023 05:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489996CECB6
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Mar 2023 17:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjC2D4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Mar 2023 23:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S230360AbjC2PXJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Mar 2023 11:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjC2D4D (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Mar 2023 23:56:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2221730E9;
-        Tue, 28 Mar 2023 20:56:01 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PmXgv0ZWnzgZXD;
-        Wed, 29 Mar 2023 11:52:43 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 11:55:58 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
-        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
-        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
-        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
-        <prime.zeng@hisilicon.com>, <Jonathan.Cameron@Huawei.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [PATCH v8 2/2] arm64: support batched/deferred tlb shootdown during page reclamation
-Date:   Wed, 29 Mar 2023 11:55:12 +0800
-Message-ID: <20230329035512.57392-3-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230329035512.57392-1-yangyicong@huawei.com>
-References: <20230329035512.57392-1-yangyicong@huawei.com>
+        with ESMTP id S230325AbjC2PXI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 11:23:08 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4FB4202;
+        Wed, 29 Mar 2023 08:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680103381; x=1711639381;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ptksIPCBqJcaNVtPPwyP250IRCPyy9oaMGihhbuBLbg=;
+  b=ePKlvhRNWFbIPO9lm0G7JgEJO7rXO4JPXAaZfXywle0BGjdr+WBnq40M
+   /sRfRvszWMcSF5J5Zk/0aUtgZYy++MlyxQzo2i/1a+A6x31GSORmnlKEC
+   zZS9Sc5bV53QSPIz0xiQ9BP0alLMutlZJNU70f/yG/hBquXrZwS/R3vLb
+   E+MMqbZ4WfNKYMbuwIPK56Yvt3Tmcltn/iwciYuJGkkxAQa2u6N10ceuA
+   aOHGKOIRItEn+WyZBYHw/g9kapnf2J9alkGP/qOadnA9h7QSwSbB3rBdz
+   NN5Ak+ejbaWwJpGHPRHIuXzKuxbVZcoiDyTX77qJL8S1J8r6e68zFOogZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368679511"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="368679511"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 08:22:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="716912773"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="716912773"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2023 08:21:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phXca-000Jf0-1i;
+        Wed, 29 Mar 2023 15:21:56 +0000
+Date:   Wed, 29 Mar 2023 23:21:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     virtualization@lists.linux-foundation.org,
+        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-clk@vger.kernel.org, io-uring@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 198925fae644b0099b66fac1d972721e6e563b17
+Message-ID: <64245763.70Rd23mcjZbCPFF8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 198925fae644b0099b66fac1d972721e6e563b17  Add linux-next specific files for 20230329
 
-on x86, batched and deferred tlb shootdown has lead to 90%
-performance increase on tlb shootdown. on arm64, HW can do
-tlb shootdown without software IPI. But sync tlbi is still
-quite expensive.
+Error/Warning reports:
 
-Even running a simplest program which requires swapout can
-prove this is true,
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
+https://lore.kernel.org/oe-kbuild-all/202303082135.NjdX1Bij-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303161521.jbGbaFjJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303291916.ovLFJk2i-lkp@intel.com
 
- int main()
- {
- #define SIZE (1 * 1024 * 1024)
-         volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-                                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+Error/Warning: (recently discovered and may have been fixed)
 
-         memset(p, 0x88, SIZE);
+drivers/base/power/domain.c:3090:23: error: 'struct dev_pm_info' has no member named 'runtime_error'
+drivers/base/power/domain.c:3092:28: error: 'struct dev_pm_info' has no member named 'disable_depth'
+drivers/base/power/domain.c:3094:28: error: 'struct dev_pm_info' has no member named 'runtime_status'
+drivers/base/power/domain.c:654:20: error: 'pm_wq' undeclared (first use in this function)
+drivers/base/power/domain.c:853:39: error: 'struct dev_pm_info' has no member named 'ignore_children'
+drivers/base/power/domain_governor.c:85:24: error: 'struct dev_pm_info' has no member named 'ignore_children'
+drivers/clk/clk-sp7021.c:316:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:351:13: warning: variable 'bw_needed' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:352:25: warning: variable 'link' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:309:17: sparse:    int
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:309:17: sparse:    void
+drivers/net/wireless/legacy/ray_cs.c:628:17: warning: 'strncpy' specified bound 32 equals destination size [-Wstringop-truncation]
 
-         for (int k = 0; k < 10000; k++) {
-                 /* swap in */
-                 for (int i = 0; i < SIZE; i += 4096) {
-                         (void)p[i];
-                 }
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-                 /* swap out */
-                 madvise(p, SIZE, MADV_PAGEOUT);
-         }
- }
+drivers/pinctrl/pinctrl-mlxbf3.c:162:20: sparse: sparse: symbol 'mlxbf3_pmx_funcs' was not declared. Should it be static?
+drivers/soc/fsl/qe/tsa.c:140:26: sparse: sparse: incorrect type in argument 2 (different address spaces)
+drivers/soc/fsl/qe/tsa.c:140:9: sparse: sparse: incorrect type in argument 2 (different address spaces)
+drivers/soc/fsl/qe/tsa.c:150:16: sparse: sparse: incorrect type in argument 1 (different address spaces)
+drivers/soc/fsl/qe/tsa.c:150:27: sparse: sparse: incorrect type in argument 1 (different address spaces)
+drivers/soc/fsl/qe/tsa.c:189:26: sparse: sparse: dereference of noderef expression
+drivers/soc/fsl/qe/tsa.c:663:22: sparse: sparse: incorrect type in assignment (different address spaces)
+drivers/soc/fsl/qe/tsa.c:673:21: sparse: sparse: incorrect type in assignment (different address spaces)
+drivers/virtio/virtio_ring.c:2784:3: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
+drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
+drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
+include/linux/gpio/consumer.h: linux/err.h is included more than once.
+include/linux/gpio/driver.h: asm/bug.h is included more than once.
+io_uring/io_uring.c:432 io_prep_async_work() error: we previously assumed 'req->file' could be null (see line 425)
+io_uring/kbuf.c:221 __io_remove_buffers() warn: variable dereferenced before check 'bl->buf_ring' (see line 219)
+net/mac80211/mesh_pathtbl.c:616:24: warning: Value stored to 'cache' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
 
-Perf result on snapdragon 888 with 8 cores by using zRAM
-as the swap block device.
+Error/Warning ids grouped by kconfigs:
 
- ~ # perf record taskset -c 4 ./a.out
- [ perf record: Woken up 10 times to write data ]
- [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
- ~ # perf report
- # To display the perf.data header info, please use --header/--header-only options.
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 60K of event 'cycles'
- # Event count (approx.): 35706225414
- #
- # Overhead  Command  Shared Object      Symbol
- # ........  .......  .................  .............................................................................
- #
-    21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
-     8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
-     6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
-     6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
-     5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
-     3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
-     3.49%  a.out    [kernel.kallsyms]  [k] memset64
-     1.63%  a.out    [kernel.kallsyms]  [k] clear_page
-     1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
-     1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
-     1.23%  a.out    [kernel.kallsyms]  [k] xas_load
-     1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
+|-- alpha-randconfig-r021-20230326
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arc-randconfig-r043-20230328
+|   |-- drivers-base-power-domain.c:error:pm_wq-undeclared-(first-use-in-this-function)
+|   |-- drivers-base-power-domain.c:error:struct-dev_pm_info-has-no-member-named-disable_depth
+|   |-- drivers-base-power-domain.c:error:struct-dev_pm_info-has-no-member-named-ignore_children
+|   |-- drivers-base-power-domain.c:error:struct-dev_pm_info-has-no-member-named-runtime_error
+|   |-- drivers-base-power-domain.c:error:struct-dev_pm_info-has-no-member-named-runtime_status
+|   `-- drivers-base-power-domain_governor.c:error:struct-dev_pm_info-has-no-member-named-ignore_children
+|-- arc-randconfig-s032-20230329
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:int
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:sparse:incompatible-types-in-conditional-expression-(different-base-types):
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:void
+|   |-- drivers-pinctrl-pinctrl-mlxbf3.c:sparse:sparse:symbol-mlxbf3_pmx_funcs-was-not-declared.-Should-it-be-static
+|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:dereference-of-noderef-expression
+|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-const-volatile-noderef-__iomem-addr-got-void-noderef-__iomem-addr
+|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-volatile-noderef-__iomem-addr-got-void-noderef-__iomem-addr
+|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-si_ram-got-void-noderef-__iomem
+|   `-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-si_regs-got-void-noderef-__iomem
+|-- arm-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arm64-randconfig-r031-20230327
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- csky-randconfig-s043-20230326
+|   `-- drivers-pinctrl-pinctrl-mlxbf3.c:sparse:sparse:symbol-mlxbf3_pmx_funcs-was-not-declared.-Should-it-be-static
+|-- i386-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
+clang_recent_errors
+|-- powerpc-randconfig-r036-20230326
+|   `-- drivers-clk-clk-sp7021.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((_m)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(unsigned-char)-unsigned-
+`-- riscv-randconfig-c006-20230326
+    |-- drivers-virtio-virtio_ring.c:warning:Value-stored-to-err-is-never-read-clang-analyzer-deadcode.DeadStores
+    `-- net-mac80211-mesh_pathtbl.c:warning:Value-stored-to-cache-during-its-initialization-is-never-read-clang-analyzer-deadcode.DeadStores
 
-ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
-swapping in/out a page mapped by only one process. If the
-page is mapped by multiple processes, typically, like more
-than 100 on a phone, the overhead would be much higher as
-we have to run tlb flush 100 times for one single page.
-Plus, tlb flush overhead will increase with the number
-of CPU cores due to the bad scalability of tlb shootdown
-in HW, so those ARM64 servers should expect much higher
-overhead.
+elapsed time: 722m
 
-Further perf annonate shows 95% cpu time of ptep_clear_flush
-is actually used by the final dsb() to wait for the completion
-of tlb flush. This provides us a very good chance to leverage
-the existing batched tlb in kernel. The minimum modification
-is that we only send async tlbi in the first stage and we send
-dsb while we have to sync in the second stage.
+configs tested: 142
+configs skipped: 11
 
-With the above simplest micro benchmark, collapsed time to
-finish the program decreases around 5%.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r021-20230326   gcc  
+alpha                randconfig-r024-20230327   gcc  
+alpha                randconfig-r032-20230327   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r001-20230326   gcc  
+arc                  randconfig-r012-20230326   gcc  
+arc                  randconfig-r025-20230327   gcc  
+arc                  randconfig-r034-20230329   gcc  
+arc                  randconfig-r043-20230327   gcc  
+arc                  randconfig-r043-20230328   gcc  
+arc                  randconfig-r043-20230329   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r033-20230326   gcc  
+arm                  randconfig-r046-20230327   gcc  
+arm                  randconfig-r046-20230329   gcc  
+arm                             rpc_defconfig   gcc  
+arm                       spear13xx_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r031-20230327   gcc  
+arm64                randconfig-r035-20230329   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r005-20230326   clang
+hexagon              randconfig-r013-20230327   clang
+hexagon              randconfig-r021-20230327   clang
+hexagon              randconfig-r023-20230327   clang
+hexagon              randconfig-r041-20230329   clang
+hexagon              randconfig-r045-20230327   clang
+hexagon              randconfig-r045-20230329   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230327   gcc  
+i386                 randconfig-a002-20230327   gcc  
+i386                 randconfig-a003-20230327   gcc  
+i386                 randconfig-a004-20230327   gcc  
+i386                 randconfig-a005-20230327   gcc  
+i386                 randconfig-a006-20230327   gcc  
+i386                 randconfig-a011-20230327   clang
+i386                 randconfig-a012-20230327   clang
+i386                 randconfig-a013-20230327   clang
+i386                 randconfig-a014-20230327   clang
+i386                 randconfig-a015-20230327   clang
+i386                 randconfig-a016-20230327   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r004-20230326   gcc  
+ia64                 randconfig-r031-20230326   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r012-20230327   gcc  
+loongarch            randconfig-r021-20230329   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r002-20230329   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r022-20230326   gcc  
+m68k                 randconfig-r035-20230327   gcc  
+microblaze           randconfig-r006-20230326   gcc  
+microblaze           randconfig-r016-20230327   gcc  
+microblaze           randconfig-r023-20230329   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r002-20230326   gcc  
+mips                 randconfig-r002-20230327   clang
+mips                 randconfig-r034-20230326   gcc  
+nios2        buildonly-randconfig-r003-20230329   gcc  
+nios2        buildonly-randconfig-r006-20230327   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r006-20230327   gcc  
+nios2                randconfig-r015-20230327   gcc  
+nios2                randconfig-r023-20230326   gcc  
+openrisc             randconfig-r032-20230329   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230327   gcc  
+parisc               randconfig-r022-20230329   gcc  
+parisc               randconfig-r025-20230329   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r034-20230327   gcc  
+powerpc              randconfig-r036-20230326   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r025-20230326   gcc  
+riscv                randconfig-r031-20230329   gcc  
+riscv                randconfig-r042-20230326   gcc  
+riscv                randconfig-r042-20230327   clang
+riscv                randconfig-r042-20230329   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r004-20230327   clang
+s390                                defconfig   gcc  
+s390                 randconfig-r015-20230326   gcc  
+s390                 randconfig-r026-20230329   clang
+s390                 randconfig-r044-20230328   gcc  
+s390                 randconfig-r044-20230329   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230326   gcc  
+sh                            hp6xx_defconfig   gcc  
+sh                   randconfig-r011-20230327   gcc  
+sh                   randconfig-r024-20230329   gcc  
+sh                   randconfig-r026-20230326   gcc  
+sh                   randconfig-r032-20230326   gcc  
+sh                           se7724_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r004-20230327   gcc  
+sparc                randconfig-r016-20230326   gcc  
+sparc                randconfig-r035-20230326   gcc  
+sparc                randconfig-r036-20230327   gcc  
+sparc64      buildonly-randconfig-r005-20230329   gcc  
+sparc64      buildonly-randconfig-r006-20230329   gcc  
+sparc64              randconfig-r005-20230327   gcc  
+sparc64              randconfig-r033-20230329   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230327   gcc  
+x86_64               randconfig-a002-20230327   gcc  
+x86_64               randconfig-a003-20230327   gcc  
+x86_64               randconfig-a004-20230327   gcc  
+x86_64               randconfig-a005-20230327   gcc  
+x86_64               randconfig-a006-20230327   gcc  
+x86_64               randconfig-a011-20230327   clang
+x86_64               randconfig-a012-20230327   clang
+x86_64               randconfig-a013-20230327   clang
+x86_64               randconfig-a014-20230327   clang
+x86_64               randconfig-a015-20230327   clang
+x86_64               randconfig-a016-20230327   clang
+x86_64               randconfig-r003-20230327   gcc  
+x86_64               randconfig-r014-20230327   clang
+x86_64                               rhel-8.3   gcc  
 
-Typical collapsed time w/o patch:
- ~ # time taskset -c 4 ./a.out
- 0.21user 14.34system 0:14.69elapsed
-w/ patch:
- ~ # time taskset -c 4 ./a.out
- 0.22user 13.45system 0:13.80elapsed
-
-Also, Yicong Yang added the following observation.
-	Tested with benchmark in the commit on Kunpeng920 arm64 server,
-	observed an improvement around 12.5% with command
-	`time ./swap_bench`.
-		w/o		w/
-	real	0m13.460s	0m11.771s
-	user	0m0.248s	0m0.279s
-	sys	0m12.039s	0m11.458s
-
-	Originally it's noticed a 16.99% overhead of ptep_clear_flush()
-	which has been eliminated by this patch:
-
-	[root@localhost yang]# perf record -- ./swap_bench && perf report
-	[...]
-	16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
-
-It is tested on 4,8,128 CPU platforms and shows to be beneficial on
-large systems but may not have improvement on small systems like on
-a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
-on CONFIG_EXPERT for this stage and make this disabled on systems
-with less than 8 CPUs. User can modify this threshold according to
-their own platforms by CONFIG_NR_CPUS_FOR_BATCHED_TLB.
-
-Also this patch improve the performance of page migration. Using pmbench
-and tries to migrate the pages of pmbench between node 0 and node 1 for
-20 times, this patch decrease the time used more than 50% and saved the
-time used by ptep_clear_flush().
-
-This patch extends arch_tlbbatch_add_mm() to take an address of the
-target page to support the feature on arm64. Also rename it to
-arch_tlbbatch_add_pending() to better match its function since we
-don't need to handle the mm on arm64 and add_mm is not proper.
-add_pending will make sense to both as on x86 we're pending the
-TLB flush operations while on arm64 we're pending the synchronize
-operations.
-
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  6 +++
- arch/arm64/include/asm/tlbbatch.h             | 12 +++++
- arch/arm64/include/asm/tlbflush.h             | 52 ++++++++++++++++++-
- arch/x86/include/asm/tlbflush.h               |  5 +-
- include/linux/mm_types_task.h                 |  4 +-
- mm/rmap.c                                     | 12 +++--
- 7 files changed, 81 insertions(+), 12 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 7f049c251a79..76208db88f3b 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: |  ok  |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1023e896d46b..93b5f5f989a1 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -95,6 +95,7 @@ config ARM64
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
-+	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-@@ -275,6 +276,11 @@ config ARM64_CONT_PMD_SHIFT
- 	default 5 if ARM64_16K_PAGES
- 	default 4
- 
-+config ARM64_NR_CPUS_FOR_BATCHED_TLB
-+	int "Threshold to enable batched TLB flush"
-+	default 8
-+	depends on ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
- config ARCH_MMAP_RND_BITS_MIN
- 	default 14 if ARM64_64K_PAGES
- 	default 16 if ARM64_16K_PAGES
-diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
-new file mode 100644
-index 000000000000..fedb0b87b8db
---- /dev/null
-+++ b/arch/arm64/include/asm/tlbbatch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ARCH_ARM64_TLBBATCH_H
-+#define _ARCH_ARM64_TLBBATCH_H
-+
-+struct arch_tlbflush_unmap_batch {
-+	/*
-+	 * For arm64, HW can do tlb shootdown, so we don't
-+	 * need to record cpumask for sending IPI
-+	 */
-+};
-+
-+#endif /* _ARCH_ARM64_TLBBATCH_H */
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index 412a3b9a3c25..41a763cf8c1b 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
- 	dsb(ish);
- }
- 
--static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
- 					 unsigned long uaddr)
- {
- 	unsigned long addr;
- 
- 	dsb(ishst);
--	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	addr = __TLBI_VADDR(uaddr, ASID(mm));
- 	__tlbi(vale1is, addr);
- 	__tlbi_user(vale1is, addr);
- }
- 
-+static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+					 unsigned long uaddr)
-+{
-+	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
-+}
-+
- static inline void flush_tlb_page(struct vm_area_struct *vma,
- 				  unsigned long uaddr)
- {
-@@ -272,6 +278,48 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
- 	dsb(ish);
- }
- 
-+#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
-+static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-+{
-+	/*
-+	 * TLB batched flush is proved to be beneficial for systems with large
-+	 * number of CPUs, especially system with more than 8 CPUs. TLB shutdown
-+	 * is cheap on small systems which may not need this feature. So use
-+	 * a threshold for enabling this to avoid potential side effects on
-+	 * these platforms.
-+	 */
-+	if (num_online_cpus() < CONFIG_ARM64_NR_CPUS_FOR_BATCHED_TLB)
-+		return false;
-+
-+	/*
-+	 * TLB flush deferral is not required on systems, which are affected with
-+	 * ARM64_WORKAROUND_REPEAT_TLBI, as __tlbi()/__tlbi_user() implementation
-+	 * will have two consecutive TLBI instructions with a dsb(ish) in between
-+	 * defeating the purpose (i.e save overall 'dsb ish' cost).
-+	 */
-+#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-+	if (unlikely(cpus_have_const_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-+		return false;
-+#endif
-+
-+	return true;
-+}
-+
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
-+{
-+	__flush_tlb_page_nosync(mm, uaddr);
-+}
-+
-+static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
-+{
-+	dsb(ish);
-+}
-+
-+#endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
-+
- /*
-  * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
-  * necessarily a performance improvement.
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 8a497d902c16..15cada9635c1 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -263,8 +263,9 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
- 	return atomic64_inc_return(&mm->context.tlb_gen);
- }
- 
--static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
--					struct mm_struct *mm)
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
- {
- 	inc_mm_tlb_gen(mm);
- 	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
-diff --git a/include/linux/mm_types_task.h b/include/linux/mm_types_task.h
-index 5414b5c6a103..aa44fff8bb9d 100644
---- a/include/linux/mm_types_task.h
-+++ b/include/linux/mm_types_task.h
-@@ -52,8 +52,8 @@ struct tlbflush_unmap_batch {
- #ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
- 	/*
- 	 * The arch code makes the following promise: generic code can modify a
--	 * PTE, then call arch_tlbbatch_add_mm() (which internally provides all
--	 * needed barriers), then call arch_tlbbatch_flush(), and the entries
-+	 * PTE, then call arch_tlbbatch_add_pending() (which internally provides
-+	 * all needed barriers), then call arch_tlbbatch_flush(), and the entries
- 	 * will be flushed on all CPUs by the time that arch_tlbbatch_flush()
- 	 * returns.
- 	 */
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 38ccb700748c..a4e2c16a1a72 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -641,12 +641,13 @@ void try_to_unmap_flush_dirty(void)
- #define TLB_FLUSH_BATCH_PENDING_LARGE			\
- 	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
- 
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-+				      unsigned long uaddr)
- {
- 	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
- 	int batch, nbatch;
- 
--	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
-+	arch_tlbbatch_add_pending(&tlb_ubc->arch, mm, uaddr);
- 	tlb_ubc->flush_required = true;
- 
- 	/*
-@@ -724,7 +725,8 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
- 	}
- }
- #else
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
-+				      unsigned long uaddr)
- {
- }
- 
-@@ -1575,7 +1577,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
-@@ -1956,7 +1958,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
 -- 
-2.24.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
