@@ -2,167 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156706D0095
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 12:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EA06D00DE
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 12:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjC3KEW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Mar 2023 06:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S229920AbjC3KPY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Mar 2023 06:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjC3KEV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 06:04:21 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361AF8A51;
-        Thu, 30 Mar 2023 03:03:57 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A6E105821FE;
-        Thu, 30 Mar 2023 06:03:53 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 30 Mar 2023 06:03:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1680170633; x=1680177833; bh=gF
-        qXqcYMWSKuJaGFIiy50Zf8Mul16NUlD8xgems2xkg=; b=JxPZOVxjXCuuUFnz8g
-        uR2No3WKokB1kYnBVGLyuNTT1GHbSx7HcllmOlx7WL73MRjvBNY1Jz63nwSIuXZm
-        fARBRkt2EgiPXJLAvasiK+94JN9Rp7qIpeg/c8F9us28ZAmzX4a12l/FSLzGWeAf
-        GP7Lhb+lkhGzU3GXPlwLR10V758pcgH1ojqXsjwkdVyUvwtO9WMqdgRyfQ7u3ctM
-        W7sU+9bMDjJx0q1aRSpQBmyxejDAdo7VNGKwjccZfKKub+cgQ2ZTm/zkP2y/rRlx
-        wYI35VSqJc9OdGsxpiyx9Lz/h6dHQyx/rbychak5+lhcx20ykt8JwaYwQzyk90NH
-        m/JA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680170633; x=1680177833; bh=gFqXqcYMWSKuJ
-        aGFIiy50Zf8Mul16NUlD8xgems2xkg=; b=o3ayTuAjbuBu4DPifrxB/HOOZRdO1
-        xb065wIqst9K32LE2zIFvIgvo3yv5lHodsQ9WEQeJOnQ4UcFBj18pN027eK8euOR
-        PtcZaxUi42xyTMd+sbBNtRmY12wtqYj80lCZcTZsq6sg8WYonLY5xmdrshZ5C44/
-        jXjWmEhQ68ThFXZ/SV/69f9njMopwi7kUxCVm+NBkbrrBCIP7mBID23rgx/hkVub
-        HQT4TO9CRtSmC/0UwEYJhKoIxPA5B3sXRdQjC9d5SuBSM3xeOdM9GqWhROqUG5n+
-        6gfH5c9KmTWNqq/meniN7YOfy58761x7eNGJpjVNO+ni0u9AywZLJQEUQ==
-X-ME-Sender: <xms:h14lZP2P6-1WML0tnHU0HdMdtZK3G6AdboBJze6kLEnEZTHVfufW-A>
-    <xme:h14lZOG421saOUxl3VTrr1QErXRPxmod2xdJenKYhBULtUD7d6J8ovO92D02wTAv1
-    7ZDE3mwId6_yOeP8ic>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehkedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:h14lZP41dAmtiVu4ty1E8BBZ-9reNxwryxuQCN8Se8vdMAwQTZcBkg>
-    <xmx:h14lZE2dCL5QmCe3baeT7FUMFxbuJwcm88C-9hfhLub0UJvmYVxYPg>
-    <xmx:h14lZCHsPaycpm9MVz5soXkltYLZMmnIjjAwPs6W0AlziFmXAZIfJA>
-    <xmx:iV4lZI76poFBm_RbGrZvSm-s7BW_iB7cNPqH9WgtDueAW0AKJy54Lg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 423AFB60086; Thu, 30 Mar 2023 06:03:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
-Mime-Version: 1.0
-Message-Id: <6a5bd3a3-87e0-4a24-89ca-d265b0817a95@app.fastmail.com>
-In-Reply-To: <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-19-arnd@kernel.org>
- <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
-Date:   Thu, 30 Mar 2023 12:03:16 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Arnd Bergmann" <arnd@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     "Vineet Gupta" <vgupta@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
-        "Brian Cain" <bcain@quicinc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Stafford Horne" <shorne@gmail.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        "Daniel Golle" <daniel@makrotopia.org>
-Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229749AbjC3KPY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 06:15:24 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8EE1FFB;
+        Thu, 30 Mar 2023 03:15:22 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id l14so12126979pfc.11;
+        Thu, 30 Mar 2023 03:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680171322;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M7LtPZVH4RMzF9XBfm4hBW5uXz/iaLJHkdbDSB+7F64=;
+        b=AUa6z5fwxkmqIEXU2H4JS8xNaBdaBvurgoNwkAY1SJznvW50gCQTPI1I8ckFWj5kqb
+         kILLCZZkqxVeLKxK7xLF2dEdnKGs6mnTtSgrsEJUPdnscu8y7u1tVgPU1/0EOx11SDcL
+         8HFd65yTz1tCg1xOHUlf7zm5r0If5skBqwZNeWJWKi9+v3FeCxA77lCM3zDLal89U8KI
+         QvGofperKbjpwahlLI2WmSonCj4IF1IWX669cuGhjqiuxpcv0n80n5DD5TEpWnB05Bti
+         WCmSJR9xs37Q1G2mZuPyrtnQ+v2KeAPHnUtZCJZxQLnBHSlI1AMDNl25wR8LrAp5esJk
+         fXBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680171322;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M7LtPZVH4RMzF9XBfm4hBW5uXz/iaLJHkdbDSB+7F64=;
+        b=Q24b6Eai2iJlBiK42R/yFQi/ngjBxq5g/LakfeyqXhqPUXy5f7MqGhInC1ZqaxP58L
+         +f3du5WCV5b/tI5VxEdcGCeJCdMut7VgB2uGkAIuS2c86UlEJiKU/B4+N5XboXUvXdnX
+         CxzkfIzxenQ1rKlWJwHUy8/tC7sqVDpll8u4N6gd2Sy0D+ydqHL2xxC907M2S0e3/xs4
+         a0C1YJcgU/TD9uSdgeHpTQP8rvSH0EObPe4FbAIEyTd2rayM/El6+9Vz7KXPbj0U3WJk
+         iRBCB83uqRLWQnRNdeQZWCkMxZBc9KQq/2MI1ty3Y2jdyJPyPpgBVYh/9DPVcG+EShuX
+         HM3g==
+X-Gm-Message-State: AAQBX9cImUXt8xamcgaAmu3wSLxv4C370O6IM/4OI+17r6lWmwKA4A5l
+        4HhbdJ4TUdZ0xizJALxw4xiELfS7Ih3k+w==
+X-Google-Smtp-Source: AKy350Y3Tbyj0a3V6M0/eIIO1fkoZCSjOo1+EjhuDLYwZd8uSV7koddvMYrs/i9z/ZS6qcSzaeGr7Q==
+X-Received: by 2002:aa7:9542:0:b0:625:7536:7b0e with SMTP id w2-20020aa79542000000b0062575367b0emr20395943pfq.29.1680171321860;
+        Thu, 30 Mar 2023 03:15:21 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id x18-20020aa793b2000000b00627e55f383dsm22469210pff.3.2023.03.30.03.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 03:15:21 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v2 0/3] Move Loongson1 PWM timer to clocksource framework
+Date:   Thu, 30 Mar 2023 18:15:03 +0800
+Message-Id: <20230330101506.545040-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 30, 2023, at 09:48, Neil Armstrong wrote:
-> On 27/03/2023 14:13, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The cache management operations for noncoherent DMA on ARMv6 work
->> in two different ways:
->> 
->>   * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
->>     DMA buffers lead to data corruption when the prefetched data is written
->>     back on top of data from the device.
->> 
->>   * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
->>     is not seen by the other core(s), leading to inconsistent contents
->>     accross the system.
->> 
->> As a consequence, neither configuration is actually safe to use in a
->> general-purpose kernel that is used on both MPCore systems and ARM1176
->> with prefetching enabled.
->> 
->> We could add further workarounds to make the behavior more dynamic based
->> on the system, but realistically, there are close to zero remaining
->> users on any ARM11MPCore anyway, and nobody seems too interested in it,
->> compared to the more popular ARM1176 used in BMC2835 and AST2500.
->> 
->> The Oxnas platform has some minimal support in OpenWRT, but most of the
->> drivers and dts files never made it into the mainline kernel, while the
->> Arm Versatile/Realview platform mainly serves as a reference system but
->> is not necessary to be kept working once all other ARM11MPCore are gone.
->
-> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
->
-> It's sad but it's the reality, there's no chance full OXNAS support will
-> ever come upstream and no real work has been done for years.
->
-> I think OXNAS support can be programmed for removal for next release,
-> it would need significant work to rework current support to make it acceptable
-> before trying to upstream missing bits anyway.
+Move Loongson1 PWM timer to clocksource framework
+and update the Kconfig/Makefile options accordingly.
 
-Ok, thanks for your reply!
+Changelog
+V1 -> V2: Delete the obsolete header file regs-pwm.h
 
-To clarify, do you think we should plan for removal after the next
-stable release (6.3, removed in 6.4), or after the next LTS
-release (probably 6.6, removed in 6.7)? As far as I understand,
-the next OpenWRT release (23.x) will be based on linux-5.15,
-and the one after that (24.x) would likely still use 6.1, unless
-they skip an LTS kernel.
+Keguang Zhang (3):
+  MIPS: Loongson32: Remove deprecated PWM timer clocksource
+  dt-bindings: timer: Add Loongson-1 clocksource
+  clocksource: loongson1: Move PWM timer to clocksource framework
 
-     Arnd
+ .../timer/loongson,ls1x-pwmtimer.yaml         |  48 ++++
+ .../include/asm/mach-loongson32/regs-pwm.h    |  25 --
+ arch/mips/loongson32/Kconfig                  |  37 ---
+ arch/mips/loongson32/common/time.c            | 210 ----------------
+ drivers/clocksource/Kconfig                   |   9 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-loongson1-pwm.c     | 236 ++++++++++++++++++
+ 7 files changed, 294 insertions(+), 272 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-pwm.h
+ create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
+
+
+base-commit: f7b5a248213f0976c7944925f3f3ab7ff199e581
+-- 
+2.34.1
+
