@@ -2,113 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022B16D052E
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 14:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A996D058C
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 14:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjC3Mrg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Mar 2023 08:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S231674AbjC3M7f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Mar 2023 08:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjC3Mrg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 08:47:36 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039D091;
-        Thu, 30 Mar 2023 05:47:35 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id n6-20020a4abd06000000b0053b59893660so2948431oop.0;
-        Thu, 30 Mar 2023 05:47:34 -0700 (PDT)
+        with ESMTP id S231338AbjC3M7e (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 08:59:34 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D22393FF;
+        Thu, 30 Mar 2023 05:59:33 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id d14so8225507ion.9;
+        Thu, 30 Mar 2023 05:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680181172; x=1682773172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=db58zgLapT4+5eM+e2dEcRQMOxpl02qLJJqJynMawPw=;
+        b=gvyLOSrV5NqLHUuxidIYczTpyccsUd898Kt8qAjGZCJm8EQYH5JcTmwLqg57uC0cvB
+         j7U0x9dcm2RsX8dLxVGcboGq4Pdvm6cDFGIifVhW5LUG0BZhpnkLq+12fDfUITmPUgDN
+         KJqbUWD1A1NNvcxlD8Va+DklQ7yRgA9v4iGNa+yDzNCF8hz/BAHOp1sivo3m/ett+i3j
+         AtVwEXoZrtByosb2V89SvT6DgwFv0o1YJU+4lunFRTh6XWRbkQcRhcsLjusSr3Liunwq
+         utzWcTAPvMsNoessMz8HZ9Y6dfPH5hnImowquLEBicF67L5RSN3ovwZ4QUhqVrtpFGVk
+         CyWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680180454;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wtBuzl8K04aB3AnZ0txrHE1YrIRmUQ4B9qyhQlZzPH4=;
-        b=cM1i2U3hcUE4Ot19SZ7suxzieLs1imCr6E0h4LrEoKU/mlWFte6rXkcbXQJEezh68v
-         5J0fiJnIk4Cu3uWPcRLhEXiYaaQkvTXY2RCEXPCIL92WwEIGlKZ2huRUyg2QrpBu2GFG
-         0YWUpOtFe48MC0Dv4ta6+k4FBffT6wwV1pOpLGdTL3PA0dK4sHc3kJHlvzlGmS66c4S7
-         JrYvy/KBfE8lSY/WC0kHbdqQ2VMSuQyoi9LiGhediafQPe8GZEQpSY1/ouMVrGjTNu9P
-         HOOSfq1BNFWvpbY3ZbNRs7VCt7NQ+6xmFdfdXO0d4/bv2CzTGe6KEmhhTqyqhgcCiQXF
-         Vj7w==
-X-Gm-Message-State: AAQBX9c//mAeh+Y/PypbCuS+R61lfILfEO0SsPbUZ7uZO7AZRLSsBa4M
-        XJGgHEVGQBrwaheLIF/4dQ==
-X-Google-Smtp-Source: AKy350YAs9GHa0khQvQ57kJ/w+Cv/Wcx7rcV/rtgNaN69Ll2vzsHrcuxjOWOnUOmrppCGRVgAFmvPg==
-X-Received: by 2002:a4a:5244:0:b0:537:b1ad:1c7c with SMTP id d65-20020a4a5244000000b00537b1ad1c7cmr6894747oob.0.1680180454079;
-        Thu, 30 Mar 2023 05:47:34 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j41-20020a4a88ac000000b0053e3da7f810sm4707307ooa.25.2023.03.30.05.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 05:47:33 -0700 (PDT)
-Received: (nullmailer pid 1824005 invoked by uid 1000);
-        Thu, 30 Mar 2023 12:47:33 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20210112; t=1680181172; x=1682773172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=db58zgLapT4+5eM+e2dEcRQMOxpl02qLJJqJynMawPw=;
+        b=GgNj6eOVH4dLtqkJAK20/LMKhswJVWtIN9ax47qNYhIqspEW1sBhaVfRTt7mbducAS
+         A/wL6rr6YO66M44LZIMe9BkSx3c+JNzUH2xnkc9r16MHCiyeI9R5RCxyWglII8gxQ5w9
+         bCYPeEdyfcSC9EbpkKYIRbRIn1fOLUaCcupt2cSthVyshskd+TLGJZ/7cDJ3Z0WSEc2T
+         gqEy2kgE0dRFahKJNbnTFzw+K5B/w3khCo8Uhz8SEdOzJwdYgXsGMQJ9OgGE/zmWWUmz
+         aJq0z2ghF6yhujSghCM5ciilGkpsMS6qST4Dl4itQDFvqWqHPhZqC3K5AaOIx7YVrdRs
+         Nk2g==
+X-Gm-Message-State: AAQBX9fjeB2bUp6zI1YBXwPHLB+knqRrRPpcKMIVKdRSSK8EliD4FX/T
+        Wqsbf9lEIPRblE8XG9XZYEc24SZtKOBBy0KIZbE=
+X-Google-Smtp-Source: AKy350Yt7w4HDnt8ZzJ1OA1g5OCPUWPp6heQMoQ57xTct+y1JPFpMNsPMtx4N97vitPklV5i5ccLJReO6yCW0ia7/Oo=
+X-Received: by 2002:a02:95c3:0:b0:3eb:3166:9da4 with SMTP id
+ b61-20020a0295c3000000b003eb31669da4mr2710421jai.2.1680181172425; Thu, 30 Mar
+ 2023 05:59:32 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-9-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-9-arnd@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 30 Mar 2023 13:59:06 +0100
+Message-ID: <CA+V-a8v--RqxFJYTZ04vVgiA69VJsFWk=r=TvRvokhpAV-famg@mail.gmail.com>
+Subject: Re: [PATCH 08/21] riscv: dma-mapping: only invalidate after DMA, not flush
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230330110512.549704-3-keguang.zhang@gmail.com>
-References: <20230330110512.549704-1-keguang.zhang@gmail.com>
- <20230330110512.549704-3-keguang.zhang@gmail.com>
-Message-Id: <168017971140.1808596.3407628411299700675.robh@kernel.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: timer: Add Loongson-1 clocksource
-Date:   Thu, 30 Mar 2023 07:47:33 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-On Thu, 30 Mar 2023 19:05:11 +0800, Keguang Zhang wrote:
-> Add devicetree binding document for Loongson-1 clocksource.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+On Mon, Mar 27, 2023 at 1:16=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> No other architecture intentionally writes back dirty cache lines into
+> a buffer that a device has just finished writing into. If the cache is
+> clean, this has no effect at all, but if a cacheline in the buffer has
+> actually been written by the CPU,  there is a drive bug that is likely
+> made worse by overwriting that buffer.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-> V2 -> V3: None
-> V1 -> V2: None
-> ---
->  .../timer/loongson,ls1x-pwmtimer.yaml         | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
-> 
+>  arch/riscv/mm/dma-noncoherent.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-yamllint warnings/errors:
+Cheers,
+Prabhakar
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dts:21:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file or directory
-   21 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230330110512.549704-3-keguang.zhang@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoher=
+ent.c
+> index d919efab6eba..640f4c496d26 100644
+> --- a/arch/riscv/mm/dma-noncoherent.c
+> +++ b/arch/riscv/mm/dma-noncoherent.c
+> @@ -42,7 +42,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t si=
+ze,
+>                 break;
+>         case DMA_FROM_DEVICE:
+>         case DMA_BIDIRECTIONAL:
+> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+> +               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+>                 break;
+>         default:
+>                 break;
+> --
+> 2.39.2
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
