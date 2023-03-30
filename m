@@ -2,201 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD106CF9ED
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 06:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5576CFC57
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 09:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjC3ECa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Mar 2023 00:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S230481AbjC3HL2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Mar 2023 03:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjC3ECY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 00:02:24 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F8D55AA
-        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 21:02:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id r11so71436696edd.5
-        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 21:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112; t=1680148938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DRrMSTrE1hzXNMTnJR9hzwcHZG5OJLH6N1k4mRkhtxc=;
-        b=ynfExVnq8Pbne4CrK35vVvzcZo/HMcJEJUR3Ujna/kLNgyxndnnVOhaOok7Q3u4boK
-         FW4keBgSZ6pU7kWyE+manshTU5Tk7hNavSWkOvFCWTteIMmp/9Qk7GSzFj7kYZ5XfmBv
-         miUHdrLcGJzpXksYn+qz42allwe3QMPmR/pnE7vpqvm1r6J8sdtN2nbt3yHJRZJvjQa2
-         WULHOKYx2FaImOfeOidrkyK9ABt3NseOxAzqi3/iHsrvkvaPYLGzC0VonLkMDJt7dAvE
-         qA6CCYx7R2kWBHI86Kqb+JhYZk0VIktRQH4ecdVqtPrNiVN9gXZkgnTnC6UdsKE6Gs/B
-         u+Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680148938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DRrMSTrE1hzXNMTnJR9hzwcHZG5OJLH6N1k4mRkhtxc=;
-        b=fMIUE7O1quOVDTowJ2OeWr3dfCC07N2oUqkQn+iKEYKve5AGhS3/pnia3rwwjfd7XC
-         LjTKJS8Rb2UWVsr8bR6e2mhv4+V/2dp5R/9Agdi64vkyKJf/xor6F9H2zJHRnF8M/cxf
-         jWJAV5fuM37NEcm9+kL308gxbCaLn6iXVTv8vmQzxiNystOEPWCnK1G/xvqUWWkmbQC6
-         Ftnuey15eieJA0YxXAzYHsTJj5TgzC9OrnKcQPmP25aD74KvP43/NuwYRUARoXrE2vHE
-         NXYL7R+gt12W/XxRvQF1dEqfBTGdLui1MCEYaTQ4NIHusbGoec+mTYX6oyO+5uABJv+c
-         77Ug==
-X-Gm-Message-State: AAQBX9c0jG3hd2FKp1K7R9jjg6sGMJ0UWfxQ493O4+IcHiDNKa3FOB9H
-        P9llkCGqa2Qdh+oSCo2d77ijtzsZOSvTUYdBfJMcJQ==
-X-Google-Smtp-Source: AKy350YsOJqAiqRYem5e01w1p2m+BEvgEUELir1jFBDVGQszGos9GuJs6YHfU/Z+9mLpMcFmxWEdJiS8UYrZt9G/tI4=
-X-Received: by 2002:a50:9fef:0:b0:4fc:1608:68c8 with SMTP id
- c102-20020a509fef000000b004fc160868c8mr10756114edf.1.1680148938164; Wed, 29
- Mar 2023 21:02:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org> <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
-In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-16-581e2605fe47@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 30 Mar 2023 09:32:06 +0530
-Message-ID: <CAAhSdy3MYV=v2TNZ_507zGe6Pj_c95TZwODPK8-zTHpkn-ukww@mail.gmail.com>
-Subject: Re: [PATCH 16/19] cpuidle: Adjust includes to remove of_device.h
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230446AbjC3HLY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 03:11:24 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CCF192;
+        Thu, 30 Mar 2023 00:11:22 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 91091581DB4;
+        Thu, 30 Mar 2023 03:11:20 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 30 Mar 2023 03:11:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680160280; x=1680167480; bh=wG
+        Aj9k8TObyqA6xHoUKa8szJrjCAJbphSDFQitQcQQs=; b=QVEDTKeVke/4u7Kg+r
+        /f0Ng8qyMJQjA0k7T1uZbzE62G/ueNBnWjpEnArFMDM92zNIXQ0BVhpsTK81gyt0
+        xSP5pbZY1IxVpqUBM+h72I4sgGKqPjbLqxNcKo6QCWkB1PzdfOUSKkfxHkuBpgbQ
+        cYQ6HqJa3bwV0Vkf7hmy8ejQKyFDSRYDfGJpYSPAochCUC5d86UJcSmtdy6Sxo6B
+        Jwxhii7JHhX5S3HrIP0mKrvU6BvYZqwsLNUfy16VYFyQuCPOCAze4qZ6sDRlwyQw
+        F08a6VUS4QIWlJ5ptfnwv75T7l2QsYPv/2qWlc1FTlhkx6SDxxZZxa17eJWjG25W
+        8QyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680160280; x=1680167480; bh=wGAj9k8TObyqA
+        6xHoUKa8szJrjCAJbphSDFQitQcQQs=; b=oomTeCD59PNC83Jndx1U6VLOVE5Dm
+        iHmSiz3n1GUnKD2uHg/nJb7LQ4xFS4iggJ6sXq9/uqeoafmTb21qaw3LmGDGWVXs
+        zFRwDOtSbIgfSbefSTdQy+SDzfOWXM+Nas8Aqo7qkiw5wE6y4qdG6iwjS4DRWXtn
+        XctTZFf5GY9RMg5ciHLqGdffXqZGKOwN45T9El3FCgUi5LSy7a/pQo0750iSwL/f
+        RG+pNkv9fRAgzmmzo4HLa1cEOhymbMSIXzYbzI354FYA0THouxwTuuuM0yobQ3gk
+        LFgzGrnAkD2cRuN42h7TslpEIGdInF1W2TSA3tfbtXeFABGM7k1iBb/7Q==
+X-ME-Sender: <xms:FTYlZOrkzwdxpCxeIZzclV90hxzPUSC3ms8-E11J67_aPSJXJ1BIkg>
+    <xme:FTYlZMrP3FZFc1NJSA8GIlQPVO9kl25CsPN1r07QL_dGO5vWTCxWy7o2eATgnKdQ9
+    a578gSy3QQoXr1upcg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehjedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:FjYlZDNNTBCw6HhWBDqV-oUWPDwRI7BTNiBMI3iXI3sHS545zVmJ2w>
+    <xmx:FjYlZN4cwCdj47vqSASOc6XR5L2duLCySn6_f-BJZvURW8Sn6XqTzw>
+    <xmx:FjYlZN6Cp-M6Z89_Yu31L8qrA-V1bCiPBKi9s_taeLF3yPIrQttNLw>
+    <xmx:GDYlZL7CJyRZz1a_FlDEKTyWBaiLrIUUjNVWWchrrS5Jr6hXYCWp0A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E08C7B60086; Thu, 30 Mar 2023 03:11:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-238-g746678b8b6-fm-20230329.001-g746678b8
+Mime-Version: 1.0
+Message-Id: <34f3e043-20eb-40b2-a7f5-b1b98a0d452a@app.fastmail.com>
+In-Reply-To: <2668e232-ae83-4576-beaa-08e420236996@spud>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-9-arnd@kernel.org>
+ <2668e232-ae83-4576-beaa-08e420236996@spud>
+Date:   Thu, 30 Mar 2023 09:10:57 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Conor Dooley" <conor@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, "Vineet Gupta" <vgupta@kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
+        "Brian Cain" <bcain@quicinc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org,
+        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        "Samuel Holland" <samuel@sholland.org>
+Subject: Re: [PATCH 08/21] riscv: dma-mapping: only invalidate after DMA, not flush
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 9:22=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
+On Wed, Mar 29, 2023, at 22:48, Conor Dooley wrote:
+> On Mon, Mar 27, 2023 at 02:13:04PM +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> No other architecture intentionally writes back dirty cache lines into
+>> a buffer that a device has just finished writing into. If the cache is
+>> clean, this has no effect at all, but
 >
-> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
-> implicitly including other includes, and is no longer needed. Adjust the
-> include files with what was implicitly included by of_device.h (cpu.h,
-> cpuhotplug.h, of.h, and of_platform.h) and drop including of_device.h.
+>> if a cacheline in the buffer has
+>> actually been written by the CPU,  there is a drive bug that is likely
+>> made worse by overwriting that buffer.
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> So does this need a
+> Fixes: 1631ba1259d6 ("riscv: Add support for non-coherent devices using 
+> zicbom extension")
+> then, even if the cacheline really should not have been touched by the
+> CPU?
+> Also, minor typo, s/drive/driver/.
 
-For cpuidle-riscv-sbi.c
-Acked-by: Anup Patel <anup@brainfault.org>
+done
 
-Regards,
-Anup
+> In the thread we had that sparked this, I went digging for the source of
+> the flushes, and it came from a review comment:
+> https://lore.kernel.org/linux-riscv/342e3c12-ebb0-badf-7d4c-c444a2b842b2@sholland.org/
 
-> ---
-> Please ack and I will take the series via the DT tree.
-> ---
->  drivers/cpuidle/cpuidle-psci.c      | 1 -
->  drivers/cpuidle/cpuidle-qcom-spm.c  | 3 +--
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 2 +-
->  drivers/cpuidle/dt_idle_states.c    | 1 -
->  4 files changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psc=
-i.c
-> index 6de027f9f6f5..bf68920d038a 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -16,7 +16,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/psci.h>
->  #include <linux/pm_domain.h>
-> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle=
--qcom-spm.c
-> index c6e2e91bb4c3..1fc9968eae19 100644
-> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
-> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-> @@ -11,8 +11,7 @@
->  #include <linux/io.h>
->  #include <linux/slab.h>
->  #include <linux/of.h>
-> -#include <linux/of_address.h>
-> -#include <linux/of_device.h>
-> +#include <linux/of_platform.h>
->  #include <linux/err.h>
->  #include <linux/platform_device.h>
->  #include <linux/cpuidle.h>
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidl=
-e-riscv-sbi.c
-> index be383f4b6855..ae0b838a0634 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -8,6 +8,7 @@
->
->  #define pr_fmt(fmt) "cpuidle-riscv-sbi: " fmt
->
-> +#include <linux/cpuhotplug.h>
->  #include <linux/cpuidle.h>
->  #include <linux/cpumask.h>
->  #include <linux/cpu_pm.h>
-> @@ -15,7 +16,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/slab.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
-> diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_s=
-tates.c
-> index 02aa0b39af9d..12fec92a85fd 100644
-> --- a/drivers/cpuidle/dt_idle_states.c
-> +++ b/drivers/cpuidle/dt_idle_states.c
-> @@ -14,7 +14,6 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->
->  #include "dt_idle_states.h"
->
->
-> --
-> 2.39.2
->
+Ah, so the comment that led to it was 
+
+"For arch_sync_dma_for_cpu(DMA_BIDIRECTIONAL), we expect the CPU to have
+written to the buffer, so this should flush, not invalidate."
+
+which sounds like Samuel just misunderstood what "bidirectional"
+means: the comment implies that both the cpu and the device access
+the buffer before arch_sync_dma_for_cpu(DMA_BIDIRECTIONAL), but
+this is not allowed. Instead, the point is that the device may both
+read and write the buffer, requiring that we must do a writeback
+at arch_sync_dma_for_device(DMA_BIDIRECTIONAL) and an invalidate
+at arch_sync_dma_for_cpu(DMA_BIDIRECTIONAL).
+
+The comment about arch_sync_dma_for_device(DMA_FROM_DEVICE) (in the
+same email) seems equally confused. It's of course easy to
+misunderstand these, and many others have gotten confused in
+similar ways before.
+
+> But *surely* if no other arch needs to do that, then we are safe to also
+> not do it... Your logic seems right by me at least, especially given the
+> lack of flushes elsewhere.
+
+Right, I remove the extra writeback from powerpc, parisc and microblaze
+for the same reason. Those appear to only be there because they used the
+same function for _for_device() as for _for_cpu(), not because someone
+thought they were required.
+
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks!
+
+     Arnd
