@@ -2,135 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CB16D0402
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 13:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022B16D052E
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 14:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjC3Lxn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Mar 2023 07:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S230401AbjC3Mrg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Mar 2023 08:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjC3Lxm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 07:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414DFB460;
-        Thu, 30 Mar 2023 04:53:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5FC16204C;
-        Thu, 30 Mar 2023 11:52:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26940C433AA;
-        Thu, 30 Mar 2023 11:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680177127;
-        bh=Lg8Woq7ScP2NFdPayLKkYeMtRMZwMJRAR9+KtXakJhE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=szgi2AGJBTiRQ58jY7BtDVpishu6YXxB3MID/h/iLnY6weieQpEEBjD5U4dJKUZJo
-         NyrFHSlcuLma/JgU04Kyl/teOBwE2aqvJirDrSyFmIOb/MgyJ5jbYzY27e7K0/FB3v
-         CGl1zaVIaqHqL9jEmUV6o9JaD3e9FPV5dCV6/OyKRUcn2nGSc77XIBQZ4V3nd48tRE
-         MXMuKMr76f/IZcL1m1wvAHaMqdCUnLP5+1pyn+Oivk5n7icXvXAiLs6rb+QGNifsx4
-         s+2w00OYui+zTpJ8W2EjziNZVSk+jRvfupY8WA5Y6La/gJ22X/s8u0ZbXc6MKI1CFs
-         Gh6YkXLHZHYVw==
-Received: by mail-lf1-f52.google.com with SMTP id g19so11034911lfr.9;
-        Thu, 30 Mar 2023 04:52:07 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ft5A7WJCknKgnZ3X+jipHPJIOsmWAmuopg6M9eJX6eQz3aA7s4
-        EQgGRwRdqFLaFGTSjQi+FLYILDCHpiUj7JnhrQg=
-X-Google-Smtp-Source: AKy350aaxBOgSqlP959KpS9cfZAsDCsvbSuFf+7QcLc+VlamdgSrDzoUdXNjAn81KSsW2remp6yjeVooIQhT3qtniP0=
-X-Received: by 2002:a19:f007:0:b0:4db:b4:c8d7 with SMTP id p7-20020a19f007000000b004db00b4c8d7mr1755725lfc.2.1680177124990;
- Thu, 30 Mar 2023 04:52:04 -0700 (PDT)
+        with ESMTP id S229749AbjC3Mrg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Mar 2023 08:47:36 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039D091;
+        Thu, 30 Mar 2023 05:47:35 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id n6-20020a4abd06000000b0053b59893660so2948431oop.0;
+        Thu, 30 Mar 2023 05:47:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680180454;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wtBuzl8K04aB3AnZ0txrHE1YrIRmUQ4B9qyhQlZzPH4=;
+        b=cM1i2U3hcUE4Ot19SZ7suxzieLs1imCr6E0h4LrEoKU/mlWFte6rXkcbXQJEezh68v
+         5J0fiJnIk4Cu3uWPcRLhEXiYaaQkvTXY2RCEXPCIL92WwEIGlKZ2huRUyg2QrpBu2GFG
+         0YWUpOtFe48MC0Dv4ta6+k4FBffT6wwV1pOpLGdTL3PA0dK4sHc3kJHlvzlGmS66c4S7
+         JrYvy/KBfE8lSY/WC0kHbdqQ2VMSuQyoi9LiGhediafQPe8GZEQpSY1/ouMVrGjTNu9P
+         HOOSfq1BNFWvpbY3ZbNRs7VCt7NQ+6xmFdfdXO0d4/bv2CzTGe6KEmhhTqyqhgcCiQXF
+         Vj7w==
+X-Gm-Message-State: AAQBX9c//mAeh+Y/PypbCuS+R61lfILfEO0SsPbUZ7uZO7AZRLSsBa4M
+        XJGgHEVGQBrwaheLIF/4dQ==
+X-Google-Smtp-Source: AKy350YAs9GHa0khQvQ57kJ/w+Cv/Wcx7rcV/rtgNaN69Ll2vzsHrcuxjOWOnUOmrppCGRVgAFmvPg==
+X-Received: by 2002:a4a:5244:0:b0:537:b1ad:1c7c with SMTP id d65-20020a4a5244000000b00537b1ad1c7cmr6894747oob.0.1680180454079;
+        Thu, 30 Mar 2023 05:47:34 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j41-20020a4a88ac000000b0053e3da7f810sm4707307ooa.25.2023.03.30.05.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 05:47:33 -0700 (PDT)
+Received: (nullmailer pid 1824005 invoked by uid 1000);
+        Thu, 30 Mar 2023 12:47:33 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-19-arnd@kernel.org>
-In-Reply-To: <20230327121317.4081816-19-arnd@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 30 Mar 2023 13:51:53 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGNjrmTr1R+-09UYtHSgvT6fSgZxvpbEOfeTFxhWtgGcQ@mail.gmail.com>
-Message-ID: <CAMj1kXGNjrmTr1R+-09UYtHSgvT6fSgZxvpbEOfeTFxhWtgGcQ@mail.gmail.com>
-Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+From:   Rob Herring <robh@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Daniel Golle <daniel@makrotopia.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230330110512.549704-3-keguang.zhang@gmail.com>
+References: <20230330110512.549704-1-keguang.zhang@gmail.com>
+ <20230330110512.549704-3-keguang.zhang@gmail.com>
+Message-Id: <168017971140.1808596.3407628411299700675.robh@kernel.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: timer: Add Loongson-1 clocksource
+Date:   Thu, 30 Mar 2023 07:47:33 -0500
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 27 Mar 2023 at 14:18, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The cache management operations for noncoherent DMA on ARMv6 work
-> in two different ways:
->
->  * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
->    DMA buffers lead to data corruption when the prefetched data is written
->    back on top of data from the device.
->
->  * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
->    is not seen by the other core(s), leading to inconsistent contents
->    accross the system.
->
-> As a consequence, neither configuration is actually safe to use in a
-> general-purpose kernel that is used on both MPCore systems and ARM1176
-> with prefetching enabled.
->
-> We could add further workarounds to make the behavior more dynamic based
-> on the system, but realistically, there are close to zero remaining
-> users on any ARM11MPCore anyway, and nobody seems too interested in it,
-> compared to the more popular ARM1176 used in BMC2835 and AST2500.
->
-> The Oxnas platform has some minimal support in OpenWRT, but most of the
-> drivers and dts files never made it into the mainline kernel, while the
-> Arm Versatile/Realview platform mainly serves as a reference system but
-> is not necessary to be kept working once all other ARM11MPCore are gone.
->
-> Take the easy way out here and drop support for multiprocessing on
-> ARMv6, along with the CONFIG_DMA_CACHE_RWFO option and the cache
-> management implementation for it. This also helps with other ARMv6
-> issues, but for the moment leaves the ability to build a kernel that
-> can run on both ARMv7 SMP and single-processor ARMv6, which we probably
-> want to stop supporting as well, but not as part of this series.
->
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Daniel Golle <daniel@makrotopia.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-oxnas@groups.io
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+On Thu, 30 Mar 2023 19:05:11 +0800, Keguang Zhang wrote:
+> Add devicetree binding document for Loongson-1 clocksource.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V2 -> V3: None
+> V1 -> V2: None
+> ---
+>  .../timer/loongson,ls1x-pwmtimer.yaml         | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dts:21:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file or directory
+   21 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/timer/loongson,ls1x-pwmtimer.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230330110512.549704-3-keguang.zhang@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
