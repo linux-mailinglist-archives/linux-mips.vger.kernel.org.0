@@ -2,141 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BF36CF678
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 00:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB486CF9BF
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Mar 2023 05:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjC2WiI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Mar 2023 18:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
+        id S229717AbjC3Dyg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Mar 2023 23:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjC2WiC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 18:38:02 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A944619F
-        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 15:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1680129471; x=1711665471;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=8mC4BypXl60HzEDMOes6JdsHqZokNKJxPcubhfSExuE=;
-  b=TQT3Ih20NXAljMih9VuI0JZuaXoaSs4Of+jGHhVTdKZffuVP1Ps5P/p0
-   XLXgJTeiu276fxHVDabw+FwRaexhXuXKjofJ74lbUIbL0IItNl7AOkD3U
-   ydLJmCrTStMkXnylC9DBZ/hcAbPNYKpDd1oQ097d3thFDCpa615f8Nref
-   Fvr5JzrP7mDZ0zNDesXoFYsdFwHm9MDou5fvviYIUJr/98d72KclG1NEt
-   tEApLP0uEJO6g9gNZ5vLxlYKkldAkVzLzy+g4nyzYQTjH6p0MecuJ37pO
-   TO3moO+G8J4lDoqongad+TwJm6bjJuq5+5fuN/7/MQjOrpHxZgmK+1glh
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,301,1673884800"; 
-   d="scan'208";a="226645315"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 30 Mar 2023 06:35:01 +0800
-IronPort-SDR: lSYgupYJK5PiAtyxa/Ufm/JgNlROPMcOEuyl0i3uMZXBbzwm6wW+VvrnFWxafZBTObWNffW+00
- Iq6FOQKWDxIy+iKmu7HxV7yumAfyM5Tj0NZhvMdFcHOShT2mKH5TRISfam8crJit8gAh9Vn8F8
- DQox6LDqiK9qX1ymcMWjgWba4L58zMc9G2bXnUB2JviOFSBC2mildy7QVD5ACjnDSLvOM1Q/pG
- Lenjmb6KFxX0m5TPKVpAjpNlXreWGZpXHXEGVJUzXyoG78KJlB8HYgaW523lna5p3O/TIe96EA
- ryc=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 14:45:29 -0700
-IronPort-SDR: pFZl9GeSpv/+0d+CBPiB/MCUZxJFbqBTe2CiAyV6MC+vkyZsTeno7eZ8omPxgqLQVUi+XbQPsD
- HqcqzqHkd0ro0Y9EiN9fqoCbRQN2Ciot/FEm2O2WNIPq87xruKKZCSna8NjuKqsunYU0cOl+Or
- JqsKzlI0q1LWHUHLIcWe8VmA7Fdku1x3fDzJyTPXyvhEgyK8rx3eLHfAzuXoday2sbsYwinAJB
- WJ+cC39lGBhZlg3kiKAme/lDagmiwjxXeRbN1XafPnfZXa+1m3K2NcV20np4pTF3ekvZWlB6Pe
- a5c=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 15:35:01 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pn1Zs1wCmz1RtVt
-        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 15:35:01 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1680129300; x=1682721301; bh=8mC4BypXl60HzEDMOes6JdsHqZokNKJxPcu
-        bhfSExuE=; b=Zok4WYhcroENZvLPiiffuiL0wIhaaRMSE93p6mIUiG5P1+ftd2L
-        q1g4BSW3yDCKYTtjxpyxP4yTyI5aihR+osGu3NHW33Fq3jncg3Qe7xNY4F/zwHCv
-        etW1Nmc+YdHa6MKI4hd5xELhEGqsNDzfy7V+nuAUqZ9fc7RzMMfrtfJiNcSB4ANF
-        pv7W16xNgr9XsLPJlP+2wNhoirGRaSfwNKtWLeK1SbCOjj5Lw5yzhhURWBT08bOc
-        VuNZw5622X4vF6VjgAxro3fJgQJCUlPlSKztiYuxIJWi6gMTBHsKGitpZ4T4QUfn
-        usPw+D9cS59VkGHy8R3Zh6mURJpGmFM4MSw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dfSaGfTph50L for <linux-mips@vger.kernel.org>;
-        Wed, 29 Mar 2023 15:35:00 -0700 (PDT)
-Received: from [10.225.163.116] (unknown [10.225.163.116])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pn1Zq4BbJz1RtVm;
-        Wed, 29 Mar 2023 15:34:59 -0700 (PDT)
-Message-ID: <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
-Date:   Thu, 30 Mar 2023 07:34:58 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: Multiple undefined configuration options are dependent in Kconfig
- under the v6.3-rc4 drivers directory
-Content-Language: en-US
-To:     =?UTF-8?B?5a2Z5rui?= <sunying@nj.iscas.ac.cn>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greybus-dev@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        with ESMTP id S229620AbjC3Dyf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Mar 2023 23:54:35 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0B25240
+        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 20:54:33 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id c4so55249pjs.4
+        for <linux-mips@vger.kernel.org>; Wed, 29 Mar 2023 20:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680148473;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rif9SVht3Xq5rHKwiENZowsz+awWs141IU0VAwjN1vg=;
+        b=fV9FgxnApIXbe1N5pM4jjR9lUZGUI9IHgwkMnRZ43spPTOEuCOBgE6jom5YYd5NaSw
+         hO3BaFodAmNdmeJnu/2X1bnm5xCDXutVF46Q4qkwiWvp0QD7VT2G+FS8VK6si5hM24E1
+         cmhd1+iI264Fr/t7n/mmHq+QUCu9AJBXrHRE5NMw2hhSYMEgz0n/xxhnwIpLUx49DXMe
+         3cXje5lTdqWVmeRk8+mxVWjAALckaFIQEvLAfdbfPdG7pkmLiTnNEoZXurcL3Sjcbenu
+         TxKvKkOO0B7xmXzmAWEmob+khrROpJZhtq4GhLIFBe54WEv6nH0q1+rtBdjUdUgdh/Qs
+         KpwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680148473;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rif9SVht3Xq5rHKwiENZowsz+awWs141IU0VAwjN1vg=;
+        b=CyCCtnTNLLwGK5KTYy6GSW2u27USN4lNTzMeXsZ8sG//JS8FWj3wU+ShLtbRrSPiUg
+         /lQF++iN/szAX39MZ2ckFso4AHtAv3qnXmSNhHsV9PfI7posItYb51SrwGvZr9c21a0W
+         WkSWDYpgUazZ7EPKrvkNOgzcE1KNIwMlj+LxcvYCmyPweTg9vfMjID0ODL0pWLJDOeZl
+         eNPjKFFrtpFwTbkDoJBqbi+uPSYosWXIoMiHImL96FfrUVsGMz3cyYdmjtXHXQgD+TbO
+         7N/e6qhhXdd0k1uXgynWXOY0+dF0ZjZLA+8LwJULoLzNsHUaT4NXzkfu54mMq1FLgv6l
+         vbyQ==
+X-Gm-Message-State: AO0yUKW6O9Gi6TW3knCgnBF8/T6+v8NMrATCa/h1duJEkDsu/VCOrQv/
+        Sm3Ei8X2oz2W/EBXdPb93BgMJQ==
+X-Google-Smtp-Source: AK7set+6CKB9aX3Y+69CYgYb8mvQ9d90t+LT0/3dtpbyQgu7Ff5u0kg7CAes3wOVIzKhF5KBg4AuvA==
+X-Received: by 2002:a05:6a20:c119:b0:d4:77a6:156f with SMTP id bh25-20020a056a20c11900b000d477a6156fmr18152236pzb.53.1680148472791;
+        Wed, 29 Mar 2023 20:54:32 -0700 (PDT)
+Received: from localhost ([122.172.85.168])
+        by smtp.gmail.com with ESMTPSA id a24-20020a62e218000000b00627f2f23624sm20068315pfi.159.2023.03.29.20.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 20:54:32 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 09:24:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Anup Patel <anup@brainfault.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-mips@vger.kernel.org
-References: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 14/19] cpufreq: Adjust includes to remove of_device.h
+Message-ID: <20230330035430.z6x3escbvr7nlya5@vireshk-i7>
+References: <20230329-dt-cpu-header-cleanups-v1-0-581e2605fe47@kernel.org>
+ <20230329-dt-cpu-header-cleanups-v1-14-581e2605fe47@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-14-581e2605fe47@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/29/23 16:52, =E5=AD=99=E6=BB=A2 wrote:
-> It has been discovered that the following configuration options are und=
-efined in the current latest version, v6.3-rc4, yet they are being relied=
- upon by other configuration options in multiple Kconfig files:
->=20
-> MIPS_BAIKAL_T1 is undefined, used as a 'depends on' condition in multip=
-le files such as drivers/ata/Kconfig, drivers/hwmon/Kconfig, drivers/bus/=
-Kconfig, and drivers/memory/Kconfig.
-> MFD_MAX597X is undefined, used as a 'depends on' condition in Kconfig f=
-ile drivers/regulator/Kconfig.
-> MFD_SM5703 is undefined, used as a 'depends on' condition in Kconfig fi=
-le drivers/regulator/Kconfig.
-> ARCH_THUNDERBAY is undefined, used as a 'depends on' condition in Kconf=
-ig files drivers/pinctrl/Kconfig and drivers/phy/intel/Kconfig.
-> ARCH_BCM4908 is undefined, used as a 'depends on' condition in Kconfig =
-file drivers/leds/blink/Kconfig.
-> MFD_TN48M_CPLD is undefined, used as a 'depends on' condition in Kconfi=
-g files drivers/gpio/Kconfig and drivers/reset/Kconfig.=20
-> USB_HSIC_USB3613 is undefined, used as a 'depends on' condition in driv=
-ers/staging/greybus/Kconfig and drivers/staging/greybus/arche-platform.c.
->=20
-> If these 7 configuration options are deprecated, it is recommended to r=
-emove the dependencies on them in the Kconfig files.=20
-> If they are still useful, it is recommended to define them.
+On 29-03-23, 10:52, Rob Herring wrote:
+> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
+> implicitly including other includes, and is no longer needed. Adjust the
+> include files with what was implicitly included by of_device.h (cpu.h and
+> of.h) and drop including of_device.h.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Please ack and I will take the series via the DT tree.
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 -
+>  drivers/cpufreq/kirkwood-cpufreq.c   | 2 +-
+>  drivers/cpufreq/maple-cpufreq.c      | 2 +-
+>  drivers/cpufreq/pmac32-cpufreq.c     | 2 +-
+>  drivers/cpufreq/pmac64-cpufreq.c     | 2 +-
+>  drivers/cpufreq/qcom-cpufreq-hw.c    | 4 ++--
+>  drivers/cpufreq/spear-cpufreq.c      | 2 +-
+>  drivers/cpufreq/tegra124-cpufreq.c   | 1 -
+>  drivers/cpufreq/tegra20-cpufreq.c    | 2 +-
+>  include/linux/cpufreq.h              | 1 -
+>  10 files changed, 8 insertions(+), 11 deletions(-)
 
-+ linux-arm & linux-mips
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-What about you send patches to fix this ?
-
->=20
->=20
-> Best regards,
-> Ying Sun
-> Pengpeng Hou
-> Yanjie Ren
-
---=20
-Damien Le Moal
-Western Digital Research
-
+-- 
+viresh
