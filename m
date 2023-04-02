@@ -2,116 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F906D35D9
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Apr 2023 08:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A870A6D3663
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Apr 2023 11:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjDBGwO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 2 Apr 2023 02:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
+        id S230196AbjDBJGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 Apr 2023 05:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDBGwN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Apr 2023 02:52:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA601BD8;
-        Sat,  1 Apr 2023 23:52:12 -0700 (PDT)
+        with ESMTP id S229447AbjDBJGK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Apr 2023 05:06:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD87B762;
+        Sun,  2 Apr 2023 02:06:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BE9DB80D9D;
-        Sun,  2 Apr 2023 06:52:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172F1C433EF;
-        Sun,  2 Apr 2023 06:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680418330;
-        bh=a/EFMMyTJLmdvL39oZFGsprYDxcAb3c4B++/AP48aI8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pqQ8UGR2W/sRFjxT8DARJF1gEKMVmWBdp+qDC9PGt0i4TRAg0xAwoG7YQQxAtDcdi
-         4Pb253Uxof3u9uF71S5Xrs095QXIy4AdVj3153ZRySY7w6oib4sTzQ8CqAmyQSRayG
-         2EAT/e6m3unLAUSKk8zn/YhBr3R6k1eBeKiApm9beA6GV7oD5h7f9NbOa+/z/XcUUq
-         Wo1iHf9vVkeyRvdktceSDmuJx7kOOEGZtUZ6DOOxmfVTUgf0Rrb6I9FB+HQBZqNZ1B
-         jIzLWCQM2V8D9tYxUPIRptyXw28M0O5YuIe+Fd2OoUguwXFRn6X5yntmmRZtkvx66T
-         3696IoVFPDlHA==
-Message-ID: <2b298e8c-e6fc-a973-9f42-b6a88e92838a@kernel.org>
-Date:   Sun, 2 Apr 2023 12:22:20 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 13/21] arc: dma-mapping: skip invalidating before
- bidirectional DMA
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15644B80DD2;
+        Sun,  2 Apr 2023 09:06:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826F5C433EF;
+        Sun,  2 Apr 2023 09:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680426365;
+        bh=tstDOziMek5axEwzqeGOS4xIyUKdT0x7UNiG+x46cAk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SUDLEiUmZd2M1RI9wUDKRUVEeV/HdPsXS+MjJD/eZftQxGBCcLvHuatVpIyRnxcuR
+         RvGM4EGuMAIht5//BYns6EzaBON7q3NASjPqGIVqOFR1oaUrNjeEV9TE0/JZLDfixj
+         78w4Ura2Z1HhUDYidKF9iNAhMM5gRZS2ejE3M+b8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <blogic@openwrt.org>,
+        Qais Yousef <Qais.Yousef@imgtec.com>,
+        "Steven J . Hill" <Steven.Hill@imgtec.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-14-arnd@kernel.org>
-From:   Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <20230327121317.4081816-14-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Yang Yingliang <yangyingliang@huawei.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] MIPS: vpe-cmp: remove module owner pointer from struct class usage.
+Date:   Sun,  2 Apr 2023 11:05:45 +0200
+Message-Id: <2023040242-pursuable-frown-48d8@gregkh>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1815; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=tstDOziMek5axEwzqeGOS4xIyUKdT0x7UNiG+x46cAk=; b=owGbwMvMwCRo6H6F97bub03G02pJDCmarulHPKZdSzJ7I/Up7v9T/is3dTUKdwrYa97om/nSO /k9r7x1RywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEwksI5hwYG4qeWZC4XMk16F cr/xjXm58fXSWwzzA3atvvxUVSxgt/aK2yWL7Dh+lF3IAgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CC Shahab
+In commit 6e30a66433af ("driver core: class: remove struct module owner
+out of struct class"), the module owner pointer was removed from struct
+class, but this was missed for the mips vpe-cmp code due to lack of
+build testing (and it being burried under a very unused config
+settings.)  Fix this up by removing the module pointer to resolve the
+build error.
 
-On 3/27/23 17:43, Arnd Bergmann wrote:
-> From: Arnd Bergmann<arnd@arndb.de>
->
-> Some architectures that need to invalidate buffers after bidirectional
-> DMA because of speculative prefetching only do a simpler writeback
-> before that DMA, while architectures that don't need to do the second
-> invalidate tend to have a combined writeback+invalidate before the
-> DMA.
->
-> arc is one of the architectures that does both, which seems unnecessary.
->
-> Change it to behave like arm/arm64/xtensa instead, and use just a
-> writeback before the DMA when we do the invalidate afterwards.
->
-> Signed-off-by: Arnd Bergmann<arnd@arndb.de>
+Note, there are other problems with the driver model usage in this file
+(static struct device usage, empty device release function, etc.), so it
+probably could use some good cleaning up, but odds are this driver
+really isn't used so hopefully it will just be removed entirely someday
+soon as part of the general "remove unused arches" cleanup that is
+slowly happening.
 
-Reviewed-by: Vineet Gupta <vgupta@kernel.org>
+Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+Cc: John Crispin <blogic@openwrt.org>
+Cc: Qais Yousef <Qais.Yousef@imgtec.com>
+Cc: Steven J. Hill <Steven.Hill@imgtec.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Cc: linux-mips@vger.kernel.org
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304020802.xbRTJKjW-lkp@intel.com/
+Fixes: 6e30a66433af ("driver core: class: remove struct module owner out of struct class")
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/mips/kernel/vpe-cmp.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Shahab can you give this a spin on hsdk - run glibc testsuite over ssh 
-and make sure nothing strange happens.
+diff --git a/arch/mips/kernel/vpe-cmp.c b/arch/mips/kernel/vpe-cmp.c
+index 92140edb3ce3..4ef7f49a4c6d 100644
+--- a/arch/mips/kernel/vpe-cmp.c
++++ b/arch/mips/kernel/vpe-cmp.c
+@@ -79,7 +79,6 @@ static void vpe_device_release(struct device *cd)
+ 
+ static struct class vpe_class = {
+ 	.name = "vpe",
+-	.owner = THIS_MODULE,
+ 	.dev_release = vpe_device_release,
+ 	.dev_groups = vpe_groups,
+ };
+-- 
+2.40.0
 
-Thx,
--Vineet
