@@ -2,50 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD136D41D4
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Apr 2023 12:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CF26D4CE8
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Apr 2023 17:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbjDCKUi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Apr 2023 06:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S232736AbjDCP7Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Apr 2023 11:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjDCKUU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Apr 2023 06:20:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4D2A12875;
-        Mon,  3 Apr 2023 03:19:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A5C41063;
-        Mon,  3 Apr 2023 03:20:37 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.57.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18E933F840;
-        Mon,  3 Apr 2023 03:19:50 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 11:19:48 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
- fallbacks
-Message-ID: <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N>
-References: <20230305205628.27385-1-ubizjak@gmail.com>
- <20230305205628.27385-2-ubizjak@gmail.com>
- <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
- <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
- <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
- <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
- <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
+        with ESMTP id S232868AbjDCP7T (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Apr 2023 11:59:19 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCD5E1988;
+        Mon,  3 Apr 2023 08:58:59 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pjMZx-00029z-00; Mon, 03 Apr 2023 17:58:45 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 37208C20E4; Mon,  3 Apr 2023 17:58:04 +0200 (CEST)
+Date:   Mon, 3 Apr 2023 17:58:04 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dengcheng Zhu <dzhu@wavecomp.com>,
+        John Crispin <blogic@openwrt.org>,
+        Qais Yousef <Qais.Yousef@imgtec.com>,
+        "Steven J . Hill" <Steven.Hill@imgtec.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] MIPS: vpe-cmp: remove module owner pointer from struct
+ class usage.
+Message-ID: <20230403155804.GA12122@alpha.franken.de>
+References: <2023040242-pursuable-frown-48d8@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+In-Reply-To: <2023040242-pursuable-frown-48d8@gregkh>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,175 +47,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 09:28:38PM +0200, Uros Bizjak wrote:
-> On Fri, Mar 24, 2023 at 5:33 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
-> > > On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
-> > > > On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> > > > >
-> > > > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
-> > > > > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
-> > > > >
-> > > > > Can you give an example of where we are passing an incompatible pointer?
-> > > >
-> > > > An example is patch 10/10 from the series, which will fail without
-> > > > this fix when fallback code is used. We have:
-> > > >
-> > > > -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
-> > > > +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
-> > > >
-> > > > where rb->head is defined as:
-> > > >
-> > > > typedef struct {
-> > > >    atomic_long_t a;
-> > > > } local_t;
-> > > >
-> > > > while offset is defined as 'unsigned long'.
-> > >
-> > > Ok, but that's because we're doing the wrong thing to start with.
-> > >
-> > > Since local_t is defined in terms of atomic_long_t, we should define the
-> > > generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
-> > > have a mismatch between 'long *' and 'unsigned long *', but then we can fix
-> > > that in the callsite:
-> > >
-> > >       while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
-> >
-> > Sorry, that should be:
-> >
-> >         while (!local_try_cmpxchg(&rb->head, (long *)&offset, head))
+On Sun, Apr 02, 2023 at 11:05:45AM +0200, Greg Kroah-Hartman wrote:
+> In commit 6e30a66433af ("driver core: class: remove struct module owner
+> out of struct class"), the module owner pointer was removed from struct
+> class, but this was missed for the mips vpe-cmp code due to lack of
+> build testing (and it being burried under a very unused config
+> settings.)  Fix this up by removing the module pointer to resolve the
+> build error.
 > 
-> The fallbacks are a bit more complicated than above, and are different
-> from atomic_try_cmpxchg.
+> Note, there are other problems with the driver model usage in this file
+> (static struct device usage, empty device release function, etc.), so it
+> probably could use some good cleaning up, but odds are this driver
+> really isn't used so hopefully it will just be removed entirely someday
+> soon as part of the general "remove unused arches" cleanup that is
+> slowly happening.
 > 
-> Please note in patch 2/10, the falbacks when arch_try_cmpxchg_local
-> are not defined call arch_cmpxchg_local. Also in patch 2/10,
-> try_cmpxchg_local is introduced, where it calls
-> arch_try_cmpxchg_local. Targets (and generic code) simply define (e.g.
-> :
+> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
+> Cc: John Crispin <blogic@openwrt.org>
+> Cc: Qais Yousef <Qais.Yousef@imgtec.com>
+> Cc: Steven J. Hill <Steven.Hill@imgtec.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Yang Yingliang <yangyingliang@huawei.com>
+> Cc: linux-mips@vger.kernel.org
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304020802.xbRTJKjW-lkp@intel.com/
+> Fixes: 6e30a66433af ("driver core: class: remove struct module owner out of struct class")
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  arch/mips/kernel/vpe-cmp.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> #define local_cmpxchg(l, o, n) \
->        (cmpxchg_local(&((l)->a.counter), (o), (n)))
-> +#define local_try_cmpxchg(l, po, n) \
-> +       (try_cmpxchg_local(&((l)->a.counter), (po), (n)))
-> 
-> which is part of the local_t API. Targets should either define all
-> these #defines, or none. There are no partial fallbacks as is the case
-> with atomic_t.
+> diff --git a/arch/mips/kernel/vpe-cmp.c b/arch/mips/kernel/vpe-cmp.c
+> index 92140edb3ce3..4ef7f49a4c6d 100644
+> --- a/arch/mips/kernel/vpe-cmp.c
+> +++ b/arch/mips/kernel/vpe-cmp.c
+> @@ -79,7 +79,6 @@ static void vpe_device_release(struct device *cd)
+>  
+>  static struct class vpe_class = {
+>  	.name = "vpe",
+> -	.owner = THIS_MODULE,
+>  	.dev_release = vpe_device_release,
+>  	.dev_groups = vpe_groups,
+>  };
+> -- 
+> 2.40.0
 
-Whether or not there are fallbacks is immaterial.
+I guess this should go the same way as commit 6e30a66433af, therefore
 
-In those cases, architectures can just as easily write C wrappers, e.g.
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-long local_cmpxchg(local_t *l, long old, long new)
-{
-	return cmpxchg_local(&l->a.counter, old, new);
-}
-
-long local_try_cmpxchg(local_t *l, long *old, long new)
-{
-	return try_cmpxchg_local(&l->a.counter, old, new);
-}
-
-> The core of the local_h API is in the local.h header. If the target
-> doesn't define its own local.h header, then asm-generic/local.h is
-> used that does exactly what you propose above regarding the usage of
-> atomic functions.
-> 
-> OTOH, when the target defines its own local.h, then the above
-> target-dependent #define path applies. The target should define its
-> own arch_try_cmpxchg_local, otherwise a "generic" target-dependent
-> fallback that calls target arch_cmpxchg_local applies. In the case of
-> x86, patch 9/10 enables new instruction by defining
-> arch_try_cmpxchg_local.
-> 
-> FYI, the patch sequence is carefully chosen so that x86 also exercises
-> fallback code between different patches in the series.
-> 
-> Targets are free to define local_t to whatever they like, but for some
-> reason they all define it to:
-> 
-> typedef struct {
->     atomic_long_t a;
-> } local_t;
-
-Yes, which is why I used atomic_long() above.
-
-> so they have to dig the variable out of the struct like:
-> 
-> #define local_cmpxchg(l, o, n) \
->      (cmpxchg_local(&((l)->a.counter), (o), (n)))
-> 
-> Regarding the mismatch of 'long *' vs 'unsigned long *': x86
-> target-specific code does for try_cmpxchg:
-> 
-> #define __raw_try_cmpxchg(_ptr, _pold, _new, size, lock) \
-> ({ \
-> bool success; \
-> __typeof__(_ptr) _old = (__typeof__(_ptr))(_pold); \
-> __typeof__(*(_ptr)) __old = *_old; \
-> __typeof__(*(_ptr)) __new = (_new); \
-> 
-> so, it *does* cast the "old" pointer to the type of "ptr". The generic
-> code does *not*. This difference is dangerous, since the compilation
-> of some code involving try_cmpxchg will compile OK for x86 but will
-> break for other targets that use try_cmpxchg fallback templates (I was
-> the unlucky one that tripped on this in the past). Please note that
-> this problem is not specific to the proposed local_try_cmpxchg series,
-> but affects the existing try_cmpxchg API.
-
-I understand the problem of arch code differing from generic code, and that we
-want to have *a* consistent behaviour for hte API.
-
-What I'm saying is that the behaviour we should aim for is where the 'old'
-pointer has a specific type (long), and we always require that, as we do for
-the various atomic_*() APIs of which local_*() is a cousin.
-
-> Also, I don't think that "fixing" callsites is the right thing to do.
-
-Why? What's wrong with doing that?
-
-The documentation in Documentation/core-api/local_ops.rst says:
-
-    The ``local_t`` type is defined as an opaque ``signed long``
-
-So the obvious and least surprising thing is for the local_*() functions to use
-'long' for values and 'long *' for pointers to values.
-
-Requiring a cast in a few places is not the end of the world.
-
-> The generic code should follow x86 and cast the "old" pointer to the
-> type of "ptr" inside the fallback.
-
-Why?
-
-I disagree, and think it's far better to be strict by default. That way,
-accidental usage of the wrong type will be caught by the compiler, and if
-someone *really* wants to use a differently type then can use a cast in the
-callsite, which makes it really obvious when that is happening.
-
-I appreciate that may require some preparatory cleanup, but I think that's a
-small price to pay for having this in a clearer and more maintainable state.
-
-> > The fundamenalthing I'm trying to say is that the
-> > atomic/atomic64/atomic_long/local/local64 APIs should be type-safe, and for
-> > their try_cmpxchg() implementations, the type signature should be:
-> >
-> >         ${atomictype}_try_cmpxchg(${atomictype} *ptr, ${inttype} *old, ${inttype} new)
-> 
-> This conversion should be performed also for the cmpxchg family of
-> functions, if desired at all. try_cmpxchg fallback is just cmpxchg
-> with some extra code around.
-
-FWIW, I agree that we *should* make try_cmpxchg() check that ptr and old
-pointer are the same type.
-
-However, I don't think that's a prerequisite for doing so for
-local_try_cmpxchg().
-
-Plese make local_try_cmpxchg() have a proper type-safe C prototype, as we do
-with the atomic*_try_cmpxchg() APIs.
-
-Thanks,
-Mark,
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
