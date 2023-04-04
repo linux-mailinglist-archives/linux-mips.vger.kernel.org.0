@@ -2,203 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590496D62B7
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 15:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3E46D63A4
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 15:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbjDDNXb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Apr 2023 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S234708AbjDDNpL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Apr 2023 09:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234487AbjDDNX0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 09:23:26 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46333C16;
-        Tue,  4 Apr 2023 06:23:21 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id q2so10336629qki.3;
-        Tue, 04 Apr 2023 06:23:21 -0700 (PDT)
+        with ESMTP id S235441AbjDDNo5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 09:44:57 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAF04C0A
+        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 06:44:37 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id f188so20252346ybb.3
+        for <linux-mips@vger.kernel.org>; Tue, 04 Apr 2023 06:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680614601;
+        d=linaro.org; s=google; t=1680615877;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kVV5FfyLXKvr30JASXaFzrtmOvguU/pSGwBivgkkCt8=;
-        b=CxCzEj2L7VIhJL6LkhpoeSyjitfjUIwxyK7WygTAvIMrtL8sNfxriP0xlU7D62WQoz
-         JS8ax3M/Eesvd5oi0sr1H03A3xMMSSa82fhef9qRDqrlsouM+KCZqqtCxNs6kzj4t5Ub
-         F7DDt5YscrWWbseYb3G5W9hFZRpZsQPXo27yv0jzn2w9mDA1ooRuDwc7z6znLG2Vi+Bi
-         tq4rA2ZMQA51NCQ7Ksdo8VwWalrmJJS5r9RCMSPpRrKxpS4no0h4o3ze6IAi22w6AMMd
-         0et5DLzt+KCxhgyjPFDLnq1TYfArzjvJxF3PKXuT3UfUffLUWpYKI/WE/kzz1oDnvdpX
-         Etng==
+        bh=hXtgBK14KPM4e26uH259a5f8IZMJzPMN2I/MMharuS0=;
+        b=YoKEFBnF4R/KLVFNoyxiZPhJmsqA79Ywp7c5w9VoTLbxOHPkU2UC3C6r9llU7auOt2
+         itjfCCAlEVj9pzFONUJdlZR26DS+6eTnTItG8/BdsRaJG+jnGN8Mar9S9nT8YJ6YbIvt
+         PczIEgFKHpzSiJdwEFeV5bQ6D7RX1kxyHOzWUeUHZxaA2y7tu1cxjyIo01gmk0ySlvUZ
+         2ItBXfsRfASPgjZS7NTX/6Gf1VUStSpHFkFEFZGlN6IDFrz+MYZjApX3UW6qF8oUnIFx
+         zKX/hy1RXkULjEErSDvMl/vL0BBq9FAoK0R7e10J9U08+BUnKq4oXitONkTYlPsXrglz
+         sC3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680614601;
+        d=1e100.net; s=20210112; t=1680615877;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kVV5FfyLXKvr30JASXaFzrtmOvguU/pSGwBivgkkCt8=;
-        b=g7noGniqiKG2bQ/xoI+RDfzHjD8Px09rLJxo/+i02hrI8q9r2m2bF8cFgh9bQAXiTR
-         oxc85X68y3tl5uctdrlgcjGGcPTYNRsziu21NMPveTEq2O4jSfBozZXix/Ks8/EzSRJr
-         2BXE70E5ye89ACfR1O3X1j5c3MDnobrlhGvAdEjlZe7mUBhIIzocabKj0OVHeOENUwjG
-         3OlNy4XXZiBAZ3EZCsLqKhguq87T7dVSqOSy+0SX+kI7M4o24lxMRDIfG9rwSaCZxqdc
-         dA2vWquijByMCCIRBxfhnC21ssfzxuzEo8ECpVuGD3Lelk6JPVu9wzTAUqNInE3TDuBd
-         XBzA==
-X-Gm-Message-State: AAQBX9cGVvtszEqlfAii2r4YQWfaUd/DpVO/gBfvBFe4WA72X31ob/rQ
-        WlQMb6PFfqf9eZs9qLeW68FvBXP/WR5x5hhL8PE=
-X-Google-Smtp-Source: AKy350b/r9epx7QN6cXCoxgIbACmW4sFS0VlXrzPHDsCvgVLRBRS+bIi9gMlH812VAfYBgK5rBITGvtyCoxFOxnCyYI=
-X-Received: by 2002:a05:620a:404f:b0:74a:28c4:64ea with SMTP id
- i15-20020a05620a404f00b0074a28c464eamr911755qko.6.1680614600864; Tue, 04 Apr
- 2023 06:23:20 -0700 (PDT)
+        bh=hXtgBK14KPM4e26uH259a5f8IZMJzPMN2I/MMharuS0=;
+        b=LUuoEgLEwqbS8kZ6JU2fzbDQT0MAkaeHPY2r9NW0iVDVHZEgWix9lTViY8hDvFX6qp
+         /9AFH6OxYkfIM4EGCdiEhx3kvtXN6VG6C+1uAukw4JLi55sCWlXvx6/kIRmU8rQhgjWj
+         V2iklGfs2f9+DiLiACCGosWxvo57qA6S57B9/gmsL5YAzdkhx++6C0T0PwtSc+UELS6K
+         5CxPBpYtLD5AxExOs7F1CdOAhnl3KJC2liDjpI6q3YBUr8BU35OXTOzOJhOOgu72sk+q
+         6oprlIiCNV/9bMpg2uE6eemdpL0mVed/EgJVilNk7jrJ8cuif2x5KkV+mvHz22fK/rl5
+         eeUg==
+X-Gm-Message-State: AAQBX9cZZvoSYSv78Jy2d66WxRYPbGwYe+FEI9WAQakbDyKDPStgs0qN
+        gNK83NS7E09MvuqYP5M7zm5jA2QEIyxdpngccFGvBA==
+X-Google-Smtp-Source: AKy350ZS+8XVi9C6uhFr1kyc6XrkkRM+FluRwKkVz9PMLEz3Sm01NQlNpsxUuoJH/tcqHDQrLl5d34Nf5Z8uV0fle0E=
+X-Received: by 2002:a25:df10:0:b0:b75:8ac3:d5d2 with SMTP id
+ w16-20020a25df10000000b00b758ac3d5d2mr1901844ybg.4.1680615876928; Tue, 04 Apr
+ 2023 06:44:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230305205628.27385-1-ubizjak@gmail.com> <20230305205628.27385-2-ubizjak@gmail.com>
- <ZB2v+avNt52ac/+w@FVFF77S0Q05N> <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
- <ZB3MR8lGbnea9ui6@FVFF77S0Q05N> <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
- <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
- <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N> <CAFULd4ZUnbtDYXBBbuTJnq9wLSf5cZTc=hUPxg6-8KRNA7YVeQ@mail.gmail.com>
- <ZCwj19okhYNRN8er@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <ZCwj19okhYNRN8er@FVFF77S0Q05N.cambridge.arm.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Tue, 4 Apr 2023 15:23:09 +0200
-Message-ID: <CAFULd4ZypxQULgq-MYgzsYd8k_BV0aH0eRhggX3MHWCgvKW=Bg@mail.gmail.com>
-Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg() fallbacks
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech> <20221018-clk-range-checks-fixes-v3-34-9a1358472d52@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-34-9a1358472d52@cerno.tech>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Apr 2023 15:44:25 +0200
+Message-ID: <CACRpkdYcHaUBG1qFVb=mi40SyEp=VyYzPmxNn-Zrmpqs1QH+kQ@mail.gmail.com>
+Subject: Re: [PATCH v3 34/65] clk: ux500: prcmu: Add a determine_rate hook
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 3:19=E2=80=AFPM Mark Rutland <mark.rutland@arm.com> =
-wrote:
->
-> On Tue, Apr 04, 2023 at 02:24:38PM +0200, Uros Bizjak wrote:
-> > On Mon, Apr 3, 2023 at 12:19=E2=80=AFPM Mark Rutland <mark.rutland@arm.=
-com> wrote:
-> > >
-> > > On Sun, Mar 26, 2023 at 09:28:38PM +0200, Uros Bizjak wrote:
-> > > > On Fri, Mar 24, 2023 at 5:33=E2=80=AFPM Mark Rutland <mark.rutland@=
-arm.com> wrote:
-> > > > >
-> > > > > On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
-> > > > > > On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
-> > > > > > > On Fri, Mar 24, 2023 at 3:13=E2=80=AFPM Mark Rutland <mark.ru=
-tland@arm.com> wrote:
-> > > > > > > >
-> > > > > > > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote=
-:
-> > > > > > > > > Cast _oldp to the type of _ptr to avoid incompatible-poin=
-ter-types warning.
-> > > > > > > >
-> > > > > > > > Can you give an example of where we are passing an incompat=
-ible pointer?
-> > > > > > >
-> > > > > > > An example is patch 10/10 from the series, which will fail wi=
-thout
-> > > > > > > this fix when fallback code is used. We have:
-> > > > > > >
-> > > > > > > -       } while (local_cmpxchg(&rb->head, offset, head) !=3D =
-offset);
-> > > > > > > +       } while (!local_try_cmpxchg(&rb->head, &offset, head)=
-);
-> > > > > > >
-> > > > > > > where rb->head is defined as:
-> > > > > > >
-> > > > > > > typedef struct {
-> > > > > > >    atomic_long_t a;
-> > > > > > > } local_t;
-> > > > > > >
-> > > > > > > while offset is defined as 'unsigned long'.
-> > > > > >
-> > > > > > Ok, but that's because we're doing the wrong thing to start wit=
-h.
-> > > > > >
-> > > > > > Since local_t is defined in terms of atomic_long_t, we should d=
-efine the
-> > > > > > generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg=
-(). We'll still
-> > > > > > have a mismatch between 'long *' and 'unsigned long *', but the=
-n we can fix
-> > > > > > that in the callsite:
-> > > > > >
-> > > > > >       while (!local_try_cmpxchg(&rb->head, &(long *)offset, hea=
-d))
-> > > > >
-> > > > > Sorry, that should be:
-> > > > >
-> > > > >         while (!local_try_cmpxchg(&rb->head, (long *)&offset, hea=
-d))
-> > > >
-> > > > The fallbacks are a bit more complicated than above, and are differ=
-ent
-> > > > from atomic_try_cmpxchg.
-> > > >
-> > > > Please note in patch 2/10, the falbacks when arch_try_cmpxchg_local
-> > > > are not defined call arch_cmpxchg_local. Also in patch 2/10,
-> > > > try_cmpxchg_local is introduced, where it calls
-> > > > arch_try_cmpxchg_local. Targets (and generic code) simply define (e=
-.g.
-> > > > :
-> > > >
-> > > > #define local_cmpxchg(l, o, n) \
-> > > >        (cmpxchg_local(&((l)->a.counter), (o), (n)))
-> > > > +#define local_try_cmpxchg(l, po, n) \
-> > > > +       (try_cmpxchg_local(&((l)->a.counter), (po), (n)))
-> > > >
-> > > > which is part of the local_t API. Targets should either define all
-> > > > these #defines, or none. There are no partial fallbacks as is the c=
-ase
-> > > > with atomic_t.
-> > >
-> > > Whether or not there are fallbacks is immaterial.
-> > >
-> > > In those cases, architectures can just as easily write C wrappers, e.=
-g.
-> > >
-> > > long local_cmpxchg(local_t *l, long old, long new)
-> > > {
-> > >         return cmpxchg_local(&l->a.counter, old, new);
-> > > }
-> > >
-> > > long local_try_cmpxchg(local_t *l, long *old, long new)
-> > > {
-> > >         return try_cmpxchg_local(&l->a.counter, old, new);
-> > > }
-> >
-> > Please find attached the complete prototype patch that implements the
-> > above suggestion.
-> >
-> > The patch includes:
-> > - implementation of instrumented try_cmpxchg{,64}_local definitions
-> > - corresponding arch_try_cmpxchg{,64}_local fallback definitions
-> > - generic local{,64}_try_cmpxchg (and local{,64}_cmpxchg) C wrappers
-> >
-> > - x86 specific local_try_cmpxchg (and local_cmpxchg) C wrappers
-> > - x86 specific arch_try_cmpxchg_local definition
-> >
-> > - kernel/events/ring_buffer.c change to test local_try_cmpxchg
-> > implementation and illustrate the transition
-> > - arch/x86/events/core.c change to test local64_try_cmpxchg
-> > implementation and illustrate the transition
-> >
-> > The definition of atomic_long_t is different for 64-bit and 32-bit
-> > targets (s64 vs int), so target specific C wrappers have to use
-> > different casts to account for this difference.
-> >
-> > Uros.
->
-> Thanks for this!
->
-> FWIW, the patch (inline below) looks good to me.
+On Tue, Apr 4, 2023 at 2:45=E2=80=AFPM Maxime Ripard <maxime@cerno.tech> wr=
+ote:
 
-Thanks, I will prepare a patch series for submission later today.
+> The UX500 PRCMU "clkout" clock implements a mux with a set_parent hook,
+> but doesn't provide a determine_rate implementation.
+>
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
 
-Uros.
+Not even that.
+
+The parent is selected from the second cell of the device tree
+specifier, and the divisor from the third cell. See:
+Documentation/devicetree/bindings/clock/stericsson,u8500-clks.yaml
+
+So this definitely does not reparent.
+
+Yours,
+Linus Walleij
