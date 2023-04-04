@@ -2,74 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDBD6D5BFE
+	by mail.lfdr.de (Postfix) with ESMTP id 67A7C6D5BFF
 	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 11:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjDDJeT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Apr 2023 05:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S234198AbjDDJeU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Apr 2023 05:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234198AbjDDJeS (ORCPT
+        with ESMTP id S234179AbjDDJeS (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 05:34:18 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82050E6E
-        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 02:34:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9BB125
+        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 02:34:16 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id F24495C00C4;
-        Tue,  4 Apr 2023 05:34:14 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 4866B5C00E4;
+        Tue,  4 Apr 2023 05:34:16 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 04 Apr 2023 05:34:14 -0400
+  by compute3.internal (MEProxy); Tue, 04 Apr 2023 05:34:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1680600854; x=
-        1680687254; bh=vm9MFnRr+j14zpHsPFEvIkftXjEwJaloD6JAkeweKqE=; b=K
-        ZMi+XWuCb54KxcY2K0kFeL6M601CTwoshV71MQpZkqWn03Gx3Dcr3k4c2Y6CQzcj
-        6D+sWFmZEDVAL4nFvU1JLT38mPLn8FEz6/KiVNLYSvzuKpB1mewCgimufEZUJFaW
-        6pSysEd43/wJGhqS0gkKR2oMYHdYRP5dWq9k/u/Fs12eZJUUhBeqm4RvwICtmaUV
-        L3qSVXjXZG4yn+JuYlqjPEvS5GkZYuMLQAWPLXkCxhHaib8YGMetzoeNmzSUrCas
-        NViJuJpi77AMZ15DdYz40kSTDhLt03oy7VbqRj5OtwbAYO8Qlv1NeY79Tul8wnBb
-        wARBXV5/xpEKBRfyv5PfQ==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1680600856; x=
+        1680687256; bh=nlhpZBIwckOwEgQacs3F0gm3vpANDVDclb6m6ubz/+Y=; b=o
+        n8R+ACKuzFpt6gK7YpveGQuC9Rlo3SGmHX8Z1ch3q3lzgWaYEUJ1Fc7I2+Hhx5Of
+        j+TbXifZKev+mf+HHeetRzfK7G8nWyROpvQ0mFIL921MMG25FWiJ+m+XXln6k3qM
+        dJvSQ19qIgseSNBUE7IsIw2YixdrDE797a7Ojv53TY1RM1id7F4iWJoWeWX4rAA+
+        ge0FB8O4FAYrk3CbcJr3f75AjM0Lz/DiluN6pcQ440+nmMQVVQy4uB1znlwOslFv
+        LPH/I9xQXDo+2QiS6mHvsxsCoRMxtHTCqyvvJma/+2HJ5wEUJw3+Akyy3VOQNJwV
+        fNXDLlUwbpq8mwr7ovn1Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1680600854; x=
-        1680687254; bh=vm9MFnRr+j14zpHsPFEvIkftXjEwJaloD6JAkeweKqE=; b=g
-        wh/G5IuQ+K9fiJWAbKHK8ZS1gktKKfLg5jD2Acy4rmDJJovz6ipw+TSX08zwr+kr
-        tc4QlKw/9GM4atSOuz+wuKzpw9uC6GfQ88h41nSgZK23L3d2ix1Dd0k9j+dsmGBT
-        Zav7rIz6186IOg2qt3+JD532OIOZFBIc2SBxdUpoUJl71B15sToKPtehihu08Uqo
-        18h/pwDIi3fMjLQqK9l00RlrfqwSs16ydTowq1JGbJkB3YTS2RJea78MqeJ10O5t
-        y4Og8fDh99jvOmRaakvnZ34Y+Pzsovn3BXY+lBhuaUuA4yl+M5XjkIbFH4S2q8Gi
-        xsiCyxOORdD6MWomxRyWA==
-X-ME-Sender: <xms:Fu8rZN48MH7jS7QSrVQUrPBOc7LeiwJFW246KplPaCTbQh3Zav-2Pg>
-    <xme:Fu8rZK561_nBwWqED93JdOZ8YQDB6FHQSvv2Kg3o-YeHKieal-sPEofobEHZRFtGS
-    UUYSn6UgwCfWHg9khc>
-X-ME-Received: <xmr:Fu8rZEfov-yCKi85pNiuPtgpJYLdOIZ7iRODvuHujKy5h5-wRdzTIiSEGc-r>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1680600856; x=
+        1680687256; bh=nlhpZBIwckOwEgQacs3F0gm3vpANDVDclb6m6ubz/+Y=; b=l
+        NluRzsbqHgLMCvfI2KxbllWnVERQHUiEQzGj8KYuWo67ULe1fYUKD2u4s7iBPCTA
+        7NjwCTEd+0XT1QFdMmW3kOpCchAaWPtPyOsl3ZKPd/FnJSWjIkaXvNd04SvY1znJ
+        N0T5dMmDkFFEXUtsqjpFjrzYDYeqN5OAsL+5fWMgusrZcj2yBVotcxJDVYpjKFXf
+        GrSxDY25LIuuAz+HboY3O1My+Mj1PvEDzj1o/hY7coIWEkaUtfpHH5Q3Kx3BcNAV
+        j4av4auYcainS7PH+dzQvXyEKvYSI86aeCsvemSwMRxHmQj1CGapOgjpelRPvQEI
+        N9j62mCclRpBdw8oSHsYg==
+X-ME-Sender: <xms:GO8rZJAKhW4u6A2XnAC8tiNXbvlTMCTOGSB01r6rtNbqNw_4_2WWzg>
+    <xme:GO8rZHj72HrqDAH8h7GJipO38gEnIc7cStrX-0zZHfnppBtcnASKnHKVIBkN9VvQY
+    RfATjT60tQaMl3F_SI>
+X-ME-Received: <xmr:GO8rZEk6URozYig-LeR1z9wLSULNMcdzgSF869ARqyyf47eWsUfdg62yZtuf>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgudeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvefgtdelgeduheegie
-    dujedtgfetvddujeelveehudfhvdeigedtvddvveffvdfhnecuffhomhgrihhnpegtphhs
-    qdhvvggtrdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:Fu8rZGIcvTBAEsRK8t7ReybIcJgGsu43ry76e0EUoScXHhxQ7Irz7g>
-    <xmx:Fu8rZBLmoArz_uQgP-CZgbM5Ib8H35h_0MtkerGASJ0LQzIzkfERHg>
-    <xmx:Fu8rZPy9tEr-VtqCmd0erVUSWEePRhumq4yceLH4d0TeCVvTdf4c9Q>
-    <xmx:Fu8rZOGU_2xsjURkY30Tcw1X15Ek9XTyc147X97ANuCJsBlaPNM7Cw>
+    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
+    dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
+    hgohgrthdrtghomh
+X-ME-Proxy: <xmx:GO8rZDzTIn2N4rZvvqoo46CAl7hQgZ55XQxJ7vqGCe0tkLjzyXUOFQ>
+    <xmx:GO8rZOScL5FXXFdqszsWl7VYp5liG_JfTGmKYszUJ1O9L-wQDOhsFg>
+    <xmx:GO8rZGZBUXO9A3-db9vSdnEWjqUz0Y7puTC0sFy7JiXnZL9V3gWROw>
+    <xmx:GO8rZEPn4ZjmEdi2LqlcHZCxPKBNWVlipjAtkgB_SDbrXBlYBRYc-Q>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Apr 2023 05:34:13 -0400 (EDT)
+ 4 Apr 2023 05:34:15 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, philmd@linaro.org,
         sergei.shtylyov@gmail.com, aleksander.lobakin@intel.com,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v3 02/12] MIPS: smp-cps: Disable coherence setup for unsupported ISA
-Date:   Tue,  4 Apr 2023 10:33:41 +0100
-Message-Id: <20230404093351.4233-3-jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 03/12] MIPS: mips-cm: Check availability of config registers
+Date:   Tue,  4 Apr 2023 10:33:42 +0100
+Message-Id: <20230404093351.4233-4-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20230404093351.4233-1-jiaxun.yang@flygoat.com>
 References: <20230404093351.4233-1-jiaxun.yang@flygoat.com>
@@ -84,80 +84,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We don't know how to do coherence setup on ISA before MIPS
-Release 1.
-
-As CPS support only servers simulation purpose on those cores,
-and simulators are always coherent, just disable initialization
-code and provide user a warning in case coherence is not setup
-properly.
+Prevent reading unsupported config register during probing process.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/kernel/cps-vec.S | 5 +++++
- arch/mips/kernel/smp-cps.c | 5 +++++
- 2 files changed, 10 insertions(+)
+ arch/mips/kernel/mips-cm.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/kernel/cps-vec.S b/arch/mips/kernel/cps-vec.S
-index 8ef492da827f..64ecfdac6580 100644
---- a/arch/mips/kernel/cps-vec.S
-+++ b/arch/mips/kernel/cps-vec.S
-@@ -116,6 +116,8 @@ not_nmi:
- 	li	t0, ST0_CU1 | ST0_CU0 | ST0_BEV | STATUS_BITDEPS
- 	mtc0	t0, CP0_STATUS
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index b4f7d950c846..3f00788b0871 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -181,11 +181,16 @@ static DEFINE_PER_CPU_ALIGNED(unsigned long, cm_core_lock_flags);
  
-+	/* We don't know how to do coherence setup on earlier ISA */
-+#if MIPS_ISA_REV > 0
- 	/* Skip cache & coherence setup if we're already coherent */
- 	lw	s7, GCR_CL_COHERENCE_OFS(s1)
- 	bnez	s7, 1f
-@@ -129,6 +131,7 @@ not_nmi:
- 	li	t0, 0xff
- 	sw	t0, GCR_CL_COHERENCE_OFS(s1)
- 	ehb
-+#endif /* MIPS_ISA_REV > 0 */
- 
- 	/* Set Kseg0 CCA to that in s0 */
- 1:	mfc0	t0, CP0_CONFIG
-@@ -515,6 +518,7 @@ LEAF(mips_cps_boot_vpes)
- 	 nop
- 	END(mips_cps_boot_vpes)
- 
-+#if MIPS_ISA_REV > 0
- LEAF(mips_cps_cache_init)
- 	/*
- 	 * Clear the bits used to index the caches. Note that the architecture
-@@ -588,6 +592,7 @@ dcache_done:
- 	jr	ra
- 	 nop
- 	END(mips_cps_cache_init)
-+#endif /* MIPS_ISA_REV > 0 */
- 
- #if defined(CONFIG_MIPS_CPS_PM) && defined(CONFIG_CPU_PM)
- 
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index 4fc288bb85b9..f968a319d87f 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -361,6 +361,8 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
- 
- static void cps_init_secondary(void)
+ phys_addr_t __mips_cm_phys_base(void)
  {
-+	int core = cpu_core(&current_cpu_data);
-+
- 	/* Disable MT - we only want to run 1 TC per VPE */
- 	if (cpu_has_mipsmt)
- 		dmt();
-@@ -376,6 +378,9 @@ static void cps_init_secondary(void)
- 		BUG_ON(ident != mips_cm_vp_id(smp_processor_id()));
- 	}
+-	u32 config3 = read_c0_config3();
+ 	unsigned long cmgcr;
  
-+	if (core > 0 && !read_gcr_cl_coherence())
-+		pr_warn("Core %u is not in coherent domain\n", core);
+ 	/* Check the CMGCRBase register is implemented */
+-	if (!(config3 & MIPS_CONF3_CMGCR))
++	if (!(read_c0_config() & MIPS_CONF_M))
++		return 0;
 +
- 	if (cpu_has_veic)
- 		clear_c0_status(ST0_IM);
- 	else
++	if (!(read_c0_config2() & MIPS_CONF_M))
++		return 0;
++
++	if (!(read_c0_config3() & MIPS_CONF3_CMGCR))
+ 		return 0;
+ 
+ 	/* Read the address from CMGCRBase */
 -- 
 2.39.2 (Apple Git-143)
 
