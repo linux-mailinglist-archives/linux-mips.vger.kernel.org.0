@@ -2,102 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCD26D673D
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 17:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F876D6879
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 18:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbjDDP0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Apr 2023 11:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S235938AbjDDQLH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Apr 2023 12:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbjDDP0g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 11:26:36 -0400
+        with ESMTP id S235913AbjDDQLF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 12:11:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BAB4493;
-        Tue,  4 Apr 2023 08:26:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B04A30F7;
+        Tue,  4 Apr 2023 09:11:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4893635F9;
-        Tue,  4 Apr 2023 15:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166DCC4339B;
-        Tue,  4 Apr 2023 15:26:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA155636AE;
+        Tue,  4 Apr 2023 16:11:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C854CC433D2;
+        Tue,  4 Apr 2023 16:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680621994;
-        bh=S5RX+65IdJoFD1RV6kPG02G0jupKJXUIf9T04GMrChI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=juLKZrGeWUX9d0oOR/CCL+88qbCAb/xWCfYJOewm4RggCItQtMsffW8KgmQJXRJdf
-         wIGDohsQC49Uu+Ack+4kjWMLAjsoMV3eb751vy96HTaqKD91T/UUKbpSlW86M8yyWU
-         kzibdkPn/HM0qi9cV+Pg+vpi80+5XFQ+v5x9mDGc2lQrl4NnUSCzI4lyIjnRln2nSD
-         O5kE/0LQwnVa4MaO8VpBvXstlEflZ23NPK1LSMQlUuVw1QtKT/IAOLsLs/T1N/El4F
-         IlKMU2toIuXW4dsXuO5nqayGgzbPTQ/Kz+zZdF9SFWy3SohdZ+M+0IoBj9mTyg+9sZ
-         lTrq/E6gLN+BQ==
-Date:   Tue, 4 Apr 2023 16:26:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
-Message-ID: <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
+        s=k20201202; t=1680624663;
+        bh=eKiqHkoBVo1AQRx10HafTawauui+/7aWix/7MTRPGrA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=nkcQpc5NRHDKcALdEO/kD1vJ7JRnALrRH75LPh2TDOMavdcMgvCuVznC7x8x+ecKt
+         1/q7prAN9eClvaAU3c0+dUWFvcRO66V04KGg+gYkb+YrMhjTw0ASpXENR+YKBHmeia
+         3Q5pvbnqrK/uCSEeFKclNxI3vwOX0dUud1/pCQiZ36qwD28S6odWh3QMAvbBbgMd/s
+         C/Qhj0iZpFO3X/jYT9y3J5qKvtPSjj/GrdFNEZo1J9pLwcjwlot2Tv6qfpoajNxUA+
+         o+rmP5HeMIpXk0J+ytkWwcX3yLOfhBvsgasfRd7/C7/NUehmnMEdxtOqmb8yLnHceu
+         ZoK1FHXZYisVQ==
+Date:   Tue, 4 Apr 2023 11:11:01 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anatolij Gustschin <agust@denx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
+ users
+Message-ID: <20230404161101.GA3554747@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pRxU5n1hMJtSd1CQ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
-X-Cookie: Being ugly isn't illegal.  Yet.
+In-Reply-To: <20230330162434.35055-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -107,62 +87,116 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
+> Provide two new helper macros to iterate over PCI device resources and
+> convert users.
+> 
+> Looking at it, refactor existing pci_bus_for_each_resource() and convert
+> users accordingly.
+> 
+> Note, the amount of lines grew due to the documentation update.
+> 
+> Changelog v8:
+> - fixed issue with pci_bus_for_each_resource() macro (LKP)
+> - due to above added a new patch to document how it works
+> - moved the last patch to be #2 (Philippe)
+> - added tags (Philippe)
+> 
+> Changelog v7:
+> - made both macros to share same name (Bjorn)
 
---pRxU5n1hMJtSd1CQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I didn't actually request the same name for both; I would have had no
+idea how to even do that :)
 
-On Tue, Apr 04, 2023 at 12:11:33PM +0200, Maxime Ripard wrote:
-> The tlv320aic32x4 clkin clock implements a mux with a set_parent hook,
-> but doesn't provide a determine_rate implementation.
+v6 had:
 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
+  pci_dev_for_each_resource_p(dev, res)
+  pci_dev_for_each_resource(dev, res, i)
 
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
+and I suggested:
 
-It could be configured from device tree as well couldn't it?
+  pci_dev_for_each_resource(dev, res)
+  pci_dev_for_each_resource_idx(dev, res, i)
 
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
+because that pattern is used elsewhere.  But you figured out how to do
+it, and having one name is even better, so thanks for that extra work!
 
-Historically clk_set_rate() wouldn't reparent IIRC.
+> - split out the pci_resource_n() conversion (Bjorn)
+> 
+> Changelog v6:
+> - dropped unused variable in PPC code (LKP)
+> 
+> Changelog v5:
+> - renamed loop variable to minimize the clash (Keith)
+> - addressed smatch warning (Dan)
+> - addressed 0-day bot findings (LKP)
+> 
+> Changelog v4:
+> - rebased on top of v6.3-rc1
+> - added tag (Krzysztof)
+> 
+> Changelog v3:
+> - rebased on top of v2 by Mika, see above
+> - added tag to pcmcia patch (Dominik)
+> 
+> Changelog v2:
+> - refactor to have two macros
+> - refactor existing pci_bus_for_each_resource() in the same way and
+>   convert users
+> 
+> Andy Shevchenko (6):
+>   kernel.h: Split out COUNT_ARGS() and CONCATENATE()
+>   PCI: Introduce pci_resource_n()
+>   PCI: Document pci_bus_for_each_resource() to avoid confusion
+>   PCI: Allow pci_bus_for_each_resource() to take less arguments
+>   EISA: Convert to use less arguments in pci_bus_for_each_resource()
+>   pcmcia: Convert to use less arguments in pci_bus_for_each_resource()
+> 
+> Mika Westerberg (1):
+>   PCI: Introduce pci_dev_for_each_resource()
+> 
+>  .clang-format                             |  1 +
+>  arch/alpha/kernel/pci.c                   |  5 +-
+>  arch/arm/kernel/bios32.c                  | 16 +++--
+>  arch/arm/mach-dove/pcie.c                 | 10 ++--
+>  arch/arm/mach-mv78xx0/pcie.c              | 10 ++--
+>  arch/arm/mach-orion5x/pci.c               | 10 ++--
+>  arch/mips/pci/ops-bcm63xx.c               |  8 +--
+>  arch/mips/pci/pci-legacy.c                |  3 +-
+>  arch/powerpc/kernel/pci-common.c          | 21 +++----
+>  arch/powerpc/platforms/4xx/pci.c          |  8 +--
+>  arch/powerpc/platforms/52xx/mpc52xx_pci.c |  5 +-
+>  arch/powerpc/platforms/pseries/pci.c      | 16 ++---
+>  arch/sh/drivers/pci/pcie-sh7786.c         | 10 ++--
+>  arch/sparc/kernel/leon_pci.c              |  5 +-
+>  arch/sparc/kernel/pci.c                   | 10 ++--
+>  arch/sparc/kernel/pcic.c                  |  5 +-
+>  drivers/eisa/pci_eisa.c                   |  4 +-
+>  drivers/pci/bus.c                         |  7 +--
+>  drivers/pci/hotplug/shpchp_sysfs.c        |  8 +--
+>  drivers/pci/pci.c                         |  3 +-
+>  drivers/pci/probe.c                       |  2 +-
+>  drivers/pci/remove.c                      |  5 +-
+>  drivers/pci/setup-bus.c                   | 37 +++++-------
+>  drivers/pci/setup-res.c                   |  4 +-
+>  drivers/pci/vgaarb.c                      | 17 ++----
+>  drivers/pci/xen-pcifront.c                |  4 +-
+>  drivers/pcmcia/rsrc_nonstatic.c           |  9 +--
+>  drivers/pcmcia/yenta_socket.c             |  3 +-
+>  drivers/pnp/quirks.c                      | 29 ++++-----
+>  include/linux/args.h                      | 13 ++++
+>  include/linux/kernel.h                    |  8 +--
+>  include/linux/pci.h                       | 72 +++++++++++++++++++----
+>  32 files changed, 190 insertions(+), 178 deletions(-)
+>  create mode 100644 include/linux/args.h
 
-> The latter case would be equivalent to setting the flag
-> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> implementation is provided, clk_round_rate() (through
-> clk_core_round_rate_nolock()) will call itself on the parent if
-> CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> CLK_SET_RATE_NO_REPARENT is set.
+Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
 
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
+I omitted
 
-To be honest it's surprising that we'd have to manually specify this, I
-would expect to be able to reparent.  I suspect it'd be better to go the
-other way here and allow reparenting.
+  [1/7] kernel.h: Split out COUNT_ARGS() and CONCATENATE()"
 
---pRxU5n1hMJtSd1CQ
-Content-Type: application/pgp-signature; name="signature.asc"
+only because it's not essential to this series and has only a trivial
+one-line impact on include/linux/pci.h.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQsQZoACgkQJNaLcl1U
-h9C4KAf9FbCqTcQH5npaqJcyqXkbkD2B/+L43dup6TDsW3MJ6KnGh7YONz0DFQtI
-yTePWQzrTp7lltc9dQ8/QOvh4Xj3HSYJ30m5Ok0oX7lCLwy3LjEHtJiou/laIivq
-v+hAN2lVJPs0oOLwI+1tyi2p+UjtHzWUJcD37bHzIsY4esaL/B/Bp7m6z1JNpyoj
-rIleJHkETKjUABBzN/UR62y6TPaPPm/hSUcy0eudfmZZhPOWkuX/iBrFcXcUgc+c
-XOAtB0+uAsDUhULdGhXZSInCoKu0mdVwLr1QoZOB7q7J3Tl83t/8Mxuk8Dr+XEWh
-JBFDNPB3HM8uQvBR5j9pbnSLt/7E/A==
-=Jkqi
------END PGP SIGNATURE-----
-
---pRxU5n1hMJtSd1CQ--
+Bjorn
