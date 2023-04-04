@@ -2,82 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F876D6879
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 18:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A096D6ECB
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 23:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbjDDQLH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Apr 2023 12:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S236067AbjDDVTY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Apr 2023 17:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbjDDQLF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 12:11:05 -0400
+        with ESMTP id S236424AbjDDVTJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 17:19:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B04A30F7;
-        Tue,  4 Apr 2023 09:11:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D54459F6
+        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 14:18:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA155636AE;
-        Tue,  4 Apr 2023 16:11:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C854CC433D2;
-        Tue,  4 Apr 2023 16:11:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07FFB638C8
+        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 21:18:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0C7C433D2;
+        Tue,  4 Apr 2023 21:18:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680624663;
-        bh=eKiqHkoBVo1AQRx10HafTawauui+/7aWix/7MTRPGrA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nkcQpc5NRHDKcALdEO/kD1vJ7JRnALrRH75LPh2TDOMavdcMgvCuVznC7x8x+ecKt
-         1/q7prAN9eClvaAU3c0+dUWFvcRO66V04KGg+gYkb+YrMhjTw0ASpXENR+YKBHmeia
-         3Q5pvbnqrK/uCSEeFKclNxI3vwOX0dUud1/pCQiZ36qwD28S6odWh3QMAvbBbgMd/s
-         C/Qhj0iZpFO3X/jYT9y3J5qKvtPSjj/GrdFNEZo1J9pLwcjwlot2Tv6qfpoajNxUA+
-         o+rmP5HeMIpXk0J+ytkWwcX3yLOfhBvsgasfRd7/C7/NUehmnMEdxtOqmb8yLnHceu
-         ZoK1FHXZYisVQ==
-Date:   Tue, 4 Apr 2023 11:11:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <20230404161101.GA3554747@bhelgaas>
+        s=k20201202; t=1680643132;
+        bh=Bd4XozHHNDWmhLnBLuJFvVK1v9kbAVXUGqJsndz1hUw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=SHm+jHvIL+nwT3sGQ7w7RrxuYhhvNnO1wYO41r8cWb/e/IQ8YBqedTAceDFXZN53j
+         pdmFBKR/cDKAzEYP6Ckke2aOje4SkPgi9a7rR6812TWACTfbTeTaNXe1HrVU5bg0nI
+         HXRsbNbnX51JCMqja7Cr9i0KEX0ArTClM1GTTbq4x0xsBh+jRVowVg9sw98/HVC0DA
+         qNECAbmY/OwGwVZQD/uwVbxBp2dEhdnxHC8RGqs5qEt6LcR8aMLpdwJSWZqp0wokDn
+         KbAcipeLtGosFxvy2g1RCm+qGRunhc4C5MeDAIFxkwXmkTIlUZhaCojtqkx99s9fRY
+         uAudrgMRg9YDA==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Tue, 04 Apr 2023 14:18:41 -0700
+Subject: [PATCH] MIPS: Drop unused positional parameter in
+ local_irq_{dis,en}able
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330162434.35055-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230404-mips-unused-named-parameters-v1-1-71d6c656f1de@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADCULGQC/x2NwQrDMAxDf6X4PEOaFgb7lbGD07itD8mCvY5B6
+ b/P7UVCSDztYKzCBo9uB+WvmLyrh/7WwbRSXRgle4YY4hDGMGKRZrjVzThjpeLaSN0/rIZpiHm
+ +90Q5EzgikTEmpTqtJ6SQ+ewsmvIsv+v3+TqOPwL0IpmHAAAA
+To:     tsbogend@alpha.franken.de
+Cc:     ndesaulniers@google.com, trix@redhat.com,
+        linux-mips@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1819; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Bd4XozHHNDWmhLnBLuJFvVK1v9kbAVXUGqJsndz1hUw=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCk6U6zVPj+I1fCY7nrq+RL+m1M57xwsSrjo+Wfjwd2tu
+ SfvRmns7ihlYRDjYJAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATSWJh+F/hmX2ouL+gwXaL
+ 8ynVTg9FJmn+aXwrV2799GD6s2T2h3IM/+t4yn68fMezdaH/bMZ37UfnvVpTuj+8tH1L9COhQ2+
+ 61FkB
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -87,116 +64,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
-> Provide two new helper macros to iterate over PCI device resources and
-> convert users.
-> 
-> Looking at it, refactor existing pci_bus_for_each_resource() and convert
-> users accordingly.
-> 
-> Note, the amount of lines grew due to the documentation update.
-> 
-> Changelog v8:
-> - fixed issue with pci_bus_for_each_resource() macro (LKP)
-> - due to above added a new patch to document how it works
-> - moved the last patch to be #2 (Philippe)
-> - added tags (Philippe)
-> 
-> Changelog v7:
-> - made both macros to share same name (Bjorn)
+When building with clang's integrated assembler, it points out that the
+CONFIG_CPU_HAS_DIEI versions of local_irq_enable and local_irq_disable
+have a named parameter that is not used in the body of the macro and it
+thinks that $8 is a positional parameter, rather than a register:
 
-I didn't actually request the same name for both; I would have had no
-idea how to even do that :)
+  arch/mips/include/asm/asmmacro.h:48:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
+   .macro local_irq_enable reg=$8
+   ^
 
-v6 had:
+The comment above the function that performs this check in LLVM notes
+that the warning may trigger in this case, even though it is not
+problematic. It is easy enough to clean this up by just omitting the
+named parameter for this version of the macro, as it is entirely unused.
 
-  pci_dev_for_each_resource_p(dev, res)
-  pci_dev_for_each_resource(dev, res, i)
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1415
+Link: https://github.com/llvm/llvm-project/commit/81c944cadb7f9e55b3517b7423a820e2577b9279
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/mips/include/asm/asmmacro.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-and I suggested:
+diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
+index 1c4438f3f2ab..067a635d3bc8 100644
+--- a/arch/mips/include/asm/asmmacro.h
++++ b/arch/mips/include/asm/asmmacro.h
+@@ -45,12 +45,12 @@
+ #endif
+ 
+ #ifdef CONFIG_CPU_HAS_DIEI
+-	.macro	local_irq_enable reg=t0
++	.macro	local_irq_enable
+ 	ei
+ 	irq_enable_hazard
+ 	.endm
+ 
+-	.macro	local_irq_disable reg=t0
++	.macro	local_irq_disable
+ 	di
+ 	irq_disable_hazard
+ 	.endm
 
-  pci_dev_for_each_resource(dev, res)
-  pci_dev_for_each_resource_idx(dev, res, i)
+---
+base-commit: 101f26c72825c5dba1dfe826e4202a9a04b435c6
+change-id: 20230404-mips-unused-named-parameters-b32df71aadda
 
-because that pattern is used elsewhere.  But you figured out how to do
-it, and having one name is even better, so thanks for that extra work!
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
-> - split out the pci_resource_n() conversion (Bjorn)
-> 
-> Changelog v6:
-> - dropped unused variable in PPC code (LKP)
-> 
-> Changelog v5:
-> - renamed loop variable to minimize the clash (Keith)
-> - addressed smatch warning (Dan)
-> - addressed 0-day bot findings (LKP)
-> 
-> Changelog v4:
-> - rebased on top of v6.3-rc1
-> - added tag (Krzysztof)
-> 
-> Changelog v3:
-> - rebased on top of v2 by Mika, see above
-> - added tag to pcmcia patch (Dominik)
-> 
-> Changelog v2:
-> - refactor to have two macros
-> - refactor existing pci_bus_for_each_resource() in the same way and
->   convert users
-> 
-> Andy Shevchenko (6):
->   kernel.h: Split out COUNT_ARGS() and CONCATENATE()
->   PCI: Introduce pci_resource_n()
->   PCI: Document pci_bus_for_each_resource() to avoid confusion
->   PCI: Allow pci_bus_for_each_resource() to take less arguments
->   EISA: Convert to use less arguments in pci_bus_for_each_resource()
->   pcmcia: Convert to use less arguments in pci_bus_for_each_resource()
-> 
-> Mika Westerberg (1):
->   PCI: Introduce pci_dev_for_each_resource()
-> 
->  .clang-format                             |  1 +
->  arch/alpha/kernel/pci.c                   |  5 +-
->  arch/arm/kernel/bios32.c                  | 16 +++--
->  arch/arm/mach-dove/pcie.c                 | 10 ++--
->  arch/arm/mach-mv78xx0/pcie.c              | 10 ++--
->  arch/arm/mach-orion5x/pci.c               | 10 ++--
->  arch/mips/pci/ops-bcm63xx.c               |  8 +--
->  arch/mips/pci/pci-legacy.c                |  3 +-
->  arch/powerpc/kernel/pci-common.c          | 21 +++----
->  arch/powerpc/platforms/4xx/pci.c          |  8 +--
->  arch/powerpc/platforms/52xx/mpc52xx_pci.c |  5 +-
->  arch/powerpc/platforms/pseries/pci.c      | 16 ++---
->  arch/sh/drivers/pci/pcie-sh7786.c         | 10 ++--
->  arch/sparc/kernel/leon_pci.c              |  5 +-
->  arch/sparc/kernel/pci.c                   | 10 ++--
->  arch/sparc/kernel/pcic.c                  |  5 +-
->  drivers/eisa/pci_eisa.c                   |  4 +-
->  drivers/pci/bus.c                         |  7 +--
->  drivers/pci/hotplug/shpchp_sysfs.c        |  8 +--
->  drivers/pci/pci.c                         |  3 +-
->  drivers/pci/probe.c                       |  2 +-
->  drivers/pci/remove.c                      |  5 +-
->  drivers/pci/setup-bus.c                   | 37 +++++-------
->  drivers/pci/setup-res.c                   |  4 +-
->  drivers/pci/vgaarb.c                      | 17 ++----
->  drivers/pci/xen-pcifront.c                |  4 +-
->  drivers/pcmcia/rsrc_nonstatic.c           |  9 +--
->  drivers/pcmcia/yenta_socket.c             |  3 +-
->  drivers/pnp/quirks.c                      | 29 ++++-----
->  include/linux/args.h                      | 13 ++++
->  include/linux/kernel.h                    |  8 +--
->  include/linux/pci.h                       | 72 +++++++++++++++++++----
->  32 files changed, 190 insertions(+), 178 deletions(-)
->  create mode 100644 include/linux/args.h
-
-Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
-
-I omitted
-
-  [1/7] kernel.h: Split out COUNT_ARGS() and CONCATENATE()"
-
-only because it's not essential to this series and has only a trivial
-one-line impact on include/linux/pci.h.
-
-Bjorn
