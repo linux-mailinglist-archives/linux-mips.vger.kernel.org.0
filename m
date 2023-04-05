@@ -2,37 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD226D76DE
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 10:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DF76D76DD
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 10:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237490AbjDEI3G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 04:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S237109AbjDEI3D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 04:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237500AbjDEI3B (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 04:29:01 -0400
+        with ESMTP id S237165AbjDEI3A (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 04:29:00 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EB074EEF
-        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 01:28:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E12B24C2B;
+        Wed,  5 Apr 2023 01:28:53 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pjyVe-0007pG-01; Wed, 05 Apr 2023 10:28:50 +0200
+        id 1pjyVe-0007pG-02; Wed, 05 Apr 2023 10:28:50 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D9339C2160; Wed,  5 Apr 2023 10:26:25 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 10:26:25 +0200
+        id DFD7AC2160; Wed,  5 Apr 2023 10:26:54 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 10:26:54 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     ndesaulniers@google.com, trix@redhat.com,
-        linux-mips@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] MIPS: Drop unused positional parameter in
- local_irq_{dis,en}able
-Message-ID: <20230405082625.GB5556@alpha.franken.de>
-References: <20230404-mips-unused-named-parameters-v1-1-71d6c656f1de@kernel.org>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: lantiq: remove unused function declaration
+Message-ID: <20230405082654.GC5556@alpha.franken.de>
+References: <20230329210328.9320-1-olek2@wp.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404-mips-unused-named-parameters-v1-1-71d6c656f1de@kernel.org>
+In-Reply-To: <20230329210328.9320-1-olek2@wp.pl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -43,28 +40,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 02:18:41PM -0700, Nathan Chancellor wrote:
-> When building with clang's integrated assembler, it points out that the
-> CONFIG_CPU_HAS_DIEI versions of local_irq_enable and local_irq_disable
-> have a named parameter that is not used in the body of the macro and it
-> thinks that $8 is a positional parameter, rather than a register:
+On Wed, Mar 29, 2023 at 11:03:28PM +0200, Aleksander Jan Bajkowski wrote:
+> The removed function declaration is a leftover of the old gphy firmware
+> loader, that has been removed in d5103604f78e1afc29e586785af540c82b573f3a.
 > 
->   arch/mips/include/asm/asmmacro.h:48:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
->    .macro local_irq_enable reg=$8
->    ^
-> 
-> The comment above the function that performs this check in LLVM notes
-> that the warning may trigger in this case, even though it is not
-> problematic. It is easy enough to clean this up by just omitting the
-> named parameter for this version of the macro, as it is entirely unused.
-> 
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1415
-> Link: https://github.com/llvm/llvm-project/commit/81c944cadb7f9e55b3517b7423a820e2577b9279
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 > ---
->  arch/mips/include/asm/asmmacro.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> index 4790cfa190d6..c2e0acb755cd 100644
+> --- a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> +++ b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> @@ -94,9 +94,6 @@ extern __iomem void *ltq_cgu_membase;
+>  #define LTQ_MPS_BASE_ADDR	(KSEG1 + 0x1F107000)
+>  #define LTQ_MPS_CHIPID		((u32 *)(LTQ_MPS_BASE_ADDR + 0x0344))
+>  
+> -/* allow booting xrx200 phys */
+> -int xrx200_gphy_boot(struct device *dev, unsigned int id, dma_addr_t dev_addr);
+> -
+>  /* request a non-gpio and set the PIO config */
+>  #define PMU_PPE			 BIT(13)
+>  extern void ltq_pmu_enable(unsigned int module);
+> -- 
+> 2.30.2
 
 applied to mips-next.
 
