@@ -2,91 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B646D830A
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 18:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CAC6D85FC
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 20:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjDEQHg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 12:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S232717AbjDES2c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 14:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjDEQHf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 12:07:35 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3B6420F
-        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 09:07:32 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5005c57f95cso76622a12.1
-        for <linux-mips@vger.kernel.org>; Wed, 05 Apr 2023 09:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680710851; x=1683302851;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ir3s/Lf5lvCAlrm1TfcesrDtB2jAmtZCISN/6dp3hBc=;
-        b=VNUObGKko6sqyyipxJHZOjjD7Vgl2nINPanPLg9CF5dNFM42M+zPkinw5lJovFp5IT
-         KgryiwfHZwGoUCHvFhE9cgxsLTI65w6qpIN9bd0/wPOfFcL5qWWLKMUORCChrg/EDytj
-         /mEZ5jrCc5FzC1si2MslaSmste3VoXKbRjv7g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680710851; x=1683302851;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ir3s/Lf5lvCAlrm1TfcesrDtB2jAmtZCISN/6dp3hBc=;
-        b=0uUHBuMiI3maGdOS0MSKEsDGJ659fkwEmYPlTuM6Vtujg0Jlg0yWTwdEq4zMn//qHy
-         O9dt3zzuvl6uwlqV3RWH27Nf+t4WJQUOwf8S9Wq0W4A0eY2Z2CTxTgb14LkCB4qmIxJy
-         eRtUd+qYl3Z+Ra9LyanRdSGXLufx0whZIe5KV+xUNbeIpS37A/tCmxxQCfD9tP+gjDgZ
-         gw+yjjHkSKtH1InKptwb0dGqQofVDQP06RWMqj+Pp12ELNx58LAx1bPsYJy1+Q94HnMI
-         mVsCEMH0iPAsVuhAy+fHOi3f0nU8HlgwgpW6r0t/g5oju5TvcZWBICnUvpMpkZrKFXii
-         AFiw==
-X-Gm-Message-State: AAQBX9e3ERdWehagdrbaP2Id2dL3uAaW8+xSSoeEgzuGtcoukKbQkZH3
-        BEKwsIQh9kM+iZPSQ57SckIRTpyFaGqiqZ9sW+E=
-X-Google-Smtp-Source: AKy350aQMCCIGd+ttlIn6lmvnbNQhhwBJ1Oi0jxEBwn9z6WIX2aUYNMX4MoVCA82q+F4FspzQF+uZA==
-X-Received: by 2002:a17:906:10c9:b0:931:4285:ea16 with SMTP id v9-20020a17090610c900b009314285ea16mr2360239ejv.7.1680710851411;
-        Wed, 05 Apr 2023 09:07:31 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id a23-20020a170906369700b0092a59ee224csm7492153ejc.185.2023.04.05.09.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 09:07:31 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 18:07:28 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 01/18] fbdev: Prepare generic architecture helpers
-Message-ID: <ZC2cwIJJlyDWge+B@phenom.ffwll.local>
-Mail-Followup-To: Arnd Bergmann <arnd@arndb.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-References: <20230405150554.30540-1-tzimmermann@suse.de>
- <20230405150554.30540-2-tzimmermann@suse.de>
- <92fe3838-41f0-4e27-8467-161553ff724f@app.fastmail.com>
+        with ESMTP id S234162AbjDES2a (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 14:28:30 -0400
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD2F95
+        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 11:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PEOSsUi8JIMvoW7QnnkpkkJijxo4IUuMnZ9vv3EjUhQ=; b=PlcvWllVCZZLIxn7TA0uYZOD2i
+        8Timk2idYv+lLO3yZJhWhHPsl92ZREHTEkcZ2uj1e53hz36DkB/efojzcWFV0Na8cR9Qj+10qLhOH
+        ta3+36sHegS1o46TQyP99X9cQQUBT/Z1QMqvJ9krER9Ob1/RWq++SuzdzpDHI3Xhy5MHfqna5eIZw
+        +3KCwr3As0xZzcRdS0d74nyj+RIivO7MbcvRaGz8ll694eT/OgE8InMgGs8kJwhgkR/6hUQpNlGNz
+        Za3hBrO3EltLq0JnttfLThWdO07VZ32OqVzWbWH2mgZNY1LmC2nLtlkLnHo1jx4ghOCQVGFpuJj4L
+        hqCUbhxg==;
+Received: from ip98-183-112-29.ok.ok.cox.net ([98.183.112.29]:48320 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <david@lechnology.com>)
+        id 1pk5gX-00020w-28;
+        Wed, 05 Apr 2023 12:08:34 -0400
+Message-ID: <9d163cc7-d7ee-55e8-c01d-a1d4b3b19877@lechnology.com>
+Date:   Wed, 5 Apr 2023 11:07:56 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92fe3838-41f0-4e27-8467-161553ff724f@app.fastmail.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 54/65] clk: da8xx: clk48: Switch to determine_rate
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-54-9a1358472d52@cerno.tech>
+ <04f5d305-9992-bcdc-cd54-111eb8254155@lechnology.com>
+ <3nyoulu5eba6eyo644crhbtog63jh7vockbp7dz6mxquj2omsn@j56kn6vkbktg>
+From:   David Lechner <david@lechnology.com>
+In-Reply-To: <3nyoulu5eba6eyo644crhbtog63jh7vockbp7dz6mxquj2omsn@j56kn6vkbktg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,62 +121,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 05:53:03PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 5, 2023, at 17:05, Thomas Zimmermann wrote:
-> > Generic implementations of fb_pgprotect() and fb_is_primary_device()
-> > have been in the source code for a long time. Prepare the header file
-> > to make use of them.
-> >
-> > Improve the code by using an inline function for fb_pgprotect() and
-> > by removing include statements.
-> >
-> > Symbols are protected by preprocessor guards. Architectures that
-> > provide a symbol need to define a preprocessor token of the same
-> > name and value. Otherwise the header file will provide a generic
-> > implementation. This pattern has been taken from <asm/io.h>.
-> >
-> > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+On 4/5/23 10:22 AM, Maxime Ripard wrote:
+> Hi David,
 > 
-> Moving this into generic code is good, but I'm not sure
-> about the default for fb_pgprotect():
+> On Wed, Apr 05, 2023 at 10:03:24AM -0500, David Lechner wrote:
+>> On 4/4/23 5:11 AM, Maxime Ripard wrote:
+>>> The TI DA8xx USB0 clk48 clocks implements a mux with a set_parent
+>>> hook, but doesn't provide a determine_rate implementation.
+>>>
+>>> This is a bit odd, since set_parent() is there to, as its name implies,
+>>> change the parent of a clock. However, the most likely candidate to
+>>> trigger that parent change is a call to clk_set_rate(), with
+>>> determine_rate() figuring out which parent is the best suited for a
+>>> given rate.
+>>>
+>>
+>> As mentioned in my previous review, parent is selected by device
+>> tree and should never be changed after init.
 > 
-> > +
-> > +#ifndef fb_pgprotect
-> > +#define fb_pgprotect fb_pgprotect
-> > +static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
-> > +				unsigned long off)
-> > +{ }
-> > +#endif
+> Great minds think alike then, because the driver implements exactly
+> that, either before or after that patch.
 > 
-> I think most architectures will want the version we have on
-> arc, arm, arm64, loongarch, and sh already:
+> That patch makes the current behaviour explicit but doesn't change it in
+> any way.
 > 
-> static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
->                                 unsigned long off)
-> {
->        vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-> }
+> So I guess that means that I can add your Acked-by on the three patches
+> you reviewed with the same message?
 > 
-> so I'd suggest making that version the default, and treating the
-> empty ones (m68knommu, sparc32) as architecture specific
-> workarounds.
+> Maxime
 
-Yeah I was about to type the same suggestion :-)
--Daniel
+Yes, preferably with a simplified commit message.
 
- 
-> I see that sparc64 and parisc use pgprot_uncached here, but as
-> they don't define a custom pgprot_writecombine, this ends up being
-> the same, and they can use the above definition as well.
-> 
-> mips defines pgprot_writecombine but uses pgprot_noncached
-> in fb_pgprotect(), which is probably a mistake and should have
-> been updated as part of commit 4b050ba7a66c ("MIPS: pgtable.h:
-> Implement the pgprot_writecombine function for MIPS").
-> 
->     Arnd
+Acked-by: David Lechner <david@lechnology.com>
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
