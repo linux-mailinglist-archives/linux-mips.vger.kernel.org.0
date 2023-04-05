@@ -2,130 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A6C6D8166
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 17:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391CC6D8183
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 17:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238900AbjDEPRE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 11:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S238948AbjDEPS3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 11:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238148AbjDEPQv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 11:16:51 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BAE768F;
-        Wed,  5 Apr 2023 08:15:23 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335Ex0qK002073;
-        Wed, 5 Apr 2023 15:12:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=EP7H/BG3XCUIVobBKkorHkQj2TA2B5DpLLQdBFgYKS4=;
- b=XbWxDBkfY2fo/oPyI6TrXqcU1euUz4IzeWoGlM8pMsRk498yO8yVE/7T1S6eJTb2S1UY
- Ce4n6uRJXGbJACtJS5PEQm7yDaXiLZ77NckRKQQQ5DNapH75rb5fd/ItpAm5JdaIGkJB
- EjYbhhlQ0ryc2KE5ooaYTcsk8RJlUZZfLediFtvaH7EkQ1SjyGt/Xzy43DdKyba2DK/C
- mj3z1Ouz77q3PQdLEc8JzeNlXRNO2YNOk1g5JnRZp+nfYv7EYFBF1bpKeDuLr8vDL+6n
- b4UH/HRs8HkTZNjSxDyvmPDruJP3v3TVMAV46NXQWSanaU69dM9Hykbwz50y1ICQraWy Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps9mdkkrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 15:12:47 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 335Ena21018706;
-        Wed, 5 Apr 2023 15:12:46 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps9mdkkpp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 15:12:45 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 335DwTrM010607;
-        Wed, 5 Apr 2023 15:12:43 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3ppc86tktp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 15:12:43 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 335FCejC27853382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Apr 2023 15:12:40 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7493520040;
-        Wed,  5 Apr 2023 15:12:40 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE7A920043;
-        Wed,  5 Apr 2023 15:12:38 +0000 (GMT)
-Received: from [9.155.211.163] (unknown [9.155.211.163])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Apr 2023 15:12:38 +0000 (GMT)
-Message-ID: <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] Kconfig: introduce HAS_IOPORT option and select it
- as necessary
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Date:   Wed, 05 Apr 2023 17:12:38 +0200
-In-Reply-To: <20230323163354.1454196-1-schnelle@linux.ibm.com>
-References: <20230323163354.1454196-1-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Chh8ozZVKyRilF6r1sDguQSl3KT7MF3_
-X-Proofpoint-GUID: RSLPMutPzrPKT5ywknWUr1qrnGdzz6Rn
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S238683AbjDEPSN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 11:18:13 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD555B95;
+        Wed,  5 Apr 2023 08:17:35 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id CFB322B06725;
+        Wed,  5 Apr 2023 11:17:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 05 Apr 2023 11:17:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1680707845; x=1680715045; bh=4g
+        3Y3WtpEmHJBlHmaZSfRkusN6Gsi4T8SDJHzgHkAHw=; b=L4vZO5QE1gCVJJlu2o
+        r6vojScB4+ZzvhrGxAnCgZw8q3iEvd5m35SZkx+KC1V9nR1oJrFdkv+ey7bHZjCL
+        h7ZEBk9Gmy/3C1A/1qdft9MpePUYhTf2LMdsCjgEXC/wq8oDjffPfKya8bL0vOhv
+        zM4glmn3aahZ0fd/tWPeXFJVlzfG49xJGig3f3S4nIf2yKej0KUqRbtf9U4HO7U4
+        Fca3KFRY0boUta2nyK/ZvwIoPXjc0uR7jRie7ubda+6o8LFTmR3EQPKCjDxKPY69
+        q+rnuCjeiU34JIwElnik7ZIFhfh2uCaJ5k3L+G6Ma8lMgJQI3qmYO86jMfQxx5Ci
+        VdNw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680707845; x=1680715045; bh=4g3Y3WtpEmHJB
+        lHmaZSfRkusN6Gsi4T8SDJHzgHkAHw=; b=VEkZsmfrmM6qqrbSYR67T7b6tnqGF
+        AvhJD3Y4WLLq1tU2AX/t6uAgHsNHwJpXvwtS4GnhhmEJ7XPVKNwRq+9WMhmmzML+
+        RG6DEdWr2hNUhcl8o0yOuq3CX2GqoiuaH9MsBOokOxVfwovgwExj8beYgt4/HxuA
+        a96LoWlzOcRy23htu+pg7NjQwIET42Hppt8MLtacCrxmqqy1yW4bPHimBOxOQWfJ
+        wAwezgR/QID/T8H8Ty1cHIhdRLrfE64Z96wSdoJclrB780/8YTOOdsPEANPT/KF4
+        SSABADpffcDQPX+mkREx6UEIjxMxopVCUSw91MvdZ2vn4nW1L5oPr6aSQ==
+X-ME-Sender: <xms:BJEtZAuMkk6wnab4QseDQgMYaxs-ZoalWk6ba9JDW-N_MwUR-r-0_g>
+    <xme:BJEtZNeeUQqDS514Kh75x4vjSF_5nb0vlfH8K6OmRPlsGhffGSlMHsAhdX_0tWg6m
+    1rxuj_wVXQehW37VVk>
+X-ME-Received: <xmr:BJEtZLwjCpHui3RPPt2Zh-h4Q5a1KUTc9johjdZpp-INV-i7TjtqsffumjLDSjqJRIBhpUDe69m60CBw6P-vuyAbTZVw17w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:BJEtZDOLnxucnvKx3FD6J-fSLSIdKT1u6WKBdKX_FeKFrkbQnefb_g>
+    <xmx:BJEtZA_bReMUs9Hnw0kWbI8p_MC65dZMSzDb9-uV0n2-sq5SiGHLpg>
+    <xmx:BJEtZLVbSPxoi4qvWklXjQcQFOKJSC341u3oT8-2Qg5yq0Cm5T0yJQ>
+    <xmx:BZEtZFFxxiKux8gHULwGp3q2GhoxRfghXYlW4d0UO9AUrD_vtD7rQM5gvGo>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Apr 2023 11:17:22 -0400 (EDT)
+Date:   Wed, 5 Apr 2023 17:17:21 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <erm4iq3mygnrr4h2gd5cag3sfuovv47ibdqsbmxcfabngvnwy4@z63ksvj55zuu>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
+ <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-05_09,2023-04-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1011 bulkscore=0 spamscore=0
- malwarescore=0 mlxlogscore=438 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304050136
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l2rp74o6ajwb6i7x"
+Content-Disposition: inline
+In-Reply-To: <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,70 +137,71 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 2023-03-23 at 17:33 +0100, Niklas Schnelle wrote:
-> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/O
-> Port access. In a future patch HAS_IOPORT=3Dn will disable compilation of
-> the I/O accessor functions inb()/outb() and friends on architectures
-> which can not meaningfully support legacy I/O spaces such as s390.
->=20
-> The following architectures do not select HAS_IOPORT:
->=20
-> * ARC
-> * C-SKY
-> * Hexagon
-> * Nios II
-> * OpenRISC
-> * s390
-> * User-Mode Linux
-> * Xtensa
->=20
-> All other architectures select HAS_IOPORT at least conditionally.
->=20
-> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
-> for HAS_IOPORT specific sections will be added in subsequent patches on
-> a per subsystem basis.
->=20
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Acked-by: Johannes Berg <johannes@sipsolutions.net> # for ARCH=3Dum
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Note: This patch is the initial patch of a larger series[0]. This patch
-> introduces the HAS_IOPORT config option while the rest of the series adds
-> driver dependencies and the final patch removes inb() / outb() and friend=
-s on
-> platforms that don't support them.=20
->=20
-> Thus each of the per-subsystem patches is independent from each other but
-> depends on this patch while the final patch depends on the whole series. =
-Thus
-> splitting this initial patch off allows the per-subsytem HAS_IOPORT depen=
-dency
-> addition be merged separately via different trees without breaking the bu=
-ild.
->=20
-> [0] https://lore.kernel.org/lkml/20230314121216.413434-1-schnelle@linux.i=
-bm.com/
->=20
-> Changes since v3:
-> - List archs without HAS_IOPORT in commit message (Arnd)
-> - Select HAS_IOPORT for LoongArch (Arnd)
-> - Use "select HAS_IOPORT if (E)ISA || .." instead of a "depends on" for (=
-E)ISA
->   for m68k and parisc
-> - Select HAS_IOPORT with config GSC on parisc (Arnd)
-> - Drop "depends on HAS_IOPORT" for um's config ISA (Johannes)
-> - Drop "depends on HAS_IOPORT" for config ISA on x86 and parisc where it =
-is
->   always selected (Arnd)
->=20
 
-Gentle ping. As far as I can tell this hasn't been picked to any tree
-sp far but also hasn't seen complains so I'm wondering if I should send
-a new version of the combined series of this patch plus the added
-HAS_IOPORT dependencies per subsystem or wait until this is picked up.
+--l2rp74o6ajwb6i7x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Niklas
+Hi Mark,
 
+On Tue, Apr 04, 2023 at 04:26:18PM +0100, Mark Brown wrote:
+> On Tue, Apr 04, 2023 at 12:11:33PM +0200, Maxime Ripard wrote:
+> > The tlv320aic32x4 clkin clock implements a mux with a set_parent hook,
+> > but doesn't provide a determine_rate implementation.
+>=20
+> > This is a bit odd, since set_parent() is there to, as its name implies,
+> > change the parent of a clock. However, the most likely candidate to
+> > trigger that parent change is a call to clk_set_rate(), with
+> > determine_rate() figuring out which parent is the best suited for a
+> > given rate.
+>=20
+> > The other trigger would be a call to clk_set_parent(), but it's far less
+> > used, and it doesn't look like there's any obvious user for that clock.
+>=20
+> It could be configured from device tree as well couldn't it?
+
+Yep, indeed.
+
+> > So, the set_parent hook is effectively unused, possibly because of an
+> > oversight. However, it could also be an explicit decision by the
+> > original author to avoid any reparenting but through an explicit call to
+> > clk_set_parent().
+>=20
+> Historically clk_set_rate() wouldn't reparent IIRC.
+>=20
+> > The latter case would be equivalent to setting the flag
+> > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> > to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> > implementation is provided, clk_round_rate() (through
+> > clk_core_round_rate_nolock()) will call itself on the parent if
+> > CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> > otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> > CLK_SET_RATE_NO_REPARENT is set.
+>=20
+> > And if it was an oversight, then we are at least explicit about our
+> > behavior now and it can be further refined down the line.
+>=20
+> To be honest it's surprising that we'd have to manually specify this, I
+> would expect to be able to reparent.  I suspect it'd be better to go the
+> other way here and allow reparenting.
+
+Yeah, I think I'd prefer to allow reparenting too, but as can be seen
+=66rom the other reviewers in that thread, it seems like we have a very
+split community here, so that doesn't sound very realistic without some
+major pushback :)
+
+Maxime
+
+--l2rp74o6ajwb6i7x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZC2RAQAKCRDj7w1vZxhR
+xRegAPwLq9rAf2gXBh+S5NNzglDB7jF/equjD6dhO2iJfkonFgD+OuUuIkBhvEAH
+dy14syHvUOJJRm7L8hscnDwFHJrXQA0=
+=mQrD
+-----END PGP SIGNATURE-----
+
+--l2rp74o6ajwb6i7x--
