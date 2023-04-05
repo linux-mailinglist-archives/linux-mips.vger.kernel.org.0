@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46CA6D813B
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 17:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B2D6D8138
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 17:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238848AbjDEPNC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 11:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S238747AbjDEPNB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 11:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238730AbjDEPMl (ORCPT
+        with ESMTP id S238551AbjDEPMl (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 11:12:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC97EC0;
-        Wed,  5 Apr 2023 08:10:47 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8263D7ECB;
+        Wed,  5 Apr 2023 08:10:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA53F625CE;
-        Wed,  5 Apr 2023 15:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604D1C433D2;
-        Wed,  5 Apr 2023 15:09:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9462625CA;
+        Wed,  5 Apr 2023 15:10:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41DAC433D2;
+        Wed,  5 Apr 2023 15:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680707405;
-        bh=rJ3M+zYS15q5Quad0wzrZG7xL5+9ADdP5E4EpauPQDA=;
+        s=k20201202; t=1680707447;
+        bh=D4YX5DK0pun7qG4OSMVc8e9vaDN+H7CmPuWpZRhiBTU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uwvoLG9Mg6dizDLr402j7UdbsqsQxuYjteYBhYwhrJlAsrbTC9nd6DQo1IzXxCIaN
-         9U72nBXMiZahaLCTdTcDIyoRUQ+ocS5hUtOmf5c/huPkH9rNDWmoozW7pynZHzH+D0
-         BGkdmKh+F8uLhLLPmXVxsc28WnJBRX2V3SfGP8T4wKvdqas3AfRJERK4rgMzIwhb2E
-         qUgFyspMctrP+YLPss7RMpYkfaXUxCSqnJxvkR2qxW/mhhhcEOUM7AD8vA30RzOHfq
-         MNkaCuaeprkDAK/eetegajbSH5jkLfbeRNdoBlc7xa5It9mB4L6J4Y1vI1mBg8lIkR
-         DpSUyJSUzAZBg==
-Date:   Wed, 5 Apr 2023 16:09:49 +0100
+        b=H++unxUb7nt0bWB0cZRIpirjyl6fMUIanjR0IybKKbOFCDZQ7fl3nGRfgXxHBmOTc
+         aLr8pCNoVrScF3nXsYVeVlit6tFVqt3RTHudqPjdJeU4XNb3Fm+L6FyB4ZGRpA8mku
+         uHDprHNH/IIWooGinODcsKEp00ZKOvzTS5e+wLSdqGlH/MPkZGOJVa2hJjKHooD4a0
+         m1oiZgR8OnAyymsDZMT9AjB6JLhQsxqkpcXhI/shb8qZ4C8ggWEHL6au6GNGlms1bf
+         2LcKx7iD5BDrkm8i9BaGwlDiJoOZSwNIUEO5nDNUcLF6Xb9gQmEcDK0dMfWFuHYUX9
+         29DfTcAe3KLQg==
+Date:   Wed, 5 Apr 2023 16:10:25 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -88,19 +88,19 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
         linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 63/65] ASoC: tlv320aic32x4: pll: Switch to
+Subject: Re: [PATCH v3 64/65] ASoC: tlv320aic32x4: div: Switch to
  determine_rate
-Message-ID: <6b83dd87-3819-4db4-bd07-92487a1df09d@sirena.org.uk>
+Message-ID: <692983f2-4aef-4ab9-9777-43f46b9cb4ba@sirena.org.uk>
 References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-63-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-64-9a1358472d52@cerno.tech>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bXPsTMNAHQ2iLa6U"
+        protocol="application/pgp-signature"; boundary="3Lzv7qB7yUCBJADV"
 Content-Disposition: inline
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-63-9a1358472d52@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-64-9a1358472d52@cerno.tech>
 X-Cookie: 1 bulls, 3 cows.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,11 +109,11 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---bXPsTMNAHQ2iLa6U
+--3Lzv7qB7yUCBJADV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Apr 04, 2023 at 12:11:53PM +0200, Maxime Ripard wrote:
+On Tue, Apr 04, 2023 at 12:11:54PM +0200, Maxime Ripard wrote:
 
 > The driver does implement round_rate() though, which means that we can
 > change the rate of the clock, but we will never get to change the
@@ -130,19 +130,19 @@ Similar comments to the other patch, I'm pretty sure this is just
 surprising design on the part of the clock API and we should just allow
 reparenting.
 
---bXPsTMNAHQ2iLa6U
+--3Lzv7qB7yUCBJADV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtjzwACgkQJNaLcl1U
-h9AOwgf9ErN1u2S7sQlFKj2SeLpE5lRKnNP6D1ooc6560nzhA27lBtrYHbRW8SJl
-T+kbhVrNtrlNbq+4ODnnfurtCWZnzgv4x6SDSb4ifzjckcCo4hjqHk9kcGQk/0Cw
-pe5S6KjNiGE3LWSWa85iqnAHH8XPVms/VcjAtDbLdiXBqV0fBmvKHpKkqpQ2IKiJ
-CPVabkZYMXj4Qh+tGAScos2ZPgNI6nG1euebgm1iPDvutLxcxU8RVHA++BVKNa62
-/ijunLrZY+U2Msq+RZQGuSWr7TfdD1DUhxhdnTG4Hjm4Q3r0KaWeixGyICYY6TyC
-r4CUzpWuZDn+9YNx2ETW7ACv6ayuMg==
-=P5db
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtj2AACgkQJNaLcl1U
+h9C6nwf/eAXWoy2nqSW5TGkiJhKHJv8x94Toi8TRODFF+R/hoCeBiwbDpLoGU2W+
+XtYiCa4AsVVTQShMscEuygSt4HqR2Hm7gaw+SoRwfdX/dEpqMCCF1Uzc9IAgRRv/
+3aWJLZtx/5Mpyu3eaA6b7ul2tFP8PDE90ePyk1zHCZGUE189FK95s3Xc6zmVnuy2
+Es8Td9JeVAZhnxCyLYGLVjoUw8/LsBEXAQWpSr/ayacNPTQa9PlPM3k/HCggwR7g
+3NRnovXN1XYJ2pkkaN9RB9yifiB9Doz8KnLhSJVYG2lIaFMyYDSuYFu2zEIa8M/y
+YabesVhSGONiNYKoP8QmdjTZqKi2nw==
+=i5C8
 -----END PGP SIGNATURE-----
 
---bXPsTMNAHQ2iLa6U--
+--3Lzv7qB7yUCBJADV--
