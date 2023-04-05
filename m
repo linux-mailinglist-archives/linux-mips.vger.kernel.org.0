@@ -2,115 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A096D6ECB
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Apr 2023 23:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1946D76E0
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 10:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236067AbjDDVTY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Apr 2023 17:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S237205AbjDEI3J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 04:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbjDDVTJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Apr 2023 17:19:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D54459F6
-        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 14:18:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07FFB638C8
-        for <linux-mips@vger.kernel.org>; Tue,  4 Apr 2023 21:18:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0C7C433D2;
-        Tue,  4 Apr 2023 21:18:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680643132;
-        bh=Bd4XozHHNDWmhLnBLuJFvVK1v9kbAVXUGqJsndz1hUw=;
-        h=From:Date:Subject:To:Cc:From;
-        b=SHm+jHvIL+nwT3sGQ7w7RrxuYhhvNnO1wYO41r8cWb/e/IQ8YBqedTAceDFXZN53j
-         pdmFBKR/cDKAzEYP6Ckke2aOje4SkPgi9a7rR6812TWACTfbTeTaNXe1HrVU5bg0nI
-         HXRsbNbnX51JCMqja7Cr9i0KEX0ArTClM1GTTbq4x0xsBh+jRVowVg9sw98/HVC0DA
-         qNECAbmY/OwGwVZQD/uwVbxBp2dEhdnxHC8RGqs5qEt6LcR8aMLpdwJSWZqp0wokDn
-         KbAcipeLtGosFxvy2g1RCm+qGRunhc4C5MeDAIFxkwXmkTIlUZhaCojtqkx99s9fRY
-         uAudrgMRg9YDA==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Tue, 04 Apr 2023 14:18:41 -0700
-Subject: [PATCH] MIPS: Drop unused positional parameter in
- local_irq_{dis,en}able
+        with ESMTP id S237165AbjDEI3H (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 04:29:07 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9EBF2699
+        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 01:29:02 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pjyVe-0007pG-00; Wed, 05 Apr 2023 10:28:50 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E320EC2116; Wed,  5 Apr 2023 10:26:03 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 10:26:03 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, philmd@linaro.org,
+        sergei.shtylyov@gmail.com, aleksander.lobakin@intel.com
+Subject: Re: [PATCH v3 00/12] MIPS Virt board support
+Message-ID: <20230405082603.GA5556@alpha.franken.de>
+References: <20230404093351.4233-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230404-mips-unused-named-parameters-v1-1-71d6c656f1de@kernel.org>
-X-B4-Tracking: v=1; b=H4sIADCULGQC/x2NwQrDMAxDf6X4PEOaFgb7lbGD07itD8mCvY5B6
- b/P7UVCSDztYKzCBo9uB+WvmLyrh/7WwbRSXRgle4YY4hDGMGKRZrjVzThjpeLaSN0/rIZpiHm
- +90Q5EzgikTEmpTqtJ6SQ+ewsmvIsv+v3+TqOPwL0IpmHAAAA
-To:     tsbogend@alpha.franken.de
-Cc:     ndesaulniers@google.com, trix@redhat.com,
-        linux-mips@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1819; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Bd4XozHHNDWmhLnBLuJFvVK1v9kbAVXUGqJsndz1hUw=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCk6U6zVPj+I1fCY7nrq+RL+m1M57xwsSrjo+Wfjwd2tu
- SfvRmns7ihlYRDjYJAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATSWJh+F/hmX2ouL+gwXaL
- 8ynVTg9FJmn+aXwrV2799GD6s2T2h3IM/+t4yn68fMezdaH/bMZ37UfnvVpTuj+8tH1L9COhQ2+
- 61FkB
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404093351.4233-1-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When building with clang's integrated assembler, it points out that the
-CONFIG_CPU_HAS_DIEI versions of local_irq_enable and local_irq_disable
-have a named parameter that is not used in the body of the macro and it
-thinks that $8 is a positional parameter, rather than a register:
+On Tue, Apr 04, 2023 at 10:33:39AM +0100, Jiaxun Yang wrote:
+> Hi all,
+> 
+> This patchset adds support for the MIPS Virt board, which is based
+> on my QEMU patch [1].
+> 
+> It can work with all CPUs from MIPS Technologies, and also Loongson-2E,
+> Loongson-2F, Cavium Octeon, R4000.
+> 
+> Thanks to generic platform, there is nothing much to do for the platform
+> support, mostly decoupling CPU features with platform features, except for
+> last two patches.
+> 
+> Note that due to QEMU limitation, SMP support is currently broken for all
+> processors other than MIPS I6400/I6500. This is because QEMU is now treatiing
+> secundary CPUs as a VPE (MIPS Release 6 VP). I'm going to fix that after getting
+> virt board support merged in QEMU.
+> 
+> Thanks.
+> 
+> - Jiaxun
+> [1]: https://lore.kernel.org/qemu-devel/20230308000745.56394-1-philmd@linaro.org/
+> 
+> Jiaxun Yang (12):
+>   MIPS: Move declaration of bcache ops to cache.c
+>   MIPS: smp-cps: Disable coherence setup for unsupported ISA
+>   MIPS: mips-cm: Check availability of config registers
+>   MIPS: Octeon: Opt-out 4k_cache feature
+>   MIPS: cpu-features: Enable octeon_cache by cpu_type
+>   MIPS: c-octeon: Provide alternative SMP cache flush function
+>   MIPS: Octeon: Allow CVMSEG to be disabled
+>   MIPS: Loongson: Move arch cflags to MIPS top level Makefile
+>   MIPS: Loongson: Don't select platform features with CPU
+>   MIPS: Octeon: Disable CVMSEG by default on other platforms
+>   MIPS: Add board config for virt board
+>   MIPS: generic: Enable all CPUs supported by virt board in Kconfig
+> 
+>  arch/mips/Kconfig                           |  6 ++--
+>  arch/mips/Makefile                          | 38 +++++++++++++++++++++
+>  arch/mips/cavium-octeon/Kconfig             |  3 +-
+>  arch/mips/configs/generic/board-virt.config | 38 +++++++++++++++++++++
+>  arch/mips/include/asm/cache.h               |  2 ++
+>  arch/mips/include/asm/cpu-features.h        | 21 ++++++++++--
+>  arch/mips/include/asm/processor.h           |  7 +++-
+>  arch/mips/kernel/asm-offsets.c              |  3 ++
+>  arch/mips/kernel/cps-vec.S                  |  5 +++
+>  arch/mips/kernel/cpu-probe.c                |  2 ++
+>  arch/mips/kernel/mips-cm.c                  |  9 +++--
+>  arch/mips/kernel/smp-cps.c                  |  5 +++
+>  arch/mips/loongson2ef/Kconfig               |  3 ++
+>  arch/mips/loongson2ef/Platform              | 35 -------------------
+>  arch/mips/loongson64/Platform               | 16 ---------
+>  arch/mips/mm/c-octeon.c                     |  5 +++
+>  arch/mips/mm/c-r4k.c                        | 14 --------
+>  arch/mips/mm/cache.c                        | 19 +++++++++++
+>  18 files changed, 158 insertions(+), 73 deletions(-)
+>  create mode 100644 arch/mips/configs/generic/board-virt.config
+> 
+> -- 
+> 2.39.2 (Apple Git-143)
 
-  arch/mips/include/asm/asmmacro.h:48:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
-   .macro local_irq_enable reg=$8
-   ^
+series applied to mips-next.
 
-The comment above the function that performs this check in LLVM notes
-that the warning may trigger in this case, even though it is not
-problematic. It is easy enough to clean this up by just omitting the
-named parameter for this version of the macro, as it is entirely unused.
+Thomas.
 
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1415
-Link: https://github.com/llvm/llvm-project/commit/81c944cadb7f9e55b3517b7423a820e2577b9279
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/include/asm/asmmacro.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
-index 1c4438f3f2ab..067a635d3bc8 100644
---- a/arch/mips/include/asm/asmmacro.h
-+++ b/arch/mips/include/asm/asmmacro.h
-@@ -45,12 +45,12 @@
- #endif
- 
- #ifdef CONFIG_CPU_HAS_DIEI
--	.macro	local_irq_enable reg=t0
-+	.macro	local_irq_enable
- 	ei
- 	irq_enable_hazard
- 	.endm
- 
--	.macro	local_irq_disable reg=t0
-+	.macro	local_irq_disable
- 	di
- 	irq_disable_hazard
- 	.endm
-
----
-base-commit: 101f26c72825c5dba1dfe826e4202a9a04b435c6
-change-id: 20230404-mips-unused-named-parameters-b32df71aadda
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
