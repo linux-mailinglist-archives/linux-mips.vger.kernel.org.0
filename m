@@ -2,110 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780006D86A7
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 21:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0576D87AF
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 22:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjDETSd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 15:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S233117AbjDEUGw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 16:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjDETSc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 15:18:32 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E104C12;
-        Wed,  5 Apr 2023 12:18:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0E3615C00E4;
-        Wed,  5 Apr 2023 15:18:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 05 Apr 2023 15:18:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680722311; x=1680808711; bh=bE+E0Y1C9R+WPWsn9rc36pOCMKER1kFL5t/
-        J3nXSkvM=; b=BukNnHfAZxYDsFASjrk9opQ9o7F8nOt76VeWt7zjvRLfegXY6ld
-        3WRzgQnlAy678Lp5XjA8asAjwATG7PaCQh1ctXdEVZMta3WtsyjV7DzP3F6ZGWr4
-        t0D5DUJ2vdEoMp34xllFcuG9XFTYWtn7vrUz9PKL8m0L7bTnRndWdg/OG1+7LitK
-        rLW1mNU0hYSLCcRTM3RI1cJxIRbRMRvRxJB2Usr0QOgvXxng2kByDwZtaEz5jIw0
-        9l34gvWpIbcn08L8JBTVTvfbov5wkyhiu8s/tbbb60qPDWSE3uoPVsuvygcwQTs4
-        zz/2Hd8vMBfjW8XRGuY48WHOpS0D3rDy5UQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680722311; x=1680808711; bh=bE+E0Y1C9R+WPWsn9rc36pOCMKER1kFL5t/
-        J3nXSkvM=; b=mBzRuwmi/mH5BXBc0hxzJWMuNCjioL5desU9eaU//+9f3/YEoTX
-        6jt7qmS/umdvEWj2swpa5t1wgWyWLe1G0fuKZSDFM7db/dQc9+uIe3EFQnHTFlPZ
-        55AEAnsYagt9/09dvaTUGxLmkc/5000PhXWWn2OZLL8oAGQYAODLFJAiOaNOlqs3
-        Gtakgb1Sl53iaP/R6m1JilDgcVQ0imDp4aKrui1X4GDFSWbYZOD9RuZ7XNpjd7NV
-        uv89qdNSq8YDXVYmBNC6NLUemElP4e7WTuWjK7NjF0mEhuBDFZd50jtY2DwIYCJ0
-        aJX1VZ+p4j7w/Cfb/GVJl3rYYdZyVC3SsCw==
-X-ME-Sender: <xms:hsktZC4SbR8plVQVShy3o1Sw8eIabxCPNdZFadRGi6Lyx3DhDnEFzw>
-    <xme:hsktZL4tJE5UKk5M68Uz4SneFr13WBW9gn5Dv_cCkte1xUREh2PQG4tT95cbcn0eQ
-    WzmTUOhtpQP5m9X4_U>
-X-ME-Received: <xmr:hsktZBeGCK0aiqj9pZD5nzzUONLXAvHANBMioWf7ikPO_ITFCoib0cZToA_IX6pWtpqh>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgudefjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:hsktZPItMSlLhkAx8zfEIkAOM4OycdRprb_u-hIk4rembOsm1O-pEg>
-    <xmx:hsktZGLAkyzq2cH3bveUkLo6b-LhCbT_UsXFGlEBLiIu3u0GJzndDA>
-    <xmx:hsktZAyS_5Dw4xeNnYkRO2KxsQ9rVPVc-Bu3Kg3Vgkd7L3AdUuEyjw>
-    <xmx:h8ktZDWvlYa1Dun4724lVv4zwURsR0r5YKOM5PUzyetJk6g_rKFtPg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Apr 2023 15:18:28 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: Remove deprecated CONFIG_MIPS_CMP
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230405185128.15237-1-tsbogend@alpha.franken.de>
-Date:   Wed, 5 Apr 2023 20:18:17 +0100
-Cc:     John Crispin <john@phrozen.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
+        with ESMTP id S230465AbjDEUGv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 16:06:51 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D6F268B;
+        Wed,  5 Apr 2023 13:06:50 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 335K0Sot3654908
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Wed, 5 Apr 2023 13:00:29 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 335K0Sot3654908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023030901; t=1680724836;
+        bh=e+7idCFcOldUdf6Kn1N4qPSHOAd8AGbMfDqGpl68/MY=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=EcXIoUqgD3GVk8dx9ASffLO9ApOOB/n4lbb3fej1ORvYHN0/iMb/OoqoAXejO+Zl0
+         Rw/g8eHLmO+3g1cgp+fB4K8y/Tv66bULY41CG0VNoNe1xXssQzoSffnMPSdWphcYwf
+         ZzGlpNJKo4CsJ2a2nk0pmTpZD0wBYq7o8dQL4gvncAtMrlBPm5aJCuPjVQ630EH6kU
+         RTKT9BP7sk08N3WlXh3R+KcPbOQKrbUAmaN/sN+VsgfhU1MyFvVfA0l5ideAWavhGi
+         1hSCNrnhuIGoxexs5BAE4C0+dBVdtOYUI9AG6FgCpZuqROhanSelavXMtP8wX3ELEQ
+         7+LEVmStcCTzw==
+Date:   Wed, 05 Apr 2023 13:00:27 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.osdn.me>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?ISO-8859-1?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4=5D_Kconfig=3A_introduce_HAS=5FI?= =?US-ASCII?Q?OPORT_option_and_select_it_as_necessary?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
+References: <20230323163354.1454196-1-schnelle@linux.ibm.com> <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
+Message-ID: <B1EC1AC7-6BB5-4B66-B171-24687C3CBFB3@zytor.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <2559C525-E9DC-43AA-ADBD-B2C2262DA760@flygoat.com>
-References: <20230405185128.15237-1-tsbogend@alpha.franken.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On April 5, 2023 8:12:38 AM PDT, Niklas Schnelle <schnelle@linux=2Eibm=2Eco=
+m> wrote:
+>On Thu, 2023-03-23 at 17:33 +0100, Niklas Schnelle wrote:
+>> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/=
+O
+>> Port access=2E In a future patch HAS_IOPORT=3Dn will disable compilatio=
+n of
+>> the I/O accessor functions inb()/outb() and friends on architectures
+>> which can not meaningfully support legacy I/O spaces such as s390=2E
+>>=20
+>> The following architectures do not select HAS_IOPORT:
+>>=20
+>> * ARC
+>> * C-SKY
+>> * Hexagon
+>> * Nios II
+>> * OpenRISC
+>> * s390
+>> * User-Mode Linux
+>> * Xtensa
+>>=20
+>> All other architectures select HAS_IOPORT at least conditionally=2E
+>>=20
+>> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
+>> for HAS_IOPORT specific sections will be added in subsequent patches on
+>> a per subsystem basis=2E
+>>=20
+>> Co-developed-by: Arnd Bergmann <arnd@kernel=2Eorg>
+>> Signed-off-by: Arnd Bergmann <arnd@kernel=2Eorg>
+>> Acked-by: Johannes Berg <johannes@sipsolutions=2Enet> # for ARCH=3Dum
+>> Acked-by: Geert Uytterhoeven <geert@linux-m68k=2Eorg>
+>> Signed-off-by: Niklas Schnelle <schnelle@linux=2Eibm=2Ecom>
+>> ---
+>> Note: This patch is the initial patch of a larger series[0]=2E This pat=
+ch
+>> introduces the HAS_IOPORT config option while the rest of the series ad=
+ds
+>> driver dependencies and the final patch removes inb() / outb() and frie=
+nds on
+>> platforms that don't support them=2E=20
+>>=20
+>> Thus each of the per-subsystem patches is independent from each other b=
+ut
+>> depends on this patch while the final patch depends on the whole series=
+=2E Thus
+>> splitting this initial patch off allows the per-subsytem HAS_IOPORT dep=
+endency
+>> addition be merged separately via different trees without breaking the =
+build=2E
+>>=20
+>> [0] https://lore=2Ekernel=2Eorg/lkml/20230314121216=2E413434-1-schnelle=
+@linux=2Eibm=2Ecom/
+>>=20
+>> Changes since v3:
+>> - List archs without HAS_IOPORT in commit message (Arnd)
+>> - Select HAS_IOPORT for LoongArch (Arnd)
+>> - Use "select HAS_IOPORT if (E)ISA || =2E=2E" instead of a "depends on"=
+ for (E)ISA
+>>   for m68k and parisc
+>> - Select HAS_IOPORT with config GSC on parisc (Arnd)
+>> - Drop "depends on HAS_IOPORT" for um's config ISA (Johannes)
+>> - Drop "depends on HAS_IOPORT" for config ISA on x86 and parisc where i=
+t is
+>>   always selected (Arnd)
+>>=20
+>
+>Gentle ping=2E As far as I can tell this hasn't been picked to any tree
+>sp far but also hasn't seen complains so I'm wondering if I should send
+>a new version of the combined series of this patch plus the added
+>HAS_IOPORT dependencies per subsystem or wait until this is picked up=2E
+>
+>Thanks,
+>Niklas
+>
+>
 
+You need this on a system supporting not just ISA but also PCI=2E
 
-> 2023=E5=B9=B44=E6=9C=885=E6=97=A5 19:51=EF=BC=8CThomas Bogendoerfer =
-<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Commit 5cac93b35c14 ("MIPS: Deprecate CONFIG_MIPS_CMP") deprecated
-> CONFIG_MIPS_CMP and after 9 years it's time to remove it.
->=20
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> =E2=80=94
-
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Thanks
-- Jiaxun=
+Typically on non-x86 architectures this is simply mapped into a memory win=
+dow=2E
