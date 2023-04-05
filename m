@@ -2,117 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A196D8631
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 20:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB00C6D807F
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 17:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjDESnO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 14:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S238694AbjDEPGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 11:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDESnN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 14:43:13 -0400
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6243519BD
-        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 11:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9w+mHpl3Feo9gU6TGM0RoWAtGMwIO5vz3Gl4AH/wd0s=; b=ZvxTGezmCbRayrfaajPz6xpEHS
-        9xqTZcht8r4gHITGoiwsva82Nok6b15BGWuZKWSrLl+I3zBJjcFwf+UVlJquHBRv6wFvYI9XwrFAK
-        AgzAnA6iLxp8/KslBLav3VPrwP7yzajCOoDMluwwA0p5IDJNk2ky2i4WBjsguubUmD9qlk9wIZdLh
-        Rs9LU80gk8BAFm6YxVWrvCkmN0PF+4w7b3AUJGiu8cG62CLZzIb1Vo9yu+vnZpxcqYUXpp9KjjPdh
-        et6d+RYaSjzfpPU1FvXvLAARE6lEgkgpZ0BcGTPgYxK70fO1YQVl313vPOEpltdyn9itg7zaF7T+j
-        NqJK3XzQ==;
-Received: from ip98-183-112-29.ok.ok.cox.net ([98.183.112.29]:57812 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <david@lechnology.com>)
-        id 1pk4gc-0004aP-2T;
-        Wed, 05 Apr 2023 11:04:35 -0400
-Message-ID: <2c8c6e3e-835e-f545-2a57-8e037d32fe9b@lechnology.com>
-Date:   Wed, 5 Apr 2023 10:04:28 -0500
+        with ESMTP id S238666AbjDEPGD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 11:06:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130C4E5;
+        Wed,  5 Apr 2023 08:05:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E984822926;
+        Wed,  5 Apr 2023 15:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680707157; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=g5CNiBMyJmGfOboPN85iL6BEAbMbhCK1z8h/E7PJqO8=;
+        b=w8tf3DJbATFS2jgiySieo5lgHacr0/X4t8O83kSm+JjUTN7INy+KEE0c6QKy2YQQEG1D51
+        ei/9VshpEuJZ8SmDOnR/EjlVwb3io8xNrPAvyiDEaO/puZewQ0rt7tBgAYItRDRs1brqRE
+        qzs1tuAkBaBxL74Ueu6ptbgKfBk5KMI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680707157;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=g5CNiBMyJmGfOboPN85iL6BEAbMbhCK1z8h/E7PJqO8=;
+        b=NJtJ5rJLvESSn/PDRi2v9Tc541wLbJpWwnGJQVN5sUOfOKv49P3yAdDLaj2lKracLovScc
+        sc9Vq2L2x0GeLvDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85CA413A10;
+        Wed,  5 Apr 2023 15:05:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aFHUH1WOLWTPIAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 05 Apr 2023 15:05:57 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 00/18] arch: Consolidate <asm/fb.h>
+Date:   Wed,  5 Apr 2023 17:05:36 +0200
+Message-Id: <20230405150554.30540-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 21/65] clk: davinci: da8xx-cfgchip: Add a
- determine_rate hook
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-21-9a1358472d52@cerno.tech>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-21-9a1358472d52@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,18 +71,87 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/4/23 5:11 AM, Maxime Ripard wrote:
-> The Davinci DA8xxx cfgchip mux clock implements a mux with a set_parent
-> hook, but doesn't provide a determine_rate implementation.
-> 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
-> 
+Various architectures provide <arm/fb.h> with helpers for fbdev
+framebuffer devices. Share the contained code where possible. There
+is already <asm-generic/fb.h>, which implements generic (as in
+'empty') functions of the fbdev helpers. The header was added in
+commit aafe4dbed0bf ("asm-generic: add generic versions of common
+headers"), but never used.
 
-As mentioned in my previous review, parent is selected by device
-tree and should never be changed after init.
+Each per-architecture header file declares and/or implements fbdev
+helpers and defines a preprocessor token for each. The generic
+header then provides the remaining helpers. It works like the I/O
+helpers in <asm/io.h>.
 
+For PARISC, the architecture helpers are mixed up with helpers
+for the system's STI graphics firmware. We first move the STI code
+to appropriate locations under video/ and then move the architecture
+helper under arch/parisc.
+
+For Sparc, there's an additional patch that moves the implementation
+from the header into a source file. This allows to avoid some include
+statements in the header file.
+
+Built on arm, arm64, m68k, mips, parisc, powerpc, sparc and x86.
+
+Thomas Zimmermann (18):
+  fbdev: Prepare generic architecture helpers
+  arch/arc: Implement <asm/fb.h> with generic helpers
+  arch/arm: Implement <asm/fb.h> with generic helpers
+  arch/arm64: Implement <asm/fb.h> with generic helpers
+  arch/ia64: Implement <asm/fb.h> with generic helpers
+  arch/loongarch: Implement <asm/fb.h> with generic helpers
+  arch/m68k: Implement <asm/fb.h> with generic helpers
+  arch/mips: Implement <asm/fb.h> with generic helpers
+  video: Remove trailing whitespaces
+  video: Move HP PARISC STI core code to shared location
+  arch/parisc: Remove trailing whitespaces
+  arch/parisc: Implement fb_is_primary_device() under arch/parisc
+  arch/parisc: Implement <asm/fb.h> with generic helpers
+  arch/powerpc: Implement <asm/fb.h> with generic helpers
+  arch/sh: Implement <asm/fb.h> with generic helpers
+  arch/sparc: Implement fb_is_primary_device() in source file
+  arch/sparc: Implement <asm/fb.h> with generic helpers
+  arch/x86: Implement <asm/fb.h> with generic helpers
+
+ arch/arc/include/asm/fb.h                     |  11 +-
+ arch/arm/include/asm/fb.h                     |  10 +-
+ arch/arm64/include/asm/fb.h                   |  10 +-
+ arch/ia64/include/asm/fb.h                    |  11 +-
+ arch/loongarch/include/asm/fb.h               |  10 +-
+ arch/m68k/include/asm/fb.h                    |  10 +-
+ arch/mips/include/asm/fb.h                    |  10 +-
+ arch/parisc/Makefile                          |   4 +-
+ arch/parisc/include/asm/fb.h                  |  17 +-
+ arch/parisc/video/Makefile                    |   3 +
+ arch/parisc/video/fbdev.c                     |  27 +++
+ arch/powerpc/include/asm/fb.h                 |   8 +-
+ arch/sh/include/asm/fb.h                      |  10 +-
+ arch/sparc/Makefile                           |   1 +
+ arch/sparc/include/asm/fb.h                   |  30 ++--
+ arch/sparc/video/Makefile                     |   3 +
+ arch/sparc/video/fbdev.c                      |  24 +++
+ arch/x86/include/asm/fb.h                     |  11 +-
+ drivers/video/Kconfig                         |   7 +
+ drivers/video/Makefile                        |   1 +
+ drivers/video/console/Kconfig                 |   1 +
+ drivers/video/console/Makefile                |   4 +-
+ drivers/video/console/sticon.c                |   6 +-
+ drivers/video/fbdev/Kconfig                   |   3 +-
+ drivers/video/fbdev/stifb.c                   | 158 +++++++++---------
+ drivers/video/{console => }/sticore.c         | 123 ++++++--------
+ include/asm-generic/fb.h                      |  20 ++-
+ .../video/fbdev => include/video}/sticore.h   |  16 +-
+ 28 files changed, 297 insertions(+), 252 deletions(-)
+ create mode 100644 arch/parisc/video/Makefile
+ create mode 100644 arch/parisc/video/fbdev.c
+ create mode 100644 arch/sparc/video/Makefile
+ create mode 100644 arch/sparc/video/fbdev.c
+ rename drivers/video/{console => }/sticore.c (95%)
+ rename {drivers/video/fbdev => include/video}/sticore.h (99%)
+
+
+base-commit: a7180debb9c631375684f4d717466cfb9f238660
+-- 
+2.40.0
 
