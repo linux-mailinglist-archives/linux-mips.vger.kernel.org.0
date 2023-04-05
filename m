@@ -2,56 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1A56D7ECE
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 16:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0DB6D7EC7
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Apr 2023 16:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238496AbjDEOLb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Apr 2023 10:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S238545AbjDEOLU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Apr 2023 10:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238518AbjDEOLJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 10:11:09 -0400
+        with ESMTP id S238302AbjDEOKy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Apr 2023 10:10:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124295FFD
-        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 07:10:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820B461A7
+        for <linux-mips@vger.kernel.org>; Wed,  5 Apr 2023 07:10:23 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pk3q6-0003FA-5Y; Wed, 05 Apr 2023 16:10:18 +0200
+        id 1pk3q4-0003FF-W1; Wed, 05 Apr 2023 16:10:17 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pk3q3-009AbX-JG; Wed, 05 Apr 2023 16:10:15 +0200
+        id 1pk3q3-009Abf-Ve; Wed, 05 Apr 2023 16:10:15 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pk3q2-00AmTj-If; Wed, 05 Apr 2023 16:10:14 +0200
+        id 1pk3q2-00AmTp-Vv; Wed, 05 Apr 2023 16:10:15 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de,
-        linux-mips@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 00/10] usb: musb: Convert to platform remove callback returning void
-Date:   Wed,  5 Apr 2023 16:09:59 +0200
-Message-Id: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 02/10] usb: musb: jz4740: Convert to platform remove callback returning void
+Date:   Wed,  5 Apr 2023 16:10:01 +0200
+Message-Id: <20230405141009.3400693-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
+References: <20230405141009.3400693-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2106; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=y5P77BkcrdOtb/jU7g30i0OmKFgbBK/VXLhzJ7hsVXY=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhTdRn1L4VMMF7t5Ctkm2O4pe/vUrsfKRt9EMbCBXYvpZ 3b/7a2djMYsDIxcDLJiiiz2jWsyrarkIjvX/rsMM4iVCWQKAxenAEyE5Sz7/4qp33SjuSouaNRP UuliYeFZvCvTrLZIsOyg1qGT1+VuVcu6/zGWndV/ItrbIkzW8kntxSLvdQ4rrtiHqfY+89CcNKP 3xZpz8ytrS51+ia9bJ7LA4XLlH1bX3RMPztzuE8NXXt+xYWLk5eApPwQCHr1J/P59mWGe7bagWQ /M1BeFeX/1UFgUNcNly6lNAvNvF70MKrOz1d7jZak0rYqpZnfe+1Ma5+V9xPrOGs6pk1g4Z23Ai VMWB40F0ji2JL169jc2W+mTZ8dy5cCuB8UOZqGnJAU0/b/1JXscqeyx8OZ3TIm9cKHjt9essnt8 2TN2TpXoVNgZ3pkTddNQ90LqdzaJevknxjFcu5LKPCoA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1655; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=LInJ1VCltnR5zQZF3u3QFfDFUTQVLF2/3mjdDDUK2yk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkLYEyTrllnyAk+4A0JArG+9Z/8Sf3w+R94F9Np ubxA2IrkuiJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZC2BMgAKCRCPgPtYfRL+ TjL3B/9f8A8Z7sDaUMrpsotRlJ7ybY+bjEYSC1gxqkgn4tREYbIL1JbtbPZWL/TpGStVeFj5cMr 0odUsl8fFZCjUekBIrcoTyh8L01dd5OgNaK8984RFHipQs9cpN1F/akKcrxZwyWe2CAtxqd3MHg t9QO++Kc8bX2u4oiQlsEbC7kulRlOCUSZrAYFa0LV1UqUNi+Ii0cR2qj0DwekW9bcbkwyQdxSfq AYmp5OkU/BIKhto8XMg3n1dKD1TN4oSw/LWkCApRVpJ74V+FKz4xYLGyLBNznAIeWvoMnFcvS39 kTXzmrmau+fHdXFuyaIyyYTxx4eD6HiN2vOyiT5/3fPSbn9o
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -67,49 +56,51 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is (mostly) ignored
+and this typically results in resource leaks. To improve here there is a
+quest to make the remove callback return void. In the first step of this
+quest all drivers are converted to .remove_new() which already returns
+void.
 
-this patch series adapts the platform drivers below drivers/usb/musb
-to use the .remove_new() callback. Compared to the traditional .remove()
-callback .remove_new() returns no value. This is a good thing because
-the driver core doesn't (and cannot) cope for errors during remove. The
-only effect of a non-zero return value in .remove() is that the driver
-core emits a warning. The device is removed anyhow and an early return
-from .remove() usually yields a resource leak.
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-By changing the remove callback to return void driver authors cannot
-reasonably assume any more that there is some kind of cleanup later.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/usb/musb/jz4740.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-All drivers touched here returned zero unconditionally in their remove
-callback, so they could all be converted trivially to .remove_new().
-
-Best regards
-Uwe
-
-Uwe Kleine-König (10):
-  usb: musb: da8xx: Convert to platform remove callback returning void
-  usb: musb: jz4740: Convert to platform remove callback returning void
-  usb: musb: mediatek: Convert to platform remove callback returning void
-  usb: musb: mpfs: Convert to platform remove callback returning void
-  usb: musb: musb_core: Convert to platform remove callback returning void
-  usb: musb: musb_dsps: Convert to platform remove callback returning void
-  usb: musb: omap2430: Convert to platform remove callback returning void
-  usb: musb: sunxi: Convert to platform remove callback returning void
-  usb: musb: tusb6010: Convert to platform remove callback returning void
-  usb: musb: ux500: Convert to platform remove callback returning void
-
- drivers/usb/musb/da8xx.c     | 6 ++----
- drivers/usb/musb/jz4740.c    | 6 ++----
- drivers/usb/musb/mediatek.c  | 6 ++----
- drivers/usb/musb/mpfs.c      | 6 ++----
- drivers/usb/musb/musb_core.c | 5 ++---
- drivers/usb/musb/musb_dsps.c | 6 ++----
- drivers/usb/musb/omap2430.c  | 6 ++----
- drivers/usb/musb/sunxi.c     | 6 ++----
- drivers/usb/musb/tusb6010.c  | 6 ++----
- drivers/usb/musb/ux500.c     | 6 ++----
- 10 files changed, 20 insertions(+), 39 deletions(-)
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index c7b1d2a394d9..5aabdd7e2511 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -308,14 +308,12 @@ static int jz4740_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int jz4740_remove(struct platform_device *pdev)
++static void jz4740_remove(struct platform_device *pdev)
+ {
+ 	struct jz4740_glue *glue = platform_get_drvdata(pdev);
+ 
+ 	platform_device_unregister(glue->pdev);
+ 	clk_disable_unprepare(glue->clk);
+-
+-	return 0;
+ }
+ 
+ static const struct of_device_id jz4740_musb_of_match[] = {
+@@ -327,7 +325,7 @@ MODULE_DEVICE_TABLE(of, jz4740_musb_of_match);
+ 
+ static struct platform_driver jz4740_driver = {
+ 	.probe		= jz4740_probe,
+-	.remove		= jz4740_remove,
++	.remove_new	= jz4740_remove,
+ 	.driver		= {
+ 		.name	= "musb-jz4740",
+ 		.of_match_table = jz4740_musb_of_match,
 -- 
 2.39.2
+
