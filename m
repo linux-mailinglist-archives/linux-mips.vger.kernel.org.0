@@ -2,162 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94856D9038
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Apr 2023 09:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF95D6D9178
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Apr 2023 10:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbjDFHMU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Apr 2023 03:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S235912AbjDFI0K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Apr 2023 04:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbjDFHMT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Apr 2023 03:12:19 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3252E55;
-        Thu,  6 Apr 2023 00:12:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 91E2E5C0096;
-        Thu,  6 Apr 2023 03:12:15 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 06 Apr 2023 03:12:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680765135; x=1680851535; bh=IHLCbFaBZU/91yw5kszxiEKx+gZnH+tjq4Y
-        W7whSqlQ=; b=ifCm37L0/5FfP5o7BgNK08W2hQLkUugFk1CNrH3YB9Qa6L7/L4X
-        g6pIx1Z9yAidTl69rRsEsNMy8d2/pEeFVMVCr3WghzwjNR/ClH6yfDTrru3E25DQ
-        pRjr8B0AS0qDQrc+O7GDIzTTCkXSSwQP3cjoDYC77Tcjrgfas1Unib7YLmt0ILus
-        iUu1lpBuvYe0EMezQVOxxFx/lBKpDavRJ4EL7Ypctsh68Ko3ylE8WbPc4n7xpVx9
-        0qcfat0eB9qEP9HQglrE+hybwzdai2BU2oOzykF4RuYggsR62gbOihMjNzF9p1vA
-        5kY9RcRS+LedvSCpG3VX/qFzJD9X3uWLWtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680765135; x=1680851535; bh=IHLCbFaBZU/91yw5kszxiEKx+gZnH+tjq4Y
-        W7whSqlQ=; b=WrvZiGgVOFnTKDCWxuJFTBHt8N/AeSE5z3FRbhBIa7sN46gsa5N
-        guiWdekavibjbMhYD1J3z4mqe8+OtvaLq0I4KiFPNzNuk/a/GJsyExdBCr4ETZyO
-        h/76CjDCUtepGCA86Xfy7coofV1iqBTKal4UkoaeplXzLluztRmQC20KS4Ndeaus
-        VNZUeaNeCV8VHZYMONsv9jNbUuSTG1oFHFHdfVTo1URiPJ8L8kkqiyp9pRQjDipH
-        fAevElt/AGzYSiYS5lGiFPJBc+uR17hpVFYjujC499lc7XOoxhSHufXwWm7piVIy
-        AV9iOfC8ebqMLfubzHlxUqo70Sh3qfreO7g==
-X-ME-Sender: <xms:znAuZO4U5IbX8CQzQqzzH_4PxcAql6S_zxhG7DR2fYxYQbMYEHnj7g>
-    <xme:znAuZH7ZSFFZXLJW3NRRvdTkvQoTHUYqVJQ2QDw14IsMqR0muqtIabdIqJQVIwLV1
-    wGRMEdcd3oLJ1n94-M>
-X-ME-Received: <xmr:znAuZNcm9MphzTrenf1JAx56T4hGpEet7gX00Tr-fFJxMBHfEBcXl0Ca1-Ar8NjGwcPW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejvddguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:znAuZLIf8Um38yCDigq3NfEJ8zMCVUE-_iqVAEccn6EMqyDtMVCRfQ>
-    <xmx:znAuZCIvgO4l_vb9ZM7nTIEB6wDOu7Jaf3njnDJE-cYwcxY6RKt33w>
-    <xmx:znAuZMw5KydGXL3bON8w0ZszqoT6wuVIMWtHI2lo3lRgw0kJ9IE7Cg>
-    <xmx:z3AuZECSnkJC1VPcrhvgTd2MszZ3G7EGxLvYt7fE0Ft0qDADXH4VQw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Apr 2023 03:12:12 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH v4 0/3] Use dma_default_coherent for devicetree default
- coherency
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230401091531.47412-1-jiaxun.yang@flygoat.com>
-Date:   Thu, 6 Apr 2023 08:12:01 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        with ESMTP id S235868AbjDFI0J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Apr 2023 04:26:09 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85A57AA9
+        for <linux-mips@vger.kernel.org>; Thu,  6 Apr 2023 01:26:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-83-D1tdxv4cNzaW0ds0adK_fQ-1; Thu, 06 Apr 2023 09:25:59 +0100
+X-MC-Unique: D1tdxv4cNzaW0ds0adK_fQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 6 Apr
+ 2023 09:25:57 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 6 Apr 2023 09:25:57 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Dave Hansen' <dave.hansen@intel.com>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        iommu@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C51B954E-FA96-450D-BB4F-D8D9D1FFC525@flygoat.com>
-References: <20230401091531.47412-1-jiaxun.yang@flygoat.com>
-To:     Christoph Hellwig <hch@lst.de>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>
+Subject: RE: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+Thread-Topic: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+Thread-Index: AQHZZ9zo4aQfYkHe8kGrF8tSkNZCGa8d8QYA
+Date:   Thu, 6 Apr 2023 08:25:57 +0000
+Message-ID: <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
+References: <20230405141710.3551-1-ubizjak@gmail.com>
+ <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-> 2023=E5=B9=B44=E6=9C=881=E6=97=A5 10:15=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi all,
->=20
-> This series split out second half of my previous series
-> "[PATCH 0/4] MIPS DMA coherence fixes".
->=20
-> It intends to use dma_default_coherent to determine the default =
-coherency of
-> devicetree probed devices instead of hardcoding it with Kconfig =
-options.
->=20
-> For some MIPS systems, dma_default_coherent is determined with either
-> bootloader or hardware registers in platform initilization code, and =
-devicetree
-> does not explicility specify the coherency of the device, so we need =
-the ability
-> to change the default coherency of devicetree probed devices.
->=20
-> For other platforms that supports noncoherent, dma_default_coherent is =
-a fixed
-> value set by arch code. It's defaulted to false for most archs except =
-RISC-V
-> and powerpc in some cases.
-
-Ping.
-
-Is there any issue remain in this series?
-
-Thanks
-Jiaxun
-
->=20
-> Thanks
-> - Jiaxun
-> ---
-> v2:
->  - Add PATCH 1 to help with backporting
->  - Use Kconfig option to set dma_default_coherent=20
->=20
-> v3:
->  - Style fixes
->  - Squash setting ARCH_DMA_DEFAULT_COHERENT into PATCH 4
->  - Setting ARCH_DMA_DEFAULT_COHERENT for PowerPC
->=20
-> v4:
->  - Drop first patch
->=20
-> Jiaxun Yang (3):
->  dma-mapping: Provide a fallback dma_default_coherent
->  dma-mapping: Provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
->  of: address: Always use dma_default_coherent for default coherency
->=20
-> arch/powerpc/Kconfig        | 2 +-
-> arch/riscv/Kconfig          | 2 +-
-> drivers/of/Kconfig          | 4 ----
-> drivers/of/address.c        | 2 +-
-> include/linux/dma-map-ops.h | 2 ++
-> kernel/dma/Kconfig          | 7 +++++++
-> kernel/dma/mapping.c        | 6 +++++-
-> 7 files changed, 17 insertions(+), 8 deletions(-)
->=20
-> --=20
-> 2.39.2 (Apple Git-143)
->=20
+RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDUgQXByaWwgMjAyMyAxNzozNw0KPiANCj4gT24g
+NC81LzIzIDA3OjE3LCBVcm9zIEJpemphayB3cm90ZToNCj4gPiBBZGQgZ2VuZXJpYyBhbmQgdGFy
+Z2V0IHNwZWNpZmljIHN1cHBvcnQgZm9yIGxvY2Fseyw2NH1fdHJ5X2NtcHhjaGcNCj4gPiBhbmQg
+d2lyZSB1cCBzdXBwb3J0IGZvciBhbGwgdGFyZ2V0cyB0aGF0IHVzZSBsb2NhbF90IGluZnJhc3Ry
+dWN0dXJlLg0KPiANCj4gSSBmZWVsIGxpa2UgSSdtIG1pc3Npbmcgc29tZSBjb250ZXh0Lg0KPiAN
+Cj4gV2hhdCBhcmUgdGhlIGFjdHVhbCBlbmQgdXNlciB2aXNpYmxlIGVmZmVjdHMgb2YgdGhpcyBz
+ZXJpZXM/ICBJcyB0aGVyZSBhDQo+IG1lYXN1cmFibGUgZGVjcmVhc2UgaW4gcGVyZiBvdmVyaGVh
+ZD8gIFdoeSBnbyB0byBhbGwgdGhpcyB0cm91YmxlIGZvcg0KPiBwZXJmPyAgV2hvIGVsc2Ugd2ls
+bCB1c2UgbG9jYWxfdHJ5X2NtcHhjaGcoKT8NCg0KSSdtIGFzc3VtaW5nIHRoZSBsb2NhbF94eHgg
+b3BlcmF0aW9ucyBvbmx5IGhhdmUgdG8gYmUgc2F2ZSB3cnQgaW50ZXJydXB0cz8NCk9uIHg4NiBp
+dCBpcyBwb3NzaWJsZSB0aGF0IGFuIGFsdGVybmF0ZSBpbnN0cnVjdGlvbiBzZXF1ZW5jZQ0KdGhh
+dCBkb2Vzbid0IHVzZSBhIGxvY2tlZCBpbnN0cnVjdGlvbiBtYXkgYWN0dWFsbHkgYmUgZmFzdGVy
+IQ0KDQpBbHRob3VnaCwgbWF5YmUsIGFueSBraW5kIG9mIGxvY2tlZCBjbXB4Y2hnIGp1c3QgbmVl
+ZHMgdG8gZW5zdXJlDQp0aGUgY2FjaGUgbGluZSBpc24ndCAnc3RvbGVuJywgc28gYXBhcnQgZnJv
+bSBwb3NzaWJsZSBzbGlnaHQNCmRlbGF5cyBvbiBhbm90aGVyIGNwdSB0aGF0IGdldHMgYSBjYWNo
+ZSBtaXNzIGZvciB0aGUgbGluZSBpbg0KYWxsIG1ha2VzIGxpdHRsZSBkaWZmZXJlbmNlLg0KVGhl
+IGNhY2hlIGxpbmUgbWlzcyBjb3N0cyBhIGxvdCBhbnl3YXksIGxpbmUgYm91bmNpbmcgbW9yZQ0K
+YW5kIGlzIGJlc3QgYXZvaWRlZC4NClNvIGlzIHRoZXJlIGFjdHVhbGx5IG11Y2ggb2YgYSBiZW5l
+Zml0IGF0IGFsbD8NCg0KQ2xlYXJseSB0aGUgdHJ5X2NtcHhjaGcgaGVscCAtIGJ1dCB0aGF0IGlz
+IGEgZGlmZmVyZW50IGlzc3VlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
+a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
+IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
