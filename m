@@ -2,31 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF95D6D9178
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Apr 2023 10:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A9F6D91CF
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Apr 2023 10:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235912AbjDFI0K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Apr 2023 04:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
+        id S235958AbjDFIjH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Apr 2023 04:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235868AbjDFI0J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Apr 2023 04:26:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85A57AA9
-        for <linux-mips@vger.kernel.org>; Thu,  6 Apr 2023 01:26:02 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-83-D1tdxv4cNzaW0ds0adK_fQ-1; Thu, 06 Apr 2023 09:25:59 +0100
-X-MC-Unique: D1tdxv4cNzaW0ds0adK_fQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 6 Apr
- 2023 09:25:57 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 6 Apr 2023 09:25:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Uros Bizjak <ubizjak@gmail.com>,
+        with ESMTP id S235893AbjDFIjF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Apr 2023 04:39:05 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E1C7686;
+        Thu,  6 Apr 2023 01:38:55 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id h8so11791668qko.8;
+        Thu, 06 Apr 2023 01:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680770335; x=1683362335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NlaEdqHEUWRBg+c+TC3rtvHvp43Ws6SzpzXrskt0NuQ=;
+        b=FcEFN1D0ri75uBu6r0ZHhcejyvqKNx6oJ/kCWbsPjgbRTXUK+5sFyIyJ41szjzh2vz
+         xVhDHcBOXBBaBl2763I8yyGNI4Y1fwMQfazSTTslgohL9KsMOTUPXNHmYVexNch0+1d0
+         Uq60kWvODRXwWd5fupV+fGBAPS0e5NQtrRQ18m1KgxMA+htmCUOAemJHSj13GyKNBBwP
+         LnTUsXPtIhkrA3+iVp9wttq9oZ6eterHG0fTb3sDXzAZV2onLK9uY4a0ZVJ4Q0/1Ldd7
+         h/usCfUZRrxzV7W5BNMQNSXEN2Am7bp6nL8tc/66t7LSwmSuBBvt43oRFVcj6mjWFab7
+         P2Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680770335; x=1683362335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NlaEdqHEUWRBg+c+TC3rtvHvp43Ws6SzpzXrskt0NuQ=;
+        b=QqKE/jumRQnNiz5fTD4GPttkurePn1RtSNihaQEBlOsHzWBToVpKdol7a3fhQycB5p
+         ysW/vlWrc9NLDv5juul2EiT6DUoMflCFTt9nPIOkC7l6Ky1LOY/KHkKrC+oIMY2h9gd8
+         qoJbcKzjSLB0Uix3hu83W3cX7aOr0VEr04fds2dmAlGHT/FZXTYDWPZBJf+tw2HTIZho
+         kYUKQNd8k45EWwoIQzzLB2A9PN3bq/b/ZJC7bwla7d9R+E1mEBpyh9DXYsgF7BGYWHgv
+         v8jbx0gM2ZuXlQ5Xw1d+sfYL6ymwbgg2/h7eaqR0lDGKoIom6uvNYFjWdpk8xjBkPghr
+         rt1A==
+X-Gm-Message-State: AAQBX9ccnf/DzmPNKDfFxaU35dpMpJvRn2VA0PyX+Yu6sHj5N99IsPJS
+        gVApIrcE169PK0W+O2zivv42BOM5UT6UIgHTFuo=
+X-Google-Smtp-Source: AKy350YwsvugLcxPSe8VSwbY+2C98qYCdXwWk5K70J+qErUm4ut29wpYfoU3MlskEoJeNSNDzBP/SXVDE5xtKbu7RqE=
+X-Received: by 2002:a05:620a:1a28:b0:742:71e6:b8d4 with SMTP id
+ bk40-20020a05620a1a2800b0074271e6b8d4mr2043793qkb.6.1680770334780; Thu, 06
+ Apr 2023 01:38:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230405141710.3551-1-ubizjak@gmail.com> <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+ <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
+In-Reply-To: <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 6 Apr 2023 10:38:43 +0200
+Message-ID: <CAFULd4YPM18B6Nv=-rNd=D0TmCbn64oLvgbDJ3CWc9DsdJG8gg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
         "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
         "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
@@ -34,50 +63,34 @@ To:     'Dave Hansen' <dave.hansen@intel.com>,
         "x86@kernel.org" <x86@kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Richard Henderson <richard.henderson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Jun Yi <yijun@loongson.cn>
-Subject: RE: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Thread-Topic: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Thread-Index: AQHZZ9zo4aQfYkHe8kGrF8tSkNZCGa8d8QYA
-Date:   Thu, 6 Apr 2023 08:25:57 +0000
-Message-ID: <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
-References: <20230405141710.3551-1-ubizjak@gmail.com>
- <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,26 +99,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDUgQXByaWwgMjAyMyAxNzozNw0KPiANCj4gT24g
-NC81LzIzIDA3OjE3LCBVcm9zIEJpemphayB3cm90ZToNCj4gPiBBZGQgZ2VuZXJpYyBhbmQgdGFy
-Z2V0IHNwZWNpZmljIHN1cHBvcnQgZm9yIGxvY2Fseyw2NH1fdHJ5X2NtcHhjaGcNCj4gPiBhbmQg
-d2lyZSB1cCBzdXBwb3J0IGZvciBhbGwgdGFyZ2V0cyB0aGF0IHVzZSBsb2NhbF90IGluZnJhc3Ry
-dWN0dXJlLg0KPiANCj4gSSBmZWVsIGxpa2UgSSdtIG1pc3Npbmcgc29tZSBjb250ZXh0Lg0KPiAN
-Cj4gV2hhdCBhcmUgdGhlIGFjdHVhbCBlbmQgdXNlciB2aXNpYmxlIGVmZmVjdHMgb2YgdGhpcyBz
-ZXJpZXM/ICBJcyB0aGVyZSBhDQo+IG1lYXN1cmFibGUgZGVjcmVhc2UgaW4gcGVyZiBvdmVyaGVh
-ZD8gIFdoeSBnbyB0byBhbGwgdGhpcyB0cm91YmxlIGZvcg0KPiBwZXJmPyAgV2hvIGVsc2Ugd2ls
-bCB1c2UgbG9jYWxfdHJ5X2NtcHhjaGcoKT8NCg0KSSdtIGFzc3VtaW5nIHRoZSBsb2NhbF94eHgg
-b3BlcmF0aW9ucyBvbmx5IGhhdmUgdG8gYmUgc2F2ZSB3cnQgaW50ZXJydXB0cz8NCk9uIHg4NiBp
-dCBpcyBwb3NzaWJsZSB0aGF0IGFuIGFsdGVybmF0ZSBpbnN0cnVjdGlvbiBzZXF1ZW5jZQ0KdGhh
-dCBkb2Vzbid0IHVzZSBhIGxvY2tlZCBpbnN0cnVjdGlvbiBtYXkgYWN0dWFsbHkgYmUgZmFzdGVy
-IQ0KDQpBbHRob3VnaCwgbWF5YmUsIGFueSBraW5kIG9mIGxvY2tlZCBjbXB4Y2hnIGp1c3QgbmVl
-ZHMgdG8gZW5zdXJlDQp0aGUgY2FjaGUgbGluZSBpc24ndCAnc3RvbGVuJywgc28gYXBhcnQgZnJv
-bSBwb3NzaWJsZSBzbGlnaHQNCmRlbGF5cyBvbiBhbm90aGVyIGNwdSB0aGF0IGdldHMgYSBjYWNo
-ZSBtaXNzIGZvciB0aGUgbGluZSBpbg0KYWxsIG1ha2VzIGxpdHRsZSBkaWZmZXJlbmNlLg0KVGhl
-IGNhY2hlIGxpbmUgbWlzcyBjb3N0cyBhIGxvdCBhbnl3YXksIGxpbmUgYm91bmNpbmcgbW9yZQ0K
-YW5kIGlzIGJlc3QgYXZvaWRlZC4NClNvIGlzIHRoZXJlIGFjdHVhbGx5IG11Y2ggb2YgYSBiZW5l
-Zml0IGF0IGFsbD8NCg0KQ2xlYXJseSB0aGUgdHJ5X2NtcHhjaGcgaGVscCAtIGJ1dCB0aGF0IGlz
-IGEgZGlmZmVyZW50IGlzc3VlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Thu, Apr 6, 2023 at 10:26=E2=80=AFAM David Laight <David.Laight@aculab.c=
+om> wrote:
+>
+> From: Dave Hansen
+> > Sent: 05 April 2023 17:37
+> >
+> > On 4/5/23 07:17, Uros Bizjak wrote:
+> > > Add generic and target specific support for local{,64}_try_cmpxchg
+> > > and wire up support for all targets that use local_t infrastructure.
+> >
+> > I feel like I'm missing some context.
+> >
+> > What are the actual end user visible effects of this series?  Is there =
+a
+> > measurable decrease in perf overhead?  Why go to all this trouble for
+> > perf?  Who else will use local_try_cmpxchg()?
+>
+> I'm assuming the local_xxx operations only have to be save wrt interrupts=
+?
+> On x86 it is possible that an alternate instruction sequence
+> that doesn't use a locked instruction may actually be faster!
 
+Please note that "local" functions do not use lock prefix. Only atomic
+properties of cmpxchg instruction are exploited since it only needs to
+be safe wrt interrupts.
+
+Uros.
+
+> Although, maybe, any kind of locked cmpxchg just needs to ensure
+> the cache line isn't 'stolen', so apart from possible slight
+> delays on another cpu that gets a cache miss for the line in
+> all makes little difference.
+> The cache line miss costs a lot anyway, line bouncing more
+> and is best avoided.
+> So is there actually much of a benefit at all?
+>
+> Clearly the try_cmpxchg help - but that is a different issue.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
