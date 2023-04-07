@@ -2,85 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A436DAE2B
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 15:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFB66DAECD
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 16:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjDGNqs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Apr 2023 09:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S239872AbjDGOWE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Apr 2023 10:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjDGNqb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 09:46:31 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51649AD34
-        for <linux-mips@vger.kernel.org>; Fri,  7 Apr 2023 06:44:21 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id by26so8506579ejb.2
-        for <linux-mips@vger.kernel.org>; Fri, 07 Apr 2023 06:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680875007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R2b3h4GiPHDFhw2slcKiiNf9Ehmkr7A8bDAPf1Quqak=;
-        b=gHx8tEAgNzcEH5lNC9SdGsw9rCqIGRoZS1TPWEWA7vYZM41vQ7ArtIqqakPTeTcZdC
-         NzFroiqxc3o5HHK4gKOFsx1XmpbulLx/cXgRQCMM5FPMSTvXJvcOPqdbC4ajC48YQx9M
-         B4ThjNoeMMuSuio8YFTLGVBqpjNM0ia92Ob8N6yWXlgnEhfvfQDpTYA6MXfkN+6OWSnM
-         fS6dA/BewUrgkGtpe9QfiGZAVFVoQCP/vqvZZ+lwrdv6pWH2Qmc/pSfSG4VC5F8nzyN1
-         aisq3Qklgg76QzY3VXJh1mdMXac8gUBM4a98FSlslLvC5flvUa4LKdKEGvo/3YmffcQ5
-         vt9Q==
+        with ESMTP id S232908AbjDGOWD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 10:22:03 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F4CFE;
+        Fri,  7 Apr 2023 07:21:58 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id k14-20020a9d700e000000b0069faa923e7eso22164480otj.10;
+        Fri, 07 Apr 2023 07:21:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680875007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R2b3h4GiPHDFhw2slcKiiNf9Ehmkr7A8bDAPf1Quqak=;
-        b=xtjbp1iSYJdG8Nze9QIwdDCLerxAA7ZowvcGp4tlxqnFSvRfFfrdu9tXxDN1ntMde9
-         +0QnWTR6+4NAcv4dDO8kWTbHjT7NIZEccIQ7XZ5gWacGNrVUvlfKJO9fyvwmyAKRAoPe
-         WQ/pImXTefJMYPU3WJ59OJ5L3YzVh/OivalABQRo30KV1ZP7udDDCmFqRR/M2PaEqUbq
-         q1RS50gmIFiP81/nsBoDsqYFeRbbssODbUyh8EJgmTZCWwMupDAmq9J5PksxjRur+ot+
-         Gq73o/6XqWsNGLYMkoL9E5+4JEvp0NldH0MyoXkTK1DizcqV6QlDTbDdgnsrzpGv+GkB
-         V6xw==
-X-Gm-Message-State: AAQBX9cK+kfMTUYu7ufQoeQo0sV3tsDPNq11qv5PBQW6oOT0d5aUpDZt
-        84PHBmM9JoyRiygy6dGenfpmow==
-X-Google-Smtp-Source: AKy350bWQEqYGFFfA/jzXWxmC5cbQRNxpFrFa3AuODJ5taegClCN1OLv9gf9TXTklAnhGglePwMqWg==
-X-Received: by 2002:a17:907:20af:b0:925:5eb8:92fd with SMTP id pw15-20020a17090720af00b009255eb892fdmr2470952ejb.14.1680875006723;
-        Fri, 07 Apr 2023 06:43:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
-        by smtp.gmail.com with ESMTPSA id 24-20020a170906319800b008e9c79ff14csm2072502ejy.96.2023.04.07.06.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 06:43:26 -0700 (PDT)
-Message-ID: <d1f0205b-f144-88aa-60f6-b14c8290fbab@linaro.org>
-Date:   Fri, 7 Apr 2023 15:43:25 +0200
+        d=1e100.net; s=20210112; t=1680877317; x=1683469317;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YsRxXaApn9xqdxBsn1qMUWKQy9YkoaOpoPL73WZA9M4=;
+        b=avniN7QEhTVP5bjEuluc7cZ/n0UfgwQ4fssIWaWuXgM23MmkXinnZYapxrmay4942F
+         Nu89UwXheFHE85Y0nwMiItL5yg9EeToIWlyQ0FXKdKCzGlo/YoR+TnwzcJ7BLlymATl7
+         cAJ876vhcaZ4B04p9wXJz0gs9mwkApFyUEr8aQxcTWL+9ztTYmSfFZwaXfhhdAF4/eeZ
+         vDBcc2w3Mr6zl4pv0866owfUhVYJdw58RAYOdBKp39Cr7UDXKIKO7UlyEn7Par4kuuHb
+         6UKd4r+ek99GVY/GXQieD8ZcQpFTnNsWkgJR9RmxdUVkc65KIMpawqwopPe4KQmAFDTd
+         uoBg==
+X-Gm-Message-State: AAQBX9ck6kouAhYO2wme0CBoSfK189BfP/iLvFGtcHX7uF96rt7PJTD2
+        o3knmFtFh0WF2+4iOlmE9w==
+X-Google-Smtp-Source: AKy350aNwBFWMxb/vuIZvZXDuIvV6p1Qf5utJufM3NqZZNE2XXf2am6NlHRLQFasd7g6u1RNlTlqlw==
+X-Received: by 2002:a9d:6b94:0:b0:68f:2134:9a3a with SMTP id b20-20020a9d6b94000000b0068f21349a3amr1048221otq.30.1680877317581;
+        Fri, 07 Apr 2023 07:21:57 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e12-20020a9d730c000000b006a3ae1c5a30sm1749510otk.9.2023.04.07.07.21.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 07:21:57 -0700 (PDT)
+Received: (nullmailer pid 2506789 invoked by uid 1000);
+        Fri, 07 Apr 2023 14:21:55 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Loongson-1 watchdog
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
+From:   Rob Herring <robh@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Yang Ling <gnaygnil@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Ling <gnaygnil@gmail.com>
+        linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230407110025.516405-2-keguang.zhang@gmail.com>
 References: <20230407110025.516405-1-keguang.zhang@gmail.com>
  <20230407110025.516405-2-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407110025.516405-2-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-Id: <168087712122.2500896.540819430483949508.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Loongson-1 watchdog
+Date:   Fri, 07 Apr 2023 09:21:55 -0500
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/04/2023 13:00, Keguang Zhang wrote:
+
+On Fri, 07 Apr 2023 19:00:24 +0800, Keguang Zhang wrote:
 > Add devicetree binding document for Loongson-1 watchdog.
 > 
 > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
@@ -89,49 +76,35 @@ On 07/04/2023 13:00, Keguang Zhang wrote:
 >  1 file changed, 40 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml b/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
-> new file mode 100644
-> index 000000000000..203726da14ff
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/loongson,ls1x-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-1 Watchdog Timer
-> +
-> +maintainers:
-> +  - Keguang Zhang <keguang.zhang@gmail.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls1x-wdt
 
-No wildcards in compatibles. What does "x" stand for?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
+yamllint warnings/errors:
 
-Instead:
-unevaluatedProperties: false
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.example.dts:18:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file or directory
+   18 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
-Best regards,
-Krzysztof
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230407110025.516405-2-keguang.zhang@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
