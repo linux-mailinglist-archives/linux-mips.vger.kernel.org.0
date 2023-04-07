@@ -2,109 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFB66DAECD
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 16:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7036DB1FD
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 19:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239872AbjDGOWE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Apr 2023 10:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S229611AbjDGRqS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Apr 2023 13:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjDGOWD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 10:22:03 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F4CFE;
-        Fri,  7 Apr 2023 07:21:58 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id k14-20020a9d700e000000b0069faa923e7eso22164480otj.10;
-        Fri, 07 Apr 2023 07:21:58 -0700 (PDT)
+        with ESMTP id S230113AbjDGRqR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 13:46:17 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89FF11D
+        for <linux-mips@vger.kernel.org>; Fri,  7 Apr 2023 10:46:14 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso21204739ote.5
+        for <linux-mips@vger.kernel.org>; Fri, 07 Apr 2023 10:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680889574; x=1683481574;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Km/TTUdssvJ6LUJeka1mufWyNrdiHANvtguzKnjLMEE=;
+        b=RojzCeJGL3ZznYgLOK2fIVwjWZOoZfY1lOomKyYDwSs7M0jzYmKX4UgznWvl+AunJT
+         jLbF1yO3HPqIzKZsNd+LkGpcH1QAXHdY62bd0urpsjamUyje7bfhHBFy8PAYQPvt56Ef
+         opP9KYZdVlr3ZeLqPvEU3L8euUK467+W/p2GOnxYOTVs2VckOZs4quMRE4FQZpNEy66j
+         WsQO2mr68IYRWgoOmGmIl87F0BqTo+RQgg+0oaabBz8eE7lBzAWzsI86mmKKlpWPdwof
+         2py0TaDGWiHmi7MxqgbqOgT/BS5ZAArjexXFR7zBZBoMdUVBpI3FJ4BCkbx35/JJzr2p
+         eZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680877317; x=1683469317;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YsRxXaApn9xqdxBsn1qMUWKQy9YkoaOpoPL73WZA9M4=;
-        b=avniN7QEhTVP5bjEuluc7cZ/n0UfgwQ4fssIWaWuXgM23MmkXinnZYapxrmay4942F
-         Nu89UwXheFHE85Y0nwMiItL5yg9EeToIWlyQ0FXKdKCzGlo/YoR+TnwzcJ7BLlymATl7
-         cAJ876vhcaZ4B04p9wXJz0gs9mwkApFyUEr8aQxcTWL+9ztTYmSfFZwaXfhhdAF4/eeZ
-         vDBcc2w3Mr6zl4pv0866owfUhVYJdw58RAYOdBKp39Cr7UDXKIKO7UlyEn7Par4kuuHb
-         6UKd4r+ek99GVY/GXQieD8ZcQpFTnNsWkgJR9RmxdUVkc65KIMpawqwopPe4KQmAFDTd
-         uoBg==
-X-Gm-Message-State: AAQBX9ck6kouAhYO2wme0CBoSfK189BfP/iLvFGtcHX7uF96rt7PJTD2
-        o3knmFtFh0WF2+4iOlmE9w==
-X-Google-Smtp-Source: AKy350aNwBFWMxb/vuIZvZXDuIvV6p1Qf5utJufM3NqZZNE2XXf2am6NlHRLQFasd7g6u1RNlTlqlw==
-X-Received: by 2002:a9d:6b94:0:b0:68f:2134:9a3a with SMTP id b20-20020a9d6b94000000b0068f21349a3amr1048221otq.30.1680877317581;
-        Fri, 07 Apr 2023 07:21:57 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e12-20020a9d730c000000b006a3ae1c5a30sm1749510otk.9.2023.04.07.07.21.56
+        d=1e100.net; s=20210112; t=1680889574; x=1683481574;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Km/TTUdssvJ6LUJeka1mufWyNrdiHANvtguzKnjLMEE=;
+        b=0hprWCCgz3wFVz7SvdffxB8nAyhqrehurocxLs1cGpKJjdDfQj0SypnIyTWI1/bWHP
+         X8QHCdwq+9GGJzDTyk8WdFhMZio980kvNNg3mNnleJTiL/6sNQv1z9C6x8Yk1Ct0ubQ3
+         zKBpdM/f8t26CiZNt0XFTdjnuiZp9FWBaXsSxVIAoLcVMMXikCKVvhRJsa4Q0hbiFYed
+         iHuUMMpDIRZhXNKVuWeE81qg8MzdnpEGo0SwQdvxwybYIf5OrlNQBb6aq9F0wdHWUism
+         zCRS9xNuCZAfehAdjLx3LD1c/tShyEalHVS1jegeydcGHWq8b1r8wVrDct7VnY76+Yt7
+         QkFA==
+X-Gm-Message-State: AAQBX9fBuSpoWjT29atGKQRxa2Vrokik2jVX2Y8rgu6oCL9Tlwb5TJOj
+        xhJcyb8FQ/avaLRLetrXkYc=
+X-Google-Smtp-Source: AKy350YdWAbDPoIRXgIn62gOBqhsXX9CIWARCS76R2T66Y6hdw5qhIzc2fbfdA0aSmx0VdrHoGXpmg==
+X-Received: by 2002:a9d:6e84:0:b0:6a1:411a:fccc with SMTP id a4-20020a9d6e84000000b006a1411afcccmr1354467otr.8.1680889574233;
+        Fri, 07 Apr 2023 10:46:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g25-20020a9d6c59000000b0069f95707335sm1844631otq.69.2023.04.07.10.46.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 07:21:57 -0700 (PDT)
-Received: (nullmailer pid 2506789 invoked by uid 1000);
-        Fri, 07 Apr 2023 14:21:55 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 07 Apr 2023 10:46:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 7 Apr 2023 10:46:11 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        philmd@linaro.org, sergei.shtylyov@gmail.com,
+        aleksander.lobakin@intel.com
+Subject: Re: [PATCH v3 12/12] MIPS: generic: Enable all CPUs supported by
+ virt board in Kconfig
+Message-ID: <85ed22b8-9a63-4df7-a84d-4cd644e2578a@roeck-us.net>
+References: <20230404093351.4233-1-jiaxun.yang@flygoat.com>
+ <20230404093351.4233-13-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Yang Ling <gnaygnil@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230407110025.516405-2-keguang.zhang@gmail.com>
-References: <20230407110025.516405-1-keguang.zhang@gmail.com>
- <20230407110025.516405-2-keguang.zhang@gmail.com>
-Message-Id: <168087712122.2500896.540819430483949508.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Loongson-1 watchdog
-Date:   Fri, 07 Apr 2023 09:21:55 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404093351.4233-13-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-On Fri, 07 Apr 2023 19:00:24 +0800, Keguang Zhang wrote:
-> Add devicetree binding document for Loongson-1 watchdog.
+On Tue, Apr 04, 2023 at 10:33:51AM +0100, Jiaxun Yang wrote:
+> Enable extra CPUs that may be supported by virt board, including
+> R4x00 (R4000 in QEMU), Cavium Octeon (Octeon68XX in QEMU), loongson2e,
+> loongson2f.
 > 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->  .../bindings/watchdog/loongson,ls1x-wdt.yaml  | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
-> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This patch results in:
 
-yamllint warnings/errors:
+Building mips:allmodconfig ... failed
+--------------
+Error log:
+arch/mips/kernel/cps-vec.S: Assembler messages:
+arch/mips/kernel/cps-vec.S:228: Error: invalid operands `mfc0 $8,$16,1'
+arch/mips/kernel/cps-vec.S:228: Error: invalid operands `mfc0 $8,$16,2'
+arch/mips/kernel/cps-vec.S:228: Error: invalid operands `mfc0 $8,$16,3'
+arch/mips/kernel/cps-vec.S:326: Error: invalid operands `mfc0 $14,$16,1'
+arch/mips/kernel/cps-vec.S:326: Error: invalid operands `mfc0 $14,$16,2'
+arch/mips/kernel/cps-vec.S:326: Error: invalid operands `mfc0 $14,$16,3'
+arch/mips/kernel/cps-vec.S:329: Error: invalid operands `mfc0 $9,$0,2'
+arch/mips/kernel/cps-vec.S:335: Error: opcode not supported on this processor: r4600 (mips3) `clz $9,$9'
+arch/mips/kernel/cps-vec.S:343: Error: invalid operands `mfc0 $25,$15,1'
+arch/mips/kernel/cps-vec.S:385: Error: invalid operands `mfc0 $8,$16,1'
+arch/mips/kernel/cps-vec.S:385: Error: invalid operands `mfc0 $8,$16,2'
+arch/mips/kernel/cps-vec.S:385: Error: invalid operands `mfc0 $8,$16,3'
+arch/mips/kernel/cps-vec.S:395: Error: opcode not supported on this processor: r4600 (mips3) `jr.hb $9'
+arch/mips/kernel/cps-vec.S:397: Error: invalid operands `mfc0 $9,$0,1'
+arch/mips/kernel/cps-vec.S:399: Error: invalid operands `mtc0 $9,$0,1'
+arch/mips/kernel/cps-vec.S:412: Error: invalid operands `mfc0 $8,$1,1'
+arch/mips/kernel/cps-vec.S:416: Error: invalid operands `mtc0 $8,$1,1'
+arch/mips/kernel/cps-vec.S:507: Error: invalid operands `mtc0 $8,$2,4'
+arch/mips/kernel/cps-vec.S:509: Error: opcode not supported on this processor: r4600 (mips3) `jr.hb $8'
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.example.dts:18:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file or directory
-   18 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
+This is with:
 
-doc reference errors (make refcheckdocs):
+Compiler version: mips64-linux-gcc (GCC) 11.3.0
+Assembler version: GNU assembler (GNU Binutils) 2.39
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230407110025.516405-2-keguang.zhang@gmail.com
+Bisect log attached for reference.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Guenter
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+---
+# bad: [e134c93f788fb93fd6a3ec3af9af850a2048c7e6] Add linux-next specific files for 20230406
+# good: [7e364e56293bb98cae1b55fd835f5991c4e96e7d] Linux 6.3-rc5
+git bisect start 'HEAD' 'v6.3-rc5'
+# bad: [ba6a630973076d0884c86c180cbfffe2fd7ccae3] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect bad ba6a630973076d0884c86c180cbfffe2fd7ccae3
+# bad: [11ed4fef8498d6e90290b0ddae0b9a3a4f84d99f] Merge branch 'for-next' of git:git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux.git
+git bisect bad 11ed4fef8498d6e90290b0ddae0b9a3a4f84d99f
+# good: [f73baa9938bb8f981aa3d58bab24b028f14fb7ff] Merge branch 'next' of https://github.com/Broadcom/stblinux.git
+git bisect good f73baa9938bb8f981aa3d58bab24b028f14fb7ff
+# good: [74a7ccd0bd5b39518b9d45e3ea455fcbbdc34632] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git
+git bisect good 74a7ccd0bd5b39518b9d45e3ea455fcbbdc34632
+# good: [7864de002ddd7557ac110a6d594ebbf0ec61773a] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+git bisect good 7864de002ddd7557ac110a6d594ebbf0ec61773a
+# bad: [657d2f0b627f20afad9b5253b32d4448a0c514bd] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git
+git bisect bad 657d2f0b627f20afad9b5253b32d4448a0c514bd
+# bad: [04f439aefe3b46cbdc4c547302af567012653fe9] Merge branch 'mips-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+git bisect bad 04f439aefe3b46cbdc4c547302af567012653fe9
+# good: [e1aa1dfef69320141f5d00eddbf279b41e70d4e7] MIPS: mips-cm: Check availability of config registers
+git bisect good e1aa1dfef69320141f5d00eddbf279b41e70d4e7
+# good: [7a0f190098f32bae208689fee6e8f6dc607d2930] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git
+git bisect good 7a0f190098f32bae208689fee6e8f6dc607d2930
+# bad: [de34007751aaba992373f2d659001a846aeb8811] MIPS: generic: Enable all CPUs supported by virt board in Kconfig
+git bisect bad de34007751aaba992373f2d659001a846aeb8811
+# good: [b6007ff809682350515936539eb91a2e8a5f799c] MIPS: Octeon: Allow CVMSEG to be disabled
+git bisect good b6007ff809682350515936539eb91a2e8a5f799c
+# good: [0c6ff92773a9c004c44af47b0609f67dcc97ba82] MIPS: Loongson: Don't select platform features with CPU
+git bisect good 0c6ff92773a9c004c44af47b0609f67dcc97ba82
+# good: [03be534e1bac6d92cbcebdddfc4242e1e3588350] MIPS: Add board config for virt board
+git bisect good 03be534e1bac6d92cbcebdddfc4242e1e3588350
+# first bad commit: [de34007751aaba992373f2d659001a846aeb8811] MIPS: generic: Enable all CPUs supported by virt board in Kconfig
