@@ -2,158 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0386E6DA9CC
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 10:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6ED6DAB7F
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 12:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239782AbjDGIL2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Apr 2023 04:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S240613AbjDGK1e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Apr 2023 06:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239610AbjDGILM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 04:11:12 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DEBA5DC;
-        Fri,  7 Apr 2023 01:11:01 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D70776000C;
-        Fri,  7 Apr 2023 08:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680855059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k62lE0Z84brwUbN0RTewMQPHSeeiOVUlnJEgkCzQsvo=;
-        b=R9CLiy5G5LdE9BO36N204fuspyAxiiF7TmcabLrbwrQPeoEl5Pn0pcw2pa9LFURAj+yhqS
-        Ku6ulo+yoPDqo0ywa6hZxIhfMa2hfrKY6oIoCe+v26HM6BlIqcgn8p8u0WJDFU+gYVyAOT
-        iWOVTokLobBTMlDhc5L2oqSRq3pJIdqQ+s5IqSFwu1iEWL1rH1J0xX63ZpwsrUgxYtF5VC
-        JMA7zniKULdwaW97f/g6p4Ec2AzETlg0EBYuF+OIU67+xs5aqnBUa8bo0FWsfGskdfArda
-        sO7wxwa4nSLUU/oHmfv/0zUTbea+upPaTGkKYKQ1Sq0BSBr1Ah5yUIuIzPRbHA==
-Date:   Fri, 7 Apr 2023 10:10:43 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Valentin Korenblit <vkorenblit@sequans.com>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Han Xu <han.xu@nxp.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Stefan Agner <stefan@agner.ch>, Lucas Stach <dev@lynxeye.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mtd@lists.infradead.org, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, linux-oxnas@groups.io,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 00/49] mtd: nand: Convert to platform remove callback
- returning void
-Message-ID: <20230407101043.299f5e22@xps-13>
-In-Reply-To: <20230401161938.2503204-1-u.kleine-koenig@pengutronix.de>
-References: <20230401161938.2503204-1-u.kleine-koenig@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231278AbjDGK1d (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 06:27:33 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6BA7282
+        for <linux-mips@vger.kernel.org>; Fri,  7 Apr 2023 03:27:28 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1F0E85C0261;
+        Fri,  7 Apr 2023 06:27:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 07 Apr 2023 06:27:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1680863245; x=1680949645; bh=AfVLHftNx0
+        iyU8xT81WX9UZaiJ2fgfUdmHD7Dv0+laQ=; b=yYnSoy7LuUK1bN7rf2Mk2vlTq5
+        idYobEuTqlYsRuKIuMBEKT004vAWcLDsAYd6YvLH8qwjG6/v18nr5ipQH6Acr9o6
+        h7J+ICcjhzP9Hn6jPxcLvBHZd97QDF3CXS0iKqU0sMJidMj/wJ9x+h1hSuAe/qWF
+        elYuxWKS1WyFOWQfq05W5xTi4edszukNtDRYSsKVZcF/NHWLf0b296xIfAph8nTK
+        ht7/eQmAM2lXO7e9EjAVbekB2p/ReHSSL6AW8ZwHrtK5CRLFpX7woEaeKNpT5h4U
+        zLRdagLPXnU3DFH97/DhpsZWjtRXYESVenfiK6vIR6LMT0iRIbbgpARN2skA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680863245; x=1680949645; bh=AfVLHftNx0iyU
+        8xT81WX9UZaiJ2fgfUdmHD7Dv0+laQ=; b=GxdZGCEFymm4jaGPkelVW7vfNDcO4
+        I5E8IbcjZCDZS9RoarxDaoSyYuBGCK6cLTsKwOjGpwLL5u+oM1obbTD6sIRGAhaD
+        F4HeLowxB3qWCX1+4DpyoyiUUWu2P7b4NJnH7wKu7HTHDqxe2eIcgZ9G0XHsu/X9
+        EMSLadeyFM9FI3X1KspjwOTH3e2UhmimUYiW/TtNy76DBgJADu8PHfw/g0fGq5K+
+        0bMMKisI0IrmOE97pmiiL/9Odcn0EEFubnisbrXHO/AVqq/YYiaclP6h81p+lwY8
+        j1iEjrw02eRYPIWVrmYKgbOiRBGTYSIbtSghK12DIqAzHq+hYjzJs2L2w==
+X-ME-Sender: <xms:DPAvZC8-rteJ68KkzZi9VPUafnUBEdbmvCQcUnVoJSX_Vgh_DC-GQA>
+    <xme:DPAvZCvQWL6yz1BXjIWpzmrriXwx1Bv2VehfzulrM_AKwEkTJweZY-3ufJ2bwRjVK
+    5kce3VsmBztcolzmy8>
+X-ME-Received: <xmr:DPAvZICc2_8wv-mmfqOVXNk3Hj8tKAMFK00CH_l-VMMIZdMYJUfseJw6IxdR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejhedgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:DPAvZKcOAMoClJIWesCz6Izs-CfLCMHFrsTHerBkUw9PYxIqOXeKwQ>
+    <xmx:DPAvZHMLaJ87ytJ7HOadAaELUxtxbj4V4BrL6f4DDrEfFU39h54YGg>
+    <xmx:DPAvZEnOgCKnfczxGoqgT4hpt0lnKFUh-pWsIvYlggVYc-rZgsvY7Q>
+    <xmx:DfAvZMpjM3zmJw4AoR7I-oYCMdO7XS2enj_f8hJ_djp9OCUs_Gx_dA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 7 Apr 2023 06:27:23 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     llvm@lists.linux.dev, tsbogend@alpha.franken.de,
+        ndesaulniers@google.com, nathan@kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/5] MIPS: LLVM toolchain support for more CPUs
+Date:   Fri,  7 Apr 2023 11:27:16 +0100
+Message-Id: <20230407102721.14814-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Uwe,
+This patchset is to add toolchain feature detection for most MIPS CPUs
+by adding more toolchain feature detections and fixing -march CFLAGS.
 
-u.kleine-koenig@pengutronix.de wrote on Sat,  1 Apr 2023 18:18:49 +0200:
+Thanks
+Jiaxun
 
-> Hello,
->=20
-> this series adapts the platform drivers below drivers/mtd/nand to use the
-> .remove_new() callback. Compared to the traditional .remove() callback
-> .remove_new() returns no value. This is a good thing because the driver c=
-ore
-> doesn't (and cannot) cope for errors during remove. The only effect of a
-> non-zero return value in .remove() is that the driver core emits a warnin=
-g. The
-> device is removed anyhow and an early return from .remove() usually yield=
-s a
-> resource leak.
->=20
-> By changing the remove callback to return void driver authors cannot
-> reasonably assume any more that there is some kind of cleanup later.
->=20
-> As all drivers already return 0 in their .remove callback, they can be
-> converted trivially.
+Jiaxun Yang (5):
+  MIPS: Move various toolchain ASE check to Kconfig
+  MIPS: Add toolchain feature dependency for microMIPS smartMIPS
+  MIPS: Detect toolchain support of workarounds in Kconfig
+  MIPS: Detect toolchain support of o32 ABI with 64 bit CPU
+  MIPS: Fallback CPU -march CFLAG to ISA level if unsupported
 
-I've looked at the different patches, they look good to me but as they
-are all trivial and exactly identical, would you mind sending this
-again all squashed in a single patch? A subsystem-wide conversion seems
-appropriate. In all cases I plan to take this for the next merge
-window.
+ arch/mips/Kconfig                | 66 +++++++++++++++++++++++++++++---
+ arch/mips/Makefile               | 65 +++++++++++--------------------
+ arch/mips/cavium-octeon/Kconfig  |  1 +
+ arch/mips/crypto/crc32-mips.c    |  4 +-
+ arch/mips/include/asm/asmmacro.h |  8 ++--
+ arch/mips/include/asm/ginvt.h    |  2 +-
+ arch/mips/include/asm/mipsregs.h | 10 ++---
+ arch/mips/include/asm/msa.h      |  4 +-
+ 8 files changed, 98 insertions(+), 62 deletions(-)
 
-I've collected the tags received so far if you want:
+-- 
+2.39.2 (Apple Git-143)
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com> # atmel
-Reviewed-by: Paul Cercueil <paul@crapouillou.net> # ingenic
-Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org> # ingenic
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # intel
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # mes=
-on
-Acked-by: Roger Quadros <rogerq@kernel.org> # omap
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be> # renesas
-Reviewed-by: Heiko Stuebner <heiko@sntech.de> # rockchip
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> # sunxi
-Acked-by: Thierry Reding <treding@nvidia.com> # tegra
-
-BTW, thanks to all of you who reviewed and answered to this thread!
-This is highly appreciated.=20
-
-Thanks,
-Miqu=C3=A8l
