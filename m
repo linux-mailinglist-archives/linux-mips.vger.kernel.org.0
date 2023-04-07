@@ -2,136 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FC96DACB2
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 14:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A436DAE2B
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 15:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjDGMqz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Apr 2023 08:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S232212AbjDGNqs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Apr 2023 09:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjDGMqy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 08:46:54 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DBAD02;
-        Fri,  7 Apr 2023 05:46:50 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso18725824otv.6;
-        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
+        with ESMTP id S231349AbjDGNqb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 09:46:31 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51649AD34
+        for <linux-mips@vger.kernel.org>; Fri,  7 Apr 2023 06:44:21 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id by26so8506579ejb.2
+        for <linux-mips@vger.kernel.org>; Fri, 07 Apr 2023 06:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680871610; x=1683463610;
+        d=linaro.org; s=google; t=1680875007;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
-        b=PnjN0Q3tykVW8UtftVm7wAXYCY0sHkDutOu46Z5WOJvciTHyr9GgP3o5jPpu0TH9mx
-         2de22563QodepzobSaq7qmDvZJSaynTQIqqW4RS/SwpGcHebMzsaA7oHn3wwW4HLvMgS
-         ECMnv05+ZSxLlw/7aruZSq93ynHFKDLPmavwIWP60k/kXx9DMJL+ZUxeiC//DH9Tk/Qi
-         PtJGPFgzA6TDGupFnp3Mib60ieivq0s24xZpkZrpFa1tnvPOfiq0w+aPpm+MS1Cjb5Q1
-         ewcmU6fAeRE/ZpWvVFKkiUoOmOFjPNR5rHm6gqBdhhUHkpZqrH8iLe9D7o7nsIAqWxuh
-         8k3Q==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R2b3h4GiPHDFhw2slcKiiNf9Ehmkr7A8bDAPf1Quqak=;
+        b=gHx8tEAgNzcEH5lNC9SdGsw9rCqIGRoZS1TPWEWA7vYZM41vQ7ArtIqqakPTeTcZdC
+         NzFroiqxc3o5HHK4gKOFsx1XmpbulLx/cXgRQCMM5FPMSTvXJvcOPqdbC4ajC48YQx9M
+         B4ThjNoeMMuSuio8YFTLGVBqpjNM0ia92Ob8N6yWXlgnEhfvfQDpTYA6MXfkN+6OWSnM
+         fS6dA/BewUrgkGtpe9QfiGZAVFVoQCP/vqvZZ+lwrdv6pWH2Qmc/pSfSG4VC5F8nzyN1
+         aisq3Qklgg76QzY3VXJh1mdMXac8gUBM4a98FSlslLvC5flvUa4LKdKEGvo/3YmffcQ5
+         vt9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680871610; x=1683463610;
+        d=1e100.net; s=20210112; t=1680875007;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
-        b=CS8hx1CBLioOmlAjYN9GHI2MEszOIBHQQu87ebRdFB3dXV0A4Ytd7zln666rufMRwx
-         GFoVpWbIQRscKb6q6RG/wuQJE1XLm7cCtWFXsbLK0l4+JFlLju8ubzJhVjdKv6uJhJYs
-         Nm+O2G8QoBBbKbW2uDMgYEnm3BoRj8iG9Q21/ijTnOoSqP3zexmYa7Q9cjgC2hggQk7/
-         4rlSjKxca2kSaWBEWPgNkMNTuwlxLBwb1cDoqeI9KG9igclP7F8wP6np2G+M1gdx8Onw
-         kEx1aiCmt/4EVkJdtsG0c3gpHgivAQLqiWiAdao/d62Jx6CxiWB2YOhJ5XMvGR+twZM4
-         DH5A==
-X-Gm-Message-State: AAQBX9fI0l5YEZo6mrq7r+qIlNw0KKsvEd76v4aaGn3x6uGiOJgXH/zN
-        ll06tJh+GeWrMdg3v/zAEW16OnuXp+g=
-X-Google-Smtp-Source: AKy350buYaLh+KrmXZBo0/Wm/s1AM5CYsV+B4+BDSnrmL3bR9QqWEkb4sIeE5zhomhkFx9ka+WDYiA==
-X-Received: by 2002:a9d:6c0c:0:b0:68b:d61c:168f with SMTP id f12-20020a9d6c0c000000b0068bd61c168fmr953370otq.11.1680871610135;
-        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d16-20020a9d5e10000000b006a305c68617sm1664872oti.53.2023.04.07.05.46.48
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2b3h4GiPHDFhw2slcKiiNf9Ehmkr7A8bDAPf1Quqak=;
+        b=xtjbp1iSYJdG8Nze9QIwdDCLerxAA7ZowvcGp4tlxqnFSvRfFfrdu9tXxDN1ntMde9
+         +0QnWTR6+4NAcv4dDO8kWTbHjT7NIZEccIQ7XZ5gWacGNrVUvlfKJO9fyvwmyAKRAoPe
+         WQ/pImXTefJMYPU3WJ59OJ5L3YzVh/OivalABQRo30KV1ZP7udDDCmFqRR/M2PaEqUbq
+         q1RS50gmIFiP81/nsBoDsqYFeRbbssODbUyh8EJgmTZCWwMupDAmq9J5PksxjRur+ot+
+         Gq73o/6XqWsNGLYMkoL9E5+4JEvp0NldH0MyoXkTK1DizcqV6QlDTbDdgnsrzpGv+GkB
+         V6xw==
+X-Gm-Message-State: AAQBX9cK+kfMTUYu7ufQoeQo0sV3tsDPNq11qv5PBQW6oOT0d5aUpDZt
+        84PHBmM9JoyRiygy6dGenfpmow==
+X-Google-Smtp-Source: AKy350bWQEqYGFFfA/jzXWxmC5cbQRNxpFrFa3AuODJ5taegClCN1OLv9gf9TXTklAnhGglePwMqWg==
+X-Received: by 2002:a17:907:20af:b0:925:5eb8:92fd with SMTP id pw15-20020a17090720af00b009255eb892fdmr2470952ejb.14.1680875006723;
+        Fri, 07 Apr 2023 06:43:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
+        by smtp.gmail.com with ESMTPSA id 24-20020a170906319800b008e9c79ff14csm2072502ejy.96.2023.04.07.06.43.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 05:46:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <27bafe2b-6fc0-2e5c-8c4e-99ed74caa5d6@roeck-us.net>
-Date:   Fri, 7 Apr 2023 05:46:47 -0700
+        Fri, 07 Apr 2023 06:43:26 -0700 (PDT)
+Message-ID: <d1f0205b-f144-88aa-60f6-b14c8290fbab@linaro.org>
+Date:   Fri, 7 Apr 2023 15:43:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Loongson-1 watchdog
 Content-Language: en-US
 To:     Keguang Zhang <keguang.zhang@gmail.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Yang Ling <gnaygnil@gmail.com>
 References: <20230407110025.516405-1-keguang.zhang@gmail.com>
- <20230407110025.516405-3-keguang.zhang@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20230407110025.516405-2-keguang.zhang@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407110025.516405-2-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/7/23 04:00, Keguang Zhang wrote:
-> This patch adds the of_match_table to enable DT support
-> of Loongson-1 watchdog driver.
-> And modify the parameter of devm_clk_get() accordingly.
+On 07/04/2023 13:00, Keguang Zhang wrote:
+> Add devicetree binding document for Loongson-1 watchdog.
 > 
 > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 > ---
->   drivers/watchdog/loongson1_wdt.c | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
+>  .../bindings/watchdog/loongson,ls1x-wdt.yaml  | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
 > 
-> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-> index bb3d075c0633..c2694222ea86 100644
-> --- a/drivers/watchdog/loongson1_wdt.c
-> +++ b/drivers/watchdog/loongson1_wdt.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/clk.h>
->   #include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/platform_device.h>
->   #include <linux/watchdog.h>
->   #include <loongson1.h>
-> @@ -100,7 +101,7 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->   	if (IS_ERR(drvdata->base))
->   		return PTR_ERR(drvdata->base);
->   
-> -	drvdata->clk = devm_clk_get(dev, pdev->name);
-> +	drvdata->clk = devm_clk_get(dev, NULL);
->   	if (IS_ERR(drvdata->clk))
->   		return PTR_ERR(drvdata->clk);
->   
-> @@ -142,10 +143,19 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id ls1x_wdt_dt_ids[] = {
-> +	{ .compatible = "loongson,ls1x-wdt", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ls1x_wdt_dt_ids);
-> +#endif
+> diff --git a/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml b/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
+> new file mode 100644
+> index 000000000000..203726da14ff
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/loongson,ls1x-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->   static struct platform_driver ls1x_wdt_driver = {
->   	.probe = ls1x_wdt_probe,
->   	.driver = {
->   		.name = "ls1x-wdt",
-> +		.of_match_table = ls1x_wdt_dt_ids,
+> +title: Loongson-1 Watchdog Timer
+> +
+> +maintainers:
+> +  - Keguang Zhang <keguang.zhang@gmail.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls1x-wdt
 
-If CONFIG_OF=n, this would result in a missing symbol.
+No wildcards in compatibles. What does "x" stand for?
 
-Guenter
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +additionalProperties: false
+
+Instead:
+unevaluatedProperties: false
+
+Best regards,
+Krzysztof
 
