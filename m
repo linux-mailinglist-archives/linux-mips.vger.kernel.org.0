@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7036DB1FD
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 19:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FA06DB20C
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Apr 2023 19:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjDGRqS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Apr 2023 13:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S229454AbjDGRui (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Apr 2023 13:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjDGRqR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 13:46:17 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89FF11D
-        for <linux-mips@vger.kernel.org>; Fri,  7 Apr 2023 10:46:14 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso21204739ote.5
-        for <linux-mips@vger.kernel.org>; Fri, 07 Apr 2023 10:46:14 -0700 (PDT)
+        with ESMTP id S230303AbjDGRuh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Apr 2023 13:50:37 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76555FF0
+        for <linux-mips@vger.kernel.org>; Fri,  7 Apr 2023 10:50:33 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id r14so25884354oiw.12
+        for <linux-mips@vger.kernel.org>; Fri, 07 Apr 2023 10:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680889574; x=1683481574;
+        d=gmail.com; s=20210112; t=1680889833; x=1683481833;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Km/TTUdssvJ6LUJeka1mufWyNrdiHANvtguzKnjLMEE=;
-        b=RojzCeJGL3ZznYgLOK2fIVwjWZOoZfY1lOomKyYDwSs7M0jzYmKX4UgznWvl+AunJT
-         jLbF1yO3HPqIzKZsNd+LkGpcH1QAXHdY62bd0urpsjamUyje7bfhHBFy8PAYQPvt56Ef
-         opP9KYZdVlr3ZeLqPvEU3L8euUK467+W/p2GOnxYOTVs2VckOZs4quMRE4FQZpNEy66j
-         WsQO2mr68IYRWgoOmGmIl87F0BqTo+RQgg+0oaabBz8eE7lBzAWzsI86mmKKlpWPdwof
-         2py0TaDGWiHmi7MxqgbqOgT/BS5ZAArjexXFR7zBZBoMdUVBpI3FJ4BCkbx35/JJzr2p
-         eZKA==
+        bh=l+VWDUTiyAIZrT1X2EsT34QcYgiBZpyZBJBIXwgc590=;
+        b=K0ENvho0bsKDHn+1k5tt89RXyLznYLnaiI2SgB8UgvRSi7elIfZR5tsojIjd3+bDFr
+         1JAx0oN+H6ydkP2cSxI8zxKTdZiv6+lq3ZGXfmv/cEOaKAFzAoU3je2h0chk8QEaeIq/
+         SYpRhEmH2THrWUiY3v+sq7+NFqDgOjs9g0q1m5GyUwyocMJJxGaAcT16Yjo+iP0gaGGY
+         RZg3PQM0tWGDr4k5g47NQNOctuwH+j/MGvclwl21WbvQOvrGrf4vpfkLeXuIm1aVS/dQ
+         ZvG4VKr2zkGp1EGXispVLD43RYzWYFhnfRZZ1FX5sl4pEdqSUzqUDSITmI8Q8Ggrxqq0
+         xzIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889574; x=1683481574;
+        d=1e100.net; s=20210112; t=1680889833; x=1683481833;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Km/TTUdssvJ6LUJeka1mufWyNrdiHANvtguzKnjLMEE=;
-        b=0hprWCCgz3wFVz7SvdffxB8nAyhqrehurocxLs1cGpKJjdDfQj0SypnIyTWI1/bWHP
-         X8QHCdwq+9GGJzDTyk8WdFhMZio980kvNNg3mNnleJTiL/6sNQv1z9C6x8Yk1Ct0ubQ3
-         zKBpdM/f8t26CiZNt0XFTdjnuiZp9FWBaXsSxVIAoLcVMMXikCKVvhRJsa4Q0hbiFYed
-         iHuUMMpDIRZhXNKVuWeE81qg8MzdnpEGo0SwQdvxwybYIf5OrlNQBb6aq9F0wdHWUism
-         zCRS9xNuCZAfehAdjLx3LD1c/tShyEalHVS1jegeydcGHWq8b1r8wVrDct7VnY76+Yt7
-         QkFA==
-X-Gm-Message-State: AAQBX9fBuSpoWjT29atGKQRxa2Vrokik2jVX2Y8rgu6oCL9Tlwb5TJOj
-        xhJcyb8FQ/avaLRLetrXkYc=
-X-Google-Smtp-Source: AKy350YdWAbDPoIRXgIn62gOBqhsXX9CIWARCS76R2T66Y6hdw5qhIzc2fbfdA0aSmx0VdrHoGXpmg==
-X-Received: by 2002:a9d:6e84:0:b0:6a1:411a:fccc with SMTP id a4-20020a9d6e84000000b006a1411afcccmr1354467otr.8.1680889574233;
-        Fri, 07 Apr 2023 10:46:14 -0700 (PDT)
+        bh=l+VWDUTiyAIZrT1X2EsT34QcYgiBZpyZBJBIXwgc590=;
+        b=HyVne77LbBwVkasrAbOJnY+NEfB2/+VbuBNd5DYhc9bV4LogQuMCpjULPNzRqPcGuF
+         yeNKadc73yNSQSZcpE7I9uYhGKR96uA667ErbBlWkMp7tjwc8RZRPYXD1bVecygZydOk
+         K++RcQd8WvvnRHFNq3Tlw6vvVuxISp+UJdXXfUifx6N1mSiStMTYWVYmkmB3x1rOXury
+         2V5HPm9X5cyeb7FOYlyMrVa1zx1lKwTS5bETj3YCaWyfVT5FVjzrEiRWUH/wOMHUTxyW
+         fhAb+moZ5E6NnTtYXCP53uFycTu/9DePt/Il5iuYVIsFyy4wifaRl2KL4ZxrviyZxITY
+         azOw==
+X-Gm-Message-State: AAQBX9dd8Zha3TLEcqEyfWXxz7Sit6hIFC0Fx41dKgHr4lm/hwEv6jfS
+        +iLRLtqB4YiKfB8d0PyzLog=
+X-Google-Smtp-Source: AKy350ZEGL2IDJTisqAJVF9lNZcfO+DcGpiPbjRskaOM3UEaGi5EXhM8M1FPEZXq8Ut2OenY5FstDw==
+X-Received: by 2002:a05:6808:2d8:b0:38b:8acb:3245 with SMTP id a24-20020a05680802d800b0038b8acb3245mr1265841oid.13.1680889833038;
+        Fri, 07 Apr 2023 10:50:33 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g25-20020a9d6c59000000b0069f95707335sm1844631otq.69.2023.04.07.10.46.12
+        by smtp.gmail.com with ESMTPSA id e3-20020a05680809a300b00389509965e3sm1849580oig.58.2023.04.07.10.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 10:46:13 -0700 (PDT)
+        Fri, 07 Apr 2023 10:50:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 10:46:11 -0700
+Date:   Fri, 7 Apr 2023 10:50:31 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
@@ -58,7 +58,7 @@ Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
         aleksander.lobakin@intel.com
 Subject: Re: [PATCH v3 12/12] MIPS: generic: Enable all CPUs supported by
  virt board in Kconfig
-Message-ID: <85ed22b8-9a63-4df7-a84d-4cd644e2578a@roeck-us.net>
+Message-ID: <80f1c596-8535-43e9-90dc-020738e38e81@roeck-us.net>
 References: <20230404093351.4233-1-jiaxun.yang@flygoat.com>
  <20230404093351.4233-13-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
@@ -81,39 +81,38 @@ On Tue, Apr 04, 2023 at 10:33:51AM +0100, Jiaxun Yang wrote:
 > loongson2f.
 > 
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
 
-This patch results in:
-
-Building mips:allmodconfig ... failed
---------------
-Error log:
-arch/mips/kernel/cps-vec.S: Assembler messages:
-arch/mips/kernel/cps-vec.S:228: Error: invalid operands `mfc0 $8,$16,1'
-arch/mips/kernel/cps-vec.S:228: Error: invalid operands `mfc0 $8,$16,2'
-arch/mips/kernel/cps-vec.S:228: Error: invalid operands `mfc0 $8,$16,3'
-arch/mips/kernel/cps-vec.S:326: Error: invalid operands `mfc0 $14,$16,1'
-arch/mips/kernel/cps-vec.S:326: Error: invalid operands `mfc0 $14,$16,2'
-arch/mips/kernel/cps-vec.S:326: Error: invalid operands `mfc0 $14,$16,3'
-arch/mips/kernel/cps-vec.S:329: Error: invalid operands `mfc0 $9,$0,2'
-arch/mips/kernel/cps-vec.S:335: Error: opcode not supported on this processor: r4600 (mips3) `clz $9,$9'
-arch/mips/kernel/cps-vec.S:343: Error: invalid operands `mfc0 $25,$15,1'
-arch/mips/kernel/cps-vec.S:385: Error: invalid operands `mfc0 $8,$16,1'
-arch/mips/kernel/cps-vec.S:385: Error: invalid operands `mfc0 $8,$16,2'
-arch/mips/kernel/cps-vec.S:385: Error: invalid operands `mfc0 $8,$16,3'
-arch/mips/kernel/cps-vec.S:395: Error: opcode not supported on this processor: r4600 (mips3) `jr.hb $9'
-arch/mips/kernel/cps-vec.S:397: Error: invalid operands `mfc0 $9,$0,1'
-arch/mips/kernel/cps-vec.S:399: Error: invalid operands `mtc0 $9,$0,1'
-arch/mips/kernel/cps-vec.S:412: Error: invalid operands `mfc0 $8,$1,1'
-arch/mips/kernel/cps-vec.S:416: Error: invalid operands `mtc0 $8,$1,1'
-arch/mips/kernel/cps-vec.S:507: Error: invalid operands `mtc0 $8,$2,4'
-arch/mips/kernel/cps-vec.S:509: Error: opcode not supported on this processor: r4600 (mips3) `jr.hb $8'
-
-This is with:
+Also, again with
 
 Compiler version: mips64-linux-gcc (GCC) 11.3.0
 Assembler version: GNU assembler (GNU Binutils) 2.39
 
-Bisect log attached for reference.
+and mips:allmodconfig:
+
+In file included from <command-line>:
+arch/mips/mm/init.c: In function 'mem_init':
+include/linux/compiler_types.h:397:45: error: call to '__compiletime_assert_437' declared with attribute error: BUILD_BUG_ON failed: IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT)
+  397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:378:25: note: in definition of macro '__compiletime_assert'
+  378 |                         prefix ## suffix();                             \
+      |                         ^~~~~~
+include/linux/compiler_types.h:397:9: note: in expansion of macro '_compiletime_assert'
+  397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |         ^~~~~~~~~~~~~~~~
+arch/mips/mm/init.c:454:9: note: in expansion of macro 'BUILD_BUG_ON'
+  454 |         BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT));
+      |         ^~~~~~~~~~~~
+
+Bisect log attached for reference, this time when trying to compile 
+arch/mips/mm/init.c.
 
 Guenter
 
