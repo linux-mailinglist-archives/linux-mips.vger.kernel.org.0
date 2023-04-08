@@ -2,177 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A693D6DBA04
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Apr 2023 12:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AC66DBAB6
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Apr 2023 13:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjDHKKr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Apr 2023 06:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S229647AbjDHL7z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Apr 2023 07:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDHKKq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Apr 2023 06:10:46 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430DEAF30
-        for <linux-mips@vger.kernel.org>; Sat,  8 Apr 2023 03:10:45 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9A15832008FE;
-        Sat,  8 Apr 2023 06:10:44 -0400 (EDT)
+        with ESMTP id S229611AbjDHL7q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Apr 2023 07:59:46 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5D1D508
+        for <linux-mips@vger.kernel.org>; Sat,  8 Apr 2023 04:59:45 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id AAEC43200907;
+        Sat,  8 Apr 2023 07:59:41 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 08 Apr 2023 06:10:44 -0400
+  by compute6.internal (MEProxy); Sat, 08 Apr 2023 07:59:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680948644; x=1681035044; bh=W8MivDAX2Jc8usDHneNxmw/HaFm8FQ3HPSr
-        JtA32ibQ=; b=bPm5BzQPhvon1HK+U9kbU0T3ZAcd5h3eYh1iAomXWVVX5oRyWjD
-        NVUw5Atbx/v3gRCBPz+eU81SXCl2+uy250N3rd8ly4w9vQNV4Id60eYMb/tnpFkg
-        wB37Tde5NHpI83ZZVtfD+niGOJm1LMgiNkkKnXKP17LQGm3XBjUaVQOT5i05d39Y
-        eaDg10HlnbQswb0/AL0CMXmfRM9VArJrk/2Yzm/qk3Ti38ZuhzHEUsjvFJp3HvIW
-        3S2+eXIwVRykK8JbIINh1xe97ubAynHC8aarzwJwHa2n0dbS26MUuIowSQwVogH/
-        2tevrOjVhE4FShF0FCxRinfr1Ud2Zo5uzJA==
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1680955181; x=1681041581; bh=ma7N/IdC4J
+        ayJa9Euedd9FmpDcN0ZPPl2Wnxn+0AHVE=; b=Un9/bLCXX42MQpY81B2EpD0n/M
+        8Z/ve/jdbAa0jFf5AlmyQBPrMZFGEFCNczpxnnl2tZ07X8LP+zVZjPqHo+HPIHDu
+        RXOtsT5cqiVnVattsh50y9Zm4n/tpTguAhCAW2/eE3rjECTKUVdsiVkoDopwwyM4
+        /8VXghf5qVPlcDXWzrmZ4pNfkKMLsrSuZFjRHe5q9lL3fX7xX+65ITDUtyRZ8sT9
+        8SnTKAhJ227iD7sAnNXsL03IrjqGEB+ClkfW+Ih2WMYbrYnqYQuWz+/2EMrVNLl0
+        VfFCUcPcswtEQEtyod7BYHyHWKeVCELmzzOrfMHfWBN7ld4UZNkT9/OGaoXQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680948644; x=1681035044; bh=W8MivDAX2Jc8usDHneNxmw/HaFm8FQ3HPSr
-        JtA32ibQ=; b=kMjivV9jQLKpkahxFm67Gj1FKsGq8x8h0Xf+9R2ushVevNZOC2S
-        KMnXiHLFZYT6ce3JJjCb9QkmqLkEPw2Ao/vZzHWqYroBMrsH+KMwThUFs4M0iJz+
-        Y61+qq/QbgShtqsIZw7Vma0gFVMVLJuttu63KTnQ341+uKlbeyo6JQV7GMz9ltwa
-        YMZssRrUsp3ZUFHUNaReKt+VysVKPuQxAywPfvW3Cdt7ogmIne73OXel1A9Kq07Q
-        mm8qGJStm3GT1UpuASTcU1X+suHiDOYjtVuisHgZlXSF8c7FsfxR0NHAX41cK+IG
-        nTZ7OMkB2CIjd7Y5PB1x2arECyq02sYJAxw==
-X-ME-Sender: <xms:oz0xZPs1to8YgP55Ep8aa31_rRFN7lr6H5Q8kxVVmwOzHRQg8UScLA>
-    <xme:oz0xZAeabppf8Kqz6cjx5YZAuVw7LPP5V7RcRd9bCX-g1HRJKcWOS6j499IYSQeF6
-    IMQlZXUg6rqjP6N_IE>
-X-ME-Received: <xmr:oz0xZCw3TifLvCG3gHJ-tkV9OU3id1mRWxktfOgQc5Abbr10u9JeSL69xI_tMG71VLai>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejjedgvdeiucetufdoteggodetrfdotf
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680955181; x=1681041581; bh=ma7N/IdC4JayJ
+        a9Euedd9FmpDcN0ZPPl2Wnxn+0AHVE=; b=bmlilAq4hozCEy37g0WVALcQHLZlN
+        yfBFz6zkOFkW+pK8l7jfRA7DyJusxuOBZL8rT+Low+AHEvx7DGW0G+NbbHZU6+d+
+        AJ6WombJ/LVRzSJijbE9pv3K2G21+zRObnRJzH746bH+Swm7myUmrL16k6H4DJa7
+        NZQAcVloYZj4hoe+PAjAFf/Zm1CLd1/qKZ8NxsW8kUg3dPierlgAVG6nweFXHo9W
+        0LpQNpzyyrrSBGs6T6dbs9OLC7gPG4G+GJidpt8/dIBmWQd3FueK6uth2p8MmIjr
+        Iek0pt8KNM7/h/LSoF3YHPouBlfUA9KsiFJnZMif/MJOjcb5t8Jnn2D+g==
+X-ME-Sender: <xms:LFcxZO5Aqyf-6qCpYx19kfWzEYAQOFYIjlePt36smKAFnMIZ7p9BHw>
+    <xme:LFcxZH6VnkcNUfVEWlHV3xF0kyWA6a00FC7FFZWOLFa0U8t340GaHDCXeJaZDpbEg
+    ykdShfgsR704Uq-mMk>
+X-ME-Received: <xmr:LFcxZNcyXQS7X8ejUen4jnCzUSP0covSMzolmtmeLmQegfkmrQBAl7bMeqoH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejjedggeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:pD0xZONxUktX2Fns_fw5_dgEFpBY8ofiWeKDNTch4F0Aem6_qePGLg>
-    <xmx:pD0xZP8z9DchzAi5Vv0-XFVEdAUJjzN2XKcKaCgDarJsBuPUTo_dXQ>
-    <xmx:pD0xZOXZq8vo6R3O4wOcnOgKRpTe_KL_Fp_UST-tTf01N8uE0PSeOQ>
-    <xmx:pD0xZJm2gnjmLOOyuv_05JCli0IU2bMrgSIzknSyAtxnJCeZO_K07w>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:LFcxZLI7cyz9H6ek6089H9LDGQMk9EVWS6FGBssubZ_gRNcFY7buNw>
+    <xmx:LFcxZCIbDhVWjx_TeO4zN0eYWzQ8mBr320gUitsK-lzapavUOSoSvA>
+    <xmx:LFcxZMy1oKOVtTHaSaSilL94xB1rPQ1pJ7H8HtldVr6fGb9wqW-gFg>
+    <xmx:LVcxZJWqYECcmkG3iRH5T8uWRcbcUkSb5HboriBliOf9n7yr89OlZA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Apr 2023 06:10:43 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: Limit MIPS_MT_SMP support by ISA reversion
+ 8 Apr 2023 07:59:39 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <984bbd06-0fbf-3c97-32a1-a6b60af4b3d3@roeck-us.net>
-Date:   Sat, 8 Apr 2023 11:10:32 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CD810353-41E9-46ED-AEFB-902B6A4FFD6F@flygoat.com>
-References: <20230407223532.7981-1-jiaxun.yang@flygoat.com>
- <984bbd06-0fbf-3c97-32a1-a6b60af4b3d3@roeck-us.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3731.500.231)
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] MIPS: Set better default CPU model and kernel code model
+Date:   Sat,  8 Apr 2023 12:59:36 +0100
+Message-Id: <20230408115936.6631-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Set default CPU model to Release 2 CPUs (MIPS64R2 if 64 bit CPU
+is present, otherwise MIPS32R2) to get better feature coverage
+on various default configs.
 
+Also set default kernel code model to 64 bit since nowadays it
+doesn't make much sense to run 32 bit kernel on a 64 bit system.
 
-> 2023=E5=B9=B44=E6=9C=888=E6=97=A5 01:30=EF=BC=8CGuenter Roeck =
-<linux@roeck-us.net> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On 4/7/23 15:35, Jiaxun Yang wrote:
->> MIPS MT ASE is only available on ISA between Release 1 and Release 5.
->> Add ISA level dependency to Kconfig to fix build.
->> Reported-by: Guenter Roeck <linux@roeck-us.net>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->=20
-> With this patch in place, I still get the second build failure.
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/Kconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-+ Thomas
-
-Seems like PTE bits are overflowing again.
-
-Last time we trade PTE special against RIXI, now I think we need to =
-decide between PTE special
-and hugepage?
-
->=20
-> In file included from <command-line>:
-> arch/mips/mm/init.c: In function 'mem_init':
-> ././include/linux/compiler_types.h:397:45: error: call to =
-'__compiletime_assert_437' declared with attribute error: BUILD_BUG_ON =
-failed: IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT)
->  397 |         _compiletime_assert(condition, msg, =
-__compiletime_assert_, __COUNTER__)
->      |                                             ^
-> ././include/linux/compiler_types.h:378:25: note: in definition of =
-macro '__compiletime_assert'
->  378 |                         prefix ## suffix();                     =
-        \
->      |                         ^~~~~~
-> ././include/linux/compiler_types.h:397:9: note: in expansion of macro =
-'_compiletime_assert'
->  397 |         _compiletime_assert(condition, msg, =
-__compiletime_assert_, __COUNTER__)
->      |         ^~~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:39:37: note: in expansion of macro =
-'compiletime_assert'
->   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), =
-msg)
->      |                                     ^~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:50:9: note: in expansion of macro =
-'BUILD_BUG_ON_MSG'
->   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " =
-#condition)
->      |         ^~~~~~~~~~~~~~~~
-> arch/mips/mm/init.c:454:9: note: in expansion of macro 'BUILD_BUG_ON'
->  454 |         BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > =
-PAGE_SHIFT));
->=20
-> Also, MIPS_MT_SMP is disabled, CONFIG_TARGET_ISA_REV=3D0, and =
-CPU_MIPSR{1,2,6}
-> is not set. Prior to "MIPS: generic: Enable all CPUs supported by virt =
-board
-> in Kconfig", the configuration was
->=20
-> CONFIG_CPU_MIPS32_R1=3Dy
-> CONFIG_CPU_MIPS32=3Dy
-> CONFIG_CPU_MIPSR1=3Dy
-> CONFIG_TARGET_ISA_REV=3D1
-> CONFIG_MIPS_MT_SMP=3Dy
->=20
-> Ultimately it is not my decision to make what should be enabled with
-> mips:allmodconfig, but to me it looks like "MIPS: generic: Enable all =
-CPUs
-> supported by virt board in Kconfig" doesn't enable but disable various
-> configurations.
-
-Indeed, as R4000 has less features so it must disable more options.
-
-To get maximum coverage on allmodconfig I think we=E2=80=99d better set =
-default CPU to MIPS64R2
-which have more features and wider user base.
-
-Also default to build 64 bit kernel if it=E2=80=99s supported by CPU.
-
-Thanks.
-Jiaxun
-
-
->=20
-> Thanks,
-> Guenter
->=20
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index ecc7a755fae6..1d681dd87bb0 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1260,6 +1260,8 @@ menu "CPU selection"
+ 
+ choice
+ 	prompt "CPU type"
++	default CPU_MIPS64_R2 if SYS_HAS_CPU_MIPS64_R2
++	default CPU_MIPS32_R2 if SYS_HAS_CPU_MIPS32_R2
+ 	default CPU_R4X00
+ 
+ config CPU_LOONGSON64
+@@ -2007,6 +2009,7 @@ menu "Kernel type"
+ 
+ choice
+ 	prompt "Kernel code model"
++	default 64BIT
+ 	help
+ 	  You should only select this option if you have a workload that
+ 	  actually benefits from 64-bit processing or if your machine has
+-- 
+2.39.2 (Apple Git-143)
 
