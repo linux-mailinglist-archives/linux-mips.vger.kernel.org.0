@@ -2,74 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3543A6DBF84
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Apr 2023 12:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBD36DBF85
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Apr 2023 12:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjDIKnd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Apr 2023 06:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S229513AbjDIKnf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Apr 2023 06:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDIKnc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Apr 2023 06:43:32 -0400
+        with ESMTP id S229458AbjDIKne (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Apr 2023 06:43:34 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2C746BF
-        for <linux-mips@vger.kernel.org>; Sun,  9 Apr 2023 03:43:31 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id AF47732004ED;
-        Sun,  9 Apr 2023 06:43:30 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0C249E9
+        for <linux-mips@vger.kernel.org>; Sun,  9 Apr 2023 03:43:33 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id EF4FB32002E2;
+        Sun,  9 Apr 2023 06:43:32 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 09 Apr 2023 06:43:31 -0400
+  by compute2.internal (MEProxy); Sun, 09 Apr 2023 06:43:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681037010; x=
-        1681123410; bh=GICeuC5Na6dEOkT9RFxmFTSwUiB6wXXr5dWatVKt1SI=; b=h
-        br0bEp5gHuzlgLbCg4djDpSISTNjkyhcxX2+dZ2xm34muiZdLJEz7RrIf4Yz/t+1
-        yWtXWTx6ilIf4sOsXKIVzzjxB4Gk5A6KNbxv22WAj1tKRKYsocvnYLTVyP+BPccd
-        RnXy3kbk7Zb/YErIikN8asz6auUOwuH2aJdShelMPk8sOaDu3rnYorp/XFtLn7HM
-        j2+LiJFYTOuxrNk5gVRFKXhYOQktnkj6nU2EsdaIqKSoxo/NjTFpzy2t5IjS04rf
-        gF6tNI/GfNFQxVgUIaxl62PZQaB9o/o9PP6/rR0GBXqiLuwjdG7xgvm3kx2aNtb1
-        vAsDp9Ph7wohMAe354gVA==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681037012; x=
+        1681123412; bh=nTO6Ylpmk7/Iff7I5htSerd/uHZn47TmohbEAcaDuVI=; b=3
+        GovYa+2y2T7xdcM7goHkVP86cSEwbAh8sj89C86Xd+7KRDHo5AzPNMm5ymwR0wEs
+        tnuUGucNE3btGxSrwXwzuga1+FEuSy0LcObLcGJKG2l83HtNVG9x0ATWRgch8MKU
+        YZavrbfgEW1rKVU2/IwVA5IbSW3qND8BvVzDDYZ6bD+rx5eWjpbPR3I8CLSoj02z
+        fcmkCha9BuY5p98VX2qHYi0vPApOL2lfadOg2OwcBch/CF4LduAl2zoWkyqRq95p
+        wcQhUtol8zEk43bcr/6bpFrrbZfWf6FRm2kNUMe3+4AwwON+JWsRFbrBArDoQrGe
+        yr002HqK3npjXIcZF5fBA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1681037010; x=
-        1681123410; bh=GICeuC5Na6dEOkT9RFxmFTSwUiB6wXXr5dWatVKt1SI=; b=m
-        5wA77IC1LBNrO3z3FmlKzyw1EkseskgKySrLlYrlE326Q7eoZq/4buVPyMx4RSG/
-        1R7lMMohuR7m4kUtJwuU1UxR2+D9ksiXqhoKqR6VzRmJ3eE4I36Aparbl/LbaQSW
-        JS8Mhh+G1LoS713TG/1sOKUbR0afcPi/d5xffZxPADgEHW/7YkbLxVbDQzVpAZhJ
-        CGveBOhASSmJpUTBRV9I3FjULk5pNWsbgoPZeG/COB2Zc/2jpjanIFbnMj0EqzpD
-        zagRwZGMOVkLCAt3PD2L1JrgN4tcRABeYpr893auYAwK8hsgRUx9oehblqGtVNRe
-        H2FZ84YEzMnamhuzVooZQ==
-X-ME-Sender: <xms:0pYyZK_XZXsKsOzNTb6j-tSqJ6rq-PFrjwZQqX-QQ-reBdmbtSTw5Q>
-    <xme:0pYyZKsrbumuSxruNgnlXgAO-sm0LXMtvRl7tcc_Z073uCO1YdK7izCQfKHoFc8EY
-    vx0Onw0j7VOs5GjQuk>
-X-ME-Received: <xmr:0pYyZACSKOL-LR7m-BytYLWk0X_R95j33D9ZWvH1ZlmVBB9S_LsZlTyywpyu>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1681037012; x=
+        1681123412; bh=nTO6Ylpmk7/Iff7I5htSerd/uHZn47TmohbEAcaDuVI=; b=h
+        Vi8AGc4iZ0J2zHdOpVHj6V/ozUqTrZLCvUt0N6mdxLUXB6SWueiRanNwRx2drdew
+        +QVFYDqxNvKFr6YQ5b/5p2G+1y9Tm94EesPynxqqEjRtTNJzFXfcwuZFQeTicyb1
+        orFMQ1zQxDj7J9pcRAx9a5kibbYklqBlYkUMAjI2ERso9zInq9YrHGnVJ5P7k8FQ
+        Y4IaAG9hbPMU25SfUNDzjN1CIzveFtgIviEGYDgoP5fpZtQGRsQiPF3NMpbjzUok
+        ZJA9/5m47CYA+qNJYfYlDC+fYiSzKh3d3Evcqd1OulVKjDqI3DlIRDpDrILAB26T
+        DmrH3B3N62o4WCyVApzEA==
+X-ME-Sender: <xms:1JYyZAzRVibB8HNg-TLI9tNre4Zo95WZe5VrsiWIb4kwwfLo1C5PuA>
+    <xme:1JYyZETmzbkux8ln_A2KwErveF0x2SXTtlCrlL5bkazk4gGey6ndzHZWf8xwE1Cfc
+    8DtuQ0ZSJPL4d23CJ4>
+X-ME-Received: <xmr:1JYyZCV7nE9RNwlrNqnNz0eLSQyKOY4HrdHbHFiySW05B1WJPRKZ6TmRMPSO>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdektddgfedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
     ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
     dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
+    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomh
-X-ME-Proxy: <xmx:0pYyZCeWVZvayWvdxdm_JTS4_1J7LqpGtot1HMSp5c_ovuy_qvYWxA>
-    <xmx:0pYyZPO8j4LMpNFPflXdRqQ3v23iofzcRI5MgaPbgW-dh3YglXn2Lw>
-    <xmx:0pYyZMlh4CW3i44wyxHHGV9poTzAfij6ZtST0Be8WyWNDZQv5J4q6g>
-    <xmx:0pYyZEphZgigudbrnhebDIY58dVGyQX-1agqwIgPKsUKGWt_-VtwFQ>
+X-ME-Proxy: <xmx:1JYyZOgYQ13b59Scotiz6fhz0p3rAGNoBmdh-7MYy_h-NMGmHdrfaQ>
+    <xmx:1JYyZCDPFWCaQqV9HHV1bzr9SmiNscFcmbPoOUjH1cttI8CgHzwDLA>
+    <xmx:1JYyZPKMxrN3DfwdFWQGNUKnjX_S1ilcNSVysW9cTfyvdgRLYDZrcg>
+    <xmx:1JYyZF8RHEG0jpDVNrR-EB0RvQFfIG2NbvJsTUqlqq3gU9JNAQOTvw>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Apr 2023 06:43:29 -0400 (EDT)
+ 9 Apr 2023 06:43:31 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     llvm@lists.linux.dev, tsbogend@alpha.franken.de,
         ndesaulniers@google.com, nathan@kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 5/8] MIPS: mipsregs: Parse fp and sp register by name in parse_r
-Date:   Sun,  9 Apr 2023 11:43:06 +0100
-Message-Id: <20230409104309.13887-6-jiaxun.yang@flygoat.com>
+Subject: [PATCH 6/8] MIPS: c-r4k: Use cache_op function for rm7k_erratum31
+Date:   Sun,  9 Apr 2023 11:43:07 +0100
+Message-Id: <20230409104309.13887-7-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
 References: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
@@ -85,49 +85,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-parse_r helper is used to parse register number from oprand,
-it only handles oprand which use number to refer register before.
+LLVM assembler is not happy with offset that may overflow immediate field.
+Use cache_op function instead of inline assembly to fix build error:
 
-However compiler may use $gp and $sp to reference register 29 and
-30. Handle this situation by adding relevant match name.
-
-Fixes compilation error:
-{standard input}: Assembler messages:
-{standard input}:1937: Error: Unable to parse register name $fp
+arch/mips/mm/c-r4k.c:922:23: error: instruction requires a CPU feature not
+currently enabled
+                        "cache\t%1, 0(%0)\n\t"
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/include/asm/mipsregs.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/mips/mm/c-r4k.c | 33 ++++++++++++++-------------------
+ 1 file changed, 14 insertions(+), 19 deletions(-)
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index 9d928b952abf..7d2c1c90fa10 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -1277,11 +1277,13 @@ static inline int mm_insn_16bit(u16 insn)
-  */
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 420440cc40b1..89603d033180 100644
+--- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -915,25 +915,20 @@ static inline void rm7k_erratum31(void)
+ 	write_c0_taghi(0);
  
- /* Match an individual register number and assign to \var */
--#define _IFC_REG(n)				\
--	".ifc	\\r, $" #n "\n\t"		\
-+#define _IFC_REG_NAME(name, n)			\
-+	".ifc	\\r, $" #name "\n\t"		\
- 	"\\var	= " #n "\n\t"			\
- 	".endif\n\t"
- 
-+#define _IFC_REG(n)	_IFC_REG_NAME(n, n)
+ 	for (addr = INDEX_BASE; addr <= INDEX_BASE + 4096; addr += ic_lsize) {
+-		__asm__ __volatile__ (
+-			".set push\n\t"
+-			".set noreorder\n\t"
+-			".set "MIPS_ISA_LEVEL"\n\t"
+-			"cache\t%1, 0(%0)\n\t"
+-			"cache\t%1, 0x1000(%0)\n\t"
+-			"cache\t%1, 0x2000(%0)\n\t"
+-			"cache\t%1, 0x3000(%0)\n\t"
+-			"cache\t%2, 0(%0)\n\t"
+-			"cache\t%2, 0x1000(%0)\n\t"
+-			"cache\t%2, 0x2000(%0)\n\t"
+-			"cache\t%2, 0x3000(%0)\n\t"
+-			"cache\t%1, 0(%0)\n\t"
+-			"cache\t%1, 0x1000(%0)\n\t"
+-			"cache\t%1, 0x2000(%0)\n\t"
+-			"cache\t%1, 0x3000(%0)\n\t"
+-			".set pop\n"
+-			:
+-			: "r" (addr), "i" (Index_Store_Tag_I), "i" (Fill_I));
++		cache_op(Index_Store_Tag_I, addr);
++		cache_op(Index_Store_Tag_I, addr + 0x1000);
++		cache_op(Index_Store_Tag_I, addr + 0x2000);
++		cache_op(Index_Store_Tag_I, addr + 0x3000);
 +
- #define _ASM_SET_PARSE_R						\
- 	".macro	parse_r var r\n\t"					\
- 	"\\var	= -1\n\t"						\
-@@ -1293,6 +1295,7 @@ static inline int mm_insn_16bit(u16 insn)
- 	_IFC_REG(20) _IFC_REG(21) _IFC_REG(22) _IFC_REG(23)		\
- 	_IFC_REG(24) _IFC_REG(25) _IFC_REG(26) _IFC_REG(27)		\
- 	_IFC_REG(28) _IFC_REG(29) _IFC_REG(30) _IFC_REG(31)		\
-+	_IFC_REG_NAME(sp, 29) _IFC_REG_NAME(fp, 30)			\
- 	".iflt	\\var\n\t"						\
- 	".error	\"Unable to parse register name \\r\"\n\t"		\
- 	".endif\n\t"							\
++		cache_op(Fill_I, addr);
++		cache_op(Fill_I, addr + 0x1000);
++		cache_op(Fill_I, addr + 0x2000);
++		cache_op(Fill_I, addr + 0x3000);
++
++		cache_op(Index_Store_Tag_I, addr);
++		cache_op(Index_Store_Tag_I, addr + 0x1000);
++		cache_op(Index_Store_Tag_I, addr + 0x2000);
++		cache_op(Index_Store_Tag_I, addr + 0x3000);
+ 	}
+ }
+ 
 -- 
 2.39.2 (Apple Git-143)
 
