@@ -2,78 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1576DBF80
+	by mail.lfdr.de (Postfix) with ESMTP id 091AE6DBF7E
 	for <lists+linux-mips@lfdr.de>; Sun,  9 Apr 2023 12:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjDIKn0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Apr 2023 06:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S229510AbjDIKnZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Apr 2023 06:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDIKnY (ORCPT
+        with ESMTP id S229454AbjDIKnY (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Apr 2023 06:43:24 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD5E4482
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0884483
         for <linux-mips@vger.kernel.org>; Sun,  9 Apr 2023 03:43:22 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 6AD8C32002E2;
-        Sun,  9 Apr 2023 06:43:18 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id BEA4832004ED;
+        Sun,  9 Apr 2023 06:43:20 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 09 Apr 2023 06:43:18 -0400
+  by compute5.internal (MEProxy); Sun, 09 Apr 2023 06:43:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:message-id:mime-version:reply-to
-        :sender:subject:subject:to:to; s=fm3; t=1681036998; x=
-        1681123398; bh=PMqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=i
-        Z3KCVOjG+6AMBqh2mTaAlcS3cDX0XctKWAToVpDWNbYMagKFzMug/0NN2SawGif+
-        tTGc9NABwR9pDtFwMkn0WNdtasxXF+cp7Ws+oDzaoIli5CbxmgOg9XwPUX0Bc1x3
-        Q+ZbixBq+b9KZj/ifF2cxiCX+zGv65P6OtjyDfE9PV73o7/d7s6Ljzc+NVfBf9C/
-        lNgdyDP7/+8B5TBWLFiJRo6+dWzKu97i/iS/B/j2qjKQgehDDtckz4Nv0bC6DbOt
-        womIdtjpdCYSm19auh59aMfcy9k8RoQtbsBETIyE1xShVAE7Z+QHcYwKi31Lyegf
-        LRKw1qK7NzEooO5AQ+FRg==
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681037000; x=
+        1681123400; bh=qWe8IvdF8H4iL7FM6XSpQ2R8Ky2u8F7Wy+R83JW6slo=; b=q
+        mMD7CzvRnP2kSYszneyd9I2hjzSU95qJ9yP3JI73EisP1AYhvjN3KeA3SxMzHJHU
+        RMincMhNbhf4jobnP684Jx5PiP3r9vOS87aLKUDk0acAoB6W6PCW4HvbCkqmfkf4
+        QzLAoO+yOYn8FbtXXYFNvvuzsbH32BIy74oisRTs+F9NrhJ6lqejZedM8PhOE2ke
+        eK8slbNwX0f83FEy2MI6iUFEpqx9R4cFHX+ocoSLcYlweWJHilIZ7nrOzsMrQOfP
+        Kjnh0REyPDfpqJLVw65zmFJzvx7ezFW67ezXrTCupMLY7VNHy3j2eUqjw+9UcWeo
+        W1M/k9bBdHq8qCjdWEuWQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; t=1681036998; x=1681123398; bh=P
-        Mqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=ddKVvuBsfpXM522As
-        SnTSKgfCALda0Wrz/vGjNOzUbrN+oG0L7Xr8bqmMwXwF0PcLNiZV/gLdQ/14b+5H
-        2aTWVLt51/DaI5dJHAcFZ2g9iSYKkh1dRUz7EloE+cZv47TuNqV0pjbo9GFPDWGv
-        z4nwW+woZh/CzbVljnGJmyF1fqFHscTk1d72noMLWRHg2MZ7s5SbAI6G14/vt8G+
-        0yVQd+o1I1HKSJQ8RcActweeJgEoiRWPOb1IjU8NHcZXOQOWUXCuilvX1vYWnAN4
-        hsHTH9DNR1bchOfLkeb6o+6Uxh32oZ4e5kYgmwY2vS+I6tcQuPZ2oh+26HzBg7W5
-        ojcjg==
-X-ME-Sender: <xms:xZYyZGoZgA3kLgLCEMmZRxsBPwb48YCizUuVVnzNt1TVIDGpiJ1USw>
-    <xme:xZYyZEoqDnj6fnSKv4OxthVRy-uQpf7dzzPafpM5m48UPLX_z6on0VQgqMZIlOYUm
-    pvICbXsbW2DNxHVpL4>
-X-ME-Received: <xmr:xZYyZLPVnvfN0wzdHdNVFAP3bXtL4XiQjMM7eCMgVD8D_k8AnMqh050bYqU6>
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1681037000; x=
+        1681123400; bh=qWe8IvdF8H4iL7FM6XSpQ2R8Ky2u8F7Wy+R83JW6slo=; b=m
+        KogR8JOoStK1MrGEgFuKeJBe2pwN5QSH75Wcjdc62Hsud7moePEj8zZqXSQkFp6q
+        zZj9tLeI2QSk02zWFmyNI1w7CvBnMR6C778fPSF70pCzDcYhyk8WRGxEYgTAXRNc
+        p6Xn4+AYvRSeZ2mH0UEB11xB1ETvbkynTDAXzboIEbx1pVwF6MvjhIZnL0bDnLYw
+        KPDmJs9mj5RgwiiaGUsrxYW1Ywnlq+kQW5lRlXSuLCazzaE54Tatbv8EdgemMeBj
+        YNy2lLHmu8ie4NgGqZlgRbGxODMT3Gw3tb6MPFHmPCuSxvGpijDPN6oP6Bxu0EyJ
+        FS0skuIsdbYQz0gX/1Y3Q==
+X-ME-Sender: <xms:yJYyZNFHFuEtYefe-eIeDSZNB4LInkFceBk7Fs_e1z-B0UM9GVlnZg>
+    <xme:yJYyZCV2pJVJkdisTU0rST3r0Ym73Q-zY6KsPRogbbMhaXKWMrTnFVg47vVF19hUI
+    7FYyPgOtufIV3_Kkv8>
+X-ME-Received: <xmr:yJYyZPLjp3Dj8h4HgusCYlnpeEr3dJYqy86qBQ861d0adHyRhypRV4l3yH77>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdektddgfedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekre
-    dtredtjeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejueekkedvfeekudfhhe
-    eliedugefgffduveeviedvffeiueekiefhtdekueeuudenucffohhmrghinhepkhgvrhhn
-    vghlrdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgt
-    ohhm
-X-ME-Proxy: <xmx:xZYyZF47h6ILlrvxM2fh9WPJt2ktgeOxAvE0L3jCYYUhA4kHWew27w>
-    <xmx:xZYyZF5_1i1bF3rmfLitbAIx6CZmcmTThyArcJ4DNQ_HDtIM90JIrQ>
-    <xmx:xZYyZFhLUarNNGut_uxr6gn1EKfznFGzevPWrxfTLS1mfzAKtYtUjQ>
-    <xmx:xpYyZI3GMjKjonfVXzOPVLfql_oQfFgQnwlHQhkd6W7nTj4RwRH0YA>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
+    ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
+    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfffhtdfhfeeuteefhf
+    egkeefkeeitdfghedukeetkedtvdekieegleetkeeutddunecuffhomhgrihhnpehslhgv
+    vghpvghrrdhssgdpvhgvtgdrshgspdhgvghnvgigrdhssgdpfhhpuhdrshgspdhprghrth
+    hirghlrdhssgdptggvgidqohgtthdrshgsnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+    homh
+X-ME-Proxy: <xmx:yJYyZDHmQhJuqgPLzyU2A7j_USVqo7MAn0V4xd0u3SP_s3BYodPeIw>
+    <xmx:yJYyZDXNu9CgF4-2gEzsimKgVymO0-dUi4XSwaMlubNSYha3fSk6-w>
+    <xmx:yJYyZOOZFj4uXjQ0-K7lil_d_uap-FZ8yGNKQNaRlVPJR04yCaKhZQ>
+    <xmx:yJYyZJywSZ7xyfA6NChESPpMfA9isB2TfFWznxpEkmw7Wc7U62tN2Q>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Apr 2023 06:43:16 -0400 (EDT)
+ 9 Apr 2023 06:43:19 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     llvm@lists.linux.dev, tsbogend@alpha.franken.de,
         ndesaulniers@google.com, nathan@kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 0/7] MIPS: LLVM build fixes
-Date:   Sun,  9 Apr 2023 11:43:01 +0100
-Message-Id: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH 1/8] MIPS: Replace assembly isa level directives with macros
+Date:   Sun,  9 Apr 2023 11:43:02 +0100
+Message-Id: <20230409104309.13887-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
+References: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
@@ -85,65 +87,818 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi all,
+There are tons of .set assembly isa level directives in tree
+to set current isa level to a higher level to enable some features.
 
-This series fixes some build errors when building with LLVM.
-Some of them was discorved by inspecting the tree.
+However as nowadays MIPS is shuffling around opcodes, a single ISA
+level setting may result wrong opcode in binary. We had MIPS_ISA_LEVEL
+macros to determine most appropriate superset of ISA level, just do a
+tree wide replacement to take advantage of those macros.
 
-Tested with LLVM + LLVM_IAS={0, 1} and GCC against:
+Mapping:
+arch=r4000 -> MIPS_ISA_ARCH_LEVEL
+{mips1, mips3, mips32r2, mips64r2} -> MIPS_ISA_LEVEL
+{mips32r5, mips64r5} -> Special case for VZ, mips64r5 if target ISA
+	is lower than R5, otherwise MIPS_ISA_LEVEL
 
-allnoconfig, allmodconfig, 32r2_defconfig, 32r2el_defconfig, 64r2_defconfig,
-64r2el_defconfig, micro32r2el_defconfig, 32r6el_defconfig, 64r6el_defconfig,
-loongson3_defconfig, lemote2f_defconfig, ip22_defconfig, cavium_octeon_defconfig,
-malta_defconfig
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/alchemy/common/sleeper.S |  6 ++--
+ arch/mips/include/asm/asmmacro.h   | 32 ++++++++++----------
+ arch/mips/include/asm/futex.h      |  8 ++---
+ arch/mips/include/asm/hazards.h    |  2 +-
+ arch/mips/include/asm/io.h         |  4 +--
+ arch/mips/include/asm/mipsmtregs.h | 18 ++++++------
+ arch/mips/include/asm/mipsregs.h   | 47 +++++++++++++++++-------------
+ arch/mips/include/asm/stackframe.h |  2 +-
+ arch/mips/kernel/bmips_vec.S       |  4 +--
+ arch/mips/kernel/csrc-r4k.c        |  2 +-
+ arch/mips/kernel/genex.S           |  8 ++---
+ arch/mips/kernel/idle.c            |  6 ++--
+ arch/mips/kernel/r4k_fpu.S         |  4 +--
+ arch/mips/kernel/syscall.c         |  2 +-
+ arch/mips/lantiq/clk.c             |  2 +-
+ arch/mips/lib/csum_partial.S       |  5 ++--
+ arch/mips/mm/c-r4k.c               |  2 +-
+ arch/mips/mm/cex-oct.S             |  2 +-
+ arch/mips/mm/sc-ip22.c             |  6 ++--
+ 19 files changed, 85 insertions(+), 77 deletions(-)
 
-With other patchsets [1] [2] [3] I sent before, on my CI [4], with tree [5].
-
-allmodconfig is still failing but it's not related to MIPS.
-
-[1]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
-[2]: https://patchwork.kernel.org/project/linux-mips/patch/20230408115936.6631-1-jiaxun.yang@flygoat.com/
-[3]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
-[4]: https://github.com/FlyGoat/kernel-action-ci/actions/runs/4649898964/jobs/8228560848
-[5]: https://github.com/FlyGoat/kernel-action-ci/tree/71d3f53e9c44cebf62cfa4ed7ec3b0ce6452555f
-
-Thanks
-Jiaxun
-
-Jiaxun Yang (8):
-  MIPS: Replace assembly isa level directives with macros
-  MIPS: Set ISA level for MSA control reg helpers
-  MIPS: loongson2ef: Add missing break in cs5536_isa
-  MIPS: asmmacro: Restore fp macro after undef
-  MIPS: mipsregs: Parse fp and sp register by name in parse_r
-  MIPS: c-r4k: Use cache_op function for rm7k_erratum31
-  MIPS: octeon_switch: Remove duplicated labels
-  MIPS: Implement microMIPS MT ASE helpers
-
- arch/mips/alchemy/common/sleeper.S            |   6 +-
- arch/mips/include/asm/asmmacro.h              |  57 ++--
- arch/mips/include/asm/futex.h                 |   8 +-
- arch/mips/include/asm/hazards.h               |   2 +-
- arch/mips/include/asm/io.h                    |   4 +-
- arch/mips/include/asm/mipsmtregs.h            | 256 +++++++++++-------
- arch/mips/include/asm/mipsregs.h              |  63 +++--
- arch/mips/include/asm/msa.h                   |   2 +
- arch/mips/include/asm/stackframe.h            |   2 +-
- arch/mips/kernel/bmips_vec.S                  |   4 +-
- arch/mips/kernel/csrc-r4k.c                   |   2 +-
- arch/mips/kernel/genex.S                      |   8 +-
- arch/mips/kernel/idle.c                       |   6 +-
- arch/mips/kernel/octeon_switch.S              |   6 -
- arch/mips/kernel/r4k_fpu.S                    |   4 +-
- arch/mips/kernel/syscall.c                    |   2 +-
- arch/mips/lantiq/clk.c                        |   2 +-
- arch/mips/lib/csum_partial.S                  |   5 +-
- .../loongson2ef/common/cs5536/cs5536_isa.c    |   2 +-
- arch/mips/mm/c-r4k.c                          |  33 +--
- arch/mips/mm/cex-oct.S                        |   2 +-
- arch/mips/mm/sc-ip22.c                        |   6 +-
- 22 files changed, 277 insertions(+), 205 deletions(-)
-
+diff --git a/arch/mips/alchemy/common/sleeper.S b/arch/mips/alchemy/common/sleeper.S
+index 13586d224314..e19f20223aac 100644
+--- a/arch/mips/alchemy/common/sleeper.S
++++ b/arch/mips/alchemy/common/sleeper.S
+@@ -91,7 +91,7 @@ LEAF(alchemy_sleep_au1000)
+ 
+ 	/* cache following instructions, as memory gets put to sleep */
+ 	la	t0, 1f
+-	.set	arch=r4000
++	.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 	cache	0x14, 0(t0)
+ 	cache	0x14, 32(t0)
+ 	cache	0x14, 64(t0)
+@@ -117,7 +117,7 @@ LEAF(alchemy_sleep_au1550)
+ 
+ 	/* cache following instructions, as memory gets put to sleep */
+ 	la	t0, 1f
+-	.set	arch=r4000
++	.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 	cache	0x14, 0(t0)
+ 	cache	0x14, 32(t0)
+ 	cache	0x14, 64(t0)
+@@ -159,7 +159,7 @@ LEAF(alchemy_sleep_au1300)
+ 	la	t1, 4f
+ 	subu	t2, t1, t0
+ 
+-	.set	arch=r4000
++	.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 
+ 1:	cache	0x14, 0(t0)
+ 	subu	t2, t2, 32
+diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
+index 74c2dedc55b4..2491a6c68390 100644
+--- a/arch/mips/include/asm/asmmacro.h
++++ b/arch/mips/include/asm/asmmacro.h
+@@ -107,7 +107,7 @@
+ 
+ 	.macro	fpu_save_16odd thread
+ 	.set	push
+-	.set	mips64r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	hardfloat
+ 	sdc1	$f1,  THREAD_FPR1(\thread)
+@@ -166,7 +166,7 @@
+ 
+ 	.macro	fpu_restore_16odd thread
+ 	.set	push
+-	.set	mips64r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	hardfloat
+ 	ldc1	$f1,  THREAD_FPR1(\thread)
+@@ -242,7 +242,7 @@
+ #ifdef CONFIG_AS_HAS_MSA
+ 	.macro	_cfcmsa	rd, cs
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	cfcmsa	\rd, $\cs
+@@ -251,7 +251,7 @@
+ 
+ 	.macro	_ctcmsa	cd, rs
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	ctcmsa	$\cd, \rs
+@@ -260,7 +260,7 @@
+ 
+ 	.macro	ld_b	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	ld.b	$w\wd, \off(\base)
+@@ -269,7 +269,7 @@
+ 
+ 	.macro	ld_h	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	ld.h	$w\wd, \off(\base)
+@@ -278,7 +278,7 @@
+ 
+ 	.macro	ld_w	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	ld.w	$w\wd, \off(\base)
+@@ -287,7 +287,7 @@
+ 
+ 	.macro	ld_d	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	ld.d	$w\wd, \off(\base)
+@@ -296,7 +296,7 @@
+ 
+ 	.macro	st_b	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	st.b	$w\wd, \off(\base)
+@@ -305,7 +305,7 @@
+ 
+ 	.macro	st_h	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	st.h	$w\wd, \off(\base)
+@@ -314,7 +314,7 @@
+ 
+ 	.macro	st_w	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	st.w	$w\wd, \off(\base)
+@@ -323,7 +323,7 @@
+ 
+ 	.macro	st_d	wd, off, base
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	st.d	$w\wd, \off(\base)
+@@ -332,7 +332,7 @@
+ 
+ 	.macro	copy_s_w	ws, n
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	copy_s.w $1, $w\ws[\n]
+@@ -341,7 +341,7 @@
+ 
+ 	.macro	copy_s_d	ws, n
+ 	.set	push
+-	.set	mips64r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	copy_s.d $1, $w\ws[\n]
+@@ -350,7 +350,7 @@
+ 
+ 	.macro	insert_w	wd, n
+ 	.set	push
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	insert.w $w\wd[\n], $1
+@@ -359,7 +359,7 @@
+ 
+ 	.macro	insert_d	wd, n
+ 	.set	push
+-	.set	mips64r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	.set	msa
+ 	insert.d $w\wd[\n], $1
+diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
+index 05832eb240fa..2107e536a308 100644
+--- a/arch/mips/include/asm/futex.h
++++ b/arch/mips/include/asm/futex.h
+@@ -29,11 +29,11 @@
+ 		"	.set	push				\n"	\
+ 		"	.set	noat				\n"	\
+ 		"	.set	push				\n"	\
+-		"	.set	arch=r4000			\n"	\
++		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
+ 		"1:	ll	%1, %4	# __futex_atomic_op	\n"	\
+ 		"	.set	pop				\n"	\
+ 		"	" insn	"				\n"	\
+-		"	.set	arch=r4000			\n"	\
++		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
+ 		"2:	sc	$1, %2				\n"	\
+ 		"	beqzl	$1, 1b				\n"	\
+ 		__stringify(__WEAK_LLSC_MB) "			\n"	\
+@@ -144,12 +144,12 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ 		"	.set	push					\n"
+ 		"	.set	noat					\n"
+ 		"	.set	push					\n"
+-		"	.set	arch=r4000				\n"
++		"	.set	"MIPS_ISA_ARCH_LEVEL"	\n"
+ 		"1:	ll	%1, %3					\n"
+ 		"	bne	%1, %z4, 3f				\n"
+ 		"	.set	pop					\n"
+ 		"	move	$1, %z5					\n"
+-		"	.set	arch=r4000				\n"
++		"	.set	"MIPS_ISA_ARCH_LEVEL"	\n"
+ 		"2:	sc	$1, %2					\n"
+ 		"	beqzl	$1, 1b					\n"
+ 		__stringify(__WEAK_LLSC_MB) "				\n"
+diff --git a/arch/mips/include/asm/hazards.h b/arch/mips/include/asm/hazards.h
+index cb16be93b048..ca18c66530e8 100644
+--- a/arch/mips/include/asm/hazards.h
++++ b/arch/mips/include/asm/hazards.h
+@@ -144,7 +144,7 @@ do {									\
+ 									\
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+-	"	.set	mips64r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	"	dla	%0, 1f					\n"	\
+ 	"	jr.hb	%0					\n"	\
+ 	"	.set	pop					\n"	\
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index cc28d207a061..e2ec7ec3dc20 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -243,7 +243,7 @@ static inline void pfx##write##bwlq(type val,				\
+ 			local_irq_save(__flags);			\
+ 		__asm__ __volatile__(					\
+ 			".set	push"		"\t\t# __writeq""\n\t"	\
+-			".set	arch=r4000"			"\n\t"	\
++			".set	"MIPS_ISA_ARCH_LEVEL		"\n\t"	\
+ 			"dsll32 %L0, %L0, 0"			"\n\t"	\
+ 			"dsrl32 %L0, %L0, 0"			"\n\t"	\
+ 			"dsll32 %M0, %M0, 0"			"\n\t"	\
+@@ -277,7 +277,7 @@ static inline type pfx##read##bwlq(const volatile void __iomem *mem)	\
+ 			local_irq_save(__flags);			\
+ 		__asm__ __volatile__(					\
+ 			".set	push"		"\t\t# __readq" "\n\t"	\
+-			".set	arch=r4000"			"\n\t"	\
++			".set	"MIPS_ISA_ARCH_LEVEL		"\n\t"	\
+ 			"ld	%L0, %1"			"\n\t"	\
+ 			"dsra32 %M0, %L0, 0"			"\n\t"	\
+ 			"sll	%L0, %L0, 0"			"\n\t"	\
+diff --git a/arch/mips/include/asm/mipsmtregs.h b/arch/mips/include/asm/mipsmtregs.h
+index a8d67c2f4f7b..b6dea86b1b82 100644
+--- a/arch/mips/include/asm/mipsmtregs.h
++++ b/arch/mips/include/asm/mipsmtregs.h
+@@ -197,7 +197,7 @@ static inline unsigned int dvpe(void)
+ 	"	.set	push						\n"
+ 	"	.set	noreorder					\n"
+ 	"	.set	noat						\n"
+-	"	.set	mips32r2					\n"
++	"	.set	"MIPS_ISA_LEVEL"				\n"
+ 	"	.word	0x41610001		# dvpe $1		\n"
+ 	"	move	%0, $1						\n"
+ 	"	ehb							\n"
+@@ -215,7 +215,7 @@ static inline void __raw_evpe(void)
+ 	"	.set	push						\n"
+ 	"	.set	noreorder					\n"
+ 	"	.set	noat						\n"
+-	"	.set	mips32r2					\n"
++	"	.set	"MIPS_ISA_LEVEL"				\n"
+ 	"	.word	0x41600021		# evpe			\n"
+ 	"	ehb							\n"
+ 	"	.set	pop						\n");
+@@ -238,7 +238,7 @@ static inline unsigned int dmt(void)
+ 
+ 	__asm__ __volatile__(
+ 	"	.set	push						\n"
+-	"	.set	mips32r2					\n"
++	"	.set	"MIPS_ISA_LEVEL"				\n"
+ 	"	.set	noat						\n"
+ 	"	.word	0x41610BC1			# dmt $1	\n"
+ 	"	ehb							\n"
+@@ -256,7 +256,7 @@ static inline void __raw_emt(void)
+ 	__asm__ __volatile__(
+ 	"	.set	push						\n"
+ 	"	.set	noreorder					\n"
+-	"	.set	mips32r2					\n"
++	"	.set	"MIPS_ISA_LEVEL"				\n"
+ 	"	.word	0x41600be1			# emt		\n"
+ 	"	ehb							\n"
+ 	"	.set	pop");
+@@ -277,7 +277,7 @@ static inline void ehb(void)
+ {
+ 	__asm__ __volatile__(
+ 	"	.set	push					\n"
+-	"	.set	mips32r2				\n"
++	"	.set	"MIPS_ISA_LEVEL"			\n"
+ 	"	ehb						\n"
+ 	"	.set	pop					\n");
+ }
+@@ -288,7 +288,7 @@ static inline void ehb(void)
+ 									\
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+-	"	.set	mips32r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	"	.set	noat					\n"	\
+ 	"	# mftc0 $1, $" #rt ", " #sel "			\n"	\
+ 	"	.word	0x41000800 | (" #rt " << 16) | " #sel " \n"	\
+@@ -306,7 +306,7 @@ static inline void ehb(void)
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+ 	"	.set	noat					\n"	\
+-	"	.set	mips32r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	"	# mftgpr $1," #rt "				\n"	\
+ 	"	.word	0x41000820 | (" #rt " << 16)		\n"	\
+ 	"	move	%0, $1					\n"	\
+@@ -331,7 +331,7 @@ static inline void ehb(void)
+ do {									\
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+-	"	.set	mips32r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	"	.set	noat					\n"	\
+ 	"	move	$1, %0					\n"	\
+ 	"	# mttgpr $1, " #rd "				\n"	\
+@@ -344,7 +344,7 @@ do {									\
+ ({									\
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+-	"	.set	mips32r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	"	.set	noat					\n"	\
+ 	"	move	$1, %0					\n"	\
+ 	"	# mttc0 %0," #rd ", " #sel "			\n"	\
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 8f0ebc399338..9d928b952abf 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -1421,7 +1421,7 @@ do {								\
+ 	else								\
+ 		__asm__ vol(						\
+ 			".set\tpush\n\t"				\
+-			".set\tmips32\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"mfc0\t%0, " #source ", " #sel "\n\t"		\
+ 			".set\tpop\n\t"					\
+ 			: "=r" (__res));				\
+@@ -1435,14 +1435,14 @@ do {								\
+ 	else if (sel == 0)						\
+ 		__asm__ vol(						\
+ 			".set\tpush\n\t"				\
+-			".set\tmips3\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dmfc0\t%0, " #source "\n\t"			\
+ 			".set\tpop"					\
+ 			: "=r" (__res));				\
+ 	else								\
+ 		__asm__ vol(						\
+ 			".set\tpush\n\t"				\
+-			".set\tmips64\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dmfc0\t%0, " #source ", " #sel "\n\t"		\
+ 			".set\tpop"					\
+ 			: "=r" (__res));				\
+@@ -1470,7 +1470,7 @@ do {									\
+ 	else								\
+ 		__asm__ __volatile__(					\
+ 			".set\tpush\n\t"				\
+-			".set\tmips32\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"mtc0\t%z0, " #register ", " #sel "\n\t"	\
+ 			".set\tpop"					\
+ 			: : "Jr" ((unsigned int)(value)));		\
+@@ -1483,14 +1483,14 @@ do {									\
+ 	else if (sel == 0)						\
+ 		__asm__ __volatile__(					\
+ 			".set\tpush\n\t"				\
+-			".set\tmips3\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dmtc0\t%z0, " #register "\n\t"			\
+ 			".set\tpop"					\
+ 			: : "Jr" (value));				\
+ 	else								\
+ 		__asm__ __volatile__(					\
+ 			".set\tpush\n\t"				\
+-			".set\tmips64\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dmtc0\t%z0, " #register ", " #sel "\n\t"	\
+ 			".set\tpop"					\
+ 			: : "Jr" (value));				\
+@@ -1545,7 +1545,7 @@ do {									\
+ 	if (sel == 0)							\
+ 		__asm__ vol(						\
+ 			".set\tpush\n\t"				\
+-			".set\tmips64\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dmfc0\t%L0, " #source "\n\t"			\
+ 			"dsra\t%M0, %L0, 32\n\t"			\
+ 			"sll\t%L0, %L0, 0\n\t"				\
+@@ -1554,7 +1554,7 @@ do {									\
+ 	else								\
+ 		__asm__ vol(						\
+ 			".set\tpush\n\t"				\
+-			".set\tmips64\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dmfc0\t%L0, " #source ", " #sel "\n\t"		\
+ 			"dsra\t%M0, %L0, 32\n\t"			\
+ 			"sll\t%L0, %L0, 0\n\t"				\
+@@ -1582,7 +1582,7 @@ do {									\
+ 	else if (sel == 0)						\
+ 		__asm__ __volatile__(					\
+ 			".set\tpush\n\t"				\
+-			".set\tmips64\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dsll\t%L0, %L0, 32\n\t"			\
+ 			"dsrl\t%L0, %L0, 32\n\t"			\
+ 			"dsll\t%M0, %M0, 32\n\t"			\
+@@ -1593,7 +1593,7 @@ do {									\
+ 	else								\
+ 		__asm__ __volatile__(					\
+ 			".set\tpush\n\t"				\
+-			".set\tmips64\n\t"				\
++			".set\t "MIPS_ISA_LEVEL" \n\t"			\
+ 			"dsll\t%L0, %L0, 32\n\t"			\
+ 			"dsrl\t%L0, %L0, 32\n\t"			\
+ 			"dsll\t%M0, %M0, 32\n\t"			\
+@@ -1628,7 +1628,7 @@ do {									\
+ 									\
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+-	"	.set	mips32r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	_ASM_SET_MFHC0							\
+ 	"	mfhc0	%0, " #source ", %1			\n"	\
+ 	_ASM_UNSET_MFHC0						\
+@@ -1642,7 +1642,7 @@ do {									\
+ do {									\
+ 	__asm__ __volatile__(						\
+ 	"	.set	push					\n"	\
+-	"	.set	mips32r2				\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	_ASM_SET_MTHC0							\
+ 	"	mthc0	%z0, " #register ", %1			\n"	\
+ 	_ASM_UNSET_MTHC0						\
+@@ -2040,7 +2040,14 @@ do {									\
+  * Macros to access the guest system control coprocessor
+  */
+ 
+-#ifndef CONFIG_AS_HAS_VIRT
++#if MIPS_ISA_REV < 5
++/* VZ ASE should be able to work with Release 2 but LLVM thinks it needs R5 */
++#define MIPS_ISA_LEVEL_VIRT "mips64r5"
++#else
++#define MIPS_ISA_LEVEL_VIRT MIPS_ISA_LEVEL
++#endif
++
++#ifndef TOOLCHAIN_SUPPORTS_VIRT
+ #define _ASM_SET_MFGC0							\
+ 	_ASM_MACRO_2R_1S(mfgc0, rt, rs, sel,				\
+ 			 _ASM_INSN_IF_MIPS(0x40600000 | __rt << 16 | __rs << 11 | \\sel)	\
+@@ -2099,7 +2106,7 @@ do {									\
+ ({ int __res;								\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips32r5\n\t"					\
++		".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"			\
+ 		_ASM_SET_MFGC0						\
+ 		"mfgc0\t%0, " #source ", %1\n\t"			\
+ 		_ASM_UNSET_MFGC0					\
+@@ -2113,7 +2120,7 @@ do {									\
+ ({ unsigned long long __res;						\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips64r5\n\t"					\
++		".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"			\
+ 		_ASM_SET_DMFGC0						\
+ 		"dmfgc0\t%0, " #source ", %1\n\t"			\
+ 		_ASM_UNSET_DMFGC0					\
+@@ -2127,7 +2134,7 @@ do {									\
+ do {									\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips32r5\n\t"					\
++		".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"			\
+ 		_ASM_SET_MTGC0						\
+ 		"mtgc0\t%z0, " #register ", %1\n\t"			\
+ 		_ASM_UNSET_MTGC0					\
+@@ -2140,7 +2147,7 @@ do {									\
+ do {									\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips64r5\n\t"					\
++		".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"			\
+ 		_ASM_SET_DMTGC0						\
+ 		"dmtgc0\t%z0, " #register ", %1\n\t"			\
+ 		_ASM_UNSET_DMTGC0					\
+@@ -2376,7 +2383,7 @@ do {									\
+ 	"	.set	reorder					\n"	\
+ 	"	# gas fails to assemble cfc1 for some archs,	\n"	\
+ 	"	# like Octeon.					\n"	\
+-	"	.set	mips1					\n"	\
++	"	.set	"MIPS_ISA_LEVEL"			\n"	\
+ 	"	.set hardfloat					\n"	\
+ 	"	cfc1	%0,"STR(source)"			\n"	\
+ 	"	.set	pop					\n"	\
+@@ -2748,7 +2755,7 @@ static inline void tlb_read(void)
+ 	"	.set	push					\n"
+ 	"	.set	noreorder				\n"
+ 	"	.set	noat					\n"
+-	"	.set	mips32r2				\n"
++	"	.set	"MIPS_ISA_LEVEL"			\n"
+ 	"	.word	0x41610001		# dvpe $1	\n"
+ 	"	move	%0, $1					\n"
+ 	"	ehb						\n"
+@@ -2769,7 +2776,7 @@ static inline void tlb_read(void)
+ 		"	.set	push				\n"
+ 		"	.set	noreorder			\n"
+ 		"	.set	noat				\n"
+-		"	.set	mips32r2			\n"
++		"	.set	"MIPS_ISA_LEVEL"		\n"
+ 		"	.word	0x41600021	# evpe		\n"
+ 		"	ehb					\n"
+ 		"	.set	pop				\n");
+diff --git a/arch/mips/include/asm/stackframe.h b/arch/mips/include/asm/stackframe.h
+index a8705aef47e1..5b3d374f43e0 100644
+--- a/arch/mips/include/asm/stackframe.h
++++ b/arch/mips/include/asm/stackframe.h
+@@ -428,7 +428,7 @@
+ 		eretnc
+ #else
+ 		.set	push
+-		.set	arch=r4000
++		.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 		eret
+ 		.set	pop
+ #endif
+diff --git a/arch/mips/kernel/bmips_vec.S b/arch/mips/kernel/bmips_vec.S
+index 921a5fa55da6..f92a4b216da8 100644
+--- a/arch/mips/kernel/bmips_vec.S
++++ b/arch/mips/kernel/bmips_vec.S
+@@ -21,7 +21,7 @@
+ #include <asm/bmips.h>
+ 
+ 	.macro	BARRIER
+-	.set	mips32
++	.set	MIPS_ISA_LEVEL_RAW
+ 	_ssnop
+ 	_ssnop
+ 	_ssnop
+@@ -123,7 +123,7 @@ NESTED(bmips_reset_nmi_vec, PT_SIZE, sp)
+ 	jr	k0
+ 
+ 	RESTORE_ALL
+-	.set	arch=r4000
++	.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 	eret
+ 
+ #ifdef CONFIG_SMP
+diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
+index edc4afc080fa..906fa1a78f7f 100644
+--- a/arch/mips/kernel/csrc-r4k.c
++++ b/arch/mips/kernel/csrc-r4k.c
+@@ -35,7 +35,7 @@ static inline unsigned int rdhwr_count(void)
+ 
+ 	__asm__ __volatile__(
+ 	"	.set push\n"
+-	"	.set mips32r2\n"
++	"	.set "MIPS_ISA_LEVEL"\n"
+ 	"	rdhwr	%0, $2\n"
+ 	"	.set pop\n"
+ 	: "=r" (count));
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index b6de8e88c1bd..2268304ae70e 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -50,7 +50,7 @@ NESTED(except_vec3_generic, 0, sp)
+  */
+ NESTED(except_vec3_r4000, 0, sp)
+ 	.set	push
+-	.set	arch=r4000
++	.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 	.set	noat
+ 	mfc0	k1, CP0_CAUSE
+ 	li	k0, 31<<2
+@@ -403,7 +403,7 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
+ ejtag_return:
+ 	back_to_back_c0_hazard
+ 	MFC0	k0, CP0_DESAVE
+-	.set	mips32
++	.set	MIPS_ISA_LEVEL_RAW
+ 	deret
+ 	.set	pop
+ 	END(ejtag_debug_handler)
+@@ -503,7 +503,7 @@ NESTED(nmi_handler, PT_SIZE, sp)
+ 	 * We need to specify a selector to access the CP0.Diag1 (GSCause)
+ 	 * register. All GSExc-equipped processors have MIPS32.
+ 	 */
+-	.set	mips32
++	.set	MIPS_ISA_LEVEL_RAW
+ 	mfc0	a1, CP0_DIAGNOSTIC1
+ 	.set	pop
+ 	TRACE_IRQS_ON
+@@ -665,7 +665,7 @@ isrdhwr:
+ 	xori	k1, _THREAD_MASK
+ 	LONG_L	v1, TI_TP_VALUE(k1)
+ 	.set	push
+-	.set	arch=r4000
++	.set	MIPS_ISA_ARCH_LEVEL_RAW
+ 	eret
+ 	.set	pop
+ #endif
+diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
+index 5abc8b7340f8..541470be5ec6 100644
+--- a/arch/mips/kernel/idle.c
++++ b/arch/mips/kernel/idle.c
+@@ -54,7 +54,7 @@ void __cpuidle r4k_wait_irqoff(void)
+ 	if (!need_resched())
+ 		__asm__(
+ 		"	.set	push		\n"
+-		"	.set	arch=r4000	\n"
++		"	.set	"MIPS_ISA_ARCH_LEVEL"\n"
+ 		"	wait			\n"
+ 		"	.set	pop		\n");
+ }
+@@ -68,7 +68,7 @@ static void __cpuidle rm7k_wait_irqoff(void)
+ 	if (!need_resched())
+ 		__asm__(
+ 		"	.set	push					\n"
+-		"	.set	arch=r4000				\n"
++		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
+ 		"	.set	noat					\n"
+ 		"	mfc0	$1, $12					\n"
+ 		"	sync						\n"
+@@ -89,7 +89,7 @@ static void __cpuidle au1k_wait(void)
+ 
+ 	__asm__(
+ 	"	.set	push			\n"
+-	"	.set	arch=r4000		\n"
++	"	.set	"MIPS_ISA_ARCH_LEVEL"	\n"
+ 	"	cache	0x14, 0(%0)		\n"
+ 	"	cache	0x14, 32(%0)		\n"
+ 	"	sync				\n"
+diff --git a/arch/mips/kernel/r4k_fpu.S b/arch/mips/kernel/r4k_fpu.S
+index 4e8c98517d9d..ec508ff455f2 100644
+--- a/arch/mips/kernel/r4k_fpu.S
++++ b/arch/mips/kernel/r4k_fpu.S
+@@ -107,7 +107,7 @@ LEAF(_save_fp_context)
+ 	.set	push
+ 	.set	hardfloat
+ #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5)
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	mfc0	t0, CP0_STATUS
+ 	sll	t0, t0, 5
+@@ -175,7 +175,7 @@ LEAF(_restore_fp_context)
+ 	.set	push
+ 	.set	hardfloat
+ #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5)
+-	.set	mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	fp=64
+ 	mfc0	t0, CP0_STATUS
+ 	sll	t0, t0, 5
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index ae93a607ddf7..7f2be5912997 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -109,7 +109,7 @@ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
+ 	if (cpu_has_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {
+ 		__asm__ __volatile__ (
+ 		"	.set	push					\n"
+-		"	.set	arch=r4000				\n"
++		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
+ 		"	li	%[err], 0				\n"
+ 		"1:	ll	%[old], (%[addr])			\n"
+ 		"	move	%[tmp], %[new]				\n"
+diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
+index 2d5a0bcb0cec..81e3329fc5de 100644
+--- a/arch/mips/lantiq/clk.c
++++ b/arch/mips/lantiq/clk.c
+@@ -177,7 +177,7 @@ static inline u32 get_counter_resolution(void)
+ 
+ 	__asm__ __volatile__(
+ 		".set	push\n"
+-		".set	mips32r2\n"
++		".set	"MIPS_ISA_LEVEL"\n"
+ 		"rdhwr	%0, $3\n"
+ 		".set pop\n"
+ 		: "=&r" (res)
+diff --git a/arch/mips/lib/csum_partial.S b/arch/mips/lib/csum_partial.S
+index 7767137c3e49..4b1060c3494b 100644
+--- a/arch/mips/lib/csum_partial.S
++++ b/arch/mips/lib/csum_partial.S
+@@ -13,6 +13,7 @@
+ #include <linux/errno.h>
+ #include <asm/asm.h>
+ #include <asm/asm-offsets.h>
++#include <asm/compiler.h>
+ #include <asm/export.h>
+ #include <asm/regdef.h>
+ 
+@@ -282,7 +283,7 @@ EXPORT_SYMBOL(csum_partial)
+ #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5) || \
+     defined(CONFIG_CPU_LOONGSON64)
+ 	.set	push
+-	.set	arch=mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	wsbh	v1, sum
+ 	movn	sum, v1, t7
+ 	.set	pop
+@@ -707,7 +708,7 @@ EXPORT_SYMBOL(csum_partial)
+ #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5) || \
+     defined(CONFIG_CPU_LOONGSON64)
+ 	.set	push
+-	.set	arch=mips32r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	wsbh	v1, sum
+ 	movn	sum, v1, odd
+ 	.set	pop
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 4b6554b48923..420440cc40b1 100644
+--- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -918,7 +918,7 @@ static inline void rm7k_erratum31(void)
+ 		__asm__ __volatile__ (
+ 			".set push\n\t"
+ 			".set noreorder\n\t"
+-			".set mips3\n\t"
++			".set "MIPS_ISA_LEVEL"\n\t"
+ 			"cache\t%1, 0(%0)\n\t"
+ 			"cache\t%1, 0x1000(%0)\n\t"
+ 			"cache\t%1, 0x2000(%0)\n\t"
+diff --git a/arch/mips/mm/cex-oct.S b/arch/mips/mm/cex-oct.S
+index 9029092aa740..bb9f6b960786 100644
+--- a/arch/mips/mm/cex-oct.S
++++ b/arch/mips/mm/cex-oct.S
+@@ -19,7 +19,7 @@
+ 	LEAF(except_vec2_octeon)
+ 
+ 	.set	push
+-	.set	mips64r2
++	.set	MIPS_ISA_LEVEL_RAW
+ 	.set	noreorder
+ 	.set	noat
+ 
+diff --git a/arch/mips/mm/sc-ip22.c b/arch/mips/mm/sc-ip22.c
+index d7238687d790..9a0c29946c2d 100644
+--- a/arch/mips/mm/sc-ip22.c
++++ b/arch/mips/mm/sc-ip22.c
+@@ -33,7 +33,7 @@ static inline void indy_sc_wipe(unsigned long first, unsigned long last)
+ 	__asm__ __volatile__(
+ 	"	.set	push			# indy_sc_wipe		\n"
+ 	"	.set	noreorder					\n"
+-	"	.set	mips3						\n"
++	"	.set	"MIPS_ISA_LEVEL"				\n"
+ 	"	.set	noat						\n"
+ 	"	mfc0	%2, $12						\n"
+ 	"	li	$1, 0x80		# Go 64 bit		\n"
+@@ -108,7 +108,7 @@ static void indy_sc_enable(void)
+ 	__asm__ __volatile__(
+ 	".set\tpush\n\t"
+ 	".set\tnoreorder\n\t"
+-	".set\tmips3\n\t"
++	".set\t"MIPS_ISA_LEVEL"\n\t"
+ 	"mfc0\t%2, $12\n\t"
+ 	"nop; nop; nop; nop;\n\t"
+ 	"li\t%1, 0x80\n\t"
+@@ -138,7 +138,7 @@ static void indy_sc_disable(void)
+ 	__asm__ __volatile__(
+ 	".set\tpush\n\t"
+ 	".set\tnoreorder\n\t"
+-	".set\tmips3\n\t"
++	".set\t"MIPS_ISA_LEVEL"\n\t"
+ 	"li\t%0, 0x1\n\t"
+ 	"dsll\t%0, 31\n\t"
+ 	"lui\t%1, 0x9000\n\t"
 -- 
 2.39.2 (Apple Git-143)
 
