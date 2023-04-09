@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052206DBF83
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Apr 2023 12:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3543A6DBF84
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Apr 2023 12:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjDIKna (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Apr 2023 06:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S229502AbjDIKnd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Apr 2023 06:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjDIKn3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Apr 2023 06:43:29 -0400
+        with ESMTP id S229458AbjDIKnc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Apr 2023 06:43:32 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A51469B
-        for <linux-mips@vger.kernel.org>; Sun,  9 Apr 2023 03:43:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 58C2C320076F;
-        Sun,  9 Apr 2023 06:43:28 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2C746BF
+        for <linux-mips@vger.kernel.org>; Sun,  9 Apr 2023 03:43:31 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id AF47732004ED;
+        Sun,  9 Apr 2023 06:43:30 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 09 Apr 2023 06:43:28 -0400
+  by compute5.internal (MEProxy); Sun, 09 Apr 2023 06:43:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681037007; x=
-        1681123407; bh=GnOjAlW4cFLZB5e9fEbCpcj/9ZFTx5uDLBq5V/Tp2os=; b=P
-        cGaozlAWWfKBnGkm/9+Z8zBQf/0/y/hz+FjWEVJ2tTXYJcunVS0WIkFSl5If8yP+
-        KLeaZtzTV23IbXGk41VcHkKoKEbHPOn2UgeDIGJHDGZie07AeoaLiCDH/AjbicCv
-        RTGdGRnrIada/IqsmWZDHOb0l/Mrum6IZTVK924x2BB60roEqVjkTBIUHEdEhzma
-        MZLBROr+S1wTLeQjEtxCaF+exwYLMqYS6Dq73eA+wWVgf1D2SVFq8y54VVC3kn8A
-        FB1aclo1SWb50CC3E03la0c/GbYxz+EIc6yVmGt6/yqSh+rnt3aidmDqmZ/MJWfd
-        LLZtbz7XKxcAZvByNpIcg==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681037010; x=
+        1681123410; bh=GICeuC5Na6dEOkT9RFxmFTSwUiB6wXXr5dWatVKt1SI=; b=h
+        br0bEp5gHuzlgLbCg4djDpSISTNjkyhcxX2+dZ2xm34muiZdLJEz7RrIf4Yz/t+1
+        yWtXWTx6ilIf4sOsXKIVzzjxB4Gk5A6KNbxv22WAj1tKRKYsocvnYLTVyP+BPccd
+        RnXy3kbk7Zb/YErIikN8asz6auUOwuH2aJdShelMPk8sOaDu3rnYorp/XFtLn7HM
+        j2+LiJFYTOuxrNk5gVRFKXhYOQktnkj6nU2EsdaIqKSoxo/NjTFpzy2t5IjS04rf
+        gF6tNI/GfNFQxVgUIaxl62PZQaB9o/o9PP6/rR0GBXqiLuwjdG7xgvm3kx2aNtb1
+        vAsDp9Ph7wohMAe354gVA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1681037007; x=
-        1681123407; bh=GnOjAlW4cFLZB5e9fEbCpcj/9ZFTx5uDLBq5V/Tp2os=; b=h
-        ZHmj3jOB7FiKa4Bs6NPob85d8nAYtNYNs8pDmdmHorp45Z+4Y/+zP8RCfaAJ2Lr3
-        PvJGRYcRTAkFCxsJbHg2HcST+iOhZQhJhqI3vpgfIRbJyGqviGRI2bTtpoUa+TZE
-        ZouzPcyloZ8WkKu7Hp55xV+SAVe2RKsV6I97HXR/1yD+72DZfNBIhNpmdwwxfhAV
-        f8Gv86EvvmG85dzOVVM1vjq0dLjtNNtDal4zpeSnHJT+i7m10wtDd/WAoriyjgCe
-        r8HwylGpY9r/+XDqvpMtUnqCtjUBfSJZzMcogniVWwintCjEz5hTiCTpD0dz6EjV
-        /qNseF3x39OeYKcpBJcTA==
-X-ME-Sender: <xms:z5YyZBbZqIabt6bUjtY4HUEvq4aeogNDPRJD8b8YFofdmvIPFbK0Fg>
-    <xme:z5YyZIZOLIUlOVfZsa6Kc3rnAlmzTO5687pV9VPR4F39Zx0p6K5-Cmzd-575Lsabb
-    fNw0jm26Q9uohmyaNs>
-X-ME-Received: <xmr:z5YyZD8rUhHz5A5bHO8yRLe3HkuVWgymQr-bGVhfAnx_FfZVSPPivIlDzz4M>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1681037010; x=
+        1681123410; bh=GICeuC5Na6dEOkT9RFxmFTSwUiB6wXXr5dWatVKt1SI=; b=m
+        5wA77IC1LBNrO3z3FmlKzyw1EkseskgKySrLlYrlE326Q7eoZq/4buVPyMx4RSG/
+        1R7lMMohuR7m4kUtJwuU1UxR2+D9ksiXqhoKqR6VzRmJ3eE4I36Aparbl/LbaQSW
+        JS8Mhh+G1LoS713TG/1sOKUbR0afcPi/d5xffZxPADgEHW/7YkbLxVbDQzVpAZhJ
+        CGveBOhASSmJpUTBRV9I3FjULk5pNWsbgoPZeG/COB2Zc/2jpjanIFbnMj0EqzpD
+        zagRwZGMOVkLCAt3PD2L1JrgN4tcRABeYpr893auYAwK8hsgRUx9oehblqGtVNRe
+        H2FZ84YEzMnamhuzVooZQ==
+X-ME-Sender: <xms:0pYyZK_XZXsKsOzNTb6j-tSqJ6rq-PFrjwZQqX-QQ-reBdmbtSTw5Q>
+    <xme:0pYyZKsrbumuSxruNgnlXgAO-sm0LXMtvRl7tcc_Z073uCO1YdK7izCQfKHoFc8EY
+    vx0Onw0j7VOs5GjQuk>
+X-ME-Received: <xmr:0pYyZACSKOL-LR7m-BytYLWk0X_R95j33D9ZWvH1ZlmVBB9S_LsZlTyywpyu>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdektddgfedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
@@ -55,21 +55,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdektddgfedvucetufdoteggod
     dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
     vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomh
-X-ME-Proxy: <xmx:z5YyZPpvzvd_Y6tJOrwZ-TzG2Pp842mdS0k9uDiMb-4d9AgVgPnCBg>
-    <xmx:z5YyZMoNPD6OCr8VdxObOwDvB7S-ePZD-DtO5B2M0NE9xzipI40YIA>
-    <xmx:z5YyZFT3E9eLbrXGs5jdC0BXVC5rUxZy_akTY-dSIPXRtm024duSgg>
-    <xmx:z5YyZFnmpym2HxrdfRQftuq_FB9gI-SFUSj47JGRY5MD2Dpw8ZmK4Q>
+X-ME-Proxy: <xmx:0pYyZCeWVZvayWvdxdm_JTS4_1J7LqpGtot1HMSp5c_ovuy_qvYWxA>
+    <xmx:0pYyZPO8j4LMpNFPflXdRqQ3v23iofzcRI5MgaPbgW-dh3YglXn2Lw>
+    <xmx:0pYyZMlh4CW3i44wyxHHGV9poTzAfij6ZtST0Be8WyWNDZQv5J4q6g>
+    <xmx:0pYyZEphZgigudbrnhebDIY58dVGyQX-1agqwIgPKsUKGWt_-VtwFQ>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Apr 2023 06:43:26 -0400 (EDT)
+ 9 Apr 2023 06:43:29 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     llvm@lists.linux.dev, tsbogend@alpha.franken.de,
         ndesaulniers@google.com, nathan@kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 4/8] MIPS: asmmacro: Restore fp macro after undef
-Date:   Sun,  9 Apr 2023 11:43:05 +0100
-Message-Id: <20230409104309.13887-5-jiaxun.yang@flygoat.com>
+Subject: [PATCH 5/8] MIPS: mipsregs: Parse fp and sp register by name in parse_r
+Date:   Sun,  9 Apr 2023 11:43:06 +0100
+Message-Id: <20230409104309.13887-6-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
 References: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
@@ -85,34 +85,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-fp macro is used by several place to reference frame pointer.
-Restore macro at end of file with {push,pop}_macro pragma to
-avoid break other assembly files.
+parse_r helper is used to parse register number from oprand,
+it only handles oprand which use number to refer register before.
+
+However compiler may use $gp and $sp to reference register 29 and
+30. Handle this situation by adding relevant match name.
+
+Fixes compilation error:
+{standard input}: Assembler messages:
+{standard input}:1937: Error: Unable to parse register name $fp
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/include/asm/asmmacro.h | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/mips/include/asm/mipsregs.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
-index 2491a6c68390..de9688911cae 100644
---- a/arch/mips/include/asm/asmmacro.h
-+++ b/arch/mips/include/asm/asmmacro.h
-@@ -20,6 +20,7 @@
- #endif
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 9d928b952abf..7d2c1c90fa10 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -1277,11 +1277,13 @@ static inline int mm_insn_16bit(u16 insn)
+  */
  
- /* preprocessor replaces the fp in ".set fp=64" with $30 otherwise */
-+#pragma push_macro("fp")
- #undef fp
+ /* Match an individual register number and assign to \var */
+-#define _IFC_REG(n)				\
+-	".ifc	\\r, $" #n "\n\t"		\
++#define _IFC_REG_NAME(name, n)			\
++	".ifc	\\r, $" #name "\n\t"		\
+ 	"\\var	= " #n "\n\t"			\
+ 	".endif\n\t"
  
- /*
-@@ -655,4 +656,6 @@
- 	.set	pop
- 	.endm
- 
-+#pragma pop_macro("fp")
++#define _IFC_REG(n)	_IFC_REG_NAME(n, n)
 +
- #endif /* _ASM_ASMMACRO_H */
+ #define _ASM_SET_PARSE_R						\
+ 	".macro	parse_r var r\n\t"					\
+ 	"\\var	= -1\n\t"						\
+@@ -1293,6 +1295,7 @@ static inline int mm_insn_16bit(u16 insn)
+ 	_IFC_REG(20) _IFC_REG(21) _IFC_REG(22) _IFC_REG(23)		\
+ 	_IFC_REG(24) _IFC_REG(25) _IFC_REG(26) _IFC_REG(27)		\
+ 	_IFC_REG(28) _IFC_REG(29) _IFC_REG(30) _IFC_REG(31)		\
++	_IFC_REG_NAME(sp, 29) _IFC_REG_NAME(fp, 30)			\
+ 	".iflt	\\var\n\t"						\
+ 	".error	\"Unable to parse register name \\r\"\n\t"		\
+ 	".endif\n\t"							\
 -- 
 2.39.2 (Apple Git-143)
 
