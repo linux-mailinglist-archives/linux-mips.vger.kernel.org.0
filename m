@@ -2,106 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C646DC450
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Apr 2023 10:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163446DC75E
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Apr 2023 15:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjDJIeI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Apr 2023 04:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S229649AbjDJNop (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Apr 2023 09:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDJIeI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Apr 2023 04:34:08 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6E3AA4
-        for <linux-mips@vger.kernel.org>; Mon, 10 Apr 2023 01:34:05 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id b17so3916637vsj.7
-        for <linux-mips@vger.kernel.org>; Mon, 10 Apr 2023 01:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681115645;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2y6ZF+9oOUd5xpzsnYpA/WWQqIIRWLv0YQ7yeTEnMFI=;
-        b=LdEWgyWN5oc0YneShy1GFV80BlXsRdVOLVGntL5QZXzKMJw00sGV6ud9nsoaXXALAh
-         cTmQqVYMpMbj4O5enPJ+sdLzx04GlcbnFQ7A4Y8ZdjE/zMCVXR/wx3VNYPdOA3I1a9u6
-         gXJ+OS3XX7+U7bsGiyv18KMphV1RkqDfpLstm0he3r3C52LEX+D8AZ6vd+TZg2Q4XtY1
-         89+zZuDkuCCof2vKmYOkcWlaffVjkZhwZYf30NkAQYz8bStQKxi+HIhY/QgSww+k3w2q
-         4mrYA+nAeaNKkDeRQhzLbfhYioXJL3DOQXj1GVLFIe2fNUCwffmqk/lndEBUH2qxcdrX
-         Uakw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681115645;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2y6ZF+9oOUd5xpzsnYpA/WWQqIIRWLv0YQ7yeTEnMFI=;
-        b=ZgZrrv6ZrkhRYBoxusJ/LrgNwWDZXAheq5VX3Hi3cq1Sb4FIO093fHbSKOqaVvqCi2
-         Feg0rDjxoB2Q2GEwxCFDwxOWdt63zXBLnr5YWk3McTGBl8OFYbGYEohfsFyefUPmPJkz
-         YZjkxp5QkfymZ7ofSQ0CSuOW72AF4PTl4t8wjvyiDSLk0WS4U9pm+Gcyt3wCwOkFoPwK
-         e74YIf3GXYb56JjP4ypiyplBqylbwulUH9SiVLFPepzsH45nLw7yOXWYeE8YfzjvWvz4
-         HF5PIAyRHg6zGpWI8/nISSflAgxB29ypEaokEUJvWRzCxbqwii0DSxtLW5lb4kATKgjH
-         s+/A==
-X-Gm-Message-State: AAQBX9cUTETlsYPmrMVXGkzZYR9qyQdf9Es1EFpCYUznhSV6CK7IFYi0
-        YFWSIZXDxyB3/Sqk/l7n9Nc6ndHigbIPDlHKYbb4sw==
-X-Google-Smtp-Source: AKy350bncSFZcosjHjqQnOjeQEFT8SwcKqwSa3FsXW6R4FbtxDmAmfupWPWLtksuGhZxRt1waKe0plT2W9g0MedZecc=
-X-Received: by 2002:a67:c38a:0:b0:425:e623:360a with SMTP id
- s10-20020a67c38a000000b00425e623360amr5739468vsj.1.1681115644735; Mon, 10 Apr
- 2023 01:34:04 -0700 (PDT)
+        with ESMTP id S229595AbjDJNoo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Apr 2023 09:44:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA1B4C09;
+        Mon, 10 Apr 2023 06:44:43 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pw99J6VlpznbV5;
+        Mon, 10 Apr 2023 21:41:08 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 10 Apr 2023 21:44:40 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
+CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>, <Jonathan.Cameron@Huawei.com>
+Subject: [PATCH v9 0/2] arm64: support batched/deferred tlb shootdown during page reclamation/migration
+Date:   Mon, 10 Apr 2023 21:43:50 +0800
+Message-ID: <20230410134352.4519-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 10 Apr 2023 14:03:53 +0530
-Message-ID: <CA+G9fYs9jB7V2QFBKy3WbMkGKqWSrE7iUq_t2QqCDLetws-bjg@mail.gmail.com>
-Subject: next: MIPS: clang-16: tinyconfig: error: unknown target CPU 'r4600'
-To:     llvm@lists.linux.dev, linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MIPS clang-16 tinyconfig build failed on Linux next-20230410.
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Though ARM64 has the hardware to do tlb shootdown, the hardware
+broadcasting is not free.
+A simplest micro benchmark shows even on snapdragon 888 with only
+8 cores, the overhead for ptep_clear_flush is huge even for paging
+out one page mapped by only one process:
+5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-clang' LLVM=1 LLVM_IAS=1
+While pages are mapped by multiple processes or HW has more CPUs,
+the cost should become even higher due to the bad scalability of
+tlb shootdown.
 
-error: unknown target CPU 'r4600'
-note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
-mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-error: unknown target CPU 'r4600'
-note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
-mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-error: unknown target CPU 'r4600'
-note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
-mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-error: unknown target CPU 'r4600'
-note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
-mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-make[2]: *** [/builds/linux/scripts/Makefile.build:114:
-scripts/mod/devicetable-offsets.s] Error 1
-make[2]: *** [/builds/linux/scripts/Makefile.build:252:
-scripts/mod/empty.o] Error 1
+The same benchmark can result in 16.99% CPU consumption on ARM64
+server with around 100 cores according to Yicong's test on patch
+2/2.
 
+This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+1. only send tlbi instructions in the first stage -
+	arch_tlbbatch_add_mm()
+2. wait for the completion of tlbi by dsb while doing tlbbatch
+	sync in arch_tlbbatch_flush()
+Testing on snapdragon shows the overhead of ptep_clear_flush
+is removed by the patchset. The micro benchmark becomes 5% faster
+even for one page mapped by single process on snapdragon 888.
 
-Build history:
-  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119585/suite/build/test/clang-16-tinyconfig/history/
-  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119585/suite/build/tests/
+This support also optimize the page migration more than 50% with support
+of batched TLB flushing [*].
 
+[*] https://lore.kernel.org/linux-mm/20230213123444.155149-1-ying.huang@intel.com/
 
---
-Linaro LKFT
-https://lkft.linaro.org
+-v9:
+1. Using a runtime tunable to control batched TLB flush, per Catalin in v7.
+   Sorry for missing this on v8.
+Link: https://lore.kernel.org/all/20230329035512.57392-1-yangyicong@huawei.com/
+
+-v8:
+1. Rebase on 6.3-rc4
+2. Tested the optimization on page migration and mentioned it in the commit
+3. Thanks the review from Anshuman.
+Link: https://lore.kernel.org/linux-mm/20221117082648.47526-1-yangyicong@huawei.com/
+
+-v7:
+1. rename arch_tlbbatch_add_mm() to arch_tlbbatch_add_pending() as suggested, since it
+   takes an extra address for arm64, per Nadav and Anshuman. Also mentioned in the commit.
+2. add tags from Xin Hao, thanks.
+Link: https://lore.kernel.org/lkml/20221115031425.44640-1-yangyicong@huawei.com/
+
+-v6:
+1. comment we don't defer TLB flush on platforms affected by ARM64_WORKAROUND_REPEAT_TLBI
+2. use cpus_have_const_cap() instead of this_cpu_has_cap()
+3. add tags from Punit, Thanks.
+4. default enable the feature when cpus >= 8 rather than > 8, since the original
+   improvement is observed on snapdragon 888 with 8 cores.
+Link: https://lore.kernel.org/lkml/20221028081255.19157-1-yangyicong@huawei.com/
+
+-v5:
+1. Make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends on EXPERT for this stage on arm64.
+2. Make a threshold of CPU numbers for enabling batched TLP flush on arm64
+Link: https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
+
+-v4:
+1. Add tags from Kefeng and Anshuman, Thanks.
+2. Limit the TLB batch/defer on systems with >4 CPUs, per Anshuman
+3. Merge previous Patch 1,2-3 into one, per Anshuman
+Link: https://lore.kernel.org/linux-mm/20220822082120.8347-1-yangyicong@huawei.com/
+
+-v3:
+1. Declare arch's tlbbatch defer support by arch_tlbbatch_should_defer() instead
+   of ARCH_HAS_MM_CPUMASK, per Barry and Kefeng
+2. Add Tested-by from Xin Hao
+Link: https://lore.kernel.org/linux-mm/20220711034615.482895-1-21cnbao@gmail.com/
+
+-v2:
+1. Collected Yicong's test result on kunpeng920 ARM64 server;
+2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+   according to the comments of Peter Zijlstra and Dave Hansen
+3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+   is empty according to the comments of Nadav Amit
+
+Thanks, Peter, Dave and Nadav for your testing or reviewing
+, and comments.
+
+-v1:
+https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+
+Anshuman Khandual (1):
+  mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+
+Barry Song (1):
+  arm64: support batched/deferred tlb shootdown during page
+    reclamation/migration
+
+ .../features/vm/TLB/arch-support.txt          |  2 +-
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/tlbbatch.h             | 12 ++++
+ arch/arm64/include/asm/tlbflush.h             | 33 ++++++++-
+ arch/arm64/mm/flush.c                         | 69 +++++++++++++++++++
+ arch/x86/include/asm/tlbflush.h               | 17 ++++-
+ include/linux/mm_types_task.h                 |  4 +-
+ mm/rmap.c                                     | 21 +++---
+ 8 files changed, 139 insertions(+), 20 deletions(-)
+ create mode 100644 arch/arm64/include/asm/tlbbatch.h
+
+-- 
+2.24.0
+
