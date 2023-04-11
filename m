@@ -2,107 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791E06DDBBB
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 15:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA52C6DDC6D
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 15:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjDKNJ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Apr 2023 09:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S229805AbjDKNnU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Apr 2023 09:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjDKNJv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 09:09:51 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E014690;
-        Tue, 11 Apr 2023 06:09:47 -0700 (PDT)
+        with ESMTP id S229501AbjDKNnT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 09:43:19 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737CCBB;
+        Tue, 11 Apr 2023 06:43:17 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8667320007;
-        Tue, 11 Apr 2023 13:09:31 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9447D60012;
+        Tue, 11 Apr 2023 13:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681218585;
+        t=1681220595;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zj1JtAKrv3GVkrzExsf9B7vpxAMSpGNgfjgQje0eTak=;
-        b=oNG2Rb7etLGd3op/Iz2fmq0xokA2awaHaTUwmpMIqfWRcdiVNffJhH1OiD/NJa8U8VhbyA
-        yF9MXtYH8Fxz3M+cAq/7V/oq1xoDx4mXB50I/MCViACuf5Xj/3sm+jiFSUhQyd/GFiKSU+
-        MvbhXoQ5xcQFvUgIZ6glZLEM1HPSvT3ZkSE8cIw3GiRKuf3ey7u+ch+9vo/URZlNg8hBkX
-        sdQ/9ZojYLUArwz1K4ERP3d5/cBFRF6/83yyqSdXppNVR0gRdgwuMipAeMDZ8IGKN7s335
-        n6r/K2t/A0PaaBtBH3FUkAWJV3CrDikEbkeZlUHa/BD6XrUBmGFFsgVYyetBaQ==
-Date:   Tue, 11 Apr 2023 15:09:30 +0200
+        bh=YG/a/d5U809a62Azy9i6h0lXlFjsDlTWJ9pqm8OP5bU=;
+        b=hHX8UiCAZtL5szZpK25h+QcFJybRGblg1lJQbRfyMx4JhQP74URDH1PKlY0KtXD3u0AO2m
+        +ojA1YL+HugJT1SJVxxR1NYpviqZqbbpow2rLTyNqPi0WoFB5rz7YxXiVuAr4g5gmsiyxL
+        8xeH9vyYgmP34C7BrjUOpRtzFxvVV8P2UmIaJD4/UQDa583WTuDsx7Ds98idmyBl2HFpp3
+        zvTwQvoQEzuSkPafSJjtVuXbFV4hd7FtG06jKqZ6fcBnTEJrP4zP/9kNobxXCtGcqWgOlE
+        Ef+hIJk5W9JQ94A7C/XGwiY1NyrQCIQ80fZuj6vDKRBjxmLd8EqRkNBiqztvTA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?UTF-8?B?RsOkcmJlcg==?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Naga Sureshkumar Relli <nagasure@xilinx.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Valentin Korenblit <vkorenblit@sequans.com>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+        Han Xu <han.xu@nxp.com>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Jack Wang <jinpu.wang@ionos.com>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stefan Agner <stefan@agner.ch>, Lucas Stach <dev@lynxeye.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Richard Weinberger <richard@nod.at>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        kernel@pengutronix.de, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>
-Subject: Re: [PATCH v3 28/65] clk: renesas: r9a06g032: Add a determine_rate
- hook
-Message-ID: <20230411150930.4fb22d7e@xps-13>
-In-Reply-To: <CAMuHMdXUEOP_3zjf8nwDyHvZVG-D0AsBjnr=esKzejMMcEiLSQ@mail.gmail.com>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
-        <20221018-clk-range-checks-fixes-v3-28-9a1358472d52@cerno.tech>
-        <CAMuHMdXUEOP_3zjf8nwDyHvZVG-D0AsBjnr=esKzejMMcEiLSQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        linux-arm-kernel@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v3] mtd: nand: Convert to platform remove callback returning void
+Date:   Tue, 11 Apr 2023 15:43:04 +0200
+Message-Id: <20230411134305.445759-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230411113816.3472237-1-u.kleine-koenig@pengutronix.de>
+References: 
 MIME-Version: 1.0
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'ec185b18c22323cb0cde0319fa90b3e467b1ed2d'
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -112,100 +111,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert & Maxime,
+On Tue, 2023-04-11 at 11:38:16 UTC, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Acked-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com> # atmel
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net> # ingenic
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> # ingenic
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # intel
+> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # meson
+> Acked-by: Roger Quadros <rogerq@kernel.org> # omap_elm
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be> # renesas
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de> # rockchip
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> # sunxi
+> Acked-by: Thierry Reding <treding@nvidia.com> # tegra
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-geert@linux-m68k.org wrote on Tue, 11 Apr 2023 12:27:38 +0200:
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
-> CC Gareth, Herv=C3=A9, Miquel, Ralph
->=20
-> On Tue, Apr 4, 2023 at 2:44=E2=80=AFPM Maxime Ripard <maxime@cerno.tech> =
-wrote:
-> > The Renesas r9a06g032 bitselect clock implements a mux with a set_parent
-> > hook, but doesn't provide a determine_rate implementation.
-> >
-> > This is a bit odd, since set_parent() is there to, as its name implies,
-> > change the parent of a clock. However, the most likely candidate to
-> > trigger that parent change is a call to clk_set_rate(), with
-> > determine_rate() figuring out which parent is the best suited for a
-> > given rate.
-> >
-> > The other trigger would be a call to clk_set_parent(), but it's far less
-> > used, and it doesn't look like there's any obvious user for that clock.
-> >
-> > So, the set_parent hook is effectively unused, possibly because of an
-> > oversight. However, it could also be an explicit decision by the
-> > original author to avoid any reparenting but through an explicit call to
-> > clk_set_parent().
-> >
-> > The latter case would be equivalent to setting the flag
-> > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> > to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> > implementation is provided, clk_round_rate() (through
-> > clk_core_round_rate_nolock()) will call itself on the parent if
-> > CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> > otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> > CLK_SET_RATE_NO_REPARENT is set.
-> >
-> > And if it was an oversight, then we are at least explicit about our
-> > behavior now and it can be further refined down the line.
-> >
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech> =20
->=20
-> LGTM, so
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-I searched for 'possible callers', I didn't find any places
-where this would be used on the consumer side. However, downstream,
-there is a rzn1-clock-bitselect.c clock driver which states:
-
-+ * This clock provider handles the case of the RZN1 where you have periphe=
-rals
-+ * that have two potential clock source and two gates, one for each of the
-+ * clock source - the used clock source (for all sub clocks) is selected b=
-y a
-+ * single bit.
-+ * That single bit affects all sub-clocks, and therefore needs to change t=
-he
-+ * active gate (and turn the others off) and force a recalculation of the =
-rates.
-
-I don't know how much of this file has been upstreamed (under a
-different form) but this might very well be related to the fact that
-reparenting in some cases would be a major issue and thus needs to be
-avoided unless done on purpose (guessing?).
-
-Maybe Ralph can comment, but for what I understand,
-
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-> But I do not have the hardware.
->=20
-> > --- a/drivers/clk/renesas/r9a06g032-clocks.c
-> > +++ b/drivers/clk/renesas/r9a06g032-clocks.c
-> > @@ -1121,6 +1121,7 @@ static int r9a06g032_clk_mux_set_parent(struct cl=
-k_hw *hw, u8 index)
-> >  }
-> >
-> >  static const struct clk_ops clk_bitselect_ops =3D {
-> > +       .determine_rate =3D __clk_mux_determine_rate,
-> >         .get_parent =3D r9a06g032_clk_mux_get_parent,
-> >         .set_parent =3D r9a06g032_clk_mux_set_parent,
-> >  };
-> > @@ -1145,7 +1146,7 @@ r9a06g032_register_bitsel(struct r9a06g032_priv *=
-clocks,
-> >
-> >         init.name =3D desc->name;
-> >         init.ops =3D &clk_bitselect_ops;
-> > -       init.flags =3D CLK_SET_RATE_PARENT;
-> > +       init.flags =3D CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT;
-> >         init.parent_names =3D names;
-> >         init.num_parents =3D 2;
-> > =20
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-
-Thanks,
-Miqu=C3=A8l
+Miquel
