@@ -2,140 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA52C6DDC6D
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 15:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626DB6DDC75
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 15:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjDKNnU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Apr 2023 09:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S230184AbjDKNnn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Apr 2023 09:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjDKNnT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 09:43:19 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737CCBB;
-        Tue, 11 Apr 2023 06:43:17 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9447D60012;
-        Tue, 11 Apr 2023 13:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681220595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YG/a/d5U809a62Azy9i6h0lXlFjsDlTWJ9pqm8OP5bU=;
-        b=hHX8UiCAZtL5szZpK25h+QcFJybRGblg1lJQbRfyMx4JhQP74URDH1PKlY0KtXD3u0AO2m
-        +ojA1YL+HugJT1SJVxxR1NYpviqZqbbpow2rLTyNqPi0WoFB5rz7YxXiVuAr4g5gmsiyxL
-        8xeH9vyYgmP34C7BrjUOpRtzFxvVV8P2UmIaJD4/UQDa583WTuDsx7Ds98idmyBl2HFpp3
-        zvTwQvoQEzuSkPafSJjtVuXbFV4hd7FtG06jKqZ6fcBnTEJrP4zP/9kNobxXCtGcqWgOlE
-        Ef+hIJk5W9JQ94A7C/XGwiY1NyrQCIQ80fZuj6vDKRBjxmLd8EqRkNBiqztvTA==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Valentin Korenblit <vkorenblit@sequans.com>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        Han Xu <han.xu@nxp.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Stefan Agner <stefan@agner.ch>, Lucas Stach <dev@lynxeye.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
-        kernel@pengutronix.de, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH v3] mtd: nand: Convert to platform remove callback returning void
-Date:   Tue, 11 Apr 2023 15:43:04 +0200
-Message-Id: <20230411134305.445759-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230411113816.3472237-1-u.kleine-koenig@pengutronix.de>
-References: 
+        with ESMTP id S230031AbjDKNnm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 09:43:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2661707;
+        Tue, 11 Apr 2023 06:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681220621; x=1712756621;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2GeQQq+KcbTCEU+rXh5JGw+yLkL8a8JmHupdRnaoc8M=;
+  b=chh0jmd4I6VNBC14A5780CVuHTxHv34bO0UjY1fWhG0r+A/g9vuNnnrk
+   E+fR5m5J7LjjjauKWjtM5cDvn/VshNJS7PkdCiRCVmTIhUshEwoVGEG8b
+   wy1Pi7MzUi65BzAmzI0VR+9oQ7q8s3WT3M0V1L5tNCwwunJzcv97RHTzx
+   8Qq1eRnZKzEXBwkocoGx0q2IWHtWIVYVgI46XPRMqoq1DfPfa0JUw94/i
+   wfzMjpmAHVtA+0eunF8M3nQVkiQyBB+wHFH9lRuec31hAZeGU7Aky1Osl
+   AO673s42/mPq2YqPWCRbRKBnog/LYpIYyM7jKV5gjF4yHdc6en+zZzG0n
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="429905385"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="429905385"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:43:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="812566489"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="812566489"
+Received: from gtryonx-mobl.amr.corp.intel.com (HELO [10.209.72.81]) ([10.209.72.81])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:43:39 -0700
+Message-ID: <1fee0372-3a3b-5e09-38c3-ffb3523fe195@intel.com>
+Date:   Tue, 11 Apr 2023 06:43:39 -0700
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'ec185b18c22323cb0cde0319fa90b3e467b1ed2d'
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Uros Bizjak <ubizjak@gmail.com>, linux-alpha@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>
+References: <20230405141710.3551-1-ubizjak@gmail.com>
+ <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+ <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 2023-04-11 at 11:38:16 UTC, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Acked-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com> # atmel
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net> # ingenic
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> # ingenic
-> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # intel
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # meson
-> Acked-by: Roger Quadros <rogerq@kernel.org> # omap_elm
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be> # renesas
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de> # rockchip
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com> # sunxi
-> Acked-by: Thierry Reding <treding@nvidia.com> # tegra
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On 4/11/23 04:35, Mark Rutland wrote:
+> I agree it'd be nice to have performance figures, but I think those would only
+> need to demonstrate a lack of a regression rather than a performance
+> improvement, and I think it's fairly clear from eyeballing the generated
+> instructions that a regression isn't likely.
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Thanks for the additional context.
 
-Miquel
+I totally agree that there's zero burden here to show a performance
+increase.  If anyone can think of a quick way to do _some_ kind of
+benchmark on the code being changed and just show that it's free of
+brown paper bags, it would be appreciated.  Nothing crazy, just think of
+one workload (synthetic or not) that will stress the paths being changed
+and run it with and without these changes.  Make sure there are not
+surprises.
+
+I also agree that it's unlikely to be brown paper bag material.
