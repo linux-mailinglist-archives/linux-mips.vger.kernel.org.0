@@ -2,203 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98FA6DD922
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 13:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3581F6DD903
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 13:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjDKLOb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Apr 2023 07:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S229571AbjDKLMm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Apr 2023 07:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDKLOa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 07:14:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7834210
-        for <linux-mips@vger.kernel.org>; Tue, 11 Apr 2023 04:14:01 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pmBv0-0004gl-Lm; Tue, 11 Apr 2023 13:12:10 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pmBuf-00AURe-AU; Tue, 11 Apr 2023 13:11:49 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pmBue-00CH5H-AL; Tue, 11 Apr 2023 13:11:48 +0200
-Date:   Tue, 11 Apr 2023 13:11:48 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Valentin Korenblit <vkorenblit@sequans.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Han Xu <han.xu@nxp.com>, Chuanhong Guo <gch981213@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Heiko Stuebner <heiko@sntech.de>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-rockchip@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-sunxi@lists.linux.dev, ye xingchen <ye.xingchen@zte.com.cn>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-mtd@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        kernel@pengutronix.de, Richard Weinberger <richard@nod.at>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-oxnas@groups.io, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH] mtd: nand: Convert to platform remove callback returning
- void
-Message-ID: <20230411111148.yefmzohsvk3facq3@pengutronix.de>
-References: <20230401161938.2503204-1-u.kleine-koenig@pengutronix.de>
- <20230407101043.299f5e22@xps-13>
- <20230408185332.d2g2ao4tdp6ltm4i@pengutronix.de>
- <20230411102025.6b2fdc9e@xps-13>
+        with ESMTP id S229526AbjDKLMl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 07:12:41 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD14E5F;
+        Tue, 11 Apr 2023 04:12:39 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2836E5C0098;
+        Tue, 11 Apr 2023 07:12:39 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 11 Apr 2023 07:12:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm1; t=1681211559; x=
+        1681297959; bh=PMqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=S
+        Js5+f5AIDMKMpprBscSE7GMgHwHstngC7MN78l+7N7GzCEzfOTtfhTiLSCZxs3x/
+        9iLaeCDCy1Dy3WCzVjY6S5Mlc3Y+Fpr0EOIjNR4I4bfX2wjXvC9FzJidaaHBIulI
+        kUY4gkcvTxXerzE0nLWiRNlg6NiBl0xoCD0Cb8YjS9Ttk6THOi4Xd/8ix6Z+ETIr
+        4+HwIp2IYqjcO2AZtxBXo0mDrNbw8yR2VjPh8aE5kWLPxyqZZQSZqn+5uuVBbgA9
+        i78zNsOc1L6ITV0447/t6HlbP3cIaE/YeCn34NV3ns7HrCnSb2mopH0y9aAVO7hf
+        34p6qpC3sBabd1Ar8K7uA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1681211559; x=1681297959; bh=P
+        Mqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=WSXYfmv3bD7xpK39y
+        xtgqik5zXTvNddVhbO0KZRPFLFbuq7LgslTEwk1SuoUMLcJnQyEQvY7z2yl1EqDU
+        3JmXtgW6DAlT5YgAnT7c5GfisTTK1PpUY2P8dwvwn9fnYufOcFTMVSPSkJ32ll6E
+        2Rbs5quDsx295bvsiFqdTqQXorG0Vle7fn19PTMyWfTlqQifrXeOQ4BER0T0hNrL
+        xPyfT9iQAONB6NVfpocmGNqRp14Xt4Ec7J5MYkKEffuEzW4uWBKftXpyNXVEkPwA
+        20TmTwSKjZvFi5y8R8jNMfZoMqu/RB70OXjTuJ9M6hUNm4U9M+hcXm7oyOTYjV0H
+        DyDNA==
+X-ME-Sender: <xms:pkA1ZJpMK949mggMz6Nd8uMDj3nsYJoDMK_XHWQRoF7Q6ZX-Tsav-w>
+    <xme:pkA1ZLoVMPGdv4IroZLFHeOn9ZPya7UI-I8KbCQEnOBbnsXS0pU8gZfDM5FTcRfWC
+    9SAKyTM1rMeTt32iS8>
+X-ME-Received: <xmr:pkA1ZGO01i-L5g1R1gZOtMirdjSHRZUrSsG4fvug0MatqKN5AAB_oWl2gXkF>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekre
+    dtredtjeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejueekkedvfeekudfhhe
+    eliedugefgffduveeviedvffeiueekiefhtdekueeuudenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgt
+    ohhm
+X-ME-Proxy: <xmx:pkA1ZE4so64hSpnTAkJkksasijDc2iyaqROC4hEni87DjzsVVPbqxA>
+    <xmx:pkA1ZI61c63DFiXYqXdn08GQrRdrcQXFztZ4HZYmE627tt_L5Eh0mQ>
+    <xmx:pkA1ZMh9MNO_jSqvaXrbK8lxilJ1gVkrd5Vid2xWyZDH4cAtOZdV1Q>
+    <xmx:p0A1ZGnU76JpL9dC0ICqGUJ_6O5FPcPiXuuspj2M33Hn0-t1ySYDgg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Apr 2023 07:12:37 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        and@gmx.com, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS: LLVM build fixes
+Date:   Tue, 11 Apr 2023 12:12:17 +0100
+Message-Id: <20230411111225.55725-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="he6vq5knkogtd7j7"
-Content-Disposition: inline
-In-Reply-To: <20230411102025.6b2fdc9e@xps-13>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi all,
 
---he6vq5knkogtd7j7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series fixes some build errors when building with LLVM.
+Some of them was discorved by inspecting the tree.
 
-Hello Miquel,
+Tested with LLVM + LLVM_IAS={0, 1} and GCC against:
 
-On Tue, Apr 11, 2023 at 10:20:25AM +0200, Miquel Raynal wrote:
-> > On Fri, Apr 07, 2023 at 10:10:43AM +0200, Miquel Raynal wrote:
-> > > I've looked at the different patches, they look good to me but as they
-> > > are all trivial and exactly identical, would you mind sending this
-> > > again all squashed in a single patch? A subsystem-wide conversion see=
-ms
-> > > appropriate. In all cases I plan to take this for the next merge
-> > > window. =20
-> >=20
-> > I slightly prefer them separately, because I like small patches and
-> > because the Acks and Reviews only apply to the individual drivers.
-> > But I don't mind seriously, so here comes the series squashed into one.
->=20
-> For any non trivial change, I would definitely do that as well.
+allnoconfig, allmodconfig, 32r2_defconfig, 32r2el_defconfig, 64r2_defconfig,
+64r2el_defconfig, micro32r2el_defconfig, 32r6el_defconfig, 64r6el_defconfig,
+loongson3_defconfig, lemote2f_defconfig, ip22_defconfig, cavium_octeon_defconfig,
+malta_defconfig
 
-A patch is only trivial as long as it doesn't do anything wrong.
-I don't assume any problem, but it wouldn't be the first. The first was
-bcm2835_spi_remove() being used in bcm2835_spi_shutdown().
+With other patchsets [1] [2] [3] I sent before, on my CI [4], with tree [5].
 
-> The thing is, by collecting the tags with b4, you lost all the Acks and
-> Reviews targets, while we could prevent this, see below.
->=20
-> > While going through the changed, probably the s3c24xx driver (which
-> > isn't exactly identical to the other changes) could benefit from an
-> > additional change throwing out the early exit (which---I guess---cannot
-> > be hit).
->=20
-> Yes, I believe the 'info =3D=3D NULL' condition is useless, feel free to
-> drop it in a second patch if you wish.
+allmodconfig is still failing but it's not related to MIPS.
 
-Yeah.
+[1]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
+[2]: https://patchwork.kernel.org/project/linux-mips/patch/20230408115936.6631-1-jiaxun.yang@flygoat.com/
+[3]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
+[4]: https://github.com/FlyGoat/kernel-action-ci/actions/runs/4649898964/jobs/8228560848
+[5]: https://github.com/FlyGoat/kernel-action-ci/tree/71d3f53e9c44cebf62cfa4ed7ec3b0ce6452555f
 
-> > BTW, I constructed the lists of acks/reviews myself and found the same
-> > set. However b4 wailed about each patch claiming:
-> >=20
-> > 	    =E2=9C=97 BADSIG: DKIM/infradead.org
->=20
-> No idea what this means, any pointer?
+Thanks
+Jiaxun
 
-lists.infradead.org signs all outgoing mail and something between these
-outgoing mails and b4 consuming them breaks the signature. I didn't
-debug, but depending on where the problem is, either
-postmaster@lists.infradead.org or the admins of lore.kernel.org or the
-maintainer of b4 might want to know and fix.
+Jiaxun Yang (8):
+  MIPS: Replace assembly isa level directives with macros
+  MIPS: Set ISA level for MSA control reg helpers
+  MIPS: loongson2ef: Add missing break in cs5536_isa
+  MIPS: asmmacro: Restore fp macro after undef
+  MIPS: mipsregs: Parse fp and sp register by name in parse_r
+  MIPS: c-r4k: Use cache_op function for rm7k_erratum31
+  MIPS: octeon_switch: Remove duplicated labels
+  MIPS: Implement microMIPS MT ASE helpers
 
-> > And it didn't like you producing the tags, saying:
-> >=20
-> > 	NOTE: some trailers ignored due to from/email mismatches:
-> > 	    ! Trailer: Acked-by: Roger Quadros <rogerq@kernel.org>
-> > 	     Msg From: Miquel Raynal <miquel.raynal@bootlin.com>
-> > 	    [...]
->=20
-> Well, yes, I don't expect b4 to read plain english when I say "I
-> collected them for you" ^^ But at least my list had a '# <area>' suffix
-> for each of the Acked and Reviewed changes, which is now missing. I
-> don't know  how useful they actually are, but it seems to me that the
-> information was lost between v1 and v2?
+ arch/mips/alchemy/common/sleeper.S            |   6 +-
+ arch/mips/include/asm/asmmacro.h              |  57 ++--
+ arch/mips/include/asm/futex.h                 |   8 +-
+ arch/mips/include/asm/hazards.h               |   2 +-
+ arch/mips/include/asm/io.h                    |   4 +-
+ arch/mips/include/asm/mipsmtregs.h            | 256 +++++++++++-------
+ arch/mips/include/asm/mipsregs.h              |  63 +++--
+ arch/mips/include/asm/msa.h                   |   2 +
+ arch/mips/include/asm/stackframe.h            |   2 +-
+ arch/mips/kernel/bmips_vec.S                  |   4 +-
+ arch/mips/kernel/csrc-r4k.c                   |   2 +-
+ arch/mips/kernel/genex.S                      |   8 +-
+ arch/mips/kernel/idle.c                       |   6 +-
+ arch/mips/kernel/octeon_switch.S              |   6 -
+ arch/mips/kernel/r4k_fpu.S                    |   4 +-
+ arch/mips/kernel/syscall.c                    |   2 +-
+ arch/mips/lantiq/clk.c                        |   2 +-
+ arch/mips/lib/csum_partial.S                  |   5 +-
+ .../loongson2ef/common/cs5536/cs5536_isa.c    |   2 +-
+ arch/mips/mm/c-r4k.c                          |  33 +--
+ arch/mips/mm/cex-oct.S                        |   2 +-
+ arch/mips/mm/sc-ip22.c                        |   6 +-
+ 22 files changed, 277 insertions(+), 205 deletions(-)
 
-That's right. I will resend in a separate thread with the annotations
-fixed. Sorry for the noise.
+-- 
+2.39.2 (Apple Git-143)
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---he6vq5knkogtd7j7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ1QHMACgkQj4D7WH0S
-/k59PQgApmYCdD89s3AZJOYu84R1sSO13lJD2sW2YG/826FnsTQ8v5JAAMkZRhMV
-k+MCufvC25ennRcrXR5Uv8O1rreswBF1+9WhnWNEGGzaOsRqvVjkbsrMHgpJUsh3
-FMlNyvjm6KpNJhqF46lITimOhkWph7CAmCq1OMnfs5D1/biK19XqlwyNlOrka0XW
-8dwB13fYwc9PnEdLkyfmzqtcQbGBezwBjXzPkAls4+2qwIJkinKwMZACrpKd1VUr
-VOROg0xogL+KfIkaVvPu4UQTs2jpIf13YnyBfynr+pg81qKqHh6lHeS9zaMbTEhM
-JRbE//97QsOix1ZjsQHXvFD4zk8yjQ==
-=LsjF
------END PGP SIGNATURE-----
-
---he6vq5knkogtd7j7--
