@@ -2,52 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A04A6DD2D2
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 08:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B3F6DD3E2
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Apr 2023 09:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDKGbt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Apr 2023 02:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
+        id S229766AbjDKHSA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Apr 2023 03:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjDKGbt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 02:31:49 -0400
+        with ESMTP id S229838AbjDKHSA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Apr 2023 03:18:00 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F021F1BCA;
-        Mon, 10 Apr 2023 23:31:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C6CC90;
+        Tue, 11 Apr 2023 00:17:56 -0700 (PDT)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxYczR_jRkkgMaAA--.40259S3;
-        Tue, 11 Apr 2023 14:31:45 +0800 (CST)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHL7R_jRkwg4eAA--.32207S2;
-        Tue, 11 Apr 2023 14:31:45 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
+        by gateway (Coremail) with SMTP id _____8CxhdijCTVkswYaAA--.40580S3;
+        Tue, 11 Apr 2023 15:17:55 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPL6iCTVkKRkeAA--.33433S2;
+        Tue, 11 Apr 2023 15:17:55 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: [PATCH] Mips: Fix _CONST64_(x) as unsigned
-Date:   Tue, 11 Apr 2023 14:31:44 +0800
-Message-Id: <20230411063144.3119-1-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxHL7R_jRkwg4eAA--.32207S2
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrtF4ktr4UAr4fGw45Kry3urg_yoWxtrg_C3
-        s2ya1kurW8Jr17Z39xZwn5JFy8W34kJFyDuFn8Gr9Iy3s0kw45Gay8GFy8tr43CFsa9r4r
-        ZFZ8tr1ayFnrKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5
-        R7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAI
-        cxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4I
-        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-        WwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
-        JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYx
-        BIdaVFxhVjvjDU0xZFpf9x07j8yCJUUUUU=
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH 0/2] Clean up uprobes for MIPS
+Date:   Tue, 11 Apr 2023 15:17:46 +0800
+Message-Id: <1681197468-20658-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8CxPL6iCTVkKRkeAA--.33433S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
+        wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE
+        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
 X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,29 +52,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Addresses should all be of unsigned type to avoid unnecessary conversions.
+When I read uprobes code of all archs, I found that some code for MIPS
+is useless, so do some cleanups.
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/mips/include/asm/addrspace.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Tiezhu Yang (2):
+  MIPS: Use def_bool y for ARCH_SUPPORTS_UPROBES
+  MIPS: Remove set_swbp() in uprobes.c
 
-diff --git a/arch/mips/include/asm/addrspace.h b/arch/mips/include/asm/addrspace.h
-index 59a48c60a065..75d36115a25e 100644
---- a/arch/mips/include/asm/addrspace.h
-+++ b/arch/mips/include/asm/addrspace.h
-@@ -25,9 +25,9 @@
- #define _ATYPE32_	int
- #define _ATYPE64_	__s64
- #ifdef CONFIG_64BIT
--#define _CONST64_(x)	x ## L
-+#define _CONST64_(x)	x ## UL
- #else
--#define _CONST64_(x)	x ## LL
-+#define _CONST64_(x)	x ## ULL
- #endif
- #endif
- 
+ arch/mips/Kconfig          |  3 +--
+ arch/mips/kernel/uprobes.c | 18 ------------------
+ 2 files changed, 1 insertion(+), 20 deletions(-)
+
 -- 
-2.20.1
+2.1.0
 
