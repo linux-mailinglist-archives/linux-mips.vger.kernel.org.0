@@ -2,41 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2314E6DF746
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Apr 2023 15:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D846DF74A
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Apr 2023 15:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjDLNeU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Apr 2023 09:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
+        id S230163AbjDLNeX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Apr 2023 09:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjDLNeR (ORCPT
+        with ESMTP id S230007AbjDLNeR (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Apr 2023 09:34:17 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A00F83D7;
-        Wed, 12 Apr 2023 06:33:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B25993F4
+        for <linux-mips@vger.kernel.org>; Wed, 12 Apr 2023 06:33:38 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pmabN-0000FF-00; Wed, 12 Apr 2023 15:33:33 +0200
+        id 1pmabN-0000FF-01; Wed, 12 Apr 2023 15:33:33 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 4E6A6C2449; Wed, 12 Apr 2023 15:27:06 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 15:27:06 +0200
+        id 4D641C2458; Wed, 12 Apr 2023 15:31:13 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 15:31:13 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     John Crispin <john@phrozen.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] MIPS: Remove deprecated CONFIG_MIPS_CMP
-Message-ID: <20230412132706.GA11717@alpha.franken.de>
-References: <20230405185128.15237-1-tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] MIPS: Set better default CPU model and kernel code model
+Message-ID: <20230412133113.GB11717@alpha.franken.de>
+References: <20230408115936.6631-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405185128.15237-1-tsbogend@alpha.franken.de>
+In-Reply-To: <20230408115936.6631-1-jiaxun.yang@flygoat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,37 +39,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:51:27PM +0200, Thomas Bogendoerfer wrote:
-> Commit 5cac93b35c14 ("MIPS: Deprecate CONFIG_MIPS_CMP") deprecated
-> CONFIG_MIPS_CMP and after 9 years it's time to remove it.
+On Sat, Apr 08, 2023 at 12:59:36PM +0100, Jiaxun Yang wrote:
+> Set default CPU model to Release 2 CPUs (MIPS64R2 if 64 bit CPU
+> is present, otherwise MIPS32R2) to get better feature coverage
+> on various default configs.
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Also set default kernel code model to 64 bit since nowadays it
+> doesn't make much sense to run 32 bit kernel on a 64 bit system.
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
-> Marc, if you prefer an extra patch for the irqchip change, I'll
-> split this. Otherwise I would take it through the MIPS tree.
+>  arch/mips/Kconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->  arch/mips/Kconfig                    |  34 +----
->  arch/mips/include/asm/rtlx.h         |   1 -
->  arch/mips/include/asm/smp-ops.h      |  16 ---
->  arch/mips/include/asm/vpe.h          |   4 -
->  arch/mips/kernel/Makefile            |   3 -
->  arch/mips/kernel/rtlx-cmp.c          | 122 ------------------
->  arch/mips/kernel/smp-cmp.c           | 148 ----------------------
->  arch/mips/kernel/vpe-cmp.c           | 180 ---------------------------
->  arch/mips/kernel/vpe.c               |   2 +-
->  arch/mips/mti-malta/Makefile         |   2 -
->  arch/mips/mti-malta/malta-amon.c     |  88 -------------
->  arch/mips/mti-malta/malta-init.c     |   2 -
->  arch/mips/mti-malta/malta-platform.c |   2 -
->  arch/mips/ralink/mt7621.c            |   2 -
->  drivers/irqchip/irq-mips-gic.c       |  26 ----
->  15 files changed, 3 insertions(+), 629 deletions(-)
->  delete mode 100644 arch/mips/kernel/rtlx-cmp.c
->  delete mode 100644 arch/mips/kernel/smp-cmp.c
->  delete mode 100644 arch/mips/kernel/vpe-cmp.c
->  delete mode 100644 arch/mips/mti-malta/malta-amon.c
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index ecc7a755fae6..1d681dd87bb0 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -1260,6 +1260,8 @@ menu "CPU selection"
+>  
+>  choice
+>  	prompt "CPU type"
+> +	default CPU_MIPS64_R2 if SYS_HAS_CPU_MIPS64_R2
+> +	default CPU_MIPS32_R2 if SYS_HAS_CPU_MIPS32_R2
+>  	default CPU_R4X00
 
-applied to mips-next.
+I don't think this makes things better. For systems with multiple
+possible CPU choices it's quite easy to get a kernel compiled for
+the wrong ISA.
+
+>  
+>  config CPU_LOONGSON64
+> @@ -2007,6 +2009,7 @@ menu "Kernel type"
+>  
+>  choice
+>  	prompt "Kernel code model"
+> +	default 64BIT
+
+I don't buy your "nowadays" argument. My SGI Indy still has 64Bit CPUs
+and has not much reason to run a 64bit kernel.
 
 Thomas.
 
