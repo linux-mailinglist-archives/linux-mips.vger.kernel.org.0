@@ -2,115 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCCB6DF777
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Apr 2023 15:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C5A6DF8D5
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Apr 2023 16:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjDLNla (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Apr 2023 09:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S231667AbjDLOmv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Apr 2023 10:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjDLNl0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Apr 2023 09:41:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16F949C2;
-        Wed, 12 Apr 2023 06:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=DH15/SxDiYPBLclQ56VREuISrrW5j0LDqpqQq7OVNTI=; b=fwo5YyaVDrgsSL1EW2eG6ZifCn
-        nQARtc5HebgVz/+GdbkxT/HPewsrSDhvVH8ViRA5L7yR3WDbC9DmPggQPMdj2YU5JTreQzgfcwIKm
-        QRIAf1XdE4vAZHL0z+gNAmTMcU5KaoOQ2EOMGd9NlHIdVOmX12t8zqrCTXjMvpovvMKsp/zSSW2QL
-        wq1adFoxn9YV53iWVnsLJEs7kK5kS/Iud8T75kNNVd8EGfzTkIbD/mdTwGc/j8gZRy4ze+jaUhHxc
-        USHi7FYvDd+KVHT4eWYOpwNhRzG3lGIjcuJBHNZ/qmCUUEBKnMbL9FzU4jNUAL2z3AnG8l+wY3m+A
-        6p0qEndQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmaiM-00DwAw-10;
-        Wed, 12 Apr 2023 13:40:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A7C5B3002A6;
-        Wed, 12 Apr 2023 15:40:42 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 91D902095F65D; Wed, 12 Apr 2023 15:40:42 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 15:40:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 3/5] locking/arch: Wire up local_try_cmpxchg
-Message-ID: <20230412134042.GA629004@hirez.programming.kicks-ass.net>
-References: <20230405141710.3551-1-ubizjak@gmail.com>
- <20230405141710.3551-4-ubizjak@gmail.com>
- <20230412113231.GA628377@hirez.programming.kicks-ass.net>
- <CAFULd4aCNNcyQm3Av+KkWVXuU9Cb0G5H5cFmqVR_T5LwCW=YJA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFULd4aCNNcyQm3Av+KkWVXuU9Cb0G5H5cFmqVR_T5LwCW=YJA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229900AbjDLOmu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Apr 2023 10:42:50 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D3572BC
+        for <linux-mips@vger.kernel.org>; Wed, 12 Apr 2023 07:42:37 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 28B875C0071;
+        Wed, 12 Apr 2023 10:42:34 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 12 Apr 2023 10:42:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1681310554; x=1681396954; bh=qDHFbaQOHjWZdPYFAdMka1/5Fzv9qBoqqxr
+        CuC17uUY=; b=nakt9gr9034fnz5xVSMB6caK0yMT2Qf5dXrupO/mZaYn5FKVmxd
+        4T8jmM+4kucpj3dQPmyN/mdn463LNbhCrskGbgJxgGNOOGq5UD+A7qDzOm/+0usk
+        xwFVrtiP94OxZcVgjIvDgw1QfGtRnF1yMn+iWojwjtaVw1bcHg3UAH5PMYun5kZ8
+        8AWgOiT3DqzbViBf4ZpjGwgo5UfuVv8VVCvBinwGUoAn/ulTfi+Wxw951xmIfNR3
+        KlAFp2D37Jzy3r/tys1mDt4Q/PNh6FFNYJHqtnVVK4BsOofiaW61jh02IXvrkdEk
+        3XPg0GxwN+dDdq2CqJSTDQdpScj4URqeIgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1681310554; x=1681396954; bh=qDHFbaQOHjWZdPYFAdMka1/5Fzv9qBoqqxr
+        CuC17uUY=; b=WGkhzRkEjl4fLD++zevPOZXUEbsGJRZQyiBy3SJ1HDLw3aavkd3
+        yjlXkAAcpjxOdZFvQQ+Z16eQxEN4ddVDFoCK64jT+dn1XA8Cm0CZfyT5+NMuey8C
+        Oh+T3Cx4JE7A2fK0lKRgB2j/mviaZ1Jg+I0+aNxcQ3I0/MJ06uGnVGLjtKEosSqI
+        zr718/sGbMt0CKYbGt4BlkqqxIhRZH7+Kz990Pptdofh7b7khZuaFIsG/IYoOZb3
+        RN+0Md4iT/w/lo7Mz1nSjtOtAD6nrqj1VMVhq42YUoujG9SuBUfjBYl/BZwFUfc8
+        70RtMETlX5FALcYs1qV82Z5Gqd8Wwxmb5lg==
+X-ME-Sender: <xms:WcM2ZN2vzDkkbgxOd_Cgkq5FdIo3U725khhHK0xW6UuoH31TUwQfIQ>
+    <xme:WcM2ZEGL2Y9ipj8Fa5y2ScAfsp6zUktnRTw1RFyVKkdHUDdPhu_3xkpPdpEaR5IT1
+    0p7GZvOaJMH_ws111s>
+X-ME-Received: <xmr:WcM2ZN4ICWjJ-ujA27hStWXmnd4cIc95oYKW14Ry_82fCyteWP0VeC6CvbCl2mjEvMtN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:WcM2ZK2mW19iLwuWUc_0JCJU4uuhz2XyAq5ekUYTuLBhgQCjFylvAQ>
+    <xmx:WcM2ZAEqhdvh1b0aRdRgYU61bn0lMjODxh9DYzq4SlOTS3VqbaXwDA>
+    <xmx:WcM2ZL9kQjOW8O-kzHrI4npg7fUeNQUj4BzRJvL0k6rFk-GGGQFxsg>
+    <xmx:WsM2ZKP6rdxe6QO_yeg_ZTD28LzUv8hLDhyfFrEKhpKrRFdjTNopyg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Apr 2023 10:42:32 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH] MIPS: Set better default CPU model and kernel code model
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230412133113.GB11717@alpha.franken.de>
+Date:   Wed, 12 Apr 2023 15:42:21 +0100
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DD69060A-9D15-4610-8AD3-59A8CEE69D0C@flygoat.com>
+References: <20230408115936.6631-1-jiaxun.yang@flygoat.com>
+ <20230412133113.GB11717@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 03:37:50PM +0200, Uros Bizjak wrote:
-> On Wed, Apr 12, 2023 at 1:33 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Apr 05, 2023 at 04:17:08PM +0200, Uros Bizjak wrote:
-> > > diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
-> > > index bc4bd19b7fc2..45492fb5bf22 100644
-> > > --- a/arch/powerpc/include/asm/local.h
-> > > +++ b/arch/powerpc/include/asm/local.h
-> > > @@ -90,6 +90,17 @@ static __inline__ long local_cmpxchg(local_t *l, long o, long n)
-> > >       return t;
-> > >  }
-> > >
-> > > +static __inline__ bool local_try_cmpxchg(local_t *l, long *po, long n)
-> > > +{
-> > > +     long o = *po, r;
-> > > +
-> > > +     r = local_cmpxchg(l, o, n);
-> > > +     if (unlikely(r != o))
-> > > +             *po = r;
-> > > +
-> > > +     return likely(r == o);
-> > > +}
-> > > +
-> >
-> > Why is the ppc one different from the rest? Why can't it use the
-> > try_cmpxchg_local() fallback and needs to have it open-coded?
-> 
-> Please note that ppc directly defines local_cmpxchg that bypasses
-> cmpxchg_local/arch_cmpxchg_local machinery. The patch takes the same
-> approach for local_try_cmpxchg, because fallbacks are using
-> arch_cmpxchg_local definitions.
-> 
-> PPC should be converted to use arch_cmpxchg_local (to also enable
-> instrumentation), but this is not the scope of the proposed patchset.
 
-Ah indeed. Thanks!
+
+> 2023=E5=B9=B44=E6=9C=8812=E6=97=A5 14:31=EF=BC=8CThomas Bogendoerfer =
+<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Sat, Apr 08, 2023 at 12:59:36PM +0100, Jiaxun Yang wrote:
+>> Set default CPU model to Release 2 CPUs (MIPS64R2 if 64 bit CPU
+>> is present, otherwise MIPS32R2) to get better feature coverage
+>> on various default configs.
+>>=20
+>> Also set default kernel code model to 64 bit since nowadays it
+>> doesn't make much sense to run 32 bit kernel on a 64 bit system.
+>>=20
+>> Reported-by: Guenter Roeck <linux@roeck-us.net>
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>> arch/mips/Kconfig | 3 +++
+>> 1 file changed, 3 insertions(+)
+>>=20
+>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> index ecc7a755fae6..1d681dd87bb0 100644
+>> --- a/arch/mips/Kconfig
+>> +++ b/arch/mips/Kconfig
+>> @@ -1260,6 +1260,8 @@ menu "CPU selection"
+>>=20
+>> choice
+>> prompt "CPU type"
+>> + default CPU_MIPS64_R2 if SYS_HAS_CPU_MIPS64_R2
+>> + default CPU_MIPS32_R2 if SYS_HAS_CPU_MIPS32_R2
+>> default CPU_R4X00
+>=20
+> I don't think this makes things better. For systems with multiple
+> possible CPU choices it's quite easy to get a kernel compiled for
+> the wrong ISA.
+
+Well this is only for best allmodconfig coverage.
+
+Or at least:
+default CPU_MIPS32_R2 if MIPS_GENERIC_KERNEL
+
+Can make things better.
+
+>=20
+>>=20
+>> config CPU_LOONGSON64
+>> @@ -2007,6 +2009,7 @@ menu "Kernel type"
+>>=20
+>> choice
+>> prompt "Kernel code model"
+>> + default 64BIT
+>=20
+> I don't buy your "nowadays" argument. My SGI Indy still has 64Bit CPUs
+> and has not much reason to run a 64bit kernel.
+
+I see, I=E2=80=99ll leave it here.
+
+Thanks
+- Jiaxun
+
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
+
+
