@@ -2,60 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2426E1264
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Apr 2023 18:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0864C6E1295
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Apr 2023 18:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjDMQf3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Apr 2023 12:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S229908AbjDMQnu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Apr 2023 12:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjDMQf2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Apr 2023 12:35:28 -0400
-Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1BB83E4
-        for <linux-mips@vger.kernel.org>; Thu, 13 Apr 2023 09:35:26 -0700 (PDT)
+        with ESMTP id S229615AbjDMQnt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Apr 2023 12:43:49 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243FE93C0
+        for <linux-mips@vger.kernel.org>; Thu, 13 Apr 2023 09:43:44 -0700 (PDT)
 Received: from lenoch ([91.218.190.200])
         by cmgsmtp with ESMTPSA
-        id mzuspFe6lPm6CmzuupKtzp; Thu, 13 Apr 2023 18:35:25 +0200
+        id n02wpkHNBv5uIn02xp3ccv; Thu, 13 Apr 2023 18:43:43 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1681403725; bh=gHenQshbY0u2f0pxY6xksdItPVfGpGXcJjifEKf5Dzw=;
+        t=1681404223; bh=tZSnvJh6UjNKzMdhLUO1i7a3iBlxGKgZAfwCnUgid7I=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=hdZuTF737iqibSDphsTKK3QTE0ZIiHvw/ueRmlQNoj/Vs7esWLI1ArFMxcQA4DCXY
-         tKMS0I1HvEubMlRv5f+EZoLKtV69P4LIYyW2sRAc869I+CV2uBZdO5Gb7/RxY/ykCX
-         lqKnWPzjM18abuhxt1TMeixaCyQFQqJVhhGqqUHkLjjSTek7yN24JAtAtYGowKAl4r
-         b1JiKvhRur0JPAbmtOCDdkHKa8f8IKngp3YnLfWdbz6gcix9muBXmRQKnXmiDNpOJs
-         FfRR3IlDFxpYWIQ7jh0MP/2oDIqmC8jkw+wspvxITje2AF8CQcdfEc6zofKZyM6RaN
-         A09rrQiU2VkyA==
+        b=Y5AkgfBC+UhDNgXkIhdJ4QocN5rzeUMk1Epc0BRSD9HJP4BBvQeTLfPm/q9FWRY11
+         kyNyQyE4BCEn7uqZRSXY2qhH9AirgGAxxc2rQpBVv5dXWJx0gxwyXsRWrJdv4JgG1y
+         u8Ot3HFqpDmRueAzCXJqI5sIl4vRNRi2hsaeLvewcgTJ9GPglY8IiwQBtKlKDlEkoh
+         bt3lhkkHI2b578sBaglNlVOOWKQjaGgywdkKxgeNIgbq5SousfTpIjiuD6dhYcJghs
+         ddpmMJTcljPEw3hbafL5hqb30fq+oBYsbPgfcNJ0NhD4ksRK83yzYpgb7J6U5laBL9
+         JcIF7iJAr80AA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1681403725; bh=gHenQshbY0u2f0pxY6xksdItPVfGpGXcJjifEKf5Dzw=;
+        t=1681404223; bh=tZSnvJh6UjNKzMdhLUO1i7a3iBlxGKgZAfwCnUgid7I=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=hdZuTF737iqibSDphsTKK3QTE0ZIiHvw/ueRmlQNoj/Vs7esWLI1ArFMxcQA4DCXY
-         tKMS0I1HvEubMlRv5f+EZoLKtV69P4LIYyW2sRAc869I+CV2uBZdO5Gb7/RxY/ykCX
-         lqKnWPzjM18abuhxt1TMeixaCyQFQqJVhhGqqUHkLjjSTek7yN24JAtAtYGowKAl4r
-         b1JiKvhRur0JPAbmtOCDdkHKa8f8IKngp3YnLfWdbz6gcix9muBXmRQKnXmiDNpOJs
-         FfRR3IlDFxpYWIQ7jh0MP/2oDIqmC8jkw+wspvxITje2AF8CQcdfEc6zofKZyM6RaN
-         A09rrQiU2VkyA==
-Date:   Thu, 13 Apr 2023 18:35:22 +0200
+        b=Y5AkgfBC+UhDNgXkIhdJ4QocN5rzeUMk1Epc0BRSD9HJP4BBvQeTLfPm/q9FWRY11
+         kyNyQyE4BCEn7uqZRSXY2qhH9AirgGAxxc2rQpBVv5dXWJx0gxwyXsRWrJdv4JgG1y
+         u8Ot3HFqpDmRueAzCXJqI5sIl4vRNRi2hsaeLvewcgTJ9GPglY8IiwQBtKlKDlEkoh
+         bt3lhkkHI2b578sBaglNlVOOWKQjaGgywdkKxgeNIgbq5SousfTpIjiuD6dhYcJghs
+         ddpmMJTcljPEw3hbafL5hqb30fq+oBYsbPgfcNJ0NhD4ksRK83yzYpgb7J6U5laBL9
+         JcIF7iJAr80AA==
+Date:   Thu, 13 Apr 2023 18:43:41 +0200
 From:   Ladislav Michl <oss-lists@triops.cz>
 To:     Andrew Lunn <andrew@lunn.ch>
 Cc:     linux-staging@lists.linux.dev, netdev@vger.kernel.org,
         linux-mips@vger.kernel.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH 0/3] staging: octeon: Convert to use phylink
-Message-ID: <ZDgvSoT/vdJeI0FS@lenoch>
+Subject: Re: [PATCH 2/3] staging: octeon: avoid needless device allocation
+Message-ID: <ZDgxPet9RIDC9Oz1@lenoch>
 References: <ZDgNexVTEfyGo77d@lenoch>
- <b70d9361-c689-4837-bc9d-8e800cda380c@lunn.ch>
+ <ZDgOLHw1IkmWVU79@lenoch>
+ <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b70d9361-c689-4837-bc9d-8e800cda380c@lunn.ch>
-X-CMAE-Envelope: MS4wfHsZGoDGjiBpBIGamKWRNqQtisNQIy98z7M13vI/Jv43QfqnQ4evFOvl0Uo7XuvXGVrCqRJPdLL3S+nRri9Sbyi5rcOkmZTGmAYXvS++pmLo89vSE0Yp
- bjBQUFs7NB078hP7EYaWCwwRGmXWifeyirvkFLCD0Iiro6MS0fFT0BBMFgIzRaVX8pyDvvjioCvYb6G6uGL6cX5KOqHAyqHSqxhaotOVq7e34SO9mE+j+cm5
- UVDkXlblL0skvOTedmJ95yEia5mRJXDhziIJvaUE0kfVEsuXU5ufyssIrBC8p7AWpAO2R1/2SPdyPduBgvKp/A==
+In-Reply-To: <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
+X-CMAE-Envelope: MS4wfGCrf+xpqrJHgtQHug1TOA3Rs9sHBGIWIj67s2C9fIRcghXOyg2DceaaW6MxxZJ8tKiS/mLSGG3klMI9iHNPzaTAUVFNsu6dA+HqYSaY5+lRfUaBiaKV
+ egWv7xhWaPkR7B3fW83pGRypUqcz0oIPk4J/xgWRCBs31l78VhxX5Vkkt+eyrM3hnZv2deCeZFAMiNsLilxWK0fizUIY8FLfxkoXf7/ZK562rr8GGXIm5TmT
+ f3s8f7z1nV3q6J/q9Ptvn8NXW0qshhh5EcvG7vk8x39zGbz+Is5yxERao65DEhYZGTwq1YmlBbi+ySAoxoO0Fg==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,142 +64,76 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Andrew,
 
-On Thu, Apr 13, 2023 at 05:45:13PM +0200, Andrew Lunn wrote:
-> Hi Ladislav
+On Thu, Apr 13, 2023 at 06:12:28PM +0200, Andrew Lunn wrote:
+> >  	num_interfaces = cvmx_helper_get_number_of_interfaces();
+> >  	for (interface = 0; interface < num_interfaces; interface++) {
+> > +		int num_ports, port_index;
+> > +		const struct net_device_ops *ops;
+> > +		const char *name;
+> > +		phy_interface_t phy_mode = PHY_INTERFACE_MODE_NA;
+> >  		cvmx_helper_interface_mode_t imode =
+> > -		    cvmx_helper_interface_get_mode(interface);
+> > -		int num_ports = cvmx_helper_ports_on_interface(interface);
+> > -		int port_index;
+> > +			cvmx_helper_interface_get_mode(interface);
+> > +
+> > +		switch (imode) {
+> > +		case CVMX_HELPER_INTERFACE_MODE_NPI:
+> > +			ops = &cvm_oct_npi_netdev_ops;
+> > +			name = "npi%d";
 > 
-> For phylink questions, it is a good idea to Cc: the phylink
-> Maintainer. And for general PHY problems, Cc: the phy Maintainers.
+> In general, the kernel does not give the interface names other than
+> ethX. userspace can rename them, e.g. systemd with its persistent
+> names. So as part of getting this driver out of staging, i would throw
+> this naming code away.
+
+That would break all userspace (which is often running vendor's kernel).
+But since driver is in staging and noone cares about vendor's kernel
+I guess it is okay...
+
+> > +		num_ports = cvmx_helper_ports_on_interface(interface);
+> >  		for (port_index = 0,
+> >  		     port = cvmx_helper_get_ipd_port(interface, 0);
+> >  		     port < cvmx_helper_get_ipd_port(interface, num_ports);
+> >  		     port_index++, port++) {
+> >  			struct octeon_ethernet *priv;
+> >  			struct net_device *dev =
+> > -			    alloc_etherdev(sizeof(struct octeon_ethernet));
+> > +				alloc_etherdev(sizeof(struct octeon_ethernet));
 > 
-> On Thu, Apr 13, 2023 at 04:11:07PM +0200, Ladislav Michl wrote:
-> > The purpose of this patches is to provide support for SFP cage to
-> > Octeon ethernet driver. This is tested with following DT snippet:
-> > 
-> > 	smi0: mdio@1180000001800 {
-> > 		compatible = "cavium,octeon-3860-mdio";
-> > 		#address-cells = <1>;
-> > 		#size-cells = <0>;
-> > 		reg = <0x11800 0x00001800 0x0 0x40>;
-> > 
-> > 		/* QSGMII PHY */
-> > 		phy0: ethernet-phy@0 {
-> > 			compatible = "marvell,88e154", "ethernet-phy-ieee802.3-c22";
+> Please try to avoid white space changed. Put such white space changes
+> into a patch of their own, with a commit message saying it just
+> contains whitespace cleanup.
+
+Sorry, I overlooked this.
+
+> >  			if (!dev) {
+> >  				pr_err("Failed to allocate ethernet device for port %d\n",
+> >  				       port);
+> > @@ -830,7 +875,12 @@ static int cvm_oct_probe(struct platform_device *pdev)
+> >  			priv->port = port;
+> >  			priv->queue = cvmx_pko_get_base_queue(priv->port);
+> >  			priv->fau = fau - cvmx_pko_get_num_queues(port) * 4;
+> > -			priv->phy_mode = PHY_INTERFACE_MODE_NA;
+> > +			priv->phy_mode = phy_mode;
 > 
-> Please don't use a compatible for the specific PHY. In fact,
-> compatibles are only used for things which are not PHYs, like Ethernet
-> switches. phylib reads the ID registers of the PHY and uses them to
-> load the correct PHY driver.
+> You should be getting phy_mode from DT.
 > 
-> Also, C22 is the default, so you don't need that either.
-
-Thanks, it works equally well with compatible removed.
-
-> > 			reg = <0>;
-> > 			interrupt-parent = <&gpio>;
-> > 			interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
-> > 			marvell,reg-init =
-> > 			  <0xff 24 0 0x2800>, <0xff 23 0 0x2001>, /* errata 3.1.1 - PHY Initialization #1 */
-> > 			  <0 29 0 3>, <0 30 0 2>, <0 29 0 0>,	  /* errata 3.1.2 - PHY Initialization #2 */
+> Ideally, you want lots of small patches which are obviously
+> correct. So i would try to break this up into smaller changes.
 > 
-> Please add C code to deal with these erratas in the marvell PHY
-> driver.
+> I also wounder if you are addresses issues in the correct order. This
+> driver is in staging for a reason. It needs a lot of work. You might
+> be better off first cleaning it up. And then consider moving it to
+> phylink.
 
-I need to dig into 4.9 ventor (and custom) tree for them. Will do later.
+I was asking this question myself and then came to this:
+Converting driver to phylink makes separating different macs easier as
+this driver is splitted between staging and arch/mips/cavium-octeon/executive/
+However I'll provide changes spotted previously as separate preparational
+patches. Would that work for you?
 
-> > 			  <4 26 0 0x2>, 			  /* prekrizeni RX a TX QSGMII sbernice */
-> > 			  <4 0 0x1000 0x1000>, 			  /* Q_ANEG workaround: P4R0B12 = 1 */
-> > 			  <3 16 0 0x1117>;			  /* nastavení LED: G=link+act, Y=1Gbit */
-> > 		};
-> 
-> Comments are normally in English. The last one seems to be setting the
-> LED. This is tolerated, but not ideal. It is not clear to me what the
-> other two do.
+> 	 Andrew
 
-I'm sorry for that. I took DT from local tree. It is not meant for upstream.
-
-> > 	pip: pip@11800a0000000 {
-> > 		compatible = "cavium,octeon-3860-pip";
-> > 		#address-cells = <1>;
-> > 		#size-cells = <0>;
-> > 		reg = <0x11800 0xa0000000 0x0 0x2000>;
-> > 
-> > 		/* Interface 0 goes to SFP */
-> > 		interface@0 {
-> > 			compatible = "cavium,octeon-3860-pip-interface";
-> > 			#address-cells = <1>;
-> > 			#size-cells = <0>;
-> > 			reg = <0>; /* interface */
-> > 
-> > 			ethernet@0 {
-> > 				compatible = "cavium,octeon-3860-pip-port";
-> > 				reg = <0>; /* Port */
-> > 				local-mac-address = [ 00 00 00 00 00 00 ];
-> > 				managed = "in-band-status";
-> > 				phy-connection-type = "1000base-x";
-> > 				sfp = <&sfp>;
-> > 			};
-> > 		};
-> 
-> > 		/* Interface 1 goes to eth1-eth4 and is QSGMII */
-> > 		interface@1 {
-> > 			compatible = "cavium,octeon-3860-pip-interface";
-> > 			#address-cells = <1>;
-> > 			#size-cells = <0>;
-> > 			reg = <1>; /* interface */
-> > 
-> > 			ethernet@0 {
-> > 				compatible = "cavium,octeon-3860-pip-port";
-> > 				reg = <0>; /* Port */
-> > 				local-mac-address = [ 00 00 00 00 00 00 ];
-> > 				phy-handle = <&phy0>;
-> 
-> If this is a QSGMII link, don't you need phy-mode property?
-
-I would normally need that, but the way how this driver works makes it
-optional.
-
-Interfaces and their types are hardwired as well as various register address.
-In the ideal world they should come from DT instead of from various
-OCTEON_IS_MODEL(OCTEON_CNXXXX) ifdefery.
-
-> > However testing revealed some glitches:
-> > 1. driver previously returned -EPROBE_DEFER when no phy was attached.
-> > Phylink stack does not seem to do so, which end up with:
-> > 
-> > Marvell PHY driver as a module:
-> > octeon_ethernet 11800a0000000.pip eth0: configuring for inband/1000base-x link mode
-> > octeon_ethernet 11800a0000000.pip eth1: PHY [8001180000001800:00] driver [Generic PHY] (irq=POLL)
-> > octeon_ethernet 11800a0000000.pip eth1: configuring for phy/sgmii link mode
-> > octeon_ethernet 11800a0000000.pip eth2: PHY [8001180000001800:01] driver [Generic PHY] (irq=POLL)
-> > octeon_ethernet 11800a0000000.pip eth2: configuring for phy/sgmii link mode
-> > octeon_ethernet 11800a0000000.pip eth0: switched to inband/sgmii link mode
-> > octeon_ethernet 11800a0000000.pip eth0: PHY [i2c:sfp:16] driver [Marvell 88E1111] (irq=POLL)
-> > octeon_ethernet 11800a0000000.pip eth3: PHY [8001180000001800:02] driver [Marvell 88E1340S] (irq=25)
-> > octeon_ethernet 11800a0000000.pip eth3: configuring for phy/sgmii link mode
-> > octeon_ethernet 11800a0000000.pip eth4: PHY [8001180000001800:03] driver [Marvell 88E1340S] (irq=25)
-> > octeon_ethernet 11800a0000000.pip eth4: configuring for phy/sgmii link mode
-> > octeon_ethernet 11800a0000000.pip eth1: Link is Up - 100Mbps/Full - flow control off
-> > 
-> > Marvell PHY driver built-in:
-> > octeon_ethernet 11800a0000000.pip eth0: configuring for inband/1000base-x link mode
-> > octeon_ethernet 11800a0000000.pip eth1: PHY [8001180000001800:00] driver [Marvell 88E1340S] (irq=25)
-> > octeon_ethernet 11800a0000000.pip eth1: configuring for phy/sgmii link mode
-> > Error: Driver 'Marvell 88E1101' is already registered, aborting...
-> > libphy: Marvell 88E1101: Error -16 in registering driver
-> > Error: Driver 'Marvell 88E1101' is already registered, aborting...
-> > libphy: Marvell 88E1101: Error -16 in registering driver
-> 
-> This is very odd. But it could be a side effect of the
-> compatible. Please try with it removed.
-
-That does not make any difference.
-
-> > 2. It is not possible to call phylink_create from ndo_init callcack as
-> > it evetually calls sfp_bus_add_upstream which calls rtnl_lock().
-> > As this lock is already taken, it just deadlocks. Is this an unsupported
-> > scenario?
-> 
-> You normally call phylink_create() in _probe().
-
-Ok, thank you.
-
->     Andrew
+Thank you,
+	ladis
