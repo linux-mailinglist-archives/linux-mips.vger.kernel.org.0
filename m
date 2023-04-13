@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46A56E137B
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Apr 2023 19:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1B36E13B6
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Apr 2023 19:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjDMR3q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Apr 2023 13:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S229630AbjDMRv0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Apr 2023 13:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjDMR3n (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Apr 2023 13:29:43 -0400
-Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA9C9014
-        for <linux-mips@vger.kernel.org>; Thu, 13 Apr 2023 10:29:39 -0700 (PDT)
+        with ESMTP id S229498AbjDMRvZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Apr 2023 13:51:25 -0400
+Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EF85B9E
+        for <linux-mips@vger.kernel.org>; Thu, 13 Apr 2023 10:51:23 -0700 (PDT)
 Received: from lenoch ([91.218.190.200])
         by cmgsmtp with ESMTPSA
-        id n0lLpFzPDPm6Cn0lMpKzFr; Thu, 13 Apr 2023 19:29:38 +0200
+        id n16OpG71YPm6Cn16PpL1GB; Thu, 13 Apr 2023 19:51:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1681406978; bh=RvFk72lJVn31Atg+4liHgBd22kUzN+EjOgK2JTXgzGA=;
+        t=1681408281; bh=+M55RhzimdGlvhG2v0FUhuXlIiFHLzcmsDSW7A4RngA=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=GqEmnUvy8WXcxfjxDWQbk6WnXc53xcCJAcLf2a4QYvUeJthJDwDEecMA/SbGL5gw2
-         xGFhPy6kB7zeb9HrIRIymgU1DFlN8s/dItKbPAT/+f4m1gnglzxtbomtbxxU2OFR3d
-         hk3FySLl4/pA98Q8Zt4U4ajJY+e9dGV02AOTA9aMT0CKnL0W0ZoosuqaZDdiJ81eeJ
-         E8AlW4NphLNDxGQS46VY+aMsU0Ri7qSQXEoTvO1FD3aDMDQw9OD4lpya1SRzabwzpw
-         IxPNY+MPcPl2AgaYHATonZ3mRdfnCEDap04Q5fotE1ZKuKpp04KgXWc4CS+WJtpq3O
-         zFVAQ6f41TxSg==
+        b=CoOtyzT9gLiSw0+G/Jn89SFqwUPRlRDY+ENtSxa0VoCkTYZEXos9P0nPKdAwuqbRd
+         vEnCNMLsgpU6HhG97Jh8v8joj9SL7r3R/tEFpPISCmi6rl5BhlojyB+wngpoIm8eUO
+         4601XTsgqXXNTxe3Yy5OpQLgnslcSONqxqJN3e7LsipRgPEeFxxRcbWoSwin6qnpOx
+         vjttTEqy+wN6S3qHXV/tYmWmn+gWfom21EME6iQ2mMMegxkdhLOG9xzQqQr8813nHb
+         dtE1TLtMVL90fAh/GRvKi9LLBMdZ++a0zitviUn4oyI3bkPxIYk0/SU/ZaS/oRwKbD
+         vZLdbpaJ+bINQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1681406978; bh=RvFk72lJVn31Atg+4liHgBd22kUzN+EjOgK2JTXgzGA=;
+        t=1681408281; bh=+M55RhzimdGlvhG2v0FUhuXlIiFHLzcmsDSW7A4RngA=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=GqEmnUvy8WXcxfjxDWQbk6WnXc53xcCJAcLf2a4QYvUeJthJDwDEecMA/SbGL5gw2
-         xGFhPy6kB7zeb9HrIRIymgU1DFlN8s/dItKbPAT/+f4m1gnglzxtbomtbxxU2OFR3d
-         hk3FySLl4/pA98Q8Zt4U4ajJY+e9dGV02AOTA9aMT0CKnL0W0ZoosuqaZDdiJ81eeJ
-         E8AlW4NphLNDxGQS46VY+aMsU0Ri7qSQXEoTvO1FD3aDMDQw9OD4lpya1SRzabwzpw
-         IxPNY+MPcPl2AgaYHATonZ3mRdfnCEDap04Q5fotE1ZKuKpp04KgXWc4CS+WJtpq3O
-         zFVAQ6f41TxSg==
-Date:   Thu, 13 Apr 2023 19:29:35 +0200
+        b=CoOtyzT9gLiSw0+G/Jn89SFqwUPRlRDY+ENtSxa0VoCkTYZEXos9P0nPKdAwuqbRd
+         vEnCNMLsgpU6HhG97Jh8v8joj9SL7r3R/tEFpPISCmi6rl5BhlojyB+wngpoIm8eUO
+         4601XTsgqXXNTxe3Yy5OpQLgnslcSONqxqJN3e7LsipRgPEeFxxRcbWoSwin6qnpOx
+         vjttTEqy+wN6S3qHXV/tYmWmn+gWfom21EME6iQ2mMMegxkdhLOG9xzQqQr8813nHb
+         dtE1TLtMVL90fAh/GRvKi9LLBMdZ++a0zitviUn4oyI3bkPxIYk0/SU/ZaS/oRwKbD
+         vZLdbpaJ+bINQ==
+Date:   Thu, 13 Apr 2023 19:51:19 +0200
 From:   Ladislav Michl <oss-lists@triops.cz>
 To:     Andrew Lunn <andrew@lunn.ch>
 Cc:     linux-staging@lists.linux.dev, netdev@vger.kernel.org,
         linux-mips@vger.kernel.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH 0/3] staging: octeon: Convert to use phylink
-Message-ID: <ZDg7/wUN5HzmJ5Zt@lenoch>
+Subject: Re: [PATCH 2/3] staging: octeon: avoid needless device allocation
+Message-ID: <ZDhBFzRr7tsCVRPd@lenoch>
 References: <ZDgNexVTEfyGo77d@lenoch>
- <b70d9361-c689-4837-bc9d-8e800cda380c@lunn.ch>
- <ZDgvSoT/vdJeI0FS@lenoch>
- <6774ce75-196c-4b55-b159-bd39ee72542e@lunn.ch>
+ <ZDgOLHw1IkmWVU79@lenoch>
+ <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
+ <ZDgxPet9RIDC9Oz1@lenoch>
+ <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6774ce75-196c-4b55-b159-bd39ee72542e@lunn.ch>
-X-CMAE-Envelope: MS4wfGJkw1qp0jIXdwLqNJ9mWkMzFKjqgXZi5ZBzKK7bAVzSFJoWM416UPOSBrbFuCpQ6L1Uzj+9wCdZY/k8Q7IwNM546bkdUxzMskcDsXxh0p5/AZMZEh/U
- UivNL13Kh4mEepjijvWKi/hfkavwjf/zJ7+dLhR0QV/Lw5KjGj+N/8IytNycEeSQnMTcW7/P6V3xiiZfE0q1vIpa1GA/2cQzzGbX5m5TwQF+bPN6EUloGVbo
- tjW3V93T4GffrjiJMixfx6SOw4RrIkQ2blraW1RsXKsgw28bgMUNSqfvX54ttQ2ebuQnCgiht18In2zm9qs4nQ==
+In-Reply-To: <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
+X-CMAE-Envelope: MS4wfMaZQ0Ggd85BQYsC1HXf1jU4yQBbbLL+fZtWemE4sg59r/Ene4Xn4kQI24CKD6BmXxfw9P4/tqWd004j97wjGszLQWZEGxY800p5cJ4dnArChc18FMY4
+ ncapD+/GhrC3N34NCtNjvaRE4kTss3F5EwBOXGsjm6iXy53D2NQSoGsd+2xb+iu23ki5/HfhZ5/9wkcEfzBBkzseao7aMTC1G4dXcKiNbN3qyjr8WYfogdIU
+ 2Xx2mFWCyDP/2VUrAJPItGo+59OVcVEhnstaLwKUo9MhTcRFTe2xM/EeSfl926Rbbf6jA0Fj/MJ4GW5w1TCR5Q==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -63,48 +64,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 07:12:29PM +0200, Andrew Lunn wrote:
-> > > > However testing revealed some glitches:
-> > > > 1. driver previously returned -EPROBE_DEFER when no phy was attached.
-> > > > Phylink stack does not seem to do so, which end up with:
-> > > > 
-> > > > Marvell PHY driver as a module:
-> > > > octeon_ethernet 11800a0000000.pip eth0: configuring for inband/1000base-x link mode
-> > > > octeon_ethernet 11800a0000000.pip eth1: PHY [8001180000001800:00] driver [Generic PHY] (irq=POLL)
-> > > > octeon_ethernet 11800a0000000.pip eth1: configuring for phy/sgmii link mode
-> > > > octeon_ethernet 11800a0000000.pip eth2: PHY [8001180000001800:01] driver [Generic PHY] (irq=POLL)
-> > > > octeon_ethernet 11800a0000000.pip eth2: configuring for phy/sgmii link mode
-> > > > octeon_ethernet 11800a0000000.pip eth0: switched to inband/sgmii link mode
-> > > > octeon_ethernet 11800a0000000.pip eth0: PHY [i2c:sfp:16] driver [Marvell 88E1111] (irq=POLL)
-> > > > octeon_ethernet 11800a0000000.pip eth3: PHY [8001180000001800:02] driver [Marvell 88E1340S] (irq=25)
-> > > > octeon_ethernet 11800a0000000.pip eth3: configuring for phy/sgmii link mode
-> > > > octeon_ethernet 11800a0000000.pip eth4: PHY [8001180000001800:03] driver [Marvell 88E1340S] (irq=25)
-> > > > octeon_ethernet 11800a0000000.pip eth4: configuring for phy/sgmii link mode
-> > > > octeon_ethernet 11800a0000000.pip eth1: Link is Up - 100Mbps/Full - flow control off
-> > > > 
-> > > > Marvell PHY driver built-in:
-> > > > octeon_ethernet 11800a0000000.pip eth0: configuring for inband/1000base-x link mode
-> > > > octeon_ethernet 11800a0000000.pip eth1: PHY [8001180000001800:00] driver [Marvell 88E1340S] (irq=25)
-> > > > octeon_ethernet 11800a0000000.pip eth1: configuring for phy/sgmii link mode
-> > > > Error: Driver 'Marvell 88E1101' is already registered, aborting...
-> > > > libphy: Marvell 88E1101: Error -16 in registering driver
-> > > > Error: Driver 'Marvell 88E1101' is already registered, aborting...
-> > > > libphy: Marvell 88E1101: Error -16 in registering driver
-> > > 
-> > > This is very odd. But it could be a side effect of the
-> > > compatible. Please try with it removed.
-> > 
-> > That does not make any difference.
+On Thu, Apr 13, 2023 at 07:20:08PM +0200, Andrew Lunn wrote:
+> > I was asking this question myself and then came to this:
+> > Converting driver to phylink makes separating different macs easier as
+> > this driver is splitted between staging and arch/mips/cavium-octeon/executive/
+> > However I'll provide changes spotted previously as separate preparational
+> > patches. Would that work for you?
 > 
-> Then i have no idea. I would suggest you add a WARN_ON() in
-> phy_driver_register() so we get a backtrace. That might give a clue
-> why it is getting registered multiple times.
+> Is you end goal to get this out of staging? phylib vs phylink is not a
+> reason to keep it in staging.
 
-And it indeed did. There was kernel/drivers/net/phy/marvell.ko
-left in /lib/modules. Clearly my mistake, sorry for the noise and
-thank you for help.
+I agree. However it is a way to move it out as once phylink_mac_ops
+for each mac gets implemented, most code from
+arch/mips/cavium-octeon/executive could then be moved into respective
+phylink_mac_op, so driver become self contained.
 
-So now only that -EPROBE_DEFER handling in module case is waiting for
-debugging.
+> It just seems odd to be adding new features to a staging driver. As a
+> bit of a "carrot and stick" maybe we should say you cannot add new
+> features until it is ready to move out of staging?
 
+Ok. I will continue to add cleanup patches before phylink support and
+we'll see how far we can get. That oddity has pretty simple reasoning:
+mainline kernel should be useable instead of vendor's solution (which
+does dirty SFP tricks from userpace and also supports AGL interface
+which is missing in staging driver). Without this, it will end as a
+spare time activity with a low priority. See this thread for context:
+https://lore.kernel.org/linux-mips/Y6rsbaT0l5cNBGbu@lenoch/
+
+> But staging is not my usual domain.
+
+Network drivers are not my usual domain, but I'll try to deal
+with that :)
+
+> 	 Andrew
+
+Thanks for the patience,
 	ladis
