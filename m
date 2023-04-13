@@ -2,94 +2,232 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD086E0876
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Apr 2023 09:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CD96E092E
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Apr 2023 10:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjDMH6b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Apr 2023 03:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
+        id S229913AbjDMIpZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Apr 2023 04:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbjDMH63 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Apr 2023 03:58:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C72619A4;
-        Thu, 13 Apr 2023 00:58:24 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.110.113])
-        by gateway (Coremail) with SMTP id _____8BxYU8ftjdkpbobAA--.43191S3;
-        Thu, 13 Apr 2023 15:58:23 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.110.113])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeUatjdkQBgiAA--.8741S5;
-        Thu, 13 Apr 2023 15:58:22 +0800 (CST)
-From:   Binbin Zhou <zhoubinbin@loongson.cn>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     linux-rtc@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>, keguang.zhang@gmail.com,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>
-Subject: [PATCH V3 7/7] MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
-Date:   Thu, 13 Apr 2023 15:58:01 +0800
-Message-Id: <6c4e9e4c2da51ecbd6a05ec2a973bc06a282d58f.1681370153.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1681370153.git.zhoubinbin@loongson.cn>
-References: <cover.1681370153.git.zhoubinbin@loongson.cn>
+        with ESMTP id S229705AbjDMIpX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Apr 2023 04:45:23 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A76903B;
+        Thu, 13 Apr 2023 01:45:10 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1842df7cb53so17030338fac.10;
+        Thu, 13 Apr 2023 01:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681375509; x=1683967509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DjFhaqNUgwhEITdByljXNEwDvl5KZHYACc5+H+WRmxg=;
+        b=RlXc2tiQGuYcvcV3TUZmKD2co3vwcHH7lF+ItJcaWdyzRLHBbabXEgkkkHvxwWCPu6
+         XmMVJDS/43XD+ZImf7wkAnRgw7A/4YV/k6W1BI2Lil0Ou5IzyAlYKhAjMDGRObfNUhI0
+         yaGI1QvuXOyazM09faU0XZgGh2C/jX/PrYH6p2oqaYkBkwchhTeqmiwknAg6eKLOKu92
+         Gu5+4+ybt75X9kDVReGDJKBfLevNg78cNqmyTQB2gdU2E1nz+Nla3Fce1l6teisHaU04
+         M/N0nDzeJUggvB5c2+WUmM/lKBlJR9EqozqqLZOv12VVeZPvIppDhfvJL8EY7FkO3K9s
+         kveA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681375509; x=1683967509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DjFhaqNUgwhEITdByljXNEwDvl5KZHYACc5+H+WRmxg=;
+        b=YZMtHr5CsKxIIHqyUXiFGVW2BAkh32kpHqPrC0lQuofpLLQEylYkh3hfyp11gvZY1O
+         lOzVSughrtpVGFqM67JQQoVU7puhI4Gct1qNeIhlb+8HHCijdmHoo/FO2tVylCSMJfeE
+         lnsEUOUZG254JsfsapFmmUvmjPowXi7cjwX4C6mKLJmEItKBt4RbRhFelFR/L4+adCK1
+         WQ0RlNOI8pHmwJTOo+3ivg1Wmkl3lKdYfdQecbfYaLI9B14n0nr0XOuihDGWiTtlglsW
+         EnQdtuhteci4/EbIFXpwdYBKfwkYnQ1CSRjhTN3euxHXzIJ3bnOyJB63/HwfR8b4EEwB
+         SATg==
+X-Gm-Message-State: AAQBX9eF2FfiCEu1pbO3xJojHQuhX+TIqQoC2V3A/9tfI4EkAMp7sibQ
+        9gVHd6/L6Gh3QK+zCCnqbyRlLV/p1bzUqWy9UUvznsG6
+X-Google-Smtp-Source: AKy350bh7BnK5X9IUb7Y1kALwgmrl26skQfM/gwRVHBGFmjQwajze1N5NFt5SbkPK3+9kR/gHV+Cu1adh6B+6WFYrsI=
+X-Received: by 2002:a05:6870:b24f:b0:177:abbb:f20c with SMTP id
+ b15-20020a056870b24f00b00177abbbf20cmr959114oam.0.1681375509039; Thu, 13 Apr
+ 2023 01:45:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxAeUatjdkQBgiAA--.8741S5
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrZFy8tw17Ary3AF4rXr4fXwb_yoW3WFg_JF
-        W7Kw18ur4rAr93Wa4xXw4rGw1Dua4jgF1rCr17JF15Xayagr13X39rCF15Ga15W39Fgr4Y
-        va95CFy7uryxKjkaLaAFLSUrUUUU5b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        E7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVW3AVW8Xw1lYx0E
-        x4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7
-        CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
-        WUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAF
-        wI0_tr0E3s1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2
-        IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0wqXPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+In-Reply-To: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 13 Apr 2023 10:44:56 +0200
+Message-ID: <CAMhs-H-0Upz--k0tkm7BFCTd0b0Gso-c_uPyzeAjOigZowbK1Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] mips: ralink: add complete clock and reset driver
+ for mtmips SoCs
+To:     linux-clk@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        john@phrozen.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        arinc.unal@arinc9.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is now supported, enable for Loongson-2K systems. Other systems are
-unaffected.
+On Tue, Mar 21, 2023 at 6:00=E2=80=AFAM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+>
+> Hi all!
+>
+> This patchset is a big effort to properly implement a clock and reset
+> driver for old ralink SoCs. This allow to properly define clocks in
+> device tree and avoid to use fixed-clocks directly from 'arch/mips/ralink=
+'
+> architecture directory code.
+>
+> Device tree 'sysc' node will be both clock and reset provider using
+> 'clock-cells' and 'reset-cells' properties.
+>
+> The ralink SoCs we are taking about are RT2880, RT3050, RT3052, RT3350,
+> RT3352, RT3883, RT5350, MT7620, MT7628 and MT7688. Mostly the code in
+> this new driver has been extracted from 'arch/mips/ralink' and cleanly
+> put using kernel clock and reset driver APIs. The clock plans for this
+> SoCs only talks about relation between CPU frequency and BUS frequency.
+> This relation is different depending on the particular SoC. CPU clock is
+> derived from XTAL frequencies.
+>
+>  Depending on the SoC we have the following frequencies:
+>  * RT2880 SoC:
+>      - XTAL: 40 MHz.
+>      - CPU: 250, 266, 280 or 300 MHz.
+>      - BUS: CPU / 2 MHz.
+>   * RT3050, RT3052, RT3350:
+>      - XTAL: 40 MHz.
+>      - CPU: 320 or 384 MHz.
+>      - BUS: CPU / 3 MHz.
+>   * RT3352:
+>      - XTAL: 40 MHz.
+>      - CPU: 384 or 400 MHz.
+>      - BUS: CPU / 3 MHz.
+>      - PERIPH: 40 MHz.
+>   * RT3383:
+>      - XTAL: 40 MHz.
+>      - CPU: 250, 384, 480 or 500 MHz.
+>      - BUS: Depends on RAM Type and CPU:
+>        + RAM DDR2: 125. ELSE 83 MHz.
+>        + RAM DDR2: 128. ELSE 96 MHz.
+>        + RAM DDR2: 160. ELSE 120 MHz.
+>        + RAM DDR2: 166. ELSE 125 MHz.
+>   * RT5350:
+>       - XTAL: 40 MHz.
+>       - CPU: 300, 320 or 360 MHz.
+>       - BUS: CPU / 3, CPU / 4, CPU / 3 MHz.
+>       - PERIPH: 40 MHz.
+>   * MT7628 and MT7688:
+>      - XTAL: 20 MHz or 40 MHz.
+>      - CPU: 575 or 580 MHz.
+>      - BUS: CPU / 3.
+>      - PCMI2S: 480 MHz.
+>      - PERIPH: 40 MHz.
+>   * MT7620:
+>      - XTAL: 20 MHz or 40 MHz.
+>      - PLL: XTAL, 480, 600 MHz.
+>      - CPU: depends on PLL and some mult and dividers.
+>      - BUS: depends on PLL and some mult and dividers.
+>      - PERIPH: 40 or XTAL MHz.
+>
+> MT7620 is a bit more complex deriving CPU clock from a PLL and an bunch o=
+f
+> register reads and predividers. To derive CPU and BUS frequencies in the
+> MT7620 SoC 'mt7620_calc_rate()' helper is used.
+> In the case XTAL can have different frequencies and we need a different
+> clock frequency for peripherals 'periph' clock in introduced.
+> The rest of the peripherals present in the SoC just follow their parent
+> frequencies.
+>
+> I am using 'mtmips' inside for ralink clock driver. This is aligned with
+> pinctrl series recently merged through pinctrl git tree [0].
+>
+> Changes have been compile tested for:
+> - RT2880
+> - RT3883
+> - MT7620
+>
+> Changes have been properly tested in RT5350 SoC based board (ALL5003 boar=
+d)
+> resulting in a working platform.
+>
+> Dts files for these SoCs in-tree except MT7621 are incomplete. We are
+> planning to align with openWRT files at some point and add extra needed
+> changes. Hence I am not touching them at all in these series. If this is
+> a problem, please let me know and I will update them.
+>
+> Talking about merging this series I'd like all of the patches going throu=
+gh
+> the MIPS tree if possible.
+>
+> Thanks in advance for your time.
+>
+> Best regards,
+>     Sergio Paracuellos
+>
+> Changes in v2:
+> - Address bindings documentation changes pointed out by Krzysztof:
+>     + Rename the file into 'mediatek,mtmips-sysc.yaml'.
+>     + Redo commit subject and log message.
+>     + Order compatibles alphabetically.
+>     + Redo bindings description taking into account this is a system
+>       controller node which provides both clocks and resets to the world.
+>     + Drop label from example.
+>     + Use 'syscon' as node name in example.
+>     + Drop no sense 'ralink,rt2880-reset' compatible string
+> - Squash patches 6 and 7 together as pointed out by Stephen Boyd.
 
-Signed-off-by: WANG Xuerui <git@xen0n.name>
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- arch/mips/configs/loongson2k_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Gentle ping on this series :-)
 
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index 728bef666f7a..8000cf838c17 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -278,6 +278,7 @@ CONFIG_USB_SERIAL=m
- CONFIG_USB_SERIAL_OPTION=m
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_CMOS=y
-+CONFIG_RTC_DRV_LS2X=y
- CONFIG_DMADEVICES=y
- # CONFIG_CPU_HWMON is not set
- CONFIG_PM_DEVFREQ=y
--- 
-2.39.1
+Thanks,
+     Sergio Paracuellos
 
+>
+> Previous series:
+> v1: https://lore.kernel.org/linux-clk/20230320161823.1424278-1-sergio.par=
+acuellos@gmail.com/T/#t
+>
+> [0]: https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06=
+185@arinc9.com/T/#t
+>
+> Sergio Paracuellos (9):
+>   dt-bindings: clock: add mtmips SoCs system controller
+>   clk: ralink: add clock and reset driver for MTMIPS SoCs
+>   mips: ralink: rt288x: remove clock related code
+>   mips: ralink: rt305x: remove clock related code
+>   mips: ralink: rt3883: remove clock related code
+>   mips: ralink: mt7620: remove clock related code
+>   mips: ralink: remove reset related code
+>   mips: ralink: get cpu rate from new driver code
+>   MAINTAINERS: add Mediatek MTMIPS Clock maintainer
+>
+>  .../bindings/clock/mediatek,mtmips-sysc.yaml  |  65 ++
+>  MAINTAINERS                                   |   6 +
+>  arch/mips/include/asm/mach-ralink/mt7620.h    |  35 -
+>  arch/mips/include/asm/mach-ralink/rt288x.h    |  10 -
+>  arch/mips/include/asm/mach-ralink/rt305x.h    |  21 -
+>  arch/mips/include/asm/mach-ralink/rt3883.h    |   8 -
+>  arch/mips/ralink/clk.c                        |  26 +-
+>  arch/mips/ralink/common.h                     |   5 -
+>  arch/mips/ralink/mt7620.c                     | 226 ----
+>  arch/mips/ralink/of.c                         |   4 -
+>  arch/mips/ralink/reset.c                      |  61 --
+>  arch/mips/ralink/rt288x.c                     |  31 -
+>  arch/mips/ralink/rt305x.c                     |  78 --
+>  arch/mips/ralink/rt3883.c                     |  44 -
+>  drivers/clk/ralink/Kconfig                    |   7 +
+>  drivers/clk/ralink/Makefile                   |   1 +
+>  drivers/clk/ralink/clk-mtmips.c               | 985 ++++++++++++++++++
+>  17 files changed, 1083 insertions(+), 530 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmi=
+ps-sysc.yaml
+>  create mode 100644 drivers/clk/ralink/clk-mtmips.c
+>
+> --
+> 2.25.1
+>
