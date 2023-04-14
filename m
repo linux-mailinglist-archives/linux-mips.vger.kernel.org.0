@@ -2,74 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7066E1DC6
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Apr 2023 10:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA096E1DC7
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Apr 2023 10:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjDNIHh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Apr 2023 04:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S229938AbjDNIHi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Apr 2023 04:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjDNIHg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Apr 2023 04:07:36 -0400
+        with ESMTP id S229947AbjDNIHh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Apr 2023 04:07:37 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E274C65BD
-        for <linux-mips@vger.kernel.org>; Fri, 14 Apr 2023 01:07:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 50C9A5C0086;
-        Fri, 14 Apr 2023 04:07:31 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE8D6E81
+        for <linux-mips@vger.kernel.org>; Fri, 14 Apr 2023 01:07:33 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8E9955C00DF;
+        Fri, 14 Apr 2023 04:07:32 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 14 Apr 2023 04:07:31 -0400
+  by compute6.internal (MEProxy); Fri, 14 Apr 2023 04:07:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1681459651; x=
-        1681546051; bh=GbyH8yAqRFdY13pD1/k/d2AWpv4tW8BU4FUnkwA1skE=; b=N
-        lOAZMQ2o/l70VEG3Alx2mVkIUPMtbJr6goBY1/W30DNIdwtRk3a4weqdyKo6+PHI
-        lOMMFAlL8KcNgRFeXzWXOMfxVddKKQwQz9q2XZZMyHSDsNAHUHEAQIiknUVET6Vs
-        yIEQjbXVMFm7a1swgIZH2nki4d5MHoW3Sps3mBL2O1LMgOUfuqGHldv4pSo3oy8r
-        gThYF/+Q6xsMClJ8kknxsu5zo8vNPVTa9Q3XKhQD2h8NRL5L/lT2g+dC7cxFdOyB
-        Q/BrF0HqO9f5DcfT8+fnnnfYwZAl5vJXSTcWxbEqAQL+lhAQhPYT3nprgq+Lp2LH
-        V0jaNvLPGdu3Pc9l03gbw==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1681459652; x=
+        1681546052; bh=2W+vVLs9XVAQ4F9uWHupEXXQyJAF5k40wMG7QV290h0=; b=Q
+        sD7A7fflu99jtogVrIcgUtPxMZ2dv3ax5Jwqdqy0lcvUjhwZko2l6nRuObIyk/Cp
+        O8SY0pvp8PanQshQg7xiYiJMSjvzP+lCck+y+Hvr3+y23ajfU5wxXNlaEYcMJRsO
+        3JTeBt7PVBE+EAwTbfmc+7ElH1pRlf+AItzsgvFEiHejO6KZymUwTBQ9anPa2NyL
+        V/orMNa97giQvciNub09lZ3tE8VeNm3YJMh4hoqcJ8K7/rks8LF6bzjUkXmUDJgx
+        mCSHXYWX/a80wo7rH57HeXWCJs3Qt5gb/1VO7hYkMu9l4tMZ6bH47nk/f9glP4Su
+        jASBGJREBjz3GyvJuRQ+w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1681459651; x=
-        1681546051; bh=GbyH8yAqRFdY13pD1/k/d2AWpv4tW8BU4FUnkwA1skE=; b=B
-        DQb+yrhEKHc5ZgMH5q0B35Pxt4Hm3QmTtjZRCspfoxfAIq5s9LilLoctBdzE4QAj
-        ikO+/Kxis6YDbxHzZEJfE8SM2nwJe4H6/5Hv0bfwwVOCFnU9vkd5OcomlGZT2RwA
-        fxwZUqNyB5Uq6fh/eNglXTT/SdhYBYUwrDUa088QUo/fVOcAPNN/pOxn3rB7R8rG
-        GKEiZjWA79oaqzacWzMCoDk6tQTmVkh/QPCEjw4Sb+be9M0d/iA4LbjB7aNkz11r
-        V+w3Z7l9TZWaFkjFxGEWoxaIj7R2aC75O0G6UqVhxL56lJxnAE3jLMXlcS1fpb8g
-        e33R0+1/g2RxMekg2dkLg==
-X-ME-Sender: <xms:wgk5ZHlbpdKBnE2z85QKgL5NEOGL-t5O9bpRZ42JzxmCKzwK11gU0Q>
-    <xme:wgk5ZK3EGMpnzra6ZOl82jMnyYNDHFFlmD3ogzVQycyv2IQRdAb8jkHuhp-psBZ4w
-    YKX2HyAfCLB2Yr6LEE>
-X-ME-Received: <xmr:wgk5ZNqDG5otr9zwmtkD0Nh_CloLSrTi_2i_GM04pplruhJf9Ke9dW5EqpkJ>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1681459652; x=
+        1681546052; bh=2W+vVLs9XVAQ4F9uWHupEXXQyJAF5k40wMG7QV290h0=; b=N
+        g2IToKCire1WzMqtj/aotfAx9fjbWufJGbYrkMbvkQw6URVP6AE1+mybTt876MiR
+        CKmoMtnTcwI5h5owTBkUlHLYKf4EoKxihVUi0fvHXLoZONMWQ/JQACQmoDv6tXkA
+        AmQ7mJX8V8ShsOENKVMcJBrb9XusLIkAvcRu/Q/ruOzAgSk6whisSqrQJ6xcuuEe
+        +1phVg/FmxlvadQLVwo2f1nxKbtUKi+WA7IQEe8az/gX7/7ygfMO7y8FnUCLXBCu
+        G+ZOJzTIRM/iidpHtVQAyUIRRrtLpnaT2pcsXF6ct/vPKOg4G9AgDRcjszMvyztY
+        lsafWbRd+8E/rYMBmdJ2Q==
+X-ME-Sender: <xms:xAk5ZCDkXQVl8W4uK2Sr9gjYeSZuJz3fSJe-9CxjQG-4PMTBvF_QhA>
+    <xme:xAk5ZMj9ZPkcUqf8wra_U6orcwSgGPXRBd0HgUBU63OCv09KIhO9xM32_J9VKM3Od
+    3q-psTVG0YYTlz35k8>
+X-ME-Received: <xmr:xAk5ZFkWwkfXRFrdbgQQwW5LLuiGEFrTa26EWnnNsqrTs81z0XfUN-xgRxBO>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekledgudeftdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
     ekredtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefledufeehgedvue
-    dvvdegkefgvddttedtleeiiefhgeetudegkefhvdfhjeeftdenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflh
-    ihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:wgk5ZPlrCDSHYTyms_bKkMDCfoBuiUG_iwNZy05O1ipjxZiMjWmCvw>
-    <xmx:wgk5ZF1zZ2ycuM8_b2I9hiYsgPMf9KcTv_bd1Kx0wBaSo_CkBtouPQ>
-    <xmx:wgk5ZOtIVJr5FyHG8AxUjXVkkSh-3Qyt-YTvERZlIGLmZR9Oskpy-A>
-    <xmx:wwk5ZATMFzpjfnxOUPvyYJbtt790dqVvM3Tm6TKYpqUAk6tMb5pBZg>
+    nhhgsehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeeifefhvedthfejve
+    evgfekueduieelfeetffdtveetffefgeelieetgfffueejkeenucffohhmrghinhepghhi
+    thhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:xAk5ZAzmpvpiMS2VZsMquqiwaW2zqyon4KQ0vYu4OKkDjsqBMWOxcA>
+    <xmx:xAk5ZHR_EmPHb2C1jfJ1601ycZSOATVcGP5q6paZgN_-ZK40mSoRtQ>
+    <xmx:xAk5ZLYYOWVhruIU3O-N1t3KA4Fe7cCUPVr5iOpDfSAoME_DyXiRRQ>
+    <xmx:xAk5ZFMGyaFImY7jWAZlSHtcKuxcqt1Q6ZVu3G1pFnssTnV26d8FmA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 04:07:29 -0400 (EDT)
+ 14 Apr 2023 04:07:31 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     llvm@lists.linux.dev, tsbogend@alpha.franken.de,
         ndesaulniers@google.com, nathan@kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 2/7] MIPS: Add toolchain feature dependency for microMIPS smartMIPS
-Date:   Fri, 14 Apr 2023 09:06:56 +0100
-Message-Id: <20230414080701.15503-3-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 3/7] MIPS: Detect toolchain support of workarounds in Kconfig
+Date:   Fri, 14 Apr 2023 09:06:57 +0100
+Message-Id: <20230414080701.15503-4-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
 References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
@@ -85,36 +85,129 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-microMIPS smartMIPS kernel can only be compiled if they are supported
-by toolchain.
+LLVM toolchain does not support most of workarounds, detect
+those supports in Kconfig so we can hide unsupported workarounds
+to user.
 
+Link: https://github.com/ClangBuiltLinux/linux/issues/1544
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- arch/mips/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/Kconfig               | 28 +++++++++++++++++++++++++---
+ arch/mips/Makefile              |  6 +++---
+ arch/mips/cavium-octeon/Kconfig |  1 +
+ 3 files changed, 29 insertions(+), 6 deletions(-)
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 41ac4dc5aae4..0b270562c3eb 100644
+index 0b270562c3eb..0cd9cd01b7ab 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -2360,7 +2360,7 @@ config CPU_NEEDS_NO_SMARTMIPS_OR_MICROMIPS
- 	  Select this if you want neither microMIPS nor SmartMIPS support
- 
- config CPU_HAS_SMARTMIPS
--	depends on SYS_SUPPORTS_SMARTMIPS
-+	depends on SYS_SUPPORTS_SMARTMIPS && CC_HAS_SMARTMIPS
- 	bool "SmartMIPS"
+@@ -371,9 +371,9 @@ config MACH_DECSTATION
+ 	select CEVT_R4K if CPU_R4X00
+ 	select CSRC_IOASIC
+ 	select CSRC_R4K if CPU_R4X00
+-	select CPU_DADDI_WORKAROUNDS if 64BIT
+-	select CPU_R4000_WORKAROUNDS if 64BIT
+-	select CPU_R4400_WORKAROUNDS if 64BIT
++	imply CPU_DADDI_WORKAROUNDS
++	imply CPU_R4000_WORKAROUNDS
++	imply CPU_R4400_WORKAROUNDS
+ 	select DMA_NONCOHERENT
+ 	select NO_IOPORT_MAP
+ 	select IRQ_MIPS_CPU
+@@ -1723,6 +1723,7 @@ config CPU_JUMP_WORKAROUNDS
+ config CPU_LOONGSON2F_WORKAROUNDS
+ 	bool "Loongson 2F Workarounds"
+ 	default y
++	depends on AS_HAS_NOP_WORKAROUNDS && AS_HAS_JUMP_WORKAROUNDS
+ 	select CPU_NOP_WORKAROUNDS
+ 	select CPU_JUMP_WORKAROUNDS
  	help
- 	  SmartMIPS is a extension of the MIPS32 architecture aimed at
-@@ -2373,6 +2373,7 @@ config CPU_HAS_SMARTMIPS
+@@ -2457,6 +2458,7 @@ config CPU_HAS_SYNC
+ #   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #5
+ config CPU_DADDI_WORKAROUNDS
+ 	bool
++	depends on CPU_R4X00_BUGS64 && CC_HAS_DADDI_WORKAROUNDS
  
- config CPU_MICROMIPS
- 	depends on 32BIT && SYS_SUPPORTS_MICROMIPS && !CPU_MIPSR6
-+	depends on CC_HAS_MICROMIPS
- 	bool "microMIPS"
+ # Work around certain R4000 CPU errata (as implemented by GCC):
+ #
+@@ -2478,6 +2480,7 @@ config CPU_DADDI_WORKAROUNDS
+ #   erratum #52
+ config CPU_R4000_WORKAROUNDS
+ 	bool
++	depends on CPU_R4X00_BUGS64 && CC_HAS_R4000_WORKAROUNDS
+ 	select CPU_R4400_WORKAROUNDS
+ 
+ # Work around certain R4400 CPU errata (as implemented by GCC):
+@@ -2488,6 +2491,7 @@ config CPU_R4000_WORKAROUNDS
+ #   "MIPS R4400MC Errata, Processor Revision 2.0 & 3.0", erratum #4
+ config CPU_R4400_WORKAROUNDS
+ 	bool
++	depends on CPU_R4X00_BUGS64 && CC_HAS_R4400_WORKAROUNDS
+ 
+ config CPU_R4X00_BUGS64
+ 	bool
+@@ -3168,6 +3172,15 @@ config CC_HAS_MNO_BRANCH_LIKELY
+ 	def_bool y
+ 	depends on $(cc-option,-mno-branch-likely)
+ 
++config CC_HAS_R4000_WORKAROUNDS
++	def_bool $(cc-option,-mfix-r4000)
++
++config CC_HAS_R4400_WORKAROUNDS
++	def_bool $(cc-option,-mfix-r4400)
++
++config CC_HAS_DADDI_WORKAROUNDS
++	def_bool $(cc-option,-mno-daddi)
++
+ # https://github.com/llvm/llvm-project/issues/61045
+ config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
+ 	def_bool y if CC_IS_CLANG
+@@ -3193,6 +3206,15 @@ config AS_HAS_DSP
+ config AS_HAS_GINV
+ 	def_bool $(cc-option,-Wa$(comma)-mginv)
+ 
++config AS_HAS_CN63XXP1_WORKAROUNDS
++	def_bool $(cc-option,-Wa$(comma)-mfix-cn63xxp1)
++
++config AS_HAS_NOP_WORKAROUNDS
++	def_bool $(cc-option,-Wa$(comma)-mfix-loongson2f-nop)
++
++config AS_HAS_JUMP_WORKAROUNDS
++	def_bool $(cc-option,-Wa$(comma)-mfix-loongson2f-jump)
++
+ menu "Power management options"
+ 
+ config ARCH_HIBERNATION_POSSIBLE
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 3aa0f9d4ceb6..344fe5f00f7b 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -193,9 +193,9 @@ cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
+ endif
+ cflags-$(CONFIG_CPU_LOONGSON64) += $(call cc-option,-mno-loongson-mmi)
+ 
+-cflags-$(CONFIG_CPU_R4000_WORKAROUNDS)	+= $(call cc-option,-mfix-r4000,)
+-cflags-$(CONFIG_CPU_R4400_WORKAROUNDS)	+= $(call cc-option,-mfix-r4400,)
+-cflags-$(CONFIG_CPU_DADDI_WORKAROUNDS)	+= $(call cc-option,-mno-daddi,)
++cflags-$(CONFIG_CPU_R4000_WORKAROUNDS)	+= -mfix-r4000
++cflags-$(CONFIG_CPU_R4400_WORKAROUNDS)	+= -mfix-r4400
++cflags-$(CONFIG_CPU_DADDI_WORKAROUNDS)	+= -mno-daddi
+ ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
+ cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa,-mfix-loongson2f-nop
+ cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa,-mfix-loongson2f-jump
+diff --git a/arch/mips/cavium-octeon/Kconfig b/arch/mips/cavium-octeon/Kconfig
+index 450e979ef5d9..38c9dc89cd5f 100644
+--- a/arch/mips/cavium-octeon/Kconfig
++++ b/arch/mips/cavium-octeon/Kconfig
+@@ -4,6 +4,7 @@ if CPU_CAVIUM_OCTEON
+ config CAVIUM_CN63XXP1
+ 	bool "Enable CN63XXP1 errata workarounds"
+ 	default "n"
++	depends on AS_HAS_CN63XXP1_WORKAROUNDS
  	help
- 	  When this option is enabled the kernel will be built using the
+ 	  The CN63XXP1 chip requires build time workarounds to
+ 	  function reliably, select this option to enable them.  These
 -- 
 2.39.2 (Apple Git-143)
 
