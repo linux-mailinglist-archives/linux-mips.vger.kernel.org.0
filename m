@@ -2,100 +2,260 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32AD6E2DE2
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Apr 2023 02:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834D36E3174
+	for <lists+linux-mips@lfdr.de>; Sat, 15 Apr 2023 14:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDOAVe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Apr 2023 20:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S229753AbjDOM6p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 15 Apr 2023 08:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDOAVd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Apr 2023 20:21:33 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606D40F8
-        for <linux-mips@vger.kernel.org>; Fri, 14 Apr 2023 17:21:30 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id nTfRpxKEOv5uInTfSp7BlT; Sat, 15 Apr 2023 02:21:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1681518088; bh=9ilePXRoNUCDch556gtjeLIsfgDIoTn3Fmaci6x9Kw0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=oi0iu4XGJWZ7tHkF+Mg9KDiSQaLzb6eMD0uFy5lKUy+LNQ+JssRtUSuXEeBfh8Yu+
-         03+BLgiusjG3KN/GrqDP9g+0wsn3jU07TPUr5ZX9MAr39kll6KO6+nIIQ5FoGVNXEH
-         1fL2oBJzb1schTPes/MbmchR9YwIqQjf09wo7Ehl4xG7nMpnxWSqyU/NcZ3y6EdPb4
-         hNan+hDVcUNTAGIArZiquzlxRSfYh5PBC1uYuNmW5V/qPWVU6DW3kHDRr0uDoOKPlB
-         ARdrhoPqssugooP1JlMg0i15y4nxktfQYBSGyW+WG9xnxEOgkIKW9A1KPmKMEIqOfD
-         7Yl3+Nu4SoMcA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1681518088; bh=9ilePXRoNUCDch556gtjeLIsfgDIoTn3Fmaci6x9Kw0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=oi0iu4XGJWZ7tHkF+Mg9KDiSQaLzb6eMD0uFy5lKUy+LNQ+JssRtUSuXEeBfh8Yu+
-         03+BLgiusjG3KN/GrqDP9g+0wsn3jU07TPUr5ZX9MAr39kll6KO6+nIIQ5FoGVNXEH
-         1fL2oBJzb1schTPes/MbmchR9YwIqQjf09wo7Ehl4xG7nMpnxWSqyU/NcZ3y6EdPb4
-         hNan+hDVcUNTAGIArZiquzlxRSfYh5PBC1uYuNmW5V/qPWVU6DW3kHDRr0uDoOKPlB
-         ARdrhoPqssugooP1JlMg0i15y4nxktfQYBSGyW+WG9xnxEOgkIKW9A1KPmKMEIqOfD
-         7Yl3+Nu4SoMcA==
-Date:   Sat, 15 Apr 2023 02:21:24 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-staging@lists.linux.dev, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        David Daney <ddaney.cavm@gmail.com>,
-        "Steven J. Hill" <sjhill@realitydiluted.com>
-Subject: Re: [PATCH 2/3] staging: octeon: avoid needless device allocation
-Message-ID: <ZDnuBDruWPFNwvWX@lenoch>
-References: <ZDgNexVTEfyGo77d@lenoch>
- <ZDgOLHw1IkmWVU79@lenoch>
- <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
- <ZDgxPet9RIDC9Oz1@lenoch>
- <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
+        with ESMTP id S229678AbjDOM6o (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 15 Apr 2023 08:58:44 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C74685;
+        Sat, 15 Apr 2023 05:58:42 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fa9da5e5bso178347167b3.1;
+        Sat, 15 Apr 2023 05:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681563521; x=1684155521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccV6fJmLsZscVpXweMcEv4sovH+IDrkvejv50k6gs/U=;
+        b=BSOaYfaXyd5Wb+epLfvjrJB5ddMbSfuRSPgkDv/0OOsO8ij2hFGojnuviqXm0GCrkP
+         ID2hBr77xwAaGcKnrXJiZAUdBojhzD8cglmd8qXgd51iUqdS7A9NAWUQz0MUF5ZcciE8
+         AWz1SY3aKamn3My6fXKs/8E5eqVabut4SfZKc0c5sbIlrZyG34ztRaxzO3zCWgWJeeks
+         vL5yfHXHE0t7DNIuTqx162KoYvLaNpuXLEhcNNNv20NmCKzlwGF6mcKsLN10ua6WOBit
+         5o9zCg+9j1R+WkmMZNRoFuK0k+WfhwAjMsbRMXWBbGHiHnx9KcILf1NV5DEtKeNZyNxV
+         c60w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681563521; x=1684155521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ccV6fJmLsZscVpXweMcEv4sovH+IDrkvejv50k6gs/U=;
+        b=RK2xoZUrJD1zo3s1mnsAVQBq71ezNtnDkNq61RlCwomL6JkFW/Lw2BKYo7X+/2yiBX
+         FuXwwgqOEeSVGl0/Q/W0+If2qJ52a+qMBOT9zJ4cuPX2bAk2hhI0CYb5lAYBa1cWc2gr
+         A3C6eiPILaQ9Tu2ZqZF8D83r0/UC466yHf+AT2slGLFJbLqWvC8i1C5SV77+tSVmXXdX
+         WiOtBwMiEVExaG8LJSYbFFUUs8d7E1lXDHU8zct2ga+YKxfVM7xXwvhLtcR2zlm58D+H
+         Kx+vdN7ZCyYYPcTbYVfWYW0rQ53Smhxra0nifThEc3wN8WMKk3rlBetttEBBZ6oc9qGx
+         oF7g==
+X-Gm-Message-State: AAQBX9cxCc/GYZvHwwyYYGAhfnQA74671W/tUbBRnbpxLJh5bU49CEyq
+        DHSRUFghuoyHbpQ8JIrPYO7igv4WTPuopSAlrQ==
+X-Google-Smtp-Source: AKy350bkbiaOTV48G/m6wg5f7oTu79ZcJL2xRJuRL2it4F9Xsb2JgTwgmruSWgxfXHK3zLR53InjScARyCku/VQAIuk=
+X-Received: by 2002:a81:b245:0:b0:54f:b721:5325 with SMTP id
+ q66-20020a81b245000000b0054fb7215325mr5587058ywh.1.1681563521186; Sat, 15 Apr
+ 2023 05:58:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
-X-CMAE-Envelope: MS4wfHTE2Vck/h8W4fgx8xmu6CI4hbI5QppxWbMKXo3GzPtS6srSky59yVtjcwCpB0HHncUofK13zOD2KvqCZEplxTdeoBqsJbau4wHKuh0ncJwc7pH35w8B
- nTbdLB7c1JGHO89ab2asZ+cdDF2rpRygGdy71uI3KhV9nVpERt5keM3wJAFRbjxBKX2koMLJy8s/lVC6ZoOunOlxCD2WDNbY4in5gKyVtpXMxL40qITirFnv
- 954ToH/jss2hpTd2Q6Hkmb/W38gLlAVNd0EJ2+ioXjukGmNZpDZ4JJFxUyygasxTq8lmI5UzkvvRB5f17Te2O5V6PI/xSUddJWfKGp/ZluinM2hGYi2/FVGX
- N0dPC6WBem5NNXjPCfee8fKUBsEUXp9I7Os0IsGFzJd7k0jj8Q8=
+References: <20230414225551.858160935@linutronix.de> <20230414232310.382005483@linutronix.de>
+In-Reply-To: <20230414232310.382005483@linutronix.de>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Sat, 15 Apr 2023 08:58:30 -0400
+Message-ID: <CAMzpN2j4NbGGR=jfxpVVQwYCZ=hHOUKm3oBpw1WKGiTUJ73EXA@mail.gmail.com>
+Subject: Re: [patch 19/37] x86/smpboot: Switch to hotplug core state synchronization
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+David Daney, Steven J. Hill
+On Fri, Apr 14, 2023 at 7:44=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
+>
+> The new AP state tracking and synchronization mechanism in the CPU hotplu=
+g
+> core code allows to remove quite some x86 specific code:
+>
+>   1) The AP alive synchronization based on cpumasks
+>
+>   2) The decision whether an AP can be brought up again
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Juergen Gross <jgross@suse.com>
+> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> Cc: xen-devel@lists.xenproject.org
+> ---
+>  arch/x86/Kconfig           |    1
+>  arch/x86/include/asm/smp.h |    7 +
+>  arch/x86/kernel/smp.c      |    1
+>  arch/x86/kernel/smpboot.c  |  159 ++++++++++----------------------------=
+-------
+>  arch/x86/xen/smp_hvm.c     |   16 +---
+>  arch/x86/xen/smp_pv.c      |   39 ++++++-----
+>  6 files changed, 72 insertions(+), 151 deletions(-)
+>
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -272,6 +272,7 @@ config X86
+>         select HAVE_UNSTABLE_SCHED_CLOCK
+>         select HAVE_USER_RETURN_NOTIFIER
+>         select HAVE_GENERIC_VDSO
+> +       select HOTPLUG_CORE_SYNC_FULL           if SMP
+>         select HOTPLUG_SMT                      if SMP
+>         select IRQ_FORCED_THREADING
+>         select NEED_PER_CPU_EMBED_FIRST_CHUNK
+> --- a/arch/x86/include/asm/smp.h
+> +++ b/arch/x86/include/asm/smp.h
+> @@ -38,6 +38,8 @@ struct smp_ops {
+>         void (*crash_stop_other_cpus)(void);
+>         void (*smp_send_reschedule)(int cpu);
+>
+> +       void (*cleanup_dead_cpu)(unsigned cpu);
+> +       void (*poll_sync_state)(void);
+>         int (*cpu_up)(unsigned cpu, struct task_struct *tidle);
+>         int (*cpu_disable)(void);
+>         void (*cpu_die)(unsigned int cpu);
+> @@ -90,7 +92,8 @@ static inline int __cpu_disable(void)
+>
+>  static inline void __cpu_die(unsigned int cpu)
+>  {
+> -       smp_ops.cpu_die(cpu);
+> +       if (smp_ops.cpu_die)
+> +               smp_ops.cpu_die(cpu);
+>  }
+>
+>  static inline void play_dead(void)
+> @@ -122,8 +125,6 @@ void native_smp_cpus_done(unsigned int m
+>  int common_cpu_up(unsigned int cpunum, struct task_struct *tidle);
+>  int native_cpu_up(unsigned int cpunum, struct task_struct *tidle);
+>  int native_cpu_disable(void);
+> -int common_cpu_die(unsigned int cpu);
+> -void native_cpu_die(unsigned int cpu);
+>  void hlt_play_dead(void);
+>  void native_play_dead(void);
+>  void play_dead_common(void);
+> --- a/arch/x86/kernel/smp.c
+> +++ b/arch/x86/kernel/smp.c
+> @@ -269,7 +269,6 @@ struct smp_ops smp_ops =3D {
+>         .smp_send_reschedule    =3D native_smp_send_reschedule,
+>
+>         .cpu_up                 =3D native_cpu_up,
+> -       .cpu_die                =3D native_cpu_die,
+>         .cpu_disable            =3D native_cpu_disable,
+>         .play_dead              =3D native_play_dead,
+>
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -57,6 +57,7 @@
+>  #include <linux/pgtable.h>
+>  #include <linux/overflow.h>
+>  #include <linux/stackprotector.h>
+> +#include <linux/cpuhotplug.h>
+>
+>  #include <asm/acpi.h>
+>  #include <asm/cacheinfo.h>
+> @@ -101,9 +102,6 @@ EXPORT_PER_CPU_SYMBOL(cpu_die_map);
+>  DEFINE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+>  EXPORT_PER_CPU_SYMBOL(cpu_info);
+>
+> -/* All of these masks are initialized in setup_cpu_local_masks() */
+> -static cpumask_var_t cpu_initialized_mask;
+> -static cpumask_var_t cpu_callout_mask;
+>  /* Representing CPUs for which sibling maps can be computed */
+>  static cpumask_var_t cpu_sibling_setup_mask;
+>
+> @@ -169,8 +167,8 @@ static void smp_callin(void)
+>         int cpuid =3D smp_processor_id();
+>
+>         /*
+> -        * If waken up by an INIT in an 82489DX configuration
+> -        * cpu_callout_mask guarantees we don't get here before an
+> +        * If waken up by an INIT in an 82489DX configuration the alive
+> +        * synchronization guarantees we don't get here before an
+>          * INIT_deassert IPI reaches our local APIC, so it is now safe to
+>          * touch our local APIC.
+>          *
+> @@ -216,17 +214,6 @@ static void ap_calibrate_delay(void)
+>         cpu_data(smp_processor_id()).loops_per_jiffy =3D loops_per_jiffy;
+>  }
+>
+> -static void wait_for_master_cpu(int cpu)
+> -{
+> -       /*
+> -        * Wait for release by control CPU before continuing with AP
+> -        * initialization.
+> -        */
+> -       WARN_ON(cpumask_test_and_set_cpu(cpu, cpu_initialized_mask));
+> -       while (!cpumask_test_cpu(cpu, cpu_callout_mask))
+> -               cpu_relax();
+> -}
+> -
+>  /*
+>   * Activate a secondary processor.
+>   */
+> @@ -247,11 +234,10 @@ static void notrace start_secondary(void
+>         cpu_init_exception_handling();
+>
+>         /*
+> -        * Sync point with wait_cpu_initialized(). Sets AP in
+> -        * cpu_initialized_mask and then waits for the control CPU
+> -        * to release it.
+> +        * Sync point with the hotplug core. Sets the sync state to ALIVE
+> +        * and waits for the control CPU to release it.
+>          */
+> -       wait_for_master_cpu(raw_smp_processor_id());
+> +       cpuhp_ap_sync_alive();
+>
+>         cpu_init();
+>         rcu_cpu_starting(raw_smp_processor_id());
+> @@ -285,7 +271,6 @@ static void notrace start_secondary(void
+>         set_cpu_online(smp_processor_id(), true);
+>         lapic_online();
+>         unlock_vector_lock();
+> -       cpu_set_state_online(smp_processor_id());
+>         x86_platform.nmi_init();
+>
+>         /* enable local interrupts */
+> @@ -736,9 +721,10 @@ static void impress_friends(void)
+>          * Allow the user to impress friends.
+>          */
+>         pr_debug("Before bogomips\n");
+> -       for_each_possible_cpu(cpu)
+> -               if (cpumask_test_cpu(cpu, cpu_callout_mask))
+> +       for_each_possible_cpu(cpu) {
+> +               if (cpumask_test_cpu(cpu, cpu_online_mask))
+>                         bogosum +=3D cpu_data(cpu).loops_per_jiffy;
 
-On Thu, Apr 13, 2023 at 07:20:08PM +0200, Andrew Lunn wrote:
-> > I was asking this question myself and then came to this:
-> > Converting driver to phylink makes separating different macs easier as
-> > this driver is splitted between staging and arch/mips/cavium-octeon/executive/
-> > However I'll provide changes spotted previously as separate preparational
-> > patches. Would that work for you?
-> 
-> Is you end goal to get this out of staging? phylib vs phylink is not a
-> reason to keep it in staging.
+This should be the same as for_each_online_cpu().
 
-A side question here: Once upon the time there was an "Cavium OCTEON-III
-network driver" patchset floating around, reached v9, at least that's
-the last one I was able to find [1]. Prerequisites were intended to go
-via linux-mips tree [2].
-
-I was unable to find any further traces and this driver is not even
-in Cavium's 5.4 vendor tree. What happened with that? It is for different
-hardware, but some design decisions might be interesting here as well.
-
-> It just seems odd to be adding new features to a staging driver. As a
-> bit of a "carrot and stick" maybe we should say you cannot add new
-> features until it is ready to move out of staging?
-> 
-> But staging is not my usual domain.
-> 
-> 	 Andrew
-
-[1] https://www.spinics.net/lists/netdev/msg498700.html
-[2] https://www.spinics.net/lists/netdev/msg498696.html
+--
+Brian Gerst
