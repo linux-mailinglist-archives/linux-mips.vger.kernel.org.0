@@ -2,78 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5C36E2D81
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Apr 2023 01:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32AD6E2DE2
+	for <lists+linux-mips@lfdr.de>; Sat, 15 Apr 2023 02:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjDNXrX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Apr 2023 19:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S229791AbjDOAVe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Apr 2023 20:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjDNXq4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Apr 2023 19:46:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2932EBB96;
-        Fri, 14 Apr 2023 16:45:53 -0700 (PDT)
-Message-ID: <20230414232311.505152290@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681515914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=nUZSh5064m2aKoxr+KQn5JPMu6mMKtsaGAC9NSZVNms=;
-        b=tXdZ+JNXwmoFAj/D4wiLzLK3B9Tdjf372IqdJt5Tv46gv42xMEL/Nl0g5kdyiZHT7x9AOz
-        mlFylzsIhnrXORGzmbDeoOd0v4PWWxn8r5JfaFvKB5y4Myd0UBCMyCyRl33Zi088uSB2Ir
-        SvONUInWoGIX09mANT0wqHnMa8plhV/+A02oVVT5ueBVnLW3psXBgZVX1wGuoSRuwDa/iV
-        WCxZeGiReQ8KfEt87/havCjKqbuogL4jZdqFqdulIebLR5I3xNrYIQ3tyIgS/ypjvwLm3u
-        ZY0rsKukGMk7diouGwNhACQ22cLpXT7hOtDVbk+HLvlFHbrtTgmHuHYua/2ZDA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681515914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=nUZSh5064m2aKoxr+KQn5JPMu6mMKtsaGAC9NSZVNms=;
-        b=pkIQhDhWjPpGLy6aH5XoCk5G1NoyA94urqDixfl4xi4JgoGh52mUmdlWbRdLMez3lvqnCR
-        cNwc4JXhAqWj08Aw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        "Arjan van de Veen" <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        with ESMTP id S229491AbjDOAVd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Apr 2023 20:21:33 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606D40F8
+        for <linux-mips@vger.kernel.org>; Fri, 14 Apr 2023 17:21:30 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id nTfRpxKEOv5uInTfSp7BlT; Sat, 15 Apr 2023 02:21:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1681518088; bh=9ilePXRoNUCDch556gtjeLIsfgDIoTn3Fmaci6x9Kw0=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=oi0iu4XGJWZ7tHkF+Mg9KDiSQaLzb6eMD0uFy5lKUy+LNQ+JssRtUSuXEeBfh8Yu+
+         03+BLgiusjG3KN/GrqDP9g+0wsn3jU07TPUr5ZX9MAr39kll6KO6+nIIQ5FoGVNXEH
+         1fL2oBJzb1schTPes/MbmchR9YwIqQjf09wo7Ehl4xG7nMpnxWSqyU/NcZ3y6EdPb4
+         hNan+hDVcUNTAGIArZiquzlxRSfYh5PBC1uYuNmW5V/qPWVU6DW3kHDRr0uDoOKPlB
+         ARdrhoPqssugooP1JlMg0i15y4nxktfQYBSGyW+WG9xnxEOgkIKW9A1KPmKMEIqOfD
+         7Yl3+Nu4SoMcA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1681518088; bh=9ilePXRoNUCDch556gtjeLIsfgDIoTn3Fmaci6x9Kw0=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=oi0iu4XGJWZ7tHkF+Mg9KDiSQaLzb6eMD0uFy5lKUy+LNQ+JssRtUSuXEeBfh8Yu+
+         03+BLgiusjG3KN/GrqDP9g+0wsn3jU07TPUr5ZX9MAr39kll6KO6+nIIQ5FoGVNXEH
+         1fL2oBJzb1schTPes/MbmchR9YwIqQjf09wo7Ehl4xG7nMpnxWSqyU/NcZ3y6EdPb4
+         hNan+hDVcUNTAGIArZiquzlxRSfYh5PBC1uYuNmW5V/qPWVU6DW3kHDRr0uDoOKPlB
+         ARdrhoPqssugooP1JlMg0i15y4nxktfQYBSGyW+WG9xnxEOgkIKW9A1KPmKMEIqOfD
+         7Yl3+Nu4SoMcA==
+Date:   Sat, 15 Apr 2023 02:21:24 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-staging@lists.linux.dev, netdev@vger.kernel.org,
         linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [patch 37/37] x86/smpboot: Allow parallel bringup for SEV-ES
-References: <20230414225551.858160935@linutronix.de>
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        David Daney <ddaney.cavm@gmail.com>,
+        "Steven J. Hill" <sjhill@realitydiluted.com>
+Subject: Re: [PATCH 2/3] staging: octeon: avoid needless device allocation
+Message-ID: <ZDnuBDruWPFNwvWX@lenoch>
+References: <ZDgNexVTEfyGo77d@lenoch>
+ <ZDgOLHw1IkmWVU79@lenoch>
+ <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
+ <ZDgxPet9RIDC9Oz1@lenoch>
+ <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 15 Apr 2023 01:45:13 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
+X-CMAE-Envelope: MS4wfHTE2Vck/h8W4fgx8xmu6CI4hbI5QppxWbMKXo3GzPtS6srSky59yVtjcwCpB0HHncUofK13zOD2KvqCZEplxTdeoBqsJbau4wHKuh0ncJwc7pH35w8B
+ nTbdLB7c1JGHO89ab2asZ+cdDF2rpRygGdy71uI3KhV9nVpERt5keM3wJAFRbjxBKX2koMLJy8s/lVC6ZoOunOlxCD2WDNbY4in5gKyVtpXMxL40qITirFnv
+ 954ToH/jss2hpTd2Q6Hkmb/W38gLlAVNd0EJ2+ioXjukGmNZpDZ4JJFxUyygasxTq8lmI5UzkvvRB5f17Te2O5V6PI/xSUddJWfKGp/ZluinM2hGYi2/FVGX
+ N0dPC6WBem5NNXjPCfee8fKUBsEUXp9I7Os0IsGFzJd7k0jj8Q8=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,147 +68,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
++David Daney, Steven J. Hill
 
-Enable parallel bringup for SEV-ES guests. The APs can't actually execute
-the CPUID instruction directly during early startup, but they can make the
-GHCB call directly instead, just as the #VC trap handler would do.
+On Thu, Apr 13, 2023 at 07:20:08PM +0200, Andrew Lunn wrote:
+> > I was asking this question myself and then came to this:
+> > Converting driver to phylink makes separating different macs easier as
+> > this driver is splitted between staging and arch/mips/cavium-octeon/executive/
+> > However I'll provide changes spotted previously as separate preparational
+> > patches. Would that work for you?
+> 
+> Is you end goal to get this out of staging? phylib vs phylink is not a
+> reason to keep it in staging.
 
-Thanks to Sabin for talking me through the way this works.
+A side question here: Once upon the time there was an "Cavium OCTEON-III
+network driver" patchset floating around, reached v9, at least that's
+the last one I was able to find [1]. Prerequisites were intended to go
+via linux-mips tree [2].
 
-Suggested-by: Sabin Rapan <sabrapan@amazon.com>
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+I was unable to find any further traces and this driver is not even
+in Cavium's 5.4 vendor tree. What happened with that? It is for different
+hardware, but some design decisions might be interesting here as well.
 
----
- arch/x86/include/asm/sev-common.h |    3 +++
- arch/x86/include/asm/smp.h        |    1 +
- arch/x86/kernel/head_64.S         |   30 ++++++++++++++++++++++++++++++
- arch/x86/kernel/smpboot.c         |   14 ++++++++++++--
- 4 files changed, 46 insertions(+), 2 deletions(-)
+> It just seems odd to be adding new features to a staging driver. As a
+> bit of a "carrot and stick" maybe we should say you cannot add new
+> features until it is ready to move out of staging?
+> 
+> But staging is not my usual domain.
+> 
+> 	 Andrew
 
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -70,6 +70,7 @@
- 	/* GHCBData[63:12] */				\
- 	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
- 
-+#ifndef __ASSEMBLY__
- /*
-  * SNP Page State Change Operation
-  *
-@@ -161,6 +162,8 @@ struct snp_psc_desc {
- 
- #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
- 
-+#endif /* __ASSEMBLY__ */
-+
- /*
-  * Error codes related to GHCB input that can be communicated back to the guest
-  * by setting the lower 32-bits of the GHCB SW_EXITINFO1 field to 2.
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -202,6 +202,7 @@ extern unsigned int smpboot_control;
- #define STARTUP_APICID_CPUID_1F 0x80000000
- #define STARTUP_APICID_CPUID_0B 0x40000000
- #define STARTUP_APICID_CPUID_01 0x20000000
-+#define STARTUP_APICID_SEV_ES	0x10000000
- 
- /* Top 8 bits are reserved for control */
- #define STARTUP_PARALLEL_MASK	0xFF000000
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -26,6 +26,7 @@
- #include <asm/nospec-branch.h>
- #include <asm/fixmap.h>
- #include <asm/smp.h>
-+#include <asm/sev-common.h>
- 
- /*
-  * We are not able to switch in one step to the final KERNEL ADDRESS SPACE
-@@ -243,9 +244,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	 * Bit 31	STARTUP_APICID_CPUID_1F flag (use CPUID 0x1f)
- 	 * Bit 30	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
- 	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
-+	 * Bit 28	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
- 	 * Bit 0-23	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
- 	movl	smpboot_control(%rip), %ecx
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+	testl	$STARTUP_APICID_SEV_ES, %ecx
-+	jnz	.Luse_sev_cpuid_0b
-+#endif
- 	testl	$STARTUP_APICID_CPUID_1F, %ecx
- 	jnz	.Luse_cpuid_1f
- 	testl	$STARTUP_APICID_CPUID_0B, %ecx
-@@ -262,6 +268,30 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	shr	$24, %edx
- 	jmp	.Lsetup_AP
- 
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+.Luse_sev_cpuid_0b:
-+	/* Set the GHCB MSR to request CPUID 0x0B_EDX */
-+	movl	$MSR_AMD64_SEV_ES_GHCB, %ecx
-+	movl	$(GHCB_CPUID_REQ_EDX << 30) | GHCB_MSR_CPUID_REQ, %eax
-+	movl	$0x0b, %edx
-+	wrmsr
-+
-+	/* Perform GHCB MSR protocol */
-+	rep; vmmcall		/* vmgexit */
-+
-+	/*
-+	 * Get the result. After the RDMSR:
-+	 *   EAX should be 0xc0000005
-+	 *   EDX should have the CPUID register value and since EDX
-+	 *   is the target register, no need to move the result.
-+	 */
-+	rdmsr
-+	andl	$GHCB_MSR_INFO_MASK, %eax
-+	cmpl	$GHCB_MSR_CPUID_RESP, %eax
-+	jne	1f
-+	jmp	.Lsetup_AP
-+#endif
-+
- .Luse_cpuid_0b:
- 	mov	$0x0B, %eax
- 	xorl	%ecx, %ecx
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -86,6 +86,7 @@
- #include <asm/hw_irq.h>
- #include <asm/stackprotector.h>
- #include <asm/sev.h>
-+#include <asm/coco.h>
- 
- /* representing HT siblings of each logical CPU */
- DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
-@@ -1266,8 +1267,16 @@ bool __init arch_cpuhp_init_parallel_bri
- 
- 	/* Encrypted guests require special CPUID handling. */
- 	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
--		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
--		return false;
-+		switch (cc_get_vendor()) {
-+		case CC_VENDOR_AMD:
-+			ctrl = STARTUP_APICID_SEV_ES;
-+			if (topology_extended_leaf == 0x0b)
-+				goto setup;
-+			fallthrough;
-+		default:
-+			pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+			return false;
-+		}
- 	}
- 
- 	switch (topology_extended_leaf) {
-@@ -1290,6 +1299,7 @@ bool __init arch_cpuhp_init_parallel_bri
- 		return false;
- 	}
- 
-+setup:
- 	pr_debug("Parallel CPU startup enabled: 0x%08x\n", ctrl);
- 	smpboot_control = ctrl;
- 	return true;
-
+[1] https://www.spinics.net/lists/netdev/msg498700.html
+[2] https://www.spinics.net/lists/netdev/msg498696.html
