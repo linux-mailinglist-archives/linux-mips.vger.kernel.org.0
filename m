@@ -2,110 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0025B6E33C0
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Apr 2023 23:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8234D6E3A3C
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Apr 2023 18:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjDOVGm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 15 Apr 2023 17:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S229588AbjDPQQo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Apr 2023 12:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDOVGl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 15 Apr 2023 17:06:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31DAB0;
-        Sat, 15 Apr 2023 14:06:40 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681592799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3DiOB1jbfBoIoBcKhJ+tlgldd4KD5aJr4Sg6j9ebPUI=;
-        b=P2JRe5U4lJMHWRXIblQx0pIuiWd2AghPV4KuEWvmDuReSyOVhQCCEFeElO4eRip+BZst8j
-        FEt9t2BOSLC4o1kel1IC1nngSPriEuvEd6hiCJGBQiNkbnbNfFcto1Vl3sKZG2ESMonhFs
-        An5RJlKu7/tSGpzgHR6Z7KG43eMP0SiKp3vTl4fTzoc+BUJC8yEtxBJufLRq9lbmeibFXN
-        sl7kTAsogFv4BEj0maXzziyeRxITPDLItnz8esS3e+KABEeGtBs5ADBH+SUHP2X3sjvsCF
-        sA5xfsq3ODgQ/B4I43wW92xDuUJXBh2S1RtOiUBnGhQ7c+K3ylqiGKlbM1+Z/A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681592799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3DiOB1jbfBoIoBcKhJ+tlgldd4KD5aJr4Sg6j9ebPUI=;
-        b=QEW/hhbgWQeeaCKMhDdxi3o+5E2lnyqCY4azQRMF5wvL6dQ0zBCYuANaf/0HtZpTDBh4rO
-        TIZpqZPJS0yZKOCg==
-To:     Brian Gerst <brgerst@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
+        with ESMTP id S229513AbjDPQQn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Apr 2023 12:16:43 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FD51BF;
+        Sun, 16 Apr 2023 09:16:42 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-32942f4b670so16904325ab.0;
+        Sun, 16 Apr 2023 09:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681661802; x=1684253802;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+l1dPVCsBREBPaNplQqRXfU3+a1O21BXYl2UEtPALx8=;
+        b=TLi6HiNlOC2Ox8RT5MP3+mY2gdtLljfEssddiSDHZrvJqnuURtAmG5mElsm/5Xou6I
+         H4WIEbuHnB1mxituWDdQyEXkMmXSMA50eg/ckqUkTYYdsL8pOPcShLAIRdj8I8ZCJziF
+         SrKqXKQ5krvj0HRUGwP5EMkBAQ2SJgWeEJXgIcS5ddYQ14K4GayLJ9LVs1uqRiiBZY24
+         l7HyuxvZk6Q+Uv9X5qSG5K1mqdWOGxfra3ZzoZMu7H7RU06x/W3QDNc5nobphgZ4lDDl
+         WVx+3GD5UIquu40DvYgtybWoyID3FmB8NWHSu7hTmIomPrhz53J94PYcpp4P8qLz1Jlz
+         TTyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681661802; x=1684253802;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+l1dPVCsBREBPaNplQqRXfU3+a1O21BXYl2UEtPALx8=;
+        b=WaBpK9mKEj0t0Z6XvfDoG4UIltCw33r6T6US9XwGT6gwGtcASc+W6o2xA71coR3K0G
+         LkZjT1J0Y5L+8mCH1DPyLtdSPCSwgAIrjImQ+4kpe7wup0ZjNQ60VkSIc3bEWTdjIV2+
+         aQE2mjE2gjVzGjDXwuwKRnj5ox94T+sCogl4P9ZRpIw6CJjOznr61mC6XYY3RcIEsq5m
+         v+dpbF1BHuvRzamH48IcrlSZJ1GMW1Bo8u20lL4FW5F+jAgh25QsDr7woKZli0tim352
+         LX25muZp3/S5NHHjFRXYyBtQl8YTOeioKPezniT6s/D0zOMxf3xqvfI2cS5X2spdsTh1
+         IzQw==
+X-Gm-Message-State: AAQBX9cfDkFi/FGRYutU3xb0/X54EjvPtcyYOouoBlBrvuOLGOdvc5H+
+        q7DL/lSMtZA5u3FwUHU2JEY=
+X-Google-Smtp-Source: AKy350Zeoi8KGnj0y0vS8PjkkZ4WmsQB9qoWE7x07Mm55E7MAvTeyEB8EysU84E4C12fsFuzTfS9Vw==
+X-Received: by 2002:a92:cec9:0:b0:317:9818:ea49 with SMTP id z9-20020a92cec9000000b003179818ea49mr8282243ilq.2.1681661801789;
+        Sun, 16 Apr 2023 09:16:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cn11-20020a0566383a0b00b0040f72526b1fsm1516212jab.16.2023.04.16.09.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 09:16:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 16 Apr 2023 09:16:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 35/37] x86/smpboot: Support parallel startup of
- secondary CPUs
-In-Reply-To: <CAMzpN2hUbYpYrqDL1ViXUWGKGa7mDEG6iHtWEZg9GvrAoRgvKQ@mail.gmail.com>
-References: <20230414225551.858160935@linutronix.de>
- <20230414232311.379210081@linutronix.de>
- <CAMzpN2hUbYpYrqDL1ViXUWGKGa7mDEG6iHtWEZg9GvrAoRgvKQ@mail.gmail.com>
-Date:   Sat, 15 Apr 2023 23:06:38 +0200
-Message-ID: <87mt38yhwh.ffs@tglx>
+        Yang Ling <gnaygnil@gmail.com>
+Subject: Re: [PATCH v2 2/2] watchdog: loongson1_wdt: Implement restart handler
+Message-ID: <89b3c1c9-025f-4157-ba99-af3a7097ae85@roeck-us.net>
+References: <20230330112051.551648-1-keguang.zhang@gmail.com>
+ <20230330112051.551648-3-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330112051.551648-3-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Apr 15 2023 at 09:22, Brian Gerst wrote:
-> On Fri, Apr 14, 2023 at 7:45=E2=80=AFPM Thomas Gleixner <tglx@linutronix.=
-de> wrote:
->> @@ -248,10 +311,20 @@ SYM_INNER_LABEL(secondary_startup_64_no_
->>          *
->>          * RDX contains the per-cpu offset
->>          */
->> -       movq    pcpu_hot + X86_current_task(%rdx), %rax
->> -       movq    TASK_threadsp(%rax), %rsp
->> +       movq    pcpu_hot + X86_top_of_stack(%rdx), %rsp
->
-> Switching to using pcpu_hot.top_of_stack is ok, but it's not
-> completely equivalent.  top_of_stack points to the end of the pt_regs
-> structure, while the kernel stack starts below pt_regs even for kernel
-> threads.  So you need to subtract PTREGS_SIZE from the stack pointer
-> after this.
->
-> This change should also be a separate patch.
+On Thu, Mar 30, 2023 at 07:20:51PM +0800, Keguang Zhang wrote:
+> Implement restart handler for the Loongson-1 watchdog driver and
+> define the watchdog registers instead of including the legacy header.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 
-You're right on both counts.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> V1 -> V2: None
+> ---
+>  drivers/watchdog/loongson1_wdt.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
+> index bb3d075c0633..a0b6fe62e516 100644
+> --- a/drivers/watchdog/loongson1_wdt.c
+> +++ b/drivers/watchdog/loongson1_wdt.c
+> @@ -7,7 +7,11 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/watchdog.h>
+> -#include <loongson1.h>
+> +
+> +/* Loongson 1 Watchdog Register Definitions */
+> +#define WDT_EN			0x0
+> +#define WDT_TIMER		0x4
+> +#define WDT_SET			0x8
+>  
+>  #define DEFAULT_HEARTBEAT	30
+>  
+> @@ -66,6 +70,18 @@ static int ls1x_wdt_stop(struct watchdog_device *wdt_dev)
+>  	return 0;
+>  }
+>  
+> +static int ls1x_wdt_restart(struct watchdog_device *wdt_dev,
+> +			    unsigned long action, void *data)
+> +{
+> +	struct ls1x_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
+> +
+> +	writel(0x1, drvdata->base + WDT_EN);
+> +	writel(0x1, drvdata->base + WDT_TIMER);
+> +	writel(0x1, drvdata->base + WDT_SET);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct watchdog_info ls1x_wdt_info = {
+>  	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+>  	.identity = "Loongson1 Watchdog",
+> @@ -77,6 +93,7 @@ static const struct watchdog_ops ls1x_wdt_ops = {
+>  	.stop = ls1x_wdt_stop,
+>  	.ping = ls1x_wdt_ping,
+>  	.set_timeout = ls1x_wdt_set_timeout,
+> +	.restart = ls1x_wdt_restart,
+>  };
+>  
+>  static void ls1x_clk_disable_unprepare(void *data)
