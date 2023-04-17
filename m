@@ -2,97 +2,185 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DD66E42B5
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Apr 2023 10:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBF66E4318
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Apr 2023 11:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjDQIhn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Apr 2023 04:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S229540AbjDQJDv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Apr 2023 05:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDQIhm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 04:37:42 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F1B1FEE;
-        Mon, 17 Apr 2023 01:37:40 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so12681774wms.1;
-        Mon, 17 Apr 2023 01:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681720659; x=1684312659;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1TS0efwUAAd7nlMdFggdSRaEYHBszL5PVl2VfDfaNHg=;
-        b=nVVXDYKM7dS4sxRa/jMCyNcxKoWwzHPzKRS0iVd6JdsLC4Yvf7HqH5uJYkZn6sPUaL
-         iCcJorJ9taEkn5S/3hZFlnNfdUXK8M9QZR9HeG/ElesAuSQ0SxIH3lplS8Z3IVQJ9tK2
-         8nfGLoQaiJgUbrvKa5++zjHL1JtK9vMOCOZ11G2mGaYsJtcN5AdMBQp7Mcy5E43bRwMA
-         4JUppzGWq8k1kaih4oTsHrEuznAt4v1Njjmr+1B2RtULOASeBzU5CCLFl18qC2Y5VYBW
-         jmlQ0p3MbMsR+GEyRUnpskMp+fYdwMXusiBhofFYKAd271MjGcWIR3P5YhGhFIQ8ZPBQ
-         jo8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681720659; x=1684312659;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1TS0efwUAAd7nlMdFggdSRaEYHBszL5PVl2VfDfaNHg=;
-        b=eXTICIODZXN9B43gR+uc4si7jF4inzrdzs4ytzNGSs4iObEm2NnM4/7VbYgyOUwOVL
-         q+hobA5MnxP3VoRG14SnG/kKvlIiXUhuaAAxzCR4zLuqHYX8lH0wy1vCRbjG19pId/oM
-         BzBeUxy+C4FkupLHR7d0K0pjkZSEvxhMYfTV9ITklf93oqCxBJXb8uRS8W2Pp/VLC/rf
-         9Wodz8v+7HoDTFb0bUXU0o8sJM1B+VjdJA0xME+BCmydRvOjLvIqvhT/ey12SnST63k+
-         AnCZx5ey7vbg2cK6AUzxH1x1pR7J7gQZ2Tq5BbyOVX2Cus0+NrR5ZB5U6X40kLaqGYh5
-         4Hcg==
-X-Gm-Message-State: AAQBX9d7eJjpSKsy1clMOBiyw3OT6N5h1c6WCXozkIKN5dfL9gajysSc
-        Nf8nVT1Lj063S4fZKA3VJgBku2d6HD8=
-X-Google-Smtp-Source: AKy350alSXGGOxruHJRLZ27Qv5gwxhcs5eIGFX7ZpE88yZEtv4l1XpzjXc4my9iIW8NDRUQO5YYFsQ==
-X-Received: by 2002:a05:600c:1e0f:b0:3f1:7510:62e8 with SMTP id ay15-20020a05600c1e0f00b003f1751062e8mr763946wmb.3.1681720659317;
-        Mon, 17 Apr 2023 01:37:39 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t12-20020a5d460c000000b002c561805a4csm9943079wrq.45.2023.04.17.01.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 01:37:38 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 11:37:30 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Ladislav Michl <oss-lists@triops.cz>,
-        linux-staging@lists.linux.dev, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH 2/3] staging: octeon: avoid needless device allocation
-Message-ID: <26dd05e9-befa-4190-ac3c-bf31d58a5f1e@kili.mountain>
-References: <ZDgNexVTEfyGo77d@lenoch>
- <ZDgOLHw1IkmWVU79@lenoch>
- <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
- <ZDgxPet9RIDC9Oz1@lenoch>
- <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
+        with ESMTP id S230042AbjDQJDu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 05:03:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4CA199F;
+        Mon, 17 Apr 2023 02:03:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0A8891F381;
+        Mon, 17 Apr 2023 09:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681722227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d8A2ZUy/lVcriOnB4f9oVvXNmiXwKTFdxYnQjf9J06M=;
+        b=BkMeIzsCaz/1qsCpBY3shJ9SdbEY8+WDuXDejoaHRIauiQ2ZOOMwTBr7sRPMgY8XWExQeE
+        oeCrwHYTYBgYmcqDhb9i/RVyMXUqnNzgaV8Lrfz+FCwVBVppBXYyvlHsYTdNvHtkOehmlb
+        M2dFpk9G2vIhcI9oPzCLoNiIE4hntOA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681722227;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d8A2ZUy/lVcriOnB4f9oVvXNmiXwKTFdxYnQjf9J06M=;
+        b=LAFt+Vockryc+5LBbO/a8ZoTBFoaqimB5HQI5t71BPiB2N2EMs4YZO59LSiealCh9tV0AW
+        T27q/nNszvC8H3BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F46113319;
+        Mon, 17 Apr 2023 09:03:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pcOfIXILPWTNVgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 09:03:46 +0000
+Message-ID: <2b4f75b8-aa83-8e41-7c99-7c8d573c0f31@suse.de>
+Date:   Mon, 17 Apr 2023 11:03:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 01/19] fbdev: Prepare generic architecture helpers
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org,
+        linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+References: <20230406143019.6709-1-tzimmermann@suse.de>
+ <20230406143019.6709-2-tzimmermann@suse.de>
+ <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------xWwPiIYmrlcSVPwysV4e9Klk"
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 07:20:08PM +0200, Andrew Lunn wrote:
-> > I was asking this question myself and then came to this:
-> > Converting driver to phylink makes separating different macs easier as
-> > this driver is splitted between staging and arch/mips/cavium-octeon/executive/
-> > However I'll provide changes spotted previously as separate preparational
-> > patches. Would that work for you?
-> 
-> Is you end goal to get this out of staging? phylib vs phylink is not a
-> reason to keep it in staging.
-> 
-> It just seems odd to be adding new features to a staging driver. As a
-> bit of a "carrot and stick" maybe we should say you cannot add new
-> features until it is ready to move out of staging?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------xWwPiIYmrlcSVPwysV4e9Klk
+Content-Type: multipart/mixed; boundary="------------8LwHOmqVih1SSnC0wxvh5ylS";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de, javierm@redhat.com,
+ gregkh@linuxfoundation.org, linux-arch@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Message-ID: <2b4f75b8-aa83-8e41-7c99-7c8d573c0f31@suse.de>
+Subject: Re: [PATCH v2 01/19] fbdev: Prepare generic architecture helpers
+References: <20230406143019.6709-1-tzimmermann@suse.de>
+ <20230406143019.6709-2-tzimmermann@suse.de>
+ <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
+In-Reply-To: <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
 
-We already have that rule.  But I don't know anything about phy vs
-phylink...
+--------------8LwHOmqVih1SSnC0wxvh5ylS
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-regards,
-dan carpenter
+SGkgR2VlcnQNCg0KQW0gMTEuMDQuMjMgdW0gMTA6MDggc2NocmllYiBHZWVydCBVeXR0ZXJo
+b2V2ZW46DQo+IEhpIFRob21hcywNCj4gDQo+IE9uIFRodSwgQXByIDYsIDIwMjMgYXQgNDoz
+MOKAr1BNIFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cm90ZToN
+Cj4+IEdlbmVyaWMgaW1wbGVtZW50YXRpb25zIG9mIGZiX3BncHJvdGVjdCgpIGFuZCBmYl9p
+c19wcmltYXJ5X2RldmljZSgpDQo+PiBoYXZlIGJlZW4gaW4gdGhlIHNvdXJjZSBjb2RlIGZv
+ciBhIGxvbmcgdGltZS4gUHJlcGFyZSB0aGUgaGVhZGVyIGZpbGUNCj4+IHRvIG1ha2UgdXNl
+IG9mIHRoZW0uDQo+Pg0KPj4gSW1wcm92ZSB0aGUgY29kZSBieSB1c2luZyBhbiBpbmxpbmUg
+ZnVuY3Rpb24gZm9yIGZiX3BncHJvdGVjdCgpDQo+PiBhbmQgYnkgcmVtb3ZpbmcgaW5jbHVk
+ZSBzdGF0ZW1lbnRzLiBUaGUgZGVmYXVsdCBtb2RlIHNldCBieQ0KPj4gZmJfcGdwcm90ZWN0
+KCkgaXMgbm93IHdyaXRlY29tYmluZSwgd2hpY2ggaXMgd2hhdCBtb3N0IHBsYXRmb3Jtcw0K
+Pj4gd2FudC4NCj4+DQo+PiBTeW1ib2xzIGFyZSBwcm90ZWN0ZWQgYnkgcHJlcHJvY2Vzc29y
+IGd1YXJkcy4gQXJjaGl0ZWN0dXJlcyB0aGF0DQo+PiBwcm92aWRlIGEgc3ltYm9sIG5lZWQg
+dG8gZGVmaW5lIGEgcHJlcHJvY2Vzc29yIHRva2VuIG9mIHRoZSBzYW1lDQo+PiBuYW1lIGFu
+ZCB2YWx1ZS4gT3RoZXJ3aXNlIHRoZSBoZWFkZXIgZmlsZSB3aWxsIHByb3ZpZGUgYSBnZW5l
+cmljDQo+PiBpbXBsZW1lbnRhdGlvbi4gVGhpcyBwYXR0ZXJuIGhhcyBiZWVuIHRha2VuIGZy
+b20gPGFzbS9pby5oPi4NCj4+DQo+PiB2MjoNCj4+ICAgICAgICAgICogIHVzZSB3cml0ZWNv
+bWJpbmUgbWFwcGluZ3MgYnkgZGVmYXVsdCAoQXJuZCkNCj4+DQo+PiBTaWduZWQtb2ZmLWJ5
+OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4gDQo+IFRoYW5r
+cyBmb3IgeW91ciBwYXRjaCENCj4gDQo+PiAtLS0gYS9pbmNsdWRlL2FzbS1nZW5lcmljL2Zi
+LmgNCj4+ICsrKyBiL2luY2x1ZGUvYXNtLWdlbmVyaWMvZmIuaA0KPj4gQEAgLTEsMTMgKzEs
+MzIgQEANCj4+ICAgLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8NCj4+
+ICsNCj4+ICAgI2lmbmRlZiBfX0FTTV9HRU5FUklDX0ZCX0hfDQo+PiAgICNkZWZpbmUgX19B
+U01fR0VORVJJQ19GQl9IXw0KPj4gLSNpbmNsdWRlIDxsaW51eC9mYi5oPg0KPj4NCj4+IC0j
+ZGVmaW5lIGZiX3BncHJvdGVjdCguLi4pIGRvIHt9IHdoaWxlICgwKQ0KPj4gKy8qDQo+PiAr
+ICogT25seSBpbmNsdWRlIHRoaXMgaGVhZGVyIGZpbGUgZnJvbSB5b3VyIGFyY2hpdGVjdHVy
+ZSdzIDxhc20vZmIuaD4uDQo+PiArICovDQo+PiArDQo+PiArI2luY2x1ZGUgPGFzbS9wYWdl
+Lmg+DQo+PiArDQo+PiArc3RydWN0IGZiX2luZm87DQo+PiArc3RydWN0IGZpbGU7DQo+PiAr
+DQo+PiArI2lmbmRlZiBmYl9wZ3Byb3RlY3QNCj4+ICsjZGVmaW5lIGZiX3BncHJvdGVjdCBm
+Yl9wZ3Byb3RlY3QNCj4+ICtzdGF0aWMgaW5saW5lIHZvaWQgZmJfcGdwcm90ZWN0KHN0cnVj
+dCBmaWxlICpmaWxlLCBzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSwNCj4+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgdW5zaWduZWQgbG9uZyBvZmYpDQo+IA0KPiBEb2Vz
+IHRoaXMgYWZmZWN0IGFueSBub01NVSBwbGF0Zm9ybXMgdGhhdCByZWxpZWQgb24gZmJfcGdw
+cm90ZWN0KCkNCj4gZG9pbmcgbm90aGluZyBiZWZvcmU/DQo+IFBlcmhhcHMgdGhlIGJvZHkg
+YmVsb3cgc2hvdWxkIGJlIHByb3RlY3RlZCBieSAiI2lmZGVmIENPTkZJR19NTVUiPw0KDQpJ
+IGNhbm5vdCBjb25jbHVzaXZlbHkgYW5zd2VyIHRoaXMgcXVlc3Rpb24sIGJ1dCBJIGRpZCBz
+b21lIGdyZXAnaW5nIA0KKCdnaXQgZ3JlcCBuZGVmIHwgZ3JlcCBDT05GSUdfTU1VJyk6DQoN
+Ck9ubHkgdGhlIGFyY2hpdGVjdHVyZXMgaW4gdGhpcyBwYXRjaHNldCBwcm92aWRlIDxhc20v
+ZmIuaD4gYnV0IG5vdGhpbmcgDQphbnl3aGVyZSB1c2VzIDxhc20tZ2VuZXJpYy9mYi5oPiB5
+ZXQuIEFuZCBvZiB0aG9zZSBhcmNoaXRlY3R1cmVzLCBvbmx5IA0KYXJtIGFuZCBtNjhrIGhh
+dmUgIUNPTkZJR19NTVUgY2FzZXMuIFRob3NlIGFyZSBoYW5kbGVkIGluIHRoZSByc3AgDQpw
+YXRjaGVzLiBJIHRoaW5rIHdlJ3JlIGdvb2QuDQoNCj4gDQo+PiArew0KPj4gKyAgICAgICB2
+bWEtPnZtX3BhZ2VfcHJvdCA9IHBncHJvdF93cml0ZWNvbWJpbmUodm1hLT52bV9wYWdlX3By
+b3QpOw0KPiANCj4gU2hvdWxkbid0IHRoaXMgdXNlIHRoZSBwZ3Byb3RfdmFsKCkgd3JhcHBl
+cj8NCg0KTm8sIEkgdGhpbmsuIEdyZXAnaW5nIGZvciB2bV9wYWdlX3Byb3QsIEknbSBub3Qg
+c2VlaW5nIGl0IGJlaW5nIHVzZWQgaW4gDQpzdWNoIGFzc2lnbm1lbnRzLg0KDQpCZXN0IHJl
+Z2FyZHMNClRob21hcw0KDQo+IA0KPj4gK30NCj4+ICsjZW5kaWYNCj4gDQo+IEdye29ldGpl
+LGVldGluZ31zLA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0K
+DQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpT
+VVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkw
+NDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2Vz
+Y2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
+--------------8LwHOmqVih1SSnC0wxvh5ylS--
+
+--------------xWwPiIYmrlcSVPwysV4e9Klk
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ9C3IFAwAAAAAACgkQlh/E3EQov+Cm
+UBAAp1ZwVmrz8T2+3vZ7ZpV1ctroomnDLRbTJNv29Sy/VKoywyu1xmGePsWLIqjuhReXF1xbOWtq
+6Ue7vAdNub4kTqGjoZy70Ct7WQAmjozmebI6ZRJEEq7aFTji2pVlikWgChEQwLMiDpsYF1vgB8vp
+8I0sP1t8Cu3HRGRyybCR2Y6WpsEk4lB4mrJxlflHRmOvFQDMZB+Y38C24LwGO6SsLIybsqB0am6d
+QrsVdKA0ByFWKQ47LhJ8tfzdpekveM9t0yR5QLhQ/9Mg1+KiyuNjcIs2dkgIoRPwEG5dkGGJ3YCy
+W12J2+Gehydj2i/55iYwpKKB0abS5Bj4vFXHqvvV2xcyrxOmdCktMRD3UR7yxs9Aa24LC1qbpZxv
+1Qk+Y/SMMZj/Nm3nIxYkobOrLgSJwEZYSbjXxVaQ7ViK6lQsMesVjAh1DFRXyTuohxVbP8onI2CU
+KL5SMAALHxHJPdG60K+/+L07gXuB5nyJFejrDlCVP9aPcJafeoWP3t/qN1xJUR4LMRyuIFgFF8qM
++5slKCT46KthVsu6GI5dsqbhQnDMAPrjlY+6GFc0jQMERh1v4J2Ev2l6o4Cy75Ru18WqY+FzcXMV
+Cr2lTlxPDrR9nUC7bONXRlrB9N2sm0RYhhZ1fpZ+sXFRah0tYDBoAIfCGzzvzjOJb/6TDxhYrza8
+bkQ=
+=Y3tV
+-----END PGP SIGNATURE-----
+
+--------------xWwPiIYmrlcSVPwysV4e9Klk--
