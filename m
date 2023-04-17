@@ -2,97 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D826E43E7
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Apr 2023 11:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82AD6E4417
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Apr 2023 11:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjDQJcw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Apr 2023 05:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S229685AbjDQJjQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Apr 2023 05:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjDQJcv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 05:32:51 -0400
-X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 02:32:08 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE5F5FDF;
-        Mon, 17 Apr 2023 02:32:07 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id DD2C02B066BA;
-        Mon, 17 Apr 2023 05:22:47 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 17 Apr 2023 05:22:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1681723367; x=1681730567; bh=peYP/lOIqmvTTJ2GJZFK05PdIeVxfQrMTMT
-        dWlxN2bY=; b=hoxslnOKq5L0fgq1KZ5uwFxkfCsDUbQoEitttD9Gb157/4VvDaL
-        fzRTYgwNrKhMTGBEWYk5kV4pCoKxj3IQV0FpUtGeddLg5GfVlMhZex8QF6mhL8p9
-        gvwX4MSUzxesv1YcnaqKaa4Hf8aEonHOEB+LqYDIenoy4k9B5AvOOz7WXYv6rPww
-        vauHxzq0EC93J9INj8HpYFP0uokUJZlvJ0DGwXpWQ8LUcqRJMmLECR08O/Gg7C4C
-        FExoluX3ejusbKwfN3AFnDxBNc0Jh1L5n5E2k8MJ529jR2BSvuckTFMjwePw4/jA
-        IVxKZIBctylYcZmrJ3YTpI6yusKyhHnhjmw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681723367; x=1681730567; bh=peYP/lOIqmvTTJ2GJZFK05PdIeVxfQrMTMT
-        dWlxN2bY=; b=MR4yxKuz3/tjr23pAzsFitwD0Txq7SZ+LasC5Fyh1rdL9W+5uLQ
-        QWuTkcsnaN+XbFlYxewK49c7zL/ltjC0cAxyGzvY+pAqila9tzloSXls1fSGTLU8
-        83j+ql9LP2Am/jKxSL+2eFTD9s2a+pAHNF1s4l+85O8VFC4gAEQAX/IiexVaT7mA
-        1njCOrvD++JH4RDb7rqDNfo30GjQVpEJWnie2UNVdXN3+HoTO7VAHqni1UoK4zJb
-        K0nmV8AH3mMhRqTjxdJcDOoA4dxU/4N4+juQYM/HVijErDhMcN+7kkXCY9vJtEKX
-        A6hZ5WwaK7trmU2l173N30Rm9x+GYS13Hyg==
-X-ME-Sender: <xms:5g89ZGh1XGEKu3GOwuyxUAI_aRj0-gXb1yU9cH41yOyGtrZXXEBRxw>
-    <xme:5g89ZHCJrzk8kcvbfI9uoi9xOXxIpgIcnUMY2tPn_xA8atud9UMgflJi8xJj_xxVr
-    3CIR7jk9VrljLNWmYA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:5g89ZOF82A9szmMdiIKfUdndIY5Y_J2WWepzSI164UFVULZ600rDfg>
-    <xmx:5g89ZPS9rsGZ3-6dQW4K4hejhxqnpa-f-mX9DnhlkCPRmeMFlap6YA>
-    <xmx:5g89ZDzdQ2ec3Pn4h3UEvgarbJnSwOf3ZSGbcWd6YhZnAMBHYJ805Q>
-    <xmx:5w89ZEqvqQ-8qIHbFuXLaLZUzpDWtqOdQ0aVq4skLKD0cgTZu8vkwIppGeY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2AD08B60086; Mon, 17 Apr 2023 05:22:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
-Mime-Version: 1.0
-Message-Id: <55abd7af-acb8-47ce-89db-1722bcf0cb9c@app.fastmail.com>
-In-Reply-To: <2b4f75b8-aa83-8e41-7c99-7c8d573c0f31@suse.de>
-References: <20230406143019.6709-1-tzimmermann@suse.de>
- <20230406143019.6709-2-tzimmermann@suse.de>
- <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
- <2b4f75b8-aa83-8e41-7c99-7c8d573c0f31@suse.de>
-Date:   Mon, 17 Apr 2023 11:22:24 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 01/19] fbdev: Prepare generic architecture helpers
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        with ESMTP id S230347AbjDQJjC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 05:39:02 -0400
+Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECDC3594
+        for <linux-mips@vger.kernel.org>; Mon, 17 Apr 2023 02:38:14 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id oLIFpknAFPm6CoLIGpSh4V; Mon, 17 Apr 2023 11:37:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1681724226; bh=fiuH0GcWevmCpKJ/ebsllotu+6NfmGBkbeZMX+tvMQw=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=XbifxrbHWa2akLpHL77M7J1IM1oSZf+O6kgZMCP1i+0mQuC2kJqxOcxzkyvBQXSO5
+         lCi1eVtUkNP9ylcEIxw9cWQjUptigbtxRyyF5eXGAlm24u1hYvJ3ICK303jgctEh0j
+         /lNb4201QskdA5dpv81MZzSoHXjVtN1Z4JiEtWhlJrb/c8zkNox0ObktjQNFO8lC4z
+         zcfpe7iX3US2H7mfVn5JLi6VWqyGWSQT2a1zxKgSvqaO7dy0v1bE1vCTu5Z3rHECUt
+         gM/qksVzsq2KtWVbZL4l5/LqvEwdAsa356YwMvlY6iWwfK5w2vsZW6KWgjc+JKSXiE
+         APkGYz9mdAsNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1681724226; bh=fiuH0GcWevmCpKJ/ebsllotu+6NfmGBkbeZMX+tvMQw=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=XbifxrbHWa2akLpHL77M7J1IM1oSZf+O6kgZMCP1i+0mQuC2kJqxOcxzkyvBQXSO5
+         lCi1eVtUkNP9ylcEIxw9cWQjUptigbtxRyyF5eXGAlm24u1hYvJ3ICK303jgctEh0j
+         /lNb4201QskdA5dpv81MZzSoHXjVtN1Z4JiEtWhlJrb/c8zkNox0ObktjQNFO8lC4z
+         zcfpe7iX3US2H7mfVn5JLi6VWqyGWSQT2a1zxKgSvqaO7dy0v1bE1vCTu5Z3rHECUt
+         gM/qksVzsq2KtWVbZL4l5/LqvEwdAsa356YwMvlY6iWwfK5w2vsZW6KWgjc+JKSXiE
+         APkGYz9mdAsNA==
+Date:   Mon, 17 Apr 2023 11:37:02 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-staging@lists.linux.dev,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH 2/3] staging: octeon: avoid needless device allocation
+Message-ID: <ZD0TPvDa7zopm0dx@lenoch>
+References: <ZDgNexVTEfyGo77d@lenoch>
+ <ZDgOLHw1IkmWVU79@lenoch>
+ <543bfbb6-af60-4b5d-abf8-0274ab0b713f@lunn.ch>
+ <ZDgxPet9RIDC9Oz1@lenoch>
+ <e2f5462d-5573-483c-9428-5f2b052cf939@lunn.ch>
+ <26dd05e9-befa-4190-ac3c-bf31d58a5f1e@kili.mountain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <26dd05e9-befa-4190-ac3c-bf31d58a5f1e@kili.mountain>
+X-CMAE-Envelope: MS4wfEZoGX5SjGjVN9HkENAmeGDGDqi/iG6ZWS3FtNZ+NfpDCsvAiEsGbJG0frJEQz+t3qh3s9ZgEjxgF4rr/tt8EqHHyu4w5ezF4oieB+uDA7J22lrYoAGe
+ 3L3zavGD6+BrPIeUKPRcvvcRCgOIEhYg25QqzUmq6cXBpG/W5GBY9yPCsWhw37E6k8MRpCdL3GaLMZyuVxRotSrWoPnIgLwzPFKFe3+lW5M/w2N9+4BKMQVa
+ 07VstyGTle8yMFw/xvD6zh6CH/X8rIs7j/56AAOZovAb6EJ98qs/4yUvFOaMscg9ZNA4t8hJgCZ6Pskc1s88eDjykwdeEeLc8h7qhy5aC7VxXic6hFf/npmA
+ 1Q8ZoCPz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,35 +67,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 17, 2023, at 11:03, Thomas Zimmermann wrote:
-> Am 11.04.23 um 10:08 schrieb Geert Uytterhoeven:
->> On Thu, Apr 6, 2023 at 4:30=E2=80=AFPM Thomas Zimmermann <tzimmermann=
-@suse.de> wrote:
+On Mon, Apr 17, 2023 at 11:37:30AM +0300, Dan Carpenter wrote:
+> On Thu, Apr 13, 2023 at 07:20:08PM +0200, Andrew Lunn wrote:
+> > > I was asking this question myself and then came to this:
+> > > Converting driver to phylink makes separating different macs easier as
+> > > this driver is splitted between staging and arch/mips/cavium-octeon/executive/
+> > > However I'll provide changes spotted previously as separate preparational
+> > > patches. Would that work for you?
+> > 
+> > Is you end goal to get this out of staging? phylib vs phylink is not a
+> > reason to keep it in staging.
+> > 
+> > It just seems odd to be adding new features to a staging driver. As a
+> > bit of a "carrot and stick" maybe we should say you cannot add new
+> > features until it is ready to move out of staging?
+> 
+> We already have that rule.  But I don't know anything about phy vs
+> phylink...
 
->>> +#ifndef fb_pgprotect
->>> +#define fb_pgprotect fb_pgprotect
->>> +static inline void fb_pgprotect(struct file *file, struct vm_area_s=
-truct *vma,
->>> +                               unsigned long off)
->>=20
->> Does this affect any noMMU platforms that relied on fb_pgprotect()
->> doing nothing before?
->> Perhaps the body below should be protected by "#ifdef CONFIG_MMU"?
->
-> I cannot conclusively answer this question, but I did some grep'ing=20
-> ('git grep ndef | grep CONFIG_MMU'):
->
-> Only the architectures in this patchset provide <asm/fb.h> but nothing=20
-> anywhere uses <asm-generic/fb.h> yet. And of those architectures, only=20
-> arm and m68k have !CONFIG_MMU cases. Those are handled in the rsp=20
-> patches. I think we're good.
+Let me elaborate here a bit then.
 
-Agreed. The generic version is just a more elaborate way to do
-nothing here, as the=20
+Current Octeon driver comes from Cavium's vendor kernel tree. Cavium
+started this about two decades ago based on their own ideas and tries
+to bend kernel interfaces around them.
 
-     vma->vm_page_prot =3D pgprot_writecombine(vma->vm_page_prot);
+Driver is based aroud Packet Input Processing/Input Packet Data (PIP/IPD)
+units which can connect their data streams to various interfaces.
+SGMII/1000BASE-X/QSGMII and RGMII are just two of them.
 
-line on nommu just turns into a self-assignment of the same member
-that was set the line before.
+Currently driver iterates over all interfaces and all ports to bind
+interfaces to PIP/IPD. There is a lot of code deciding which
+interfaces/ports exits on given Octeon SoC, see
+arch/mips/cavium-octeon/executive/
+Driver code then calls those helpers with interface/port aguments
+and they do the magic using switches deciding what to do based
+on interface type.
 
-     Arnd
+I'm proposing to leave all that trickery behind and just follow what's
+written in device tree, so each I/O interface ends up as a driver
+with its own mac ops. While it is possible to implement that as
+private mac ops as some other drivers do, I think it is more
+convenient to use phylink_mac_ops.
+
+In case I'm missing something or I'm wrong with analysis, please let
+me know.
+
+Thanks,
+	ladis
