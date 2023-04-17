@@ -2,129 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477C96E4711
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Apr 2023 14:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E2A6E485B
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Apr 2023 14:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjDQMCN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Apr 2023 08:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S231349AbjDQM5V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Apr 2023 08:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjDQMCK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 08:02:10 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA099BB;
-        Mon, 17 Apr 2023 05:01:25 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S229738AbjDQM5R (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 08:57:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEB1210C;
+        Mon, 17 Apr 2023 05:56:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C7E5061CC40F9;
-        Mon, 17 Apr 2023 13:24:36 +0200 (CEST)
-Message-ID: <a736cae5-8c05-ddda-a1b0-37c8afdbd6ea@molgen.mpg.de>
-Date:   Mon, 17 Apr 2023 13:24:36 +0200
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 65ACA1F86C;
+        Mon, 17 Apr 2023 12:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681736218; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TjKFT65nFde0KHYwvUCAIbizOxCNdL0ntslOVRl87lE=;
+        b=qU6w2kY5MzqEXwd8TMNs58RhCH9e5hAM3giF5jjQmYT6lBuIWGXS/c+WHrP5T+pN3SY2vp
+        NA5N6GTN/+zI0Nkuz0JjvVnZJyhucRMUl5SOITpu5xAQg48nvBBYq194+Km0t5IwM18z2J
+        BTyIpDo3bUNDxPWIkyVoQeOFNoGNWP4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681736218;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TjKFT65nFde0KHYwvUCAIbizOxCNdL0ntslOVRl87lE=;
+        b=oVQCEIp+Zsfrb6hp9far1l809Ib3e3nbzdCxJOOQ2f8MndGptEVdK0mKoxA4OcCHq1YcqT
+        IcKcAyErDVaEE+AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E43D31390E;
+        Mon, 17 Apr 2023 12:56:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yBGhNhlCPWToWwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Apr 2023 12:56:57 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 00/19] arch: Consolidate <asm/fb.h>
+Date:   Mon, 17 Apr 2023 14:56:32 +0200
+Message-Id: <20230417125651.25126-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-References: <20230414225551.858160935@linutronix.de>
- <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de>
-In-Reply-To: <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[Correct David’s address]
+Various architectures provide <asm/fb.h> with helpers for fbdev
+framebuffer devices. Share the contained code where possible. There
+is already <asm-generic/fb.h>, which implements generic (as in
+'empty') functions of the fbdev helpers. The header was added in
+commit aafe4dbed0bf ("asm-generic: add generic versions of common
+headers"), but never used.
 
-Am 17.04.23 um 13:19 schrieb Paul Menzel:
-> Dear Thomas,
-> 
-> 
-> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
-> 
->> This is a complete rework of the parallel bringup patch series (V17)
->>
->>      
->> https://lore.kernel.org/lkml/20230328195758.1049469-1-usama.arif@bytedance.com
->>
->> to address the issues which were discovered in review:
-> 
-> […]
-> 
-> Thank you very much for your rework.
-> 
-> I tested this on the ASUS F2A85-M PRO, and get a delay of ten seconds.
-> 
-> ```
-> […]
-> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD 
-> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
-> […]
-> [    0.259329] smp: Bringing up secondary CPUs ...
-> [    0.259527] x86: Booting SMP configuration:
-> [    0.259528] .... node  #0, CPUs:      #1
-> [    0.261007] After schedule_preempt_disabled
-> [   10.260990] CPU1 failed to report alive state
-> [   10.261070] smp: Brought up 1 node, 1 CPU
-> [   10.261073] smpboot: Max logical packages: 2
-> [   10.261074] smpboot: Total of 1 processors activated (7800.54 BogoMIPS)
-> [   10.261601] devtmpfs: initialized
-> [   10.261697] x86/mm: Memory block size: 128MB
-> ```
-> 
-> This delay has been there with v6.3-rc6-46-gde4664485abbc and some 
-> custom (printk) patches on top and merging dwmw2/parallel-6.2-rc3-v16 
-> into it. I only tested this. I think dwmw2/parallel-6.2-v17 failed to 
-> build for me, when trying to merge it into Linus’ master version at that 
-> time. I didn’t come around to report it, and you posted your rework, so 
-> I am replying here.
-> 
-> I am going to try your branch directly in the next days, but just wanted 
-> to report back already.
-> 
-> 
-> Kind regards,
-> 
-> Paul
+Each per-architecture header file declares and/or implements fbdev
+helpers and defines a preprocessor token for each. The generic
+header then provides the remaining helpers. It works like the I/O
+helpers in <asm/io.h>.
+
+For PARISC, the architecture helpers are mixed up with helpers
+for the system's STI graphics firmware. We first move the STI code
+to appropriate locations under video/ and then move the architecture
+helper under arch/parisc.
+
+For Sparc, there's an additional patch that moves the implementation
+from the header into a source file. This allows to avoid some include
+statements in the header file.
+
+Built on arm, arm64, m68k, mips, parisc, powerpc, sparc and x86.
+
+v3:
+	* use default fb_pgprotect() on arc, parisc, sparc64 (Arnd)
+	* fix includes in generic fb.h
+v2:
+	* make writecombine the default mapping mode (Arnd)
+	* rework fb_pgprotect() on m68k
+
+Thomas Zimmermann (19):
+  fbdev: Prepare generic architecture helpers
+  arch/arc: Implement <asm/fb.h> with generic helpers
+  arch/arm: Implement <asm/fb.h> with generic helpers
+  arch/arm64: Implement <asm/fb.h> with generic helpers
+  arch/ia64: Implement <asm/fb.h> with generic helpers
+  arch/loongarch: Implement <asm/fb.h> with generic helpers
+  arch/m68k: Merge variants of fb_pgprotect() into single function
+  arch/m68k: Implement <asm/fb.h> with generic helpers
+  arch/mips: Implement <asm/fb.h> with generic helpers
+  video: Remove trailing whitespaces
+  video: Move HP PARISC STI core code to shared location
+  arch/parisc: Remove trailing whitespaces
+  arch/parisc: Implement fb_is_primary_device() under arch/parisc
+  arch/parisc: Implement <asm/fb.h> with generic helpers
+  arch/powerpc: Implement <asm/fb.h> with generic helpers
+  arch/sh: Implement <asm/fb.h> with generic helpers
+  arch/sparc: Implement fb_is_primary_device() in source file
+  arch/sparc: Implement <asm/fb.h> with generic helpers
+  arch/x86: Implement <asm/fb.h> with generic helpers
+
+ arch/arc/include/asm/fb.h                     |  16 +-
+ arch/arm/include/asm/fb.h                     |  15 +-
+ arch/arm64/include/asm/fb.h                   |  15 +-
+ arch/ia64/include/asm/fb.h                    |  11 +-
+ arch/loongarch/include/asm/fb.h               |  15 +-
+ arch/m68k/include/asm/fb.h                    |  22 +--
+ arch/mips/include/asm/fb.h                    |  10 +-
+ arch/parisc/Makefile                          |   4 +-
+ arch/parisc/include/asm/fb.h                  |  20 +--
+ arch/parisc/video/Makefile                    |   3 +
+ arch/parisc/video/fbdev.c                     |  27 +++
+ arch/powerpc/include/asm/fb.h                 |   8 +-
+ arch/sh/include/asm/fb.h                      |  15 +-
+ arch/sparc/Makefile                           |   1 +
+ arch/sparc/include/asm/fb.h                   |  33 ++--
+ arch/sparc/video/Makefile                     |   3 +
+ arch/sparc/video/fbdev.c                      |  24 +++
+ arch/x86/include/asm/fb.h                     |  11 +-
+ drivers/video/Kconfig                         |   7 +
+ drivers/video/Makefile                        |   1 +
+ drivers/video/console/Kconfig                 |   1 +
+ drivers/video/console/Makefile                |   4 +-
+ drivers/video/console/sticon.c                |   6 +-
+ drivers/video/fbdev/Kconfig                   |   3 +-
+ drivers/video/fbdev/stifb.c                   | 158 +++++++++---------
+ drivers/video/{console => }/sticore.c         | 123 ++++++--------
+ include/asm-generic/fb.h                      |  24 ++-
+ .../video/fbdev => include/video}/sticore.h   |  16 +-
+ 28 files changed, 285 insertions(+), 311 deletions(-)
+ create mode 100644 arch/parisc/video/Makefile
+ create mode 100644 arch/parisc/video/fbdev.c
+ create mode 100644 arch/sparc/video/Makefile
+ create mode 100644 arch/sparc/video/fbdev.c
+ rename drivers/video/{console => }/sticore.c (95%)
+ rename {drivers/video/fbdev => include/video}/sticore.h (99%)
+
+
+base-commit: c7cfe0c7215db9556ffe7ce33d1f60f768336cfd
+prerequisite-patch-id: 0aa359f6144c4015c140c8a6750be19099c676fb
+prerequisite-patch-id: c67e5d886a47b7d0266d81100837557fda34cb24
+prerequisite-patch-id: cbc453ee02fae02af22fbfdce56ab732c7a88c36
+-- 
+2.40.0
+
