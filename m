@@ -2,72 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B803E6E549D
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Apr 2023 00:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA296E5605
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Apr 2023 02:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjDQWTa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Apr 2023 18:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S229652AbjDRAuL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Apr 2023 20:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDQWT3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 18:19:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C661F5275;
-        Mon, 17 Apr 2023 15:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681769968; x=1713305968;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yMAw32GB6bnYHTIaJx+3YJu4UkN11Fi/gjV1eDLzAFs=;
-  b=brz8CcyL1HOoLlpbB2TIzyxT1Iu3Qf66g66JzOZm3y58A/jPkO7eDQ6p
-   GsEeVdywLd/4vlMPkttjhIc3KVbG6H2Hk0Zmdw0qvQ4Bd5bJaMEC5pnKT
-   vR8EIM0bEyldMhjCrbq7rWCP6WBVWbpxISZnaP01+ozpZdaaUcqYzC0st
-   y1sOvAB3BRWTViGLf5rDUWSBpLZdSjciEy2DM6hRTFK7OfD+eGwL/+Jv2
-   C11tPeZrthUd92qhp6pXDZhf5WaRBOXQOC3RXKclEZFYXcpl55ewvy/dP
-   X5nRPMuisdAvgw/OBjZEEckfZceKwJR4boC0QvjCbJlJhGQJJ2pzTgHv+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="347767943"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="347767943"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 15:19:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="684313012"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="684313012"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Apr 2023 15:19:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1poXBh-000chh-0f;
-        Mon, 17 Apr 2023 22:19:05 +0000
-Date:   Tue, 18 Apr 2023 06:18:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: [PATCH 24/33] m68k: Convert various functions to use ptdescs
-Message-ID: <202304180652.LeoLmaNQ-lkp@intel.com>
-References: <20230417205048.15870-25-vishal.moola@gmail.com>
+        with ESMTP id S229479AbjDRAuJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Apr 2023 20:50:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B332D47;
+        Mon, 17 Apr 2023 17:50:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D85A629EB;
+        Tue, 18 Apr 2023 00:50:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA7AC433EF;
+        Tue, 18 Apr 2023 00:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681779007;
+        bh=ob+RguaaZGgk/yhIR3DTpFkJJlEXBdn6L7F4PQIpnG0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=fIbMQAF8HESOjo6yVwJyz+/s2Ptgu8+uHTMV1lO53oB7rzWJjvcWPpcXWD/mZlYWb
+         Bq74GH7rjDEF+kMq9pjAilhKi7ja6qP7FTMi7fVVC3DxfnxIaQd4uGBBeMXvAbGmTl
+         HblgCH42BShoDrRnEI3kkpMXZkIEx984HodaAWuZKdZz4aRzjss7nfDyeRLf2x/EWa
+         FtQaMh7QBlt7wAwxPmMS0XQ0C06/lNslXl8W9YQkSfmlkdU7nG4Q52eoB54SIfJxN3
+         V484eIUVLweT7R7DMkP+wyjalwlOXiwCpRNuq20+17XOYTjH8bkziFduGrxWCLoW3y
+         a6oUEDx52OioQ==
+Message-ID: <0c8891233195166d4a1b3cd858e91445.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417205048.15870-25-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAMhs-H9+ZthzCvqssypG8a2xKF4KFnvgz4ZfTKn6wE=ZxV29hQ@mail.gmail.com>
+References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com> <20230321050034.1431379-3-sergio.paracuellos@gmail.com> <2d848bc03aacb41a708ba2794eb043ff.sboyd@kernel.org> <CAMhs-H9+ZthzCvqssypG8a2xKF4KFnvgz4ZfTKn6wE=ZxV29hQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] clk: ralink: add clock and reset driver for MTMIPS SoCs
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org, arinc.unal@arinc9.com
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 17 Apr 2023 17:50:05 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,92 +58,157 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Vishal,
+Quoting Sergio Paracuellos (2023-04-13 22:49:47)
+> On Thu, Apr 13, 2023 at 8:55=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> w=
+rote:
+> >
+> > Quoting Sergio Paracuellos (2023-03-20 22:00:27)
+> > > diff --git a/drivers/clk/ralink/clk-mtmips.c b/drivers/clk/ralink/clk=
+-mtmips.c
+> > > new file mode 100644
+> > > index 000000000000..6b4b5ae9384d
+> > > --- /dev/null
+> > > +++ b/drivers/clk/ralink/clk-mtmips.c
+> > > @@ -0,0 +1,985 @@
+[...]
+> >
+> > > +               .name =3D _name,                                  \
+> > > +               .ops =3D &(const struct clk_ops) {                \
+> >
+> > Make this into a named variable? Otherwise I suspect the compiler will
+> > want to duplicate it.
+>=20
+> I am not sure if I understand this. What do you mean exactly?
 
-kernel test robot noticed the following build warnings:
+	static const struct clk_ops mtmips_periph_clk_ops =3D {
+		.recalc_rate =3D mtmips_pherip_clk_rate,
+	};
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20230417]
-[cannot apply to s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus linus/master v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > +static unsigned long rt3352_bus_recalc_rate(struct clk_hw *hw,
+> > > +                                           unsigned long parent_rate)
+> > > +{
+> > > +       return parent_rate / 3;
+> > > +}
+> > > +
+> > > +static unsigned long rt305x_xtal_recalc_rate(struct clk_hw *hw,
+> > > +                                            unsigned long parent_rat=
+e)
+> > > +{
+> > > +       return 40000000;
+> > > +}
+> >
+> > Register fixed factor and fixed rate clks in software instead of
+> > duplicating the code here.
+>=20
+> All the macros used in current code rely on the fact of having recalc
+> functions so we can maintain the code shorter just using them. Is
+> there a real benefit of using a fixed factor and fixed clks here?
+> If possible I can avoid the duplicate here just using the same
+> recalc_rate function returning the fixed stuff for both 305x and 3352
+> SoCs as I am also doing for other functions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/s390-Use-_pt_s390_gaddr-for-gmap-address-tracking/20230418-045832
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230417205048.15870-25-vishal.moola%40gmail.com
-patch subject: [PATCH 24/33] m68k: Convert various functions to use ptdescs
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230418/202304180652.LeoLmaNQ-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/630b38053b213e6138d3deb3e4325b24ad6dcb1f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vishal-Moola-Oracle/s390-Use-_pt_s390_gaddr-for-gmap-address-tracking/20230418-045832
-        git checkout 630b38053b213e6138d3deb3e4325b24ad6dcb1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
+The real benefit is less code, smaller kernel size, less maintenance
+over time.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304180652.LeoLmaNQ-lkp@intel.com/
+> >
+> > > +       }
+> > > +}
+> > > +
+> > > +static unsigned long rt2880_cpu_recalc_rate(struct clk_hw *hw,
+> > > +                                           unsigned long xtal_clk)
+> > > +{
+> > > +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
+> > > +       struct regmap *sysc =3D clk->priv->sysc;
+> > > +       u32 t;
+> > > +
+> > > +       regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
+> > > +       t =3D (t >> RT2880_CONFIG_CPUCLK_SHIFT) & RT2880_CONFIG_CPUCL=
+K_MASK;
+> > > +
+> > > +       switch (t) {
+> > > +       case RT2880_CONFIG_CPUCLK_250:
+> > > +               return 250000000;
+> > > +       case RT2880_CONFIG_CPUCLK_266:
+> > > +               return 266000000;
+> > > +       case RT2880_CONFIG_CPUCLK_280:
+> > > +               return 280000000;
+> > > +       case RT2880_CONFIG_CPUCLK_300:
+> > > +               return 300000000;
+> > > +       default:
+> > > +               BUG();
+> > > +       }
+> > > +}
+> > > +
+> > > +static unsigned long rt2880_bus_recalc_rate(struct clk_hw *hw,
+> > > +                                           unsigned long parent_rate)
+> > > +{
+> > > +       return parent_rate / 2;
+> > > +}
+> >
+> > A fixed factor clk?
+>=20
+> As I have said, macros rely on having recalc_rate functions. Also,
+> having in this way makes pretty clear the relation between the bus
+> clock and its related parent as it is in the datasheet.
 
-All warnings (new ones prefixed by >>):
+The macros are your own design, right? In which case, maybe you can use
+CLK_HW_INIT() and friends macros instead to show the relationship
+between clks in C code?
 
-   arch/m68k/mm/motorola.c: In function 'free_pointer_table':
->> arch/m68k/mm/motorola.c:204:56: warning: passing argument 1 of 'virt_to_ptdesc' makes pointer from integer without a cast [-Wint-conversion]
-     204 |                         ptdesc_pte_dtor(virt_to_ptdesc(page));
-         |                                                        ^~~~
-         |                                                        |
-         |                                                        long unsigned int
-   In file included from arch/m68k/mm/motorola.c:15:
-   include/linux/mm.h:2721:57: note: expected 'const void *' but argument is of type 'long unsigned int'
-    2721 | static inline struct ptdesc *virt_to_ptdesc(const void *x)
-         |                                             ~~~~~~~~~~~~^
-   arch/m68k/mm/motorola.c: At top level:
-   arch/m68k/mm/motorola.c:418:13: warning: no previous prototype for 'paging_init' [-Wmissing-prototypes]
-     418 | void __init paging_init(void)
-         |             ^~~~~~~~~~~
+>=20
+> >
+> > > +
+> > > +static u32 mt7620_calc_rate(u32 ref_rate, u32 mul, u32 div)
+> > > +{
+> > > +       u64 t;
+> > > +
+> > > +       t =3D ref_rate;
+> > > +       t *=3D mul;
+> > > +       do_div(t, div);
+> >
+> > Do we really need to do 64-bit math? At the least use div_u64().
+>=20
+> This is directly extracted from arch/mips/ralink clock code, so I have
+> maintained it as it is since I don't have an mt7620 SoC based board to
+> test. However using div_u64 here with t being u64 makes sense.
 
+Does anyone have the board to test? Can we simply delete it instead?
 
-vim +/virt_to_ptdesc +204 arch/m68k/mm/motorola.c
+> > > +
+> > > +static unsigned long mt7620_bus_recalc_rate(struct clk_hw *hw,
+> > > +                                           unsigned long parent_rate)
+> > > +{
+> > > +       static const u32 ocp_dividers[16] =3D {
+> > > +               [CPU_SYS_CLKCFG_OCP_RATIO_2] =3D 2,
+> > > +               [CPU_SYS_CLKCFG_OCP_RATIO_3] =3D 3,
+> > > +               [CPU_SYS_CLKCFG_OCP_RATIO_4] =3D 4,
+> > > +               [CPU_SYS_CLKCFG_OCP_RATIO_5] =3D 5,
+> > > +               [CPU_SYS_CLKCFG_OCP_RATIO_10] =3D 10,
+> > > +       };
+> > > +       struct mtmips_clk *clk =3D to_mtmips_clk(hw);
+> > > +       struct regmap *sysc =3D clk->priv->sysc;
+> > > +       u32 t;
+> > > +       u32 ocp_ratio;
+> > > +       u32 div;
+> > > +
+> > > +       if (IS_ENABLED(CONFIG_USB)) {
+> > > +               /*
+> > > +               * When the CPU goes into sleep mode, the BUS
+> > > +               * clock will be too low for USB to function properly.
+> > > +               * Adjust the busses fractional divider to fix this
+> > > +               */
+> > > +               regmap_read(sysc, SYSC_REG_CPU_SYS_CLKCFG, &t);
+> > > +               t &=3D ~(CLKCFG_FDIV_MASK | CLKCFG_FFRAC_MASK);
+> > > +               t |=3D CLKCFG_FDIV_USB_VAL | CLKCFG_FFRAC_USB_VAL;
+> > > +               regmap_write(sysc, SYSC_REG_CPU_SYS_CLKCFG, t);
+> >
+> > Why can't we do this unconditionally? And recalc_rate() shouldn't be
+> > writing registers. It should be calculating the frequency of the clk
+> > based on 'parent_rate' and whatever the hardware is configured for.
+>=20
+> This code is with IS_ENABLED(CONFIG_USB) guard in the original code so
+> I have maintained it as it is. Where should it be moved into instead
+> of doing the register writes in this recalc function?
 
-   185	
-   186	int free_pointer_table(void *table, int type)
-   187	{
-   188		ptable_desc *dp;
-   189		unsigned long ptable = (unsigned long)table;
-   190		unsigned long page = ptable & PAGE_MASK;
-   191		unsigned int mask = 1U << ((ptable - page)/ptable_size(type));
-   192	
-   193		dp = PD_PTABLE(page);
-   194		if (PD_MARKBITS (dp) & mask)
-   195			panic ("table already free!");
-   196	
-   197		PD_MARKBITS (dp) |= mask;
-   198	
-   199		if (PD_MARKBITS(dp) == ptable_mask(type)) {
-   200			/* all tables in page are free, free page */
-   201			list_del(dp);
-   202			mmu_page_dtor((void *)page);
-   203			if (type == TABLE_PTE)
- > 204				ptdesc_pte_dtor(virt_to_ptdesc(page));
-   205			free_page (page);
-   206			return 1;
-   207		} else if (ptable_list[type].next != dp) {
-   208			/*
-   209			 * move this descriptor to the front of the list, since
-   210			 * it has one or more free tables.
-   211			 */
-   212			list_move(dp, &ptable_list[type]);
-   213		}
-   214		return 0;
-   215	}
-   216	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Can you do it unconditionally in driver probe? Or when the clk is turned
+off or on can you park it at a safe frequency?
