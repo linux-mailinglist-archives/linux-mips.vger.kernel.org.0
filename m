@@ -2,113 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487716E83D2
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 23:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D746E8458
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 00:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjDSVfT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Apr 2023 17:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
+        id S230041AbjDSWDq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Apr 2023 18:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjDSVfS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 17:35:18 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F22BB
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 14:35:17 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-246fa478d45so190345a91.3
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 14:35:17 -0700 (PDT)
+        with ESMTP id S229573AbjDSWDp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 18:03:45 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F441FFB
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 15:03:44 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a68f2345c5so4137225ad.2
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 15:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681940117; x=1684532117;
+        d=google.com; s=20221208; t=1681941823; x=1684533823;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OzkNoC83E5W4yn7xAvA2kp2dMY6MFjzJc1lOPrGXtTU=;
-        b=ryH8H2CzhxhgPRAntJZg2qhSpn9QN/Myf3vxZlODMIdgNF/UWTkGSnYj9rUyGmqqKf
-         3UytNfBHSfJ6Qc4kfmwOizdJuaMsuN3IpzeeLuTzGni0xsf5BxbD9Do9hrkOIj/v8SSF
-         erXEvB3ts/RQrH4GJ7E+1TKmtUQcnajg89VLIT0QByY9A75WSUTPRpskKRYQrBAQiyFk
-         wtwCdvMVV+B0EOKYq5T/ZQh8aadkqBenU6M7SRBHqzToIFV2hVItiCDC9hiyr3l2QKe6
-         tzYuzuu+xBlH8sOUgzzicC97w67wNjfyibhFZbTPIxnA83dTxsuNbVakpmoKNKLA7luY
-         w5pA==
+        bh=zh5e890yF5vPU5jFDEQlJGrwn7FtrHqnTGkDM3PEhGk=;
+        b=nYVR6pd5ohHan4cvMM25Oc7l0XYFR7FKSc+MZWSm47m/oOsn4bUdrLtiApb2BMvn9W
+         WMcUClzdzEaRKUhQqYcVkdaaXR7KftttiGhQ7uahIeMcUbgwCNxXOFoRc0bqdUzsQNhH
+         TNIgJE1vhzIYwtrMizt4qj93JwRprxsgCnHVpqaBaO8fnbOpHZOl6pX9icRFTPPabgWH
+         AspQ5jLPqr23bvNYBUnbbxE6dz4gJfQw9RdJkVEwTGJ1vMBdxoV9soEmxUrCqrFDZaYs
+         5JTEhKZT+WcDaVg3XI73+vIz4c16Lv6VGec0UOth4LxNfXZuXXhJIDLO0/ERPMvIbgGy
+         4C2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681940117; x=1684532117;
+        d=1e100.net; s=20221208; t=1681941823; x=1684533823;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OzkNoC83E5W4yn7xAvA2kp2dMY6MFjzJc1lOPrGXtTU=;
-        b=JztkUYWpoC/6a8AnJOGLHJar/QEyuRxFFkqvRleQlYCI3O4eq9vUiRd4FMVcXQycXH
-         WOtlp8IypiJmNRzLNVBd6HHcbHoQsRVAmFws++jxcMeeMluBvWy/PyOYw7NN+Fx/Y+So
-         2Ytq2ikQ8r2NQ12N4mqMhGvZg/isLyk/EYzBpECF3ss1gHi5ZC61lhWDzZFjNMysTZxS
-         JS0SJAdOtIuNNXHoZ+Ny999hAhRZoGYRVfkgj5ZGQwgJj0hoZ0+bOXZ2Iop1MsCadpbU
-         /+KgVnQsJNOxfxyXnTqyNKHjkkKcWoQ9GFxMxnWoQpasCvJ+jYkFL3Ujmuz2xKDrfZW/
-         21NQ==
-X-Gm-Message-State: AAQBX9ekm4+9SPhMqW5NIwCAio2uOyM8eif5ptiYjN8UP+guX6KRNKPb
-        veC4yc/lUS7uRZmaoKaKKelQ9QgWxobHTBaW/jjSGg==
-X-Google-Smtp-Source: AKy350Y5FJRYN+MG23UrI62VxmV/BhDcpZ9mDVdf9iEBaP4/cEaP+GIHDQ/8ViYiNP3fUVheTp8B4qrt2qzU+RLHGjo=
-X-Received: by 2002:a17:90a:2d81:b0:247:c0bd:b99a with SMTP id
- p1-20020a17090a2d8100b00247c0bdb99amr3921830pjd.31.1681940117050; Wed, 19 Apr
- 2023 14:35:17 -0700 (PDT)
+        bh=zh5e890yF5vPU5jFDEQlJGrwn7FtrHqnTGkDM3PEhGk=;
+        b=fgtEeGScWRH3xsPdQpKMhYmZkBQyNSy4HgD+Y763zE113zCvTifxX4kVtvxupUucY6
+         TJXXx97ra+3En44acbyojMqTTiVIfpCsC7BIEv4EERIXD4/6YTX7uhKI4Rqj84XIY52E
+         OfCzcu21J23bgRgyXXWN+f+Ys6oMiWV1Zy67mn2KPp+d6YrEMzB8JJeeZ9ScqvWj4zcG
+         hRSfAjkGybaXNByrLgtyh7+1ZEJJagVZufqC1/MNcRH6AXDsZEs4LwIzeFna5kC/kiwM
+         nCheCSLsqZ+b5hKkWdIhzcEqyWrYQ8Ti/vFizG7aq8OvszdrEBdbIMgvuCrNRQr2Vk+4
+         IIYg==
+X-Gm-Message-State: AAQBX9dSPeQ67khxEa6wWiK/Pp5Yroe3uLCKH3nuK4esenwLz0PgK6XV
+        Kg9uCv8q0aDSTTBb3oiCeBQDmVt5zxiFIZs7lS8RAw==
+X-Google-Smtp-Source: AKy350Y2Z2JjZ2qaX/ON4uPm2q//KaaWuchhgDJWWtGCJjwBgwDhMMx5Eo7igcV2qq6xRhf+gjVMj3nsuoCURnpIxZM=
+X-Received: by 2002:a17:902:f78c:b0:1a2:94bb:e104 with SMTP id
+ q12-20020a170902f78c00b001a294bbe104mr6667157pln.39.1681941823522; Wed, 19
+ Apr 2023 15:03:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-7-jiaxun.yang@flygoat.com> <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
- <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
-In-Reply-To: <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
+References: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
+In-Reply-To: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 19 Apr 2023 14:35:02 -0700
-Message-ID: <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if unsupported
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+Date:   Wed, 19 Apr 2023 15:03:31 -0700
+Message-ID: <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
+To:     Nathan Chancellor <nathan@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Cc:     jpoimboe@kernel.org, peterz@infradead.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 9:50=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.co=
-m> wrote:
+On Wed, Apr 19, 2023 at 11:43=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
 >
+> After commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
+> forcibly"), a compiler may choose not to inline a function marked with
+> just 'inline'. If check_bugs() is not inlined into start_kernel(), which
+> occurs when building with clang after commit 9ea7e6b62c2b ("init: Mark
+> [arch_call_]rest_init() __noreturn"), modpost complains with:
 >
+>   WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs =
+(section: .text) -> check_bugs32 (section: .init.text)
 >
-> > 2023=E5=B9=B44=E6=9C=8818=E6=97=A5 21:07=EF=BC=8CNick Desaulniers <ndes=
-aulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Fri, Apr 14, 2023 at 1:07=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoa=
-t.com> wrote:
-> >>
-> >> LLVM does not implement some of -march options. However those options
-> >> are not mandatory for kernel to build for those CPUs.
-> >>
-> >> Fallback -march CFLAG to ISA level if unsupported by toolchain so
-> >> we can get those kernel to build with LLVM.
-> >>
-> >> Link: https://github.com/ClangBuiltLinux/linux/issues/1544
-> >> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >
-> > Thanks for the patch! Maybe it's more obvious to folks who work on
-> > mips, but how did you determine that say `p5600` is `mips32r5` or
-> > `r10000` is `mips4`?
+> check_bugs() is only called from start_kernel(), which itself is marked
+> __init, so mark check_bugs() as __init as well to clear up the warning
+> and make everything work properly.
 >
-> Wikipedia [1] should fit the purpose.
+> While there is currently no warning about check_bugs_early(), it could
+> have the same problem, as it is called from arch_setup() and calls
+> check_bugs64_early(), both marked __init. Mark it as __init for the same
+> reason as above.
 >
-> [1]: https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> NOTE: This is based on v6.3-rc7, as the issue shows up due to a patch in
+> the tip tree, but this appears to be an ancient issue that could have
+> showed up at any point (hence why no explicit Fixes tag), so I chose a
+> base that should allow either the MIPS or tip folks to apply this patch.
 
-Mostly! Though I was not able to verify:
-- p5600
-- r5500
-- rm5200
-- sb1
-- loongson*
+Probably for the MIPS tree.
 
-The rest LGTM, but maybe these families are better understood by Thomas?
+>
+> Additionally, I was tempted to remove the explicit 'inline' since the
+> compiler is free to do whatever it wants anyways but this is a static
+> function in a header so we would need to add '__maybe_unused', which is
+> already added with 'inline' in a normal build so I just left it alone.
+> ---
+>  arch/mips/include/asm/bugs.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
+> index d72dc6e1cf3c..9b9bf9bc7d24 100644
+> --- a/arch/mips/include/asm/bugs.h
+> +++ b/arch/mips/include/asm/bugs.h
+> @@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
+>  extern void check_bugs32(void);
+>  extern void check_bugs64(void);
+>
+> -static inline void check_bugs_early(void)
+> +static inline void __init check_bugs_early(void)
+>  {
+>         if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
+>                 check_bugs64_early();
+>  }
+
+If the only call site is in arch/mips/kernel/setup.c, then perhaps we
+can move the definition of check_bugs_early there and mark it static
+__init and drop inline?
+
+Unless we foresee other callers potentially in the future?  Patch
+otherwise LGTM.  Thanks for the patch!
+
+>
+> -static inline void check_bugs(void)
+> +static inline void __init check_bugs(void)
+>  {
+>         unsigned int cpu =3D smp_processor_id();
+>
+>
+> ---
+> base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
+> change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+
+
 --=20
 Thanks,
 ~Nick Desaulniers
