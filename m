@@ -2,89 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C846E7FE4
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 18:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727666E8044
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 19:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjDSQu4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Apr 2023 12:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
+        id S232589AbjDSRX1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Apr 2023 13:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbjDSQuz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 12:50:55 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE2655B9
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 09:50:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 87F115C008E;
-        Wed, 19 Apr 2023 12:50:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 19 Apr 2023 12:50:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1681923049; x=1682009449; bh=dLXXL9q6BarZExsPuZVOKkCgQK+Q0o/h/ZC
-        r5b/C8mI=; b=UaM2/Vu6CVmlJvk2Kies9w5+uobY+s1IoR3w1Sj3u+ooEMRUd8q
-        LxmhYZc1+J0TuSNhUNmVfspelTSBGX5ETTZT3Zzsgh1y6+qFFjFpcA2/ENBStsq6
-        rkzlHPSmlJb8kfPt78TDWad7bcDSBVmDCThnPqjGxKOqmxTIuyvN/f+xXxNliG2G
-        JP4fOyA2Em0Lqwa/Di/fj4wJGEluXIMBxwwcn1fElSgTBUm8F8YuB7FWRhmdN/zj
-        YSt7jOzE4Ks09IvwF4l4tFPLUC343Jy6l8C5/uH05JHc1WgMCXxz4Xn/uyWgn7wB
-        thTnv3b2vHH72LBeRyFV6+4PK5/xLMxKgZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681923049; x=1682009449; bh=dLXXL9q6BarZExsPuZVOKkCgQK+Q0o/h/ZC
-        r5b/C8mI=; b=Ph9/9UB+7iLMtCsD8z/5yfv+lizXHmTC4VaD34fe6q+/4QMywBl
-        kdeVMZDRnib8//0nF/vBxkKB+PVnyN+oO/oKp3o8fS/I7V2SHoeNOCQU6asInTse
-        00ZL31li8fFi43+DcmJTMGJR/wexjSW2pfVeA/6NzAoCalBsOCWAJ8LKhepMlnVd
-        5YUQYQgBDCg5pCS8cCaBIFhi5oCXNKz0wz01LJFtiNh22ALU2Fdt7F8bvwI2BNRL
-        zQXRIuNwVSdlRhprHZNFFSPKz5/MMjaXaH7qHCfOIzQDZY2Bu9gVsZ6kEZ3CqR6J
-        GsFBzzqLw9l0B3hzA3petE5fPvtR2mHR2hA==
-X-ME-Sender: <xms:6RtAZKwkRz3Lmd4Jex-6q8TomJrTcvuOMVf0nXuO9hYnmRp9NMPRNQ>
-    <xme:6RtAZGRBw0D7CROHsS8s0Ia5SkEHVAmJx5ejZ9bQNQMiUYbWeFn4CyGe9ajFjkYfD
-    xAYuzh4Vh3lZUShr70>
-X-ME-Received: <xmr:6RtAZMUHc_dRyt8QW7i4z0UkPJURFenJ172kNIkl-48388GyCeA7K8BQi3xyb8PBn8ne>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedttddguddtiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeduleefueeggfeitdfgkeeukeetjedvveelieeviedvueek
-    ueeljefhleeugefhudenucffohhmrghinhepghhithhhuhgsrdgtohhmpdifihhkihhpvg
-    guihgrrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:6RtAZAi5dPmpAMBmpOKV7Fv4TGe5Bo3n2Qi6cZKjzoc6f4SP3Dk52A>
-    <xmx:6RtAZMC8k9RnBYI7tG6dcw7qzAZrJPYvm9p54n-5Axnu6e5GwHfQjA>
-    <xmx:6RtAZBJ6YkBx8df13FLqMheggdvduKXWs2pbBnAc_lNH1_57UtP6UA>
-    <xmx:6RtAZPNPxS4mEPK_LQg6Hs-hJMA-iHSpqORrgTuDCYUpRAENgV42Cw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Apr 2023 12:50:48 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if
- unsupported
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
-Date:   Wed, 19 Apr 2023 17:50:36 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        llvm@lists.linux.dev,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <nathan@kernel.org>
+        with ESMTP id S232271AbjDSRXZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 13:23:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90A659B;
+        Wed, 19 Apr 2023 10:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1681924974; i=deller@gmx.de;
+        bh=C5yrQi1O5H/ZJ6i2wZhc9S+TYhhPSe8koYmOSkrsxpg=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=refzFEX/nVgK8/0c/yNY2CyfC3AdkpdTH+IYk+xIV5Q+38dlY1vRhZEFTmpMyUDc/
+         9kvkEZP0kVR01Hn28FwdYcvQkmsX1L9UWL+i8vZhz0goEWhOLvIAIfwTtlVmCjbgUD
+         u0lHmNPk61xpVh/6OWDJbveUXhuyj8lAjtP3C/VV7CHk+16/4VihPYwuUHEvivlYBw
+         UlL1VdmKWD8uIdo0Aoh5XASGCGmlY7GyOYsX3ffFnBo5KedAYvGh4FHhvglxT+KgCd
+         xQN6ABCnavylRmWcBFmE/lQHqF7hO3CioLhryov1vpJhVvImQ4wtSXMt4z9yTImXug
+         5i3ajdU7cJ5LA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.144.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MatVb-1qRYCj0P8t-00cRzi; Wed, 19
+ Apr 2023 19:22:54 +0200
+Message-ID: <b1f90fa4-85c7-e785-ba14-f32962f87d5e@gmx.de>
+Date:   Wed, 19 Apr 2023 19:22:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 00/19] arch: Consolidate <asm/fb.h>
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+References: <20230417125651.25126-1-tzimmermann@suse.de>
+ <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
+ <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-7-jiaxun.yang@flygoat.com>
- <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-Provags-ID: V03:K1:H9qZXkCOPDN+3vsO7z+9ttDKPCRSFaiF/4cDmiO5ovofGlBxTzT
+ kMlRPG3r4Q6KYGeHBb//fU40kwtmWj1gVkdx7p7FELLCFOD5Nql8qYPGjnWefhzsS88zNIK
+ xaqD2s84khdceDbFsitlOpU2HidQYYXlykQQ9SD+p1IgyfdLRLZnqUmFoBDr2Oq3uB/Hpmu
+ vy6bniwylk05WNGd4sCJg==
+UI-OutboundReport: notjunk:1;M01:P0:5ox/8AYo9cY=;DXfWBLw0Wfb00Me5ctwgZzfIUZ/
+ 1GcLaW7zyF+rDR6gv5OFGKt/ECtMI2VLnGHaGgup0zhzHr7BbEMURzdNk4ut1hQ/I1Ur1dsc0
+ 1JvQBABCmnEIVKxSHIzxSDISBJC4Qap+OiyTLFMWZ9un0xA1yRdsUs2M1yt+a2EqGcCluQlae
+ 19JYqGAwJcB9zy4M2luWaDfLR+ZKhj9ZKj8YSY34zxXwBPDgYmXrjwHYmJ4VTpPq9lQoP7XYz
+ zFNmrhEsoPBmtBzXWAha6jdgOhp/DgbHDRiAP61aoHFFNbzRmhAGM4NsKuWZgVMGEWTXl21UX
+ RWqLtp/2wf2qeOu3egFZaXc8jYCWg1NlAIcF9HZ3295DdF25gExyuV9did7VXP77oNQQ+QXPc
+ fhCOeNGtft8Mand8MEWSS+3kWNhuIfz07igr9+fsGtxP3ysYKTaY3WPhXV0YMVT8Bep0brJsz
+ it0ElaUn+GMQsDuKpgWJIn6dE2RbkRjrP0KTWEny7DHSk8JEWgia6+A8qE0EY++w+1sCntVun
+ q6L6YvL6bob4Q1BUg6FQGSTaWbEOj1aXk0c3aEh6x+vXVvTOLaLYYUvW1lFtPoRMygYgZx4wQ
+ rJN3kennM/9oLujbd5BqjhpxyFEKAHVCVXS45wO+oSJnirRTWt+IU+XGjNEY0ptfkn3mN4x/q
+ kvGcY6cnurtogkHbIzoeA9JDtK7wJr1dYuVhIbxaw4ROiwNGBzb/BR3lIpmxi2xnCf7zxwLP8
+ po9pTOMtKhkJLo/DaIoVdM7R07TLStHRQWeCtVEbKyLKDvKxPjppGZ6s5Tz5A6AXYgiSFhuW4
+ cGKpK8tRgRhTmcAGp6W5xqVoysF2XWyW46xmjytoEwKEd8r8g4J//wzQ3dLfMvZ9GduabVyKy
+ Tq5+OYpXodvPTj/P2JbKEivhf9ZtS7PrHr8f0DO4nsV7nYIV9I/xwMZ3jymGdPYzWNpnTiyox
+ UXVSng==
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,44 +85,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Thomas,
 
+> Am 17.04.23 um 16:12 schrieb Arnd Bergmann:>> On Mon, Apr 17, 2023, at 1=
+4:56, Thomas Zimmermann wrote:
+>>> Various architectures provide <asm/fb.h> with helpers for fbdev
+>>> framebuffer devices. Share the contained code where possible. There
+>>> is already <asm-generic/fb.h>, which implements generic (as in
+>>> 'empty') functions of the fbdev helpers. The header was added in
+>>> commit aafe4dbed0bf ("asm-generic: add generic versions of common
+>>> headers"), but never used.
+>>>
+>>> Each per-architecture header file declares and/or implements fbdev
+>>> helpers and defines a preprocessor token for each. The generic
+>>> header then provides the remaining helpers. It works like the I/O
+>>> helpers in <asm/io.h>.
+>>
+>> Looks all good to me,
+>>
+>> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Thanks a lot. I know that Helge wants to test the PARISC changes, so
+> I'll keep this series pending for a bit longer. I'd like to merge the
+> patches through the DRM tree, if no one objects.
 
-> 2023=E5=B9=B44=E6=9C=8818=E6=97=A5 21:07=EF=BC=8CNick Desaulniers =
-<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, Apr 14, 2023 at 1:07=E2=80=AFAM Jiaxun Yang =
-<jiaxun.yang@flygoat.com> wrote:
->>=20
->> LLVM does not implement some of -march options. However those options
->> are not mandatory for kernel to build for those CPUs.
->>=20
->> Fallback -march CFLAG to ISA level if unsupported by toolchain so
->> we can get those kernel to build with LLVM.
->>=20
->> Link: https://github.com/ClangBuiltLinux/linux/issues/1544
->> Reported-by: Nathan Chancellor <nathan@kernel.org>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->=20
-> Thanks for the patch! Maybe it's more obvious to folks who work on
-> mips, but how did you determine that say `p5600` is `mips32r5` or
-> `r10000` is `mips4`?
+Yes, patch is good and I've tested it on parisc. Thanks!
 
-Wikipedia [1] should fit the purpose.
+You may add:
+Acked-by: Helge Deller <deller@gmx.de>
+to the series and take it through the drm tree.
 
->=20
-> Is there a table somewhere you used as a reference? Including such
-> info in the commit message would help reviewers such as myself verify
-> the patch.
->=20
-> Also, in v1, you mentioned that -mtune is not a substitute. It would
-> be good to record that info in the commit message as well.
-
-Thanks for the input! Will reword in next rev.
-
->=20
-
-
-[1]: https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
-
-Thanks
-- Jiaxun=
+Helge
