@@ -2,171 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC176E7479
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 09:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F076E75AC
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 10:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjDSHzy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Apr 2023 03:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S231600AbjDSIw5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Apr 2023 04:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjDSHzx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 03:55:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2EBBBBE
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 00:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681890851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ku4/Si8D6xrlYmDkiBxBM7QW/Zhm4h1GUH6h0hqbhBo=;
-        b=KEl+iPBF+usjCmxggqrsRVXnav4zRJuun8FrN9XXc+MKcjf0bERK0b1H1FCAyzVksqFg77
-        iEcyx6SxHhLMZKFKSu0kA8NOs/iFynlywZEXMJIbk9G4Rtkf34FiYn4HLI+tN9iYrZciI+
-        o7nsSzj1VMsuNi31HJqUWJTCDeJhSus=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-277-XB2wXFUYO_W9YW8OelKaMg-1; Wed, 19 Apr 2023 03:54:09 -0400
-X-MC-Unique: XB2wXFUYO_W9YW8OelKaMg-1
-Received: by mail-wm1-f70.google.com with SMTP id hg24-20020a05600c539800b003f066c0b044so849287wmb.0
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 00:54:09 -0700 (PDT)
+        with ESMTP id S231352AbjDSIw4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 04:52:56 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E753949CE
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 01:52:54 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id fw30so26894461ejc.5
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 01:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681894373; x=1684486373;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PduK/plWRjdmEIPxSdh8pvf2swuzHYiuVB01GLQkQ1I=;
+        b=hRFGLc7SCnxuhFp/K84EVRgkHYM7RJKmeX15fMVvCPq5iWDqksye0t5d/F1EpeDGaN
+         yZnOTFMzXPYZGIP/h6vYgSoB0rHGbUj+UUDDvuKPPKCWO+wQo0jZO/tCjctLMWlGzRvY
+         6ckpvPbSqSGHh0wH7PZBzbYf7Obpmbvzq7DSaRUnW/KaKiV9hnfEpA66PMvMj0yq6t4d
+         BfQzZ5k6weVb2nOofS4WQg7XdQx2NgHmssB33HpeRu2uSRm0TAFsIJwSx0oPCy9Tg5FP
+         ERigo1s6hpdnEzLMR4d1nBwJn1m9drcq360+h2hxZ/7Hax0htG4Ja2Ap7n9RrEvgoahV
+         TkRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681890849; x=1684482849;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ku4/Si8D6xrlYmDkiBxBM7QW/Zhm4h1GUH6h0hqbhBo=;
-        b=KgaXaEaX2wPfNqn+qEik5k9LmHdQhKzlg+XCgvtKPAwx7ANKYYxd/O2IXgg1k8rUGM
-         NA8kf/PagghIL2DQwVaP+eUB3xFrJFFAb56boW6O182siK7UQ90j4A7cta+A5U1G4H6p
-         F5Hzb3AJd1fiqjnaGDT91Q8eP0zszx2r4VFQ58RZdJgFtjYq3AQi5m3ZuC09Pu3Gr+dE
-         O7qDhR72NBvmPp1pg2RcyPdDxiUKKQ/kNEE/e2baOibxu58gqGrU2lt+QfFgKFaTyPI1
-         3sxLsM+q6lkqfip4emBpjDLN5JE3/ZVViUX4htIioND+Gp2EFjgeZ8040toNTgHfHWlf
-         MBbQ==
-X-Gm-Message-State: AAQBX9dWvU0s0nQ3zSu94nvwxkAhvHioNCwsHPrRqod/IfcHwICLTBbk
-        G99koTa6Ib3rB7i/0PsMc/gELM+ygfr53PzunxyfWwHOXyxr8awVFXItqp/pjb3d4z4twm2mzJO
-        GioodhdzVdBHodip5bTlNFg==
-X-Received: by 2002:a05:600c:2305:b0:3f1:728a:1881 with SMTP id 5-20020a05600c230500b003f1728a1881mr7565086wmo.31.1681890848811;
-        Wed, 19 Apr 2023 00:54:08 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZGeCzv8hHHPCLoBp3+kn6wkQN0cMnv6OhMvvwsxXxMwENw712YUrmrVhvIskYHJBvgTLUksw==
-X-Received: by 2002:a05:600c:2305:b0:3f1:728a:1881 with SMTP id 5-20020a05600c230500b003f1728a1881mr7565048wmo.31.1681890848428;
-        Wed, 19 Apr 2023 00:54:08 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:7b00:7c52:a5fa:8004:96fd? (p200300cbc70b7b007c52a5fa800496fd.dip0.t-ipconnect.de. [2003:cb:c70b:7b00:7c52:a5fa:8004:96fd])
-        by smtp.gmail.com with ESMTPSA id l26-20020a1ced1a000000b003eeb1d6a470sm1327085wmh.13.2023.04.19.00.54.06
+        d=1e100.net; s=20221208; t=1681894373; x=1684486373;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PduK/plWRjdmEIPxSdh8pvf2swuzHYiuVB01GLQkQ1I=;
+        b=iaoVfKzvKLU2JaBg45N1pWksZ7VItKeuoPkZcOFdh2pm1gf4vJBqGJcWTFDFt+Tu3/
+         8X5Gcc9fVisxjK79L3ZYgSCfT/elqcQCILVzkAguvJ0+qsVdsXWRB/1Ts2lWQ/DcfOg6
+         ub5PJKSuGZzfKaqYTEL7bmira3mnIU7aMRCwmD0s2zPotALnXLixfNRJ3RWpY5GMTu3C
+         4uUR5rzA6k071AfjNz/pREj5Df8a8LfuqqAS3abiXZh5qDi41GgdO1hc0d59sfg9Rc1x
+         mhSH58fuTRGU1F2TExTCTkjp2KPSZbx1tjeNJYjJoY7xpPrQ7RYrbtZGjuJPL+fooIUN
+         /+Vw==
+X-Gm-Message-State: AAQBX9fKw2xySP66NaOVn2chBtKVpFOnD9R+H3OOryGdHTO0kRffIYMH
+        z2Tft9F4W/tkJwnAzIsEkNSniw==
+X-Google-Smtp-Source: AKy350ZFWiW0hGkCbNsxjK6vG6qEmnVmVQFNTRf9l1nODW+fWb8LJyQgCAFPx7AU+x2vmvQbclIzEQ==
+X-Received: by 2002:a17:906:1ec8:b0:906:3373:cfe9 with SMTP id m8-20020a1709061ec800b009063373cfe9mr13868776ejj.10.1681894373413;
+        Wed, 19 Apr 2023 01:52:53 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
+        by smtp.gmail.com with ESMTPSA id p3-20020a17090635c300b0094ed14a5b75sm8064533ejb.51.2023.04.19.01.52.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 00:54:08 -0700 (PDT)
-Message-ID: <e0c0ad67-f23f-ff35-80bf-841dcfd43d99@redhat.com>
-Date:   Wed, 19 Apr 2023 09:54:06 +0200
+        Wed, 19 Apr 2023 01:52:53 -0700 (PDT)
+Message-ID: <05ebf834-2220-d1e6-e07a-529b8f9cb100@linaro.org>
+Date:   Wed, 19 Apr 2023 10:52:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
+Subject: Re: [PATCH V3 1/7] dt-bindings: rtc: Subdivision of LS2X RTC
+ compatible
 Content-Language: en-US
-To:     Vishal Moola <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
-References: <20230417205048.15870-1-vishal.moola@gmail.com>
- <20230417205048.15870-2-vishal.moola@gmail.com>
- <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
- <CAOzc2pwpRhNoFbdzdzuvrqbZdf2OsrTvBGs40QCZJjA5fS_q1A@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 01/33] s390: Use _pt_s390_gaddr for gmap address tracking
-In-Reply-To: <CAOzc2pwpRhNoFbdzdzuvrqbZdf2OsrTvBGs40QCZJjA5fS_q1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Binbin Zhou <zhoubb.aaron@gmail.com>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
+        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
+        zhaoxiao <zhaoxiao@uniontech.com>, keguang.zhang@gmail.com
+References: <cover.1681370153.git.zhoubinbin@loongson.cn>
+ <35f43a8cfc32b5a065e4a04eb6cc6abf311f2700.1681370153.git.zhoubinbin@loongson.cn>
+ <b4b23751-a44c-2b38-0d55-a34711ad53c4@linaro.org>
+ <CAMpQs4+XBQD9KB3XOPe4zp_vC5RxPaOZU0aJQZKTW=+9r5nmag@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMpQs4+XBQD9KB3XOPe4zp_vC5RxPaOZU0aJQZKTW=+9r5nmag@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 18.04.23 23:33, Vishal Moola wrote:
-> On Tue, Apr 18, 2023 at 8:45 AM David Hildenbrand <david@redhat.com> wrote:
+On 19/04/2023 09:12, Binbin Zhou wrote:
+> On Mon, Apr 17, 2023 at 1:31 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->> On 17.04.23 22:50, Vishal Moola (Oracle) wrote:
->>> s390 uses page->index to keep track of page tables for the guest address
->>> space. In an attempt to consolidate the usage of page fields in s390,
->>> replace _pt_pad_2 with _pt_s390_gaddr to replace page->index in gmap.
+>> On 13/04/2023 09:57, Binbin Zhou wrote:
+>>> The LS2X RTC alarm depends on the associated registers in a separate
+>>> power management domain.
 >>>
->>> This will help with the splitting of struct ptdesc from struct page, as
->>> well as allow s390 to use _pt_frag_refcount for fragmented page table
->>> tracking.
+>>> In order to define the PM domain addresses of the different chips, a
+>>> more detailed description of compatible is required.
+>>
+>> This does not match your diff at all.
+>>
 >>>
->>> Since page->_pt_s390_gaddr aliases with mapping, ensure its set to NULL
->>> before freeing the pages as well.
->>>
->>> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+>>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
 >>> ---
+>>>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 7 +++++--
+>>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+>>> index a3603e638c37..2928811b83a0 100644
+>>> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+>>> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+>>> @@ -47,8 +47,11 @@ properties:
+>>>        - isil,isl1218
+>>>        # Intersil ISL12022 Real-time Clock
+>>>        - isil,isl12022
+>>> -      # Loongson-2K Socs/LS7A bridge Real-time Clock
+>>> -      - loongson,ls2x-rtc
 >>
->> [...]
+>> Why removing it?
 >>
->>> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
->>> index 3fc9e680f174..2616d64c0e8c 100644
->>> --- a/include/linux/mm_types.h
->>> +++ b/include/linux/mm_types.h
->>> @@ -144,7 +144,7 @@ struct page {
->>>                struct {        /* Page table pages */
->>>                        unsigned long _pt_pad_1;        /* compound_head */
->>>                        pgtable_t pmd_huge_pte; /* protected by page->ptl */
->>> -                     unsigned long _pt_pad_2;        /* mapping */
->>> +                     unsigned long _pt_s390_gaddr;   /* mapping */
->>>                        union {
->>>                                struct mm_struct *pt_mm; /* x86 pgds only */
->>>                                atomic_t pt_frag_refcount; /* powerpc */
+>>> +      # Loongson LS7A bridge Real-time Clock
+>>> +      - loongson,ls7a-rtc
+>>> +      # Loongson-2K Socs Real-time Clock
+>>> +      - loongson,ls2k0500-rtc
+>>> +      - loongson,ls2k1000-rtc
 >>
->> The confusing part is, that these gmap page tables are not ordinary
->> process page tables that we would ordinarily place into this section
->> here. That's why they are also not allocated/freed using the typical
->> page table constructor/destructor ...
+>> That's even more surprising...
+>>
+>> I don't understand what you are doing here at all.
+> Hi Krzysztof:
 > 
-> I initially thought the same, so I was quite confused when I saw
-> __gmap_segment_gaddr was using pmd_pgtable_page().
+> Sorry, maybe my description was not accurate.
 > 
-> Although they are not ordinary process page tables, since we
-> eventually want to move them out of struct page, I think shifting them
-> to be in ptdescs, being a memory descriptor for page tables, makes
-> the most sense.
+> Looking back at my V2 patchset, the first patch was to add ls2x-rtc compatible.
+> (https://lore.kernel.org/linux-rtc/0288efeb4209e4a49af07de6399045aaa00a970c.1673227292.git.zhoubinbin@loongson.cn/)
+> 
+> In the process of modifying the V2 patchset, it was discovered that
+> the ACPI domain offset addresses on some of the socs (LS2K1000) were
+> different and I wanted to differentiate them by soc compatible. So I
+> was going to drop the ls2x-rtc compatible directly from the V3 patch
+> set.
+> However, when I rebased the V3 patchset, I found that the previous
+> ls2x-rtc compatible patch had been merged (commit 473a8ce756fd). So I
+> had to remove it and add soc compatible.
 
-Seeing utilities like tlb_remove_page_ptdesc() that don't really apply 
-to such page tables, I wonder if we should much rather treat such 
-shadow/auxiliary/... page tables (just like other architectures like 
-x86, arm, ... employ as well) as a distinct type.
+Can all folks in Loongson stop adding wildcards as compatibles? Several
+compatibles were acked, because we do not know what 'x' stands for. Now,
+it turns out it's a wildcard which is not allowed.
 
-And have ptdesc be the common type for all process page tables.
+https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
 
 > 
-> Another option is to leave pmd_pgtable_page() as is just for this case.
-> Or we can revert commit 7e25de77bc5ea which uses the function here
-> then figure out where these gmap pages table pages will go later.
+> How about the following description:
+> Since commit 473a8ce756fd (dt-bindings: rtc: Add Loongson LS2X RTC
+> support), the ls2x-rtc compatible has been added. But the specific soc
+> compatible is needed to be used to define different ACPI domain offset
+> addresses.
+> 
+It's better. Anyway, SoC parts are rarely trivial devices, so this
+should be probably moved to its own schema.
 
-I'm always confused when reading gmap code, so let me have another look :)
-
-The confusing part is that s390x shares the lowest level page tables 
-(PTE tables) between the process and gmap ("guest mapping", similar to 
-EPT on x86-64). It maps these process PTE tables (covering 1 MiB) into 
-gmap-specific PMD tables.
-
-pmd_pgtable_page() should indeed always give us a gmap-specific 
-PMD-table. In fact, something allocated via gmap_alloc_table().
-
-Decoupling both concepts sounds like a good idea.
-
--- 
-Thanks,
-
-David / dhildenb
+Best regards,
+Krzysztof
 
