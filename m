@@ -2,105 +2,215 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5035C6E8470
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 00:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06416E855D
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 00:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjDSWPR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Apr 2023 18:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S232873AbjDSW5F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Apr 2023 18:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjDSWPP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 18:15:15 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C883E4C06
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 15:15:13 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1ppG52-0007kL-00; Thu, 20 Apr 2023 00:15:12 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D827AC0117; Thu, 20 Apr 2023 00:15:00 +0200 (CEST)
-Date:   Thu, 20 Apr 2023 00:15:00 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if
- unsupported
-Message-ID: <20230419221500.GA17797@alpha.franken.de>
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-7-jiaxun.yang@flygoat.com>
- <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
- <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
- <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
+        with ESMTP id S232731AbjDSW5E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 18:57:04 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF3819AF
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 15:56:59 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a6bc48aec8so4253535ad.2
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 15:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681945019; x=1684537019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EfHs6iQcu6f/xzGNIRNs/Y6zNI7wkCv1JLv9sFf5g1M=;
+        b=Hf8STPeTqcCEMBqR/MDrmp1HtnPk6GIH5PFNOTsUN7tPgWqWR1ZyBP8GwDsJkkLKG8
+         AYhZdFrgwCV8MqXtRmCQi31cmL6jiSjz3Nhdqbn+Ydb7KtggmVC0mWLgTkV8h5LrocTx
+         JMSiKPmPNqI9PaMzeCfkSLedwLBMwC/49yavs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681945019; x=1684537019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EfHs6iQcu6f/xzGNIRNs/Y6zNI7wkCv1JLv9sFf5g1M=;
+        b=JwN+KaoZAj81R8F9yz6DNfysHY4pzxSdaNvXbQgqOML86mNqyOm8jLR0Dc8Rb7Aj17
+         ee+f7hJuTgJ/VjcFkat2OXpvTLi1+T0kv18Bbgm3fHBb6/YL/iOZf2G80oIBZaug6w0H
+         GiVyr2HCUxK7EqSYSymPF7Az7SsUMqI3MMfnfpVbUERofv7emFLMMNBVwl/jVhP+62Pz
+         ZrOV0BcjYoatwQoy21XsTZUX5pQIAETjJgIOAX293qjAUV2kVP+PEsgiCQuyotgTkNo9
+         lSSCmV3OSLnzK9oy3pnk7k3d2pXBh1vu3dKZIkSqjEyYcEPVf8AvibjuRdWOZRBAQOa2
+         Ghpg==
+X-Gm-Message-State: AAQBX9fNaB09LiFa3MwEueUvH9sk9dYmNk4wMvkWBR39D4jhZk6M7ovE
+        DqFhZlG3fLp6dmj9cD9H9FyC/g==
+X-Google-Smtp-Source: AKy350ZiPT69ec5g7FHlxHkgLJsXu49t1r2PGDTeEGKpYVM7Qe0rm8s8+T+i58n9/utMvufCZU7NAA==
+X-Received: by 2002:a17:902:e74a:b0:1a6:46d7:77dc with SMTP id p10-20020a170902e74a00b001a646d777dcmr7987289plf.43.1681945018669;
+        Wed, 19 Apr 2023 15:56:58 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:8b1:fa03:670e:b784])
+        by smtp.gmail.com with ESMTPSA id h15-20020a17090aea8f00b00246ea338c96sm1847101pjz.53.2023.04.19.15.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 15:56:57 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     ito-yuichi@fujitsu.com, kgdb-bugreport@lists.sourceforge.net,
+        Chen-Yu Tsai <wens@csie.org>,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-perf-users@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Ben Dooks <ben-linux@fluff.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+        x86@kernel.org
+Subject: [PATCH v8 00/10] arm64: Add framework to turn an IPI as NMI
+Date:   Wed, 19 Apr 2023 15:55:54 -0700
+Message-ID: <20230419225604.21204-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 02:35:02PM -0700, Nick Desaulniers wrote:
-> On Wed, Apr 19, 2023 at 9:50 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> >
-> >
-> >
-> > > 2023年4月18日 21:07，Nick Desaulniers <ndesaulniers@google.com> 写道：
-> > >
-> > > On Fri, Apr 14, 2023 at 1:07 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> > >>
-> > >> LLVM does not implement some of -march options. However those options
-> > >> are not mandatory for kernel to build for those CPUs.
-> > >>
-> > >> Fallback -march CFLAG to ISA level if unsupported by toolchain so
-> > >> we can get those kernel to build with LLVM.
-> > >>
-> > >> Link: https://github.com/ClangBuiltLinux/linux/issues/1544
-> > >> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > >
-> > > Thanks for the patch! Maybe it's more obvious to folks who work on
-> > > mips, but how did you determine that say `p5600` is `mips32r5` or
-> > > `r10000` is `mips4`?
-> >
-> > Wikipedia [1] should fit the purpose.
-> >
-> > [1]: https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
-> 
-> Mostly! Though I was not able to verify:
-> - p5600
+This is an attempt to resurrect Sumit's old patch series [1] that
+allowed us to use the arm64 pseudo-NMI to get backtraces of CPUs and
+also to round up CPUs in kdb/kgdb. The last post from Sumit that I
+could find was v7, so I called this series v8. I haven't copied all of
+his old changelongs here, but you can find them from the link.
 
-mips32r5
+Since v7, I have:
+* Addressed the small amount of feedback that was there for v7.
+* Rebased.
+* Added a new patch that prevents us from spamming the logs with idle
+  tasks.
+* Added an extra patch to gracefully fall back to regular IPIs if
+  pseudo-NMIs aren't there.
 
-> - r5500
+Since there appear to be a few different patches series related to
+being able to use NMIs to get stack traces of crashed systems, let me
+try to organize them to the best of my understanding:
 
-mips4
+a) This series. On its own, a) will (among other things) enable stack
+   traces of all running processes with the soft lockup detector if
+   you've enabled the sysctl "kernel.softlockup_all_cpu_backtrace". On
+   its own, a) doesn't give a hard lockup detector.
 
-> - rm5200
+b) A different recently-posted series [2] that adds a hard lockup
+   detector based on perf. On its own, b) gives a stack crawl of the
+   locked up CPU but no stack crawls of other CPUs (even if they're
+   locked too). Together with a) + b) we get everything (full lockup
+   detect, full ability to get stack crawls).
 
-mips4
+c) The old Android "buddy" hard lockup detector [3] that I'm
+   considering trying to upstream. If b) lands then I believe c) would
+   be redundant (at least for arm64). c) on its own is really only
+   useful on arm64 for platforms that can print CPU_DBGPCSR somehow
+   (see [4]). a) + c) is roughly as good as a) + b).
 
-> - sb1
+[1] https://lore.kernel.org/linux-arm-kernel/1604317487-14543-1-git-send-email-sumit.garg@linaro.org/
+[2] https://lore.kernel.org/linux-arm-kernel/20220903093415.15850-1-lecopzer.chen@mediatek.com/
+[3] https://issuetracker.google.com/172213097
+[4] https://issuetracker.google.com/172213129
 
-mips64r1
+Changes in v8:
+- dynamic_ipi_setup() and dynamic_ipi_teardown() no longer take cpu param
+- dynamic_ipi_setup() and dynamic_ipi_teardown() no longer take cpu param
+- Add loongarch support, too
+- Removed "#ifdef CONFIG_SMP" since arm64 is always SMP
+- "Tag the arm64 idle functions as __cpuidle" new for v8
+- "Provide a stub kgdb_nmicallback() if !CONFIG_KGDB" new for v8
+- "Fallback to a regular IPI if NMI isn't enabled" new for v8
 
-all information taken from datasheets.
+Douglas Anderson (3):
+  arm64: idle: Tag the arm64 idle functions as __cpuidle
+  kgdb: Provide a stub kgdb_nmicallback() if !CONFIG_KGDB
+  arm64: ipi_nmi: Fallback to a regular IPI if NMI isn't enabled
 
-> - loongson*
+Sumit Garg (7):
+  arm64: Add framework to turn IPI as NMI
+  irqchip/gic-v3: Enable support for SGIs to act as NMIs
+  arm64: smp: Assign and setup an IPI as NMI
+  nmi: backtrace: Allow runtime arch specific override
+  arm64: ipi_nmi: Add support for NMI backtrace
+  kgdb: Expose default CPUs roundup fallback mechanism
+  arm64: kgdb: Roundup cpus using IPI as NMI
 
-probably depends on the exact type, but as I don't have datasheets
-I can't say what it is exactly, probaly mips32r2/mips64r2.
-
-Thomas.
+ arch/arm/include/asm/irq.h       |   2 +-
+ arch/arm/kernel/smp.c            |   3 +-
+ arch/arm64/include/asm/irq.h     |   4 ++
+ arch/arm64/include/asm/nmi.h     |  17 +++++
+ arch/arm64/kernel/Makefile       |   2 +-
+ arch/arm64/kernel/idle.c         |   4 +-
+ arch/arm64/kernel/ipi_nmi.c      | 103 +++++++++++++++++++++++++++++++
+ arch/arm64/kernel/kgdb.c         |  18 ++++++
+ arch/arm64/kernel/smp.c          |   8 +++
+ arch/loongarch/include/asm/irq.h |   2 +-
+ arch/loongarch/kernel/process.c  |   3 +-
+ arch/mips/include/asm/irq.h      |   2 +-
+ arch/mips/kernel/process.c       |   3 +-
+ arch/powerpc/include/asm/nmi.h   |   2 +-
+ arch/powerpc/kernel/stacktrace.c |   3 +-
+ arch/sparc/include/asm/irq_64.h  |   2 +-
+ arch/sparc/kernel/process_64.c   |   4 +-
+ arch/x86/include/asm/irq.h       |   2 +-
+ arch/x86/kernel/apic/hw_nmi.c    |   3 +-
+ drivers/irqchip/irq-gic-v3.c     |  29 ++++++---
+ include/linux/kgdb.h             |  13 ++++
+ include/linux/nmi.h              |  12 ++--
+ kernel/debug/debug_core.c        |   8 ++-
+ 23 files changed, 217 insertions(+), 32 deletions(-)
+ create mode 100644 arch/arm64/include/asm/nmi.h
+ create mode 100644 arch/arm64/kernel/ipi_nmi.c
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.40.0.634.g4ca3ef3211-goog
+
