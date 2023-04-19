@@ -2,127 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E976E815B
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 20:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4386E8262
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 22:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjDSSnL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Apr 2023 14:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S231608AbjDSUJs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Apr 2023 16:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDSSnK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 14:43:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E813C32;
-        Wed, 19 Apr 2023 11:43:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 113E16419A;
-        Wed, 19 Apr 2023 18:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC37BC433EF;
-        Wed, 19 Apr 2023 18:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681929788;
-        bh=5RTCILtLjE6PslW82/bAKw5NGHNOYNqtdIPg3yeeo2g=;
-        h=From:Date:Subject:To:Cc:From;
-        b=qrXVnJOByhNAA5zjYye9gYnVfeqD6b7nxk1duWNiS4OdnIlIjlHAVY3Z+B8HNPXPg
-         l5a5wnty2Tszlt/9szdX8eIIKGdvs4ZNnd8QeafkbqSL/oB7lRMRz3hDuHoZOKlnVD
-         yPUZRyVlROqpCqZ88BbsRXHxQKtU9wrGOF13xIj7Sh65Pw2emCsgJj4mTQncPCBAK/
-         sSQKbPXnVrO2HPYucZCxin078KtedZuLSD3N5sUTa1Ur1OvZraHpMSKlverwQQ+MjK
-         OjRZlhzJp3dmmQf6UHBnsetNvs3NNaJw3rU0OhKSrWVQHPTD+T7TZUOT29IPl/sDFJ
-         4K29CbAJMlI/w==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 19 Apr 2023 11:42:54 -0700
-Subject: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
+        with ESMTP id S231490AbjDSUJq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 16:09:46 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588DF4C33
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 13:09:45 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-506767f97f8so290840a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 13:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681934984; x=1684526984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xw+KJbFyACMkRJGroXOI3BeGOTCCUWrYEe/1oBLkoRQ=;
+        b=zxLiR99eSsw7BjcTYQ5S8E/CLIhKw3VB5JtlrC3z5U9ubcd67bhgmEL6qhgyiYHXnN
+         1FKFTMdCsvP8cWawQqMJH8WcsJXs7jKvHzVzsgZjss3z7mRJuhEnp2MklmWlA5gMjRXG
+         mAUhXVOcM/JlvX7vsTfyiWiz3Rmwe3D+OhArJEsHNLImFAO2I3OTIlHXI/TCRRyyhFR7
+         fgT92UqMmmJC/mx078VhIgAqtju+3rvlsQx52kdYVGRerlNjhFJv2cUxNcROuWBOjM+a
+         eR1UeOFNXCkXI1ObwK1mMXi0GZI7DEGzgsoWiT7tdYkbkrHnV27T/TMX25BRd/GWv2DD
+         1tug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681934984; x=1684526984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xw+KJbFyACMkRJGroXOI3BeGOTCCUWrYEe/1oBLkoRQ=;
+        b=YxiBv/1U9mXAhzYpUVXdBj3RKZQjddWvyafqKwVVPWmIKrdS1mdILVONIvynYF6pr/
+         xepmgseiXtH0iy7K4F79Md3/tffmlBqgHZiCsHbd1hAq16zh1J3CJD2RT4C3wlz2VtOG
+         CneV09HR8XhjQdhE2/oCmxOeODcE2ssDDZQnxB+LJuTva28IwioiOGoR7b6mNMscMbF+
+         K57g1J14WoDfeyqwrmOkon6ZiZ0nqNALd4q5s8oiBeNuVB/tZJ0GZG4lOR70biWb9zov
+         tqbulBdk9v+wCwBrSKhgFpTgsI3etNNW7Uhjak7iSK8xdpU9+CufUsOkOHNEVAgw8Fvs
+         4+cw==
+X-Gm-Message-State: AAQBX9eq2yXNQhyKpCLvCAZe56uuZknt2tY4eHQW2hFLjFplnG0/gnh/
+        IJNViGJA+rCQbxTHarjqObQFLA==
+X-Google-Smtp-Source: AKy350a3Apxx+KuNFbakTzHCxKVnVUVMPDVeV2R93lEsA74lMQBPm+5IF/g1O8tqNFYYN6/peDtnqw==
+X-Received: by 2002:a05:6402:650:b0:504:b313:5898 with SMTP id u16-20020a056402065000b00504b3135898mr7270539edx.27.1681934983797;
+        Wed, 19 Apr 2023 13:09:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
+        by smtp.gmail.com with ESMTPSA id i10-20020aa7dd0a000000b0050685927971sm6858485edv.30.2023.04.19.13.09.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 13:09:43 -0700 (PDT)
+Message-ID: <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
+Date:   Wed, 19 Apr 2023 22:09:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson
+ EIOINTC
+Content-Language: en-US
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+References: <cover.1681887790.git.zhoubinbin@loongson.cn>
+ <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAC02QGQC/x2N0QrCMAwAf2Xk2UDbOUF/RWQ0XVyDrI6kE2Hs3
- 918PA7uVjBWYYNbs4LyR0zeZQd/aiDlWEZGGXaG4ELrzv6Kk8yGKXN69bSMhlKkYqxVhZbK6ML
- Fu5YGCl0He4SiMZLGkvKRmaJV1kPMyk/5/s/3x7b9AM63U+CJAAAA
-To:     tsbogend@alpha.franken.de
-Cc:     ndesaulniers@google.com, jpoimboe@kernel.org, peterz@infradead.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2451; i=nathan@kernel.org;
- h=from:subject:message-id; bh=5RTCILtLjE6PslW82/bAKw5NGHNOYNqtdIPg3yeeo2g=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkOZtZiVTXtbxMjXzFuv7FMe9NhA/vfM3q0ZjyoP7XhM
- Wc8x9WtHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi128w/M+5PHXGmS0xvmt/
- ye9RCA5WXHzHQax+ndPinrxTqw7G3l/IyHBUsa+Y68MvTUXH+1Eiy5urcm5+WVWZ/pX9+nrH0m9
- 781gA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-forcibly"), a compiler may choose not to inline a function marked with
-just 'inline'. If check_bugs() is not inlined into start_kernel(), which
-occurs when building with clang after commit 9ea7e6b62c2b ("init: Mark
-[arch_call_]rest_init() __noreturn"), modpost complains with:
+On 19/04/2023 09:17, Binbin Zhou wrote:
+> Add Loongson Extended I/O Interrupt controller binding with DT schema
+> format using json-schema.
+> 
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  .../loongson,eiointc.yaml                     | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> new file mode 100644
+> index 000000000000..4ab4efb061e1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson Extended I/O Interrupt Controller
+> +
+> +maintainers:
+> +  - Binbin Zhou <zhoubinbin@loongson.cn>
+> +
+> +description: |
+> +  This interrupt controller is found on the Loongson-3 family chips and
+> +  Loongson-2K series chips and is used to distribute interrupts directly to
+> +  individual cores without forwarding them through the HT's interrupt line.
+> +
+> +allOf:
+> +  - $ref: /schemas/interrupt-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k0500-eiointc
+> +      - loongson,ls2k2000-eiointc
+> +
+> +  reg:
+> +    items:
+> +      - description: Interrupt enable registers
+> +      - description: Interrupt status registers
+> +      - description: Interrupt clear registers
+> +      - description: Interrupt routing configuration registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: enable
+> +      - const: status
+> +      - const: clear
+> +      - const: route
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - '#interrupt-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    eiointc: interrupt-controller@1fe11600 {
+> +      compatible = "loongson,ls2k0500-eiointc";
+> +      reg = <0x1fe11600 0x10>,
+> +            <0x1fe11700 0x10>,
+> +            <0x1fe11800 0x10>,
+> +            <0x1fe114c0 0x4>;
 
-  WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs (section: .text) -> check_bugs32 (section: .init.text)
-
-check_bugs() is only called from start_kernel(), which itself is marked
-__init, so mark check_bugs() as __init as well to clear up the warning
-and make everything work properly.
-
-While there is currently no warning about check_bugs_early(), it could
-have the same problem, as it is called from arch_setup() and calls
-check_bugs64_early(), both marked __init. Mark it as __init for the same
-reason as above.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-NOTE: This is based on v6.3-rc7, as the issue shows up due to a patch in
-the tip tree, but this appears to be an ancient issue that could have
-showed up at any point (hence why no explicit Fixes tag), so I chose a
-base that should allow either the MIPS or tip folks to apply this patch.
-
-Additionally, I was tempted to remove the explicit 'inline' since the
-compiler is free to do whatever it wants anyways but this is a static
-function in a header so we would need to add '__maybe_unused', which is
-already added with 'inline' in a normal build so I just left it alone.
----
- arch/mips/include/asm/bugs.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-index d72dc6e1cf3c..9b9bf9bc7d24 100644
---- a/arch/mips/include/asm/bugs.h
-+++ b/arch/mips/include/asm/bugs.h
-@@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
- extern void check_bugs32(void);
- extern void check_bugs64(void);
- 
--static inline void check_bugs_early(void)
-+static inline void __init check_bugs_early(void)
- {
- 	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
- 		check_bugs64_early();
- }
- 
--static inline void check_bugs(void)
-+static inline void __init check_bugs(void)
- {
- 	unsigned int cpu = smp_processor_id();
- 
-
----
-base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
+Binding is OK, but are you sure you want to split the address space like
+this? It looks like two address spaces (enable+clear+status should be
+one). Are you sure this is correct?
 
 Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+Krzysztof
 
