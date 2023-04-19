@@ -2,107 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E805D6E7775
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 12:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04CD6E79D4
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Apr 2023 14:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbjDSKdJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Apr 2023 06:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S232696AbjDSMi2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Apr 2023 08:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjDSKcw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 06:32:52 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B42A5C4
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 03:32:48 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6a5f6349ec3so748289a34.0
-        for <linux-mips@vger.kernel.org>; Wed, 19 Apr 2023 03:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681900367; x=1684492367;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X3XSqvrj9FGCYS1ksd0C9vpvihqJ2xRJTy45N8qgQwo=;
-        b=bmbFupc/uECSlTZCt5fqcSlzyU2rXJ826O7WDdHlb0rHphYR5of35XPSoxN0FwNI2S
-         2ErnAGgJ3Dg311z3tbpfl//I2kJsb13e8RbgNs8mRt19CQHX1wCEi1UsIj1zrMm3vRe7
-         LH2TQcx5I4GT3LpSSTf0z6UnEkkqEHa/EEWgd/T2ZEDKMHQcB3fxpg2Rkj6+yUZpIzDM
-         a0C3p2zipH1YhynNSuFFV5H7MrlBtiAz77YVQZ4fsjMC9ujwUufLvfZJfI2WB/knLkKG
-         +1I/FnYH0lIGFChuQBrACuhZRfGgF7CpN0VW8ShE761+RIMPRum1i1XJFTfsE7hGEHcK
-         Emtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681900367; x=1684492367;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3XSqvrj9FGCYS1ksd0C9vpvihqJ2xRJTy45N8qgQwo=;
-        b=NfyKx1tMDNiFoEdAxIF8G7toAAvRYplLwYUgrw6BWmhmgNpEPXVKO3LN2/wjDldCEC
-         JblBoxGgtZ8rFiRpJQSmBqa0TtggjzSv1N614Ih0yUIacXqc34JIVMS8kYSFZkk15Qe1
-         MUpEXmT/+sk362khP5rorQ7fpwJBQihNymH2vZd7UyKHQt+GlB6zqIRTwvle6QVsB04o
-         xZhfMEuJy7nZZG8+Xn3E+Ac9KdbFbY9xjRu2f9PByAeM2I83PqCpG0FiZcazC4zQ9VfI
-         kfYgDaUt1LrHBXuPJl9XHetD4dm3OWHWJwnU+RnSzntFq5VDBd5zOhqWeH5pTjdAm393
-         kqBg==
-X-Gm-Message-State: AAQBX9eb28dYY1Sy/GMyg3wDcAyYoRoMplB5GbwWY75vdXo6ktZ33CG5
-        L5rIYLe18W0zcDA4nWoPTap584N41iYpt1uRdRQ=
-X-Google-Smtp-Source: AKy350YM1n0uH4leEk9Gxe12ulpC7w/Kp8skg8OiALUbFSr8DGObZhYBviCQeBU+KDbK2YHmBX85cLJIpiuUoirrQt0=
-X-Received: by 2002:a9d:7a47:0:b0:6a5:d8ff:a846 with SMTP id
- z7-20020a9d7a47000000b006a5d8ffa846mr1573109otm.7.1681900367489; Wed, 19 Apr
- 2023 03:32:47 -0700 (PDT)
+        with ESMTP id S231592AbjDSMi1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Apr 2023 08:38:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFD0A5C8;
+        Wed, 19 Apr 2023 05:38:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681907899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TzrbFJX0mLRnVyg6gK50wjW8gAdRTyt3eKsS6bO2Ho8=;
+        b=UQOJzBaZIKBAqIIp2iqE9MqaQt4o5jf4X54iENF8PIgb3XVSKHeAToYhSAetn/VDc3XDSc
+        vbXK6VM/E7725N29s2FSKaatj7nI1wyCTjA86cgr2JkrX8DxeEun3hjlUqogLtb5s5zfSa
+        SywUUUueeIYsZNv4w36kFnEjVOxY/DSPPwkyq+kebzFI7z2gYg0r9CnlmtgFv9TqDyfAlD
+        YKid0ziPPcge9cOBT8GWWTc95C+prcMhIbymQfHwn03mi0EsBFOddKVOKY2XMi3tesk7+V
+        TiCAx54bzs6ELiLXkmKcxWv4fFnjWSoKaHB0PW1kBv0yCnbUWTFXcy/RdtQ2bA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681907899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TzrbFJX0mLRnVyg6gK50wjW8gAdRTyt3eKsS6bO2Ho8=;
+        b=G/PDlG02+awXAj/Znv2ir94TrCNuE4soVJYG72z/i6F9KUyMxTR0qJUk/z9cfxNZH98BUp
+        FAdnV9eglXscn1DA==
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+In-Reply-To: <87a5z443g2.ffs@tglx>
+References: <20230414225551.858160935@linutronix.de>
+ <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
+ <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
+ <87r0sh4m7a.ffs@tglx> <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de>
+ <87a5z443g2.ffs@tglx>
+Date:   Wed, 19 Apr 2023 14:38:18 +0200
+Message-ID: <877cu83v45.ffs@tglx>
 MIME-Version: 1.0
-Received: by 2002:a05:6850:d8a4:b0:480:899d:66bd with HTTP; Wed, 19 Apr 2023
- 03:32:47 -0700 (PDT)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <barr.williamboafo1@gmail.com>
-Date:   Wed, 19 Apr 2023 03:32:47 -0700
-Message-ID: <CAK0gjPibfc=D9GAk7W5muQZ3LEHLf8rU6cVvgtzd99QHP6vGkw@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:330 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [barr.williamboafo1[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [barr.williamboafo1[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hitnodeby23[at]yahoo.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  3.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
--- 
-Hello
+On Wed, Apr 19 2023 at 11:38, Thomas Gleixner wrote:
+> On Tue, Apr 18 2023 at 22:10, Paul Menzel wrote:
+>> Am 18.04.23 um 10:40 schrieb Thomas Gleixner:
+>>> Can you please provide the output of cpuid?
+>>
+>> Of course. Here the top, and the whole output is attached.
+>
+> Thanks for the data. Can you please apply the debug patch below and
+> provide the dmesg output? Just the line which is added by the patch is
+> enough. You can boot with cpuhp.parallel=off so you don't have wait for
+> 10 seconds.
 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business Proposal,
+Borislav found some a machine which also refuses to boot. It turns of
+the debug patch was spot on:
 
- If you are interested kindly reply to me so i can give you all the details.
+[    0.462724] .... node  #0, CPUs:      #1
+[    0.462731] smpboot: Kicking AP alive: 17
+[    0.465723]  #2
+[    0.465732] smpboot: Kicking AP alive: 18
+[    0.467641]  #3
+[    0.467641] smpboot: Kicking AP alive: 19
 
-Thanks and God Bless You.
-Ms Hinda Itno Deby
+So the kernel gets APICID 17, 18, 19 from ACPI but CPUID leaf 0x1
+ebx[31:24], which is the initial APICID has:
+
+CPU1		0x01
+CPU2		0x02
+CPU3		0x03
+
+Which means the APICID to Linux CPU number lookup based on CPUID 0x01
+fails for all of them and stops them dead in the low level startup code.
+
+IOW, the BIOS assignes random numbers to the AP APICs for whatever
+raisins, which leaves the parallel startup low level code up a creek
+without a paddle, except for actually reading the APICID back from the
+APIC. *SHUDDER*
+
+I'm leaning towards disabling the CPUID lead 0x01 based discovery and be
+done with it.
+
+Thanks,
+
+        tglx
