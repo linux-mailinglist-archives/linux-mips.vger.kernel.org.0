@@ -2,192 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7756E9540
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 15:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583B86E97B0
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 16:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjDTNBZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Apr 2023 09:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S232685AbjDTOwT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Apr 2023 10:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjDTNBY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 09:01:24 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3117A9B;
-        Thu, 20 Apr 2023 06:00:58 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fb615ac3dso40498997b3.2;
-        Thu, 20 Apr 2023 06:00:58 -0700 (PDT)
+        with ESMTP id S232758AbjDTOwN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 10:52:13 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74074ECB
+        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 07:51:51 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1a52677bd54so7578325ad.3
+        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 07:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681995658; x=1684587658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cOz2vJX6O8WYQA+86dOvET6FW/q2m4As7J1doBwYieQ=;
-        b=SFRtVWPbBXUIMuQ5P64CLBS539wch2e8cP9vsCUiPg+MkKM1b6+nHJeIRma1Q6nfuK
-         2Xkt9YhXhCLJJDY4Eoj+HOSRlAOi29R+7GNtTRQCr3rFvzIYFrhx+tN6A5ZJAoKEVNt/
-         dIkO8/SDhE2/lJXuibw7QLyOZr6gn3O/YEZWSYPJLs/Sr6VIcUskUVRD4N1SsU88+i3c
-         x/R6malWXYad5p55JNi/JMAm/sKSADuSZz9GhivHU1NIf/Ozptz6YpIjuysVjzULsfsj
-         cFZ1oD6bSFQON9lmQnOkarivg3aQZT7ejPxI8tF/48fBVWJKbcshoVRRuctm1+Pk23Ud
-         QIBw==
+        d=google.com; s=20221208; t=1682002311; x=1684594311;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cenhvMgRBJVEyO+DQ1Yk7EeAnoD+Mx3QDGrPvs6dp/U=;
+        b=ozdQf66WPw8ShRBluz+LMQljss+d3T0PBYjA3jmNDdv//pVrmGXx6L9uusb7fIhJSL
+         LymgWp9X3FbkLAAxceftLeQZn0/6M8JdZmIbsV9oONQVhJAe+e9OODUteXA7bMLvWkmz
+         5ayRkEY6NENxUYGlnGZFkZBlmyRHMXNIOgoLHCbFX3aaDwjuintlWNx5LkJKfs2Sd6PE
+         Ya8JLH6D3Xz61J6mffVksjDGSWXvO9yhMWIRSY/rzCnaTg7svns1MKliwXodcMA+7eb1
+         u30LO7+8+pIMTa1eXTgGdK8wfjlZ/7y7DufflgYGy0ae6b3znNofgHpeyL7dnXNOKs4z
+         yrGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681995658; x=1684587658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cOz2vJX6O8WYQA+86dOvET6FW/q2m4As7J1doBwYieQ=;
-        b=K7GJ+/ZbxVdD6BYEsEznRoGDvP4YwN94wcFwIA1FWRjnm0PBTD4hpwXZuZazCW8gsC
-         g/ymRW9AWfpaSD6J1sbUqD0JZ7vKYRZTv09krRxR5TxUHmunaFYOJ+zAB8wbDWmtV2j9
-         +xNWi9uROBaep8F10Imnlf93MoOK8YnAjNArs3xgt4gBuh204u+hfNqldjxOVPgI+eeV
-         7he0LF4ssXLrOIwKBpKuehgWdXvP2plAv+72f6lGzlMQTwtIZ+10TpBuGfXL1ONufoU9
-         77oK/+bOnxLyRQX+snvuwHtzBTmhOdpXFYE7lxzsf0nhx+CTifS2HenlmbJD8R0X6VZY
-         H41Q==
-X-Gm-Message-State: AAQBX9cmc7MimmaYOQbcPuJWxHpFNUNMAgDjIh6hbFauNUQPeG+f9imQ
-        MfMTRvcYFQrXchJTHZjxHcJFeJuotseAfibim2s=
-X-Google-Smtp-Source: AKy350ZkKzpMEQFQALpd3cUpdAhLhNufP4l2LeGvrYz2hiijurncKr1W1aLvwH6jsswb6m6sGIjecPmAmxB6QTrh0pk=
-X-Received: by 2002:a0d:e0c1:0:b0:54c:1405:2ce with SMTP id
- j184-20020a0de0c1000000b0054c140502cemr712660ywe.49.1681995657810; Thu, 20
- Apr 2023 06:00:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1681887790.git.zhoubinbin@loongson.cn> <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
- <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
-In-Reply-To: <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Thu, 20 Apr 2023 21:00:42 +0800
-Message-ID: <CAMpQs4JjHvVOzQz-1Y-q9ut6tWUpakrHeozuwPg0dzoDcUFEGA@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682002311; x=1684594311;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cenhvMgRBJVEyO+DQ1Yk7EeAnoD+Mx3QDGrPvs6dp/U=;
+        b=a+YYF3fjW3sa+MmuSsgOo2C83s1J1ORqccIj9Etj/XxXx0Lj9aOg2vNbbeagpl1wmZ
+         SIoUhhZ9EtJ6N2AM96I5grP4n4ORPnpn0AFx+rVFkDfeE74Vo0y4mb8wgIBrOeHP6Qke
+         Q91T1LuUDSgc3LTR+F4mdmmid9iwQY0oIT6MUfgDcgSvlujOkFvIGq4sNW1h7Lx2FOGK
+         fpplXO1dhbArM2A8Fwp58jkzMLLwAr+3hAlHeCIjubE+Xsn8nO6XwRpsTMBt3VLzSXtG
+         dE6LWZyDqDm1KTKbwNhW4o3/wZlTDPNCQsJu2vcQ4CzPvEUw7PVgrmow1tbLDT2HMWva
+         dUkQ==
+X-Gm-Message-State: AAQBX9dCKIfrWhRuDKdMGezciOjwLgr4zNKWwzw+CDMQpcKUaJH7brcC
+        0ql5M7hTc+JGQGQ6SAiuy8QjS6r6wvk=
+X-Google-Smtp-Source: AKy350YZDYx9Ka0U+LJTenQgM1KG3UW2Yutu07LdZ7q6GZTzBdJRqMrlgBJSIie+uzUyI4FO9iSrYEblhR4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:f807:b0:1a6:3a2e:b731 with SMTP id
+ ix7-20020a170902f80700b001a63a2eb731mr623230plb.1.1682002311424; Thu, 20 Apr
+ 2023 07:51:51 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 07:51:49 -0700
+In-Reply-To: <87y1mm3iqz.ffs@tglx>
+Mime-Version: 1.0
+References: <87r0sh4m7a.ffs@tglx> <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de>
+ <87a5z443g2.ffs@tglx> <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
+ <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com> <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com>
+ <871qkf3qek.ffs@tglx> <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
+Message-ID: <ZEFRhXua6Jxvit1R@google.com>
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        "=?iso-8859-1?Q?J=FCrgen_Gro=DF?=" <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 4:09=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Apr 20, 2023, Thomas Gleixner wrote:
+> On Thu, Apr 20 2023 at 10:23, Andrew Cooper wrote:
+> > On 20/04/2023 9:32 am, Thomas Gleixner wrote:
+> > > On Wed, Apr 19, 2023, Andrew Cooper wrote:
+> > > > This was changed in x2APIC, which made the x2APIC_ID immutable.
 >
-> On 19/04/2023 09:17, Binbin Zhou wrote:
-> > Add Loongson Extended I/O Interrupt controller binding with DT schema
-> > format using json-schema.
+> >> I'm pondering to simply deny parallel mode if x2APIC is not there.
 > >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  .../loongson,eiointc.yaml                     | 74 +++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-control=
-ler/loongson,eiointc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/loo=
-ngson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
-/loongson,eiointc.yaml
-> > new file mode 100644
-> > index 000000000000..4ab4efb061e1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,e=
-iointc.yaml
-> > @@ -0,0 +1,74 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interrupt-controller/loongson,eioin=
-tc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson Extended I/O Interrupt Controller
-> > +
-> > +maintainers:
-> > +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> > +
-> > +description: |
-> > +  This interrupt controller is found on the Loongson-3 family chips an=
-d
-> > +  Loongson-2K series chips and is used to distribute interrupts direct=
-ly to
-> > +  individual cores without forwarding them through the HT's interrupt =
-line.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/interrupt-controller.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - loongson,ls2k0500-eiointc
-> > +      - loongson,ls2k2000-eiointc
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Interrupt enable registers
-> > +      - description: Interrupt status registers
-> > +      - description: Interrupt clear registers
-> > +      - description: Interrupt routing configuration registers
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: enable
-> > +      - const: status
-> > +      - const: clear
-> > +      - const: route
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  '#interrupt-cells':
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-controller
-> > +  - '#interrupt-cells'
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    eiointc: interrupt-controller@1fe11600 {
-> > +      compatible =3D "loongson,ls2k0500-eiointc";
-> > +      reg =3D <0x1fe11600 0x10>,
-> > +            <0x1fe11700 0x10>,
-> > +            <0x1fe11800 0x10>,
-> > +            <0x1fe114c0 0x4>;
->
-> Binding is OK, but are you sure you want to split the address space like
-> this? It looks like two address spaces (enable+clear+status should be
-> one). Are you sure this is correct?
->
-Hi Krzysztof:
+> > I'm not sure if that will help much.
+> 
+> Spoilsport.
 
-These registers are all in the range of chip configuration registers,
-in the case of LS2K0500, which has a base address of 0x1fe10000.
-However, the individual register addresses are not contiguous with
-each other, and most are distributed across modules, so I feel that
-they should be listed in detail as they are used.
+LOL, well let me pile on then.  x2APIC IDs aren't immutable on AMD hardware.  The
+ID is read-only when the CPU is in x2APIC mode, but any changes made to the ID
+while the CPU is in xAPIC mode survive the transition to x2APIC.  From the APM:
 
-Thanks.
-Binbin
+  A value previously written by software to the 8-bit APIC_ID register (MMIO offset
+  30h) is converted by hardware into the appropriate format and reflected into the
+  32-bit x2APIC_ID register (MSR 802h).
 
-> Best regards,
-> Krzysztof
->
->
+FWIW, my observations from testing on bare metal are that the xAPIC ID is effectively
+read-only (writes are dropped) on Intel CPUs as far back as Haswell, while the above
+behavior described in the APM holds true on at least Rome and Milan.
+
+My guess is that Intel's uArch specific behavior of the xAPIC ID being read-only
+was introduced when x2APIC came along, but I didn't test farther back than Haswell.
