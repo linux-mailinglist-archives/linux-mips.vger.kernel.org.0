@@ -2,126 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583B86E97B0
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 16:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988CE6E98A8
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 17:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbjDTOwT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Apr 2023 10:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S232158AbjDTPpm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Apr 2023 11:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbjDTOwN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 10:52:13 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74074ECB
-        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 07:51:51 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1a52677bd54so7578325ad.3
-        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 07:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682002311; x=1684594311;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cenhvMgRBJVEyO+DQ1Yk7EeAnoD+Mx3QDGrPvs6dp/U=;
-        b=ozdQf66WPw8ShRBluz+LMQljss+d3T0PBYjA3jmNDdv//pVrmGXx6L9uusb7fIhJSL
-         LymgWp9X3FbkLAAxceftLeQZn0/6M8JdZmIbsV9oONQVhJAe+e9OODUteXA7bMLvWkmz
-         5ayRkEY6NENxUYGlnGZFkZBlmyRHMXNIOgoLHCbFX3aaDwjuintlWNx5LkJKfs2Sd6PE
-         Ya8JLH6D3Xz61J6mffVksjDGSWXvO9yhMWIRSY/rzCnaTg7svns1MKliwXodcMA+7eb1
-         u30LO7+8+pIMTa1eXTgGdK8wfjlZ/7y7DufflgYGy0ae6b3znNofgHpeyL7dnXNOKs4z
-         yrGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682002311; x=1684594311;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cenhvMgRBJVEyO+DQ1Yk7EeAnoD+Mx3QDGrPvs6dp/U=;
-        b=a+YYF3fjW3sa+MmuSsgOo2C83s1J1ORqccIj9Etj/XxXx0Lj9aOg2vNbbeagpl1wmZ
-         SIoUhhZ9EtJ6N2AM96I5grP4n4ORPnpn0AFx+rVFkDfeE74Vo0y4mb8wgIBrOeHP6Qke
-         Q91T1LuUDSgc3LTR+F4mdmmid9iwQY0oIT6MUfgDcgSvlujOkFvIGq4sNW1h7Lx2FOGK
-         fpplXO1dhbArM2A8Fwp58jkzMLLwAr+3hAlHeCIjubE+Xsn8nO6XwRpsTMBt3VLzSXtG
-         dE6LWZyDqDm1KTKbwNhW4o3/wZlTDPNCQsJu2vcQ4CzPvEUw7PVgrmow1tbLDT2HMWva
-         dUkQ==
-X-Gm-Message-State: AAQBX9dCKIfrWhRuDKdMGezciOjwLgr4zNKWwzw+CDMQpcKUaJH7brcC
-        0ql5M7hTc+JGQGQ6SAiuy8QjS6r6wvk=
-X-Google-Smtp-Source: AKy350YZDYx9Ka0U+LJTenQgM1KG3UW2Yutu07LdZ7q6GZTzBdJRqMrlgBJSIie+uzUyI4FO9iSrYEblhR4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f807:b0:1a6:3a2e:b731 with SMTP id
- ix7-20020a170902f80700b001a63a2eb731mr623230plb.1.1682002311424; Thu, 20 Apr
- 2023 07:51:51 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 07:51:49 -0700
-In-Reply-To: <87y1mm3iqz.ffs@tglx>
-Mime-Version: 1.0
-References: <87r0sh4m7a.ffs@tglx> <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de>
- <87a5z443g2.ffs@tglx> <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
- <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com> <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com>
- <871qkf3qek.ffs@tglx> <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
-Message-ID: <ZEFRhXua6Jxvit1R@google.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        "=?iso-8859-1?Q?J=FCrgen_Gro=DF?=" <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
+        with ESMTP id S231997AbjDTPpm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 11:45:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6A0E2;
+        Thu, 20 Apr 2023 08:45:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C03D643C4;
+        Thu, 20 Apr 2023 15:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C98C433EF;
+        Thu, 20 Apr 2023 15:45:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682005539;
+        bh=RqzPLJRv4Lf5O4O76oH40wEJLKGg6yw+iZXeH5rG4dQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=afAw6WGMaD+BqMxQEw8SvFAUttM3QUu8SyfnKbKVc0VpwAMVB+N9ZG+fVy77/GKHR
+         rWqcib927XQn66zUS5pm7oEzL7wXtC4/rHCD12g9nVU3JqrrKXCH/2uKVShmX5uzxH
+         2PpZpTeSdkjf01sz7bLNUYi1Au7100egrqL99qczKD0PwuS29m0LSDgiZQTaxjsLVz
+         AC6BVl54iiJ96LnB+EMYSozkdcoPIh59DuKFxSnwTwoOkLLaW1UpnEHdaLzRPyKL8+
+         9F6/JK3hVTSkmysyWcVD7EHl3JcsJlM9bdmXr5CVfGxOdDhL/Nv4/hruWBkr8VX2ux
+         ty9OD1smfOtKA==
+Date:   Thu, 20 Apr 2023 08:45:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-mips@vger.kernel.org, llvm@lists.linux.dev,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Phil =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: mips: ERROR: modpost: Section mismatches detected.
+Message-ID: <20230420154537.GA706381@dev-arch.thelio-3990X>
+References: <CA+G9fYt+4e57Gdy6cix=LeNK6XqWoui8du=mZWu=cf8vPYocKw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYt+4e57Gdy6cix=LeNK6XqWoui8du=mZWu=cf8vPYocKw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 20, 2023, Thomas Gleixner wrote:
-> On Thu, Apr 20 2023 at 10:23, Andrew Cooper wrote:
-> > On 20/04/2023 9:32 am, Thomas Gleixner wrote:
-> > > On Wed, Apr 19, 2023, Andrew Cooper wrote:
-> > > > This was changed in x2APIC, which made the x2APIC_ID immutable.
->
-> >> I'm pondering to simply deny parallel mode if x2APIC is not there.
-> >
-> > I'm not sure if that will help much.
+Hi Naresh,
+
+On Thu, Apr 20, 2023 at 04:31:12PM +0530, Naresh Kamboju wrote:
+> Following build failures noticed on Linux next-20230419 for mips.
 > 
-> Spoilsport.
+> Regressions found on mips:
+>  - build/clang-nightly-allnoconfig
+>  - build/clang-16-allnoconfig
+>  - build/clang-16-tinyconfig
+>  - build/clang-nightly-tinyconfig
+> 
+> 
+> arch/mips/kernel/genex.S:520:2: warning: macro defined with named
+> parameters which are not used in macro body, possible positional
+> parameter found in body which will have no effect
+>  .macro __BUILD_verbose nexception
+>  ^
+> WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs
+> (section: .text) -> check_bugs32 (section: .init.text)
+> ERROR: modpost: Section mismatches detected.
+> Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
+> make[2]: *** [scripts/Makefile.modpost:136: vmlinux.symvers] Error 1
+> make[2]: *** Deleting file 'vmlinux.symvers'
+> make[2]: Target '__modpost' not remade because of errors.
+> make[1]: *** [Makefile:1978: modpost] Error 2
 
-LOL, well let me pile on then.  x2APIC IDs aren't immutable on AMD hardware.  The
-ID is read-only when the CPU is in x2APIC mode, but any changes made to the ID
-while the CPU is in xAPIC mode survive the transition to x2APIC.  From the APM:
+Thanks for the report. I sent a patch for this yesterday:
 
-  A value previously written by software to the 8-bit APIC_ID register (MMIO offset
-  30h) is converted by hardware into the appropriate format and reflected into the
-  32-bit x2APIC_ID register (MSR 802h).
+https://lore.kernel.org/20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org/
 
-FWIW, my observations from testing on bare metal are that the xAPIC ID is effectively
-read-only (writes are dropped) on Intel CPUs as far back as Haswell, while the above
-behavior described in the APM holds true on at least Rome and Milan.
-
-My guess is that Intel's uArch specific behavior of the xAPIC ID being read-only
-was introduced when x2APIC came along, but I didn't test farther back than Haswell.
+Cheers,
+Nathan
