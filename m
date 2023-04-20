@@ -2,87 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCBB6E9C47
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 21:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481F36E9C58
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 21:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbjDTTKt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Apr 2023 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S231921AbjDTTQX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Apr 2023 15:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjDTTKo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 15:10:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD731199C;
-        Thu, 20 Apr 2023 12:10:42 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682017840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IP9ZNUD6L+xj0tXvEDGg3l5TK/5q2SwHvuD7zakyePA=;
-        b=WXvOBhQnrav0UZqBuiQZWizGndl7UnBGE4WEv/h2i7ST7IiAdxEZfLwucan2JIMhkBg01P
-        uUN5BsPKTBLEdYA1FDN0qfXk7vkFGDhn+EN/Y4xhpGnXkq59aXs2yqe6OA0c/kkflNeB8x
-        M4nW29KgQHanGvT8ypy6QbmjFrkppakOwQhJdF3RPgMsYdigf/wmMjAH+ekKBmfSsv83A6
-        DDtyepjU24kHPMCyp6lGMu4+T30tWy2hYs4fFm0so009cR1Vp4crko8h7h67DD72woi9E/
-        GajaPaudI4kAd8QwWs3G+B9IQjYV5JonnXf/f2veHQIrSFHnCbuSwV7BCC/AwQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682017840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IP9ZNUD6L+xj0tXvEDGg3l5TK/5q2SwHvuD7zakyePA=;
-        b=N6gei/2hTKux/sJnPsYCf5fnEl3UCTMBtgBN8A/utlew7zJA7EnlFuMmSWaMDFGbNzCBtQ
-        2LmnohpRtSqZ1yAQ==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <56e59a4d-a47f-4bfe-7db5-5f921062ad69@molgen.mpg.de>
-References: <87r0sh4m7a.ffs@tglx>
- <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
- <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
- <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
- <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
- <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
- <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
- <56e59a4d-a47f-4bfe-7db5-5f921062ad69@molgen.mpg.de>
-Date:   Thu, 20 Apr 2023 21:10:38 +0200
-Message-ID: <87sfcu2wup.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        with ESMTP id S231909AbjDTTQW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 15:16:22 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150172705
+        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 12:16:21 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 39F4B32001AB;
+        Thu, 20 Apr 2023 15:16:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 20 Apr 2023 15:16:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1682018177; x=1682104577; bh=pbDnR67Pa+Q38iOPlfqE8mwiOTvo9Nuikap
+        uw/p64Lo=; b=yOrMxfK0a2MmAp31iOViwo4xNBnusHSCzcJTNZ9G4gdCgl7ijs2
+        7lvKSqZ++OlJ1qDsHPFyI2W722/UR3F1s3NjzJ8awMxqv+UhTsWT+3mrEYDh301x
+        s269uN1psuHFWBkFm2wGnXd7XeikdcUgsopxQfXtyU7Z4yrBw9Y/rHIy2sjt3RCV
+        9T/hA1uiuuHTYAAd3FYT2GYX3iRtLBbLJ7B303S175Qeyy2hStToqU2Ea0UJjn2R
+        ae26+isLh7h3EkQYRkBFwf5R0uUChToiigMMMPMDbjfKAK7lTve+7Ojd6rPOWqyr
+        w7wlYnLCaUZL/x3TPyjvKpQ9hKCxHwHuJxw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682018177; x=1682104577; bh=pbDnR67Pa+Q38iOPlfqE8mwiOTvo9Nuikap
+        uw/p64Lo=; b=P/TsETXMgMavuHW6rJV/JsznXP9ynOqTLNdMfU60yqdTaG8qrm7
+        ZwQNlInSzLlTyJ4fTBrpGm4J08t02rc0hdF/08yowoekEtP7JLX7oUHPgbZ0FtAY
+        NXUa3HfG9ckTvnRljzcn1PhDOvYiGKofYY+rAunvAXSlSBrTOAzC9KgGQbngf4Rc
+        6nQwsrwFGoIB3my4iXbcoYX8EPm43jQOn1oTMstteNBn+inwp8iqoKbzuceLCA3k
+        k8+0KntKqSoGP1nxfBXErUhtZgJvbuziL3FIm4W88BIzZy33kzszk8DatBAKVy5P
+        4BqMMSe7QVJ5qZQbQqIBtDuqHo8x6TmP2yA==
+X-ME-Sender: <xms:gY9BZODpYhn7iKaHVujRQm2xZX-wGdgZs-JjGfF4_NyV8BZK3PLeew>
+    <xme:gY9BZIjwss_VUN4PRhwzf8vRJZLKucc_1hcz5g3XVJNVcjLpXF6UjtvhTSLJyyudH
+    kQ9Sfr9C2-rVSfIl3I>
+X-ME-Received: <xmr:gY9BZBnyCtjfA3rYZBIeleXdk4-XEdZvVl5liGlwbk4Axad1Vl4zMTbtokTkj4tMxCWE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddgudefgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
+    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeduleefueeggfeitdfgkeeukeetjedvveelieeviedvueek
+    ueeljefhleeugefhudenucffohhmrghinhepghhithhhuhgsrdgtohhmpdifihhkihhpvg
+    guihgrrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:gY9BZMz2GvQUPnYZAWqMAHMPJrfiX18TGWIu_l2vhq4eQ5dJ4sJMhA>
+    <xmx:gY9BZDQhitFUU3BcJPfT_yFnl8vienSEbIBhJkCMoN8UCNP3p_Cnlg>
+    <xmx:gY9BZHZ3e4b8k93gEYDBGu8DWJhbJWLZmXgyWlvncNDa2ky1KfXL-w>
+    <xmx:gY9BZCGH3tysjKbQpcNzsdsOpQ4MAU8SjdYsKrfiuoM5lmkQUezKZQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 20 Apr 2023 15:16:16 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if
+ unsupported
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <CAKwvOdkZA6DVCbgF=P1xZcHiyGFTnYvGReJZTzVnmeZdsH0L3w@mail.gmail.com>
+Date:   Thu, 20 Apr 2023 20:16:05 +0100
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5EBF3474-13B4-4920-AD14-B3F258303DC4@flygoat.com>
+References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
+ <20230414080701.15503-7-jiaxun.yang@flygoat.com>
+ <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
+ <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
+ <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
+ <20230419221500.GA17797@alpha.franken.de>
+ <CAKwvOdkZA6DVCbgF=P1xZcHiyGFTnYvGReJZTzVnmeZdsH0L3w@mail.gmail.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,227 +97,71 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 20 2023 at 18:47, Paul Menzel wrote:
-> Am 20.04.23 um 17:57 schrieb Thomas Gleixner:
-> I quickly applied it on top of your branch, but I am getting:
 
-As I said it was untested. I was traveling and did not have access to a
-machine to even build it completely. Fixed up and tested version below.
 
-Thanks,
+> 2023=E5=B9=B44=E6=9C=8820=E6=97=A5 17:32=EF=BC=8CNick Desaulniers =
+<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Wed, Apr 19, 2023 at 3:15=E2=80=AFPM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+>>=20
+>> On Wed, Apr 19, 2023 at 02:35:02PM -0700, Nick Desaulniers wrote:
+>>> On Wed, Apr 19, 2023 at 9:50=E2=80=AFAM Jiaxun Yang =
+<jiaxun.yang@flygoat.com> wrote:
+>>>>=20
+>>>>=20
+>>>>=20
+>>>>> 2023=E5=B9=B44=E6=9C=8818=E6=97=A5 21:07=EF=BC=8CNick Desaulniers =
+<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
+>>>>>=20
+>>>>> On Fri, Apr 14, 2023 at 1:07=E2=80=AFAM Jiaxun Yang =
+<jiaxun.yang@flygoat.com> wrote:
+>>>>>>=20
+>>>>>> LLVM does not implement some of -march options. However those =
+options
+>>>>>> are not mandatory for kernel to build for those CPUs.
+>>>>>>=20
+>>>>>> Fallback -march CFLAG to ISA level if unsupported by toolchain so
+>>>>>> we can get those kernel to build with LLVM.
+>>>>>>=20
+>>>>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1544
+>>>>>> Reported-by: Nathan Chancellor <nathan@kernel.org>
+>>>>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>>>>>=20
+>>>>> Thanks for the patch! Maybe it's more obvious to folks who work on
+>>>>> mips, but how did you determine that say `p5600` is `mips32r5` or
+>>>>> `r10000` is `mips4`?
+>>>>=20
+>>>> Wikipedia [1] should fit the purpose.
+>>>>=20
+>>>> [1]: =
+https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
+>>>=20
+>>> Mostly! Though I was not able to verify:
+>>> - p5600
+>>=20
+>> mips32r5
+>>=20
+>>> - r5500
+>>=20
+>> mips4
+>>=20
+>>> - rm5200
+>>=20
+>> mips4
+>>=20
+>>> - sb1
+>>=20
+>> mips64r1
+>=20
+> Thomas, thanks for reviewing datasheets to verify this.
+>=20
+> Jiaxun, for SB1, you have cc-option fall back to -march=3Dmips4, does
+> that need to be -march=3Dmips64r1?
 
-        tglx
----
---- a/arch/x86/include/asm/apicdef.h
-+++ b/arch/x86/include/asm/apicdef.h
-@@ -138,7 +138,8 @@
- #define		APIC_EILVT_MASKED	(1 << 16)
- 
- #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
--#define APIC_BASE_MSR	0x800
-+#define APIC_BASE_MSR		0x800
-+#define APIC_X2APIC_ID_MSR	0x802
- #define XAPIC_ENABLE	(1UL << 11)
- #define X2APIC_ENABLE	(1UL << 10)
- 
-@@ -162,6 +163,7 @@
- #define APIC_CPUID(apicid)	((apicid) & XAPIC_DEST_CPUS_MASK)
- #define NUM_APIC_CLUSTERS	((BAD_APICID + 1) >> XAPIC_DEST_CPUS_SHIFT)
- 
-+#ifndef __ASSEMBLY__
- /*
-  * the local APIC register structure, memory mapped. Not terribly well
-  * tested, but we might eventually use this one in the future - the
-@@ -435,4 +437,5 @@ enum apic_delivery_modes {
- 	APIC_DELIVERY_MODE_EXTINT	= 7,
- };
- 
-+#endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_APICDEF_H */
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -195,14 +195,13 @@ extern void nmi_selftest(void);
- #endif
- 
- extern unsigned int smpboot_control;
-+extern unsigned long apic_mmio_base;
- 
- #endif /* !__ASSEMBLY__ */
- 
- /* Control bits for startup_64 */
--#define STARTUP_APICID_CPUID_1F 0x80000000
--#define STARTUP_APICID_CPUID_0B 0x40000000
--#define STARTUP_APICID_CPUID_01 0x20000000
--#define STARTUP_APICID_SEV_ES	0x10000000
-+#define STARTUP_READ_APICID	0x80000000
-+#define STARTUP_APICID_SEV_ES	0x40000000
- 
- /* Top 8 bits are reserved for control */
- #define STARTUP_PARALLEL_MASK	0xFF000000
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -101,6 +101,8 @@ static int apic_extnmi __ro_after_init =
-  */
- static bool virt_ext_dest_id __ro_after_init;
- 
-+unsigned long apic_mmio_base __ro_after_init;
-+
- /*
-  * Map cpu index to physical APIC ID
-  */
-@@ -2164,6 +2166,7 @@ void __init register_lapic_address(unsig
- 
- 	if (!x2apic_mode) {
- 		set_fixmap_nocache(FIX_APIC_BASE, address);
-+		apic_mmio_base = APIC_BASE;
- 		apic_printk(APIC_VERBOSE, "mapped APIC to %16lx (%16lx)\n",
- 			    APIC_BASE, address);
- 	}
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -24,8 +24,10 @@
- #include "../entry/calling.h"
- #include <asm/export.h>
- #include <asm/nospec-branch.h>
-+#include <asm/apicdef.h>
- #include <asm/fixmap.h>
- #include <asm/smp.h>
-+
- #include <asm/sev-common.h>
- 
- /*
-@@ -237,37 +239,25 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 
- #ifdef CONFIG_SMP
- 	/*
--	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
--	 * used to look up the CPU number.  For booting a single CPU, the
--	 * CPU number is encoded in smpboot_control.
-+	 * For parallel boot, the APIC ID is either retrieved the APIC or
-+	 * from CPUID, and then used to look up the CPU number.
-+	 * For booting a single CPU, the CPU number is encoded in
-+	 * smpboot_control.
- 	 *
--	 * Bit 31	STARTUP_APICID_CPUID_1F flag (use CPUID 0x1f)
--	 * Bit 30	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
--	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
--	 * Bit 28	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
-+	 * Bit 31	STARTUP_APICID_READ (Read APICID from APIC)
-+	 * Bit 30	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
- 	 * Bit 0-23	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
- 	movl	smpboot_control(%rip), %ecx
-+	testl	$STARTUP_READ_APICID, %ecx
-+	jnz	.Lread_apicid
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	testl	$STARTUP_APICID_SEV_ES, %ecx
- 	jnz	.Luse_sev_cpuid_0b
- #endif
--	testl	$STARTUP_APICID_CPUID_1F, %ecx
--	jnz	.Luse_cpuid_1f
--	testl	$STARTUP_APICID_CPUID_0B, %ecx
--	jnz	.Luse_cpuid_0b
--	testl	$STARTUP_APICID_CPUID_01, %ecx
--	jnz	.Luse_cpuid_01
- 	andl	$(~STARTUP_PARALLEL_MASK), %ecx
- 	jmp	.Lsetup_cpu
- 
--.Luse_cpuid_01:
--	mov	$0x01, %eax
--	cpuid
--	mov	%ebx, %edx
--	shr	$24, %edx
--	jmp	.Lsetup_AP
--
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- .Luse_sev_cpuid_0b:
- 	/* Set the GHCB MSR to request CPUID 0x0B_EDX */
-@@ -292,24 +282,30 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	jmp	.Lsetup_AP
- #endif
- 
--.Luse_cpuid_0b:
--	mov	$0x0B, %eax
--	xorl	%ecx, %ecx
--	cpuid
-+.Lread_apicid:
-+	mov	$MSR_IA32_APICBASE, %ecx
-+	rdmsr
-+	testl	$X2APIC_ENABLE, %eax
-+	jnz	.Lread_apicid_msr
-+
-+	/* Read the APIC ID from the fix-mapped MMIO space. */
-+	movq	apic_mmio_base(%rip), %rcx
-+	addq	$APIC_ID, %rcx
-+	movl	(%rcx), %eax
-+	shr	$24, %eax
- 	jmp	.Lsetup_AP
- 
--.Luse_cpuid_1f:
--	mov	$0x1f, %eax
--	xorl	%ecx, %ecx
--	cpuid
-+.Lread_apicid_msr:
-+	mov	$APIC_X2APIC_ID_MSR, %ecx
-+	rdmsr
- 
- .Lsetup_AP:
--	/* EDX contains the APIC ID of the current CPU */
-+	/* EAX contains the APIC ID of the current CPU */
- 	xorq	%rcx, %rcx
- 	leaq	cpuid_to_apicid(%rip), %rbx
- 
- .Lfind_cpunr:
--	cmpl	(%rbx,%rcx,4), %edx
-+	cmpl	(%rbx,%rcx,4), %eax
- 	jz	.Lsetup_cpu
- 	inc	%ecx
- #ifdef CONFIG_FORCE_NR_CPUS
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1253,41 +1253,22 @@ bool __init arch_cpuhp_init_parallel_bri
- 		return false;
- 	}
- 
--	/* Encrypted guests require special CPUID handling. */
-+	/* Encrypted guests require special handling. */
- 	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
- 		switch (cc_get_vendor()) {
- 		case CC_VENDOR_AMD:
- 			ctrl = STARTUP_APICID_SEV_ES;
- 			if (topology_extended_leaf == 0x0b)
--				goto setup;
-+				break;
- 			fallthrough;
- 		default:
- 			pr_info("Parallel CPU startup disabled due to guest state encryption\n");
- 			return false;
- 		}
-+	} else {
-+		ctrl = STARTUP_READ_APICID;
- 	}
- 
--	switch (topology_extended_leaf) {
--	case 0x0b:
--		ctrl = STARTUP_APICID_CPUID_0B;
--		break;
--	case 0x1f:
--		ctrl = STARTUP_APICID_CPUID_1F;
--		break;
--	case 0x00:
--		/* For !x2APIC mode 8 bits from leaf 0x01 are sufficient. */
--		if (!x2apic_mode) {
--			ctrl = STARTUP_APICID_CPUID_01;
--			break;
--		}
--		fallthrough;
--	default:
--		pr_info("Parallel CPU startup disabled. Unsupported topology leaf %u\n",
--			topology_extended_leaf);
--		return false;
--	}
--
--setup:
- 	pr_debug("Parallel CPU startup enabled: 0x%08x\n", ctrl);
- 	smpboot_control = ctrl;
- 	return true;
+Yep, my bad, was reading the manual wrong.
+
+Will fix in next rev.
+
+Thanks.
+- Jiaxun=
