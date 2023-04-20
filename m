@@ -2,66 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFC96E99CA
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 18:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F6E6E99D6
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Apr 2023 18:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbjDTQnd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Apr 2023 12:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S229469AbjDTQrl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Apr 2023 12:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbjDTQn2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 12:43:28 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8702A3AA8
-        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 09:43:22 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-246bb512038so855732a91.1
-        for <linux-mips@vger.kernel.org>; Thu, 20 Apr 2023 09:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682009002; x=1684601002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nw8O7x8OBHvdA7jKPbAVli/sCidSbiqC6ilM4PlkgJI=;
-        b=E+GaHcMPs/BVf7dMFIuuMRiXeb4EQQYS32sQ13m5fk3INFlcsddRBsE4QmCiGn6QCA
-         WF+oTViOSCkP7nWkzfo4eSb7rbAv2jOHez5by7mRMtnVqraCtdSG/f5jTg+OxpfNMF6c
-         /gD6RH+Bm4z2ht2tNjdiv8yBDpnimbLlcMQ/h0arKyS5hQeAXA2PHq0viWc3YR4bC6Y4
-         oE7JNbPHM63JxBsjhcip/K2nNX56PL4NX7VWdbonuAtTFfJzcJZZNY5tjQzFJEYVVC2/
-         bnZHKXl7KDJNfWkhUkrw0lZXwWm216b+heeTy/LpMVhbyhOwdi9rM3FiraqOJCDYhs/J
-         aueg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682009002; x=1684601002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nw8O7x8OBHvdA7jKPbAVli/sCidSbiqC6ilM4PlkgJI=;
-        b=i7u7S2/pnUrqU0ZiWG2jbx3jeN+UXK8p2SMa0iYwBIaZeh3PNu6d/cCfE7OtWqVA82
-         nSAlQRmGF9KhTG7h5cAfXnOW27hkFtqahET/+O8wFwK5GzS6jDHL4V6+1liFfRoDzqIT
-         /f/QrqaRO1AgBCHPI4zV0NDVdRFFyKgb2f00EiJ3ugI1Cx4vGOuN034fS1pR7gaQ27Kz
-         j3UWrRNDUe8XyEJYfXQfTKh0EdohAOFxkjBMGvPAL85Ul6qNHtvJoBp5Ze1tkEDgZXdc
-         kpplzfYNBZfXHE1cz/4gmI6sokiRr8hebPRs27WjutQZNXLhpdS9OopWcigKxFSP4+PE
-         eWiQ==
-X-Gm-Message-State: AAQBX9cT6RrggDLDy7qbiTqlABjGWRFquDKHJJAPCsTD5dOSySWsy5zM
-        vqCdpsaPYLOsiLP6PzOUag0H/vYF5vb3pOqMlaMqvnpZAr6nfU1LyFBowA==
-X-Google-Smtp-Source: AKy350aYaiEJ2+SbkJJWKlVEoTm7/kk84c8/mm9rImUU4UtKr4jMsAG2S808vlu3DcB7fa/DASYoXVsJg8O/fZNl2Kw=
-X-Received: by 2002:a17:90a:de02:b0:247:2d9d:4722 with SMTP id
- m2-20020a17090ade0200b002472d9d4722mr2537007pjv.0.1682009001452; Thu, 20 Apr
- 2023 09:43:21 -0700 (PDT)
+        with ESMTP id S229447AbjDTQrj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Apr 2023 12:47:39 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EECD210A;
+        Thu, 20 Apr 2023 09:47:36 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aee70.dynamic.kabel-deutschland.de [95.90.238.112])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C4A9E61E4052B;
+        Thu, 20 Apr 2023 18:47:32 +0200 (CEST)
+Message-ID: <56e59a4d-a47f-4bfe-7db5-5f921062ad69@molgen.mpg.de>
+Date:   Thu, 20 Apr 2023 18:47:31 +0200
 MIME-Version: 1.0
-References: <20230409104309.13887-1-jiaxun.yang@flygoat.com> <20230409104309.13887-2-jiaxun.yang@flygoat.com>
-In-Reply-To: <20230409104309.13887-2-jiaxun.yang@flygoat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 20 Apr 2023 09:43:06 -0700
-Message-ID: <CAKwvOdmRobqFrnZ70ODzdMfp4A-Br0mHhRkEnmTrkyk7CmiERg@mail.gmail.com>
-Subject: Re: [PATCH 1/8] MIPS: Replace assembly isa level directives with macros
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, llvm@lists.linux.dev,
-        tsbogend@alpha.franken.de, nathan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+References: <87r0sh4m7a.ffs@tglx>
+ <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
+ <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
+ <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
+ <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
+ <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
+ <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <87v8hq35sk.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,947 +81,280 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 9, 2023 at 3:43=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.com=
-> wrote:
->
-> There are tons of .set assembly isa level directives in tree
-> to set current isa level to a higher level to enable some features.
->
-> However as nowadays MIPS is shuffling around opcodes, a single ISA
+Dear Thomas,
 
-What do you mean by "shuffling around opcodes?"
 
-> level setting may result wrong opcode in binary. We had MIPS_ISA_LEVEL
-> macros to determine most appropriate superset of ISA level, just do a
-> tree wide replacement to take advantage of those macros.
-
-Hi Jiaxun,
-Thanks for the patch! Do you have more info about how this change
-relates to LLVM? Is clang having a hard time assembling some of these
-files with the given `.set arch=3D` directives without this patch?
-Seems perhaps related to just {mips32r5, mips64r5} perhaps?
-
-More comments below, inline.
-
->
-> Mapping:
-> arch=3Dr4000 -> MIPS_ISA_ARCH_LEVEL
-> {mips1, mips3, mips32r2, mips64r2} -> MIPS_ISA_LEVEL
-> {mips32r5, mips64r5} -> Special case for VZ, mips64r5 if target ISA
->         is lower than R5, otherwise MIPS_ISA_LEVEL
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Am 20.04.23 um 17:57 schrieb Thomas Gleixner:
+> On Thu, Apr 20 2023 at 07:51, Sean Christopherson wrote:
+>> On Thu, Apr 20, 2023, Thomas Gleixner wrote:
+>>> On Thu, Apr 20 2023 at 10:23, Andrew Cooper wrote:
+>>>> On 20/04/2023 9:32 am, Thomas Gleixner wrote:
+>>>>> On Wed, Apr 19, 2023, Andrew Cooper wrote:
+>>>>>> This was changed in x2APIC, which made the x2APIC_ID immutable.
+>>>
+>>>>> I'm pondering to simply deny parallel mode if x2APIC is not there.
+>>>>
+>>>> I'm not sure if that will help much.
+>>>
+>>> Spoilsport.
+>>
+>> LOL, well let me pile on then.  x2APIC IDs aren't immutable on AMD hardware.  The
+>> ID is read-only when the CPU is in x2APIC mode, but any changes made to the ID
+>> while the CPU is in xAPIC mode survive the transition to x2APIC.  From the APM:
+>>
+>>    A value previously written by software to the 8-bit APIC_ID register (MMIO offset
+>>    30h) is converted by hardware into the appropriate format and reflected into the
+>>    32-bit x2APIC_ID register (MSR 802h).
+>>
+>> FWIW, my observations from testing on bare metal are that the xAPIC ID is effectively
+>> read-only (writes are dropped) on Intel CPUs as far back as Haswell, while the above
+>> behavior described in the APM holds true on at least Rome and Milan.
+>>
+>> My guess is that Intel's uArch specific behavior of the xAPIC ID being read-only
+>> was introduced when x2APIC came along, but I didn't test farther back than Haswell.
+> 
+> I'm not so worried about modern hardware. The horrorshow is the old muck
+> as demonstrated and of course there is virt :)
+> 
+> Something like the completely untested below should just work whatever
+> APIC ID the BIOS decided to dice.
+> 
+> That might just work on SEV too without that GHCB muck, but what do I
+> know.
+> 
+> Thanks,
+> 
+>          tglx
 > ---
->  arch/mips/alchemy/common/sleeper.S |  6 ++--
->  arch/mips/include/asm/asmmacro.h   | 32 ++++++++++----------
->  arch/mips/include/asm/futex.h      |  8 ++---
->  arch/mips/include/asm/hazards.h    |  2 +-
->  arch/mips/include/asm/io.h         |  4 +--
->  arch/mips/include/asm/mipsmtregs.h | 18 ++++++------
->  arch/mips/include/asm/mipsregs.h   | 47 +++++++++++++++++-------------
->  arch/mips/include/asm/stackframe.h |  2 +-
->  arch/mips/kernel/bmips_vec.S       |  4 +--
->  arch/mips/kernel/csrc-r4k.c        |  2 +-
->  arch/mips/kernel/genex.S           |  8 ++---
->  arch/mips/kernel/idle.c            |  6 ++--
->  arch/mips/kernel/r4k_fpu.S         |  4 +--
->  arch/mips/kernel/syscall.c         |  2 +-
->  arch/mips/lantiq/clk.c             |  2 +-
->  arch/mips/lib/csum_partial.S       |  5 ++--
->  arch/mips/mm/c-r4k.c               |  2 +-
->  arch/mips/mm/cex-oct.S             |  2 +-
->  arch/mips/mm/sc-ip22.c             |  6 ++--
->  19 files changed, 85 insertions(+), 77 deletions(-)
->
-> diff --git a/arch/mips/alchemy/common/sleeper.S b/arch/mips/alchemy/commo=
-n/sleeper.S
-> index 13586d224314..e19f20223aac 100644
-> --- a/arch/mips/alchemy/common/sleeper.S
-> +++ b/arch/mips/alchemy/common/sleeper.S
-> @@ -91,7 +91,7 @@ LEAF(alchemy_sleep_au1000)
->
->         /* cache following instructions, as memory gets put to sleep */
->         la      t0, 1f
-> -       .set    arch=3Dr4000
-> +       .set    MIPS_ISA_ARCH_LEVEL_RAW
->         cache   0x14, 0(t0)
->         cache   0x14, 32(t0)
->         cache   0x14, 64(t0)
-> @@ -117,7 +117,7 @@ LEAF(alchemy_sleep_au1550)
->
->         /* cache following instructions, as memory gets put to sleep */
->         la      t0, 1f
-> -       .set    arch=3Dr4000
-> +       .set    MIPS_ISA_ARCH_LEVEL_RAW
->         cache   0x14, 0(t0)
->         cache   0x14, 32(t0)
->         cache   0x14, 64(t0)
-> @@ -159,7 +159,7 @@ LEAF(alchemy_sleep_au1300)
->         la      t1, 4f
->         subu    t2, t1, t0
->
-> -       .set    arch=3Dr4000
-> +       .set    MIPS_ISA_ARCH_LEVEL_RAW
->
->  1:     cache   0x14, 0(t0)
->         subu    t2, t2, 32
-> diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asm=
-macro.h
-> index 74c2dedc55b4..2491a6c68390 100644
-> --- a/arch/mips/include/asm/asmmacro.h
-> +++ b/arch/mips/include/asm/asmmacro.h
-> @@ -107,7 +107,7 @@
->
->         .macro  fpu_save_16odd thread
->         .set    push
-> -       .set    mips64r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    hardfloat
->         sdc1    $f1,  THREAD_FPR1(\thread)
-> @@ -166,7 +166,7 @@
->
->         .macro  fpu_restore_16odd thread
->         .set    push
-> -       .set    mips64r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    hardfloat
->         ldc1    $f1,  THREAD_FPR1(\thread)
-> @@ -242,7 +242,7 @@
->  #ifdef CONFIG_AS_HAS_MSA
->         .macro  _cfcmsa rd, cs
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         cfcmsa  \rd, $\cs
-> @@ -251,7 +251,7 @@
->
->         .macro  _ctcmsa cd, rs
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         ctcmsa  $\cd, \rs
-> @@ -260,7 +260,7 @@
->
->         .macro  ld_b    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         ld.b    $w\wd, \off(\base)
-> @@ -269,7 +269,7 @@
->
->         .macro  ld_h    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         ld.h    $w\wd, \off(\base)
-> @@ -278,7 +278,7 @@
->
->         .macro  ld_w    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         ld.w    $w\wd, \off(\base)
-> @@ -287,7 +287,7 @@
->
->         .macro  ld_d    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         ld.d    $w\wd, \off(\base)
-> @@ -296,7 +296,7 @@
->
->         .macro  st_b    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         st.b    $w\wd, \off(\base)
-> @@ -305,7 +305,7 @@
->
->         .macro  st_h    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         st.h    $w\wd, \off(\base)
-> @@ -314,7 +314,7 @@
->
->         .macro  st_w    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         st.w    $w\wd, \off(\base)
-> @@ -323,7 +323,7 @@
->
->         .macro  st_d    wd, off, base
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         st.d    $w\wd, \off(\base)
-> @@ -332,7 +332,7 @@
->
->         .macro  copy_s_w        ws, n
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         copy_s.w $1, $w\ws[\n]
-> @@ -341,7 +341,7 @@
->
->         .macro  copy_s_d        ws, n
->         .set    push
-> -       .set    mips64r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         copy_s.d $1, $w\ws[\n]
-> @@ -350,7 +350,7 @@
->
->         .macro  insert_w        wd, n
->         .set    push
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         insert.w $w\wd[\n], $1
-> @@ -359,7 +359,7 @@
->
->         .macro  insert_d        wd, n
->         .set    push
-> -       .set    mips64r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         .set    msa
->         insert.d $w\wd[\n], $1
-> diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.=
-h
-> index 05832eb240fa..2107e536a308 100644
-> --- a/arch/mips/include/asm/futex.h
-> +++ b/arch/mips/include/asm/futex.h
-> @@ -29,11 +29,11 @@
->                 "       .set    push                            \n"     \
->                 "       .set    noat                            \n"     \
->                 "       .set    push                            \n"     \
-> -               "       .set    arch=3Dr4000                      \n"    =
- \
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"           \n"     \
->                 "1:     ll      %1, %4  # __futex_atomic_op     \n"     \
->                 "       .set    pop                             \n"     \
->                 "       " insn  "                               \n"     \
-> -               "       .set    arch=3Dr4000                      \n"    =
- \
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"           \n"     \
->                 "2:     sc      $1, %2                          \n"     \
->                 "       beqzl   $1, 1b                          \n"     \
->                 __stringify(__WEAK_LLSC_MB) "                   \n"     \
-> @@ -144,12 +144,12 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user=
- *uaddr,
->                 "       .set    push                                    \=
-n"
->                 "       .set    noat                                    \=
-n"
->                 "       .set    push                                    \=
-n"
-> -               "       .set    arch=3Dr4000                             =
- \n"
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"   \n"
->                 "1:     ll      %1, %3                                  \=
-n"
->                 "       bne     %1, %z4, 3f                             \=
-n"
->                 "       .set    pop                                     \=
-n"
->                 "       move    $1, %z5                                 \=
-n"
-> -               "       .set    arch=3Dr4000                             =
- \n"
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"   \n"
->                 "2:     sc      $1, %2                                  \=
-n"
->                 "       beqzl   $1, 1b                                  \=
-n"
->                 __stringify(__WEAK_LLSC_MB) "                           \=
-n"
-> diff --git a/arch/mips/include/asm/hazards.h b/arch/mips/include/asm/haza=
-rds.h
-> index cb16be93b048..ca18c66530e8 100644
-> --- a/arch/mips/include/asm/hazards.h
-> +++ b/arch/mips/include/asm/hazards.h
-> @@ -144,7 +144,7 @@ do {                                                 =
-                       \
->                                                                         \
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
-> -       "       .set    mips64r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         "       dla     %0, 1f                                  \n"     \
->         "       jr.hb   %0                                      \n"     \
->         "       .set    pop                                     \n"     \
-> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-> index cc28d207a061..e2ec7ec3dc20 100644
-> --- a/arch/mips/include/asm/io.h
-> +++ b/arch/mips/include/asm/io.h
-> @@ -243,7 +243,7 @@ static inline void pfx##write##bwlq(type val,        =
-                       \
->                         local_irq_save(__flags);                        \
->                 __asm__ __volatile__(                                   \
->                         ".set   push"           "\t\t# __writeq""\n\t"  \
-> -                       ".set   arch=3Dr4000"                     "\n\t" =
- \
-> +                       ".set   "MIPS_ISA_ARCH_LEVEL            "\n\t"  \
->                         "dsll32 %L0, %L0, 0"                    "\n\t"  \
->                         "dsrl32 %L0, %L0, 0"                    "\n\t"  \
->                         "dsll32 %M0, %M0, 0"                    "\n\t"  \
-> @@ -277,7 +277,7 @@ static inline type pfx##read##bwlq(const volatile voi=
-d __iomem *mem)        \
->                         local_irq_save(__flags);                        \
->                 __asm__ __volatile__(                                   \
->                         ".set   push"           "\t\t# __readq" "\n\t"  \
-> -                       ".set   arch=3Dr4000"                     "\n\t" =
- \
-> +                       ".set   "MIPS_ISA_ARCH_LEVEL            "\n\t"  \
->                         "ld     %L0, %1"                        "\n\t"  \
->                         "dsra32 %M0, %L0, 0"                    "\n\t"  \
->                         "sll    %L0, %L0, 0"                    "\n\t"  \
-> diff --git a/arch/mips/include/asm/mipsmtregs.h b/arch/mips/include/asm/m=
-ipsmtregs.h
-> index a8d67c2f4f7b..b6dea86b1b82 100644
-> --- a/arch/mips/include/asm/mipsmtregs.h
-> +++ b/arch/mips/include/asm/mipsmtregs.h
-> @@ -197,7 +197,7 @@ static inline unsigned int dvpe(void)
->         "       .set    push                                            \=
-n"
->         "       .set    noreorder                                       \=
-n"
->         "       .set    noat                                            \=
-n"
-> -       "       .set    mips32r2                                        \=
-n"
-> +       "       .set    "MIPS_ISA_LEVEL"                                \=
-n"
->         "       .word   0x41610001              # dvpe $1               \=
-n"
->         "       move    %0, $1                                          \=
-n"
->         "       ehb                                                     \=
-n"
-> @@ -215,7 +215,7 @@ static inline void __raw_evpe(void)
->         "       .set    push                                            \=
-n"
->         "       .set    noreorder                                       \=
-n"
->         "       .set    noat                                            \=
-n"
-> -       "       .set    mips32r2                                        \=
-n"
-> +       "       .set    "MIPS_ISA_LEVEL"                                \=
-n"
->         "       .word   0x41600021              # evpe                  \=
-n"
->         "       ehb                                                     \=
-n"
->         "       .set    pop                                             \=
-n");
-> @@ -238,7 +238,7 @@ static inline unsigned int dmt(void)
->
->         __asm__ __volatile__(
->         "       .set    push                                            \=
-n"
-> -       "       .set    mips32r2                                        \=
-n"
-> +       "       .set    "MIPS_ISA_LEVEL"                                \=
-n"
->         "       .set    noat                                            \=
-n"
->         "       .word   0x41610BC1                      # dmt $1        \=
-n"
->         "       ehb                                                     \=
-n"
-> @@ -256,7 +256,7 @@ static inline void __raw_emt(void)
->         __asm__ __volatile__(
->         "       .set    push                                            \=
-n"
->         "       .set    noreorder                                       \=
-n"
-> -       "       .set    mips32r2                                        \=
-n"
-> +       "       .set    "MIPS_ISA_LEVEL"                                \=
-n"
->         "       .word   0x41600be1                      # emt           \=
-n"
->         "       ehb                                                     \=
-n"
->         "       .set    pop");
-> @@ -277,7 +277,7 @@ static inline void ehb(void)
->  {
->         __asm__ __volatile__(
->         "       .set    push                                    \n"
-> -       "       .set    mips32r2                                \n"
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"
->         "       ehb                                             \n"
->         "       .set    pop                                     \n");
->  }
-> @@ -288,7 +288,7 @@ static inline void ehb(void)
->                                                                         \
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
-> -       "       .set    mips32r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         "       .set    noat                                    \n"     \
->         "       # mftc0 $1, $" #rt ", " #sel "                  \n"     \
->         "       .word   0x41000800 | (" #rt " << 16) | " #sel " \n"     \
-> @@ -306,7 +306,7 @@ static inline void ehb(void)
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
->         "       .set    noat                                    \n"     \
-> -       "       .set    mips32r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         "       # mftgpr $1," #rt "                             \n"     \
->         "       .word   0x41000820 | (" #rt " << 16)            \n"     \
->         "       move    %0, $1                                  \n"     \
-> @@ -331,7 +331,7 @@ static inline void ehb(void)
->  do {                                                                   \
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
-> -       "       .set    mips32r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         "       .set    noat                                    \n"     \
->         "       move    $1, %0                                  \n"     \
->         "       # mttgpr $1, " #rd "                            \n"     \
-> @@ -344,7 +344,7 @@ do {                                                 =
-                       \
->  ({                                                                     \
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
-> -       "       .set    mips32r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         "       .set    noat                                    \n"     \
->         "       move    $1, %0                                  \n"     \
->         "       # mttc0 %0," #rd ", " #sel "                    \n"     \
-> diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mip=
-sregs.h
-> index 8f0ebc399338..9d928b952abf 100644
-> --- a/arch/mips/include/asm/mipsregs.h
-> +++ b/arch/mips/include/asm/mipsregs.h
-> @@ -1421,7 +1421,7 @@ do {                                               =
-               \
->         else                                                            \
->                 __asm__ vol(                                            \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips32\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "mfc0\t%0, " #source ", " #sel "\n\t"           \
->                         ".set\tpop\n\t"                                 \
->                         : "=3Dr" (__res));                               =
- \
-> @@ -1435,14 +1435,14 @@ do {                                             =
-               \
->         else if (sel =3D=3D 0)                                           =
-   \
->                 __asm__ vol(                                            \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips3\n\t"                               \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dmfc0\t%0, " #source "\n\t"                    \
->                         ".set\tpop"                                     \
->                         : "=3Dr" (__res));                               =
- \
->         else                                                            \
->                 __asm__ vol(                                            \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips64\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dmfc0\t%0, " #source ", " #sel "\n\t"          \
->                         ".set\tpop"                                     \
->                         : "=3Dr" (__res));                               =
- \
-> @@ -1470,7 +1470,7 @@ do {                                               =
-                       \
->         else                                                            \
->                 __asm__ __volatile__(                                   \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips32\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "mtc0\t%z0, " #register ", " #sel "\n\t"        \
->                         ".set\tpop"                                     \
->                         : : "Jr" ((unsigned int)(value)));              \
-> @@ -1483,14 +1483,14 @@ do {                                             =
-                       \
->         else if (sel =3D=3D 0)                                           =
-   \
->                 __asm__ __volatile__(                                   \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips3\n\t"                               \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dmtc0\t%z0, " #register "\n\t"                 \
->                         ".set\tpop"                                     \
->                         : : "Jr" (value));                              \
->         else                                                            \
->                 __asm__ __volatile__(                                   \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips64\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dmtc0\t%z0, " #register ", " #sel "\n\t"       \
->                         ".set\tpop"                                     \
->                         : : "Jr" (value));                              \
-> @@ -1545,7 +1545,7 @@ do {                                               =
-                       \
->         if (sel =3D=3D 0)                                                =
-   \
->                 __asm__ vol(                                            \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips64\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dmfc0\t%L0, " #source "\n\t"                   \
->                         "dsra\t%M0, %L0, 32\n\t"                        \
->                         "sll\t%L0, %L0, 0\n\t"                          \
-> @@ -1554,7 +1554,7 @@ do {                                               =
-                       \
->         else                                                            \
->                 __asm__ vol(                                            \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips64\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dmfc0\t%L0, " #source ", " #sel "\n\t"         \
->                         "dsra\t%M0, %L0, 32\n\t"                        \
->                         "sll\t%L0, %L0, 0\n\t"                          \
-> @@ -1582,7 +1582,7 @@ do {                                               =
-                       \
->         else if (sel =3D=3D 0)                                           =
-   \
->                 __asm__ __volatile__(                                   \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips64\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dsll\t%L0, %L0, 32\n\t"                        \
->                         "dsrl\t%L0, %L0, 32\n\t"                        \
->                         "dsll\t%M0, %M0, 32\n\t"                        \
-> @@ -1593,7 +1593,7 @@ do {                                               =
-                       \
->         else                                                            \
->                 __asm__ __volatile__(                                   \
->                         ".set\tpush\n\t"                                \
-> -                       ".set\tmips64\n\t"                              \
-> +                       ".set\t "MIPS_ISA_LEVEL" \n\t"                  \
->                         "dsll\t%L0, %L0, 32\n\t"                        \
->                         "dsrl\t%L0, %L0, 32\n\t"                        \
->                         "dsll\t%M0, %M0, 32\n\t"                        \
-> @@ -1628,7 +1628,7 @@ do {                                               =
-                       \
->                                                                         \
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
-> -       "       .set    mips32r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         _ASM_SET_MFHC0                                                  \
->         "       mfhc0   %0, " #source ", %1                     \n"     \
->         _ASM_UNSET_MFHC0                                                \
-> @@ -1642,7 +1642,7 @@ do {                                               =
-                       \
->  do {                                                                   \
->         __asm__ __volatile__(                                           \
->         "       .set    push                                    \n"     \
-> -       "       .set    mips32r2                                \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         _ASM_SET_MTHC0                                                  \
->         "       mthc0   %z0, " #register ", %1                  \n"     \
->         _ASM_UNSET_MTHC0                                                \
-> @@ -2040,7 +2040,14 @@ do {                                              =
-                       \
->   * Macros to access the guest system control coprocessor
->   */
->
-> -#ifndef CONFIG_AS_HAS_VIRT
-> +#if MIPS_ISA_REV < 5
-> +/* VZ ASE should be able to work with Release 2 but LLVM thinks it needs=
- R5 */
-> +#define MIPS_ISA_LEVEL_VIRT "mips64r5"
-> +#else
-> +#define MIPS_ISA_LEVEL_VIRT MIPS_ISA_LEVEL
-> +#endif
-
-Do we have a bug on file for LLVM for this?  If not, please file one.
-Either way, please include a link in the commit message (and maybe in
-a comment in the sources as well).
-
-
+> --- a/arch/x86/include/asm/apicdef.h
+> +++ b/arch/x86/include/asm/apicdef.h
+> @@ -138,7 +138,8 @@
+>   #define		APIC_EILVT_MASKED	(1 << 16)
+>   
+>   #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
+> -#define APIC_BASE_MSR	0x800
+> +#define APIC_BASE_MSR		0x800
+> +#define APIC_X2APIC_ID_MSR	0x802
+>   #define XAPIC_ENABLE	(1UL << 11)
+>   #define X2APIC_ENABLE	(1UL << 10)
+>   
+> @@ -162,6 +163,7 @@
+>   #define APIC_CPUID(apicid)	((apicid) & XAPIC_DEST_CPUS_MASK)
+>   #define NUM_APIC_CLUSTERS	((BAD_APICID + 1) >> XAPIC_DEST_CPUS_SHIFT)
+>   
+> +#ifndef __ASSEMBLY__
+>   /*
+>    * the local APIC register structure, memory mapped. Not terribly well
+>    * tested, but we might eventually use this one in the future - the
+> @@ -435,4 +437,5 @@ enum apic_delivery_modes {
+>   	APIC_DELIVERY_MODE_EXTINT	= 7,
+>   };
+>   
+> +#endif /* !__ASSEMBLY__ */
+>   #endif /* _ASM_X86_APICDEF_H */
+> --- a/arch/x86/include/asm/smp.h
+> +++ b/arch/x86/include/asm/smp.h
+> @@ -195,14 +195,13 @@ extern void nmi_selftest(void);
+>   #endif
+>   
+>   extern unsigned int smpboot_control;
+> +extern unsigned long apic_mmio_base;
+>   
+>   #endif /* !__ASSEMBLY__ */
+>   
+>   /* Control bits for startup_64 */
+> -#define STARTUP_APICID_CPUID_1F 0x80000000
+> -#define STARTUP_APICID_CPUID_0B 0x40000000
+> -#define STARTUP_APICID_CPUID_01 0x20000000
+> -#define STARTUP_APICID_SEV_ES	0x10000000
+> +#define STARTUP_READ_APICID	0x80000000
+> +#define STARTUP_APICID_SEV_ES	0x40000000
+>   
+>   /* Top 8 bits are reserved for control */
+>   #define STARTUP_PARALLEL_MASK	0xFF000000
+> --- a/arch/x86/kernel/apic/apic.c
+> +++ b/arch/x86/kernel/apic/apic.c
+> @@ -101,6 +101,8 @@ static int apic_extnmi __ro_after_init =
+>    */
+>   static bool virt_ext_dest_id __ro_after_init;
+>   
+> +unsigned long apic_mmio_base __ro_after_init;
 > +
-> +#ifndef TOOLCHAIN_SUPPORTS_VIRT
->  #define _ASM_SET_MFGC0                                                 \
->         _ASM_MACRO_2R_1S(mfgc0, rt, rs, sel,                            \
->                          _ASM_INSN_IF_MIPS(0x40600000 | __rt << 16 | __rs=
- << 11 | \\sel)        \
-> @@ -2099,7 +2106,7 @@ do {                                               =
-                       \
->  ({ int __res;                                                          \
->         __asm__ __volatile__(                                           \
->                 ".set\tpush\n\t"                                        \
-> -               ".set\tmips32r5\n\t"                                    \
-> +               ".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"                   \
->                 _ASM_SET_MFGC0                                          \
->                 "mfgc0\t%0, " #source ", %1\n\t"                        \
->                 _ASM_UNSET_MFGC0                                        \
-> @@ -2113,7 +2120,7 @@ do {                                               =
-                       \
->  ({ unsigned long long __res;                                           \
->         __asm__ __volatile__(                                           \
->                 ".set\tpush\n\t"                                        \
-> -               ".set\tmips64r5\n\t"                                    \
-> +               ".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"                   \
->                 _ASM_SET_DMFGC0                                         \
->                 "dmfgc0\t%0, " #source ", %1\n\t"                       \
->                 _ASM_UNSET_DMFGC0                                       \
-> @@ -2127,7 +2134,7 @@ do {                                               =
-                       \
->  do {                                                                   \
->         __asm__ __volatile__(                                           \
->                 ".set\tpush\n\t"                                        \
-> -               ".set\tmips32r5\n\t"                                    \
-> +               ".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"                   \
->                 _ASM_SET_MTGC0                                          \
->                 "mtgc0\t%z0, " #register ", %1\n\t"                     \
->                 _ASM_UNSET_MTGC0                                        \
-> @@ -2140,7 +2147,7 @@ do {                                               =
-                       \
->  do {                                                                   \
->         __asm__ __volatile__(                                           \
->                 ".set\tpush\n\t"                                        \
-> -               ".set\tmips64r5\n\t"                                    \
-> +               ".set\t " MIPS_ISA_LEVEL_VIRT " \n\t"                   \
->                 _ASM_SET_DMTGC0                                         \
->                 "dmtgc0\t%z0, " #register ", %1\n\t"                    \
->                 _ASM_UNSET_DMTGC0                                       \
-> @@ -2376,7 +2383,7 @@ do {                                               =
-                       \
->         "       .set    reorder                                 \n"     \
->         "       # gas fails to assemble cfc1 for some archs,    \n"     \
->         "       # like Octeon.                                  \n"     \
-> -       "       .set    mips1                                   \n"     \
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"     \
->         "       .set hardfloat                                  \n"     \
->         "       cfc1    %0,"STR(source)"                        \n"     \
->         "       .set    pop                                     \n"     \
-> @@ -2748,7 +2755,7 @@ static inline void tlb_read(void)
->         "       .set    push                                    \n"
->         "       .set    noreorder                               \n"
->         "       .set    noat                                    \n"
-> -       "       .set    mips32r2                                \n"
-> +       "       .set    "MIPS_ISA_LEVEL"                        \n"
->         "       .word   0x41610001              # dvpe $1       \n"
->         "       move    %0, $1                                  \n"
->         "       ehb                                             \n"
-> @@ -2769,7 +2776,7 @@ static inline void tlb_read(void)
->                 "       .set    push                            \n"
->                 "       .set    noreorder                       \n"
->                 "       .set    noat                            \n"
-> -               "       .set    mips32r2                        \n"
-> +               "       .set    "MIPS_ISA_LEVEL"                \n"
->                 "       .word   0x41600021      # evpe          \n"
->                 "       ehb                                     \n"
->                 "       .set    pop                             \n");
-> diff --git a/arch/mips/include/asm/stackframe.h b/arch/mips/include/asm/s=
-tackframe.h
-> index a8705aef47e1..5b3d374f43e0 100644
-> --- a/arch/mips/include/asm/stackframe.h
-> +++ b/arch/mips/include/asm/stackframe.h
-> @@ -428,7 +428,7 @@
->                 eretnc
->  #else
->                 .set    push
-> -               .set    arch=3Dr4000
-> +               .set    MIPS_ISA_ARCH_LEVEL_RAW
->                 eret
->                 .set    pop
->  #endif
-> diff --git a/arch/mips/kernel/bmips_vec.S b/arch/mips/kernel/bmips_vec.S
-> index 921a5fa55da6..f92a4b216da8 100644
-> --- a/arch/mips/kernel/bmips_vec.S
-> +++ b/arch/mips/kernel/bmips_vec.S
-> @@ -21,7 +21,7 @@
->  #include <asm/bmips.h>
->
->         .macro  BARRIER
-> -       .set    mips32
-> +       .set    MIPS_ISA_LEVEL_RAW
->         _ssnop
->         _ssnop
->         _ssnop
-> @@ -123,7 +123,7 @@ NESTED(bmips_reset_nmi_vec, PT_SIZE, sp)
->         jr      k0
->
->         RESTORE_ALL
-> -       .set    arch=3Dr4000
-> +       .set    MIPS_ISA_ARCH_LEVEL_RAW
->         eret
->
->  #ifdef CONFIG_SMP
-> diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
-> index edc4afc080fa..906fa1a78f7f 100644
-> --- a/arch/mips/kernel/csrc-r4k.c
-> +++ b/arch/mips/kernel/csrc-r4k.c
-> @@ -35,7 +35,7 @@ static inline unsigned int rdhwr_count(void)
->
->         __asm__ __volatile__(
->         "       .set push\n"
-> -       "       .set mips32r2\n"
-> +       "       .set "MIPS_ISA_LEVEL"\n"
->         "       rdhwr   %0, $2\n"
->         "       .set pop\n"
->         : "=3Dr" (count));
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index b6de8e88c1bd..2268304ae70e 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -50,7 +50,7 @@ NESTED(except_vec3_generic, 0, sp)
->   */
->  NESTED(except_vec3_r4000, 0, sp)
->         .set    push
-> -       .set    arch=3Dr4000
-> +       .set    MIPS_ISA_ARCH_LEVEL_RAW
->         .set    noat
->         mfc0    k1, CP0_CAUSE
->         li      k0, 31<<2
-> @@ -403,7 +403,7 @@ NESTED(ejtag_debug_handler, PT_SIZE, sp)
->  ejtag_return:
->         back_to_back_c0_hazard
->         MFC0    k0, CP0_DESAVE
-> -       .set    mips32
-> +       .set    MIPS_ISA_LEVEL_RAW
->         deret
->         .set    pop
->         END(ejtag_debug_handler)
-> @@ -503,7 +503,7 @@ NESTED(nmi_handler, PT_SIZE, sp)
->          * We need to specify a selector to access the CP0.Diag1 (GSCause=
-)
->          * register. All GSExc-equipped processors have MIPS32.
->          */
-> -       .set    mips32
-> +       .set    MIPS_ISA_LEVEL_RAW
->         mfc0    a1, CP0_DIAGNOSTIC1
->         .set    pop
->         TRACE_IRQS_ON
-> @@ -665,7 +665,7 @@ isrdhwr:
->         xori    k1, _THREAD_MASK
->         LONG_L  v1, TI_TP_VALUE(k1)
->         .set    push
-> -       .set    arch=3Dr4000
-> +       .set    MIPS_ISA_ARCH_LEVEL_RAW
->         eret
->         .set    pop
->  #endif
-> diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-> index 5abc8b7340f8..541470be5ec6 100644
-> --- a/arch/mips/kernel/idle.c
-> +++ b/arch/mips/kernel/idle.c
-> @@ -54,7 +54,7 @@ void __cpuidle r4k_wait_irqoff(void)
->         if (!need_resched())
->                 __asm__(
->                 "       .set    push            \n"
-> -               "       .set    arch=3Dr4000      \n"
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"\n"
->                 "       wait                    \n"
->                 "       .set    pop             \n");
->  }
-> @@ -68,7 +68,7 @@ static void __cpuidle rm7k_wait_irqoff(void)
->         if (!need_resched())
->                 __asm__(
->                 "       .set    push                                    \=
-n"
-> -               "       .set    arch=3Dr4000                             =
- \n"
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"                   \=
-n"
->                 "       .set    noat                                    \=
-n"
->                 "       mfc0    $1, $12                                 \=
-n"
->                 "       sync                                            \=
-n"
-> @@ -89,7 +89,7 @@ static void __cpuidle au1k_wait(void)
->
->         __asm__(
->         "       .set    push                    \n"
-> -       "       .set    arch=3Dr4000              \n"
-> +       "       .set    "MIPS_ISA_ARCH_LEVEL"   \n"
->         "       cache   0x14, 0(%0)             \n"
->         "       cache   0x14, 32(%0)            \n"
->         "       sync                            \n"
-> diff --git a/arch/mips/kernel/r4k_fpu.S b/arch/mips/kernel/r4k_fpu.S
-> index 4e8c98517d9d..ec508ff455f2 100644
-> --- a/arch/mips/kernel/r4k_fpu.S
-> +++ b/arch/mips/kernel/r4k_fpu.S
-> @@ -107,7 +107,7 @@ LEAF(_save_fp_context)
->         .set    push
->         .set    hardfloat
->  #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5)
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         mfc0    t0, CP0_STATUS
->         sll     t0, t0, 5
-> @@ -175,7 +175,7 @@ LEAF(_restore_fp_context)
->         .set    push
->         .set    hardfloat
->  #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5)
-> -       .set    mips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    fp=3D64
->         mfc0    t0, CP0_STATUS
->         sll     t0, t0, 5
-> diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
-> index ae93a607ddf7..7f2be5912997 100644
-> --- a/arch/mips/kernel/syscall.c
-> +++ b/arch/mips/kernel/syscall.c
-> @@ -109,7 +109,7 @@ static inline int mips_atomic_set(unsigned long addr,=
- unsigned long new)
->         if (cpu_has_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {
->                 __asm__ __volatile__ (
->                 "       .set    push                                    \=
-n"
-> -               "       .set    arch=3Dr4000                             =
- \n"
-> +               "       .set    "MIPS_ISA_ARCH_LEVEL"                   \=
-n"
->                 "       li      %[err], 0                               \=
-n"
->                 "1:     ll      %[old], (%[addr])                       \=
-n"
->                 "       move    %[tmp], %[new]                          \=
-n"
-> diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
-> index 2d5a0bcb0cec..81e3329fc5de 100644
-> --- a/arch/mips/lantiq/clk.c
-> +++ b/arch/mips/lantiq/clk.c
-> @@ -177,7 +177,7 @@ static inline u32 get_counter_resolution(void)
->
->         __asm__ __volatile__(
->                 ".set   push\n"
-> -               ".set   mips32r2\n"
-> +               ".set   "MIPS_ISA_LEVEL"\n"
->                 "rdhwr  %0, $3\n"
->                 ".set pop\n"
->                 : "=3D&r" (res)
-> diff --git a/arch/mips/lib/csum_partial.S b/arch/mips/lib/csum_partial.S
-> index 7767137c3e49..4b1060c3494b 100644
-> --- a/arch/mips/lib/csum_partial.S
-> +++ b/arch/mips/lib/csum_partial.S
-> @@ -13,6 +13,7 @@
->  #include <linux/errno.h>
->  #include <asm/asm.h>
->  #include <asm/asm-offsets.h>
-> +#include <asm/compiler.h>
->  #include <asm/export.h>
->  #include <asm/regdef.h>
->
-> @@ -282,7 +283,7 @@ EXPORT_SYMBOL(csum_partial)
->  #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5) || \
->      defined(CONFIG_CPU_LOONGSON64)
->         .set    push
-> -       .set    arch=3Dmips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         wsbh    v1, sum
->         movn    sum, v1, t7
->         .set    pop
-> @@ -707,7 +708,7 @@ EXPORT_SYMBOL(csum_partial)
->  #if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR5) || \
->      defined(CONFIG_CPU_LOONGSON64)
->         .set    push
-> -       .set    arch=3Dmips32r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         wsbh    v1, sum
->         movn    sum, v1, odd
->         .set    pop
-> diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-> index 4b6554b48923..420440cc40b1 100644
-> --- a/arch/mips/mm/c-r4k.c
-> +++ b/arch/mips/mm/c-r4k.c
-> @@ -918,7 +918,7 @@ static inline void rm7k_erratum31(void)
->                 __asm__ __volatile__ (
->                         ".set push\n\t"
->                         ".set noreorder\n\t"
-> -                       ".set mips3\n\t"
-> +                       ".set "MIPS_ISA_LEVEL"\n\t"
->                         "cache\t%1, 0(%0)\n\t"
->                         "cache\t%1, 0x1000(%0)\n\t"
->                         "cache\t%1, 0x2000(%0)\n\t"
-> diff --git a/arch/mips/mm/cex-oct.S b/arch/mips/mm/cex-oct.S
-> index 9029092aa740..bb9f6b960786 100644
-> --- a/arch/mips/mm/cex-oct.S
-> +++ b/arch/mips/mm/cex-oct.S
-> @@ -19,7 +19,7 @@
->         LEAF(except_vec2_octeon)
->
->         .set    push
-> -       .set    mips64r2
-> +       .set    MIPS_ISA_LEVEL_RAW
->         .set    noreorder
->         .set    noat
->
-> diff --git a/arch/mips/mm/sc-ip22.c b/arch/mips/mm/sc-ip22.c
-> index d7238687d790..9a0c29946c2d 100644
-> --- a/arch/mips/mm/sc-ip22.c
-> +++ b/arch/mips/mm/sc-ip22.c
-> @@ -33,7 +33,7 @@ static inline void indy_sc_wipe(unsigned long first, un=
-signed long last)
->         __asm__ __volatile__(
->         "       .set    push                    # indy_sc_wipe          \=
-n"
->         "       .set    noreorder                                       \=
-n"
-> -       "       .set    mips3                                           \=
-n"
-> +       "       .set    "MIPS_ISA_LEVEL"                                \=
-n"
->         "       .set    noat                                            \=
-n"
->         "       mfc0    %2, $12                                         \=
-n"
->         "       li      $1, 0x80                # Go 64 bit             \=
-n"
-> @@ -108,7 +108,7 @@ static void indy_sc_enable(void)
->         __asm__ __volatile__(
->         ".set\tpush\n\t"
->         ".set\tnoreorder\n\t"
-> -       ".set\tmips3\n\t"
-> +       ".set\t"MIPS_ISA_LEVEL"\n\t"
->         "mfc0\t%2, $12\n\t"
->         "nop; nop; nop; nop;\n\t"
->         "li\t%1, 0x80\n\t"
-> @@ -138,7 +138,7 @@ static void indy_sc_disable(void)
->         __asm__ __volatile__(
->         ".set\tpush\n\t"
->         ".set\tnoreorder\n\t"
-> -       ".set\tmips3\n\t"
-> +       ".set\t"MIPS_ISA_LEVEL"\n\t"
->         "li\t%0, 0x1\n\t"
->         "dsll\t%0, 31\n\t"
->         "lui\t%1, 0x9000\n\t"
-> --
-> 2.39.2 (Apple Git-143)
->
+>   /*
+>    * Map cpu index to physical APIC ID
+>    */
+> @@ -2164,6 +2166,7 @@ void __init register_lapic_address(unsig
+>   
+>   	if (!x2apic_mode) {
+>   		set_fixmap_nocache(FIX_APIC_BASE, address);
+> +		apic_mmio_base = APIC_BASE;
+>   		apic_printk(APIC_VERBOSE, "mapped APIC to %16lx (%16lx)\n",
+>   			    APIC_BASE, address);
+>   	}
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -24,8 +24,10 @@
+>   #include "../entry/calling.h"
+>   #include <asm/export.h>
+>   #include <asm/nospec-branch.h>
+> +#include <asm/apicdef.h>
+>   #include <asm/fixmap.h>
+>   #include <asm/smp.h>
+> +
+>   #include <asm/sev-common.h>
+>   
+>   /*
+> @@ -237,37 +239,24 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>   
+>   #ifdef CONFIG_SMP
+>   	/*
+> -	 * For parallel boot, the APIC ID is retrieved from CPUID, and then
+> -	 * used to look up the CPU number.  For booting a single CPU, the
+> -	 * CPU number is encoded in smpboot_control.
+> +	 * For parallel boot, the APIC ID is either retrieved the APIC or
+> +	 * from CPUID, and then used to look up the CPU number.
+> +	 * For booting a single CPU, the CPU number is encoded in
+> +	 * smpboot_control.
+>   	 *
+> -	 * Bit 31	STARTUP_APICID_CPUID_1F flag (use CPUID 0x1f)
+> -	 * Bit 30	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
+> -	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
+> -	 * Bit 28	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
+> +	 * Bit 31	STARTUP_APICID_READ (Read APICID from APIC)
+> +	 * Bit 30	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
+>   	 * Bit 0-23	CPU# if STARTUP_APICID_CPUID_xx flags are not set
+>   	 */
+>   	movl	smpboot_control(%rip), %ecx
+> +	testl	$STARTUP_READ_APICID, %ecx
+>   #ifdef CONFIG_AMD_MEM_ENCRYPT
+>   	testl	$STARTUP_APICID_SEV_ES, %ecx
+>   	jnz	.Luse_sev_cpuid_0b
+>   #endif
+> -	testl	$STARTUP_APICID_CPUID_1F, %ecx
+> -	jnz	.Luse_cpuid_1f
+> -	testl	$STARTUP_APICID_CPUID_0B, %ecx
+> -	jnz	.Luse_cpuid_0b
+> -	testl	$STARTUP_APICID_CPUID_01, %ecx
+> -	jnz	.Luse_cpuid_01
+>   	andl	$(~STARTUP_PARALLEL_MASK), %ecx
+>   	jmp	.Lsetup_cpu
+>   
+> -.Luse_cpuid_01:
+> -	mov	$0x01, %eax
+> -	cpuid
+> -	mov	%ebx, %edx
+> -	shr	$24, %edx
+> -	jmp	.Lsetup_AP
+> -
+>   #ifdef CONFIG_AMD_MEM_ENCRYPT
+>   .Luse_sev_cpuid_0b:
+>   	/* Set the GHCB MSR to request CPUID 0x0B_EDX */
+> @@ -292,24 +281,30 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>   	jmp	.Lsetup_AP
+>   #endif
+>   
+> -.Luse_cpuid_0b:
+> -	mov	$0x0B, %eax
+> -	xorl	%ecx, %ecx
+> -	cpuid
+> -	jmp	.Lsetup_AP
+> +.Lread_apicid:
+> +	mov	$MSR_IA32_APICBASE, %ecx
+> +	rdmsr
+> +	testl	$X2APIC_ENABLE, %eax
+> +	jnz	read_apicid_msr
+> +
+> +	/* Read the APIC ID from the fix-mapped MMIO space. */
+> +	movq	apic_mmio_base(%rip), %rcx
+> +	addq	$APIC_ID, %rcx
+> +	movl	(%rcx), %eax
+> +	shr	$24, %eax
+> +	jnz	.Lread_apicid
+>   
+> -.Luse_cpuid_1f:
+> -	mov	$0x1f, %eax
+> -	xorl	%ecx, %ecx
+> -	cpuid
+> +.Lread_apicid_msr:
+> +	mov	$APIC_X2APIC_ID_MSR, %ecx
+> +	rdmsr
+>   
+>   .Lsetup_AP:
+> -	/* EDX contains the APIC ID of the current CPU */
+> +	/* EAX contains the APIC ID of the current CPU */
+>   	xorq	%rcx, %rcx
+>   	leaq	cpuid_to_apicid(%rip), %rbx
+>   
+>   .Lfind_cpunr:
+> -	cmpl	(%rbx,%rcx,4), %edx
+> +	cmpl	(%rbx,%rcx,4), %eax
+>   	jz	.Lsetup_cpu
+>   	inc	%ecx
+>   #ifdef CONFIG_FORCE_NR_CPUS
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -1253,41 +1253,22 @@ bool __init arch_cpuhp_init_parallel_bri
+>   		return false;
+>   	}
+>   
+> -	/* Encrypted guests require special CPUID handling. */
+> +	/* Encrypted guests require special handling. */
+>   	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
+>   		switch (cc_get_vendor()) {
+>   		case CC_VENDOR_AMD:
+>   			ctrl = STARTUP_APICID_SEV_ES;
+>   			if (topology_extended_leaf == 0x0b)
+> -				goto setup;
+> +				break;
+>   			fallthrough;
+>   		default:
+>   			pr_info("Parallel CPU startup disabled due to guest state encryption\n");
+>   			return false;
+>   		}
+> +	} else {
+> +		ctrl = STARTUP_READ_APICID;
+>   	}
+>   
+> -	switch (topology_extended_leaf) {
+> -	case 0x0b:
+> -		ctrl = STARTUP_APICID_CPUID_0B;
+> -		break;
+> -	case 0x1f:
+> -		ctrl = STARTUP_APICID_CPUID_1F;
+> -		break;
+> -	case 0x00:
+> -		/* For !x2APIC mode 8 bits from leaf 0x01 are sufficient. */
+> -		if (!x2apic_mode) {
+> -			ctrl = STARTUP_APICID_CPUID_01;
+> -			break;
+> -		}
+> -		fallthrough;
+> -	default:
+> -		pr_info("Parallel CPU startup disabled. Unsupported topology leaf %u\n",
+> -			topology_extended_leaf);
+> -		return false;
+> -	}
+> -
+> -setup:
+>   	pr_debug("Parallel CPU startup enabled: 0x%08x\n", ctrl);
+>   	smpboot_control = ctrl;
+>   	return true;
+
+I quickly applied it on top of your branch, but I am getting:
+
+```
+$ wget https://lore.kernel.org/lkml/87v8hq35sk.ffs@tglx/raw
+$ patch -p1 < raw
+$ make
+[…]
+   LD      .tmp_vmlinux.kallsyms1
+ld: arch/x86/kernel/head_64.o: in function `secondary_startup_64_no_verify':
+(.head.text+0xbf): undefined reference to `read_apicid_msr'
+make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+make: *** [Makefile:1249: vmlinux] Error 2
+```
 
 
---=20
-Thanks,
-~Nick Desaulniers
+Kind regards,
+
+Paul
