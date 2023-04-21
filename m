@@ -2,75 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BE46EAFCE
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Apr 2023 18:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EC36EB052
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Apr 2023 19:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbjDUQ4H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Apr 2023 12:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S233436AbjDURLg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Apr 2023 13:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbjDUQzw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Apr 2023 12:55:52 -0400
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFC1167FB
-        for <linux-mips@vger.kernel.org>; Fri, 21 Apr 2023 09:55:17 -0700 (PDT)
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-51eff047777so1473418a12.3
-        for <linux-mips@vger.kernel.org>; Fri, 21 Apr 2023 09:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682096005; x=1684688005;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZkpp0Q8jjYvxCvjV0ny/+Rc/wVVpL1bL7ck4xeVhlc=;
-        b=0h1fkH+Qg9TAAOhRy5ByqB0jrA5qVCSK4v4VOevyiT2ApjSQTkdNJB5NveNHYdDJyn
-         UJHQdihO3xA3kzsZEepsUYjUUldoQQHE3IwikHmH626x/P3dqcuE74kUFvi/fYfmL8id
-         EDHpOrTTDrdls8Ay6MgcRCV+nPsBif06WnlTwtqTPlBkRDbsQd0Ihsksz1E+BPVTlwL+
-         Wr1jDKNxfs+qyRuwYH973UQwgCLkK4mXV3n/qkGEbaFtetzvIDazfRsZNp9s0jwVrFs5
-         k56stUv4Ja+Quv0wmKFN8uJmrJL9UvFWW6XEpyc/9yhzn8gHY1vEcRlztKntO6uIDVGX
-         jZXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682096005; x=1684688005;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZkpp0Q8jjYvxCvjV0ny/+Rc/wVVpL1bL7ck4xeVhlc=;
-        b=Eu3nt12Nf+2aILyAkZr+nHxy5DAQMmvJZjYZ51HpcxCjdcUK+tL1GH2acxqQvtPx7L
-         phFr15hueBywEshhwSYbwVDUCdph1e7yH2XnMRE7pjzaOPrDm1d0NhT3xlbCISrcImdT
-         KS/O1KgKvwZ9t6PBhl7L5CvkCWSkGraRNFE1oy0BnRzaoHk4TGDkKvOzuWPPubUmGuDv
-         eUKx6T6fNtFtLGZwfuSGhTV7bFl+7mqmXluDmjbUzjG/9BdDT6WgzwK8/4RsUJkH68Lv
-         oog6UxCZsG74Z/B+g/ug8Iy7+Jqy8OzvT0RKToLNBs1hErU6w8O0fokGGB7aVkAT4cjC
-         K5+w==
-X-Gm-Message-State: AAQBX9eDVWb5eKFnVciUj5oHiRJg6+MkhazJaL13Oj8dMi2ONRYFekm1
-        Opa5eCs+Py8AOwo93nGM6IRoI+R1mkyw
-X-Google-Smtp-Source: AKy350bDKAEiJjC/uv+A89c39cSNVyu8ADQH7b61iTn5O1CeNgQ8Eu2os+9yNYOIL6Af0Fk180jnNb9Y53o2
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:90a:690d:b0:23f:a851:4f04 with SMTP id
- r13-20020a17090a690d00b0023fa8514f04mr1467442pjj.3.1682096004881; Fri, 21 Apr
- 2023 09:53:24 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 09:53:05 -0700
-In-Reply-To: <20230421165305.804301-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20230421165305.804301-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421165305.804301-10-vipinsh@google.com>
-Subject: [PATCH 9/9] KVM: arm64: Run clear-dirty-log under MMU read lock
-From:   Vipin Sharma <vipinsh@google.com>
-To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        with ESMTP id S233368AbjDURLb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Apr 2023 13:11:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECEB16B23;
+        Fri, 21 Apr 2023 10:11:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BD6061084;
+        Fri, 21 Apr 2023 17:11:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B12ECC433D2;
+        Fri, 21 Apr 2023 17:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682097060;
+        bh=DnRJVkdO+iXXcujqYX0KJiluJwWD+2pWlYT4caOjV0E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EHqT+C8njFjfHsi70rZiFdTrbu/ie2fbzv5GWFi7pafMAdvhkg+xjmdkME5V+TP5H
+         vcLBHMLLGFbsS6Bh5vypOpKExqOA8wsRzF41qmZ19WzWKshlk3u9i0D0aXorNQzjsL
+         nQpYWA+mm/4JtT8Uwm4DBOpUtNdlt85q/uiLWvjEUOn2ZnHqCgjzx1pGUZyWRwl9U3
+         I41Jwu+sshMCbAC8Y0Ew+K9z6kUOnYFRIA8TNf11u2KxRLFc8FeFiRoyQxIli0As/N
+         m14zF/WcXp/SNioGllvt5vra6edJysaPm4tYR2VfzMlV49j4IaFjTG0hvQMliIapd3
+         qihad4ZVYUIAA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ppuHi-00AFeg-8D;
+        Fri, 21 Apr 2023 18:10:58 +0100
+Date:   Fri, 21 Apr 2023 18:10:57 +0100
+Message-ID: <86pm7xjh3y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     oliver.upton@linux.dev, james.morse@arm.com,
         suzuki.poulose@arm.com, yuzenghui@huawei.com,
         catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
         aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
         anup@brainfault.org, atishp@atishpatra.org,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        dmatlack@google.com, ricarkol@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 9/9] KVM: arm64: Run clear-dirty-log under MMU read lock
+In-Reply-To: <20230421165305.804301-10-vipinsh@google.com>
+References: <20230421165305.804301-1-vipinsh@google.com>
+        <20230421165305.804301-10-vipinsh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vipinsh@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de, anup@brainfault.org, atishp@atishpatra.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com, ricarkol@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,76 +76,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Take MMU read lock for write protecting PTEs and use shared page table
-walker for clearing dirty logs.
+On Fri, 21 Apr 2023 17:53:05 +0100,
+Vipin Sharma <vipinsh@google.com> wrote:
+> 
+> Take MMU read lock for write protecting PTEs and use shared page table
+> walker for clearing dirty logs.
+> 
+> Clearing dirty logs are currently performed under MMU write locks. This
+> means vCPUs write protection fault, which also take MMU read lock,  will
+> be blocked during this operation. This causes guest degradation and
+> especially noticeable on VMs with lot of vCPUs.
+> 
+> Taking MMU read lock will allow vCPUs to execute parallelly and reduces
+> the impact on vCPUs performance.
 
-Clearing dirty logs are currently performed under MMU write locks. This
-means vCPUs write protection fault, which also take MMU read lock,  will
-be blocked during this operation. This causes guest degradation and
-especially noticeable on VMs with lot of vCPUs.
+Sure. Taking no lock whatsoever would be even better.
 
-Taking MMU read lock will allow vCPUs to execute parallelly and reduces
-the impact on vCPUs performance.
+What I don't see is the detailed explanation that gives me the warm
+feeling that this is safe and correct. Such an explanation is the
+minimum condition for me to even read the patch.
 
-Tested improvement on a ARM Ampere Altra host (64 CPUs, 256 GB
-memory and single NUMA node) via dirty_log_perf_test for 48 vCPU, 96
-GB memory, 8GB clear chunk size, 1 second wait between Clear-Dirty-Log
-calls and configuration:
+Thanks,
 
-Test command:
-./dirty_log_perf_test -s anonymous_hugetlb_2mb -b 2G -v 48 -l 1 -k 8G -j -m 2
+	M.
 
-Before:
-Total pages touched: 50331648 (Reads: 0, Writes: 50331648)
-
-After:
-Total pages touched: 125304832 (Reads: 0, Writes: 125304832)
-
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
- arch/arm64/kvm/mmu.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index e0189cdda43d..3f2117d93998 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -67,8 +67,12 @@ static int stage2_apply_range(struct kvm_s2_mmu *mmu, phys_addr_t addr,
- 		if (ret)
- 			break;
- 
--		if (resched && next != end)
--			cond_resched_rwlock_write(&kvm->mmu_lock);
-+		if (resched && next != end) {
-+			if (flags & KVM_PGTABLE_WALK_SHARED)
-+				cond_resched_rwlock_read(&kvm->mmu_lock);
-+			else
-+				cond_resched_rwlock_write(&kvm->mmu_lock);
-+		}
- 	} while (addr = next, addr != end);
- 
- 	return ret;
-@@ -994,7 +998,7 @@ static void kvm_mmu_write_protect_pt_masked(struct kvm *kvm,
- 	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
- 	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
- 
--	stage2_wp_range(&kvm->arch.mmu, start, end, 0);
-+	stage2_wp_range(&kvm->arch.mmu, start, end, KVM_PGTABLE_WALK_SHARED);
- }
- 
- /*
-@@ -1008,9 +1012,9 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
- 		struct kvm_memory_slot *slot,
- 		gfn_t gfn_offset, unsigned long mask)
- {
--	write_lock(&kvm->mmu_lock);
-+	read_lock(&kvm->mmu_lock);
- 	kvm_mmu_write_protect_pt_masked(kvm, slot, gfn_offset, mask);
--	write_unlock(&kvm->mmu_lock);
-+	read_unlock(&kvm->mmu_lock);
- }
- 
- static void kvm_send_hwpoison_signal(unsigned long address, short lsb)
 -- 
-2.40.0.634.g4ca3ef3211-goog
-
+Without deviation from the norm, progress is not possible.
