@@ -2,39 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE826EA4AE
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Apr 2023 09:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F626EA51E
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Apr 2023 09:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjDUH1r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Apr 2023 03:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S229559AbjDUHo1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Apr 2023 03:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjDUH1q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Apr 2023 03:27:46 -0400
+        with ESMTP id S229642AbjDUHo0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Apr 2023 03:44:26 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBBFD132;
-        Fri, 21 Apr 2023 00:27:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0EB010D7
+        for <linux-mips@vger.kernel.org>; Fri, 21 Apr 2023 00:44:24 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pplBD-0004sS-00; Fri, 21 Apr 2023 09:27:39 +0200
+        id 1pplRQ-0004xg-00; Fri, 21 Apr 2023 09:44:24 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E0BBCC0121; Fri, 21 Apr 2023 09:27:12 +0200 (CEST)
-Date:   Fri, 21 Apr 2023 09:27:12 +0200
+        id 1F8ECC0122; Fri, 21 Apr 2023 09:41:35 +0200 (CEST)
+Date:   Fri, 21 Apr 2023 09:41:35 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>, jpoimboe@kernel.org,
-        peterz@infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
-Message-ID: <20230421072712.GA5563@alpha.franken.de>
-References: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
- <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
- <20230419233710.GA1314058@dev-arch.thelio-3990X>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH 1/8] MIPS: Replace assembly isa level directives with
+ macros
+Message-ID: <20230421074134.GA6209@alpha.franken.de>
+References: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
+ <20230409104309.13887-2-jiaxun.yang@flygoat.com>
+ <CAKwvOdmRobqFrnZ70ODzdMfp4A-Br0mHhRkEnmTrkyk7CmiERg@mail.gmail.com>
+ <FEE1072C-2228-4B2E-92C0-760F0B471D04@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419233710.GA1314058@dev-arch.thelio-3990X>
+In-Reply-To: <FEE1072C-2228-4B2E-92C0-760F0B471D04@flygoat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -45,33 +46,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 04:37:10PM -0700, Nathan Chancellor wrote:
-> > > diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-> > > index d72dc6e1cf3c..9b9bf9bc7d24 100644
-> > > --- a/arch/mips/include/asm/bugs.h
-> > > +++ b/arch/mips/include/asm/bugs.h
-> > > @@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
-> > >  extern void check_bugs32(void);
-> > >  extern void check_bugs64(void);
-> > >
-> > > -static inline void check_bugs_early(void)
-> > > +static inline void __init check_bugs_early(void)
-> > >  {
-> > >         if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-> > >                 check_bugs64_early();
-> > >  }
-> > 
-> > If the only call site is in arch/mips/kernel/setup.c, then perhaps we
-> > can move the definition of check_bugs_early there and mark it static
-> > __init and drop inline?
+On Thu, Apr 20, 2023 at 08:29:03PM +0100, Jiaxun Yang wrote:
+> Yes, GAS and LLVM sometimes have different opinions on what a instruction
+> feature should belong to. Personally I think there is no right or wrong in most case.
 > 
-> Sure, we could even go a step further and just copy the body into the
-> one call site ourselves, I see little reason for this to be a dedicated
-> function. That is probably best done in a separate patch altogether in
-> lieu of just adding __init.
+> So generally when we try to use some inline assembly features that toolchain
+> may consider belongs to higher ISA level we will use `.set mips64r2` directives.
+> 
+> Having this patch just unified the defined arch across the tree, so it happens to fix
+> some cases where `.set` was given a improper option.
 
-I don't expect any new checks added to check_bugs_early so let's
-move the whole function into the call site.
+I'd prefer, if we don't magically fix something by doing this massive
+replacement. So first bug fixing then cleanup.
+
+And what I don't like is the name of the #defines (I know it's not your
+choice, ), they don't tell me anything and it's still not clear which
+one should be used in which case.
+
+I see one use case, which is enabling 64bit instruction inside a 32bit
+kernel.
+
+What are the others ?
+
+Do we really need all of them ? For example the change in
+arch/mips/mm/cex-oct.S, this is for a octeon kernel, which only supports
+and works with 64bit kernels...
+
 
 Thomas.
 
