@@ -2,182 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C1A6EB206
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Apr 2023 21:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABDE6EB25E
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Apr 2023 21:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjDUTEg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Apr 2023 15:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S233527AbjDUTnc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Apr 2023 15:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbjDUTEc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Apr 2023 15:04:32 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824A926BF;
-        Fri, 21 Apr 2023 12:04:30 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-38c0a331d3cso1447750b6e.1;
-        Fri, 21 Apr 2023 12:04:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682103870; x=1684695870;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oEVD6TwI8qgPWVxrhj86c7Ln4JsVutrlctSF8C4EjUM=;
-        b=CiDtRbtgYDl46Gtqt1bih8Un/tfuq+dio6jIddI12rJ1BaivIxVcizR/kwsDI0XMLg
-         H6+cfPPSivXck0hGQzACYFuoiZmd3dPRmCmgFagzVv05MHoslY6wlwQhMAFMYuh4NBoI
-         +UjG8WLAxgngXoPODRDOeV0T52erj2XtA0eeOuKXJGzXMcyCU2Qo4qd/KlrOV72Hei3Q
-         8VCt2iA5Xu0s2wRjrTLMdt85CbWt2LO5RroxZGJFUI95zwtumW+KETNjpVdvplwIVxHY
-         yt+l49jEfV/Zzp7sKW/a78lGrQRNTEjsJrRKTX6HHUQyDeQFqBbA6WnXo+jol7Q0hckc
-         //PA==
-X-Gm-Message-State: AAQBX9fsikG5WKCpak3anv6Ck7inlumTXA5nSjNsD7vPqSqOHPu+t0CP
-        XOTBszDoN7GjHB5OpWm9dED2BF4hOQ==
-X-Google-Smtp-Source: AKy350ZZKs6nRzErt5Hgh0Ydf8D5qRZ9OHhRf2jidU9uiXC1zuPE2SpN652Vc2sWTz/SHwVcWquxvw==
-X-Received: by 2002:a05:6808:15a8:b0:38e:bfa:241e with SMTP id t40-20020a05680815a800b0038e0bfa241emr3816681oiw.42.1682103869565;
-        Fri, 21 Apr 2023 12:04:29 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q125-20020acad983000000b0038e07fe2c97sm1884773oig.42.2023.04.21.12.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 12:04:29 -0700 (PDT)
-Received: (nullmailer pid 1626609 invoked by uid 1000);
-        Fri, 21 Apr 2023 19:04:28 -0000
-Date:   Fri, 21 Apr 2023 14:04:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
-Message-ID: <20230421190428.GA1617382-robh@kernel.org>
-References: <cover.1681887790.git.zhoubinbin@loongson.cn>
- <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
- <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
- <CAMpQs4JjHvVOzQz-1Y-q9ut6tWUpakrHeozuwPg0dzoDcUFEGA@mail.gmail.com>
+        with ESMTP id S232480AbjDUTnb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Apr 2023 15:43:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBB4198B;
+        Fri, 21 Apr 2023 12:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682106210; x=1713642210;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j/aCznEbmzY6CPJfpDgAnembGflLWzYVe2uqfonw5qE=;
+  b=bBu9kFSG4MUTd41ZNewf4Bunotdt1cJe7TqkiHht4O3SWolQsfKdSn0r
+   V0+4Vcl3rJBWbpeh+vorSkopT2JNMlYgQy399Fo0hlDAJWV3bMf+sDX5j
+   7k/XGVtOXhulcUEYXwutfAVHJqDZcT7t/W4YaK5Waq83Vry9doFzTVlV3
+   zTmZPbxXy/MmfFc9kbrmEJPq1Cqb+oLCRw3rvA+OlvyngRq96UUp5BkuR
+   qDA6SCsdZUXjIaU7BBJua2OdDXfAZzYqxiIX78+kLb+u2zqzDVfQEwz0k
+   wzTsB29Mt7OypmLj1Ikzo3soUC2TszL2nEz5az1T0kC62r+sZi+cMkHrJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="348861991"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="348861991"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 12:43:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="866795075"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="866795075"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Apr 2023 12:43:22 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppwfB-000gla-0k;
+        Fri, 21 Apr 2023 19:43:21 +0000
+Date:   Sat, 22 Apr 2023 03:43:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vipin Sharma <vipinsh@google.com>, maz@kernel.org,
+        oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH 7/9] KVM: mmu: Move mmu lock/unlock to arch code for
+ clear dirty log
+Message-ID: <202304220315.bpwbgH5n-lkp@intel.com>
+References: <20230421165305.804301-8-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMpQs4JjHvVOzQz-1Y-q9ut6tWUpakrHeozuwPg0dzoDcUFEGA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230421165305.804301-8-vipinsh@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 09:00:42PM +0800, Binbin Zhou wrote:
-> On Thu, Apr 20, 2023 at 4:09 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 19/04/2023 09:17, Binbin Zhou wrote:
-> > > Add Loongson Extended I/O Interrupt controller binding with DT schema
-> > > format using json-schema.
-> > >
-> > > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > > ---
-> > >  .../loongson,eiointc.yaml                     | 74 +++++++++++++++++++
-> > >  1 file changed, 74 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> > > new file mode 100644
-> > > index 000000000000..4ab4efb061e1
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> > > @@ -0,0 +1,74 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Loongson Extended I/O Interrupt Controller
-> > > +
-> > > +maintainers:
-> > > +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> > > +
-> > > +description: |
-> > > +  This interrupt controller is found on the Loongson-3 family chips and
-> > > +  Loongson-2K series chips and is used to distribute interrupts directly to
-> > > +  individual cores without forwarding them through the HT's interrupt line.
-> > > +
-> > > +allOf:
-> > > +  - $ref: /schemas/interrupt-controller.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - loongson,ls2k0500-eiointc
-> > > +      - loongson,ls2k2000-eiointc
-> > > +
-> > > +  reg:
-> > > +    items:
-> > > +      - description: Interrupt enable registers
-> > > +      - description: Interrupt status registers
-> > > +      - description: Interrupt clear registers
-> > > +      - description: Interrupt routing configuration registers
-> > > +
-> > > +  reg-names:
-> > > +    items:
-> > > +      - const: enable
-> > > +      - const: status
-> > > +      - const: clear
-> > > +      - const: route
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupt-controller: true
-> > > +
-> > > +  '#interrupt-cells':
-> > > +    const: 1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - interrupts
-> > > +  - interrupt-controller
-> > > +  - '#interrupt-cells'
-> > > +
-> > > +unevaluatedProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    eiointc: interrupt-controller@1fe11600 {
-> > > +      compatible = "loongson,ls2k0500-eiointc";
-> > > +      reg = <0x1fe11600 0x10>,
-> > > +            <0x1fe11700 0x10>,
-> > > +            <0x1fe11800 0x10>,
-> > > +            <0x1fe114c0 0x4>;
-> >
-> > Binding is OK, but are you sure you want to split the address space like
-> > this? It looks like two address spaces (enable+clear+status should be
-> > one). Are you sure this is correct?
-> >
-> Hi Krzysztof:
-> 
-> These registers are all in the range of chip configuration registers,
-> in the case of LS2K0500, which has a base address of 0x1fe10000.
+Hi Vipin,
 
-Where is the schema for this? Either it should be the 
-interrupt-controller itself or this binding should be a child node of 
-it. Which way really depends on whether the eiointc is reused on 
-multiple chips with different register offsets or parent block.
+kernel test robot noticed the following build warnings:
 
-Can't really give better advice without a complete picture of the 'chip 
-configuration registers'. So please provide that.
+[auto build test WARNING on 95b9779c1758f03cf494e8550d6249a40089ed1c]
 
-Rob
+url:    https://github.com/intel-lab-lkp/linux/commits/Vipin-Sharma/KVM-selftests-Allow-dirty_log_perf_test-to-clear-dirty-memory-in-chunks/20230422-005708
+base:   95b9779c1758f03cf494e8550d6249a40089ed1c
+patch link:    https://lore.kernel.org/r/20230421165305.804301-8-vipinsh%40google.com
+patch subject: [PATCH 7/9] KVM: mmu: Move mmu lock/unlock to arch code for clear dirty log
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20230422/202304220315.bpwbgH5n-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e7505b53d53e3bb5e7f1c43233ef3644673edb75
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vipin-Sharma/KVM-selftests-Allow-dirty_log_perf_test-to-clear-dirty-memory-in-chunks/20230422-005708
+        git checkout e7505b53d53e3bb5e7f1c43233ef3644673edb75
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304220315.bpwbgH5n-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/riscv/kvm/mmu.c: In function 'kvm_arch_mmu_enable_log_dirty_pt_masked':
+>> arch/riscv/kvm/mmu.c:399:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     399 |         phys_addr_t base_gfn = slot->base_gfn + gfn_offset;
+         |         ^~~~~~~~~~~
+
+
+vim +399 arch/riscv/kvm/mmu.c
+
+c9d57373fc87a3 Anup Patel   2022-07-29  392  
+9d05c1fee83757 Anup Patel   2021-09-27  393  void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
+9d05c1fee83757 Anup Patel   2021-09-27  394  					     struct kvm_memory_slot *slot,
+9d05c1fee83757 Anup Patel   2021-09-27  395  					     gfn_t gfn_offset,
+9d05c1fee83757 Anup Patel   2021-09-27  396  					     unsigned long mask)
+9d05c1fee83757 Anup Patel   2021-09-27  397  {
+e7505b53d53e3b Vipin Sharma 2023-04-21  398  	spin_lock(&kvm->mmu_lock);
+9d05c1fee83757 Anup Patel   2021-09-27 @399  	phys_addr_t base_gfn = slot->base_gfn + gfn_offset;
+9d05c1fee83757 Anup Patel   2021-09-27  400  	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
+9d05c1fee83757 Anup Patel   2021-09-27  401  	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
+9d05c1fee83757 Anup Patel   2021-09-27  402  
+26708234eb12e7 Anup Patel   2022-05-09  403  	gstage_wp_range(kvm, start, end);
+e7505b53d53e3b Vipin Sharma 2023-04-21  404  	spin_unlock(&kvm->mmu_lock);
+9d05c1fee83757 Anup Patel   2021-09-27  405  }
+99cdc6c18c2d81 Anup Patel   2021-09-27  406  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
