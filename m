@@ -2,86 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AEF6EBB85
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Apr 2023 23:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2426EBC4E
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 03:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjDVVbB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Apr 2023 17:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S229804AbjDWBiL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Apr 2023 21:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDVVbA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Apr 2023 17:31:00 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DABC0198B;
-        Sat, 22 Apr 2023 14:30:59 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pqKoq-0004RI-00; Sat, 22 Apr 2023 23:30:56 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 03F14C0135; Sat, 22 Apr 2023 23:30:42 +0200 (CEST)
-Date:   Sat, 22 Apr 2023 23:30:42 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     ndesaulniers@google.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH v2 0/2] MIPS: Fix check_bugs() modpost warning
-Message-ID: <20230422213042.GA7318@alpha.franken.de>
-References: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229966AbjDWBiL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Apr 2023 21:38:11 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B665A10FD;
+        Sat, 22 Apr 2023 18:38:08 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxYU_8i0RkotEgAA--.51512S3;
+        Sun, 23 Apr 2023 09:38:05 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxsrT8i0RkiPk1AA--.7506S2;
+        Sun, 23 Apr 2023 09:38:04 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] MIPS: uprobes: Restore thread.trap_nr
+Date:   Sun, 23 Apr 2023 09:38:03 +0800
+Message-Id: <1682213883-3654-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxsrT8i0RkiPk1AA--.7506S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZw13uw1rWw1UtFW3tFy8AFb_yoW3trcEkw
+        17Za4vkr15Jr4UZ34Uu3y3WFZxX34rGFn3A3W29FWUKw4Yyr1UCFs8GF98AF4DG3yqyrZ0
+        yrn8Xrn8ua129jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        U7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E
+        0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzV
+        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026x
+        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+        JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+        Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
+        IYCTnIWIevJa73UjIFyTuYvjxUwmhFDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 09:11:25AM -0700, Nathan Chancellor wrote:
-> Hi all,
-> 
-> This series fixes a modpost warning visible in -next from check_bugs()
-> and helps avoid a potential, albeit unlikely, warning from
-> check_bugs_early().
-> 
-> ---
-> Changes in v2:
-> - Now two separate patches: one to avoid current check_bugs() warning
->   and one to avoid potential check_bugs_early() warning.
-> - Sink body of check_bugs_early() into setup_arch() directly, rather
->   than marking it as __init (Nick).
-> - Add Naresh's reported-by to patch 1, which came after v1 was sent.
-> - Reword commit messages to note that there is not a problem at run time
->   because check_bugs() and check_bugs_early(), while not marked __init,
->   are only called from __init functions; modpost does not know this
->   though, hence the warning.
-> - Link to v1: https://lore.kernel.org/r/20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org
-> 
-> ---
-> Nathan Chancellor (2):
->       MIPS: Mark check_bugs() as __init
->       MIPS: Sink body of check_bugs_early() into its only call site
-> 
->  arch/mips/include/asm/bugs.h | 8 +-------
->  arch/mips/kernel/setup.c     | 3 ++-
->  2 files changed, 3 insertions(+), 8 deletions(-)
-> ---
-> base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-> change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
+thread.trap_nr is saved in arch_uprobe_pre_xol(), it should be restored
+in arch_uprobe_{post,abort}_xol() accordingly, actually it was only done
+in the post function, just do it in the abort function too, this change
+is similar with x86 and powerpc.
 
-series applied to mips-next.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/kernel/uprobes.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas.
-
+diff --git a/arch/mips/kernel/uprobes.c b/arch/mips/kernel/uprobes.c
+index 6b630ed..401b148 100644
+--- a/arch/mips/kernel/uprobes.c
++++ b/arch/mips/kernel/uprobes.c
+@@ -191,6 +191,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *aup,
+ {
+ 	struct uprobe_task *utask = current->utask;
+ 
++	current->thread.trap_nr = utask->autask.saved_trap_nr;
+ 	instruction_pointer_set(regs, utask->vaddr);
+ }
+ 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.1.0
+
