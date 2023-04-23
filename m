@@ -2,73 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E776EBC63
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 04:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE246EBC8B
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 05:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDWCTG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Apr 2023 22:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S230161AbjDWDIq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Apr 2023 23:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDWCTF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Apr 2023 22:19:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76451BD5;
-        Sat, 22 Apr 2023 19:19:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 634B660B51;
-        Sun, 23 Apr 2023 02:19:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9BA5C433EF;
-        Sun, 23 Apr 2023 02:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682216343;
-        bh=z5+A1RZSqI7NEF+u17BC2Wk+13SViH+UhzWxCAu3ssM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Lq9mT2pZt1k+aa/xmOW6bCdAf9SdoHG+Szo9u04E0JXv/FXrm7cRW8BX82dPJtq/m
-         4DKAUC+6+rhgkKnHapSTc3g66hzW+bDFagqUbxli89SkpBGGqtCemc6BE1NLSjbdgZ
-         XSe6zAtjm33XyB4VR7swkw5uSu4Ui4kWMg2DIXxBXQnrpo7ET6ZtUUUDPMsqXFG1qC
-         9/tFMwlj5HstykPIRwnrS308E1on+dPXVIg8Vwie+osd+ALSPMroWYtDqk+C2YUv0M
-         /jUxthoX9OtoXxmJ/EidAN4y5S59Tgdy8itTCwytfeJ/FFtcrbEXvEoWsqoIfrpAvh
-         p0cb5HFT2WkSg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6443E270DB;
-        Sun, 23 Apr 2023 02:19:03 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v6.3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230422212534.GA7257@alpha.franken.de>
-References: <20230422212534.GA7257@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230422212534.GA7257@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.3_2
-X-PR-Tracked-Commit-Id: 6dcbd0a69c84a8ae7a442840a8cf6b1379dc8f16
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 622322f53c6d9ddd3c2a4aad852b3e1adbd56da7
-Message-Id: <168221634373.27513.14791443979191365431.pr-tracker-bot@kernel.org>
-Date:   Sun, 23 Apr 2023 02:19:03 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229699AbjDWDIo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Apr 2023 23:08:44 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFE9211C;
+        Sat, 22 Apr 2023 20:08:44 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a50cb65c92so28713225ad.0;
+        Sat, 22 Apr 2023 20:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682219323; x=1684811323;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cRa8+FoOALv4APJpWbkEwxqQB2wwpsdDuWka4oQkSXw=;
+        b=EbzaIQRuoTYzlseyU+5IxOgQziMdElPg5BNm5g+ggkhsJWmx89EJd8oiYJ/4Hjehj1
+         Y42InVChVjBcjIvWUlvjKqWrFRkM5nZpdKflA/17HfJpZkhRwpdk+5tyj9v7ggDbiduO
+         4zdubbU7OaXO+M3Cm4ZVWhipeP497DcBIiWLqJeZzSKBNsupx6h+CHT30L5y0pPETSdY
+         Ogpst+nodf5dtL9ZlxXuHThJanPvjnu4A4EuKk3EkW9jH6j0YuMJud9Hn4CdU7dW1H5m
+         vo51kfMGoJhIz2s6wIUl/AqyY0GKVrXASIZ73Ebb5sCgwHEpLcY/TTNjlHDH4rMI5K7Y
+         S8nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682219323; x=1684811323;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cRa8+FoOALv4APJpWbkEwxqQB2wwpsdDuWka4oQkSXw=;
+        b=YadMKEMIL0MkWd6s8gBEhuWeWYlugs1N8SB5zaJPwDSNLccQBVXjeECFcyLe3PrMGl
+         eqmikrjK4aDCk9wXy5mbX5tUe5HDsmOx0S5rpicp/H/QbT0CxR8s0fRcnPsIK6C5X6m3
+         XvDrWR9EjgrAkHXMDwGBkLTPBOuhH0Zuwyy41guZshTUONPzb2kDlHTdXOBUQAjBHkKM
+         NvARKYpV9wa1+nU3aTDxcL8H8AMvwY6geFwBelO5a5LhlBxGmzlwzGapF18q8JvPNDQ+
+         n21ZEBcxSil1fNsDbzGytQItuwf7ujcPvu28zVkavreb3hsXCTRG9SD3y5OOz2yd8jeu
+         HO1Q==
+X-Gm-Message-State: AAQBX9d+p2svpa+PlwLlS/wv1wRaEz9fV0aWuohS3NcJo08h0gBO16+v
+        obdX5LsQyCcP8/1WhqdLBkL4LK3eUY8=
+X-Google-Smtp-Source: AKy350bTmVHmFQp+sHMoEWRiOX2xVPt0WzEAHxnrS6hDPHNkDRxiO8QJ1ugaI1RmjlNfwIOuxhO94A==
+X-Received: by 2002:a17:903:1251:b0:1a9:5dfb:11c5 with SMTP id u17-20020a170903125100b001a95dfb11c5mr4330418plh.35.1682219323319;
+        Sat, 22 Apr 2023 20:08:43 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-51.three.co.id. [116.206.28.51])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170902bd9000b001a6dc4f4a8csm478065pls.73.2023.04.22.20.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Apr 2023 20:08:42 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7B7EC106797; Sun, 23 Apr 2023 10:08:38 +0700 (WIB)
+Date:   Sun, 23 Apr 2023 10:08:37 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] MIPS: uprobes: Restore thread.trap_nr
+Message-ID: <ZEShNUil0gsVlrDo@debian.me>
+References: <1682213883-3654-1-git-send-email-yangtiezhu@loongson.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="O7Is9K1MZxESaB/k"
+Content-Disposition: inline
+In-Reply-To: <1682213883-3654-1-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Sat, 22 Apr 2023 23:25:34 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.3_2
+--O7Is9K1MZxESaB/k
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/622322f53c6d9ddd3c2a4aad852b3e1adbd56da7
+On Sun, Apr 23, 2023 at 09:38:03AM +0800, Tiezhu Yang wrote:
+> thread.trap_nr is saved in arch_uprobe_pre_xol(), it should be restored
+> in arch_uprobe_{post,abort}_xol() accordingly, actually it was only done
+> in the post function, just do it in the abort function too, this change
+> is similar with x86 and powerpc.
 
-Thank you!
+I'm confused (please fix up grammar, spelling, and punctuation). Can you
+explain why thread.trap_nr should be restored somewhere else? Also, what
+x86/powerpc changes as reference?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--O7Is9K1MZxESaB/k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZEShMQAKCRD2uYlJVVFO
+o7JPAQCKqSaf6wOMWWRmqM4AeXMOR0pUHFOq5zLSBrenErDLQQEApLxOMi2vHQnN
+LJVZgZBTHH2kHDtlkofiZXWfxh6TxAs=
+=yyT7
+-----END PGP SIGNATURE-----
+
+--O7Is9K1MZxESaB/k--
