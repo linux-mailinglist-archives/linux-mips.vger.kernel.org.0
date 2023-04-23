@@ -2,81 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2426EBC4E
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 03:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E776EBC63
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 04:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjDWBiL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Apr 2023 21:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S229699AbjDWCTG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Apr 2023 22:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjDWBiL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Apr 2023 21:38:11 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B665A10FD;
-        Sat, 22 Apr 2023 18:38:08 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxYU_8i0RkotEgAA--.51512S3;
-        Sun, 23 Apr 2023 09:38:05 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxsrT8i0RkiPk1AA--.7506S2;
-        Sun, 23 Apr 2023 09:38:04 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+        with ESMTP id S229587AbjDWCTF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Apr 2023 22:19:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76451BD5;
+        Sat, 22 Apr 2023 19:19:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 634B660B51;
+        Sun, 23 Apr 2023 02:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9BA5C433EF;
+        Sun, 23 Apr 2023 02:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682216343;
+        bh=z5+A1RZSqI7NEF+u17BC2Wk+13SViH+UhzWxCAu3ssM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Lq9mT2pZt1k+aa/xmOW6bCdAf9SdoHG+Szo9u04E0JXv/FXrm7cRW8BX82dPJtq/m
+         4DKAUC+6+rhgkKnHapSTc3g66hzW+bDFagqUbxli89SkpBGGqtCemc6BE1NLSjbdgZ
+         XSe6zAtjm33XyB4VR7swkw5uSu4Ui4kWMg2DIXxBXQnrpo7ET6ZtUUUDPMsqXFG1qC
+         9/tFMwlj5HstykPIRwnrS308E1on+dPXVIg8Vwie+osd+ALSPMroWYtDqk+C2YUv0M
+         /jUxthoX9OtoXxmJ/EidAN4y5S59Tgdy8itTCwytfeJ/FFtcrbEXvEoWsqoIfrpAvh
+         p0cb5HFT2WkSg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6443E270DB;
+        Sun, 23 Apr 2023 02:19:03 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230422212534.GA7257@alpha.franken.de>
+References: <20230422212534.GA7257@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230422212534.GA7257@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.3_2
+X-PR-Tracked-Commit-Id: 6dcbd0a69c84a8ae7a442840a8cf6b1379dc8f16
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 622322f53c6d9ddd3c2a4aad852b3e1adbd56da7
+Message-Id: <168221634373.27513.14791443979191365431.pr-tracker-bot@kernel.org>
+Date:   Sun, 23 Apr 2023 02:19:03 +0000
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH] MIPS: uprobes: Restore thread.trap_nr
-Date:   Sun, 23 Apr 2023 09:38:03 +0800
-Message-Id: <1682213883-3654-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxsrT8i0RkiPk1AA--.7506S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrZw13uw1rWw1UtFW3tFy8AFb_yoW3trcEkw
-        17Za4vkr15Jr4UZ34Uu3y3WFZxX34rGFn3A3W29FWUKw4Yyr1UCFs8GF98AF4DG3yqyrZ0
-        yrn8Xrn8ua129jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        U7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E
-        0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzV
-        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026x
-        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
-        JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
-        Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
-        IYCTnIWIevJa73UjIFyTuYvjxUwmhFDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-thread.trap_nr is saved in arch_uprobe_pre_xol(), it should be restored
-in arch_uprobe_{post,abort}_xol() accordingly, actually it was only done
-in the post function, just do it in the abort function too, this change
-is similar with x86 and powerpc.
+The pull request you sent on Sat, 22 Apr 2023 23:25:34 +0200:
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/uprobes.c | 1 +
- 1 file changed, 1 insertion(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.3_2
 
-diff --git a/arch/mips/kernel/uprobes.c b/arch/mips/kernel/uprobes.c
-index 6b630ed..401b148 100644
---- a/arch/mips/kernel/uprobes.c
-+++ b/arch/mips/kernel/uprobes.c
-@@ -191,6 +191,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *aup,
- {
- 	struct uprobe_task *utask = current->utask;
- 
-+	current->thread.trap_nr = utask->autask.saved_trap_nr;
- 	instruction_pointer_set(regs, utask->vaddr);
- }
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/622322f53c6d9ddd3c2a4aad852b3e1adbd56da7
+
+Thank you!
+
 -- 
-2.1.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
