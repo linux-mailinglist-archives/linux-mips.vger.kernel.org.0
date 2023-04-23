@@ -2,74 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBDC6EC06A
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 16:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7376EC070
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Apr 2023 16:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjDWOf4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Apr 2023 10:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S229453AbjDWOmz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Apr 2023 10:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDWOf4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Apr 2023 10:35:56 -0400
+        with ESMTP id S229441AbjDWOmy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Apr 2023 10:42:54 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17D9FF;
-        Sun, 23 Apr 2023 07:35:54 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 869DF32008C0;
-        Sun, 23 Apr 2023 10:35:52 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A3E77;
+        Sun, 23 Apr 2023 07:42:53 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id EA712320089C;
+        Sun, 23 Apr 2023 10:42:52 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 23 Apr 2023 10:35:52 -0400
+  by compute2.internal (MEProxy); Sun, 23 Apr 2023 10:42:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1682260552; x=1682346952; bh=PAr4ZIboJa
-        MJHdcJfTxs+nnLe/T7fzo0XDxOaHgRyXc=; b=jELwyHghNtdBQkMRWXrbT7Pi85
-        SekQsOSnG0U4zaTXXArDVkRWgSgqG71E/yRCZufo9K6Htzj9QUA7KDCC+qYwI6p6
-        /HJAKNzXzZLA6NWdLkmDfj8ZqimxCWS9D2iWVSlUCJ5r9XA3WjQ1/h2xIxXi0itc
-        zO0rhDub8Y8WlwgYZIN/f9F792PSz+MgzqDoIp9T0yWkvnkDngY1E3piiKy/Xz9V
-        o/rtjWuWjyB23palsPzR3QWTdXOfCuEO4eNkpRwOKoVS9wTCzsHr/f2kPq9DQTL4
-        ONkhrtgYO7RhAQame0E5XzmNWyOPKQxqfP+xpOGiPjKJtMH5cYTh37CMo3Ug==
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1682260972; x=1682347372; bh=WPq+Zi7vywciatF5G9rBX6Bg3LuU18ZaNh/
+        wk2gqel8=; b=laGDiIMmpcnsJBY/YrcHFcpjxkkRjGs+LWsJMypzC1/slkxvsu9
+        2EAEgZxqg8Khl0up9m4z6MHXo01NmVJouNvzRZ/OldqJtQRsoNx3ixHMScgWf5YX
+        LNag+jYgGM0AoHn+M1Rb6EZNhM1+RMgIese82FDsfYC2387qtFpST+IKcMidvDjH
+        n1hKTxfWMCsAbplVpOrxWk9vbrViOuViZpZh+Vy2Nq4hUa/ytsta5Y+y5PziiIBy
+        8VGLJCysi/vtBpNtmInBfeZarfa+qm8I5Jd3QbtvscEM/jcPqRw28dIm+W1c0LUg
+        6sFq42oDAjInVSFG13+TP9HR+IraGUereJw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682260552; x=1682346952; bh=PAr4ZIboJaMJH
-        dcJfTxs+nnLe/T7fzo0XDxOaHgRyXc=; b=GVR0AE//fuvQZurX4qScKH9S8wlFd
-        3Bk1pjj0b3d29JhfD3xMrTg5bY12VmqSmk62zxyljkgk6LB70r3jkWmTi/o1fYWo
-        8BHTyT1png2MgBgcrgP0wvJcLr8jZwhXjP4nlc/TbSHXox2gOzLtOo6SEAnCzOE7
-        QUrpMWZayAEMbShoeNAZWtRuJkqwTrr13UhJA119GJPSlFQAHhau3ba6eAJFGWDa
-        JlZT77/wK877WOLnqv7ybSLG/gSwSiNS/k0ZVKEoRu6EgkPa4UINbyk3P/Mou6mw
-        ldUPYD+YTCEE5NMNha7TY2ZVbriezfMuIeCdBzfiVHJKlolt3bOHe0QZg==
-X-ME-Sender: <xms:R0JFZP5McjHkG02elBuK4R3cdnp10UAc2fTEXC3TO8MFdB1HJZbjiQ>
-    <xme:R0JFZE4Y9URdImaDNkIis_DnZzizHQhnKD9eIfP-EP02sHnauAdeDytjkacPLIhey
-    9eflFD8N5SRoI80hMM>
-X-ME-Received: <xmr:R0JFZGfFeZOs8RJIopBuNsC7Ub5p74Eov2WbP8kBaBSk7I5DnU5F8r8VcZlK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtkedgjeekucetufdoteggodetrfdotf
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682260972; x=1682347372; bh=WPq+Zi7vywciatF5G9rBX6Bg3LuU18ZaNh/
+        wk2gqel8=; b=FWGaDxUREopJdToOwAHn1rQbzKzLa8TCJnONMklpxPazJtszniV
+        X6M4D2VhRCA/HqRiPII/f1ULqjI+6QxAB9cxIyX/Oc+AJf1PVplf8czRFbGhoupc
+        AoEkdU1Zc065OFu/pgTvsY/r4Czbpd2opD+oZ4uM0QQ9iGx3JwdMkGVfi7O/5eom
+        rzvVlvBT/cud7i6Wq42nCZszOkaz2IXfFXFiSHxSaUe7DjKWKHKHq7cEf6DDRjin
+        dEwDMc3lwbU41klPF95mY4zKQiGU3eNq1+U87WxHhl8JgjeFWL3cktqlr/G6ZlC6
+        zwQUGLvfepf23+Mecs3J+YRVkxQElUYgS7g==
+X-ME-Sender: <xms:7ENFZHFWKemQEWALxlayMdnGJvspliziPLZ2WPJFMnXQ5J0JkmudWA>
+    <xme:7ENFZEVwZWCdmmOwMngZ5QQABR6VXlxOZy7KPa3s6e48bh6_LEBvmdDyTJE08Xhx4
+    Iihf7GQI-eCMCW5oxc>
+X-ME-Received: <xmr:7ENFZJIjC3s2q_sz2kpDOKGd_WoFXs9giMnFWYfW6sKii7dMl6IDgkS7nRyKVWVFx9We>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtkedgkedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
-    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:R0JFZAIDC8SGw8EhhWmMfhPFrAmY055IwQUFA9jd6r85lXHWLXaJfw>
-    <xmx:R0JFZDLYfxsPJel5rzSaVJaV-ZjDrcn5zbhmbKgbS7gDkKDq4Hr3pg>
-    <xmx:R0JFZJyVqryL6S9ldbDJI4bTApa731sJ7Yq9vnh-xJTjWy1UjRClOw>
-    <xmx:SEJFZKX5xvwKBK0CrjXCO7V5YpIkKQhZYo9QEXdiD8bqBzOFieXoug>
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:7ENFZFG9LhHIbkOXSVoZal785sefLRC-ahBGzzg4wCEW__e2zjyJ2g>
+    <xmx:7ENFZNUl7U-dvf88-n0ZNT8xXaNvxc0RJFlUP4hxMbtIwKiaXvygpQ>
+    <xmx:7ENFZAMWOS8k62Z63m7F4uOPbpxq8KLlw58bL4yzEHWqj_8xfJEKeg>
+    <xmx:7ENFZMfBpwXacG1ETti0rCGdnjGYrOTdE7HaTqoWJeo47Q_-yWhIuw>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Apr 2023 10:35:50 -0400 (EDT)
+ 23 Apr 2023 10:42:51 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH] MIPS: Remove unused variable in arch_local_irq_restore
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH] MIPS: Remove unused variable in arch_local_irq_restore
-Date:   Sun, 23 Apr 2023 15:35:45 +0100
-Message-Id: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
+Date:   Sun, 23 Apr 2023 15:42:40 +0100
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <BD0619A1-0F31-4226-B2C6-F2FA9FBBB38D@flygoat.com>
+References: <20230423143545.32487-1-jiaxun.yang@flygoat.com>
+To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,27 +86,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It was left over in 9efe1ad6f24a ("MIPS: Don't play with fire in
-DIEI irq_restore").
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/irqflags.h | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/arch/mips/include/asm/irqflags.h b/arch/mips/include/asm/irqflags.h
-index 3357bce75c69..b79269789c71 100644
---- a/arch/mips/include/asm/irqflags.h
-+++ b/arch/mips/include/asm/irqflags.h
-@@ -59,8 +59,6 @@ static inline unsigned long arch_local_irq_save(void)
- 
- static inline void arch_local_irq_restore(unsigned long flags)
- {
--	unsigned long __tmp1;
--
- 	if (likely(flags)) {
- 		__asm__ __volatile__(
- 		"	.set	push						\n"
--- 
-2.39.2 (Apple Git-143)
+> 2023=E5=B9=B44=E6=9C=8823=E6=97=A5 15:35=EF=BC=8CJiaxun Yang =
+<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> It was left over in 9efe1ad6f24a ("MIPS: Don't play with fire in
+> DIEI irq_restore").
+>=20
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+Oh sorry please ignore the noise.
+
+mips-fixes tree on codeaurora mirror is lapsed. Really shouldn=E2=80=99t =
+use that mirror.
+
+Thanks
+Jiaxun=20
+
+> ---
+> arch/mips/include/asm/irqflags.h | 2 --
+> 1 file changed, 2 deletions(-)
+>=20
+> diff --git a/arch/mips/include/asm/irqflags.h =
+b/arch/mips/include/asm/irqflags.h
+> index 3357bce75c69..b79269789c71 100644
+> --- a/arch/mips/include/asm/irqflags.h
+> +++ b/arch/mips/include/asm/irqflags.h
+> @@ -59,8 +59,6 @@ static inline unsigned long =
+arch_local_irq_save(void)
+>=20
+> static inline void arch_local_irq_restore(unsigned long flags)
+> {
+> - unsigned long __tmp1;
+> -
+> if (likely(flags)) {
+> __asm__ __volatile__(
+> " .set push \n"
+> --=20
+> 2.39.2 (Apple Git-143)
+>=20
 
