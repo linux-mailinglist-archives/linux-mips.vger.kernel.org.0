@@ -2,117 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD096ED30E
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Apr 2023 19:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA446ED400
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Apr 2023 19:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbjDXRDJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Apr 2023 13:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S231696AbjDXR6m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Apr 2023 13:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbjDXRDI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Apr 2023 13:03:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0233C4C1E;
-        Mon, 24 Apr 2023 10:03:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FAF561F22;
-        Mon, 24 Apr 2023 17:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297D2C433D2;
-        Mon, 24 Apr 2023 17:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682355785;
-        bh=VEVvVZ8+SlsEh9PFAshPWT7wBg1WEd2nNfTgDFp1BYo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eXuxW1vKbdgSWII8dvlWMbJ9Ck/G2tsLsG+xxW1eDaz1FFdVRlBlyNDIybSzYtp+J
-         8kJaCk1Sa2vMRA5I26+0u1q1q5cWgf7n8b3R09muHCWMvmZOjCDK9lXp3WP02n4zGi
-         ymWWXUKwSVcPAZj3UXF5ngbq9+YqenmUKkhjDkETrh8sMqKQjVVsYAFK5HMLVJ2Fkr
-         acMi4r1vqfmbdXEdwluFi9S4O7rCE6Ji9b4MeqazSmmEx1zKCZj+9KJb+UlZytVvKe
-         Ah8ldBTPY5bRvP9si+4b7HHAlqgsCwnuD/8V6WAPBDu4wt9b4/iSmqcqNPFut9VTJp
-         oaiCLdGkGU9iw==
-Date:   Mon, 24 Apr 2023 10:03:03 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        with ESMTP id S229625AbjDXR6l (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Apr 2023 13:58:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E48E6A42;
+        Mon, 24 Apr 2023 10:58:40 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682359118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/B8ViPkT84zF77YJVg/Vg+DuX3x6sDAhKrSrx63B0t8=;
+        b=zNVUbHm89L6WRj2i94+vPyVn3/KO1LB2C60TWY+kKf2/e8X9/9XtdKbM639oCyDfzo+kF6
+        y7T/sJmhL5ytO4DUh414kpf+vt4CvUe/YodEpDD02hfzlBINbTEIvI3SsdLqezsCo+5tFW
+        AvbLWyv3qGi42txG7eIeRdoNoCDf86KN/QgJXAPPGmhTl1TqeCcHqSPF7eM9+ujvoD5z/m
+        AjrKuWx0mKwm8kHTyjPIB1SSadCZzqxSWvKRYA61NK+fA/i4N78zaZprmbihpUvGoCep3s
+        2RQE5w5ABRrYdGBrSZjZPmPvtUXxeogAae/i/g9/9f8KekX5LyUd6mtLrTj6qw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682359118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/B8ViPkT84zF77YJVg/Vg+DuX3x6sDAhKrSrx63B0t8=;
+        b=ZaMRZ/Y/wVrPL6Kd1U5Zo8HZlUCLMRTrTHQ/7Xvf+abFcSRFeSo9Dw3jXKeMeUtXfr3+up
+        aT9nxD885g2bqnAA==
+To:     Brian Gerst <brgerst@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        llvm@lists.linux.dev, Borislav Petkov <bp@alien8.de>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v2 2/7] MIPS: Add toolchain feature dependency for
- microMIPS smartMIPS
-Message-ID: <20230424170303.GA1255815@dev-arch.thelio-3990X>
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-3-jiaxun.yang@flygoat.com>
- <20230418130823.GA12456@alpha.franken.de>
- <CAKwvOd=ye9jA0-3QRpD76waZCSX=ayFeE2ZNAPPM-fLdyCq1FQ@mail.gmail.com>
- <77F56166-265A-4653-ADF4-B0057604A539@flygoat.com>
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 35/37] x86/smpboot: Support parallel startup of
+ secondary CPUs
+In-Reply-To: <87mt38yhwh.ffs@tglx>
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232311.379210081@linutronix.de>
+ <CAMzpN2hUbYpYrqDL1ViXUWGKGa7mDEG6iHtWEZg9GvrAoRgvKQ@mail.gmail.com>
+ <87mt38yhwh.ffs@tglx>
+Date:   Mon, 24 Apr 2023 19:58:36 +0200
+Message-ID: <878reh17sj.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <77F56166-265A-4653-ADF4-B0057604A539@flygoat.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 08:41:07PM +0100, Jiaxun Yang wrote:
-> 
-> 
-> > 2023年4月20日 00:01，Nick Desaulniers <ndesaulniers@google.com> 写道：
-> > 
-> > On Tue, Apr 18, 2023 at 6:13 AM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> >> 
-> >> On Fri, Apr 14, 2023 at 09:06:56AM +0100, Jiaxun Yang wrote:
-> >>> microMIPS smartMIPS kernel can only be compiled if they are supported
-> >>> by toolchain.
-> >>> 
-> >>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > 
-> > Question: won't the lack of this (patch and rest of the series) hurt
-> > our ability to test randconfig builds of ARCH=mips with clang? See
-> > also the 0day report from Boris:
-> > https://lore.kernel.org/llvm/202304170748.Fg9VIgGd-lkp@intel.com/
-> 
-> Kconfig experts, Is there any way to generate warning based on Kconfig options?
-> So we can let users know there are something went wrong but still allow build to happen.
+On Sat, Apr 15 2023 at 23:06, Thomas Gleixner wrote:
 
-I do not think there is a way that this can be done within Kconfig
-itself but you could do something like arch/x86/Makefile does for
-RETPOLINE during archprepare and warn when an option is selected without
-a dependency. I envision something like the following but it has not
-even been compile tested:
+> On Sat, Apr 15 2023 at 09:22, Brian Gerst wrote:
+>> On Fri, Apr 14, 2023 at 7:45=E2=80=AFPM Thomas Gleixner <tglx@linutronix=
+.de> wrote:
+>>> @@ -248,10 +311,20 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>>>          *
+>>>          * RDX contains the per-cpu offset
+>>>          */
+>>> -       movq    pcpu_hot + X86_current_task(%rdx), %rax
+>>> -       movq    TASK_threadsp(%rax), %rsp
+>>> +       movq    pcpu_hot + X86_top_of_stack(%rdx), %rsp
+>>
+>> Switching to using pcpu_hot.top_of_stack is ok, but it's not
+>> completely equivalent.  top_of_stack points to the end of the pt_regs
+>> structure, while the kernel stack starts below pt_regs even for kernel
+>> threads.  So you need to subtract PTREGS_SIZE from the stack pointer
+>> after this.
+>>
+>> This change should also be a separate patch.
+>
+> You're right on both counts.
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 04e46ec24319..2c3be65ce3cc 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -399,6 +399,11 @@ ifdef CONFIG_MIPS32_O32
- 	@$(kecho) '  Checking missing-syscalls for O32'
- 	$(Q)$(MAKE) $(build)=. missing-syscalls missing_syscalls_flags="-mabi=32"
- endif
-+ifdef CONFIG_CPU_HAS_SMARTMIPS
-+ifndef CC_HAS_SMARTMIPS
-+	$(warning CONFIG_CPU_HAS_SMARTMIPS selected without supported compiler, build may not work)
-+endif
-+endif
- 
- install:
- 	$(Q)install -D -m 755 vmlinux $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
+Actually no. We can't do that as this breaks suspend/resume (again).
 
-You could also make that depend on !CONFIG_COMPILE_TEST, as that is a
-signal that the user does not intend to run this kernel.
-
-Masahiro might have other comments.
-
-Cheers,
-Nathan
+/me drops it.
