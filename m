@@ -2,37 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A9B6EC78C
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Apr 2023 10:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAB66EC808
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Apr 2023 10:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjDXIBu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Apr 2023 04:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S231394AbjDXIpg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Apr 2023 04:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDXIBt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Apr 2023 04:01:49 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23F6F11B;
-        Mon, 24 Apr 2023 01:01:48 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pqr8r-0002pn-00; Mon, 24 Apr 2023 10:01:45 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3D49BC021A; Mon, 24 Apr 2023 10:01:24 +0200 (CEST)
-Date:   Mon, 24 Apr 2023 10:01:24 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Henry Willard <henry.willard@oracle.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] MIPS: Don't clear _PAGE_SPECIAL in _PAGE_CHG_MASK
-Message-ID: <20230424080124.GA4889@alpha.franken.de>
-References: <20230412212953.388185-1-henry.willard@oracle.com>
+        with ESMTP id S231387AbjDXIpf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Apr 2023 04:45:35 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A67FF
+        for <linux-mips@vger.kernel.org>; Mon, 24 Apr 2023 01:45:32 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so30857887a12.1
+        for <linux-mips@vger.kernel.org>; Mon, 24 Apr 2023 01:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682325931; x=1684917931;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H2QhGbPfS5cFQyV2e+dfSoRNu58zlK/LOs70+0DhVQg=;
+        b=JYxpf8QGYxce1yUMh0Qi+Fp1oILpqRp2214cBO7q7NJqGA86odQLx05RtEiAz3qEDZ
+         pYTCQas33oKTGfv4nE3NcOjO6lj37xrTOx/dWm2Ipr2JpAkfnNTxzDG317OzYHMkp9aB
+         M4DSY/0nkneF+otW91G9dj/K12ipUQhLG/kjc1aN/rqNcAbgWRmOHkFeKiOJcjO8xt4Y
+         NkuV4UvLvgm4nDuKc7kJmyndDoMzuK7uDmlNGgcsBWNQu/60v75WPFzcDd4+oI8YU6qc
+         T1I4UuK0qckBjz88XVMhU247waC0pn+3GR+yx5zc9097CTrBxaaQf8GUISMrSDauUehk
+         8eGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682325931; x=1684917931;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H2QhGbPfS5cFQyV2e+dfSoRNu58zlK/LOs70+0DhVQg=;
+        b=WW2BRe7ch6Wpdykuf9HYWtQjQlEORUrrz0QvVz3rwDLJBPEB6FKMf/yBZGH41ZUB7m
+         92iynV6x4nXjbFP8pgSmukE2wSd6Pr8LADDtexi/rfup0bObNAZwdoZdR3HV9ZD5XAkd
+         /KdE2QI05E0Ow54qg8gh6vIoVGBab7vARVtukLSFeZUQNLvlsko97VbwGsG6wfXxJQwx
+         QUbn6+RWT7lzv+dxlhSsHyAeMEeO0AiWnLhzb+pr3b7ZvKnUP8LPGBmPp4Qh0KEzk/OP
+         eSFyoP0e6JoHi3IQb4c8IV3zWVS/tNViFuWzPecwMTDOY6oUCCH31MMV3OZKwz/f4fxg
+         5mwQ==
+X-Gm-Message-State: AAQBX9d95QVLvfnQymGkmZSECp0uBjMKUrJ2IvhXD7Gsg/Rf+vl2hG5r
+        wbcoJQ0QLCAlkhuH+Ygq9fTsGA==
+X-Google-Smtp-Source: AKy350bxdVgo3uacEszB4mUWydB3zlwuBKaof0asY6EntyEMNGr8s1gxCIhCzq9xEWTc75SvmZNj8g==
+X-Received: by 2002:a17:906:cc99:b0:94a:511b:a21d with SMTP id oq25-20020a170906cc9900b0094a511ba21dmr9547736ejb.28.1682325930798;
+        Mon, 24 Apr 2023 01:45:30 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:fcdb:bf53:d053:3a52? ([2a02:810d:15c0:828:fcdb:bf53:d053:3a52])
+        by smtp.gmail.com with ESMTPSA id jt20-20020a170906ca1400b008e54ac90de1sm5250255ejb.74.2023.04.24.01.45.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 01:45:30 -0700 (PDT)
+Message-ID: <169d832c-72c0-6c67-37c3-dbea9e1bc639@linaro.org>
+Date:   Mon, 24 Apr 2023 10:45:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412212953.388185-1-henry.willard@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson
+ EIOINTC
+Content-Language: en-US
+To:     Binbin Zhou <zhoubb.aaron@gmail.com>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+References: <cover.1681887790.git.zhoubinbin@loongson.cn>
+ <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
+ <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
+ <CAMpQs4JjHvVOzQz-1Y-q9ut6tWUpakrHeozuwPg0dzoDcUFEGA@mail.gmail.com>
+ <75231886-cdf6-cfde-d6b9-183b1fbf98da@linaro.org>
+ <CAMpQs4Jp8WPKJEuJD-_83oRPBbPELxS5ufqp-nHow0D9D+R+ig@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMpQs4Jp8WPKJEuJD-_83oRPBbPELxS5ufqp-nHow0D9D+R+ig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,56 +91,65 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 03:29:53PM -0600, Henry Willard wrote:
-> In the special case where
+On 23/04/2023 10:30, Binbin Zhou wrote:
+> On Thu, Apr 20, 2023 at 11:52 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 20/04/2023 15:00, Binbin Zhou wrote:
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    eiointc: interrupt-controller@1fe11600 {
+>>>>> +      compatible = "loongson,ls2k0500-eiointc";
+>>>>> +      reg = <0x1fe11600 0x10>,
+>>>>> +            <0x1fe11700 0x10>,
+>>>>> +            <0x1fe11800 0x10>,
+>>>>> +            <0x1fe114c0 0x4>;
+>>>>
+>>>> Binding is OK, but are you sure you want to split the address space like
+>>>> this? It looks like two address spaces (enable+clear+status should be
+>>>> one). Are you sure this is correct?
+>>>>
+>>> Hi Krzysztof:
+>>>
+>>> These registers are all in the range of chip configuration registers,
+>>> in the case of LS2K0500, which has a base address of 0x1fe10000.
+>>> However, the individual register addresses are not contiguous with
+>>> each other, and most are distributed across modules, so I feel that
+>>> they should be listed in detail as they are used.
+>>
+>> Do you want to say that:
+>> Between 0x1fe11600 and 0x1fe11700 there are EIOINTC registers and other
+>> (independent) module registers?
 > 
-> 	p = mmap(NULL, ALLOC_SIZE, PROT_READ,
->                 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
+> No, this section is all EIO-related configuration, but there will be
+> undefined space here.
 > 
-> is followed by
+> Throughout the chip configuration space, there are some relatively
+> common areas, such as the definition of 0x1fe1_14c0.
+> Because our chip supports two interrupt modes, node legacy I/O
+> interrupt and extended I/O interrupt, both modes require interrupt
+> routing registers.
+> Their registers are then defined together: the legacy interrupt I/O
+> start address is 0x1fe1_1400, while the extended I/O interrupt start
+> address is 0x1fe1_14c0.
 > 
-> 	rc = mprotect(p, ALLOC_SIZE, PROT_NONE);
+> Then I have carefully compared the chip configuration space in
+> LS2K0500 and LS2K2000 and can see that:
 > 
-> the _PAGE_SPECIAL bit in the page tables will be cleared by
-> mistake and the later unmapped operations will incorrectly
-> modify the struct page for the the zero page. This sequence
-> occurs in the madvise05 test of the Linux Test Project
-> suite of tests.
+> 1. The chip configuration space base addresses are different, but they
+> both have a size of 64KB;
+> 2. The offset addresses of the EIO related registers are the same, for
+> example the offset of the enable register is 0x1600.
 > 
-> This was discovered while testing an older version of the kernel
-> (5.4.17) on a MIPS device. Unfortunately, support for this device
-> is not available in newer kernels, so I can't test this with the
-> latest Linux kernel code. It looks like the problem exists in
-> newer kernels, but I can't verify it. Except for the LTP test,
-> this sequence of calls is probably not common.
+> Wouldn't it be better to declare the entire configuration space (64KB)
+> directly in the dts and use the offsets to access the corresponding
+> registers?
 > 
-> Passing it along in the hope it will be useful to someone.
-> 
-> Signed-off-by: Henry Willard <henry.willard@oracle.com>
-> ---
->  arch/mips/include/asm/pgtable-bits.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-> index 2362842ee2b5..1c576679aa87 100644
-> --- a/arch/mips/include/asm/pgtable-bits.h
-> +++ b/arch/mips/include/asm/pgtable-bits.h
-> @@ -280,6 +280,7 @@ static inline uint64_t pte_to_entrylo(unsigned long pte_val)
->  #define __WRITEABLE	(_PAGE_SILENT_WRITE | _PAGE_WRITE | _PAGE_MODIFIED)
->  
->  #define _PAGE_CHG_MASK	(_PAGE_ACCESSED | _PAGE_MODIFIED |	\
-> -			 _PAGE_SOFT_DIRTY | _PFN_MASK | _CACHE_MASK)
-> +			 _PAGE_SOFT_DIRTY | _PFN_MASK |   \
-> +			 _CACHE_MASK | _PAGE_SPECIAL)
->  
->  #endif /* _ASM_PGTABLE_BITS_H */
-> -- 
-> 2.31.1
+> Example:
+> reg = <0x1fe10000 0x10000>.
 
-applied to mips-next.
+Yes, that's what usually we do.
 
-Thomas.
+Best regards,
+Krzysztof
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
