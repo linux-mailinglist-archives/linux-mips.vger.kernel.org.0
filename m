@@ -2,87 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81DA6EE8CF
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Apr 2023 22:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213106EEFBB
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Apr 2023 09:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbjDYUHv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Apr 2023 16:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S239597AbjDZH7k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Apr 2023 03:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbjDYUHv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Apr 2023 16:07:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435EEA5E0;
-        Tue, 25 Apr 2023 13:07:50 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682453268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4O15691mL3gwOERb5M8WwZ/BXXDNqH0+MWC0TCs50QE=;
-        b=Bwuzz8Nz/BV6G/VL2bb+kha7mVj8/IRkuvbsjwjzk4USnPr2OW7n7gum3YLTay29fSKm4l
-        VIaAVviF4DxNGn2wYM6o0v57oY64CRe+VgXsYQv76pd/utkcrBMIA+Hlh315Cm54VqTo7K
-        atpyanHwbqEDa1wx0+1kk6JnSgmhiayROO89bvR9xqhG5h5fXOyJHuELCWZOaAN84arMeq
-        GGcJ4Ir8foJBLeP8ch9gHIy9jvOiKYJ4asV3QtfyaAgXR2pzDWC3evufPz0x9jkOlulsT0
-        C2Q9I3DEe4BIAOmlzxJr0oVN2tLwYUOfQk+hTo1aBm1XqujojvIZxEYvbxiQIw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682453268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4O15691mL3gwOERb5M8WwZ/BXXDNqH0+MWC0TCs50QE=;
-        b=RrFYGWkb9+Sr7TGoFVSkR/dCgulbRZuvJgUFeQBLzx1gsWc2Iv3HT6T4XcF1FLb33wIMzq
-        mCdHr2bCd+lRBoCA==
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
+        with ESMTP id S239446AbjDZH7j (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Apr 2023 03:59:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 284F130EB;
+        Wed, 26 Apr 2023 00:59:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 680B44B3;
+        Wed, 26 Apr 2023 01:00:21 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.23.120])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A76593F587;
+        Wed, 26 Apr 2023 00:59:32 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 08:59:26 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
         Brian Gerst <brgerst@gmail.com>,
         Arjan van de Veen <arjan@linux.intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Paul McKenney <paulmck@kernel.org>,
         Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Juergen Gross <jgross@suse.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         xen-devel@lists.xenproject.org,
         Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <87v8hq35sk.ffs@tglx>
-References: <87r0sh4m7a.ffs@tglx>
- <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
- <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
- <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
- <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
- <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
- <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
-Date:   Tue, 25 Apr 2023 22:07:47 +0200
-Message-ID: <87r0s7zpws.ffs@tglx>
+        linux-riscv@lists.infradead.org, Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 22/37] arm64: smp: Switch to hotplug core state
+ synchronization
+Message-ID: <ZEjZ3pHjQWn4drs8@FVFF77S0Q05N>
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232310.569498144@linutronix.de>
+ <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
+ <87ttx3zqof.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ttx3zqof.ffs@tglx>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,26 +74,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 20 2023 at 17:57, Thomas Gleixner wrote:
-> On Thu, Apr 20 2023 at 07:51, Sean Christopherson wrote:
-> Something like the completely untested below should just work whatever
-> APIC ID the BIOS decided to dice.
+On Tue, Apr 25, 2023 at 09:51:12PM +0200, Thomas Gleixner wrote:
+> On Mon, Apr 17 2023 at 16:50, Mark Rutland wrote:
+> > As a tangent/aside, we might need to improve that for confidential compute
+> > architectures, and we might want to generically track cpus which might still be
+> > using kernel text/data. On arm64 we ensure that via our cpu_kill() callback
+> > (which'll use PSCI CPU_AFFINITY_INFO), but I'm not sure if TDX and/or SEV-SNP
+> > have a similar mechanism.
+> >
+> > Otherwise, a malicious hypervisor can pause a vCPU just before it leaves the
+> > kernel (e.g. immediately after the arch_cpuhp_cleanup_dead_cpu() call), wait
+> > for a kexec (or resuse of stack memroy), and unpause the vCPU to cause things
+> > to blow up.
+> 
+> There are a gazillion ways for a malicious hypervisor to blow up a
+> 'squint enough to be confident' guest.
+> 
+> The real question is whether it can utilize such a blow up to extract
+> confidential information from the guest.
 >
-> That might just work on SEV too without that GHCB muck, but what do I
-> know.
+> If not then it's just yet another way of DoS which is an "acceptable"
+> attack as it only affects availability but not confidentiality.
 
-It does not.
+Sure.
 
-RDMSR(X2APIC_ID) is trapped via #VC which cannot be handled at that
-point. Unfortunately the GHCB protocol does not provide a RDMSR
-mechanism similar to the CPUID mechanism. Neither does the secure
-firmware enforce CPUID(0xb):APICID to real APIC ID consistency.
+My thinking is that this is an attack against the *integrity* of the guest
+(since the vCPU that gets unpasued may write to memory), and so it's
+potentially more than just a DoS.
 
-So the hypervisor can dice the APIC IDs as long as they are consistent
-with the provided ACPI/MADT table.
-
-So no parallel startup for SEV for now.
+I only mention this because I'd like to account for that on arm64, and if other
+architectures also wanted to handle that it might make sense to have some
+common infrastructure to track whether CPUs are potentially still within the
+kernel.
 
 Thanks,
-
-        tglx
+Mark.
