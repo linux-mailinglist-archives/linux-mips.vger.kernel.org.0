@@ -2,139 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5156F122C
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Apr 2023 09:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD096F12A7
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Apr 2023 09:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345207AbjD1HOt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Apr 2023 03:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S1345807AbjD1Hnx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Apr 2023 03:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjD1HOs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Apr 2023 03:14:48 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1E32106;
-        Fri, 28 Apr 2023 00:14:46 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so7369792276.0;
-        Fri, 28 Apr 2023 00:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682666086; x=1685258086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JjD4LdSVifv1y48NP8NbjYeH/jMSNzvdhViXyXR12O0=;
-        b=CmddwR/COD4j5JCvj5y8CuVO2dPW87N9Q9DKsOWuSog2R5gV8dD7wnAaSe61NuISW8
-         g4mnzESEGxadmaUOBs8uXDoZAIk6NmPnhsKIHTLdLofh7gvFydlscvMhqBtt5qzxyThc
-         p0bTHZaBb/lwcHMJL1RMdau5CNEkjs633qacSYQbAsHfA9v6OR3GD9VIoZBs0ZFpFalT
-         Tsbj7UP96SG9FawCqe2ZSdPqeMER3oETtScicg2RnPG1nwYZO8KGmvoknut8soa6z11v
-         jqpUJxjgIspsfTZsPeneWQioycC+C4DAqtVFng50LIjF0js0r7hIysXeQfQStlnMxCQt
-         5+BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682666086; x=1685258086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JjD4LdSVifv1y48NP8NbjYeH/jMSNzvdhViXyXR12O0=;
-        b=hZ9JEX40JAazXUZcOhflPSKQ2u/aT0//3MhmylpJFhrOjqJjMHMpKsc07yj2hP6Sy4
-         7XD4R5QE577RTFCEHkGWrHh0XS7ph7FZh7d5LlJj/XuC0yJkAvtWNMUj1lWKAXvF/FQK
-         AW5aSUiw5Kmdk2zMTz5NfWJarnr9Q0Q8g0c+VJ+8Y2XVs7DZlnlYSV2XbONhlEoFGZXJ
-         xvbAKH/LBJoeecnOQ8elyrx7dBggpsA8Ee2uUrGQZ0xSPjkpnTzTGR0ma8tekEMp9W1V
-         xBgzHL87MnqUeGUhbOWdaFJCYuz5OVB0iD+YEHn1WVXNjLnewZgPk58OIZra9KUQVnch
-         ujZw==
-X-Gm-Message-State: AC+VfDy5e6GUNUYgqHK9Q7I4/2QikkRlLWnqWHCOwHa13FQ/VzUwzIot
-        JxlSP/QtWSj4x53S/Sdspo8Zc1F96rRpkptTbl5ucjb9hvYNekNs
-X-Google-Smtp-Source: ACHHUZ7qAMCPC1Nx0vUJvR5mwjHg24fYFqQIBkUzZFfa6v3Jnl36hIANECVAnaR8WbC2XBxcVj8WMq85y+iUxhLGMts=
-X-Received: by 2002:a81:4dc6:0:b0:54f:85bc:a808 with SMTP id
- a189-20020a814dc6000000b0054f85bca808mr6394159ywb.16.1682666085657; Fri, 28
- Apr 2023 00:14:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAOd03yRAmPULzi8fYTnukCpRPHa1Zsv5ZFFeQRcQ7B1abQCGqA@mail.gmail.com>
- <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
-In-Reply-To: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
-From:   genjian zhang <zhanggenjian123@gmail.com>
-Date:   Fri, 28 Apr 2023 15:13:32 +0800
-Message-ID: <CAOd03yTc3+Sa4zsPQCu3dHiJfuUf-kOMxeUH6rm4u4Z6Hv2BQQ@mail.gmail.com>
-Subject: Re: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES
- is enabled
-To:     tsbogend@alpha.franken.de, rdunlap@infradead.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1345641AbjD1Hng (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Apr 2023 03:43:36 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D015FC0;
+        Fri, 28 Apr 2023 00:42:35 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 615423200319;
+        Fri, 28 Apr 2023 03:41:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 28 Apr 2023 03:41:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
+        JdT/8deI=; b=DclSOfxipXonjr10Zfze2g04tEcMacCmPEMQj9KSUXPgBjVvL3b
+        MQo6fuWFJzT27nHJRs74jQBGwTtn2n2KHu5aTUjHmlrE0229hVE5oHF9yZDkS3ew
+        p1PmAZmZsXTagjeqlDcNnPsWoMKrE3WDRUgwOnllR2Mxd40mEjio8JDSoZrBhcLY
+        EpF/qnQ//QXfqOClL6sTo+6QcKph0TMZrseOTG+p/07lIk+CJDRuw9l1QbbyGXjO
+        Eb35nUJHmU87iS3+aXTcjIEw3yWT1ZcEtVJ4ScA81na/2JXShjG0jXm+bNsByN9H
+        0auAMaDbwZPPaqpkQeZO7SI/+wjiURWUsIw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
+        JdT/8deI=; b=ZK/ac6fyNoZWTXPXbTwDD4R131otN5WDVVkeFrFt0hh+B+HJxI8
+        X1G/CekMUpexmmrmmtZG9J6nlcBpYM2so1ttFbssFuvmAd/ypJumITr52uxj1kqy
+        Zy5c2xC/bhpYC6ggOg+MvqevGn68/zmzyOJ/3I3FVAlKSomAD5e4Rd6yFIqBKGoS
+        hfpNiJGqsm98wDNSPOSseTUhCzwwWb6vjvWT3xqdwN747++XNPbtRAEMqvBh4uIw
+        8a5wbLZI4Yp1uAxenqy8Yq0fZoWyfdJOOTsgpDQXZZOenD4BGJ/pbNjPRx5NNA7H
+        eRdIwS64tODrt1vngpa6XkfH9l9gVEeJE5g==
+X-ME-Sender: <xms:sXhLZC_w2Ek7ASHPBn9INJdoLclKFnb0_xbl3lC3xmLCPyKQXxk-BA>
+    <xme:sXhLZCuacs7cUiWYO0nEuiBYqB32l5BX1MLYeiBEMcK-fUP18Owr4Xr3Py6CFXhZd
+    _Jcbs_IxCTeOMDCEhI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedujedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:sXhLZICeUj5YmbBGBf_2m0H6PdWJkxUh3cvjU_9w54cXtxEeD9Uaeg>
+    <xmx:sXhLZKfodyYkaB9AElovPFxDfwUHR8mUJf5ooIYAhxFkIsxA5POH_w>
+    <xmx:sXhLZHPdS6QKadaKE8YtYrFaIvC03TvHzezzcglBLhUn06N1drpMBQ>
+    <xmx:snhLZPb3qpLzi_KGSCW3CvjqMT17lW441eMUaxBX-rqa1NYZ3zdyZQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1B945B60086; Fri, 28 Apr 2023 03:41:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <52dd950a-e714-4ebe-a663-4e0ec6463d03@app.fastmail.com>
+In-Reply-To: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
+References: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
+Date:   Fri, 28 Apr 2023 08:40:51 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stanislav Kinsburskii" <skinsburskii@linux.microsoft.com>
+Cc:     "Matt Turner" <mattst88@gmail.com>, x86@kernel.org,
+        "Stanislav Kinsburskii" <stanislav.kinsburskii@gmail.com>,
+        "Borislav Petkov" <bp@alien8.de>, linux-ia64@vger.kernel.org,
+        "Mark Brown" <broonie@kernel.org>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        linux-kernel@vger.kernel.org, "Brian Cain" <bcain@quicinc.com>,
+        linux-mips@vger.kernel.org,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Omar Sandoval" <osandov@fb.com>, "Helge Deller" <deller@gmx.de>,
+        linuxppc-dev@lists.ozlabs.org, linux-hexagon@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Chris Down" <chris@chrisdown.name>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH 0/7] Expect immutable pointer in virt_to_phys/isa_virt_to_bus
+ prototypes
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 11:05=E2=80=AFPM Genjian <zhanggenjian123@gmail.com=
-> wrote:
+On Sat, Apr 15, 2023, at 12:17, Stanislav Kinsburskii wrote:
+> This series is aimed to address compilation warnings when a constant p=
+ointer
+> is passed to virt_to_phys and isa_virt_to_bus functions:
 >
-> From: Genjian Zhang <zhanggenjian@kylinos.cn>
+>   warning: passing argument 1 of =E2=80=98virt_to_phys=E2=80=99 discar=
+ds =E2=80=98const=E2=80=99=20
+> qualifier from pointer target type
+>   warning: passing argument 1 of =E2=80=98isa_virt_to_bus=E2=80=99 dis=
+cards =E2=80=98const=E2=80=99=20
+> qualifier from pointer target type
 >
-> compiler error (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110):
->
-> {standard input}: Assembler messages:
-> {standard input}:171: Error: found '(', expected: ')'
-> {standard input}:171: Error: found '(', expected: ')'
-> {standard input}:171: Error: non-constant expression in ".if" statement
-> {standard input}:171: Error: junk at end of line, first unrecognized
-> character is `('
->
-> Expands ___SYNC() macros. However, 'if' statement will be wrong
-> assembly.This Compilers report a lot of errors like the above.
-> this problem is caused by the #define of if() in
-> include/linux/compiler.h when CONFIG_PROFILE_ALL_BRANCHES
-> is set. Move '.if' into quoted strings to fix it.
->
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
-> ---
->  arch/mips/include/asm/sync.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync.h
-> index aabd097933fe..56a4f6f6cdef 100644
-> --- a/arch/mips/include/asm/sync.h
-> +++ b/arch/mips/include/asm/sync.h
-> @@ -175,7 +175,7 @@
->   */
->  #ifdef CONFIG_CPU_HAS_SYNC
->  # define ____SYNC(_type, _reason, _else)                       \
-> -       .if     (( _type ) !=3D -1) && ( _reason );               \
-> +       ((_type) !=3D -1) && (_reason);                           \
->         .set    push;                                           \
->         .set    MIPS_ISA_LEVEL_RAW;                             \
->         .rept   __SYNC_rpt(_type);                              \
-> @@ -192,13 +192,14 @@
->  /*
->   * Preprocessor magic to expand macros used as arguments before we inser=
-t them
->   * into assembly code.
-> + * In addition,'if' cannot be enabled.
->   */
->  #ifdef __ASSEMBLY__
->  # define ___SYNC(type, reason, else)                           \
-> -       ____SYNC(type, reason, else)
-> +       .if     ____SYNC(type, reason, else)
->  #else
->  # define ___SYNC(type, reason, else)                           \
-> -       __stringify(____SYNC(type, reason, else))
-> +       ".if"   __stringify(____SYNC(type, reason, else))
->  #endif
->
->  #define __SYNC(type, reason)                                   \
-> --
-> 2.25.1
+> The change(s) is the same for all architectures, but it's split into a=
+ series on
+> per-arch basis to simplify applying and testing on the maintainers sid=
+e.
 >
 
-This patch does not take into account the situation that CPU_HAS_SYNC
-is not set. I will revise it later.
+Looks all good to me. If everyone is happy with it, I'll queue it up
+after in the asm-generic tree for 6.5, once rc1 is out.
 
-Thanks.
---=20
-Genjian
+ Arnd
