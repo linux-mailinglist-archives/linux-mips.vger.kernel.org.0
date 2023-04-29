@@ -2,118 +2,181 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2B06F25DA
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Apr 2023 20:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563986F2640
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Apr 2023 22:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjD2SZD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Apr 2023 14:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S230266AbjD2UO3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Apr 2023 16:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjD2SYy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Apr 2023 14:24:54 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63D31FDD
-        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 11:24:52 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a6670671e3so9276575ad.0
-        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 11:24:52 -0700 (PDT)
+        with ESMTP id S230055AbjD2UO2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Apr 2023 16:14:28 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A01B0
+        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1aaebed5bd6so380325ad.1
+        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682792692; x=1685384692;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799264; x=1685391264;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KGl5HMSK57VmBSwKSnwgm3VXr902jH6XBJlNczgIzTY=;
-        b=l+H0JwRFKwAD4TzkKtg69sq/SE0iMjDe/NX6Txlv16Ba4kBdBRnOLJE9cuEp/EtowJ
-         pvTfeswVQQvBqhKyncNpPdAR29BMkNe6LB9ZMzoVyBV5Q9aGwXPM1Fc+6Qr50SDIiKsJ
-         q9xyHClsPNOcAaBRr9fQ8UfCjonz6jsBwXrYvJjTpLiOgKgKgvN8uwk1fTPbl8XK+035
-         m3QY80DvBeDJf799u5hnhHuLgfMpPNb4a9jtTjDBw2OzLziw75OHG2J322CH+dAw1HCw
-         HsmmVI7grjIDtuj7uBS5rk+EMADzgTEglzedbNWVOsorwBluoILEBWp5M0RLFiHKNfCf
-         2+Mg==
+        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
+        b=ztXNyujPGJ3TImj9rkWYO2n2FifWKitTQShNykqcCXMnlMDmDVUdGDZxkkAjoc2LxT
+         wjlkNuWu5MpGZ0hx2IY/BfGicm00cVl+x8sMPYhvJYOTMhGVFNRcq+t2+IhK1Zbg1HBm
+         TwPyb5IfXHXgdYm4kQQJO8mCutMWnoA0MAQG1HObQV2DkWdvKA82EPwFFy15NEoVvzDJ
+         YaFLlQv2/hnRBo+Kg2l+LFcBMREq5GVfs5levwZlW+i9w9qFVpvKUrXtIKJRJqUd1KUC
+         DRDHp5Z7Fs9kgbXLfeVSACxaLJ8vDKqbLXNf+pwsIg4BCZFLNo8FmqNy+hScbEds+O2l
+         SL9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682792692; x=1685384692;
+        d=1e100.net; s=20221208; t=1682799264; x=1685391264;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KGl5HMSK57VmBSwKSnwgm3VXr902jH6XBJlNczgIzTY=;
-        b=OUbmwDDlfrDeeNlVmbHu7udaYXh2Yc4bZDWO7x8vWZ5CeYrDR1vnu40cEJmFX2ss8T
-         Pm7rgbVslzkZO01SB9eZW2/k0SLh1XavyaivW9Y2RM4nTmP2mKljQQCmacxylLta5VO5
-         SExUKlFTv+Wu00hG7wEHnD6Yz8Mn689EcIA397sTr+yyrqzK7KjiFcKI1imUal/WWrah
-         dAdh7nFTKAR/NBUu5lyajZ7p7/4BXe/8vyYWF/V0kyOtwZzmmRDU/CWd8c3eUsxfplvp
-         1WTp06K7iLFnivGopuIysypGaydk8bfnHqMekors0UOGBDUO03CT2XRIzw05PHIgN/oP
-         DoBw==
-X-Gm-Message-State: AC+VfDwoqBRd7mdF32w03Xdg+ip6Po+IZjDS0Rp5JsLNR1ba+ecUFN5o
-        QHOWBiPRyZP3JE9guXkE0FBcCA==
-X-Google-Smtp-Source: ACHHUZ6ZiLzN9eR+ckFMqg7tN3D4bPpq4geojnHO1Jqz7HXa46oxZHVvxREPvQQtQygRvSqX/lxFkg==
-X-Received: by 2002:a17:903:124b:b0:1a2:8c7e:f315 with SMTP id u11-20020a170903124b00b001a28c7ef315mr10630845plh.21.1682792692014;
-        Sat, 29 Apr 2023 11:24:52 -0700 (PDT)
+        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
+        b=HvENXosttgs+lzwo0vNhR1iAKyhUmr3ZMUnyqTe7LJ9J53yp/x/QvSkzSPCKgBGt2l
+         wbFXTDpm+u0tYbK8AQlq3QPY97TkixyaWLKeJ87l9GyAuli0Slc641TW2cJLQC0i5j5C
+         P5tpMIj17EHAzklXQ7NJ7MuinyOMqPDgWnjYD3uBFR6xAimQve6kncOkFuBSOShiP4ri
+         uGVUrkXYM9obEEAIT7VtcV4BgJDSe7qC5n9RpyE5gTTeb7i4I4gB7ERnYEAllHgr67nH
+         YtYfrbf9vu2TP+4mrtKGQQC4F6XtwZj7NowPbfu402lTzJQQ398r6w0gA/jmn75P32jb
+         pm8A==
+X-Gm-Message-State: AC+VfDw4v/q6hHusVEpu/JnsXQCjJpeWm7fTu0u5fwVqp66xiPBvy4YH
+        lX382PpZSLqCyU+AJ2TmUmEAGg==
+X-Google-Smtp-Source: ACHHUZ7pgoIToYashe1bFzQ1hUq7/0xuSIbhdV55MwhX+AUZI7FSn+oK96sUBgsJukxkcTmiriVdYg==
+X-Received: by 2002:a17:902:ef45:b0:1a6:dd9a:62c5 with SMTP id e5-20020a170902ef4500b001a6dd9a62c5mr8875345plx.10.1682799264493;
+        Sat, 29 Apr 2023 13:14:24 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id z2-20020a170902708200b001a19196af48sm15137375plk.64.2023.04.29.11.24.51
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902740200b001a4f7325466sm15179442pll.276.2023.04.29.13.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 11:24:51 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 11:24:51 -0700 (PDT)
-X-Google-Original-Date: Sat, 29 Apr 2023 11:24:33 PDT (-0700)
-Subject:     Re: [PATCH 09/19] riscv: cacheinfo: Adjust includes to remove of_device.h
-In-Reply-To: <20230329-dt-cpu-header-cleanups-v1-9-581e2605fe47@kernel.org>
-CC:     davem@davemloft.net, robh+dt@kernel.org, frowand.list@gmail.com,
-        linux@armlinux.org.uk, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Greg KH <gregkh@linuxfoundation.org>,
-        rafael@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        amit.kachhap@gmail.com, viresh.kumar@linaro.org,
-        lukasz.luba@arm.com, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        tiny.windzz@gmail.com, lpieralisi@kernel.org, sudeep.holla@arm.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        anup@brainfault.org, chenhuacai@kernel.org,
-        jiaxun.yang@flygoat.com, Marc Zyngier <maz@kernel.org>,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org
+        Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
+X-Google-Original-Date: Sat, 29 Apr 2023 13:14:07 PDT (-0700)
+Subject:     Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
+In-Reply-To: <20230429063348.125544-1-npiggin@gmail.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, npiggin@gmail.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vgupta@kernel.org, linux-snps-arc@lists.infradead.org,
+        bcain@quicinc.com, linux-hexagon@vger.kernel.org,
+        chenhuacai@kernel.org, loongarch@lists.linux.dev,
+        geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
+        monstr@monstr.eu, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, linux-openrisc@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, linux-sh@vger.kernel.org,
+        davem@davemloft.net, sparclinux@vger.kernel.org, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        linux-um@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, khilman@baylibre.com, frederic@kernel.org
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     robh@kernel.org
-Message-ID: <mhng-8827afbb-9f5f-4a6d-b528-4b79b1a32f8a@palmer-ri-x1c9a>
+To:     npiggin@gmail.com
+Message-ID: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 29 Mar 2023 08:52:06 PDT (-0700), robh@kernel.org wrote:
-> Now that of_cpu_device_node_get() is defined in of.h, of_device.h is just
-> implicitly including other includes, and is no longer needed. Adjust the
-> include files with what was implicitly included by of_device.h (cpu.h and
-> of.h) and drop including of_device.h.
+On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
+> This option was created in commit 554b0004d0ec4 ("vtime: Add
+> HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
+> they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> The cputime_t type has since been removed, so this doesn't have any
+> meaning. Remove it.
+>
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Vineet Gupta <vgupta@kernel.org>
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: Brian Cain <bcain@quicinc.com>
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: loongarch@lists.linux.dev
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: Michal Simek <monstr@monstr.eu>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: linux-openrisc@vger.kernel.org
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: linux-sh@vger.kernel.org
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: linux-um@lists.infradead.org
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 > ---
-> Please ack and I will take the series via the DT tree.
-> ---
->  arch/riscv/kernel/cacheinfo.c | 1 -
->  1 file changed, 1 deletion(-)
+> Hi,
 >
-> diff --git a/arch/riscv/kernel/cacheinfo.c b/arch/riscv/kernel/cacheinfo.c
-> index 3a13113f1b29..e3829d2de5d9 100644
-> --- a/arch/riscv/kernel/cacheinfo.c
-> +++ b/arch/riscv/kernel/cacheinfo.c
-> @@ -5,7 +5,6 @@
+> Could we tidy this? I don't know what tree it can go in, timers,
+> sched, asm-generic, probably doesn't matter.
 >
->  #include <linux/cpu.h>
->  #include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <asm/cacheinfo.h>
+> The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
+> NO_HZ_FULL so if your arch has some other issue that requires this
+> then the documentation needs to change. Any concerns from the archs?
+> I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
+> which looks to be:
 >
->  static struct riscv_cacheinfo_ops *rv_cache_ops;
+> arc
+> hexagon
+> loongarch 32-bit with SMP
+> m68k
+> microblaze
+> mips 32-bit with SMP
+> nios2
+> openrisc
+> parisc 32-bit
+> riscv 32-bit
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Nothing's jumping out, though I haven't tested this yet so I'm not 100%.  
+I assume this isn't aimed for this merge window, given the timing?  
+Probably best to give this sort of thing time to bake in linux-next, but 
+I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big 
+deal either way on my end.
+
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+
+> sh
+> sparc 32-bit
+> um 32-bit
+> x86 32-bit
+>
+> Thanks,
+> Nick
