@@ -2,181 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563986F2640
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Apr 2023 22:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A856F2667
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Apr 2023 22:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjD2UO3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Apr 2023 16:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S230406AbjD2UU4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Apr 2023 16:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjD2UO2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Apr 2023 16:14:28 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A01B0
-        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1aaebed5bd6so380325ad.1
-        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
+        with ESMTP id S230398AbjD2UUz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Apr 2023 16:20:55 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174121BE4
+        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 13:20:54 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso982091a12.1
+        for <linux-mips@vger.kernel.org>; Sat, 29 Apr 2023 13:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799264; x=1685391264;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799653; x=1685391653;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
-        b=ztXNyujPGJ3TImj9rkWYO2n2FifWKitTQShNykqcCXMnlMDmDVUdGDZxkkAjoc2LxT
-         wjlkNuWu5MpGZ0hx2IY/BfGicm00cVl+x8sMPYhvJYOTMhGVFNRcq+t2+IhK1Zbg1HBm
-         TwPyb5IfXHXgdYm4kQQJO8mCutMWnoA0MAQG1HObQV2DkWdvKA82EPwFFy15NEoVvzDJ
-         YaFLlQv2/hnRBo+Kg2l+LFcBMREq5GVfs5levwZlW+i9w9qFVpvKUrXtIKJRJqUd1KUC
-         DRDHp5Z7Fs9kgbXLfeVSACxaLJ8vDKqbLXNf+pwsIg4BCZFLNo8FmqNy+hScbEds+O2l
-         SL9w==
+        bh=eT6Iosx0mXfdelnB+/awy2djLbdEQHSWYwF0l6D7UZk=;
+        b=ECOq4apJvbMRfpWybGzzN8N3SQxb+4g3QZ5Ja3lycK6jef0tEat0EPoSm+c5Rl2HQZ
+         7M/5vLkgGavbRBNI/Iph1n9oWKXV68c0zRBv/DfNjXL/GpZpy4RmZH/Zl8PQf9bLz8zn
+         y6NfIlL5q35D9/JLi7IjUhXukABkG0GPFnHJJPnMg1xpwv0WoRV0MMF09L5WXl1w+pWw
+         /8g3OdFZFtvkTkm+joMcc37KH8hz1dNB+hEouJPjOTUVnwoyr2TioClxNWGF2oGtwwn9
+         AtCq5qiqM4UMvf9nLwYlqV5rLwkB/9B2nY6FVam34vPR+78+zno8EG0Oblwjci0k1lsv
+         ip5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682799264; x=1685391264;
+        d=1e100.net; s=20221208; t=1682799653; x=1685391653;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
-        b=HvENXosttgs+lzwo0vNhR1iAKyhUmr3ZMUnyqTe7LJ9J53yp/x/QvSkzSPCKgBGt2l
-         wbFXTDpm+u0tYbK8AQlq3QPY97TkixyaWLKeJ87l9GyAuli0Slc641TW2cJLQC0i5j5C
-         P5tpMIj17EHAzklXQ7NJ7MuinyOMqPDgWnjYD3uBFR6xAimQve6kncOkFuBSOShiP4ri
-         uGVUrkXYM9obEEAIT7VtcV4BgJDSe7qC5n9RpyE5gTTeb7i4I4gB7ERnYEAllHgr67nH
-         YtYfrbf9vu2TP+4mrtKGQQC4F6XtwZj7NowPbfu402lTzJQQ398r6w0gA/jmn75P32jb
-         pm8A==
-X-Gm-Message-State: AC+VfDw4v/q6hHusVEpu/JnsXQCjJpeWm7fTu0u5fwVqp66xiPBvy4YH
-        lX382PpZSLqCyU+AJ2TmUmEAGg==
-X-Google-Smtp-Source: ACHHUZ7pgoIToYashe1bFzQ1hUq7/0xuSIbhdV55MwhX+AUZI7FSn+oK96sUBgsJukxkcTmiriVdYg==
-X-Received: by 2002:a17:902:ef45:b0:1a6:dd9a:62c5 with SMTP id e5-20020a170902ef4500b001a6dd9a62c5mr8875345plx.10.1682799264493;
-        Sat, 29 Apr 2023 13:14:24 -0700 (PDT)
+        bh=eT6Iosx0mXfdelnB+/awy2djLbdEQHSWYwF0l6D7UZk=;
+        b=M6txy3W/gqfUp3zPwE/y9YFlhIERckQDWBTj1hKhPYuR1duvwW3xUg9zMeRLTGform
+         dFdphV/Vu1K3A1LeGNQYkqQnEw2KVLi2LvzAaFqegLGGV0EV8UmvlkRDYsFWquGsGfC0
+         3p05q9mwZ255a8NeVypRV5uVNeeJAbluiIoBiHBqZvW9ISeUr+h3wucJGwjymXHp9nC8
+         epiY2eBLn/Q9ofgjOts5d33Plr15jP36vGk11IwnzdfQ7BU3cv5sRvNH6aMp52y5wwf1
+         zwhy00Z6yuACl1ONiwF8cZ4+UtXYe5Cp3zejmAVG+hsC9Rrch6OsCw1PRP4KdPpSJLke
+         kaLg==
+X-Gm-Message-State: AC+VfDwUh6myWOU0NeB0vwveLrsHbq6kME6CXDJtykFkCw4xr4Hjoov/
+        EfcDxM8g5k6RXPbVU223J9QrxA==
+X-Google-Smtp-Source: ACHHUZ5WOI/1aioBsqwebacxzZ9ZdQY0r+MMnoJ8pEVhZBGss1o6w2KghYZKaT+eG3K6P9EOLAdM9w==
+X-Received: by 2002:a17:902:cece:b0:1aa:e451:e22 with SMTP id d14-20020a170902cece00b001aae4510e22mr1575813plg.40.1682799653446;
+        Sat, 29 Apr 2023 13:20:53 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id g2-20020a170902740200b001a4f7325466sm15179442pll.276.2023.04.29.13.14.23
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902a50d00b001a64ce7b18dsm15229418plq.165.2023.04.29.13.20.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
-X-Google-Original-Date: Sat, 29 Apr 2023 13:14:07 PDT (-0700)
-Subject:     Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
-In-Reply-To: <20230429063348.125544-1-npiggin@gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>, npiggin@gmail.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vgupta@kernel.org, linux-snps-arc@lists.infradead.org,
-        bcain@quicinc.com, linux-hexagon@vger.kernel.org,
-        chenhuacai@kernel.org, loongarch@lists.linux.dev,
-        geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
-        monstr@monstr.eu, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, linux-openrisc@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, linux-sh@vger.kernel.org,
-        davem@davemloft.net, sparclinux@vger.kernel.org, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        linux-um@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, khilman@baylibre.com, frederic@kernel.org
+        Sat, 29 Apr 2023 13:20:52 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 13:20:52 -0700 (PDT)
+X-Google-Original-Date: Sat, 29 Apr 2023 13:20:35 PDT (-0700)
+Subject:     Re: [PATCH] libgcc: Add forward declarations for generic library routines
+In-Reply-To: <74a647f7-cf5f-4c23-aad6-77bf5b04e116@app.fastmail.com>
+CC:     geert+renesas@glider.be, akpm@linux-foundation.org,
+        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        lkp@intel.com
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     npiggin@gmail.com
-Message-ID: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-8d0e378d-10f7-4107-99aa-b204c3d2a619@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
-> This option was created in commit 554b0004d0ec4 ("vtime: Add
-> HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
-> they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
+On Fri, 21 Apr 2023 13:38:52 PDT (-0700), Arnd Bergmann wrote:
+> On Fri, Apr 21, 2023, at 16:54, Geert Uytterhoeven wrote:
+>> With W=1 on platforms that use the generic gcc library routines
+>> (csky/loongarch/mips/riscv/sh/xtensa):
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/oe-kbuild-all/202303272214.RxzpA6bP-lkp@intel.com/
+>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 >
-> The cputime_t type has since been removed, so this doesn't have any
-> meaning. Remove it.
+> Nice, this is one I don't have in my series,
 >
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: Brian Cain <bcain@quicinc.com>
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: loongarch@lists.linux.dev
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: linux-openrisc@vger.kernel.org
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-parisc@vger.kernel.org
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: linux-riscv@lists.infradead.org
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: linux-um@lists.infradead.org
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> ---
-> Hi,
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 >
-> Could we tidy this? I don't know what tree it can go in, timers,
-> sched, asm-generic, probably doesn't matter.
->
-> The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
-> NO_HZ_FULL so if your arch has some other issue that requires this
-> then the documentation needs to change. Any concerns from the archs?
-> I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
-> which looks to be:
->
-> arc
-> hexagon
-> loongarch 32-bit with SMP
-> m68k
-> microblaze
-> mips 32-bit with SMP
-> nios2
-> openrisc
-> parisc 32-bit
-> riscv 32-bit
+> I have patches for a lot of other missing prototype warnings, plan
+> to send them out after -rc1.
 
-Nothing's jumping out, though I haven't tested this yet so I'm not 100%.  
-I assume this isn't aimed for this merge window, given the timing?  
-Probably best to give this sort of thing time to bake in linux-next, but 
-I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big 
-deal either way on my end.
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
-
-> sh
-> sparc 32-bit
-> um 32-bit
-> x86 32-bit
->
-> Thanks,
-> Nick
+I think I've merged some stuff around here before, but it's probably 
+better for some more generic tree?  LMK if you guys wanted me to pick 
+these up, though, I've got a smattering of small stuff already so I'll 
+have another PR either way.
