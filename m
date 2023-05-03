@@ -2,102 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6B06F56E6
-	for <lists+linux-mips@lfdr.de>; Wed,  3 May 2023 13:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72246F57E6
+	for <lists+linux-mips@lfdr.de>; Wed,  3 May 2023 14:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjECLGv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 May 2023 07:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S229805AbjECMbP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 May 2023 08:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjECLGu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 May 2023 07:06:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ABB49CC;
-        Wed,  3 May 2023 04:06:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8050662CC1;
-        Wed,  3 May 2023 11:06:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319CAC433D2;
-        Wed,  3 May 2023 11:06:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683112007;
-        bh=1Z/abXjYScbaeQJORhJfZ1yaBTS2vU/U1cufhR2GD0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DYeRD57ViS93rxSgHpAWB7YMqFMUVx8+EiMfSRn6yQEG7G9RSDQSNSSe1sxzZ3BLo
-         GvrB3gAjIST0ilFZUg8IMfwBDx8wfH+KA+j3pBm5lWI8UmkhRuaPcCrBRvajh/kKlf
-         sc97elHz9FlAP3leMT4UaefDRJMGkLzMHZE6FdoaOvmUUjuDHCL58u0eFmESKWCS4j
-         iTu0lEr+kmh/c3tzKSar0Ap1ePkXfG5K61exCSLbCF+9ApT/2au8DOYFlhGDOEhdXg
-         2pQvwMWVokBgoPnt+ruSQN7Puaw5HnfRo4DOOVEE3FkCyWkRa5+PjlZzOTI1BYYKE3
-         QatkVXcriRXBA==
-Date:   Wed, 3 May 2023 13:06:44 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org, Brian Cain <bcain@quicinc.com>,
-        linux-hexagon@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-openrisc@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
-Message-ID: <ZFJARBDqWPLSy7Ge@localhost.localdomain>
-References: <20230429063348.125544-1-npiggin@gmail.com>
+        with ESMTP id S229822AbjECMbN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 May 2023 08:31:13 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1B455AF
+        for <linux-mips@vger.kernel.org>; Wed,  3 May 2023 05:31:11 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-55a8019379fso27169157b3.0
+        for <linux-mips@vger.kernel.org>; Wed, 03 May 2023 05:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683117070; x=1685709070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTrT4jPc7J5Eliba/sNg5kwjP6TH6hnGe4LZ/zcsA7o=;
+        b=h6CZGQjzmQEBoCydE3tNyOUgkXuZkUfdzrGG9K7kUwAwoLFxNhVXjtbs3lH8tPxDCJ
+         lgKRzg/JByUmGYCLL1CBZxXCRwwaP/rcXDhv2Q0GbKNzMw1mD93llA0XuKu/SXVKGhJI
+         NHqdGYM/fsJ+Ulf/M1a3wzv1A4ho3F0hcM+YLNZQbZaR4dRxXgizaF3qTwUJMBBb9vk+
+         k0MT4rhuEw/bjlFGXI9qtZ70Th89ykZJTxgBlWMLyNPantAaXohSSDpl+SR2KNSQNWyd
+         O4ti0OXekeEAAcuBzGV2+JNTOWwwti5A2/r08pux2hZNGEsWdjxGaCG3fEnLYaVTcLex
+         f5Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683117070; x=1685709070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hTrT4jPc7J5Eliba/sNg5kwjP6TH6hnGe4LZ/zcsA7o=;
+        b=iglTvV9YAv/bgD5kV5togfFglFWLEgkKpARsDnrdse97a+O5JuEGGwcKeaB9CC1LqW
+         KB9ZFg0cuH0Vq8SXZKWgRfalO1mZpJlPlyKJxW2Ofawi8+moj4938MKq/xPsi7mbwHhP
+         aHjh5TyjHnG3yFBUTYvkeGnz6CEJJj90WTrvlk/C15bX3oCcEbGDjDOwd+Wy+qMKow/s
+         dqfeViEotccA5WgavfAPbGsgmVJvhFfBOTerVInvVLKclCOkCy22TBETlBX25qNPqAa3
+         QbHOPnPKh2Vl+PNCqJKXS5Rya2/UQStvjLqnvLEpJpe3KkdClTRLjVfVcPvtXss34CW9
+         3uKQ==
+X-Gm-Message-State: AC+VfDylS73DX2+qvkjabRl1sOG6s5QXV4ihmZZ2tijC6gIzh2m+P7Be
+        46vG9KT/LzwQEgrfjv/DQw9LQ9noKJfs8HYykWbRzg==
+X-Google-Smtp-Source: ACHHUZ5Ewu4j5yENuc3yZI5omV8bCwxGXLnezBSGE3w7r+x/XbA+XE92J0DD6UuUftsDizL2fZBuK/upLJL7mLXrYUg=
+X-Received: by 2002:a81:4f4f:0:b0:55a:aa57:5660 with SMTP id
+ d76-20020a814f4f000000b0055aaa575660mr5037096ywb.20.1683117070218; Wed, 03
+ May 2023 05:31:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230429063348.125544-1-npiggin@gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230430-nokia770-regression-v1-0-97704e36b094@linaro.org>
+ <20230430-nokia770-regression-v1-3-97704e36b094@linaro.org> <CAPDyKFoPa3PZGFBO4njSfEd6H0rdc6KKwPFvE1x6Xx13thKv8g@mail.gmail.com>
+In-Reply-To: <CAPDyKFoPa3PZGFBO4njSfEd6H0rdc6KKwPFvE1x6Xx13thKv8g@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 3 May 2023 14:30:58 +0200
+Message-ID: <CACRpkdaXVeFtm1cqgtKsOnVppGC1dKNmdOSN59r97C1u_XTqGw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] ARM/mmc: Convert old mmci-omap to GPIO descriptors
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Le Sat, Apr 29, 2023 at 04:33:48PM +1000, Nicholas Piggin a écrit :
-> This option was created in commit 554b0004d0ec4 ("vtime: Add
-> HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
-> they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
-> 
-> The cputime_t type has since been removed, so this doesn't have any
-> meaning. Remove it.
+On Tue, May 2, 2023 at 4:26=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
+ wrote:
+> On Sun, 30 Apr 2023 at 11:22, Linus Walleij <linus.walleij@linaro.org> wr=
+ote:
 
-Well, cputime_t has disappeared but not the u64 type used
-for task/cpu time accounting.
+> > Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> This looks like it's best funneled through the soc maintainer's tree(s), =
+right?
+>
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-But now we have the vtime seqcount. Though we already had it
-when we introduced that Kconfig switch so I can't remember why
-this was necessary :-(
+Thanks, yeah the plan is to wait and see if I get some testing from
+the OMAP1/2/3
+guys and then collect the lot and put on a branch to SoC unless Tony wants
+the job :D
 
-It _looks_ OK but I might be missing something...
-
-Thanks.
+Yours,
+Linus Walleij
