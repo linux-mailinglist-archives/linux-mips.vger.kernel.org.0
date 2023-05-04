@@ -2,285 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D2C6F5E59
-	for <lists+linux-mips@lfdr.de>; Wed,  3 May 2023 20:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2096F6D04
+	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 15:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjECSoE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 May 2023 14:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S230215AbjEDNjn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 May 2023 09:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjECSnl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 May 2023 14:43:41 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28168A56;
-        Wed,  3 May 2023 11:41:17 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so7041575b3a.1;
-        Wed, 03 May 2023 11:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683139273; x=1685731273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffwvzJo3AetlasPY6gczdMsVH/amBSlWs9nz5GwhjKo=;
-        b=BUwgoBPWsCmvVQYmmuOOxZi2Vjm5BAQyRtgpsU3UIjTvN96QrVGClIjRjcrP3CO/4a
-         vKPHya5vUObcTcf2qbpwCNwRVZMrIV+yCVJicmSnLfRDLn5GQo/JRwoN1DO3YOSQXwKw
-         iTAE8nywvJqc3X4JuNhaHD964flox43stbpb97fQN0E7Bxtn/8umJjl2LH4UIxG2OOcM
-         OU3dtgxTlljLyDb8zW5dVcu9Z3K9tuUx97r8/sIHdEFDsXiEzvkgCK0Bb1yl6edwJbWy
-         mNKTap/DotcsrKzDAnEMi4WxSoK+qQADqP8Rb7nxvikR7yfBfesjPELVdkU5rg+QH5ts
-         w+7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683139273; x=1685731273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ffwvzJo3AetlasPY6gczdMsVH/amBSlWs9nz5GwhjKo=;
-        b=gt8vu529Ix1+8ZiUYJ61V+5PLvyAXVE8YCROqXXStS5Qj20Izp3WI5KEMvaLs2/lBc
-         PybZCgzYbxIAGluj6/mXma1cCk1ay0H6/Dh0CRxUMmW4hO0yOrQVpckLHcJzevZRrV0I
-         H6tIqn/WbxhAcKc1/OjuynlGnxOj3yOfNc+Jz0H4FaoA9wE5TUJouEx+4nQ1WM1mpLJ6
-         p9ME/sx/XMGtFTAFyiuBaek/MEMRHfDIghTM6QF2TGzh6F6ReWw6Fc2OC68YtVoM/EsP
-         RD5JfyWbQx05DO/0tYfIvy/yY1NxcIgUxK1Tiftx8nO4Ib9CLqWhecoMwBvOtPnRsdUG
-         ZuFA==
-X-Gm-Message-State: AC+VfDxpHjZddTEVmiz9ZZgWTR+63Lll8hDyaBqeSCLQDlvCjYB3TSv+
-        yCQ9TaC5Fk0PlUog6JSTk4g=
-X-Google-Smtp-Source: ACHHUZ4sGR2VzM/n/g6q/XijzKKMV6zu0D1LXBCdpHQIraxKFbmxB3ILwUBxWRATGPgJ4Z6CrVyxeQ==
-X-Received: by 2002:a05:6a00:14c6:b0:636:e0fb:8c45 with SMTP id w6-20020a056a0014c600b00636e0fb8c45mr3611728pfu.16.1683139272680;
-        Wed, 03 May 2023 11:41:12 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9390:e396:49ef:54dc])
-        by smtp.gmail.com with ESMTPSA id q10-20020a63d60a000000b0051eff0a70d7sm19998800pgg.94.2023.05.03.11.41.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:41:11 -0700 (PDT)
-Date:   Wed, 3 May 2023 11:41:08 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Helge Deller <deller@gmx.de>,
+        with ESMTP id S229638AbjEDNjl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 09:39:41 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA08E768B;
+        Thu,  4 May 2023 06:39:40 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3445DKX4028271;
+        Thu, 4 May 2023 08:39:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=zEWDZRH16IxZH8jYRpv51rOx+oio62y+XziPw6IiJ1w=;
+ b=L9OXVtBpZ1h2EQYPU9fS+CdLeJbQogB3ovHqBxHZV93tB0yyeToDCRKM+3p1Z+XcLFZz
+ DhnfCDaIAxZdN2kEgqy91hT0ZkrDGwKDxWYOZyY84Bl71CaNzT/kQ6H7HeGti1LPjN2A
+ 1C53tmN+15LZY4Xx0LsXz3jdPfYj804ASLi4vP04knaO2fZRiDoRcGlVawsjF8dnEBef
+ /SeuYP9ruq4TACIUkQ8hZ4rHae8zIGOhnmbirZT1jFR/3kSOYyRRGhG6Ds8kk3q2z9qA
+ m1ycJOjn8GapD45ROvo5FEKeAAyqeD0ftMxijnIycmgOTyr7CJvQgOt/JbzSOHf7FjX0 fg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3q8ynqxxwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 08:39:25 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 4 May
+ 2023 08:39:24 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Thu, 4 May 2023 08:39:24 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E168D11AA;
+        Thu,  4 May 2023 13:39:23 +0000 (UTC)
+Date:   Thu, 4 May 2023 13:39:23 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 1/4] Input/ARM: ads7846: Get pendown IRQ from descriptors
-Message-ID: <ZFKqxNA9m9Kge1oo@google.com>
-References: <20230430-nokia770-regression-v1-0-97704e36b094@linaro.org>
- <20230430-nokia770-regression-v1-1-97704e36b094@linaro.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-actions@lists.infradead.org>,
+        <patches@opensource.cirrus.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-phy@lists.infradead.org>,
+        <linux-rtc@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        <alsa-devel@alsa-project.org>, <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v3 14/65] clk: lochnagar: Add a determine_rate hook
+Message-ID: <20230504133923.GE68926@ediswmail.ad.cirrus.com>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-14-9a1358472d52@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230430-nokia770-regression-v1-1-97704e36b094@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-14-9a1358472d52@cerno.tech>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: by0VDh8QAdOEbtK8UU7dmeZOMGxMIv4b
+X-Proofpoint-ORIG-GUID: by0VDh8QAdOEbtK8UU7dmeZOMGxMIv4b
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 11:22:16AM +0200, Linus Walleij wrote:
-> The ADS7846 has some limited support for using GPIO descriptors,
-> let's convert it over completely and fix all users to provide
-> GPIOs in descriptor tables.
+On Tue, Apr 04, 2023 at 12:11:04PM +0200, Maxime Ripard wrote:
+> The lochnagar clocks implement a mux with a set_parent hook, but
+> doesn't provide a determine_rate implementation.
 > 
-> The Nokia 770 now has dynamic allocation of IRQ numbers, so this
-> needs to be fixed for it to work.
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
 > 
-> Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+> 
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+> 
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
->  arch/arm/mach-omap1/board-nokia770.c | 12 +++++++++++-
->  arch/arm/mach-pxa/spitz.c            | 11 ++++++++++-
->  arch/mips/alchemy/devboards/db1000.c | 11 ++++++++++-
->  drivers/input/touchscreen/ads7846.c  | 32 ++++++++------------------------
->  include/linux/spi/ads7846.h          |  2 --
->  5 files changed, 39 insertions(+), 29 deletions(-)
-> 
-> diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
-> index a501a473ffd6..eb7652670447 100644
-> --- a/arch/arm/mach-omap1/board-nokia770.c
-> +++ b/arch/arm/mach-omap1/board-nokia770.c
-> @@ -118,7 +118,16 @@ static struct ads7846_platform_data nokia770_ads7846_platform_data __initdata =
->  	.debounce_max	= 10,
->  	.debounce_tol	= 3,
->  	.debounce_rep	= 1,
-> -	.gpio_pendown	= ADS7846_PENDOWN_GPIO,
-> +};
-> +
-> +static struct gpiod_lookup_table nokia770_ads7846_gpio_table = {
-> +	/* SPI bus 2, device with chip select 0 */
-> +	.dev_id = "spi2.0",
-> +	.table = {
-> +		GPIO_LOOKUP("gpio-0-15", ADS7846_PENDOWN_GPIO,
-> +			    "pendown", GPIO_ACTIVE_HIGH),
-> +		{ }
-> +	},
->  };
 
-I would like to eventually get rid of GPIO_LOOKUP in favor of
-PROPERTY_ENTRY_GPIO. Can we try something like the draft below (just
-typed, not even compiled):
+Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
-index a501a473ffd6..34b8e392b917 100644
---- a/arch/arm/mach-omap1/board-nokia770.c
-+++ b/arch/arm/mach-omap1/board-nokia770.c
-@@ -12,6 +12,7 @@
- #include <linux/init.h>
- #include <linux/mutex.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/input.h>
- #include <linux/omapfb.h>
- 
-@@ -35,6 +36,24 @@
- #include "clock.h"
- #include "mmc.h"
- 
-+static const struct software_node nokia770_mpuio_gpiochip_node = {
-+	.name = "mpuio",
-+};
-+
-+static const struct software_node nokia770_gpiochip1_node = {
-+	.name = "gpio-0-15",
-+};
-+
-+static const struct software_node nokia770_gpiochip2_node = {
-+	.name = "gpio-16-31",
-+};
-+
-+static const struct software_node nokia770_gpiochip_nodes[] = {
-+	&nokia770_mpuio_gpiochip_node
-+	&nokia770_gpiochip1_node,
-+	&nokia770_gpiochip2_node,
-+};
-+
- #define ADS7846_PENDOWN_GPIO	15
- 
- static const unsigned int nokia770_keymap[] = {
-@@ -102,6 +121,17 @@ static const struct omap_lcd_config nokia770_lcd_config __initconst = {
- 	.ctrl_name	= "hwa742",
- };
- 
-+static const struct property_entry nokia770_mipid_props[] = {
-+	PROPERTY_ENTRY_GPIO("reset-gpios", &nokia770_gpiochip1_node,
-+			    13, GPIO_ACTIVE_LOW),
-+	{ }
-+};
-+
-+static const struct software_node nokia770_mipid_swnode = {
-+	.name = "lcd_mipid",
-+	.properties = nokia770_mipid_props,
-+};
-+
- static void __init mipid_dev_init(void)
- {
- 	nokia770_mipid_platform_data.nreset_gpio = 13;
-@@ -110,15 +140,22 @@ static void __init mipid_dev_init(void)
- 	omapfb_set_lcd_config(&nokia770_lcd_config);
- }
- 
--static struct ads7846_platform_data nokia770_ads7846_platform_data __initdata = {
--	.x_max		= 0x0fff,
--	.y_max		= 0x0fff,
--	.x_plate_ohms	= 180,
--	.pressure_max	= 255,
--	.debounce_max	= 10,
--	.debounce_tol	= 3,
--	.debounce_rep	= 1,
--	.gpio_pendown	= ADS7846_PENDOWN_GPIO,
-+static const struct property_entry nokia770_ads7846_props[] = {
-+	PROPERTY_ENTRY_U32("touchscreen-size-x", 4096),
-+	PROPERTY_ENTRY_U32("touchscreen-size-y", 4096),
-+	PROPERTY_ENTRY_U32("touchscreen-max-pressure", 256),
-+	PROPERTY_ENTRY_U32("touchscreen-average-samples", 10),
-+	PROPERTY_ENTRY_U16("ti,x-plate-ohms", 180),
-+	PROPERTY_ENTRY_U16("ti,debounce-tol", 3),
-+	PROPERTY_ENTRY_U16("ti,debounce-rep", 1),
-+	PROPERTY_ENTRY_GPIO("pendown-gpios", &nokia770_gpiochip1_node,
-+			    ADS7846_PENDOWN_GPIO, GPIO_ACTIVE_HIGH),
-+	{ }
-+};
-+
-+static const struct software_node nokia770_ads7846_swnode = {
-+	.name = "ads7846",
-+	.properties = nokia770_ads7846_props,
- };
- 
- static struct spi_board_info nokia770_spi_board_info[] __initdata = {
-@@ -128,13 +165,14 @@ static struct spi_board_info nokia770_spi_board_info[] __initdata = {
- 		.chip_select    = 3,
- 		.max_speed_hz   = 12000000,
- 		.platform_data	= &nokia770_mipid_platform_data,
-+		.swnode		= &nokia770_mipid_swnode,
- 	},
- 	[1] = {
- 		.modalias       = "ads7846",
- 		.bus_num        = 2,
- 		.chip_select    = 0,
- 		.max_speed_hz   = 2500000,
--		.platform_data	= &nokia770_ads7846_platform_data,
-+		.swnode		= &nokia770_ads7846_swnode,
- 	},
- };
- 
-@@ -212,14 +250,15 @@ static inline void nokia770_mmc_init(void)
- #endif
- 
- #if IS_ENABLED(CONFIG_I2C_CBUS_GPIO)
--static struct gpiod_lookup_table nokia770_cbus_gpio_table = {
--	.dev_id = "i2c-cbus-gpio.2",
--	.table = {
--		GPIO_LOOKUP_IDX("mpuio", 9, NULL, 0, 0), /* clk */
--		GPIO_LOOKUP_IDX("mpuio", 10, NULL, 1, 0), /* dat */
--		GPIO_LOOKUP_IDX("mpuio", 11, NULL, 2, 0), /* sel */
--		{ },
--	},
-+static const struct software_node_ref_args nokia770_cbus_gpio_refs[] = {
-+	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 9, 0),
-+	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 10, 0),
-+	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 11, 0),
-+};
-+
-+static const struct property_entry nokia770_ads7846_props[] = {
-+	PROPERTY_ENTRY_REF_ARRAY("gpios", nokia770_cbus_gpio_refs),
-+	{ }
- };
- 
- static struct platform_device nokia770_cbus_device = {
-@@ -253,7 +292,8 @@ static void __init nokia770_cbus_init(void)
- 	nokia770_i2c_board_info_2[1].irq = gpio_to_irq(tahvo_irq_gpio);
- 	i2c_register_board_info(2, nokia770_i2c_board_info_2,
- 				ARRAY_SIZE(nokia770_i2c_board_info_2));
--	gpiod_add_lookup_table(&nokia770_cbus_gpio_table);
-+	device_create_managed_software_node(&nokia770_cbus_device.dev,
-+					    nokia770_cbus_props, NULL);
- 	platform_device_register(&nokia770_cbus_device);
- }
- #else /* CONFIG_I2C_CBUS_GPIO */
-@@ -273,6 +313,7 @@ static void __init omap_nokia770_init(void)
- 	/* Unmask SleepX signal */
- 	omap_writew((omap_readw(0xfffb5004) & ~2), 0xfffb5004);
- 
-+	software_node_register_node_group(nokia770_gpiochip_swnodes);
- 	platform_add_devices(nokia770_devices, ARRAY_SIZE(nokia770_devices));
- 	nokia770_spi_board_info[1].irq = gpio_to_irq(15);
- 	spi_register_board_info(nokia770_spi_board_info,
-
-
-This will need switching ads7846.c from using of_property* to
-device_property* so that it can parse software nodes.
-
-Thanks.
-
--- 
-Dmitry
+Thanks,
+Charles
