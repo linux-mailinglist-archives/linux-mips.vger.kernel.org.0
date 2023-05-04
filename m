@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1C06F727B
-	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 21:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9D16F7283
+	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 21:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjEDTDV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 May 2023 15:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S229462AbjEDTDe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 May 2023 15:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjEDTCv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 15:02:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9A4902D;
-        Thu,  4 May 2023 12:02:21 -0700 (PDT)
-Message-ID: <20230504185937.031599435@linutronix.de>
+        with ESMTP id S230139AbjEDTCw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 15:02:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AD37A98;
+        Thu,  4 May 2023 12:02:23 -0700 (PDT)
+Message-ID: <20230504185937.088861348@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683226940;
+        s=2020; t=1683226941;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=kEfrtWr4PgKjoC3uLMIgq7wwpzWxMcfb80JJcMYPrNo=;
-        b=PmeJbSUkoSGxnlVzLJXUvjH48dikWh6/q5JUoaP/Nq1/Ww69G3R8FGSMzpcyfgrbQmJWPS
-        L1voUlN08pCvhmk6/QZrwPjAlPy1WtF3SmmFaso8csKdSwgSj+Xrh0yxgNvs9UWRGz4C7i
-        363j0HgkKBjg4ZGOGH5SMTymlwml0+zJzHFJoBLLKJNEm7WITc1vHb3UDkvrXQbf+dNpB1
-        VNDwuviXGLHURwt2oOpvvRZjYyIp2mbeTsBXGfdQ/vyCHUYkflxEUN3y3vqtAgWpyktb4q
-        t022EVpGgFL77pRnNi56GuH4R9mqq/EtBm5ZisWdMifcZ+kMZTibAs3llShwcg==
+         references:references; bh=waR3DpyQ6DyvK8jEESlEb5rxqBYC2I7FeZ3H8ZtIrVQ=;
+        b=HKYLcl9cklgr6YO5/NspFjC+D2CCt/ZYWzxxiOOGuCX7u/7IGOq81DQhVq9PvbBHY6Kpcr
+        SxWHo0Ub70GUTAFkoXjKOB1ZyWdtlCAv2pBsav0oFkFgcMqJgiDoblcu2Hnt6D2hLbDJE7
+        kec7wtFBfE1xoWI2cME3sJv8K73WrIvhYqzB8k1hCePY7f28tWiYPkzCL3lKJ1aAZjMvt+
+        kXyU82XPa0OHMGsQ8hlC+TxCd6BOdr1gglOHT1fZhwBJGZCjFBU2Yxs7+XALa+aaWrMaCV
+        mvw2zjNCImLQQhSEXScVL50CeJT6NF1GH6WIuPs8AGymg+ULRPU3wowu71D4Lw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683226940;
+        s=2020e; t=1683226941;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=kEfrtWr4PgKjoC3uLMIgq7wwpzWxMcfb80JJcMYPrNo=;
-        b=dKl/1HBoUECGor2iJDs5A3fYWbTcWkykgPuLe6FZ3+pVZqFoQN8p5o4X0DvHU0A/AOKXEN
-        mUmNYqpZZv5DVhDw==
+         references:references; bh=waR3DpyQ6DyvK8jEESlEb5rxqBYC2I7FeZ3H8ZtIrVQ=;
+        b=XDnjEy7a3qUl/tWMxBUIj3PidEk2DRdxC5hulFnew5UcHpu5yRDRS/g5aolbe6p1RMLJCX
+        rQwCSliTpoNYDfAw==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -66,11 +66,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch V2 13/38] x86/smpboot: Remove cpu_callin_mask
+Subject: [patch V2 14/38] cpu/hotplug: Rework sparse_irq locking in bringup_cpu()
 References: <20230504185733.126511787@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu,  4 May 2023 21:02:19 +0200 (CEST)
+Date:   Thu,  4 May 2023 21:02:21 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -83,164 +83,70 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Now that TSC synchronization is SMP function call based there is no reason
-to wait for the AP to be set in smp_callin_mask. The control CPU waits for
-the AP to set itself in the online mask anyway.
+There is no harm to hold sparse_irq lock until the upcoming CPU completes
+in cpuhp_online_idle(). This allows to remove cpu_online() synchronization
+from architecture code.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
 ---
- arch/x86/kernel/smpboot.c |   61 +++++++---------------------------------------
- 1 file changed, 10 insertions(+), 51 deletions(-)
+ kernel/cpu.c |   28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 ---
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -104,7 +104,6 @@ EXPORT_PER_CPU_SYMBOL(cpu_info);
- /* All of these masks are initialized in setup_cpu_local_masks() */
- static cpumask_var_t cpu_initialized_mask;
- static cpumask_var_t cpu_callout_mask;
--static cpumask_var_t cpu_callin_mask;
- /* Representing CPUs for which sibling maps can be computed */
- static cpumask_var_t cpu_sibling_setup_mask;
- 
-@@ -167,21 +166,16 @@ static inline void smpboot_restore_warm_
-  */
- static void smp_callin(void)
- {
--	int cpuid;
-+	int cpuid = smp_processor_id();
- 
- 	/*
- 	 * If waken up by an INIT in an 82489DX configuration
--	 * cpu_callout_mask guarantees we don't get here before
--	 * an INIT_deassert IPI reaches our local APIC, so it is
--	 * now safe to touch our local APIC.
--	 */
--	cpuid = smp_processor_id();
--
--	/*
--	 * the boot CPU has finished the init stage and is spinning
--	 * on callin_map until we finish. We are free to set up this
--	 * CPU, first the APIC. (this is probably redundant on most
--	 * boards)
-+	 * cpu_callout_mask guarantees we don't get here before an
-+	 * INIT_deassert IPI reaches our local APIC, so it is now safe to
-+	 * touch our local APIC.
-+	 *
-+	 * Set up this CPU, first the APIC, which is probably redundant on
-+	 * most boards.
- 	 */
- 	apic_ap_setup();
- 
-@@ -192,7 +186,7 @@ static void smp_callin(void)
- 	 * The topology information must be up to date before
- 	 * calibrate_delay() and notify_cpu_starting().
- 	 */
--	set_cpu_sibling_map(raw_smp_processor_id());
-+	set_cpu_sibling_map(cpuid);
- 
- 	ap_init_aperfmperf();
- 
-@@ -205,11 +199,6 @@ static void smp_callin(void)
- 	 * state (CPUHP_ONLINE in the case of serial bringup).
- 	 */
- 	notify_cpu_starting(cpuid);
--
--	/*
--	 * Allow the master to continue.
--	 */
--	cpumask_set_cpu(cpuid, cpu_callin_mask);
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -558,7 +558,7 @@ static int cpuhp_kick_ap(int cpu, struct
+ 	return ret;
  }
  
- static void ap_calibrate_delay(void)
-@@ -268,11 +257,6 @@ static void notrace start_secondary(void
- 	rcu_cpu_starting(raw_smp_processor_id());
- 	x86_cpuinit.early_percpu_clock_init();
- 
--	/*
--	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
--	 * but just sets the bit to let the controlling CPU (BSP) know that
--	 * it's got this far.
--	 */
- 	smp_callin();
- 
- 	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
-@@ -1112,7 +1096,7 @@ static int wait_cpu_cpumask(unsigned int
-  * and thus wait_for_master_cpu(), then set cpu_callout_mask to allow it
-  * to proceed.  The AP will then proceed past setting its 'callin' bit
-  * and end up waiting in check_tsc_sync_target() until we reach
-- * do_wait_cpu_online() to tend to it.
-+ * wait_cpu_online() to tend to it.
-  */
- static int wait_cpu_initialized(unsigned int cpu)
+-static int bringup_wait_for_ap(unsigned int cpu)
++static int bringup_wait_for_ap_online(unsigned int cpu)
  {
-@@ -1127,20 +1111,7 @@ static int wait_cpu_initialized(unsigned
+ 	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+ 
+@@ -579,15 +579,12 @@ static int bringup_wait_for_ap(unsigned
+ 	 */
+ 	if (!cpu_smt_allowed(cpu))
+ 		return -ECANCELED;
+-
+-	if (st->target <= CPUHP_AP_ONLINE_IDLE)
+-		return 0;
+-
+-	return cpuhp_kick_ap(cpu, st, st->target);
++	return 0;
  }
  
- /*
-- * Bringup step three: Wait for the target AP to reach smp_callin().
-- * The AP is not waiting for us here so we don't need to parallelise
-- * this step. Not entirely clear why we care about this, since we just
-- * proceed directly to TSC synchronization which is the next sync
-- * point with the AP anyway.
-- */
--static void wait_cpu_callin(unsigned int cpu)
--{
--	while (!cpumask_test_cpu(cpu, cpu_callin_mask))
--		schedule();
--}
--
--/*
-- * Bringup step four: Wait for the target AP to reach set_cpu_online() in
-+ * Bringup step three: Wait for the target AP to reach set_cpu_online() in
-  * start_secondary().
-  */
- static void wait_cpu_online(unsigned int cpu)
-@@ -1170,14 +1141,6 @@ static int native_kick_ap(unsigned int c
- 	}
+ static int bringup_cpu(unsigned int cpu)
+ {
++	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+ 	struct task_struct *idle = idle_thread_get(cpu);
+ 	int ret;
  
- 	/*
--	 * Already booted CPU?
--	 */
--	if (cpumask_test_cpu(cpu, cpu_callin_mask)) {
--		pr_debug("do_boot_cpu %d Already started\n", cpu);
--		return -ENOSYS;
--	}
--
--	/*
- 	 * Save current MTRR state in case it was changed since early boot
- 	 * (e.g. by the ACPI SMI) to initialize new CPUs with MTRRs in sync:
- 	 */
-@@ -1214,7 +1177,6 @@ int native_cpu_up(unsigned int cpu, stru
+@@ -606,10 +603,23 @@ static int bringup_cpu(unsigned int cpu)
+ 
+ 	/* Arch-specific enabling code. */
+ 	ret = __cpu_up(cpu, idle);
+-	irq_unlock_sparse();
  	if (ret)
- 		goto out;
- 
--	wait_cpu_callin(cpu);
- 	wait_cpu_online(cpu);
- 
- out:
-@@ -1330,7 +1292,6 @@ void __init smp_prepare_cpus_common(void
- 	 * Setup boot CPU information
- 	 */
- 	smp_store_boot_cpu_info(); /* Final full version of the data */
--	cpumask_copy(cpu_callin_mask, cpumask_of(0));
- 	mb();
- 
- 	for_each_possible_cpu(i) {
-@@ -1545,7 +1506,6 @@ early_param("possible_cpus", _setup_poss
- void __init setup_cpu_local_masks(void)
- {
- 	alloc_bootmem_cpumask_var(&cpu_initialized_mask);
--	alloc_bootmem_cpumask_var(&cpu_callin_mask);
- 	alloc_bootmem_cpumask_var(&cpu_callout_mask);
- 	alloc_bootmem_cpumask_var(&cpu_sibling_setup_mask);
+-		return ret;
+-	return bringup_wait_for_ap(cpu);
++		goto out_unlock;
++
++	ret = bringup_wait_for_ap_online(cpu);
++	if (ret)
++		goto out_unlock;
++
++	irq_unlock_sparse();
++
++	if (st->target <= CPUHP_AP_ONLINE_IDLE)
++		return 0;
++
++	return cpuhp_kick_ap(cpu, st, st->target);
++
++out_unlock:
++	irq_unlock_sparse();
++	return ret;
  }
-@@ -1609,7 +1569,6 @@ static void remove_cpu_from_maps(int cpu
- {
- 	set_cpu_online(cpu, false);
- 	cpumask_clear_cpu(cpu, cpu_callout_mask);
--	cpumask_clear_cpu(cpu, cpu_callin_mask);
- 	/* was set by cpu_init() */
- 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
- 	numa_remove_cpu(cpu);
+ 
+ static int finish_cpu(unsigned int cpu)
 
