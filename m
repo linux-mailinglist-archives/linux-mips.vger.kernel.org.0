@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208076F7357
-	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 21:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F4F6F73EC
+	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 21:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjEDTmq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 May 2023 15:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S230466AbjEDTrE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 May 2023 15:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjEDTmo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 15:42:44 -0400
+        with ESMTP id S230462AbjEDTqX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 15:46:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF5A93FC;
-        Thu,  4 May 2023 12:42:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9CB17DE3;
+        Thu,  4 May 2023 12:44:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18761636FD;
-        Thu,  4 May 2023 19:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359AAC433EF;
-        Thu,  4 May 2023 19:42:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE0806376B;
+        Thu,  4 May 2023 19:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1769BC433A7;
+        Thu,  4 May 2023 19:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229333;
-        bh=yGdU6LmRneX8nmQX8uyT5+6jzBckt9pX6pzjCTeRi0Y=;
+        s=k20201202; t=1683229478;
+        bh=qZYIJvR010xYBic9m1qbZLw+mEEFPpB8Iz+8lLPEuHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=up5Bk7EF5nRxMm1nEmcOJjDb/HdVhTu9QezQ1272GuQVm+Ha44TZxMMozvP1LgQ3Q
-         siwMYouvP42rXuzFx4ukC9tODIu0ADWkG2gK3v2sXt7Xyr5ukoX/J2rpC5JyoZWAT5
-         OHV9JAhS6n7Pdes1LbctROp3BHzGNw+A5SICvIJFxET22gfuB8jLN50hwZ60lVX8Kk
-         Z90ZUanyA0vWgdYIW4/ib775kfsTgTKIBRrNlNlsIurjTS+ilv9ghkby6VJLodYLRf
-         Z0h1iHcRkR6/opv+i+/9+7ntOfrSj9y3twLPnjBKgzKCV9XjH6hf1EaBYCXMjtzkp/
-         YsK2LxxOigbkQ==
+        b=hk9bw+0Z4zwONKPImrFlZgbnauNEuuynZbrdU476wcq3gzVQ5QavUlGWZSU8Hz+2J
+         l1iZl82FvqJMwokEg5zcozlfPM9dOtxan0ERJh5JNG9d68DopYiDBF2L3+eESHpA12
+         G8P39fYivlykyaDIk/RWuwbb6L+Mmlx1b0mp1jvpCCKcqr5y/QkQs9854boBJyLLGd
+         iGSZHeKRxZsWEYpJSqGp8iSlVrkFgck4+scbBKoOao+yxZlJX3sDWk9CUOcc9z1wgC
+         x/iVsJ+2xN5Om22QSNYR1hERIJHeOBgrcwL8pP45JhATbdHXLa4aNZeKhWu6CzB3p3
+         KEBLA/lOTVKtg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -40,12 +40,12 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Sasha Levin <sashal@kernel.org>, tsbogend@alpha.franken.de,
         ast@kernel.org, andrii@kernel.org, paulburton@kernel.org,
         linux-mips@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 08/59] bpf, mips: Implement DADDI workarounds for JIT
-Date:   Thu,  4 May 2023 15:40:51 -0400
-Message-Id: <20230504194142.3805425-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.2 06/53] bpf, mips: Implement DADDI workarounds for JIT
+Date:   Thu,  4 May 2023 15:43:26 -0400
+Message-Id: <20230504194413.3806354-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
-References: <20230504194142.3805425-1-sashal@kernel.org>
+In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
+References: <20230504194413.3806354-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -82,7 +82,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index e2f3ca73f40d6..edc7d8790f1e8 100644
+index 15cb692b0a097..b89c4bf2fa0ad 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
 @@ -64,7 +64,6 @@ config MIPS
