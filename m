@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1826F72BD
-	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 21:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614F26F728D
+	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 21:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjEDTEb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 May 2023 15:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
+        id S230244AbjEDTDs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 May 2023 15:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjEDTDl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 15:03:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0420C7A8A;
-        Thu,  4 May 2023 12:02:53 -0700 (PDT)
-Message-ID: <20230504185937.423370586@linutronix.de>
+        with ESMTP id S229780AbjEDTDR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 15:03:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E453993F9;
+        Thu,  4 May 2023 12:02:34 -0700 (PDT)
+Message-ID: <20230504185937.477649111@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683226951;
+        s=2020; t=1683226952;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=axTWYuKGRsLuY3sP+yWW8AcC0JvmEXRH4k+OCDSDm2U=;
-        b=JAJHUpAZ99ml9kYEJFLumTtqdUWusgMhRKrkATvPmN/E+Np81ottt9W5maLBM9NBIbWnTJ
-        ySXLTT+Kor4hdXfzIlODt/giO0VNStwSizmA019ybO7WFnSPuKbPIPcG3oj4yklxtxS7aU
-        n5N8P25WOp3c7sKTlX7jtclRMC9dib+OWP5+g0u3XA7xjm7H0BSCVrqlJV/pGkhcRHSFVC
-        ZhGGbdg5oKi9BMbxdVDZ/bAYmjvP7467rF6XY91JkA52gVUbdvWtKdomwEUWHzXE5dZyQO
-        7dxtw3w6CHviPJabbTdmg6NJJm327vynExXUs6x1WAljoJBJhWhlKD3vNmVT4w==
+         references:references; bh=J5ghl8+CFsq8rw8xRo6ZeJvRj8tj82GRgWZ3Thf5XTs=;
+        b=QenhqFcoejPtec/MlD+hqV1n9MlgT2acU00U3XD2Oc1Pol7q/9eI63VtS15ZCC/d+9WDGA
+        KxchOK615tOJzZsBewTOkPd1Jd5+B3is2a42u/N5CTkPLatyJZrrvz8FEIqC7XWO8in3oU
+        53hbjDByv1h2xPpYpva0v6RgjUscQ2HfSl/jqKFOass4OpUQpzxo6UHcGhtLw9087/2M+Z
+        tt8EMVFZ49ggeVcETqNdsJDpa2BsXfwNUKKIIKpi+M53OvsvG9KFTR5Ffn+WK+321Pqy5y
+        ZzdinLtGlwMYQuT48xSu+HgHHks4RytPcjC2QUYQ0+Ziux8bRvvTSEM3m/LHVw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683226951;
+        s=2020e; t=1683226952;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=axTWYuKGRsLuY3sP+yWW8AcC0JvmEXRH4k+OCDSDm2U=;
-        b=AkOrbIV4f+h48OPko5LlDDOWxYQnlMZwftJ+TMWfHtwe4frm64xHt5Hf1EzpPa/P2tJZ7D
-        0WESNcwn3qKK6QDA==
+         references:references; bh=J5ghl8+CFsq8rw8xRo6ZeJvRj8tj82GRgWZ3Thf5XTs=;
+        b=jA8uBZa7TYtw4jZ6vKFGruDR2mfnjcH3f8p0I307i2kdUOd1y2C6N6fsUQhyOplmByw+pg
+        yUiP5bOguA/FxuBw==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -66,12 +66,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch V2 20/38] cpu/hotplug: Remove cpu_report_state() and related
- unused cruft
+Subject: [patch V2 21/38] ARM: smp: Switch to hotplug core state synchronization
 References: <20230504185733.126511787@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu,  4 May 2023 21:02:30 +0200 (CEST)
+Date:   Thu,  4 May 2023 21:02:32 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -84,124 +83,76 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-No more users.
+Switch to the CPU hotplug core state tracking and synchronization
+mechanim. No functional change intended.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arm-kernel@lists.infradead.org
 
 ---
- include/linux/cpu.h |    2 -
- kernel/smpboot.c    |   90 ----------------------------------------------------
- 2 files changed, 92 deletions(-)
+ arch/arm/Kconfig           |    1 +
+ arch/arm/include/asm/smp.h |    2 +-
+ arch/arm/kernel/smp.c      |   18 +++++++-----------
+ 3 files changed, 9 insertions(+), 12 deletions(-)
 ---
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -184,8 +184,6 @@ void arch_cpu_idle_enter(void);
- void arch_cpu_idle_exit(void);
- void __noreturn arch_cpu_idle_dead(void);
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -124,6 +124,7 @@ config ARM
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UID16
+ 	select HAVE_VIRT_CPU_ACCOUNTING_GEN
++	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
+ 	select IRQ_FORCED_THREADING
+ 	select MODULES_USE_ELF_REL
+ 	select NEED_DMA_MAP_STATE
+--- a/arch/arm/include/asm/smp.h
++++ b/arch/arm/include/asm/smp.h
+@@ -64,7 +64,7 @@ extern void secondary_startup_arm(void);
  
--int cpu_report_state(int cpu);
--int cpu_check_up_prepare(int cpu);
- void cpu_set_state_online(int cpu);
- void play_idle_precise(u64 duration_ns, u64 latency_ns);
+ extern int __cpu_disable(void);
  
---- a/kernel/smpboot.c
-+++ b/kernel/smpboot.c
-@@ -329,97 +329,7 @@ EXPORT_SYMBOL_GPL(smpboot_unregister_per
- #ifndef CONFIG_HOTPLUG_CORE_SYNC
- static DEFINE_PER_CPU(atomic_t, cpu_hotplug_state) = ATOMIC_INIT(CPU_POST_DEAD);
+-extern void __cpu_die(unsigned int cpu);
++static inline void __cpu_die(unsigned int cpu) { }
  
--/*
-- * Called to poll specified CPU's state, for example, when waiting for
-- * a CPU to come online.
-- */
--int cpu_report_state(int cpu)
--{
--	return atomic_read(&per_cpu(cpu_hotplug_state, cpu));
--}
--
--/*
-- * If CPU has died properly, set its state to CPU_UP_PREPARE and
-- * return success.  Otherwise, return -EBUSY if the CPU died after
-- * cpu_wait_death() timed out.  And yet otherwise again, return -EAGAIN
-- * if cpu_wait_death() timed out and the CPU still hasn't gotten around
-- * to dying.  In the latter two cases, the CPU might not be set up
-- * properly, but it is up to the arch-specific code to decide.
-- * Finally, -EIO indicates an unanticipated problem.
-- *
-- * Note that it is permissible to omit this call entirely, as is
-- * done in architectures that do no CPU-hotplug error checking.
-- */
--int cpu_check_up_prepare(int cpu)
--{
--	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_UP_PREPARE);
--		return 0;
--	}
--
--	switch (atomic_read(&per_cpu(cpu_hotplug_state, cpu))) {
--
--	case CPU_POST_DEAD:
--
--		/* The CPU died properly, so just start it up again. */
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_UP_PREPARE);
--		return 0;
--
--	case CPU_DEAD_FROZEN:
--
--		/*
--		 * Timeout during CPU death, so let caller know.
--		 * The outgoing CPU completed its processing, but after
--		 * cpu_wait_death() timed out and reported the error. The
--		 * caller is free to proceed, in which case the state
--		 * will be reset properly by cpu_set_state_online().
--		 * Proceeding despite this -EBUSY return makes sense
--		 * for systems where the outgoing CPUs take themselves
--		 * offline, with no post-death manipulation required from
--		 * a surviving CPU.
--		 */
--		return -EBUSY;
--
--	case CPU_BROKEN:
--
--		/*
--		 * The most likely reason we got here is that there was
--		 * a timeout during CPU death, and the outgoing CPU never
--		 * did complete its processing.  This could happen on
--		 * a virtualized system if the outgoing VCPU gets preempted
--		 * for more than five seconds, and the user attempts to
--		 * immediately online that same CPU.  Trying again later
--		 * might return -EBUSY above, hence -EAGAIN.
--		 */
--		return -EAGAIN;
--
--	case CPU_UP_PREPARE:
--		/*
--		 * Timeout while waiting for the CPU to show up. Allow to try
--		 * again later.
--		 */
--		return 0;
--
--	default:
--
--		/* Should not happen.  Famous last words. */
--		return -EIO;
--	}
--}
--
--/*
-- * Mark the specified CPU online.
-- *
-- * Note that it is permissible to omit this call entirely, as is
-- * done in architectures that do no CPU-hotplug error checking.
-- */
--void cpu_set_state_online(int cpu)
--{
--	(void)atomic_xchg(&per_cpu(cpu_hotplug_state, cpu), CPU_ONLINE);
--}
--
- #ifdef CONFIG_HOTPLUG_CPU
--
+ extern void arch_send_call_function_single_ipi(int cpu);
+ extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -288,15 +288,11 @@ int __cpu_disable(void)
+ }
+ 
  /*
-  * Wait for the specified CPU to exit the idle loop and die.
+- * called on the thread which is asking for a CPU to be shutdown -
+- * waits until shutdown has completed, or it is timed out.
++ * called on the thread which is asking for a CPU to be shutdown after the
++ * shutdown completed.
   */
+-void __cpu_die(unsigned int cpu)
++void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
+ {
+-	if (!cpu_wait_death(cpu, 5)) {
+-		pr_err("CPU%u: cpu didn't die\n", cpu);
+-		return;
+-	}
+ 	pr_debug("CPU%u: shutdown\n", cpu);
+ 
+ 	clear_tasks_mm_cpumask(cpu);
+@@ -336,11 +332,11 @@ void __noreturn arch_cpu_idle_dead(void)
+ 	flush_cache_louis();
+ 
+ 	/*
+-	 * Tell __cpu_die() that this CPU is now safe to dispose of.  Once
+-	 * this returns, power and/or clocks can be removed at any point
+-	 * from this CPU and its cache by platform_cpu_kill().
++	 * Tell cpuhp_bp_sync_dead() that this CPU is now safe to dispose
++	 * of. Once this returns, power and/or clocks can be removed at
++	 * any point from this CPU and its cache by platform_cpu_kill().
+ 	 */
+-	(void)cpu_report_death();
++	cpuhp_ap_report_dead();
+ 
+ 	/*
+ 	 * Ensure that the cache lines associated with that completion are
 
