@@ -2,136 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB1F6F7063
-	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 19:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47606F7216
+	for <lists+linux-mips@lfdr.de>; Thu,  4 May 2023 20:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjEDREQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 May 2023 13:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S229941AbjEDSqT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 May 2023 14:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjEDREP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 13:04:15 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90B62719;
-        Thu,  4 May 2023 10:04:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F1E2E580E6A;
-        Thu,  4 May 2023 13:04:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 04 May 2023 13:04:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1683219852; x=1683227052; bh=Pk
-        SQbmz2mEiFvQuMjYfFpQvVcVsNXX6yAK0DMQvrT78=; b=cmJlwLa8yhdC4PdQoI
-        d0hb531eiI2SORxL3Fl3hrBicgmrIqTK2JruPb97I5kPMeDAKroA/qfvcVn4SHpi
-        0GJwBwwJhVyBr0Z3gCWPJStGYlLHJVRHb8h+jKHQvCaAntRpesESAK3sBnsryQLT
-        SY1pMZNm7NeXzxB0X4LGhh4tDtYGJwHvxymMS6zun/yeRMUOk17dwvfkedHb73tr
-        HDJwJT3hqrDjvLymB2DkFIWIl9NAK1sqV8mngyOKOOkARjYozakGWeevZLdVnLJM
-        2r9OCaZnJE/Iut75vl7CK6hrYFM8e09Zs5jDuDCIHU4E46AgWleB+oJARw3dPB4i
-        nWXg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683219852; x=1683227052; bh=PkSQbmz2mEiFv
-        QuMjYfFpQvVcVsNXX6yAK0DMQvrT78=; b=AuagbG+sDeabBm6qygO9uf6q6oPyP
-        ln51yGwNChqfoFi25xJw+emXpwH8g/NTNhI3i5k1yWKZiYlTlAS5rplMF6gQkK/e
-        laonPFrlE/3b3UZB5kH5Oe8M2j6oYoZR4K3PB9E/ohKD6c/GRXCbuk26UWMvS6ps
-        IGPMb413/9tdMInk8seyummLGmLiYcAs0royMw83PEXI5IllNN1DDdz1ub/MnRtP
-        jNV3A8TnFjNuN73VANJme+us+/xozB2Fslb8vtM7RCSV5PVpN7WkauqzxtupFLrH
-        w6KIslwyhc14ZQfGI9ojV26lTWu/2uydNx3dHVpk0RYe0JWyoFktgKk2g==
-X-ME-Sender: <xms:iuVTZB3-j9J9v_I9u_nLe23G-6Km95qYmGddsS8j9B3EISxW2I58tQ>
-    <xme:iuVTZIFcT7ZRU7I8Q-j_hIxB2UA45VX7YZUSc23XiwcJfwvL32Fc00IBM8g7HDbhY
-    fDMxv-M9z8kq6nDOks>
-X-ME-Received: <xmr:iuVTZB6hMgnVSN6caEFK-biUtu_4lRmFrrREwhLfK0aqpVD8obrAFVEs3OgODGka612q-Vxrss0VmiOBn_hzt2nWqkubj9U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeftddguddtkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
-    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:iuVTZO352jeG413D2-8gCuvaVz9nzir5JVeGb9Qt5T66BjFUHxDI6A>
-    <xmx:iuVTZEEch61XFzQdgNXpnEgchfdDLzHESPV9TD2R7L76K_Tm_CGCzg>
-    <xmx:iuVTZP8JvDB9v2-05uIiSmwcEsdw1ZGXKd400N956wEG9rbS3yqRhA>
-    <xmx:jOVTZIO2DARyLcbYRuAk0sTaKYb8VuLfnAb3kuIJaa_ZaJPDtFbScA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 May 2023 13:04:09 -0400 (EDT)
-Date:   Thu, 4 May 2023 19:04:07 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 29/65] clk: socfpga: gate: Add a determine_rate hook
-Message-ID: <tgtfisqxubin4cjj6q26fboirbcnjzcazt5y3m322lw5lskz6l@d3tgz4hdfnk2>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
- <679921ee-98d4-d6ef-5934-e009fd4b31fc@kernel.org>
- <sjlp5ubnpvulgwhhymmfkmmobkgxacyqwagqozodkee3di2qik@3igj6k3zgbk6>
- <57dd81d0-510e-0fab-670d-1109eb8dd974@kernel.org>
+        with ESMTP id S229680AbjEDSqS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 14:46:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5F83C33;
+        Thu,  4 May 2023 11:46:17 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683225976;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OIAcVs2YXBnNfaPvpuizW2PEW4lhJ1YnG6MUoZkO7aY=;
+        b=3+tD+LTP2nHbLKQ6ayQSSKK8VpBIuQK3gXforAfUYbXvx4vM+fYGuufKzSpG2saVKOpTsV
+        to0Q6mzIGbAQjDqsOQkje2Tja0U/TKz3F+TviP3kf+19hr3bEm6s4uGo2F+s+PdBgPIGkj
+        gHjK9Yi0pM4GUZc5ZpONvd31Hppwcu+Bcbd8TlaOcVKhOuZIjToIAW5YXeXW3Go5sZpcCh
+        htSi5EE8To3+PKCGlsNtyNrMRTsE8PlVdNzqWmd8pkRxZ1vMQC2VO2mXVu6cVctYauCbM0
+        4H8XFlx6BIILGrhdr/EBrOtC8Cm0866nFAfWkkLlHu0QtdUMHZ2jk6jWm8xf3Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683225976;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OIAcVs2YXBnNfaPvpuizW2PEW4lhJ1YnG6MUoZkO7aY=;
+        b=pPb8Wqh2Bj6AkjBEVHoo9nA/DLOEH7EgQ6O+EgS1RtAjQlyepgF0Tr/3dF7rDdC5tR1PRC
+        DisRQOSHrsQxZlDw==
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: RE: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+In-Reply-To: <BYAPR21MB168888DC5432883D8866BA40D76A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230414225551.858160935@linutronix.de>
+ <BYAPR21MB168888DC5432883D8866BA40D76A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Date:   Thu, 04 May 2023 20:46:15 +0200
+Message-ID: <878re43pfs.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wz33ctz6wi47hpno"
-Content-Disposition: inline
-In-Reply-To: <57dd81d0-510e-0fab-670d-1109eb8dd974@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -140,118 +89,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Michael!
 
---wz33ctz6wi47hpno
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Apr 27 2023 at 14:48, Michael Kelley wrote:
+> From: Thomas Gleixner <tglx@linutronix.de> Sent: Friday, April 14, 2023 4:44 PM
+>
+> I smoke-tested several Linux guest configurations running on Hyper-V,
+> using the "kernel/git/tglx/devel.git hotplug" tree as updated on April 26th.
+> No functional issues, but encountered one cosmetic issue (details below).
+>
+> Configurations tested:
+> *  16 vCPUs and 32 vCPUs
+> *  1 NUMA node and 2 NUMA nodes
+> *  Parallel bring-up enabled and disabled via kernel boot line
+> *  "Normal" VMs and SEV-SNP VMs running with a paravisor on Hyper-V.
+>     This config can use parallel bring-up because most of the SNP-ness is
+>     hidden in the paravisor.  I was glad to see this work properly.
+>
+> There's not much difference in performance with and without parallel
+> bring-up on the 32 vCPU VM.   Without parallel, the time is about 26
+> milliseconds.  With parallel, it's about 24 ms.   So bring-up is already
+> fast in the virtual environment.
 
-Hi Dinh,
+Depends on the environment :)
 
-On Thu, Apr 27, 2023 at 02:09:48PM -0500, Dinh Nguyen wrote:
-> Hi Maxime,
->=20
-> On 4/25/23 09:48, Maxime Ripard wrote:
-> > Hi Dinh,
-> >=20
-> > On Mon, Apr 24, 2023 at 01:32:28PM -0500, Dinh Nguyen wrote:
-> > > On 4/4/23 05:11, Maxime Ripard wrote:
-> > > > The SoCFGPA gate clock implements a mux with a set_parent hook, but
-> > > > doesn't provide a determine_rate implementation.
-> > > >=20
-> > > > This is a bit odd, since set_parent() is there to, as its name impl=
-ies,
-> > > > change the parent of a clock. However, the most likely candidate to
-> > > > trigger that parent change is a call to clk_set_rate(), with
-> > > > determine_rate() figuring out which parent is the best suited for a
-> > > > given rate.
-> > > >=20
-> > > > The other trigger would be a call to clk_set_parent(), but it's far=
- less
-> > > > used, and it doesn't look like there's any obvious user for that cl=
-ock.
-> > > >=20
-> > > > So, the set_parent hook is effectively unused, possibly because of =
-an
-> > > > oversight. However, it could also be an explicit decision by the
-> > > > original author to avoid any reparenting but through an explicit ca=
-ll to
-> > > > clk_set_parent().
-> > > >=20
-> > > > The latter case would be equivalent to setting the flag
-> > > > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate =
-hook
-> > > > to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> > > > implementation is provided, clk_round_rate() (through
-> > > > clk_core_round_rate_nolock()) will call itself on the parent if
-> > > > CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> > > > otherwise. __clk_mux_determine_rate() has the exact same behavior w=
-hen
-> > > > CLK_SET_RATE_NO_REPARENT is set.
-> > > >=20
-> > > > And if it was an oversight, then we are at least explicit about our
-> > > > behavior now and it can be further refined down the line.
-> > > >=20
-> > > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > > > ---
-> > > >    drivers/clk/socfpga/clk-gate.c | 3 ++-
-> > > >    1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/c=
-lk-gate.c
-> > > > index 32ccda960f28..cbba8462a09e 100644
-> > > > --- a/drivers/clk/socfpga/clk-gate.c
-> > > > +++ b/drivers/clk/socfpga/clk-gate.c
-> > > > @@ -110,6 +110,7 @@ static unsigned long socfpga_clk_recalc_rate(st=
-ruct clk_hw *hwclk,
-> > > >    static struct clk_ops gateclk_ops =3D {
-> > > >    	.recalc_rate =3D socfpga_clk_recalc_rate,
-> > > > +	.determine_rate =3D __clk_mux_determine_rate,
-> > > >    	.get_parent =3D socfpga_clk_get_parent,
-> > > >    	.set_parent =3D socfpga_clk_set_parent,
-> > > >    };
-> > > > @@ -166,7 +167,7 @@ void __init socfpga_gate_init(struct device_nod=
-e *node)
-> > > >    	init.name =3D clk_name;
-> > > >    	init.ops =3D ops;
-> > > > -	init.flags =3D 0;
-> > > > +	init.flags =3D CLK_SET_RATE_NO_REPARENT;
-> > > >    	init.num_parents =3D of_clk_parent_fill(node, parent_name, SOCF=
-PGA_MAX_PARENTS);
-> > > >    	if (init.num_parents < 2) {
-> > > >=20
-> > >=20
-> > > This patch broke SoCFPGA boot serial port. The characters are mangled.
-> >=20
-> > Do you have any other access to that board? If so, could you dump
-> > clk_summary in debugfs with and without that patch?
-> >=20
->=20
-> That dump from the clk_summary are identical for both cases.
+> The cosmetic issue is in the dmesg log, and arises because Hyper-V
+> enumerates SMT CPUs differently from many other environments.  In
+> a Hyper-V guest, the SMT threads in a core are numbered as <even, odd>
+> pairs.  Guest CPUs #0 & #1 are SMT threads in core, as are #2 & #3, etc.  With
+> parallel bring-up, here's the dmesg output:
+>
+> [    0.444345] smp: Bringing up secondary CPUs ...
+> [    0.445139] .... node  #0, CPUs:    #2  #4  #6  #8 #10 #12 #14 #16 #18 #20 #22 #24 #26 #28 #30
+> [    0.454112] x86: Booting SMP configuration:
+> [    0.456035]       #1  #3  #5  #7  #9 #11 #13 #15 #17 #19 #21 #23 #25 #27 #29 #31
+> [    0.466120] smp: Brought up 1 node, 32 CPUs
+> [    0.467036] smpboot: Max logical packages: 1
+> [    0.468035] smpboot: Total of 32 processors activated (153240.06 BogoMIPS)
+>
+> The function announce_cpu() is specifically testing for CPU #1 to output the
+> "Booting SMP configuration" message.  In a Hyper-V guest, CPU #1 is the second
+> SMT thread in a core, so it isn't started until all the even-numbered CPUs are
+> started.
 
-Thanks for testing
+Ah. Didn't notice that because SMT siblings are usually enumerated after
+all primary ones in ACPI.
 
-I'm a bit confused, there should be no difference in behaviour, and if
-there was any difference I would expect the clock tree to be somewhat
-different.
+> I don't know if this cosmetic issue is worth fixing, but I thought I'd point it out.
 
-Could you still paste the clk_summary (and dmesg) output? Which UART
-driver is being used?
+That's trivial enough to fix. I'll amend the topmost patch before
+posting V2.
 
-Also, is there a way for me to test it somehow?
+Thanks for giving it a ride!
 
-Thanks,
-Maxime
-
---wz33ctz6wi47hpno
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZFPlhwAKCRDj7w1vZxhR
-xctpAQD9sYYRJZv9h/D0iPAAtlYeOZYDF7u18IvdR8rTQHoA/wEAz3/h3C/WCX/e
-9OHv6OkqMBGTFLQxWrqvIxshn0fuYg4=
-=DIwC
------END PGP SIGNATURE-----
-
---wz33ctz6wi47hpno--
+       tglx
