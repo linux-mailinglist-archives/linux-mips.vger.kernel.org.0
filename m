@@ -2,173 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A163A6F8285
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 14:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031426F8336
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 14:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjEEMEj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 May 2023 08:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S232223AbjEEMpd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 May 2023 08:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjEEMEh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 08:04:37 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0C39EDF;
-        Fri,  5 May 2023 05:04:32 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E468D5C02C1;
-        Fri,  5 May 2023 08:04:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 05 May 2023 08:04:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1683288268; x=1683374668; bh=LAgUMsID5w2avzf9PFHv2O+viyYgaFw1o+N
-        MLyWqG60=; b=H/bh1YSV4eq+4ZpRFAv55gNbJuhPtakE72182LsFotC8j2DgTIu
-        oXRjQ3r1ylDPH9UnBsOZZUYBJmGYmQXCLMb6viGJomasYQWeHOwZ7dDuiEThl3F4
-        CyrqrwejtER3OgqzazlYNnLJhDNIoHOb6Mfqd7GOpfW9CUMA/t43ruOSI/KrvBse
-        pb800EY/VOQmwZufAWJ/nOZoIJtk1yB1d32srLnvHxD+Tu4pp7JYVsL1sMwg9VHl
-        jgmplK0vxqzEjENNnL3IGOgAT4r0JewN+T+3OMNhOPq+Z+TiD9QkcQ2Wws/0LxwM
-        fSi/CQ8wBV7wpYIKsNQsKVmOEn6gs86yfnQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683288268; x=1683374668; bh=LAgUMsID5w2avzf9PFHv2O+viyYgaFw1o+N
-        MLyWqG60=; b=XylrgE/FzpOkXP/38f7IkiLZCII9CBUuA/C0RjqY0nZtqr0hqGf
-        Er7A6zovX6ZSrGHXF06ocW3kOCRuzgOv/xGTpJulhNQTKVfxt29zjaa/G5iJ0lqt
-        KjSvcMrONnO05OBuI0KS1as3b1P1THDQtH+bFBQ1TSitaRCdy1iLQZuoZ6uZcCsU
-        3fs1C2g2OqupuruP9j2k+QzxXlssNm28Wvpje/URAZ16jYRL1vR/naHswlqJhY+r
-        /hSL662sDvMg09gEMJKGchvUNrJO9Iba3QU4HIxjJK13TJGD+HT2B1hke8LID+l2
-        Qy3IG/BJhm0l+wH8ALOK1YVSFRQvxAiaVBA==
-X-ME-Sender: <xms:zPBUZCenFASlTO_pgLzfRhj3VVhq5d0yCoMby11dH9buDUo_3bu2Nw>
-    <xme:zPBUZMNR4nxREst3JYpTtvPollr2prRiNpAkDIFvIyjALP4EVamT9MY--NhAiiTxY
-    71yZ2NNPKQ4VngPUNI>
-X-ME-Received: <xmr:zPBUZDha9vKFH-z6S4gVhLTI6TvDejELWo4Qgy4zw5DxGonu_EQgHF0zJ_poyXZRFZVX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepkeevieelveeiueekveejgeekfffhffekkeeikeejffdvkedt
-    geevfeejuefggeegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:zPBUZP8ldsgMnfy2UvAp7WN6LsBGx5BMLD1pUlozbj2itgMI3nc2uQ>
-    <xmx:zPBUZOsLyeVqlHCu9HoNlDHUwGFWdpRRYEoe3WzyZN4aXOf85u9fdg>
-    <xmx:zPBUZGHR2b64arDeGudEgVNbPolyQvcVusVBFG8xKk7SMuVY2Kvxcg>
-    <xmx:zPBUZPluBgGBZ9t0c67HhrGKaSt-vb7M6DnNQK__cSvc9MmKcGMvCg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 08:04:26 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH AUTOSEL 6.3 08/59] bpf, mips: Implement DADDI workarounds
- for JIT
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230504194142.3805425-8-sashal@kernel.org>
-Date:   Fri, 5 May 2023 13:04:14 +0100
-Cc:     linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        with ESMTP id S232032AbjEEMpb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 08:45:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A8817FC3;
+        Fri,  5 May 2023 05:45:30 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683290728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ro/VOFl72UDWFwy8gwNK93pOtDrJEFznvt3NXDl6cF8=;
+        b=NEssImE7oVj95z4/FBIZJnxzphr31CeA4k7oJeJinz1r5r1l9dXN1gppKxrfH844UqDO9z
+        4QSvSZ+MCzWy04loOUdVFWsJabtUy+6xAHaZOnUP3kDamwQqqChUVjh6yxS90kqh/3foQl
+        BxPnqXdK0mEFhXKLhgXSM8yu090mNdF9FRSITtHjxNfxijznNsQsOy0jITHZ9ajNCFSUr7
+        ixcpybMXO0+Tte9hyNa1D9uPISenZGZ0GM57Wg5ua9BDE6mitsB+qwg3eCN369M6O0Jwe5
+        /MuZBe8FpjmVO3WPvPxa64u3KW+r1rcVtivlIiAVpuzcTFgSsngi+McsE/7vlQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683290728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ro/VOFl72UDWFwy8gwNK93pOtDrJEFznvt3NXDl6cF8=;
+        b=65zpCtdzuEaRqOzhfQTeNfeiCJfu8TviFjuPm0aorQPKM8pLdEAQ4DrGamxrKih4/79CxI
+        kPU4Ye7GnkFx6vAA==
+To:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        bpf@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <50FCC591-D86A-46A3-AF4A-DD68D2FACC78@flygoat.com>
-References: <20230504194142.3805425-1-sashal@kernel.org>
- <20230504194142.3805425-8-sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: Re: [patch V2 34/38] x86/cpu/amd; Invoke
+ detect_extended_topology_early() on boot CPU
+In-Reply-To: <38b259bb-050b-023e-4f43-212f95f022ac@citrix.com>
+References: <20230504185733.126511787@linutronix.de>
+ <20230504185938.179661118@linutronix.de>
+ <38b259bb-050b-023e-4f43-212f95f022ac@citrix.com>
+Date:   Fri, 05 May 2023 14:45:28 +0200
+Message-ID: <87354b3q1j.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, May 05 2023 at 00:04, Andrew Cooper wrote:
+> On 04/05/2023 8:02 pm, Thomas Gleixner wrote:
+>> From: Thomas Gleixner <tglx@linutronix.de>
+>>
+>> The early detection stores the extended topology leaf number which is
+>> required for parallel hotplug.
+>>
+>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>
+> It occurs to me that this and the previous patch are stale given that we
+> no longer look at CPUID in the trampoline.
+>
+> They're probably useful changes in isolation, but the commit messages
+> want adjusting to remove the association with parallel boot.
 
-
-> 2023=E5=B9=B45=E6=9C=884=E6=97=A5 20:40=EF=BC=8CSasha Levin =
-<sashal@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
->=20
-> [ Upstream commit bbefef2f07080cd502a93cb1c529e1c8a6c4ac8e ]
->=20
-> For DADDI errata we just workaround by disable immediate operation
-> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
->=20
-> All other use cases in JIT won't cause overflow thus they are all =
-safe.
->=20
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-> Link: =
-https://lore.kernel.org/bpf/20230228113305.83751-2-jiaxun.yang@flygoat.com=
-
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-Hi Sasha,
-
-I think this patch should count as a functional improvement instead of =
-regression fix.
-
-Please drop it from stable queue.
-
-Thanks
-Jiaxun
-
-> ---
-> arch/mips/Kconfig            | 1 -
-> arch/mips/net/bpf_jit_comp.c | 4 ++++
-> 2 files changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index e2f3ca73f40d6..edc7d8790f1e8 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -64,7 +64,6 @@ config MIPS
-> select HAVE_DMA_CONTIGUOUS
-> select HAVE_DYNAMIC_FTRACE
-> select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
-> - !CPU_DADDI_WORKAROUNDS && \
-> !CPU_R4000_WORKAROUNDS && \
-> !CPU_R4400_WORKAROUNDS
-> select HAVE_EXIT_THREAD
-> diff --git a/arch/mips/net/bpf_jit_comp.c =
-b/arch/mips/net/bpf_jit_comp.c
-> index b17130d510d49..a40d926b65139 100644
-> --- a/arch/mips/net/bpf_jit_comp.c
-> +++ b/arch/mips/net/bpf_jit_comp.c
-> @@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
-> /* All legal eBPF values are valid */
-> return true;
-> case BPF_ADD:
-> + if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-> + return false;
-> /* imm must be 16 bits */
-> return imm >=3D -0x8000 && imm <=3D 0x7fff;
-> case BPF_SUB:
-> + if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-> + return false;
-> /* -imm must be 16 bits */
-> return imm >=3D -0x7fff && imm <=3D 0x8000;
-> case BPF_AND:
-> --=20
-> 2.39.2
->=20
-
+Duh. Indeed. Completely forgot about that.
