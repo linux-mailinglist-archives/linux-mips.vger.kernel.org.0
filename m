@@ -2,262 +2,173 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4766F820C
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 13:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A163A6F8285
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 14:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbjEEL3U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 May 2023 07:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S232080AbjEEMEj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 May 2023 08:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbjEEL3S (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 07:29:18 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4D019D;
-        Fri,  5 May 2023 04:29:17 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 56BF22B067C5;
-        Fri,  5 May 2023 07:29:12 -0400 (EDT)
+        with ESMTP id S232069AbjEEMEh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 08:04:37 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0C39EDF;
+        Fri,  5 May 2023 05:04:32 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E468D5C02C1;
+        Fri,  5 May 2023 08:04:28 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 05 May 2023 07:29:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
+  by compute2.internal (MEProxy); Fri, 05 May 2023 08:04:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
         :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1683286151; x=1683293351; bh=ndjQ7HVeSN4i8zABollHrDBZww9ExlgvMkp
-        LIBiyWjo=; b=T9Lw9zwl1j4gAchlAqf868n+ONsa8T1Jma6Kie6SQqc1JsZ8+up
-        UPSosBn8a0prhr7B3JBHHvepawk7SM4AB0S50m0Z9C02z7dPGSqRReKS+VLkOHOB
-        FAPs4SpSsVmTF3+8Ghz1q2Rhj1RpmWNUSZpmMQysHLSIw8WXIZrtTh71obkbsjSH
-        xXAPhzeznignXNTp9Fx4tbHnMbWbffu1MCr9w91lyQKR3FITe4l3bYl8bB6ARjRR
-        SYOOAUEPGmML0VGXkaomNLjq0zGLu1gJAkaJYA0h1OsbGOMdL91WfJCQZRm/h3ow
-        /QukAyMhsUluR/jKby4pprO+Hv1jfHBgwLw==
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1683288268; x=1683374668; bh=LAgUMsID5w2avzf9PFHv2O+viyYgaFw1o+N
+        MLyWqG60=; b=H/bh1YSV4eq+4ZpRFAv55gNbJuhPtakE72182LsFotC8j2DgTIu
+        oXRjQ3r1ylDPH9UnBsOZZUYBJmGYmQXCLMb6viGJomasYQWeHOwZ7dDuiEThl3F4
+        CyrqrwejtER3OgqzazlYNnLJhDNIoHOb6Mfqd7GOpfW9CUMA/t43ruOSI/KrvBse
+        pb800EY/VOQmwZufAWJ/nOZoIJtk1yB1d32srLnvHxD+Tu4pp7JYVsL1sMwg9VHl
+        jgmplK0vxqzEjENNnL3IGOgAT4r0JewN+T+3OMNhOPq+Z+TiD9QkcQ2Wws/0LxwM
+        fSi/CQ8wBV7wpYIKsNQsKVmOEn6gs86yfnQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683286151; x=1683293351; bh=ndjQ7HVeSN4i8zABollHrDBZww9ExlgvMkp
-        LIBiyWjo=; b=CF6WSKQYCI3E/jvMvy7zs1RZSdpsH0+IH+yaVCHNcUhncsNcedq
-        cATqo/Attv11v0DdvvbcBfJ3OnGALuLFUIl3QgQ7iNo0D1vnIOfzTD0WF/GzKJlQ
-        J5qxewihlTYG3fGiei38zNGWwMruRYaoRbBTPHykZEK2a2Si/2im4Msiwxme3Qdq
-        A168MT4Bop8kBkgmRsV5K4u1vkuDErr6LrsCg/rdX6ubv2bTwsAPnRF0flo4awo5
-        2E48YfpF4ZMmjNwZZklF/sc6h6g75NAtns98uYrlW965X5lN7wlZ3kcG7vD7VJ32
-        L+dvZMF95jxVQTg9CV3DeNH0/bmh8wLKB1Q==
-X-ME-Sender: <xms:h-hUZHkZbvPknp2uhhk8X9aGi9g2nwtaWY7fgCaXzPks-vfHbPaJXA>
-    <xme:h-hUZK2qRUJ9AIN7EFOGhT9O5BPMFq1BXX5ZOalGfbC98TlXOpT9He__fzCru0SNx
-    bVWR87jLDTODQ--9ng>
-X-ME-Received: <xmr:h-hUZNpx3SN1tVrfCA1jJoyEqrUcIaDUXoJokh5g6QjG63oL9Jf2VjbenVoeey9CFNXkaHZkXPKN18AeqPY1qWzbvxn2xlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddggeduucetufdoteggodetrfdotf
+        1683288268; x=1683374668; bh=LAgUMsID5w2avzf9PFHv2O+viyYgaFw1o+N
+        MLyWqG60=; b=XylrgE/FzpOkXP/38f7IkiLZCII9CBUuA/C0RjqY0nZtqr0hqGf
+        Er7A6zovX6ZSrGHXF06ocW3kOCRuzgOv/xGTpJulhNQTKVfxt29zjaa/G5iJ0lqt
+        KjSvcMrONnO05OBuI0KS1as3b1P1THDQtH+bFBQ1TSitaRCdy1iLQZuoZ6uZcCsU
+        3fs1C2g2OqupuruP9j2k+QzxXlssNm28Wvpje/URAZ16jYRL1vR/naHswlqJhY+r
+        /hSL662sDvMg09gEMJKGchvUNrJO9Iba3QU4HIxjJK13TJGD+HT2B1hke8LID+l2
+        Qy3IG/BJhm0l+wH8ALOK1YVSFRQvxAiaVBA==
+X-ME-Sender: <xms:zPBUZCenFASlTO_pgLzfRhj3VVhq5d0yCoMby11dH9buDUo_3bu2Nw>
+    <xme:zPBUZMNR4nxREst3JYpTtvPollr2prRiNpAkDIFvIyjALP4EVamT9MY--NhAiiTxY
+    71yZ2NNPKQ4VngPUNI>
+X-ME-Received: <xmr:zPBUZDha9vKFH-z6S4gVhLTI6TvDejELWo4Qgy4zw5DxGonu_EQgHF0zJ_poyXZRFZVX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddggeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:h-hUZPnBbn94NkQEKEvHbnG2dNEDSaWJ3HzWEz6UeZ3oi0Hr2f1wBw>
-    <xmx:h-hUZF0RPsBudEBxx_2_QL7vcNG8U86RLpUqgDh4H-Jv8xu81dOidA>
-    <xmx:h-hUZOuOqcak98u8Mk2jcNEfbau8KqAAexmRK7VnFIq5AZP85OXh5Q>
-    <xmx:h-hUZG_LJv11B8ecbvnvjZu0iT3jsoKOqbg0CYomkb7L4J0dvgDMfjXr3iQ>
-Feedback-ID: i8771445c:Fastmail
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepkeevieelveeiueekveejgeekfffhffekkeeikeejffdvkedt
+    geevfeejuefggeegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:zPBUZP8ldsgMnfy2UvAp7WN6LsBGx5BMLD1pUlozbj2itgMI3nc2uQ>
+    <xmx:zPBUZOsLyeVqlHCu9HoNlDHUwGFWdpRRYEoe3WzyZN4aXOf85u9fdg>
+    <xmx:zPBUZGHR2b64arDeGudEgVNbPolyQvcVusVBFG8xKk7SMuVY2Kvxcg>
+    <xmx:zPBUZPluBgGBZ9t0c67HhrGKaSt-vb7M6DnNQK__cSvc9MmKcGMvCg>
+Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 07:29:10 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Fri, 05 May 2023 13:26:10 +0200
-Subject: [PATCH v4 68/68] clk: Forbid to register a mux without
- determine_rate
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221018-clk-range-checks-fixes-v4-68-971d5077e7d2@cerno.tech>
-References: <20221018-clk-range-checks-fixes-v4-0-971d5077e7d2@cerno.tech>
-In-Reply-To: <20221018-clk-range-checks-fixes-v4-0-971d5077e7d2@cerno.tech>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        David Lechner <david@lechnology.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Peng Fan <peng.fan@nxp.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sekhar Nori <nsekhar@ti.com>, Shawn Guo <shawnguo@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        patches@opensource.cirrus.com,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4464; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=3adLcMXzLNtbtn3jDq9B/uPJX8+PAXTnVm0BAOsWqLs=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCkhz5f++bpla/KjT+HVHNwH3ZZ43W04aiYltLwmTObeLs9b
- +dfrO0pZGMS4GGTFFFlihM2XxJ2a9bqTjW8ezBxWJpAhDFycAjARhmKG/8mm/ZL2RzblvZLa8tXGK5
- PzRLb6I/fSXxkpb5W8WG6VqDD8lRZM8Tofc+S4jfAN7mnZR1sD/rBeip/deyxP567/o2Z1XgA=
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+ 5 May 2023 08:04:26 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH AUTOSEL 6.3 08/59] bpf, mips: Implement DADDI workarounds
+ for JIT
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230504194142.3805425-8-sashal@kernel.org>
+Date:   Fri, 5 May 2023 13:04:14 +0100
+Cc:     linux-kernel@vger.kernel.org,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        bpf@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <50FCC591-D86A-46A3-AF4A-DD68D2FACC78@flygoat.com>
+References: <20230504194142.3805425-1-sashal@kernel.org>
+ <20230504194142.3805425-8-sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The determine_rate hook allows to select the proper parent and its rate
-for a given clock configuration. On another hand, set_parent is there to
-change the parent of a mux.
 
-Some clocks provide a set_parent hook but don't implement
-determine_rate. In such a case, set_parent is pretty much useless since
-the clock framework will always assume the current parent is to be used,
-and we will thus never change it.
 
-This situation can be solved in two ways:
-  - either we don't need to change the parent, and we thus shouldn't
-    implement set_parent;
-  - or we don't want to change the parent, in this case we should set
-    CLK_SET_RATE_NO_REPARENT;
-  - or we're missing a determine_rate implementation.
+> 2023=E5=B9=B45=E6=9C=884=E6=97=A5 20:40=EF=BC=8CSasha Levin =
+<sashal@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>=20
+> [ Upstream commit bbefef2f07080cd502a93cb1c529e1c8a6c4ac8e ]
+>=20
+> For DADDI errata we just workaround by disable immediate operation
+> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+>=20
+> All other use cases in JIT won't cause overflow thus they are all =
+safe.
+>=20
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+> Link: =
+https://lore.kernel.org/bpf/20230228113305.83751-2-jiaxun.yang@flygoat.com=
 
-The latter is probably just an oversight from the driver's author, and
-we should thus raise their awareness about the fact that the current
-state of the driver is confusing.
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-All the drivers in-tree have been converted by now, so let's prevent any
-clock with set_parent but without determine_rate to register so that it
-can't sneak in again in the future.
+Hi Sasha,
 
-Cc: Abel Vesa <abelvesa@kernel.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: "Andreas Färber" <afaerber@suse.de>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Chunyan Zhang <zhang.lyra@gmail.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: David Airlie <airlied@gmail.com>
-Cc: David Lechner <david@lechnology.com>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Mikko Perttunen <mperttunen@nvidia.com>
-Cc: Miles Chen <miles.chen@mediatek.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Orson Zhai <orsonzhai@gmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Peter De Schrijver <pdeschrijver@nvidia.com>
-Cc: Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: Samuel Holland <samuel@sholland.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Sekhar Nori <nsekhar@ti.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-actions@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-phy@lists.infradead.org
-Cc: linux-renesas-soc@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-sunxi@lists.linux.dev
-Cc: linux-tegra@vger.kernel.org
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: patches@opensource.cirrus.com
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/clk.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+I think this patch should count as a functional improvement instead of =
+regression fix.
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index e4a1d5f9694c..c8f9227c29c9 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3775,6 +3775,13 @@ static int __clk_core_init(struct clk_core *core)
- 		goto out;
- 	}
- 
-+	if (core->ops->set_parent && !core->ops->determine_rate) {
-+		pr_err("%s: %s must implement .set_parent & .determine_rate\n",
-+			__func__, core->name);
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
- 	if (core->num_parents > 1 && !core->ops->get_parent) {
- 		pr_err("%s: %s must implement .get_parent as it has multi parents\n",
- 		       __func__, core->name);
+Please drop it from stable queue.
 
--- 
-2.40.0
+Thanks
+Jiaxun
+
+> ---
+> arch/mips/Kconfig            | 1 -
+> arch/mips/net/bpf_jit_comp.c | 4 ++++
+> 2 files changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index e2f3ca73f40d6..edc7d8790f1e8 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -64,7 +64,6 @@ config MIPS
+> select HAVE_DMA_CONTIGUOUS
+> select HAVE_DYNAMIC_FTRACE
+> select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> - !CPU_DADDI_WORKAROUNDS && \
+> !CPU_R4000_WORKAROUNDS && \
+> !CPU_R4400_WORKAROUNDS
+> select HAVE_EXIT_THREAD
+> diff --git a/arch/mips/net/bpf_jit_comp.c =
+b/arch/mips/net/bpf_jit_comp.c
+> index b17130d510d49..a40d926b65139 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
+> /* All legal eBPF values are valid */
+> return true;
+> case BPF_ADD:
+> + if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> + return false;
+> /* imm must be 16 bits */
+> return imm >=3D -0x8000 && imm <=3D 0x7fff;
+> case BPF_SUB:
+> + if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> + return false;
+> /* -imm must be 16 bits */
+> return imm >=3D -0x7fff && imm <=3D 0x8000;
+> case BPF_AND:
+> --=20
+> 2.39.2
+>=20
 
