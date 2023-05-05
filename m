@@ -2,65 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0360E6F84C8
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 16:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE846F870F
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 18:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjEEOYT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 May 2023 10:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S231611AbjEEQxO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 May 2023 12:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbjEEOYR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 10:24:17 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D7916365;
-        Fri,  5 May 2023 07:24:13 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2fddb442d47so1688475f8f.2;
-        Fri, 05 May 2023 07:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683296652; x=1685888652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PlDyLjFrRP+hfZ2TWXEpRe3b1GLGrGjhoymBjZ3qVLc=;
-        b=p10HuDCV36ISVIMZatgDP0FktkLduGhvkpGCxgulHVNaJ9kUUr9hIaCQg1tY58GrWu
-         trtEAppma+1beNjHAFHgTdXEzIsV45MP6lW7Og0NObFS/qVebz7Fu9EoBnE6PqZh298g
-         k+qDO8IimllK3J2P15ut6B3J7FmPAPSXD+oSi+9LzmXkt7nbkqiKFCl38rnN5CjmVkDF
-         u9jok73k7RKLhS5hpJtqZAtUr7cc4TniV/LG7L1/nw7Ny6/Je7JLjKPrxGDf24U5vU/A
-         IMzVPoHMUv3/s3Aod35t+DthrUkswkql2SRKe6x8wnHOWynOuVqM8ksWWNwu65QOVuS4
-         CBcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683296652; x=1685888652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PlDyLjFrRP+hfZ2TWXEpRe3b1GLGrGjhoymBjZ3qVLc=;
-        b=P7hBxEHFsS6rsu173EmQyXvCM8mZ4miAi9OS7gQYcZv61tJYBwgMEVjkzGRAgtgyJc
-         YwJxugX2sLaJipqD6vgzf99X6TSOZFXjQ9hIVLzwYaonKuNmr1y1z/RyviEjs6BY72yE
-         dp4/C4xHL2/dfhp1szngUxybw44drvDtzblPa/DLneoassunrGUCUJjEGgiT5OZKwuOv
-         9kYSD0isJL7NpasERoec+K8fV9/Bg7uyAUhudwwSoxnv3yqJO0PHCQCXX5/vyxd2uFMf
-         sdJGfo4H5zmwjyyrRhlXdDAH0avDX+QGdsj1vffZ8vb2h8hDZG4N9B9DXGmcx4hYscUu
-         l2QA==
-X-Gm-Message-State: AC+VfDz34ESOItJ5a4BQ4mJWnOdF+Bvc17pb64ms0HCqH5yJThAof7SE
-        vRd32JITogHMqWQmQXWlrxs=
-X-Google-Smtp-Source: ACHHUZ6F2f+oOlyXN55d8B0CDJM7mlvzRBv6v2gvWCvMTu1f9wQkEBlU8qrrck4PxF1uew6G807Pog==
-X-Received: by 2002:adf:dd82:0:b0:306:287c:7106 with SMTP id x2-20020adfdd82000000b00306287c7106mr1557295wrl.54.1683296651675;
-        Fri, 05 May 2023 07:24:11 -0700 (PDT)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id k9-20020adfe8c9000000b0030642f5da27sm2562969wrn.37.2023.05.05.07.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 07:24:10 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     tsbogend@alpha.franken.de
-Cc:     paul@crapouillou.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mips: dts: ingenic: Remove unnecessary AIC clocks
-Date:   Fri,  5 May 2023 15:24:00 +0100
-Message-Id: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S231464AbjEEQxN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 12:53:13 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A031940D;
+        Fri,  5 May 2023 09:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1683305586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cm5Ovt89OfGJCeWTOZ91qJGDxssoS6SoIn7qKeUUUII=;
+        b=Qt9ZsTXhoCIGaPFWg1rJo0krNw0t60cwBgGiXqjXRz9k4Jc4juJuSRAuuIjUMN7MzwHUH6
+        XCxaJ/zzM+m2GRuMrDY67DPlmnaiYW4Ist+Boik1FKw7vZphuebHUpm75r3T+LauruClfm
+        3tpScXg2uj7/jmjd5ZDvnaC+mTZgoPE=
+Message-ID: <f52d02cd797088cd599d5bda5653495d987ba85b.camel@crapouillou.net>
+Subject: Re: [PATCH v2] mips: dts: ingenic: Remove unnecessary AIC clocks
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        tsbogend@alpha.franken.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 05 May 2023 18:53:04 +0200
+In-Reply-To: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
+References: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,80 +47,77 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The "ext" and "pll half" clocks don't belong in the DT. They are
-not consumed directly by the AIC and are only used as the parent
-clocks of the "i2s" clock. An operating system should be able to
-figure out that information itself because it presumably knows the
-layout of the clock tree.
-
-Removing these from the DT should be safe from a compatibility
-point of view because the jz4740-i2s driver in Linux does not, and
-never did depend on them.
-
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Link: https://lore.kernel.org/all/20221028103418.17578-1-aidanmacdonald.0x0@gmail.com/
----
-This is a resend of patch 2/3 from a previous submission which is linked above.
-
-v1->v2: updated commit message
-
- arch/mips/boot/dts/ingenic/jz4725b.dtsi | 7 ++-----
- arch/mips/boot/dts/ingenic/jz4740.dtsi  | 7 ++-----
- arch/mips/boot/dts/ingenic/jz4770.dtsi  | 5 ++---
- 3 files changed, 6 insertions(+), 13 deletions(-)
-
-diff --git a/arch/mips/boot/dts/ingenic/jz4725b.dtsi b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-index e9e48022f631..acbbe8c4664c 100644
---- a/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-@@ -198,11 +198,8 @@ aic: audio-controller@10020000 {
- 
- 		#sound-dai-cells = <0>;
- 
--		clocks = <&cgu JZ4725B_CLK_AIC>,
--			 <&cgu JZ4725B_CLK_I2S>,
--			 <&cgu JZ4725B_CLK_EXT>,
--			 <&cgu JZ4725B_CLK_PLL_HALF>;
--		clock-names = "aic", "i2s", "ext", "pll half";
-+		clocks = <&cgu JZ4725B_CLK_AIC>, <&cgu JZ4725B_CLK_I2S>;
-+		clock-names = "aic", "i2s";
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <10>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-index 7f76cba03a08..bdd6f4d82ec9 100644
---- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-@@ -192,11 +192,8 @@ aic: audio-controller@10020000 {
- 		interrupt-parent = <&intc>;
- 		interrupts = <18>;
- 
--		clocks = <&cgu JZ4740_CLK_AIC>,
--			 <&cgu JZ4740_CLK_I2S>,
--			 <&cgu JZ4740_CLK_EXT>,
--			 <&cgu JZ4740_CLK_PLL_HALF>;
--		clock-names = "aic", "i2s", "ext", "pll half";
-+		clocks = <&cgu JZ4740_CLK_AIC>, <&cgu JZ4740_CLK_I2S>;
-+		clock-names = "aic", "i2s";
- 
- 		dmas = <&dmac 25 0xffffffff>, <&dmac 24 0xffffffff>;
- 		dma-names = "rx", "tx";
-diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-index bda0a3a86ed5..9c0099919db7 100644
---- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-@@ -238,9 +238,8 @@ aic: audio-controller@10020000 {
- 
- 		#sound-dai-cells = <0>;
- 
--		clocks = <&cgu JZ4770_CLK_AIC>, <&cgu JZ4770_CLK_I2S>,
--			 <&cgu JZ4770_CLK_EXT>, <&cgu JZ4770_CLK_PLL0>;
--		clock-names = "aic", "i2s", "ext", "pll half";
-+		clocks = <&cgu JZ4770_CLK_AIC>, <&cgu JZ4770_CLK_I2S>;
-+		clock-names = "aic", "i2s";
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <34>;
--- 
-2.39.2
+SGkgQWlkYW4sCgpMZSB2ZW5kcmVkaSAwNSBtYWkgMjAyMyDDoCAxNToyNCArMDEwMCwgQWlkYW4g
+TWFjRG9uYWxkIGEgw6ljcml0wqA6Cj4gVGhlICJleHQiIGFuZCAicGxsIGhhbGYiIGNsb2NrcyBk
+b24ndCBiZWxvbmcgaW4gdGhlIERULiBUaGV5IGFyZQo+IG5vdCBjb25zdW1lZCBkaXJlY3RseSBi
+eSB0aGUgQUlDIGFuZCBhcmUgb25seSB1c2VkIGFzIHRoZSBwYXJlbnQKPiBjbG9ja3Mgb2YgdGhl
+ICJpMnMiIGNsb2NrLiBBbiBvcGVyYXRpbmcgc3lzdGVtIHNob3VsZCBiZSBhYmxlIHRvCj4gZmln
+dXJlIG91dCB0aGF0IGluZm9ybWF0aW9uIGl0c2VsZiBiZWNhdXNlIGl0IHByZXN1bWFibHkga25v
+d3MgdGhlCj4gbGF5b3V0IG9mIHRoZSBjbG9jayB0cmVlLgo+IAo+IFJlbW92aW5nIHRoZXNlIGZy
+b20gdGhlIERUIHNob3VsZCBiZSBzYWZlIGZyb20gYSBjb21wYXRpYmlsaXR5Cj4gcG9pbnQgb2Yg
+dmlldyBiZWNhdXNlIHRoZSBqejQ3NDAtaTJzIGRyaXZlciBpbiBMaW51eCBkb2VzIG5vdCwgYW5k
+Cj4gbmV2ZXIgZGlkIGRlcGVuZCBvbiB0aGVtLgoKQWdyZWVkLgoKPiBTaWduZWQtb2ZmLWJ5OiBB
+aWRhbiBNYWNEb25hbGQgPGFpZGFubWFjZG9uYWxkLjB4MEBnbWFpbC5jb20+Cj4gTGluazoKPiBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjEwMjgxMDM0MTguMTc1NzgtMS1haWRhbm1h
+Y2RvbmFsZC4weDBAZ21haWwuY29tLwoKUmV2aWV3ZWQtYnk6IFBhdWwgQ2VyY3VlaWwgPHBhdWxA
+Y3JhcG91aWxsb3UubmV0PgoKQ2hlZXJzLAotUGF1bAoKPiAtLS0KPiBUaGlzIGlzIGEgcmVzZW5k
+IG9mIHBhdGNoIDIvMyBmcm9tIGEgcHJldmlvdXMgc3VibWlzc2lvbiB3aGljaCBpcwo+IGxpbmtl
+ZCBhYm92ZS4KPiAKPiB2MS0+djI6IHVwZGF0ZWQgY29tbWl0IG1lc3NhZ2UKPiAKPiDCoGFyY2gv
+bWlwcy9ib290L2R0cy9pbmdlbmljL2p6NDcyNWIuZHRzaSB8IDcgKystLS0tLQo+IMKgYXJjaC9t
+aXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzQwLmR0c2nCoCB8IDcgKystLS0tLQo+IMKgYXJjaC9t
+aXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzcwLmR0c2nCoCB8IDUgKystLS0KPiDCoDMgZmlsZXMg
+Y2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0
+IGEvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzI1Yi5kdHNpCj4gYi9hcmNoL21pcHMv
+Ym9vdC9kdHMvaW5nZW5pYy9qejQ3MjViLmR0c2kKPiBpbmRleCBlOWU0ODAyMmY2MzEuLmFjYmJl
+OGM0NjY0YyAxMDA2NDQKPiAtLS0gYS9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3MjVi
+LmR0c2kKPiArKysgYi9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3MjViLmR0c2kKPiBA
+QCAtMTk4LDExICsxOTgsOCBAQCBhaWM6IGF1ZGlvLWNvbnRyb2xsZXJAMTAwMjAwMDAgewo+IMKg
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjc291bmQtZGFpLWNlbGxzID0gPDA+
+Owo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrcyA9IDwmY2d1IEpa
+NDcyNUJfQ0xLX0FJQz4sCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgPCZjZ3UgSlo0NzI1Ql9DTEtfSTJTPiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNndSBKWjQ3MjVCX0NMS19FWFQ+LAo+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY2d1IEpaNDcyNUJf
+Q0xLX1BMTF9IQUxGPjsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stbmFt
+ZXMgPSAiYWljIiwgImkycyIsICJleHQiLCAicGxsIGhhbGYiOwo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8JmNndSBKWjQ3MjVCX0NMS19BSUM+LCA8JmNndQo+IEpa
+NDcyNUJfQ0xLX0kyUz47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrLW5h
+bWVzID0gImFpYyIsICJpMnMiOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBpbnRlcnJ1cHQtcGFyZW50ID0gPCZpbnRjPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGludGVycnVwdHMgPSA8MTA+Owo+IGRpZmYgLS1naXQgYS9hcmNoL21pcHMvYm9vdC9k
+dHMvaW5nZW5pYy9qejQ3NDAuZHRzaQo+IGIvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0
+NzQwLmR0c2kKPiBpbmRleCA3Zjc2Y2JhMDNhMDguLmJkZDZmNGQ4MmVjOSAxMDA2NDQKPiAtLS0g
+YS9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3NDAuZHRzaQo+ICsrKyBiL2FyY2gvbWlw
+cy9ib290L2R0cy9pbmdlbmljL2p6NDc0MC5kdHNpCj4gQEAgLTE5MiwxMSArMTkyLDggQEAgYWlj
+OiBhdWRpby1jb250cm9sbGVyQDEwMDIwMDAwIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGludGVycnVwdC1wYXJlbnQgPSA8JmludGM+Owo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgaW50ZXJydXB0cyA9IDwxOD47Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0NzQwX0NMS19BSUM+LAo+IC3CoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY2d1IEpaNDc0MF9DTEtfSTJT
+PiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNn
+dSBKWjQ3NDBfQ0xLX0VYVD4sCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgPCZjZ3UgSlo0NzQwX0NMS19QTExfSEFMRj47Cj4gLcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGNsb2NrLW5hbWVzID0gImFpYyIsICJpMnMiLCAiZXh0IiwgInBsbCBo
+YWxmIjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0
+NzQwX0NMS19BSUM+LCA8JmNndQo+IEpaNDc0MF9DTEtfSTJTPjsKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgY2xvY2stbmFtZXMgPSAiYWljIiwgImkycyI7Cj4gwqAKPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRtYXMgPSA8JmRtYWMgMjUgMHhmZmZmZmZmZj4sIDwm
+ZG1hYyAyNCAweGZmZmZmZmZmPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRt
+YS1uYW1lcyA9ICJyeCIsICJ0eCI7Cj4gZGlmZiAtLWdpdCBhL2FyY2gvbWlwcy9ib290L2R0cy9p
+bmdlbmljL2p6NDc3MC5kdHNpCj4gYi9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3NzAu
+ZHRzaQo+IGluZGV4IGJkYTBhM2E4NmVkNS4uOWMwMDk5OTE5ZGI3IDEwMDY0NAo+IC0tLSBhL2Fy
+Y2gvbWlwcy9ib290L2R0cy9pbmdlbmljL2p6NDc3MC5kdHNpCj4gKysrIGIvYXJjaC9taXBzL2Jv
+b3QvZHRzL2luZ2VuaWMvano0NzcwLmR0c2kKPiBAQCAtMjM4LDkgKzIzOCw4IEBAIGFpYzogYXVk
+aW8tY29udHJvbGxlckAxMDAyMDAwMCB7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCNzb3VuZC1kYWktY2VsbHMgPSA8MD47Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0NzcwX0NMS19BSUM+LCA8JmNndQo+IEpaNDc3
+MF9DTEtfSTJTPiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCA8JmNndSBKWjQ3NzBfQ0xLX0VYVD4sIDwmY2d1Cj4gSlo0NzcwX0NMS19QTEwwPjsKPiAt
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stbmFtZXMgPSAiYWljIiwgImkycyIs
+ICJleHQiLCAicGxsIGhhbGYiOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9j
+a3MgPSA8JmNndSBKWjQ3NzBfQ0xLX0FJQz4sIDwmY2d1Cj4gSlo0NzcwX0NMS19JMlM+Owo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9jay1uYW1lcyA9ICJhaWMiLCAiaTJzIjsK
+PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50ZXJydXB0LXBhcmVudCA9
+IDwmaW50Yz47Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcnJ1cHRzID0g
+PDM0PjsKCg==
 
