@@ -2,146 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DE36F7C4F
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 07:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A126F7C7B
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 07:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjEEFVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 May 2023 01:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S230127AbjEEFrT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 May 2023 01:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbjEEFVf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 01:21:35 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904E1FF2;
-        Thu,  4 May 2023 22:21:34 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d2e1a72fcca58-643990c5373so1066670b3a.1;
-        Thu, 04 May 2023 22:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683264094; x=1685856094;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EKL5kLsFZ+sGZTRgz40hRJ00ZAZDAzqUio/KlP62gi4=;
-        b=lHpwsCFdfLgDiplHfTzxQjsbRim2o7ukHfbDAPIlptK1Jmla8UZFX2AfNek4kGW8uj
-         qnSmAjc4B/hHU2uZtWDt3r9BXaTbbvpy6AT4lco7A0ovtse5VPRwwxYqrPSQXNejt9RX
-         KRLYprgjuZYdEpGrdD8DaICU4cNIw6AsviY9fX1Z/XLBnfjROiIIaVkWsAuZbqGtRoYx
-         /syt6W5igYfaZiAPrkOD3YMOogB/re5D7BP17ugXLSFzE3uhH3aUXXkPeApg7BSb49ND
-         eMtAJ+4bbgaaBqaRbgjPL4g7tSLJVPmAFszyglARcGRMvr3iMVstWslTXFC9pixf3RQe
-         vRtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683264094; x=1685856094;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EKL5kLsFZ+sGZTRgz40hRJ00ZAZDAzqUio/KlP62gi4=;
-        b=djdbNrexzWjplHe/acUV6y9mlCV9vHhAdsKXrL3PJd3KJw32G8asSWGaEBXYAWsRuv
-         i1Q7Vpgl9Ff6G1mTaBmyiGFF8Aj3zZ5Xkj8aFUSuAe6xGgCVJ0c0EubzVtLuUraRqMnJ
-         gjWyRmmGPHvQTfT1D1N1ssiEpcqZDqvCVF4MWO+3t1b11Rhqve8dh7Qo/+5RoZLRm9AX
-         C0I4ZQ+X02rYgNNb9ZCOVeKM3n13lhDEPZriK9hSh420eZYRnuWMJzLSZuM3Uksadqm/
-         jdmkhqXY8agHq+YGVNHPBN95t0AFZumDe+DiIae3+lb6aQI4J4nB1AbGdPVGu1o4DB1R
-         GuJQ==
-X-Gm-Message-State: AC+VfDxRQ0gi3OLb6yXWN2bE77Qq5eqyLDpWr0NRJtypG96SAbEResCj
-        oIubCSFSyjrSanezMOqA2ac=
-X-Google-Smtp-Source: ACHHUZ4V1vC1xXnS7doNxpBX8QO+KvFXRYeR1afGEHLiVH2VTtdsgHCy9fyGnxeXcRxiRP9nB4rieA==
-X-Received: by 2002:a05:6a00:168b:b0:63d:2d7d:b6f2 with SMTP id k11-20020a056a00168b00b0063d2d7db6f2mr1021223pfc.4.1683264093548;
-        Thu, 04 May 2023 22:21:33 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 9-20020aa79249000000b006430aa24dd7sm678036pfp.73.2023.05.04.22.21.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 22:21:33 -0700 (PDT)
-From:   Genjian <zhanggenjian123@gmail.com>
-X-Google-Original-From: Genjian <zhanggenjian@kylinos.cn>
-To:     tsbogend@alpha.franken.de, rdunlap@infradead.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanggenjian123@gmail.com, Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH v3] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
-Date:   Fri,  5 May 2023 13:19:53 +0800
-Message-Id: <20230505051953.331080-1-zhanggenjian@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229577AbjEEFrS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 01:47:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C398A11D89;
+        Thu,  4 May 2023 22:47:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CA2563B30;
+        Fri,  5 May 2023 05:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEBDC433B0;
+        Fri,  5 May 2023 05:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683265636;
+        bh=TmEJ43a9wRyU79Q4Z9WHv4VZR6aLeCdSzDRMZZtHgkE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=I2g+vyhe1hoLtc3xpRjAc9BU/OAumbEN1B7Qbc0uCZJ6vm38izq9WxgG6TDQIw9Cn
+         gtD6rIxqmEHNa8rMU8v/ldvTpcVtaEF3DSdJwkdOmvdfZad8eHH3pZuMYUuPnRHXOF
+         aYYdetp0cJMW6mFI28DiTiu7OK1/suDqFmm+PnshMDcFrjGxdV75SdkN4eyVXeCkzW
+         HSaITHGNl7LHZa0zreUIjIqZKUUeH1GUas9yTSfl5gIOK4Nx3H8cZuqGu0g7MQUCMn
+         LcnwJPgGPB8cca2qNfnc8SP0goqQZTmJ1qZnOLhwiQAwrnHXfTiUVeCmF7841pmmh4
+         RSuO/9+XH4fLg==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-94f3cd32799so263635666b.0;
+        Thu, 04 May 2023 22:47:16 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz2FrmL4Up3fD5j3mGM/O8YWH2p5IWI7Om1S8wwmKwlPsAcDzfQ
+        f0Yxie+j4D8vrLMz9f2waM7nC/UUl9aPPiqySfE=
+X-Google-Smtp-Source: ACHHUZ7vjZvoO17O2+xGcjw8YRQwo0MSgi9BtdhaWD+v+3nmuTyY0RrEyW2wbSK+lqJd6C9lcTXOXjjLYHG3jJse7RE=
+X-Received: by 2002:a17:907:1c07:b0:960:ddba:e5c7 with SMTP id
+ nc7-20020a1709071c0700b00960ddbae5c7mr139047ejc.40.1683265634680; Thu, 04 May
+ 2023 22:47:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-10-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-10-arnd@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 5 May 2023 13:47:03 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
+Message-ID: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
+Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before
+ bidirectional DMA
+To:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Genjian Zhang <zhanggenjian@kylinos.cn>
+On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> For a DMA_BIDIRECTIONAL transfer, the caches have to be cleaned
+> first to let the device see data written by the CPU, and invalidated
+> after the transfer to let the CPU see data written by the device.
+>
+> riscv also invalidates the caches before the transfer, which does
+> not appear to serve any purpose.
+Yes, we can't guarantee the CPU pre-load cache lines randomly during
+dma working.
 
-compiler error (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110):
+But I've two purposes to keep invalidates before dma transfer:
+ - We clearly tell the CPU these cache lines are invalid. The caching
+algorithm would use these invalid slots first instead of replacing
+valid ones.
+ - Invalidating is very cheap. Actually, flush and clean have the same
+performance in our machine.
 
-{standard input}: Assembler messages:
-{standard input}:171: Error: found '(', expected: ')'
-{standard input}:171: Error: found '(', expected: ')'
-{standard input}:171: Error: non-constant expression in ".if" statement
-{standard input}:171: Error: junk at end of line, first unrecognized
-character is `('
+So, how about:
 
-Expands ___SYNC() macros. However, 'if' statement will be wrong
-assembly. This Compilers report a lot of errors like the above.
-The problem is caused by the #define of if() in
-include/linux/compiler.h when CONFIG_PROFILE_ALL_BRANCHES
-is set. Move '.if' into quoted strings to fix it.
+diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoheren=
+t.c
+index d919efab6eba..2c52fbc15064 100644
+--- a/arch/riscv/mm/dma-noncoherent.c
++++ b/arch/riscv/mm/dma-noncoherent.c
+@@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t s=
+ize,
+                ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+                break;
+        case DMA_FROM_DEVICE:
+-               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+-               break;
+        case DMA_BIDIRECTIONAL:
+                ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                break;
+@@ -42,7 +40,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size=
+,
+                break;
+        case DMA_FROM_DEVICE:
+        case DMA_BIDIRECTIONAL:
+                /* I'm not sure all drivers have guaranteed cacheline
+alignment. If not, this inval would cause problems */
+-               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
++               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+                break;
+        default:
+                break;
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
----
- arch/mips/include/asm/sync.h | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/riscv/mm/dma-noncoherent.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoher=
+ent.c
+> index 640f4c496d26..69c80b2155a1 100644
+> --- a/arch/riscv/mm/dma-noncoherent.c
+> +++ b/arch/riscv/mm/dma-noncoherent.c
+> @@ -25,7 +25,7 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t=
+ size,
+>                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+>                 break;
+>         case DMA_BIDIRECTIONAL:
+> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+> +               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+>                 break;
+>         default:
+>                 break;
+> --
+> 2.39.2
+>
 
-diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync.h
-index aabd097933fe..fab3ae758ea6 100644
---- a/arch/mips/include/asm/sync.h
-+++ b/arch/mips/include/asm/sync.h
-@@ -173,9 +173,8 @@
-  * when we detect at runtime that we're running on a CPU that doesn't need
-  * them.
-  */
--#ifdef CONFIG_CPU_HAS_SYNC
- # define ____SYNC(_type, _reason, _else)			\
--	.if	(( _type ) != -1) && ( _reason );		\
-+	((_type) != -1) && (_reason);				\
- 	.set	push;						\
- 	.set	MIPS_ISA_LEVEL_RAW;				\
- 	.rept	__SYNC_rpt(_type);				\
-@@ -185,21 +184,28 @@
- 	.else;							\
- 	_else;							\
- 	.endif
--#else
--# define ____SYNC(_type, _reason, _else)
--#endif
- 
- /*
-  * Preprocessor magic to expand macros used as arguments before we insert them
-  * into assembly code.
-+ * In addition,'if' cannot be enabled.
-  */
-+#ifdef CONFIG_CPU_HAS_SYNC
- #ifdef __ASSEMBLY__
- # define ___SYNC(type, reason, else)				\
--	____SYNC(type, reason, else)
-+	.if	____SYNC(type, reason, else)
-+#else
-+# define ___SYNC(type, reason, else)				\
-+	".if"	__stringify(____SYNC(type, reason, else))
-+#endif
-+#else /* CONFIG_CPU_HAS_SYNC */
-+#ifdef __ASSEMBLY__
-+# define ___SYNC(type, reason, else)
- #else
- # define ___SYNC(type, reason, else)				\
--	__stringify(____SYNC(type, reason, else))
-+	__stringify()
- #endif
-+#endif /* CONFIG_CPU_HAS_SYNC */
- 
- #define __SYNC(type, reason)					\
- 	___SYNC(__SYNC_##type, __SYNC_##reason, )
--- 
-2.25.1
 
+--=20
+Best Regards
+ Guo Ren
