@@ -2,245 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152896F798F
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 01:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C716F7AE2
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 04:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjEDXEc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 May 2023 19:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S229989AbjEEC2d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 May 2023 22:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEDXEa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 19:04:30 -0400
-Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457EA9EF8;
-        Thu,  4 May 2023 16:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1683241469;
-  h=message-id:date:from:subject:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=btf+YDR09e31a7nJQt4TFhTa4ii9ccR3xjDeZADBtFU=;
-  b=h1DP3KxOYN93rWSoryyLzNdlXytp9atO6y8U6FTGZQbJCNd+OMSSg6pj
-   /EQatiGmpWa+h9en23al0vi9jQXT3RJjxn+MuljGklxsViFG3DGYsRCKK
-   B/S9zsS0miIuGblsfEwsHlmeSpBnua2YKpBaogtBML3jB5LcauQfD8e8h
-   I=;
-X-IronPort-RemoteIP: 104.47.59.168
-X-IronPort-MID: 110371711
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23: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
-IronPort-HdrOrdr: A9a23:q7JOg6pxGXXkorUcmwt6pjYaV5oAeYIsimQD101hICG9E/bo8v
- xG+c5wuCMc5wx8ZJhNo7+90dC7MArhHP1OkOss1NWZPDUO0VHARL2Ki7GN/9SKIVycygcy78
- Zdmp9FebnN5AhB5voSODPIaOrIGuP3lpxAWN2uqEuFkTsaE52IMT0JcDqmLg==
-X-Talos-CUID: 9a23:vjt1N2Mplw2XN+5DUS1bpGg/HeccdSPD3k76MU66KFhqYejA
-X-Talos-MUID: =?us-ascii?q?9a23=3AR/FKtA7NZl2ZTUmoxGCHD0SBxoxn8vSkJBghoK4?=
- =?us-ascii?q?XkPSeETx5axSHoCWOF9o=3D?=
-X-IronPort-AV: E=Sophos;i="5.99,250,1677560400"; 
-   d="scan'208";a="110371711"
-Received: from mail-dm6nam12lp2168.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.168])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 May 2023 19:04:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ULuGhHlj2ISnghdgpqb4EG6URH8INlEONQvHxdgVsfW4QtxkPX6GoRxGQh8vyZg5RwiM4QStkhPkBk8cML8VjSPh79dOa8JljP494LZ6x7iWerrrpb+zzEUqCX8fJAYq+kltENCH9tmdv6PVqJWQOQZxnnmcKsiz0YzqMZ+D1HjzXnKyfIRUrzcG09FAj8HkKsEZNbPCpMyf1FWn2bFPm0zPq7ZIlEp6Vj9aOLxQ+NgOlnS8yAu8lGlFZiRIIg7VpjZDGSL1dtIesQ/qjFqg/RqTeJUHvqEUZMMRDpQ91k+oh34jQDZc7ThIEKNPAJhznEB3OaKd0qOVFmZ8F4rUfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=btf+YDR09e31a7nJQt4TFhTa4ii9ccR3xjDeZADBtFU=;
- b=GykOnQVztneNYAc0H2rAk5tUFdK3UNw6/9WWn5cunhlUOMXIbuFU67WlXh/AyfPKTnx8r8cnF0qMfOAM0+tNmUgSGd/GFPDNbd4gGIFkL540i8T6sz7v9dBJLWKX81glrMTGOEgsI6eiL/3ChMXzMXkK6a23t12wWtpMxxYH7odspoL4Q3yZBpXdioahTQAasEiSEKbD8f9ZuDKv9J+VfC5U5Dlh3IqnIXBWaYsqp5kGB5Fz4toL33fK8Z3EN50//Or7YOYxib+2N6NP7cqabtlRo7057Nh3s56gUm8lPoBCZ5T0cSynLLu9ogm7c2SANGwVCmgE1cuu3w21MFmEIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+        with ESMTP id S229758AbjEEC2c (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 May 2023 22:28:32 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C9CAD37;
+        Thu,  4 May 2023 19:28:30 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a7c1b86e8so1595998276.2;
+        Thu, 04 May 2023 19:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=btf+YDR09e31a7nJQt4TFhTa4ii9ccR3xjDeZADBtFU=;
- b=J90gB9GLYZwmXiu3bmiuqp8KNl2vYOikQyV62BGqXZa7nDm5xOUvdf3xhNlqrOWoGrYaWy07Eeb3rpF3OiQuJaLmHBOnLuCXTSSQ9Wg/WPo+LE7MZyHygC6gO7E5vmHZtRqEpGVJzVfpa5lEKbbSYihDv7tDNYSno8G6g/B5dqI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by DS7PR03MB5510.namprd03.prod.outlook.com (2603:10b6:5:2ce::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Thu, 4 May
- 2023 23:04:23 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::4fc:e616:1cf0:57bb]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::4fc:e616:1cf0:57bb%4]) with mapi id 15.20.6340.031; Thu, 4 May 2023
- 23:04:23 +0000
-Message-ID: <38b259bb-050b-023e-4f43-212f95f022ac@citrix.com>
-Date:   Fri, 5 May 2023 00:04:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [patch V2 34/38] x86/cpu/amd; Invoke
- detect_extended_topology_early() on boot CPU
-Content-Language: en-GB
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-References: <20230504185733.126511787@linutronix.de>
- <20230504185938.179661118@linutronix.de>
-In-Reply-To: <20230504185938.179661118@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0473.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a8::10) To BYAPR03MB3623.namprd03.prod.outlook.com
- (2603:10b6:a02:aa::12)
+        d=gmail.com; s=20221208; t=1683253709; x=1685845709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IQTwCtOioJF8t/OiNx/dPasS+fdTMROa/SSWtKZQgKs=;
+        b=JIWVovMpQ3sB1Y2LItd2ey9cLqND5SVtLG/8J4+W6kJJosibN1+m8+ousRJlYRLjms
+         pFD42ttOvGyeO0vBmCLohiRM/cmdb3MEslUpdzxtDeEqb0XLI+Nv88W8baeZka2pUK83
+         UTCAQNM/6duTyT8/c5ngSJaFw6ocRwUNOd8mydPI84GdzFbgSAKdJbqJWJl6Nl/W66tN
+         UmAVwigIsyaIH5OWjFSQe6cYlBKFaE87zB7VL/4zOcbCDjMOiP0Ccha1IjsgDeyh3uuZ
+         LnBOZEHjyUntMlacBaSUb5kDv5FC8cFQXH8xoReYqYbVlcDa0rK8idPo2sG0u2pCrByo
+         Rlkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683253709; x=1685845709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IQTwCtOioJF8t/OiNx/dPasS+fdTMROa/SSWtKZQgKs=;
+        b=U0y3VKZRMnV3mV4rdWJyJ+whKM/BWkvjYVCyD1tdCw8PwB7F5whLsIv9zc/4UUG1+S
+         pQBWDhaGgRoiIE9Z4bGpJ8FGOhluxnaS7LsMGVzr1j1YvPOjKwfV3QqtUPj0UKH2FYeU
+         Y5XFPe7EwkFZ1rzzbYM7JxGeen+ZtzncWA7+M7NZtNFdXGMtxOHt8YXS5iGhyh9Jw6x8
+         mbXmerphyBTd8QUyPztZHtmInvmMChgaXo/+29vLqyUsjbUy5m1YCX8NqoxFnQ3BHPJM
+         dQGx1SaRVNFNP/aWgyP8F/eq2blgh2cJMcj/fCw/rwwRHdEZZnO5x2Bujj/tnEVxdRFK
+         5xKg==
+X-Gm-Message-State: AC+VfDy2cyC+aU9ifwWSf0gIJfKPLqqIePhoEOkAFbCMDc1VfUIDnrhS
+        Xa2ATkOe/1AydjNlbINis7cXwAvD0gGzcQo88vY=
+X-Google-Smtp-Source: ACHHUZ6s8kmM5Dp5ih24Bs2hjigFmkgmEJakDis6EgSGdU/4H1aET/JyFpi3QqfwTFH10DYcjaA8FESVKsOzzJ1oQFQ=
+X-Received: by 2002:a25:c78f:0:b0:b9a:8298:d873 with SMTP id
+ w137-20020a25c78f000000b00b9a8298d873mr30812ybe.49.1683253709325; Thu, 04 May
+ 2023 19:28:29 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|DS7PR03MB5510:EE_
-X-MS-Office365-Filtering-Correlation-Id: ddb066f3-8553-4af6-a2aa-08db4cf3e645
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KD0D68GVI57Fkqj8sMXyvLmEFZdB1+Xt/tcujv3JRziSTvGLC3LmYl0Q0o26xJbFwukSYHYgWGgqVAmfkmM6/z3nbvCAl+dV0NmmIrGH+/JoeUB0z73A2x+ltr6lRiwatqE4EOvo3U8RhHGXDnplF8XCKAsGZsC3bp6qywM5MNaVeIcijmqqPcRnhp9v/KaXUzRhczrprcV6YfAYSFbk3mZxV5TKB1rP4J2tSnKs89cGOJOD3Upg2p4lA3CLmFkZGPmz2ZOFs4e+aeUIrcUN5lnzA6kf8a4HaWhxp4Qc6z09TAUys8ND/+R0icaBN31FovcuUh9AMZDsznriMRyc7OMfNQBSmqSxuXtb73qpxA7LSyABUBdGaMokqPy02hVxAxccngzmVDiOLxd7zCG/CCD4jb4xC5LMyJhxuFtsbMOWt3EdVtE00x6jORAoYW8UUrcS8tsPJPhMYxlPIi7+R6qlH2VQbYta3G+2kNqXQ6wBSKNRuKQKSfn+r+rvQDAWYITrFivQv/KA937tbtlmcGGi4FAfBKh88UbmS5ovo+IxaEmZu+1iB7CX1O9TQLPkTct5Rx5m1F+2YrgSKfYKsApbkQ0SLooOyUg0cf79IwWpgJxnSDZltbuQx6l2FqzAyqExrt0z7yXtlisF9lPLlg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(366004)(136003)(346002)(451199021)(2906002)(4744005)(8676002)(31686004)(54906003)(41300700001)(66946007)(478600001)(5660300002)(316002)(8936002)(186003)(110136005)(6666004)(4326008)(66556008)(7406005)(7416002)(66476007)(6486002)(26005)(6512007)(6506007)(53546011)(82960400001)(36756003)(83380400001)(2616005)(31696002)(86362001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWt5ekN6YWVqNGdWc3czcS9tcU9ZYTB3YnQ3YUxOMGg4VDNXSXduRU5JQzVl?=
- =?utf-8?B?SWRYeWxETFNiTGFtWXNSRGRMNm92VDhmcUFwNm9OVW5QdWhjMmptZzYzWElz?=
- =?utf-8?B?WTZHU0p0OHEyckh6OXVjMy9ZTnQ2ZGp4eDVvVit2NGQ1YXVYaXpDSzYxeWVi?=
- =?utf-8?B?SjA1ZjZzQ0c1cEsyWUdVK2Q0Z2txenlYdXpPS3FPSzZCbkV6MDAwcS9DZ09v?=
- =?utf-8?B?ZytOM1hpdmN3QXdtNVhHYlpJZldtdUUvSVphVUxVSkNJay9WWmgzanRQVnNP?=
- =?utf-8?B?TXBmNkp0VWQwRE9nRHE3UGRkdGdwZTQ5dVkrVFdsam1ITHZBc0JXM3YyNHB6?=
- =?utf-8?B?UzVPNGExQ0tabSt3SFo1OE9VQkNrVWdWNmh1b3ZTbEtZazhBbTBOTGlMQlM4?=
- =?utf-8?B?aFc2dWgvU1hvbHZadnEyWG9aUFExVUxlZFhnVXliaVY3SHhjUmhiQW5DUUFk?=
- =?utf-8?B?R3dia3ZrMEpnUGhTeGVmNFVhV2RlTHFEM2pvREpTcG5tTVIzd2JpODdLM2xl?=
- =?utf-8?B?RGdyaDU1UVFtUCtTTkhUcEUwbW94ZVVGUkUxeG1YYS90ZWplSW1hbS9PSzZ0?=
- =?utf-8?B?aFRqd0hJM0lXVDBFNm9mcWJYT2N1NWlXVWVuOS9MUzkrL0VZeXhNZzBwL1Y1?=
- =?utf-8?B?bTlvN3FLTEV3Z1RzWjdRQjd0TG9CdXo2dEVoUVIzMDVmMEdneit5dXNGWEV0?=
- =?utf-8?B?M09RdSthaGRFUzdRUUpNSStZUmVuN1gyeWRsSmhMc29uUWxkUE1oMTlEcjYw?=
- =?utf-8?B?d1hMdXFpNlMvVnNlNU9TN0dBTVNBSW1hY0hHQ0hiZWQxMFcrYm5uVXFVQWc0?=
- =?utf-8?B?Wm9VMkkxWUR5NC8waVcrNUNBK2xKRnZkSy93K1JCMDR4cVFZN1NXWmVtSjly?=
- =?utf-8?B?aTVjT0ZwbkhGa2xMOGR6WHhXbUhqWFJOd0tZV2tjUmNKY2hvd1Jvc3FpVmh1?=
- =?utf-8?B?RUxPY1dOVzlORFcwT3VDSjhPZVJqdmRKU25xMFFrMWdzdTJzY1EzNjJvcDQ2?=
- =?utf-8?B?OThxbUxpY2dtTzdBL0kreW9Na1gwdTFlYTNWS0xSMC9GUDlMc3NVdmZNQlRQ?=
- =?utf-8?B?Slg2c3ZPYVJCdDdzdURUN3pxNURqRnZ0YktzbkNlSzgyTGxYWmhCWTJWMGU1?=
- =?utf-8?B?UVNBRTBMZ2kxLzJSb3QvQXpsS2hxQ1BDNGJYRjAwMitBRk9iN3dZc2ErekNQ?=
- =?utf-8?B?dGpNZWcyWVRsUGRTeDF2NnJtN2wrbEZqZkI3amxCemFFaGFSOW9UWUp2eDdz?=
- =?utf-8?B?djUzTWZiUGRURHBZNEV3azUxZzVwa0pMUWlFVm1rekRaQmNHWkxDeWhQeHh1?=
- =?utf-8?B?UDBSN0drdHRvMnRYcE5QUUJ1d2NjYWgrOWJJamN5UlE1WkRpNVF0M2UvbWpZ?=
- =?utf-8?B?b3UvUUNFd3NIekFpN1F1T3AwUHU2QnNNVE9TMzZLNlJOTkc1VS9OQVV2WXBh?=
- =?utf-8?B?Q3VEazZCMFl2bkJJcnpzdW1BTFA2aTRzTHR0bXp2YVV6Q1dLcWR1RW1RS2tm?=
- =?utf-8?B?N0x0WW95MUMyOFZUaExXb001M2RHWEF4blFZUUFvWU1qK29GeWtyNXNuT204?=
- =?utf-8?B?TlR1VXA3QjdyTnN6R1NiNHpBajBuSVI0eHA4TVBFdmxaOERCbTdTcDhUc2gw?=
- =?utf-8?B?dXRoNmZNa0lUSjFtRnVrRk0zOEZubFk5L0taZHI5Nk9zczlWSit1MTBKUlho?=
- =?utf-8?B?WHkvNnRQNUhsTG84dVN1UXp4YlJwc1R2STU4NFRsSUVMbkVVMGVITm5mVzVY?=
- =?utf-8?B?V2V1VWVPN2NUV0VKb3Q4SHd3aVNxN2FIQTRIN0I5U1JLQ2huQ0l0VjZkV0dx?=
- =?utf-8?B?OUdKQUV1djFaZUhWMnA1ZjJvSTNYQW9xd014VDMveTYxZDFIVDlQdUxuUXhE?=
- =?utf-8?B?QjhjWi9tbmtFS0l6VjMxeUM0dzczVDRxUGpZcklsRUc0RldrZi9aVEVyYnBx?=
- =?utf-8?B?VkxhRWlHWjNWV3IrWGNuQTVkSERxRXI4TmRiWm1VaHFwemxqcnhUM28zSnRI?=
- =?utf-8?B?VTQ2eFVrTDRxY0M4a3FucjBPVXgrc29uOHk2NXJNUVp0TVEzTzVSN1dFc0JD?=
- =?utf-8?B?ZG1VY0prSHE0TE1QMGVzNk5CSU1yUnZXZU10eHF4bkFUcDArU1BJU1UvWmFl?=
- =?utf-8?B?UVJRNlErdEFIQno3R0xhOWpxL3I4ZUNmRGJoaEViODJ0N0Vna0ZoMHVqU3Vq?=
- =?utf-8?B?ZVE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ZE5oTXhTNjdUQjRtL0hadXhibmVmNHBXQTlmc25xYzE1ZXo4c1FiM29TREJv?=
- =?utf-8?B?c3RCRnlhL2NOSzQ5T0V0anVCc3J3ZGxrOXFLaUh0OFhUTnkxRUdGK2VSZG0r?=
- =?utf-8?B?cmVVYVdHYlBCTHJ4V1NVRFNZV2kzOVhSdlNOT1NLT2lJcEE2TlV2dlhOVW5N?=
- =?utf-8?B?VnBKbzlxdXFneUpqRWVXZkFjaWFUSEVVQi9SUFcweUFLVHhidjB2L1N3VmVP?=
- =?utf-8?B?TlhpdGRxTnpWWFFXZVk0UjFhOW1BZW5TZUh3VlQ0Tmh2YlRkeVpkWC9pMHZy?=
- =?utf-8?B?QjZza296S1ozOThHV0RPWVRhaXNUeDNCd2dxcG56OVc1YWxXT01jdG80VmR3?=
- =?utf-8?B?NWlaOWV4cnJnQUxITHFxNU9NM3pIR2NSSFdxYmdsbHBPQlhSY1NQWm4yZE5a?=
- =?utf-8?B?VmJTY25lUFZHTURGY3hFRDR1cmcyQzllclU2WS9BQzdwM2poQjA2VXd4UlFo?=
- =?utf-8?B?UWJnMjBlZFc4RmYxWkxxeWFKSTNMOUJURHpnOUc0S3VLeHlnbU54YmxDN0Zj?=
- =?utf-8?B?ZkgwNXdGVDlFTEtvNGs4aDFGaVB4QnROOGRnL3YzdlAzaXdobzZIWXlySEJK?=
- =?utf-8?B?UCtRMkc2SG9ZV3dBS0w4U05qMXJnVUxKMTYxc2x0bzFpci95b2FLQWk0MWxu?=
- =?utf-8?B?amwzeU5uOVNwSmxtNjdFZmk4ZklOb3d6RitiemRlRUl5QjNTUjNXZkUvTnpD?=
- =?utf-8?B?NGRDbkhVRmthZktxejlmN2s5MTFSaTg0Q1g4TktHb1NnelJYRWtLaFBUdnph?=
- =?utf-8?B?dmJvMGpndjhhMTBxRmJpVjk5Z1ZIem50SVU3aHRUdmEzY3pPazduVUhXaEFF?=
- =?utf-8?B?cDU0YVFEZEowR0hSaUFkL3FlOVNwRXhoKzVEN2xDR1NwRVMvbk9hdDVxVkxu?=
- =?utf-8?B?L1RTSE43ZEZlOFFIRHYzaWYrMHZSU1hObENFN3VUbE1acmRVYWZyK3JnUkR2?=
- =?utf-8?B?SDQxVUtwRmFQUWZWdWpUUjN1ME9yQTE1ZEZES3lBNXpDM3JkYzlud3p3SCtD?=
- =?utf-8?B?bVc2WTJOaTZ5blBjK2s2UTR6S3NLQTMxM1RQUlovQjlSSDdLalJKb1BQTnFJ?=
- =?utf-8?B?anVLTEhIYUIwTThxdFd4SXgwWERkMjhEcEs2WEVmeEdGMUU4Nmc2K3I2UmxC?=
- =?utf-8?B?VUlFR2VKVHpVKzE0TWp4TDFJd2FlNFl1TU8vR2t5ZDBoRFNRVGMyeFFHWnhW?=
- =?utf-8?B?ZEdVYkhmRU5nelVWRkFzNGIwUjQySnBVdXVDV2t0ZzNERlhpVWtQRjRVSjgx?=
- =?utf-8?B?YTB4eFd0b0dSc3BiN21CSERaVVpydDdMMmRkWFR0TU9Uc08vVFR3UEYxdU0r?=
- =?utf-8?B?NU04MkxLSHo5Uk85cXViaUdXMWJ4MDMvdVBOYnpCVmcrQU1lb0tqei9tTElk?=
- =?utf-8?B?eFM2Q0toU2UvNkVRUWlIb1NySG05bml4b1QvakRmQ09ZZ2dpZkZMZDd0dGtt?=
- =?utf-8?B?Z2hFV2M1amxtRjVvaVJIUUlTZGdRUk0ySytiK0FlVU1ZenVNV0hBVVJnaEM2?=
- =?utf-8?B?ZXcyREJjcDBZdmVYVkhPTFBwQ1U3alJmSUVid2VZS21sak5nMnk0Q1hxZmZn?=
- =?utf-8?B?WExlQnd2bmpXSWRFeWdHLytvdVpsK0drTGcvK0d2Ykoramh1eS92eXFCYXhS?=
- =?utf-8?B?SWloeTFkYXgwbDFZSEgrZDFPMlcxRTZvS0FHRDVsUmYwZWJ6N1lhbllVWE5I?=
- =?utf-8?B?SDZzK2o2T2IyZEZyVXE1UVQ1bzBubVVMc0V1bDJMdmwrcG85OW1VL25HSEpG?=
- =?utf-8?B?NitCelpBdmZjdGFCQjJYamdwVGFOWTd2WUlveWdxTHVlOVMyZEpSUU1FditT?=
- =?utf-8?B?VFpOdEcwT2h3dUc1QXYwVlpYTGEwZFJQaFNMalA1OTlpR3NQcHlhMW9jMVhM?=
- =?utf-8?B?OHdjZTJOWlZJRXJObXlyNzRDRzJ3aXlFaGx0Y2FSOHVUd2lKQ3I0bzhEVkhZ?=
- =?utf-8?B?TTZpdjVFNkNTQm1jdXJwYW00UjRpNVFEZTZDVk5iUWRFM3YzZ2dUcnpua0gz?=
- =?utf-8?B?WGU3cGZyU2FienVzNHZCM3duNHlQQy8zdzlYb2lTaDQ0RnN6STJXWE9uWERu?=
- =?utf-8?B?alRvVGMrWEhOdElvamVwNXVIdWlNQVR1M2V0Qy90WjJaWENaQ1RzV0swSWlM?=
- =?utf-8?B?Z1NiNThHQUlmL0x6ZCtuVE85T2pLZmRxSi93UnR4QmVaSVR5OFBuU2FEejJi?=
- =?utf-8?B?MktacDlnSngydzlGYnVPb1NBcE5xM3pQaWJabzBldDNGbWhrU2xTQ0ZaQ1VP?=
- =?utf-8?B?WjUrMVA1VmRjSFBHeG1pbFJxUW5RPT0=?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddb066f3-8553-4af6-a2aa-08db4cf3e645
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 23:04:23.2063
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L3M8vqN1eZMqZZM08fyQ6wS6KeSqlN98nl5daeUcL2WR76YX3Aoej1X//2uBjOZ0V02Gwj//z4/8ArazEkfIn9M67MlzwwFXVX+7wRwXgFg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB5510
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <cover.1681370153.git.zhoubinbin@loongson.cn> <09f381f445cfbcf857845f61d10238452037b2e8.1681370153.git.zhoubinbin@loongson.cn>
+ <20230416194901b538cb7c@mail.local>
+In-Reply-To: <20230416194901b538cb7c@mail.local>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 5 May 2023 10:28:16 +0800
+Message-ID: <CAMpQs4LhkupxQExQCqg9qJ0eWCzLZEaeKDrJThTVyezz=ne53A@mail.gmail.com>
+Subject: Re: [PATCH V3 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
+        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, keguang.zhang@gmail.com,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>, zhangbaoqi@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -248,18 +79,343 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 04/05/2023 8:02 pm, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On Mon, Apr 17, 2023 at 3:49=E2=80=AFAM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
 >
-> The early detection stores the extended topology leaf number which is
-> required for parallel hotplug.
+> On 13/04/2023 15:57:34+0800, Binbin Zhou wrote:
+> > This RTC module is integrated into the Loongson-2K SoC and the LS7A
+> > bridge chip. This version is almost entirely rewritten to make use of
+> > current kernel API, and it supports both ACPI and DT.
+> >
+> > This driver is shared by MIPS-based Loongson-3A4000 system (use FDT) an=
+d
+> > LoongArch-based Loongson-3A5000 system (use ACPI).
+> >
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
+> > Signed-off-by: WANG Xuerui <git@xen0n.name>
+> > ---
+> >  drivers/rtc/Kconfig    |  11 ++
+> >  drivers/rtc/Makefile   |   1 +
+> >  drivers/rtc/rtc-ls2x.c | 345 +++++++++++++++++++++++++++++++++++++++++
 >
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> This is v3 and this is still not merged in rtc-ls1x.c.
 
-It occurs to me that this and the previous patch are stale given that we
-no longer look at CPUID in the trampoline.
+Hi Alexandre:
 
-They're probably useful changes in isolation, but the commit messages
-want adjusting to remove the association with parallel boot.
+The ls1x rtc has been merged in at my local repository and Keguang has
+helped test it through, so it will be ready for release in the next
+version.
+In the meantime rtc-ls2x will be renamed to rtc-loongson.
 
-~Andrew
+>
+> >  3 files changed, 357 insertions(+)
+> >  create mode 100644 drivers/rtc/rtc-ls2x.c
+> >
+> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > index 753872408615..e1b9d64d2678 100644
+> > --- a/drivers/rtc/Kconfig
+> > +++ b/drivers/rtc/Kconfig
+> > @@ -1706,6 +1706,17 @@ config RTC_DRV_LPC32XX
+> >         This driver can also be built as a module. If so, the module
+> >         will be called rtc-lpc32xx.
+> >
+> > +config RTC_DRV_LS2X
+> > +     tristate "Loongson LS2X RTC"
+> > +     depends on MACH_LOONGSON64 || COMPILE_TEST
+> > +     select REGMAP_MMIO
+> > +     help
+> > +       If you say yes here you get support for the RTC on the Loongson=
+-2K
+> > +       SoC and LS7A bridge, which first appeared on the Loongson-2H.
+> > +
+> > +       This driver can also be built as a module. If so, the module
+> > +       will be called rtc-ls2x.
+> > +
+> >  config RTC_DRV_PM8XXX
+> >       tristate "Qualcomm PMIC8XXX RTC"
+> >       depends on MFD_PM8XXX || MFD_SPMI_PMIC || COMPILE_TEST
+> > diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> > index ea445d1ebb17..cff5df09fc60 100644
+> > --- a/drivers/rtc/Makefile
+> > +++ b/drivers/rtc/Makefile
+> > @@ -82,6 +82,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)     +=3D rtc-ls1x.o
+> >  obj-$(CONFIG_RTC_DRV_LP8788) +=3D rtc-lp8788.o
+> >  obj-$(CONFIG_RTC_DRV_LPC24XX)        +=3D rtc-lpc24xx.o
+> >  obj-$(CONFIG_RTC_DRV_LPC32XX)        +=3D rtc-lpc32xx.o
+> > +obj-$(CONFIG_RTC_DRV_LS2X)   +=3D rtc-ls2x.o
+> >  obj-$(CONFIG_RTC_DRV_M41T80) +=3D rtc-m41t80.o
+> >  obj-$(CONFIG_RTC_DRV_M41T93) +=3D rtc-m41t93.o
+> >  obj-$(CONFIG_RTC_DRV_M41T94) +=3D rtc-m41t94.o
+> > diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
+> > new file mode 100644
+> > index 000000000000..c74dd88ae11b
+> > --- /dev/null
+> > +++ b/drivers/rtc/rtc-ls2x.c
+> > @@ -0,0 +1,345 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * Loongson-2K/LS7A RTC driver
+> > + *
+> > + * Based on the original out-of-tree Loongson-2H RTC driver for Linux =
+2.6.32,
+> > + * by Shaozong Liu <liushaozong@loongson.cn>.
+> > + *
+> > + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
+> > + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
+> > + *                           Binbin Zhou <zhoubinbin@loongson.cn>
+> > + */
+> > +
+> > +#include <linux/bitfield.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/rtc.h>
+> > +#include <linux/acpi.h>
+> > +
+> > +/* Time Of Year(TOY) counters registers */
+> > +#define TOY_TRIM_REG         0x20 /* Must be initialized to 0 */
+> > +#define TOY_WRITE0_REG               0x24 /* TOY low 32-bits value (wr=
+ite-only) */
+> > +#define TOY_WRITE1_REG               0x28 /* TOY high 32-bits value (w=
+rite-only) */
+> > +#define TOY_READ0_REG                0x2c /* TOY low 32-bits value (re=
+ad-only) */
+> > +#define TOY_READ1_REG                0x30 /* TOY high 32-bits value (r=
+ead-only) */
+> > +#define TOY_MATCH0_REG               0x34 /* TOY timing interrupt 0 */
+> > +#define TOY_MATCH1_REG               0x38 /* TOY timing interrupt 1 */
+> > +#define TOY_MATCH2_REG               0x3c /* TOY timing interrupt 2 */
+> > +
+> > +/* RTC counters registers */
+> > +#define RTC_CTRL_REG         0x40 /* TOY and RTC control register */
+> > +#define RTC_TRIM_REG         0x60 /* Must be initialized to 0 */
+> > +#define RTC_WRITE0_REG               0x64 /* RTC counters value (write=
+-only) */
+> > +#define RTC_READ0_REG                0x68 /* RTC counters value (read-=
+only) */
+> > +#define RTC_MATCH0_REG               0x6c /* RTC timing interrupt 0 */
+> > +#define RTC_MATCH1_REG               0x70 /* RTC timing interrupt 1 */
+> > +#define RTC_MATCH2_REG               0x74 /* RTC timing interrupt 2 */
+> > +
+> > +/* bitmask of TOY_WRITE0_REG */
+> > +#define TOY_MON                      GENMASK(31, 26)
+> > +#define TOY_DAY                      GENMASK(25, 21)
+> > +#define TOY_HOUR             GENMASK(20, 16)
+> > +#define TOY_MIN                      GENMASK(15, 10)
+> > +#define TOY_SEC                      GENMASK(9, 4)
+> > +#define TOY_MSEC             GENMASK(3, 0)
+> > +
+> > +/* bitmask of TOY_MATCH0/1/2_REG */
+> > +#define TOY_MATCH_YEAR               GENMASK(31, 26)
+> > +#define TOY_MATCH_MON                GENMASK(25, 22)
+> > +#define TOY_MATCH_DAY                GENMASK(21, 17)
+> > +#define TOY_MATCH_HOUR               GENMASK(16, 12)
+> > +#define TOY_MATCH_MIN                GENMASK(11, 6)
+> > +#define TOY_MATCH_SEC                GENMASK(5, 0)
+> > +
+> > +/* bitmask of RTC_CTRL_REG */
+> > +#define RTC_ENABLE           BIT(13) /* 1: RTC counters enable */
+> > +#define TOY_ENABLE           BIT(11) /* 1: TOY counters enable */
+> > +#define OSC_ENABLE           BIT(8) /* 1: 32.768k crystal enable */
+> > +#define TOY_ENABLE_MASK              (TOY_ENABLE | OSC_ENABLE)
+> > +
+> > +/* PM domain registers */
+> > +#define PM1_STS_REG          0x0c /* Power management 1 status registe=
+r */
+> > +#define RTC_STS                      BIT(10) /* RTC status */
+> > +#define PM1_EN_REG           0x10 /* Power management 1 enable registe=
+r */
+> > +#define RTC_EN                       BIT(10) /* RTC event enable */
+> > +
+> > +/* Offset of PM domain from RTC domain, for rtc alarm */
+> > +enum ls2x_pm_offset {
+> > +     GENERIC_OFFSET =3D 0x100,
+> > +     LS2K1000_OFFSET =3D 0x800,
+> > +};
+> > +
+> > +struct ls2x_rtc_priv {
+> > +     spinlock_t lock; /* protects PM registers access */
+> > +     int irq;
+> > +     struct rtc_device *rtcdev;
+> > +     struct regmap *regmap;
+> > +     void __iomem *pm_base; /* PM domain base, for rtc alarm */
+> > +};
+> > +
+> > +static const struct regmap_config ls2x_rtc_regmap_config =3D {
+> > +     .reg_bits =3D 32,
+> > +     .val_bits =3D 32,
+> > +     .reg_stride =3D 4,
+> > +};
+> > +
+> > +/* IRQ Handlers */
+> > +static irqreturn_t ls2x_rtc_isr(int irq, void *id)
+> > +{
+> > +     struct ls2x_rtc_priv *priv =3D (struct ls2x_rtc_priv *)id;
+> > +
+> > +     rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> > +     return IRQ_HANDLED;
+> > +}
+> > +
+> > +static u32 ls2x_rtc_handler(void *id)
+> > +{
+> > +     u32 ret;
+> > +     struct ls2x_rtc_priv *priv =3D (struct ls2x_rtc_priv *)id;
+> > +
+> > +     spin_lock(&priv->lock);
+> > +     /* Disable rtc event */
+> > +     writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
+> > +            priv->pm_base + PM1_EN_REG);
+> > +
+> > +     /* Clear rtc interrupt status */
+> > +     writel(RTC_STS, priv->pm_base + PM1_STS_REG);
+> > +     spin_unlock(&priv->lock);
+> > +
+> > +     /*
+> > +      * The TOY_MATCH0_REG should be cleared 0 here,
+> > +      * otherwise the interrupt cannot be cleared.
+> > +      */
+> > +     ret =3D regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> > +     return 0;
+> > +}
+> > +
+> > +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> > +{
+> > +     int ret;
+> > +     u32 ctrl_data, rtc_data[2];
+> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     ret =3D regmap_read(priv->regmap, RTC_CTRL_REG, &ctrl_data);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     if (!(ctrl_data & TOY_ENABLE_MASK))
+> > +             return -EINVAL;
+> > +
+> > +     ret =3D regmap_bulk_read(priv->regmap, TOY_READ0_REG, rtc_data,
+> > +                            ARRAY_SIZE(rtc_data));
+>
+> There is still no answer on whether the TOY_READ0_REG and TOY_READ1_REG
+> are latched.
+>
+
+After talking to colleagues offline, the RTC hardware itself can
+guarantee atomicity for bulk reads.
+
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     tm->tm_sec =3D FIELD_GET(TOY_SEC, rtc_data[0]);
+> > +     tm->tm_min =3D FIELD_GET(TOY_MIN, rtc_data[0]);
+> > +     tm->tm_hour =3D FIELD_GET(TOY_HOUR, rtc_data[0]);
+> > +     tm->tm_mday =3D FIELD_GET(TOY_DAY, rtc_data[0]);
+> > +     tm->tm_mon =3D FIELD_GET(TOY_MON, rtc_data[0]) - 1;
+> > +     tm->tm_year =3D rtc_data[1];
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> > +{
+> > +     int ret;
+> > +     u32 rtc_data[2];
+> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     rtc_data[0] =3D FIELD_PREP(TOY_SEC, tm->tm_sec)
+> > +                 | FIELD_PREP(TOY_MIN, tm->tm_min)
+> > +                 | FIELD_PREP(TOY_HOUR, tm->tm_hour)
+> > +                 | FIELD_PREP(TOY_DAY, tm->tm_mday)
+> > +                 | FIELD_PREP(TOY_MON, tm->tm_mon + 1);
+> > +     rtc_data[1] =3D tm->tm_year;
+> > +
+> > +     ret =3D regmap_bulk_write(priv->regmap, TOY_WRITE0_REG, rtc_data,
+> > +                             ARRAY_SIZE(rtc_data));
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     /* Enable RTC TOY counters and crystal */
+> > +     return regmap_update_bits(priv->regmap, RTC_CTRL_REG, TOY_ENABLE_=
+MASK,
+> > +                               TOY_ENABLE_MASK);
+> > +}
+> > +
+> > +static int ls2x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *=
+alrm)
+> > +{
+> > +     int ret;
+> > +     u32 alarm_data;
+> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     ret =3D regmap_read(priv->regmap, TOY_MATCH0_REG, &alarm_data);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     alrm->time.tm_sec =3D FIELD_GET(TOY_MATCH_SEC, alarm_data);
+> > +     alrm->time.tm_min =3D FIELD_GET(TOY_MATCH_MIN, alarm_data);
+> > +     alrm->time.tm_hour =3D FIELD_GET(TOY_MATCH_HOUR, alarm_data);
+> > +     alrm->time.tm_mday =3D FIELD_GET(TOY_MATCH_DAY, alarm_data);
+> > +     alrm->time.tm_mon =3D FIELD_GET(TOY_MATCH_MON, alarm_data) - 1;
+> > +     /*
+> > +      * This is a hardware bug.
+> > +      * The year field in the SYS_TOYMATCH has only 6 bits(bits[31:26]=
+),
+> > +      * so it can only be set from 1900 to 1963.
+> > +      * In order to avoid an invalid alarm value during booting, we ma=
+nually
+> > +      * add 64 after reading the year field (equivalent to filling in =
+the
+> > +      * high bits).
+> > +      */
+> > +     alrm->time.tm_year =3D FIELD_GET(TOY_MATCH_YEAR, alarm_data) + 64=
+;
+>
+> This is restricting to the 1964 to 2027 range whereas you claim the RTC
+> has a 2000 to 2099 range. Why don't you simply do 2000 to 2063 which
+> would at least match most of it.
+>
+
+I have compiled a description of this hardware defect:
+
+Firstly, the root cause of the defect is that there are not enough
+bits in the MATCH register to indicate the year, only 6 bits.
+The rtc hardware uses the MATCH register to compare the alarm time
+values and to determine if an alarm is triggered.
+
+Therefore, we have to ensure that the lower 6 bits remain unchanged
+during the conversion of the year value . Otherwise the rtc hardware
+will definitely not succeed when matching and thus the alarm function
+will not work.
+In summary, here we can only add or subtract 64 (or a multiple of 64).
+
+To avoid the year being described only up to 2027, how about the
+following solution:
+1. define the global variable year_offset, which holds the required offset.
+2. In ls2x_rtc_read_time(), calculate year_offset =3D tm->tm_year / 64 * 64=
+.
+
+> I am very very disappointed. I had all these comments on v1 and v2, you
+> are sending v3 with the exact same issues. How can I trust this is ever
+> going to progress in the right direction?
+
+I apologise that the time between these two patch sets is a bit long
+and I did not double check the relevant change points.
+I will double check each point that needs to be changed before sending
+out subsequent patches.
+
+Again, I apologise.
+
+Thanks.
+Binbin
+
+>
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
