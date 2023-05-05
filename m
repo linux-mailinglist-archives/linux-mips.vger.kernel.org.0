@@ -2,122 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE846F870F
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 18:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3C56F8756
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 19:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjEEQxO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 May 2023 12:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S231359AbjEERQd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 May 2023 13:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjEEQxN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 12:53:13 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A031940D;
-        Fri,  5 May 2023 09:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1683305586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cm5Ovt89OfGJCeWTOZ91qJGDxssoS6SoIn7qKeUUUII=;
-        b=Qt9ZsTXhoCIGaPFWg1rJo0krNw0t60cwBgGiXqjXRz9k4Jc4juJuSRAuuIjUMN7MzwHUH6
-        XCxaJ/zzM+m2GRuMrDY67DPlmnaiYW4Ist+Boik1FKw7vZphuebHUpm75r3T+LauruClfm
-        3tpScXg2uj7/jmjd5ZDvnaC+mTZgoPE=
-Message-ID: <f52d02cd797088cd599d5bda5653495d987ba85b.camel@crapouillou.net>
-Subject: Re: [PATCH v2] mips: dts: ingenic: Remove unnecessary AIC clocks
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        tsbogend@alpha.franken.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 05 May 2023 18:53:04 +0200
-In-Reply-To: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
-References: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230297AbjEERQc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 13:16:32 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9BB2723;
+        Fri,  5 May 2023 10:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683306991; x=1714842991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=COkGdhmzVsdP87GQO1YqoDziPbpeYNGC0sWooQdVgSE=;
+  b=gGKfoPFQ1j8ZRXjdLE/t3B73zXMMFzoAhRI6XfxXiKKezq6/eKDLtJ/l
+   Vxle/p6CS253xaNkG3CilBmW6wVzSrzNSED+QVOLtcyFwcPRngbERtahD
+   pLJJVcRyfq9L5GsdJvRwIs5J3xJRDyt50sYC68A4kqnFyo+KxD85MUgX2
+   9W1Uk0yaRHnIN5ZO2ZBm0LX6BRSikvNa7ojgMxay+7FLrSG6c6qttTnEL
+   8nn6u9WLjTX1//PuFttXBq6jHKZoTiniiGgyhf/u91HUHMHd5yIZLM9fr
+   p45TJcCYmHrDS6bO/NHkueLofUshDcmdO+ttWPDq35ORub0abevk6nxLs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="435579040"
+X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
+   d="scan'208";a="435579040"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 10:16:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="675166695"
+X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
+   d="scan'208";a="675166695"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 May 2023 10:16:23 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1puz2d-0000mD-0U;
+        Fri, 05 May 2023 17:16:23 +0000
+Date:   Sat, 6 May 2023 01:15:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        linux-phy@lists.infradead.org, linux-clk@vger.kernel.org,
+        Abel Vesa <abelvesa@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mips@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-sunxi@lists.linux.dev,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Subject: Re: [PATCH v4 04/68] clk: Introduce
+ clk_hw_determine_rate_no_reparent()
+Message-ID: <202305060103.z9ddfq9A-lkp@intel.com>
+References: <20221018-clk-range-checks-fixes-v4-4-971d5077e7d2@cerno.tech>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018-clk-range-checks-fixes-v4-4-971d5077e7d2@cerno.tech>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGkgQWlkYW4sCgpMZSB2ZW5kcmVkaSAwNSBtYWkgMjAyMyDDoCAxNToyNCArMDEwMCwgQWlkYW4g
-TWFjRG9uYWxkIGEgw6ljcml0wqA6Cj4gVGhlICJleHQiIGFuZCAicGxsIGhhbGYiIGNsb2NrcyBk
-b24ndCBiZWxvbmcgaW4gdGhlIERULiBUaGV5IGFyZQo+IG5vdCBjb25zdW1lZCBkaXJlY3RseSBi
-eSB0aGUgQUlDIGFuZCBhcmUgb25seSB1c2VkIGFzIHRoZSBwYXJlbnQKPiBjbG9ja3Mgb2YgdGhl
-ICJpMnMiIGNsb2NrLiBBbiBvcGVyYXRpbmcgc3lzdGVtIHNob3VsZCBiZSBhYmxlIHRvCj4gZmln
-dXJlIG91dCB0aGF0IGluZm9ybWF0aW9uIGl0c2VsZiBiZWNhdXNlIGl0IHByZXN1bWFibHkga25v
-d3MgdGhlCj4gbGF5b3V0IG9mIHRoZSBjbG9jayB0cmVlLgo+IAo+IFJlbW92aW5nIHRoZXNlIGZy
-b20gdGhlIERUIHNob3VsZCBiZSBzYWZlIGZyb20gYSBjb21wYXRpYmlsaXR5Cj4gcG9pbnQgb2Yg
-dmlldyBiZWNhdXNlIHRoZSBqejQ3NDAtaTJzIGRyaXZlciBpbiBMaW51eCBkb2VzIG5vdCwgYW5k
-Cj4gbmV2ZXIgZGlkIGRlcGVuZCBvbiB0aGVtLgoKQWdyZWVkLgoKPiBTaWduZWQtb2ZmLWJ5OiBB
-aWRhbiBNYWNEb25hbGQgPGFpZGFubWFjZG9uYWxkLjB4MEBnbWFpbC5jb20+Cj4gTGluazoKPiBo
-dHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjEwMjgxMDM0MTguMTc1NzgtMS1haWRhbm1h
-Y2RvbmFsZC4weDBAZ21haWwuY29tLwoKUmV2aWV3ZWQtYnk6IFBhdWwgQ2VyY3VlaWwgPHBhdWxA
-Y3JhcG91aWxsb3UubmV0PgoKQ2hlZXJzLAotUGF1bAoKPiAtLS0KPiBUaGlzIGlzIGEgcmVzZW5k
-IG9mIHBhdGNoIDIvMyBmcm9tIGEgcHJldmlvdXMgc3VibWlzc2lvbiB3aGljaCBpcwo+IGxpbmtl
-ZCBhYm92ZS4KPiAKPiB2MS0+djI6IHVwZGF0ZWQgY29tbWl0IG1lc3NhZ2UKPiAKPiDCoGFyY2gv
-bWlwcy9ib290L2R0cy9pbmdlbmljL2p6NDcyNWIuZHRzaSB8IDcgKystLS0tLQo+IMKgYXJjaC9t
-aXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzQwLmR0c2nCoCB8IDcgKystLS0tLQo+IMKgYXJjaC9t
-aXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzcwLmR0c2nCoCB8IDUgKystLS0KPiDCoDMgZmlsZXMg
-Y2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0
-IGEvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0NzI1Yi5kdHNpCj4gYi9hcmNoL21pcHMv
-Ym9vdC9kdHMvaW5nZW5pYy9qejQ3MjViLmR0c2kKPiBpbmRleCBlOWU0ODAyMmY2MzEuLmFjYmJl
-OGM0NjY0YyAxMDA2NDQKPiAtLS0gYS9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3MjVi
-LmR0c2kKPiArKysgYi9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3MjViLmR0c2kKPiBA
-QCAtMTk4LDExICsxOTgsOCBAQCBhaWM6IGF1ZGlvLWNvbnRyb2xsZXJAMTAwMjAwMDAgewo+IMKg
-Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjc291bmQtZGFpLWNlbGxzID0gPDA+
-Owo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrcyA9IDwmY2d1IEpa
-NDcyNUJfQ0xLX0FJQz4sCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgPCZjZ3UgSlo0NzI1Ql9DTEtfSTJTPiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNndSBKWjQ3MjVCX0NMS19FWFQ+LAo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY2d1IEpaNDcyNUJf
-Q0xLX1BMTF9IQUxGPjsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stbmFt
-ZXMgPSAiYWljIiwgImkycyIsICJleHQiLCAicGxsIGhhbGYiOwo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8JmNndSBKWjQ3MjVCX0NMS19BSUM+LCA8JmNndQo+IEpa
-NDcyNUJfQ0xLX0kyUz47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrLW5h
-bWVzID0gImFpYyIsICJpMnMiOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBpbnRlcnJ1cHQtcGFyZW50ID0gPCZpbnRjPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGludGVycnVwdHMgPSA8MTA+Owo+IGRpZmYgLS1naXQgYS9hcmNoL21pcHMvYm9vdC9k
-dHMvaW5nZW5pYy9qejQ3NDAuZHRzaQo+IGIvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvano0
-NzQwLmR0c2kKPiBpbmRleCA3Zjc2Y2JhMDNhMDguLmJkZDZmNGQ4MmVjOSAxMDA2NDQKPiAtLS0g
-YS9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3NDAuZHRzaQo+ICsrKyBiL2FyY2gvbWlw
-cy9ib290L2R0cy9pbmdlbmljL2p6NDc0MC5kdHNpCj4gQEAgLTE5MiwxMSArMTkyLDggQEAgYWlj
-OiBhdWRpby1jb250cm9sbGVyQDEwMDIwMDAwIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGludGVycnVwdC1wYXJlbnQgPSA8JmludGM+Owo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgaW50ZXJydXB0cyA9IDwxOD47Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0NzQwX0NMS19BSUM+LAo+IC3CoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY2d1IEpaNDc0MF9DTEtfSTJT
-PiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNn
-dSBKWjQ3NDBfQ0xLX0VYVD4sCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgPCZjZ3UgSlo0NzQwX0NMS19QTExfSEFMRj47Cj4gLcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGNsb2NrLW5hbWVzID0gImFpYyIsICJpMnMiLCAiZXh0IiwgInBsbCBo
-YWxmIjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0
-NzQwX0NMS19BSUM+LCA8JmNndQo+IEpaNDc0MF9DTEtfSTJTPjsKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgY2xvY2stbmFtZXMgPSAiYWljIiwgImkycyI7Cj4gwqAKPiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRtYXMgPSA8JmRtYWMgMjUgMHhmZmZmZmZmZj4sIDwm
-ZG1hYyAyNCAweGZmZmZmZmZmPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRt
-YS1uYW1lcyA9ICJyeCIsICJ0eCI7Cj4gZGlmZiAtLWdpdCBhL2FyY2gvbWlwcy9ib290L2R0cy9p
-bmdlbmljL2p6NDc3MC5kdHNpCj4gYi9hcmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9qejQ3NzAu
-ZHRzaQo+IGluZGV4IGJkYTBhM2E4NmVkNS4uOWMwMDk5OTE5ZGI3IDEwMDY0NAo+IC0tLSBhL2Fy
-Y2gvbWlwcy9ib290L2R0cy9pbmdlbmljL2p6NDc3MC5kdHNpCj4gKysrIGIvYXJjaC9taXBzL2Jv
-b3QvZHRzL2luZ2VuaWMvano0NzcwLmR0c2kKPiBAQCAtMjM4LDkgKzIzOCw4IEBAIGFpYzogYXVk
-aW8tY29udHJvbGxlckAxMDAyMDAwMCB7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCNzb3VuZC1kYWktY2VsbHMgPSA8MD47Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjZ3UgSlo0NzcwX0NMS19BSUM+LCA8JmNndQo+IEpaNDc3
-MF9DTEtfSTJTPiwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCA8JmNndSBKWjQ3NzBfQ0xLX0VYVD4sIDwmY2d1Cj4gSlo0NzcwX0NMS19QTEwwPjsKPiAt
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xvY2stbmFtZXMgPSAiYWljIiwgImkycyIs
-ICJleHQiLCAicGxsIGhhbGYiOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9j
-a3MgPSA8JmNndSBKWjQ3NzBfQ0xLX0FJQz4sIDwmY2d1Cj4gSlo0NzcwX0NMS19JMlM+Owo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9jay1uYW1lcyA9ICJhaWMiLCAiaTJzIjsK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50ZXJydXB0LXBhcmVudCA9
-IDwmaW50Yz47Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcnJ1cHRzID0g
-PDM0PjsKCg==
+Hi Maxime,
 
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 145e5cddfe8b4bf607510b2dcf630d95f4db420f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/clk-Export-clk_hw_forward_rate_request/20230505-193724
+base:   145e5cddfe8b4bf607510b2dcf630d95f4db420f
+patch link:    https://lore.kernel.org/r/20221018-clk-range-checks-fixes-v4-4-971d5077e7d2%40cerno.tech
+patch subject: [PATCH v4 04/68] clk: Introduce clk_hw_determine_rate_no_reparent()
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230506/202305060103.z9ddfq9A-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3acd93f10087c4a2905407786d6dc7af83c2a58c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maxime-Ripard/clk-Export-clk_hw_forward_rate_request/20230505-193724
+        git checkout 3acd93f10087c4a2905407786d6dc7af83c2a58c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305060103.z9ddfq9A-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "clk_hw_determine_rate_no_reparent" [drivers/clk/clk_test.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
