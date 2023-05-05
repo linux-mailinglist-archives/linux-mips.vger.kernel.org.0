@@ -2,208 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559226F83C3
-	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 15:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0360E6F84C8
+	for <lists+linux-mips@lfdr.de>; Fri,  5 May 2023 16:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbjEENT2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 May 2023 09:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S232462AbjEEOYT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 May 2023 10:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjEENT0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 09:19:26 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1E11E9BD;
-        Fri,  5 May 2023 06:19:22 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1A10F5802A0;
-        Fri,  5 May 2023 09:19:19 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 05 May 2023 09:19:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1683292759; x=1683299959; bh=MFewdMftG+wRD887OcQ41hQs0awPz56T0ru
-        yGnj8ABI=; b=T7QiYreOPC+QycowzVZsUb+Flt5SaOjHFxAhKjqZsP+nsbKyqVd
-        vQ8eowoEYwNI/GU+ISyjC+jWPEKamuy6X2bmGmXoFQmBFMRt3DPTZF7imVRis0gr
-        S0EkyyDbQvtLD7pfZ4AsHyrYk42NDSyf8/wa7V9JGjoeIM+dclks9qkVsfuCYS36
-        2bnobzF6Lg7r4sP9JfGrvCZy6bK7TL5qDUup6dDDozkhtlDKoL2JENn8cqmA5ZJ5
-        wLu4/Si0kCVvWmQxVaYqYa+bPXXPogECh5ZRpy0s2bQVgjpqCgavDgb5K4Sf79fl
-        Z2ACYtb7nNPJlBQY7RKS+i0yrfAvSYbn6sQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683292759; x=1683299959; bh=MFewdMftG+wRD887OcQ41hQs0awPz56T0ru
-        yGnj8ABI=; b=FVvu2kHfPB+goofUSO7GBQXw9iAuEK1luvy6mN9DIT3CnY67Gls
-        0KZVLaa6ELu1958ejxqPitibsxtjnQdtVNl7Z4DIo/7t6vSCqKnMSbKFtiZxUfg8
-        SuTynEk2oMcUtF9nJJbJg0GYURVCU7bPEPfG8kEUYCku0K859h+BHBVlobnzbNVb
-        9jCOuQHGR9JdwHKNFMPcOBCnbMbqE970CGlmaHJPbDGFzyO5if6gbd+OUkaHxy+L
-        frNzAleO1fKFLe9X7xNq2nNbq2hrGATg6TTB1yBWoA0Wjb4XH3SHavwUomASSa1B
-        aF2LKjYsYglP/xYL6ASj4zNf9qShE/HNiUg==
-X-ME-Sender: <xms:UwJVZOh9cnZIXMM77LhNvXoz2YNii-arffCBI32Pq_fv4QfUTdVISg>
-    <xme:UwJVZPAntNX3cn4OGLtqo2LRLlqkpl7Dvxks5UPOgyYyhnzhUynPY4VJ3y3azSULF
-    _Z-HMCpBmE7SFSlVlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:UwJVZGH5NsIuOroPMeDuiba-Tn1p718Jzhmp9sTCmS-1lOWUaiFtVQ>
-    <xmx:UwJVZHTAxF0WKn8MsTwRzrxqsy1jTv31MgcN7ZNnDyiETst0t2wtOQ>
-    <xmx:UwJVZLzt4fDtGxTef6RbmcqquDaW2xXV0M3lt4aM-O0fppZufkssOQ>
-    <xmx:VwJVZHhc7KCJPgnStXUQtZd0bp63LSI-wEqxVbh0vya0G4fcoSCVFw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 110CDB60089; Fri,  5 May 2023 09:19:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <f460ad77-aa76-43bb-b2bb-e3b6dbcd8b03@app.fastmail.com>
-In-Reply-To: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-10-arnd@kernel.org>
- <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
-Date:   Fri, 05 May 2023 15:18:54 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     guoren <guoren@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>,
-        "Christoph Hellwig" <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, "Vineet Gupta" <vgupta@kernel.org>,
-        "Will Deacon" <will@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Brian Cain" <bcain@quicinc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Stafford Horne" <shorne@gmail.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before bidirectional
- DMA
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232308AbjEEOYR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 May 2023 10:24:17 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D7916365;
+        Fri,  5 May 2023 07:24:13 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2fddb442d47so1688475f8f.2;
+        Fri, 05 May 2023 07:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683296652; x=1685888652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlDyLjFrRP+hfZ2TWXEpRe3b1GLGrGjhoymBjZ3qVLc=;
+        b=p10HuDCV36ISVIMZatgDP0FktkLduGhvkpGCxgulHVNaJ9kUUr9hIaCQg1tY58GrWu
+         trtEAppma+1beNjHAFHgTdXEzIsV45MP6lW7Og0NObFS/qVebz7Fu9EoBnE6PqZh298g
+         k+qDO8IimllK3J2P15ut6B3J7FmPAPSXD+oSi+9LzmXkt7nbkqiKFCl38rnN5CjmVkDF
+         u9jok73k7RKLhS5hpJtqZAtUr7cc4TniV/LG7L1/nw7Ny6/Je7JLjKPrxGDf24U5vU/A
+         IMzVPoHMUv3/s3Aod35t+DthrUkswkql2SRKe6x8wnHOWynOuVqM8ksWWNwu65QOVuS4
+         CBcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683296652; x=1685888652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PlDyLjFrRP+hfZ2TWXEpRe3b1GLGrGjhoymBjZ3qVLc=;
+        b=P7hBxEHFsS6rsu173EmQyXvCM8mZ4miAi9OS7gQYcZv61tJYBwgMEVjkzGRAgtgyJc
+         YwJxugX2sLaJipqD6vgzf99X6TSOZFXjQ9hIVLzwYaonKuNmr1y1z/RyviEjs6BY72yE
+         dp4/C4xHL2/dfhp1szngUxybw44drvDtzblPa/DLneoassunrGUCUJjEGgiT5OZKwuOv
+         9kYSD0isJL7NpasERoec+K8fV9/Bg7uyAUhudwwSoxnv3yqJO0PHCQCXX5/vyxd2uFMf
+         sdJGfo4H5zmwjyyrRhlXdDAH0avDX+QGdsj1vffZ8vb2h8hDZG4N9B9DXGmcx4hYscUu
+         l2QA==
+X-Gm-Message-State: AC+VfDz34ESOItJ5a4BQ4mJWnOdF+Bvc17pb64ms0HCqH5yJThAof7SE
+        vRd32JITogHMqWQmQXWlrxs=
+X-Google-Smtp-Source: ACHHUZ6F2f+oOlyXN55d8B0CDJM7mlvzRBv6v2gvWCvMTu1f9wQkEBlU8qrrck4PxF1uew6G807Pog==
+X-Received: by 2002:adf:dd82:0:b0:306:287c:7106 with SMTP id x2-20020adfdd82000000b00306287c7106mr1557295wrl.54.1683296651675;
+        Fri, 05 May 2023 07:24:11 -0700 (PDT)
+Received: from localhost ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id k9-20020adfe8c9000000b0030642f5da27sm2562969wrn.37.2023.05.05.07.24.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 07:24:10 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     tsbogend@alpha.franken.de
+Cc:     paul@crapouillou.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mips: dts: ingenic: Remove unnecessary AIC clocks
+Date:   Fri,  5 May 2023 15:24:00 +0100
+Message-Id: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 5, 2023, at 07:47, Guo Ren wrote:
-> On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
-> wrote:
+The "ext" and "pll half" clocks don't belong in the DT. They are
+not consumed directly by the AIC and are only used as the parent
+clocks of the "i2s" clock. An operating system should be able to
+figure out that information itself because it presumably knows the
+layout of the clock tree.
 
->>
->> riscv also invalidates the caches before the transfer, which does
->> not appear to serve any purpose.
-> Yes, we can't guarantee the CPU pre-load cache lines randomly during
-> dma working.
->
-> But I've two purposes to keep invalidates before dma transfer:
->  - We clearly tell the CPU these cache lines are invalid. The caching
-> algorithm would use these invalid slots first instead of replacing
-> valid ones.
->  - Invalidating is very cheap. Actually, flush and clean have the same
-> performance in our machine.
+Removing these from the DT should be safe from a compatibility
+point of view because the jz4740-i2s driver in Linux does not, and
+never did depend on them.
 
-The main purpose of the series was to get consistent behavior on
-all machines, so I really don't want a custom optimization on
-one architecture. You make a good point about cacheline reuse
-after invalidation, but if we do that, I'd suggest doing this
-across all architectures.
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Link: https://lore.kernel.org/all/20221028103418.17578-1-aidanmacdonald.0x0@gmail.com/
+---
+This is a resend of patch 2/3 from a previous submission which is linked above.
 
-> So, how about:
->
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-nonco=
-herent.c
-> index d919efab6eba..2c52fbc15064 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, siz=
-e_t size,
->                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
->                 break;
->         case DMA_FROM_DEVICE:
-> -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> -               break;
->         case DMA_BIDIRECTIONAL:
->                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
->                 break;
+v1->v2: updated commit message
 
-This is something we can consider. Unfortunately, this is something
-that no architecture (except pa-risc, which has other problems)
-does at the moment, so we'd probably need to have a proper debate
-about this.
+ arch/mips/boot/dts/ingenic/jz4725b.dtsi | 7 ++-----
+ arch/mips/boot/dts/ingenic/jz4740.dtsi  | 7 ++-----
+ arch/mips/boot/dts/ingenic/jz4770.dtsi  | 5 ++---
+ 3 files changed, 6 insertions(+), 13 deletions(-)
 
-We already have two conflicting ways to handle DMA_FROM_DEVICE,
-either invalidate/invalidate, or clean/invalidate. I can see
-that flush/invalidate may be a sensible option as well, but I'd
-want to have that discussion after the series is complete, so
-we can come to a generic solution that has the same documented
-behavior across all architectures.
+diff --git a/arch/mips/boot/dts/ingenic/jz4725b.dtsi b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
+index e9e48022f631..acbbe8c4664c 100644
+--- a/arch/mips/boot/dts/ingenic/jz4725b.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
+@@ -198,11 +198,8 @@ aic: audio-controller@10020000 {
+ 
+ 		#sound-dai-cells = <0>;
+ 
+-		clocks = <&cgu JZ4725B_CLK_AIC>,
+-			 <&cgu JZ4725B_CLK_I2S>,
+-			 <&cgu JZ4725B_CLK_EXT>,
+-			 <&cgu JZ4725B_CLK_PLL_HALF>;
+-		clock-names = "aic", "i2s", "ext", "pll half";
++		clocks = <&cgu JZ4725B_CLK_AIC>, <&cgu JZ4725B_CLK_I2S>;
++		clock-names = "aic", "i2s";
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <10>;
+diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi b/arch/mips/boot/dts/ingenic/jz4740.dtsi
+index 7f76cba03a08..bdd6f4d82ec9 100644
+--- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
+@@ -192,11 +192,8 @@ aic: audio-controller@10020000 {
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <18>;
+ 
+-		clocks = <&cgu JZ4740_CLK_AIC>,
+-			 <&cgu JZ4740_CLK_I2S>,
+-			 <&cgu JZ4740_CLK_EXT>,
+-			 <&cgu JZ4740_CLK_PLL_HALF>;
+-		clock-names = "aic", "i2s", "ext", "pll half";
++		clocks = <&cgu JZ4740_CLK_AIC>, <&cgu JZ4740_CLK_I2S>;
++		clock-names = "aic", "i2s";
+ 
+ 		dmas = <&dmac 25 0xffffffff>, <&dmac 24 0xffffffff>;
+ 		dma-names = "rx", "tx";
+diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi b/arch/mips/boot/dts/ingenic/jz4770.dtsi
+index bda0a3a86ed5..9c0099919db7 100644
+--- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
+@@ -238,9 +238,8 @@ aic: audio-controller@10020000 {
+ 
+ 		#sound-dai-cells = <0>;
+ 
+-		clocks = <&cgu JZ4770_CLK_AIC>, <&cgu JZ4770_CLK_I2S>,
+-			 <&cgu JZ4770_CLK_EXT>, <&cgu JZ4770_CLK_PLL0>;
+-		clock-names = "aic", "i2s", "ext", "pll half";
++		clocks = <&cgu JZ4770_CLK_AIC>, <&cgu JZ4770_CLK_I2S>;
++		clock-names = "aic", "i2s";
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <34>;
+-- 
+2.39.2
 
-In particular, if we end up moving arm64 and riscv back to the
-traditional invalidate/invalidate for DMA_FROM_DEVICE and
-document that driver must not rely on buffers getting cleaned
-before a partial DMA_FROM_DEVICE, the question between clean
-or flush becomes moot as well.
-
-> @@ -42,7 +40,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t=
- size,
->                 break;
->         case DMA_FROM_DEVICE:
->         case DMA_BIDIRECTIONAL:
->                 /* I'm not sure all drivers have guaranteed cacheline
-> alignment. If not, this inval would cause problems */
-> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
->                 break;
-
-This is my original patch, and I would not mix it with the other
-change. The problem with non-aligned DMA_BIDIRECTIONAL buffers in
-is that both flush and inval would be wrong if you get simultaneous
-writes from device and cpu to the same cache line, so there is
-no way to win this. Using inval instead of flush would at least
-work if the CPU data in the cacheline is read-only from the CPU,
-so that seems better than something that is always wrong.
-
-The documented API is that sharing the cache line is not allowed
-at all, so anything that would observe a difference between the
-two is also a bug. One idea that we have considered already is
-that we could overwrite the unused bits of the cacheline with
-poison values and/or mark them as invalid using KASAN for debugging
-purposes, to find drivers that already violate this.
-
-      Arnd
