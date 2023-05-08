@@ -2,307 +2,398 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3736FB792
-	for <lists+linux-mips@lfdr.de>; Mon,  8 May 2023 21:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3DB6FB8F7
+	for <lists+linux-mips@lfdr.de>; Mon,  8 May 2023 22:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbjEHTr1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 May 2023 15:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S233235AbjEHUym (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 May 2023 16:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbjEHTqr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 May 2023 15:46:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BF67AA7;
-        Mon,  8 May 2023 12:45:07 -0700 (PDT)
-Message-ID: <20230508185219.230287961@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683575065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=3NBWNJYu3OFWIUCmAc5GXW8QVPdUswJXSMxcyKJq1tg=;
-        b=K6CA2AWS2i4RYcmGQF5izhhtRvEH4Lqy1zX4leSX1xCbJyu2fRUt2bE/H/K1KBaD4mhPbX
-        DXbEEuDfyoRsRnWOS+Az/SwmgLHy0tkGFwSi+d9yJ7tMxgkcQqSUw6UAeTo9FkUMHY3IUg
-        T/DcJN7g9UpndwKZO+NAaBwlV2ov/Q5kI7PbzfEk3wlLHqSoSVXJmbX27DqtE0LGcHeJ5/
-        uMD6H0ks6CuxavlZamlO82S2b8EL75FhHxK4jbfs4N8WF5LaIuaXPH1KPg0hu/77zltt9Q
-        FxeGNYCpIMpzLNNpAb0Z1xP21rZ/1pqRbky5sY5CgPzxIzrF2nbI5kpsiH2C4A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683575065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=3NBWNJYu3OFWIUCmAc5GXW8QVPdUswJXSMxcyKJq1tg=;
-        b=wmV5ftrL9XveDdj42u5NoraYPGMS4sHOk5l7sWwCFijJk9PW7V8wwmY2iynLMZfkCTudZu
-        C7051zfZnT0NNeAQ==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S229621AbjEHUyl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 May 2023 16:54:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7708686AA
+        for <linux-mips@vger.kernel.org>; Mon,  8 May 2023 13:54:13 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pw7r5-000303-P6; Mon, 08 May 2023 22:53:11 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pw7r3-0024oy-Nl; Mon, 08 May 2023 22:53:09 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pw7r2-002YUk-Pw; Mon, 08 May 2023 22:53:08 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thor Thayer <thor.thayer@linux.intel.com>,
+        Elie Morisse <syniurge@gmail.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jochen Friedrich <jochen@scram.de>,
+        Benson Leung <bleung@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chris Pringle <chris.pringle@phabrix.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Roese <sr@denx.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>, Robert Richter <rric@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wei Chen <harperchen1110@gmail.com>,
+        George Cherian <gcherian@marvell.com>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Korsgaard <peter.korsgaard@barco.com>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, openbmc@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch v3 36/36] x86/smpboot/64: Implement
- arch_cpuhp_init_parallel_bringup() and enable it
-References: <20230508181633.089804905@linutronix.de>
+        linux-aspeed@lists.ozlabs.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-mips@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-omap@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: [PATCH 00/89] i2c: Convert to platform remove callback returning void
+Date:   Mon,  8 May 2023 22:51:37 +0200
+Message-Id: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  8 May 2023 21:44:25 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12259; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=CUiyRkHedGuUngm1XVS44bTPkh5X8UNxtDmuuxmkXfI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWA/sUJy//6LnoJE8pZ1jpYWJb4ReEOteWEqx nBbdvdRxiaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlgPwAKCRCPgPtYfRL+ TrMyB/47jd7Ku/xKY+yn8Pz8lCxZfeQrwdKR0Ava+mmos9tRoEvf3C/fjgZ6JdPMn2xAOuFj5L0 ChlkHdf+cjgqrDShJg+TdHgusB/fqdoi2SilcdhEg4do3/OuaNy0bmP1lx97NUPi74d38/N8hO4 Wjf9h6QZucyKU5j9n9VuRVgPMcA35GhgWZ+Ga+hU+dlTINCOxdJu/al05N7Ex74ppPtfxjCBTQO f0LzVF+aO+5Q9Uyx/0Q1RBhNY2vAtr4I1t+5bybE+u1pqJ9AZNAgk+NuN67I1nNSjBRl0BtYaE3 u5cZFNC9MgmA4TtzZbTz14vLP4QKcyyxwruCQNqDFAK21Isv
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Hello,
 
-Implement the validation function which tells the core code whether
-parallel bringup is possible.
+this series convers the drivers below drivers/i2c to the .remove_new()
+callback of struct platform_driver(). The motivation is to make the
+remove callback less prone for errors and wrong assumptions. See commit
+5c5a7680e67b ("platform: Provide a remove callback that returns no
+value") for a more detailed rationale.
 
-The only condition for now is that the kernel does not run in an encrypted
-guest as these will trap the RDMSR via #VC, which cannot be handled at that
-point in early startup.
+All but one driver already returned zero unconditionally in their
+.remove() callback, so converting them to .remove_new() is trivial.
+i2c-davinci has two patches in this series, first the error path is
+improved to not return an error code, then it's converted as the others
+drivers are.
 
-There was an earlier variant for AMD-SEV which used the GHBC protocol for
-retrieving the APIC ID via CPUID, but there is no guarantee that the
-initial APIC ID in CPUID is the same as the real APIC ID. There is no
-enforcement from the secure firmware and the hypervisor can assign APIC IDs
-as it sees fit as long as the ACPI/MADT table is consistent with that
-assignment.
+The two davinci patches are also the only interdependency in this
+series. I was unsure if I should split the series in two, the busses and
+the mux changes; if convenient these can be applied independent of each
+other.
 
-Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
-AMD-SEV guests for parallel startup needs some more thought.
+Best regards
+Uwe
 
-Intel-TDX provides a secure RDMSR hypercall, but supporting that is outside
-the scope of this change.
+Uwe Kleine-König (89):
+  i2c: altera: Convert to platform remove callback returning void
+  i2c: amd-mp2-plat: Convert to platform remove callback returning void
+  i2c: aspeed: Convert to platform remove callback returning void
+  i2c: at91-core: Convert to platform remove callback returning void
+  i2c: au1550: Convert to platform remove callback returning void
+  i2c: axxia: Convert to platform remove callback returning void
+  i2c: bcm-iproc: Convert to platform remove callback returning void
+  i2c: bcm-kona: Convert to platform remove callback returning void
+  i2c: bcm2835: Convert to platform remove callback returning void
+  i2c: brcmstb: Convert to platform remove callback returning void
+  i2c: cadence: Convert to platform remove callback returning void
+  i2c: cbus-gpio: Convert to platform remove callback returning void
+  i2c: cht-wc: Convert to platform remove callback returning void
+  i2c: cpm: Convert to platform remove callback returning void
+  i2c: cros-ec-tunnel: Convert to platform remove callback returning
+    void
+  i2c: davinci: Improve error reporting for problems during .remove()
+  i2c: davinci: Convert to platform remove callback returning void
+  i2c: designware-platdrv: Convert to platform remove callback returning
+    void
+  i2c: digicolor: Convert to platform remove callback returning void
+  i2c: dln2: Convert to platform remove callback returning void
+  i2c: emev2: Convert to platform remove callback returning void
+  i2c: exynos5: Convert to platform remove callback returning void
+  i2c: gpio: Convert to platform remove callback returning void
+  i2c: gxp: Convert to platform remove callback returning void
+  i2c: highlander: Convert to platform remove callback returning void
+  i2c: hix5hd2: Convert to platform remove callback returning void
+  i2c: ibm_iic: Convert to platform remove callback returning void
+  i2c: img-scb: Convert to platform remove callback returning void
+  i2c: imx-lpi2c: Convert to platform remove callback returning void
+  i2c: imx: Convert to platform remove callback returning void
+  i2c: iop3xx: Convert to platform remove callback returning void
+  i2c: isch: Convert to platform remove callback returning void
+  i2c: jz4780: Convert to platform remove callback returning void
+  i2c: kempld: Convert to platform remove callback returning void
+  i2c: lpc2k: Convert to platform remove callback returning void
+  i2c: meson: Convert to platform remove callback returning void
+  i2c: microchip-corei2c: Convert to platform remove callback returning
+    void
+  i2c: mlxbf: Convert to platform remove callback returning void
+  i2c: mlxcpld: Convert to platform remove callback returning void
+  i2c: mpc: Convert to platform remove callback returning void
+  i2c: mt65xx: Convert to platform remove callback returning void
+  i2c: mt7621: Convert to platform remove callback returning void
+  i2c: mv64xxx: Convert to platform remove callback returning void
+  i2c: mxs: Convert to platform remove callback returning void
+  i2c: npcm7xx: Convert to platform remove callback returning void
+  i2c: ocores: Convert to platform remove callback returning void
+  i2c: octeon-platdrv: Convert to platform remove callback returning
+    void
+  i2c: omap: Convert to platform remove callback returning void
+  i2c: opal: Convert to platform remove callback returning void
+  i2c: pasemi-platform: Convert to platform remove callback returning
+    void
+  i2c: pca-platform: Convert to platform remove callback returning void
+  i2c: pnx: Convert to platform remove callback returning void
+  i2c: powermac: Convert to platform remove callback returning void
+  i2c: pxa: Convert to platform remove callback returning void
+  i2c: qcom-cci: Convert to platform remove callback returning void
+  i2c: qcom-geni: Convert to platform remove callback returning void
+  i2c: qup: Convert to platform remove callback returning void
+  i2c: rcar: Convert to platform remove callback returning void
+  i2c: riic: Convert to platform remove callback returning void
+  i2c: rk3x: Convert to platform remove callback returning void
+  i2c: rzv2m: Convert to platform remove callback returning void
+  i2c: s3c2410: Convert to platform remove callback returning void
+  i2c: scmi: Convert to platform remove callback returning void
+  i2c: scx200_acb: Convert to platform remove callback returning void
+  i2c: sh7760: Convert to platform remove callback returning void
+  i2c: sh_mobile: Convert to platform remove callback returning void
+  i2c: simtec: Convert to platform remove callback returning void
+  i2c: st: Convert to platform remove callback returning void
+  i2c: stm32f4: Convert to platform remove callback returning void
+  i2c: stm32f7: Convert to platform remove callback returning void
+  i2c: sun6i-p2wi: Convert to platform remove callback returning void
+  i2c: synquacer: Convert to platform remove callback returning void
+  i2c: tegra-bpmp: Convert to platform remove callback returning void
+  i2c: tegra: Convert to platform remove callback returning void
+  i2c: uniphier-f: Convert to platform remove callback returning void
+  i2c: uniphier: Convert to platform remove callback returning void
+  i2c: versatile: Convert to platform remove callback returning void
+  i2c: viperboard: Convert to platform remove callback returning void
+  i2c: wmt: Convert to platform remove callback returning void
+  i2c: xgene-slimpro: Convert to platform remove callback returning void
+  i2c: xiic: Convert to platform remove callback returning void
+  i2c: xlp9xx: Convert to platform remove callback returning void
+  i2c: mux: arb-gpio-challenge: Convert to platform remove callback
+    returning void
+  i2c: mux: demux-pinctrl: Convert to platform remove callback returning
+    void
+  i2c: mux: gpio: Convert to platform remove callback returning void
+  i2c: mux: gpmux: Convert to platform remove callback returning void
+  i2c: mux: mlxcpld: Convert to platform remove callback returning void
+  i2c: mux: pinctrl: Convert to platform remove callback returning void
+  i2c: mux: reg: Convert to platform remove callback returning void
 
-Fixup announce_cpu() as e.g. on Hyper-V CPU1 is the secondary sibling of
-CPU0, which makes the @cpu == 1 logic in announce_cpu() fall apart.
+ drivers/i2c/busses/i2c-altera.c             |  6 ++----
+ drivers/i2c/busses/i2c-amd-mp2-plat.c       |  5 ++---
+ drivers/i2c/busses/i2c-aspeed.c             |  6 ++----
+ drivers/i2c/busses/i2c-at91-core.c          |  6 ++----
+ drivers/i2c/busses/i2c-au1550.c             |  5 ++---
+ drivers/i2c/busses/i2c-axxia.c              |  6 ++----
+ drivers/i2c/busses/i2c-bcm-iproc.c          |  6 ++----
+ drivers/i2c/busses/i2c-bcm-kona.c           |  6 ++----
+ drivers/i2c/busses/i2c-bcm2835.c            |  6 ++----
+ drivers/i2c/busses/i2c-brcmstb.c            |  5 ++---
+ drivers/i2c/busses/i2c-cadence.c            |  6 ++----
+ drivers/i2c/busses/i2c-cbus-gpio.c          |  6 ++----
+ drivers/i2c/busses/i2c-cht-wc.c             |  6 ++----
+ drivers/i2c/busses/i2c-cpm.c                |  6 ++----
+ drivers/i2c/busses/i2c-cros-ec-tunnel.c     |  6 ++----
+ drivers/i2c/busses/i2c-davinci.c            | 14 ++++++--------
+ drivers/i2c/busses/i2c-designware-platdrv.c |  6 ++----
+ drivers/i2c/busses/i2c-digicolor.c          |  6 ++----
+ drivers/i2c/busses/i2c-dln2.c               |  6 ++----
+ drivers/i2c/busses/i2c-emev2.c              |  6 ++----
+ drivers/i2c/busses/i2c-exynos5.c            |  6 ++----
+ drivers/i2c/busses/i2c-gpio.c               |  6 ++----
+ drivers/i2c/busses/i2c-gxp.c                |  6 ++----
+ drivers/i2c/busses/i2c-highlander.c         |  6 ++----
+ drivers/i2c/busses/i2c-hix5hd2.c            |  6 ++----
+ drivers/i2c/busses/i2c-ibm_iic.c            |  6 ++----
+ drivers/i2c/busses/i2c-img-scb.c            |  6 ++----
+ drivers/i2c/busses/i2c-imx-lpi2c.c          |  6 ++----
+ drivers/i2c/busses/i2c-imx.c                |  6 ++----
+ drivers/i2c/busses/i2c-iop3xx.c             |  6 ++----
+ drivers/i2c/busses/i2c-isch.c               |  6 ++----
+ drivers/i2c/busses/i2c-jz4780.c             |  5 ++---
+ drivers/i2c/busses/i2c-kempld.c             |  6 ++----
+ drivers/i2c/busses/i2c-lpc2k.c              |  6 ++----
+ drivers/i2c/busses/i2c-meson.c              |  6 ++----
+ drivers/i2c/busses/i2c-microchip-corei2c.c  |  6 ++----
+ drivers/i2c/busses/i2c-mlxbf.c              |  6 ++----
+ drivers/i2c/busses/i2c-mlxcpld.c            |  6 ++----
+ drivers/i2c/busses/i2c-mpc.c                |  6 ++----
+ drivers/i2c/busses/i2c-mt65xx.c             |  6 ++----
+ drivers/i2c/busses/i2c-mt7621.c             |  6 ++----
+ drivers/i2c/busses/i2c-mv64xxx.c            |  6 ++----
+ drivers/i2c/busses/i2c-mxs.c                |  6 ++----
+ drivers/i2c/busses/i2c-npcm7xx.c            |  5 ++---
+ drivers/i2c/busses/i2c-ocores.c             |  6 ++----
+ drivers/i2c/busses/i2c-octeon-platdrv.c     |  5 ++---
+ drivers/i2c/busses/i2c-omap.c               |  6 ++----
+ drivers/i2c/busses/i2c-opal.c               |  6 ++----
+ drivers/i2c/busses/i2c-pasemi-platform.c    |  5 ++---
+ drivers/i2c/busses/i2c-pca-platform.c       |  6 ++----
+ drivers/i2c/busses/i2c-pnx.c                |  6 ++----
+ drivers/i2c/busses/i2c-powermac.c           |  6 ++----
+ drivers/i2c/busses/i2c-pxa.c                |  6 ++----
+ drivers/i2c/busses/i2c-qcom-cci.c           |  6 ++----
+ drivers/i2c/busses/i2c-qcom-geni.c          |  5 ++---
+ drivers/i2c/busses/i2c-qup.c                |  5 ++---
+ drivers/i2c/busses/i2c-rcar.c               |  6 ++----
+ drivers/i2c/busses/i2c-riic.c               |  6 ++----
+ drivers/i2c/busses/i2c-rk3x.c               |  6 ++----
+ drivers/i2c/busses/i2c-rzv2m.c              |  6 ++----
+ drivers/i2c/busses/i2c-s3c2410.c            |  6 ++----
+ drivers/i2c/busses/i2c-scmi.c               |  6 ++----
+ drivers/i2c/busses/i2c-sh7760.c             |  6 ++----
+ drivers/i2c/busses/i2c-sh_mobile.c          |  5 ++---
+ drivers/i2c/busses/i2c-simtec.c             |  6 ++----
+ drivers/i2c/busses/i2c-st.c                 |  6 ++----
+ drivers/i2c/busses/i2c-stm32f4.c            |  6 ++----
+ drivers/i2c/busses/i2c-stm32f7.c            |  6 ++----
+ drivers/i2c/busses/i2c-sun6i-p2wi.c         |  6 ++----
+ drivers/i2c/busses/i2c-synquacer.c          |  6 ++----
+ drivers/i2c/busses/i2c-tegra-bpmp.c         |  6 ++----
+ drivers/i2c/busses/i2c-tegra.c              |  6 ++----
+ drivers/i2c/busses/i2c-uniphier-f.c         |  6 ++----
+ drivers/i2c/busses/i2c-uniphier.c           |  6 ++----
+ drivers/i2c/busses/i2c-versatile.c          |  5 ++---
+ drivers/i2c/busses/i2c-viperboard.c         |  6 ++----
+ drivers/i2c/busses/i2c-wmt.c                |  6 ++----
+ drivers/i2c/busses/i2c-xgene-slimpro.c      |  6 ++----
+ drivers/i2c/busses/i2c-xiic.c               |  6 ++----
+ drivers/i2c/busses/i2c-xlp9xx.c             |  6 ++----
+ drivers/i2c/busses/scx200_acb.c             |  6 ++----
+ drivers/i2c/muxes/i2c-arb-gpio-challenge.c  |  5 ++---
+ drivers/i2c/muxes/i2c-demux-pinctrl.c       |  6 ++----
+ drivers/i2c/muxes/i2c-mux-gpio.c            |  6 ++----
+ drivers/i2c/muxes/i2c-mux-gpmux.c           |  6 ++----
+ drivers/i2c/muxes/i2c-mux-mlxcpld.c         |  5 ++---
+ drivers/i2c/muxes/i2c-mux-pinctrl.c         |  6 ++----
+ drivers/i2c/muxes/i2c-mux-reg.c             |  6 ++----
+ 88 files changed, 180 insertions(+), 343 deletions(-)
 
-[ mikelley: Reported the announce_cpu() fallout
-
-Originally-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-
----
-V2: Fixup announce_cpu() - Michael Kelley
-V3: Fixup announce_cpu() for real - Michael Kelley
----
- arch/x86/Kconfig             |    3 -
- arch/x86/kernel/cpu/common.c |    6 --
- arch/x86/kernel/smpboot.c    |   87 +++++++++++++++++++++++++++++++++++--------
- 3 files changed, 75 insertions(+), 21 deletions(-)
----
-
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,8 +274,9 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_PARALLEL			if SMP && X86_64
- 	select HOTPLUG_SMT			if SMP
--	select HOTPLUG_SPLIT_STARTUP		if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2128,11 +2128,7 @@ static inline void setup_getcpu(int cpu)
- }
- 
- #ifdef CONFIG_X86_64
--static inline void ucode_cpu_init(int cpu)
--{
--	if (cpu)
--		load_ucode_ap();
--}
-+static inline void ucode_cpu_init(int cpu) { }
- 
- static inline void tss_setup_ist(struct tss_struct *tss)
- {
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -58,6 +58,7 @@
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/mc146818rtc.h>
- 
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -75,7 +76,7 @@
- #include <asm/fpu/api.h>
- #include <asm/setup.h>
- #include <asm/uv/uv.h>
--#include <linux/mc146818rtc.h>
-+#include <asm/microcode.h>
- #include <asm/i8259.h>
- #include <asm/misc.h>
- #include <asm/qspinlock.h>
-@@ -128,7 +129,6 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
- 
--
- static unsigned int smpboot_warm_reset_vector_count;
- 
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
-@@ -229,16 +229,43 @@ static void notrace start_secondary(void
- 	 */
- 	cr4_init();
- 
--#ifdef CONFIG_X86_32
--	/* switch away from the initial page table */
--	load_cr3(swapper_pg_dir);
--	__flush_tlb_all();
--#endif
-+	/*
-+	 * 32-bit specific. 64-bit reaches this code with the correct page
-+	 * table established. Yet another historical divergence.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32)) {
-+		/* switch away from the initial page table */
-+		load_cr3(swapper_pg_dir);
-+		__flush_tlb_all();
-+	}
-+
- 	cpu_init_exception_handling();
- 
- 	/*
--	 * Synchronization point with the hotplug core. Sets the
--	 * synchronization state to ALIVE and waits for the control CPU to
-+	 * 32-bit systems load the microcode from the ASM startup code for
-+	 * historical reasons.
-+	 *
-+	 * On 64-bit systems load it before reaching the AP alive
-+	 * synchronization point below so it is not part of the full per
-+	 * CPU serialized bringup part when "parallel" bringup is enabled.
-+	 *
-+	 * That's even safe when hyperthreading is enabled in the CPU as
-+	 * the core code starts the primary threads first and leaves the
-+	 * secondary threads waiting for SIPI. Loading microcode on
-+	 * physical cores concurrently is a safe operation.
-+	 *
-+	 * This covers both the Intel specific issue that concurrent
-+	 * microcode loading on SMT siblings must be prohibited and the
-+	 * vendor independent issue`that microcode loading which changes
-+	 * CPUID, MSRs etc. must be strictly serialized to maintain
-+	 * software state correctness.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_64))
-+		load_ucode_ap();
-+
-+	/*
-+	 * Synchronization point with the hotplug core. Sets this CPUs
-+	 * synchronization state to ALIVE and spin-waits for the control CPU to
- 	 * release this CPU for further bringup.
- 	 */
- 	cpuhp_ap_sync_alive();
-@@ -924,9 +951,9 @@ static int wakeup_secondary_cpu_via_init
- /* reduce the number of lines printed when booting a large cpu count system */
- static void announce_cpu(int cpu, int apicid)
- {
-+	static int width, node_width, first = 1;
- 	static int current_node = NUMA_NO_NODE;
- 	int node = early_cpu_to_node(cpu);
--	static int width, node_width;
- 
- 	if (!width)
- 		width = num_digits(num_possible_cpus()) + 1; /* + '#' sign */
-@@ -934,10 +961,10 @@ static void announce_cpu(int cpu, int ap
- 	if (!node_width)
- 		node_width = num_digits(num_possible_nodes()) + 1; /* + '#' */
- 
--	if (cpu == 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
--
- 	if (system_state < SYSTEM_RUNNING) {
-+		if (first)
-+			pr_info("x86: Booting SMP configuration:\n");
-+
- 		if (node != current_node) {
- 			if (current_node > (-1))
- 				pr_cont("\n");
-@@ -948,11 +975,11 @@ static void announce_cpu(int cpu, int ap
- 		}
- 
- 		/* Add padding for the BSP */
--		if (cpu == 1)
-+		if (first)
- 			pr_cont("%*s", width + 1, " ");
-+		first = 0;
- 
- 		pr_cont("%*s#%d", width - num_digits(cpu), " ", cpu);
--
- 	} else
- 		pr_info("Booting Node %d Processor %d APIC 0x%x\n",
- 			node, cpu, apicid);
-@@ -1242,6 +1269,36 @@ void __init smp_prepare_cpus_common(void
- 	set_cpu_sibling_map(0);
- }
- 
-+#ifdef CONFIG_X86_64
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	/*
-+	 * Encrypted guests require special handling. They enforce X2APIC
-+	 * mode but the RDMSR to read the APIC ID is intercepted and raises
-+	 * #VC or #VE which cannot be handled in the early startup code.
-+	 *
-+	 * AMD-SEV does not provide a RDMSR GHCB protocol so the early
-+	 * startup code cannot directly communicate with the secure
-+	 * firmware. The alternative solution to retrieve the APIC ID via
-+	 * CPUID(0xb), which is covered by the GHCB protocol, is not viable
-+	 * either because there is no enforcement of the CPUID(0xb)
-+	 * provided "initial" APIC ID to be the same as the real APIC ID.
-+	 *
-+	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-+	 * implemented seperately in the low level startup ASM code.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-+		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+		return false;
-+	}
-+
-+	smpboot_control = STARTUP_READ_APICID;
-+	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
-+	return true;
-+}
-+#endif
-+
- /*
-  * Prepare for SMP bootup.
-  * @max_cpus: configured maximum number of CPUs, It is a legacy parameter
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.39.2
 
