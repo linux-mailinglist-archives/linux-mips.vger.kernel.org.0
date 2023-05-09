@@ -2,265 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A752A6FC014
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 09:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8946FC29D
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 11:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbjEIHGt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 03:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S235087AbjEIJUs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 05:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbjEIHGr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 03:06:47 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131507AA4
-        for <linux-mips@vger.kernel.org>; Tue,  9 May 2023 00:06:37 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30796c0cbcaso1801202f8f.1
-        for <linux-mips@vger.kernel.org>; Tue, 09 May 2023 00:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683615995; x=1686207995;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=useBAoxrYFwGHlGULbrUpovVaQLb6iywksro7xdg1q0=;
-        b=fZP2GHn4DPbtLB9U9ddJiVCa5mTnlQNHnfLoeLLIICTFhTP6H3OheMCsLlesKdlSjE
-         oxU7n/iEvpzCiIYBayhdlJx0vjcsF5ikFN4zXIwD296y1TGVXwz9lO9zjYppSVQl+nN0
-         xgd6JUvZ32UxidXxTPFEPDuxgQ/X2ydDOHmPHO9scxbna8W/NFSPeDJtdXIHo3ymexpI
-         ep52vrhEvlYwUgGOx/cdDvX1kJfm5x5sc2koohyYVOeWf/Q5Mxww/sb06tbAL+q/sPNa
-         0eFClRmYTi0tn/TtP8PBkUEdMFbpiX+WXktTpdlFF9cnNJVnyawqlUi+NQlMXW1WKr0u
-         tKSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683615995; x=1686207995;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=useBAoxrYFwGHlGULbrUpovVaQLb6iywksro7xdg1q0=;
-        b=SHmp0rwlfh9xqGPg3V3XK7hDYnHqY0ZQkP0Rci70iW5Cci4ZJeNyGkU+Dtx56ktU64
-         NZCqERjEmI+hu4a6+pEvaKfv0FQ3YX/sJURqMUV/5u8ZZWU4ZACK4ct3KM8SdU2XxsU8
-         MbqjKLNMkF7Kmo3/Ck4nwYxwpueewC2f8humyClm84RT0fR89cNiGokRHdTJGQonro+q
-         mTdO6OPFC3OuakjfWEAZr8B/ilrYkTpFmrwWHlO5Q8kH/Qj0k9S2XruCFpA2D4756na+
-         aDdGPaiZeY+lZDabGGsT2GEZji2MplgVMoUS0u5awsput7sfYsShvN+U0xDiURHDDx44
-         2y+g==
-X-Gm-Message-State: AC+VfDw4/tjCJYzooB52ZzpLts2y3A7d4gy08CpNzcCJAwTy7Zc/Hauj
-        Kq22RIiyRRjER2NxIbBvVtycrw1xRjdxdn/wyn6nYg==
-X-Google-Smtp-Source: ACHHUZ48BETwgkFEHm8YnNvXMQpcpYVDJsRZesFXjLdWUvDZRdq9TUHfydeR5bG1gLliOkfOUxpETfIXCAorTp5K1Pw=
-X-Received: by 2002:a5d:6a47:0:b0:306:2d16:9b4f with SMTP id
- t7-20020a5d6a47000000b003062d169b4fmr9470428wrw.9.1683615995449; Tue, 09 May
- 2023 00:06:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230306100508.1171812-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230306100508.1171812-1-alexghiti@rivosinc.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 9 May 2023 09:06:23 +0200
-Message-ID: <CAHVXubjRtto_omfz_NsLcKkJniciX0ShNxcX5vBqnGFQLpB4ug@mail.gmail.com>
-Subject: Re: [PATCH v5 00/26] Remove COMMAND_LINE_SIZE from uapi
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
+        with ESMTP id S234945AbjEIJUY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 05:20:24 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CCE100C0;
+        Tue,  9 May 2023 02:20:17 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.73.203) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 9 May 2023
+ 12:20:06 +0300
+Subject: Re: [patch v3 33/36] x86/apic: Save the APIC virtual base address
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <x86@kernel.org>, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        <xen-devel@lists.xenproject.org>,
         Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-arm-kernel@lists.infradead.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        <linux-csky@vger.kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        <linux-mips@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        <linux-riscv@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185219.070274100@linutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <a6f48a7b-484c-31af-f568-cb1de0d766d4@omp.ru>
+Date:   Tue, 9 May 2023 12:20:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20230508185219.070274100@linutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.73.203]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 05/09/2023 08:58:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 177218 [May 07 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.203 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.203 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 178.176.73.203:7.4.1,7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.203
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/09/2023 09:07:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 5/9/2023 6:00:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arnd,
+Hello!
 
-On Mon, Mar 6, 2023 at 11:05=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> This all came up in the context of increasing COMMAND_LINE_SIZE in the
-> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-> maximum length of /proc/cmdline and userspace could staticly rely on
-> that to be correct.
->
-> Usually I wouldn't mess around with changing this sort of thing, but
-> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-> increasing, but they're from before the UAPI split so I'm not quite sure
-> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> asm-generic/setup.h.").
->
-> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-> part of the uapi to begin with, and userspace should be able to handle
-> /proc/cmdline of whatever length it turns out to be.  I don't see any
-> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-> search, but that's not really enough to consider it unused on my end.
->
-> This issue was already considered in s390 and they reached the same
-> conclusion in commit 622021cd6c56 ("s390: make command line
-> configurable").
->
-> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
-> shouldn't be part of uapi, so this now touches all the ports.  I've
-> tried to split this all out and leave it bisectable, but I haven't
-> tested it all that aggressively.
->
-> Changes since v4 <https://lore.kernel.org/all/20230302093539.372962-1-ale=
-xghiti@rivosinc.com/>:
-> * Add my own SoB as suggested by Geert
-> * Add riscv patches as suggested by Bj=C3=B6rn
-> * Remove "WITH Linux-syscall-note" from new setup.h not in uapi/, as
->   suggested by Greg KH, his quoted answer below:
->
-> "The "syscall note" makes no sense at all for any files not in the uapi/
-> directory, so you can remove it just fine as that WITH doesn't mean
-> anything _UNLESS_ the file is in the uapi directory."
->
-> Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-ale=
-xghiti@rivosinc.com/>:
-> * Added RB/AB
-> * Added a mention to commit 622021cd6c56 ("s390: make command line
->   configurable") in the cover letter
->
-> Changes since v2 <https://lore.kernel.org/all/20221211061358.28035-1-palm=
-er@rivosinc.com/>:
-> * Fix sh, csky and ia64 builds, as reported by kernel test robot
->
-> Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-pal=
-mer@dabbelt.com/>:
-> * Touches every arch.
->
-> base-commit-tag: next-20230207
->
-> Alexandre Ghiti (2):
->   riscv: Remove COMMAND_LINE_SIZE from uapi
->   riscv: Remove empty <uapi/asm/setup.h>
->
-> Palmer Dabbelt (24):
->   alpha: Remove COMMAND_LINE_SIZE from uapi
->   arm64: Remove COMMAND_LINE_SIZE from uapi
->   arm: Remove COMMAND_LINE_SIZE from uapi
->   ia64: Remove COMMAND_LINE_SIZE from uapi
->   m68k: Remove COMMAND_LINE_SIZE from uapi
->   microblaze: Remove COMMAND_LINE_SIZE from uapi
->   mips: Remove COMMAND_LINE_SIZE from uapi
->   parisc: Remove COMMAND_LINE_SIZE from uapi
->   powerpc: Remove COMMAND_LINE_SIZE from uapi
->   sparc: Remove COMMAND_LINE_SIZE from uapi
->   xtensa: Remove COMMAND_LINE_SIZE from uapi
->   asm-generic: Remove COMMAND_LINE_SIZE from uapi
->   alpha: Remove empty <uapi/asm/setup.h>
->   arc: Remove empty <uapi/asm/setup.h>
->   m68k: Remove empty <uapi/asm/setup.h>
->   arm64: Remove empty <uapi/asm/setup.h>
->   microblaze: Remove empty <uapi/asm/setup.h>
->   sparc: Remove empty <uapi/asm/setup.h>
->   parisc: Remove empty <uapi/asm/setup.h>
->   x86: Remove empty <uapi/asm/setup.h>
->   xtensa: Remove empty <uapi/asm/setup.h>
->   powerpc: Remove empty <uapi/asm/setup.h>
->   mips: Remove empty <uapi/asm/setup.h>
->   s390: Remove empty <uapi/asm/setup.h>
->
->  .../admin-guide/kernel-parameters.rst         |  2 +-
->  arch/alpha/include/asm/setup.h                |  4 +--
->  arch/alpha/include/uapi/asm/setup.h           |  7 -----
->  arch/arc/include/asm/setup.h                  |  1 -
->  arch/arc/include/uapi/asm/setup.h             |  6 -----
->  arch/arm/include/asm/setup.h                  |  1 +
->  arch/arm/include/uapi/asm/setup.h             |  2 --
->  arch/arm64/include/asm/setup.h                |  3 ++-
->  arch/arm64/include/uapi/asm/setup.h           | 27 -------------------
->  arch/ia64/include/asm/setup.h                 | 10 +++++++
->  arch/ia64/include/uapi/asm/setup.h            |  6 ++---
->  arch/loongarch/include/asm/setup.h            |  2 +-
->  arch/m68k/include/asm/setup.h                 |  3 +--
->  arch/m68k/include/uapi/asm/setup.h            | 17 ------------
->  arch/microblaze/include/asm/setup.h           |  2 +-
->  arch/microblaze/include/uapi/asm/setup.h      | 20 --------------
->  arch/mips/include/asm/setup.h                 |  3 ++-
->  arch/mips/include/uapi/asm/setup.h            |  8 ------
->  arch/parisc/include/{uapi =3D> }/asm/setup.h    |  2 +-
->  arch/powerpc/include/asm/setup.h              |  2 +-
->  arch/powerpc/include/uapi/asm/setup.h         |  7 -----
->  arch/riscv/include/asm/setup.h                |  7 +++++
->  arch/riscv/include/uapi/asm/setup.h           |  8 ------
->  arch/s390/include/asm/setup.h                 |  1 -
->  arch/s390/include/uapi/asm/setup.h            |  1 -
->  arch/sh/include/asm/setup.h                   |  2 +-
->  arch/sparc/include/asm/setup.h                |  6 ++++-
->  arch/sparc/include/uapi/asm/setup.h           | 16 -----------
->  arch/x86/include/asm/setup.h                  |  2 --
->  arch/x86/include/uapi/asm/setup.h             |  1 -
->  arch/xtensa/include/{uapi =3D> }/asm/setup.h    |  2 +-
->  include/asm-generic/Kbuild                    |  1 +
->  include/{uapi =3D> }/asm-generic/setup.h        |  0
->  include/uapi/asm-generic/Kbuild               |  1 -
->  34 files changed, 40 insertions(+), 143 deletions(-)
->  delete mode 100644 arch/alpha/include/uapi/asm/setup.h
->  delete mode 100644 arch/arc/include/uapi/asm/setup.h
->  delete mode 100644 arch/arm64/include/uapi/asm/setup.h
->  create mode 100644 arch/ia64/include/asm/setup.h
->  delete mode 100644 arch/m68k/include/uapi/asm/setup.h
->  delete mode 100644 arch/microblaze/include/uapi/asm/setup.h
->  delete mode 100644 arch/mips/include/uapi/asm/setup.h
->  rename arch/parisc/include/{uapi =3D> }/asm/setup.h (63%)
->  delete mode 100644 arch/powerpc/include/uapi/asm/setup.h
->  create mode 100644 arch/riscv/include/asm/setup.h
->  delete mode 100644 arch/riscv/include/uapi/asm/setup.h
->  delete mode 100644 arch/s390/include/uapi/asm/setup.h
->  delete mode 100644 arch/sparc/include/uapi/asm/setup.h
->  delete mode 100644 arch/x86/include/uapi/asm/setup.h
->  rename arch/xtensa/include/{uapi =3D> }/asm/setup.h (84%)
->  rename include/{uapi =3D> }/asm-generic/setup.h (100%)
->
-> --
-> 2.37.2
->
+On 5/8/23 10:44 PM, Thomas Gleixner wrote:
 
-I don't see this series in 6.4-rc1, I don't mean to bother you, I just
-want to make sure it did not get lost :)
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> For parallel CPU brinugp it's required to read the APIC ID in the low level
+> startup code. The virtual APIC base address is a constant because its a
+> fix-mapped address. Exposing that constant which is composed via macros to
+> assembly code is non-trivial dues to header inclusion hell.
 
-Thanks,
+   s/dues/due/?
 
-Alex
+> Aside of that it's constant only because of the vsyscall ABI
+> requirement. Once vsyscall is out of the picture the fixmap can be placed
+> at runtime.
+> 
+> Avoid header hell, stay flexible and store the address in a variable which
+> can be exposed to the low level startup code.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
+
+[...]
+
+MBR, Sergey
