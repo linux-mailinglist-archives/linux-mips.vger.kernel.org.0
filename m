@@ -2,112 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D90A6FC5FD
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4FC6FC6EA
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbjEIMMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 08:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S234716AbjEIMnJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 08:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235510AbjEIMMP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:12:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DCE3C25;
-        Tue,  9 May 2023 05:12:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683634332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OeDWxrG4XUYobVqWgAe3O2JPVJDj89o+5jrCfskGJg8=;
-        b=hl/TK4RBTejer0s1ss/VQWoTE3DJHIErNy5ObBMt3F35AuGijMu5SQIYqEXIyyWfguIJ74
-        IuVIsOwOjI+DOYpi1oyZvtSrA4xy0VqeURht3o6yDrYLZd0dCj9sQmFOFO0ByR3FGuzx1X
-        DX/4mqvZ8z2EcTfmL6YwZj0AheRNPYO2Sw/CFuIRodeNmQ9+fMov+UrbzmNB3mOPDT4LpP
-        XixRF4zedTnImudhtqeC8vGLPe0PN84sIltm+fYhikFa7xWpApb8aT+EKAws94oS5Kw77W
-        ZD3DPvNRfQa9kERCm1KsnYEOdLoCE866a9iJjH9pstUyHznEaCqcjcX+ulrAEw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683634332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OeDWxrG4XUYobVqWgAe3O2JPVJDj89o+5jrCfskGJg8=;
-        b=C/RxUkGIvC1trkLde7ELOcrRJTFX/YyTBVeqxDPOcpgYwMXYyUXrtmmSUhQ5qz65ax/jQH
-        CAvGiAfvhE+ZmGAQ==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: Re: [patch v3 18/36] [patch V2 18/38] cpu/hotplug: Add CPU state
- tracking and synchronization
-In-Reply-To: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.240871842@linutronix.de>
- <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 14:12:12 +0200
-Message-ID: <87bkit1z6r.ffs@tglx>
+        with ESMTP id S234704AbjEIMnF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:43:05 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E1E4C1A;
+        Tue,  9 May 2023 05:42:49 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3062db220a3so3753184f8f.0;
+        Tue, 09 May 2023 05:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683636163; x=1686228163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ogUelxBN/iBvkYaR2z1a5yJ9iiiICSJTX6onuQ39wKc=;
+        b=bP7R25534DGHvBCha1PbVOLFyNyApN14uU0+rqLMNhnVLU10jdo0WpgiD4Fm5V0yAI
+         qB9qqNDTJNCGQpxxKLifFkvcNrAT6QpRIzcuFAQOHfNsG4T1LJkdu9BJqroSTIQuCnSH
+         hVmH8GmS4d3T4uHCkbAxE+GJfb+6wFmAyVPw8Qr8/MJJwoTr0DX3abclrKNkPLwDd3qq
+         QnkES30ONz6qzfN90XpFKCc6PfH1ofxZHL/Kfgi8YzSg/5h5z+MdHLX6fTrmTadngxAg
+         nsULLXonZPl8d+eq1IQ4r5tR/1ucDnjMokuQ606bWx9lLRVU7nOwih+KSmfHz8CWWfn8
+         2Ykw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683636163; x=1686228163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ogUelxBN/iBvkYaR2z1a5yJ9iiiICSJTX6onuQ39wKc=;
+        b=IhkAgda/IgAVEFTtxKaJ7Z6LrvOQg85j5YFFXU+A+e4dgv4bjcJMlXn8vOiCSDOR8m
+         Ttrmy4lXS8rmzIx44wk4xmUis6tjNyznFha/QS6aXbQap4OtljatYHFs2HUQLfcwyVPb
+         oEKXLH98pYtt8vjuLhZ6x8ombL4uqWnFW6Id3xQ4cmSoGTk7z5TqjhpID1kB7Sio6QAe
+         PZa+pXf75mSLeaHMOuu+elZ76jPDAco1y9C6woaNYccrI2x2eSVDzyjZ7msCU+51LcHZ
+         X7XK5FcfLWt5qbYtTQ1t+moRgAAbc1ux3iOf5A057ibhRvEQghIzjyhL00I30RK5MNwH
+         5ykQ==
+X-Gm-Message-State: AC+VfDzV9AHiEwpazotJBtL/owgvtpbN/sESEuTkcBEa94MCTKfAVdrG
+        4nChmAW5loeJ+60dJDnZ6MI=
+X-Google-Smtp-Source: ACHHUZ4OvsksKT0JGRCaHiq1efo16lO58Z2ioXMGYLZCNfBtE3MpDpTy4POSymXX2RrynXBHt6s39g==
+X-Received: by 2002:a05:6000:1a48:b0:306:34e4:be40 with SMTP id t8-20020a0560001a4800b0030634e4be40mr8884827wry.33.1683636163178;
+        Tue, 09 May 2023 05:42:43 -0700 (PDT)
+Received: from localhost ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id i14-20020a5d558e000000b003079f2c2de7sm3058083wrv.112.2023.05.09.05.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 05:42:42 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tsbogend@alpha.franken.de, paul@crapouillou.net
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v1 1/3] ASoC: jz4740-i2s: Add support for X1000 SoC
+Date:   Tue,  9 May 2023 13:42:36 +0100
+Message-Id: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09 2023 at 13:07, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
->
->> +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
->> +{
->> +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
->> +	int sync = atomic_read(st);
->> +
->> +	while (!atomic_try_cmpxchg(st, &sync, state));
->> +}
->
-> Why isn't:
->
-> 	atomic_set(st, state);
->
-> any good?
+The X1000's AIC is similar to the AIC found on other Ingenic SoCs.
+It has symmetric playback/capture rates like the JZ4740, but more
+flexible clocking when outputting the system or bit clocks.
 
-Good question. It's only the other side (control CPU) which needs to be
-careful.
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ sound/soc/jz4740/jz4740-i2s.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Thanks,
+diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
+index 6d9cfe0a5041..7cb563bb8b09 100644
+--- a/sound/soc/jz4740/jz4740-i2s.c
++++ b/sound/soc/jz4740/jz4740-i2s.c
+@@ -329,6 +329,14 @@ static const struct i2s_soc_info jz4760_i2s_soc_info = {
+ 	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+ };
+ 
++static const struct i2s_soc_info x1000_i2s_soc_info = {
++	.dai = &jz4740_i2s_dai,
++	.field_rx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
++	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
++	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 8),
++	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 8),
++};
++
+ static struct snd_soc_dai_driver jz4770_i2s_dai = {
+ 	.probe = jz4740_i2s_dai_probe,
+ 	.playback = {
+@@ -440,6 +448,7 @@ static const struct of_device_id jz4740_of_matches[] = {
+ 	{ .compatible = "ingenic,jz4760-i2s", .data = &jz4760_i2s_soc_info },
+ 	{ .compatible = "ingenic,jz4770-i2s", .data = &jz4770_i2s_soc_info },
+ 	{ .compatible = "ingenic,jz4780-i2s", .data = &jz4780_i2s_soc_info },
++	{ .compatible = "ingenic,x1000-i2s", .data = &x1000_i2s_soc_info },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, jz4740_of_matches);
+-- 
+2.39.2
 
-        tglx
