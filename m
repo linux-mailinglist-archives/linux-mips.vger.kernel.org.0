@@ -2,108 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B09C6FCF28
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 22:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F726FD06C
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 23:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjEIULK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 16:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S229734AbjEIVBi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 17:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjEIULJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 16:11:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6479A1729;
-        Tue,  9 May 2023 13:11:07 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683663065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GDHRmjiERMZtAMWS8NswxcpsZgr8pqyf8cBJN0UwKq4=;
-        b=qRz1Wt3JIbNYLISqAbJr1CMERh+G2fMl0sqNUINGFnuAglUDS20PR5mShGM7iQQQaOXzUO
-        6p1nBmlJSh5FISuh/gxPpyFl5N/5lIcPzXiWCbOhc/BY9nLjejGZdozuMFQuDWHB0czbQ3
-        N334596N1dIxTBUtYyzDiKqjfnYYlcCALsa05iyDdZ772j72RpkHn+oDxyP4ObL7l+piSu
-        ZhZkepOsryy7f/3f8Xvt0ySi2CMPDVnx0tsF8XLS0QXVKSABEb0ZDeaHvlrFZfnZHg6sEY
-        EkUkcA416BPYsfyNhOSk3xIjz0pEBaTy2eNw1t0P+tqJe8e17B+vC1YPI9z1/Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683663065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GDHRmjiERMZtAMWS8NswxcpsZgr8pqyf8cBJN0UwKq4=;
-        b=Xlcesbr/mowxxv4d+xv21wM9Nh14MEM6CP2UULmrKClB0/ijd/XoMlkIURymgqxjfMwTM5
-        2x4mgfol9jpnTzDw==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        with ESMTP id S234547AbjEIVBh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 17:01:37 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF22365A8
+        for <linux-mips@vger.kernel.org>; Tue,  9 May 2023 14:00:58 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-559ded5e170so94349647b3.3
+        for <linux-mips@vger.kernel.org>; Tue, 09 May 2023 14:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683666058; x=1686258058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ek4N4zhVnFp0OjD2e91cJw6qEMFFDQc5/FTgmHiGak=;
+        b=KvksaCpKrzaY0+3FUW5oyI//dFtyxPTQHfzl5+0VHvQcVCTA/wc5skYbfQaGQAiqO6
+         RG+BFjA1uT+YcH6WAEZj1dAYjHu44a/fsNy0DucHqAiFcc0aHh0TP0/SHym2wtLFhgya
+         jvcVrNDfs1uLf3q9XYKlS2tP9Nf6+clp3l9kNKu7ghj3ZCYhSVgo0DyhzvOiItYtumh1
+         4JQnslNgjT5PK1cZo9gjIG01FVTUxhvtvM1wwCOMTIKO+8A4D8darjFAiHGGXkHMA/wC
+         qK2Wu25nEc78g+A7cmmAaUVZiu2rHo/uQi1GdwXanr4ugUOWKbNzFsu5Od9kub1ggvSe
+         EDcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683666058; x=1686258058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1ek4N4zhVnFp0OjD2e91cJw6qEMFFDQc5/FTgmHiGak=;
+        b=ZWZDgqlocdGMQsxLrV2v91715C1Q3YMCRi3iq/tLEW00K+G8yU3B7fsD3BNbrUpGAN
+         /N1hX4TtmBPTvYU6ltJ9pEolBPcordGBjhlHvWWqmxGZaUGRYcLpl6bpmGjJs1xll6W3
+         a3eaYM/s8Qrda3LfL0vbmbxy21T8UC9uVXNqONW/3MAsPLTTi+Pp7sP4ogxqqSpzXjmz
+         h5u5mGFQcOuPp+2FVLol1jF0fWw+tXCGwZJCQ9aXmMQ37UHGJHzMSjkqBWhZteYdu2qy
+         McuYt8mRzIYsNe83eqOl0ZKajzjSSqDT77PBj7oG51Cl254NR3bWTngynsQwIxjZI/Kh
+         KDpA==
+X-Gm-Message-State: AC+VfDyBL0qVeHVZflKOiwNEbqHAMFxySaXoQZR4A0HdZWS5BHUpVG8r
+        SQEXOLMm0NPMWjQZJNuaXHVXD5KLq37usIpBgSjkQ7uvIfFa8aY4txs=
+X-Google-Smtp-Source: ACHHUZ5qUtibgquXG1CHXn5rsYEnNugGuamTPmXoGAjYsiSltyM3mefeFrXCpD+c8boXnApqrdpstv0ZlJ4ZhdJ1iOQ=
+X-Received: by 2002:a67:f291:0:b0:42e:6748:13dc with SMTP id
+ m17-20020a67f291000000b0042e674813dcmr5348659vsk.0.1683665528538; Tue, 09 May
+ 2023 13:52:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230306190156.434452-1-dmatlack@google.com>
+In-Reply-To: <20230306190156.434452-1-dmatlack@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 9 May 2023 13:51:42 -0700
+Message-ID: <CALzav=fZFpzw57hNmg2fqYG-0ddtvQd9+=7cw8tzuOGbZW1A1A@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] KVM: Refactor KVM stats macros and enable custom
+ stat names
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
- separate phases and document them
-In-Reply-To: <20230509100421.GU83892@hirez.programming.kicks-ass.net>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185217.671595388@linutronix.de>
- <20230509100421.GU83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 22:11:05 +0200
-Message-ID: <87fs85z2na.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Eric Farman <farman@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09 2023 at 12:04, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
-> Not to the detriment of this patch, but this barrier() and it's comment
-> seem weird vs smp_callin(). That function ends with an atomic bitop (it
-> has to, at the very least it must not be weaker than store-release) but
-> also has an explicit wmb() to order setup vs CPU_STARTING.
+On Mon, Mar 6, 2023 at 11:01=E2=80=AFAM David Matlack <dmatlack@google.com>=
+ wrote:
 >
-> (arguably that should be a full fence *AND* get a comment)
+> This series refactors the KVM stats macros to reduce duplication and
+> adds the support for choosing custom names for stats.
 
-TBH: I'm grasping for something 'arguable': What's the point of this
-wmb() or even a mb()?
+Hi Paolo,
 
-Most of the [w]mb()'s in smpboot.c except those in mwait_play_dead()
-have a very distinct voodoo programming smell.
-
-Thanks,
-
-        tglx
+I just wanted to double-check if this series is on your radar
+(probably for 6.5)?
