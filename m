@@ -2,40 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178236FC3FA
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 12:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2326FC438
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 12:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235320AbjEIKdc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 06:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S235311AbjEIKu2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 06:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235312AbjEIKdX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 06:33:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BD510A21;
-        Tue,  9 May 2023 03:33:07 -0700 (PDT)
+        with ESMTP id S234584AbjEIKu1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 06:50:27 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655D519A1;
+        Tue,  9 May 2023 03:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Gd64jCpByI9ftMmszyCnHSbL15wXcN+sPo8L/Xdfd60=; b=CuTgyV8Kb4pFfLeLsvFJaMyO39
-        w2tpTejdL1282DKRtl3AaKdBc8Hn9nRTvQQ9DYhYlpzuM+dpyDsaxtc21qM27D5mhnRuD9XTvUY5G
-        MfmaLX0npp7MFDGUFX7ijHJkVij0No7VT3AyLbMnuaBv9CKOD2u3qLQSzqJSxcKBidQ7zxyDDXI7m
-        hqnlBbQaeXEG6bseRUttA1lqVEUVI3JxK01J44mwxCael+dlQLLA7vZjXVQQ7OBQnE6iIxtBTXeCR
-        ImOG2OhzXWYJBbeaCRJM8CDHHwhpRKJBAE1FMdg0FB6l5hrBc2ELTNWjQncuzgP6yccu91Zu935vF
-        pcCRHJ6g==;
+        bh=8P7wZHGsQrdcODAexcyC5HmNjq7UyxY+a/r9BHYLyPc=; b=LZcrlvoWgQ+AuQIzSKoAbD0LMI
+        b6BHDQIQNgv1TgrA6LONLCnHui8tdPe3S7PqOkv3sYRCrscZ+XMID94S8/TszoyfPgDPSAtQ+UTEb
+        h4a3MCLNpB/XRmwM0n8A1ogc7k4Bpmn3jlbth/DX7axlvB31Yl6fCYMH6bJHqtyrRocreKHmePIjY
+        oGkzR9e3lZU/07+fFI0IW2dT3qtKo/wVGsmWPmVsGg8bTZtIl1kVM5ehFmk3qTLmzEE7S3RcUzrrq
+        Hzf61paJrYytBCotmCbO9yxt1Ffzzoe6S7f87moZIuIvJFRKis9FFf32XMpNwcYOWQPfdMZxjOYjd
+        W8dWFyOA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwKdJ-00F9hx-3z; Tue, 09 May 2023 10:31:49 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwKuD-0066WL-1Q;
+        Tue, 09 May 2023 10:49:19 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29CF1300451;
-        Tue,  9 May 2023 12:31:47 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2CAA300023;
+        Tue,  9 May 2023 12:49:15 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 10E2120B21BBF; Tue,  9 May 2023 12:31:47 +0200 (CEST)
-Date:   Tue, 9 May 2023 12:31:46 +0200
+        id A111020B0882C; Tue,  9 May 2023 12:49:15 +0200 (CEST)
+Date:   Tue, 9 May 2023 12:49:15 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
@@ -70,17 +71,15 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
- separate phases and document them
-Message-ID: <20230509103146.GW83892@hirez.programming.kicks-ass.net>
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: Re: [patch v3 13/36] x86/smpboot: Remove cpu_callin_mask
+Message-ID: <20230509104915.GX83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
- <20230508185217.671595388@linutronix.de>
+ <20230508185217.956149661@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508185217.671595388@linutronix.de>
+In-Reply-To: <20230508185217.956149661@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -91,71 +90,76 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, May 08, 2023 at 09:43:47PM +0200, Thomas Gleixner wrote:
 
-And since I'm commenting on existing things anyway, let me continue...
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
 
-On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
-
-> +static int wait_cpu_cpumask(unsigned int cpu, const struct cpumask *mask)
-> +{
-> +	unsigned long timeout;
->  
-> +	/*
-> +	 * Wait up to 10s for the CPU to report in.
-> +	 */
-> +	timeout = jiffies + 10*HZ;
-> +	while (time_before(jiffies, timeout)) {
-> +		if (cpumask_test_cpu(cpu, mask))
-> +			return 0;
-> +
-> +		schedule();
->  	}
-> +	return -1;
-> +}
-
-> +/*
-> + * Bringup step three: Wait for the target AP to reach smp_callin().
-> + * The AP is not waiting for us here so we don't need to parallelise
-> + * this step. Not entirely clear why we care about this, since we just
-> + * proceed directly to TSC synchronization which is the next sync
-> + * point with the AP anyway.
-> + */
-> +static void wait_cpu_callin(unsigned int cpu)
-> +{
-> +	while (!cpumask_test_cpu(cpu, cpu_callin_mask))
-> +		schedule();
-> +}
-> +
-> +/*
-> + * Bringup step four: Synchronize the TSC and wait for the target AP
-> + * to reach set_cpu_online() in start_secondary().
-> + */
-> +static void wait_cpu_online(unsigned int cpu)
+> @@ -167,21 +166,16 @@ static inline void smpboot_restore_warm_
+>   */
+>  static void smp_callin(void)
 >  {
->  	unsigned long flags;
-> +
-> +	/*
-> +	 * Check TSC synchronization with the AP (keep irqs disabled
-> +	 * while doing so):
-> +	 */
-> +	local_irq_save(flags);
-> +	check_tsc_sync_source(cpu);
-> +	local_irq_restore(flags);
-> +
-> +	/*
-> +	 * Wait for the AP to mark itself online, so the core caller
-> +	 * can drop sparse_irq_lock.
-> +	 */
-> +	while (!cpu_online(cpu))
-> +		schedule();
-> +}
+> -	int cpuid;
+> +	int cpuid = smp_processor_id();
+>  
+>  	/*
+>  	 * If waken up by an INIT in an 82489DX configuration
+> -	 * cpu_callout_mask guarantees we don't get here before
+> -	 * an INIT_deassert IPI reaches our local APIC, so it is
+> -	 * now safe to touch our local APIC.
+> -	 */
+> -	cpuid = smp_processor_id();
+> -
+> -	/*
+> -	 * the boot CPU has finished the init stage and is spinning
+> -	 * on callin_map until we finish. We are free to set up this
+> -	 * CPU, first the APIC. (this is probably redundant on most
+> -	 * boards)
+> +	 * cpu_callout_mask guarantees we don't get here before an
+> +	 * INIT_deassert IPI reaches our local APIC, so it is now safe to
+> +	 * touch our local APIC.
+> +	 *
+> +	 * Set up this CPU, first the APIC, which is probably redundant on
+> +	 * most boards.
+>  	 */
+>  	apic_ap_setup();
+>  
+> @@ -192,7 +186,7 @@ static void smp_callin(void)
+>  	 * The topology information must be up to date before
+>  	 * calibrate_delay() and notify_cpu_starting().
+>  	 */
+> -	set_cpu_sibling_map(raw_smp_processor_id());
+> +	set_cpu_sibling_map(cpuid);
+>  
+>  	ap_init_aperfmperf();
+>  
+> @@ -205,11 +199,6 @@ static void smp_callin(void)
+>  	 * state (CPUHP_ONLINE in the case of serial bringup).
+>  	 */
+>  	notify_cpu_starting(cpuid);
+> -
+> -	/*
+> -	 * Allow the master to continue.
+> -	 */
+> -	cpumask_set_cpu(cpuid, cpu_callin_mask);
+>  }
+>  
+>  static void ap_calibrate_delay(void)
+> @@ -268,11 +257,6 @@ static void notrace start_secondary(void
+>  	rcu_cpu_starting(raw_smp_processor_id());
+>  	x86_cpuinit.early_percpu_clock_init();
+>  
+> -	/*
+> -	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
+> -	 * but just sets the bit to let the controlling CPU (BSP) know that
+> -	 * it's got this far.
+> -	 */
+>  	smp_callin();
+>  
+>  	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
 
-These schedule() loops make me itch... this is basically Ye Olde yield()
-loop with all it's known 'benefits'.
+Good riddance to that mask; however is smp_callin() still an appropriate
+name for that function?
 
-Now, I don't think it's horribly broken, we're explicitly waiting on
-another CPU and can't have priority inversions, but yuck!
-
-It could all be somewhat cleaned up with wait_var_event{_timeout}() and
-wake_up_var(), but I'm really not sure that's worth it. But at least it
-requires a comment to justify.
+Would smp_starting() -- seeing how this kicks of CPU_STARTING not be a
+better name?
