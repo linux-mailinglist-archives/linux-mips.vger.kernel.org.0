@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316C36FC5F1
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6556FC5F8
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbjEIMKD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 08:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
+        id S235643AbjEIMKO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 08:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbjEIMJ4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:09:56 -0400
+        with ESMTP id S235674AbjEIMKK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:10:10 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64493C05;
-        Tue,  9 May 2023 05:09:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BC94202;
+        Tue,  9 May 2023 05:10:08 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683634184;
+        s=2020; t=1683634206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JdyszAQFsS8NQ584CZnckJnpEhoUaXW9tnBOiTa+9+E=;
-        b=ka9gkcGHPU/F0K+ngaz5jaCDeTzITcmJantNFEH1Q/42sdZ4zT1IqtMce7W/ZjZD1bK1+j
-        /LNwDssKYbtn14emuSZbyff8IjECHOj44E32PB3y66ONqTaivar6HFMvTYpEn79bGOVSI8
-        sOjrIz9MvrC0jruLu+aWlOCPHHLUW+sovMocfUIwQQzie8Jw2EWX+LtwgcvbMB/fb++PT7
-        3V5LLpihTVTj/4ipngAecsP92q7WSv1hEdEi47Ocn0+UqB1lNCmcxgzxFfcOzQz6hdRbtH
-        MZzhHOOgMIT3YAtQVGXh4XejswO34svSG9XWtwbNWw47oZdXADP7zBo3uAbL7Q==
+        bh=VtDcNKByG3QGqBaMWteEmBlx8o79YaY4wIW5CrphOKI=;
+        b=ozV/VUOhCbdvdcwqxdtfXZdcaA90ARKwOnYQBRouWIahnMXGWDMqDNjRrHC/BBYWjq5SZl
+        0zVkjwMN1HrH8Nj5PlcDw7JkrmEq1wl2opWaW4iHlUWYz9rS55vTCEV7bvHci0YQS0msKe
+        OiKR9k0tA7izR2CPXGYcFUsQfK7A+x/0KRvkRZX+qrF7KiQIDhvs0oyXBpq1rxJdGhfGCh
+        MYC6WnITSxgPyRjiVJDU49KaDy0xrS7hBHILcujYL+/hxIaH+NoGh3k9eNjkZ5FjVDbyZQ
+        FdCg0ek5JAc2T8OI8FHkzUUTTsC4j7rKC+fqFmbcQZsqVeexs2oybxw7tmiGyQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683634184;
+        s=2020e; t=1683634206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JdyszAQFsS8NQ584CZnckJnpEhoUaXW9tnBOiTa+9+E=;
-        b=GXVTcObOnQaoFBT3flZUDZ+yT6E9sycBY79vdaY5U1FPyYZPuFxqBXtxFTxmCYvrEjr620
-        6gR4tFX9TtdUtDAw==
+        bh=VtDcNKByG3QGqBaMWteEmBlx8o79YaY4wIW5CrphOKI=;
+        b=ZLjODydBGy8cvSTodcStIAcmZAy/XrGuM8TLpXQA6c10hgPy1SCLXFLe3hFmS5CqBcJDXp
+        pZHsXusMPUdgkGCg==
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
@@ -68,13 +68,14 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: Re: [patch v3 13/36] x86/smpboot: Remove cpu_callin_mask
-In-Reply-To: <20230509104915.GX83892@hirez.programming.kicks-ass.net>
+Subject: Re: [patch v3 14/36] [patch V2 14/38] cpu/hotplug: Rework
+ sparse_irq locking in bringup_cpu()
+In-Reply-To: <20230509110223.GY83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
- <20230508185217.956149661@linutronix.de>
- <20230509104915.GX83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 14:09:44 +0200
-Message-ID: <87h6sl1zav.ffs@tglx>
+ <20230508185218.013044883@linutronix.de>
+ <20230509110223.GY83892@hirez.programming.kicks-ass.net>
+Date:   Tue, 09 May 2023 14:10:06 +0200
+Message-ID: <87ednp1za9.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,21 +88,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09 2023 at 12:49, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:43:47PM +0200, Thomas Gleixner wrote:
->> -	/*
->> -	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
->> -	 * but just sets the bit to let the controlling CPU (BSP) know that
->> -	 * it's got this far.
->> -	 */
->>  	smp_callin();
->>  
->>  	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
+On Tue, May 09 2023 at 13:02, Peter Zijlstra wrote:
+> On Mon, May 08, 2023 at 09:43:49PM +0200, Thomas Gleixner wrote:
+>> From: Thomas Gleixner <tglx@linutronix.de>
+>> 
+>> There is no harm to hold sparse_irq lock until the upcoming CPU completes
+>> in cpuhp_online_idle(). This allows to remove cpu_online() synchronization
+>> from architecture code.
 >
-> Good riddance to that mask; however is smp_callin() still an appropriate
-> name for that function?
->
-> Would smp_starting() -- seeing how this kicks of CPU_STARTING not be a
-> better name?
+> Uuuuuhh.. damn. Can you at the very least ammend the comment near
+> irq_lock_sparse() to mention these extra duties?
 
-Something like that, yes.
+Will do.
