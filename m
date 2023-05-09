@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1446FC5D9
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACDE6FC5E5
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjEIMIg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 08:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S235569AbjEIMJ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 08:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbjEIMIe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:08:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03097272D;
-        Tue,  9 May 2023 05:08:33 -0700 (PDT)
+        with ESMTP id S235531AbjEIMJZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:09:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C402698;
+        Tue,  9 May 2023 05:09:24 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683634111;
+        s=2020; t=1683634163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=auvnPlCdrxbwfVCryOkTHE8CzjY0504gnLY8d2dRonQ=;
-        b=wafQfE3T818swYq6uLvh8KHiTe44B+AlTcCuev0YTvhSecK7fkanUUlrOFuq1HA2ASd8t+
-        BU6tHwwDMQA0mZaxMylheStrGpAitYQ7e4+1xdIBRK50qlGuPKGUbpzNoPFc/U7pFg4vp7
-        3txn/u3LsCuYBQ0eNUlaTm7ZlGVH1WlsNSZfP3xwKGSzwPqUJorHyzC7YM1MHYvCO7Lmx3
-        BiJQOvEs+Zr/r7cQvp3o3X/HSCezUruhmuDtMYKpw4lmxWL4y4XK9Xj0Ms0sscYlMfQk/M
-        8L9/ObIQjuOr/DXSdupvrplmykX+MkwMcI4Kqk1nxIkYGFdBkt+5ECVVyItbUg==
+        bh=JzzIG9diO0rBmRqXNA2vITQ7laniNDqcQjUI61xR0zc=;
+        b=yGBgjZXX7JUQf9ai2BxNAcE40QqlbbCZvKDivZ8fc+Ky9mAI/0ueQdDzNtDVuilsrvxJJO
+        lJ5mhaodIDGsYlQ0IXQvZ9tZytQody5uNCpERHh6I46d500WQf2vjLSAaSUonj1VM7S27k
+        ijKtUP6m6oR8ZuUZRNmjosyunXeQRrX26+o4C4sXaWq1kq0u9zQ+mYZBmKYBPh+6Nuyz6J
+        ha7BRefsXdcuOh0ABNgFpkVgNGLsV2g+kzTN5Fz65Tux9qtwNHNwfsc6BXGq7Rw/qb5o8h
+        P5C95248r6aRH+rMJbxtb6dCXh+b7CBcpY6Wfvf0ny/k2Ev6eJ3Z3YSX7s1qRw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683634111;
+        s=2020e; t=1683634163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=auvnPlCdrxbwfVCryOkTHE8CzjY0504gnLY8d2dRonQ=;
-        b=iQxVDqhAuaPEJSQzwxbX/REaKwQ08dwCm2L5m3NrRVeFnmsUvKPu/IfGcUkN/jYTMsh6S3
-        yqlu1nzMP1/UIxCA==
+        bh=JzzIG9diO0rBmRqXNA2vITQ7laniNDqcQjUI61xR0zc=;
+        b=fUDzvynzHE21pHjVwgqzy6eWSyFgbVajRkQas+BUCgv8eUYACTe86SoKSEy94dBf+BbPut
+        fM8AU/kPvb2mGGDg==
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
@@ -71,12 +71,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw@amazon.co.uk>
 Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
  separate phases and document them
-In-Reply-To: <20230509101902.GV83892@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230509103146.GW83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
  <20230508185217.671595388@linutronix.de>
- <20230509101902.GV83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 14:08:31 +0200
-Message-ID: <87mt2d1zcw.ffs@tglx>
+ <20230509103146.GW83892@hirez.programming.kicks-ass.net>
+Date:   Tue, 09 May 2023 14:09:23 +0200
+Message-ID: <87jzxh1zbg.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,26 +89,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09 2023 at 12:19, Peter Zijlstra wrote:
+On Tue, May 09 2023 at 12:31, Peter Zijlstra wrote:
 > On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
->> @@ -1048,60 +1066,89 @@ static int do_boot_cpu(int apicid, int c
+>> +	/*
+>> +	 * Wait for the AP to mark itself online, so the core caller
+>> +	 * can drop sparse_irq_lock.
+>> +	 */
+>> +	while (!cpu_online(cpu))
+>> +		schedule();
+>> +}
 >
-> 	/*
-> 	 * AP might wait on cpu_callout_mask in cpu_init() with
-> 	 * cpu_initialized_mask set if previous attempt to online
-> 	 * it timed-out. Clear cpu_initialized_mask so that after
-> 	 * INIT/SIPI it could start with a clean state.
-> 	 */
-> 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
-> 	smp_mb();
+> These schedule() loops make me itch... this is basically Ye Olde yield()
+> loop with all it's known 'benefits'.
 >
-> ^^^ that barrier is weird too, cpumask_clear_cpu() is an atomic op and
-> implies much the same (this is x86 after all). If you want to be super
-> explicit about it write:
+> Now, I don't think it's horribly broken, we're explicitly waiting on
+> another CPU and can't have priority inversions, but yuck!
 >
-> 	smp_mb__after_atomic();
->
-> (which is a no-op) but then it still very much requires a comment as to
-> what exactly it orders against what.
+> It could all be somewhat cleaned up with wait_var_event{_timeout}() and
+> wake_up_var(), but I'm really not sure that's worth it. But at least it
+> requires a comment to justify.
 
-As this is gone a few patches later, I just be lazy and leave it alone.
+All of them are gone with the later patches and the control CPU will
+just go straight to wait for the completion in the core code.
+
