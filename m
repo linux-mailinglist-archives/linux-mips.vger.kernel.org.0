@@ -2,94 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E93D6FC723
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931D36FC7B2
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 15:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjEIMxz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 08:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S235482AbjEINPo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 09:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbjEIMxy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:53:54 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A96A19A2
-        for <linux-mips@vger.kernel.org>; Tue,  9 May 2023 05:53:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-966287b0f72so598200766b.0
-        for <linux-mips@vger.kernel.org>; Tue, 09 May 2023 05:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683636830; x=1686228830;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AQ1fu2WVit0XpFYJO1HVXZdtM09g9xg4NWdbjKfjcdw=;
-        b=NRJa4wR0L5sxYiBYsjvaSotaEAr3i/z5gi+yJfZyMbQ9M1G3IZF2Vg+1deYmCTWkeq
-         sKoIpW1DstIc1l7EsIA5+Xviu/cOAXuZ944ggjj338Z1SOs4WjNv35C+Oiipi8IEuo3R
-         QfLJm9Rk7r+efYiB53saEWK5bhdifTQKOFwDtQsSsDEhmCSrUp0CaEX0j+la+X05qCzu
-         USi6IROBozT9gZ8Lr2FzpHkxrdCpkKIxUqP7WoOvJ1zfuwWM921C8uW19ygPCfIBVYPw
-         vq30JP/lg7Bebnh0vdQYH27930zpQoTYp1Zk2tNFcoNOjDpUCm2Po5IXcAD2Jcu+1o0h
-         sh3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683636830; x=1686228830;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQ1fu2WVit0XpFYJO1HVXZdtM09g9xg4NWdbjKfjcdw=;
-        b=Km9FMaxBziFAdm762E8fmXHDbt/BikCer2Jk4+avxvnXby2AlTEuMFe8wWDyLvHG6o
-         XpwkJwKKI0TegqHRIf9buy3Q3LNOqYUaAJofPMJmmoZ20gzGurKx1YhPTor3jWiqGnpw
-         ggz1VXb06BTYePN2Bdhg9pvvRRnSXHTMdE7ginvbquzizIdDZZN+w+xWDo3UQ35YFhyP
-         dD5LG+k/nQUzWCPLqVWXAQPri2M2HMdjf7aU4DP8UoltjX5JShdbPWp9RsOdbN26wndR
-         MFJ9bYc/F6I8iac/7PIqTalDstwGlClQVoopFvenSNghf1Iqe+4E/aj2mmcH1rgP0/1W
-         Q/fQ==
-X-Gm-Message-State: AC+VfDw13RGlm3GkPUDFEPu/Yz4vyYxPtvNq8OH6ZZGOC/20x7aQ88Qc
-        QLLAiRDkIbBiW5Lvl1XNVjTy2Q==
-X-Google-Smtp-Source: ACHHUZ5rMdpsKWEvTTEh/DvsOL9NDyPEkz0z+m31zmJLkkf82u2ZmFAqnlUjBTnJ0ThDeANQb8DwXg==
-X-Received: by 2002:a17:907:9454:b0:953:291a:6705 with SMTP id dl20-20020a170907945400b00953291a6705mr12123308ejc.17.1683636830597;
-        Tue, 09 May 2023 05:53:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id gz4-20020a170907a04400b009571293d6acsm1294306ejc.59.2023.05.09.05.53.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 05:53:48 -0700 (PDT)
-Message-ID: <ffa9077a-db13-8272-fea1-93290f8bcd6b@linaro.org>
-Date:   Tue, 9 May 2023 14:53:47 +0200
+        with ESMTP id S235487AbjEINPl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 09:15:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962135251;
+        Tue,  9 May 2023 06:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=khqr0MrXgdTVdwiWa8T0MGcDfR6bo4jGzZcTutjT+jQ=; b=AEUW7P6wHkheamaa+eBuAM5GlC
+        HfXe2ylLtWfcka1eSHoTdooMv0rHLwy/4UXXJfZaPtCYmRmGdjmuMt/FClhve6qLhrukTIXm+8N+x
+        nnGp+Vzv9Hegi36E8Rf/r4OzxVgdZvlwWMFCYnhPsYrrh5BHtNngH7k2UHSRocxMaqFkCSuUYHGyM
+        EsKfIzE5XcxVl6vZOctnKdun9FsIUQbYBW2M+Z1E/CAIBnpced8CJq1O4rRlwdi1xMIKktEKJ2RfE
+        L+hwPaIMMTATJdkHhod0l8xSQ9RsSKpUEP7+RkcJIh1jBJKJkRFGUcEM0nLnU4e2CbQIrer3yhEJm
+        rDt36aIw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pwNA0-00FGci-C9; Tue, 09 May 2023 13:13:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B23CD30026A;
+        Tue,  9 May 2023 15:13:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9497920B41FB2; Tue,  9 May 2023 15:13:40 +0200 (CEST)
+Date:   Tue, 9 May 2023 15:13:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [patch v3 34/36] x86/smpboot: Implement a bit spinlock to
+ protect the realmode stack
+Message-ID: <20230509131340.GA83892@hirez.programming.kicks-ass.net>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185219.123719053@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 2/3] ASoC: ingenic: Add compatible string for X1000 SoC
-Content-Language: en-US
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, tsbogend@alpha.franken.de,
-        paul@crapouillou.net
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
- <20230509124238.195191-2-aidanmacdonald.0x0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230509124238.195191-2-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508185219.123719053@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/05/2023 14:42, Aidan MacDonald wrote:
-> The audio controller in the X1000 is similar to the JZ47xx SoCs.
-> 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  Documentation/devicetree/bindings/sound/ingenic,aic.yaml | 1 +
+On Mon, May 08, 2023 at 09:44:22PM +0200, Thomas Gleixner wrote:
 
-Subject: missing dt-bindings prefix (second).
+> @@ -252,6 +252,17 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>  	movq	TASK_threadsp(%rax), %rsp
+>  
+>  	/*
+> +	 * Now that this CPU is running on its own stack, drop the realmode
+> +	 * protection. For the boot CPU the pointer is NULL!
+> +	 */
+> +	movq	trampoline_lock(%rip), %rax
+	movl	$0, (%rax)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +.Lsetup_gdt:
+> +	/*
+>  	 * We must switch to a new descriptor in kernel space for the GDT
+>  	 * because soon the kernel won't have access anymore to the userspace
+>  	 * addresses where we're currently running on. We have to do that here
 
-Best regards,
-Krzysztof
+> --- a/arch/x86/realmode/rm/trampoline_64.S
+> +++ b/arch/x86/realmode/rm/trampoline_64.S
+> @@ -37,6 +37,24 @@
+>  	.text
+>  	.code16
+>  
+> +.macro LOAD_REALMODE_ESP
+> +	/*
+> +	 * Make sure only one CPU fiddles with the realmode stack
+> +	 */
+> +.Llock_rm\@:
+> +	btl	$0, tr_lock
+> +	jnc	2f
+> +	pause
+> +	jmp	.Llock_rm\@
+> +2:
+> +	lock
+> +	btsl	$0, tr_lock
+> +	jc	.Llock_rm\@
 
+Do we really care about performance here; or should we pick the simpler
+form? Also, 'lock' is a prefix, not an instruction.
+
+.Llock_rm\@:
+	lock btsl	$0, tr_lock;
+	jnc		2f
+	pause
+	jmp		.Llock_rm\@
+2:
+
+> +
+> +	# Setup stack
+> +	movl	$rm_stack_end, %esp
+> +.endm
+> +
+>  	.balign	PAGE_SIZE
