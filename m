@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6556FC5F8
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D90A6FC5FD
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235643AbjEIMKO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 08:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        id S235569AbjEIMMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 08:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235674AbjEIMKK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:10:10 -0400
+        with ESMTP id S235510AbjEIMMP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:12:15 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BC94202;
-        Tue,  9 May 2023 05:10:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DCE3C25;
+        Tue,  9 May 2023 05:12:14 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683634206;
+        s=2020; t=1683634332;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=VtDcNKByG3QGqBaMWteEmBlx8o79YaY4wIW5CrphOKI=;
-        b=ozV/VUOhCbdvdcwqxdtfXZdcaA90ARKwOnYQBRouWIahnMXGWDMqDNjRrHC/BBYWjq5SZl
-        0zVkjwMN1HrH8Nj5PlcDw7JkrmEq1wl2opWaW4iHlUWYz9rS55vTCEV7bvHci0YQS0msKe
-        OiKR9k0tA7izR2CPXGYcFUsQfK7A+x/0KRvkRZX+qrF7KiQIDhvs0oyXBpq1rxJdGhfGCh
-        MYC6WnITSxgPyRjiVJDU49KaDy0xrS7hBHILcujYL+/hxIaH+NoGh3k9eNjkZ5FjVDbyZQ
-        FdCg0ek5JAc2T8OI8FHkzUUTTsC4j7rKC+fqFmbcQZsqVeexs2oybxw7tmiGyQ==
+        bh=OeDWxrG4XUYobVqWgAe3O2JPVJDj89o+5jrCfskGJg8=;
+        b=hl/TK4RBTejer0s1ss/VQWoTE3DJHIErNy5ObBMt3F35AuGijMu5SQIYqEXIyyWfguIJ74
+        IuVIsOwOjI+DOYpi1oyZvtSrA4xy0VqeURht3o6yDrYLZd0dCj9sQmFOFO0ByR3FGuzx1X
+        DX/4mqvZ8z2EcTfmL6YwZj0AheRNPYO2Sw/CFuIRodeNmQ9+fMov+UrbzmNB3mOPDT4LpP
+        XixRF4zedTnImudhtqeC8vGLPe0PN84sIltm+fYhikFa7xWpApb8aT+EKAws94oS5Kw77W
+        ZD3DPvNRfQa9kERCm1KsnYEOdLoCE866a9iJjH9pstUyHznEaCqcjcX+ulrAEw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683634206;
+        s=2020e; t=1683634332;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=VtDcNKByG3QGqBaMWteEmBlx8o79YaY4wIW5CrphOKI=;
-        b=ZLjODydBGy8cvSTodcStIAcmZAy/XrGuM8TLpXQA6c10hgPy1SCLXFLe3hFmS5CqBcJDXp
-        pZHsXusMPUdgkGCg==
+        bh=OeDWxrG4XUYobVqWgAe3O2JPVJDj89o+5jrCfskGJg8=;
+        b=C/RxUkGIvC1trkLde7ELOcrRJTFX/YyTBVeqxDPOcpgYwMXYyUXrtmmSUhQ5qz65ax/jQH
+        CAvGiAfvhE+ZmGAQ==
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
@@ -68,14 +68,14 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: Re: [patch v3 14/36] [patch V2 14/38] cpu/hotplug: Rework
- sparse_irq locking in bringup_cpu()
-In-Reply-To: <20230509110223.GY83892@hirez.programming.kicks-ass.net>
+Subject: Re: [patch v3 18/36] [patch V2 18/38] cpu/hotplug: Add CPU state
+ tracking and synchronization
+In-Reply-To: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
- <20230508185218.013044883@linutronix.de>
- <20230509110223.GY83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 14:10:06 +0200
-Message-ID: <87ednp1za9.ffs@tglx>
+ <20230508185218.240871842@linutronix.de>
+ <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
+Date:   Tue, 09 May 2023 14:12:12 +0200
+Message-ID: <87bkit1z6r.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,15 +88,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09 2023 at 13:02, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:43:49PM +0200, Thomas Gleixner wrote:
->> From: Thomas Gleixner <tglx@linutronix.de>
->> 
->> There is no harm to hold sparse_irq lock until the upcoming CPU completes
->> in cpuhp_online_idle(). This allows to remove cpu_online() synchronization
->> from architecture code.
+On Tue, May 09 2023 at 13:07, Peter Zijlstra wrote:
+> On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
 >
-> Uuuuuhh.. damn. Can you at the very least ammend the comment near
-> irq_lock_sparse() to mention these extra duties?
+>> +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
+>> +{
+>> +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
+>> +	int sync = atomic_read(st);
+>> +
+>> +	while (!atomic_try_cmpxchg(st, &sync, state));
+>> +}
+>
+> Why isn't:
+>
+> 	atomic_set(st, state);
+>
+> any good?
 
-Will do.
+Good question. It's only the other side (control CPU) which needs to be
+careful.
+
+Thanks,
+
+        tglx
