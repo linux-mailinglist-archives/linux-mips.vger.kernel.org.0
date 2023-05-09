@@ -2,63 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D5E6FC52A
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 13:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74446FC5CE
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 14:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235562AbjEILkM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 07:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
+        id S235320AbjEIMHX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 08:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbjEILj7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 07:39:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574EF5FF5;
-        Tue,  9 May 2023 04:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683632389; x=1715168389;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ySFbRMPE5woE8/OgNoxQ54y0KJ1ObhlKfMTwKQtAX0Q=;
-  b=jZb6ww1jV6SJbSarmcboblKT2xDNiFTrQBaXgYyWb1joz8yrrp9JKlXn
-   9pIg9uaynf4Jp0BpHAGkbrXCUGvUFIc8kG2CInj+IjBeI3XC16cRsRDbk
-   XTn7jR7lUBoa2xty019f3e477c8LBHY/iZjTLDhD3YEVQ52oK6T2DalPL
-   Io3OGMv28ru6nx6+Mf/SoUzzgeYHABhUBAIsyh4QFbFq/PHyzDLkqHJF/
-   bLWvm/Ju8vgPf3d2nP9fGOvFFG2o2BaLmn37mLx9ld7qVfoJqMm9h9H9l
-   f/bsea2JwHRoiDjdUipRZl/T8GIABx8i3I/Rf3V9QmkpigaZanRKqLOGw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="347362088"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="347362088"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 04:39:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="763805948"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="763805948"
-Received: from mbrdon-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.219.121])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 04:39:46 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        with ESMTP id S235359AbjEIMHX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 08:07:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C5730D5;
+        Tue,  9 May 2023 05:07:22 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683634040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8MCFM0FDR2P5xT6w7iIAowrB6rGKJkA6dzl9HivHWk=;
+        b=WQKf9JTpFPSQGT0uFg5INijnVR8R5fqcikzHfuS5DVBLQGQ7GwJQT+EVszHAmjT/3/UBuz
+        qVYnARbWYomJ6gliEb43t5la/h6VifzuO+zL/GRl0NjzHXmgK5N/FGwqL06FgLMkljqBFm
+        XyfTJfmksGnqa6BjZhyerBbGE6iuFhkjn27fQrUXAQ1QApceQPW64uUNRla+fMpap+pUkk
+        SWZ9l1mk0piAcuHN5EvFC700NqxfjfjIo2TZ35Uf44N6qz9M7DRMymepQA2ZWVsdTMQEJG
+        ZopQRoGBKBzZCgD4GsYTMKx5vSxJBSs3/zJnl8HdNjGWI5X3/Fou00r0/4324g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683634040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8MCFM0FDR2P5xT6w7iIAowrB6rGKJkA6dzl9HivHWk=;
+        b=HEbhRwUpE3y701WVF4If5EM5F8H8s6m0+F3iRYhv9+fKfUn3XmN66AS4uimVHFaZrmTvUY
+        YoYD1EwiDwf+ofDQ==
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 4/6] serial: 8250: RT288x/Au1xxx code away from core
-Date:   Tue,  9 May 2023 14:39:22 +0300
-Message-Id: <20230509113924.19540-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230509113924.19540-1-ilpo.jarvinen@linux.intel.com>
-References: <20230509113924.19540-1-ilpo.jarvinen@linux.intel.com>
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
+ separate phases and document them
+In-Reply-To: <20230509100421.GU83892@hirez.programming.kicks-ass.net>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185217.671595388@linutronix.de>
+ <20230509100421.GU83892@hirez.programming.kicks-ass.net>
+Date:   Tue, 09 May 2023 14:07:20 +0200
+Message-ID: <87pm791zev.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,448 +89,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A non-trivial amount of RT288x/Au1xxx code is encapsulated into
-ifdeffery in 8250_port / 8250_early and some if UPIO_AU blocks.
-Create a separate file from them.
+On Tue, May 09 2023 at 12:04, Peter Zijlstra wrote:
+> On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
+>> +	/*
+>> +	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
+>> +	 * but just sets the bit to let the controlling CPU (BSP) know that
+>> +	 * it's got this far.
+>> +	 */
+>>  	smp_callin();
+>>  
+>> -	/* otherwise gcc will move up smp_processor_id before the cpu_init */
+>> +	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
+>>  	barrier();
+>
+> Not to the detriment of this patch, but this barrier() and it's comment
+> seem weird vs smp_callin(). That function ends with an atomic bitop (it
+> has to, at the very least it must not be weaker than store-release) but
+> also has an explicit wmb() to order setup vs CPU_STARTING.
+>
+> (arguably that should be a full fence *AND* get a comment)
+>
+> There is no way the smp_processor_id() referred to in this comment can
+> land before cpu_init() even without the barrier().
 
-Also handle errors properly in the cases where RT288x/Au1xxx code is
-not configured.
+Right. Let me clean that up.
 
-It seems that 0x1000 mapsize is likely overkill but I've kept it the
-same as previously (the value was shrunk to that value in commit
-b2b13cdfd05e ("SERIAL 8250: Fixes for Alchemy UARTs.")). Seemingly, the
-driver only needs to access register at 0x28 for the divisor latch.
+Thanks,
 
-The Kconfig side is a bit tricky. As SERIAL_8250_RT288X is bool it can
-only be =y. It is possible to have SERIAL_8250=m + SERIAL_8250_RT288X=y
-which required altering when 8250/ is included or the rt288x would not
-be built.
-
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- arch/mips/alchemy/common/platform.c   |  10 +-
- drivers/tty/serial/8250/8250_early.c  |  21 ----
- drivers/tty/serial/8250/8250_of.c     |   4 +-
- drivers/tty/serial/8250/8250_port.c   |  78 --------------
- drivers/tty/serial/8250/8250_rt288x.c | 142 ++++++++++++++++++++++++++
- drivers/tty/serial/8250/Makefile      |   1 +
- drivers/tty/serial/Makefile           |   2 +-
- include/linux/serial_8250.h           |   8 +-
- 8 files changed, 161 insertions(+), 105 deletions(-)
- create mode 100644 drivers/tty/serial/8250/8250_rt288x.c
-
-diff --git a/arch/mips/alchemy/common/platform.c b/arch/mips/alchemy/common/platform.c
-index b8f3397c59c9..d4ab34b3b404 100644
---- a/arch/mips/alchemy/common/platform.c
-+++ b/arch/mips/alchemy/common/platform.c
-@@ -51,9 +51,9 @@ static void alchemy_8250_pm(struct uart_port *port, unsigned int state,
- #define PORT(_base, _irq)					\
- 	{							\
- 		.mapbase	= _base,			\
-+		.mapsize	= 0x1000,			\
- 		.irq		= _irq,				\
- 		.regshift	= 2,				\
--		.iotype		= UPIO_AU,			\
- 		.flags		= UPF_SKIP_TEST | UPF_IOREMAP | \
- 				  UPF_FIXED_TYPE,		\
- 		.type		= PORT_16550A,			\
-@@ -124,8 +124,14 @@ static void __init alchemy_setup_uarts(int ctype)
- 	au1xx0_uart_device.dev.platform_data = ports;
- 
- 	/* Fill up uartclk. */
--	for (s = 0; s < c; s++)
-+	for (s = 0; s < c; s++) {
- 		ports[s].uartclk = uartclk;
-+		if (au_platform_setup(&ports[s]) < 0) {
-+			kfree(ports);
-+			printk(KERN_INFO "Alchemy: missing support for UARTs\n");
-+			return;
-+		}
-+	}
- 	if (platform_device_register(&au1xx0_uart_device))
- 		printk(KERN_INFO "Alchemy: failed to register UARTs\n");
- }
-diff --git a/drivers/tty/serial/8250/8250_early.c b/drivers/tty/serial/8250/8250_early.c
-index 0ebde0ab8167..4299a8bd83d9 100644
---- a/drivers/tty/serial/8250/8250_early.c
-+++ b/drivers/tty/serial/8250/8250_early.c
-@@ -36,7 +36,6 @@
- 
- static unsigned int serial8250_early_in(struct uart_port *port, int offset)
- {
--	int reg_offset = offset;
- 	offset <<= port->regshift;
- 
- 	switch (port->iotype) {
-@@ -50,8 +49,6 @@ static unsigned int serial8250_early_in(struct uart_port *port, int offset)
- 		return ioread32be(port->membase + offset);
- 	case UPIO_PORT:
- 		return inb(port->iobase + offset);
--	case UPIO_AU:
--		return port->serial_in(port, reg_offset);
- 	default:
- 		return 0;
- 	}
-@@ -59,7 +56,6 @@ static unsigned int serial8250_early_in(struct uart_port *port, int offset)
- 
- static void serial8250_early_out(struct uart_port *port, int offset, int value)
- {
--	int reg_offset = offset;
- 	offset <<= port->regshift;
- 
- 	switch (port->iotype) {
-@@ -78,9 +74,6 @@ static void serial8250_early_out(struct uart_port *port, int offset, int value)
- 	case UPIO_PORT:
- 		outb(value, port->iobase + offset);
- 		break;
--	case UPIO_AU:
--		port->serial_out(port, reg_offset, value);
--		break;
- 	}
- }
- 
-@@ -199,17 +192,3 @@ OF_EARLYCON_DECLARE(omap8250, "ti,omap3-uart", early_omap8250_setup);
- OF_EARLYCON_DECLARE(omap8250, "ti,omap4-uart", early_omap8250_setup);
- 
- #endif
--
--#ifdef CONFIG_SERIAL_8250_RT288X
--
--static int __init early_au_setup(struct earlycon_device *dev, const char *opt)
--{
--	dev->port.serial_in = au_serial_in;
--	dev->port.serial_out = au_serial_out;
--	dev->port.iotype = UPIO_AU;
--	dev->con->write = early_serial8250_write;
--	return 0;
--}
--OF_EARLYCON_DECLARE(palmchip, "ralink,rt2880-uart", early_au_setup);
--
--#endif
-diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-index 1b461fba15a3..c9f6bd7a7038 100644
---- a/drivers/tty/serial/8250/8250_of.c
-+++ b/drivers/tty/serial/8250/8250_of.c
-@@ -171,7 +171,9 @@ static int of_platform_serial_setup(struct platform_device *ofdev,
- 
- 	switch (type) {
- 	case PORT_RT2880:
--		port->iotype = UPIO_AU;
-+		ret = rt288x_setup(port);
-+		if (ret)
-+			goto err_unprepare;
- 		break;
- 	}
- 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 0622c11f0064..ae50744c6878 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -341,66 +341,6 @@ static void default_serial_dl_write(struct uart_8250_port *up, u32 value)
- 	serial_out(up, UART_DLM, value >> 8 & 0xff);
- }
- 
--#ifdef CONFIG_SERIAL_8250_RT288X
--
--#define UART_REG_UNMAPPED	-1
--
--/* Au1x00/RT288x UART hardware has a weird register layout */
--static const s8 au_io_in_map[8] = {
--	[UART_RX]	= 0,
--	[UART_IER]	= 2,
--	[UART_IIR]	= 3,
--	[UART_LCR]	= 5,
--	[UART_MCR]	= 6,
--	[UART_LSR]	= 7,
--	[UART_MSR]	= 8,
--	[UART_SCR]	= UART_REG_UNMAPPED,
--};
--
--static const s8 au_io_out_map[8] = {
--	[UART_TX]	= 1,
--	[UART_IER]	= 2,
--	[UART_FCR]	= 4,
--	[UART_LCR]	= 5,
--	[UART_MCR]	= 6,
--	[UART_LSR]	= UART_REG_UNMAPPED,
--	[UART_MSR]	= UART_REG_UNMAPPED,
--	[UART_SCR]	= UART_REG_UNMAPPED,
--};
--
--unsigned int au_serial_in(struct uart_port *p, int offset)
--{
--	if (offset >= ARRAY_SIZE(au_io_in_map))
--		return UINT_MAX;
--	offset = au_io_in_map[offset];
--	if (offset == UART_REG_UNMAPPED)
--		return UINT_MAX;
--	return __raw_readl(p->membase + (offset << p->regshift));
--}
--
--void au_serial_out(struct uart_port *p, int offset, int value)
--{
--	if (offset >= ARRAY_SIZE(au_io_out_map))
--		return;
--	offset = au_io_out_map[offset];
--	if (offset == UART_REG_UNMAPPED)
--		return;
--	__raw_writel(value, p->membase + (offset << p->regshift));
--}
--
--/* Au1x00 haven't got a standard divisor latch */
--static u32 au_serial_dl_read(struct uart_8250_port *up)
--{
--	return __raw_readl(up->port.membase + 0x28);
--}
--
--static void au_serial_dl_write(struct uart_8250_port *up, u32 value)
--{
--	__raw_writel(value, up->port.membase + 0x28);
--}
--
--#endif
--
- static unsigned int hub6_serial_in(struct uart_port *p, int offset)
- {
- 	offset = offset << p->regshift;
-@@ -510,15 +450,6 @@ static void set_io_from_upio(struct uart_port *p)
- 		p->serial_out = mem32be_serial_out;
- 		break;
- 
--#ifdef CONFIG_SERIAL_8250_RT288X
--	case UPIO_AU:
--		p->serial_in = au_serial_in;
--		p->serial_out = au_serial_out;
--		up->dl_read = au_serial_dl_read;
--		up->dl_write = au_serial_dl_write;
--		break;
--#endif
--
- 	default:
- 		p->serial_in = io_serial_in;
- 		p->serial_out = io_serial_out;
-@@ -2968,11 +2899,6 @@ static unsigned int serial8250_port_size(struct uart_8250_port *pt)
- {
- 	if (pt->port.mapsize)
- 		return pt->port.mapsize;
--	if (pt->port.iotype == UPIO_AU) {
--		if (pt->port.type == PORT_RT2880)
--			return 0x100;
--		return 0x1000;
--	}
- 	if (is_omap1_8250(pt))
- 		return 0x16 << pt->port.regshift;
- 
-@@ -3222,10 +3148,6 @@ static void serial8250_config_port(struct uart_port *port, int flags)
- 	if (flags & UART_CONFIG_TYPE)
- 		autoconfig(up);
- 
--	/* if access method is AU, it is a 16550 with a quirk */
--	if (port->type == PORT_16550A && port->iotype == UPIO_AU)
--		up->bugs |= UART_BUG_NOMSR;
--
- 	/* HW bugs may trigger IRQ while IIR == NO_INT */
- 	if (port->type == PORT_TEGRA)
- 		up->bugs |= UART_BUG_NOMSR;
-diff --git a/drivers/tty/serial/8250/8250_rt288x.c b/drivers/tty/serial/8250/8250_rt288x.c
-new file mode 100644
-index 000000000000..51b1cf5476dd
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_rt288x.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * RT288x/Au1xxx driver
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/io.h>
-+#include <linux/init.h>
-+#include <linux/console.h>
-+#include <linux/serial.h>
-+#include <linux/serial_8250.h>
-+
-+#include "8250.h"
-+
-+#define UART_REG_UNMAPPED	-1
-+
-+/* Au1x00/RT288x UART hardware has a weird register layout */
-+static const s8 au_io_in_map[8] = {
-+	[UART_RX]	= 0,
-+	[UART_IER]	= 2,
-+	[UART_IIR]	= 3,
-+	[UART_LCR]	= 5,
-+	[UART_MCR]	= 6,
-+	[UART_LSR]	= 7,
-+	[UART_MSR]	= 8,
-+	[UART_SCR]	= UART_REG_UNMAPPED,
-+};
-+
-+static const s8 au_io_out_map[8] = {
-+	[UART_TX]	= 1,
-+	[UART_IER]	= 2,
-+	[UART_FCR]	= 4,
-+	[UART_LCR]	= 5,
-+	[UART_MCR]	= 6,
-+	[UART_LSR]	= UART_REG_UNMAPPED,
-+	[UART_MSR]	= UART_REG_UNMAPPED,
-+	[UART_SCR]	= UART_REG_UNMAPPED,
-+};
-+
-+static unsigned int au_serial_in(struct uart_port *p, int offset)
-+{
-+	if (offset >= ARRAY_SIZE(au_io_in_map))
-+		return UINT_MAX;
-+	offset = au_io_in_map[offset];
-+	if (offset == UART_REG_UNMAPPED)
-+		return UINT_MAX;
-+	return __raw_readl(p->membase + (offset << p->regshift));
-+}
-+
-+static void au_serial_out(struct uart_port *p, int offset, int value)
-+{
-+	if (offset >= ARRAY_SIZE(au_io_out_map))
-+		return;
-+	offset = au_io_out_map[offset];
-+	if (offset == UART_REG_UNMAPPED)
-+		return;
-+	__raw_writel(value, p->membase + (offset << p->regshift));
-+}
-+
-+/* Au1x00 haven't got a standard divisor latch */
-+static u32 au_serial_dl_read(struct uart_8250_port *up)
-+{
-+	return __raw_readl(up->port.membase + 0x28);
-+}
-+
-+static void au_serial_dl_write(struct uart_8250_port *up, u32 value)
-+{
-+	__raw_writel(value, up->port.membase + 0x28);
-+}
-+
-+int au_platform_setup(struct plat_serial8250_port *p)
-+{
-+	p->iotype = UPIO_AU;
-+
-+	p->serial_in = au_serial_in;
-+	p->serial_out = au_serial_out;
-+	p->dl_read = au_serial_dl_read;
-+	p->dl_write = au_serial_dl_write;
-+
-+	p->mapsize = 0x1000;
-+
-+	p->bugs |= UART_BUG_NOMSR;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(au_platform_setup);
-+
-+int rt288x_setup(struct uart_port *p)
-+{
-+	struct uart_8250_port *up = up_to_u8250p(p);
-+
-+	p->iotype = UPIO_AU;
-+
-+	p->serial_in = au_serial_in;
-+	p->serial_out = au_serial_out;
-+	up->dl_read = au_serial_dl_read;
-+	up->dl_write = au_serial_dl_write;
-+
-+	p->mapsize = 0x100;
-+
-+	up->bugs |= UART_BUG_NOMSR;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(rt288x_setup);
-+
-+#ifdef CONFIG_SERIAL_8250_CONSOLE
-+static void au_putc(struct uart_port *port, unsigned char c)
-+{
-+	unsigned int status;
-+
-+	au_serial_out(port, UART_TX, c);
-+
-+	for (;;) {
-+		status = au_serial_in(port, UART_LSR);
-+		if (uart_lsr_tx_empty(status))
-+			break;
-+		cpu_relax();
-+	}
-+}
-+
-+static void au_early_serial8250_write(struct console *console,
-+				      const char *s, unsigned int count)
-+{
-+	struct earlycon_device *device = console->data;
-+	struct uart_port *port = &device->port;
-+
-+	uart_console_write(port, s, count, au_putc);
-+}
-+
-+static int __init early_au_setup(struct earlycon_device *dev, const char *opt)
-+{
-+	rt288x_setup(&dev->port);
-+	dev->con->write = au_early_serial8250_write;
-+
-+	return 0;
-+}
-+OF_EARLYCON_DECLARE(palmchip, "ralink,rt2880-uart", early_au_setup);
-+#endif
-+
-+MODULE_DESCRIPTION("RT288x/Au1xxx UART driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index 4fc2fc1f41b6..628b75be312e 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -35,6 +35,7 @@ obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
- obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
- obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
- obj-$(CONFIG_SERIAL_8250_OMAP)		+= 8250_omap.o
-+obj-$(CONFIG_SERIAL_8250_RT288X)	+= 8250_rt288x.o
- obj-$(CONFIG_SERIAL_8250_LPC18XX)	+= 8250_lpc18xx.o
- obj-$(CONFIG_SERIAL_8250_MT6577)	+= 8250_mtk.o
- obj-$(CONFIG_SERIAL_8250_UNIPHIER)	+= 8250_uniphier.o
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index cd9afd9e3018..531ec3a19dae 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -21,7 +21,7 @@ obj-$(CONFIG_SERIAL_SUNSAB) += sunsab.o
- obj-$(CONFIG_SERIAL_21285) += 21285.o
- 
- # Now bring in any enabled 8250/16450/16550 type drivers.
--obj-$(CONFIG_SERIAL_8250) += 8250/
-+obj-y += 8250/
- 
- obj-$(CONFIG_SERIAL_AMBA_PL010) += amba-pl010.o
- obj-$(CONFIG_SERIAL_AMBA_PL011) += amba-pl011.o
-diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
-index 82cd8d90a040..8f38be25eefa 100644
---- a/include/linux/serial_8250.h
-+++ b/include/linux/serial_8250.h
-@@ -7,6 +7,7 @@
- #ifndef _LINUX_SERIAL_8250_H
- #define _LINUX_SERIAL_8250_H
- 
-+#include <linux/errno.h>
- #include <linux/serial_core.h>
- #include <linux/serial_reg.h>
- #include <linux/platform_device.h>
-@@ -211,8 +212,11 @@ void serial8250_set_isa_configurator(void (*v)(int port, struct uart_port *up,
- 					       u32 *capabilities));
- 
- #ifdef CONFIG_SERIAL_8250_RT288X
--unsigned int au_serial_in(struct uart_port *p, int offset);
--void au_serial_out(struct uart_port *p, int offset, int value);
-+int rt288x_setup(struct uart_port *p);
-+int au_platform_setup(struct plat_serial8250_port *p);
-+#else
-+static inline int rt288x_setup(struct uart_port *p) { return -ENODEV; }
-+static inline int au_platform_setup(struct plat_serial8250_port *p) { return -ENODEV; }
- #endif
- 
- #endif
--- 
-2.30.2
-
+        tglx
