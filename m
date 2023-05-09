@@ -2,141 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8946FC29D
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 11:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106176FC2F0
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 11:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbjEIJUs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S233995AbjEIJiP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 05:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234945AbjEIJUY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 05:20:24 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CCE100C0;
-        Tue,  9 May 2023 02:20:17 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.73.203) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 9 May 2023
- 12:20:06 +0300
-Subject: Re: [patch v3 33/36] x86/apic: Save the APIC virtual base address
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     <x86@kernel.org>, David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        <xen-devel@lists.xenproject.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        <linux-csky@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        <linux-riscv@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185219.070274100@linutronix.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <a6f48a7b-484c-31af-f568-cb1de0d766d4@omp.ru>
-Date:   Tue, 9 May 2023 12:20:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20230508185219.070274100@linutronix.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.73.203]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 05/09/2023 08:58:12
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 177218 [May 07 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.203 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.203 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 178.176.73.203:7.4.1,7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.203
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/09/2023 09:07:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 5/9/2023 6:00:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229527AbjEIJiO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 05:38:14 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD9C1BB;
+        Tue,  9 May 2023 02:38:13 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 510B53200909;
+        Tue,  9 May 2023 05:38:09 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 09 May 2023 05:38:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683625088; x=1683711488; bh=JI
+        GYjICWF1iIfi0CDhSvRnlPKKVSNYNlDX65zfQiumM=; b=I4f00STfLlF/8uXCTH
+        3QpblrayO3QWqay0XoJFyDhSGixH93u1NpebSFNfjNuzTOvoj8liVXfe1F94W5Rf
+        OkSrKPsHW5CuU0O1n0k6mggu+GTBSI/aou3nmMYv4bopXJdWnRpImUuuJczssOQ+
+        nlk+zQ5fWguXF4QyfgIy+yXeh/fUk1+OamDH2mE02AK2FeEVzFdjp/ZkYF3f7WIC
+        LIwJOvrGNIHyMm3GfL+mc2A3QpjuHP/knTB/o3RrDaqIa6igFFLXbN2J2tS7W0OZ
+        O9Wt51WwuNP4vEqULDQIoB4aLzCG2tEy390anoUON9826Lqxxh2mvRVv16wDWwRA
+        CvaA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683625088; x=1683711488; bh=JIGYjICWF1iIf
+        i0CDhSvRnlPKKVSNYNlDX65zfQiumM=; b=irqHQQNUKUqvUAWpf1VIoKg/G9Bt6
+        oINt/vqLIbTfVMwG9Hc5BS3wM0rbLNDlp9dyFIk+K8+Yg+w4CyaCBkMNIzxaClt2
+        5hKEmXIfTpuX0D57VxY0NRbGmHgrdfX9LgmsqsHxxYojoy6cFD/h297xpqpZ2dCm
+        lgjUpyY5EApgsYS6fgKw+ibdPJPY3SWVhfBScpbBw297KiqjtIpYFOEKWx6uVBZE
+        b0R51rMZ6QfJDFCbYlMztsHMKOUmxxlKnwnj3kyD0ejAc+LApjOXTCP8sFBPBWbp
+        FSJfhVLzSwOexCHMh/u/lmkpf2d0AvcvV0c/5voSuhOmrHueXeXY33A2Q==
+X-ME-Sender: <xms:fxRaZA_Ub9iK8xWlXqyIcc6uOkdIYRFhQ2MO1HuoJ9dmIsXEFLaf3w>
+    <xme:fxRaZIvg7GcdRQOpg1jMA0HvMPQftuRhcyc5ZSdsuVGpbWVIflp8kq4JY9m-G-ZJV
+    SnIqkn0V04I_3L7-qg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegtddgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepheekfeduteffkeegieekvdffkedtkeeftefhfeejkeejgefhleekhfelheff
+    vdetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpshhouhhrtggvfigrrhgvrdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghr
+    nhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:fxRaZGDVHJPv_8wICJO5UOx_vULOMBKmGMOLmO0DbqAHdDw2Qx8Sgg>
+    <xmx:fxRaZAeGXsQCwZusXvgF1StxgPbYalneVgw_y3tnkrhLFMC_jy3rjA>
+    <xmx:fxRaZFMfYWVflVj5rOKIcutKIF5dLbPvZi1Iw7dHO-fYBDC-s9lWkg>
+    <xmx:gBRaZCcVsH6XHVXaai7iby-iCY4PxFduF5s1msWOAJRYZEdcbjifDA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 85FE3B60086; Tue,  9 May 2023 05:38:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+Mime-Version: 1.0
+Message-Id: <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
+In-Reply-To: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
+Date:   Tue, 09 May 2023 11:37:46 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Cc:     linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On Tue, May 9, 2023, at 09:05, Tiezhu Yang wrote:
+> Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
+> in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
+> usable, just define __BITS_PER_LONG as (__CHAR_BIT__ * __SIZEOF_LONG__) in
+> asm-generic uapi bitsperlong.h, simpler, works everywhere.
+>
+> Remove all the arch specific uapi bitsperlong.h which will be generated as
+> arch/*/include/generated/uapi/asm/bitsperlong.h.
+>
+> Suggested-by: Xi Ruoyao <xry111@xry111.site>
+> Link: 
+> https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-On 5/8/23 10:44 PM, Thomas Gleixner wrote:
+I originally introduced the bitsperlong.h header, and I'd love to
+see it removed if it's no longer needed. Your patch certainly
+seems like it does this well.
 
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> For parallel CPU brinugp it's required to read the APIC ID in the low level
-> startup code. The virtual APIC base address is a constant because its a
-> fix-mapped address. Exposing that constant which is composed via macros to
-> assembly code is non-trivial dues to header inclusion hell.
+There is one minor obstacle to this, which is that the compiler
+requirements for uapi headers are not the same as for kernel
+internal code. In particular, the uapi headers may be included
+by user space code that is built with an older compiler version,
+or with a compiler that is not gcc or clang.
 
-   s/dues/due/?
+I think we are completely safe on the architectures that were
+added since the linux-3.x days (arm64, riscv, csky, openrisc,
+loongarch, nios2, and hexagon), but for the older ones there
+is a regression risk. Especially on targets that are not that
+actively maintained (sparc, alpha, ia64, sh, ...) there is
+a good chance that users are stuck on ancient toolchains.
 
-> Aside of that it's constant only because of the vsyscall ABI
-> requirement. Once vsyscall is out of the picture the fixmap can be placed
-> at runtime.
-> 
-> Avoid header hell, stay flexible and store the address in a variable which
-> can be exposed to the low level startup code.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Michael Kelley <mikelley@microsoft.com>
+It's probably also a safe assumption that anyone with an older
+libc version won't be using the latest kernel headers, so
+I think we can still do this across architectures if both
+glibc and musl already require a compiler that is new enough,
+or alternatively if we know that the kernel headers require
+a new compiler for other reasons and nobody has complained.
 
-[...]
+For glibc, it looks the minimum compiler version was raised
+from gcc-5 to gcc-8 four years ago, so we should be fine.
 
-MBR, Sergey
+In musl, the documentation states that at least gcc-3.4 or
+clang-3.2 are required, which probably predate the
+__SIZEOF_LONG__ macro. On the other hand, musl was only
+released in 2011, and building musl itself explicitly
+does not require kernel uapi headers, so this may not
+be too critical.
+
+There is also uClibc, but I could not find any minimum
+supported compiler version for that. Most commonly, this
+one is used for cross-build environments, so it's also
+less likely to have libc/gcc/headers being wildly out of
+sync. Not sure.
+
+      Arnd
+
+[1] https://sourceware.org/pipermail/libc-alpha/2019-January/101010.html
