@@ -2,40 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84EA6FC49D
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 13:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D3A6FC51C
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 13:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235462AbjEILJG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 07:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S235281AbjEILhO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 07:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235464AbjEILJC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 07:09:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA40B106FC;
-        Tue,  9 May 2023 04:08:51 -0700 (PDT)
+        with ESMTP id S234976AbjEILhM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 07:37:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C7D19B1;
+        Tue,  9 May 2023 04:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jRJqPjkZDLfU3CkfoL3myLBABJzadgOWoNWDI32Y8LI=; b=vSapig8PT+X9FleUgN3U0CZtui
-        relRtn1zPe77P0WIAsoYme9WGw5tkGy2jBjW361caFHw1VfseDENIJEioGXGsAlXDL56EYU9zLoKK
-        sYtsAQy08WKeWKCMyQFs1KJSr/OyChBFdzqL/MxK7qab9fpOnk7H5jh5WbiYQN/4wFh+Pj/AmUjtw
-        QaFbJledlkQi5f022TKkXoXPhIOBe4yd/n6XLOTCL2wmgcVNokN/6W7o9qCPn/qVvfH0K0rQjHZ6A
-        RGMSVi/rBgBEn6a8OS6m8fLIOlG3fUbF/IUlHnmjqIk+2Iwkmd+PWpBK1wBJ3ULFWthvylMJrnGnM
-        mBfXf0KA==;
+        bh=9uy06VylNOBEAiDOc+c/ggtZsNSxY44p/M1PWpIHlTo=; b=AdPs8XtYEpkR3G25UQ9/ynnaJQ
+        yoQ7TJHtTer78qTxQSruGfUSIJdNhTXt+0UcvF9ygN5qgsE6skCGKlKdAU+XGBlszdQLENogWL1pZ
+        XLDEoXkr1kINeJ7StBwuvXlWsxIhr3i/RPNAsp79LBG8KMNp3MRdGeYKSudMDFtBS86uE8nzWEe5v
+        a8CfaEawnbrmqXklNcksitW8TUN0x1wEip6a7zDZlkdKaRBllociBadnbaExT9c9ou3QCvpRH4AgG
+        bSH5gSP2c1D5dxXxDWXZkTYGeRAN4a/hJ1z/YW9bJKB/4Im2NbAtVPF75WnxH6OHWaCKH0GsK31IY
+        N6mfY+UQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwLBl-00FBZV-VA; Tue, 09 May 2023 11:07:26 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwLdH-00678Y-0c;
+        Tue, 09 May 2023 11:35:52 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 20197300023;
-        Tue,  9 May 2023 13:07:23 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8F613302F3D;
+        Tue,  9 May 2023 13:35:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0504E20B0882C; Tue,  9 May 2023 13:07:22 +0200 (CEST)
-Date:   Tue, 9 May 2023 13:07:22 +0200
+        id 6D04F20C342B1; Tue,  9 May 2023 13:35:48 +0200 (CEST)
+Date:   Tue, 9 May 2023 13:35:48 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
@@ -73,13 +74,14 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 Subject: Re: [patch v3 18/36] [patch V2 18/38] cpu/hotplug: Add CPU state
  tracking and synchronization
-Message-ID: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
+Message-ID: <20230509113548.GD38236@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
  <20230508185218.240871842@linutronix.de>
+ <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508185218.240871842@linutronix.de>
+In-Reply-To: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -90,19 +92,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
+On Tue, May 09, 2023 at 01:07:23PM +0200, Peter Zijlstra wrote:
+> On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
+> 
+> > +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
+> > +{
+> > +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
+> > +	int sync = atomic_read(st);
+> > +
+> > +	while (!atomic_try_cmpxchg(st, &sync, state));
+> > +}
+> 
+> Why isn't:
+> 
+> 	atomic_set(st, state);
+> 
+> any good?
 
-> +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
-> +{
-> +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
-> +	int sync = atomic_read(st);
-> +
-> +	while (!atomic_try_cmpxchg(st, &sync, state));
-> +}
+Hmm, should at the very least be atomic_set_release(), but if you want
+the full barrier then:
 
-Why isn't:
+	(void)atomic_xchg(st, state);
 
-	atomic_set(st, state);
-
-any good?
-
+is the much saner way to write the above.
