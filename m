@@ -2,39 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FF76FC831
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 15:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2437F6FC852
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 15:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbjEINrk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 09:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S231544AbjEIN6q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 09:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbjEINrj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 09:47:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F63AB4;
-        Tue,  9 May 2023 06:47:38 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683640056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EiOLX/A8rFePD0DrbaikIW8S9TmO2h3FaFar7PON5hU=;
-        b=IDDtornM7g68QBrYy4uAnmWXjYq0L0EFNdR49PbDsHqDTgeml6v7RJL2t0m5sUXtVghPxN
-        Y9xm+Z8m/e3hKUrE5pyar8/KK0qEKQPlYka0/Tb3iMx+mgfeyMNL/O25jjjjRzlsdTv+0Z
-        8shI/utWzvYwqBv97NrrZDv7w4aKvhnGNE6KrmZ++Tu6qGaUft6vGLNO3kbS/OKo+Q0Re5
-        6QCYNHWmtfZwiB9EeOwWBrdDOurFiMNsscJ4jOZMujRqBwDip8CpD7bfEN2VdQMrgNJt2m
-        19jTmwkZ2nc1PLZHDKShrWj69L1Yd8FKDMqN/Q3H65LVSvPfuBkvDkQSP/O+tg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683640056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EiOLX/A8rFePD0DrbaikIW8S9TmO2h3FaFar7PON5hU=;
-        b=Qut7XwyPl0DgMnjgEWltV14QsYg9li7QYZrUkmEwn/8iVTGLbJy2fiNLjt0flPIbrA0rho
-        MvlgsTmYsK7KiKDA==
-To:     Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S229741AbjEIN6p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 09:58:45 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3B383;
+        Tue,  9 May 2023 06:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hI8/gqpI8woXdIossg1TLqD9QGRFHNBoUAZE5mW3mjQ=; b=GG2RnOQApmwDBLG6Gsm3njtVQf
+        QxqK9VGUrgp9oG3wZracPmQrcB+PBRcVxw73VjgtK1EMmZyecLmKDRZHvAfJpdPcc5RHZtTaq4xJD
+        Mbjqc7jH+sKLynVrQ64G6thUi4zwqh8rCYsg9Lp1iTW79Slo5Qe2L9QpI3n9DvhT3p7bA6TVmgAX9
+        8FkXE5EqF+OkD2XK8OFB/cQwLHDQ75opJ0AVpsGCIfoG/ikF4CYJw/Z3nYXvLfqJ6eD5BtnvJz2Bw
+        RLxcdIrVYS3ih1v97QwYZHxN2Pa2PpFaGa3IzYQuFTqIQDj8U8Z4tCDPnIp0p0jNTeEO6UhbNFTql
+        XWuyju0w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwNqk-0069ad-04;
+        Tue, 09 May 2023 13:57:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51BE730026A;
+        Tue,  9 May 2023 15:57:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3402820B08835; Tue,  9 May 2023 15:57:49 +0200 (CEST)
+Date:   Tue, 9 May 2023 15:57:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
@@ -69,19 +73,18 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch v3 34/36] x86/smpboot: Implement a bit spinlock to
- protect the realmode stack
-In-Reply-To: <20230509131340.GA83892@hirez.programming.kicks-ass.net>
+Subject: Re: [patch v3 35/36] x86/smpboot: Support parallel startup of
+ secondary CPUs
+Message-ID: <20230509135749.GB83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
- <20230508185219.123719053@linutronix.de>
- <20230509131340.GA83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 15:47:36 +0200
-Message-ID: <87v8h1zkef.ffs@tglx>
+ <20230508185219.176824543@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508185219.176824543@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,10 +92,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09 2023 at 15:13, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:44:22PM +0200, Thomas Gleixner wrote:
->
-> Do we really care about performance here; or should we pick the simpler
-> form? Also, 'lock' is a prefix, not an instruction.
+On Mon, May 08, 2023 at 09:44:23PM +0200, Thomas Gleixner wrote:
+> +	/*  APIC ID not found in the table. Drop the trampoline lock and bail. */
+> +	movq	trampoline_lock(%rip), %rax
 
-Right. KISS is the way to go.
+Again:
+
+	movl	$0, (%rax)
+
+is sufficient for unlock.
+
+> +	lock
+> +	btrl	$0, (%rax)
