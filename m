@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7070C6FC372
-	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 12:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BCE6FC3B6
+	for <lists+linux-mips@lfdr.de>; Tue,  9 May 2023 12:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbjEIKGt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 May 2023 06:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S234094AbjEIKUF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 May 2023 06:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbjEIKGr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 06:06:47 -0400
+        with ESMTP id S229519AbjEIKUE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 May 2023 06:20:04 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FA74220;
-        Tue,  9 May 2023 03:06:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE5230FA;
+        Tue,  9 May 2023 03:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iQWsW3vK30T3lTlKXPjWF0ZCCCbqYMC5X75lG5LhBXg=; b=cDPXLQL0z0hLF1/yioFQfmCaBB
-        N8lg3b/6x/H60+tu73L248gNyd5xmZKox7zPuU6VKCA8HcngpEx3i7EoIRxvCJJ2pou+WtOB8+c9l
-        YAHhjctqF48WprPL0AyMzqqVZVwEpLUFVHpyjG9u8qxjZkI2cmceUyq18t9h1WvD06PgFHVUtc705
-        oUIyYOlqGQYWw9krcv5O2YQSBJhVKeLH6KQpRFn783U2eBmeNUpii/ZsJVFV2chFCnrg6UHHo2dd7
-        DFXEbQ718ZPPJ5wbZiakPwUWdfgyQIDGAdRJdu8G/8DVLYhi0TuNwKpexszZz1O5menSPb5zkPzoM
-        5WEFDxwA==;
+        bh=PKLh6UaLISIjcUauhr3iF6UlbMhF5g8Vn0HXFbC39j0=; b=K8SrgFC3k1Pze4pOS36EiCmG5X
+        E4mGhrJh8Tp4MMzIggJmmXSFDZoSRoQqK8ZUoW5YCSL9s//gW2n7gBpJeQTN7vOfD2LUm3mpTdcjL
+        DTdVl75NGlZb4DOM8Wve9/AenoFUKmgzoAxcsYqONDoeb7PPUXjOxPipqJ24L4IRLmGatnmIZpg2K
+        HOlNGraQ3bkXrLYD9MfaMGh6bgWxWd7JPQwv1bSEkvzLwsfu5SOyXdDbvpO1kezDEFG52JV23LZ25
+        KZPTC+yVvXc+uJTxC9FqAeTMucXuRrB9TjfoerWv5xB7Ih77dPE2yMPM9BF4mN/7ksbc1OfszoqR+
+        0x9nU15w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwKCp-00F8Kf-BN; Tue, 09 May 2023 10:04:27 +0000
+        id 1pwKQx-00F95R-HR; Tue, 09 May 2023 10:19:03 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AE21E300451;
-        Tue,  9 May 2023 12:04:21 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4B1FF300451;
+        Tue,  9 May 2023 12:19:02 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 36C9B20B0882F; Tue,  9 May 2023 12:04:21 +0200 (CEST)
-Date:   Tue, 9 May 2023 12:04:21 +0200
+        id 29A6F20B21BBE; Tue,  9 May 2023 12:19:02 +0200 (CEST)
+Date:   Tue, 9 May 2023 12:19:02 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
@@ -74,7 +74,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw@amazon.co.uk>
 Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
  separate phases and document them
-Message-ID: <20230509100421.GU83892@hirez.programming.kicks-ass.net>
+Message-ID: <20230509101902.GV83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
  <20230508185217.671595388@linutronix.de>
 MIME-Version: 1.0
@@ -91,50 +91,42 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+
+Again, not really this patch, but since I had to look at this code ....
+
 On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
+> @@ -1048,60 +1066,89 @@ static int do_boot_cpu(int apicid, int c
 
-> @@ -233,14 +237,31 @@ static void notrace start_secondary(void
->  	load_cr3(swapper_pg_dir);
->  	__flush_tlb_all();
->  #endif
-> +	/*
-> +	 * Sync point with wait_cpu_initialized(). Before proceeding through
-> +	 * cpu_init(), the AP will call wait_for_master_cpu() which sets its
-> +	 * own bit in cpu_initialized_mask and then waits for the BSP to set
-> +	 * its bit in cpu_callout_mask to release it.
-> +	 */
->  	cpu_init_secondary();
->  	rcu_cpu_starting(raw_smp_processor_id());
->  	x86_cpuinit.early_percpu_clock_init();
-> +
-> +	/*
-> +	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
-> +	 * but just sets the bit to let the controlling CPU (BSP) know that
-> +	 * it's got this far.
-> +	 */
->  	smp_callin();
+	/*
+	 * AP might wait on cpu_callout_mask in cpu_init() with
+	 * cpu_initialized_mask set if previous attempt to online
+	 * it timed-out. Clear cpu_initialized_mask so that after
+	 * INIT/SIPI it could start with a clean state.
+	 */
+	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+	smp_mb();
+
+^^^ that barrier is weird too, cpumask_clear_cpu() is an atomic op and
+implies much the same (this is x86 after all). If you want to be super
+explicit about it write:
+
+	smp_mb__after_atomic();
+
+(which is a no-op) but then it still very much requires a comment as to
+what exactly it orders against what.
+
+
+	/*
+	 * Wake up a CPU in difference cases:
+	 * - Use a method from the APIC driver if one defined, with wakeup
+	 *   straight to 64-bit mode preferred over wakeup to RM.
+	 * Otherwise,
+>  	 * - Use an INIT boot APIC message
+>  	 */
+>  	if (apic->wakeup_secondary_cpu_64)
+> +		return apic->wakeup_secondary_cpu_64(apicid, start_ip);
+>  	else if (apic->wakeup_secondary_cpu)
+> +		return apic->wakeup_secondary_cpu(apicid, start_ip);
 >  
-> -	/* otherwise gcc will move up smp_processor_id before the cpu_init */
-> +	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
->  	barrier();
-
-Not to the detriment of this patch, but this barrier() and it's comment
-seem weird vs smp_callin(). That function ends with an atomic bitop (it
-has to, at the very least it must not be weaker than store-release) but
-also has an explicit wmb() to order setup vs CPU_STARTING.
-
-(arguably that should be a full fence *AND* get a comment)
-
-There is no way the smp_processor_id() referred to in this comment can
-land before cpu_init() even without the barrier().
-
-> -	/* Check TSC synchronization with the control CPU: */
-> +
-> +	/*
-> +	 * Check TSC synchronization with the control CPU, which will do
-> +	 * its part of this from wait_cpu_online(), making it an implicit
-> +	 * synchronization point.
-> +	 */
->  	check_tsc_sync_target();
->  
->  	/*
+> +	return wakeup_secondary_cpu_via_init(apicid, start_ip);
+> +}
