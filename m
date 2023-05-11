@@ -2,107 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243496FEE58
-	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 11:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632866FEEDE
+	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 11:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbjEKJHe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 May 2023 05:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S237237AbjEKJbJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 May 2023 05:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbjEKJHd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 05:07:33 -0400
-Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCD7555A2;
-        Thu, 11 May 2023 02:07:29 -0700 (PDT)
-Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id D614A41D13BF;
-        Thu, 11 May 2023 10:07:27 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Thu, 11 May 2023 10:07:27 +0100
-Date:   Thu, 11 May 2023 10:07:27 +0100
-From:   Liviu Dudau <liviu@dudau.co.uk>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] mips: dts: ralink: Clarify usage of MT7621 ethernet phy
- arguments
-Message-ID: <ZFywT5/S3gICedl8@bart.dudau.co.uk>
-References: <20230509200032.308934-1-liviu@dudau.co.uk>
- <a5fdd37e-6f42-2f37-357f-ad5bb082fa7d@arinc9.com>
- <ZFvaxVwVOnzVofrU@bart.dudau.co.uk>
- <CAMhs-H8yu9HFte0x53u_Mq8vFzS1ZOKxxR7H=tszfijhtVrU=A@mail.gmail.com>
+        with ESMTP id S236592AbjEKJbH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 05:31:07 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4884EEC;
+        Thu, 11 May 2023 02:31:06 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-757741ca000so500431385a.2;
+        Thu, 11 May 2023 02:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683797466; x=1686389466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=44LgLHJDIULJkMBem069KICIq3uxO214CaUgM8dXQT8=;
+        b=BDA3XAW6HVHBBCTylbjq0CrSvwep3z/RKHIin6eHkOxIgxSvF9oCpp4JdMxjhKCg8a
+         t6De61RAZB8nwhqVhhnd+GwGOl5A9f6x8ta1mhnXQNHIA8XVVWTsZ3z2sLNVKJGzzpnv
+         pVJ84YIgNXNe3zzg0Bt2DTwq5JDGQGStI/fGod4pqnCGfyQ7QKofa8hYUqI7j01kYIh5
+         pdBpovGUxFwqp+4kZG7VlWddqhNwbB9KXu5x5m7XiaxjuDvLIgeFm1gLHxbutaTsEe0t
+         4R0BYZnEDMzRXc8veBcbo5PxiVrNC+0sZriJIWCU7Z1JN7IWfsEaHn66MIjE5tmEuP4w
+         GExw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683797466; x=1686389466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=44LgLHJDIULJkMBem069KICIq3uxO214CaUgM8dXQT8=;
+        b=dOB9EqJRKU9yOdD/XZ2T/hNNSCFQtAGKxLUU16T6mVKz6TCWCNalINroxiiD+sbp+Q
+         N406tuWlnXrlHLE2XghdpM1R3uUH36/6YyhUpY3pcf530A7VBgwc1oc16edXX3Ev6GXs
+         LBNQKqX1qhl2XbgpqAYRY9CZ87xGR7xBkKEcvVQw3uWauWfGtzjMRZV4IMh71TRci4jH
+         SFrooGCERFq2zkzbvwiIg/zPCHBSsLTZ1IZ/vFfLCZyAEVJcl917xswax7omKu2TB8gr
+         Eh7yq94a71+WRcFrOC+k7GuokGZbJbvPS8EGTWotP4K3o7XyytgSr1KhNmmjNqyFGvI7
+         Wfrg==
+X-Gm-Message-State: AC+VfDzWHForSBQse/Glxvyj0A7Qwsifs7e0vqzajeOPLXEXBtCnBeU2
+        uMOe012FZ5yNduh3m9Uq3zTkdCRCOOUnWZCK5tk=
+X-Google-Smtp-Source: ACHHUZ4gCIyUNhd/+bbAhcP9wNcKpLhKmfok0Ws6ilq/cfwGVAdfDhZw6m7PSHSI2kufFJi8oJq2AHQm2PPca7W1ngo=
+X-Received: by 2002:ad4:5961:0:b0:621:4551:c6dc with SMTP id
+ eq1-20020ad45961000000b006214551c6dcmr7378789qvb.39.1683797465598; Thu, 11
+ May 2023 02:31:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMhs-H8yu9HFte0x53u_Mq8vFzS1ZOKxxR7H=tszfijhtVrU=A@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230510195806.2902878-1-nphamcs@gmail.com> <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
+In-Reply-To: <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Thu, 11 May 2023 02:30:54 -0700
+Message-ID: <CAKEwX=OFVkc2GL3jmoC-qAuwZvzxfs7v__aWY=8bLY3MeMq9hA@mail.gmail.com>
+Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-api@vger.kernel.org, kernel-team@meta.com,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>, chris@zankel.net,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 11, 2023 at 06:13:41AM +0200, Sergio Paracuellos wrote:
-> Hi Liviu,
-
-Hi Sergio,
-
-> 
-> On Wed, May 10, 2023 at 7:56 PM Liviu Dudau <liviu@dudau.co.uk> wrote:
+On Thu, May 11, 2023 at 12:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+>
+> On Wed, May 10, 2023, at 21:58, Nhat Pham wrote:
+> > cachestat is previously only wired in for x86 (and architectures using
+> > the generic unistd.h table):
 > >
-> > Hi Arınç,
+> > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com=
+/
 > >
-> > On Wed, May 10, 2023 at 02:59:44PM +0200, Arınç ÜNAL wrote:
-> > > On 9.05.2023 22:00, Liviu Dudau wrote:
-> > > > The device tree uses numbers as arguments to the phys property that are
-> > > > confusing for newcomers. Define names for the values and use them in the
-> > > > device tree.
-> > > >
-> > > > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> > >
-> > > You should document this on
-> > > instead of
-> > > doing this. Under the phys property, add 'description:' and explain this.
+> > This patch wires cachestat in for all the other architectures.
 > >
-> > There is already some sort of explanation under
-> > Documentation/devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml, so I'm
-> > not sure what I'm improving by adding new text in the /pci/ section.
-> >
-> > Maybe I haven't explained properly in the commit message, this is meant to
-> > give a name to the 1 and 0 values used in the device tree, not to clarify
-> > any perceived missing documentation.
-> 
-> What is that useful for if the bindings are well documented? The
-> description in the
-> 'Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml' file
-> for the '#phy-cells'
-> property is already telling you what that cell is used for. It is
-> obvious that zero means not dual ported and one means dual ported.
-> So for me there is no need to add anything extra but in case you want
-> to clarify anything you should modify binding documentation not the
-> device tree file at all.
+> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+>
+> The changes you did here look good, but you missed one
+> file that has never been converted to the syscall.tbl format:
+> arch/arm64/include/asm/unistd32.h along with the __NR_compat_syscalls
+> definition in arch/arm64/include/asm/unistd.h, please add those
+> as well, and then
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Understood. Then please feel free to ignore this patch.
+Just sent a follow-up fixlet for this:
 
-Best regards,
-Liviu
+https://lore.kernel.org/linux-mm/20230511092843.3896327-1-nphamcs@gmail.com=
+/T/#u
 
-> 
-> Thanks,
->     Sergio Paracuellos
-> >
-> > >
-> > > Arınç
-> >
-> > Best regards,
-> > Liviu
-
--- 
-Everyone who uses computers frequently has had, from time to time,
-a mad desire to attack the precocious abacus with an axe.
-       	   	      	     	  -- John D. Clark, Ignition!
+Thanks for the suggestion!
