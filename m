@@ -2,94 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EB46FEA2A
-	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 05:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6FD6FEA48
+	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 05:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbjEKDX2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 May 2023 23:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S231562AbjEKDkv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 May 2023 23:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjEKDX0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 May 2023 23:23:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8CFF4;
-        Wed, 10 May 2023 20:23:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGy012TVHz4x4X;
-        Thu, 11 May 2023 13:23:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1683775400;
-        bh=segvorBuGekPc5jSCLXtWJe7pAKDaM/2mPQxUa2lvTw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mpN6WZbs8ze5YaIng5ERyTBY3chApO1uFrN1U1lTsRVA9HI18/rgyaG/eZmexoGi4
-         xyNRjwovMhVVlZljbfexsALAQ/VC7SXFkLQXhGs4Bb0CKdQ9ZE7uWK8mAGQpR/wXnj
-         Wj/Kq9bEbYeNfiJORTh/qbHavius2OrvxO8nKOQelnsk3QR4A3TJ4hsLhIW2fK+19D
-         90D5YoD3X1p3CFTX+0ixP4wpazzRWLy7HTHBpgR9OBJW3WUEJ01CMuFyOW/rNQ/1o1
-         jq40YmakA31zDnqwNmvC6KPPEIJRM2z/UjkLs2qgYubScN3CGu05cVDjwVg/DFcNT6
-         LL1PDlPViTPUQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, linux-arch@vger.kernel.org,
-        hannes@cmpxchg.org, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux@armlinux.org.uk, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
-In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
-References: <20230510195806.2902878-1-nphamcs@gmail.com>
-Date:   Thu, 11 May 2023 13:23:12 +1000
-Message-ID: <874joja6vz.fsf@mail.lhotse>
+        with ESMTP id S232261AbjEKDkt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 May 2023 23:40:49 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C99358A
+        for <linux-mips@vger.kernel.org>; Wed, 10 May 2023 20:40:46 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55a64f0053fso121424307b3.3
+        for <linux-mips@vger.kernel.org>; Wed, 10 May 2023 20:40:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683776445; x=1686368445;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENej4jeIUZxBD8VRbCOiI8elHKtxPPI57IP2BPex2w8=;
+        b=dRwxCttbruWpOV8kYGHv3nNrU7YtDC+OTBLfOopudv25EcY0eOmFueuJ1hPNX/4yPK
+         lZ+CKDV1ixGM1wGcKj6qimEkiOeHP6uO8k5UBK+K1guiiOneHW0aTpdbI9jx4n9a3pWh
+         YFOswR2fPcVLNVki1JCjWzUrcXjuJx2vuRzc9QuQNzAXt9LIKAoY0UTfBY1lvuZsc4wF
+         pZT0aAuiR0nq7zlCMbbcyMMj9SgafH/QvrYzNVzvWnn9FvZdI2qYWnYMs14sXD98qyJZ
+         5JrZz4aeYcjgWQTN89jue2C1nxgpjN2jR5BgjDHmda2BP2F+t1GLE3TEXf4gxBg+jWes
+         mQFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683776445; x=1686368445;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENej4jeIUZxBD8VRbCOiI8elHKtxPPI57IP2BPex2w8=;
+        b=ZfFljtGaX1ESYuZE85pV4KidCrSTkUVLrpLK2frWyAAHsy8dHAmte1xkG3pg4jtsIK
+         xsmUEQxHwT0ocdbw28A+GvGc/rM994RnlMxMbQ3dmLQMarzsR6KKXDVh3NvniFXU81l7
+         4Ys8dcAyuahBMQZexrTsAEZzm5/rBz40bYCsbax9L+8LjHl6bZuHRuDeQJwVtmdR3hrb
+         N6gViuvymjTcHEMFaY1oBMCFisDXb3mdj2YCirIbL/km6WuGzL95ERacvkEx4h//eria
+         WoJC2v8OYUOgKFdLMCrKcnlG+RZfCHDsaUSq8uL/tkP7kUReKA4B+ihMVu2TSuc7EF6p
+         RVHg==
+X-Gm-Message-State: AC+VfDwqxjqLJTysv54dV9M51QQ6Ibg8Gofe7X7D3F2wJsOb2ELA1GsJ
+        QJMIPGoIqZaVX0NCcbPWS74h6Q==
+X-Google-Smtp-Source: ACHHUZ7h//pElwTWDcmRkblmnEL8tpIvH3DpaXFnfKmYUIesZtUkvvAepMEKFrx4IKpikCPoidpc1g==
+X-Received: by 2002:a81:8702:0:b0:560:bb81:6468 with SMTP id x2-20020a818702000000b00560bb816468mr6471997ywf.23.1683776445583;
+        Wed, 10 May 2023 20:40:45 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id g138-20020a815290000000b0054629ed8300sm4571040ywb.80.2023.05.10.20.40.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 20:40:45 -0700 (PDT)
+Date:   Wed, 10 May 2023 20:40:41 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 01/23] arm: allow pte_offset_map[_lock]() to fail
+In-Reply-To: <ZFup/fG50MPFF979@casper.infradead.org>
+Message-ID: <b9dc75bf-b13c-37ba-6c16-9fc163703dd@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <5011977-d876-6a24-a3fc-c7e6a02877b8@google.com> <ZFup/fG50MPFF979@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Nhat Pham <nphamcs@gmail.com> writes:
-> cachestat is previously only wired in for x86 (and architectures using
-> the generic unistd.h table):
->
-> https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
->
-> This patch wires cachestat in for all the other architectures.
->
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
->  arch/arm/tools/syscall.tbl                  | 1 +
->  arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
->  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
->  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
->  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
->  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+On Wed, 10 May 2023, Matthew Wilcox wrote:
+> On Tue, May 09, 2023 at 09:42:44PM -0700, Hugh Dickins wrote:
+> > diff --git a/arch/arm/lib/uaccess_with_memcpy.c b/arch/arm/lib/uaccess_with_memcpy.c
+> > index e4c2677cc1e9..2f6163f05e93 100644
+> > --- a/arch/arm/lib/uaccess_with_memcpy.c
+> > +++ b/arch/arm/lib/uaccess_with_memcpy.c
+> > @@ -74,6 +74,9 @@ pin_page_for_write(const void __user *_addr, pte_t **ptep, spinlock_t **ptlp)
+> >  		return 0;
+> >  
+> >  	pte = pte_offset_map_lock(current->mm, pmd, addr, &ptl);
+> > +	if (unlikely(!pte))
+> > +		return 0;
+> 
+> Failing seems like the wrong thig to do if we transitioned from a PTE
+> to PMD here?  Looks to me like we should goto a new label right after
+> the 'pmd = pmd_offset(pud, addr);', no?
 
-With the change to the selftest (see my other mail), I tested this on
-powerpc and all tests pass.
+I'm pretty sure it's right as is; but probably more by luck than care -
+I do not think I studied this code as closely as you have now made me do;
+and it's clear that this is a piece of code where rare transient issues
+could come up, and must be handled correctly.  Thank you for making me
+look again.
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+The key is in the callers of pin_page_for_write(): __copy_to_user_memcpy()
+and __clear_user_memset().  They're doing "while (!pin_page_for_write())"
+loops - they hope for the fast path of getting pte_lock or pmd_lock on
+the page, and doing a __memcpy() or __memset() to the user address; but
+if anything goes "wrong", a __put_user() to fault in the page (or fail)
+then pin_page_for_write() again.
 
+"if (unlikely(!pte)) return 0" says that the expected fast path did not
+succeed, so please __put_user() and have another go.
 
-cheers
+It is somewhere I could have done a "goto again", but that would be
+superfluous when it's already designed that way at the outer level.
+
+Hugh
