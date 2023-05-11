@@ -2,298 +2,257 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28ABB6FF61C
-	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 17:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F6D6FF6B7
+	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 18:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238558AbjEKPiC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 May 2023 11:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S238603AbjEKQDZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 May 2023 12:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237708AbjEKPiC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 11:38:02 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96F84C20;
-        Thu, 11 May 2023 08:37:57 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b8d2eed3dso13374910a12.0;
-        Thu, 11 May 2023 08:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683819476; x=1686411476;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O/XBZtudt4Nd+ty/JtcmV3cTusiipTZDBIaE6R8LRoA=;
-        b=qOtT6b7lHWVNrmrNuqrhTt6juE6JXKbIA5WcUgGMkKq9NfHaedwIBYcfMbdJuWN22C
-         YwL/4VL47QR6+YHx56QGshP6NONVgDPUgm4VEA94ZBq7ySe/viFBPlZZNo9BPZi6UTSu
-         BR3yuegtPlm4rJonJMhTr6IPOz+M43c95GOEoQKZSReN/RjeDfvXdMzbUnX4VwV0aJ/d
-         rulAgJ921hReVnbIdbenk3gRvgJE6W7TAmUSKOIe5xDx7jJKN6nMt9fe+6j0Cc0PWXrD
-         QlP1p9FZ/GXtdiv+ZBzW8wBDU78kA9qmHw8KoXsVuFFslLOn6SZ0Sv6ZAKHMQFQ5BNp2
-         4kgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683819476; x=1686411476;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O/XBZtudt4Nd+ty/JtcmV3cTusiipTZDBIaE6R8LRoA=;
-        b=KQaG1jwwkQAyOFEO37MTrgyey2Zya/pk1BOM2t/zIPB5ZbyJbjOH9ot3LKCt7PZlbi
-         BiX2Y4XdR4RgIdupxQU36/ogfKiVrOkwS9xkOGyFH6HhSXDHfiKDrsJgoZ3Lkcx1FwoH
-         9Wb4oryYuEkCK1J01li0TphrZGMiLQiogz3HLXHcApLSTtzxyZtCU8ZyfyWPTyMn+Puq
-         Gq8mULxFQpiustjgl6Ela1hqE7scK/w0vC14SFC8lh05iRh0Ys+GeUFTGUSo3yy5GKqm
-         dTpw19ZVX97qtj6aIfG4YqDaNt7G044VYSf6W5XY4Q+lDzm7O9l3oIj9wwnl7Fi33qDI
-         ICaA==
-X-Gm-Message-State: AC+VfDxBIhFT5PCeoAeIJ6682ioAzQyP7zR+tGlo8jfBAzIsZmiXYl8r
-        waUNkfHx/TYl3PlKv1LlxfL1oDkV61nfGw==
-X-Google-Smtp-Source: ACHHUZ4iqMvGOSLbvHNZB5g+BiVMVbS1nPR9KcWwQrGU3Zp4ofc/uTdt7Ykq6H7zw8WrwtqyH7Zm9A==
-X-Received: by 2002:a17:907:25c3:b0:933:868:413a with SMTP id ae3-20020a17090725c300b009330868413amr18158995ejc.15.1683819476122;
-        Thu, 11 May 2023 08:37:56 -0700 (PDT)
-Received: from flagship2.deu.mlau.at (p200300c02712e50000000000000002af.dip0.t-ipconnect.de. [2003:c0:2712:e500::2af])
-        by smtp.gmail.com with ESMTPSA id r12-20020a1709062ccc00b0094e954fd015sm4194192ejr.175.2023.05.11.08.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 08:37:55 -0700 (PDT)
-From:   Manuel Lauss <manuel.lauss@gmail.com>
-To:     alsa-devel@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, Manuel Lauss <manuel.lauss@gmail.com>
-Subject: [PATCH] ASoC: au1x: fix dma data provisioning
-Date:   Thu, 11 May 2023 17:37:53 +0200
-Message-Id: <20230511153753.880266-1-manuel.lauss@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S238612AbjEKQDX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 12:03:23 -0400
+Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB7E82683;
+        Thu, 11 May 2023 09:03:20 -0700 (PDT)
+Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
+        by smtp.dudau.co.uk (Postfix) with SMTP id F2CB441D13BF;
+        Thu, 11 May 2023 17:03:18 +0100 (BST)
+Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Thu, 11 May 2023 17:03:18 +0100
+Date:   Thu, 11 May 2023 17:03:18 +0100
+From:   Liviu Dudau <liviu@dudau.co.uk>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] mips: dts: ralink: Add support for TP-Link HC220 G5 v1
+ board.
+Message-ID: <ZF0RxoLRyl78s8sf@bart.dudau.co.uk>
+References: <20230509200125.309026-1-liviu@dudau.co.uk>
+ <43301707-8763-2a9f-956d-1ea0ae004a56@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <43301707-8763-2a9f-956d-1ea0ae004a56@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Provide data in the dai probe callback, which is early enough
-for the dma components.  Makes audio playback and recording
-work again.
+On Thu, May 11, 2023 at 03:41:30PM +0200, Arınç ÜNAL wrote:
+> On 9.05.2023 22:01, Liviu Dudau wrote:
+> > This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+> > a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
+> > connected to the main SoC over PCIe.
+> > 
+> > The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
+> > improve routing bandwidth.
+> > 
+> > The device uses NMBM over NAND, which is not currently supported in the
+> > mainline, so NAND node is skipped in this revision.
+> > 
+> > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+> 
+> This is great to see. I'm going to mainline all the MT7621 devicetrees on
+> OpenWrt at some point, this is a good step for this.
 
-Signed-off-by: Manuel Lauss <manuel.lauss@gmail.com>
----
-without this patch, the dma components will report ENODEV in the 
- pcm_open() callbacks since dma data hasn't been provided at
- call time.
+AFAIK this board is not supported by OpenWrt at all. So the flow will be
+the other way this time :)
 
- sound/soc/au1x/ac97c.c    | 30 +++++++++++++-----------------
- sound/soc/au1x/dbdma2.c   | 10 +++++-----
- sound/soc/au1x/dma.c      |  8 ++++----
- sound/soc/au1x/i2sc.c     | 10 +++++-----
- sound/soc/au1x/psc-ac97.c | 12 +++---------
- sound/soc/au1x/psc-i2s.c  | 10 +++++-----
- 6 files changed, 35 insertions(+), 45 deletions(-)
+> 
+> > ---
+> >   arch/mips/boot/dts/ralink/Makefile            |   3 +-
+> >   .../dts/ralink/mt7621-tplink-hc220_g5.dts     | 126 ++++++++++++++++++
+> >   2 files changed, 128 insertions(+), 1 deletion(-)
+> >   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
+> > 
+> > diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+> > index 11732b8c8163a..c57a2b40876b4 100644
+> > --- a/arch/mips/boot/dts/ralink/Makefile
+> > +++ b/arch/mips/boot/dts/ralink/Makefile
+> > @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
+> >   dtb-$(CONFIG_SOC_MT7621) += \
+> >   	mt7621-gnubee-gb-pc1.dtb \
+> > -	mt7621-gnubee-gb-pc2.dtb
+> > +	mt7621-gnubee-gb-pc2.dtb \
+> > +	mt7621-tplink-hc220_g5.dtb
+> >   obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+> > diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
+> > new file mode 100644
+> > index 0000000000000..83d15711907d0
+> > --- /dev/null
+> > +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
+> > @@ -0,0 +1,126 @@
+> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +/dts-v1/;
+> > +
+> > +#include "mt7621.dtsi"
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/input/input.h>
+> > +#include <dt-bindings/leds/common.h>
+> > +
+> > +/ {
+> > +	compatible = "tplink,hc220-g5", "mediatek,mt7621-soc";
+> 
+> tplink,hc220-g5-v1 should fit better. Also please make another patch to add
+> the compatible string under Boards with Mediatek/Ralink MT7621 SoC on
+> Documentation/devicetree/bindings/mips/ralink.yaml.
 
-diff --git a/sound/soc/au1x/ac97c.c b/sound/soc/au1x/ac97c.c
-index a11d6841afc2..faba360b299b 100644
---- a/sound/soc/au1x/ac97c.c
-+++ b/sound/soc/au1x/ac97c.c
-@@ -187,20 +187,15 @@ static struct snd_ac97_bus_ops ac97c_bus_ops = {
- 	.warm_reset	= au1xac97c_ac97_warm_reset,
- };
- 
--static int alchemy_ac97c_startup(struct snd_pcm_substream *substream,
--				 struct snd_soc_dai *dai)
--{
--	struct au1xpsc_audio_data *ctx = snd_soc_dai_get_drvdata(dai);
--	snd_soc_dai_set_dma_data(dai, substream, &ctx->dmaids[0]);
--	return 0;
--}
--
- static const struct snd_soc_dai_ops alchemy_ac97c_ops = {
--	.startup		= alchemy_ac97c_startup,
-+	/* no ops necessary */
- };
- 
- static int au1xac97c_dai_probe(struct snd_soc_dai *dai)
- {
-+	struct au1xpsc_audio_data *wd = snd_soc_dai_get_drvdata(dai);
-+
-+	snd_soc_dai_init_dma_data(dai, &(wd->dmaids[0]), &(wd->dmaids[1]));
- 	return ac97c_workdata ? 0 : -ENODEV;
- }
- 
-@@ -271,29 +266,30 @@ static int au1xac97c_drvprobe(struct platform_device *pdev)
- 	WR(ctx, AC97_CONFIG, ctx->cfg);
- 
- 	platform_set_drvdata(pdev, ctx);
--
-+	ac97c_workdata = ctx;
- 	ret = snd_soc_set_ac97_ops(&ac97c_bus_ops);
- 	if (ret)
- 		return ret;
- 
- 	ret = snd_soc_register_component(&pdev->dev, &au1xac97c_component,
- 					 &au1xac97c_dai_driver, 1);
--	if (ret)
--		return ret;
-+	if (!ret)
-+		return 0;
- 
--	ac97c_workdata = ctx;
--	return 0;
-+	snd_soc_set_ac97_ops(NULL);
-+	ac97c_workdata = NULL;
-+
-+	return ret;
- }
- 
- static void au1xac97c_drvremove(struct platform_device *pdev)
- {
- 	struct au1xpsc_audio_data *ctx = platform_get_drvdata(pdev);
- 
-+	snd_soc_set_ac97_ops(NULL);
- 	snd_soc_unregister_component(&pdev->dev);
--
- 	WR(ctx, AC97_ENABLE, EN_D);	/* clock off, disable */
--
--	ac97c_workdata = NULL;	/* MDEV */
-+	ac97c_workdata = NULL;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/soc/au1x/dbdma2.c b/sound/soc/au1x/dbdma2.c
-index 3d67e27fada9..b6ad5d00703c 100644
---- a/sound/soc/au1x/dbdma2.c
-+++ b/sound/soc/au1x/dbdma2.c
-@@ -279,13 +279,13 @@ static int au1xpsc_pcm_open(struct snd_soc_component *component,
- {
- 	struct au1xpsc_audio_dmadata *pcd = to_dmadata(substream, component);
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
--	int stype = substream->stream, *dmaids;
-+	int *dmaid;
- 
--	dmaids = snd_soc_dai_get_dma_data(asoc_rtd_to_cpu(rtd, 0), substream);
--	if (!dmaids)
--		return -ENODEV;	/* whoa, has ordering changed? */
-+	dmaid = snd_soc_dai_get_dma_data(asoc_rtd_to_cpu(rtd, 0), substream);
-+	if (!dmaid)
-+		return -ENODEV;
- 
--	pcd->ddma_id = dmaids[stype];
-+	pcd->ddma_id = *dmaid;
- 
- 	snd_soc_set_runtime_hwparams(substream, &au1xpsc_pcm_hardware);
- 	return 0;
-diff --git a/sound/soc/au1x/dma.c b/sound/soc/au1x/dma.c
-index 7f5be90c9ed1..08661540ec3b 100644
---- a/sound/soc/au1x/dma.c
-+++ b/sound/soc/au1x/dma.c
-@@ -192,16 +192,16 @@ static int alchemy_pcm_open(struct snd_soc_component *component,
- {
- 	struct alchemy_pcm_ctx *ctx = ss_to_ctx(substream, component);
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
--	int *dmaids, s = substream->stream;
-+	int *dmaid, s = substream->stream;
- 	char *name;
- 
--	dmaids = snd_soc_dai_get_dma_data(asoc_rtd_to_cpu(rtd, 0), substream);
--	if (!dmaids)
-+	dmaid = snd_soc_dai_get_dma_data(asoc_rtd_to_cpu(rtd, 0), substream);
-+	if (!dmaid)
- 		return -ENODEV;	/* whoa, has ordering changed? */
- 
- 	/* DMA setup */
- 	name = (s == SNDRV_PCM_STREAM_PLAYBACK) ? "audio-tx" : "audio-rx";
--	ctx->stream[s].dma = request_au1000_dma(dmaids[s], name,
-+	ctx->stream[s].dma = request_au1000_dma(*dmaid, name,
- 					au1000_dma_interrupt, 0,
- 					&ctx->stream[s]);
- 	set_dma_mode(ctx->stream[s].dma,
-diff --git a/sound/soc/au1x/i2sc.c b/sound/soc/au1x/i2sc.c
-index 064406080d72..de5aa1990a6c 100644
---- a/sound/soc/au1x/i2sc.c
-+++ b/sound/soc/au1x/i2sc.c
-@@ -194,22 +194,22 @@ static int au1xi2s_hw_params(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
--static int au1xi2s_startup(struct snd_pcm_substream *substream,
--			   struct snd_soc_dai *dai)
-+static int au1xi2s_dai_probe(struct snd_soc_dai *dai)
- {
--	struct au1xpsc_audio_data *ctx = snd_soc_dai_get_drvdata(dai);
--	snd_soc_dai_set_dma_data(dai, substream, &ctx->dmaids[0]);
-+	struct au1xpsc_audio_data *wd = snd_soc_dai_get_drvdata(dai);
-+
-+	snd_soc_dai_init_dma_data(dai, &(wd->dmadata[0]), &(wd->dmadata[1]));
- 	return 0;
- }
- 
- static const struct snd_soc_dai_ops au1xi2s_dai_ops = {
--	.startup	= au1xi2s_startup,
- 	.trigger	= au1xi2s_trigger,
- 	.hw_params	= au1xi2s_hw_params,
- 	.set_fmt	= au1xi2s_set_fmt,
- };
- 
- static struct snd_soc_dai_driver au1xi2s_dai_driver = {
-+	.probe	= au1xi2s_dai_probe,
- 	.symmetric_rate		= 1,
- 	.playback = {
- 		.rates		= AU1XI2SC_RATES,
-diff --git a/sound/soc/au1x/psc-ac97.c b/sound/soc/au1x/psc-ac97.c
-index 9fd91aea7d1a..08503eaef595 100644
---- a/sound/soc/au1x/psc-ac97.c
-+++ b/sound/soc/au1x/psc-ac97.c
-@@ -319,21 +319,15 @@ static int au1xpsc_ac97_trigger(struct snd_pcm_substream *substream,
- 	return ret;
- }
- 
--static int au1xpsc_ac97_startup(struct snd_pcm_substream *substream,
--				struct snd_soc_dai *dai)
--{
--	struct au1xpsc_audio_data *pscdata = snd_soc_dai_get_drvdata(dai);
--	snd_soc_dai_set_dma_data(dai, substream, &pscdata->dmaids[0]);
--	return 0;
--}
--
- static int au1xpsc_ac97_probe(struct snd_soc_dai *dai)
- {
-+	struct au1xpsc_audio_data *wd = snd_soc_dai_get_drvdata(dai);
-+
-+	snd_soc_dai_init_dma_data(dai, &(wd->dmaids[0]), &(wd->dmaids[1]));
- 	return au1xpsc_ac97_workdata ? 0 : -ENODEV;
- }
- 
- static const struct snd_soc_dai_ops au1xpsc_ac97_dai_ops = {
--	.startup	= au1xpsc_ac97_startup,
- 	.trigger	= au1xpsc_ac97_trigger,
- 	.hw_params	= au1xpsc_ac97_hw_params,
- };
-diff --git a/sound/soc/au1x/psc-i2s.c b/sound/soc/au1x/psc-i2s.c
-index 52734dec8247..430f188df42e 100644
---- a/sound/soc/au1x/psc-i2s.c
-+++ b/sound/soc/au1x/psc-i2s.c
-@@ -254,22 +254,22 @@ static int au1xpsc_i2s_trigger(struct snd_pcm_substream *substream, int cmd,
- 	return ret;
- }
- 
--static int au1xpsc_i2s_startup(struct snd_pcm_substream *substream,
--			       struct snd_soc_dai *dai)
-+static int au1xpsci2s_dai_probe(struct snd_soc_dai *dai)
- {
--	struct au1xpsc_audio_data *pscdata = snd_soc_dai_get_drvdata(dai);
--	snd_soc_dai_set_dma_data(dai, substream, &pscdata->dmaids[0]);
-+	struct au1xpsc_audio_data *wd = snd_soc_dai_get_drvdata(dai);
-+
-+	snd_soc_dai_init_dma_data(dai, &(wd->dmaids[0]), &(wd->dmaids[1]));
- 	return 0;
- }
- 
- static const struct snd_soc_dai_ops au1xpsc_i2s_dai_ops = {
--	.startup	= au1xpsc_i2s_startup,
- 	.trigger	= au1xpsc_i2s_trigger,
- 	.hw_params	= au1xpsc_i2s_hw_params,
- 	.set_fmt	= au1xpsc_i2s_set_fmt,
- };
- 
- static const struct snd_soc_dai_driver au1xpsc_i2s_dai_template = {
-+	.probe	= au1xpsci2s_dai_probe,
- 	.playback = {
- 		.rates		= AU1XPSC_I2S_RATES,
- 		.formats	= AU1XPSC_I2S_FMTS,
+Will do another patch with the documentation update. I will also send a v2
+incorporating all your review comments, thanks for taking the time!
+
+Regarding the full name: I'm quite tempted to drop the v1(.0) entirely as I'm
+not really sure that TP-Link will release another board. Doing a search now
+I fail to find on any TP-Link results the mention of the version.
+
+> 
+> > +	model = "TP-Link HC220 G5 v1.0";
+> 
+> "TP-Link HC220 G5 v1" should be enough.
+> 
+> > +
+> > +	memory@0 {
+> > +		device_type = "memory";
+> > +		reg = <0x0 0x0 0x0 0x8000000>;
+> > +	};
+> > +
+> > +	chosen {
+> > +		/* bootargs = "earlycon=uart8260,mmio32,0x1e000c00 root=/dev/ram0 kgdboc=ttyS0,115200 ip=192.168.88.1:192.168.88.2:::hc220:eth1:none kgdbcon console=ttyS0,115200"; */
+> > +		/* bootargs = "console=ttyS0,115200 earlycon=uart8260,mmio32,0x1e000c00 root=/dev/ram0"; */
+> > +		bootargs = "console=ttyS0,115200 root=/dev/nfs ip=192.168.88.2:192.168.88.5::255.255.255.0:hc220_g5:eth1:none nfsroot=192.168.88.5:/mips,vers=4,sec=sys ro rootwait";
+> > +	};
+> > +
+> > +	gpio-keys {
+> > +		compatible = "gpio-keys";
+> > +
+> > +		key-reset {
+> > +			label = "reset";
+> > +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+> > +			linux,code = <KEY_RESTART>;
+> > +		};
+> > +
+> > +		key-wps {
+> > +			label = "wps";
+> > +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+> > +			linux,code = <KEY_WPS_BUTTON>;
+> > +		};
+> > +	};
+> > +
+> > +	leds {
+> > +		compatible = "gpio-leds";
+> > +
+> > +		red {
+> > +			color = <LED_COLOR_ID_RED>;
+> > +			function = LED_FUNCTION_FAULT;
+> > +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
+> > +		};
+> > +
+> > +		green {
+> > +			color = <LED_COLOR_ID_GREEN>;
+> > +			function = LED_FUNCTION_POWER;
+> > +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+> > +			linux,default-trigger = "default-on";
+> > +		};
+> > +
+> > +		blue {
+> > +			color = <LED_COLOR_ID_BLUE>;
+> > +			function = LED_FUNCTION_WPS;
+> > +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+> > +		};
+> > +	};
+> > +
+> > +	resetc: reset-controller {
+> > +		compatible = "ralink,rt2880-reset";
+> > +		#reset-cells = <1>;
+> > +	};
+> > +
+> > +	mtd {
+> > +		compatible = "mediatek,mt7622-nfc";
+> > +	};
+> > +};
+> > +
+> > +&i2c {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&pcie {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&spi0 {
+> > +	status = "okay";
+> > +
+> > +	flash@0 {
+> > +		#address-cells = <1>;
+> > +		#size-cells = <1>;
+> > +		compatible = "jedec,spi-nor";
+> > +		reg = <0>;
+> > +		spi-max-frequency = <50000000>;
+> > +	};
+> > +};
+> > +
+> > +/* gmac1 connected to MT7530's phy0 */
+> > +&gmac1 {
+> > +	status = "okay";
+> > +	phy-handle = <&ethphy0>;
+> > +};
+> > +
+> > +&mdio {
+> > +	/* MT7530's phy0 */
+> > +	ethphy0: ethernet-phy@0 {
+> > +		reg = <0>;
+> > +		phy-mode = "rgmii";
+> > +	};
+> > +};
+> 
+> These are partially wrong, check the mt7621.dtsi on mainline. Or better,
+> don't do it. I'm very close to adding support for changing the DSA conduit
+> for user ports. I suggest you just add port@0 to the DSA switch node below.
+>
+
+I don't claim to be an expert on DSA or how MT7530 connects to MT7621, however
+I do remember trying various combinations and failing to make all the ports
+work. I blame TP-Link on having a weird setup, but to be sure I will try your
+suggestion if I manage to understand exactly where I'm "partially wrong" :)
+
+I will also try to remove the node to see what I get and report back here.
+
+Best regards,
+Liviu
+
+
+> > +
+> > +&switch0 {
+> > +	/* #gpio-cells = <2>;
+> > +	gpio-controller; */
+> > +
+> > +	ports {
+> > +		/* phy0 is muxed to gmac1 */
+> > +		/delete-node/ port@0;
+> > +
+> > +		port@1 {
+> > +			status = "okay";
+> > +			label = "lan1";
+> > +		};
+> > +
+> > +		port@2 {
+> > +			status = "okay";
+> > +			label = "wan";
+> > +		};
+> > +	};
+> > +};
+> 
+> Arınç
+
 -- 
-2.40.1
-
+Everyone who uses computers frequently has had, from time to time,
+a mad desire to attack the precocious abacus with an axe.
+       	   	      	     	  -- John D. Clark, Ignition!
