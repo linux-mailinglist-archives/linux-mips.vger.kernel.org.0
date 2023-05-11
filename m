@@ -2,47 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AF96FEB42
-	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 07:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3615A6FEB7E
+	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 08:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbjEKFgd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 May 2023 01:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S231562AbjEKGCs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 May 2023 02:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236357AbjEKFga (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 01:36:30 -0400
+        with ESMTP id S231183AbjEKGCr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 02:02:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7761BE;
-        Wed, 10 May 2023 22:36:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0540C138;
+        Wed, 10 May 2023 23:02:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D035764AC9;
-        Thu, 11 May 2023 05:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560E7C4339C;
-        Thu, 11 May 2023 05:36:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 800D464AE3;
+        Thu, 11 May 2023 06:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320E5C433D2;
+        Thu, 11 May 2023 06:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683783388;
-        bh=Li8TsZIC3+G4sZ2u2PoC9+w39L+GRTcS+o1WoXz/ThI=;
+        s=k20201202; t=1683784964;
+        bh=L4Nnv6gPFOyuLFZDBZsL5VCSsSaGeg9xGtmV+5kvrYo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UnXFj0rdh8DwN+JHlhLSnNxwfTgexUDqgGtNS2cNcZnsG0iTilDw2U7Kc+E7kwesT
-         5qLNXLTRDF7lAFiXSQEk9zbwp0BjGwkHrILyto4FlE9RfxzR7+Yr7k+IZgaBNOde5L
-         Mzazg7ELqqbqEAo/PrmEq1jeXNhBMF63+6v7a10emFnHu961HtJZjdQP5dwqjjId40
-         2tG1qtH1h8m2sM5fll8XQnUtmbCqDqxIsh00yxT1eHBxBwSMHah+67Mt6wTYxdBUcP
-         xwzrG8Jb6p2rvnpIwVE+useb2qy4QEvjvA2CtDSoQ4lWTQcTaEvoZgGhRGAOS9CyTl
-         RxnvLyWAkAqqA==
+        b=VyqAQJHFu2ZOa6qUeQpMH1Mij3SIUuel5M5juD/3iv6Fi4f3ZPTxuhUzsbHzwgYXp
+         sdAHe2fn/srgdvZTlksC2EgyVJDPdRjkr6FQb/sJ0zBdsVZI6NqtS4mNd9SesYtwbV
+         kYAP7xNLJfLWp2K7gHKdXxvZaGzo5ylVj+bU7B92cYN59jJSw0aD5hV8FYC9ItOH8W
+         zkuu5idA/ma/R/8VlmhTYgeGRE0v4tJxjKRnOPXb7i0WPq3M49XdcQep4xP6KM6oTW
+         kkB9oAcZkJfUp6qfaZTBtH8WVhZTjGzA5RAy3+E24SPb3NDi+SRMdCGDgbtvQsth7O
+         ftLcsshj4LQ1w==
 From:   Mark Brown <broonie@kernel.org>
-To:     paul@crapouillou.net,
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tsbogend@alpha.franken.de,
+        paul@crapouillou.net,
         Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230509125134.208129-1-aidanmacdonald.0x0@gmail.com>
-References: <20230509125134.208129-1-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [PATCH v1] ASoC: jz4740-i2s: Make I2S divider calculations
- more robust
-Message-Id: <168378338586.323079.4615747574575722094.b4-ty@kernel.org>
-Date:   Thu, 11 May 2023 14:36:25 +0900
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+In-Reply-To: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
+References: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: (subset) [PATCH v1 1/3] ASoC: jz4740-i2s: Add support for
+ X1000 SoC
+Message-Id: <168378495575.334814.10028126851566135486.b4-ty@kernel.org>
+Date:   Thu, 11 May 2023 15:02:35 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,20 +59,12 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 09 May 2023 13:51:34 +0100, Aidan MacDonald wrote:
-> When the CPU supplies bit/frame clocks, the system clock (clk_i2s)
-> is divided to produce the bit clock. This is a simple 1/N divider
-> with a fairly limited range, so for a given system clock frequency
-> only a few sample rates can be produced. Usually a wider range of
-> sample rates is supported by varying the system clock frequency.
+On Tue, 09 May 2023 13:42:36 +0100, Aidan MacDonald wrote:
+> The X1000's AIC is similar to the AIC found on other Ingenic SoCs.
+> It has symmetric playback/capture rates like the JZ4740, but more
+> flexible clocking when outputting the system or bit clocks.
 > 
-> The old calculation method was not very robust and could easily
-> produce the wrong clock rate, especially with non-standard rates.
-> For example, if the system clock is 1.99x the target bit clock
-> rate, the divider would be calculated as 1 instead of the more
-> accurate 2.
 > 
-> [...]
 
 Applied to
 
@@ -78,8 +72,10 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: jz4740-i2s: Make I2S divider calculations more robust
-      commit: ad721bc919edfd8b4b06977458a412011e2f0c50
+[1/3] ASoC: jz4740-i2s: Add support for X1000 SoC
+      commit: bb1b282da4be8af998de7b5a2c600af6ef01aa4f
+[2/3] ASoC: ingenic: Add compatible string for X1000 SoC
+      commit: d40b28d642d52e4687c73dd098fbd8ac8e2dc1d8
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
