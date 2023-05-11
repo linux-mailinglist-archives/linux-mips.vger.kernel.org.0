@@ -2,46 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993C96FF34A
-	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 15:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD926FF381
+	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 16:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbjEKNo1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 May 2023 09:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S237258AbjEKOAe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 May 2023 10:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238170AbjEKNoK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 09:44:10 -0400
+        with ESMTP id S233998AbjEKOAd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 10:00:33 -0400
 Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D652186;
-        Thu, 11 May 2023 06:43:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1683812625; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619732D5B;
+        Thu, 11 May 2023 07:00:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683813593; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=ahzbYv3GbsCy7qFGNW+TS6G1K255Zc8tPaWnlVtL34PzrIjWLJE3OcYUMNikkmzikiQxlaE8iQm1kcfJMFN6O7Z3atGtOsvcfvXBIe5AzcgpvwT1ufp3LS4+9sOGTbpluno1/8y0v1Kg4SLXtGTYn5LHr3fwJMWrWs0BjdfgCWo=
+        b=chZYxiLztGDfjMD2pYB/zEfdBEONq+lFYC/Ft6eqc8HHd+U6MgVh6L3IPY2dbg8IJBss8+zD/bGfRcWb3Vfq4X9lFh2E5dZMlWBTU3Oh3Vrd8TcGSSs2AZcOwTmWKdp0jA3qWnBpcjfXnnoztFQnOh86J2vuYS7x8b4wQ/dMYoY=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1683812625; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Kk1qAWGqn4/kFRbf5MQYGMlgX+H8kYV39hdmYP2/k+M=; 
-        b=Keb9SULhVo2MJuQmSeY/mgDU31kNet+uzF3P37nYECsw37mqgogyKxRMD6Leoq8JAXhO53Y8P4qt5uRRdsI783IVEzpKgVwyu5UsTNX2MbHz5E8CvEXpsa4Pgpz+ZEmOdSKm/1crHfZwLHBmv79pWsDggsVQrDSP8e+D+qcHCpg=
+        t=1683813593; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qQbMYUDsKNLkUWpHaNQP5KTAN9kqwWBsuvO7Tkmxnrg=; 
+        b=B3EB078KwObMionflVutgZsfg4L2poFyHMtHGebE/oWqg9P7tbqkb2yUCLOU7lDPvjyjjSg5a+f7sGt4tACbNP9HHDoTwAJOegbPXwPGOdPSI2hGwy9Otbbk8/UVJGHb7WKuDFNAI6IHmvP+R1pJqS1V4yKU/R0sEh7j89E72h8=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=arinc9.com;
         spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
         dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683812625;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683813593;
         s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
         h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=Kk1qAWGqn4/kFRbf5MQYGMlgX+H8kYV39hdmYP2/k+M=;
-        b=DGnJBJ4qU3CD7oYYjhpQrQ5OaZJCAWgCdNNNscX7qvtmkIYZZo1MhdT3glOuQ19p
-        kzhMeXM/5brWbtD2hbwvQEwP1PLIAre522RVXXOfGQrE9rTqIT19RV9t2JY4NcI+Js2
-        hLokbkq9lPKUPb9C/8tMKFdducaae4EOwCvmHb/Y=
+        bh=qQbMYUDsKNLkUWpHaNQP5KTAN9kqwWBsuvO7Tkmxnrg=;
+        b=jyDGGe7HtEGOUSpSq1PJKv5c2Q0d/wUjSTqkEQb9YH6/GKG1RKzK+Nq3v3cteu99
+        d4LaGj8vmsvGiyP/JzHvxxhWkoKbghBoy+L9Z9MEhlvyUfZYTG4JInviGxSDOzJSNQA
+        yibzJ0ZxTmetCXyRSikmJRM0A3o+TvrXLey3Z6LE=
 Received: from [10.1.111.147] (185.242.250.116-ip.operadors.cat [185.242.250.116]) by mx.zohomail.com
-        with SMTPS id 168381262314599.20625267029584; Thu, 11 May 2023 06:43:43 -0700 (PDT)
-Message-ID: <7be59dc4-1663-9acc-ae5d-f0ad7e3b1053@arinc9.com>
-Date:   Thu, 11 May 2023 15:43:38 +0200
+        with SMTPS id 16838135904591003.9773108387027; Thu, 11 May 2023 06:59:50 -0700 (PDT)
+Message-ID: <b6050e71-7ebe-ff3e-5683-b60ce9327c58@arinc9.com>
+Date:   Thu, 11 May 2023 15:59:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
+ Thunderbird/102.10.0
 Subject: Re: [PATCH] mips: dts: ralink: Add support for TP-Link HC220 G5 v1
  board.
-Content-Language: en-US
 To:     Liviu Dudau <liviu@dudau.co.uk>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
@@ -50,6 +49,7 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230509200125.309026-1-liviu@dudau.co.uk>
+Content-Language: en-US
 From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 In-Reply-To: <20230509200125.309026-1-liviu@dudau.co.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
@@ -65,36 +65,8 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9.05.2023 22:01, Liviu Dudau wrote:
-> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
-> connected to the main SoC over PCIe.
-> 
-> The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
-> improve routing bandwidth.
-> 
-> The device uses NMBM over NAND, which is not currently supported in the
-> mainline, so NAND node is skipped in this revision.
-> 
-> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> ---
->   arch/mips/boot/dts/ralink/Makefile            |   3 +-
->   .../dts/ralink/mt7621-tplink-hc220_g5.dts     | 126 ++++++++++++++++++
->   2 files changed, 128 insertions(+), 1 deletion(-)
->   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
-> 
-> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
-> index 11732b8c8163a..c57a2b40876b4 100644
-> --- a/arch/mips/boot/dts/ralink/Makefile
-> +++ b/arch/mips/boot/dts/ralink/Makefile
-> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
->   
->   dtb-$(CONFIG_SOC_MT7621) += \
->   	mt7621-gnubee-gb-pc1.dtb \
-> -	mt7621-gnubee-gb-pc2.dtb
-> +	mt7621-gnubee-gb-pc2.dtb \
-> +	mt7621-tplink-hc220_g5.dtb
-
-No underscores please. And add v1 on the filename.
+Please remove the dot from the subject. Also check the patches with 
+scripts/checkpatch.pl. At least one of them has got 80 columns on a 
+line, the limit is 75.
 
 Arınç
