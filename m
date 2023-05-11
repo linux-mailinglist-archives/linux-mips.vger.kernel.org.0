@@ -2,238 +2,227 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDCE6FE4B3
-	for <lists+linux-mips@lfdr.de>; Wed, 10 May 2023 21:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F946FE9EF
+	for <lists+linux-mips@lfdr.de>; Thu, 11 May 2023 04:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjEJT6M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 May 2023 15:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S235984AbjEKC6B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 May 2023 22:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjEJT6K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 May 2023 15:58:10 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C0944B0;
-        Wed, 10 May 2023 12:58:08 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-250175762b8so6631574a91.1;
-        Wed, 10 May 2023 12:58:08 -0700 (PDT)
+        with ESMTP id S229447AbjEKC6A (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 May 2023 22:58:00 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F0F10FD
+        for <linux-mips@vger.kernel.org>; Wed, 10 May 2023 19:57:58 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b9e2b65d006so11900924276.3
+        for <linux-mips@vger.kernel.org>; Wed, 10 May 2023 19:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683748687; x=1686340687;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vrx8jUkYApu9SW/+pw7TCUy5jAaSOx8fwCfGK3LodVQ=;
-        b=cNfvtEg/+MJREEIXc8i2FMKkB0WQkc8kpFbwpZNegWdKFWhI58Qu/5Dl6RY7rgClL4
-         ZbYJQlMaYc0ZZ4jAT4kdrCSxEfW+oyjRgQfhHQslvIttyNP5nQZeoJBIIUhewaZckeSp
-         z8hazt7Ua+tZUeFQuzfskcMu+XGsjLGkjQh287f04HkoakF+uOYzSwLzxZ9SMJO4cnPQ
-         3Y3JRXTLDBR13s7sYYCbFO9CMg+P65shwNk0pyrlFSa1gBBrYKcfrOjOq7Lt8PMrNl3B
-         v5V21g/ZbP1FhaLsWju2CINDJaf9dRcGpqievi+vxLnE2g5yf5n+B1HL7WvJugoJcZz7
-         /qvw==
+        d=google.com; s=20221208; t=1683773878; x=1686365878;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKY0MPg+ixVSR7jOZPK9uKssH+HTM4GRvqWKWUn/BFA=;
+        b=A/8Yl5mLDDyzpMzxH/65tVA6ZiqBtbA3d9RA8fCNCX4cspZ3FSeBdW0oUC/QrOwu05
+         JoxxoIZTWWZvG9sUA5Kt4j/mCk5PbrWXYCjVoAOE6DA24+iPz85mkYE73LNDr0oFWCdT
+         rH/bRk56/wMHo6z0qHtG+YSqxp4dd4t3ZJ8DxDyJqTsMSx9i6fBtQEQ4PO2NHpeCsaUL
+         CWzLaMlncwyqAXylxS2D1Zyo1qpYkgLrxXJlwsKj/b67fZ4WppqlP9S5HEb7GRAykDlw
+         k/Vb5i8FWzhnGt6pe/zFYyUpDBBrPTmJLrRKIFY1WW7hoXogJGukSIZoffaAETEPY/4t
+         xZVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683748687; x=1686340687;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vrx8jUkYApu9SW/+pw7TCUy5jAaSOx8fwCfGK3LodVQ=;
-        b=Q6P5Lpsr4Qo+zT5AIN7cN4klDIewOu3TWrUNs9PEeyT4U+p3h53w89AxW/rLtkfvZi
-         5I9vyUluLBBT6jP/M3V/dDW0qdAgQ9DwRKDktcO3CSNS9BpfDS6MqnvQ6Kdzgvjl935v
-         pCkpVzGFztdf81/NnekEe9glVgvKhlq+lizOCwoItMWFvJ4wsk9rHSgYzJc7ok6UVWBc
-         tXxHXtk20kCeb9Q44TYP+8p0S7qdrOCUUDPpxbGf+6cAxlN6PdKjaABzml8YyjHR3Lva
-         nXqZw0u/tAG2xACTKfIBIpap6fIyVjtu+/RCaTrjkrwsLH2yaqqsnoj+RuxPsPeOc8km
-         o/3w==
-X-Gm-Message-State: AC+VfDxbvcpCPnhPAXBp7Xt6DTOmwCvUVOO5YT1j0w6uUHMJKPEUVJHD
-        pN+KAhzzACpJz1NZUslnBoA=
-X-Google-Smtp-Source: ACHHUZ5hK9VGUuyMmTnmAQ9kmEZlouRZGOv1NQBM2ITyyig1tB1tBZEus8BNk0FQqRn/fXp2f9PNIw==
-X-Received: by 2002:a17:90b:b85:b0:24b:a5b6:e866 with SMTP id bd5-20020a17090b0b8500b0024ba5b6e866mr19822621pjb.24.1683748687406;
-        Wed, 10 May 2023 12:58:07 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-118.fbsv.net. [2a03:2880:ff:76::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 191-20020a6305c8000000b004e28be19d1csm3601518pgf.32.2023.05.10.12.58.06
+        d=1e100.net; s=20221208; t=1683773878; x=1686365878;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKY0MPg+ixVSR7jOZPK9uKssH+HTM4GRvqWKWUn/BFA=;
+        b=HR0k7QKiS58eXwlfOnMYlbGNrhiOCg+g+Ga2zyxbHo0s2j9skGEdLHUH3WLtM62GS1
+         Ex3zW4GOj4QHIq56SjgZJf2egZFbWUsYMeFMxdXbFrXQFuq6xXacCnoHgRkw+vM43sn7
+         8ykPCrO7z2ufQSal7ltq6Stf5Ar+R7UiKKRa+UVzm8GuK3mOSofqdKmAHqZVxvPc6i6e
+         VPu5utjlcBXeWterFQQeYz51FVw/TGY5T3tl8JyQmqS3joz61c3xSnIfdqIzXydDbTIn
+         XM4UlscFBkKx2hD3gxjeHRA12ZwVvhqCfcb2Fos1xz4OE1kCFT1cfpCZPCWJ1EHRKDLb
+         8xcA==
+X-Gm-Message-State: AC+VfDyk3AWnqwY0I59zQjjWMf3jzloKf5eJ51+m774RaBeEB8FUXIM6
+        scghoioTOkGnIorEVUpYzm48wQ==
+X-Google-Smtp-Source: ACHHUZ6C0n0sBeLY7gcn1OD5R2jloe8ods8pFVDt6dBMBTUUJpoOKztQObF61f5mEv/MRTTUjmAJWA==
+X-Received: by 2002:a81:d54b:0:b0:55a:2102:1699 with SMTP id l11-20020a81d54b000000b0055a21021699mr20828006ywj.11.1683773877637;
+        Wed, 10 May 2023 19:57:57 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id q6-20020a0de706000000b0055a07e36659sm4496591ywe.145.2023.05.10.19.57.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 12:58:07 -0700 (PDT)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, linux-arch@vger.kernel.org,
-        hannes@cmpxchg.org, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux@armlinux.org.uk, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: [PATCH] cachestat: wire up cachestat for other architectures
-Date:   Wed, 10 May 2023 12:58:06 -0700
-Message-Id: <20230510195806.2902878-1-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 10 May 2023 19:57:57 -0700 (PDT)
+Date:   Wed, 10 May 2023 19:57:46 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 05/23] m68k: allow pte_offset_map[_lock]() to fail
+In-Reply-To: <CAMuHMdWb0SrEs=cDzKW1Ai2UywnnpZip4pk9mOkiVGivPpj8sg@mail.gmail.com>
+Message-ID: <b4a5f11-68ee-7bba-b362-10ef7c9b956@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <237c8410-ce61-94c-4260-7318ad6a4f3@google.com> <CAMuHMdWb0SrEs=cDzKW1Ai2UywnnpZip4pk9mOkiVGivPpj8sg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463760895-840625160-1683773877=:9548"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-cachestat is previously only wired in for x86 (and architectures using
-the generic unistd.h table):
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
+---1463760895-840625160-1683773877=:9548
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-This patch wires cachestat in for all the other architectures.
+On Wed, 10 May 2023, Geert Uytterhoeven wrote:
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
- arch/arm/tools/syscall.tbl                  | 1 +
- arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
- arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
- arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
- arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
- arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
- arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
- arch/s390/kernel/syscalls/syscall.tbl       | 1 +
- arch/sh/kernel/syscalls/syscall.tbl         | 1 +
- arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
- arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
- 14 files changed, 14 insertions(+)
+> Hi Hugh,
+>=20
+> Thanks for your patch!
 
-diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-index 8ebacf37a8cf..1f13995d00d7 100644
---- a/arch/alpha/kernel/syscalls/syscall.tbl
-+++ b/arch/alpha/kernel/syscalls/syscall.tbl
-@@ -490,3 +490,4 @@
- 558	common	process_mrelease		sys_process_mrelease
- 559	common  futex_waitv                     sys_futex_waitv
- 560	common	set_mempolicy_home_node		sys_ni_syscall
-+561	common	cachestat			sys_cachestat
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index ac964612d8b0..8ebed8a13874 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -464,3 +464,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common	futex_waitv			sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-index 72c929d9902b..f8c74ffeeefb 100644
---- a/arch/ia64/kernel/syscalls/syscall.tbl
-+++ b/arch/ia64/kernel/syscalls/syscall.tbl
-@@ -371,3 +371,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-index b1f3940bc298..4f504783371f 100644
---- a/arch/m68k/kernel/syscalls/syscall.tbl
-+++ b/arch/m68k/kernel/syscalls/syscall.tbl
-@@ -450,3 +450,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-index 820145e47350..858d22bf275c 100644
---- a/arch/microblaze/kernel/syscalls/syscall.tbl
-+++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-@@ -456,3 +456,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index 253ff994ed2e..1976317d4e8b 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -389,3 +389,4 @@
- 448	n32	process_mrelease		sys_process_mrelease
- 449	n32	futex_waitv			sys_futex_waitv
- 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	n32	cachestat			sys_cachestat
-diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-index 3f1886ad9d80..cfda2511badf 100644
---- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-@@ -365,3 +365,4 @@
- 448	n64	process_mrelease		sys_process_mrelease
- 449	n64	futex_waitv			sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	n64	cachestat			sys_cachestat
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index 8f243e35a7b2..7692234c3768 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -438,3 +438,4 @@
- 448	o32	process_mrelease		sys_process_mrelease
- 449	o32	futex_waitv			sys_futex_waitv
- 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	o32	cachestat			sys_cachestat
-diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index 0e42fceb2d5e..3c71fad78318 100644
---- a/arch/parisc/kernel/syscalls/syscall.tbl
-+++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -448,3 +448,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common	futex_waitv			sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index a0be127475b1..8c0b08b7a80e 100644
---- a/arch/powerpc/kernel/syscalls/syscall.tbl
-+++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -537,3 +537,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index 799147658dee..7df0329d46cb 100644
---- a/arch/s390/kernel/syscalls/syscall.tbl
-+++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -453,3 +453,4 @@
- 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
- 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
- 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
-+451  common	cachestat		sys_cachestat			sys_cachestat
-diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-index 2de85c977f54..97377e8c5025 100644
---- a/arch/sh/kernel/syscalls/syscall.tbl
-+++ b/arch/sh/kernel/syscalls/syscall.tbl
-@@ -453,3 +453,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index 4398cc6fb68d..faa835f3c54a 100644
---- a/arch/sparc/kernel/syscalls/syscall.tbl
-+++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -496,3 +496,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
-diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-index 52c94ab5c205..2b69c3c035b6 100644
---- a/arch/xtensa/kernel/syscalls/syscall.tbl
-+++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-@@ -421,3 +421,4 @@
- 448	common	process_mrelease		sys_process_mrelease
- 449	common  futex_waitv                     sys_futex_waitv
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-+451	common	cachestat			sys_cachestat
--- 
-2.34.1
+And thank you for looking so quickly, Geert.
 
+>=20
+> On Wed, May 10, 2023 at 6:48=E2=80=AFAM Hugh Dickins <hughd@google.com> w=
+rote:
+> > In rare transient cases, not yet made possible, pte_offset_map() and
+> > pte_offset_map_lock() may not find a page table: handle appropriately.
+> >
+> > Restructure cf_tlb_miss() with a pte_unmap() (previously omitted)
+> > at label out, followed by one local_irq_restore() for all.
+>=20
+> That's a bug fix, which should be a separate patch?
+
+No, that's not a bug fix for the current tree, since m68k does not
+offer CONFIG_HIGHPTE, so pte_unmap() is never anything but a no-op
+for m68k (see include/linux/pgtable.h).
+
+But I want to change pte_unmap() to do something even without
+CONFIG_HIGHPTE, so have to fix up any such previously harmless
+omissions in this series first.
+
+>=20
+> >
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+>=20
+>=20
+> > --- a/arch/m68k/include/asm/mmu_context.h
+> > +++ b/arch/m68k/include/asm/mmu_context.h
+> > @@ -99,7 +99,7 @@ static inline void load_ksp_mmu(struct task_struct *t=
+ask)
+> >         p4d_t *p4d;
+> >         pud_t *pud;
+> >         pmd_t *pmd;
+> > -       pte_t *pte;
+> > +       pte_t *pte =3D NULL;
+> >         unsigned long mmuar;
+> >
+> >         local_irq_save(flags);
+> > @@ -139,7 +139,7 @@ static inline void load_ksp_mmu(struct task_struct =
+*task)
+> >
+> >         pte =3D (mmuar >=3D PAGE_OFFSET) ? pte_offset_kernel(pmd, mmuar=
+)
+> >                                      : pte_offset_map(pmd, mmuar);
+> > -       if (pte_none(*pte) || !pte_present(*pte))
+> > +       if (!pte || pte_none(*pte) || !pte_present(*pte))
+> >                 goto bug;
+>=20
+> If the absence of a pte is to become a non-abnormal case, it should
+> probably jump to "end" instead, to avoid spamming the kernel log.
+
+I don't think so (but of course it's hard for you to tell, without
+seeing all completed series of series).  If pmd_none(*pmd) can safely
+goto bug just above, and pte_none(*pte) goto bug here, well, the !pte
+case is going to be stranger than either of those.
+
+My understanding of this function, load_ksp_mmu(), is that it's dealing
+at context switch with a part of userspace which very much needs to be
+present: whatever keeps that from being swapped out or migrated at
+present, will be sure to keep the !pte case away - we cannot steal its
+page table just at random (and a THP on m68k would be surprising too).
+
+Though there is one case I can think of which will cause !pte here,
+and so goto bug: if the pmd entry has got corrupted, and counts as
+pmd_bad(), which will be tested (and cleared) in pte_offset_map().
+But it is okay to report a bug in that case.
+
+I can certainly change this to goto end instead if you still prefer,
+no problem; but I'd rather keep it as is, if only for me to be proved
+wrong by you actually seeing spam there.
+
+>=20
+> >
+> >         set_pte(pte, pte_mkyoung(*pte));
+> > @@ -161,6 +161,8 @@ static inline void load_ksp_mmu(struct task_struct =
+*task)
+> >  bug:
+> >         pr_info("ksp load failed: mm=3D0x%p ksp=3D0x08%lx\n", mm, mmuar=
+);
+> >  end:
+> > +       if (pte && mmuar < PAGE_OFFSET)
+> > +               pte_unmap(pte);
+>=20
+> Is this also a bugfix, not mentioned in the patch description?
+
+I'm not sure whether you're referring to the pte_unmap() which we
+already discussed above, or you're seeing something else in addition;
+but I don't think there's a bugfix here, just a rearrangement because
+we now want lots of cases to do the pte_unmap() and local_irq_restore().
+
+Hugh
+
+>=20
+> >         local_irq_restore(flags);
+> >  }
+> >
+>=20
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --=20
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>=20
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
+---1463760895-840625160-1683773877=:9548--
