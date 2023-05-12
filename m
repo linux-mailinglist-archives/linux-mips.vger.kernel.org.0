@@ -2,116 +2,264 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BA66FFF56
-	for <lists+linux-mips@lfdr.de>; Fri, 12 May 2023 05:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E279F7000B7
+	for <lists+linux-mips@lfdr.de>; Fri, 12 May 2023 08:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239872AbjELDia (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 May 2023 23:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S239988AbjELGlr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 May 2023 02:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjELDi3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 23:38:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0698349F3;
-        Thu, 11 May 2023 20:38:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C6B64D31;
-        Fri, 12 May 2023 03:38:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A0DC433EF;
-        Fri, 12 May 2023 03:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683862707;
-        bh=Q7pZ6HkRh3PVDzBCV74mB+fwpBcm2L4Wrr7Gj6KO6ZA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U4rplEw0qMOGxowZ1loQ7IR10mVPR+gkIHrN9H2/CYQigVdydLPavay7G++a7nk75
-         jDhpGXpsFo8grDqyj+dAD0bRHJYnhZ3zC9JzvBPFC3B2RpUt1tYfAWrn3pIHyEvUc0
-         m+plA03PmuYT+NcYOD6DwNQyNX3nG8GNV7/Tz7bjzisl+mJN6FAg46r36holy/6HO4
-         6GEsQAkOKAoidlLLVYOcRtmzSHojiofTEI1BfDjbKkAJM3vujpQ7oWR4AovPMspdwk
-         AfdZmFHnb8dcLpWYTKW3v5BTK8ry629pZRiCq4rIBS69MISbPUUJXyByuj5gGgwTNw
-         bDNRPX9IyrHYA==
-Date:   Thu, 11 May 2023 20:38:24 -0700
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michel Lespinasse <michel@lespinasse.org>
-Subject: Re: [PATCH 00/23] arch: allow pte_offset_map[_lock]() to fail
-Message-ID: <20230512033824.GF4135@kernel.org>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
- <ZFs0k2rrLPH9A/UU@casper.infradead.org>
- <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com>
- <ZFz1j1slZHCQmwMJ@casper.infradead.org>
+        with ESMTP id S239935AbjELGlq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 May 2023 02:41:46 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8776DD99;
+        Thu, 11 May 2023 23:41:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683873661; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=WBJPNS1VncVLopJ6Or8tH6kpNvapG0NNdi3faRj/g/CxNA6BLibW/4MXUB71zA8lN2Mh93xYMM+gaVsF1pXWwBPm/bxQTG01BX3XOu954v3u3WVE2Er4M9VFo7jK9GjrhvfVpsROSFR3P4Ij2bigdoODTL8dgn9MV7KEgX96xaE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1683873661; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=D6pDZG9SgSjLKUr5mKOeAxGqVV/5/LNcopei0JAKDyI=; 
+        b=oGaSbdCXOCO+iATsG2QFvqorzLcEzHuDyN6lDo7IJfZu1grsh7O9GiEREYo/eK5nQG/8S4ldzzre4ARhX0o2uZx5CqbSicz8c7gpyO/etlwv1QxZoJU8ClhgbPq0vBEf4xexNGOrBRiMjcCLaDRKvCT8M3QBZZNEKu8G5GiK5Q4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683873661;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=D6pDZG9SgSjLKUr5mKOeAxGqVV/5/LNcopei0JAKDyI=;
+        b=CUX2vR/Z8nUvJHCwGKg0DaxyY40hlqgXdZI2m2NhBM5KVCs7NlAuVYGoZkeSSZF4
+        ZXqYQm3x83UWfOHx21yUmi7C9IfGZyT5BtawbmpHE3PYDIi84LAyRIGZAyX6anaF/Rz
+        KFi181YfXGILNFrrm7mPrjab3VNbfhCJUFHJpPaQ=
+Received: from [10.1.111.147] (185.242.250.116-ip.operadors.cat [185.242.250.116]) by mx.zohomail.com
+        with SMTPS id 1683873660851408.5520398170154; Thu, 11 May 2023 23:41:00 -0700 (PDT)
+Message-ID: <84b31c59-81d3-c83d-ece9-a120b1cdcdd7@arinc9.com>
+Date:   Fri, 12 May 2023 08:40:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFz1j1slZHCQmwMJ@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] mips: dts: ralink: Add support for TP-Link HC220 G5 v1
+ board.
+To:     Liviu Dudau <liviu@dudau.co.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230509200125.309026-1-liviu@dudau.co.uk>
+ <43301707-8763-2a9f-956d-1ea0ae004a56@arinc9.com>
+ <ZF0RxoLRyl78s8sf@bart.dudau.co.uk>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZF0RxoLRyl78s8sf@bart.dudau.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On Thu, May 11, 2023 at 03:02:55PM +0100, Matthew Wilcox wrote:
-> On Wed, May 10, 2023 at 09:35:44PM -0700, Hugh Dickins wrote:
-> > On Wed, 10 May 2023, Matthew Wilcox wrote:
-> > 
-> > I don't really understand why you're going down a remove-CONFIG_HIGHPTE
-> > route: I thought you were motivated by the awkardness of kmap on large
-> > folios; but I don't see how removing HIGHPTE helps with that at all
-> > (unless you have a "large page tables" effort in mind, but I doubt it).
+On 11.05.2023 18:03, Liviu Dudau wrote:
+> On Thu, May 11, 2023 at 03:41:30PM +0200, Arınç ÜNAL wrote:
+>> On 9.05.2023 22:01, Liviu Dudau wrote:
+>>> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+>>> a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
+>>> connected to the main SoC over PCIe.
+>>>
+>>> The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
+>>> improve routing bandwidth.
+>>>
+>>> The device uses NMBM over NAND, which is not currently supported in the
+>>> mainline, so NAND node is skipped in this revision.
+>>>
+>>> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+>>
+>> This is great to see. I'm going to mainline all the MT7621 devicetrees on
+>> OpenWrt at some point, this is a good step for this.
 > 
-> Quite right, my primary concern is filesystem metadata; primarily
-> directories as I don't think anybody has ever supported symlinks or
-> superblocks larger than 4kB.
+> AFAIK this board is not supported by OpenWrt at all. So the flow will be
+> the other way this time :)
 > 
-> I was thinking that removing CONFIG_HIGHPTE might simplify the page
-> fault handling path a little, but now I've looked at it some more, and
-> I'm not sure there's any simplification to be had.  It should probably
-> use kmap_local instead of kmap_atomic(), though.
- 
-Removing CONFIG_HIGHPTE will drop several lines and will allow to get rid
-of custom __pte_alloc_one on x86.
+>>
+>>> ---
+>>>    arch/mips/boot/dts/ralink/Makefile            |   3 +-
+>>>    .../dts/ralink/mt7621-tplink-hc220_g5.dts     | 126 ++++++++++++++++++
+>>>    2 files changed, 128 insertions(+), 1 deletion(-)
+>>>    create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
+>>>
+>>> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+>>> index 11732b8c8163a..c57a2b40876b4 100644
+>>> --- a/arch/mips/boot/dts/ralink/Makefile
+>>> +++ b/arch/mips/boot/dts/ralink/Makefile
+>>> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
+>>>    dtb-$(CONFIG_SOC_MT7621) += \
+>>>    	mt7621-gnubee-gb-pc1.dtb \
+>>> -	mt7621-gnubee-gb-pc2.dtb
+>>> +	mt7621-gnubee-gb-pc2.dtb \
+>>> +	mt7621-tplink-hc220_g5.dtb
+>>>    obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+>>> diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
+>>> new file mode 100644
+>>> index 0000000000000..83d15711907d0
+>>> --- /dev/null
+>>> +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
+>>> @@ -0,0 +1,126 @@
+>>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +/dts-v1/;
+>>> +
+>>> +#include "mt7621.dtsi"
+>>> +
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/input/input.h>
+>>> +#include <dt-bindings/leds/common.h>
+>>> +
+>>> +/ {
+>>> +	compatible = "tplink,hc220-g5", "mediatek,mt7621-soc";
+>>
+>> tplink,hc220-g5-v1 should fit better. Also please make another patch to add
+>> the compatible string under Boards with Mediatek/Ralink MT7621 SoC on
+>> Documentation/devicetree/bindings/mips/ralink.yaml.
+> 
+> Will do another patch with the documentation update. I will also send a v2
+> incorporating all your review comments, thanks for taking the time!
+> 
+> Regarding the full name: I'm quite tempted to drop the v1(.0) entirely as I'm
+> not really sure that TP-Link will release another board. Doing a search now
+> I fail to find on any TP-Link results the mention of the version.
 
---
-Sincerely yours,
-Mike.
+What I understand is TP-Link always call their first hardware release v1 
+as they are notorious for introducing new versions to cut costs as much 
+as possible. On the downloads website for the product, "v1" is there on 
+the product name.
+
+https://www.tp-link.com/us/support/download/hc220-g5/
+
+> 
+>>
+>>> +	model = "TP-Link HC220 G5 v1.0";
+>>
+>> "TP-Link HC220 G5 v1" should be enough.
+>>
+>>> +
+>>> +	memory@0 {
+>>> +		device_type = "memory";
+>>> +		reg = <0x0 0x0 0x0 0x8000000>;
+>>> +	};
+>>> +
+>>> +	chosen {
+>>> +		/* bootargs = "earlycon=uart8260,mmio32,0x1e000c00 root=/dev/ram0 kgdboc=ttyS0,115200 ip=192.168.88.1:192.168.88.2:::hc220:eth1:none kgdbcon console=ttyS0,115200"; */
+>>> +		/* bootargs = "console=ttyS0,115200 earlycon=uart8260,mmio32,0x1e000c00 root=/dev/ram0"; */
+>>> +		bootargs = "console=ttyS0,115200 root=/dev/nfs ip=192.168.88.2:192.168.88.5::255.255.255.0:hc220_g5:eth1:none nfsroot=192.168.88.5:/mips,vers=4,sec=sys ro rootwait";
+>>> +	};
+>>> +
+>>> +	gpio-keys {
+>>> +		compatible = "gpio-keys";
+>>> +
+>>> +		key-reset {
+>>> +			label = "reset";
+>>> +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+>>> +			linux,code = <KEY_RESTART>;
+>>> +		};
+>>> +
+>>> +		key-wps {
+>>> +			label = "wps";
+>>> +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+>>> +			linux,code = <KEY_WPS_BUTTON>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	leds {
+>>> +		compatible = "gpio-leds";
+>>> +
+>>> +		red {
+>>> +			color = <LED_COLOR_ID_RED>;
+>>> +			function = LED_FUNCTION_FAULT;
+>>> +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
+>>> +		};
+>>> +
+>>> +		green {
+>>> +			color = <LED_COLOR_ID_GREEN>;
+>>> +			function = LED_FUNCTION_POWER;
+>>> +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+>>> +			linux,default-trigger = "default-on";
+>>> +		};
+>>> +
+>>> +		blue {
+>>> +			color = <LED_COLOR_ID_BLUE>;
+>>> +			function = LED_FUNCTION_WPS;
+>>> +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	resetc: reset-controller {
+>>> +		compatible = "ralink,rt2880-reset";
+>>> +		#reset-cells = <1>;
+>>> +	};
+>>> +
+>>> +	mtd {
+>>> +		compatible = "mediatek,mt7622-nfc";
+>>> +	};
+>>> +};
+>>> +
+>>> +&i2c {
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>> +&pcie {
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>> +&spi0 {
+>>> +	status = "okay";
+>>> +
+>>> +	flash@0 {
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <1>;
+>>> +		compatible = "jedec,spi-nor";
+>>> +		reg = <0>;
+>>> +		spi-max-frequency = <50000000>;
+>>> +	};
+>>> +};
+>>> +
+>>> +/* gmac1 connected to MT7530's phy0 */
+>>> +&gmac1 {
+>>> +	status = "okay";
+>>> +	phy-handle = <&ethphy0>;
+>>> +};
+>>> +
+>>> +&mdio {
+>>> +	/* MT7530's phy0 */
+>>> +	ethphy0: ethernet-phy@0 {
+>>> +		reg = <0>;
+>>> +		phy-mode = "rgmii";
+>>> +	};
+>>> +};
+>>
+>> These are partially wrong, check the mt7621.dtsi on mainline. Or better,
+>> don't do it. I'm very close to adding support for changing the DSA conduit
+>> for user ports. I suggest you just add port@0 to the DSA switch node below.
+>>
+> 
+> I don't claim to be an expert on DSA or how MT7530 connects to MT7621, however
+> I do remember trying various combinations and failing to make all the ports
+> work. I blame TP-Link on having a weird setup, but to be sure I will try your
+> suggestion if I manage to understand exactly where I'm "partially wrong" :)
+
+You're not wrong, the bindings are. You must disable fixed-link. The 
+properties status okay and phy-mode rgmii on ethphy0 is not necessary so 
+these can be dropped. Take a look at the GB-PC2 bindings, rgmii-rxid is 
+specific to GB-PC2 so no need to do that:
+
+https://github.com/torvalds/linux/blob/master/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts#L114
+
+If you define the port under the DSA switch node, it should just work.
+
+Arınç
