@@ -2,59 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D416FFCB3
-	for <lists+linux-mips@lfdr.de>; Fri, 12 May 2023 00:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BA66FFF56
+	for <lists+linux-mips@lfdr.de>; Fri, 12 May 2023 05:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239376AbjEKWhW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 May 2023 18:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S239872AbjELDia (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 May 2023 23:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239214AbjEKWhV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 18:37:21 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6E4526C
-        for <linux-mips@vger.kernel.org>; Thu, 11 May 2023 15:37:18 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-55b7630a736so138680157b3.1
-        for <linux-mips@vger.kernel.org>; Thu, 11 May 2023 15:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683844637; x=1686436637;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7hKTTTuYzAS0vkkDuN/hWvEkav8P49YQtcFz2W5wMI=;
-        b=leqASNj4yXDwWkS3XyfGWIhxAw4SXxeg+extgQ/D3LGDyC8VCP1/fZdCDvzoBwFKI4
-         QsCpGgSaYJ3A6Zsn21DOX95W5x878ZXSFyOvGdFILF6cniMlbGpQ7kGstvh8Z0S2dYcr
-         KAZan2e+K8+hIYGfwKwpNjm5N5qCVBq6paKd8Ge6TYCsDubNG0nFnc28YyshVIf+H1TB
-         XtjHozhI9s8vKDiN1ralH7fr2aSIYGrsjfbuSUekrZzkfIqSGnPlfgmSzyftn9ttXqkA
-         wtISLC6kLw6VjZt4HnbIKNxY1VCI8P1bODtk830M8QQedX+j6RlN/KsBHhJiNcIqK0oT
-         5pFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683844637; x=1686436637;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7hKTTTuYzAS0vkkDuN/hWvEkav8P49YQtcFz2W5wMI=;
-        b=PQ8MFvEbmwezc/uj4Bov2RtM2F1bpLA6eGjW7omTuh/S/I6PQwDX5LD99XFRbKFeBL
-         P4Ew2Lc3+lgYvzvNucrBVah9UX4ZrqKIZ9wHWupAsqz5tKcmRPDB1Xq7edCg6Zw6+vvN
-         ziCkJ9evtuU8TsqiI03XSx7qwAAoeVwHcIHK4kwtvBwzAQy8cHDvuFnFwsQlEZWaSIAt
-         w8MqnybH+ygaTVMdm2GDm5YpAJ5g6E9noq7HvDl9QwIykx9jdUTukFjkS58rGNva7iC4
-         IOTn4op36p7/EJu+3H7HyfIj3xHbU/GdOed25tGQPmQbL8IAZ9dWfBf2Eyqb3jRp8Afq
-         TmVg==
-X-Gm-Message-State: AC+VfDwj6sHL2xghk1UwGWMz6cQiu6CdZP6FKTyN0Khl8t7TSpvKSzh8
-        Uzr8esaUm8AYyF7zjwhH3K2T2Q==
-X-Google-Smtp-Source: ACHHUZ5ulkW3cY83+IL8attIxR7bTyRhvIioTTYSGrJhrY5IS/y6LwBFwFzMwChvIicQOTRvegivGA==
-X-Received: by 2002:a0d:d993:0:b0:559:d294:1c48 with SMTP id b141-20020a0dd993000000b00559d2941c48mr22473279ywe.24.1683844637583;
-        Thu, 11 May 2023 15:37:17 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k189-20020a0dfac6000000b0054fa5f6c0cdsm5262641ywf.53.2023.05.11.15.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 15:37:17 -0700 (PDT)
-Date:   Thu, 11 May 2023 15:37:06 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
+        with ESMTP id S231736AbjELDi3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 May 2023 23:38:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0698349F3;
+        Thu, 11 May 2023 20:38:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C6B64D31;
+        Fri, 12 May 2023 03:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A0DC433EF;
+        Fri, 12 May 2023 03:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683862707;
+        bh=Q7pZ6HkRh3PVDzBCV74mB+fwpBcm2L4Wrr7Gj6KO6ZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U4rplEw0qMOGxowZ1loQ7IR10mVPR+gkIHrN9H2/CYQigVdydLPavay7G++a7nk75
+         jDhpGXpsFo8grDqyj+dAD0bRHJYnhZ3zC9JzvBPFC3B2RpUt1tYfAWrn3pIHyEvUc0
+         m+plA03PmuYT+NcYOD6DwNQyNX3nG8GNV7/Tz7bjzisl+mJN6FAg46r36holy/6HO4
+         6GEsQAkOKAoidlLLVYOcRtmzSHojiofTEI1BfDjbKkAJM3vujpQ7oWR4AovPMspdwk
+         AfdZmFHnb8dcLpWYTKW3v5BTK8ry629pZRiCq4rIBS69MISbPUUJXyByuj5gGgwTNw
+         bDNRPX9IyrHYA==
+Date:   Thu, 11 May 2023 20:38:24 -0700
+From:   Mike Rapoport <rppt@kernel.org>
 To:     Matthew Wilcox <willy@infradead.org>
-cc:     Hugh Dickins <hughd@google.com>,
+Cc:     Hugh Dickins <hughd@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         David Hildenbrand <david@redhat.com>,
         Suren Baghdasaryan <surenb@google.com>,
@@ -88,58 +70,48 @@ cc:     Hugh Dickins <hughd@google.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Michel Lespinasse <michel@lespinasse.org>
 Subject: Re: [PATCH 00/23] arch: allow pte_offset_map[_lock]() to fail
-In-Reply-To: <ZFz1j1slZHCQmwMJ@casper.infradead.org>
-Message-ID: <5f1dd6f-1e75-8d98-3083-e1bd2163dcc6@google.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <ZFs0k2rrLPH9A/UU@casper.infradead.org> <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com> <ZFz1j1slZHCQmwMJ@casper.infradead.org>
+Message-ID: <20230512033824.GF4135@kernel.org>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+ <ZFs0k2rrLPH9A/UU@casper.infradead.org>
+ <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com>
+ <ZFz1j1slZHCQmwMJ@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFz1j1slZHCQmwMJ@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 11 May 2023, Matthew Wilcox wrote:
+Hi,
+
+On Thu, May 11, 2023 at 03:02:55PM +0100, Matthew Wilcox wrote:
+> On Wed, May 10, 2023 at 09:35:44PM -0700, Hugh Dickins wrote:
+> > On Wed, 10 May 2023, Matthew Wilcox wrote:
+> > 
+> > I don't really understand why you're going down a remove-CONFIG_HIGHPTE
+> > route: I thought you were motivated by the awkardness of kmap on large
+> > folios; but I don't see how removing HIGHPTE helps with that at all
+> > (unless you have a "large page tables" effort in mind, but I doubt it).
+> 
+> Quite right, my primary concern is filesystem metadata; primarily
+> directories as I don't think anybody has ever supported symlinks or
+> superblocks larger than 4kB.
 > 
 > I was thinking that removing CONFIG_HIGHPTE might simplify the page
 > fault handling path a little, but now I've looked at it some more, and
 > I'm not sure there's any simplification to be had.  It should probably
 > use kmap_local instead of kmap_atomic(), though.
+ 
+Removing CONFIG_HIGHPTE will drop several lines and will allow to get rid
+of custom __pte_alloc_one on x86.
 
-Re kmap_local, yes, one of the patches in the next series does make
-that change.
-
-> 
-> I infer that what you need is a pte_access_start() and a
-> pte_access_end() which look like they can be plausibly rcu_read_lock()
-> and rcu_read_unlock(), but might need to be local_irq_save() and
-> local_irq_restore() in some configurations?
-
-Yes, except that the local_irq_restore() in PAE-like configurations
-(if we need it at all) is not delayed until the pte_access_end() or
-pte_unmap() - it's internal to the pte_access_start() or pte_offset_map():
-interrupts only disabled across the getting of a consistent pmd entry.
-
-Over-generalizing a little, any user of pte_offset_map() (as opposed to
-pte_offset_map_lock()) has to be prepared for the ptes to change under
-them: but we do need to give them something that is or was recently the
-relevant page table, rather than a random page mishmashed from mismatched
-pmd_low and pmd_high.
-
-> 
-> We also talked about moving x86 to always RCU-free page tables in
-> order to make accessing /proc/$pid/smaps lockless.  I believe Michel
-> is going to take a swing at this project.
-
-(And /proc/$pid/numa_maps, I hope: that's even worse in some way, IIRC.)
-
-That might be orthogonal to what I'm doing: many non-x86 architectures
-already do RCU-freeing of page tables via the TLB route, but that doesn't
-cover a pte_free() from retract_page_tables() or collapse_and_free_pmd().
-
-Hugh
+--
+Sincerely yours,
+Mike.
