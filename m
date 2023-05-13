@@ -2,137 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC457019F1
-	for <lists+linux-mips@lfdr.de>; Sat, 13 May 2023 23:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6C8701A16
+	for <lists+linux-mips@lfdr.de>; Sat, 13 May 2023 23:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbjEMVCe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 13 May 2023 17:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S230226AbjEMVhw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 13 May 2023 17:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbjEMVCc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 17:02:32 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA1E30C4;
-        Sat, 13 May 2023 14:02:29 -0700 (PDT)
+        with ESMTP id S229447AbjEMVhu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 17:37:50 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597C26BF;
+        Sat, 13 May 2023 14:37:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684011649; i=deller@gmx.de;
-        bh=S8BdFQeWXnw0k7xb/Pd2AhJXn5drG2VSOAIP2nWf5C4=;
+        t=1684013732; i=deller@gmx.de;
+        bh=yJRf6LHTP/Tqq0WjA9yc9VAdZA0puqTSbfj+iJUayOI=;
         h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=mcUG47eX0Gn5veG6Ma/ul80RdUo6bsI8PVfZz0zKmUflnHrmh7e47BPa5vNQH5AE5
-         xN8t8csT87bACHCqA8OsuJ2hWYdHBaim0kPYxyJPyGV+wdFIZqdMZ2KWJkGpMA71P/
-         egT+C+AIP++kGZ4bJ4izMXA5xAwpUSXSFsk26PUoT8kKqTDoQAx1/dB+6F6qtKXT3r
-         GvfRk5+vnzNiG67CzR+x13ghBN34jZ4cPRgxhCtav+HMxKP6wiojHtau4ptA6nVxv6
-         cehya8971oTBpuL9wmCK7IO8pT5+JyFocI4nxvSEkGnCMrJGyPpXH1ZFrtHGaJENlu
-         oDzqQ+ljsk/Dw==
+        b=cr8F1CRBH8iQkDkEZ/t6guBO/5jXWPHjvHesKUuGbD0L0xJGMcsfDLG0X9/WHN5tf
+         gmoBZcMozWcEmMI1SXgz60UKtLHg89Qkg3K5IkelB8CkMlNz7sHwAxzIMD7I9clgqG
+         8BBXU1INAL2hkc4jAoXGc9Lj9qQhDT78CQ4DXrxDBdxOVY1Chk3DgfjVKIVZpGXT/D
+         hVsUkekeRL3hC4ZEJXj+51+YVnf9Nvq9nqI08asyhPuJHM5bnDl2bJRO7+pyeEkSzs
+         makkDeysMdDZ+PR6cOIDeDEyBEo1Ufi+QeDWvXHj3Lo1XEgk6NeIJkd9GLiqmybaVK
+         GkXJUictBPxtg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.158.250]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Ygz-1puuDq2TVb-0036k5; Sat, 13
- May 2023 23:00:49 +0200
-Message-ID: <f918a8af-5a9b-1309-e19a-4f3f09ebab7f@gmx.de>
-Date:   Sat, 13 May 2023 23:00:45 +0200
+Received: from [192.168.20.60] ([94.134.158.250]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MdvqW-1qYw4r4BZ0-00b73t; Sat, 13
+ May 2023 23:35:32 +0200
+Message-ID: <ca4ac780-42b0-4818-bd84-e1a4acbb28dd@gmx.de>
+Date:   Sat, 13 May 2023 23:35:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Subject: Re: [PATCH 08/23] parisc: add pte_unmap() to balance get_ptep()
 Content-Language: en-US
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
         Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-References: <20230512203426.452963764@linutronix.de>
- <12207466.O9o76ZdvQC@natalenko.name>
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+ <44ebbf90-5fbb-2815-17c7-fcfe3c87d78e@google.com>
 From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <12207466.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <44ebbf90-5fbb-2815-17c7-fcfe3c87d78e@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RpgEId2B9D5HBcL9fBRb+3JWwwhOteIZ1nytZcasaTAmfarvNwn
- fMFgkrHHFQUTus1MzALvRPziABh8c3qvbp7zrAUgbDN6l4imCV7IS4gxdfOdNFI3zgs3XcO
- 11oz6jBIU+1Ra6lyKd+YTydDGuvPMiAY0/gQGWH75WYI+9H8qnSK0e5rvRvnBk3gV+e2mh4
- /Iype0ZePC7XiPoEhVRJQ==
-UI-OutboundReport: notjunk:1;M01:P0:ea8O6TsDxRo=;lqMJCETSNInGwiqOiM4sQMSPd/7
- etoWsuDh2oxQRCTcOm6dNI+74udQOMfHHsm5ViBWq91/zE7BHjEibpBxtH5P3frWwqkILGDJY
- 77TFvDyNXPxd7F47SPcZN1Y3tC0PxkAf8D2O4cXgxGzfXcqh6ZU5OdAWofsVnHmYksoaSdtQK
- /sdWCcq3GNm8Op/iz5sawvt5qV1caIjxirPF8NcX0+HOQDWTmdrgC3KQzahSNe6sgpUYU6A0L
- mj7+P2ZJAxwQSxuoPapXn3E9fK1sETKVzH5EkA2MRPR0BSWfZGm58+nvXtGRoh46V31D9fD3Q
- NgyF0MBkq1h5MMqm1cehrsOqM2fbQUc0mMtImW91/3B0tJVWvww1nAEia9y/XTCE6oKIP/2gr
- +84+DVNsM/OlplgxXAFgsPN0eCrTWdSERofcLepJeNo96NsytLDtOEC7en5zvPV0KkUQe00QS
- 7rl6hFiJ2MYRqfAsgTAw+jmhG8FlpDZPBv8Qq+5EkCGTbFJhfELHNgSJGuuUlUFEGFIKg7jXn
- TbfcaEF6rc4H+WtmaiTMOKNj/SAINwPT+rP+dvyLp2D+729pu0fnQ5k2EkmED+YwXds8vE225
- wFJ3/ZTMghskjLsZVfA+2lbtPTtpXWJ2p2zBBziSEqo2Kk1sKdgS8zq+73wIqibIA4jML/dNg
- OjnqB1D1UaKpKshMSbg63O+5KVXRw0oSgTABWdEzITLhLZrpla6aYa+4BT2wx4mVopNigTidP
- 6HmdhUQpPsfRRdKs/r4DivnIBsaKGWFyGuHjs39P1LTXCnQY+bq7LDx/BcQ49EV022T0FmVHP
- KfxdeSRzDf8VaI7h0Pu+Db96WH9ssPLUVoP+CljJisx2W/IBROPWWx2uhxuL/WIb5UkL14enC
- X/qSeD3BduOA1I9b5VZJterCRzLCiAvjZkN8LbeJOzVdVWMV4EDWlFIivJLXJf7C5BFFtiTfU
- ffX/dDZ8QuTU2qdmz3lPDMkbZx0=
+X-Provags-ID: V03:K1:02c5NpapKZ0yND7w0y40kUtQXH+Ybc0bQPzvspvwYlotAB99sF5
+ zFBBfNW47FR7ppsIv7ORzd5debot/2bSdnSyGIDtWWm1xzh1QppJDewIoqcOMGEOc5o3++E
+ GB7D5SsAuS01JsydFNYGrdMOwh1KtcLiZKmwzv4YnhFPj7aU+qawXM/A52PkJ99vIebL33s
+ O5IbJLN5O6SEa/1rmMz5g==
+UI-OutboundReport: notjunk:1;M01:P0:bhlTqfzpBjQ=;VggY45HBIIx7XaH/PngpNV8urft
+ cjwTlAoz1j7g24v8vlKLAO3PylYnY/qHL1gAemvPDWFLKb+ZHNP7elgmO7WqCtgoC6KjABob8
+ DNOyUboPP4EN29IO7mQkp5zAUdfcC9dvuIH6FrtIgv24kY/u0UkP0sFqXCCza311xuhuc0bfI
+ W3a3RTKNdId6dAowl5u63DT6seM8Hm4iphC0SPSPZT9g005M9r8+BQH/XC9MFQyJSO3FX3CWI
+ UokhNrxaQU+aZoAGuy0ZKtyCLBTYWL4F6TSIHPfUdr4DKE8vx3tRYWkx+4y1/bi2ullhSCNlL
+ t6uHP3r9oyZotSEHOmuNGQ7W90zXSNq13A8slhX51+wEbYQI7OjJlN5/6SNi0b3fPn7mCmsak
+ 5u96zCjBgO45UkYwIFVS3h7nF/Mwj8eEQpBbuQa/S0dQzwZzDhm85nk91JGJWzeKBhnpogocH
+ HASt2e1tuCNJHXlJDWO5LuLXb/JVmpy/KwGOxafTz0qWr0u9OGwBJyzr/aekEvaK0vqfAKu9G
+ WWPJ6EPxl3C5tMotM5H57EtsA/8G5fV+FiCfWCTjtjTsMZF7DQvd5ixzVKc8aKHYj3o78J5J9
+ b1xbN4FsZDbke0QSx0p5QFQq4XQal0qGr9xIMYRqRZ0p56T3GrZgrwad5D5lXnpeTj0OqJ47u
+ LkxrOM39notrGfVPy74SGBIJ6LFZQs2aBXs0Hrdb2Ua2vNs/36VHsvhfxQ4rZu2ljsKr7Tnsd
+ t3WHCudqPse4fRr2srS44fxtRfB3efVVWEMsoe5NnAfdFJZgOwt0WYZyDbB2PZ4mU7ilCEJAJ
+ irVSZYdS00VuNKqtGWxFrZ0rrE5AHHHlC1uGoa5UQz1YYRu63D00hqjC4lOZ81YrXtV0VSuXi
+ PDH9rmGqc28YryLY3ce8ZihMjd1Tkl/vP1QN0EuRgkkWHoKGGQ5LzjYSoYI+w24AaBgVLeyTT
+ dmWbT/BmDshTWbB5y4/6VdjN1LM=
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
-> On p=C3=A1tek 12. kv=C4=9Btna 2023 23:06:56 CEST Thomas Gleixner wrote:
->> This is version 4 of the reworked parallel bringup series. Version 3 ca=
-n be
->> found here:
->>
->>     https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
->> ...
->>
->> Other than that there are no changes and the other details are all the =
-same
->> as in V3 and V2.
->>
->> It's also available from git:
->>
->>      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotpl=
-ug
+Hi Hugh,
 
-I tested your series on the parisc architecture just to make sure that it =
-still works
-with your patch applied.
-On parisc the CPU bringup happens later in the boot process (after the inv=
-entory),
-so your patch won't have an direct impact anyway.
-But at least everything still works, incl. manual CPU enable/disable.
+On 5/10/23 06:52, Hugh Dickins wrote:
+> To keep balance in future, remember to pte_unmap() after a successful
+> get_ptep().  And (we might as well) pretend that flush_cache_pages()
+> really needed a map there, to read the pfn before "unmapping".
+>
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+> ---
+>   arch/parisc/kernel/cache.c | 26 +++++++++++++++++++++-----
+>   1 file changed, 21 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
+> index 1d3b8bc8a623..b0c969b3a300 100644
+> --- a/arch/parisc/kernel/cache.c
+> +++ b/arch/parisc/kernel/cache.c
+> @@ -425,10 +425,15 @@ void flush_dcache_page(struct page *page)
+>   		offset =3D (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
+>   		addr =3D mpnt->vm_start + offset;
+>   		if (parisc_requires_coherency()) {
+> +			bool needs_flush =3D false;
+>   			pte_t *ptep;
+>
+>   			ptep =3D get_ptep(mpnt->vm_mm, addr);
+> -			if (ptep && pte_needs_flush(*ptep))
+> +			if (ptep) {
+> +				needs_flush =3D pte_needs_flush(*ptep);
+> +				pte_unmap(ptep);
+> +			}
+> +			if (needs_flush)
+>   				flush_user_cache_page(mpnt, addr);
+>   		} else {
+>   			/*
+> @@ -560,14 +565,20 @@ EXPORT_SYMBOL(flush_kernel_dcache_page_addr);
+>   static void flush_cache_page_if_present(struct vm_area_struct *vma,
+>   	unsigned long vmaddr, unsigned long pfn)
+>   {
+> -	pte_t *ptep =3D get_ptep(vma->vm_mm, vmaddr);
+> +	bool needs_flush =3D false;
+> +	pte_t *ptep;
+>
+>   	/*
+>   	 * The pte check is racy and sometimes the flush will trigger
+>   	 * a non-access TLB miss. Hopefully, the page has already been
+>   	 * flushed.
+>   	 */
+> -	if (ptep && pte_needs_flush(*ptep))
+> +	ptep =3D get_ptep(vma->vm_mm, vmaddr);
+> +	if (ptep) {
+> +		needs_flush =3D pte_needs_flush(*ptep))
 
-So, you may add
-Tested-by: Helge Deller <deller@gmx.de> # parisc
+^^^^^
+One ")" too much and lacks a trailing ";"
+Should be:
+		needs_flush =3D pte_needs_flush(*ptep);
 
-Thanks!
+With that fixed the kernel compiles and boots sucessfully on parisc.
+
 Helge
