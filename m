@@ -2,121 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4607019AD
-	for <lists+linux-mips@lfdr.de>; Sat, 13 May 2023 22:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC457019F1
+	for <lists+linux-mips@lfdr.de>; Sat, 13 May 2023 23:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjEMUgV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 13 May 2023 16:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S234165AbjEMVCe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 13 May 2023 17:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEMUgV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 16:36:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70A52D40;
-        Sat, 13 May 2023 13:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684010178; x=1715546178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=onYFYVldXP9dx3srsdPLwnPSsSURVschs6xcAcd8kOI=;
-  b=dqgoAdcFBsE57M6yFgLQCN/dBTgay6qW5QHwe+Mj3ZoI9NK4Ievdlbxg
-   vNxkoFwqIkSsC1bVtIgs07m9TWmfbZ0iInWEdwfSw1Ijy/3/GNZ7CTLES
-   muH9wOfDmsArPjHHXAmVvA6+bv0K2JNg0yty6FGwOifvck22zbrh7A6eT
-   V6Kb5BSfxay++1qxP/MdRoqAAe/flVEd4vkUn7/HLnPDTAVWSIJLLl8Wb
-   j1ezRPBSqmhFpuqzo4Sc16J1WqbS/nOlkTlBxVz3t7sCbpiFm16Ti6i9B
-   T5sVD9zWT/MITRPp/6HSdL+qyCJ73Q8LybeM7kPT/s+IzQjGjHV0/e2cq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="348480329"
-X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="348480329"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 13:36:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="844772599"
-X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="844772599"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 May 2023 13:36:16 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxvyR-0005fe-35;
-        Sat, 13 May 2023 20:36:15 +0000
-Date:   Sun, 14 May 2023 04:35:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Genjian <zhanggenjian123@gmail.com>, tsbogend@alpha.franken.de,
-        rdunlap@infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhanggenjian123@gmail.com,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES
- is enabled
-Message-ID: <202305140443.2830m30j-lkp@intel.com>
-References: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
+        with ESMTP id S231190AbjEMVCc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 17:02:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA1E30C4;
+        Sat, 13 May 2023 14:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684011649; i=deller@gmx.de;
+        bh=S8BdFQeWXnw0k7xb/Pd2AhJXn5drG2VSOAIP2nWf5C4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=mcUG47eX0Gn5veG6Ma/ul80RdUo6bsI8PVfZz0zKmUflnHrmh7e47BPa5vNQH5AE5
+         xN8t8csT87bACHCqA8OsuJ2hWYdHBaim0kPYxyJPyGV+wdFIZqdMZ2KWJkGpMA71P/
+         egT+C+AIP++kGZ4bJ4izMXA5xAwpUSXSFsk26PUoT8kKqTDoQAx1/dB+6F6qtKXT3r
+         GvfRk5+vnzNiG67CzR+x13ghBN34jZ4cPRgxhCtav+HMxKP6wiojHtau4ptA6nVxv6
+         cehya8971oTBpuL9wmCK7IO8pT5+JyFocI4nxvSEkGnCMrJGyPpXH1ZFrtHGaJENlu
+         oDzqQ+ljsk/Dw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.158.250]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Ygz-1puuDq2TVb-0036k5; Sat, 13
+ May 2023 23:00:49 +0200
+Message-ID: <f918a8af-5a9b-1309-e19a-4f3f09ebab7f@gmx.de>
+Date:   Sat, 13 May 2023 23:00:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Content-Language: en-US
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+References: <20230512203426.452963764@linutronix.de>
+ <12207466.O9o76ZdvQC@natalenko.name>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <12207466.O9o76ZdvQC@natalenko.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:RpgEId2B9D5HBcL9fBRb+3JWwwhOteIZ1nytZcasaTAmfarvNwn
+ fMFgkrHHFQUTus1MzALvRPziABh8c3qvbp7zrAUgbDN6l4imCV7IS4gxdfOdNFI3zgs3XcO
+ 11oz6jBIU+1Ra6lyKd+YTydDGuvPMiAY0/gQGWH75WYI+9H8qnSK0e5rvRvnBk3gV+e2mh4
+ /Iype0ZePC7XiPoEhVRJQ==
+UI-OutboundReport: notjunk:1;M01:P0:ea8O6TsDxRo=;lqMJCETSNInGwiqOiM4sQMSPd/7
+ etoWsuDh2oxQRCTcOm6dNI+74udQOMfHHsm5ViBWq91/zE7BHjEibpBxtH5P3frWwqkILGDJY
+ 77TFvDyNXPxd7F47SPcZN1Y3tC0PxkAf8D2O4cXgxGzfXcqh6ZU5OdAWofsVnHmYksoaSdtQK
+ /sdWCcq3GNm8Op/iz5sawvt5qV1caIjxirPF8NcX0+HOQDWTmdrgC3KQzahSNe6sgpUYU6A0L
+ mj7+P2ZJAxwQSxuoPapXn3E9fK1sETKVzH5EkA2MRPR0BSWfZGm58+nvXtGRoh46V31D9fD3Q
+ NgyF0MBkq1h5MMqm1cehrsOqM2fbQUc0mMtImW91/3B0tJVWvww1nAEia9y/XTCE6oKIP/2gr
+ +84+DVNsM/OlplgxXAFgsPN0eCrTWdSERofcLepJeNo96NsytLDtOEC7en5zvPV0KkUQe00QS
+ 7rl6hFiJ2MYRqfAsgTAw+jmhG8FlpDZPBv8Qq+5EkCGTbFJhfELHNgSJGuuUlUFEGFIKg7jXn
+ TbfcaEF6rc4H+WtmaiTMOKNj/SAINwPT+rP+dvyLp2D+729pu0fnQ5k2EkmED+YwXds8vE225
+ wFJ3/ZTMghskjLsZVfA+2lbtPTtpXWJ2p2zBBziSEqo2Kk1sKdgS8zq+73wIqibIA4jML/dNg
+ OjnqB1D1UaKpKshMSbg63O+5KVXRw0oSgTABWdEzITLhLZrpla6aYa+4BT2wx4mVopNigTidP
+ 6HmdhUQpPsfRRdKs/r4DivnIBsaKGWFyGuHjs39P1LTXCnQY+bq7LDx/BcQ49EV022T0FmVHP
+ KfxdeSRzDf8VaI7h0Pu+Db96WH9ssPLUVoP+CljJisx2W/IBROPWWx2uhxuL/WIb5UkL14enC
+ X/qSeD3BduOA1I9b5VZJterCRzLCiAvjZkN8LbeJOzVdVWMV4EDWlFIivJLXJf7C5BFFtiTfU
+ ffX/dDZ8QuTU2qdmz3lPDMkbZx0=
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Genjian,
+Hi Thomas,
+> On p=C3=A1tek 12. kv=C4=9Btna 2023 23:06:56 CEST Thomas Gleixner wrote:
+>> This is version 4 of the reworked parallel bringup series. Version 3 ca=
+n be
+>> found here:
+>>
+>>     https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
+>> ...
+>>
+>> Other than that there are no changes and the other details are all the =
+same
+>> as in V3 and V2.
+>>
+>> It's also available from git:
+>>
+>>      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotpl=
+ug
 
-kernel test robot noticed the following build warnings:
+I tested your series on the parisc architecture just to make sure that it =
+still works
+with your patch applied.
+On parisc the CPU bringup happens later in the boot process (after the inv=
+entory),
+so your patch won't have an direct impact anyway.
+But at least everything still works, incl. manual CPU enable/disable.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.4-rc1 next-20230512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So, you may add
+Tested-by: Helge Deller <deller@gmx.de> # parisc
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230427150332.2978867-1-zhanggenjian%40kylinos.cn
-patch subject: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
-config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20230514/202305140443.2830m30j-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6eb50851d61ca808629a062e0545704eba5be950
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
-        git checkout 6eb50851d61ca808629a062e0545704eba5be950
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/mm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305140443.2830m30j-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/mips/mm/c-r3k.c:28:15: warning: no previous prototype for 'r3k_cache_size' [-Wmissing-prototypes]
-      28 | unsigned long r3k_cache_size(unsigned long ca_flags)
-         |               ^~~~~~~~~~~~~~
-   arch/mips/mm/c-r3k.c:63:15: warning: no previous prototype for 'r3k_cache_lsize' [-Wmissing-prototypes]
-      63 | unsigned long r3k_cache_lsize(unsigned long ca_flags)
-         |               ^~~~~~~~~~~~~~~
-   arch/mips/mm/c-r3k.c:286:6: warning: no previous prototype for 'r3k_cache_init' [-Wmissing-prototypes]
-     286 | void r3k_cache_init(void)
-         |      ^~~~~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:422: Error: non-constant expression in ".if" statement
-   {standard input}: Error: end of file inside conditional
-   {standard input}:422: Error: here is the start of the unterminated conditional
->> {standard input}: Warning: missing .end at end of assembly
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks!
+Helge
