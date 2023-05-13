@@ -2,101 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6C8701A16
-	for <lists+linux-mips@lfdr.de>; Sat, 13 May 2023 23:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9E3701ACA
+	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 01:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjEMVhw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 13 May 2023 17:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S229508AbjEMXUX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 13 May 2023 19:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEMVhu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 17:37:50 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597C26BF;
-        Sat, 13 May 2023 14:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684013732; i=deller@gmx.de;
-        bh=yJRf6LHTP/Tqq0WjA9yc9VAdZA0puqTSbfj+iJUayOI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=cr8F1CRBH8iQkDkEZ/t6guBO/5jXWPHjvHesKUuGbD0L0xJGMcsfDLG0X9/WHN5tf
-         gmoBZcMozWcEmMI1SXgz60UKtLHg89Qkg3K5IkelB8CkMlNz7sHwAxzIMD7I9clgqG
-         8BBXU1INAL2hkc4jAoXGc9Lj9qQhDT78CQ4DXrxDBdxOVY1Chk3DgfjVKIVZpGXT/D
-         hVsUkekeRL3hC4ZEJXj+51+YVnf9Nvq9nqI08asyhPuJHM5bnDl2bJRO7+pyeEkSzs
-         makkDeysMdDZ+PR6cOIDeDEyBEo1Ufi+QeDWvXHj3Lo1XEgk6NeIJkd9GLiqmybaVK
-         GkXJUictBPxtg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.158.250]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MdvqW-1qYw4r4BZ0-00b73t; Sat, 13
- May 2023 23:35:32 +0200
-Message-ID: <ca4ac780-42b0-4818-bd84-e1a4acbb28dd@gmx.de>
-Date:   Sat, 13 May 2023 23:35:26 +0200
+        with ESMTP id S229447AbjEMXUW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 19:20:22 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA492700;
+        Sat, 13 May 2023 16:20:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684020020; x=1715556020;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rEjsC050EnB334yNVCRh3vB5CJVdTb9qovPvhznaKOM=;
+  b=K8eV+aXOeDwwV/lEGYvHO+llmudZmqiV5lij9IHpeD+DT7mRgx2zSZ9f
+   X4NsmWG634l0S7fY7mjkD0fW25HxU9oUE/wt3w6x0L+BA+aaGRK61DYmF
+   FFRenDA6+0sBsbag176FR7aq75LVgx3DzD0NHBk/5vt2vXC/0S4zNppUd
+   hNtrVT/Yec7AgQZyee+DX4qd8xxWdfvJOhjQRZ9yzLQ6YiLgtUFRAPeJU
+   CQ04APNQ09/gZfnktwjhGSkEelgF/vHF50t4YsmPjH2Ce/1hGU9DBEDDp
+   8q5Ax4ekXCHauT3shxRtsgc3IftMDDU/hxCxTy/twkvrzX6TAGIehgXHn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="353261154"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="353261154"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 16:20:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="812487054"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="812487054"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 13 May 2023 16:20:18 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxyXB-0005it-1K;
+        Sat, 13 May 2023 23:20:17 +0000
+Date:   Sun, 14 May 2023 07:19:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Genjian <zhanggenjian123@gmail.com>, tsbogend@alpha.franken.de,
+        rdunlap@infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhanggenjian123@gmail.com,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES
+ is enabled
+Message-ID: <202305140702.w0bg48FH-lkp@intel.com>
+References: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 08/23] parisc: add pte_unmap() to balance get_ptep()
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
- <44ebbf90-5fbb-2815-17c7-fcfe3c87d78e@google.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <44ebbf90-5fbb-2815-17c7-fcfe3c87d78e@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:02c5NpapKZ0yND7w0y40kUtQXH+Ybc0bQPzvspvwYlotAB99sF5
- zFBBfNW47FR7ppsIv7ORzd5debot/2bSdnSyGIDtWWm1xzh1QppJDewIoqcOMGEOc5o3++E
- GB7D5SsAuS01JsydFNYGrdMOwh1KtcLiZKmwzv4YnhFPj7aU+qawXM/A52PkJ99vIebL33s
- O5IbJLN5O6SEa/1rmMz5g==
-UI-OutboundReport: notjunk:1;M01:P0:bhlTqfzpBjQ=;VggY45HBIIx7XaH/PngpNV8urft
- cjwTlAoz1j7g24v8vlKLAO3PylYnY/qHL1gAemvPDWFLKb+ZHNP7elgmO7WqCtgoC6KjABob8
- DNOyUboPP4EN29IO7mQkp5zAUdfcC9dvuIH6FrtIgv24kY/u0UkP0sFqXCCza311xuhuc0bfI
- W3a3RTKNdId6dAowl5u63DT6seM8Hm4iphC0SPSPZT9g005M9r8+BQH/XC9MFQyJSO3FX3CWI
- UokhNrxaQU+aZoAGuy0ZKtyCLBTYWL4F6TSIHPfUdr4DKE8vx3tRYWkx+4y1/bi2ullhSCNlL
- t6uHP3r9oyZotSEHOmuNGQ7W90zXSNq13A8slhX51+wEbYQI7OjJlN5/6SNi0b3fPn7mCmsak
- 5u96zCjBgO45UkYwIFVS3h7nF/Mwj8eEQpBbuQa/S0dQzwZzDhm85nk91JGJWzeKBhnpogocH
- HASt2e1tuCNJHXlJDWO5LuLXb/JVmpy/KwGOxafTz0qWr0u9OGwBJyzr/aekEvaK0vqfAKu9G
- WWPJ6EPxl3C5tMotM5H57EtsA/8G5fV+FiCfWCTjtjTsMZF7DQvd5ixzVKc8aKHYj3o78J5J9
- b1xbN4FsZDbke0QSx0p5QFQq4XQal0qGr9xIMYRqRZ0p56T3GrZgrwad5D5lXnpeTj0OqJ47u
- LkxrOM39notrGfVPy74SGBIJ6LFZQs2aBXs0Hrdb2Ua2vNs/36VHsvhfxQ4rZu2ljsKr7Tnsd
- t3WHCudqPse4fRr2srS44fxtRfB3efVVWEMsoe5NnAfdFJZgOwt0WYZyDbB2PZ4mU7ilCEJAJ
- irVSZYdS00VuNKqtGWxFrZ0rrE5AHHHlC1uGoa5UQz1YYRu63D00hqjC4lOZ81YrXtV0VSuXi
- PDH9rmGqc28YryLY3ce8ZihMjd1Tkl/vP1QN0EuRgkkWHoKGGQ5LzjYSoYI+w24AaBgVLeyTT
- dmWbT/BmDshTWbB5y4/6VdjN1LM=
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -105,62 +69,119 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Hugh,
+Hi Genjian,
 
-On 5/10/23 06:52, Hugh Dickins wrote:
-> To keep balance in future, remember to pte_unmap() after a successful
-> get_ptep().  And (we might as well) pretend that flush_cache_pages()
-> really needed a map there, to read the pfn before "unmapping".
->
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->   arch/parisc/kernel/cache.c | 26 +++++++++++++++++++++-----
->   1 file changed, 21 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-> index 1d3b8bc8a623..b0c969b3a300 100644
-> --- a/arch/parisc/kernel/cache.c
-> +++ b/arch/parisc/kernel/cache.c
-> @@ -425,10 +425,15 @@ void flush_dcache_page(struct page *page)
->   		offset =3D (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
->   		addr =3D mpnt->vm_start + offset;
->   		if (parisc_requires_coherency()) {
-> +			bool needs_flush =3D false;
->   			pte_t *ptep;
->
->   			ptep =3D get_ptep(mpnt->vm_mm, addr);
-> -			if (ptep && pte_needs_flush(*ptep))
-> +			if (ptep) {
-> +				needs_flush =3D pte_needs_flush(*ptep);
-> +				pte_unmap(ptep);
-> +			}
-> +			if (needs_flush)
->   				flush_user_cache_page(mpnt, addr);
->   		} else {
->   			/*
-> @@ -560,14 +565,20 @@ EXPORT_SYMBOL(flush_kernel_dcache_page_addr);
->   static void flush_cache_page_if_present(struct vm_area_struct *vma,
->   	unsigned long vmaddr, unsigned long pfn)
->   {
-> -	pte_t *ptep =3D get_ptep(vma->vm_mm, vmaddr);
-> +	bool needs_flush =3D false;
-> +	pte_t *ptep;
->
->   	/*
->   	 * The pte check is racy and sometimes the flush will trigger
->   	 * a non-access TLB miss. Hopefully, the page has already been
->   	 * flushed.
->   	 */
-> -	if (ptep && pte_needs_flush(*ptep))
-> +	ptep =3D get_ptep(vma->vm_mm, vmaddr);
-> +	if (ptep) {
-> +		needs_flush =3D pte_needs_flush(*ptep))
+kernel test robot noticed the following build errors:
 
-^^^^^
-One ")" too much and lacks a trailing ";"
-Should be:
-		needs_flush =3D pte_needs_flush(*ptep);
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.4-rc1 next-20230512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-With that fixed the kernel compiles and boots sucessfully on parisc.
+url:    https://github.com/intel-lab-lkp/linux/commits/Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230427150332.2978867-1-zhanggenjian%40kylinos.cn
+patch subject: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
+config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20230514/202305140702.w0bg48FH-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6eb50851d61ca808629a062e0545704eba5be950
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
+        git checkout 6eb50851d61ca808629a062e0545704eba5be950
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Helge
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305140702.w0bg48FH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   init/main.c:779:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+     779 | void __init __weak arch_post_acpi_subsys_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   init/main.c:791:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
+     791 | void __init __weak mem_encrypt_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~
+   init/main.c:793:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
+     793 | void __init __weak poking_init(void) { }
+         |                    ^~~~~~~~~~~
+   {standard input}: Assembler messages:
+   {standard input}:2288: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+>> {standard input}:2288: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:131: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:131: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:245: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:245: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:139: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:898: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:67: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:149: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   arch/mips/kernel/syscall.c:51:16: warning: no previous prototype for 'sysm_pipe' [-Wmissing-prototypes]
+      51 | asmlinkage int sysm_pipe(void)
+         |                ^~~~~~~~~
+   {standard input}: Assembler messages:
+   {standard input}:356: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:356: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:178: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:878: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:90: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:169: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:35: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:513: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:100: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:138: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+--
+   {standard input}: Assembler messages:
+   {standard input}:44: Error: non-constant expression in ".if" statement
+>> {standard input}: Error: end of file inside conditional
+   {standard input}:332: Error: here is the start of the unterminated conditional
+   {standard input}: Warning: missing .end at end of assembly
+..
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
