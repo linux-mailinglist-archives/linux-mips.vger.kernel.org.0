@@ -2,186 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9E3701ACA
-	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 01:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C936701D9F
+	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 15:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjEMXUX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 13 May 2023 19:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S229808AbjENNlu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 May 2023 09:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEMXUW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 13 May 2023 19:20:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA492700;
-        Sat, 13 May 2023 16:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684020020; x=1715556020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rEjsC050EnB334yNVCRh3vB5CJVdTb9qovPvhznaKOM=;
-  b=K8eV+aXOeDwwV/lEGYvHO+llmudZmqiV5lij9IHpeD+DT7mRgx2zSZ9f
-   X4NsmWG634l0S7fY7mjkD0fW25HxU9oUE/wt3w6x0L+BA+aaGRK61DYmF
-   FFRenDA6+0sBsbag176FR7aq75LVgx3DzD0NHBk/5vt2vXC/0S4zNppUd
-   hNtrVT/Yec7AgQZyee+DX4qd8xxWdfvJOhjQRZ9yzLQ6YiLgtUFRAPeJU
-   CQ04APNQ09/gZfnktwjhGSkEelgF/vHF50t4YsmPjH2Ce/1hGU9DBEDDp
-   8q5Ax4ekXCHauT3shxRtsgc3IftMDDU/hxCxTy/twkvrzX6TAGIehgXHn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="353261154"
-X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="353261154"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 16:20:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="812487054"
-X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="812487054"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 13 May 2023 16:20:18 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxyXB-0005it-1K;
-        Sat, 13 May 2023 23:20:17 +0000
-Date:   Sun, 14 May 2023 07:19:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Genjian <zhanggenjian123@gmail.com>, tsbogend@alpha.franken.de,
-        rdunlap@infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhanggenjian123@gmail.com,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES
- is enabled
-Message-ID: <202305140702.w0bg48FH-lkp@intel.com>
-References: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
+        with ESMTP id S229635AbjENNlt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 09:41:49 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FACF10FC;
+        Sun, 14 May 2023 06:41:48 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f139de8cefso60535236e87.0;
+        Sun, 14 May 2023 06:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684071706; x=1686663706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+qvnHcB/azIUhjmByanInN+pkcOd92LVDrbUZO6gKU=;
+        b=Sj2fAQWPczlH0VqG5hHOFSTTCgAOvfl/SegsvPvdegYis30vX0MbwKvXo4X0O/W73V
+         n0mJEjtQvn53XqQaab6hXIJb96BKe5CTLDOX1uofBwAuyOltJDePPyFoWpEDXzSp9Zj/
+         LP5CQmNBGln8qyXnleH/YIEl2IeMFjtiDyycJ1eX42d5PHW1awmV7N8sgJSbGevdEUSC
+         /5YPVZDsFL33yrx51WBJlflK8SvOaNolxMCWBLNxbOiBPHBEXyMGDgf+AlEi+yAG2Gwx
+         3XC8hXzsBMBlZ+e2P+zWutu0Qjnm3hCf8yi0ZsFAXmfL/Eu4/H68vHlbEm+l5+YK+vNS
+         Uo4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684071706; x=1686663706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2+qvnHcB/azIUhjmByanInN+pkcOd92LVDrbUZO6gKU=;
+        b=KfllxvXjLfcTdAENvODsQIrotai1QlG3et4FLbfCq7yJhrL9SyllLiHyBc4rp43PAD
+         WRgtQ3Qu/4dB35XSGxXM9+WQC1vP721SqZ4mmYALLTnGLc9K9c56bENi08dDsHWG+heQ
+         9cRv7skz84fI8UDuOFO6mgnk/TsgFCal3UloWlUoaFXqHzTkBrs+JZ+vt7cjf5qpcePJ
+         GD4B2z4k9xQEPN1FESA6ln3hXLC2WwFIDLd5BNlWrU/TfP8bfN85D0WHDWQqguG2/Mo5
+         X7a01BC8t/4hrah1ERwQr70UDisxPy8gFTdYBfRDUBrnmSgly9PN5H2pUfnZXW9ElzGe
+         lJjg==
+X-Gm-Message-State: AC+VfDzMr+s0CIPRRBF0EC/NYLRpBbC28sH5lywMrPenhZxrm8b2+m13
+        z2FGY+a1IRlaGfe06YXMI/T1aT4r+HOMeA==
+X-Google-Smtp-Source: ACHHUZ7vkpLjRVlgFHbnD4i09hJ/Fxd5i1LjlJnB4WMMZCY0L4enBlQd68HBgM1gDhyw4F2OGcaKmw==
+X-Received: by 2002:a05:6512:10c6:b0:4ed:b86b:9cc9 with SMTP id k6-20020a05651210c600b004edb86b9cc9mr5369371lfg.28.1684071705983;
+        Sun, 14 May 2023 06:41:45 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id t27-20020ac243bb000000b004f27d033994sm806724lfl.267.2023.05.14.06.41.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 06:41:44 -0700 (PDT)
+Date:   Sun, 14 May 2023 16:41:43 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     maz@kernel.org, tsbogend@alpha.franken.de, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] irqchip/mips-gic: Don't touch vl_map if a local
+ interrupt is not routable
+Message-ID: <20230514134143.6uclwfhzkar4jupe@mobilestation>
+References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
+ <20230424103156.66753-2-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230424103156.66753-2-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Genjian,
+Hello Jiaxun
 
-kernel test robot noticed the following build errors:
+On Mon, Apr 24, 2023 at 11:31:55AM +0100, Jiaxun Yang wrote:
+> When a GIC local interrupt is not routable, it's vl_map will be used
+> to control some internal states for core (providing IPTI, IPPCI, IPFDC
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.4-rc1 next-20230512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> input signal for core). Overriding it will interfere core's intetrupt
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230427150332.2978867-1-zhanggenjian%40kylinos.cn
-patch subject: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
-config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20230514/202305140702.w0bg48FH-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6eb50851d61ca808629a062e0545704eba5be950
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
-        git checkout 6eb50851d61ca808629a062e0545704eba5be950
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+s/intetrupt/interrupt
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305140702.w0bg48FH-lkp@intel.com/
+> controller.
+> 
+> Do not touch vl_map if a local interrupt is not routable, we are not
+> going to remap it.
+> 
+> Before dd098a0e0319 (" irqchip/mips-gic: Get rid of the reliance on
+> irq_cpu_online()"), if a local interrupt is not routable, then it won't
+> be requested from GIC Local domain, and thus gic_all_vpes_irq_cpu_online
+> won't be called for that particular interrupt.
+> 
+> Fixes: dd098a0e0319 (" irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-All errors (new ones prefixed by >>):
+My system doesn't have VPEs but 2x MIPS32 P5600 cores with GIC enabled as
+EIC device so I can't fully test this change, but at the very least it
+looks reasonable. Indeed performing the local IRQs routing setups for
+the non-routable IRQs looks invalid. A similar change can be spotted
+in the gic_irq_domain_map() method implementation.
 
-   init/main.c:779:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-     779 | void __init __weak arch_post_acpi_subsys_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   init/main.c:791:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
-     791 | void __init __weak mem_encrypt_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~
-   init/main.c:793:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
-     793 | void __init __weak poking_init(void) { }
-         |                    ^~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:2288: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
->> {standard input}:2288: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:131: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:131: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:245: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:245: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:139: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:898: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:67: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:149: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   arch/mips/kernel/syscall.c:51:16: warning: no previous prototype for 'sysm_pipe' [-Wmissing-prototypes]
-      51 | asmlinkage int sysm_pipe(void)
-         |                ^~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:356: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:356: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:178: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:878: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:90: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:169: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:35: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:513: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:100: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:138: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
---
-   {standard input}: Assembler messages:
-   {standard input}:44: Error: non-constant expression in ".if" statement
->> {standard input}: Error: end of file inside conditional
-   {standard input}:332: Error: here is the start of the unterminated conditional
-   {standard input}: Warning: missing .end at end of assembly
-..
+> ---
+>  drivers/irqchip/irq-mips-gic.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index 046c355e120b..b568d55ef7c5 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
+> @@ -399,6 +399,8 @@ static void gic_all_vpes_irq_cpu_online(void)
+>  		unsigned int intr = local_intrs[i];
+>  		struct gic_all_vpes_chip_data *cd;
+>  
+> +		if (!gic_local_irq_is_routable(intr))
+> +			continue;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please add newline here to distinguish the skip-step code chunk and
+the setup code so the look would look a tiny bit more readable.
+
+>  		cd = &gic_all_vpes_chip_data[intr];
+>  		write_gic_vl_map(mips_gic_vx_map_reg(intr), cd->map);
+>  		if (cd->mask)
+
+Other than that the change looks good. Thanks.
+
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
+> -- 
+> 2.34.1
+> 
