@@ -2,170 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5DD701F90
-	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 22:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEDB702002
+	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 23:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjENUpZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 May 2023 16:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S229648AbjENVtZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 May 2023 17:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjENUpY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 16:45:24 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36516E48;
-        Sun, 14 May 2023 13:45:23 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A2F015C00A7;
-        Sun, 14 May 2023 16:45:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 14 May 2023 16:45:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684097120; x=1684183520; bh=/W41ffXeloPR/6oAM7Le1tM72U7sJeoRvVy
-        Iao3+j0w=; b=Woi6DWGoOZf+nEIDss62CuAIIQqTsXJhVv/n8ECAK0sItur73ND
-        fPQ6th2BitC2rOs8BW2Mo6PsM5efjmcI1pecs5ay/GzydCqC/th66F8TXayLsPck
-        2GL0jDMzzkMcKFcqiRUHMZ6dBUWov6yjm4oLbqwS/Y9tI/cF+fDpKAXlPRQYLaG1
-        Tzj+oHAuF6hWMARJsOL2Gm5PsqM/hull7Yg6J+xzR210Qsod9Kyeb6v6MD+M28ev
-        Ow89aUIyFeBMSbbPgvmKsjn33FuHu9zuo8kGKt2wqLugXtj2RqFFqrgBQtmXjbKA
-        NardQ8jFqSslVPh3uxOKz5a0BqTm/NQ/i0Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684097120; x=1684183520; bh=/W41ffXeloPR/6oAM7Le1tM72U7sJeoRvVy
-        Iao3+j0w=; b=jeS6TL+toYtP0Nh2UjwigOoHlJNo+riDbPR0ZSiZ0Q3sitfLtK6
-        TLdV1ypXcSBZtz7Ubq5LKsEULNnMH9s8Is9s4hEIPsP2unZmWRvA3KP3/K9EbUVm
-        7L+xz+a84RFF6ZZZ5SKw/4sAzmEmx6R95H0euaEy7GPzeHJGZ24Zu23Q02LrJ65r
-        QmRxiOIFsnqabNNjZFuJ1iMetlPNtIAYVHh9iomoXZhQz3hHZjaf9WGpLcvG4CbU
-        vmprXMswx4mktceaJMpcLVaRkKOPn50gz1B4LhNLkcNYopiaSlWpBxBGz7CeHT1R
-        yOjETxrXO0fTPW0VU2X1a9o1j6lxO5TShBw==
-X-ME-Sender: <xms:X0hhZPm7bn_B7WDnULJLgflM-C6fcTomynsCXT1njgO_QwkFv7I5lg>
-    <xme:X0hhZC3biT4xjZKiqbwICopoDublU7gXvI61P2rbAGugWFBPiXsusiTGgwJjCwWYd
-    aQ44HzhurE4jELPtUI>
-X-ME-Received: <xmr:X0hhZFoYeYaMX71iocIVZf6BYkDpFA2zxczH3ivJfdUwMyl-9X4qidBDjZg3D5BVCXX6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehhedgudehgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:X0hhZHmmS9EpnJNsJQn56GdGDwXanyMjGfGx0gKJDujtTlADVVkafQ>
-    <xmx:X0hhZN1blrajML1i7ZWqoysqmNLu7lICN6wfm_qkRu0pcOL_Ws5z5A>
-    <xmx:X0hhZGtHMKt7XsdcE7Jy3p1notWFJl6fRw2jrxEaGXcVcnMPS6CZ3w>
-    <xmx:YEhhZF-ezGJdC8k8rUrgNOU9YcO01EdZu-9drinqcZMH-znI72vguw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 May 2023 16:45:18 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 2/2] irqchip/mips-gic: Use raw spinlock for gic_lock
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230514135601.5irhslf6tdv4tk5z@mobilestation>
-Date:   Sun, 14 May 2023 21:45:06 +0100
-Cc:     Marc Zyngier <maz@kernel.org>,
+        with ESMTP id S229534AbjENVtY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 17:49:24 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A8290;
+        Sun, 14 May 2023 14:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zygIhDyV8ht+xJs1lmqnA3sy7ZHDhj2x5W8U9MyDTpM=; b=AtfoJ+yRkuDm9gCWovg7bgbFzv
+        zvtG8omqD3Ee2e5vtlK1211bbhN7KzcG9ZOV/p9gXghTUS1HF9EaelwoM4SQo/b4sWNMb2wsJsVAh
+        ryLGjfB/dL5jQW5LWnI6h4gq4lKj2LKWt1eQxsKNKi4CYTHPi2D+7G5csc6so1Mr3IZqjzYXfvDre
+        Wa2IYRFjoBiG9xBoaM3MR/ceTkMFFWkX6SNnbTUn4IT7Xv2Ef1OD3QTBmf65tsdUdiBBhGBc7WMfJ
+        YjLmEKzf9bN3ap+iE91yCmvTRvaupsrf+ACH5S2PsgkJyDm/ZJKotc9YiiD6FM6FqFSv7z1nQGLn3
+        n3J6H6Qw==;
+Received: from [177.189.3.227] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pyJaT-009SDU-MC; Sun, 14 May 2023 23:49:06 +0200
+Message-ID: <b4733705-7014-49c6-57ab-a67459954f28@igalia.com>
+Date:   Sun, 14 May 2023 18:48:50 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B793C674-2122-4464-A23D-1FDC450E9631@flygoat.com>
-References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
- <20230424103156.66753-3-jiaxun.yang@flygoat.com>
- <20230514135601.5irhslf6tdv4tk5z@mobilestation>
-To:     Serge Semin <fancer.lancer@gmail.com>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>
+References: <20230512203426.452963764@linutronix.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20230512203426.452963764@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 12/05/2023 18:06, Thomas Gleixner wrote:
+> Hi!
+> 
+> This is version 4 of the reworked parallel bringup series. Version 3 can be
+> found here:
+> 
+>    https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
 
 
-> 2023=E5=B9=B45=E6=9C=8814=E6=97=A5 14:56=EF=BC=8CSerge Semin =
-<fancer.lancer@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Mon, Apr 24, 2023 at 11:31:56AM +0100, Jiaxun Yang wrote:
->> Since we may hold gic_lock in hardirq context, use raw spinlock
->> makes more sense given that it is for low-level interrupt handling
->> routine and the critical section is small.
->>=20
->> Fixes BUG:
->>=20
->> [    0.426106] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> [    0.426257] [ BUG: Invalid wait context ]
->> [    0.426422] 6.3.0-rc7-next-20230421-dirty #54 Not tainted
->> [    0.426638] -----------------------------
->> [    0.426766] swapper/0/1 is trying to lock:
->> [    0.426954] ffffffff8104e7b8 (gic_lock){....}-{3:3}, at: =
-gic_set_type+0x30/08
->>=20
->> Fixes: 95150ae8b330 ("irqchip: mips-gic: Implement irq_set_type =
-callback")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->=20
-> LGTM especially in the RT-patch context. Feel free to add:
-> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
->=20
-> Please see a tiny nitpick below.
->=20
->> ---
->> drivers/irqchip/irq-mips-gic.c | 30 +++++++++++++++---------------
->> 1 file changed, 15 insertions(+), 15 deletions(-)
->>=20
->> diff --git a/drivers/irqchip/irq-mips-gic.c =
-b/drivers/irqchip/irq-mips-gic.c
->> index b568d55ef7c5..6d5ecc10a870 100644
->> --- a/drivers/irqchip/irq-mips-gic.c
->> +++ b/drivers/irqchip/irq-mips-gic.c
->> @@ -50,7 +50,7 @@ void __iomem *mips_gic_base;
->>=20
->> static DEFINE_PER_CPU_READ_MOSTLY(unsigned long[GIC_MAX_LONGS], =
-pcpu_masks);
->>=20
->> -static DEFINE_SPINLOCK(gic_lock);
->> +static DEFINE_RAW_SPINLOCK(gic_lock);
->> static struct irq_domain *gic_irq_domain;
->> static int gic_shared_intrs;
->> static unsigned int gic_cpu_pin;
->> @@ -210,7 +210,7 @@ static int gic_set_type(struct irq_data *d, =
-unsigned int type)
->>=20
->> irq =3D GIC_HWIRQ_TO_SHARED(d->hwirq);
->>=20
->=20
->> - spin_lock_irqsave(&gic_lock, flags);
->> + raw_spin_lock_irqsave(&gic_lock, flags);
->=20
-> AFAICS this call can be moved way down to be after the switch-case
-> block.
+Hi Thomas, thanks for series! I was able to test it on the Steam Deck
+(on top of 6.4-rc2), and everything is working fine; also tested S3
+suspend/resume, working as expected.
 
-Thanks for the suggestion :-)
+Some logs from boot time:
 
-Since it actually reduced critical section I think it should not be =
-included in this patch which
-Cced stable.
 
-I=E2=80=99ll fix that in a new patch.
+Parallel boot
+[    0.239764] smp: Bringing up secondary CPUs ...
+[...]
+[    0.253130] smp: Brought up 1 node, 8 CPUs
 
-Thanks
-- Jiaxun
 
->=20
-> -Serge(y)
->=20
+Regular boot (with cpuhp.parallel=0)
+[    0.240093] smp: Bringing up secondary CPUs ...
+[...]
+[    0.253475] smp: Brought up 1 node, 8 CPUs
 
+
+Feel free to add (to the series):
+
+Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
+
+Cheers,
+
+
+Guilherme
