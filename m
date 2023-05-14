@@ -2,67 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C936701D9F
-	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 15:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306B7701DAA
+	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 15:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjENNlu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 May 2023 09:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
+        id S232283AbjENN4I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 May 2023 09:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjENNlt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 09:41:49 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FACF10FC;
-        Sun, 14 May 2023 06:41:48 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f139de8cefso60535236e87.0;
-        Sun, 14 May 2023 06:41:48 -0700 (PDT)
+        with ESMTP id S229635AbjENN4H (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 09:56:07 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B7919AC;
+        Sun, 14 May 2023 06:56:05 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f139de8cefso60571219e87.0;
+        Sun, 14 May 2023 06:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684071706; x=1686663706;
+        d=gmail.com; s=20221208; t=1684072564; x=1686664564;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+qvnHcB/azIUhjmByanInN+pkcOd92LVDrbUZO6gKU=;
-        b=Sj2fAQWPczlH0VqG5hHOFSTTCgAOvfl/SegsvPvdegYis30vX0MbwKvXo4X0O/W73V
-         n0mJEjtQvn53XqQaab6hXIJb96BKe5CTLDOX1uofBwAuyOltJDePPyFoWpEDXzSp9Zj/
-         LP5CQmNBGln8qyXnleH/YIEl2IeMFjtiDyycJ1eX42d5PHW1awmV7N8sgJSbGevdEUSC
-         /5YPVZDsFL33yrx51WBJlflK8SvOaNolxMCWBLNxbOiBPHBEXyMGDgf+AlEi+yAG2Gwx
-         3XC8hXzsBMBlZ+e2P+zWutu0Qjnm3hCf8yi0ZsFAXmfL/Eu4/H68vHlbEm+l5+YK+vNS
-         Uo4w==
+        bh=/ZVKIUKzGX05OMg0P/SQC1TBuz/zx2SrEhQdY2C1eVk=;
+        b=e0jL1+x+B+CVF5D5kZvCOlSKlGE+7Pz/TLv0uhcK/uzns0Bh8hero3o8Fo/erRqUCJ
+         PitZDzEqXuKhiXoferofSQxwm1+ZlDLyTDQ9Wtm8fL2MD5Nd8nS2mmp68juxCoACoad7
+         eCKBMLrKglQPGDfshYP4i/xyujCWSCEQxjAKTeZSzTyc5uXpVTkbkKIqAZ6VmYwjo9b6
+         D+2IpuJ/raLjQcDG5x8whLooOicrUw8ENJKD2xmQR8NPmEH1RZ8yMZhYb8Sur8qNM+WC
+         nvna/yVJ9DvOrUp4eXaSwvVEidy5kuDXu5Ipg9O5hWOLCFai3Bpijjkpbf6zaPkE8A5M
+         0fGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684071706; x=1686663706;
+        d=1e100.net; s=20221208; t=1684072564; x=1686664564;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2+qvnHcB/azIUhjmByanInN+pkcOd92LVDrbUZO6gKU=;
-        b=KfllxvXjLfcTdAENvODsQIrotai1QlG3et4FLbfCq7yJhrL9SyllLiHyBc4rp43PAD
-         WRgtQ3Qu/4dB35XSGxXM9+WQC1vP721SqZ4mmYALLTnGLc9K9c56bENi08dDsHWG+heQ
-         9cRv7skz84fI8UDuOFO6mgnk/TsgFCal3UloWlUoaFXqHzTkBrs+JZ+vt7cjf5qpcePJ
-         GD4B2z4k9xQEPN1FESA6ln3hXLC2WwFIDLd5BNlWrU/TfP8bfN85D0WHDWQqguG2/Mo5
-         X7a01BC8t/4hrah1ERwQr70UDisxPy8gFTdYBfRDUBrnmSgly9PN5H2pUfnZXW9ElzGe
-         lJjg==
-X-Gm-Message-State: AC+VfDzMr+s0CIPRRBF0EC/NYLRpBbC28sH5lywMrPenhZxrm8b2+m13
-        z2FGY+a1IRlaGfe06YXMI/T1aT4r+HOMeA==
-X-Google-Smtp-Source: ACHHUZ7vkpLjRVlgFHbnD4i09hJ/Fxd5i1LjlJnB4WMMZCY0L4enBlQd68HBgM1gDhyw4F2OGcaKmw==
-X-Received: by 2002:a05:6512:10c6:b0:4ed:b86b:9cc9 with SMTP id k6-20020a05651210c600b004edb86b9cc9mr5369371lfg.28.1684071705983;
-        Sun, 14 May 2023 06:41:45 -0700 (PDT)
+        bh=/ZVKIUKzGX05OMg0P/SQC1TBuz/zx2SrEhQdY2C1eVk=;
+        b=Orx5QsZaPkG3VwhWkf25+rbeGZwHjVBqjrG/u45Lp5wzMDIW16TbNzQJvVdcXkjET9
+         I2w3RTnCmvQwAzlofs3x9MnAzhJBpk9CSum7ME6F7Fa/t1YWU99zoBQ8EF/s71mSSJv3
+         Ph3FfDxDm9llvMVq/o1hzbe3UIm5BYzv78G/0FI1IWcfVnmnTcP9FfHkNPOm8do3K8jA
+         SOKzTCcni2VtOWdC2faWzXE0UtWqbR7DC9Vc2gqS0n8HXFeA4ieEFMzJLnjrZxMD0Rqn
+         5IjRPIE0MJ4hi9rd5ZTsk4Fu0239cd8otRDu00ITioWYCe0txjp01l563jSpr6J4lQdM
+         VGqg==
+X-Gm-Message-State: AC+VfDxd/e++HlYpaJcJXpfGsOW0oF8QQ7TxPYVjAoMYiTlPh1QX+/Aa
+        uzZPBribhfBO5RxdqaFerRw=
+X-Google-Smtp-Source: ACHHUZ7mQ7RO6cdlG9W7P4VAMMcMRRu+pFti/c2Y25RROUCnNz6dYcMDHV9/AJDpmEfzZe3BiBUSKw==
+X-Received: by 2002:ac2:47f8:0:b0:4f3:78dd:8e0b with SMTP id b24-20020ac247f8000000b004f378dd8e0bmr928479lfp.32.1684072563576;
+        Sun, 14 May 2023 06:56:03 -0700 (PDT)
 Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id t27-20020ac243bb000000b004f27d033994sm806724lfl.267.2023.05.14.06.41.44
+        by smtp.gmail.com with ESMTPSA id n15-20020ac2490f000000b004efe9a169d2sm2224611lfi.64.2023.05.14.06.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 06:41:44 -0700 (PDT)
-Date:   Sun, 14 May 2023 16:41:43 +0300
+        Sun, 14 May 2023 06:56:03 -0700 (PDT)
+Date:   Sun, 14 May 2023 16:56:01 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc:     maz@kernel.org, tsbogend@alpha.franken.de, tglx@linutronix.de,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] irqchip/mips-gic: Don't touch vl_map if a local
- interrupt is not routable
-Message-ID: <20230514134143.6uclwfhzkar4jupe@mobilestation>
+Subject: Re: [PATCH 2/2] irqchip/mips-gic: Use raw spinlock for gic_lock
+Message-ID: <20230514135601.5irhslf6tdv4tk5z@mobilestation>
 References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
- <20230424103156.66753-2-jiaxun.yang@flygoat.com>
+ <20230424103156.66753-3-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424103156.66753-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230424103156.66753-3-jiaxun.yang@flygoat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,64 +72,166 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Jiaxun
-
-On Mon, Apr 24, 2023 at 11:31:55AM +0100, Jiaxun Yang wrote:
-> When a GIC local interrupt is not routable, it's vl_map will be used
-> to control some internal states for core (providing IPTI, IPPCI, IPFDC
-
-> input signal for core). Overriding it will interfere core's intetrupt
-
-s/intetrupt/interrupt
-
-> controller.
+On Mon, Apr 24, 2023 at 11:31:56AM +0100, Jiaxun Yang wrote:
+> Since we may hold gic_lock in hardirq context, use raw spinlock
+> makes more sense given that it is for low-level interrupt handling
+> routine and the critical section is small.
 > 
-> Do not touch vl_map if a local interrupt is not routable, we are not
-> going to remap it.
+> Fixes BUG:
 > 
-> Before dd098a0e0319 (" irqchip/mips-gic: Get rid of the reliance on
-> irq_cpu_online()"), if a local interrupt is not routable, then it won't
-> be requested from GIC Local domain, and thus gic_all_vpes_irq_cpu_online
-> won't be called for that particular interrupt.
+> [    0.426106] =============================
+> [    0.426257] [ BUG: Invalid wait context ]
+> [    0.426422] 6.3.0-rc7-next-20230421-dirty #54 Not tainted
+> [    0.426638] -----------------------------
+> [    0.426766] swapper/0/1 is trying to lock:
+> [    0.426954] ffffffff8104e7b8 (gic_lock){....}-{3:3}, at: gic_set_type+0x30/08
 > 
-> Fixes: dd098a0e0319 (" irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()")
+> Fixes: 95150ae8b330 ("irqchip: mips-gic: Implement irq_set_type callback")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-My system doesn't have VPEs but 2x MIPS32 P5600 cores with GIC enabled as
-EIC device so I can't fully test this change, but at the very least it
-looks reasonable. Indeed performing the local IRQs routing setups for
-the non-routable IRQs looks invalid. A similar change can be spotted
-in the gic_irq_domain_map() method implementation.
+LGTM especially in the RT-patch context. Feel free to add:
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+Please see a tiny nitpick below.
 
 > ---
->  drivers/irqchip/irq-mips-gic.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/irqchip/irq-mips-gic.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
 > 
 > diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-> index 046c355e120b..b568d55ef7c5 100644
+> index b568d55ef7c5..6d5ecc10a870 100644
 > --- a/drivers/irqchip/irq-mips-gic.c
 > +++ b/drivers/irqchip/irq-mips-gic.c
-> @@ -399,6 +399,8 @@ static void gic_all_vpes_irq_cpu_online(void)
->  		unsigned int intr = local_intrs[i];
->  		struct gic_all_vpes_chip_data *cd;
+> @@ -50,7 +50,7 @@ void __iomem *mips_gic_base;
 >  
-> +		if (!gic_local_irq_is_routable(intr))
-> +			continue;
+>  static DEFINE_PER_CPU_READ_MOSTLY(unsigned long[GIC_MAX_LONGS], pcpu_masks);
+>  
+> -static DEFINE_SPINLOCK(gic_lock);
+> +static DEFINE_RAW_SPINLOCK(gic_lock);
+>  static struct irq_domain *gic_irq_domain;
+>  static int gic_shared_intrs;
+>  static unsigned int gic_cpu_pin;
+> @@ -210,7 +210,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
+>  
+>  	irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
+>  
 
-Please add newline here to distinguish the skip-step code chunk and
-the setup code so the look would look a tiny bit more readable.
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
 
->  		cd = &gic_all_vpes_chip_data[intr];
->  		write_gic_vl_map(mips_gic_vx_map_reg(intr), cd->map);
->  		if (cd->mask)
-
-Other than that the change looks good. Thanks.
-
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+AFAICS this call can be moved way down to be after the switch-case
+block.
 
 -Serge(y)
 
+>  	switch (type & IRQ_TYPE_SENSE_MASK) {
+>  	case IRQ_TYPE_EDGE_FALLING:
+>  		pol = GIC_POL_FALLING_EDGE;
+> @@ -250,7 +250,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
+>  	else
+>  		irq_set_chip_handler_name_locked(d, &gic_level_irq_controller,
+>  						 handle_level_irq, NULL);
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  
+>  	return 0;
+>  }
+> @@ -268,7 +268,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
+>  		return -EINVAL;
+>  
+>  	/* Assumption : cpumask refers to a single CPU */
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  
+>  	/* Re-route this IRQ */
+>  	write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
+> @@ -279,7 +279,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
+>  		set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
+>  
+>  	irq_data_update_effective_affinity(d, cpumask_of(cpu));
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  
+>  	return IRQ_SET_MASK_OK;
+>  }
+> @@ -357,12 +357,12 @@ static void gic_mask_local_irq_all_vpes(struct irq_data *d)
+>  	cd = irq_data_get_irq_chip_data(d);
+>  	cd->mask = false;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	for_each_online_cpu(cpu) {
+>  		write_gic_vl_other(mips_cm_vp_id(cpu));
+>  		write_gic_vo_rmask(BIT(intr));
+>  	}
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  }
+>  
+>  static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
+> @@ -375,12 +375,12 @@ static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
+>  	cd = irq_data_get_irq_chip_data(d);
+>  	cd->mask = true;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	for_each_online_cpu(cpu) {
+>  		write_gic_vl_other(mips_cm_vp_id(cpu));
+>  		write_gic_vo_smask(BIT(intr));
+>  	}
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  }
+>  
+>  static void gic_all_vpes_irq_cpu_online(void)
+> @@ -393,7 +393,7 @@ static void gic_all_vpes_irq_cpu_online(void)
+>  	unsigned long flags;
+>  	int i;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(local_intrs); i++) {
+>  		unsigned int intr = local_intrs[i];
+> @@ -407,7 +407,7 @@ static void gic_all_vpes_irq_cpu_online(void)
+>  			write_gic_vl_smask(BIT(intr));
+>  	}
+>  
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  }
+>  
+>  static struct irq_chip gic_all_vpes_local_irq_controller = {
+> @@ -437,11 +437,11 @@ static int gic_shared_irq_domain_map(struct irq_domain *d, unsigned int virq,
+>  
+>  	data = irq_get_irq_data(virq);
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
+>  	write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
+>  	irq_data_update_effective_affinity(data, cpumask_of(cpu));
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  
+>  	return 0;
+>  }
+> @@ -533,12 +533,12 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+>  	if (!gic_local_irq_is_routable(intr))
+>  		return -EPERM;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	for_each_online_cpu(cpu) {
+>  		write_gic_vl_other(mips_cm_vp_id(cpu));
+>  		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
+>  	}
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  
+>  	return 0;
+>  }
 > -- 
 > 2.34.1
 > 
