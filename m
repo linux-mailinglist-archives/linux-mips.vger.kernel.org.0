@@ -2,105 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CBA701DB4
-	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 16:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BFD701EEA
+	for <lists+linux-mips@lfdr.de>; Sun, 14 May 2023 20:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235354AbjENOEa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 May 2023 10:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S229635AbjENSUh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 May 2023 14:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjENOEa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 10:04:30 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526DB1BF3;
-        Sun, 14 May 2023 07:04:28 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f380cd1019so552603e87.1;
-        Sun, 14 May 2023 07:04:27 -0700 (PDT)
+        with ESMTP id S232258AbjENSUe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 May 2023 14:20:34 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAD41BEB
+        for <linux-mips@vger.kernel.org>; Sun, 14 May 2023 11:20:31 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba1815e12efso10173270276.3
+        for <linux-mips@vger.kernel.org>; Sun, 14 May 2023 11:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684073066; x=1686665066;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iuGklFcEx4ogqrncOrMBWjf7nZjLMpfhpMESX9sQcR4=;
-        b=k7agaoeR57haBOVtUviP2mPIXwvl3yDhurydnAnCwIR7gIuo7/UQPSmEMyNTEmLhF1
-         pC7LSIz2o/0l8p+Yuq1vGRO0WgQ5U90JxDy5R1hmvnO2Qz9QEc7vgDZ36P2Teb+4e+AS
-         w5gB2Pc4mR6Qt0mRlV5uZHh6yim3wU5m5HnvRIqq7Akv/SkYOlUEfWgQHZckBP0cTBI2
-         yQkrFhOCJRzQ/SBFa1kXXEBljM+rw/sAJhuHnFco/mxTX5NmAwRpq5ygUbS5w8E7SPnB
-         Z503Toob9fVsM18xzKyGNyRUzLBWOHF47uXKTSOg6+hhU9qKp+scUcyquPZCoL4Qbf7M
-         r3gw==
+        d=google.com; s=20221208; t=1684088430; x=1686680430;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/w8Ik+B9LqquAVc24RATG4RXaBZs1t11jn/s3N/obhU=;
+        b=3hM1VI6NWGWu8nKjmz4E776n6/tfMkoFz07qqIrs1oaapPZVpFGqRfLcsrD2Q9+aIl
+         lVkR5CaBLhkLbvj6PetC97KquetslVNm4ewYDv3VlmeuHTS81B9LSL8mS5hv5NNIrJ5k
+         qfkEuu9pgy+dtpTd6GHTh0Gi0u67Y0T46ElzOPo7riZGmKUfHA7vSk0Zmd7HgvGJHxab
+         DqbZyXByDthzzyzxr91aGkpWgNkslpXmOPPlerkZVQyLnPVqgNtVTmJy+exwCn44tZ+/
+         VxkE3CJ7HkShwyo4XrVtp449lbAR3UPOjv88P7k+8G1RfjN7YRQ6k8XKtpgdfILs4FOB
+         5kcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684073066; x=1686665066;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iuGklFcEx4ogqrncOrMBWjf7nZjLMpfhpMESX9sQcR4=;
-        b=glla06MgKV3Ki7VDxUuAS632Cyz5HOSC4Cvi5yMWUyXWYGKgHnbu4HnO6FEisK01/c
-         CreWw0DQ6JwVNsRemUDIeoC8E3VGiZuDP+7K9yvxMSMHV+CWvNdRvSErV7/rIM0z3Hjh
-         T6TbrNl1/1SDI/qvi73yFV9zMASYZHBkWsRrmEZmX6EPP0itLGNWUW9D4U1pqSP9dIw0
-         Kdfyerz/GjjCV2qe15jgLQgENSB3s3Q1SFenarbjYXJAfGJDUt0hWjeOjXtGoYXWwTgn
-         8WlnN+bW/dBIWXcgLb8KEBrI19u9Vfv3d2yySMTMD7w0He8cg7kdYPUtzp7ND5V5GzeD
-         HC8A==
-X-Gm-Message-State: AC+VfDyAsVpre9uWqyDMb3h6IJR3QTqQU6AkkgnwLhRgdQcQD9hm4fsE
-        4DfRCvf54siCPFhi5G5S2p33DkGYw869kA==
-X-Google-Smtp-Source: ACHHUZ73vIq12vZRHgJzDA2lPm9LeJRlziN8yf3RKEMSmOSkYiMhZfduQK9GoarN7Z2bi2UuX0HFHQ==
-X-Received: by 2002:ac2:5deb:0:b0:4ed:d216:8217 with SMTP id z11-20020ac25deb000000b004edd2168217mr5603903lfq.11.1684073066149;
-        Sun, 14 May 2023 07:04:26 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id q1-20020a19a401000000b004f24bc0cbf9sm2217231lfc.154.2023.05.14.07.04.25
+        d=1e100.net; s=20221208; t=1684088430; x=1686680430;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/w8Ik+B9LqquAVc24RATG4RXaBZs1t11jn/s3N/obhU=;
+        b=jhPLgy7WGTbPJaVoIZssiRIsc2wlKmyzCJLXba8Wi8nbBkybaH75AsoIcWYB1+0Kn6
+         N5oCuodhd8u40IDs9cTBMPIzmzMvv62/XvD3lqawYhx+zaHyjYCKgLpDJoRP8/KCPJTb
+         +nGNc8BLOi78ZbZgqHOgbkK/Os4mL/CrQPYyHiaWz63dzdxf/jPb6OFhluWawaTl5Z5n
+         t4ktRRWGSrgUyLDP7wIFa1b5AdY4n38RM15TBixh83jTeNwmrtkH6fgQgjKDSNZHUh0R
+         4Qvz28qBixMe/UMeA0PWs4MsN3w0Wkj2AKLQ9zanO683bapXGrTeY+cLITDbILyAL82r
+         Cqjw==
+X-Gm-Message-State: AC+VfDzFxyZudPiv5nJZDxf4Z8nojes7Dhg6jW/+/Z8GPELb6qMJhnwN
+        QnLB7ip6jNdNryUC4sZs7KsjCQ==
+X-Google-Smtp-Source: ACHHUZ4uC/iK9slyVYAwsZbskAJfVUMUdzJpIRbgKgSPhKsknTzzPntrNJG85XVm7SRutl/ig2uJ2g==
+X-Received: by 2002:a25:abe5:0:b0:ba1:b539:a39a with SMTP id v92-20020a25abe5000000b00ba1b539a39amr27412446ybi.6.1684088430350;
+        Sun, 14 May 2023 11:20:30 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 192-20020a2503c9000000b00ba73c26f0d6sm1520144ybd.15.2023.05.14.11.20.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 07:04:25 -0700 (PDT)
-Date:   Sun, 14 May 2023 17:04:23 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     maz@kernel.org, tsbogend@alpha.franken.de, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] irqchip/mips-gic fixes
-Message-ID: <20230514140423.vvuoctb7u5uc53c3@mobilestation>
-References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
+        Sun, 14 May 2023 11:20:28 -0700 (PDT)
+Date:   Sun, 14 May 2023 11:20:16 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Helge Deller <deller@gmx.de>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 08/23] parisc: add pte_unmap() to balance get_ptep()
+In-Reply-To: <ca4ac780-42b0-4818-bd84-e1a4acbb28dd@gmx.de>
+Message-ID: <6de39db5-d9aa-b35a-1652-8bdf90e7df72@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <44ebbf90-5fbb-2815-17c7-fcfe3c87d78e@google.com> <ca4ac780-42b0-4818-bd84-e1a4acbb28dd@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun
+On Sat, 13 May 2023, Helge Deller wrote:
 
-On Mon, Apr 24, 2023 at 11:31:54AM +0100, Jiaxun Yang wrote:
-> Hi all,
+> Hi Hugh,
 > 
-> This patchset fixes two issues in the MIPS GIC driver that may block
-> booting on some systems.
+> On 5/10/23 06:52, Hugh Dickins wrote:
+> > To keep balance in future, remember to pte_unmap() after a successful
+> > get_ptep().  And (we might as well) pretend that flush_cache_pages()
+> > really needed a map there, to read the pfn before "unmapping".
+> >
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >   arch/parisc/kernel/cache.c | 26 +++++++++++++++++++++-----
+> >   1 file changed, 21 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
+> > index 1d3b8bc8a623..b0c969b3a300 100644
+> > --- a/arch/parisc/kernel/cache.c
+> > +++ b/arch/parisc/kernel/cache.c
+> > @@ -425,10 +425,15 @@ void flush_dcache_page(struct page *page)
+> >     offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
+> >     addr = mpnt->vm_start + offset;
+> >     if (parisc_requires_coherency()) {
+> > +			bool needs_flush = false;
+> >      pte_t *ptep;
+> >
+> >   			ptep = get_ptep(mpnt->vm_mm, addr);
+> > -			if (ptep && pte_needs_flush(*ptep))
+> > +			if (ptep) {
+> > +				needs_flush = pte_needs_flush(*ptep);
+> > +				pte_unmap(ptep);
+> > +			}
+> > +			if (needs_flush)
+> >     		flush_user_cache_page(mpnt, addr);
+> >     } else {
+> >   			/*
+> > @@ -560,14 +565,20 @@ EXPORT_SYMBOL(flush_kernel_dcache_page_addr);
+> >   static void flush_cache_page_if_present(struct vm_area_struct *vma,
+> >   	unsigned long vmaddr, unsigned long pfn)
+> >   {
+> > -	pte_t *ptep = get_ptep(vma->vm_mm, vmaddr);
+> > +	bool needs_flush = false;
+> > +	pte_t *ptep;
+> >
+> >    /*
+> >     * The pte check is racy and sometimes the flush will trigger
+> >     * a non-access TLB miss. Hopefully, the page has already been
+> >     * flushed.
+> >     */
+> > -	if (ptep && pte_needs_flush(*ptep))
+> > +	ptep = get_ptep(vma->vm_mm, vmaddr);
+> > +	if (ptep) {
+> > +		needs_flush = pte_needs_flush(*ptep))
 > 
-> Please review.
+> ^^^^^
+> One ")" too much and lacks a trailing ";"
+> Should be:
+> 		needs_flush = pte_needs_flush(*ptep);
+> 
+> With that fixed the kernel compiles and boots sucessfully on parisc.
 
-Thanks for the series. Please find some comments sent in the framework
-of the corresponding patches which don't though prevent from having
-the patchset tested. No problems were found on the Baikal-T1 SoC with
-2x MIPS32 P5600 core on board. So feel free to add for the entire
-series:
+Urgh! Indeed, thanks a lot Helge: I'll fold that in.
 
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
-
--Serge(y)
-
-> 
-> Thanks
-> 
-> Jiaxun Yang (2):
->   irqchip/mips-gic: Don't touch vl_map if a local interrupt is not
->     routable
->   irqchip/mips-gic: Use raw spinlock for gic_lock
-> 
->  drivers/irqchip/irq-mips-gic.c | 32 +++++++++++++++++---------------
->  1 file changed, 17 insertions(+), 15 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+Hugh
