@@ -2,52 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379EA7058AC
-	for <lists+linux-mips@lfdr.de>; Tue, 16 May 2023 22:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8E9705914
+	for <lists+linux-mips@lfdr.de>; Tue, 16 May 2023 22:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjEPUV7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 May 2023 16:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S229550AbjEPUrP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 May 2023 16:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjEPUVx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 May 2023 16:21:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862819034;
-        Tue, 16 May 2023 13:21:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0440663620;
-        Tue, 16 May 2023 20:21:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABAAC433EF;
-        Tue, 16 May 2023 20:21:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684268498;
-        bh=bIicD6gRU90W8lIoeCPzUX3DM76ZJNapL2GUNon+oYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZmqwHBJQbGjxtCnjYVmgoNPMHvdH3Sk8FKUccNpdIPHjNwR1R6jeSZuWBTf5c/8CB
-         gfdIWCqrVH9j1En9uWb9amUM2zyHPtmNNrdviVXyraoUXVMkU+WG2eYhjRnoyGgqJD
-         xT8zoZYYhRKDnmC9tr7zLyo7S8sWOq7T0rZSRLYOi/5twWbh3ddNw4MAVM/RzezIzl
-         MUFSJeg0qdydkXR0AYJHygwU7tIc1dHNWSm13r5i/9NrkPQw+rTdKIeQrOoCPNjqUm
-         AMJhDZWQ2f/GN/Fl1nuQk+q7ZLk7dOChocIVEVPxMm7RZc67LGi+JuU7zRfJpd2LP3
-         GPCGmELN8gOGQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: rawnand: ingenic: fix empty stub helper definitions
-Date:   Tue, 16 May 2023 22:21:24 +0200
-Message-Id: <20230516202133.559488-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229456AbjEPUrO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 May 2023 16:47:14 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A80DC114
+        for <linux-mips@vger.kernel.org>; Tue, 16 May 2023 13:47:12 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 8C31E92009D; Tue, 16 May 2023 22:47:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 85EAC92009B;
+        Tue, 16 May 2023 21:47:11 +0100 (BST)
+Date:   Tue, 16 May 2023 21:47:11 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] MIPS: Limit MIPS_MT_SMP support by ISA reversion
+In-Reply-To: <62F0038E-F2A2-4D1E-B53A-E84916598102@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2305162116470.50034@angie.orcam.me.uk>
+References: <20230407223532.7981-1-jiaxun.yang@flygoat.com> <alpine.DEB.2.21.2305161542290.50034@angie.orcam.me.uk> <62F0038E-F2A2-4D1E-B53A-E84916598102@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,59 +42,54 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 16 May 2023, Jiaxun Yang wrote:
 
-A few functions provide an empty interface definition when
-CONFIG_MTD_NAND_INGENIC_ECC is disabled, but they are accidentally
-defined as global functions in the header:
+> > Actually the MIPS MT ASE is explicitly from R2 onwards only[1] and it has 
+> > *not* been withdrawn as at R6[2].
+> 
+> Thanks for the info!
+> 
+> I’m a little bit confused with relationship of MT and VP though, I thought VP
+> suppressed MT, and they look conflicting, does it mean there are two possible
+> ways of multithreading in R6?
 
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:39:5: error: no previous prototype for 'ingenic_ecc_calculate'
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:46:5: error: no previous prototype for 'ingenic_ecc_correct'
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:53:6: error: no previous prototype for 'ingenic_ecc_release'
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:57:21: error: no previous prototype for 'of_ingenic_ecc_get'
+ Hmm, interesting point.  I would have thought you can have either but not 
+both, however there is a note along with the description of CP0.Config3.MT 
+in[1] that for R6 the bit has to be 0.  That place and the description of 
+the new CP0.Config5.VP bit seem the only mentions of MT ASE/Module removal 
+with R6 and there is e.g. this paragraph for CP0.Wired:
 
-Turn them into 'static inline' definitions instead.
+"Release 6 adds the Limit field.  The intent of a non-zero value for this 
+field is to place a limit on the number of wired entries in a TLB such 
+that non-wired entries may be shared in a common physical TLB by multiple 
+VPEs (as defined in the Multi-threading (MT) Module, Volume IV-f), or 
+Guests and Root (see the Virtualization Module, Volume IV-i).  For Release 
+6, if the Limit field is greater than 0, and a value greater than Limit is 
+written to the Wired field, then the write is ignored."
 
-Fixes: 15de8c6efd0e ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/mtd/nand/raw/ingenic/ingenic_ecc.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+which explicitly refers to the MT ASE/Module in the context of R6 only.  
 
-diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h
-index 2cda439b5e11..017868f59f22 100644
---- a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h
-+++ b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h
-@@ -36,25 +36,25 @@ int ingenic_ecc_correct(struct ingenic_ecc *ecc,
- void ingenic_ecc_release(struct ingenic_ecc *ecc);
- struct ingenic_ecc *of_ingenic_ecc_get(struct device_node *np);
- #else /* CONFIG_MTD_NAND_INGENIC_ECC */
--int ingenic_ecc_calculate(struct ingenic_ecc *ecc,
-+static inline int ingenic_ecc_calculate(struct ingenic_ecc *ecc,
- 			  struct ingenic_ecc_params *params,
- 			  const u8 *buf, u8 *ecc_code)
- {
- 	return -ENODEV;
- }
- 
--int ingenic_ecc_correct(struct ingenic_ecc *ecc,
-+static inline int ingenic_ecc_correct(struct ingenic_ecc *ecc,
- 			struct ingenic_ecc_params *params, u8 *buf,
- 			u8 *ecc_code)
- {
- 	return -ENODEV;
- }
- 
--void ingenic_ecc_release(struct ingenic_ecc *ecc)
-+static inline void ingenic_ecc_release(struct ingenic_ecc *ecc)
- {
- }
- 
--struct ingenic_ecc *of_ingenic_ecc_get(struct device_node *np)
-+static inline struct ingenic_ecc *of_ingenic_ecc_get(struct device_node *np)
- {
- 	return ERR_PTR(-ENODEV);
- }
--- 
-2.39.2
+ Revision 6.02 is the only MIPS32r6 privileged specification a copy of 
+which I have, however it has this note in the revision history:
 
+"* Added CP0 VPControl for MT (new)"
+
+so I guess support for the MT ASE/Module was removed as an afterthought 
+and then the architecture specification updated in a sloppy manner.  
+
+ And indeed the MIPS64r6 privileged specification confirms that, as I have 
+copies or revisions 6.00 and 6.03, and the former has the MT ASE/Module 
+still fully supported (and no mention of the CP0.Config5.VP bit nor the 
+CP0.VPControl register) while the latter is similar to MIPS32 revision 
+6.02 document.
+
+> If so I’d probably rewrite cps-sec in uasm to take that into account, sigh. 
+
+ I guess you don't have to be concerned about R6 then.
+
+[1] "MIPS32 Architecture For Programmers, Vol. III: MIPS32 / microMIPS32 
+    Privileged Resource Architecture", IMAGINATION TECHNOLOGIES, Document 
+    Number: MD00090, Revision 6.02, July 10, 2015, Table 9.67 "Config3 
+    Register Field Descriptions", p. 251
+
+  Maciej
