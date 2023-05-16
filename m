@@ -2,312 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349B8704E47
-	for <lists+linux-mips@lfdr.de>; Tue, 16 May 2023 14:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EB07050C4
+	for <lists+linux-mips@lfdr.de>; Tue, 16 May 2023 16:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbjEPM4S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 May 2023 08:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S233325AbjEPObY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 May 2023 10:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjEPM4Q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 May 2023 08:56:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD3E6EA5
-        for <linux-mips@vger.kernel.org>; Tue, 16 May 2023 05:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684241694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dmTy7RERLTTlHMDvbmWoaYSTmqTCStLXSnB9hgIg4f0=;
-        b=d+XaO2BhTpvrSdcLm6WsjrseZJpLUM0B3dAhPMlXI9rkiIqtq0IRYWMxJHlKkw43YgFsxd
-        NMXDcDgskgvX3E9yH5p+PVqTU2E2NjfDMzEVzptcfk66YYgtnzKCX6Xv8fEf3ZMptm2uvE
-        h0GoMIu6lZ9r0iW9vtUvZCEmkfw2AXY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-z_NlnuGROBOnKL3k1Ydrsw-1; Tue, 16 May 2023 08:54:47 -0400
-X-MC-Unique: z_NlnuGROBOnKL3k1Ydrsw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C8652808E75;
-        Tue, 16 May 2023 12:54:46 +0000 (UTC)
-Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA0EDC15BA0;
-        Tue, 16 May 2023 12:54:44 +0000 (UTC)
-Date:   Tue, 16 May 2023 20:54:41 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v5 RESEND 01/17] asm-generic/iomap.h: remove
- ARCH_HAS_IOREMAP_xx macros
-Message-ID: <ZGN9EZyoshL9cDE8@MiWiFi-R3L-srv>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-2-bhe@redhat.com>
- <ZGMfl5KW9sXkhT8n@kernel.org>
+        with ESMTP id S233791AbjEPObX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 May 2023 10:31:23 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5927283
+        for <linux-mips@vger.kernel.org>; Tue, 16 May 2023 07:31:20 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so21717242a12.1
+        for <linux-mips@vger.kernel.org>; Tue, 16 May 2023 07:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684247479; x=1686839479;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mhMTEtmnAgofUvsT7JdDd7CuFjDTNwQ0IePtBe84tf4=;
+        b=RjQ6vBlPrLZrqaZibPuzPOyAcQ/N68F6X9g7mU07aWoQlYVkQmpNUoo/MoxMLr0o4/
+         sOdCghqidlUJ2/yatZjMwldzrgMNdmwrwl9mkPK29F+KialT0N/Mgyt/pN9V7DW3zTnQ
+         QxZs3Y/aLlDHf4tFTwYj0qAShWqfeV9ASoog8dw1pdsy4eZuR42ryP+SyMw9IBIO03ce
+         3w5HZX5MjiF+YWUAWfO8uVH3ADI3M4/Rb5c35IhqGgG6sf3zv/dCu8RSDa1SxkKPRSlF
+         O73ylzGd2uZDYRNXjvvMxXqNyxCA0cELAIcZWkb7cCPkdjb49TiJfn0zPvpKy6ofd2kC
+         Mt8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684247479; x=1686839479;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mhMTEtmnAgofUvsT7JdDd7CuFjDTNwQ0IePtBe84tf4=;
+        b=Ti6Ucb5YpxNpelpFKjn+Zp+a/GsdLnwT7Rw7i5TflsyzDpdB2pp9r5aXGcy38cKqiq
+         GtxJootVu+HMT2+smMAg2E5oP0nPNRDN+V9bOUUNq1jfiTlOI5xmC3cJLf4rYYHj9x62
+         ejfyXc03+gzcvQNVUOexgOJ039ql92cHoWQap8d00cbzNGdVE3pPJHxbeHRbpzbD1iQ6
+         rEpVxresIenO0Nr4p7DGc2VNkMG8NHlnDxy2hGiO78lQ5bsqlg4ph3K7SOnxuTcAI0qa
+         WsR2F4wi7DjxDdPWP6Ayeic9yxGpHH3+yV9nVNsDp5KMhKcQdKSay+vhgzYkaZg7xQl+
+         UM/g==
+X-Gm-Message-State: AC+VfDy2okvirM7RayoQl/plgOdPlcFj2aM0Soa4/VTWkkZxMLWFytX4
+        ONo/Vfl2WA2rw0bHpvJrRYBVhZvbz3Z8zT8gzUg=
+X-Google-Smtp-Source: ACHHUZ5QKqqSi2ocS2x1810ACJVREO+lAlDubwfN+cq/HXGiulVDAWi9WFdFateC1tcKqrw65H5o1JQ8UNsbYMYW3r4=
+X-Received: by 2002:a05:6402:202a:b0:50b:c804:46b8 with SMTP id
+ ay10-20020a056402202a00b0050bc80446b8mr29382171edb.31.1684247478827; Tue, 16
+ May 2023 07:31:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGMfl5KW9sXkhT8n@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6f02:c902:b0:4e:b15d:3b17 with HTTP; Tue, 16 May 2023
+ 07:31:17 -0700 (PDT)
+Reply-To: sandrina.omaru2022@gmail.com
+From:   Sandrina Omaru <omarusandrina04@gmail.com>
+Date:   Tue, 16 May 2023 16:31:17 +0200
+Message-ID: <CAPssEY9E8ZeWnf1Am6eVJEN2ou2Y5rG2BWdG54Ai6bCz3ARd_g@mail.gmail.com>
+Subject: KOMPLIMENT DNEVA
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05/16/23 at 09:15am, Mike Rapoport wrote:
-> Hi,
-> 
-> On Mon, May 15, 2023 at 05:08:32PM +0800, Baoquan He wrote:
-> > Let's use '#define ioremap_xx' and "#ifdef ioremap_xx" instead.
-> > 
-> > For each architecture to remove defined ARCH_HAS_IOREMAP_xx macros in
-> 
-> This sentence seems to be stale.
+KOMPLIMENT DNEVA
 
-Right, will remove this, thanks a lot for careful reviewing.
+Z globokim spo=C5=A1tovanjem in poni=C5=BEnim priznanjem vas prosim, da nav=
+edem
+naslednjih nekaj vrstic v va=C5=A1o prijaznost. Upam, da boste prihranili
+nekaj svojih dragocenih minut in s so=C4=8Dutjem prebrali ta poziv.
+Priznati moram, da vam pi=C5=A1em to e-po=C5=A1tno sporo=C4=8Dilo z velikim=
+ upanjem,
+veseljem in navdu=C5=A1enjem, za katerega vem in z vero verjamem, da vas
+mora zagotovo najti v dobrem zdravstvenem stanju.
 
-> 
-> > To remove defined ARCH_HAS_IOREMAP_xx macros in <asm/io.h> of each ARCH,
-> > the ARCH's own ioremap_wc|wt|np definition need be above
-> > "#include <asm-generic/iomap.h>. Otherwise the redefinition error would
-> > be seen during compiling. So the relevant adjustments are made to avoid
-> > compiling error:
-> > 
-> >   loongarch:
-> >   - doesn't include <asm-generic/iomap.h>, defining ARCH_HAS_IOREMAP_WC
-> >     is redundant, so simply remove it.
-> > 
-> >   m68k:
-> >   - selected GENERIC_IOMAP, <asm-generic/iomap.h> has been added in
-> >     <asm-generic/io.h>, and <asm/kmap.h> is included above
-> >     <asm-generic/iomap.h>, so simply remove ARCH_HAS_IOREMAP_WT defining.
-> > 
-> >   mips:
-> >   - move "#include <asm-generic/iomap.h>" below ioremap_wc definition
-> >     in <asm/io.h>
-> > 
-> >   powerpc:
-> >   - remove "#include <asm-generic/iomap.h>" in <asm/io.h> because it's
-> >     duplicated with the one in <asm-generic/io.h>, let's rely on the
-> >     latter.
-> > 
-> >   x86:
-> >   - selected GENERIC_IOMAP, remove #include <asm-generic/iomap.h> in
-> >     the middle of <asm/io.h>. Let's rely on <asm-generic/io.h>.
-> > 
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: loongarch@lists.linux.dev
-> > Cc: linux-m68k@lists.linux-m68k.org
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linuxppc-dev@lists.ozlabs.org
-> > Cc: x86@kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-arch@vger.kernel.org
-> 
-> Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> 
-> > ---
-> >  arch/loongarch/include/asm/io.h     | 2 --
-> >  arch/m68k/include/asm/io_mm.h       | 2 --
-> >  arch/m68k/include/asm/kmap.h        | 2 --
-> >  arch/mips/include/asm/io.h          | 5 ++---
-> >  arch/powerpc/include/asm/io.h       | 9 +--------
-> >  arch/x86/include/asm/io.h           | 5 -----
-> >  drivers/net/ethernet/sfc/io.h       | 2 +-
-> >  drivers/net/ethernet/sfc/siena/io.h | 2 +-
-> >  include/asm-generic/iomap.h         | 6 +++---
-> >  9 files changed, 8 insertions(+), 27 deletions(-)
-> > 
-> > diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
-> > index 545e2708fbf7..5fef1246c6fb 100644
-> > --- a/arch/loongarch/include/asm/io.h
-> > +++ b/arch/loongarch/include/asm/io.h
-> > @@ -5,8 +5,6 @@
-> >  #ifndef _ASM_IO_H
-> >  #define _ASM_IO_H
-> >  
-> > -#define ARCH_HAS_IOREMAP_WC
-> > -
-> >  #include <linux/kernel.h>
-> >  #include <linux/types.h>
-> >  
-> > diff --git a/arch/m68k/include/asm/io_mm.h b/arch/m68k/include/asm/io_mm.h
-> > index d41fa488453b..6a0abd4846c6 100644
-> > --- a/arch/m68k/include/asm/io_mm.h
-> > +++ b/arch/m68k/include/asm/io_mm.h
-> > @@ -26,8 +26,6 @@
-> >  #include <asm/virtconvert.h>
-> >  #include <asm/kmap.h>
-> >  
-> > -#include <asm-generic/iomap.h>
-> > -
-> >  #ifdef CONFIG_ATARI
-> >  #define atari_readb   raw_inb
-> >  #define atari_writeb  raw_outb
-> > diff --git a/arch/m68k/include/asm/kmap.h b/arch/m68k/include/asm/kmap.h
-> > index dec05743d426..4efb3efa593a 100644
-> > --- a/arch/m68k/include/asm/kmap.h
-> > +++ b/arch/m68k/include/asm/kmap.h
-> > @@ -4,8 +4,6 @@
-> >  
-> >  #ifdef CONFIG_MMU
-> >  
-> > -#define ARCH_HAS_IOREMAP_WT
-> > -
-> >  /* Values for nocacheflag and cmode */
-> >  #define IOMAP_FULL_CACHING		0
-> >  #define IOMAP_NOCACHE_SER		1
-> > diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-> > index cc28d207a061..477773328a06 100644
-> > --- a/arch/mips/include/asm/io.h
-> > +++ b/arch/mips/include/asm/io.h
-> > @@ -12,8 +12,6 @@
-> >  #ifndef _ASM_IO_H
-> >  #define _ASM_IO_H
-> >  
-> > -#define ARCH_HAS_IOREMAP_WC
-> > -
-> >  #include <linux/compiler.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/types.h>
-> > @@ -25,7 +23,6 @@
-> >  #include <asm/byteorder.h>
-> >  #include <asm/cpu.h>
-> >  #include <asm/cpu-features.h>
-> > -#include <asm-generic/iomap.h>
-> >  #include <asm/page.h>
-> >  #include <asm/pgtable-bits.h>
-> >  #include <asm/processor.h>
-> > @@ -210,6 +207,8 @@ void iounmap(const volatile void __iomem *addr);
-> >  #define ioremap_wc(offset, size)					\
-> >  	ioremap_prot((offset), (size), boot_cpu_data.writecombine)
-> >  
-> > +#include <asm-generic/iomap.h>
-> > +
-> >  #if defined(CONFIG_CPU_CAVIUM_OCTEON)
-> >  #define war_io_reorder_wmb()		wmb()
-> >  #else
-> > diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-> > index f1e657c9bbe8..67a3fb6de498 100644
-> > --- a/arch/powerpc/include/asm/io.h
-> > +++ b/arch/powerpc/include/asm/io.h
-> > @@ -3,11 +3,6 @@
-> >  #define _ASM_POWERPC_IO_H
-> >  #ifdef __KERNEL__
-> >  
-> > -#define ARCH_HAS_IOREMAP_WC
-> > -#ifdef CONFIG_PPC32
-> > -#define ARCH_HAS_IOREMAP_WT
-> > -#endif
-> > -
-> >  /*
-> >   */
-> >  
-> > @@ -732,9 +727,7 @@ static inline void name at					\
-> >  #define writel_relaxed(v, addr)	writel(v, addr)
-> >  #define writeq_relaxed(v, addr)	writeq(v, addr)
-> >  
-> > -#ifdef CONFIG_GENERIC_IOMAP
-> > -#include <asm-generic/iomap.h>
-> > -#else
-> > +#ifndef CONFIG_GENERIC_IOMAP
-> >  /*
-> >   * Here comes the implementation of the IOMAP interfaces.
-> >   */
-> > diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-> > index e9025640f634..76238842406a 100644
-> > --- a/arch/x86/include/asm/io.h
-> > +++ b/arch/x86/include/asm/io.h
-> > @@ -35,9 +35,6 @@
-> >    *  - Arnaldo Carvalho de Melo <acme@conectiva.com.br>
-> >    */
-> >  
-> > -#define ARCH_HAS_IOREMAP_WC
-> > -#define ARCH_HAS_IOREMAP_WT
-> > -
-> >  #include <linux/string.h>
-> >  #include <linux/compiler.h>
-> >  #include <linux/cc_platform.h>
-> > @@ -212,8 +209,6 @@ void memset_io(volatile void __iomem *, int, size_t);
-> >  #define memcpy_toio memcpy_toio
-> >  #define memset_io memset_io
-> >  
-> > -#include <asm-generic/iomap.h>
-> > -
-> >  /*
-> >   * ISA space is 'always mapped' on a typical x86 system, no need to
-> >   * explicitly ioremap() it. The fact that the ISA IO space is mapped
-> > diff --git a/drivers/net/ethernet/sfc/io.h b/drivers/net/ethernet/sfc/io.h
-> > index 30439cc83a89..07f99ad14bf3 100644
-> > --- a/drivers/net/ethernet/sfc/io.h
-> > +++ b/drivers/net/ethernet/sfc/io.h
-> > @@ -70,7 +70,7 @@
-> >   */
-> >  #ifdef CONFIG_X86_64
-> >  /* PIO is a win only if write-combining is possible */
-> > -#ifdef ARCH_HAS_IOREMAP_WC
-> > +#ifdef ioremap_wc
-> >  #define EFX_USE_PIO 1
-> >  #endif
-> >  #endif
-> > diff --git a/drivers/net/ethernet/sfc/siena/io.h b/drivers/net/ethernet/sfc/siena/io.h
-> > index 30439cc83a89..07f99ad14bf3 100644
-> > --- a/drivers/net/ethernet/sfc/siena/io.h
-> > +++ b/drivers/net/ethernet/sfc/siena/io.h
-> > @@ -70,7 +70,7 @@
-> >   */
-> >  #ifdef CONFIG_X86_64
-> >  /* PIO is a win only if write-combining is possible */
-> > -#ifdef ARCH_HAS_IOREMAP_WC
-> > +#ifdef ioremap_wc
-> >  #define EFX_USE_PIO 1
-> >  #endif
-> >  #endif
-> > diff --git a/include/asm-generic/iomap.h b/include/asm-generic/iomap.h
-> > index 08237ae8b840..196087a8126e 100644
-> > --- a/include/asm-generic/iomap.h
-> > +++ b/include/asm-generic/iomap.h
-> > @@ -93,15 +93,15 @@ extern void __iomem *ioport_map(unsigned long port, unsigned int nr);
-> >  extern void ioport_unmap(void __iomem *);
-> >  #endif
-> >  
-> > -#ifndef ARCH_HAS_IOREMAP_WC
-> > +#ifndef ioremap_wc
-> >  #define ioremap_wc ioremap
-> >  #endif
-> >  
-> > -#ifndef ARCH_HAS_IOREMAP_WT
-> > +#ifndef ioremap_wt
-> >  #define ioremap_wt ioremap
-> >  #endif
-> >  
-> > -#ifndef ARCH_HAS_IOREMAP_NP
-> > +#ifndef ioremap_np
-> >  /* See the comment in asm-generic/io.h about ioremap_np(). */
-> >  #define ioremap_np ioremap_np
-> >  static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
-> > -- 
-> > 2.34.1
-> > 
-> > 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+Moje ime je Sandrina Omaru; Sem edini otrok mojih pokojnih star=C5=A1ev
+Chief. G. Williams Omaru. Moj o=C4=8De je bil zelo ugleden poslovni magnet,
+ki je v svojih dneh deloval v glavnem mestu Slonoko=C5=A1=C4=8Dene obale.
 
+=C5=BDalostno je, da povem, da je skrivnostno umrl v Franciji med enim od
+svojih poslovnih potovanj v tujino, =C4=8Deprav je njegovo nenadno smrt
+povezoval ali bolje re=C4=8Deno domneval, da jo je na=C4=8Drtoval moj stric=
+, ki
+je takrat potoval z njim. Toda Bog pozna resnico! Moja mama je umrla,
+ko sem bil star komaj 6 let, in od takrat me je o=C4=8De vzel tako
+posebnega.
+
+Pred smrtjo mojega o=C4=8Deta me je poklical in me obvestil, da ima vsoto
+tri milijone =C5=A1eststo tiso=C4=8D evrov. (3.600.000,00 =E2=82=AC), ki ji=
+h je
+deponiral v zasebni banki tukaj v Abid=C5=BEanu, Slonoko=C5=A1=C4=8Dena oba=
+la. Rekel
+mi je, da je polo=C5=BEil denar na moje ime in mi dal tudi vse potrebne
+pravne dokumente v zvezi s tem depozitom pri banki,
+
+Star sem komaj 22 let in sem univerzitetni diplomant in res ne vem,
+kaj naj naredim. Zdaj =C5=BEelim po=C5=A1tenega in BOGA boje=C4=8Dega partn=
+erja v
+tujini, ki mu lahko naka=C5=BEe ta denar z njegovo pomo=C4=8Djo, in po
+transakciji bom pri=C5=A1el in stalno prebival v va=C5=A1i dr=C5=BEavi do t=
+renutka,
+ko bo primerno, da se vrnem domov, =C4=8De tako =C5=BEelja. To je zato, ker=
+ sem
+zaradi nenehne politi=C4=8Dne krize tukaj na Slonoko=C5=A1=C4=8Deni obali u=
+trpel
+veliko =C5=A1kode.
+
+Smrt mojega o=C4=8Deta je pravzaprav prinesla =C5=BEalost v moje =C5=BEivlj=
+enje. Prav
+tako =C5=BEelim vlo=C5=BEiti sklad pod va=C5=A1im nadzorom, ker se ne spozn=
+am na
+poslovni svet. Iskreno si =C5=BEelim va=C5=A1e poni=C5=BEne pomo=C4=8Di v z=
+vezi s tem.
+Va=C5=A1e predloge in ideje bomo zelo cenili.
+
+Prosim, upo=C5=A1tevajte to in se =C4=8Dim prej oglasite pri meni. Takoj po=
+trdim
+va=C5=A1o pripravljenost, poslal vam bom svojo sliko in vas obvestil o ve=
+=C4=8D
+podrobnostih v zvezi s to zadevo.
+
+Prijazni pozdravi,
+
+Sandrina Omaru.
