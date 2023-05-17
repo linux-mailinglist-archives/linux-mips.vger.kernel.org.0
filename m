@@ -2,112 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4BC706D54
-	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 17:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DDA706E7E
+	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 18:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjEQPwj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 May 2023 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S229591AbjEQQr7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 May 2023 12:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbjEQPwV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 11:52:21 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CAEDC66
-        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 08:51:16 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-561ca1918e5so9466567b3.1
-        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 08:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684338674; x=1686930674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
-        b=PxKg2pRCl/MeEqp5uvc8FI6+YOF8ZQ0EzboQ7hpfbuFJX3IIqChekL0/PSY6f6ZBkZ
-         urHQTw8B9Qu+ZY/1vJzTnbXCr75YfIhdSyy686/eLISuhgZHB6UQ3EVsl6FD9v625A/w
-         tjxES+HrRzg6bCh5g/2aKxK6aL5WAXk6n5hL6cNQ4DLvHOdkJN6i/f12VZINOcSbVDWY
-         Ht8TqiZDvyXTZ0hs/EBmu3kHn7bK+REyjKbHcdjwjITX645yBU2SclzoGsnZb8Qs2uwx
-         3eg3Vv2wpF9jKUnxeZFE5DWnz2u2DGzEAq8Ck0m/CDBEkeEBn1RCKj2gBMDNc7cK4SzS
-         DFJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684338674; x=1686930674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
-        b=SVOvPKj8puOXrchbRSG+l08GTrvTc2Kb9IrBtKYwlnPigB4PuEdX2f+pl5D2YH5iHx
-         czeSMQjzJ02vl7kfzLLMzElwXOE633oSwoQ0gcGpT6Gg8aQImTDCd68HV9QX1G+l/I0e
-         i4+2tMmO5xxR0fHaMkyc4nwQ2yXy4coVO0SpqbeE0u4xtymzHHJ0i7kA6PfN+ILNn0mG
-         4r59Q4duG1tCm0hd29LMmbifM7JnNR0D0ZAwwGDaVXVP3uP2zKd8UhiqNUSIOQiJgLUR
-         Mb8uKkFUWtj24s7nkd/A3sJMk8psHnpQYBXSW1K50+eum++UVDLD6Dn4OoihV49gf7g/
-         629w==
-X-Gm-Message-State: AC+VfDw5QqHjYy8IBtg6QeTdoeJYp2573mnhAnMZAPB5OyXIAp+DEEgg
-        rhNpFBAOxffK+utEAUw1oRuce/7HS832bLwXIMeO
-X-Google-Smtp-Source: ACHHUZ7m7iuWUD5omxnx19xTgvLnN/+5Wgfo2oM56GLLAkTkIZomD+UUzUvvSVfeDFHavflonxguaAqx7fdYrFqY+DA=
-X-Received: by 2002:a81:53c5:0:b0:55d:c2c3:fbb8 with SMTP id
- h188-20020a8153c5000000b0055dc2c3fbb8mr34245755ywb.40.1684338674184; Wed, 17
- May 2023 08:51:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517131102.934196-5-arnd@kernel.org> <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
- <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
-In-Reply-To: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 May 2023 11:51:03 -0400
-Message-ID: <CAHC9VhQZyxVhDb0uB-+q7H=e++yq0qEAZGssPjepgnZ3i3_pnA@mail.gmail.com>
-Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        with ESMTP id S229457AbjEQQr5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 12:47:57 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CDE59DC;
+        Wed, 17 May 2023 09:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684342076; x=1715878076;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3aGbiMN0V+5yc6Amt+Y7GgCQxqWtHVXzMieUoBpl1Y0=;
+  b=NwujApARbS7z1+LSFfGoME6jThv38EVEpbFbdRsSmpRq/iKKAQs2HeIZ
+   jJlEWubv7r4iGiwuTLAoRvQDvWLxJqRj7o/J9WXzngQy4EoBJsBFjI9fP
+   rjdNxavDWXW5CtSU2AU4CXvE46E1VGSbPUVKcaIhu2AllfO55IQEvDp/c
+   klRU9gK1V50fBPsHNXAkzXK9LcKuGS9MjHnNCNR+7Wku7Z6T6iqyuvMCF
+   kWe+DgG5JMjPI14pnwIsQ3G4My6eP10PKejM0RsYy3mD463l6zeQWwYre
+   5r1AdcPFAxjCiiWSiu3Qu9/g1ujYOThj1fqnHQWKXQuQni50baQfZV707
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="351834340"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="351834340"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 09:47:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="948338934"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="948338934"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 17 May 2023 09:47:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pzKJL-0008UB-36;
+        Wed, 17 May 2023 19:47:35 +0300
+Date:   Wed, 17 May 2023 19:47:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
         Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 2/7] iio: mb1232: relax return value check for IRQ get
+Message-ID: <ZGUFJ5LRCzW2V0a1@smile.fi.intel.com>
+References: <cover.1684220962.git.mazziesaccount@gmail.com>
+ <429804dac3b1ea55dd233d1e2fdf94240e2f2b93.1684220962.git.mazziesaccount@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <429804dac3b1ea55dd233d1e2fdf94240e2f2b93.1684220962.git.mazziesaccount@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:51=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
-> On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
-> > On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
->
-> > We probably should move the audit_serial() and auditsc_get_stamp()
-> > away from the watch/mark/tree functions, but that isn't your problem.
-> >
-> > Anyway, this looks okay to me; do you have a problem if I merge this
-> > via the audit/next branch or were you hoping to have this go in
-> > through a different tree?
->
-> Merging it through your tree is probably best, Andrew can either
-> pick the ones that nobody else took, or I can resend the rest.
+On Tue, May 16, 2023 at 10:12:41AM +0300, Matti Vaittinen wrote:
+> fwnode_irq_get() was changed to not return 0 anymore.
+> 
+> Drop check for return value 0.
 
-Easy enough, merged to audit/next, thanks.
+...
 
---=20
-paul-moore.com
+> -	if (data->irqnr <= 0) {
+> +	if (data->irqnr < 0) {
+>  		/* usage of interrupt is optional */
+>  		data->irqnr = -1;
+>  	} else {
+
+
+After this change I'm not sure we need this branch at all, I mean that -errn is
+equal to -1 in the code (but needs to be checked for silly checks like == -1).
+
+Hence
+
+Entire excerpt can be replaced with
+
+	if (data->irqnr > 0) {
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
