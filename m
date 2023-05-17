@@ -2,129 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47566706EF3
-	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 19:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74407072A4
+	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 21:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjEQRDn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 May 2023 13:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        id S229517AbjEQT7n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 May 2023 15:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEQRDm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 13:03:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D989E;
-        Wed, 17 May 2023 10:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684343021; x=1715879021;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2y9dc4fvVXmSayb63VV0cFv6otKKoZXMYMxw98nbiUY=;
-  b=kRcCOgBggZt0gF/jc+KW4oVF1X8CHd4VGfx3lWlIry/tdwVU8QS/zubG
-   xe0NQamEfwys21whCOa/0Qc3+3/TlThDBOoEixu2sjuhLRfisygi2U0Qj
-   KATSMUNpuTMJtvFlraIFdbbEN+YtVp4kg9kBxskU0+Nknp9FUWg1tqeTD
-   /Dy7tCw4fzxFq9Oey4h2ippE57VfKzI8DvXoK+2HSSLOcAQBYv5Vcx8fs
-   YkcV0hdQdmaIzyu/2Jy5/4EWYJdgApN8RCZ2dc30mYa/XcJMpfI7fbOjv
-   zxuaFLH2WY0lTYl0/FCWjdBs3ub7IFe0vUri4fykpr9pksi8HI70Cftpr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="351840399"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="351840399"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 10:03:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="813944402"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="813944402"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 17 May 2023 10:03:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pzKYi-0008V6-2X;
-        Wed, 17 May 2023 20:03:28 +0300
-Date:   Wed, 17 May 2023 20:03:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
+        with ESMTP id S229475AbjEQT7V (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 15:59:21 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E47E67;
+        Wed, 17 May 2023 12:59:20 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-146-199-nat.elisa-mobile.fi [85.76.146.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4QM3pT6zgSzyWs;
+        Wed, 17 May 2023 22:59:13 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1684353557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uT4QeccEOPKkK7gGYPYPm3Y9FH1yk/CYJCXvyI1gFcg=;
+        b=WZFEpJpuxHgdL66a5PaD1yNk7SpgMp9G9guhbNAaUh3HEUxnbuFWcPk8rHcB/dQQJaayMK
+        upe+8t3l5YMswlkboqSxW1TMcS8P/5RX1nVRVXD5ExA19T8y7uQqsCZL1U0nsnp5cTTAW4
+        WqLdFf44BWpW+Gcb+Kix2JvPsvJMOEE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1684353557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uT4QeccEOPKkK7gGYPYPm3Y9FH1yk/CYJCXvyI1gFcg=;
+        b=uqZALiO1J2n/ZSQ1Zg25g0VKOhsOJ/6Qt1tM/2HyGw+suNSH0P3c0GzRaRzizaWMSFNnCo
+        kXUNe5mMx5fBj+8WBcmDkoSMxVBjAarDMIXN1vF1ZIB9LxTfhPvbYuxL0RtKrJA9x3X5j+
+        m2hOXBKV8p6FLsSV8qUVN62sMFztjCM=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684353557; a=rsa-sha256; cv=none;
+        b=RKAECBWDBO58k84XgosU1UrhQq2r0jPWNipNo3Gi0fMRoUGJZblm+3P1vXugNvU+LqaNyh
+        c2O6jMu7dk5j7DzRa8mJccrAhHhiOFueDQPGfrq0HfU5IqmE4NrXeiRgdWhUIROwa4xfNf
+        00KimNUa/R4AbP591nbysQnVZMJjE/A=
+Date:   Wed, 17 May 2023 22:59:11 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
         Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] pinctrl: wpcm450: elax return value check for IRQ
- get
-Message-ID: <ZGUI4J27h69ed005@smile.fi.intel.com>
-References: <cover.1684220962.git.mazziesaccount@gmail.com>
- <2d89de999a1d142efbd5eb10ff31cca12309e66d.1684220962.git.mazziesaccount@gmail.com>
- <ZGOwCSPH68DJN/NC@probook>
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] Input: ads7846 - Convert to use software nodes
+Message-ID: <20230517195911.GG271152@darkstar.musicnaut.iki.fi>
+References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
+ <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZGOwCSPH68DJN/NC@probook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:32:09PM +0200, Jonathan Neuschäfer wrote:
-> On Tue, May 16, 2023 at 10:13:14AM +0300, Matti Vaittinen wrote:
+Hi,
 
-> > The special handling in this driver was added when fixing a problem
-> > where returning zero from fwnode_irq_get[_byname]() was treated as
-> > succes yielding zero being used as a valid IRQ by the driver.
-> > f4a31facfa80 ("pinctrl: wpcm450: Correct the fwnode_irq_get() return value check")
-> > The commit message does not mention if choosing not to abort the probe
-> > on device-tree mapping failure (as is done on other errors) was chosen
-> > because: a) Abort would have broken some existing setup. b) Because skipping
-> > an IRQ on failure is "the right thing to do", or c) because it sounded like
-> > a way to minimize risk of breaking something.
-> > 
-> > If the reason is a) - then I'd appreciate receiving some more
-> > information and a suggestion how to proceed (if possible). If the reason
-> > is b), then it might be best to just skip the IRQ instead of aborting
-> > the probe for all errors on IRQ getting. Finally, in case of c), well,
-> > by acking this change you will now accept the risk :)
+This does not compile as nokia770_ads7846_props is declared twice,
+and nokia770_cbus_props and nokia770_mpuio_gpiochip_swnode are missing.
 
-From my side it was c).
+On Mon, May 08, 2023 at 11:20:06PM +0200, Linus Walleij wrote:
+> +static const struct software_node_ref_args nokia770_cbus_gpio_refs[] = {
+> +	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 9, 0),
+> +	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 10, 0),
+> +	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 11, 0),
+> +};
 
-> > The first patch of the series changes the fwnode_irq_get() so this depends
-> > on the first patch of the series and should not be applied alone.
-> 
-> Thanks for investigating this!
-> 
-> It's not a), because there are no existing setups that rely on broken
-> IRQs connected to this pinctrl/GPIO controller.
-> 
-> I suspect b) or c), but I'll let Andy give a more definite answer.
+These should be nokia770_mpuio_gpiochip_node.
 
+> +static const struct property_entry nokia770_ads7846_props[] = {
+> +	PROPERTY_ENTRY_REF_ARRAY("gpios", nokia770_cbus_gpio_refs),
+> +	{ }
+>  };
 
--- 
-With Best Regards,
-Andy Shevchenko
+This should be nokia770_cbus_props.
 
-
+A.
