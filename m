@@ -2,135 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468027066A5
-	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 13:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1673E7067FF
+	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 14:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjEQL3u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 May 2023 07:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S231633AbjEQMXx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 May 2023 08:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbjEQL3i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 07:29:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F122D30C8;
-        Wed, 17 May 2023 04:29:36 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HB7BJC023902;
-        Wed, 17 May 2023 11:28:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=NDNDo483NWCxuBgC62EmEkRd88RyM/bkMdaCrqWiEjU=;
- b=VRtGkAflt6Ne1p93gyowlWX7j5boLIQ7h0nC9VIo7uX3bwTrUs3t4FOkk1lJTYXqc25V
- 9FamFmiSWFwwyWa1DKrOu9DcxLjGAv2i0jSAymPQgGQf5P0M1OluYrFgT26OhkCmT/su
- BOKQtACZlOM4qdl7albr+SCOM7HzolGHsX5OPk132gsH5r9G7psINiKU8nGXVgkrlm0G
- JFTSinpEe96JQbyAanKB2Lfpy9cfYcMtNW6I0KolKOl1iMwgb7HevQZDAfJyxXafubsX
- 7gBNmSwaGFu7ct5RonhF3KWLIHQEwZVWECGZeI9L5VSTs6GPXqMDDHdOU4895qB3OFQc 4w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmw5v1gq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:28:14 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HB7Pi6025529;
-        Wed, 17 May 2023 11:28:13 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmw5v1gn6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:28:12 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H2RRIs022653;
-        Wed, 17 May 2023 11:28:09 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qj264t4u2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:28:09 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HBS6QC63177030
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 11:28:06 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 203902004B;
-        Wed, 17 May 2023 11:28:06 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CE9620040;
-        Wed, 17 May 2023 11:28:05 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 17 May 2023 11:28:04 +0000 (GMT)
-Date:   Wed, 17 May 2023 13:28:03 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        with ESMTP id S231621AbjEQMXu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 08:23:50 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7241700
+        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 05:23:48 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510d8d7f8eeso598108a12.0
+        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 05:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684326227; x=1686918227;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DA6gqqg7VsSOlrzSY0fplomac16MO4m/OUxGHMUrEn8=;
+        b=YMBnZJIg35A1B1GTWe8LhYlzT/LOxu20MCzLFBgHhOswqLlw3uMyTSUrWvyn7zCLC8
+         syvGDIEanQ5n5GHTKZ4gqiKBeUxCCHFQUahbxbla26a+nurlNNHLfAbzaGzyFGdh/rdl
+         NJRAsQmQiUb1SeNGnfWxL9UETxaqhODBDnhzz3XbrDygz9xa8zbpg3eUvTAXVIH2R5Wk
+         NdDe/6qfYhDbWsC2lPH1K4EobZy0TfYsixqsRF2LxFrDOVEXPdftp3repyVa2GjeLtzu
+         Ww1kDUkdmAVNkNY6SbJ9gM9yId4YRrFyZBwC/S3FC6DA4JpKUF6Ub8DXyTfrwQWCbhAv
+         THJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684326227; x=1686918227;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DA6gqqg7VsSOlrzSY0fplomac16MO4m/OUxGHMUrEn8=;
+        b=gceecC0HCyRK+1i3GvdqxiuJbtlBQQQGh1/7o73+RdVYOKlULGsTnZ66Lzw04vL1ZW
+         tKMfryy7XsZS22w4UUNcl2OJaoUBB80ZzW+tHwjRuJchrwZnbbDTPtf7rO0mO7zJAH+Q
+         utCguzluZdoMHAlUefLerkvDO7VmOr91Q1ymfS5fqg3TsCHAQQ1sOm4pL3bDjGiUgUdZ
+         tNx//E3sMDGwZ/i4cdPoBbSiRQUN0BlRRxOjQNApaqdSi9Eg85F5QLw9vPIXflina8j7
+         KsvGaH6vCNxdkQC/YwLCHGz7jW6laHOw0gkTd2DfPK0voXsR6crqwfDdVVcmHyeWc3Vo
+         3/qw==
+X-Gm-Message-State: AC+VfDz5eETshgn6UhqKL55p9GjmZIAQljzzVvZPk2cY8M9uQ+BIHlP0
+        h5Na+Vhjzd9mYgSR12iGzMVduw==
+X-Google-Smtp-Source: ACHHUZ7ZE8VVkUbrRdQvJOOf5Y0qLJrv9egXM2gFQmNhinP7JeNwvJyttB2ybh44E2+UNes2t7hqBg==
+X-Received: by 2002:aa7:c1cd:0:b0:506:8dba:bd71 with SMTP id d13-20020aa7c1cd000000b005068dbabd71mr2345396edp.27.1684326227183;
+        Wed, 17 May 2023 05:23:47 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id p3-20020aa7d303000000b0050e01a965a3sm6495480edq.5.2023.05.17.05.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 05:23:46 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 16/23] s390: gmap use pte_unmap_unlock() not spin_unlock()
-Message-ID: <ZGS6Q9jb/Rjwi4Rm@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
- <5579873-d7b-65e-5de0-a2ba8a144e7@google.com>
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Michael Walle <michael@walle.cc>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 4/6] arm64: dts: sparx5: rename pinctrl nodes
+Date:   Wed, 17 May 2023 14:23:40 +0200
+Message-Id: <168432619061.440504.10986193205480323774.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220319204628.1759635-5-michael@walle.cc>
+References: <20220319204628.1759635-1-michael@walle.cc> <20220319204628.1759635-5-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5579873-d7b-65e-5de0-a2ba8a144e7@google.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tSWvl9C0MlO4O_EzCFOjF_JcbOB8NztS
-X-Proofpoint-ORIG-GUID: NWm_n_tm0YYcdEmwRmZvkdtWX-DujuzO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
- spamscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=780
- priorityscore=1501 mlxscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305170090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:02:32PM -0700, Hugh Dickins wrote:
-> pte_alloc_map_lock() expects to be followed by pte_unmap_unlock(): to
-> keep balance in future, pass ptep as well as ptl to gmap_pte_op_end(),
-> and use pte_unmap_unlock() instead of direct spin_unlock() (even though
-> ptep ends up unused inside the macro).
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  arch/s390/mm/gmap.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
 
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+On Sat, 19 Mar 2022 21:46:26 +0100, Michael Walle wrote:
+> The pinctrl device tree binding will be converted to YAML format. Rename
+> the pin nodes so they end with "-pins" to match the schema.
+> 
+> 
+
+Applied, thanks!
+
+[4/6] arm64: dts: sparx5: rename pinctrl nodes
+      https://git.kernel.org/krzk/linux-dt/c/d5e64404e77c19ec5bd687b34a11eec0263f1aa8
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
