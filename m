@@ -2,48 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A04706A21
-	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 15:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB97706B2F
+	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 16:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjEQNsT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 17 May 2023 09:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S232008AbjEQOeE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 May 2023 10:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjEQNsS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 09:48:18 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7CD1BFA;
-        Wed, 17 May 2023 06:48:17 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso19247966b.0;
-        Wed, 17 May 2023 06:48:17 -0700 (PDT)
+        with ESMTP id S231989AbjEQOeC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 10:34:02 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAFD7DA7
+        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 07:33:54 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-7576e0b14ceso50553885a.1
+        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 07:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1684334033; x=1686926033;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=e3oHRvM4+O+XVaUuEdehDkOXM012vn7RckSkGvna424=;
+        b=fu1tzDMU/Og/xO2VDVrDn7AMjoYSOOqIHHpkafFQsXAXa7bAquEW8FLCbTstV+4LMK
+         WozWorjMKA6Ye6vd/CWIiTxdEYThpduYehQ0CQ0WfYzDYjo3Vb2D2M2rgHnkpqG2DoOG
+         hFYTNMutL1PBlKS5Sm6U/taMV6kJ+5c+nFWzW2BnEmFKQvrQZqgN1lt1MaOoYlFovyr9
+         7rwdJcPszNNgJz0aUNWpj3BWju7B7DitjFIRX5EHLLPdarguqNTfEhlBsUlRfiyyggcm
+         rmyPk1XWlhvVmYgOtYCrVpLjW2EGN4HHxXkb5Vh4zDOUpaw4fdaI2HH4gyNooTHomACq
+         60Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684331296; x=1686923296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ktinit9wKE6dNmLgC8Q+hzsuqEwfbXOj0+wtuIuj7PA=;
-        b=XBpzxd6w41aMmUzQOVx7M1JeAG6TU6klJCNM2ZFFJ64fWZqsixC+fuStxe+J0AhaHm
-         p0AvsZzH01Y2dvXZ748Ac+LZVDdVoGBY2EyMFTvn3Ezuq10PW1hbopd+OUdbOmZ9X07+
-         vHfX2XL5fJLzShFbdZykXnZvsqegs/KCl8a16rGx1Ljyp9eqtm8CbtfB5OCEIQgrT7w0
-         p1ECYCmTpO+cs16M44DBOK2Hoc29btFMVKn+5HslgnnNEO+N/f3IbZiijW4DtkSprnEq
-         CIlUiTz0mbK+HP9WkIvaIiqYYmPYmehH2LAh4GpIyn/wA4a/5xqY45CGK61+GF0hhEVd
-         Qt7Q==
-X-Gm-Message-State: AC+VfDxIMXLnCbk6CJZeM8b3nU/IXBIv83UG7Lcg2nCcIGRaY+4dilnJ
-        /fGqxwe4tASXf6sDk/dnbYXzZefNa7QskcjAttw=
-X-Google-Smtp-Source: ACHHUZ6M9EgcbaCbKF8EZaqyFXATppYniPvZEHcewZCPT/QYkFrutGUliTGcVVnKvC2nG18eSQY5J4nCD2m1yx3JtWA=
-X-Received: by 2002:a17:906:778a:b0:92e:f520:7762 with SMTP id
- s10-20020a170906778a00b0092ef5207762mr2003855ejm.6.1684331295491; Wed, 17 May
- 2023 06:48:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517131102.934196-1-arnd@kernel.org> <20230517131102.934196-11-arnd@kernel.org>
-In-Reply-To: <20230517131102.934196-11-arnd@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 17 May 2023 15:48:04 +0200
-Message-ID: <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com>
-Subject: Re: [PATCH 10/14] suspend: add a arch_resume_nosmt() prototype
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        d=1e100.net; s=20221208; t=1684334033; x=1686926033;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e3oHRvM4+O+XVaUuEdehDkOXM012vn7RckSkGvna424=;
+        b=JiMHkQjpC6Km+FF7/0mIPzE9ILK0T+q/M8U80V9CuxUfTUqjzq9b/f1Eu8FP4hExM/
+         aSbi8T6AlegObqATgUsTCo3Zx/MwVxaUf4lh3TMOfQmrmYkxeDnunrWEfodvbNVMflF+
+         NLyNgUdk6tPsAD5MDFQn8R8lbde0+VBw4A2DrfZhirkin5wmC9Q2pKVa+jnZKeLwlY9A
+         6OuYhoVkl9MAiu3AMjaF6nHUBj9tpz9szuIsjueU0eyIQC80uNnVLZfJjPLNp7UM7IRG
+         o2wRi8YxR4z7pkH9NJ6EpVpo1Z3i1S+0jnfLXOOfZfNT1xVa/WOG94Pw/f1DxTuCJNGK
+         AUVw==
+X-Gm-Message-State: AC+VfDy5ar9AVeDLvVgsuRmoT52LVJsunxaUbU9TbWFK9OeZ23G7/AhM
+        Nok4JNTnAUBs2JyHdeSeliyd
+X-Google-Smtp-Source: ACHHUZ62YidM3zKdwt9WsXpqyD57MEzZUZPKzKjSHJhQM0a+oKDUHR+Gn6BJRSHZwAJwHcpYfUyurw==
+X-Received: by 2002:ac8:5c91:0:b0:3ef:5ba0:7038 with SMTP id r17-20020ac85c91000000b003ef5ba07038mr73060971qta.21.1684334033429;
+        Wed, 17 May 2023 07:33:53 -0700 (PDT)
+Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
+        by smtp.gmail.com with ESMTPSA id d19-20020a05620a159300b0075914b01c29sm645867qkk.70.2023.05.17.07.33.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 07:33:52 -0700 (PDT)
+Date:   Wed, 17 May 2023 10:33:52 -0400
+Message-ID: <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
@@ -55,7 +64,6 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
         Eric Paris <eparis@redhat.com>,
         Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
         Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
@@ -68,57 +76,86 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         audit@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
+References: <20230517131102.934196-5-arnd@kernel.org>
+In-Reply-To: <20230517131102.934196-5-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 17, 2023 at 3:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The arch_resume_nosmt() has a __weak definition, plus an x86
-> specific override, but no prototype that ensures the two have
-> the same arguments. This causes a W=1 warning:
->
-> arch/x86/power/hibernate.c:189:5: error: no previous prototype for 'arch_resume_nosmt' [-Werror=missing-prototypes]
->
-> Add the prototype in linux/suspend.h, which is included in
-> both places.
->
+On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
+> 
+> Building with 'make W=1' reveals two function definitions without
+> a previous prototype in the audit code:
+> 
+> lib/compat_audit.c:32:5: error: no previous prototype for 'audit_classify_compat_syscall' [-Werror=missing-prototypes]
+> kernel/audit.c:1813:14: error: no previous prototype for 'audit_serial' [-Werror=missing-prototypes]
+> 
+> The first one needs a declaration from linux/audit.h but cannot
+> include that header without causing conflicting (compat) syscall number
+> definitions, so move the it into linux/audit_arch.h.
+> 
+> The second one is declared conditionally based on CONFIG_AUDITSYSCALL
+> but needed as a local function even when that option is disabled, so
+> move the declaration out of the #ifdef block.
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Do you want me to pick this up?
-
-If not
-
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
 > ---
->  include/linux/suspend.h | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index f16653f7be32..bc911fecb8e8 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -472,6 +472,8 @@ static inline int hibernate_quiet_exec(int (*func)(void *data), void *data) {
->  }
->  #endif /* CONFIG_HIBERNATION */
->
-> +int arch_resume_nosmt(void);
+>  include/linux/audit.h      | 2 --
+>  include/linux/audit_arch.h | 2 ++
+>  kernel/audit.h             | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index 31086a72e32a..6a3a9e122bb5 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -130,8 +130,6 @@ extern unsigned compat_dir_class[];
+>  extern unsigned compat_chattr_class[];
+>  extern unsigned compat_signal_class[];
+>  
+> -extern int audit_classify_compat_syscall(int abi, unsigned syscall);
+> -
+>  /* audit_names->type values */
+>  #define	AUDIT_TYPE_UNKNOWN	0	/* we don't know yet */
+>  #define	AUDIT_TYPE_NORMAL	1	/* a "normal" audit record */
+> diff --git a/include/linux/audit_arch.h b/include/linux/audit_arch.h
+> index 8fdb1afe251a..0e34d673ef17 100644
+> --- a/include/linux/audit_arch.h
+> +++ b/include/linux/audit_arch.h
+> @@ -21,4 +21,6 @@ enum auditsc_class_t {
+>  	AUDITSC_NVALS /* count */
+>  };
+>  
+> +extern int audit_classify_compat_syscall(int abi, unsigned syscall);
 > +
->  #ifdef CONFIG_HIBERNATION_SNAPSHOT_DEV
->  int is_hibernate_resume_dev(dev_t dev);
->  #else
-> --
-> 2.39.2
->
+>  #endif
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index c57b008b9914..94738bce40b2 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -259,8 +259,8 @@ extern struct tty_struct *audit_get_tty(void);
+>  extern void audit_put_tty(struct tty_struct *tty);
+>  
+>  /* audit watch/mark/tree functions */
+> -#ifdef CONFIG_AUDITSYSCALL
+>  extern unsigned int audit_serial(void);
+> +#ifdef CONFIG_AUDITSYSCALL
+>  extern int auditsc_get_stamp(struct audit_context *ctx,
+>  			      struct timespec64 *t, unsigned int *serial);
+
+We probably should move the audit_serial() and auditsc_get_stamp()
+away from the watch/mark/tree functions, but that isn't your problem.
+
+Anyway, this looks okay to me; do you have a problem if I merge this
+via the audit/next branch or were you hoping to have this go in
+through a different tree?
+
+--
+paul-moore.com
