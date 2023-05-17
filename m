@@ -2,134 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203D6706BA2
-	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 16:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B1B706C40
+	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 17:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjEQOw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 May 2023 10:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S229529AbjEQPKV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 May 2023 11:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjEQOw3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 10:52:29 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1434E19B0;
-        Wed, 17 May 2023 07:52:28 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 08E9E3200903;
-        Wed, 17 May 2023 10:52:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 17 May 2023 10:52:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1684335144; x=1684421544; bh=5mas8wApaiArBzc/k2qYZpcPuHFX2rPvIJz
-        00K7T8oE=; b=PgX23426o57WwtsjjYljjBuol/IGj/CdwDxYdVlzVn9DGm1wDMv
-        2FycDR3if/94TiLb5t1Sgx5wgRwymx1kDyNIwk42/KtXRE8cVroHeWsgAD7udiIQ
-        lgw15YyHjlw6cKboUDmX2B1BGrMyHuKGFtiHdt3MvWYZYTx0y51flCEMGqwb8oOS
-        MDnNcvNC5dTNFZZfjgtys4wAotOWdl5aYw1QNDn9N/EY+a3j4FgO17JnmwNzwyLW
-        +L1RWjgOGzhOPrZbZBhgqgdOKvnd6ooChaSPW1J2BgIsil9IBQl3xkgEMrGVh+g1
-        nSWTQV1EHEbBLvFTg/YnzpTPVw0G7mO1DaQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684335144; x=1684421544; bh=5mas8wApaiArBzc/k2qYZpcPuHFX2rPvIJz
-        00K7T8oE=; b=xFz/jAwV3qJ5yapPW/ZMpohG53y24e2YAUcXPuy6+uQd5ShtE1S
-        nbNkfhIECkF4nDilsZdooexk1mf11q39LZVWpdl6P52J/kzZsoB2N0SFf8gocyGD
-        DMtBEVRH+WgNUlJPkRfXnJGbmi99k5CknZw2t4g1UhJg3NsLgE5zB0Q9C55B/0F4
-        JNDlIYNtMogx+WHJANRHNZRztj1wLJJ2IpebT0ltPcIwhY34S42Pgq6Z5ZbvkDPD
-        WJTl1ujvi6Ata9f6/+6uuox7hxfXhVkCc+wDEet+vGxY07P0aV10Ih5tLNtm0ji8
-        0k7xvpekdrytg0TcK5ykd3p8oZ1pS3qsf8g==
-X-ME-Sender: <xms:JupkZHJXUwAnZPNa3E8RuTbb2CNWsCwq_Z5tikjt7ADc18n-mdUfzQ>
-    <xme:JupkZLLDGsX9lwAFQBl3acQpMglzqnsfJXPOSxDYTRNJifjsUqnnrrooI49gkDc3o
-    kJ1JoyxhrDHMXiN7qU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:JupkZPuWr7PbkG8y0OQs8W5jkT7165Fs-hGwQ1dSVjNGZJuoctIlOg>
-    <xmx:JupkZAY3sGGDQXi7i1jIpaf7oriSryY6KsNIDvNuiwje_IZhC_FwBQ>
-    <xmx:JupkZOaVQhNp_7gXeWPUGsIHD_hREdvTHdUUFKKteLVNN_aws7nsAg>
-    <xmx:KOpkZC4wS1szrrY0RrweYZ6FC1I75qf26i68Ll0F1kXm2bXHzRy53Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EB947B60086; Wed, 17 May 2023 10:52:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <6b7f6f66-7890-47a3-a22d-e29f2944823a@app.fastmail.com>
-In-Reply-To: <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com>
-References: <20230517131102.934196-1-arnd@kernel.org>
- <20230517131102.934196-11-arnd@kernel.org>
- <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com>
-Date:   Wed, 17 May 2023 16:52:01 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, x86@kernel.org,
-        "Paul Moore" <paul@paul-moore.com>,
-        "Eric Paris" <eparis@redhat.com>,
-        "Dennis Zhou" <dennis@kernel.org>, "Tejun Heo" <tj@kernel.org>,
-        "Christoph Lameter" <cl@linux.com>, "Pavel Machek" <pavel@ucw.cz>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Waiman Long" <longman@redhat.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 10/14] suspend: add a arch_resume_nosmt() prototype
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230313AbjEQPKT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 11:10:19 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0F835A5;
+        Wed, 17 May 2023 08:10:01 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9659c5b14d8so136119366b.3;
+        Wed, 17 May 2023 08:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684336200; x=1686928200;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RbHR3p/aSwGiwoZdp2CXqzfCqmJLbldvSD60wsj1Fzs=;
+        b=jHNY7YUQq7T5u7nBwuVtfqJOHyeYlzKXv+ooTfcFyKORavnxs8v9xgsa5X09yq5+oF
+         0yJlPl+gNCXgkVEEA1lmjzsnM+FeXzZ8RMTq9UXaZF514rYjhkALhBPZh//eg3CdVYoD
+         sDDShdi+8y6B/+2XvFQHvkJP4AyFxtpr1Wpp+YEymFNole9yPq8mWDQoEo2dZJ0+8PEY
+         p4ayoD9o/wofATVFsQeMUNH2yNnSPfZqRQTwK7fmnyLjmL1O8g3m1SymuPfIlS1ae7d6
+         KlIampzTO1eXgcl9QqAkTW4Q3njVKtnTadDUUhwiTF7CPE5yx1JgyREVP2ueLR2R+NCL
+         zAJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684336200; x=1686928200;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RbHR3p/aSwGiwoZdp2CXqzfCqmJLbldvSD60wsj1Fzs=;
+        b=D45EqTWkh863VhYWGpsu2+VHKeQNxmiflzHIvnsLSDrheXVNj8sgFmSj3jqE00XCcb
+         bGfGrfkTIiS8OmgTiLWnDgs8CodCDhYmSmoV4CJZ9hLmJP599SqNiwKRwJdr5rj0KScV
+         9gNVvVL4tQU/R+2XGNyKltXzAAGs2UrHnU5d1uSMnv6Xp0OYhRPTIr8KI85897z9DPR/
+         18jQoHFBL8mPrYfvG3aIxvP4GmgSaEjp2xTSegDFVSYQoDaUfJTkx6Iz2NVsR0HZrl/2
+         alHAe3FmF1i58f1+K+jLmhqxBzB6nNbCxzqirA+xWy/n23TvJygYCLAjucI6U3/PORMZ
+         RvnA==
+X-Gm-Message-State: AC+VfDy+nCXjg8HTtaH0D2pvurovIUE4QEmt7VRfa2hpqThZ/JPoy9Tp
+        TU5P0exifsRyBncM9HhRuCk=
+X-Google-Smtp-Source: ACHHUZ4sorPC+/RpGxDAM+RiswTD01mb/F0FjwwmcxR8Y5NPGoupZIgsSlQwp8ACSQZXGcUniFMyXg==
+X-Received: by 2002:a17:907:948e:b0:96a:ec5c:685b with SMTP id dm14-20020a170907948e00b0096aec5c685bmr12951001ejc.29.1684336199815;
+        Wed, 17 May 2023 08:09:59 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906845a00b00965cd15c9bbsm12413901ejy.62.2023.05.17.08.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 08:09:59 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Charlemagne Lasse <charlemagnelasse@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] locking/arch: Avoid variable shadowing in local_try_cmpxchg()
+Date:   Wed, 17 May 2023 17:09:40 +0200
+Message-Id: <20230517150940.172430-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 17, 2023, at 15:48, Rafael J. Wysocki wrote:
-> On Wed, May 17, 2023 at 3:12=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->>
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The arch_resume_nosmt() has a __weak definition, plus an x86
->> specific override, but no prototype that ensures the two have
->> the same arguments. This causes a W=3D1 warning:
->>
->> arch/x86/power/hibernate.c:189:5: error: no previous prototype for 'a=
-rch_resume_nosmt' [-Werror=3Dmissing-prototypes]
->>
->> Add the prototype in linux/suspend.h, which is included in
->> both places.
->>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Do you want me to pick this up?
+Several architectures define arch_try_local_cmpxchg macro using
+internal temporary variables named __old or _old. Uglify equally
+named variable in local_try_cmpxchg() with additional underscore
+to avoid variable shadowing warning.
 
-Yes, please do. Thanks,
+Fixes: d994f2c8e241 ("locking/arch: Wire up local_try_cmpxchg()")
+Reported-by: Charlemagne Lasse <charlemagnelasse@gmail.com>
+Closes: https://lore.kernel.org/lkml/CAFGhKbyxtuk=LoW-E3yLXgcmR93m+Dfo5-u9oQA_YC5Fcy_t9g@mail.gmail.com/
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jun Yi <yijun@loongson.cn>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/loongarch/include/asm/local.h | 4 ++--
+ arch/mips/include/asm/local.h      | 4 ++--
+ arch/x86/include/asm/local.h       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-     Arnd
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 83e995b30e47..4c6e4ed23433 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -63,8 +63,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	typeof(l->a.counter) *___old = (typeof(l->a.counter) *) old;
++	return try_cmpxchg_local(&l->a.counter, ___old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index 5daf6fe8e3e9..de276e2ebb64 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -101,8 +101,8 @@ static __inline__ long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	typeof(l->a.counter) *___old = (typeof(l->a.counter) *) old;
++	return try_cmpxchg_local(&l->a.counter, ___old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+index 56d4ef604b91..36cf5ca83ccb 100644
+--- a/arch/x86/include/asm/local.h
++++ b/arch/x86/include/asm/local.h
+@@ -127,8 +127,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	typeof(l->a.counter) *___old = (typeof(l->a.counter) *) old;
++	return try_cmpxchg_local(&l->a.counter, ___old, new);
+ }
+ 
+ /* Always has a lock prefix */
+-- 
+2.40.1
+
