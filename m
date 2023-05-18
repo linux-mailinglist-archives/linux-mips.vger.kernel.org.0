@@ -2,487 +2,236 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13508707A77
-	for <lists+linux-mips@lfdr.de>; Thu, 18 May 2023 09:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B901C707B1E
+	for <lists+linux-mips@lfdr.de>; Thu, 18 May 2023 09:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjERHBA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 May 2023 03:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S229961AbjERHhZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 May 2023 03:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjERHA6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 May 2023 03:00:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F152E2111;
-        Thu, 18 May 2023 00:00:55 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QMLSN351FzLmM5;
-        Thu, 18 May 2023 14:59:32 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        with ESMTP id S229820AbjERHhX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 May 2023 03:37:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BF7B7;
+        Thu, 18 May 2023 00:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684395442; x=1715931442;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=QjP5BRvKL20YViOl3cf4xTCLASAgcmH4AzYZnjDG1jc=;
+  b=nFPzzHukkl1YqIShK3IgWdKNKMY5f5ZjPR0ukk4mSpRQOeoH79lEQczW
+   8e5m7Lny/LUjrC/WPuphg+XipyLoRWvt70MmeONhD2lvMgxSY7z433XN2
+   OVHiBN9E91/I3XNmuB2+wFwJF4usH55e81D5oquUTBzkY1vKl/3rXaIDd
+   6W+kzP1K68NqtUyl+pHLVkI9vqmQpqRzUGuKvympYZeMp1KeF87yCkeKT
+   o52V/PBfTdLqGDjWidCwx5ozaMc7YenNKsmHic5J/g+beV1OXp+N47xeU
+   C5RxfzE5i/vvmXe2oz5ns0HViFSuxjQuqNvXF2EwZQhetEnWbXcxcfuze
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,284,1677567600"; 
+   d="scan'208";a="216050944"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 May 2023 00:37:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 18 May 2023 15:00:53 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
-        <catalin.marinas@arm.com>, <mark.rutland@arm.com>,
-        <ryan.roberts@arm.com>, <will@kernel.org>,
-        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
-        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
-        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
-        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
-        <prime.zeng@hisilicon.com>, <Jonathan.Cameron@Huawei.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [RESEND PATCH v9 2/2] arm64: support batched/deferred tlb shootdown during page reclamation/migration
-Date:   Thu, 18 May 2023 14:59:34 +0800
-Message-ID: <20230518065934.12877-3-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230518065934.12877-1-yangyicong@huawei.com>
-References: <20230518065934.12877-1-yangyicong@huawei.com>
+ 15.1.2507.21; Thu, 18 May 2023 00:37:12 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 18 May 2023 00:37:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c6EQwqoZgOIIBgSqAz8zlMKi0C7MHzGdo2Xdusg6PJYliGnrsA25pKN/PGpzBMo/JnP5TRrYiGHnihBZq5R2agj0hMGwUVoE9YBonhLXvKl7LvIKB9xeUR7ASGWFJK/z8R7QRnqtPtYfm6GiNiSLKJOlDvhU6aXq4kFTPASHWiu7Z1FsBjpEX/h18ImmmMznPYAorfznmP+LqMr5qmBaYQudOVgiXYqVwQmOzk/ezbxjxs3hactnTLaMGMQd39hHifD4yy7VDOTPs7Sm1UDRsHbvlJ1TC/xVqTyQa9Af55OPc6J/179kv1M//UmjH59Ue4IebBKyt+5SeaAC/bfeUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QjP5BRvKL20YViOl3cf4xTCLASAgcmH4AzYZnjDG1jc=;
+ b=YgwKs7klzhqgZtAfskfVBtwOIbFAPYUl97+ZhHidC9RsJp0T9rl0VeLtwiojB49UpnthN/dvoENKJwvzJ1hv1GtOHJtY/MuloOdYakMeS99d91YRYRBoBqX4eV5Cnyki9iVKCILce+G8ACXPO57iku4XvONQI51Xn1o/kPPr/jn+yruMm3V4VV1uwIbsP7AZpPgEPaJy6f94t1yV6w5l1K10yj3+NqPezTez2/oVLvJmCzffLyk/38lUvaCH6hESBpi7JLMjr/fIv1HugOXPlIQljAHObMNILISitehxBWwveH2jNXOxD1w0CscHVVgq42jmX0eEXBW6ydfmSJ+edQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QjP5BRvKL20YViOl3cf4xTCLASAgcmH4AzYZnjDG1jc=;
+ b=mlHua0VdZE7IO4bp+bGyoHSnUMbGDRA77A+RHRxSvzj1fPGH2TKBnwPBj+GuSO/J+iE4mfIwGj52hKcoMrbMYv6uC0xSRGJvH3TQplQmXaHPVmvqC+AR2uhSxg62lUcFLxrf6vP2ULASC8BVOGtYohPxqR9my1AuQ2TfZ73+o3s=
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com (2603:10b6:a03:4c3::17)
+ by DS0PR11MB8017.namprd11.prod.outlook.com (2603:10b6:8:115::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Thu, 18 May
+ 2023 07:37:04 +0000
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be]) by SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 07:37:04 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <maxime@cerno.tech>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <afaerber@suse.de>, <mani@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <jcmvbkbc@gmail.com>, <ckeepax@opensource.cirrus.com>,
+        <rf@opensource.cirrus.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <luca.ceresoli@bootlin.com>,
+        <david@lechnology.com>, <nsekhar@ti.com>, <abelvesa@kernel.org>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <matthias.bgg@gmail.com>, <geert+renesas@glider.be>,
+        <dinguyen@kernel.org>, <pdeschrijver@nvidia.com>,
+        <pgaikwad@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <vkoul@kernel.org>, <kishon@kernel.org>, <a.zummo@towertech.it>,
+        <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <paul@crapouillou.net>, <orsonzhai@gmail.com>,
+        <baolin.wang@linux.alibaba.com>, <zhang.lyra@gmail.com>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-actions@lists.infradead.org>,
+        <patches@opensource.cirrus.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-phy@lists.infradead.org>,
+        <linux-rtc@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        <alsa-devel@alsa-project.org>, <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v3 06/65] clk: at91: main: Add a determine_rate hook
+Thread-Topic: [PATCH v3 06/65] clk: at91: main: Add a determine_rate hook
+Thread-Index: AQHZiVuK76JtSAxFEUSi6IVLveVz2Q==
+Date:   Thu, 18 May 2023 07:37:03 +0000
+Message-ID: <accb9d15-b5ab-e99d-5b02-589688e68964@microchip.com>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-6-9a1358472d52@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-6-9a1358472d52@cerno.tech>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ2PR11MB7648:EE_|DS0PR11MB8017:EE_
+x-ms-office365-filtering-correlation-id: 3672536e-dba7-4e55-503b-08db5772acd7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: svgADzVIkG9Ipspkiub+OIQxikKpvfDv79yA952i59OUfKO043EbUFSGar3XJXCDqqDseu4E64H+S0YHJ1fsxd78jL56YL9pjiahzM/MqdIg63n9IUOmotJUIh9ws18EJbfhrEiWXTXerLsg8YONyoEVoQmtgPLzB0DlM621C8FZv6uLxhUXYnzPvT4RDj9SrV7nHBdIv+yxsgzeSrBh6CSVb0u6Yo8Ls2Tazoy5JKJm2cE0pRcnApdpqvO2Ur/sotkXL/eVPnY/yh0bKRySPm2xtQxbM1ILnIaXbPaOCOr/ibwbAO+PdoAXBc9hANHW44+zE/8cVY1Gg40aI5Wsm2qGVajZcFY3xZd24+F0eioNPoBIohcwHrnFrQy1oO5Gngym1ONoDUUGUH25awXaURoPP3/6cOY2G7UvtBhc7J18uxxXCQRltsPliYiy7DeE6wL/SRLtSrbVcGjAt9eYbwLoZOGl+oIt9JHlDgIvKcIW6c9azOsXvJBMOAAp1d/77uyAA7lsyf89wy0RFsIdioE1PShoHcHjO+t/i550COWBMTig6Lr2A9klgFziXS1tThwim7M2dA1i7X4EAcabYOs6biIdZ3sYIB+i+iN3t3JXaOOunHqbA4okXSglCDpgHGKkKdVRaXH21UPhpl1SAh60SLtCD3+HQIFfjG2jSe6wBXK+5AZcSY+7hOeTcWjocifJ7qU2AzpVHwhP8mglLw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7648.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199021)(110136005)(2906002)(91956017)(41300700001)(316002)(54906003)(478600001)(7406005)(7416002)(7366002)(31686004)(71200400001)(6486002)(66946007)(8676002)(66446008)(4326008)(8936002)(66556008)(76116006)(66476007)(64756008)(5660300002)(6506007)(26005)(53546011)(186003)(2616005)(83380400001)(36756003)(86362001)(38070700005)(921005)(38100700002)(122000001)(6512007)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NzMzNFdsSHRwLys1eVpQVE4wRFNBbVlBOTNoUXlab0ptZHcxa3lOQUZsa1Rv?=
+ =?utf-8?B?dGJ4dmhNb3N3Tlo5Mmsvd29RZk5lZ2F4czgyM05Ed1F4TUJSbXArK0YvMWtu?=
+ =?utf-8?B?UFV1M3BCY1o5VkhwV0xvYnp3TzVLUFlsNHNJcnprRGJJVGFKS000K29mWnpB?=
+ =?utf-8?B?N2RBa01YMjVaWUJoTXd2K0htWTJUTml0bGNZWHZsZDhWTnRrSS9waWppSEtF?=
+ =?utf-8?B?S2xhTWZyUEJuV1ZCQW5hRzdTdUU5MFBSV01odkJMWkZLaGxuUkd5QVJQSDUz?=
+ =?utf-8?B?aWlrZnY0R0hiTDQzWEw5SU44Wm1xTTFvbi9Ma1FHMFFzZ2phbGI0TjRYSXhy?=
+ =?utf-8?B?cDQ3QXpMc2pZMHhFNTFqUW5kZ3d1bE9IN2hlc2RFMzIyU3lWTU1lOGhKZExm?=
+ =?utf-8?B?ZlRENkkxelVOeWxIZzZKNEt0ZGVsNjJ0ZlhyQ245b1VpQ2tvaDV0ZjN3UWFo?=
+ =?utf-8?B?RktDRm1HSEowUDRZd1NaeFpNUWkzZGZiZ3J0WHNzYS9hRnV2MWduVnBmeWlL?=
+ =?utf-8?B?a2MrWkJjc3NhYkxCTDlab0tBVjBtVnFUbWJVdVRtaVBmd1p1dERBRVRyYUtL?=
+ =?utf-8?B?Mk9xVWhNRlBJMStMVzJqZnNxeThhcVhSL0UwYWhXK2hwTzJaZm1FRWJQUk5M?=
+ =?utf-8?B?TlREQ2Nra2lqOTJnSi9odnZTL3E5bTJuR1FGRFpPYUpXdlB1c2NIMGZYSVAy?=
+ =?utf-8?B?c1dpM0Z6T3YyNlZ2MERiWkhBQTZwY2RORjhtZS80aUxwbDNYM0xzZnRhbXVh?=
+ =?utf-8?B?U2tnMTBxUFFxSUk2VW9MNkFRaXgzNTlyVXNERlQrQmVLVnk3QVdIaVJuWUF0?=
+ =?utf-8?B?WS9vTDc1KzlYTGs1OURwczdCOTZaYmwxQ2JMTjhQQ3E2bm1IVkIya3o3NGYv?=
+ =?utf-8?B?SGk5Mk53MFFELzF6WndITGFSd00vRGFTbUp5VHIxMHpQeXpsVnIyZWxWaklN?=
+ =?utf-8?B?dXRiUDdnRmVvVzBrUUZyUDBMZVR1UUhweEpTalFzeFNjQlprUk9OZndBTnh3?=
+ =?utf-8?B?eGNEbGZ1Y0RVTjBEV1dSaUlrcVhENnFRRjhQTDJrN3dRS1BJNE51RGZBSk5D?=
+ =?utf-8?B?MngySjVEVlc0eTZQVURqUnM4UjdleUc3OVY0WVdtbnZBVXVYa0IvbHFUeG9G?=
+ =?utf-8?B?ek43VFVzaEltdXhKZkVqMENPb1FHZll2Z0ZKbm5uaXloT0xoUDBvQW9QQ3Mv?=
+ =?utf-8?B?VjhEdDd0SEt1Z1VnRFRaS0FZL2crYTYvWFJsL0t4R0g3NGZKOWFmYTQ5bUxU?=
+ =?utf-8?B?NHZVZVI0SzNkVm9KVmV5U0ptaDE3QStOcUlDVGdPYTNucldjcnRReUxUdEtx?=
+ =?utf-8?B?TWliUVpxN2wremllZUMwY3ZpdmQweXBaamFRV0IvT0FOZklCdVA0ZEJFUnpt?=
+ =?utf-8?B?R00zTlkvMkNJclhnV3JTOUJQMDZab2Q5OUg1R1dSQkljSXVGUWpJeFVxa2Za?=
+ =?utf-8?B?d0ROL2lPdDljb1pWOVJ3SEhUL0xVSmRtYitSZGdXcTZVdFE2bW5WVmt6QjZz?=
+ =?utf-8?B?SHYwK0RaVVR3dERQeDRBa1VwNnR3ckdzVUN2UE1kR1QraUF1M2Y4RC9Hanhn?=
+ =?utf-8?B?Mkx6eUFaMGVZbnpySzM5YUorTk1JVEg3cVI4VVYxS3ZsY3FMeWNsZS90UTZt?=
+ =?utf-8?B?ejhnWXVaV2I4d2I1a0NydnlNcksxRHpaR1plOTN4dUttenZpdWxPM2ZnZE8r?=
+ =?utf-8?B?Y0FaQlRQeFB2R01oaERHYW5rU05MSm5yMVdEbE9Hek94eEFPZnRaRnd2eXNw?=
+ =?utf-8?B?ZVNPSUVCUTFDcmRTWXBsVGlxbEdncHNWZzdkaE1IeTl5d21XZkRaaEhZZTRU?=
+ =?utf-8?B?eG5ZWEprd2U2VWdMNk83Wk41REpzTm5sdnRrMmVEK1M3ZG1TL210TzYwR29J?=
+ =?utf-8?B?WmEya1NwUnBzN1VlS2NZUDlrQ1Q3K1JqZExEUDlwVGNhNm1iaVJKR29jaUdW?=
+ =?utf-8?B?eXNXQVR5c2IxQnVWdnNxT1J4Q094Z1FOTlV0clEvY01XTUFrcTlsQzVsclRO?=
+ =?utf-8?B?TFY3THROajlPTWs4dVpRU0IrZnpVSVgzSHgzM0RBbmttREhweDE5aG9aU1Fw?=
+ =?utf-8?B?T2E5b0IzTk9Ga0M3Rm9vZCtCYVAxN2d4OUdDOCtTbTYrR0phRGRhQzJkN0pi?=
+ =?utf-8?B?M2R3Tk85VWhYRnlYSXNJUm9wV0VNZ1dvYUpKUFVBbXk1YzhjVEFwdm5zZURV?=
+ =?utf-8?B?b1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <124125420FC9B54DBBBC21352E2305E4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7648.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3672536e-dba7-4e55-503b-08db5772acd7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 07:37:03.9669
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4zsk8Js+16+SoYb2hQiTld5L1rVJrJvdp893c3J0N/+wKa4SUiHxoy/6uR9hQJsSJNQPBPfK4icBzLr8PW6Ih8x4aPRr+3Yqet0MM2GNA7o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8017
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
-
-on x86, batched and deferred tlb shootdown has lead to 90%
-performance increase on tlb shootdown. on arm64, HW can do
-tlb shootdown without software IPI. But sync tlbi is still
-quite expensive.
-
-Even running a simplest program which requires swapout can
-prove this is true,
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
-
- int main()
- {
- #define SIZE (1 * 1024 * 1024)
-         volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-                                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-
-         memset(p, 0x88, SIZE);
-
-         for (int k = 0; k < 10000; k++) {
-                 /* swap in */
-                 for (int i = 0; i < SIZE; i += 4096) {
-                         (void)p[i];
-                 }
-
-                 /* swap out */
-                 madvise(p, SIZE, MADV_PAGEOUT);
-         }
- }
-
-Perf result on snapdragon 888 with 8 cores by using zRAM
-as the swap block device.
-
- ~ # perf record taskset -c 4 ./a.out
- [ perf record: Woken up 10 times to write data ]
- [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
- ~ # perf report
- # To display the perf.data header info, please use --header/--header-only options.
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 60K of event 'cycles'
- # Event count (approx.): 35706225414
- #
- # Overhead  Command  Shared Object      Symbol
- # ........  .......  .................  .............................................................................
- #
-    21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
-     8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
-     6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
-     6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
-     5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
-     3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
-     3.49%  a.out    [kernel.kallsyms]  [k] memset64
-     1.63%  a.out    [kernel.kallsyms]  [k] clear_page
-     1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
-     1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
-     1.23%  a.out    [kernel.kallsyms]  [k] xas_load
-     1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
-
-ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
-swapping in/out a page mapped by only one process. If the
-page is mapped by multiple processes, typically, like more
-than 100 on a phone, the overhead would be much higher as
-we have to run tlb flush 100 times for one single page.
-Plus, tlb flush overhead will increase with the number
-of CPU cores due to the bad scalability of tlb shootdown
-in HW, so those ARM64 servers should expect much higher
-overhead.
-
-Further perf annonate shows 95% cpu time of ptep_clear_flush
-is actually used by the final dsb() to wait for the completion
-of tlb flush. This provides us a very good chance to leverage
-the existing batched tlb in kernel. The minimum modification
-is that we only send async tlbi in the first stage and we send
-dsb while we have to sync in the second stage.
-
-With the above simplest micro benchmark, collapsed time to
-finish the program decreases around 5%.
-
-Typical collapsed time w/o patch:
- ~ # time taskset -c 4 ./a.out
- 0.21user 14.34system 0:14.69elapsed
-w/ patch:
- ~ # time taskset -c 4 ./a.out
- 0.22user 13.45system 0:13.80elapsed
-
-Also, Yicong Yang added the following observation.
-	Tested with benchmark in the commit on Kunpeng920 arm64 server,
-	observed an improvement around 12.5% with command
-	`time ./swap_bench`.
-		w/o		w/
-	real	0m13.460s	0m11.771s
-	user	0m0.248s	0m0.279s
-	sys	0m12.039s	0m11.458s
-
-	Originally it's noticed a 16.99% overhead of ptep_clear_flush()
-	which has been eliminated by this patch:
-
-	[root@localhost yang]# perf record -- ./swap_bench && perf report
-	[...]
-	16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
-
-It is tested on 4,8,128 CPU platforms and shows to be beneficial on
-large systems but may not have improvement on small systems like on
-a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
-on CONFIG_EXPERT for this stage and add a runtime tunable to allow
-to disable it according to the scenario.
-
-Also this patch improve the performance of page migration. Using pmbench
-and tries to migrate the pages of pmbench between node 0 and node 1 for
-20 times, this patch decrease the time used more than 50% and saved the
-time used by ptep_clear_flush().
-
-This patch extends arch_tlbbatch_add_mm() to take an address of the
-target page to support the feature on arm64. Also rename it to
-arch_tlbbatch_add_pending() to better match its function since we
-don't need to handle the mm on arm64 and add_mm is not proper.
-add_pending will make sense to both as on x86 we're pending the
-TLB flush operations while on arm64 we're pending the synchronize
-operations.
-
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  1 +
- arch/arm64/include/asm/tlbbatch.h             | 12 ++++
- arch/arm64/include/asm/tlbflush.h             | 33 ++++++++-
- arch/arm64/mm/flush.c                         | 69 +++++++++++++++++++
- arch/x86/include/asm/tlbflush.h               |  5 +-
- include/linux/mm_types_task.h                 |  4 +-
- mm/rmap.c                                     | 12 ++--
- 8 files changed, 126 insertions(+), 12 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 7f049c251a79..76208db88f3b 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: |  ok  |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b1201d25a8a4..b3fc652dc902 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -96,6 +96,7 @@ config ARM64
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
- 	select ARCH_SUPPORTS_PER_VMA_LOCK
-+	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
-new file mode 100644
-index 000000000000..fedb0b87b8db
---- /dev/null
-+++ b/arch/arm64/include/asm/tlbbatch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ARCH_ARM64_TLBBATCH_H
-+#define _ARCH_ARM64_TLBBATCH_H
-+
-+struct arch_tlbflush_unmap_batch {
-+	/*
-+	 * For arm64, HW can do tlb shootdown, so we don't
-+	 * need to record cpumask for sending IPI
-+	 */
-+};
-+
-+#endif /* _ARCH_ARM64_TLBBATCH_H */
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index 412a3b9a3c25..8041905e26b9 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
- 	dsb(ish);
- }
- 
--static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
- 					 unsigned long uaddr)
- {
- 	unsigned long addr;
- 
- 	dsb(ishst);
--	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	addr = __TLBI_VADDR(uaddr, ASID(mm));
- 	__tlbi(vale1is, addr);
- 	__tlbi_user(vale1is, addr);
- }
- 
-+static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+					 unsigned long uaddr)
-+{
-+	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
-+}
-+
- static inline void flush_tlb_page(struct vm_area_struct *vma,
- 				  unsigned long uaddr)
- {
-@@ -272,6 +278,29 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
- 	dsb(ish);
- }
- 
-+#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
-+extern struct static_key_false batched_tlb_enabled;
-+
-+static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-+{
-+	return static_branch_likely(&batched_tlb_enabled);
-+}
-+
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
-+{
-+	__flush_tlb_page_nosync(mm, uaddr);
-+}
-+
-+static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
-+{
-+	dsb(ish);
-+}
-+
-+#endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
-+
- /*
-  * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
-  * necessarily a performance improvement.
-diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
-index 5f9379b3c8c8..84a8e15cda96 100644
---- a/arch/arm64/mm/flush.c
-+++ b/arch/arm64/mm/flush.c
-@@ -7,8 +7,10 @@
-  */
- 
- #include <linux/export.h>
-+#include <linux/jump_label.h>
- #include <linux/mm.h>
- #include <linux/pagemap.h>
-+#include <linux/sysctl.h>
- 
- #include <asm/cacheflush.h>
- #include <asm/cache.h>
-@@ -107,3 +109,70 @@ void arch_invalidate_pmem(void *addr, size_t size)
- }
- EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
- #endif
-+
-+#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
-+DEFINE_STATIC_KEY_FALSE(batched_tlb_enabled);
-+
-+static bool batched_tlb_flush_supported(void)
-+{
-+#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-+	/*
-+	 * TLB flush deferral is not required on systems, which are affected with
-+	 * ARM64_WORKAROUND_REPEAT_TLBI, as __tlbi()/__tlbi_user() implementation
-+	 * will have two consecutive TLBI instructions with a dsb(ish) in between
-+	 * defeating the purpose (i.e save overall 'dsb ish' cost).
-+	 */
-+	if (unlikely(cpus_have_const_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-+		return false;
-+#endif
-+	return true;
-+}
-+
-+int batched_tlb_enabled_handler(struct ctl_table *table, int write,
-+				      void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	unsigned int enabled = static_branch_unlikely(&batched_tlb_enabled);
-+	struct ctl_table t;
-+	int err;
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	t = *table;
-+	t.data = &enabled;
-+	err = proc_dointvec_minmax(&t, write, buffer, lenp, ppos);
-+	if (!err && write) {
-+		if (enabled && batched_tlb_flush_supported())
-+			static_branch_enable(&batched_tlb_enabled);
-+		else
-+			static_branch_disable(&batched_tlb_enabled);
-+	}
-+
-+	return err;
-+}
-+
-+static struct ctl_table batched_tlb_sysctls[] = {
-+	{
-+		.procname	= "batched_tlb_enabled",
-+		.data		= NULL,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= batched_tlb_enabled_handler,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
-+	{}
-+};
-+
-+static int __init batched_tlb_sysctls_init(void)
-+{
-+	if (batched_tlb_flush_supported())
-+		static_branch_enable(&batched_tlb_enabled);
-+
-+	register_sysctl_init("vm", batched_tlb_sysctls);
-+	return 0;
-+}
-+late_initcall(batched_tlb_sysctls_init);
-+
-+#endif
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 46bdff73217c..2eb4b69ce38b 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -283,8 +283,9 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
- 	return atomic64_inc_return(&mm->context.tlb_gen);
- }
- 
--static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
--					struct mm_struct *mm)
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
- {
- 	inc_mm_tlb_gen(mm);
- 	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
-diff --git a/include/linux/mm_types_task.h b/include/linux/mm_types_task.h
-index 5414b5c6a103..aa44fff8bb9d 100644
---- a/include/linux/mm_types_task.h
-+++ b/include/linux/mm_types_task.h
-@@ -52,8 +52,8 @@ struct tlbflush_unmap_batch {
- #ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
- 	/*
- 	 * The arch code makes the following promise: generic code can modify a
--	 * PTE, then call arch_tlbbatch_add_mm() (which internally provides all
--	 * needed barriers), then call arch_tlbbatch_flush(), and the entries
-+	 * PTE, then call arch_tlbbatch_add_pending() (which internally provides
-+	 * all needed barriers), then call arch_tlbbatch_flush(), and the entries
- 	 * will be flushed on all CPUs by the time that arch_tlbbatch_flush()
- 	 * returns.
- 	 */
-diff --git a/mm/rmap.c b/mm/rmap.c
-index b45f95ab0c04..9ef497228d45 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -642,7 +642,8 @@ void try_to_unmap_flush_dirty(void)
- #define TLB_FLUSH_BATCH_PENDING_LARGE			\
- 	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
- 
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval,
-+				      unsigned long uaddr)
- {
- 	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
- 	int batch;
-@@ -651,7 +652,7 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval)
- 	if (!pte_accessible(mm, pteval))
- 		return;
- 
--	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
-+	arch_tlbbatch_add_pending(&tlb_ubc->arch, mm, uaddr);
- 	tlb_ubc->flush_required = true;
- 
- 	/*
-@@ -726,7 +727,8 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
- 	}
- }
- #else
--static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval)
-+static void set_tlb_ubc_flush_pending(struct mm_struct *mm, pte_t pteval,
-+				      unsigned long uaddr)
- {
- }
- 
-@@ -1577,7 +1579,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pteval);
-+				set_tlb_ubc_flush_pending(mm, pteval, address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
-@@ -1958,7 +1960,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pteval);
-+				set_tlb_ubc_flush_pending(mm, pteval, address);
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
--- 
-2.24.0
-
+T24gMDQuMDQuMjAyMyAxMzoxMCwgTWF4aW1lIFJpcGFyZCB3cm90ZToNCj4gRVhURVJOQUwgRU1B
+SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
+dyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBUaGUgU0FNOXg1IG1haW4gY2xvY2sgaW1wbGVt
+ZW50cyBhIG11eCB3aXRoIGEgc2V0X3BhcmVudCBob29rLCBidXQNCj4gZG9lc24ndCBwcm92aWRl
+IGEgZGV0ZXJtaW5lX3JhdGUgaW1wbGVtZW50YXRpb24uDQo+IA0KPiBUaGlzIGlzIGEgYml0IG9k
+ZCwgc2luY2Ugc2V0X3BhcmVudCgpIGlzIHRoZXJlIHRvLCBhcyBpdHMgbmFtZSBpbXBsaWVzLA0K
+PiBjaGFuZ2UgdGhlIHBhcmVudCBvZiBhIGNsb2NrLiBIb3dldmVyLCB0aGUgbW9zdCBsaWtlbHkg
+Y2FuZGlkYXRlIHRvDQo+IHRyaWdnZXIgdGhhdCBwYXJlbnQgY2hhbmdlIGlzIGEgY2FsbCB0byBj
+bGtfc2V0X3JhdGUoKSwgd2l0aA0KPiBkZXRlcm1pbmVfcmF0ZSgpIGZpZ3VyaW5nIG91dCB3aGlj
+aCBwYXJlbnQgaXMgdGhlIGJlc3Qgc3VpdGVkIGZvciBhDQo+IGdpdmVuIHJhdGUuDQo+IA0KPiBU
+aGUgb3RoZXIgdHJpZ2dlciB3b3VsZCBiZSBhIGNhbGwgdG8gY2xrX3NldF9wYXJlbnQoKSwgYnV0
+IGl0J3MgZmFyIGxlc3MNCj4gdXNlZCwgYW5kIGl0IGRvZXNuJ3QgbG9vayBsaWtlIHRoZXJlJ3Mg
+YW55IG9idmlvdXMgdXNlciBmb3IgdGhhdCBjbG9jay4NCj4gDQo+IFNvLCB0aGUgc2V0X3BhcmVu
+dCBob29rIGlzIGVmZmVjdGl2ZWx5IHVudXNlZCwgcG9zc2libHkgYmVjYXVzZSBvZiBhbg0KPiBv
+dmVyc2lnaHQuIEhvd2V2ZXIsIGl0IGNvdWxkIGFsc28gYmUgYW4gZXhwbGljaXQgZGVjaXNpb24g
+YnkgdGhlDQo+IG9yaWdpbmFsIGF1dGhvciB0byBhdm9pZCBhbnkgcmVwYXJlbnRpbmcgYnV0IHRo
+cm91Z2ggYW4gZXhwbGljaXQgY2FsbCB0bw0KPiBjbGtfc2V0X3BhcmVudCgpLg0KPiANCj4gVGhl
+IGxhdHRlciBjYXNlIHdvdWxkIGJlIGVxdWl2YWxlbnQgdG8gc2V0dGluZyB0aGUgZmxhZw0KPiBD
+TEtfU0VUX1JBVEVfTk9fUkVQQVJFTlQsIHRvZ2V0aGVyIHdpdGggc2V0dGluZyBvdXIgZGV0ZXJt
+aW5lX3JhdGUgaG9vaw0KPiB0byBfX2Nsa19tdXhfZGV0ZXJtaW5lX3JhdGUoKS4gSW5kZWVkLCBp
+ZiBubyBkZXRlcm1pbmVfcmF0ZQ0KPiBpbXBsZW1lbnRhdGlvbiBpcyBwcm92aWRlZCwgY2xrX3Jv
+dW5kX3JhdGUoKSAodGhyb3VnaA0KPiBjbGtfY29yZV9yb3VuZF9yYXRlX25vbG9jaygpKSB3aWxs
+IGNhbGwgaXRzZWxmIG9uIHRoZSBwYXJlbnQgaWYNCj4gQ0xLX1NFVF9SQVRFX1BBUkVOVCBpcyBz
+ZXQsIGFuZCB3aWxsIG5vdCBjaGFuZ2UgdGhlIGNsb2NrIHJhdGUNCj4gb3RoZXJ3aXNlLiBfX2Ns
+a19tdXhfZGV0ZXJtaW5lX3JhdGUoKSBoYXMgdGhlIGV4YWN0IHNhbWUgYmVoYXZpb3Igd2hlbg0K
+PiBDTEtfU0VUX1JBVEVfTk9fUkVQQVJFTlQgaXMgc2V0Lg0KPiANCj4gQW5kIGlmIGl0IHdhcyBh
+biBvdmVyc2lnaHQsIHRoZW4gd2UgYXJlIGF0IGxlYXN0IGV4cGxpY2l0IGFib3V0IG91cg0KPiBi
+ZWhhdmlvciBub3cgYW5kIGl0IGNhbiBiZSBmdXJ0aGVyIHJlZmluZWQgZG93biB0aGUgbGluZS4N
+Cj4gDQo+IFNpZ25lZC1vZmYtYnk6IE1heGltZSBSaXBhcmQgPG1heGltZUBjZXJuby50ZWNoPg0K
+DQpSZXZpZXdlZC1ieTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5j
+b20+DQoNClRlc3RlZC1ieTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hp
+cC5jb20+DQoNCj4gLS0tDQo+ICBkcml2ZXJzL2Nsay9hdDkxL2Nsay1tYWluLmMgfCAzICsrLQ0K
+PiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL2F0OTEvY2xrLW1haW4uYyBiL2RyaXZlcnMvY2xrL2F0
+OTEvY2xrLW1haW4uYw0KPiBpbmRleCA4NjAxYjI3YzFhZTAuLmUwNGU3MjM5NDYzMiAxMDA2NDQN
+Cj4gLS0tIGEvZHJpdmVycy9jbGsvYXQ5MS9jbGstbWFpbi5jDQo+ICsrKyBiL2RyaXZlcnMvY2xr
+L2F0OTEvY2xrLW1haW4uYw0KPiBAQCAtNTMzLDYgKzUzMyw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1
+Y3QgY2xrX29wcyBzYW05eDVfbWFpbl9vcHMgPSB7DQo+ICAgICAgICAgLnByZXBhcmUgPSBjbGtf
+c2FtOXg1X21haW5fcHJlcGFyZSwNCj4gICAgICAgICAuaXNfcHJlcGFyZWQgPSBjbGtfc2FtOXg1
+X21haW5faXNfcHJlcGFyZWQsDQo+ICAgICAgICAgLnJlY2FsY19yYXRlID0gY2xrX3NhbTl4NV9t
+YWluX3JlY2FsY19yYXRlLA0KPiArICAgICAgIC5kZXRlcm1pbmVfcmF0ZSA9IF9fY2xrX211eF9k
+ZXRlcm1pbmVfcmF0ZSwNCj4gICAgICAgICAuc2V0X3BhcmVudCA9IGNsa19zYW05eDVfbWFpbl9z
+ZXRfcGFyZW50LA0KPiAgICAgICAgIC5nZXRfcGFyZW50ID0gY2xrX3NhbTl4NV9tYWluX2dldF9w
+YXJlbnQsDQo+ICAgICAgICAgLnNhdmVfY29udGV4dCA9IGNsa19zYW05eDVfbWFpbl9zYXZlX2Nv
+bnRleHQsDQo+IEBAIC01NjUsNyArNTY2LDcgQEAgYXQ5MV9jbGtfcmVnaXN0ZXJfc2FtOXg1X21h
+aW4oc3RydWN0IHJlZ21hcCAqcmVnbWFwLA0KPiAgICAgICAgIGluaXQub3BzID0gJnNhbTl4NV9t
+YWluX29wczsNCj4gICAgICAgICBpbml0LnBhcmVudF9uYW1lcyA9IHBhcmVudF9uYW1lczsNCj4g
+ICAgICAgICBpbml0Lm51bV9wYXJlbnRzID0gbnVtX3BhcmVudHM7DQo+IC0gICAgICAgaW5pdC5m
+bGFncyA9IENMS19TRVRfUEFSRU5UX0dBVEU7DQo+ICsgICAgICAgaW5pdC5mbGFncyA9IENMS19T
+RVRfUEFSRU5UX0dBVEUgfCBDTEtfU0VUX1JBVEVfTk9fUkVQQVJFTlQ7DQo+IA0KPiAgICAgICAg
+IGNsa21haW4tPmh3LmluaXQgPSAmaW5pdDsNCj4gICAgICAgICBjbGttYWluLT5yZWdtYXAgPSBy
+ZWdtYXA7DQo+IA0KPiAtLQ0KPiAyLjM5LjINCj4gDQoNCg==
