@@ -2,238 +2,220 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B690E70748A
-	for <lists+linux-mips@lfdr.de>; Wed, 17 May 2023 23:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD197078A3
+	for <lists+linux-mips@lfdr.de>; Thu, 18 May 2023 05:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjEQVuo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 May 2023 17:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S229930AbjERDzB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 May 2023 23:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjEQVun (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 17:50:43 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055C75B90
-        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 14:50:40 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-56190515833so12458997b3.0
-        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 14:50:39 -0700 (PDT)
+        with ESMTP id S229514AbjERDy7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 May 2023 23:54:59 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451B81B3
+        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 20:54:57 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33164ec77ccso89575ab.0
+        for <linux-mips@vger.kernel.org>; Wed, 17 May 2023 20:54:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684360239; x=1686952239;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrqZZXifWUb49UwqN4ktjCYYTpIiyxjiceM91X1owo=;
-        b=PPBehuovPkLBa6/NGbQAXn/eE0OjqEyROrqLX97nN6jBSNnfJoc5x6zVzWooSZlBuR
-         ygh7zMisKFOdApdpWLXdE38Ez48wbdl6bRgelI1M2q7oF1fjbdo+FT/cryTh0RkA2PgM
-         PVNv73NfYOacgZraULasH6MPisPmrZxBB5SdyINIUR+rCWC/xGGFoY/3V4eCh48ezelN
-         vlspmk4A/B3orH5IwCfSCJfMbueYznmKfST0fzCY2VeJqOWgXVBfHyrQGp7gwU4xxk/e
-         4DAXLkf7AssRwZV1LOldxmp7mNGGXTey4IiHanP7lOcu21DjwGEEnizw4Nh4dLrJMR0W
-         24RQ==
+        d=google.com; s=20221208; t=1684382096; x=1686974096;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZUVeCFBwRepQ2BhIuX+KxHZY1nB5uxUEqLPpEtLZZJM=;
+        b=Zd8CZw4lDm3vx4Btn66LS+zXtmPmlTEJcS72PeDUvzyhNeU/Tzq17Aqm7wPesOhqxn
+         sWEAVFQB278LPP4XLq8ee1pz+paUcB5W2nO+oqEh8r9dAS9L68OC/BH+ODGXdYh+emJx
+         WKiYB/jHj4X3aGGLhIABvNgBwFEEznm1n3n6oHo7VTtGUnk1xcaQgSNAyUU4Vqga5yAr
+         jWjSfmhV/tJoj/KDRyL03E+eLVHantYiObxVeHNMCZhPpqPhRfsgjPhB6VqJzaS95UxL
+         D3dgDlKu7w+7uloOUqz09vqCkGnKCrcElKSij3Kc2kQruZV8S/DpV0Bk68xek2T9fmls
+         xu1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684360239; x=1686952239;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrqZZXifWUb49UwqN4ktjCYYTpIiyxjiceM91X1owo=;
-        b=Dy38vbwVTYDPB1i6+3qwjJURpMWDnF5hm/VoyGp9bnCVRPngiOuSXRcXkl2FSusrNO
-         T+qrepapAdu2JpcF7X/9Jsth2B4IjNlBtrGwdFCPCw+blqqzeCE5iNMlB89+66RwDDx6
-         eMxuyYmQ7oJDYBAZc96fuG/WfubgUkm+Es0SQ4yTtDPxFUZFFpxT/rAe90caHxzCXg0j
-         8WOXS5/teOy83PZUtJ4jMJqxSvnydGt3FY29q+WmaSSK8ym+w1ZOq1Pakvh8Ox2XDxpT
-         umObqJkGzkzi5vHawBsTCrVDPuG8XS68KB/k+3dHqvaSEM4Bin1QlyTxayYByV+X2LXV
-         XHdA==
-X-Gm-Message-State: AC+VfDykoDuxyBKmUwdfkFNKZA+ZLkUE708pi9h5bf/h+V56CRjFTzY2
-        wu2Kvk6r3OPS3jz0+TFXbpr6Lw==
-X-Google-Smtp-Source: ACHHUZ5K1W6BqH54lP1fyWtEUpWwZ0lmy+14bsbtce6I/HyB5LShp2aTZ/lznkrMNM/kuQdbHXvf0A==
-X-Received: by 2002:a81:6744:0:b0:55a:af:2486 with SMTP id b65-20020a816744000000b0055a00af2486mr2691032ywc.18.1684360239031;
-        Wed, 17 May 2023 14:50:39 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 129-20020a251187000000b00ba6ffc7ef35sm785837ybr.65.2023.05.17.14.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 14:50:38 -0700 (PDT)
-Date:   Wed, 17 May 2023 14:50:28 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
+        d=1e100.net; s=20221208; t=1684382096; x=1686974096;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZUVeCFBwRepQ2BhIuX+KxHZY1nB5uxUEqLPpEtLZZJM=;
+        b=HRWnFP3MJt/vfyyIpdC/zt0miJIWRk8N3pb0xScsZf6pIo62aW3MdocGLPl9odEEh7
+         CrhXLuqpEldc1TVaY+uOh2EOXmCOASPn+O45Lr0AfDLbNN3Tnj7LAA6zX1D/Yagqctka
+         o4m34SSpaYaA1wjDJz58+l7YaPzJ+5JxahS/vUmlrjOjDToIWu86FYZPtICZNJkHaFBt
+         uv3tfFbIvQbWzfTeAjCXMuxgQtKDHidN72w5n6dShc/4+r/6xbxj0hqdDHF9l5Uwx9C6
+         0VaGIMy+amcKaGChcNZdVyeOtDsQ80YZkb4qfwOBZFLKOEuU08mXFnEIOHW+/6L0JZj7
+         0nBw==
+X-Gm-Message-State: AC+VfDwEiMW7dFmYdaqZQQzJFylzP1qovBAlGPHmBJGcUoPH6tJQNufS
+        UhPLOX/CfIbaQeAxU+U0nuIJX4SzqWka27naKdlcfw==
+X-Google-Smtp-Source: ACHHUZ717zmrczolPQ87hbWdJhPbrvKwtnmjQulUOZnWQ5Q0uegRkL12ChK1bcl526dLzNN00CxdtF2jaAUwZjfOdVw=
+X-Received: by 2002:a05:6e02:2145:b0:331:4d3c:db55 with SMTP id
+ d5-20020a056e02214500b003314d3cdb55mr133492ilv.4.1684382096471; Wed, 17 May
+ 2023 20:54:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230517131102.934196-1-arnd@kernel.org> <20230517131102.934196-10-arnd@kernel.org>
+In-Reply-To: <20230517131102.934196-10-arnd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 18 May 2023 11:54:44 +0800
+Message-ID: <CABVgOSnu4B2O49O012=ywvmskso3cfbYRbdhX2RXA1C1v-ymSw@mail.gmail.com>
+Subject: Re: [PATCH 09/14] kunit: include debugfs header file
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Arnd Bergmann <arnd@arndb.de>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 15/23] s390: allow pte_offset_map_lock() to fail
-In-Reply-To: <20230517123546.672fb9b0@p-imbrenda>
-Message-ID: <4a15dbaa-1614-ce-ce1f-f73959cef895@google.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <94aec8fe-383f-892-dcbf-d4c14e460a7@google.com> <20230517123546.672fb9b0@p-imbrenda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        audit@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000008cecff05fbefc48b"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 17 May 2023, Claudio Imbrenda wrote:
-> On Tue, 9 May 2023 22:01:16 -0700 (PDT)
-> Hugh Dickins <hughd@google.com> wrote:
-> 
-> > In rare transient cases, not yet made possible, pte_offset_map() and
-> > pte_offset_map_lock() may not find a page table: handle appropriately.
-> > 
-> > Signed-off-by: Hugh Dickins <hughd@google.com>
-> > ---
-> >  arch/s390/kernel/uv.c  |  2 ++
-> >  arch/s390/mm/gmap.c    |  2 ++
-> >  arch/s390/mm/pgtable.c | 12 +++++++++---
-> >  3 files changed, 13 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> > index cb2ee06df286..3c62d1b218b1 100644
-> > --- a/arch/s390/kernel/uv.c
-> > +++ b/arch/s390/kernel/uv.c
-> > @@ -294,6 +294,8 @@ int gmap_make_secure(struct gmap *gmap, unsigned long gaddr, void *uvcb)
-> >  
-> >  	rc = -ENXIO;
-> >  	ptep = get_locked_pte(gmap->mm, uaddr, &ptelock);
-> > +	if (!ptep)
-> > +		goto out;
+--0000000000008cecff05fbefc48b
+Content-Type: text/plain; charset="UTF-8"
 
-You may or may not be asking about this instance too.  When I looked at
-how the code lower down handles -ENXIO (promoting it to -EFAULT if an
-access fails, or to -EAGAIN to ask for a retry), this looked just right
-(whereas using -EAGAIN here would be wrong: that expects a "page" which
-has not been initialized at this point).
+On Wed, 17 May 2023 at 21:12, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> An extra #include statement is needed to ensure the prototypes
+> for debugfs interfaces are visible, avoiding this warning:
+>
+> lib/kunit/debugfs.c:28:6: error: no previous prototype for 'kunit_debugfs_cleanup' [-Werror=missing-prototypes]
+> lib/kunit/debugfs.c:33:6: error: no previous prototype for 'kunit_debugfs_init' [-Werror=missing-prototypes]
+> lib/kunit/debugfs.c:102:6: error: no previous prototype for 'kunit_debugfs_create_suite' [-Werror=missing-prototypes]
+> lib/kunit/debugfs.c:118:6: error: no previous prototype for 'kunit_debugfs_destroy_suite' [-Werror=missing-prototypes]
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-> >  	if (pte_present(*ptep) && !(pte_val(*ptep) & _PAGE_INVALID) && pte_write(*ptep)) {
-> >  		page = pte_page(*ptep);
-> >  		rc = -EAGAIN;
-> > diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> > index dc90d1eb0d55..d198fc9475a2 100644
-> > --- a/arch/s390/mm/gmap.c
-> > +++ b/arch/s390/mm/gmap.c
-> > @@ -2549,6 +2549,8 @@ static int __zap_zero_pages(pmd_t *pmd, unsigned long start,
-> >  		spinlock_t *ptl;
-> >  
-> >  		ptep = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
-> > +		if (!ptep)
-> > +			break;
-> 
-> so if pte_offset_map_lock fails, we abort and skip both the failed
-> entry and the rest of the entries?
+Nice catch, thanks. I'm fine with this going in via -mm, but if you'd
+prefer it to go via kselftest/kunit, let me know.
 
-Yes.
+Reviewed-by: David Gow <davidgow@google.com>
 
-> 
-> can pte_offset_map_lock be retried immediately if it fails? (consider
-> that we currently don't allow THP with KVM guests)
-> 
-> Would something like this:
-> 
-> do {
-> 	ptep = pte_offset_map_lock(...);
-> 	mb();	/* maybe? */
-> } while (!ptep);
-> 
-> make sense?
+Cheers,
+-- David
 
-No.  But you're absolutely right to be asking: thank you for looking
-into it so carefully - and I realize that it's hard at this stage to
-judge what's appropriate, when I've not yet even posted the endpoint
-of these changes, the patches which make it possible not to find a
-page table here.  And I'm intentionally keeping that vague, because
-although I shall only introduce a THP case, I do expect it to be built
-upon later in reclaiming empty page tables: it would be nice not to
-have to change the arch code again when extending further.
+>  lib/kunit/debugfs.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> index b08bb1fba106..22c5c496a68f 100644
+> --- a/lib/kunit/debugfs.c
+> +++ b/lib/kunit/debugfs.c
+> @@ -10,6 +10,7 @@
+>  #include <kunit/test.h>
+>
+>  #include "string-stream.h"
+> +#include "debugfs.h"
+>
+>  #define KUNIT_DEBUGFS_ROOT             "kunit"
+>  #define KUNIT_DEBUGFS_RESULTS          "results"
+> --
+> 2.39.2
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230517131102.934196-10-arnd%40kernel.org.
 
-My "rare transient cases" phrase may be somewhat misleading: one thing
-that's wrong with your tight pte_offset_map_lock() loop above is that
-the pmd entry pointing to page table may have been suddenly replaced by
-a pmd_none() entry; and there's nothing in your loop above to break out
-if that is so.
+--0000000000008cecff05fbefc48b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-But if a page table is suddenly removed, that would be because it was
-either empty, or replaced by a THP entry, or easily reconstructable on
-demand (by that, I probably mean it was only mapping shared file pages,
-which can just be refaulted if needed again).
-
-The case you're wary of, is if the page table were removed briefly,
-then put back shortly after: and still contains zero pages further down.
-That's not something mm does now, nor at the end of my several series,
-nor that I imagine us wanting to do in future: but I am struggling to
-find a killer argument to persuade you that it could never be done -
-most pages in a page table do need rmap tracking, which will BUG if
-it's broken, but that argument happens not to apply to the zero page.
-
-(Hmm, there could be somewhere, where we would find it convenient to
-remove a page table with intent to do ...something, then validation
-of that isolated page table fails, so we just put it back again.)
-
-Is it good enough for me to promise you that we won't do that?
-
-There are several ways in which we could change __zap_zero_pages(),
-but I don't see them as actually dealing with the concern at hand.
-
-One change, I've tended to make at the mm end but did not dare
-to interfere here: it would seem more sensible to do a single
-pte_offset_map_lock() outside the loop, return if that fails,
-increment ptep inside the loop, pte_unmap_unlock() after the loop.
-
-But perhaps you have preemption reasons for not wanting that; and
-although it would eliminate the oddity of half-processing a page
-table, it would not really resolve the problem at hand: because,
-what if this page table got removed just before __zap_zero_pages()
-tries to take the lock, then got put back just after?
-
-Another change: I see __zap_zero_pages() is driven by walk_page_range(),
-and over at the mm end I'm usually setting walk->action to ACTION_AGAIN
-in these failure cases; but thought that an unnecessary piece of magic
-here, and cannot see how it could actually help.  Your "retry the whole
-walk_page_range()" suggestion below would be a heavier equivalent of
-that: but neither way gives confidence, if a page table could actually
-be removed then reinserted without mmap_write_lock().
-
-I think I want to keep this s390 __zap_zero_pages() issue in mind, it is
-important and thank you for raising it; but don't see any change to the
-patch as actually needed.
-
-Hugh
-
-> 
-> 
-> otherwise maybe it's better to return an error and retry the whole
-> walk_page_range() in s390_enable_sie() ? it's a slow path anyway.
-> 
-> >  		if (is_zero_pfn(pte_pfn(*ptep)))
-> >  			ptep_xchg_direct(walk->mm, addr, ptep, __pte(_PAGE_INVALID));
-> >  		pte_unmap_unlock(ptep, ptl);
-> 
-> [...]
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAEDPnEOWzT2vYIrJhGq
+c1swDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzA1MTIx
+NjMzMjlaFw0yMzExMDgxNjMzMjlaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfIQuFV9ECjSKrnHc+/gEoEHeMu29G
+hkC9x5KA7Tgm7ZISSdxxP+b9Q23vqKKYcaXlXzxDUweAEa7KrhRdZMpcF1p14/qI6AG7rBn8otbO
+t6QSE9nwXQRL5ITEHtPRcQzLU5H9Yyq4b9MmEZAq+ByKX1t6FrXw461kqV8I/oCueKmD0p6mU/4k
+xzQWik4ZqST0MXkJiZenSKDDN+U1qGgHKC3HAzsIlWpNh/WsWcD4RRcEtwfW1h9DwRfGFp78OFQg
+65qXbeub4G7ELSIdjGygCzVG+g1jo6we5uqPep3iRCzn92KROEVxP5lG9FlwQ2YWMt+dNiGrJdKy
+Kw4TK7CrAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFG/UTu3x
+9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
+Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
+iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
+jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
+jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
+FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDy
+NkOhXvFQzVSUzEL0U7yvjVToTpRRBqjD19aTuf2q2DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA1MTgwMzU0NTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASZj0gEQ+5lxvkjrq4q9q
+5mjjTag80+oStNj31xLxqT9znMHS6iSot1ydtlpdvi9KdzvHQkJ5IfDglO7zxa85QP3Lhwohu3HQ
+1cbrnbPsqFIuxwtIedSAC+CdtmId3fIoU+8q92Zza/gTeeyK3s8SRAEIR+zVMTo6nht+KGLmnbjS
+jDw7GiibXzfchEqEe8JdqMANIZ8AcQHWuSZ38ur+pCivS7W1SNK9aGCYOOnal1mK/1wdBSpcih2H
+Vn7dKVT/tdMUCJlrZroJgr8RVfnmuLzPayYKnQyrYyEvM41vYYv6cMaW24VTXfFEaf5srz2yzOhq
+zEItkzXw9MlVZ+tLJA==
+--0000000000008cecff05fbefc48b--
