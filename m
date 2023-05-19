@@ -2,32 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C585C70A085
-	for <lists+linux-mips@lfdr.de>; Fri, 19 May 2023 22:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1127B70A09E
+	for <lists+linux-mips@lfdr.de>; Fri, 19 May 2023 22:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjESUXP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 May 2023 16:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S229515AbjESUaX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 May 2023 16:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjESUXO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 May 2023 16:23:14 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04374E49;
-        Fri, 19 May 2023 13:23:11 -0700 (PDT)
+        with ESMTP id S229508AbjESUaX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 May 2023 16:30:23 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 761DEE0;
+        Fri, 19 May 2023 13:30:22 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 95EAE92009E; Fri, 19 May 2023 22:23:10 +0200 (CEST)
+        id 9DAEB92009D; Fri, 19 May 2023 22:30:21 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 901D792009B;
-        Fri, 19 May 2023 21:23:10 +0100 (BST)
-Date:   Fri, 19 May 2023 21:23:10 +0100 (BST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8FB3392009B;
+        Fri, 19 May 2023 21:30:21 +0100 (BST)
+Date:   Fri, 19 May 2023 21:30:21 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
-In-Reply-To: <20230519164753.72065-2-jiaxun.yang@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
-References: <20230519164753.72065-1-jiaxun.yang@flygoat.com> <20230519164753.72065-2-jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 2/3] MIPS: Introduce config options for LLSC
+ availability
+In-Reply-To: <20230519164753.72065-3-jiaxun.yang@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2305192125360.50034@angie.orcam.me.uk>
+References: <20230519164753.72065-1-jiaxun.yang@flygoat.com> <20230519164753.72065-3-jiaxun.yang@flygoat.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -42,23 +43,18 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, 19 May 2023, Jiaxun Yang wrote:
 
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index 6d15a398d389..fd452e68cd90 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -152,6 +152,13 @@ static inline void check_errata(void)
->  	struct cpuinfo_mips *c = &current_cpu_data;
->  
->  	switch (current_cpu_type()) {
-> +	case CPU_4KC:
-> +		if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
-> +			c->options &= ~MIPS_CPU_LLSC;
-> +			if (!IS_ENABLED(CONFIG_WAR_4K_LLSC))
-> +				pr_err("CPU have LLSC errata, please enable CONFIG_WAR_4K_LLSC");
+> --- a/arch/mips/include/asm/cpu-features.h
+> +++ b/arch/mips/include/asm/cpu-features.h
+> @@ -185,8 +185,13 @@
+>  #ifndef cpu_has_ejtag
+>  #define cpu_has_ejtag		__opt(MIPS_CPU_EJTAG)
+>  #endif
+> +
+>  #ifndef cpu_has_llsc
+> -#define cpu_has_llsc		__isa_ge_or_opt(1, MIPS_CPU_LLSC)
+> +# ifdef CONFIG_CPU_MAY_HAVE_LLSC
+> +#  define cpu_has_llsc		(IS_ENABLED(CONFIG_CPU_HAS_LLSC) ||  __opt(MIPS_CPU_LLSC))
 
- Given the circumstances I think this should be `panic'.  You don't want 
-to continue with a system that can randomly lock up.
-
- Also "CPU has LLSC erratum, [...]" as both are singular.
+ Extraneous space and overlong line here.
 
   Maciej
