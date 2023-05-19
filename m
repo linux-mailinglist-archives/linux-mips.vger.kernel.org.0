@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CE970A222
-	for <lists+linux-mips@lfdr.de>; Fri, 19 May 2023 23:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D97B70A2A2
+	for <lists+linux-mips@lfdr.de>; Sat, 20 May 2023 00:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjESVwT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 May 2023 17:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S229965AbjESWDc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 May 2023 18:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjESVwI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 May 2023 17:52:08 -0400
+        with ESMTP id S229627AbjESWDc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 May 2023 18:03:32 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB371730;
-        Fri, 19 May 2023 14:51:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F80F10EC;
+        Fri, 19 May 2023 15:03:00 -0700 (PDT)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 1FA023200998;
-        Fri, 19 May 2023 17:51:17 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 19 May 2023 17:51:17 -0400
+        by mailout.west.internal (Postfix) with ESMTP id 49A16320091A;
+        Fri, 19 May 2023 18:03:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 19 May 2023 18:03:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:content-type:date
         :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684533076; x=1684619476; bh=Swpo4gUk6xVGAujZkHWBnImzkqnYkyRI2qy
-        um8DHZXw=; b=ppK7/DGLIequAjDx/8H8T0JGT5Jpmz6WPC6jYQM5dQsLsrEic7K
-        eK98aWQONrLPIPoAghZSIP7W3v4HTpPXB6E53h34qtx1hKqmrN3sb074cpWM3OcD
-        6+oSm8YCGQcjfKhIFcv9OudS4NqMPkCoCj+ycwh3Pqd2WbUCM5RRmxSgzHtrsfcU
-        vbUD7OgOqe7mdJoTSjMg+ghoCw1vBYqR8AjT0879yEGzk9RqrrCjkfUAM7pvy/WI
-        WbHoOLPAMSZ93RvNLgziQLCbbE0S4OXwUstqVr4lqMGjWpU/fJBpKgsb6vaaec+H
-        0/FLBoKo/xGies1TvEUi2ct8onXjiARz5/Q==
+        1684533779; x=1684620179; bh=jIqJL/NnQpehuADJQuVaM4SynqOfVffT2Cc
+        4DfmU6kM=; b=uAlCQIBMuYeeFwcf/oKb2FwHhhVPqFvEewLKMTG4U9VHboY9y4V
+        Q56qik0vKZdaAOv/snedAoYYqaVP0gbM6FIMcMFGIRWyomQNG18+30wVGXelg3Nc
+        YPX54DJnovQPXbP8blFSUQ70YfQRmGXUSwozUseusDeOuHjlDbCunqhUy2ZSRBL3
+        ZF7U7QrDFqsEbmooIbLmOgEh/hcym4nv6H/MZnU8t1MJh/FD48UGRwJvfmPPK2Ge
+        g90Clsp+SoFSVp/LMC3zYU6k1Rw7R7uyDptlcoVNK2FVWjW5/AQh/aFezG9eG+Y8
+        Vc07MqFLg27b5BgO5UWd1Yryd9NhP/8hRaQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684533076; x=1684619476; bh=Swpo4gUk6xVGAujZkHWBnImzkqnYkyRI2qy
-        um8DHZXw=; b=t1g71FeOZc4MvfkUamJxEqiMBO3X/3I8Gu2WuShThD+opjiy4vb
-        Bn9re+3mbTKm3mtB4PdJAB+vJKc3Buq3J0dvjdmA4z5hjepasoBp9yaONtH/3nSU
-        5yS6epXvKblGMt60cxvH+gr3Pq0Oi8Vups6MyoFCSeg7vGcC4Rybgc7vWKZKY3ph
-        L0iEM0e3gKWsRSDIsdr0BuYLQ/WXIVqRkGG8tYHtgchYhjELHM8sc+W2KbTbt2j6
-        E8IOz69FEvDhM5VMFg8ukfIHVQhu9fH0ZSXE5cvp+Mrx6wDY9ku9wW+Z79WwCZ25
-        E23TcdI2S+5n8fn4UMlER6xPMrBAtO8kDBw==
-X-ME-Sender: <xms:VO9nZP2qDnQlSrXHYjZtszO0KIR7p2KoW2VAbgDCPZn7ilqeEW_Q3w>
-    <xme:VO9nZOE3EOekc6uH8YQEcBbjD05ZUaeA5mbjY0wZdlqsutZAaEofNTLJ76TVEHPjG
-    ZDGbBReDMluWizbyFc>
-X-ME-Received: <xmr:VO9nZP5I6IxXTDUbmS6G73seWF8b9FlH6UdsC7dWncXRYV8AUIsRaHxHd3YrmSaMOgKO>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiiedgtdefucetufdoteggodetrfdotf
+        1684533779; x=1684620179; bh=jIqJL/NnQpehuADJQuVaM4SynqOfVffT2Cc
+        4DfmU6kM=; b=Ajp0awkzr9rPoBGX5nlwRBH66sZo7ZLbKy/0JGwZVp2w4kV/ITo
+        mrStE/NCCXXtTM1FmvnTzkf190kh3fcGDQCUUfMz1G9intGx1KwmJ/8MuOqstIv/
+        G24BrIerw69QIqG2c13DtI4Y64USGZJ8+lQhXfsXmzxcRHNC756+2F2EWKCCXmYw
+        LGWvKQfUN1iagsNZCnBnAKUaSp9C5yOYVrPdNtfCxQiTOoUh1HnvlcEuoHNBaoot
+        GF5YLdeBmULL7QqE7a+oxAYziLP9H7/ecCSkb31P5r7zqmP4FalsPtoVq+P5UitI
+        Jpv2JS/pGFMZo3PQSK6qmdyomhUUaErzQ2Q==
+X-ME-Sender: <xms:E_JnZCvaBD0kAEPKoYVGQPpc6mFiRj2zhf3Jj5Y8HbpHSDPTrMve4g>
+    <xme:E_JnZHeirQhfcks7ZfzRIImr86kkgP780XxIjsYPktI7jzYQJrVrrX1nA534L2JC_
+    Z49gsgi7KaPLkgDMwg>
+X-ME-Received: <xmr:E_JnZNxu-aAIQCuye-VzJngY6j0qhq2zJcAV8Y7F8NquEVTSSTIjfCfT25q6NTXlJ12H>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiiedgtdehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
@@ -55,28 +55,27 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiiedgtdefucetufdoteggod
     cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
     ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:VO9nZE20hoN3q4E124vsNYlbizWgS0wXSHJtOblhZuoEJt2WS6Owbw>
-    <xmx:VO9nZCG3lz_tVwiHCteGCu2Xje54QSBoh-MielZ-1Pl_NfLEwmNVJw>
-    <xmx:VO9nZF87c1NHDYyxQ1aGE62bsXDKeW0CHr5mlX58x3FZKdxGaGfCOg>
-    <xmx:VO9nZHQn3CAWH03xgc7WjMiRJFrvGe20ni5Qnly-neZnFmJPLK3Ghg>
+X-ME-Proxy: <xmx:E_JnZNNHgePKL4I82PoFcylcHYNvX2CjpuGwNEw3xOXoDgVCOoag-Q>
+    <xmx:E_JnZC_rWnF9bvYlivHNIYIkboVc70Wn5lvCaCixRvwwft07FuzSoQ>
+    <xmx:E_JnZFX5PAXk9MxV50Fhlq_P8MUEdby8xfICSjRq3W5Ft0v6ImvD3Q>
+    <xmx:E_JnZEKPYADbuIP7pcjk0Kz_uvXKH1m7gbUJseg_jZ6B1kcCafobEA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 May 2023 17:51:15 -0400 (EDT)
+ 19 May 2023 18:02:58 -0400 (EDT)
 Content-Type: text/plain;
         charset=utf-8
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
+Subject: Re: [PATCH] MIPS: Fix MIPS_O32_FP64_SUPPORT for 64bit CPUs before R2
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
-Date:   Fri, 19 May 2023 22:51:04 +0100
+In-Reply-To: <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
+Date:   Fri, 19 May 2023 23:02:47 +0100
 Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
         linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <53043C18-7C75-4D5F-A15E-86D981D19CA8@flygoat.com>
-References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
- <20230519164753.72065-2-jiaxun.yang@flygoat.com>
- <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
+Message-Id: <C1676532-0051-43D7-82D8-1E5697407C70@flygoat.com>
+References: <20230519163023.70542-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
 To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
 X-Mailer: Apple Mail (2.3731.500.231)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,43 +90,69 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 21:23=EF=BC=8CMaciej W. Rozycki =
+> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 21:10=EF=BC=8CMaciej W. Rozycki =
 <macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
 >=20
 > On Fri, 19 May 2023, Jiaxun Yang wrote:
 >=20
->> diff --git a/arch/mips/kernel/cpu-probe.c =
-b/arch/mips/kernel/cpu-probe.c
->> index 6d15a398d389..fd452e68cd90 100644
->> --- a/arch/mips/kernel/cpu-probe.c
->> +++ b/arch/mips/kernel/cpu-probe.c
->> @@ -152,6 +152,13 @@ static inline void check_errata(void)
->> struct cpuinfo_mips *c =3D &current_cpu_data;
+>> MIPS_O32_FP64_SUPPORT enables possibility of using all 32 FPRs on =
+32bit
+>> kernel in case CPU implemented FR1. As FR1 is present on all 64bit =
+CPUs
+>> following R4000's priviliged spec, there is no reason to limit such =
+support
+>> to R2+ CPUs.
+>=20
+> I guess one can do it and still run FPXX software, but I fail to see =
+what=20
+> gain it provides.  For FP32 it breaks things as accesses to =
+odd-numbered=20
+> FPRs will no longer get at the high part of a double value and for =
+FP64=20
+> there are no MTHC1/MFHC1 instructions required to access the high =
+part.
+
+Actually software may access the high part by SDC1/LDC1.
+FP32 binaries are still going to run at FR0 mode.
+
+>=20
+> What problem are you trying to solve?  And how did you verify this =
+patch?
+
+Was trying to deal a proprietary JIT software who want to enable FR1 via =
+prctl
+on Loongson-2F with 32 bit kernel.
+
+>=20
+>> --- a/arch/mips/kernel/fpu-probe.c
+>> +++ b/arch/mips/kernel/fpu-probe.c
+>> @@ -289,6 +289,23 @@ void cpu_set_fpu_opts(struct cpuinfo_mips *c)
+>> c->options |=3D MIPS_CPU_FRE;
+>> }
 >>=20
->> switch (current_cpu_type()) {
->> + case CPU_4KC:
->> + if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
->> + c->options &=3D ~MIPS_CPU_LLSC;
->> + if (!IS_ENABLED(CONFIG_WAR_4K_LLSC))
->> + pr_err("CPU have LLSC errata, please enable CONFIG_WAR_4K_LLSC");
+>> + /* Fix up FIR for FPU earlier than R2 */
+>> + if (!cpu_has_mips_r2_r6) {
+>> + c->fpu_id |=3D MIPS_FPIR_S;
+>> +#ifdef CONFIG_CPU_R4K_FPU
+>> + /* All known R4000 class FPU implemented double */
+>> + c->fpu_id |=3D MIPS_FPIR_D;
+>> +#endif
 >=20
-> Given the circumstances I think this should be `panic'.  You don't =
-want=20
-> to continue with a system that can randomly lock up.
+> Currently all FPUs we support implement double and we require that, so =
+no=20
+> need to make this piece conditional (I would use IS_ENABLED otherwise, =
+so=20
+> as not to clutter the source with #ifdef), but `c->fpu_id' is also =
+exposed=20
+> to the user via ptrace(2), so this has to reflect hardware and not =
+give a=20
+> synthesized value.
 
-I just checked how other architectures handle such situation, it seems =
-like
-TAINT_CPU_OUT_OF_SPEC is a better option.
+Alas, I thought R2030 class FPU does not have double? Since MIPS-IV spec
+says SDC1 is introduced in MIPS II.
 
-Panic in cpu_probe can be frustrating for users as it is earlier than =
-initialisation
-of consoles so the panic message can never be read by users.
-
->=20
-> Also "CPU has LLSC erratum, [...]" as both are singular.
-
-Thanks for the tip :-)
-- Jiaxun
+Thanks
+Jiaxun
 
 >=20
 >  Maciej
