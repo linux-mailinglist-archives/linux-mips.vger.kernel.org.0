@@ -2,76 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6AA70A8C4
-	for <lists+linux-mips@lfdr.de>; Sat, 20 May 2023 17:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D6070AAF2
+	for <lists+linux-mips@lfdr.de>; Sat, 20 May 2023 22:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjETPQq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 20 May 2023 11:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S229568AbjETUcc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 20 May 2023 16:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjETPQp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 20 May 2023 11:16:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712A4EE;
-        Sat, 20 May 2023 08:16:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C71160A4A;
-        Sat, 20 May 2023 15:16:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A72C433EF;
-        Sat, 20 May 2023 15:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684595803;
-        bh=UGvLhlhaGVuZ1xNTf9EdfX6bmO7ekWIS/JxQ4csPyO4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Fk8RBRN4CpUt2XfHmROjEBC6rq1EM5kZM+neDoJm+QOW/TFLuzJb+OVPs9Ka546V6
-         zxjXdoIvK2neuvr77CwHUI8Qs8GDjdCoqO9VUkbXv8qld00GuRL70NfeyyrA8jPvmp
-         9VPuAgV7/biO6/3p/NI9LQuhgSNercRdPA7WnAClUu31zIB3H9w6hWMl0tLHA+jhsB
-         GQMHQF9D+Ewv1+JSjD6gG7bgpl/rDOrip1hn7nuQhM0sZsPRqs8bLFTGoBBLi1BS1Z
-         KTtNUn9fKOJTKYwS1Bdf4FUtRHY647HYY3rLAMopGe4tbdLCwXhNM/hQqDOqwrCwWO
-         qDFvoT+MzECuQ==
-Date:   Sat, 20 May 2023 16:32:49 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 2/8] iio: mb1232: relax return value check for IRQ
- get
-Message-ID: <20230520163249.56f1e56d@jic23-huawei>
-In-Reply-To: <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
-References: <cover.1684493615.git.mazziesaccount@gmail.com>
-        <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        with ESMTP id S229464AbjETUcb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 20 May 2023 16:32:31 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52039FA;
+        Sat, 20 May 2023 13:32:30 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 0A53A92009D; Sat, 20 May 2023 22:32:29 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 036F392009B;
+        Sat, 20 May 2023 21:32:28 +0100 (BST)
+Date:   Sat, 20 May 2023 21:32:28 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH] MIPS: Fix MIPS_O32_FP64_SUPPORT for 64bit CPUs before
+ R2
+In-Reply-To: <C1676532-0051-43D7-82D8-1E5697407C70@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2305192352100.27887@angie.orcam.me.uk>
+References: <20230519163023.70542-1-jiaxun.yang@flygoat.com> <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk> <C1676532-0051-43D7-82D8-1E5697407C70@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +42,66 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 19 May 2023 14:01:23 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Fri, 19 May 2023, Jiaxun Yang wrote:
 
-> fwnode_irq_get() was changed to not return 0 anymore.
+> > I guess one can do it and still run FPXX software, but I fail to see what 
+> > gain it provides.  For FP32 it breaks things as accesses to odd-numbered 
+> > FPRs will no longer get at the high part of a double value and for FP64 
+> > there are no MTHC1/MFHC1 instructions required to access the high part.
 > 
-> Drop check for return value 0.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Actually software may access the high part by SDC1/LDC1.
 
-> ---
-> Revsion history:
-> v4 => v5:
->  - drop unnecessary data->irqnr = -1 assignment
-> 
-> The first patch of the series changes the fwnode_irq_get() so this depends
-> on the first patch of the series and should not be applied alone.
-> ---
->  drivers/iio/proximity/mb1232.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/iio/proximity/mb1232.c b/drivers/iio/proximity/mb1232.c
-> index e70cac8240af..3ae226297a00 100644
-> --- a/drivers/iio/proximity/mb1232.c
-> +++ b/drivers/iio/proximity/mb1232.c
-> @@ -76,7 +76,7 @@ static s16 mb1232_read_distance(struct mb1232_data *data)
->  		goto error_unlock;
->  	}
->  
-> -	if (data->irqnr >= 0) {
-> +	if (data->irqnr > 0) {
->  		/* it cannot take more than 100 ms */
->  		ret = wait_for_completion_killable_timeout(&data->ranging,
->  									HZ/10);
-> @@ -212,10 +212,7 @@ static int mb1232_probe(struct i2c_client *client)
->  	init_completion(&data->ranging);
->  
->  	data->irqnr = fwnode_irq_get(dev_fwnode(&client->dev), 0);
-> -	if (data->irqnr <= 0) {
-> -		/* usage of interrupt is optional */
-> -		data->irqnr = -1;
-> -	} else {
-> +	if (data->irqnr > 0) {
->  		ret = devm_request_irq(dev, data->irqnr, mb1232_handle_irq,
->  				IRQF_TRIGGER_FALLING, id->name, indio_dev);
->  		if (ret < 0) {
+ I'm aware of that, but you'd need a new psABI variation really to handle 
+such an arrangement.  None of the existing FP32, FP64, FPXX handles it.
 
+> > What problem are you trying to solve?  And how did you verify this patch?
+> 
+> Was trying to deal a proprietary JIT software who want to enable FR1 via prctl
+> on Loongson-2F with 32 bit kernel.
+
+ There may be a better way: rather than avoiding MTHC1/MFHC1, handle them 
+in the FPU emulator where unavailable in FR=1 mode while leaving the rest 
+to hardware.  That would make regular FR64 software work.
+
+ I'd expect such a JIT to have other issues with pre-R2 hardware though, 
+with missing machine instructions.  I had a similar situation a few years 
+ago with FireFox's JIT making assumptions above the MIPS ISA level the 
+piece of software was itself compiled for and opted for just disabling the 
+JIT, as fixing FireFox and rebuilding it would be more effort than it was 
+worth in my view.
+
+ This might be the best way for you to move forward too, and I'm all but 
+enthusiastic about adding a workaround in the kernel for a broken piece of 
+proprietary user software.  Sorry.
+
+ Also I seem to remember there was a pitfall with running 32-bit software 
+on pre-R2 hardware in the FR=1 mode, but maybe I'm making up things here.  
+It's been so long since I last looked into this.
+
+ In any case you do need to verify this somehow, like by running the math 
+part of the glibc testsuite with o32 in the FR=1 mode on pre-R2 hardware.  
+Running the GDB test suite to make sure ptrace(2) works fine with the new 
+FPU configuration would make sense too.
+
+> > Currently all FPUs we support implement double and we require that, so no 
+> > need to make this piece conditional (I would use IS_ENABLED otherwise, so 
+> > as not to clutter the source with #ifdef), but `c->fpu_id' is also exposed 
+> > to the user via ptrace(2), so this has to reflect hardware and not give a 
+> > synthesized value.
+> 
+> Alas, I thought R2030 class FPU does not have double? Since MIPS-IV spec
+> says SDC1 is introduced in MIPS II.
+
+ There's no SDC1/LDC1, but the usual MIPS I FP machine instructions (of 
+which there are fewer than in MIPS II, e.g. there's no SQRT.fmt or direct 
+conversions) do support the double format/encoding.  It's just that double 
+FP data has to be transferred piecemeal; other supported operations will 
+execute just fine.  Otherwise the existence of the odd-numbered FPRs would 
+make no sense in the first place.
+
+ Plain single floating-point units are extremely rare, e.g. the R4650 has 
+one (it does support CP0.Status.FR though, for 32 singles), and we do not 
+support them (e.g. the R4650 has a simple base-bounds MMU only, no TLB).  
+Another one is the R5900, but its FPU is not an IEEE 754 device even.
+
+  Maciej
