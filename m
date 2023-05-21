@@ -2,247 +2,207 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BD670B1E7
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 00:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61AA70B1FF
+	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 01:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjEUW7y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 21 May 2023 18:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S230083AbjEUXKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 21 May 2023 19:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjEUW7v (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 May 2023 18:59:51 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AEAC1;
-        Sun, 21 May 2023 15:59:49 -0700 (PDT)
-Received: (Authenticated sender: contact@artur-rojek.eu)
-        by mail.gandi.net (Postfix) with ESMTPSA id 35D0E1C0004;
-        Sun, 21 May 2023 22:59:47 +0000 (UTC)
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH v2 2/2] input: joystick: Fix buffer data parsing
-Date:   Mon, 22 May 2023 00:59:01 +0200
-Message-Id: <20230521225901.388455-3-contact@artur-rojek.eu>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230521225901.388455-1-contact@artur-rojek.eu>
-References: <20230521225901.388455-1-contact@artur-rojek.eu>
+        with ESMTP id S229481AbjEUXKv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 21 May 2023 19:10:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC8EC3;
+        Sun, 21 May 2023 16:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=K4WPA18aOPTDws24S0fhivh+wdB5uMs20IVqeoLDFVg=; b=hJTNXKpY1GbFcDud/StMM0mEm2
+        xOmsZsaInQKpMD9FooAVISqofGLGHm9a5H/rHHpttDavg1t7RPFnHv8iu4yaUr4I+Skm4f77Ts7dJ
+        N2rIhAHDLkfqC7vOSwQBkIZ+8V7ubQvABAmenRS2bJGr7w2aWA++bPIRU/l7QEgnL9z+xQKpIf0O8
+        gXwWSbOoxhiW+4lat9w6/+2JVZ+DJixh+RMPg1k6trv0YRuSKave9LzH9XIY2TvdiFKQwJ5R7v2gl
+        pGJdi2o9fdGbWKWa+/Afah6LjIxCRvgysMR2L09BoIET2yphe3qVs/N+Gt0oXMonLk1kEizCDctvw
+        p0QorifA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q0sCL-004pPC-1G;
+        Sun, 21 May 2023 23:10:47 +0000
+Message-ID: <7ee02152-d498-87dc-d372-017212888db9@infradead.org>
+Date:   Sun, 21 May 2023 16:10:44 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/3] Documentation: kernel-parameters: Add some MIPS
+ parameters
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-doc@vger.kernel.org, corbet@lwn.net
+References: <20230521223124.21911-1-jiaxun.yang@flygoat.com>
+ <20230521223124.21911-4-jiaxun.yang@flygoat.com>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230521223124.21911-4-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Don't try to access buffer data of a channel by its scan index. Instead,
-calculate its offset in the buffer.
+Hi--
 
-This is necessary, as the scan index of a channel does not represent its
-position in a buffer - the buffer will contain data for enabled channels
-only, affecting data offsets and alignment.
+A few of these new entries are out of place, i.e., not in
+sorted order. See below.
 
-While at it, also fix minor style issue in probe.
 
-Reported-by: Chris Morgan <macromorgan@hotmail.com>
-Closes: https://lore.kernel.org/linux-input/20220408212857.9583-1-macroalpha82@gmail.com/
-Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-Tested-by: Paul Cercueil <paul@crapouillou.net>
----
+On 5/21/23 15:31, Jiaxun Yang wrote:
+> Those parameters lives in MIPS kernel since very start.
+> Document them for convenience.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 9c502d3aa0cd..67a0c3f7eca3 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -713,6 +713,8 @@
+>  			Sets the size of memory pool for coherent, atomic dma
+>  			allocations, by default set to 256K.
+>  
+> +	coherentio	[KNL,MIPS] Force enable hardware DMA cache coherency.
+> +
 
-v2: - provide new implementation for calculating channel offsets 
-    - cache the resulting offsets
-    - fix minor style issue in probe
-    - drop the "Fixes" tag
+This one should be just above "coherent_pool".
 
- drivers/input/joystick/adc-joystick.c | 102 +++++++++++++++++++++++---
- 1 file changed, 90 insertions(+), 12 deletions(-)
+>  	com20020=	[HW,NET] ARCnet - COM20020 chipset
+>  			Format:
+>  			<io>[,<irq>[,<nodeID>[,<backplane>[,<ckp>[,<timeout>]]]]]
+> @@ -3626,6 +3628,8 @@
+>  
+>  	nocache		[ARM]
+>  
+> +	nocoherentio	[KNL,MIPS] Force enable software DMA cache coherency.
+> +
 
-diff --git a/drivers/input/joystick/adc-joystick.c b/drivers/input/joystick/adc-joystick.c
-index c0deff5d4282..2f9f0cae8f95 100644
---- a/drivers/input/joystick/adc-joystick.c
-+++ b/drivers/input/joystick/adc-joystick.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
-+#include <linux/sort.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -25,6 +26,7 @@ struct adc_joystick {
- 	struct iio_cb_buffer *buffer;
- 	struct adc_joystick_axis *axes;
- 	struct iio_channel *chans;
-+	int *offsets;
- 	int num_chans;
- 	bool polled;
- };
-@@ -47,35 +49,38 @@ static int adc_joystick_handle(const void *data, void *private)
- {
- 	struct adc_joystick *joy = private;
- 	enum iio_endian endianness;
--	int bytes, msb, val, idx, i;
--	const u16 *data_u16;
-+	int bytes, msb, val, off, i;
-+	const u8 *chan_data;
- 	bool sign;
- 
- 	bytes = joy->chans[0].channel->scan_type.storagebits >> 3;
- 
- 	for (i = 0; i < joy->num_chans; ++i) {
--		idx = joy->chans[i].channel->scan_index;
- 		endianness = joy->chans[i].channel->scan_type.endianness;
- 		msb = joy->chans[i].channel->scan_type.realbits - 1;
- 		sign = tolower(joy->chans[i].channel->scan_type.sign) == 's';
-+		off = joy->offsets[i];
-+
-+		if (off < 0)
-+			return -EINVAL;
-+
-+		chan_data = (const u8 *)data + off;
- 
- 		switch (bytes) {
- 		case 1:
--			val = ((const u8 *)data)[idx];
-+			val = *chan_data;
- 			break;
- 		case 2:
--			data_u16 = (const u16 *)data + idx;
--
- 			/*
- 			 * Data is aligned to the sample size by IIO core.
- 			 * Call `get_unaligned_xe16` to hide type casting.
- 			 */
- 			if (endianness == IIO_BE)
--				val = get_unaligned_be16(data_u16);
-+				val = get_unaligned_be16(chan_data);
- 			else if (endianness == IIO_LE)
--				val = get_unaligned_le16(data_u16);
-+				val = get_unaligned_le16(chan_data);
- 			else /* IIO_CPU */
--				val = *data_u16;
-+				val = *(const u16 *)chan_data;
- 			break;
- 		default:
- 			return -EINVAL;
-@@ -94,6 +99,69 @@ static int adc_joystick_handle(const void *data, void *private)
- 	return 0;
- }
- 
-+static int adc_joystick_si_cmp(const void *a, const void *b, const void *priv)
-+{
-+	const struct iio_channel *chans = priv;
-+
-+	return chans[*(int *)a].channel->scan_index -
-+	       chans[*(int *)b].channel->scan_index;
-+}
-+
-+static int *adc_joystick_get_chan_offsets(struct iio_channel *chans, int count)
-+{
-+	struct iio_dev *indio_dev = chans[0].indio_dev;
-+	const struct iio_chan_spec *ch;
-+	int *offsets, *si_order;
-+	int idx, i, si, length, offset = 0;
-+
-+	offsets = kmalloc_array(count, sizeof(int), GFP_KERNEL);
-+	if (!offsets)
-+		return ERR_PTR(-ENOMEM);
-+
-+	si_order = kmalloc_array(count, sizeof(int), GFP_KERNEL);
-+	if (!si_order) {
-+		kfree(offsets);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	for (i = 0; i < count; ++i)
-+		si_order[i] = i;
-+	/* Channels in buffer are ordered by scan index. Sort to match that. */
-+	sort_r(si_order, count, sizeof(int), adc_joystick_si_cmp, NULL, chans);
-+
-+	for (i = 0; i < count; ++i) {
-+		idx = si_order[i];
-+		ch = chans[idx].channel;
-+		si = ch->scan_index;
-+
-+		if (si < 0 || !test_bit(si, indio_dev->active_scan_mask)) {
-+			offsets[idx] = -1;
-+			continue;
-+		}
-+
-+		/* Channels sharing scan indices also share the samples. */
-+		if (idx > 0 && si == chans[idx - 1].channel->scan_index) {
-+			offsets[idx] = offsets[idx - 1];
-+			continue;
-+		}
-+
-+		offsets[idx] = offset;
-+
-+		length = ch->scan_type.storagebits / 8;
-+		if (ch->scan_type.repeat > 1)
-+			length *= ch->scan_type.repeat;
-+
-+		/* Account for channel alignment. */
-+		if (offset % length)
-+			offset += length - (offset % length);
-+		offset += length;
-+	}
-+
-+	kfree(si_order);
-+
-+	return offsets;
-+}
-+
- static int adc_joystick_open(struct input_dev *dev)
- {
- 	struct adc_joystick *joy = input_get_drvdata(dev);
-@@ -101,10 +169,19 @@ static int adc_joystick_open(struct input_dev *dev)
- 	int ret;
- 
- 	ret = iio_channel_start_all_cb(joy->buffer);
--	if (ret)
-+	if (ret) {
- 		dev_err(devp, "Unable to start callback buffer: %d\n", ret);
-+		return ret;
-+	}
- 
--	return ret;
-+	joy->offsets = adc_joystick_get_chan_offsets(joy->chans,
-+						     joy->num_chans);
-+	if (IS_ERR(joy->offsets)) {
-+		dev_err(devp, "Unable to allocate channel offsets\n");
-+		return PTR_ERR(joy->offsets);
-+	}
-+
-+	return 0;
- }
- 
- static void adc_joystick_close(struct input_dev *dev)
-@@ -112,6 +189,7 @@ static void adc_joystick_close(struct input_dev *dev)
- 	struct adc_joystick *joy = input_get_drvdata(dev);
- 
- 	iio_channel_stop_all_cb(joy->buffer);
-+	kfree(joy->offsets);
- }
- 
- static void adc_joystick_cleanup(void *data)
-@@ -269,7 +347,7 @@ static int adc_joystick_probe(struct platform_device *pdev)
- 
- 		error = devm_add_action_or_reset(dev, adc_joystick_cleanup,
- 						 joy->buffer);
--		if (error)  {
-+		if (error) {
- 			dev_err(dev, "Unable to add action\n");
- 			return error;
- 		}
+OK.
+
+>  	no_console_suspend
+>  			[HW] Never suspend the console
+>  			Disable suspending of consoles during suspend and
+> @@ -3645,6 +3649,7 @@
+>  			[KNL] Disable object debugging
+>  
+>  	nodsp		[SH] Disable hardware DSP at boot time.
+> +			[MIPS] Disable DSP ASE at boot time.
+>  
+>  	noefi		Disable EFI runtime services support.
+>  
+> @@ -3667,6 +3672,8 @@
+>  
+>  	nofsgsbase	[X86] Disables FSGSBASE instructions.
+>  
+> +	noftlb		[MIPS] Disable Fixed TLB at boot time.
+
+OK.
+
+> +
+>  	nofxsr		[BUGS=X86-32] Disables x86 floating point extended
+>  			register save and restore. The kernel will only save
+>  			legacy floating-point registers on task switch.
+> @@ -3678,6 +3685,8 @@
+>  			in certain environments such as networked servers or
+>  			real-time systems.
+>  
+> +	nohtw		[MIPS] Disable hardware page table walker at boot time.
+> +
+
+nohtw should be immediately after "nohlt".
+
+>  	no_hash_pointers
+>  			Force pointers printed to the console or buffers to be
+>  			unhashed.  By default, when a pointer is printed via %p
+> @@ -3758,6 +3767,8 @@
+>  
+>  	nolapic_timer	[X86-32,APIC] Do not use the local APIC timer.
+>  
+> +	noulri          [MIPS] Disable RDHWR ULR access for user space.
+> +
+This should be just after "no_uaccess_flush".
+
+>  	nomca		[IA-64] Disable machine check abort handling
+>  
+>  	nomce		[X86-32] Disable Machine Check Exception
+> @@ -3882,6 +3893,8 @@
+>  			[X86,PV_OPS] Disable paravirtualized VMware scheduler
+>  			clock and use the default one.
+>  
+> +	nowait		[MIPS] Disable the wait instruction for idle.
+> +
+
+OK.
+
+>  	nowatchdog	[KNL] Disable both lockup detectors, i.e.
+>  			soft-lockup and NMI watchdog (hard-lockup).
+>  
+> @@ -3893,6 +3906,8 @@
+>  			LEGACY_XAPIC_DISABLED bit set in the
+>  			IA32_XAPIC_DISABLE_STATUS MSR.
+>  
+> +	noxpa		[MIPS] Disable XPA (eXtended Physical Addressing) ASE.
+> +
+
+OK.
+
+>  	noxsave		[BUGS=X86] Disables x86 extended register state save
+>  			and restore using xsave. The kernel will fallback to
+>  			enabling legacy floating-point and sse state.
+> @@ -3936,6 +3951,8 @@
+>  
+>  	nr_uarts=	[SERIAL] maximum number of UARTs to be registered.
+>  
+> +	ntlb=		[MIPS] Override max number of TLB entries.
+> +
+
+OK.
+
+>  	numa=off 	[KNL, ARM64, PPC, RISCV, SPARC, X86] Disable NUMA, Only
+>  			set up a single NUMA node spanning all memory.
+>  
+> @@ -5273,6 +5290,18 @@
+>  	rcupdate.rcu_self_test= [KNL]
+>  			Run the RCU early boot self tests
+>  
+> +	rd_size=	[KNL,MIPS]
+> +			Specify size of initrd in memory.
+> +			Need to be used with rd_start.
+> +
+> +	rd_start=	[KNL,MIPS]
+> +			Specify a virtual address from which to load the initrd.
+> +			Must in KSEG0 or XKPHYS space.
+> +			Need to be used with rd_size.
+> +
+
+rd_size and rd_start should be just after "rdrand".
+
+> +	rdhwr_noopt	[MIPS] Disable optimization of trap and emulation for
+> +			"RDHWR v1, $29" instruction.
+> +
+
+OK.
+
+>  	rdinit=		[KNL]
+>  			Format: <full_path>
+>  			Run specified binary instead of /init from the ramdisk,
+
+thanks.
 -- 
-2.40.1
-
+~Randy
