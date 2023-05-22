@@ -2,145 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E539B70CB73
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 22:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D2670CBE7
+	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 23:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjEVUqY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 May 2023 16:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S235145AbjEVVEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 May 2023 17:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbjEVUqV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 16:46:21 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0245793;
-        Mon, 22 May 2023 13:46:20 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 70F2A5C01A6;
-        Mon, 22 May 2023 16:46:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 22 May 2023 16:46:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684788380; x=1684874780; bh=+L0icm8PcJhuI13aRSH2Ao5/O3h9y8NRZXY
-        eIScQ4y8=; b=t5hDG+T+q4+N+pi2RIe8l6lky8dAwg0ymcZjms+fECVpeDGxLLD
-        Id82YtnBeKWx1AR3n37tdVkvx9iEX5scRf/GR/a5hpJavVAyCfhYkiAjgVfEQuZA
-        Gufp1U2+pwZcXMWsLZJltAwaJObV1VJ8+s5jAYe3+GxO+w+tuN00NPwC2WFHfFto
-        fxlLoUXWic4BAnlNgjHgAptvOMQJgmP6iP+x74IB7Xl2lZN2qCzF5Pq3BDiXCSeo
-        Cj34bZMhZjesbWSVIp/w3xzlyIl8ZaObgJPH6LzWJchVwVrFEjZYohmL7ILXYJ2u
-        ZbkBinIiej2Qe3yL334QM/zwyeoujLJoDIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684788380; x=1684874780; bh=+L0icm8PcJhuI13aRSH2Ao5/O3h9y8NRZXY
-        eIScQ4y8=; b=tzPnmQu1M9KXKAYcVjNuG4zajI8IUzNOve45nD/9XZUUxJy0Xfu
-        k2m5dO3Na7i6so3frJ/dzY5r41k2Y4YuNXf3iAlamxv3MtmwbCp8vcYJwcJdgcZ4
-        Vi8MSvGddxcwOCVD1lrCUMlZK4iRzXOLSaXOATaxD6lp47Avm5/d4/lFbjTpVvja
-        fikPC90T8L6GqO4nAmXMVbmpE3h2wXNoHgzAcSRgPlSz68joOpKtsjJ+IGlkg909
-        ZBJ5UqSnDVuHvVR465hEdHmdHrnvEMjdqWHvW3PGkWrSgevrIuWRAIK/d8iebA2H
-        P4xW8DYeA51kd4kbIXjopXpW2myzKkjiRlg==
-X-ME-Sender: <xms:m9RrZCgi6ef8jCuMhvPHfiCGX77EiB0FhYZg0ch8J6OAkrotUnzHSg>
-    <xme:m9RrZDCXyadmlX8_pUOEgkS9NEoUCXv8mG1yjZK9S-wprXOunzn9Jb_-zIk2UG2ax
-    V2XMR0qIwZAJwaBN8o>
-X-ME-Received: <xmr:m9RrZKHXSoZ2Q3p645T2aJO1hU94GLeoLB0r3L5oIig91vKIEzh3KcYY_q9CJKYy_wRs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejuddgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:m9RrZLTh5xY8K2OVPbxp8hWr_MJHR424VfzEIaHgPmv3W7W1oZUQAw>
-    <xmx:m9RrZPyVtntBojPtp-IQq7wSRJhB03N5C9cVyWIy0Bn4ItTTwhyAXg>
-    <xmx:m9RrZJ7gtARiONt5AMlKd-DgzchBtAt6oEREfdcQqHtlYbcJALxe3w>
-    <xmx:nNRrZK_m50czInslGqZjYVK1jjecOZBF0Nyt6JlrLV2KA5NN4VIWXw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 22 May 2023 16:46:18 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <alpine.DEB.2.21.2305192342180.27887@angie.orcam.me.uk>
-Date:   Mon, 22 May 2023 21:46:07 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CB4BAB41-0BE0-4897-AE1E-9A98A6851FEF@flygoat.com>
-References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
- <20230519164753.72065-2-jiaxun.yang@flygoat.com>
- <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
- <53043C18-7C75-4D5F-A15E-86D981D19CA8@flygoat.com>
- <alpine.DEB.2.21.2305192342180.27887@angie.orcam.me.uk>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234660AbjEVVEW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 17:04:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE08C94;
+        Mon, 22 May 2023 14:04:19 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684789457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NByQKI51jy2j672ZUXdG7FihvnPAeSwdTvvAedoGpTg=;
+        b=MX+9r6HXu/5QEBqc2yVGdayzLN9QC3Spcof7x6wlSwPAvG+JCGl3dIF3Tqjwo831B+7A0z
+        HjgfkuU57m3Mx12VWLwF1kWcZOoV7A8fkpM0+EmI1ItXgmcU/k6TXgHZPx8IDVYMbQizgt
+        tGVREPK3sLYjlK2mAsLydenhzGmSLA3xyVTQNIN837Vka6O+yHpXvp2jLe0l2HJV7Nc9Qe
+        pnPkq0PwnFymxCDoDBNb/vRRCWh8VNuMos17F9fUWM3d52sMdPly/QVK6LuLIuAUqckaId
+        NvxIeaxkD6G74LbIeNkj/Kr2rL0IzG/VT2eU1eqW2iuY9+IYD3SC/W2JWHiiMQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684789457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NByQKI51jy2j672ZUXdG7FihvnPAeSwdTvvAedoGpTg=;
+        b=vhXfTHSmkg8sMek6N/YM9Kxa/vm8sXoYRsypyfUtGXP1dQSKCaL+3v90Q5MYWJoZJcTP6l
+        6NVrzQcJMR+6yiAA==
+To:     Mark Brown <broonie@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [patch V4 33/37] cpu/hotplug: Allow "parallel" bringup up to
+ CPUHP_BP_KICK_AP_STATE
+In-Reply-To: <4ca39e58-055f-432c-8124-7c747fa4e85b@sirena.org.uk>
+References: <20230512203426.452963764@linutronix.de>
+ <20230512205257.240231377@linutronix.de>
+ <4ca39e58-055f-432c-8124-7c747fa4e85b@sirena.org.uk>
+Date:   Mon, 22 May 2023 23:04:17 +0200
+Message-ID: <87bkicw01a.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, May 22 2023 at 20:45, Mark Brown wrote:
+> On Fri, May 12, 2023 at 11:07:50PM +0200, Thomas Gleixner wrote:
+>> From: Thomas Gleixner <tglx@linutronix.de>
+>> 
+>> There is often significant latency in the early stages of CPU bringup, and
+>> time is wasted by waking each CPU (e.g. with SIPI/INIT/INIT on x86) and
+>> then waiting for it to respond before moving on to the next.
+>> 
+>> Allow a platform to enable parallel setup which brings all to be onlined
+>> CPUs up to the CPUHP_BP_KICK_AP state. While this state advancement on the
+>> control CPU (BP) is single-threaded the important part is the last state
+>> CPUHP_BP_KICK_AP which wakes the to be onlined CPUs up.
+>
+> We're seeing a regression on ThunderX2 systems with 256 CPUs with an
+> arm64 defconfig running -next which I've bisected to this patch.  Before
+> this commit we bring up 256 CPUs:
+>
+> [   29.137225] GICv3: CPU254: found redistributor 11e03 region 1:0x0000000441f60000
+> [   29.137238] GICv3: CPU254: using allocated LPI pending table @0x00000008818e0000
+> [   29.137305] CPU254: Booted secondary processor 0x0000011e03 [0x431f0af1]
+> [   29.292421] Detected PIPT I-cache on CPU255
+> [   29.292635] GICv3: CPU255: found redistributor 11f03 region 1:0x0000000441fe0000
+> [   29.292648] GICv3: CPU255: using allocated LPI pending table @0x00000008818f0000
+> [   29.292715] CPU255: Booted secondary processor 0x0000011f03 [0x431f0af1]
+> [   29.292859] smp: Brought up 2 nodes, 256 CPUs
+> [   29.292864] SMP: Total of 256 processors activated.
+>
+> but after we only bring up 255, missing the 256th:
+>
+> [   29.165888] GICv3: CPU254: found redistributor 11e03 region 1:0x0000000441f60000
+> [   29.165901] GICv3: CPU254: using allocated LPI pending table @0x00000008818e0000
+> [   29.165968] CPU254: Booted secondary processor 0x0000011e03 [0x431f0af1]
+> [   29.166120] smp: Brought up 2 nodes, 255 CPUs
+> [   29.166125] SMP: Total of 255 processors activated.
+>
+> I can't immediately see an issue with the patch itself, for systems
+> without CONFIG_HOTPLUG_PARALLEL=y it should replace the loop over
+> cpu_present_mask done by for_each_present_cpu() with an open coded one.
+> I didn't check the rest of the series yet.
+>
+> The KernelCI bisection bot also isolated an issue on Odroid XU3 (a 32
+> bit arm system) with the final CPU of the 8 on the system not coming up
+> to the same patch:
+>
+>   https://groups.io/g/kernelci-results/message/42480?p=%2C%2C%2C20%2C0%2C0%2C0%3A%3Acreated%2C0%2Call-cpus%2C20%2C2%2C0%2C99054444
+>
+> Other boards I've checked (including some with multiple CPU clusters)
+> seem to be bringing up all their CPUs so it doesn't seem to just be
+> general breakage.
 
+That does not make any sense at all and my tired brain does not help
+either.
 
-> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 23:51=EF=BC=8CMaciej W. Rozycki =
-<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, 19 May 2023, Jiaxun Yang wrote:
->=20
->>> Given the circumstances I think this should be `panic'.  You don't =
-want=20
->>> to continue with a system that can randomly lock up.
->>=20
->> I just checked how other architectures handle such situation, it =
-seems like
->> TAINT_CPU_OUT_OF_SPEC is a better option.
->=20
-> That can be easily missed, just as a random message in the kernel log,=20=
+Can you please apply the below debug patch and provide the output?
 
-> even at a high priority, and LOGLEVEL_ERR is not particularly high =
-even. =20
-> For a system configuration that qualifies as not usable for any =
-practical=20
-> purpose I find this approach leaving something to desire.
+Thanks,
 
-Just found another reason that not to panic in such situation when I=E2=80=
-=99m playing
-around QEMU.
-
-Emulation software like QEMU, mipssim, OVPSim, IASIM tends use base PRID
-of a core. It can be more than annoying for people to find kernel =
-suddenly won=E2=80=99t
-boot on their simulator.
-
->=20
->> Panic in cpu_probe can be frustrating for users as it is earlier than =
-initialisation
->> of consoles so the panic message can never be read by users.
->=20
-> Is there no early console support for the systems affected?
-
-For routers it=E2=80=99s very common that serial port available to user =
-is not the same one
-as we hooked for earlyprintk.
-
-For QEMU users potentially using graphic interface, initialisation of =
-DRM/FBDEV
-comes very later.
-
-Thanks
-- Jiaxun
-
->=20
->  Maciej
-
+        tglx
+---
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 005f863a3d2b..90a9b2ae8391 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1767,13 +1767,20 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
+ {
+ 	unsigned int cpu;
+ 
++	pr_info("Bringup max %u CPUs to %d\n", ncpus, target);
++
+ 	for_each_cpu(cpu, mask) {
+ 		struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
++		int ret;
++
++		pr_info("Bringup CPU%u left %u\n", cpu, ncpus);
+ 
+ 		if (!--ncpus)
+ 			break;
+ 
+-		if (cpu_up(cpu, target) && can_rollback_cpu(st)) {
++		ret = cpu_up(cpu, target);
++		pr_info("Bringup CPU%u %d\n", cpu, ret);
++		if (ret && can_rollback_cpu(st)) {
+ 			/*
+ 			 * If this failed then cpu_up() might have only
+ 			 * rolled back to CPUHP_BP_KICK_AP for the final
