@@ -2,167 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB1470BBF8
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090DE70C2D7
+	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 17:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbjEVLgW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 May 2023 07:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S234368AbjEVP6s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 May 2023 11:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbjEVLgU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:36:20 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C946F1;
-        Mon, 22 May 2023 04:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1684755358;
+        with ESMTP id S234193AbjEVP6r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 11:58:47 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E55B5;
+        Mon, 22 May 2023 08:58:45 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2C9BD60003;
+        Mon, 22 May 2023 15:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684771124;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0n8l4247LeEWaLKQ0FnSfNM9KwjF8gdrQk1OZZ4VON0=;
-        b=vgcIeJ3SYVpE+jcU3BpOIfJQV6mo8nqBt41pXsNvzViL3qMlZQ0sZPJ1saiDlTQfuT4dN9
-        RK6OVIflDrt5aZua0j4XeZJTSAF7Eqb1Beyly8LBtIrwXdbaNCT/N3dcJZPxFAV50yQ8n/
-        gVjLZTufknvT5paH8YMPKdkWWVXlbQc=
-Message-ID: <6b88623e44b2a98a2e5d8d6d2453f92eb1b673ae.camel@crapouillou.net>
-Subject: Re: [PATCH v2 1/2] iio/adc: ingenic: Fix channel offsets in buffer
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Date:   Mon, 22 May 2023 13:35:56 +0200
-In-Reply-To: <CAHp75VdjAxAvmYVW4qgV2i91L31=Ctx4nx_eAe9+pqPFEArD3w@mail.gmail.com>
-References: <20230521225901.388455-1-contact@artur-rojek.eu>
-         <20230521225901.388455-2-contact@artur-rojek.eu>
-         <CAHp75VeLRHwcKQALwnBb-gqVeyxxH=_F40TserRXqo_kbaZzoQ@mail.gmail.com>
-         <CAHp75VedgVOA4qTJFeVuabKXBaB=y4Ss0fLu7a7J9GGgWFPqQg@mail.gmail.com>
-         <2fc0874ce8a802aeb98e553b15e27fb4d4b75a1c.camel@crapouillou.net>
-         <CAHp75VdjAxAvmYVW4qgV2i91L31=Ctx4nx_eAe9+pqPFEArD3w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bh=gFwgjCPf/4asoNSTd2rB0052AcQsns5SfkHhPLz5LaE=;
+        b=fg4hZ1nrhDhCKJ9uVedfX193NoCwJ8eeuuApDSDCP27/ahRcDy22tl3vsTuhlUyb/44saU
+        YHuoGm3urtJDj86mcTGQ5E2fJvNgkjpZRAefGC0c9Nn+jG3WXuOUIESM/dZrME7dMIBqXu
+        xd/K+Ph1Vyb6LiJrRg2Q15I5Z/PUc3wwT75OvoRDPLpSNviOwaVIIfu1JBobK80+xzsji5
+        I6oOqQdwBik5cdfCeqGWMGGbMMzMm+F4vLNCMErSM8+IeWLUs4tWhgG02iD7U6/vDqOG04
+        Xi0uYzddRGpIGoFK9pBaIpoSRVXKoZdvhe+k7afrmBkS90t/2dpnAxbQ6VC4+w==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: ingenic: fix empty stub helper definitions
+Date:   Mon, 22 May 2023 17:58:42 +0200
+Message-Id: <20230522155842.46808-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230516202133.559488-1-arnd@kernel.org>
+References: 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'6b31b07fc235cf089bf87de1b8b5e471a5f7a090'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andy,
+On Tue, 2023-05-16 at 20:21:24 UTC, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A few functions provide an empty interface definition when
+> CONFIG_MTD_NAND_INGENIC_ECC is disabled, but they are accidentally
+> defined as global functions in the header:
+> 
+> drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:39:5: error: no previous prototype for 'ingenic_ecc_calculate'
+> drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:46:5: error: no previous prototype for 'ingenic_ecc_correct'
+> drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:53:6: error: no previous prototype for 'ingenic_ecc_release'
+> drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:57:21: error: no previous prototype for 'of_ingenic_ecc_get'
+> 
+> Turn them into 'static inline' definitions instead.
+> 
+> Fixes: 15de8c6efd0e ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-Le lundi 22 mai 2023 =C3=A0 14:05 +0300, Andy Shevchenko a =C3=A9crit=C2=A0=
-:
-> On Mon, May 22, 2023 at 1:23=E2=80=AFPM Paul Cercueil <paul@crapouillou.n=
-et>
-> wrote:
-> > Le lundi 22 mai 2023 =C3=A0 13:18 +0300, Andy Shevchenko a =C3=A9crit :
-> > > On Mon, May 22, 2023 at 1:15=E2=80=AFPM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Mon, May 22, 2023 at 1:59=E2=80=AFAM Artur Rojek
-> > > > <contact@artur-rojek.eu> wrote:
->=20
-> ...
->=20
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u16 tdat[6];
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 val;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memset(tdat, 0, ARRAY_SIZE(=
-tdat));
-> > > >=20
-> > > > Yeah, as LKP tells us this should be sizeof() instead of
-> > > > ARRAY_SIZE().
-> > > >=20
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; mask && i < A=
-RRAY_SIZE(tdat); mask >>=3D 2)
-> > > > > {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 if (mask & 0x3) {
-> > > >=20
-> > > > (for the consistency it has to be GENMASK(), but see below)
-> > > >=20
-> > > > First of all, strictly speaking we should use the full mask
-> > > > without
-> > > > limiting it to the 0 element in the array (I'm talking about
-> > > > active_scan_mask).
-> > > >=20
-> > > > That said, we may actually use bit operations here in a better
-> > > > way,
-> > > > i.e.
-> > > >=20
-> > > > =C2=A0 unsigned long mask =3D active_scan_mask[0] &
-> > > > (active_scan_mask[0] -
-> > > > 1);
-> > > >=20
-> > > > =C2=A0 j =3D 0;
-> > > > =C2=A0 for_each_set_bit(i, active_scan_mask, ...) {
-> > > > =C2=A0=C2=A0=C2=A0 val =3D readl(...);
-> > > > =C2=A0=C2=A0=C2=A0 /* Two channels per sample. Demux active. */
-> > > > =C2=A0=C2=A0=C2=A0 tdat[j++] =3D val >> (16 * (i % 2));
-> > >=20
-> > > Alternatively
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 /* Two channels per sample. Demux active. */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 if (i % 2)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[j++] =3D upper_16_bits(val)=
-;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 else
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[j++] =3D lower_16_bits(val)=
-;
-> > >=20
-> > > which may be better to read.
-> >=20
-> > It's not if/else though. You would check (i % 2) for the upper 16
-> > bits,
-> > and (i % 1) for the lower 16 bits. Both can be valid at the same
-> > time.
->=20
-> Are you sure? Have you looked into the proposed code carefully?
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
-Yes. I co-wrote the original code, I know what it's supposed to do.
-
->=20
-> What probably can be done differently is the read part, that can be
-> called once. But looking at it I'm not sure how it's supposed to work
-> at all, since the address is always the same. How does the code and
-> hardware are in sync with the channels?
-
-It's a FIFO.
-
-Cheers,
--Paul
-
->=20
-> > > > =C2=A0 }
-> > > >=20
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =
-=3D readl(adc->base +
-> > > > > JZ_ADC_REG_ADTCH);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Tw=
-o channels per sample. Demux
-> > > > > active.
-> > > > > */
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (m=
-ask & BIT(0))
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[i++] =3D val & 0xffff;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (m=
-ask & BIT(1))
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[i++] =3D val >> 16;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 }
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->=20
-
+Miquel
