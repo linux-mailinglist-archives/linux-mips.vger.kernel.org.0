@@ -2,176 +2,262 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D2670CBE7
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 23:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A44670CD73
+	for <lists+linux-mips@lfdr.de>; Tue, 23 May 2023 00:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235145AbjEVVEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 May 2023 17:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S232411AbjEVWEC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 May 2023 18:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbjEVVEW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 17:04:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE08C94;
-        Mon, 22 May 2023 14:04:19 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684789457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NByQKI51jy2j672ZUXdG7FihvnPAeSwdTvvAedoGpTg=;
-        b=MX+9r6HXu/5QEBqc2yVGdayzLN9QC3Spcof7x6wlSwPAvG+JCGl3dIF3Tqjwo831B+7A0z
-        HjgfkuU57m3Mx12VWLwF1kWcZOoV7A8fkpM0+EmI1ItXgmcU/k6TXgHZPx8IDVYMbQizgt
-        tGVREPK3sLYjlK2mAsLydenhzGmSLA3xyVTQNIN837Vka6O+yHpXvp2jLe0l2HJV7Nc9Qe
-        pnPkq0PwnFymxCDoDBNb/vRRCWh8VNuMos17F9fUWM3d52sMdPly/QVK6LuLIuAUqckaId
-        NvxIeaxkD6G74LbIeNkj/Kr2rL0IzG/VT2eU1eqW2iuY9+IYD3SC/W2JWHiiMQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684789457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NByQKI51jy2j672ZUXdG7FihvnPAeSwdTvvAedoGpTg=;
-        b=vhXfTHSmkg8sMek6N/YM9Kxa/vm8sXoYRsypyfUtGXP1dQSKCaL+3v90Q5MYWJoZJcTP6l
-        6NVrzQcJMR+6yiAA==
-To:     Mark Brown <broonie@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch V4 33/37] cpu/hotplug: Allow "parallel" bringup up to
- CPUHP_BP_KICK_AP_STATE
-In-Reply-To: <4ca39e58-055f-432c-8124-7c747fa4e85b@sirena.org.uk>
-References: <20230512203426.452963764@linutronix.de>
- <20230512205257.240231377@linutronix.de>
- <4ca39e58-055f-432c-8124-7c747fa4e85b@sirena.org.uk>
-Date:   Mon, 22 May 2023 23:04:17 +0200
-Message-ID: <87bkicw01a.ffs@tglx>
+        with ESMTP id S233734AbjEVWEB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 18:04:01 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1159010D;
+        Mon, 22 May 2023 15:03:56 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ae3fe67980so63526315ad.3;
+        Mon, 22 May 2023 15:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684793035; x=1687385035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpHmxjgmV0Vk1MhcahhVozYr+mz8Dg9yDUvR4PtiQhM=;
+        b=GpYVgcFTfPVtaDrcrVmg9epAe2ATreL0f7OffrsFLLljS11WZpR3ICOlWpPtRNiI12
+         n1PuowWitFYDZEPLcwcZgpC1wkB9wNFPO+NlzjSV73Uwt02P+p5bVvYeO7cyMSYl+coN
+         X2zmfqqU8J33qx4pesG5cQ9vOfo2lk786sKgFrVsiH8lg1p6pqkbAwtgyPTj/fMAyB0+
+         uYr3r+ML32/oDB9jIMDZnGDNy1pwdfyR5YvSR3XGOX48Ve92+vz+YBfYfVPyKKniE4x5
+         dY5wcaTJdpEjbMSxIzIdhxIfYYtY74cg83Hl8my85Ta2/F0E3EXTIgJNyOX/D2OU50qB
+         Q20g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684793035; x=1687385035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mpHmxjgmV0Vk1MhcahhVozYr+mz8Dg9yDUvR4PtiQhM=;
+        b=XT+1DoIKzbvfVlNe+dpK568NgZmVGZnhdtjNcUAEUK4sxwZ8VbTJHCwsHEgEV5mdhx
+         6pVAuU5cmw/lwrg+ek7kaExA/RSGPFe2Spfqv1901P9pvO75DBwPcNR/ZkCHb6GR4auT
+         10Q4W7ymh1ZcCNhH1WPjVZLHPYu+hXC19uzV2pKMYA8hHyyF6QsropuJbrKdxGdr61CI
+         BkFPJj35Gzr1wwbuihSo+mC+HQ1gChfze6jd6a0oBRCLtIhBDCBrayCG4Tn20k1eGtDM
+         TBJvRd3Kb1LhsXFzBIGSXEx5DP/opj0KQ/WhZH3LFIV/X5cIgUbjTlhfmEIjGKCDdtH/
+         PGkQ==
+X-Gm-Message-State: AC+VfDwMFcJJPOjuLTnj+cMBGuCl0tbx/SKDqAX7HztBVbLLjyjwpn7z
+        WypaHuoPNUM5fK0WNyEM6UnRATnzYxn9VfZJxB2g0G6d+w4=
+X-Google-Smtp-Source: ACHHUZ6MkS+pfCyF5lozLz9Yvb+d++T4r8l09Q4Y7Fd5NYA3FPe8potDPNRXMU3ShEv+EbEXothFGSAtXAFbZggVYOI=
+X-Received: by 2002:a17:903:2343:b0:1ab:109e:a553 with SMTP id
+ c3-20020a170903234300b001ab109ea553mr15447275plh.62.1684793035429; Mon, 22
+ May 2023 15:03:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
+ <20230519164753.72065-2-jiaxun.yang@flygoat.com> <CAOiHx==iku+duvBnAfu_3AXgNmY9aK+uO+t9Enzdf6qQN5m+iw@mail.gmail.com>
+ <2CC0C4B4-78C4-4D93-828C-318DC1CAD479@flygoat.com>
+In-Reply-To: <2CC0C4B4-78C4-4D93-828C-318DC1CAD479@flygoat.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Tue, 23 May 2023 00:03:43 +0200
+Message-ID: <CAOiHx=mue3GPncsCH-ndyDy_+X3R5AMRE6VBKztHF=RkHBD7SQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 22 2023 at 20:45, Mark Brown wrote:
-> On Fri, May 12, 2023 at 11:07:50PM +0200, Thomas Gleixner wrote:
->> From: Thomas Gleixner <tglx@linutronix.de>
->> 
->> There is often significant latency in the early stages of CPU bringup, and
->> time is wasted by waking each CPU (e.g. with SIPI/INIT/INIT on x86) and
->> then waiting for it to respond before moving on to the next.
->> 
->> Allow a platform to enable parallel setup which brings all to be onlined
->> CPUs up to the CPUHP_BP_KICK_AP state. While this state advancement on the
->> control CPU (BP) is single-threaded the important part is the last state
->> CPUHP_BP_KICK_AP which wakes the to be onlined CPUs up.
+On Mon, 22 May 2023 at 22:38, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> We're seeing a regression on ThunderX2 systems with 256 CPUs with an
-> arm64 defconfig running -next which I've bisected to this patch.  Before
-> this commit we bring up 256 CPUs:
 >
-> [   29.137225] GICv3: CPU254: found redistributor 11e03 region 1:0x0000000441f60000
-> [   29.137238] GICv3: CPU254: using allocated LPI pending table @0x00000008818e0000
-> [   29.137305] CPU254: Booted secondary processor 0x0000011e03 [0x431f0af1]
-> [   29.292421] Detected PIPT I-cache on CPU255
-> [   29.292635] GICv3: CPU255: found redistributor 11f03 region 1:0x0000000441fe0000
-> [   29.292648] GICv3: CPU255: using allocated LPI pending table @0x00000008818f0000
-> [   29.292715] CPU255: Booted secondary processor 0x0000011f03 [0x431f0af1]
-> [   29.292859] smp: Brought up 2 nodes, 256 CPUs
-> [   29.292864] SMP: Total of 256 processors activated.
 >
-> but after we only bring up 255, missing the 256th:
+> > 2023=E5=B9=B45=E6=9C=8822=E6=97=A5 19:40=EF=BC=8CJonas Gorski <jonas.go=
+rski@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > Hi,
+> >
+> > On Fri, 19 May 2023 at 18:49, Jiaxun Yang <jiaxun.yang@flygoat.com> wro=
+te:
+> >>
+> >> WAR_4KC_LLSC is used to control workaround of 4KC LLSC issue
+> >> that affects 4Kc up to version 0.9.
+> >>
+> >> Early ath25 chips are known to be affected.
+> >>
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> ---
+> >> arch/mips/Kconfig                                        | 6 ++++++
+> >> arch/mips/include/asm/cpu.h                              | 1 +
+> >> arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h | 2 +-
+> >> arch/mips/kernel/cpu-probe.c                             | 7 +++++++
+> >> 4 files changed, 15 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> >> index 30e90a2d53f4..354d033364ad 100644
+> >> --- a/arch/mips/Kconfig
+> >> +++ b/arch/mips/Kconfig
+> >> @@ -230,6 +230,7 @@ config ATH25
+> >>        select SYS_SUPPORTS_BIG_ENDIAN
+> >>        select SYS_SUPPORTS_32BIT_KERNEL
+> >>        select SYS_HAS_EARLY_PRINTK
+> >> +       select WAR_4KC_LLSC if !SOC_AR5312
+> >
+> > Shouldn't this be "if SOC_AR5312"?
 >
-> [   29.165888] GICv3: CPU254: found redistributor 11e03 region 1:0x0000000441f60000
-> [   29.165901] GICv3: CPU254: using allocated LPI pending table @0x00000008818e0000
-> [   29.165968] CPU254: Booted secondary processor 0x0000011e03 [0x431f0af1]
-> [   29.166120] smp: Brought up 2 nodes, 255 CPUs
-> [   29.166125] SMP: Total of 255 processors activated.
+> Ah sorry, I misread the original code.
 >
-> I can't immediately see an issue with the patch itself, for systems
-> without CONFIG_HOTPLUG_PARALLEL=y it should replace the loop over
-> cpu_present_mask done by for_each_present_cpu() with an open coded one.
-> I didn't check the rest of the series yet.
+> >
+> > Though since you are adding runtime detection/correction below, I
+> > wonder if this would be really needed as an extra symbol, and rather
+> > use the later introduced (CPU_MAY_HAVE_LLSC) directly.
 >
-> The KernelCI bisection bot also isolated an issue on Odroid XU3 (a 32
-> bit arm system) with the final CPU of the 8 on the system not coming up
-> to the same patch:
+> I bet it=E2=80=99s better to have a symbol just for tracking errata. So w=
+e can easily know
+> if SoC is affected by a errata and have some extra documentation.
 >
->   https://groups.io/g/kernelci-results/message/42480?p=%2C%2C%2C20%2C0%2C0%2C0%3A%3Acreated%2C0%2Call-cpus%2C20%2C2%2C0%2C99054444
+> >
+> > Or rather have select "CPU_HAS_LLSC if !SOC_AR5312" in that case.
+> >
+> >>        help
+> >>          Support for Atheros AR231x and Atheros AR531x based boards
+> >>
+> >> @@ -2544,6 +2545,11 @@ config WAR_ICACHE_REFILLS
+> >> config WAR_R10000_LLSC
+> >>        bool
+> >>
+> >> +# On 4Kc up to version 0.9 (PRID_REV < 1) there is a bug that may cau=
+se llsc
+> >> +# sequences to deadlock.
+> >> +config WAR_4KC_LLSC
+> >> +       bool
+> >> +
+> >> # 34K core erratum: "Problems Executing the TLBR Instruction"
+> >> config WAR_MIPS34K_MISSED_ITLB
+> >>        bool
+> >> diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+> >> index ecb9854cb432..84bb1931a8b4 100644
+> >> --- a/arch/mips/include/asm/cpu.h
+> >> +++ b/arch/mips/include/asm/cpu.h
+> >> @@ -247,6 +247,7 @@
+> >> #define PRID_REV_VR4122                        0x0070
+> >> #define PRID_REV_VR4181A               0x0070  /* Same as VR4122 */
+> >> #define PRID_REV_VR4130                        0x0080
+> >> +#define PRID_REV_4KC_V1_0              0x0001
+> >> #define PRID_REV_34K_V1_0_2            0x0022
+> >> #define PRID_REV_LOONGSON1B            0x0020
+> >> #define PRID_REV_LOONGSON1C            0x0020  /* Same as Loongson-1B =
+*/
+> >> diff --git a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h =
+b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+> >> index ec3604c44ef2..5df292b1ff04 100644
+> >> --- a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+> >> +++ b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+> >> @@ -24,7 +24,7 @@
+> >> #define cpu_has_counter                        1
+> >> #define cpu_has_ejtag                  1
+> >>
+> >> -#if !defined(CONFIG_SOC_AR5312)
+> >> +#if !defined(WAR_4KC_LLSC)
+> >> #  define cpu_has_llsc                 1
+> >
+> > since the #else path defines cpu_has_llsc as 0, it means that kernels
+> > targeting both SoCs would force llsc to be unavailable (not introduced
+> > by you).
 >
-> Other boards I've checked (including some with multiple CPU clusters)
-> seem to be bringing up all their CPUs so it doesn't seem to just be
-> general breakage.
+> I=E2=80=99m a little bit confused.
+> The logic seems very clear to me: If a SoC is not affected by WAR_4KC_LLS=
+C,
+> then wire  cpu_has_llsc to 1, else wire it to 0.
 
-That does not make any sense at all and my tired brain does not help
-either.
+ATH25 allows you building for multiple SoCs at the same time, and if
+you do so, you don't know in advance on which SoC you boot. So you
+need to have third path here where cpu_has_llsc isn't wired to
+anything.
 
-Can you please apply the below debug patch and provide the output?
+This is wrong in the current code already, so should be fixed there.
 
-Thanks,
+>
+> It matches my intention.
+>
+> >
+> > So this probably should be rather this:
+> >
+> > #if !defined(CONFIG_SOC_AR5312)
+> > #define cpu_has_llsc 1
+> > #else if !defined(CONFIG_SOC_AR5312)
+> > #define cpu_has_llsc 0
+> > #endif
+>
+> The condition on if leg seems same to the else leg, I=E2=80=99m not sure =
+if it can ever work.
 
-        tglx
----
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 005f863a3d2b..90a9b2ae8391 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1767,13 +1767,20 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
- {
- 	unsigned int cpu;
- 
-+	pr_info("Bringup max %u CPUs to %d\n", ncpus, target);
-+
- 	for_each_cpu(cpu, mask) {
- 		struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
-+		int ret;
-+
-+		pr_info("Bringup CPU%u left %u\n", cpu, ncpus);
- 
- 		if (!--ncpus)
- 			break;
- 
--		if (cpu_up(cpu, target) && can_rollback_cpu(st)) {
-+		ret = cpu_up(cpu, target);
-+		pr_info("Bringup CPU%u %d\n", cpu, ret);
-+		if (ret && can_rollback_cpu(st)) {
- 			/*
- 			 * If this failed then cpu_up() might have only
- 			 * rolled back to CPUHP_BP_KICK_AP for the final
+Sorry, I typo'd. I wanted to write
+
+#if !defined(CONFIG_SOC_AR5312)
+#define cpu_has_llsc 1
+#else if !defined(CONFIG_SOC_AR2315)
+#define cpu_has_llsc 0
+(#else /* don't define it */)
+#endif
+
+Only SOC_AR2315 selected =3D> cpu_has_llsc =3D 1
+Only SOC_AR5312 selected =3D> cpu_has_llsc =3D 0
+both selected =3D> cpu_has_llsc will need to be determined at runtime
+(don't set it to anything)
+
+>
+> >
+> > (so if only one is enabled, set it accordingly, else let runtime
+> > detection handle it).
+> >
+> >> #else
+> >> /*
+> >> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe=
+.c
+> >> index 6d15a398d389..fd452e68cd90 100644
+> >> --- a/arch/mips/kernel/cpu-probe.c
+> >> +++ b/arch/mips/kernel/cpu-probe.c
+> >> @@ -152,6 +152,13 @@ static inline void check_errata(void)
+> >>        struct cpuinfo_mips *c =3D &current_cpu_data;
+> >>
+> >>        switch (current_cpu_type()) {
+> >> +       case CPU_4KC:
+> >> +               if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V=
+1_0) {
+> >> +                       c->options &=3D ~MIPS_CPU_LLSC;
+> >> +                       if (!IS_ENABLED(CONFIG_WAR_4K_LLSC))
+> >> +                               pr_err("CPU have LLSC errata, please e=
+nable CONFIG_WAR_4K_LLSC");
+> >> +               }
+> >
+> > And then you don't need this error message at all, since then
+> > cpu_has_llsc is 0 or follows MIPS_CPU_LLSC, unless you disabled
+> > support for the relevant SoC, and then you'll have bigger problems
+> > anyway.
+>
+> The problem is as per MIPS the affected IP core was shipped to multiple c=
+ustomers
+> This error message can cover other SoCs that potentially using this core.
+
+AFAICT the core issue is if the platform hardcodes cpu_has_llsc to 1.
+
+So the error/warning this should be then something like this
+
+ if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
+   c->options &=3D ~MIPS_CPU_LLSC;
+   if (cpu_has_llsc) { // <- should now be false, unless the platform
+defines it as 1
+      pr_err("CPU has LLSC erratum, but cpu_has_llsc is force enabled!\n");
+   }
+
+because clearing MIPS_CPU_LLSC does nothing if cpu_has_llsc is
+#defined as 1, regardless if it selected WAR_4K_LLSC or not.
+
+(also your error print is missing a \n at the end)
+
+Regards,
+Jonas
