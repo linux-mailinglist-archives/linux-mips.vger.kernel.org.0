@@ -2,153 +2,277 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C67E70BB11
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814C070BB18
+	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjEVLEj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 May 2023 07:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S233135AbjEVLFt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 May 2023 07:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbjEVLES (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:04:18 -0400
-Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1057F49D5;
-        Mon, 22 May 2023 03:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1684753156;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FtaOawtEIZcYR8kQ1ZUJu5ElatA0FpUwqecHrTU8yhQ=;
-  b=eKTQiG0GTHYqSwmmumMZmFo09jlkzvs+Ek+OLyeU0z9yKR25nIWDrnBG
-   q7sYB24xWwmYySdnw6rYxhs7kY+N4xsGwYqylkFLyfgHZ5gnllAL6bjIu
-   1r1pu/F9Tgjw1p9Y3iV0Omlp9MPVUxWrFoRUH4yd0bSkR2kLLcZ4utSjp
-   0=;
-Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-X-SBRS: 4.0
-X-MesageID: 109791905
-X-Ironport-Server: esa2.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.123
-X-Policy: $RELAYED
-IronPort-Data: A9a23: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
- zLJ
-IronPort-HdrOrdr: A9a23:09+17q/QTihma8HpfNRuk+DJI+orL9Y04lQ7vn2ZKCY5TiX8ra
- vFoB11726WtN9vYgBDpTntAse9qBDnmaKdg7NwAV7KZmCPhILCFu5fBOXZogEIEheOk9Jg6Q
- ==
-X-Talos-CUID: 9a23:2S2XfmxwRhoEaCNipankBgUFO984XnKB6k7AAFeEOVZZQuafEHyfrfY=
-X-Talos-MUID: =?us-ascii?q?9a23=3A0NkJAA8ep6I1nEDTNh1Sp+OQf+5K8YiPDmlUq8k?=
- =?us-ascii?q?DhpOGNBReIzmy0SviFw=3D=3D?=
-X-IronPort-AV: E=Sophos;i="6.00,184,1681185600"; 
-   d="scan'208";a="109791905"
-From:   Andrew Cooper <andrew.cooper3@citrix.com>
-To:     <tglx@linutronix.de>
-CC:     <James.Bottomley@HansenPartnership.com>,
-        <andrew.cooper3@citrix.com>, <arjan@linux.intel.com>,
-        <arnd@arndb.de>, <boris.ostrovsky@oracle.com>, <brgerst@gmail.com>,
-        <catalin.marinas@arm.com>, <deller@gmx.de>, <dwmw2@infradead.org>,
-        <gpiccoli@igalia.com>, <guoren@kernel.org>, <jgross@suse.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-csky@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux@armlinux.org.uk>,
-        <lucjan.lucjanov@gmail.com>, <mark.rutland@arm.com>,
-        <mikelley@microsoft.com>, <oleksandr@natalenko.name>,
-        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        <paulmck@kernel.org>, <pbonzini@redhat.com>,
-        <pmenzel@molgen.mpg.de>, <ross.philipson@oracle.com>,
-        <sabrapan@amazon.com>, <seanjc@google.com>,
-        <thomas.lendacky@amd.com>, <tsbogend@alpha.franken.de>,
-        <usama.arif@bytedance.com>, <will@kernel.org>, <x86@kernel.org>,
-        <xen-devel@lists.xenproject.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [PATCH] x86/apic: Fix use of X{,2}APIC_ENABLE in asm with older binutils
-Date:   Mon, 22 May 2023 11:57:38 +0100
-Message-ID: <20230522105738.2378364-1-andrew.cooper3@citrix.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230512203426.452963764@linutronix.de>
-References: <20230512203426.452963764@linutronix.de>
+        with ESMTP id S233145AbjEVLFY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:05:24 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3C830F2;
+        Mon, 22 May 2023 04:00:20 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75b0df81142so94240985a.2;
+        Mon, 22 May 2023 04:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684753140; x=1687345140;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5fvYEEaFxIdJ1ctjBoNsSe7YJW7m1yyULGgSkldRgms=;
+        b=bV+gk4w01kvKXq3uxQ1aw/ILIKqaedH4DBgplPDtCAPc8RAEjRhKPQpuNUzgXluDkW
+         eyiO6NjXhsc41pP8IpfTkuz9aFlzA+mEODb5EkY74LZtUDrU/6BdXkkiV5cw+vzFfSSy
+         RR7uzvljrxGrWWK3WyyUDfVulzB1avH+5tvXDwuw6PoMAFsUgdDMOp7x4g/HQ09Nnh9S
+         ChwE5xpXV/kDp60/OSBGp/81sPXQRy98Mkz76OaTMA9rKf1T+4VLYUlK42L26YYPsUZD
+         oP70Vn0TWgKK/Oocs5pNd7J04wDePClWEc/7fkEqbjJB2w9/5o4w7k3kEqTHvwR8X+Hf
+         TuUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684753140; x=1687345140;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5fvYEEaFxIdJ1ctjBoNsSe7YJW7m1yyULGgSkldRgms=;
+        b=HO2Ya9+uuahr6TcKosy+DcW3m2f0FvIgZXUVYdtfNuMHDRR8Gu3xe0Ilf69oU9SDM1
+         gZRQpF0L9pslBepycBuYeHAhmxXuJl4qMxbAzQSYnJbf0CGCKQceeLl0xj7d9vDT/xr3
+         REio8PALdgn+G9rs4Y+vtodwytigURAV3zQFMR/Ds1r7J/NQaqkU2iz258OqA2pY/8Os
+         lDZR9/PaZvSo6SQkSkijpvbk7LskivJeHUAOTKeE7r0Kzxk/hfbAX+HzteB+t/8xPtlq
+         Tknicw1tZNSoih3Scji2dJ1D6cZu8SW2OpwdM1fH3tzzptv4MsoAttGjc2zupgm3OLpv
+         9Ybg==
+X-Gm-Message-State: AC+VfDwFH1N8TJNUaVzc5F1ImSKy9SJFAFfxZ7ysgCOMH0VXv3++9Ho+
+        mC10k+GBxuIQuDcCLN4NtJKldvgNo/mHVdw+ff3D4XexUzY=
+X-Google-Smtp-Source: ACHHUZ4IhOsWxTmHezMj1Zil6Ulgdl4RITYTYZi9OkO6+om0HV48MoRQRYTN+Hvs67DNKz/f1qsWrZQWm6uoqzOA4Os=
+X-Received: by 2002:a05:620a:2b95:b0:75b:23a0:de92 with SMTP id
+ dz21-20020a05620a2b9500b0075b23a0de92mr124875qkb.16.1684753139687; Mon, 22
+ May 2023 03:58:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230521225901.388455-1-contact@artur-rojek.eu> <20230521225901.388455-3-contact@artur-rojek.eu>
+In-Reply-To: <20230521225901.388455-3-contact@artur-rojek.eu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 22 May 2023 13:58:23 +0300
+Message-ID: <CAHp75Vfj_2WJdcn4TC2SesUrWFmyhXHujS9P8O3JXdFcAb=WeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] input: joystick: Fix buffer data parsing
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-"x86/smpboot: Support parallel startup of secondary CPUs" adds the first use
-of X2APIC_ENABLE in assembly, but older binutils don't tolerate the UL suffix.
+On Mon, May 22, 2023 at 1:59=E2=80=AFAM Artur Rojek <contact@artur-rojek.eu=
+> wrote:
+>
+> Don't try to access buffer data of a channel by its scan index. Instead,
+> calculate its offset in the buffer.
+>
+> This is necessary, as the scan index of a channel does not represent its
+> position in a buffer - the buffer will contain data for enabled channels
+> only, affecting data offsets and alignment.
+>
+> While at it, also fix minor style issue in probe.
 
-Switch to using BIT() instead.
+a minor
+the probe
 
-Fixes: 7e75178a0950 ("x86/smpboot: Support parallel startup of secondary CPUs")
-Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
----
- arch/x86/include/asm/apicdef.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> Reported-by: Chris Morgan <macromorgan@hotmail.com>
+> Closes: https://lore.kernel.org/linux-input/20220408212857.9583-1-macroal=
+pha82@gmail.com/
 
-diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
-index bf546dfb6e58..4b125e5b3187 100644
---- a/arch/x86/include/asm/apicdef.h
-+++ b/arch/x86/include/asm/apicdef.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_APICDEF_H
- #define _ASM_X86_APICDEF_H
- 
-+#include <linux/bits.h>
-+
- /*
-  * Constants for various Intel APICs. (local APIC, IOAPIC, etc.)
-  *
-@@ -140,8 +142,8 @@
- #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
- #define APIC_BASE_MSR		0x800
- #define APIC_X2APIC_ID_MSR	0x802
--#define XAPIC_ENABLE	(1UL << 11)
--#define X2APIC_ENABLE	(1UL << 10)
-+#define XAPIC_ENABLE		BIT(11)
-+#define X2APIC_ENABLE		BIT(10)
- 
- #ifdef CONFIG_X86_32
- # define MAX_IO_APICS 64
+What is this tag? Anything documented? Otherwise use BugLink or Link.
 
-base-commit: 0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
--- 
-2.30.2
+...
 
+>         struct adc_joystick_axis *axes;
+>         struct iio_channel *chans;
+> +       int *offsets;
+
+Why not unsigned? I.o.w. is there any meaning for negative values?
+
+>         int num_chans;
+>         bool polled;
+
+...
+
+> +               off =3D joy->offsets[i];
+
+> +
+
+Move this blank line to be before the previous line.
+
+> +               if (off < 0)
+> +                       return -EINVAL;
+
+...
+
+>                 case 1:
+> -                       val =3D ((const u8 *)data)[idx];
+> +                       val =3D *chan_data;
+
+Might be also
+
+   get_unaligned((const u8 *)chan_data);
+
+And with all this (see below) the chan_data actually can be declared
+as const void *.
+
+>                         break;
+>                 case 2:
+> -                       data_u16 =3D (const u16 *)data + idx;
+> -
+>                         /*
+>                          * Data is aligned to the sample size by IIO core=
+.
+>                          * Call `get_unaligned_xe16` to hide type casting=
+.
+>                          */
+>                         if (endianness =3D=3D IIO_BE)
+> -                               val =3D get_unaligned_be16(data_u16);
+> +                               val =3D get_unaligned_be16(chan_data);
+>                         else if (endianness =3D=3D IIO_LE)
+> -                               val =3D get_unaligned_le16(data_u16);
+> +                               val =3D get_unaligned_le16(chan_data);
+>                         else /* IIO_CPU */
+> -                               val =3D *data_u16;
+> +                               val =3D *(const u16 *)chan_data;
+
+This probably needs to be
+
+   get_unaligned((const u16 *)chan_data);
+
+for the sake of consistency with the above.
+
+>                         break;
+>                 default:
+>                         return -EINVAL;
+
+...
+
+> +static int adc_joystick_si_cmp(const void *a, const void *b, const void =
+*priv)
+> +{
+> +       const struct iio_channel *chans =3D priv;
+> +
+> +       return chans[*(int *)a].channel->scan_index -
+> +              chans[*(int *)b].channel->scan_index;
+
+Discarding const?
+
+> +}
+
+...
+
+> +       offsets =3D kmalloc_array(count, sizeof(int), GFP_KERNEL);
+
+sizeof(*offsets)
+
+> +       if (!offsets)
+> +               return ERR_PTR(-ENOMEM);
+
+...
+
+> +       si_order =3D kmalloc_array(count, sizeof(int), GFP_KERNEL);
+
+sizeof(*si_order)
+
+> +       if (!si_order) {
+> +               kfree(offsets);
+> +               return ERR_PTR(-ENOMEM);
+> +       }
+
+...
+
+> +       /* Channels in buffer are ordered by scan index. Sort to match th=
+at. */
+
+the buffer
+
+> +       sort_r(si_order, count, sizeof(int), adc_joystick_si_cmp, NULL, c=
+hans);
+
+sizeof(*si_order) ?
+
+sizeof(int) is a bit odd, the above will tell better without even
+knowing the sort_r() parameters what it is about.
+
+...
+
+> +       for (i =3D 0; i < count; ++i) {
+> +               idx =3D si_order[i];
+> +               ch =3D chans[idx].channel;
+> +               si =3D ch->scan_index;
+> +
+> +               if (si < 0 || !test_bit(si, indio_dev->active_scan_mask))=
+ {
+> +                       offsets[idx] =3D -1;
+> +                       continue;
+> +               }
+> +
+> +               /* Channels sharing scan indices also share the samples. =
+*/
+> +               if (idx > 0 && si =3D=3D chans[idx - 1].channel->scan_ind=
+ex) {
+> +                       offsets[idx] =3D offsets[idx - 1];
+> +                       continue;
+> +               }
+> +
+> +               offsets[idx] =3D offset;
+
+> +               length =3D ch->scan_type.storagebits / 8;
+
+BITS_PER_BYTE ?
+
+> +               if (ch->scan_type.repeat > 1)
+> +                       length *=3D ch->scan_type.repeat;
+
+> +               /* Account for channel alignment. */
+> +               if (offset % length)
+> +                       offset +=3D length - (offset % length);
+
+Would one of ALIGN() / rounddown / etc work here?
+
+> +               offset +=3D length;
+> +       }
+
+...
+
+> +       joy->offsets =3D adc_joystick_get_chan_offsets(joy->chans,
+> +                                                    joy->num_chans);
+> +       if (IS_ERR(joy->offsets)) {
+> +               dev_err(devp, "Unable to allocate channel offsets\n");
+
+> +               return PTR_ERR(joy->offsets);
+> +       }
+> +
+> +       return 0;
+
+return PTR_ERR_OR_ZERO() ?
+
+...
+
+>                 error =3D devm_add_action_or_reset(dev, adc_joystick_clea=
+nup,
+>                                                  joy->buffer);
+> -               if (error)  {
+> +               if (error) {
+>                         dev_err(dev, "Unable to add action\n");
+>                         return error;
+>                 }
+
+Unrelated change.
+
+--=20
+With Best Regards,
+Andy Shevchenko
