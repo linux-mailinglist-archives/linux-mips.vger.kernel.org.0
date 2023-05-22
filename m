@@ -2,96 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A8E70BB3D
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CFD70BBA7
+	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjEVLLz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 May 2023 07:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S233371AbjEVLWk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 May 2023 07:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjEVLLU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:11:20 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9CC30ED;
-        Mon, 22 May 2023 04:06:19 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-62381fe42b3so25770386d6.0;
-        Mon, 22 May 2023 04:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684753578; x=1687345578;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HCxmceFxaOu1idnfY2VfZs/REw/SEk7/UmlEMx9raLg=;
-        b=mDOIzfl3POnlvpW7fR0L1vhdAyGYek1iyC/V62ZOA7U7Y2eIo0EkuZW9G43PyX+HtT
-         WvsDp8bsb4XqrMv+ifaueMktR4ZousftZiBd4RR4NqhLPdBHK7KSWevXTvdn0TxT+/9S
-         iscw/J607rXEoKUs+VVflRAUSrGxqllQVXChQzzrsckZE0Ng6UkpZ40zjXEFTxb5YGVb
-         CsA2FH8fUfCD/5T53yIt2lI9/GeQ7hBadutg3uPMeuf0Psr4s9FJGv7tWZozktBAL1th
-         tArfVZDwdsy5dqY8f2GKzMrmpqNi+zRFPGsdWvuLNeIpevGzmWXOJUy5eL2eCyyPvtAf
-         gqQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753578; x=1687345578;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HCxmceFxaOu1idnfY2VfZs/REw/SEk7/UmlEMx9raLg=;
-        b=Sgx566vCmrvHZkeqxXtsZ9EJNYAj6exnFg6YDy3/pkhdyGHWpejHx8vZDMIsy/TBVE
-         epVEnfCxvX0gdvRmKb27vQFlxkb1sb3JsQ8HE0HRmOviUIZnIoQra0GPZLwJalx5tdTP
-         DjrWDv32Qz8OX6bHvB1t28ZrhfzLrWp7TSwBBbZEuTMXpD06G3WE+FdqS7VJ3rcCzI9W
-         Ze/utrytonJmGgszsISDArXw4iq3JNfItISCvS3oxskTTnIA1Ihz9I0Uxm7cVcDVC1gl
-         oYcvinKHBBYuMqyZPVtkOdj/9I1B8XPyAdRIk6t7/N0bRA3jgucXzwrzvKO1O/GMyonF
-         Wp8w==
-X-Gm-Message-State: AC+VfDwC9JE/i29UrnTLRIokhgPsxEoiVSiBKx/IShCq/EveMA35jtU0
-        DFSHgOxrfzi0t6mcJjaRwBbhDHKdKFmfnavTxbE=
-X-Google-Smtp-Source: ACHHUZ4za1Fk1pRjVTXSpuT50YNQaqoVS3396KaiL6WErAffhxbAYHVgGx3UFjBlpa3K6PD8w4Yf81yJl+5AK0/5DrA=
-X-Received: by 2002:ad4:5c49:0:b0:621:6886:d4db with SMTP id
- a9-20020ad45c49000000b006216886d4dbmr18327778qva.38.1684753578280; Mon, 22
- May 2023 04:06:18 -0700 (PDT)
+        with ESMTP id S233344AbjEVLWY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:22:24 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF80C5275;
+        Mon, 22 May 2023 04:17:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cQTiKEc/43ERh/RUjjvIJQkEsJdOq6qRkauNBfX0QXQ=; b=p9m/ILtgZZh20NKGMrXp1m9S79
+        L3gjgt3hqJWh343H0TOYKs01/G2BPEuhvFC4TMuRPeU+MY+G/63vgoqDRNSKM39yVvKzOTaMjmZFK
+        7LM8lsFJeYjGWosrrrGG5miTPAuK0YTizFt0WQTN+y4vi/M34EkH3zTVqOfVyGhSWIOf8ow6+E///
+        7SsMn4KhRSRjr9A7KCnECWwdnNE+HTrXL6yLyaObfuKu+fRhMgUnrXcHYHyRgw+uyKRbUhZTX2eMd
+        dspexsNkPMSmOqiOaZOzjcHaV7Or01naZ8gCOX7wKpbxrnL7eOBmMEZkr02uGpGm9yxIp2RZVNEOy
+        4Up4YdGA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59006)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q13XQ-0006UY-2o; Mon, 22 May 2023 12:17:16 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q13XE-0007tn-CU; Mon, 22 May 2023 12:17:04 +0100
+Date:   Mon, 22 May 2023 12:17:04 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Cooper <andrew.cooper3@citrix.com>
+Cc:     tglx@linutronix.de, James.Bottomley@hansenpartnership.com,
+        arjan@linux.intel.com, arnd@arndb.de, boris.ostrovsky@oracle.com,
+        brgerst@gmail.com, catalin.marinas@arm.com, deller@gmx.de,
+        dwmw2@infradead.org, gpiccoli@igalia.com, guoren@kernel.org,
+        jgross@suse.com, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, lucjan.lucjanov@gmail.com,
+        mark.rutland@arm.com, mikelley@microsoft.com,
+        oleksandr@natalenko.name, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, paulmck@kernel.org, pbonzini@redhat.com,
+        pmenzel@molgen.mpg.de, ross.philipson@oracle.com,
+        sabrapan@amazon.com, seanjc@google.com, thomas.lendacky@amd.com,
+        tsbogend@alpha.franken.de, usama.arif@bytedance.com,
+        will@kernel.org, x86@kernel.org, xen-devel@lists.xenproject.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: Re: [PATCH] x86/apic: Fix use of X{,2}APIC_ENABLE in asm with older
+ binutils
+Message-ID: <ZGtPMHJM/TfklT+2@shell.armlinux.org.uk>
+References: <20230512203426.452963764@linutronix.de>
+ <20230522105738.2378364-1-andrew.cooper3@citrix.com>
 MIME-Version: 1.0
-References: <20230521225901.388455-1-contact@artur-rojek.eu>
- <20230521225901.388455-2-contact@artur-rojek.eu> <CAHp75VeLRHwcKQALwnBb-gqVeyxxH=_F40TserRXqo_kbaZzoQ@mail.gmail.com>
- <9812499a8e017b8e01327069c8063e5f213bb1c8.camel@crapouillou.net>
-In-Reply-To: <9812499a8e017b8e01327069c8063e5f213bb1c8.camel@crapouillou.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 22 May 2023 14:05:42 +0300
-Message-ID: <CAHp75Vfhj0Unrv+fsy+j-xErqt-UVR6G-7if18LoKgBRZGfG7g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] iio/adc: ingenic: Fix channel offsets in buffer
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522105738.2378364-1-andrew.cooper3@citrix.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 22, 2023 at 1:20=E2=80=AFPM Paul Cercueil <paul@crapouillou.net=
-> wrote:
-> Le lundi 22 mai 2023 =C3=A0 13:15 +0300, Andy Shevchenko a =C3=A9crit :
-> > On Mon, May 22, 2023 at 1:59=E2=80=AFAM Artur Rojek <contact@artur-roje=
-k.eu>
-> > wrote:
+Hi,
 
-...
+Please can you tell me what the relevance of this patch is to me, and
+thus why I'm included in the Cc list? I have never touched this file,
+not in its current path nor a previous path according to git.
 
-> > > +       memset(tdat, 0, ARRAY_SIZE(tdat));
-> >
-> > Yeah, as LKP tells us this should be sizeof() instead of
-> > ARRAY_SIZE().
->
-> Probably "u16 tdat[6] =3D { 0 };" would work too?
+Thanks.
 
-Without 0 also would work :-)
+On Mon, May 22, 2023 at 11:57:38AM +0100, Andrew Cooper wrote:
+> "x86/smpboot: Support parallel startup of secondary CPUs" adds the first use
+> of X2APIC_ENABLE in assembly, but older binutils don't tolerate the UL suffix.
+> 
+> Switch to using BIT() instead.
+> 
+> Fixes: 7e75178a0950 ("x86/smpboot: Support parallel startup of secondary CPUs")
+> Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+> ---
+>  arch/x86/include/asm/apicdef.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
+> index bf546dfb6e58..4b125e5b3187 100644
+> --- a/arch/x86/include/asm/apicdef.h
+> +++ b/arch/x86/include/asm/apicdef.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _ASM_X86_APICDEF_H
+>  #define _ASM_X86_APICDEF_H
+>  
+> +#include <linux/bits.h>
+> +
+>  /*
+>   * Constants for various Intel APICs. (local APIC, IOAPIC, etc.)
+>   *
+> @@ -140,8 +142,8 @@
+>  #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
+>  #define APIC_BASE_MSR		0x800
+>  #define APIC_X2APIC_ID_MSR	0x802
+> -#define XAPIC_ENABLE	(1UL << 11)
+> -#define X2APIC_ENABLE	(1UL << 10)
+> +#define XAPIC_ENABLE		BIT(11)
+> +#define X2APIC_ENABLE		BIT(10)
+>  
+>  #ifdef CONFIG_X86_32
+>  # define MAX_IO_APICS 64
+> 
+> base-commit: 0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
+> -- 
+> 2.30.2
+> 
+> 
 
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
