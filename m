@@ -2,130 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CFD70BBA7
-	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB1470BBF8
+	for <lists+linux-mips@lfdr.de>; Mon, 22 May 2023 13:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbjEVLWk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 May 2023 07:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S233127AbjEVLgW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 May 2023 07:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjEVLWY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:22:24 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF80C5275;
-        Mon, 22 May 2023 04:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cQTiKEc/43ERh/RUjjvIJQkEsJdOq6qRkauNBfX0QXQ=; b=p9m/ILtgZZh20NKGMrXp1m9S79
-        L3gjgt3hqJWh343H0TOYKs01/G2BPEuhvFC4TMuRPeU+MY+G/63vgoqDRNSKM39yVvKzOTaMjmZFK
-        7LM8lsFJeYjGWosrrrGG5miTPAuK0YTizFt0WQTN+y4vi/M34EkH3zTVqOfVyGhSWIOf8ow6+E///
-        7SsMn4KhRSRjr9A7KCnECWwdnNE+HTrXL6yLyaObfuKu+fRhMgUnrXcHYHyRgw+uyKRbUhZTX2eMd
-        dspexsNkPMSmOqiOaZOzjcHaV7Or01naZ8gCOX7wKpbxrnL7eOBmMEZkr02uGpGm9yxIp2RZVNEOy
-        4Up4YdGA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59006)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q13XQ-0006UY-2o; Mon, 22 May 2023 12:17:16 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q13XE-0007tn-CU; Mon, 22 May 2023 12:17:04 +0100
-Date:   Mon, 22 May 2023 12:17:04 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     tglx@linutronix.de, James.Bottomley@hansenpartnership.com,
-        arjan@linux.intel.com, arnd@arndb.de, boris.ostrovsky@oracle.com,
-        brgerst@gmail.com, catalin.marinas@arm.com, deller@gmx.de,
-        dwmw2@infradead.org, gpiccoli@igalia.com, guoren@kernel.org,
-        jgross@suse.com, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, lucjan.lucjanov@gmail.com,
-        mark.rutland@arm.com, mikelley@microsoft.com,
-        oleksandr@natalenko.name, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, paulmck@kernel.org, pbonzini@redhat.com,
-        pmenzel@molgen.mpg.de, ross.philipson@oracle.com,
-        sabrapan@amazon.com, seanjc@google.com, thomas.lendacky@amd.com,
-        tsbogend@alpha.franken.de, usama.arif@bytedance.com,
-        will@kernel.org, x86@kernel.org, xen-devel@lists.xenproject.org,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: Re: [PATCH] x86/apic: Fix use of X{,2}APIC_ENABLE in asm with older
- binutils
-Message-ID: <ZGtPMHJM/TfklT+2@shell.armlinux.org.uk>
-References: <20230512203426.452963764@linutronix.de>
- <20230522105738.2378364-1-andrew.cooper3@citrix.com>
+        with ESMTP id S233157AbjEVLgU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 May 2023 07:36:20 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C946F1;
+        Mon, 22 May 2023 04:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1684755358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0n8l4247LeEWaLKQ0FnSfNM9KwjF8gdrQk1OZZ4VON0=;
+        b=vgcIeJ3SYVpE+jcU3BpOIfJQV6mo8nqBt41pXsNvzViL3qMlZQ0sZPJ1saiDlTQfuT4dN9
+        RK6OVIflDrt5aZua0j4XeZJTSAF7Eqb1Beyly8LBtIrwXdbaNCT/N3dcJZPxFAV50yQ8n/
+        gVjLZTufknvT5paH8YMPKdkWWVXlbQc=
+Message-ID: <6b88623e44b2a98a2e5d8d6d2453f92eb1b673ae.camel@crapouillou.net>
+Subject: Re: [PATCH v2 1/2] iio/adc: ingenic: Fix channel offsets in buffer
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Date:   Mon, 22 May 2023 13:35:56 +0200
+In-Reply-To: <CAHp75VdjAxAvmYVW4qgV2i91L31=Ctx4nx_eAe9+pqPFEArD3w@mail.gmail.com>
+References: <20230521225901.388455-1-contact@artur-rojek.eu>
+         <20230521225901.388455-2-contact@artur-rojek.eu>
+         <CAHp75VeLRHwcKQALwnBb-gqVeyxxH=_F40TserRXqo_kbaZzoQ@mail.gmail.com>
+         <CAHp75VedgVOA4qTJFeVuabKXBaB=y4Ss0fLu7a7J9GGgWFPqQg@mail.gmail.com>
+         <2fc0874ce8a802aeb98e553b15e27fb4d4b75a1c.camel@crapouillou.net>
+         <CAHp75VdjAxAvmYVW4qgV2i91L31=Ctx4nx_eAe9+pqPFEArD3w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522105738.2378364-1-andrew.cooper3@citrix.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Hi Andy,
 
-Please can you tell me what the relevance of this patch is to me, and
-thus why I'm included in the Cc list? I have never touched this file,
-not in its current path nor a previous path according to git.
+Le lundi 22 mai 2023 =C3=A0 14:05 +0300, Andy Shevchenko a =C3=A9crit=C2=A0=
+:
+> On Mon, May 22, 2023 at 1:23=E2=80=AFPM Paul Cercueil <paul@crapouillou.n=
+et>
+> wrote:
+> > Le lundi 22 mai 2023 =C3=A0 13:18 +0300, Andy Shevchenko a =C3=A9crit :
+> > > On Mon, May 22, 2023 at 1:15=E2=80=AFPM Andy Shevchenko
+> > > <andy.shevchenko@gmail.com> wrote:
+> > > > On Mon, May 22, 2023 at 1:59=E2=80=AFAM Artur Rojek
+> > > > <contact@artur-rojek.eu> wrote:
+>=20
+> ...
+>=20
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u16 tdat[6];
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 val;
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memset(tdat, 0, ARRAY_SIZE(=
+tdat));
+> > > >=20
+> > > > Yeah, as LKP tells us this should be sizeof() instead of
+> > > > ARRAY_SIZE().
+> > > >=20
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; mask && i < A=
+RRAY_SIZE(tdat); mask >>=3D 2)
+> > > > > {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 if (mask & 0x3) {
+> > > >=20
+> > > > (for the consistency it has to be GENMASK(), but see below)
+> > > >=20
+> > > > First of all, strictly speaking we should use the full mask
+> > > > without
+> > > > limiting it to the 0 element in the array (I'm talking about
+> > > > active_scan_mask).
+> > > >=20
+> > > > That said, we may actually use bit operations here in a better
+> > > > way,
+> > > > i.e.
+> > > >=20
+> > > > =C2=A0 unsigned long mask =3D active_scan_mask[0] &
+> > > > (active_scan_mask[0] -
+> > > > 1);
+> > > >=20
+> > > > =C2=A0 j =3D 0;
+> > > > =C2=A0 for_each_set_bit(i, active_scan_mask, ...) {
+> > > > =C2=A0=C2=A0=C2=A0 val =3D readl(...);
+> > > > =C2=A0=C2=A0=C2=A0 /* Two channels per sample. Demux active. */
+> > > > =C2=A0=C2=A0=C2=A0 tdat[j++] =3D val >> (16 * (i % 2));
+> > >=20
+> > > Alternatively
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0 /* Two channels per sample. Demux active. */
+> > > =C2=A0=C2=A0=C2=A0=C2=A0 if (i % 2)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[j++] =3D upper_16_bits(val)=
+;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0 else
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[j++] =3D lower_16_bits(val)=
+;
+> > >=20
+> > > which may be better to read.
+> >=20
+> > It's not if/else though. You would check (i % 2) for the upper 16
+> > bits,
+> > and (i % 1) for the lower 16 bits. Both can be valid at the same
+> > time.
+>=20
+> Are you sure? Have you looked into the proposed code carefully?
 
-Thanks.
+Yes. I co-wrote the original code, I know what it's supposed to do.
 
-On Mon, May 22, 2023 at 11:57:38AM +0100, Andrew Cooper wrote:
-> "x86/smpboot: Support parallel startup of secondary CPUs" adds the first use
-> of X2APIC_ENABLE in assembly, but older binutils don't tolerate the UL suffix.
-> 
-> Switch to using BIT() instead.
-> 
-> Fixes: 7e75178a0950 ("x86/smpboot: Support parallel startup of secondary CPUs")
-> Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
-> ---
->  arch/x86/include/asm/apicdef.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
-> index bf546dfb6e58..4b125e5b3187 100644
-> --- a/arch/x86/include/asm/apicdef.h
-> +++ b/arch/x86/include/asm/apicdef.h
-> @@ -2,6 +2,8 @@
->  #ifndef _ASM_X86_APICDEF_H
->  #define _ASM_X86_APICDEF_H
->  
-> +#include <linux/bits.h>
-> +
->  /*
->   * Constants for various Intel APICs. (local APIC, IOAPIC, etc.)
->   *
-> @@ -140,8 +142,8 @@
->  #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
->  #define APIC_BASE_MSR		0x800
->  #define APIC_X2APIC_ID_MSR	0x802
-> -#define XAPIC_ENABLE	(1UL << 11)
-> -#define X2APIC_ENABLE	(1UL << 10)
-> +#define XAPIC_ENABLE		BIT(11)
-> +#define X2APIC_ENABLE		BIT(10)
->  
->  #ifdef CONFIG_X86_32
->  # define MAX_IO_APICS 64
-> 
-> base-commit: 0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
-> -- 
-> 2.30.2
-> 
-> 
+>=20
+> What probably can be done differently is the read part, that can be
+> called once. But looking at it I'm not sure how it's supposed to work
+> at all, since the address is always the same. How does the code and
+> hardware are in sync with the channels?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+It's a FIFO.
+
+Cheers,
+-Paul
+
+>=20
+> > > > =C2=A0 }
+> > > >=20
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =
+=3D readl(adc->base +
+> > > > > JZ_ADC_REG_ADTCH);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Tw=
+o channels per sample. Demux
+> > > > > active.
+> > > > > */
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (m=
+ask & BIT(0))
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[i++] =3D val & 0xffff;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (m=
+ask & BIT(1))
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tdat[i++] =3D val >> 16;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>=20
+
