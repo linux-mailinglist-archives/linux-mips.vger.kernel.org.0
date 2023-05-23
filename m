@@ -2,37 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD45870D893
-	for <lists+linux-mips@lfdr.de>; Tue, 23 May 2023 11:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F65570D89D
+	for <lists+linux-mips@lfdr.de>; Tue, 23 May 2023 11:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236140AbjEWJNy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 May 2023 05:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S236266AbjEWJN5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 May 2023 05:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236134AbjEWJNx (ORCPT
+        with ESMTP id S236201AbjEWJNx (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 23 May 2023 05:13:53 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50FD5132
-        for <linux-mips@vger.kernel.org>; Tue, 23 May 2023 02:13:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9AEC138;
+        Tue, 23 May 2023 02:13:45 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q1O5K-0007MY-01; Tue, 23 May 2023 11:13:38 +0200
+        id 1q1O5K-0007MY-02; Tue, 23 May 2023 11:13:38 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C2883C02E6; Tue, 23 May 2023 11:06:11 +0200 (CEST)
-Date:   Tue, 23 May 2023 11:06:11 +0200
+        id 8C0AEC02E6; Tue, 23 May 2023 11:07:06 +0200 (CEST)
+Date:   Tue, 23 May 2023 11:07:06 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Manuel Lauss <manuel.lauss@gmail.com>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: unhide PATA_PLATFORM
-Message-ID: <20230523090611.GB9484@alpha.franken.de>
-References: <20230509185744.413302-1-manuel.lauss@gmail.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     paul@crapouillou.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mips: dts: ingenic: Remove unnecessary AIC clocks
+Message-ID: <20230523090706.GC9484@alpha.franken.de>
+References: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509185744.413302-1-manuel.lauss@gmail.com>
+In-Reply-To: <20230505142400.1270848-1-aidanmacdonald.0x0@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,31 +42,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 09, 2023 at 08:57:44PM +0200, Manuel Lauss wrote:
-> Alchemy DB1200/DB1300 boards can use the pata_platform driver.
-> Unhide the config entry in all of MIPS.
+On Fri, May 05, 2023 at 03:24:00PM +0100, Aidan MacDonald wrote:
+> The "ext" and "pll half" clocks don't belong in the DT. They are
+> not consumed directly by the AIC and are only used as the parent
+> clocks of the "i2s" clock. An operating system should be able to
+> figure out that information itself because it presumably knows the
+> layout of the clock tree.
 > 
-> Signed-off-by: Manuel Lauss <manuel.lauss@gmail.com>
+> Removing these from the DT should be safe from a compatibility
+> point of view because the jz4740-i2s driver in Linux does not, and
+> never did depend on them.
+> 
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Link: https://lore.kernel.org/all/20221028103418.17578-1-aidanmacdonald.0x0@gmail.com/
 > ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+> This is a resend of patch 2/3 from a previous submission which is linked above.
 > 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index c2f5498d207f..675a8660cb85 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -79,6 +79,7 @@ config MIPS
->  	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
->  	select HAVE_MOD_ARCH_SPECIFIC
->  	select HAVE_NMI
-> +	select HAVE_PATA_PLATFORM
->  	select HAVE_PERF_EVENTS
->  	select HAVE_PERF_REGS
->  	select HAVE_PERF_USER_STACK_DUMP
-> -- 
-> 2.40.1
+> v1->v2: updated commit message
+> 
+>  arch/mips/boot/dts/ingenic/jz4725b.dtsi | 7 ++-----
+>  arch/mips/boot/dts/ingenic/jz4740.dtsi  | 7 ++-----
+>  arch/mips/boot/dts/ingenic/jz4770.dtsi  | 5 ++---
+>  3 files changed, 6 insertions(+), 13 deletions(-)
 
-applied to mips-fixes.
+applied to mips-next.
 
 Thomas.
 
