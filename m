@@ -2,155 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59F970EAFF
-	for <lists+linux-mips@lfdr.de>; Wed, 24 May 2023 03:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8550A70F8A7
+	for <lists+linux-mips@lfdr.de>; Wed, 24 May 2023 16:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238871AbjEXBtb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 May 2023 21:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S232786AbjEXO1I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 May 2023 10:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjEXBta (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 May 2023 21:49:30 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50AB184
-        for <linux-mips@vger.kernel.org>; Tue, 23 May 2023 18:49:27 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba82d82bd39so630715276.2
-        for <linux-mips@vger.kernel.org>; Tue, 23 May 2023 18:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684892967; x=1687484967;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qRR20WPPG9GQ+bWld5KX4B7EuAV7QhoHIJ5BRRfzj5g=;
-        b=fL1Ko/YzJ7ADR+5IhbndnTRBOzBniMKv2InrhlDBTKJ8NlYVC/WzojNZzRdjG8LqqI
-         8LB9Z4sfpXm4DMnyfRFicnIehOON6Mw+FClbq6xhPa9tlrIuXm3Q/2idrYMx02+afzOp
-         1VCSHU1xv+O9cTuzhmlxGQq1v0D4TgBrAS9dYOJLgo+SzeMAZ7rQLDPNPL9H5vsD1p44
-         JTB4zFm6Ty/2t/Mm5CpAGXHuXSex52HKZD5bYmtrIhNvgrtjqZinsu17ACzjltY7KKk5
-         TNaE7Q4HSc79RkqKOj+NGXTgrLKTP+KzqHxsfw06sf9yCgMnslxI0DnH5G6oL7bKwZgq
-         fWlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684892967; x=1687484967;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qRR20WPPG9GQ+bWld5KX4B7EuAV7QhoHIJ5BRRfzj5g=;
-        b=koW1Gf/EF2twc+S0nF4XRpVKDlLieaJKemZobDi+aTPLFYXRNf887RwpiU43Q/pAMv
-         +BBXx/3RHSMnS3Qb3hEnLi+sxv7KM66t8KlzMus8NmurbHnru0mMCujX1KTvXkoRkeVE
-         9ge8bF3B5y8g3sdH+udx3/cOvdPbNuw33Ha5y6JpnrcHKMpa6r72Ay2faBWwANxGoW7V
-         QQ/yHoZuX3Sioi+UPX2Vu75kejvEoTKgkI9aE/ljcmFVIaD2x73wy7VVJQ+ymdOUWPCl
-         Sc4HnjawQ8z0SAMPwhIl0AhBQA7jBANVbWT8XnnJoxSnTrns/eeeYlSkja4EAXf+mEhO
-         nHAA==
-X-Gm-Message-State: AC+VfDyTAdLkN6FvYsdGS+VhGdVecsgOHv9E3SpOMVSSbHC7zc2LGcmk
-        i32JAy8TP4seiUKWpnANJU9Lew==
-X-Google-Smtp-Source: ACHHUZ7f0TOZQo7Cw+o/qEVNq4B1zvZdBbLM5VJM6QqwwtZu4t36Vxp5CkGSHrwBFYCBff4rw2Ddpw==
-X-Received: by 2002:a25:385:0:b0:ba8:54c4:3136 with SMTP id 127-20020a250385000000b00ba854c43136mr19398918ybd.52.1684892966804;
-        Tue, 23 May 2023 18:49:26 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id x7-20020a259a07000000b00b8f6ec5a955sm2395274ybn.49.2023.05.23.18.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 18:49:26 -0700 (PDT)
-Date:   Tue, 23 May 2023 18:49:14 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        with ESMTP id S229524AbjEXO1H (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 May 2023 10:27:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AA711D;
+        Wed, 24 May 2023 07:27:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 91B9522041;
+        Wed, 24 May 2023 14:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684938424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tXGazCQJhB+4Gbe14ojDjDepmPElagpzQVjU1cq9coM=;
+        b=CvxJjiwUfSN+kySKUn/EWA67pNGj3pzmDi1HbwCtE90AFBLWe7vv+d8M1Ij3FkSbIz4VTI
+        gWvmGqepcrFlLCBiRAAf+FLKtDv7IxP6DOFYzfABdT3HuVDKFvuPv4HouAx5CI/XFNBevQ
+        b0eo4MDqgOjEmRFkWmGBuHZT8lU/dcs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684938424;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tXGazCQJhB+4Gbe14ojDjDepmPElagpzQVjU1cq9coM=;
+        b=pq5m/8gWb5XY3U0bzLALdtiUNBu4jqNs3ujyoKqIbmne//9yJpXq+qLIx07FO9Z84ILL6b
+        c/7V1xSDO+g6aHAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1777E13425;
+        Wed, 24 May 2023 14:27:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VWz9BLgebmSqKAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 24 May 2023 14:27:04 +0000
+Message-ID: <4f690e97-b26c-1705-51e7-0d7ebc77d819@suse.cz>
+Date:   Wed, 24 May 2023 16:27:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] mm/slab: rename CONFIG_SLAB to CONFIG_SLAB_DEPRECATED
+Content-Language: en-US
+To:     David Rientjes <rientjes@google.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Qin Jian <qinjian@cqplus1.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 15/23] s390: allow pte_offset_map_lock() to fail
-In-Reply-To: <20230523140056.55b664b1@p-imbrenda>
-Message-ID: <b64cd153-18e8-81a6-b852-c04d8b1381d@google.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <94aec8fe-383f-892-dcbf-d4c14e460a7@google.com> <20230517123546.672fb9b0@p-imbrenda> <4a15dbaa-1614-ce-ce1f-f73959cef895@google.com> <20230523140056.55b664b1@p-imbrenda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-um@lists.infradead.org, linux-mm@kvack.org
+References: <20230523091139.21449-1-vbabka@suse.cz>
+ <be109b49-8510-5887-72ae-738db9945619@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <be109b49-8510-5887-72ae-738db9945619@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 23 May 2023, Claudio Imbrenda wrote:
+On 5/24/23 02:29, David Rientjes wrote:
+> On Tue, 23 May 2023, Vlastimil Babka wrote:
 > 
-> so if I understand the above correctly, pte_offset_map_lock will only
-> fail if the whole page table has disappeared, and in that case, it will
-> never reappear with zero pages, therefore we can safely skip (in that
-> case just break). if we were to do a continue instead of a break, we
-> would most likely fail again anyway.
-
-Yes, that's the most likely; and you hold mmap_write_lock() there,
-and VM_NOHUGEPAGE on all vmas, so I think it's the only foreseeable
-possibility.
-
+>> As discussed at LSF/MM [1] [2] and with no objections raised there,
+>> deprecate the SLAB allocator. Rename the user-visible option so that
+>> users with CONFIG_SLAB=y get a new prompt with explanation during make
+>> oldconfig, while make olddefconfig will just switch to SLUB.
+>> 
+>> In all defconfigs with CONFIG_SLAB=y remove the line so those also
+>> switch to SLUB. Regressions due to the switch should be reported to
+>> linux-mm and slab maintainers.
+>> 
+>> [1] https://lore.kernel.org/all/4b9fc9c6-b48c-198f-5f80-811a44737e5f@suse.cz/
+>> [2] https://lwn.net/Articles/932201/
+>> 
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> in that case I would still like a small change in your patch: please
-> write a short (2~3 lines max) comment about why it's ok to do things
-> that way
+> Acked-by: David Rientjes <rientjes@google.com>
 
-Sure.
+Thanks.
 
-But I now see that I've disobeyed you, and gone to 4 lines (but in the
-comment above the function, so as not to distract from the code itself):
-is this good wording to you?  I needed to research how they were stopped
-from coming in afterwards, so wanted to put something greppable in there.
+> The Kconfig option says that SLAB will be removed in a few cycles.  I 
+> think we should wait until at least the next LTS kernel is forked at the 
+> end of the year so that users who upgrade to only the LTS releases can be 
+> prompted for this change and surface any concerns.  Slab allocation is a 
+> critical subsystem, so I presume this is the safest and most responsible 
+> way to do the SLAB deprecation.  Hopefully that timeline works for 
+> everybody.
 
-And, unless I'm misunderstanding, that "after THP was enabled" was
-always supposed to say "after THP was disabled" (because splitting a
-huge zero page pmd inserts a a page table full of little zero ptes).
+Sure, and in fact looking at predicted release dates [1], if the deprecation
+goes into 6.5 then 6.7 ("few" == 2) is already end of January 2024, anyway.
 
-Or would you prefer the comment in the commit message instead,
-or down just above the pte_offset_map_lock() line?
-
-It would much better if I could find one place at the mm end, to
-enforce its end of the contract; but cannot think how to do that.
-
-Hugh
-
---- a/arch/s390/mm/gmap.c
-+++ b/arch/s390/mm/gmap.c
-@@ -2537,7 +2537,12 @@ static inline void thp_split_mm(struct mm_struct *mm)
-  * Remove all empty zero pages from the mapping for lazy refaulting
-  * - This must be called after mm->context.has_pgste is set, to avoid
-  *   future creation of zero pages
-- * - This must be called after THP was enabled
-+ * - This must be called after THP was disabled.
-+ *
-+ * mm contracts with s390, that even if mm were to remove a page table,
-+ * racing with the loop below and so causing pte_offset_map_lock() to fail,
-+ * it will never insert a page table containing empty zero pages once
-+ * mm_forbids_zeropage(mm) i.e. mm->context.has_pgste is set.
-  */
- static int __zap_zero_pages(pmd_t *pmd, unsigned long start,
- 			   unsigned long end, struct mm_walk *walk)
+[1] https://hansen.beer/~dave/phb/
