@@ -2,181 +2,188 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EBA70FF70
-	for <lists+linux-mips@lfdr.de>; Wed, 24 May 2023 22:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589F471063D
+	for <lists+linux-mips@lfdr.de>; Thu, 25 May 2023 09:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbjEXUsj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 May 2023 16:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S233181AbjEYHZe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 May 2023 03:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236057AbjEXUsh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 May 2023 16:48:37 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01666187;
-        Wed, 24 May 2023 13:48:27 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 564803200B1C;
-        Wed, 24 May 2023 16:48:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 24 May 2023 16:48:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684961303; x=
-        1685047703; bh=GIQrYXVIJfghlyJeZVTwMC4NvSXNZTZ81GeVUDK35vA=; b=t
-        V78D8AQWQriaLyjLryKXcRouM18sDnenIWh1Yu+0MLtrKqbfxYSkYAP7Ah45z0C0
-        wqrRshdZnP8Fzs3Y74J2dEDBmVYWYkp0Dr1xsrl5u5j90fMLI6BY4GxnFIanI2ra
-        ZHoNHyFdoiSeY0hssG0uaEFpYzR9Lz3q64/uyyqR22r9Bp9R7utjmhCAN40FS5yl
-        LMsNTY7sC/uKblPAscJfx1OowRzqDWvUUksw9EcLsmJ5dxmskbo1njKOtT/uAEJb
-        p8CBABZQSKnGrDpi9R3ukiBCGNRVKr8j1xz53Ydve6A5EMl4OC/qVLH06zs0pCt+
-        L7IqaBqFdMvHDowOKkSCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684961303; x=1685047703; bh=GIQrYXVIJfghl
-        yJeZVTwMC4NvSXNZTZ81GeVUDK35vA=; b=YXeLdPNcTaSCsiCsBeJv2f5p9SuP4
-        8PNIAd5OHvvHh0zi0J6sHQ2iDxJi3KUZPgxTwHgsCiBnsG4iFJMa5e9VSO/9SRsp
-        1uf6gxH+qkDhvA2KvyiORL0inPnSLCOCJ7W/hgwUyUdJI1MHVbrXnbq8uhCmMqay
-        QCl1ZWzVXrCzb30GT0XC1Wta3d7Y3WxRKULau+sNOAow3o6ZJP+eHzUVYtEPFdUO
-        SEJPLcn5mgVKhWahWT0mp2x4brRIS3jKZQ5jeti0GnxZf5j3AV7cUWQLho6bY9Hg
-        bJgTAAYblxZs0e6yU12BJKusEGvIJR9TETpkuLHQittJSabdfnNE4zZlw==
-X-ME-Sender: <xms:FnhuZDTH2VncK0GAbUd4QSuubawcVJEemEMmfWagwDdFrmymqbynRw>
-    <xme:FnhuZEylmO4WOFyEi63qXNPS7KmYBZh0Oi4Ko1ah2WyXbPpIb5vWyfJ0rtnlScPMf
-    YwGNKBrFecAJTAStLU>
-X-ME-Received: <xmr:FnhuZI0B8fy9Ol2lnVR91k-mp_zuw1fzrmbcod9KqT-pVjgXEb11Z3-99qaxPUeQ45cz-A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgudehudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
-    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:FnhuZDDD4TIO_TlTLMdLlTBKIBaI4Z9lylnIe3wBeaO4FVJJxTQ0FA>
-    <xmx:FnhuZMj_AEyzunCa7U0nUvY822b_W_v3y-MdIwmWBPCWgqMitbF1og>
-    <xmx:FnhuZHo0gf_JVrLFUK-EgR8w02dXTQBT2P7OqLOR94f80xY3JTy1xg>
-    <xmx:F3huZHB2sQNsFiPjk9M0j2hsG8Xww7Nt8oC4qQnHLKoB8ZE2QQW6hQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 May 2023 16:48:21 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 49820109F9F; Wed, 24 May 2023 23:48:18 +0300 (+03)
-Date:   Wed, 24 May 2023 23:48:18 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
+        with ESMTP id S233805AbjEYHZ1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 May 2023 03:25:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14841BD;
+        Thu, 25 May 2023 00:25:26 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P7MZUR027615;
+        Thu, 25 May 2023 07:24:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=55klH+MHDRtIEEtWGbvAfPxNnN6EmMw4scwT5+fq3XI=;
+ b=RCtuVZMVyLY0xGNcOr1uNeKOK8ntfwHROTFHQ4+AHlf2PWmk9UMR5C1PwZzqTymLhX3F
+ YS8x9sdj4rnAtSDt7d3OIlvETB4UqOoJw503GtHvkqIIk34L6d4qe/5QAfXKoRiw8KQ3
+ q2vN+VSVcbXRkWC9E/KmFqhp4J9Uk1or/sNjytHkFA/FLMsoMkRIv3iKpmsDaSpOHta9
+ CUHKBISpNyljOYab0uO1Fpi++beo28ogb584RD8aDiv+J9GeRUJVo/dWdX2F0D18x38T
+ iFptJIA55GKyv/jWO+T8QXxUyFt7k1uiwhkDKMXzQji2/r8sTbD6T9TT2CpRLV4sxd42 RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt32yg93r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 07:24:01 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34P7CWdL024922;
+        Thu, 25 May 2023 07:24:00 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt32yg92j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 07:24:00 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34P4rUxB029511;
+        Thu, 25 May 2023 07:23:57 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qppcuaahq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 07:23:57 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34P7NrqW22610506
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 May 2023 07:23:53 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0BFA20043;
+        Thu, 25 May 2023 07:23:53 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0955820040;
+        Thu, 25 May 2023 07:23:53 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.66])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 25 May 2023 07:23:52 +0000 (GMT)
+Date:   Thu, 25 May 2023 09:23:51 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
         Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-Message-ID: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 15/23] s390: allow pte_offset_map_lock() to fail
+Message-ID: <20230525092351.7671f2a4@p-imbrenda>
+In-Reply-To: <b64cd153-18e8-81a6-b852-c04d8b1381d@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+        <94aec8fe-383f-892-dcbf-d4c14e460a7@google.com>
+        <20230517123546.672fb9b0@p-imbrenda>
+        <4a15dbaa-1614-ce-ce1f-f73959cef895@google.com>
+        <20230523140056.55b664b1@p-imbrenda>
+        <b64cd153-18e8-81a6-b852-c04d8b1381d@google.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508185218.962208640@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qRLyp44GLiE9zXh3PageqjkrZmyh07xV
+X-Proofpoint-GUID: uXGxTdAMLt8o-nI3lVA1NmtMWFctokRx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_03,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250057
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:44:17PM +0200, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On Tue, 23 May 2023 18:49:14 -0700 (PDT)
+Hugh Dickins <hughd@google.com> wrote:
+
+> On Tue, 23 May 2023, Claudio Imbrenda wrote:
+> > 
+> > so if I understand the above correctly, pte_offset_map_lock will only
+> > fail if the whole page table has disappeared, and in that case, it will
+> > never reappear with zero pages, therefore we can safely skip (in that
+> > case just break). if we were to do a continue instead of a break, we
+> > would most likely fail again anyway.  
 > 
-> Make the primary thread tracking CPU mask based in preparation for simpler
-> handling of parallel bootup.
+> Yes, that's the most likely; and you hold mmap_write_lock() there,
+> and VM_NOHUGEPAGE on all vmas, so I think it's the only foreseeable
+> possibility.
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Michael Kelley <mikelley@microsoft.com>
+> > 
+> > in that case I would still like a small change in your patch: please
+> > write a short (2~3 lines max) comment about why it's ok to do things
+> > that way  
 > 
+> Sure.
 > 
-> ---
->  arch/x86/include/asm/apic.h     |    2 --
->  arch/x86/include/asm/topology.h |   19 +++++++++++++++----
->  arch/x86/kernel/apic/apic.c     |   20 +++++++++-----------
->  arch/x86/kernel/smpboot.c       |   12 +++---------
->  4 files changed, 27 insertions(+), 26 deletions(-)
-> ---
+> But I now see that I've disobeyed you, and gone to 4 lines (but in the
+> comment above the function, so as not to distract from the code itself):
+> is this good wording to you?  I needed to research how they were stopped
+> from coming in afterwards, so wanted to put something greppable in there.
 > 
+> And, unless I'm misunderstanding, that "after THP was enabled" was
+> always supposed to say "after THP was disabled" (because splitting a
+> huge zero page pmd inserts a a page table full of little zero ptes).
 
-...
+indeed, thanks for noticing and fixing it
 
-> @@ -2386,20 +2386,16 @@ bool arch_match_cpu_phys_id(int cpu, u64
->  }
->  
->  #ifdef CONFIG_SMP
-> -/**
-> - * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
-> - * @apicid: APIC ID to check
-> - */
-> -bool apic_id_is_primary_thread(unsigned int apicid)
-> +static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
->  {
-> -	u32 mask;
-> -
-> -	if (smp_num_siblings == 1)
-> -		return true;
->  	/* Isolate the SMT bit(s) in the APICID and check for 0 */
-> -	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
-> -	return !(apicid & mask);
-> +	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
-> +
-> +	if (smp_num_siblings == 1 || !(apicid & mask))
-> +		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
->  }
-> +#else
-> +static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
->  #endif
->  
->  /*
+> 
+> Or would you prefer the comment in the commit message instead,
+> or down just above the pte_offset_map_lock() line?
+> 
+> It would much better if I could find one place at the mm end, to
+> enforce its end of the contract; but cannot think how to do that.
+> 
+> Hugh
+> 
+> --- a/arch/s390/mm/gmap.c
+> +++ b/arch/s390/mm/gmap.c
+> @@ -2537,7 +2537,12 @@ static inline void thp_split_mm(struct mm_struct *mm)
+>   * Remove all empty zero pages from the mapping for lazy refaulting
+>   * - This must be called after mm->context.has_pgste is set, to avoid
+>   *   future creation of zero pages
+> - * - This must be called after THP was enabled
+> + * - This must be called after THP was disabled.
+> + *
+> + * mm contracts with s390, that even if mm were to remove a page table,
+> + * racing with the loop below and so causing pte_offset_map_lock() to fail,
+> + * it will never insert a page table containing empty zero pages once
+> + * mm_forbids_zeropage(mm) i.e. mm->context.has_pgste is set.
+>   */
+>  static int __zap_zero_pages(pmd_t *pmd, unsigned long start,
+>  			   unsigned long end, struct mm_walk *walk)
 
-This patch causes boot regression on TDX guest. The guest crashes on SMP
-bring up.
-
-The change makes use of smp_num_siblings earlier than before: the mask get
-constructed in acpi_boot_init() codepath. Later on smp_num_siblings gets
-updated in detect_ht().
-
-In my setup with 16 vCPUs, smp_num_siblings is 16 before detect_ht() and
-set to 1 in detect_ht().
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+looks good, thanks
