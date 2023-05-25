@@ -2,66 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0017111A4
-	for <lists+linux-mips@lfdr.de>; Thu, 25 May 2023 19:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8743D7111B8
+	for <lists+linux-mips@lfdr.de>; Thu, 25 May 2023 19:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbjEYRFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 May 2023 13:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
+        id S233090AbjEYRM2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 May 2023 13:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjEYRFf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 May 2023 13:05:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0989194;
-        Thu, 25 May 2023 10:05:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E30B647B7;
-        Thu, 25 May 2023 17:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D10BC433D2;
-        Thu, 25 May 2023 17:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685034331;
-        bh=yIjNxDD74CzuvoVXeFhsdRIPEKXPng6z65P4bdifQFs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f/jid+QsaCGwZa4IVRrVtbahris94j5A8Zi7KToWru2/XGQA2MeMzDXIDuCBG3d11
-         4dAkNMmlGw7CysZ+Bv3P31HSyXDV35IaNO/Z1DG/VNQDk/7wRNpsKs4lT+22exEUlr
-         EgGaJcH/gc2g/PxZ/PJgE++yQtgf7293g1OaLEJavjc6kGi+gRwqLf04PDdRBk7t4x
-         XBRRc5t+y3aOhuiBhW6EuzA/4bjXh+cYBxBRisrQ3/F8BrM3nr3Oxv7lu5u5QhC3Gs
-         6HKjJgMq+fGF+U8evE21qMPHv6gj2x8IFxMqEdzBzTkII1YefzMU6v5nt6GI9BG+fb
-         cNUT6aDevoBeA==
-Date:   Thu, 25 May 2023 18:05:25 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        zhao zhang <zhzhl555@gmail.com>,
-        Yang Ling <gnaygnil@gmail.com>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the
- trivial RTCs
-Message-ID: <20230525-custody-oversleep-f778eddf981c@spud>
-References: <cover.1684983279.git.zhoubinbin@loongson.cn>
- <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
+        with ESMTP id S229672AbjEYRM0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 May 2023 13:12:26 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCB2B6;
+        Thu, 25 May 2023 10:12:26 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-19edebe85adso969318fac.2;
+        Thu, 25 May 2023 10:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685034745; x=1687626745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H8r4ODEq2+fLCDOwkU0I9uMZzQGsmacbN0I7clioZxg=;
+        b=hlN2P2+4u+i/qYY499lGWAoyNY/dboRXOhJznjo9Nm7b8P8cZFR+c+0fCkL2rW25CD
+         +hZ5J0+Ex4V3ScR/Xe/US44TDdlNVBI/xdsG40Ua1AXHZ442jMGry74GV2BfJq0J5IYV
+         u7lelVrP8y0maLYqq75TrtqE6TS9ejRf7OJtZV90tVtzTBQB8gLHvCfhdBCn30nX09L2
+         ck5ghpRGKOeV6W36JYgZ3HGXIa/8ueDRuLasr3XHrrQINIR3LY+3Qk5dm5YcGu7+Oweg
+         Z/YZFzs6cf7vI3ciL7ceyYyXeS7nwrYpgRm5g9mSuxHdlnBWIXgAoNtf5095aMXhJIqs
+         nB3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685034745; x=1687626745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H8r4ODEq2+fLCDOwkU0I9uMZzQGsmacbN0I7clioZxg=;
+        b=WQf7YEDlMAGgmPJ+qSCKgwEyaUrrY70KYIt2rYdyNoiiQ4rn49ONydB/EwKTz5+gie
+         wFNz+aAOHnQ21UtE/adZ1AS6NaWL5UPeaxThGddrHmYbCB6kH+LNQ8bP8cvzyUjrauTW
+         VtM/0VHDpEHADZIVuMuaMR4TXHxH+HAP6YBJJKImlO3KGfEO2HXijtXR1nxSD2705V7n
+         bwk/BV/XcuCIKUTzV/G5YN/WUp3AHs7f5Xx7KK/9TES3nziDi5WTtyNQJY36IgNC2uiW
+         BVUJahDiJ4ST/5xaMmPm8BkKhaaxRWSDXDMb7J/o0GgQxOkGQDVM21Ac7Z1Kuaks3W3k
+         +6WQ==
+X-Gm-Message-State: AC+VfDwh1+yPHYpNrclWc1WQ9D5dKfnycYI4V1DqJwRTrPpi8RhHjFre
+        uim8c3rQLUGhO8m+z+h7QaMRa4WRpqPLbP3cjZE=
+X-Google-Smtp-Source: ACHHUZ7vTuIkb3AY2emRZbpynC4n929WANyhiAk9Z8pBe93X++8c36ksUYj3vhKz06//2+LG6F86/hC/ahr56+n93g0=
+X-Received: by 2002:a05:6871:505:b0:19a:1694:f03f with SMTP id
+ s5-20020a056871050500b0019a1694f03fmr1875889oal.47.1685034745319; Thu, 25 May
+ 2023 10:12:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LCh+4220dViEtGIh"
-Content-Disposition: inline
-In-Reply-To: <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-3-vishal.moola@gmail.com> <20230525085819.GW4967@kernel.org>
+In-Reply-To: <20230525085819.GW4967@kernel.org>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Thu, 25 May 2023 10:12:14 -0700
+Message-ID: <CAOzc2pw63URkr08q4_VP+3wbRDnFjyUE8zxQrvQtnJ5kbtGhFg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/34] s390: Use _pt_s390_gaddr for gmap address tracking
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,161 +79,23 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, May 25, 2023 at 1:58=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> On Mon, May 01, 2023 at 12:27:57PM -0700, Vishal Moola (Oracle) wrote:
+> > s390 uses page->index to keep track of page tables for the guest addres=
+s
+> > space. In an attempt to consolidate the usage of page fields in s390,
+> > replace _pt_pad_2 with _pt_s390_gaddr to replace page->index in gmap.
+> >
+> > This will help with the splitting of struct ptdesc from struct page, as
+> > well as allow s390 to use _pt_frag_refcount for fragmented page table
+> > tracking.
+> >
+> > Since page->_pt_s390_gaddr aliases with mapping, ensure its set to NULL
+> > before freeing the pages as well.
+>
+> Wouldn't it be easier to use _pt_pad_1 which is aliased with lru and that
+> does not seem to be used by page tables at all?
 
---LCh+4220dViEtGIh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Binbin,
-
-On Thu, May 25, 2023 at 08:55:23PM +0800, Binbin Zhou wrote:
-> Move Loongson RTC bindings from trivial-rtc.yaml into loongson,rtc.yaml.
->=20
-> Also, we will discard the use of wildcards in compatible (ls2x-rtc),
-> soc-based compatible is more accurate for hardware differences between
-> chips.
->=20
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../devicetree/bindings/rtc/loongson,rtc.yaml | 47 +++++++++++++++++++
->  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
->  2 files changed, 47 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/loongson,rtc.ya=
-ml
->=20
-> diff --git a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml b/Do=
-cumentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> new file mode 100644
-> index 000000000000..68e56829e390
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/loongson,rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson Real-Time Clock
-> +
-> +maintainers:
-> +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls1b-rtc
-> +      - loongson,ls1c-rtc
-> +      - loongson,ls7a-rtc
-> +      - loongson,ls2k0500-rtc
-> +      - loongson,ls2k1000-rtc
-> +      - loongson,ls2k2000-rtc
-
-|+static const struct of_device_id loongson_rtc_of_match[] =3D {
-|+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_config =
-},
-|+       { .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1x_rtc_config =
-},
-|+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_conf=
-ig },
-|+       { .compatible =3D "loongson,ls2k0500-rtc", .data =3D &generic_rtc_=
-config },
-|+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_rtc=
-_config },
-|+       { .compatible =3D "loongson,ls2k2000-rtc", .data =3D &generic_rtc_=
-config },
-|+       { /* sentinel */ }
-|+};
-
-This is a sign to me that your compatibles here are could do with some
-fallbacks. Both of the ls1 ones are compatible with each other & there
-are three that are generic.
-
-I would allow the following:
-"loongson,ls1b-rtc"
-"loongson,ls1c-rtc", "loongson,ls1b-rtc"
-"loongson,ls7a-rtc"
-"loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
-"loongson,ls2k2000-rtc", "loongson,ls7a-rtc"
-"loongson,ls2k1000-rtc"
-
-And then the driver only needs:
-|+static const struct of_device_id loongson_rtc_of_match[] =3D {
-|+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_config =
-},
-|+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_conf=
-ig },
-|+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_rtc=
-_config },
-|+       { /* sentinel */ }
-|+};
-
-And ~if~when you add support for more devices in the future that are
-compatible with the existing ones no code changes are required.
-
-To maintain compatibility with the existing devicetrees, should the old
-"loongson,ls2x-rtc" be kept in the driver?
-
-Thanks,
-Conor.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    rtc_dev: rtc@1fe27800 {
-> +      compatible =3D "loongson,ls2k0500-rtc";
-> +      reg =3D <0x1fe27800 0x100>;
-> +
-> +      interrupt-parent =3D <&liointc1>;
-> +      interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Doc=
-umentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> index a3603e638c37..9af77f21bb7f 100644
-> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> @@ -47,8 +47,6 @@ properties:
->        - isil,isl1218
->        # Intersil ISL12022 Real-time Clock
->        - isil,isl12022
-> -      # Loongson-2K Socs/LS7A bridge Real-time Clock
-> -      - loongson,ls2x-rtc
->        # Real Time Clock Module with I2C-Bus
->        - microcrystal,rv3029
->        # Real Time Clock
-> --=20
-> 2.39.1
->=20
-
---LCh+4220dViEtGIh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+VVQAKCRB4tDGHoIJi
-0hS5AP9eJ/cAM7cJFUO6MGAFwhGdgh9DuZeCmW2nKKm448BbgAD/V/jZQkjUX1PU
-fPaToEbOGD7NZIMxz9dYRjrrLufxYAc=
-=sUvs
------END PGP SIGNATURE-----
-
---LCh+4220dViEtGIh--
+I initially thought the same, but s390 page tables use lru.
