@@ -2,179 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FC2712057
-	for <lists+linux-mips@lfdr.de>; Fri, 26 May 2023 08:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EB27123F2
+	for <lists+linux-mips@lfdr.de>; Fri, 26 May 2023 11:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242274AbjEZGkN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 May 2023 02:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
+        id S236264AbjEZJqc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 May 2023 05:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240535AbjEZGkL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 May 2023 02:40:11 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4F610D7;
-        Thu, 25 May 2023 23:39:43 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so349122e87.2;
-        Thu, 25 May 2023 23:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685083182; x=1687675182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r8WxArmJoZC8xqHylJdU5AGk+XIbCJbogTeDfs0y2fc=;
-        b=kZlxofiucY8/Lfp0amC/THuRlzjVm4QfLqqW0v8XoWvGEazpIcKfv+6Y3Hkn28xoPU
-         QfGXd7HkgrTwQ7CNDgIIxnupjEz612uEqGABVzbMzhsb3UBA2jm0mgt2VHWoKOAuXmsN
-         VoFAX2icB6TKFkhF6SS3ZcDfsVrB95m4IDnEBZKQRCzUMgKrO3rab67HUeLHwPmnbOkk
-         eU6j760c569VapRpeY/+vjs6apRsTp67TJowAAq0MNV7LVC9PoFNzE9UR+PZOD/CuW3p
-         ChtTT4YO9tj+T6H6Cksspq3qsVrEGp/722KN9wUHFz63wiU2cDlaZyUWlHhxkheWZ0DC
-         eYfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685083182; x=1687675182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r8WxArmJoZC8xqHylJdU5AGk+XIbCJbogTeDfs0y2fc=;
-        b=YFA9TIX8E2PH6upJmkKC6t4+seOzjNNIbI3lSIpSBBAaCUiwktzzRYaUtgTbZFXTZt
-         sHYzTxwnJOd6dfysK4sx1/vHDDJR7WlZdmVUPkprG7FMUmbvSsEGmyYi3eHVoresdeMy
-         jlyJFUThzZdYnKXiKY80/iF/q94osJEDAkbWOuBt3Px8xIzWKXTX3eoaWDf8fWNg3dgP
-         f4/AR8toZDRDUcYxG1DyLHbL1VPQuVL64JB6mKQ/AB8zp8TGLFNVyLHX/EpbM5cAy3kD
-         ksMxS/oQ56Q4X+zL5e2mKbSy4Yh7hWSP3xLwgCu/LK666xrjMQTZXvcN5JCmkTWjd/u1
-         fXeQ==
-X-Gm-Message-State: AC+VfDx9Sz/Tzh85iQLtm0Ye2fhRMzhx2T0gmaPsTQjjTMFBacU2Mk0A
-        jZcBEOnIlHVpSi8FzGyd62Y=
-X-Google-Smtp-Source: ACHHUZ7suqP34B7zhh7d+MVDHYwTRa3XCDJTVoRDJ3idVkc5oKu76GbAuL5+UGbLruSq7U8YqZfIpQ==
-X-Received: by 2002:ac2:5deb:0:b0:4eb:1361:895c with SMTP id z11-20020ac25deb000000b004eb1361895cmr168335lfq.55.1685083181695;
-        Thu, 25 May 2023 23:39:41 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id a22-20020a19f816000000b004f3789c8bd5sm488291lff.132.2023.05.25.23.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 23:39:41 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:39:37 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v6 8/8] i2c: i2c-smbus: fwnode_irq_get_byname() return value
- fix
-Message-ID: <1c77cca2bb4a61133ebfc6833516981c98fb48b4.1685082026.git.mazziesaccount@gmail.com>
-References: <cover.1685082026.git.mazziesaccount@gmail.com>
+        with ESMTP id S230106AbjEZJqb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 May 2023 05:46:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A1DA4;
+        Fri, 26 May 2023 02:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685094389; x=1716630389;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wCWGZqjxmi5S7z4xOw6jSScIIJ8ZtfxFVm7rVDtgoOU=;
+  b=dW6nefangcRRlkdI941I+QPLc3cxI1xByis9KerUf40qvLYJzpb2Vam8
+   oPNKuF53o19epMDay/PKLZ4zXyAQoW5RSriz+FfsHhBWMEBP6OKCIxbSG
+   mkkiM7zIBhj/UKgrxWA6KAJs2Uf5vqQId2Jx3XlSEkrTEEPmYyGz4MvtB
+   iM8eg1rYhxsj+n3hdvBlpbZu+Strc6CVlgvD1VbFhVGZ3DVbB4bvQufT1
+   uhRoV2OvjscSiEY3Qvb3lfsVYL30NKHx8RjIyFlAdi2ziLyn9XntPJZKq
+   TtBGesvic28jS66yldcWJGP8LLMPPGh1BHF+l1/fwf3nONTSUjA718F1x
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="382409623"
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="382409623"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 02:46:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="708337372"
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="708337372"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 26 May 2023 02:46:25 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2U1g-000JEN-32;
+        Fri, 26 May 2023 09:46:24 +0000
+Date:   Fri, 26 May 2023 17:45:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-arch@vger.kernel.org, arnd@arndb.de,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Baoquan He <bhe@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4] mips: add <asm-generic/io.h> including
+Message-ID: <202305261736.cBisGOAz-lkp@intel.com>
+References: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H4EfgDTIilQ8R8lz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1685082026.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Jiaxun,
 
---H4EfgDTIilQ8R8lz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-The fwnode_irq_get_byname() was changed to not return 0 upon failure so
-return value check can be adjusted to reflect the change.
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.4-rc3 next-20230525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/mips-add-asm-generic-io-h-including/20230520-035318
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20230519195135.79600-1-jiaxun.yang%40flygoat.com
+patch subject: [PATCH v4] mips: add <asm-generic/io.h> including
+config: mips-randconfig-r015-20230525 (https://download.01.org/0day-ci/archive/20230526/202305261736.cBisGOAz-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/4f10a6993ab8060829908b87cdeea41f7eae38e7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jiaxun-Yang/mips-add-asm-generic-io-h-including/20230520-035318
+        git checkout 4f10a6993ab8060829908b87cdeea41f7eae38e7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/mmc/
 
----
-Revision history:
-v5 =3D>:
- - No changes
-v4 =3D> v5:
- - Added back after this was accidentally dropped at v4.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305261736.cBisGOAz-lkp@intel.com/
 
-Depends on the mentioned return value change which is in patch 1/2. The
-return value change does also cause a functional change here. Eg. when
-IRQ mapping fails, the fwnode_irq_get_byname() no longer returns zero.
-This will cause also the probe here to return nonzero failure. I guess
-this is desired behaviour - but I would appreciate any confirmation.
+All warnings (new ones prefixed by >>):
 
-Please, see also previous discussion here:
-https://lore.kernel.org/all/fbd52f5f5253b382b8d7b3e8046134de29f965b8.166671=
-0197.git.mazziesaccount@gmail.com/
-
-Another suggestion has been to drop the check altogether. I am slightly
-reluctant on doing that unless it gets confirmed that is the "right
-thing to do".
----
- drivers/i2c/i2c-smbus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 138c3f5e0093..893fe7cd3e41 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -129,7 +129,7 @@ static int smbalert_probe(struct i2c_client *ara)
- 	} else {
- 		irq =3D fwnode_irq_get_byname(dev_fwnode(adapter->dev.parent),
- 					    "smbus_alert");
--		if (irq <=3D 0)
-+		if (irq < 0)
- 			return irq;
- 	}
-=20
---=20
-2.40.1
+   In file included from drivers/mmc/host/dw_mmc.c:41:
+>> drivers/mmc/host/dw_mmc.h:506:9: warning: '__raw_writeq' macro redefined [-Wmacro-redefined]
+   #define __raw_writeq(__value, __reg) \
+           ^
+   arch/mips/include/asm/io.h:566:9: note: previous definition is here
+   #define __raw_writeq __raw_writeq
+           ^
+   In file included from drivers/mmc/host/dw_mmc.c:41:
+>> drivers/mmc/host/dw_mmc.h:508:9: warning: '__raw_readq' macro redefined [-Wmacro-redefined]
+   #define __raw_readq(__reg) (*(volatile u64 __force *)(__reg))
+           ^
+   arch/mips/include/asm/io.h:562:9: note: previous definition is here
+   #define __raw_readq __raw_readq
+           ^
+   2 warnings generated.
 
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+vim +/__raw_writeq +506 drivers/mmc/host/dw_mmc.h
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
+76184ac17edf3c Ben Dooks   2015-03-25  473  
+f95f3850f7a9e1 Will Newton 2011-01-02  474  /* Register access macros */
+f95f3850f7a9e1 Will Newton 2011-01-02  475  #define mci_readl(dev, reg)			\
+a2f17680f42878 Ben Dooks   2015-03-25  476  	readl_relaxed((dev)->regs + SDMMC_##reg)
+f95f3850f7a9e1 Will Newton 2011-01-02  477  #define mci_writel(dev, reg, value)			\
+a2f17680f42878 Ben Dooks   2015-03-25  478  	writel_relaxed((value), (dev)->regs + SDMMC_##reg)
+f95f3850f7a9e1 Will Newton 2011-01-02  479  
+f95f3850f7a9e1 Will Newton 2011-01-02  480  /* 16-bit FIFO access macros */
+f95f3850f7a9e1 Will Newton 2011-01-02  481  #define mci_readw(dev, reg)			\
+a2f17680f42878 Ben Dooks   2015-03-25  482  	readw_relaxed((dev)->regs + SDMMC_##reg)
+f95f3850f7a9e1 Will Newton 2011-01-02  483  #define mci_writew(dev, reg, value)			\
+a2f17680f42878 Ben Dooks   2015-03-25  484  	writew_relaxed((value), (dev)->regs + SDMMC_##reg)
+f95f3850f7a9e1 Will Newton 2011-01-02  485  
+f95f3850f7a9e1 Will Newton 2011-01-02  486  /* 64-bit FIFO access macros */
+f95f3850f7a9e1 Will Newton 2011-01-02  487  #ifdef readq
+f95f3850f7a9e1 Will Newton 2011-01-02  488  #define mci_readq(dev, reg)			\
+a2f17680f42878 Ben Dooks   2015-03-25  489  	readq_relaxed((dev)->regs + SDMMC_##reg)
+f95f3850f7a9e1 Will Newton 2011-01-02  490  #define mci_writeq(dev, reg, value)			\
+a2f17680f42878 Ben Dooks   2015-03-25  491  	writeq_relaxed((value), (dev)->regs + SDMMC_##reg)
+f95f3850f7a9e1 Will Newton 2011-01-02  492  #else
+f95f3850f7a9e1 Will Newton 2011-01-02  493  /*
+f95f3850f7a9e1 Will Newton 2011-01-02  494   * Dummy readq implementation for architectures that don't define it.
+f95f3850f7a9e1 Will Newton 2011-01-02  495   *
+f95f3850f7a9e1 Will Newton 2011-01-02  496   * We would assume that none of these architectures would configure
+f95f3850f7a9e1 Will Newton 2011-01-02  497   * the IP block with a 64bit FIFO width, so this code will never be
+f95f3850f7a9e1 Will Newton 2011-01-02  498   * executed on those machines. Defining these macros here keeps the
+f95f3850f7a9e1 Will Newton 2011-01-02  499   * rest of the code free from ifdefs.
+f95f3850f7a9e1 Will Newton 2011-01-02  500   */
+f95f3850f7a9e1 Will Newton 2011-01-02  501  #define mci_readq(dev, reg)			\
+892b1e312b1791 James Hogan 2011-06-24  502  	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg))
+f95f3850f7a9e1 Will Newton 2011-01-02  503  #define mci_writeq(dev, reg, value)			\
+892b1e312b1791 James Hogan 2011-06-24  504  	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg) = (value))
+76184ac17edf3c Ben Dooks   2015-03-25  505  
+76184ac17edf3c Ben Dooks   2015-03-25 @506  #define __raw_writeq(__value, __reg) \
+76184ac17edf3c Ben Dooks   2015-03-25  507  	(*(volatile u64 __force *)(__reg) = (__value))
+76184ac17edf3c Ben Dooks   2015-03-25 @508  #define __raw_readq(__reg) (*(volatile u64 __force *)(__reg))
+f95f3850f7a9e1 Will Newton 2011-01-02  509  #endif
+f95f3850f7a9e1 Will Newton 2011-01-02  510  
 
---H4EfgDTIilQ8R8lz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwVCkACgkQeFA3/03a
-ocXmFggA0lKFBzYI45TejrFqGuuYHu+8Jvkb5ZtRGtbzJr/G+YTwI3+Lr7UsBYWK
-ExhoeK/JVn9hUHfktDxlb3ibqhvv0w8c/YIqlYpPjie1RoOnaibtvLSDdeZWImpx
-J5P0HgPCcNmYzf7HB+EkBPbO3A97rjoEPRqQrDIKlbvXKeVJ9UOe5aozoTJ0Zbks
-vS/xjtofsQFeG4HY2AQhdJxzeK6rN6icW268kNmOH3HVwmWLxhM95yGReoA5AIrR
-eB9LBNORgHJgWdyGMuXS8DKHmLE+IRAYS0z3yPhojk9JHTuNfLS1AkycuMOfGKZM
-nbpr1az2DNhdzKL/dPApFJ5Ee7Rxsg==
-=nb3R
------END PGP SIGNATURE-----
-
---H4EfgDTIilQ8R8lz--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
