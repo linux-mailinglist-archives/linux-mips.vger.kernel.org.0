@@ -2,256 +2,248 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF19711CC7
-	for <lists+linux-mips@lfdr.de>; Fri, 26 May 2023 03:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC9971200A
+	for <lists+linux-mips@lfdr.de>; Fri, 26 May 2023 08:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjEZBhR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 May 2023 21:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S241794AbjEZGfG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 May 2023 02:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjEZBhQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 May 2023 21:37:16 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36448E2;
-        Thu, 25 May 2023 18:37:15 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bacf7060678so621811276.0;
-        Thu, 25 May 2023 18:37:15 -0700 (PDT)
+        with ESMTP id S229847AbjEZGfF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 May 2023 02:35:05 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789809C;
+        Thu, 25 May 2023 23:35:02 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af225e5b4bso3554111fa.3;
+        Thu, 25 May 2023 23:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685065034; x=1687657034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dbE/5+8uZmjZcqHEzUiRIHHFUgDq75qRlEVbM3X+PbU=;
-        b=OMPhxRT7v+M/V3KF/2BCyscCvSI4n0n21xH7ySQPiGUecMGuaYm9j57OrUd9D2gr53
-         ohx+8wQXsRw4txaIhHFa2EkAX4oGi9B+xM6oKSWsbHBcrKwcYAADmFvxCq1Ttb6w6gyx
-         5f/DFe7aNPc6bnmtSkRnoun4d71yG08JlNY/QV5HoXBLtHZtitkYFZrgqrUGyKUaH+Q+
-         jS26TEk7rcnX0hOAB6QikJRghbKDS3nuw1wjc57mz+PUDMi57La2L2qAV6NPg2v3Yry7
-         jEM21YBoCGiQ/0e1707PmH7DYIv7zN6atkT2KMnQEWaS+2BW+ZCNSbl6eQ7wIshzelgN
-         8M0w==
+        d=gmail.com; s=20221208; t=1685082901; x=1687674901;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WcJOZerpXi8ObNNdTOUnt4O1FT4NXUTLaczmvwBX9kY=;
+        b=HVYhbWH5FxmTZOP2RMUrEJwk3Y0kEqphdgwS15BCu42Lky/My2LAi4wwia4SLV8YcJ
+         mdm81Bz2O0IXaDRhXxvnveeisdQWSHMWIX2pegSlrMwAZj1IpscNMYGbEPqVXdZZ/fXL
+         8rdyrYgZN7YL3+N1o8IgtpYUapJ0HQB0WJRmODtuK4x3Il7MJffIj/8VyVHNzPbLebqS
+         CoIECfRgwC+AB6cAjht7/Be+xBIUDU0WWvIVt6z2xCJvQpc0JFlES13g7UH0jBOvc+KT
+         7ckzmE2I90dOYJe3tJ5lCxUlol1anJgnsohxJXS17JLGgWg0xNhUCeNcm4hXx1PbLRSQ
+         d28Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685065034; x=1687657034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dbE/5+8uZmjZcqHEzUiRIHHFUgDq75qRlEVbM3X+PbU=;
-        b=WgF9CO2pSMzVIjG/vhZxVuwuFNtGd254qhkL/0hwQUUe68+rycgdpfUFhG76FqwtEh
-         xbLhEza4DBmlw1cF8UCmnAq9U3Ki52bL9lyOycOYK6pqxmWEkALDirsSGzDOO/lAdnPA
-         ih2rlLL+kcIv/gBW3uQLBASWd59KN/uOB5625l3D0qCdkEkx+oZsUIwPfEIy5c+etUer
-         Dm5lOPqqN17C66cP33/bSUxDWDK8Hr4vHdQNjW7hv/dv9IONTN39dun57TlmmtGHZJcS
-         sPzYymLGGr7ZgS+ZpDgxGWqd3H8P9M5u+hXxkROqlU+FdUMus/ng6MkS0LIU+DKfAr0U
-         7pLg==
-X-Gm-Message-State: AC+VfDzEe6RTxSHmEhg2zkWCN5aFRKHiEy+1mvH1jCcacyG8iNwc4VtQ
-        5uCr8cXrbmDN4saPMS7YqmEgBqAPtY07404gJ9I=
-X-Google-Smtp-Source: ACHHUZ4GaSi0jiXxwYm5nsZ10Yb5XxkqmCcja7+35DyFqffiFSKnDGHSokuaD3vnoB0VdbIGs09thaXewJANtC6/Wig=
-X-Received: by 2002:a25:aaae:0:b0:ba7:8562:33b8 with SMTP id
- t43-20020a25aaae000000b00ba7856233b8mr184224ybi.15.1685065034263; Thu, 25 May
- 2023 18:37:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685082901; x=1687674901;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WcJOZerpXi8ObNNdTOUnt4O1FT4NXUTLaczmvwBX9kY=;
+        b=e6MeaPydNNk6WrKAsT17x1tm4qCcVutjg7lKIjJDywBZV8RyvPm9GmYJGkh4VYGmwm
+         rJHpix17v+li4IoB2ZyDYflnGQ0wz+E8ZcVyEz1wfhh4HUht6hEEA/L2U4niGCOw+n2/
+         sSbJt7uNaVOJF3tL7WIPTCurH3P0h/zndZTPivAOOjpwGjzj/Vjuard2rrTTaMdB94EL
+         utKlsTunK9DLrAVlH9Iq0mxsCzlH0Cg8zrfi3WAQNxXK6M83S67S1sUYQv1XusVCrNcB
+         9eRXI+HJw+kWWSFuXlAMmJd4nDEf3+tJliH22dGMtMmw69fIlzX0eXwsnWeoEEGjf2s7
+         WM6A==
+X-Gm-Message-State: AC+VfDxbTigxdnoI7cFeJBdrlkZ+LNg2XX89q4Mf+eeMj9m8GWZc1mAK
+        NYaNmGef20Eg6JfpTJlnICEoNB/5GpY=
+X-Google-Smtp-Source: ACHHUZ4DJBxQQEa/1VeMXLnR0qOMEbRktLB7HCgdxnCUjBh/7NEMEMVin+iGP9WqpmCOXNgp3rHlCg==
+X-Received: by 2002:a2e:8e88:0:b0:2ac:7a77:1d4e with SMTP id z8-20020a2e8e88000000b002ac7a771d4emr387558ljk.24.1685082900374;
+        Thu, 25 May 2023 23:35:00 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id f19-20020a2ea0d3000000b002a8bc2fb3cesm562896ljm.115.2023.05.25.23.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 23:34:59 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:34:48 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v6 0/8] fix fwnode_irq_get[_byname()] returnvalue
+Message-ID: <cover.1685082026.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-References: <cover.1684983279.git.zhoubinbin@loongson.cn> <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
- <20230525-custody-oversleep-f778eddf981c@spud>
-In-Reply-To: <20230525-custody-oversleep-f778eddf981c@spud>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Fri, 26 May 2023 09:37:02 +0800
-Message-ID: <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
-Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the trivial RTCs
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        zhao zhang <zhzhl555@gmail.com>,
-        Yang Ling <gnaygnil@gmail.com>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BIdqUJjNRoUB+WL6"
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 26, 2023 at 1:05=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> Hey Binbin,
->
-> On Thu, May 25, 2023 at 08:55:23PM +0800, Binbin Zhou wrote:
-> > Move Loongson RTC bindings from trivial-rtc.yaml into loongson,rtc.yaml=
-.
-> >
-> > Also, we will discard the use of wildcards in compatible (ls2x-rtc),
-> > soc-based compatible is more accurate for hardware differences between
-> > chips.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  .../devicetree/bindings/rtc/loongson,rtc.yaml | 47 +++++++++++++++++++
-> >  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
-> >  2 files changed, 47 insertions(+), 2 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/loongson,rtc.=
-yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml b/=
-Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > new file mode 100644
-> > index 000000000000..68e56829e390
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > @@ -0,0 +1,49 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/loongson,rtc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson Real-Time Clock
-> > +
-> > +maintainers:
-> > +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> > +
-> > +allOf:
-> > +  - $ref: rtc.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - loongson,ls1b-rtc
-> > +      - loongson,ls1c-rtc
-> > +      - loongson,ls7a-rtc
-> > +      - loongson,ls2k0500-rtc
-> > +      - loongson,ls2k1000-rtc
-> > +      - loongson,ls2k2000-rtc
->
-> |+static const struct of_device_id loongson_rtc_of_match[] =3D {
-> |+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_confi=
-g },
-> |+       { .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1x_rtc_confi=
-g },
-> |+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_co=
-nfig },
-> |+       { .compatible =3D "loongson,ls2k0500-rtc", .data =3D &generic_rt=
-c_config },
-> |+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_r=
-tc_config },
-> |+       { .compatible =3D "loongson,ls2k2000-rtc", .data =3D &generic_rt=
-c_config },
-> |+       { /* sentinel */ }
-> |+};
->
-> This is a sign to me that your compatibles here are could do with some
-> fallbacks. Both of the ls1 ones are compatible with each other & there
-> are three that are generic.
->
-> I would allow the following:
-> "loongson,ls1b-rtc"
-> "loongson,ls1c-rtc", "loongson,ls1b-rtc"
-> "loongson,ls7a-rtc"
-> "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
-> "loongson,ls2k2000-rtc", "loongson,ls7a-rtc"
-> "loongson,ls2k1000-rtc"
->
-> And then the driver only needs:
-> |+static const struct of_device_id loongson_rtc_of_match[] =3D {
-> |+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_confi=
-g },
-> |+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_co=
-nfig },
-> |+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_r=
-tc_config },
-> |+       { /* sentinel */ }
-> |+};
->
-> And ~if~when you add support for more devices in the future that are
-> compatible with the existing ones no code changes are required.
 
-Hi Conor:
+--BIdqUJjNRoUB+WL6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your reply.
+The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+zero if mapping the IRQ fails. This contradicts the
+fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+errno on error is unepected and can easily lead to problems
+like:
 
-Yes, this is looking much cleaner. But it can't show every chip that
-supports that driver.
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret < 0)
+		return ret;
+=2E..
+}
 
-As we know, Loongson is a family of chips:
-ls1b/ls1c represent the Loongson-1 family of CPU chips;
-ls7a represents the Loongson LS7A bridge chip;
-ls2k0500/ls2k1000/ls2k2000 represent the Loongson-2 family of CPU chips.
+or
 
-Based on my previous conversations with Krzysztof, it seems that
-soc-based to order compatible is more popular, so I have listed all
-the chips that support that RTC driver.
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret <=3D 0)
+		return ret;
+=2E..
+}
 
->
-> To maintain compatibility with the existing devicetrees, should the old
-> "loongson,ls2x-rtc" be kept in the driver?
+which are both likely to be wrong. First treats zero as successful call and
+misses the IRQ mapping failure. Second returns zero from probe even though
+it detects the IRQ mapping failure correvtly.
 
-No, It seems that wildcards in compatible are not allowed."
-loongson,ls2x-rtc" itself was part of this patch series at one time,
-but apparently it is not the right way to describe these chips.
+Here we change the fwnode_irq_get() and the fwnode_irq_get_byname() to
+always return a negative errno upon failure.
 
-Here is Krzysztof's previous reply:
-https://lore.kernel.org/linux-rtc/05ebf834-2220-d1e6-e07a-529b8f9cb100@lina=
-ro.org/
+I have audited following callers (v6.4-rc2):
 
-Thanks.
-Binbin
+fwnode_irq_get_byname():
+drivers/i2c/i2c-smbus.c
+drivers/iio/accel/adxl355_core.c
+drivers/iio/accel/kionix-kx022a.c
+drivers/iio/adc/ad4130.c
+drivers/iio/adc/max11410.c
+drivers/iio/addac/ad74115.c
+drivers/iio/gyro/fxas21002c_core.c
+drivers/iio/imu/adis16480.c
+drivers/iio/imu/bmi160/bmi160_core.c
+drivers/iio/imu/bmi160/bmi160_core.c
 
->
-> Thanks,
-> Conor.
->
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +    rtc_dev: rtc@1fe27800 {
-> > +      compatible =3D "loongson,ls2k0500-rtc";
-> > +      reg =3D <0x1fe27800 0x100>;
-> > +
-> > +      interrupt-parent =3D <&liointc1>;
-> > +      interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
-> > +    };
-> > +
-> > +...
-> > diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/D=
-ocumentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> > index a3603e638c37..9af77f21bb7f 100644
-> > --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> > @@ -47,8 +47,6 @@ properties:
-> >        - isil,isl1218
-> >        # Intersil ISL12022 Real-time Clock
-> >        - isil,isl12022
-> > -      # Loongson-2K Socs/LS7A bridge Real-time Clock
-> > -      - loongson,ls2x-rtc
-> >        # Real Time Clock Module with I2C-Bus
-> >        - microcrystal,rv3029
-> >        # Real Time Clock
-> > --
-> > 2.39.1
-> >
+fwnode_irq_get():
+drivers/gpio/gpio-dwapb.c
+drivers/iio/chemical/scd30_serial.c
+drivers/iio/proximity/mb1232.c
+drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+drivers/net/mdio/fwnode_mdio.c
+drivers/pinctrl/pinctrl-ingenic.c
+drivers/pinctrl/pinctrl-microchip-sgpio.c
+drivers/pinctrl/pinctrl-pistachio.c
+
+and it seems to me these calls will be Ok after the change. The
+i2c-smbus.c and kionix-kx022a.c will gain a functional change (bugfix?) as
+after this patch the probe will return -EINVAL should the IRQ mapping fail.
+The series will also adjust the return value check for zero to be omitted.
+
+NOTES:
+
+Changes are compile-tested only.
+
+drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+will also gain a functional change. The pinctrl-wpcm450.c change is easy
+to see - after this series the device-tree mapping failures will be
+handled as any other errors - probe will be aborted with -EINVAL. Other
+feasible option could be treating other errors in IRQ getting same way
+as the DT mapping failures - just silently skip the IRQ. Please see
+comment in the respective patch.
+
+drivers/iio/cdc/ad7150.c
+Changed logic so that all the IRQ getting errors jump to the same
+'no-IRQ' branch as the DT mapping error did.
+
+Revision history:
+v5 =3D> v6:
+ - iio: cdc: ad7150 - never abort probe if IRQ getting fails
+v4 =3D> v5:
+ - Fix subject lines for mvpp2 and wpcm450
+ - drop unnecessary irqno assignment from mb1232
+ - add back the drivers/i2c/i2c-smbus.c change which was accidentally
+   dropped during v3 =3D> v4 work
+v3 =3D> v4:
+ - Change also the fwnode_irq_get() as was suggested by Jonathan.
+Changelog v2 =3D> v3:
+ - rebase/resend/add kx022a fix.
+Changelog v1 =3D> v2:
+ - minor styling
+
+---
+
+Matti Vaittinen (8):
+  drivers: fwnode: fix fwnode_irq_get[_byname]()
+  iio: mb1232: relax return value check for IRQ get
+  net-next: mvpp2: relax return value check for IRQ get
+  pinctrl: wpcm450: relax return value check for IRQ get
+  pinctrl: ingenic: relax return value check for IRQ get
+  pinctrl: pistachio: relax return value check for IRQ get
+  iio: cdc: ad7150: relax return value check for IRQ get
+  i2c: i2c-smbus: fwnode_irq_get_byname() return value fix
+
+ drivers/base/property.c                         | 12 +++++++++---
+ drivers/i2c/i2c-smbus.c                         |  2 +-
+ drivers/iio/cdc/ad7150.c                        | 10 +++++-----
+ drivers/iio/proximity/mb1232.c                  |  7 ++-----
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |  4 ++--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c       |  2 --
+ drivers/pinctrl/pinctrl-ingenic.c               |  2 --
+ drivers/pinctrl/pinctrl-pistachio.c             |  6 ------
+ 8 files changed, 19 insertions(+), 26 deletions(-)
+
+
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+--=20
+2.40.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--BIdqUJjNRoUB+WL6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwUwQACgkQeFA3/03a
+ocXAagf/SATcFgxl0jKSBaNOTF/+28Pno+TjHp9Sdo/8Ymwrg9L9edhW7FpovyWA
+5ErMPmzMs7zSKg6b9ThVlNqVX0ApH/9sVsrZZ5+xh3TapswoYLPPngUxSV2JC6cF
++Dq5A7qKkcHV5nQVQgW3tI/e7E0xybH3LNit2KaF3xgVFjfrJZ00Wx2R+j0N0JrG
+WjRQ12FUGQ7fa5W52qG9/P3aFDC1L9kQL0peEAhA6PLuIdiX86tMkp0eh7n2Ni90
+O28ZvVRC1lL+xeTxhW3QvtrxiT4EgxfbGiDgHGJ+nAJdGblViNXYFbqJXGcI+n70
+R9znRQPe0WUgM2XzsU9mp/1w9qdxFg==
+=GMUh
+-----END PGP SIGNATURE-----
+
+--BIdqUJjNRoUB+WL6--
