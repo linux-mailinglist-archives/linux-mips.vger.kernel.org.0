@@ -2,85 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB1171350F
-	for <lists+linux-mips@lfdr.de>; Sat, 27 May 2023 15:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DE3713564
+	for <lists+linux-mips@lfdr.de>; Sat, 27 May 2023 17:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjE0NkK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 27 May 2023 09:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S232864AbjE0PJl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 May 2023 11:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjE0NkK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 May 2023 09:40:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471EEDE;
-        Sat, 27 May 2023 06:40:08 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685194803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhphG4bdKEhlSrLILx8LQHUnhtq5h2kh7PjylDw7WHk=;
-        b=c7tPQEf1tDSaswC+udb6n2rEFtodyCz+0hqKKRaloSAWHscsivpNExWbDw/lNzJYugWAC1
-        Jm29ndY/DVZdilpSdABXMmg7zcNPlf2ipCdzoFFpOsDlGdRTaa/cDp4VQIgvIIuUN9JR/Z
-        4wJQUUIDzQZJXqPtRi0VknCvN575jHF4GBgn5HyL1/e+ips0AysDA2DuVxTFjRXavrRMCR
-        ErEe1ocMuKOicQKxwfjXlIfBvhnKCrT8khka2tjtWb5cZaLE3ZEkUSF51OwhE4SNq1hAJg
-        OsmAHNMb9ZxT3Z/Q3tFuCRyz5jSjP+VvrhVlox0l3Z4ceASC3h0ieO88IF9MuA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685194803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhphG4bdKEhlSrLILx8LQHUnhtq5h2kh7PjylDw7WHk=;
-        b=IAhogYOgiDrfm9G9lFn3jmOMGU4kEEQCTcf6iURfWSFeMNN2CJaahVSnX2MzxuXmnO+mLX
-        zbrDN0kZP7Q4fvCA==
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-In-Reply-To: <87y1lbl7r6.ffs@tglx>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
-Date:   Sat, 27 May 2023 15:40:02 +0200
-Message-ID: <87sfbhlwp9.ffs@tglx>
+        with ESMTP id S232759AbjE0PJk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 27 May 2023 11:09:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A55E3;
+        Sat, 27 May 2023 08:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=u50hcZSLxjXk+ZnHObIQ29gSZuYnejTLeMWOgyxvfyQ=; b=kvDbU0q2z5jUTh3d5nQNpnIto9
+        5xrW767Q1PCPoDvq7cJx36GAZEG2mizda3DrQtiBOGyiytCq2OMTOEXq8TWh2LZ+xzaLqiKD9V9Eb
+        EJX8E77j208rlnFcLKHX2rZvcHGssHh261tJ08qNlv2+zYnLCkftBGtSrrF/p39TJSIPJr0ITg4/l
+        1g7Vh1u4qG6tN9I49LGc4DG6JUJ0KFWAYdrSkVV8XgiRrI/avMqTujLKkfiEnrTSZ/y+N3Nd9R9D8
+        /OJnFeU9SGlsUclnIO5MUMB9v4WCZl1IYBNx4a3hMv/KnLwfYzmktawxgr1m6qrMuAbL8hw04B8Os
+        8rYGwubA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q2vXv-003tpc-6G; Sat, 27 May 2023 15:09:31 +0000
+Date:   Sat, 27 May 2023 16:09:31 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Vishal Moola <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 05/34] mm: add utility functions for ptdesc
+Message-ID: <ZHIdK+170XoK2jVe@casper.infradead.org>
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-6-vishal.moola@gmail.com>
+ <20230525090956.GX4967@kernel.org>
+ <CAOzc2pxSH6GhBnAoSOjvYJk2VdMDFZi3H_1qGC5Cdyp3j4AzPQ@mail.gmail.com>
+ <20230525202537.GA4967@kernel.org>
+ <CAOzc2pxD21mxisy-M5b_SDUv0MYwNHqaVDJnJpARuDG_HjCbOg@mail.gmail.com>
+ <20230527104144.GH4967@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527104144.GH4967@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,78 +62,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 26 2023 at 12:14, Thomas Gleixner wrote:
-> On Wed, May 24 2023 at 23:48, Kirill A. Shutemov wrote:
->> This patch causes boot regression on TDX guest. The guest crashes on SMP
->> bring up.
+On Sat, May 27, 2023 at 01:41:44PM +0300, Mike Rapoport wrote:
+> Sorry if I wasn't clear, by "page table page" I meant the page (or memory
+> for that matter) for actual page table rather than struct page describing
+> that memory.
+> 
+> So what we allocate here is the actual memory for the page tables and not
+> the memory for the metadata. That's why I think the name ptdesc_alloc is
+> confusing.
 
-The below should fix that. Sigh...
-
-Thanks,
-
-        tglx
-----
-Subject: x86/smp: Initialize cpu_primary_thread_mask late
-From: Thomas Gleixner <tglx@linutronix.de>
-Date: Fri, 26 May 2023 21:38:47 +0200
-
-Marking primary threads in the cpumask during early boot is only correct in
-certain configurations, but broken e.g. for the legacy hyperthreading
-detection.
-
-This is due to the complete mess in the CPUID evaluation code which
-initializes smp_num_siblings only half during early init and fixes it up
-later when identify_boot_cpu() is invoked.
-
-So using smp_num_siblings before identify_boot_cpu() leads to incorrect
-results.
-
-Fixing the early CPU init code to provide the proper data is a larger scale
-surgery as the code has dependencies on data structures which are not
-initialized during early boot.
-
-Move the initialization of cpu_primary_thread_mask wich depends on
-smp_num_siblings being correct to an early initcall so that it is set up
-correctly before SMP bringup.
-
-Fixes: f54d4434c281 ("x86/apic: Provide cpu_primary_thread mask")
-Reported-by: "Kirill A. Shutemov" <kirill@shutemov.name>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/kernel/apic/apic.c |   18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -2398,6 +2398,21 @@ static void cpu_mark_primary_thread(unsi
- 	if (smp_num_siblings == 1 || !(apicid & mask))
- 		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
- }
-+
-+/*
-+ * Due to the utter mess of CPUID evaluation smp_num_siblings is not valid
-+ * during early boot. Initialize the primary thread mask before SMP
-+ * bringup.
-+ */
-+static int __init smp_init_primary_thread_mask(void)
-+{
-+	unsigned int cpu;
-+
-+	for (cpu = 0; cpu < nr_logical_cpuids; cpu++)
-+		cpu_mark_primary_thread(cpu, cpuid_to_apicid[cpu]);
-+	return 0;
-+}
-+early_initcall(smp_init_primary_thread_mask);
- #else
- static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
- #endif
-@@ -2544,7 +2559,8 @@ int generic_processor_info(int apicid, i
- 	set_cpu_present(cpu, true);
- 	num_processors++;
- 
--	cpu_mark_primary_thread(cpu, apicid);
-+	if (system_state >= SYSTEM_BOOTING)
-+		cpu_mark_primary_thread(cpu, apicid);
- 
- 	return cpu;
- }
+But that's going to be the common pattern in the Glorious Future.
+You allocate a folio and that includes both the folio memory descriptor
+and the 2^n pages of memory described by that folio.  Similarly for all
+the other memory descriptors.
