@@ -2,68 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED20713B06
-	for <lists+linux-mips@lfdr.de>; Sun, 28 May 2023 19:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0149A713B20
+	for <lists+linux-mips@lfdr.de>; Sun, 28 May 2023 19:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjE1RJb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 May 2023 13:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S229520AbjE1RdT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 May 2023 13:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE1RJ3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 May 2023 13:09:29 -0400
+        with ESMTP id S229448AbjE1RdT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 May 2023 13:33:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B620AD;
-        Sun, 28 May 2023 10:09:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AC1BD;
+        Sun, 28 May 2023 10:33:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3830760C43;
-        Sun, 28 May 2023 17:09:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E930C433D2;
-        Sun, 28 May 2023 17:09:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70B6160DFC;
+        Sun, 28 May 2023 17:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33080C433EF;
+        Sun, 28 May 2023 17:33:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685293767;
-        bh=2HpDsz16RbryZeSwk70hXDJ4gla3IAE1NdBPN6l1aP8=;
+        s=k20201202; t=1685295196;
+        bh=qzJfjzEEjZiZQ5UutuKr+0+hvV5RgYLuzJPm3/PtkBE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Gr7QOQt2l6vjbf3VM5hswjKooNeJfYxzibw4EBvFMzr6n1/GoC6PpJxvrJ/OSbiyc
-         +mKF1bnLp+ges7WvYmqyL7W2abCU90qn/i9l0fP4xb7qKF6wfRSh7saGoj6JTORp9v
-         5KsEMMULspxFSEltwBYRnArSLyi6T3YXQbVvAbU+6E0Cn1O3mZhj6AOa+Re9io82A0
-         bAL+LUT9h9y7xq1qEBrVNKXVTFEKyN/Ex25o8am3ApyPZLEcER9wLiabH1WIqw3ztq
-         cftIDCy+iZtZOBNoONnZOKsvPH2uQUDTw19nFruZATKPF/sytCKpatxgMXRSmXqHVk
-         gIqRX+UivGbDQ==
-Date:   Sun, 28 May 2023 18:25:43 +0100
+        b=UXtD9ZFB/1BoG67nX257ClGZvhetKEoCIktc3yq7ycXgBpJJi1/C9aoLCes39jG8R
+         fPgYnl0X49kJEyTZ10gYxvKqMhFNsBii/GEl6qKVrEgMy82whBIvqSzCjiiUJQ4cmj
+         eiIQbMT4PyKROjCcoMrchGNdGPErG6DwXzSN1hvkf/Vm9uslvb+8O9YwygTqazfXgi
+         exaFiXwTEP25yWd+LHL+VSRN8TI8gWL5fan9NHmhVRO5EpPWp11kVsOA8SxII55xwC
+         /L2G/NN7bJC7YRGZHQ4T3CO7wPrYpVstgUeCgkAPnQRWIiaDC27VGU0+sj6aF7opRN
+         i5poptqSBLXJg==
+Date:   Sun, 28 May 2023 18:49:35 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v6 1/8] drivers: fwnode: fix fwnode_irq_get[_byname]()
-Message-ID: <20230528182543.656da0d1@jic23-huawei>
-In-Reply-To: <f457a106929e37638a87775d8d72adaff0f85cb6.1685082026.git.mazziesaccount@gmail.com>
-References: <cover.1685082026.git.mazziesaccount@gmail.com>
-        <f457a106929e37638a87775d8d72adaff0f85cb6.1685082026.git.mazziesaccount@gmail.com>
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] iio/adc: ingenic: Fix channel offsets in buffer
+Message-ID: <20230528184935.15dd91fa@jic23-huawei>
+In-Reply-To: <20230521225901.388455-2-contact@artur-rojek.eu>
+References: <20230521225901.388455-1-contact@artur-rojek.eu>
+        <20230521225901.388455-2-contact@artur-rojek.eu>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -78,82 +59,71 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 26 May 2023 09:35:30 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Mon, 22 May 2023 00:59:00 +0200
+Artur Rojek <contact@artur-rojek.eu> wrote:
 
-> The fwnode_irq_get() and the fwnode_irq_get_byname() return 0 upon
-> device-tree IRQ mapping failure. This is contradicting the
-> fwnode_irq_get_byname() function documentation and can potentially be a
-> source of errors like:
+> Consumers expect the buffer to only contain enabled channels. While
+> preparing the buffer, the driver makes two mistakes:
+> 1) It inserts empty data for disabled channels.
+> 2) Each ADC readout contains samples for two 16-bit channels. If either
+>    of them is active, the whole 32-bit sample is pushed into the buffer
+>    as-is.
 > 
-> int probe(...) {
-> 	...
+> Both of those issues cause the active channels to appear at the wrong
+> offsets in the buffer. Fix the above by demuxing samples for active
+> channels only.
 > 
-> 	irq = fwnode_irq_get_byname();
-> 	if (irq <= 0)
-> 		return irq;
+> This has remained unnoticed, as all the consumers so far were only using
+> channels 0 and 1, leaving them unaffected by changes introduced in this
+> commit.
 > 
-> 	...
-> }
-> 
-> Here we do correctly check the return value from fwnode_irq_get_byname()
-> but the driver probe will now return success. (There was already one
-> such user in-tree).
-> 
-> Change the fwnode_irq_get_byname() to work as documented and make also the
-> fwnode_irq_get() follow same common convention returning a negative errno
-> upon failure.
-> 
-> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
-> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-This bothers me a little because there may be drivers that haven't been
-caught yet that assume the zero value.   Still this is more consistent
-with what I'd expect to happen, so fair enough
+> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> Tested-by: Paul Cercueil <paul@crapouillou.net>
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+Lazy me suggestions that, as we didn't notice this before, clearly the
+vast majority of times the channels are both enabled.
+As such you 'could' just set available_scan_masks and burn the overhead
+of reading channels you don't want, instead letting the IIO core demux
+deal with the data movement if needed.
 
 > ---
-> I dropped the existing reviewed-by tags because change to
-> fwnode_irq_get() was added.
 > 
-> Revision history:
-> v4 =>:
->  - No Changes
-> v3 => v4:
->  - Change also the fwnode_irq_get()
-> ---
->  drivers/base/property.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+> v2: - demux active channels from ADC readouts 
+>     - clarify in the commit description that this patch doesn't impact
+>       existing consumers of this driver
 > 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index f6117ec9805c..8c40abed7852 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -987,12 +987,18 @@ EXPORT_SYMBOL(fwnode_iomap);
->   * @fwnode:	Pointer to the firmware node
->   * @index:	Zero-based index of the IRQ
->   *
-> - * Return: Linux IRQ number on success. Other values are determined
-> - * according to acpi_irq_get() or of_irq_get() operation.
-> + * Return: Linux IRQ number on success. Negative errno on failure.
->   */
->  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
->  {
-> -	return fwnode_call_int_op(fwnode, irq_get, index);
-> +	int ret;
+>  drivers/iio/adc/ingenic-adc.c | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-adc.c
+> index a7325dbbb99a..093710a7ad4c 100644
+> --- a/drivers/iio/adc/ingenic-adc.c
+> +++ b/drivers/iio/adc/ingenic-adc.c
+> @@ -802,13 +802,19 @@ static irqreturn_t ingenic_adc_irq(int irq, void *data)
+>  	struct ingenic_adc *adc = iio_priv(iio_dev);
+>  	unsigned long mask = iio_dev->active_scan_mask[0];
+>  	unsigned int i;
+> -	u32 tdat[3];
+> -
+> -	for (i = 0; i < ARRAY_SIZE(tdat); mask >>= 2, i++) {
+> -		if (mask & 0x3)
+> -			tdat[i] = readl(adc->base + JZ_ADC_REG_ADTCH);
+> -		else
+> -			tdat[i] = 0;
+> +	u16 tdat[6];
+> +	u32 val;
 > +
-> +	ret = fwnode_call_int_op(fwnode, irq_get, index);
-> +	/* We treat mapping errors as invalid case */
-> +	if (ret == 0)
-> +		return -EINVAL;
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL(fwnode_irq_get);
+> +	memset(tdat, 0, ARRAY_SIZE(tdat));
+> +	for (i = 0; mask && i < ARRAY_SIZE(tdat); mask >>= 2) {
+> +		if (mask & 0x3) {
+> +			val = readl(adc->base + JZ_ADC_REG_ADTCH);
+> +			/* Two channels per sample. Demux active. */
+> +			if (mask & BIT(0))
+> +				tdat[i++] = val & 0xffff;
+> +			if (mask & BIT(1))
+> +				tdat[i++] = val >> 16;
+> +		}
+>  	}
 >  
+>  	iio_push_to_buffers(iio_dev, tdat);
 
