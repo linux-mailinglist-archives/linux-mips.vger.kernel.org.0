@@ -2,120 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AE1714AE4
-	for <lists+linux-mips@lfdr.de>; Mon, 29 May 2023 15:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B7D714B15
+	for <lists+linux-mips@lfdr.de>; Mon, 29 May 2023 15:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjE2Nwz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 May 2023 09:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S230164AbjE2NyQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 May 2023 09:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjE2Nwr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 May 2023 09:52:47 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 May 2023 06:52:37 PDT
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44C7110
-        for <linux-mips@vger.kernel.org>; Mon, 29 May 2023 06:52:37 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 3dHYqCUKwv5uI3dHZqr1YP; Mon, 29 May 2023 15:51:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1685368294; bh=bucKz+Haz4+7MKDRJpT6h861a2KK5U5c1O/AVn8p7ms=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=DsmAZxR3norjQhadCmq+hoRZRqlNmEJTtEXp6muIvEDLVaCJLYJVSIwasV3UMtVSt
-         s0komLwOPpk7leLdLEuUr3aKWiJu2+hB8X7AMC7xraDFUM1ul9DrF6y4h7CBJJ9hmS
-         QEyqAXoTbr20RfSt800IQ9Dpju11wqj/XBrBnMku1t9Rfr0x+dX62DlicDOgzX1GnY
-         caHQhKbODqABrTtrno20JFq1n32pqIoTj4Cuj+2veoFZhcTqqoZodRScrqAhpp9h78
-         wDMKA9l4BrvyiFvHCMgQ7iInc+wfQLJIodW4o98gtxLxCaEs7tOA/ooUvNdAYq4Y/1
-         eHCPzCYRu12Cg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1685368294; bh=bucKz+Haz4+7MKDRJpT6h861a2KK5U5c1O/AVn8p7ms=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=DsmAZxR3norjQhadCmq+hoRZRqlNmEJTtEXp6muIvEDLVaCJLYJVSIwasV3UMtVSt
-         s0komLwOPpk7leLdLEuUr3aKWiJu2+hB8X7AMC7xraDFUM1ul9DrF6y4h7CBJJ9hmS
-         QEyqAXoTbr20RfSt800IQ9Dpju11wqj/XBrBnMku1t9Rfr0x+dX62DlicDOgzX1GnY
-         caHQhKbODqABrTtrno20JFq1n32pqIoTj4Cuj+2veoFZhcTqqoZodRScrqAhpp9h78
-         wDMKA9l4BrvyiFvHCMgQ7iInc+wfQLJIodW4o98gtxLxCaEs7tOA/ooUvNdAYq4Y/1
-         eHCPzCYRu12Cg==
-Date:   Mon, 29 May 2023 15:51:32 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>
-Subject: Re: [PATCH] mips: Fix spacing issue
-Message-ID: <ZHSt5JKOc1hwEGTv@lenoch>
-References: <20230529113421.8970-1-franziska.naepelt@gmail.com>
+        with ESMTP id S229951AbjE2Nx2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 May 2023 09:53:28 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33DE131;
+        Mon, 29 May 2023 06:52:59 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id F3CD65C0126;
+        Mon, 29 May 2023 09:52:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 29 May 2023 09:52:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1685368374; x=1685454774; bh=cWL+ydqAXL
+        J30NEjXy53IDGA3PgBjHHLDwDyHIEE/5I=; b=oIuNInrOtpAOQzZLbD3v5AFSN9
+        wutegbZ/U5SfeEbORvQQhtNW6bPWpN8Q52nfnapxf8uYDv7RKKUzLudF5HwmQhRW
+        mxAROGGCvczWGmeHdYUp5mian4SsLWtzsTUJFa3uhZcK+YGQg2niUGgw3AnXQjwn
+        RXcFSKWzXUjiv/H4LEbrXDUPVAQKM6GF+AfDVv+6jD7KT9C1EbT2s9wNdUGL8L4j
+        z+V1ui+cEDs8n1Lx9ncJjLQhoprh+Tg0FyyVfyhYMRKu85wawezOC0TlIzGPr479
+        uA7UR5mnm+esj0BRZNbVDiS+tPNTyMPn9Mz46FKNtnPtvYO25wbVj7dupRRg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685368374; x=1685454774; bh=cWL+ydqAXLJ30
+        NEjXy53IDGA3PgBjHHLDwDyHIEE/5I=; b=HE8oGDLZwc2VA82joUBHhO3NCvfKV
+        gY/KsLPzdO0DdYXB3N+6fRQVDIYXVJ5Jb+2b0ATKUJ6avPGZYq2fS9oFQZ+Kr8+G
+        BtX8r2fH8Dbh6ARptyzO7OmRMy7uJ+kSAqYqxAH1OfLntJxVQIZS17lh1UD5PLlM
+        RQnbKy683qe8E3DiEClzw/uvNrhcI6dzpsQcomrtccs9DPfkDcy66TOFffAlpQ0I
+        uaJsYipIPlU/sTRkkZ2rulKSOu5E89C/4C3J3WzKGL+H1vb+q9y0IrEo0eGHIa3I
+        6LbGz6qJHYsk1iUl/z9VSF6Xf9Py7buzUFmz29oSS93WOoVfO1gppBkxA==
+X-ME-Sender: <xms:Nq50ZJGRe-CXv2pHQhkiJBqJWLrN3YZiqppu-LEWgLA4gGV8h0U0nw>
+    <xme:Nq50ZOVcB9FjfHtDTNhbAC0T5A9K-kzxeYHjUfuIf3oGuVQnFTQWeneEqngt7zw-l
+    WJ44Y7UDrFpG8nbHwc>
+X-ME-Received: <xmr:Nq50ZLKjFM6F_UHK9fcPsRjz8Nd3Wc4TzPMhsK7Nxd-bCUboPMETxD4aNb5X>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekhedgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:Nq50ZPEK19IXHTefgzihs4Z-F0qg0GkRCZK-QlPp7qc4jmdrYW_71Q>
+    <xmx:Nq50ZPXy00mzXGfID5k4ol6fmBVIwPJ5lJk8R4Euegd05O8orQh_mA>
+    <xmx:Nq50ZKMsSczKDcgM-M-eBPQV6UwzAeO3xF9zPigkFOa2bvhYlI_oJw>
+    <xmx:Nq50ZMiJbC16ZNqxwMXDDC_sEhLnGhmFy5IiV7KolwFKKEDHgedLmQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 29 May 2023 09:52:53 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
+Date:   Mon, 29 May 2023 14:52:44 +0100
+Message-Id: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529113421.8970-1-franziska.naepelt@gmail.com>
-X-CMAE-Envelope: MS4wfFGH8mxnUyFuhTzkkGt7Soejk5fMTIEVBPNRnTKF6XyLaT6iiUEg5SsoktNQEZ2uVE8TTq8mnYyXIpX4IC/dBPvR1qurIJjOJbnFlixuWMxuhWu7m739
- NLzA7yWAGay8rxLWlTcSqYK2G6VKcKx2wBseRzVdMyBkWKTZnD/paTdZSaS3AwPbYYEwcEzO0AuPnwW4103RBl31A4SM+8FRhMZgswTqGZeSybP5DSOoi7Y+
- 5YYxp8PTJ39HS2Un8+W56pis7qAdPNxNSi617s7FO2tGnK4Aa85cBuVdJvp9aX5dwRbxlm9IzwLteHByT80q5pb1iC3mHy0p4QA+JnvQBVU=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
+backward compatible with MIPS32R2 there is no reason to forbid
+M5150 and P5600 on MIPS32R2 kernel.
 
-coould we just fix all whitespaces while there?
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/include/asm/cpu-type.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/sibyte/swarm/platform.c b/arch/mips/sibyte/swarm/platform.c
-index 484969db7713..339d77a0a08f 100644
---- a/arch/mips/sibyte/swarm/platform.c
-+++ b/arch/mips/sibyte/swarm/platform.c
-@@ -88,15 +88,15 @@ device_initcall(swarm_pata_init);
- #define sb1250_dev_struct(num) \
- 	static struct resource sb1250_res##num = {		\
- 		.name = "SB1250 MAC " __stringify(num),		\
--		.flags = IORESOURCE_MEM,		\
--		.start = A_MAC_CHANNEL_BASE(num),	\
--		.end = A_MAC_CHANNEL_BASE(num + 1) -1,	\
-+		.flags = IORESOURCE_MEM,			\
-+		.start = A_MAC_CHANNEL_BASE(num),		\
-+		.end = A_MAC_CHANNEL_BASE(num + 1) - 1,		\
- 	};\
- 	static struct platform_device sb1250_dev##num = {	\
--		.name = "sb1250-mac",			\
--	.id = num,					\
--	.resource = &sb1250_res##num,			\
--	.num_resources = 1,				\
-+		.name = "sb1250-mac",				\
-+		.id = num,					\
-+		.resource = &sb1250_res##num,			\
-+		.num_resources = 1,				\
- 	}
+diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-type.h
+index a4a66bd93748..4032cd90ea30 100644
+--- a/arch/mips/include/asm/cpu-type.h
++++ b/arch/mips/include/asm/cpu-type.h
+@@ -54,7 +54,8 @@ static inline int __pure __get_cpu_type(const int cpu_type)
+ 	case CPU_PROAPTIV:
+ #endif
  
- sb1250_dev_struct(0);
+-#ifdef CONFIG_SYS_HAS_CPU_MIPS32_R5
++#if defined(CONFIG_SYS_HAS_CPU_MIPS32_R2) || \
++    defined(CONFIG_SYS_HAS_CPU_MIPS32_R5)
+ 	case CPU_M5150:
+ 	case CPU_P5600:
+ #endif
+-- 
+2.39.2 (Apple Git-143)
 
-On Mon, May 29, 2023 at 01:34:21PM +0200, Franziska Naepelt wrote:
-> This removes the following checkpatch issue:
-> - ERROR: need consistent spacing around '-' (ctx:WxV)
-> 
-> Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
-> ---
->  arch/mips/sibyte/swarm/platform.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/sibyte/swarm/platform.c b/arch/mips/sibyte/swarm/platform.c
-> index 484969db7713..06bf7105e7b1 100644
-> --- a/arch/mips/sibyte/swarm/platform.c
-> +++ b/arch/mips/sibyte/swarm/platform.c
-> @@ -90,7 +90,7 @@ device_initcall(swarm_pata_init);
->  		.name = "SB1250 MAC " __stringify(num),		\
->  		.flags = IORESOURCE_MEM,		\
->  		.start = A_MAC_CHANNEL_BASE(num),	\
-> -		.end = A_MAC_CHANNEL_BASE(num + 1) -1,	\
-> +		.end = A_MAC_CHANNEL_BASE(num + 1) - 1,	\
->  	};\
->  	static struct platform_device sb1250_dev##num = {	\
->  		.name = "sb1250-mac",			\
-> 
-> base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-> -- 
-> 2.39.2 (Apple Git-143)
