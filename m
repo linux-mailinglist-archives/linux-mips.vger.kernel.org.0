@@ -2,94 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAB1714474
-	for <lists+linux-mips@lfdr.de>; Mon, 29 May 2023 08:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C2F714484
+	for <lists+linux-mips@lfdr.de>; Mon, 29 May 2023 08:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjE2GYg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 May 2023 02:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S231596AbjE2GZC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 May 2023 02:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjE2GYe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 May 2023 02:24:34 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69974110;
-        Sun, 28 May 2023 23:24:02 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3a611b3ddso5089703e87.0;
-        Sun, 28 May 2023 23:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685341440; x=1687933440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uEmuOv7fyHRZPnJixXOmvNLBHdAL/mnG87N9Mya3BSM=;
-        b=UHxHMFKCeb7EfKc/IxtN6IKsRrbAG5vpabv6bNlDzNSqbjDn2rb5+AfDSAgs5f1jlB
-         +UmvYBtFCAdHHId0KdRpSh5MjkZ1U2bkl5ux58LRQC1iA3YbDcfyKg3cN5A/SNxXf0Vz
-         q7lRK4l6pdWvBe0WoZc3S2fukzneaipQ9dZ865TPKIPdQgNX7jAcwNq6e80MjYS8lf6r
-         aY/5CcHejY4Gn4VDmVBLKcBBP0h8eR8EL6qxknsm9ZT+Nvyk69C00g0FlBiMpsZDnYWq
-         T9yrkOsI7GuAYaPPG49vyYz3HVdZ5duXDZdCKwVtGC5mQJhYxMXkY9Gtg5x7sxrTmHn4
-         8JbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685341440; x=1687933440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uEmuOv7fyHRZPnJixXOmvNLBHdAL/mnG87N9Mya3BSM=;
-        b=PloHy1eIcIgm7lUrOMf/1lHKTia9Avhg8mmIXgqgSVlNROyB1bXb8Uo+YlskcR+6dN
-         jvvYRN+IHaBB6xsg2oDmz4reTyRGzk2v0eIIhK9YmCl1SHeKowAiqaoFCvC0QnTpmrZm
-         q67uPj+guc7IQfGThuaQDWg+vJ7C9fI0yL3FAKS+ULceRxbi6AkhHLqhnvgkJ59X9+dZ
-         iJ4JT3uJm2bnzPofuNN9cOkuJojk1ojuZu4MRB9wNq3T4sfhUu6gbok6Iqb1SgTBkt4p
-         UBatfvu2bl1VaxU9k9nKDdxz/FG1++tkT2zZNQtR3b9A9KRPcBRAc9dXPuZYYK+9icw1
-         V4mw==
-X-Gm-Message-State: AC+VfDxHRD/erezCNvOsk3La7YHlGF9ZJU2eczgVdNVXvVieLe8yNVzz
-        3S2q2CSkWxQhNP9VaVFY4wVDHo2NHG4=
-X-Google-Smtp-Source: ACHHUZ4A4w5AYq5DZKR8KECg7aiQfo1vTJZS23CTUj+cq12URjvIZ6YO33hOKPbIS9EDo9zLBGoTtA==
-X-Received: by 2002:a05:6512:3d25:b0:4ef:edb4:2c77 with SMTP id d37-20020a0565123d2500b004efedb42c77mr2688210lfv.11.1685341440377;
-        Sun, 28 May 2023 23:24:00 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id f2-20020a19ae02000000b004f3a90b195esm1859534lfc.51.2023.05.28.23.23.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 23:23:59 -0700 (PDT)
-Date:   Mon, 29 May 2023 09:23:55 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v7 6/9] pinctrl: pistachio: relax return value check for IRQ
- get
-Message-ID: <08188d9dd325f1f8b13f9173af00c03d0c27c2e0.1685340157.git.mazziesaccount@gmail.com>
-References: <cover.1685340157.git.mazziesaccount@gmail.com>
+        with ESMTP id S231504AbjE2GYu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 May 2023 02:24:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F817EA;
+        Sun, 28 May 2023 23:24:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14E76612DB;
+        Mon, 29 May 2023 06:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BE1C4339B;
+        Mon, 29 May 2023 06:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685341457;
+        bh=xZQ4c3sZfJ1nNEi2GqOvmmx6GGK5BJZioTZWTyJcUB4=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=okzVTHJLaVvykLXWWqT9sSAnbTsG6R8QSNm5nJZtaHcteF7moKcxFof5iXFKkjQoP
+         whTfYpmf7wITNgUeZQY3/CMYYN49UwsjXJ3N9bM/8nRTuCw/t7/QUfDdqEvZSqddUF
+         ZJOtRGIRS0uEEhi1gPXod8SJaxKe+fbomEZCcXCqbr1jMi/j7R2mM3mAAy9DBg1TJ8
+         RVTTT8q8CqdqA9wM2LtOhjbQv/1KYVFwqlHieMnihPuPdiBc6Jzcr82ySaf6LhcE5d
+         13oAJ9Pk0IbwUXy+E2HVjxQYXO5Xo7Jx8mMudbiXoi7X4tziqATloY6krK3RITdE7g
+         pTP8URjybR0HA==
+Date:   Mon, 29 May 2023 07:24:12 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+CC:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        zhao zhang <zhzhl555@gmail.com>,
+        Yang Ling <gnaygnil@gmail.com>,
+        loongson-kernel@lists.loongnix.cn
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_V4_1/5=5D_dt-bindings=3A_rtc=3A_?= =?US-ASCII?Q?Remove_the_LS2X_from_the_trivial_RTCs?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAJhJPsU_qOJKO99S1xjJaSUqXsXAG7HpYbzs5wTb8J4-tQqSQA@mail.gmail.com>
+References: <cover.1684983279.git.zhoubinbin@loongson.cn> <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn> <20230525-custody-oversleep-f778eddf981c@spud> <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com> <20230526-dolly-reheat-06c4d5658415@wendy> <CAMpQs4KeHCW+9ssAn-jF0efiUOzERRFDu9Sjz1Mtv5Lk1uFuPA@mail.gmail.com> <A206E0A5-9BF0-4787-9B06-9F91FA3C60A3@flygoat.com> <20230527-passing-unfixed-39e01b787808@spud> <14EF9F21-8150-40D9-8870-E9151C4882CF@flygoat.com> <20230527-poet-antarctic-cc02aa60ab52@spud> <CAJhJPsU_qOJKO99S1xjJaSUqXsXAG7HpYbzs5wTb8J4-tQqSQA@mail.gmail.com>
+Message-ID: <E229B204-1B00-4B24-B4BF-15277682FB4B@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ghTxwxrKVJCkx8O0"
-Content-Disposition: inline
-In-Reply-To: <cover.1685340157.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,80 +71,45 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---ghTxwxrKVJCkx8O0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-fwnode_irq_get[_byname]() were changed to not return 0 anymore.
+On 29 May 2023 03:59:57 IST, Keguang Zhang <keguang=2Ezhang@gmail=2Ecom> w=
+rote:
+>On Sun, May 28, 2023 at 6:22=E2=80=AFAM Conor Dooley <conor@kernel=2Eorg>=
+ wrote:
+>>
+>> On Sat, May 27, 2023 at 10:59:48PM +0100, Jiaxun Yang wrote:
+>> > > 2023=E5=B9=B45=E6=9C=8827=E6=97=A5 17:23=EF=BC=8CConor Dooley <cono=
+r@kernel=2Eorg> =E5=86=99=E9=81=93=EF=BC=9A
+>> > > On Sat, May 27, 2023 at 05:13:39PM +0100, Jiaxun Yang wrote:
+>>
+>> > >> My recommendation is leaving compatible string as is=2E
+>> > >
+>> > > "as is" meaning "as it is right now in Linus' tree", or "as it is i=
+n
+>> > > this patch"?
+>> >
+>> > Ah sorry I meant in this patch=2E
+>> >
+>> > Since there won=E2=80=99t be any new ls1x chip that will boot Linux a=
+ny time soon (due to
+>> > Loongson move away from MIPS but LoongArch32 is undefined for now), a=
+nd
+>> > rest compatible strings are wide enough to cover their family, I thin=
+k the present
+>> > compatible strings in this patch describes hardware best=2E
+>>
+>> I don't see why new bindings being written for old hardware should some=
+how
+>> be treated differently than new bindings for new hardware=2E
+>
+>Let me add that ls1b RTC and ls1c RTC are not exactly the same=2E
+>The former supports RTC interrupt, while the latter does not=2E
+>So my suggestion is to leave the compatible string as it is in this patch=
+=2E
 
-Drop check for return value 0.
+Just as a reminder, there are more than ls1b & c in the patch, lest we for=
+get=2E
+Also, fallback compatibles mean a compatible subset, not only that two dev=
+ices are identical=2E
+The interrupt is passed by the interrupts property=2E
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
----
-Revision history:
- - No changes
-
-Please note, I took Linus' reply to v4 cover-letter as ack && added the
-tag. Please let me know if this was not Ok.
-
-The first patch of the series changes the fwnode_irq_get() so this depends
-on the first patch of the series and should not be applied alone.
----
- drivers/pinctrl/pinctrl-pistachio.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-=
-pistachio.c
-index 53408344927a..8c50e0091b32 100644
---- a/drivers/pinctrl/pinctrl-pistachio.c
-+++ b/drivers/pinctrl/pinctrl-pistachio.c
-@@ -1393,12 +1393,6 @@ static int pistachio_gpio_register(struct pistachio_=
-pinctrl *pctl)
- 			dev_err(pctl->dev, "Failed to retrieve IRQ for bank %u\n", i);
- 			goto err;
- 		}
--		if (!ret) {
--			fwnode_handle_put(child);
--			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
--			ret =3D -EINVAL;
--			goto err;
--		}
- 		irq =3D ret;
-=20
- 		bank =3D &pctl->gpio_banks[i];
---=20
-2.40.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---ghTxwxrKVJCkx8O0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmR0RPsACgkQeFA3/03a
-ocVYqwf8D7VOgeWSjImpUGoUcaAvu5XsMeByrw2K7Q2RluG/8FZ7VKFHA8v8rbvC
-K1/yxFYmSUVDGf0Qkhl/L1VsgJvdUwdCRpz9d3eXMFxl9iGxhByH+E5HValg5gr+
-fBUvr26tze7GkwgXHvT/edu8oJXBUMphtdDmRlbtB446+IIYZ/5fdjZ7sXirFzHh
-pzIWeF7QKKNqCYlIOLz40lrVTbNqKk3Sah753GYxfWrk9s/VeuRjZ7c2NZu0RvBH
-GTeqVpnRtCfhC5JmnbGFB4HaNcowp+LlkSa6dNhWuE0Btlswb8xQef35WouGGlh7
-fC0l1jcqp4oUBJ+OjdIXFdH3Y3kvww==
-=5e+h
------END PGP SIGNATURE-----
-
---ghTxwxrKVJCkx8O0--
