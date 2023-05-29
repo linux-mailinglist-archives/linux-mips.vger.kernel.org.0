@@ -2,119 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DB4713BF9
-	for <lists+linux-mips@lfdr.de>; Sun, 28 May 2023 20:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39114714219
+	for <lists+linux-mips@lfdr.de>; Mon, 29 May 2023 04:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjE1S5z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 May 2023 14:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
+        id S230207AbjE2Cj6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 May 2023 22:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjE1S5y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 May 2023 14:57:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEF0C4;
-        Sun, 28 May 2023 11:57:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8193B612D2;
-        Sun, 28 May 2023 18:57:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DE1C433EF;
-        Sun, 28 May 2023 18:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685300271;
-        bh=KlKvkfbT2430hhOEgYoBgaDnMkWkALFfhUEwavNOtLg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M2UobjnClAfdfRy0Po1wB9j4LPI1N+oqswdAWDqt6VvPCaO7OlScQ30yw/RhSHaEu
-         lsgW+G+F0PJKP8QE11DiFsqDihh3DhP41ymAXDJNHdGDmFDXplhKp4bKw3wtgfGWcO
-         FgP1RbgQnCoHx6Oq/RW5Uy7bMTLnxl7XUpgbaUv/Ge7t8prNuHv0hBE0Lp9YTCudoB
-         s3gsXWGzVcW+JtuAoFKNTYZiOOOYFzLt0banqQ+4C+bNMPf8s11KiKv3JiiF59CTJE
-         IAsLu/M9AfvMc3TIGJFwQ2UoNnox4CUMbr8W2ili6BGzFeqACokV97xYERRJLSBtE5
-         Hjq6j7Ri6XWJQ==
-Date:   Sun, 28 May 2023 20:14:07 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     andy.shevchenko@gmail.com,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
+        with ESMTP id S230117AbjE2Cj4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 May 2023 22:39:56 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97421A7;
+        Sun, 28 May 2023 19:39:50 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 68EBC320083A;
+        Sun, 28 May 2023 22:39:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sun, 28 May 2023 22:39:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685327985; x=
+        1685414385; bh=CkLoqHnVGlymW7d8k4EFDgQjQ/Ry/XUh7kKzLI6+vlE=; b=W
+        7EccITdMZC0pSl/b1cfDKDyxZJGjSM57ZL2lxSNLgeqB4IerV8LFdI9zEG9Uv3G5
+        XelSpBSDuEiMFswqvgC+uqMSU41P+0pHnc0CfVm+/om40YXV8TBgy4FQ3uAnJ0sd
+        0leGMjl2uPikmG/RgzzVFUtdTyGqRV9PoTLcM/5fX1Q+VN3mISeO/SGfktGELjZZ
+        NdxDajeL23HVze7H5M+ZON2UH8rVcjxVZPc4eeORlBj44HD0strS02gomytli9s7
+        PBU0KbXi2fQ1wTum70GIBqTrZdwfVGFyVfYmU4ShoSq7JbcP7lXhTS7MnuWZ/MSP
+        q530uy7ak3gazTiZQa03w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685327985; x=1685414385; bh=CkLoqHnVGlymW
+        7d8k4EFDgQjQ/Ry/XUh7kKzLI6+vlE=; b=Ym18twRp4YDc99fHB93LquZJ0Z4zp
+        embehcemE/kKIw1lZWuqx1KLQozamaAeoJM8goXmgoaZW3VB8Dgu+XxcQIKA7hdr
+        ii4iswSCwWVizYzEQhscnjWq5UJr55hgxRG1klgsxQfGEpvQcFkllQ/IlrtZeuNd
+        IkgtrkaFdbgTtMVHe/1BaJAZgG5u4VOq3VGMrtOS9mrpBphl1Sv9YkU1wdeQ//ZD
+        7Iq1V0iH3LUN1FJ4cnVRQ7ifNB0s2ek3SVY9vbksOnEwoqh4M6UrCmTyI4hRZ4zX
+        H05f0ian4GSUghIm00k8vxuIOxyQfYMTfS1T0c/t3HVr9UH3nfIjwNYjw==
+X-ME-Sender: <xms:bhB0ZISkSebDoY7ePFrAHMDJbiQqzCSLtGQEC7GihGdfbUW05RzW4w>
+    <xme:bhB0ZFzAz6AVefd2szJo-ws8Uh2hNyL_zT_y1XDQB_wTeqEm_eppvzBm55tfHAdwY
+    NArb6jCfmWTz_8OPNI>
+X-ME-Received: <xmr:bhB0ZF3ndzPOosUupfAXA2uJY_qxBkSmJjfdBatmCRw5_Peevlwyk7NCarF_NFDe7DIgoQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekgedgheelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:bhB0ZMB8itjXVeTPWF_K8Nmn0VUSqgIS-owqp_lG18bg5bU4EsSh7g>
+    <xmx:bhB0ZBhiT1zEB1GcRZ1uvkLgyLjitMFL8pFJUil6ufu20rCWUASJ9g>
+    <xmx:bhB0ZIrw9F7S8Wzi-Fm-LbfqbFWndpEyT87JM97uPNmv25HvJJw6bQ>
+    <xmx:cRB0ZEAbi-FwJdt75RNpPlGa_l7-Cjrsterd_z2tGu_lje6NiEeMZQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 28 May 2023 22:39:42 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id DC398109530; Mon, 29 May 2023 05:39:39 +0300 (+03)
+Date:   Mon, 29 May 2023 05:39:39 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
         Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 3/8] net-next: mvpp2: relax return value check for
- IRQ get
-Message-ID: <20230528201407.394235f5@jic23-huawei>
-In-Reply-To: <6e94c838-886d-3c58-3fa0-175501f57f56@gmail.com>
-References: <cover.1684493615.git.mazziesaccount@gmail.com>
-        <7c7b1a123d6d5c15c8b37754f1f0c4bd1cad5a01.1684493615.git.mazziesaccount@gmail.com>
-        <ZGpSpZFEo5cw94U_@surfacebook>
-        <6e94c838-886d-3c58-3fa0-175501f57f56@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+Message-ID: <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
+ <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sfbhlwp9.ffs@tglx>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 22 May 2023 08:15:01 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-
-> Hi Andy,
+On Sat, May 27, 2023 at 03:40:02PM +0200, Thomas Gleixner wrote:
+> On Fri, May 26 2023 at 12:14, Thomas Gleixner wrote:
+> > On Wed, May 24 2023 at 23:48, Kirill A. Shutemov wrote:
+> >> This patch causes boot regression on TDX guest. The guest crashes on SMP
+> >> bring up.
 > 
-> On 5/21/23 20:19, andy.shevchenko@gmail.com wrote:
-> > Fri, May 19, 2023 at 02:01:47PM +0300, Matti Vaittinen kirjoitti:  
-> >> fwnode_irq_get[_byname]() were changed to not return 0 anymore.
-> >>
-> >> Drop check for return value 0.  
-> > 
-> > ...
-> >   
-> >> -		if (v->irq <= 0) {
-> >> +		if (v->irq < 0) {
-> >>   			ret = -EINVAL;  
-> > 
-> > 			ret = v->irq;
-> > 
-> > ?  
-> 
-> For me that seems to be correct, yes. This, however, would be a 
-> functional change and in my opinion it should be done separately from 
-> this API change.
-Ah. I commented on this as well in v6.  Roll us that separate patch
-and I expect we'll both be happy ;)
+> The below should fix that. Sigh...
 
-Jonathan
+Okay, this gets me fixes the boot for TDX guest:
 
-> 
-> >   
-> >>   			goto err;
-> >>   		}  
-> >   
-> 
+Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
+But it gets broken again on "x86/smpboot: Implement a bit spinlock to
+protect the realmode stack" with
+
+[    0.554079] .... node  #0, CPUs:        #1  #2
+[    0.738071] Callback from call_rcu_tasks() invoked.
+[   10.562065] CPU2 failed to report alive state
+[   10.566337]   #3
+[   20.570066] CPU3 failed to report alive state
+[   20.574268]   #4
+...
+
+Notably CPU1 is missing from "failed to report" list. So CPU1 takes the
+lock fine, but seems never unlocks it.
+
+Maybe trampoline_lock(%rip) in head_64.S somehow is not the same as
+&tr_lock in trampoline_64.S. I donno.
+
+I haven't find the root cause yet. But bypassing locking in
+LOAD_REALMODE_ESP makes the issue go away.
+
+I will look more into it.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
