@@ -2,25 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA73715120
-	for <lists+linux-mips@lfdr.de>; Mon, 29 May 2023 23:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0826B71517C
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 00:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjE2VyC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 May 2023 17:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
+        id S229476AbjE2WIM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 May 2023 18:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjE2VyC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 May 2023 17:54:02 -0400
-Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA179C1;
-        Mon, 29 May 2023 14:53:59 -0700 (PDT)
-Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id F023641D13A6;
-        Mon, 29 May 2023 22:53:57 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Mon, 29 May 2023 22:53:57 +0100
-Date:   Mon, 29 May 2023 22:53:57 +0100
-From:   Liviu Dudau <liviu@dudau.co.uk>
-To:     Conor Dooley <conor@kernel.org>
+        with ESMTP id S229453AbjE2WIL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 May 2023 18:08:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6F0D9;
+        Mon, 29 May 2023 15:08:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 501DB6222C;
+        Mon, 29 May 2023 22:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA58C433D2;
+        Mon, 29 May 2023 22:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685398089;
+        bh=/SAkM6L6pLMXULtkz7jaGIEEbq1gF6/aA1Vc65sJ6uY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k8PWnZW4AF72HlirtTCBde2dEFCjGxmiRFxxMqa7GeOJ7e3N2qNnJ75HENYd8hpBS
+         DS7bS/KZZlfRWnFScHpfcsyJsdG7blZOcE484Ndyo7gKFkO8Mgt8E+X47Q1qJwiT69
+         hqD0E0492cXsYx5jE/nlwKvxOBmaEMSYCzVLrymQJa0E0Yik3KEMKTLFdElbxdSEIU
+         UNjEB/IHooaDwHQAZoMTsYedMNcfj2ryA0k5d7H6XX3AEw16MpvmODxW6QUjdM0Kmo
+         hdh9EAvP48SVIQgABOMYLdUFa2Yx5h7tiikhNdWhkarkMkL3URCL5shmsvmQAGbZtm
+         Uayx8z7JA0RQA==
+Date:   Mon, 29 May 2023 23:08:05 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Liviu Dudau <liviu@dudau.co.uk>
 Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
@@ -30,88 +43,99 @@ Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         devicetree@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] dt-bindings: mips: Add bindings for TP-Link HC220
  G5 v1 board
-Message-ID: <ZHUe9RJfweNBAU0K@bart.dudau.co.uk>
+Message-ID: <20230529-justify-runaround-a1dc64980ece@spud>
 References: <84b31c59-81d3-c83d-ece9-a120b1cdcdd7@arinc9.com>
  <20230529150833.526084-1-liviu@dudau.co.uk>
  <20230529150833.526084-3-liviu@dudau.co.uk>
  <20230529-unhook-alone-1b1bd6e6a226@spud>
+ <ZHUe9RJfweNBAU0K@bart.dudau.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lt45wcAU/aD5Q3aP"
 Content-Disposition: inline
-In-Reply-To: <20230529-unhook-alone-1b1bd6e6a226@spud>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZHUe9RJfweNBAU0K@bart.dudau.co.uk>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 29, 2023 at 10:00:20PM +0100, Conor Dooley wrote:
-> Hey,
 
-Hi Conor,
+--lt45wcAU/aD5Q3aP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> On Mon, May 29, 2023 at 04:08:33PM +0100, Liviu Dudau wrote:
-> > Add bindings for the compatible string used for the TP-Link's
-> > HC220 G5 V1 board, a wireless AP based on MT7621.
-> > 
-> > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> 
-> Two process things:
-> - Please run get_maintainer.pl against the current git tree - you seem
->   to have missed 2 of the 3 dt-bindings maintainers. I don't mind my
->   omission, but omitting Krzysztof means you're submitting patches based
->   on a tree that is over a year old.
+On Mon, May 29, 2023 at 10:53:57PM +0100, Liviu Dudau wrote:
+> On Mon, May 29, 2023 at 10:00:20PM +0100, Conor Dooley wrote:
 
-Appologies for that, I should have check get_maintainer.pl rather than looking
-at the output of git log for the file.
+> > Two process things:
+> > - Please run get_maintainer.pl against the current git tree - you seem
+> >   to have missed 2 of the 3 dt-bindings maintainers. I don't mind my
+> >   omission, but omitting Krzysztof means you're submitting patches based
+> >   on a tree that is over a year old.
+>=20
+> Appologies for that, I should have check get_maintainer.pl rather than lo=
+oking
+> at the output of git log for the file.
 
-> - Please don't send a v2 in reply to the v1.
+Yeah, git log ain't the way to do things ;)
 
-Sorry, I'm not sure why that makes any difference. Reason for sending it as a
-reply was the fact that last conversation was more than two weeks ago, people
-might have forgot the context. This way it's all in one thread.
+>=20
+> > - Please don't send a v2 in reply to the v1.
+>=20
+> Sorry, I'm not sure why that makes any difference. Reason for sending it =
+as a
+> reply was the fact that last conversation was more than two weeks ago, pe=
+ople
+> might have forgot the context. This way it's all in one thread.
 
-> 
-> > ---
-> >  Documentation/devicetree/bindings/mips/ralink.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mips/ralink.yaml b/Documentation/devicetree/bindings/mips/ralink.yaml
-> > index 704b5b5951271..53c1f66353770 100644
-> > --- a/Documentation/devicetree/bindings/mips/ralink.yaml
-> > +++ b/Documentation/devicetree/bindings/mips/ralink.yaml
-> > @@ -80,6 +80,7 @@ properties:
-> >            - enum:
-> >                - gnubee,gb-pc1
-> >                - gnubee,gb-pc2
-> > +              - tplink,hc220-g5-v1
-> 
-> For the actual change though,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+That's fine, just include a link to v1 on lore for anyone that cares
+about the context, like so:
+https://lore.kernel.org/all/20230529150833.526084-1-liviu@dudau.co.uk/
 
-Many thanks!
+I knew this mail had been sent today because I noticed at the time that
+you'd only CCed Rob but I remembered nothing of the subject line since
+I saw it hours ago. Look how far back in my mailbox it ended up because
+of being sent as a reply to the v1, and that mailbox only contains
+emails from the devicetree list!
 
-Best regards,
-Liviu
+4380     May 29 Liviu Dudau     (7.6K) =E2=94=82       =E2=94=8C=E2=94=80>[=
+PATCH v2 1/2] mips: dts: ralink: Add support for TP-Link HC220 G5 v1 board
+4381   T May 29 Liviu Dudau     (5.8K) =E2=94=82       =E2=94=82   =E2=94=
+=8C=E2=94=80>
+4382  sF May 29 To Liviu Dudau  (6.8K) =E2=94=82       =E2=94=82 =E2=94=8C=
+=E2=94=80>
+4383     May 29 Liviu Dudau     (4.6K) =E2=94=82       =E2=94=9C=E2=94=80>[=
+PATCH v2 2/2] dt-bindings: mips: Add bindings for TP-Link HC220 G5 v1 board
+4384     May 29 Liviu Dudau     (4.7K) =E2=94=82     =E2=94=8C=E2=94=80>[PA=
+TCH v2 0/2] mips: dts: ralink: Add support for TP-Link HC220 G5 v1 board
+4385     May 12 Ar=C4=B1n=C3=A7 =C3=9CNAL      ( 12K) =E2=94=82   =E2=94=8C=
+=E2=94=80>
+4386     May 11 Liviu Dudau     ( 10K) =E2=94=82 =E2=94=8C=E2=94=80>
+4387     May 11 Ar=C4=B1n=C3=A7 =C3=9CNAL      ( 10K) =E2=94=9C=E2=94=80>
+4388     May 09 Liviu Dudau     (7.8K) [PATCH] mips: dts: ralink: Add suppo=
+rt for TP-Link HC220 G5 v1 board.
 
-> 
-> Thanks,
-> Conor.
-> 
-> >            - const: mediatek,mt7621-soc
-> >  
-> >  additionalProperties: true
-> > -- 
-> > 2.40.1
-> > 
+Some patch application & CI tools apparently also get confused, but I
+dunno what those tools are.
 
+Cheers,
+Conor.
 
+--lt45wcAU/aD5Q3aP
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Everyone who uses computers frequently has had, from time to time,
-a mad desire to attack the precocious abacus with an axe.
-       	   	      	     	  -- John D. Clark, Ignition!
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHUiRQAKCRB4tDGHoIJi
+0owQAQDqQWE836dDmnGHAOUfNHHIZo2m1J7F1iDctD7ujYfvdgD8DoD19Osygghi
+TeU1n9CbriOf+S+Q4AL6mAvfDHyyIQY=
+=J02g
+-----END PGP SIGNATURE-----
+
+--lt45wcAU/aD5Q3aP--
