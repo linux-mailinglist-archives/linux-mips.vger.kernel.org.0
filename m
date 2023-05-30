@@ -2,206 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C025D715D69
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91753715E0B
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjE3LkF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 07:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S231996AbjE3Lzz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 07:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjE3LkE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:40:04 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B53C5;
-        Tue, 30 May 2023 04:40:03 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9daef8681fso3358245276.1;
-        Tue, 30 May 2023 04:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685446802; x=1688038802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pl5TicixGzRQ0Rq0fw3FNPOG1mfIhS0y+dbkDNMEbHI=;
-        b=brYtG3pmzpjYxd0Gspn+o+J/iBHmc4MVzR7HSexEtLmYmHpWz1GUbxDnAePchkkuDT
-         1X1eWz/LvDJ3VPoUwppx5yQIj5reIhouxsv5CIrwspQUd1p7DEzGuKnZLRrqSfA/Ut6v
-         +DEsWTkChutc2HZT/Jo4WQhhys9SqMj5zujqLXp5XUJSgMc4yeFVcg1u+g9UfVxetwMj
-         AT+wofkSXoUraY/WlFJOq8mLWycHCH+GR1fW+mysT8oBxYlrMXnOcdPbexFnJi4kBFC/
-         rdvOS4sJoBZ2An8avCaTGirU9DJ2JDz9H6OCeanbmygSBFWqI1iFd9zIjqkRNXRvMsq6
-         icHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685446802; x=1688038802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pl5TicixGzRQ0Rq0fw3FNPOG1mfIhS0y+dbkDNMEbHI=;
-        b=MwXqG9oqi1QPezU8pNf8B5UVP5YToh+cx6WTSMllKHXoufez5u1ClWljLBfzLlm65v
-         HU3GLyGpsOG9+HbyEXTryuRdkuzUMO+e/V26+8IcaeNpJVefiR8il6bm9Iqcs8VI6/jc
-         ne4GMtremsv/JoL0o5NZ+iAUs9PTU6zIT262SrkHar8LpNlEv2dwCXGrVscYAykod0gy
-         MD7IT0V4Q73Xg12nFuDuL3MmiUd52RX1VbFvdIASYKXHn2KSBqy8gZnKqCdSK6ASu4Zj
-         R7NAh10s9L4C6FJSCKN86wFJdLwPuDQedYs7X1N+DyLZXnGK43j3C5uKg5k/XI4lE1zr
-         DTTg==
-X-Gm-Message-State: AC+VfDwF+lD9UFEUPeejNerSFgWndht86Wg5iWFE27L+i/zGvcelxfff
-        l8XsQeLkITbzvHRmsFHtwxmCryVF001a+EQ605Q=
-X-Google-Smtp-Source: ACHHUZ5HLiNtBoCLtNDdf4gENt8MpYtx6f5wliUYDAFOEj+EumK9qpKm+caObyiJwcoOzICOaaSjesoNWnDLtA2vx+g=
-X-Received: by 2002:a0d:d4cd:0:b0:564:c4db:633a with SMTP id
- w196-20020a0dd4cd000000b00564c4db633amr2212623ywd.15.1685446802410; Tue, 30
- May 2023 04:40:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1684983279.git.zhoubinbin@loongson.cn> <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
- <20230525-custody-oversleep-f778eddf981c@spud> <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
- <20230526-dolly-reheat-06c4d5658415@wendy> <CAMpQs4KeHCW+9ssAn-jF0efiUOzERRFDu9Sjz1Mtv5Lk1uFuPA@mail.gmail.com>
- <A206E0A5-9BF0-4787-9B06-9F91FA3C60A3@flygoat.com> <20230527-passing-unfixed-39e01b787808@spud>
- <14EF9F21-8150-40D9-8870-E9151C4882CF@flygoat.com> <20230527-poet-antarctic-cc02aa60ab52@spud>
- <CAJhJPsU_qOJKO99S1xjJaSUqXsXAG7HpYbzs5wTb8J4-tQqSQA@mail.gmail.com>
- <E229B204-1B00-4B24-B4BF-15277682FB4B@kernel.org> <CAMpQs4K4e3BSVvqXa+QjhM5XDxHc_ZCiRYW+HgPo21AQ_bYSRQ@mail.gmail.com>
- <6845b6ce-06a8-9a0c-7f04-50fa906cd1e4@linaro.org>
-In-Reply-To: <6845b6ce-06a8-9a0c-7f04-50fa906cd1e4@linaro.org>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Tue, 30 May 2023 19:39:50 +0800
-Message-ID: <CAMpQs4JLp3iUh6LkN6SND8O8wRZZcM04Shcq4rUa5QEOUAVsGg@mail.gmail.com>
-Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the trivial RTCs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        with ESMTP id S232112AbjE3Lzw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:55:52 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21D6B0;
+        Tue, 30 May 2023 04:55:16 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 1CE5632002F9;
+        Tue, 30 May 2023 07:55:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 30 May 2023 07:55:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1685447701; x=1685534101; bh=2tvvKDbF1hK6YbztPVPIPE2ZY0lY840KyG/
+        h2NOWuoo=; b=lkluiL6H+vITqeODD7XEF20W3kCNsR/E7ufYbbIIuAAuDMW2OD/
+        4/EIG6JSPsrzaB6KmB7A5oZDyc/axoLOjNyvcmuPQgYZql/Suw+kYiia/VmIJ5XH
+        1bmU5G1Z9eOG0eteBnaECL6tSKzypBe3cppxmjzcWLEHIZQDMwhFCmdLmEBdOefV
+        gOBB6IvIaLfLrb0Wx084SvMlEPMpoVtoX/O1Ko3L/ozWVb4nEvKs2ak+C+4ZAitR
+        +YHk6Ep9+UHD6LAGcdCUj9QpUyQJSxqQXT+s+7En0oM4hwMcrtWkg2ff1qs4R8EJ
+        +CQOhzE9YFSav4EhIOyyWw5sEc1bz4/FUNg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685447701; x=1685534101; bh=2tvvKDbF1hK6YbztPVPIPE2ZY0lY840KyG/
+        h2NOWuoo=; b=C3Row8K9n+zp6VYbQ3HDJeeBsatAtoC351VOzcJEZizfnfqHnfN
+        ayJUZ+YaUt/WRluCT9qAiXl/B1GWI0BBDElgNTh7usVsyTMlTrsPWCB/P80ZhGTF
+        KPsO2dge+EGb/0IwCzMga8BfKl7eGMifxwRVVI1sfnaAliEgndQx2U+0b+LgsUN+
+        BWbvH1PBeBxEaXMNm/zbGCsVSrX5SyKtAncwqaAb/aikTiYkKM+mEShBrG0eeV0q
+        PeDaZI8bh9YQd0llMS9OB/ok22Ri9Ggkyiub1xh2Gd+yRRB0+Bd6aQwOe6j3d/sH
+        1ImaUt7SDJS5kUPhmKNLMUouS7NvbdPxn1g==
+X-ME-Sender: <xms:FeR1ZJhLt7L0ASsnrXF0viTA75Jbuu4EsGT-bTG5PUbi7zMaNd6Low>
+    <xme:FeR1ZODbC468OBQs5_eEwTAWMTynOg9gysM1TuPWa4zrGkC19xkLPj2FallaSBsrN
+    jtsm8dzctjUXYBiAX0>
+X-ME-Received: <xmr:FeR1ZJE2eAzfR0xUjkZ8an_d5LlH7o-mZ0qW-WiCP3QlNgsZHyZuLrlTOuj4vKyKfcXL>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedggeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:FeR1ZOTtxKDA1nmYhfxnhpaZFoEdmFzbO5TCqYPx1x6ungZhd6SEbg>
+    <xmx:FeR1ZGzmB6QQlY-YqGVAdWHT7duh6ekXod3ToXhT6_oEK9Cjm4vFMA>
+    <xmx:FeR1ZE7A2ISZxdIt8wYsaw3fi5VZX_BYrbZvzD8PnvYSzL_oquwRug>
+    <xmx:FeR1ZK-hT-Krg6j2DPeVFrQwTDcy7Nauivk_jkL7UE09TaYrnTpmig>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 07:55:00 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <alpine.DEB.2.21.2305301152080.42601@angie.orcam.me.uk>
+Date:   Tue, 30 May 2023 12:54:49 +0100
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        zhao zhang <zhzhl555@gmail.com>,
-        Yang Ling <gnaygnil@gmail.com>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <BCECE3BF-7A4D-43BF-8AA8-2232D974CD71@flygoat.com>
+References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
+ <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
+ <alpine.DEB.2.21.2305301152080.42601@angie.orcam.me.uk>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 30, 2023 at 4:17=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 29/05/2023 10:31, Binbin Zhou wrote:
-> > Hi Krzysztof:
-> >
-> > Excuse me.
-> > We have different opinions on how to better describe rtc-loongson compa=
-tible.
-> >
-> > Based on my previous communication with you, I think we should list
-> > all the Socs in the driver and drop the wildcards.
->
-> Suggestion was about the bindings. Not in the driver. I never said to
-> list all compatibles in the driver...
->
-> > This should be clearer and more straightforward:
-> >
-> >         { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_conf=
-ig
-> > }, //ls1b soc
-> >         { .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1x_rtc_conf=
-ig
-> > }, //ls1c soc
-> >         { .compatible =3D "loongson,ls7a-rtc", .data =3D
-> > &generic_rtc_config }, //ls7a bridge chip
-> >         { .compatible =3D "loongson,ls2k0500-rtc", .data =3D
-> > &generic_rtc_config }, // ls2k0500 soc
-> >         { .compatible =3D "loongson,ls2k2000-rtc", .data =3D
-> > &generic_rtc_config }, // ls2k2000 soc
-> >         { .compatible =3D "loongson,ls2k1000-rtc", .data =3D
-> > &ls2k1000_rtc_config }, // ls2k1000 soc
->
-> I would suggest to use fallbacks as suggested by Conor at least for some
-> of them. You referred to my previous comments about wildcards.
-> Wildcard !=3D fallback.
->
-> >
-> > And Conor thought it should be rendered using a fallback compatible
-> > form based on ".data".
->
-> Based on common (compatible) programming model unless you already have
-> clear hardware differences making them incompatible.
->
-> >
-> >         "loongson,ls1b-rtc"
-> >         "loongson,ls1c-rtc", "loongson,ls1b-rtc"
-> >         "loongson,ls7a-rtc"
-> >         "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
-> >         "longson,ls2k2000-rtc", "longson,ls7a-rtc"
-> >         "loonson,ls2k1000-rtc"
-> >
-> >         { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_conf=
-ig }
-> >         { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_c=
-onfig }
-> >         { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_=
-rtc_config }
-> >
-> > In this form,  I think it might not be possible to show very
-> > graphically which chips are using the driver.
->
-> ??? How is it impossible? For all other SoCs and architectures it is
-> possible, so what is special for Loongson?
->
-> > Also, for example, "ls7a" is a bridge chip, while
-> > "ls2k2000"/"ls2k0500" are soc chips, and it seems inappropriate to
-> > integrate them into one item.
->
-> Why it is inappropriate? I don't see the issue here... what is a
-> "bridge" chip? Isn't this also an SoC?
->
-Hi Krzysztof:
 
-LS7A bridge chip can be considered as a combination of South and North
-bridge. Generally, it will be connected to the Loongson-3 series CPUs.
-LS2K500/LS2K1000/LS2K2000 refers to the LS2K series embedded CPU chip.
 
-Therefore, from the understanding of the driver code, I don't think it
-is appropriate to fallback them together. Please pardon me if this
-view does not apply to dt-binding.
+> 2023=E5=B9=B45=E6=9C=8830=E6=97=A5 12:07=EF=BC=8CMaciej W. Rozycki =
+<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Tue, 30 May 2023, Jiaxun Yang wrote:
+>=20
+>>>> M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
+>>>> backward compatible with MIPS32R2 there is no reason to forbid
+>>>> M5150 and P5600 on MIPS32R2 kernel.
+>>>=20
+>>> What problem are you trying to solve?  The CONFIG_SYS_HAS_CPU_* =
+settings=20
+>>> denote overall platform's support for the given CPU and have nothing =
+to do=20
+>>> with what architecture level a given kernel has been configured for. =
+ You=20
+>>> do need to get the settings right for your platform, just as you do =
+in=20
+>>> 2/2, but this 1/2 part looks wrong to me.
+>>=20
+>> Well the universal target is to allow R2 generic kernel to run on R5 =
+CPUs.
+>> As R5 is backward compatible we can just have one universal kernel =
+binary.
+>=20
+> Sure, but this change is not needed for it.  You just need to declare=20=
 
-If fallback is necessary, can we have this:
+> which ISA revisions your platform supports and leave `__get_cpu_type'=20=
 
-Let ls7a remain a separate item.
+> alone.  It has worked like that for a decade now.
 
-"loongson,ls1b-rtc"
-"loongson,ls1c-rtc", "loongson,ls1b-rtc"
-"loongson,ls7a-rtc"
-"loongson,ls2k0500-rtc"
-"loongson,ls2k2000-rtc", "loongson,ls2k0500-rtc"
-"loongson,ls2k1000-rtc"
+I=E2=80=99m afraid it won=E2=80=99t work as you expected.
 
-{ .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_config }
-{ .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_config }
-{ .compatible =3D "loongson,ls2k0500-rtc", .data =3D &generic_rtc_config }
-{ .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_rtc_config }
+Actually I ran into a problem that `case CPU_P5600` in c-r4k.c is =
+optimised out
+by compiler, because the codepath is marked as unreachable.
 
-Thanks.
-Binbin
+Thanks
+- Jiaxun
 
->
-> >
-> > Which one do you think is more suitable for us?
->
-> Use fallbacks for some. You pointed difference in alarm for ls1x, right?
-> If so, then they can stay separate.
->
-> ls2k500 and ls2k2000 seem compatible with each other so should use fallba=
-ck.
->
-> Best regards,
-> Krzysztof
->
+>=20
+> Back in the day I used to run R1 kernels on R2 hardware myself.  And=20=
+
+> maybe MIPS IV on R1 even, as we had MIPS Malta CPU modules with both =
+MIPS=20
+> IV devices (QED RM5261/RM7061) and MIPS64r1 devices (MIPS =
+5Kc/20Kc/25Kf)=20
+> and switching the kernel when swapping modules was a nuisance.  The =
+Malta=20
+> config still supports these devices although some may not exist =
+anymore.
+>=20
+>  Maciej
+
