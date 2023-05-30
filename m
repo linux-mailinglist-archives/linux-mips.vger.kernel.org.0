@@ -2,92 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1878B715836
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 10:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C39F7158C5
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 10:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjE3ITI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 04:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S229711AbjE3IjK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 04:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjE3ITE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 04:19:04 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F5B9D;
-        Tue, 30 May 2023 01:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1685434738;
+        with ESMTP id S230089AbjE3IjJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 04:39:09 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C256CBF;
+        Tue, 30 May 2023 01:39:07 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685435946;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cndrBEvjoH1OeoZKeuFmD3TUrxxCWmRRuavFehVpiWY=;
-        b=TT/23ooijGYmeBgg9uNwMITdnarWa/ig/g4ZSbKScrFBjNQgY+1azzKkhHYpdU7nkt4OX5
-        zOauVwdS0FCM3twOBJO5Ze9ofADGEYy2wOujWu9pCsJlO21sIm24UddOP4ore74R+7PQdj
-        Y48fy2eOcIU6PT3+8jl9p43imOFS5lA=
-Message-ID: <45a42e25658393e3767071960214b0ff47f0737b.camel@crapouillou.net>
-Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and
- M5150
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Tue, 30 May 2023 11:18:56 +0300
-In-Reply-To: <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
-References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
-         <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bh=2zMAQurx6j5eJt60qxcRl7LgyeTAElgXySavg4WXE30=;
+        b=SG8cB3IBdwzYA1YrzK4sNPTknENv6L1BK234JvN/fQQ549/HLGQChEV4sUhCJ1OfSIuHwB
+        UY2LunyjvHAALHHOctFLXIsKJo382RJgKzV2LYF7DC6Hscn302ONMCx7nItzz8dMtUJXmP
+        KxPn1HdKwizWQwEuZXWG8vbY1fVZ3CC6QkSccNwF954wKOTmB/TabNwn70HnOeoq8+97Z7
+        fbwVpoOxKxA8ViT42ASJIRYvg1Nk3EJEx58PvIQfCG5wlKtOC8H3pvzIoLPT9SjVvRrc4D
+        wtp/9VQXAtRfI+Q9Efu50UCqrzgcPQTtEOpncpQiQCPrO0WOK9bC58eDtjr9Mg==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7DBF8C0004;
+        Tue, 30 May 2023 08:39:03 +0000 (UTC)
+Date:   Tue, 30 May 2023 10:39:02 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>,
+        Yang Ling <gnaygnil@gmail.com>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH V4 2/5] rtc: Remove the Loongson-1 RTC driver
+Message-ID: <20230530083902f09c6b43@mail.local>
+References: <cover.1684983279.git.zhoubinbin@loongson.cn>
+ <98fc717871d3a39b18ad1a26780d0d2cf1fa0896.1684983279.git.zhoubinbin@loongson.cn>
+ <2f883bad-2f8e-ef03-fc3f-c13980fb1536@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f883bad-2f8e-ef03-fc3f-c13980fb1536@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Maciej,
+On 30/05/2023 10:08:22+0200, Krzysztof Kozlowski wrote:
+> On 25/05/2023 14:55, Binbin Zhou wrote:
+> > Remove the ls1x-rtc driver as it is obsolete. We will continue to
+> > support the ls1x RTC in the upcoming Loongson unified RTC driver
+> > rtc-loongson.
+> > 
+> > Cc: Keguang Zhang <keguang.zhang@gmail.com>
+> > Cc: zhao zhang <zhzhl555@gmail.com>
+> > Cc: Yang Ling <gnaygnil@gmail.com>
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > ---
+> >  drivers/rtc/Kconfig    |  10 ---
+> >  drivers/rtc/Makefile   |   1 -
+> >  drivers/rtc/rtc-ls1x.c | 192 -----------------------------------------
+> >  3 files changed, 203 deletions(-)
+> 
+> Removal in one commit and adding a new driver in second is not what we
+> usually do. We expect code to be developed and to evolve.
+> 
 
-Le mardi 30 mai 2023 =C3=A0 09:03 +0100, Maciej W. Rozycki a =C3=A9crit=C2=
-=A0:
-> On Mon, 29 May 2023, Jiaxun Yang wrote:
->=20
-> > M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
-> > backward compatible with MIPS32R2 there is no reason to forbid
-> > M5150 and P5600 on MIPS32R2 kernel.
->=20
-> =C2=A0What problem are you trying to solve?=C2=A0 The CONFIG_SYS_HAS_CPU_=
-*
-> settings=20
-> denote overall platform's support for the given CPU and have nothing
-> to do=20
-> with what architecture level a given kernel has been configured for.=C2=
-=A0
-> You=20
-> do need to get the settings right for your platform, just as you do
-> in=20
-> 2/2, but this 1/2 part looks wrong to me.
->=20
-> =C2=A0NB CPU_4KEC is double-listed as R1 and R2 because early revisions o=
-f
-> the=20
-> 4KEc core were actually R1 before switching to R2, so this CPU can
-> report=20
-> either revision.
->=20
-> =C2=A0I don't know why CPU_XBURST is also listed as both R1 and R2, the
-> history=20
-> looks convoluted with no explanation.=C2=A0 Paul, is the CPU also dual-
-> revision=20
-> or is it just a bug and it is supposed to be listed under one ISA
-> revision
-> only, presumably R2?
+I'm fine with that, even if unusual.
 
-The XBurst CPU is R1 in older Ingenic SoCs (JZ4760B and older), and R2
-in newer SoCs (JZ4770 and newer).
 
-Cheers,
--Paul
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
