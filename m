@@ -2,161 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEC7715C2D
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 12:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731C7715C9F
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjE3KrB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 06:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S231239AbjE3LH3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 07:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjE3Kqe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 06:46:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77397D9;
-        Tue, 30 May 2023 03:46:27 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685443583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aczuPZRXM/3T3zeRyckgFz17tXnOXBoIRzMvbCKmwP4=;
-        b=jtpE+gCbIAd5N53RxGc6sgaT2si80ubO5trdzq0YZPJgj0u0uGxnEtLhxrdtPRPKOaDE18
-        ztu5b4k5XEjvK/fjpfaluMv16JvaD5E4Z3L+jqW7tLBl5pCr13VXjUoqvtgyKLd/Y/xqu/
-        84SV1UbOvwmhndn5fFxZSGrnlbePrrHSpEQPGnffMATrvpt3ZAkTXG6ylWpzmAYhS4dUem
-        FTBfKKPOVhev4++C/nR20YRFt6jyNNtCz9uhzfOoHg4olSWAigaKti8fg/vEQYtVI0MLbc
-        gP2h3BhbdhTtPHPbM7xx+svbc8m0rHw4UqvtNs/L/faaOGodmpnGf4MovXV/Gg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685443583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aczuPZRXM/3T3zeRyckgFz17tXnOXBoIRzMvbCKmwP4=;
-        b=Hfhdo2/Q/3z4khc8VnhVtRu45XjAYTmDIx3ynzUXbEbUuJzXZUdsmlA0kYxl32RnfB9UKw
-        25lgiYCSG2Kzr+Dw==
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [patch] x86/realmode: Make stack lock work in trampoline_compat()
-In-Reply-To: <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
-Date:   Tue, 30 May 2023 12:46:22 +0200
-Message-ID: <87h6rujdvl.ffs@tglx>
+        with ESMTP id S229724AbjE3LH2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:07:28 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F1FC93;
+        Tue, 30 May 2023 04:07:26 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 39AC492009C; Tue, 30 May 2023 13:07:26 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 3298B92009B;
+        Tue, 30 May 2023 12:07:26 +0100 (BST)
+Date:   Tue, 30 May 2023 12:07:26 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     Paul Cercueil <paul@crapouillou.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and
+ M5150
+In-Reply-To: <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2305301152080.42601@angie.orcam.me.uk>
+References: <20230529135245.4085-1-jiaxun.yang@flygoat.com> <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk> <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The stack locking and stack assignment macro LOAD_REALMODE_ESP fails to
-work when invoked from the 64bit trampoline entry point:
+On Tue, 30 May 2023, Jiaxun Yang wrote:
 
-trampoline_start64
-  trampoline_compat
-    LOAD_REALMODE_ESP <- lock
+> >> M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
+> >> backward compatible with MIPS32R2 there is no reason to forbid
+> >> M5150 and P5600 on MIPS32R2 kernel.
+> > 
+> > What problem are you trying to solve?  The CONFIG_SYS_HAS_CPU_* settings 
+> > denote overall platform's support for the given CPU and have nothing to do 
+> > with what architecture level a given kernel has been configured for.  You 
+> > do need to get the settings right for your platform, just as you do in 
+> > 2/2, but this 1/2 part looks wrong to me.
+> 
+> Well the universal target is to allow R2 generic kernel to run on R5 CPUs.
+> As R5 is backward compatible we can just have one universal kernel binary.
 
-Accessing tr_lock is only possible from 16bit mode. For the compat entry
-point this needs to be pa_tr_lock so that the required relocation entry is
-generated. Otherwise it locks the non-relocated address which is
-aside of being wrong never cleared in secondary_startup_64() causing all
-but the first CPU to get stuck on the lock.
+ Sure, but this change is not needed for it.  You just need to declare 
+which ISA revisions your platform supports and leave `__get_cpu_type' 
+alone.  It has worked like that for a decade now.
 
-Make the macro take an argument lock_pa which defaults to 0 and rename it
-to LOCK_AND_LOAD_REALMODE_ESP to make it clear what this is about.
+ Back in the day I used to run R1 kernels on R2 hardware myself.  And 
+maybe MIPS IV on R1 even, as we had MIPS Malta CPU modules with both MIPS 
+IV devices (QED RM5261/RM7061) and MIPS64r1 devices (MIPS 5Kc/20Kc/25Kf) 
+and switching the kernel when swapping modules was a nuisance.  The Malta 
+config still supports these devices although some may not exist anymore.
 
-Fixes: f6f1ae9128d2 ("x86/smpboot: Implement a bit spinlock to protect the realmode stack")
-Reported-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/realmode/rm/trampoline_64.S |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -37,12 +37,16 @@
- 	.text
- 	.code16
- 
--.macro LOAD_REALMODE_ESP
-+.macro LOCK_AND_LOAD_REALMODE_ESP lock_pa=0
- 	/*
- 	 * Make sure only one CPU fiddles with the realmode stack
- 	 */
- .Llock_rm\@:
-+	.if \lock_pa
-+        lock btsl       $0, pa_tr_lock
-+	.else
-         lock btsl       $0, tr_lock
-+	.endif
-         jnc             2f
-         pause
-         jmp             .Llock_rm\@
-@@ -63,7 +67,7 @@ SYM_CODE_START(trampoline_start)
- 	mov	%ax, %es
- 	mov	%ax, %ss
- 
--	LOAD_REALMODE_ESP
-+	LOCK_AND_LOAD_REALMODE_ESP
- 
- 	call	verify_cpu		# Verify the cpu supports long mode
- 	testl   %eax, %eax		# Check for return code
-@@ -106,7 +110,7 @@ SYM_CODE_START(sev_es_trampoline_start)
- 	mov	%ax, %es
- 	mov	%ax, %ss
- 
--	LOAD_REALMODE_ESP
-+	LOCK_AND_LOAD_REALMODE_ESP
- 
- 	jmp	.Lswitch_to_protected
- SYM_CODE_END(sev_es_trampoline_start)
-@@ -189,7 +193,7 @@ SYM_CODE_START(pa_trampoline_compat)
- 	 * In compatibility mode.  Prep ESP and DX for startup_32, then disable
- 	 * paging and complete the switch to legacy 32-bit mode.
- 	 */
--	LOAD_REALMODE_ESP
-+	LOCK_AND_LOAD_REALMODE_ESP lock_pa=1
- 	movw	$__KERNEL_DS, %dx
- 
- 	movl	$(CR0_STATE & ~X86_CR0_PG), %eax
+  Maciej
