@@ -2,146 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB291715F69
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 14:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF433716020
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 14:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjE3MaM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S231945AbjE3MmB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 08:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjE3MaA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 08:30:00 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A1ED9;
-        Tue, 30 May 2023 05:29:59 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0F49D5C0187;
-        Tue, 30 May 2023 08:29:56 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 30 May 2023 08:29:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685449796; x=
-        1685536196; bh=EEiwGlX0Rwp4JD9gZJQ2+HoBg+CT8hF4DrYL0banGb4=; b=J
-        hSWsjxiEcHNkhsyc3AMDUebr4x6d+5Z/IPmQcP3r3HEa2PV4iCNRm3rpXjqMalMw
-        /OE0m3uI6TqVPy5TXs2laPgrna5SS91VjYoT0EXhAxxqYtnfxHMo7QJ6Jnmck2VP
-        qm3TSO2CTWhnzg3XOjo+mkHnuk/QAm3oPsYysD8xP3lNHGWahS0Xzz2Vdy00xqfC
-        yAn6/IaCpooPjW/r5dFkd/NaFIY0S16nWFqTsAWzyPFXWDFJvzH1dM+PTmRZ6g7j
-        2o0X6GJUAtrKbuNWm0yrLAHjaZxrzujAqghJbB5Pgmh3apFHgN+WZcMp8TtzR5PN
-        UmtTiyLIs/YDkMAzAHUpw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685449796; x=1685536196; bh=EEiwGlX0Rwp4J
-        D9gZJQ2+HoBg+CT8hF4DrYL0banGb4=; b=O8gpcmbIa+lNB390LgDoxjyCM0VpN
-        DeUDIRCCkjdQ+WpdGdzcgnse0TwvjzKgs5YriXR9QomUEOgfslSoIJc3vkGujs74
-        VPkfaqeBhzNmKSfdheBPc28aFjtzgiElyb8XMQ0DCHEgvEKGVEHWluQY5NUAZeJE
-        0lhHFHNpkdZmPZZBdDmvBiTp7eiVYb6eCW3ZjMWdk153TSS6tRrEHYat++3ogA0G
-        Z8/iPnkXzgVKZDv3CCQVLAT94m9xNd1Y4sHfuu5+Nx2HBWBDzJVK/E2qPoDde2j0
-        6E+pDcEqROIFws3Einak7j/Pec39SrUOUvx1BCXKNueY+QbbjiTx3jhIA==
-X-ME-Sender: <xms:Qux1ZDpZHdZDdRqzuQ3oUtp4N6AbptLlyGyPf-zqztvLum_Wpk8xEg>
-    <xme:Qux1ZNo1F15jgz6IzDPB24Axf7HXd1_RtRQC-fw6kQbdty6wE8mBYqfLb7uXR-P_r
-    JVGo2mcRT2J7JcrdCo>
-X-ME-Received: <xmr:Qux1ZAMinJKpb7I-Q699cMCl5dTtv9S_hHYYcGI6fA9B46v2Q7yLRFaxadSo-LlFaSYPXQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:Qux1ZG6ZsOw6xeVtxhzYN2s1-Hwz6qJfUWen7z_-iQrz1HVXN1ijxA>
-    <xmx:Qux1ZC7stYJcdgzWQepJmmrvNf0MLSMCayxkwEJj9btY7h4-oM2Vrw>
-    <xmx:Qux1ZOh_9TgCy4k005YOTV8O1Ry7xm6HbvZqesWx4liI3OpUdnIllw>
-    <xmx:ROx1ZAaQz7AjEzvPi21kVUbjMxYAZy5wCX2Z0W4XoTeRn9P4Z4ohSw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 08:29:54 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id EB5E1104992; Tue, 30 May 2023 15:29:51 +0300 (+03)
-Date:   Tue, 30 May 2023 15:29:51 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-Message-ID: <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
-References: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
- <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx>
- <87cz2ija1e.ffs@tglx>
+        with ESMTP id S229473AbjE3Mlz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 08:41:55 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7012116;
+        Tue, 30 May 2023 05:41:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f4f757d575so3272871e87.0;
+        Tue, 30 May 2023 05:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685450490; x=1688042490;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AXaBIyVkac3rpUtYwBflOv6zoeF3mDER/Xuhtgf0HxI=;
+        b=JDDM0WvC217/SS1BoFRzZ3KDw+XWOI03wOCwV/mGeCYgPrL9rJtWgt/fXaNQTnRGnF
+         sdVU1IhJsZksQ0ovu75OBR4qE11W6cy4ROj7smbnyhG94bkEA27C73vVVnxFVTcgfsw8
+         ez95ROtkfdNG6jBrLrZzfyZrFAK4LKqi/IcDax7bDxLi/lNcRutEliXXQC7kP/vU7ALv
+         FsZ32HBg9dS5iu3LsR2ngyXPwSQLyXnDaj1q1YjzytWWjEe+frN9oI3697fPuC6xNj+y
+         aJ5uH9lAlr/f06RYqCp3c+Sjd6I4zvToutEDNElOppPJ8f7Mx5WJWQJ3FeKMDi2LkgQZ
+         P4/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685450490; x=1688042490;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AXaBIyVkac3rpUtYwBflOv6zoeF3mDER/Xuhtgf0HxI=;
+        b=f0kFItLXVsnmmBoklcvMifgGqkqZpkO0qhENqyjk4PrdTmfLg9cRfcbf+SCx0XSLwE
+         iXlgHUQH2Dnt8ZcpuVOs02VRrD31h+MwuVt4eZtfN869DnzmoMyTF1gNidQsfPTE7xd2
+         VLJkQDVAjoIsH/HBktrm/pX/bxOZcTB9bR1jfDJDELxQlb0mpXoCo+IcsLYJMvDH4RaD
+         4rul6jnrcUhxWU/G/VtsYR38ZUqfGFm1qKPzpzLKBLpo26taPx3G5ocEc4qSpaQYIKzE
+         9Ghi/wbii3C+ROf6j6WZvNnuEtl0jYo+pB+l3/1l5JcW8zLnZ0Zxum3dZLEwUND5q5Wd
+         Fq2A==
+X-Gm-Message-State: AC+VfDxTJt9gDxQE7qS/E9YwYUGUVh0+3MvtfViE01KZMJJqDqPDCkWK
+        Lo0bBPVhDQdy3v1RhPJB35bY4BwkyBI=
+X-Google-Smtp-Source: ACHHUZ42xZ3SWl/k60L/ACqzSFzTYi56GXGjH1R23w2LlPlQ4o740RMIVAdcGqaUXimVaSd0i0FJkA==
+X-Received: by 2002:ac2:5296:0:b0:4ed:d5ce:7dea with SMTP id q22-20020ac25296000000b004edd5ce7deamr755848lfm.27.1685450490326;
+        Tue, 30 May 2023 05:41:30 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id f6-20020ac25326000000b004f2529c71c1sm330070lfh.260.2023.05.30.05.41.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 05:41:29 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:41:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
+Message-ID: <20230530124127.z5rr5vauw43rafrt@mobilestation>
+References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
+ <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
+ <alpine.DEB.2.21.2305301152080.42601@angie.orcam.me.uk>
+ <BCECE3BF-7A4D-43BF-8AA8-2232D974CD71@flygoat.com>
+ <alpine.DEB.2.21.2305301315120.42601@angie.orcam.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87cz2ija1e.ffs@tglx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.DEB.2.21.2305301315120.42601@angie.orcam.me.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
-> The decision to allow parallel bringup of secondary CPUs checks
-> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
-> parallel bootup because accessing the local APIC is intercepted and raises
-> a #VC or #VE, which cannot be handled at that point.
+On Tue, May 30, 2023 at 01:16:32PM +0100, Maciej W. Rozycki wrote:
+> On Tue, 30 May 2023, Jiaxun Yang wrote:
 > 
-> The check works correctly, but only for AMD encrypted guests. TDX does not
-> set that flag.
+> > > Sure, but this change is not needed for it.  You just need to declare 
+> > > which ISA revisions your platform supports and leave `__get_cpu_type' 
+> > > alone.  It has worked like that for a decade now.
+> > 
+> > I’m afraid it won’t work as you expected.
+> > 
+> > Actually I ran into a problem that `case CPU_P5600` in c-r4k.c is optimised out
+> > by compiler, because the codepath is marked as unreachable.
 > 
-> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
-> definitely works for both AMD and Intel.
+>  Maybe there's a bug elsewhere then.  Send me your .config and I'll try to 
+> reproduce it.
 
-It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
-report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
-we want it.
+I may have misunderstood something, but it seems like there is no such
+problem on my P5600 system:
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+[fancer@mobilestation] kernel $ grep -r P5600 -B2 -A2 arch/mips/mm/c-r4k.c 
+        case CPU_1004K:
+        case CPU_INTERAPTIV:
+        case CPU_P5600:
+        case CPU_PROAPTIV:
+        case CPU_M5150:
+--
+        case CPU_P6600:
+        case CPU_M6250:
+                pr_info("MIPS P5600 is here\n");
+                if (!(read_c0_config7() & MIPS_CONF7_IAR) &&
+                    (c->icache.waysize > PAGE_SIZE))
+
+Log:
+[    0.000000] Linux version 6.4.0-rc1-bt1-00235-gf9efd6b74b12-dirty (fancer@mobilestation) (mipsel-baikal-linux-gcc (GCC) 7.3.0, GNU ld (GNU Binutils) 2.30.0.20180208) #1
+275 SMP PREEMPT Tue May 30 15:30:48 MSK 2023
+[    0.000000] CPU0 revision is: 0001a830 (MIPS P5600)
+[    0.000000] FPU revision is: 30f30320
+[    0.000000] MSA revision is: 00000320
+...
+[    0.000000] VPE topology {1,1} total 2
+[    0.000000] MIPS P5600 is here
+...
+
+-Serge(y)
+
+> 
+>   Maciej
