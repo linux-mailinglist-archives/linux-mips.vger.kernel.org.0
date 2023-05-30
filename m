@@ -2,157 +2,206 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591E3715D5C
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C025D715D69
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbjE3Lht (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 07:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S229681AbjE3LkF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 07:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjE3Lhs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:37:48 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D607F0;
-        Tue, 30 May 2023 04:37:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E3DF45C017D;
-        Tue, 30 May 2023 07:37:43 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 30 May 2023 07:37:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685446663; x=
-        1685533063; bh=O6qShh+asEKKf+CBp8F6HZvUgA+aseK9FX7RcXKq70E=; b=T
-        PxfL1LB8q81/rUHg2XvMW3/4dxt+oSWRPKcAA/VfwYJOvqRMkuXbP9hfoQUPlVSO
-        3soZ2+X/mMLCpkpE36IZk2R8xohb+JFPwPG226Er1VdHwSTvTSzW4L1L4BfMdTAl
-        cyvBNn8WObkCH3dHEG0vdM9jEvph3Kqx1tVbGsUe3WZ44vXaE8v5maJ2RJe+YrSC
-        GX5joEHfNuuIsxFWMg4QoCYDUUuSy4hBfDCbYL5QS75GdWcak7oLD0I/A7g5ySLZ
-        97gbvYvfHV4/mUcIJk6wxGA0aOki4z2l3aOHQ/J9CG6pEcuQByuQm5NukOQOPZXq
-        vPq3NVhuEDvhWnhHty/kQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685446663; x=1685533063; bh=O6qShh+asEKKf
-        +CBp8F6HZvUgA+aseK9FX7RcXKq70E=; b=l0ULuSdSAZxz4Id4NCjNDvSuSOjMi
-        QqSMBgGatnuAwLmz3fq+W4g/oun3yPwfK//TkFcZ6Qq+DMdNuFKSZkR/czNaanZ3
-        gznyzrlaJqmjlULYXIN7dHt3y127wCGCkXO0rr+NHuFgCc4N3xN5GwyOadZlstUV
-        a3o1mniuANA9XqsFbG+jwBgNe/OGqk/sN44MUk+0RSsbIyYvHHYSTkvoRnOn6SeF
-        rv4hWOEyn4GZwmVgc+SFsnrI01HOSbZcYCrd6IFT0pqXMDUW4Vmh2gZ04tO5eISK
-        EoKkp0YR75uKBoU43kRStRyPv6JkVt6WDRCdPoFTo8MuPbZ66elW67kDQ==
-X-ME-Sender: <xms:BuB1ZOy_Q46awEmN2n8G6kx8lsnsXgrIxRUOpUzTmTdMa1-A14ViIw>
-    <xme:BuB1ZKTbzE4D__kHwieS6qeKhQFl4uQ6IxouuMedEdB1YUPeLzq8gSfMAkpVKHfMg
-    QLPoAR-6feJERNRsXc>
-X-ME-Received: <xmr:BuB1ZAU1H0WyeO0sWr9ctDyadG9xs8jMn7SxVF4JQokcsMi1YeZCk5CAfCZUAhfjSHSbbg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedggedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:BuB1ZEh9a_Nx2KnEl0bxE_6wFFsAAHJjtQ7tVuZLckQsjbx72eMOOw>
-    <xmx:BuB1ZADM9mF7NSxqOPQgVmbPy_3aGLmt_VDiuZpBghOrn8S6GDODfQ>
-    <xmx:BuB1ZFJ4QwIW-3zwUMfEScRRvHHBGJkOJozaJp0tgTSGdiBfitkTXw>
-    <xmx:B-B1ZGgs54qOEGkAg2SG46XGOwz7zUTLzQh2fKV_ve3nUjRgpDEsOg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 07:37:42 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 177A51098DC; Tue, 30 May 2023 14:37:40 +0300 (+03)
-Date:   Tue, 30 May 2023 14:37:40 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-Message-ID: <20230530113740.lbvg4to747xo32a7@box.shutemov.name>
-References: <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
- <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx>
+        with ESMTP id S229593AbjE3LkE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:40:04 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B53C5;
+        Tue, 30 May 2023 04:40:03 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9daef8681fso3358245276.1;
+        Tue, 30 May 2023 04:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685446802; x=1688038802;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pl5TicixGzRQ0Rq0fw3FNPOG1mfIhS0y+dbkDNMEbHI=;
+        b=brYtG3pmzpjYxd0Gspn+o+J/iBHmc4MVzR7HSexEtLmYmHpWz1GUbxDnAePchkkuDT
+         1X1eWz/LvDJ3VPoUwppx5yQIj5reIhouxsv5CIrwspQUd1p7DEzGuKnZLRrqSfA/Ut6v
+         +DEsWTkChutc2HZT/Jo4WQhhys9SqMj5zujqLXp5XUJSgMc4yeFVcg1u+g9UfVxetwMj
+         AT+wofkSXoUraY/WlFJOq8mLWycHCH+GR1fW+mysT8oBxYlrMXnOcdPbexFnJi4kBFC/
+         rdvOS4sJoBZ2An8avCaTGirU9DJ2JDz9H6OCeanbmygSBFWqI1iFd9zIjqkRNXRvMsq6
+         icHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685446802; x=1688038802;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pl5TicixGzRQ0Rq0fw3FNPOG1mfIhS0y+dbkDNMEbHI=;
+        b=MwXqG9oqi1QPezU8pNf8B5UVP5YToh+cx6WTSMllKHXoufez5u1ClWljLBfzLlm65v
+         HU3GLyGpsOG9+HbyEXTryuRdkuzUMO+e/V26+8IcaeNpJVefiR8il6bm9Iqcs8VI6/jc
+         ne4GMtremsv/JoL0o5NZ+iAUs9PTU6zIT262SrkHar8LpNlEv2dwCXGrVscYAykod0gy
+         MD7IT0V4Q73Xg12nFuDuL3MmiUd52RX1VbFvdIASYKXHn2KSBqy8gZnKqCdSK6ASu4Zj
+         R7NAh10s9L4C6FJSCKN86wFJdLwPuDQedYs7X1N+DyLZXnGK43j3C5uKg5k/XI4lE1zr
+         DTTg==
+X-Gm-Message-State: AC+VfDwF+lD9UFEUPeejNerSFgWndht86Wg5iWFE27L+i/zGvcelxfff
+        l8XsQeLkITbzvHRmsFHtwxmCryVF001a+EQ605Q=
+X-Google-Smtp-Source: ACHHUZ5HLiNtBoCLtNDdf4gENt8MpYtx6f5wliUYDAFOEj+EumK9qpKm+caObyiJwcoOzICOaaSjesoNWnDLtA2vx+g=
+X-Received: by 2002:a0d:d4cd:0:b0:564:c4db:633a with SMTP id
+ w196-20020a0dd4cd000000b00564c4db633amr2212623ywd.15.1685446802410; Tue, 30
+ May 2023 04:40:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87jzwqjeey.ffs@tglx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1684983279.git.zhoubinbin@loongson.cn> <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
+ <20230525-custody-oversleep-f778eddf981c@spud> <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
+ <20230526-dolly-reheat-06c4d5658415@wendy> <CAMpQs4KeHCW+9ssAn-jF0efiUOzERRFDu9Sjz1Mtv5Lk1uFuPA@mail.gmail.com>
+ <A206E0A5-9BF0-4787-9B06-9F91FA3C60A3@flygoat.com> <20230527-passing-unfixed-39e01b787808@spud>
+ <14EF9F21-8150-40D9-8870-E9151C4882CF@flygoat.com> <20230527-poet-antarctic-cc02aa60ab52@spud>
+ <CAJhJPsU_qOJKO99S1xjJaSUqXsXAG7HpYbzs5wTb8J4-tQqSQA@mail.gmail.com>
+ <E229B204-1B00-4B24-B4BF-15277682FB4B@kernel.org> <CAMpQs4K4e3BSVvqXa+QjhM5XDxHc_ZCiRYW+HgPo21AQ_bYSRQ@mail.gmail.com>
+ <6845b6ce-06a8-9a0c-7f04-50fa906cd1e4@linaro.org>
+In-Reply-To: <6845b6ce-06a8-9a0c-7f04-50fa906cd1e4@linaro.org>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Tue, 30 May 2023 19:39:50 +0800
+Message-ID: <CAMpQs4JLp3iUh6LkN6SND8O8wRZZcM04Shcq4rUa5QEOUAVsGg@mail.gmail.com>
+Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the trivial RTCs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        zhao zhang <zhzhl555@gmail.com>,
+        Yang Ling <gnaygnil@gmail.com>,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 30, 2023 at 12:34:45PM +0200, Thomas Gleixner wrote:
-> On Tue, May 30 2023 at 11:26, Thomas Gleixner wrote:
-> > On Tue, May 30 2023 at 03:54, Kirill A. Shutemov wrote:
-> >> On Mon, May 29, 2023 at 11:31:29PM +0300, Kirill A. Shutemov wrote:
-> >>> Disabling parallel bringup helps. I didn't look closer yet. If you have
-> >>> an idea let me know.
-> >>
-> >> Okay, it crashes around .Lread_apicid due to touching MSRs that trigger #VE.
-> >>
-> >> Looks like the patch had no intention to enable parallel bringup on TDX.
-> >>
-> >> +        * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-> >> +        * implemented seperately in the low level startup ASM code.
-> >>
-> >> But CC_ATTR_GUEST_STATE_ENCRYPT that used to filter it out is
-> >> SEV-ES-specific thingy and doesn't cover TDX. I don't think we have an
-> >> attribute that fits nicely here.
+On Tue, May 30, 2023 at 4:17=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 29/05/2023 10:31, Binbin Zhou wrote:
+> > Hi Krzysztof:
 > >
-> > Bah. That sucks.
-> 
-> Can we have something consistent in this CC space or needs everything to
-> be extra magic per CC variant?
+> > Excuse me.
+> > We have different opinions on how to better describe rtc-loongson compa=
+tible.
+> >
+> > Based on my previous communication with you, I think we should list
+> > all the Socs in the driver and drop the wildcards.
+>
+> Suggestion was about the bindings. Not in the driver. I never said to
+> list all compatibles in the driver...
+>
+> > This should be clearer and more straightforward:
+> >
+> >         { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_conf=
+ig
+> > }, //ls1b soc
+> >         { .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1x_rtc_conf=
+ig
+> > }, //ls1c soc
+> >         { .compatible =3D "loongson,ls7a-rtc", .data =3D
+> > &generic_rtc_config }, //ls7a bridge chip
+> >         { .compatible =3D "loongson,ls2k0500-rtc", .data =3D
+> > &generic_rtc_config }, // ls2k0500 soc
+> >         { .compatible =3D "loongson,ls2k2000-rtc", .data =3D
+> > &generic_rtc_config }, // ls2k2000 soc
+> >         { .compatible =3D "loongson,ls2k1000-rtc", .data =3D
+> > &ls2k1000_rtc_config }, // ls2k1000 soc
+>
+> I would suggest to use fallbacks as suggested by Conor at least for some
+> of them. You referred to my previous comments about wildcards.
+> Wildcard !=3D fallback.
+>
+> >
+> > And Conor thought it should be rendered using a fallback compatible
+> > form based on ".data".
+>
+> Based on common (compatible) programming model unless you already have
+> clear hardware differences making them incompatible.
+>
+> >
+> >         "loongson,ls1b-rtc"
+> >         "loongson,ls1c-rtc", "loongson,ls1b-rtc"
+> >         "loongson,ls7a-rtc"
+> >         "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
+> >         "longson,ls2k2000-rtc", "longson,ls7a-rtc"
+> >         "loonson,ls2k1000-rtc"
+> >
+> >         { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_conf=
+ig }
+> >         { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_c=
+onfig }
+> >         { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_=
+rtc_config }
+> >
+> > In this form,  I think it might not be possible to show very
+> > graphically which chips are using the driver.
+>
+> ??? How is it impossible? For all other SoCs and architectures it is
+> possible, so what is special for Loongson?
+>
+> > Also, for example, "ls7a" is a bridge chip, while
+> > "ls2k2000"/"ls2k0500" are soc chips, and it seems inappropriate to
+> > integrate them into one item.
+>
+> Why it is inappropriate? I don't see the issue here... what is a
+> "bridge" chip? Isn't this also an SoC?
+>
+Hi Krzysztof:
 
-IIUC, CC_ATTR_GUEST_MEM_ENCRYPT should cover all AMD SEV flavours and
-Intel TDX. But the name is confusing in this context: memory encryption
-has nothing to do with the APIC.
+LS7A bridge chip can be considered as a combination of South and North
+bridge. Generally, it will be connected to the Loongson-3 series CPUs.
+LS2K500/LS2K1000/LS2K2000 refers to the LS2K series embedded CPU chip.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Therefore, from the understanding of the driver code, I don't think it
+is appropriate to fallback them together. Please pardon me if this
+view does not apply to dt-binding.
+
+If fallback is necessary, can we have this:
+
+Let ls7a remain a separate item.
+
+"loongson,ls1b-rtc"
+"loongson,ls1c-rtc", "loongson,ls1b-rtc"
+"loongson,ls7a-rtc"
+"loongson,ls2k0500-rtc"
+"loongson,ls2k2000-rtc", "loongson,ls2k0500-rtc"
+"loongson,ls2k1000-rtc"
+
+{ .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_config }
+{ .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_config }
+{ .compatible =3D "loongson,ls2k0500-rtc", .data =3D &generic_rtc_config }
+{ .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_rtc_config }
+
+Thanks.
+Binbin
+
+>
+> >
+> > Which one do you think is more suitable for us?
+>
+> Use fallbacks for some. You pointed difference in alarm for ls1x, right?
+> If so, then they can stay separate.
+>
+> ls2k500 and ls2k2000 seem compatible with each other so should use fallba=
+ck.
+>
+> Best regards,
+> Krzysztof
+>
