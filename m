@@ -2,63 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29A0716085
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 14:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4B9716113
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 15:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjE3Mvi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 08:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S232278AbjE3NHQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 09:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjE3Mvg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 08:51:36 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52496A1;
-        Tue, 30 May 2023 05:51:06 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so4777997e87.2;
-        Tue, 30 May 2023 05:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685451063; x=1688043063;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Gal9XjgCsS2UDUaYyweRJgD8pL7uFqcBLW5/YTWPodM=;
-        b=hOxtt9iOuVVmIO+k/mOsv0DE529D5ZqZfPFubolRq5Qt0pzRZAjajiLHRFbwjpwiv7
-         XUcVtEjV8LgXPys7mpSFtU6w1gvx6zv13XP7IybXvS0gcuDoWplueVIQdZMM0GOWqG09
-         tj0ky/eJVdoudEf1pDAjvBKBzWODz6djPGqg1Gh3zy3UTDUNJ1knJ7bcxRoCGon7as8L
-         Z5CjaCneU5N2hb4nDYcOL1hLiSnDB3+9s7kjHxkY2m1MkRW3KrA4jiH+AiX/LjBMA5Fc
-         uu5O04VlSPaZ/Tt/Z2hgRNGM6FTX0LN/l0L2nI5QwLO2z+l3hFgaUlxaUphsoHFeZToD
-         Va+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451063; x=1688043063;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gal9XjgCsS2UDUaYyweRJgD8pL7uFqcBLW5/YTWPodM=;
-        b=kyW3xu9PuF3n8gqACoUWhii2+dFB5BBCqfvwllWDR/BPbCmEuM2deThhdZTdggPjEQ
-         uuFBC5VZ7EtznqelMXQNGfZ9p82itGz1VTlC+Y7UdqlW+GCAhGi66bLZJk312WFIvvXN
-         pBXblILoaa3Fp3hwSqY68EzOKjatW/5DXRxYJzs4Mpw8mRdEmmpTlLWZX686MZYVMjHO
-         GKt5XaoKe88mM533Z9ipcHJYU1GoAO7t+qkirPkqxIEp13m6VDhOghHXqnKoGu3i1p8E
-         Dyx7HUWNBPovrzXxs70yPOqYIMZ+7yUJAP1G+MxrmvW38zBo4+JEnIxFwyYlNz/n5Zlp
-         hOxQ==
-X-Gm-Message-State: AC+VfDxtwx8sPKkx4QwqSt28HGUIwbjUVyb6+YAVyiKhr4ikohxl2kSR
-        PLdcdFC/QL+2lrGulnwkqqQ=
-X-Google-Smtp-Source: ACHHUZ5iTQf3pMnSMzAz1V1jS3WQKztyQ0Zo5d8VZ5HJrCm/W3RISSpWjZoJNdQmAb7nJ4+hcqkNEg==
-X-Received: by 2002:ac2:53a7:0:b0:4f3:aa29:b663 with SMTP id j7-20020ac253a7000000b004f3aa29b663mr764401lfh.35.1685451062781;
-        Tue, 30 May 2023 05:51:02 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id u11-20020ac243cb000000b004efedad4604sm337636lfl.18.2023.05.30.05.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:51:02 -0700 (PDT)
-Date:   Tue, 30 May 2023 15:51:00 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        with ESMTP id S229649AbjE3NHP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 09:07:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974A992;
+        Tue, 30 May 2023 06:07:14 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id D709C5C0154;
+        Tue, 30 May 2023 08:57:51 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 30 May 2023 08:57:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1685451471; x=1685537871; bh=/vngq095dMysS+VQMtZnh+O7OIzkDlS3aNu
+        +O6rzhPE=; b=O0MGN6+EIEinJG8m8aHuQe4WKepJbOGM2WgIvnMr052EKTYpHob
+        6xWjFcXm9dZaxW8gk2DNluYy1dpk2k/AU5T3PVvv0xNP3WnNwbwLqYbgVuKjjZom
+        0pwd/L69SmQTKslO/aJOirchlXpZIHXpXsGWI5vtwxTfJ0Qw3CpuyXLl8ght/9y5
+        2xfD5MqAWxJvj1+wunfu664Rg5ShcgC4nfqlsQMno4cJZTcwlmuExxaa35CSSF2/
+        Alao5kPhckY8xJcvDSBwN7AUVJTaoMTxt6BtVrXs834j9usukgqtD1GaDv5IDZLh
+        WZm7kEnZ7TqROxe1Q76dxc/wkNZNju5T9wA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685451471; x=1685537871; bh=/vngq095dMysS+VQMtZnh+O7OIzkDlS3aNu
+        +O6rzhPE=; b=E2JYlRp+jiwOQVGCHZRqJZWsLf2VC3olZc+Kp4S/vbmKfcOAs5y
+        AHn/i9i/WiM6E4eYuTyOY2hwYEjLBaIuk0/fKX9UA9otFP+iZbUUylxf0EfZVQyI
+        q8FYSS0KVBaLlEjgAW5TsJ8dackyKvE1gj3zBBsa0fA8eJtuFmAZpQ1T1tEE8bvX
+        sQ5LdhCOtgo0YWbx201d/VJkK64uxn3kqF4vQnoh9pqz1fgtF1WUkd1mKaHVG/wg
+        pSjryfxxnYKZomHUYy4FUClvVFxmRf2H3n4Kjl9SlL5hICMoaA1n6BR8Oc3Ftx4g
+        HVmFN8BRySzL+ZNXol/rjdRB/L54p+qEgCg==
+X-ME-Sender: <xms:z_J1ZJbeFpPQu7FyXMhjUHT95HKEzhSwkDb6t9LMIRtMuOCggrvc7Q>
+    <xme:z_J1ZAam9bpTHbNY1q1BHYMQ5Hf8vJagYOHpp1wva1pweqQ6DA441wtF7UxifAldB
+    BEJip471Tz0LHBIAzg>
+X-ME-Received: <xmr:z_J1ZL9sqYbmmlwnK57zI7suQzLBE-LaTESBd_gglnm3KyVZoaqMYG-4tAKFz6acqVc2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:z_J1ZHpTzrR-5hV2-OLYk00s1az84i83oXBnejnVDIn4CmdflQQ6kg>
+    <xmx:z_J1ZErrlFelpHlffg-VG9DJm2dIAGjWM4nvgazmCcLxlvxN8ZH-Nw>
+    <xmx:z_J1ZNRG66oE-Ck1llyOdLqRi7w48jSgWAJ6y0nina7jThizzh0jFw>
+    <xmx:z_J1ZNlvk9jdo0e-9U1DTgW7kAd49BmodPXowZc94Ry1EypcLeiz_w>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 08:57:50 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230530125100.bd626syvkbfv7zhv@mobilestation>
+Date:   Tue, 30 May 2023 13:57:39 +0100
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Paul Cercueil <paul@crapouillou.net>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
         linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
-Message-ID: <20230530125100.bd626syvkbfv7zhv@mobilestation>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9BBD5835-ACD8-48BD-AED9-E23473237FAD@flygoat.com>
 References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
  <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
  <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
@@ -66,83 +83,103 @@ References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
  <BCECE3BF-7A4D-43BF-8AA8-2232D974CD71@flygoat.com>
  <alpine.DEB.2.21.2305301315120.42601@angie.orcam.me.uk>
  <20230530124127.z5rr5vauw43rafrt@mobilestation>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230530124127.z5rr5vauw43rafrt@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20230530125100.bd626syvkbfv7zhv@mobilestation>
+To:     Serge Semin <fancer.lancer@gmail.com>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 30, 2023 at 03:41:30PM +0300, Serge Semin wrote:
-> On Tue, May 30, 2023 at 01:16:32PM +0100, Maciej W. Rozycki wrote:
-> > On Tue, 30 May 2023, Jiaxun Yang wrote:
-> > 
-> > > > Sure, but this change is not needed for it.  You just need to declare 
-> > > > which ISA revisions your platform supports and leave `__get_cpu_type' 
-> > > > alone.  It has worked like that for a decade now.
-> > > 
-> > > I’m afraid it won’t work as you expected.
-> > > 
-> > > Actually I ran into a problem that `case CPU_P5600` in c-r4k.c is optimised out
-> > > by compiler, because the codepath is marked as unreachable.
-> > 
-> >  Maybe there's a bug elsewhere then.  Send me your .config and I'll try to 
-> > reproduce it.
-> 
-> I may have misunderstood something, but it seems like there is no such
-> problem on my P5600 system:
-> 
-> [fancer@mobilestation] kernel $ grep -r P5600 -B2 -A2 arch/mips/mm/c-r4k.c 
->         case CPU_1004K:
->         case CPU_INTERAPTIV:
->         case CPU_P5600:
->         case CPU_PROAPTIV:
->         case CPU_M5150:
-> --
->         case CPU_P6600:
->         case CPU_M6250:
->                 pr_info("MIPS P5600 is here\n");
->                 if (!(read_c0_config7() & MIPS_CONF7_IAR) &&
->                     (c->icache.waysize > PAGE_SIZE))
-> 
-> Log:
-> [    0.000000] Linux version 6.4.0-rc1-bt1-00235-gf9efd6b74b12-dirty (fancer@mobilestation) (mipsel-baikal-linux-gcc (GCC) 7.3.0, GNU ld (GNU Binutils) 2.30.0.20180208) #1
-> 275 SMP PREEMPT Tue May 30 15:30:48 MSK 2023
-> [    0.000000] CPU0 revision is: 0001a830 (MIPS P5600)
-> [    0.000000] FPU revision is: 30f30320
-> [    0.000000] MSA revision is: 00000320
-> ...
-> [    0.000000] VPE topology {1,1} total 2
-> [    0.000000] MIPS P5600 is here
-> ...
 
-Here is the CPU-related kernel configs:
-root@msbt2:~# cat /proc/config.gz | gunzip | grep CPU_MIPS
-# CONFIG_CPU_MIPS32_R2 is not set
-# CONFIG_CPU_MIPS32_R5 is not set
-# CONFIG_CPU_MIPS32_3_5_FEATURES is not set
-CONFIG_CPU_MIPS32_R5_FEATURES=y
-CONFIG_CPU_MIPS32_R5_XPA=y
-CONFIG_SYS_HAS_CPU_MIPS32_R2=y
-CONFIG_SYS_HAS_CPU_MIPS32_R3_5=y
-CONFIG_SYS_HAS_CPU_MIPS32_R5=y
-CONFIG_CPU_MIPS32=y
-CONFIG_CPU_MIPSR5=y
-CONFIG_CPU_MIPSR2_IRQ_VI=y
-CONFIG_CPU_MIPSR2_IRQ_EI=y
 
--Serge(y)
+> 2023=E5=B9=B45=E6=9C=8830=E6=97=A5 13:51=EF=BC=8CSerge Semin =
+<fancer.lancer@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Tue, May 30, 2023 at 03:41:30PM +0300, Serge Semin wrote:
+>> On Tue, May 30, 2023 at 01:16:32PM +0100, Maciej W. Rozycki wrote:
+>>> On Tue, 30 May 2023, Jiaxun Yang wrote:
+>>>=20
+>>>>> Sure, but this change is not needed for it.  You just need to =
+declare=20
+>>>>> which ISA revisions your platform supports and leave =
+`__get_cpu_type'=20
+>>>>> alone.  It has worked like that for a decade now.
+>>>>=20
+>>>> I=E2=80=99m afraid it won=E2=80=99t work as you expected.
+>>>>=20
+>>>> Actually I ran into a problem that `case CPU_P5600` in c-r4k.c is =
+optimised out
+>>>> by compiler, because the codepath is marked as unreachable.
+>>>=20
+>>> Maybe there's a bug elsewhere then.  Send me your .config and I'll =
+try to=20
+>>> reproduce it.
+>>=20
+>> I may have misunderstood something, but it seems like there is no =
+such
+>> problem on my P5600 system:
+>>=20
+>> [fancer@mobilestation] kernel $ grep -r P5600 -B2 -A2 =
+arch/mips/mm/c-r4k.c=20
+>>        case CPU_1004K:
+>>        case CPU_INTERAPTIV:
+>>        case CPU_P5600:
+>>        case CPU_PROAPTIV:
+>>        case CPU_M5150:
+>> --
+>>        case CPU_P6600:
+>>        case CPU_M6250:
+>>                pr_info("MIPS P5600 is here\n");
+>>                if (!(read_c0_config7() & MIPS_CONF7_IAR) &&
+>>                    (c->icache.waysize > PAGE_SIZE))
+>>=20
+>> Log:
+>> [    0.000000] Linux version 6.4.0-rc1-bt1-00235-gf9efd6b74b12-dirty =
+(fancer@mobilestation) (mipsel-baikal-linux-gcc (GCC) 7.3.0, GNU ld (GNU =
+Binutils) 2.30.0.20180208) #1
+>> 275 SMP PREEMPT Tue May 30 15:30:48 MSK 2023
+>> [    0.000000] CPU0 revision is: 0001a830 (MIPS P5600)
+>> [    0.000000] FPU revision is: 30f30320
+>> [    0.000000] MSA revision is: 00000320
+>> ...
+>> [    0.000000] VPE topology {1,1} total 2
+>> [    0.000000] MIPS P5600 is here
+>> ...
+>=20
+> Here is the CPU-related kernel configs:
+> root@msbt2:~# cat /proc/config.gz | gunzip | grep CPU_MIPS
+> # CONFIG_CPU_MIPS32_R2 is not set
+> # CONFIG_CPU_MIPS32_R5 is not set
+> # CONFIG_CPU_MIPS32_3_5_FEATURES is not set
+> CONFIG_CPU_MIPS32_R5_FEATURES=3Dy
+> CONFIG_CPU_MIPS32_R5_XPA=3Dy
+> CONFIG_SYS_HAS_CPU_MIPS32_R2=3Dy
+> CONFIG_SYS_HAS_CPU_MIPS32_R3_5=3Dy
+> CONFIG_SYS_HAS_CPU_MIPS32_R5=3Dy
+> CONFIG_CPU_MIPS32=3Dy
+> CONFIG_CPU_MIPSR5=3Dy
+> CONFIG_CPU_MIPSR2_IRQ_VI=3Dy
+> CONFIG_CPU_MIPSR2_IRQ_EI=3Dy
 
-> 
+I was trying to run kernel compiled with CONFIG_CPU_MIPS32_R2 on P5600.
+
+Thanks
+- Jiaxun
+
+>=20
 > -Serge(y)
-> 
-> > 
-> >   Maciej
+>=20
+>>=20
+>> -Serge(y)
+>>=20
+>>>=20
+>>>  Maciej
+
+
