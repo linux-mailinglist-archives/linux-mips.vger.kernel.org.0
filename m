@@ -2,65 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9787157DD
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 10:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CE0715803
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 10:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjE3IDn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 04:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S229997AbjE3IJA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 04:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjE3IDj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 04:03:39 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CD2CA8;
-        Tue, 30 May 2023 01:03:34 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 8A96192009C; Tue, 30 May 2023 10:03:32 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8397492009B;
-        Tue, 30 May 2023 09:03:32 +0100 (BST)
-Date:   Tue, 30 May 2023 09:03:32 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Cercueil <paul@crapouillou.net>
-cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and
- M5150
-In-Reply-To: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
-References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S229998AbjE3IIl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 04:08:41 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62EE10A
+        for <linux-mips@vger.kernel.org>; Tue, 30 May 2023 01:08:25 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-97392066d04so620749866b.3
+        for <linux-mips@vger.kernel.org>; Tue, 30 May 2023 01:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685434104; x=1688026104;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NQhjJ+6D9VsTTMDieSwfWtpvTuOPCjU+h7AtDdnwYcM=;
+        b=iOIgj8Tjhk5wu3ob5u7Zk7NjAWU5m8PbqRtznROJZ30GAgsI8TvPzjRkDJXGqrwZtS
+         eWoGfcuKJWSR7619n9y+doXwOCHSI7JpNx4TFwD5XflWa1Dsq4d6zeVlmER1b38973x7
+         Ns+Ub1NTxEe9rzfJgXNQ3+txI+Yu174kPVlGS3ODtVJ6wb3dC3MzcqBgQwu/sPFpCD2H
+         d3kkGmE6v4J0404GdcV6/++laiJeQxikgDv6MNUkrDkIKMWm4ln3GT96wnMuyrbDgUOM
+         bos3B1G9EkWDLcKGdRPMWvhS7Kh+afVSVY9aInTrWW/VwaVpx+O5aZrHBqQKdu91TfXt
+         PmnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685434104; x=1688026104;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NQhjJ+6D9VsTTMDieSwfWtpvTuOPCjU+h7AtDdnwYcM=;
+        b=CMvDeYXsb4md2kJJHXJet+LkHzEGbMTXll7rN8j0wpI89FZPGFqDK5ikwHmsBWLSIk
+         bEf89asrIcHIGHEZX4HoU8+sVoFwwfKfor24h9iavSe/3mzgUwC9WBiglmxVlbX8XaIi
+         gFco/k9vKb1tYilyZeP+CNO71ih5uB+L0ebp6j9l0DCCHQOzngUmcp/0cyK25M9CgKkk
+         aLbRAApMeTjj0cvz0Pk18GWS8K3Ybfm5tOuusxyTtbg1XUvc4eiRMv/AnmxA+Abaotst
+         bDdBoR7EIKF9DV4IaLaboD1OPTgmrcUt1wOw3Y2fZlLu7cwe6ns2HI28s++So8UwiejF
+         4DNQ==
+X-Gm-Message-State: AC+VfDybCdgb5gmxi/oYuUb8w3AJMG+tJmeeCHzuINa6Nt4QzVNE9d1z
+        pvtPFndR+4uboeoQtlMmIDwQhg==
+X-Google-Smtp-Source: ACHHUZ7zESSJK/T+t45vczioXDndjnO+H2WtnGA8SN2N6SO/FRpryfGtWVdQHvCzmNgM89NX54j1vQ==
+X-Received: by 2002:a17:907:97c5:b0:970:482:9fcd with SMTP id js5-20020a17090797c500b0097004829fcdmr1740437ejc.24.1685434104165;
+        Tue, 30 May 2023 01:08:24 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id c7-20020a170906154700b00965ec1faf27sm6926113ejd.74.2023.05.30.01.08.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 01:08:23 -0700 (PDT)
+Message-ID: <2f883bad-2f8e-ef03-fc3f-c13980fb1536@linaro.org>
+Date:   Tue, 30 May 2023 10:08:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V4 2/5] rtc: Remove the Loongson-1 RTC driver
+Content-Language: en-US
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>,
+        Yang Ling <gnaygnil@gmail.com>,
+        loongson-kernel@lists.loongnix.cn
+References: <cover.1684983279.git.zhoubinbin@loongson.cn>
+ <98fc717871d3a39b18ad1a26780d0d2cf1fa0896.1684983279.git.zhoubinbin@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <98fc717871d3a39b18ad1a26780d0d2cf1fa0896.1684983279.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 29 May 2023, Jiaxun Yang wrote:
+On 25/05/2023 14:55, Binbin Zhou wrote:
+> Remove the ls1x-rtc driver as it is obsolete. We will continue to
+> support the ls1x RTC in the upcoming Loongson unified RTC driver
+> rtc-loongson.
+> 
+> Cc: Keguang Zhang <keguang.zhang@gmail.com>
+> Cc: zhao zhang <zhzhl555@gmail.com>
+> Cc: Yang Ling <gnaygnil@gmail.com>
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  drivers/rtc/Kconfig    |  10 ---
+>  drivers/rtc/Makefile   |   1 -
+>  drivers/rtc/rtc-ls1x.c | 192 -----------------------------------------
+>  3 files changed, 203 deletions(-)
 
-> M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
-> backward compatible with MIPS32R2 there is no reason to forbid
-> M5150 and P5600 on MIPS32R2 kernel.
+Removal in one commit and adding a new driver in second is not what we
+usually do. We expect code to be developed and to evolve.
 
- What problem are you trying to solve?  The CONFIG_SYS_HAS_CPU_* settings 
-denote overall platform's support for the given CPU and have nothing to do 
-with what architecture level a given kernel has been configured for.  You 
-do need to get the settings right for your platform, just as you do in 
-2/2, but this 1/2 part looks wrong to me.
+Best regards,
+Krzysztof
 
- NB CPU_4KEC is double-listed as R1 and R2 because early revisions of the 
-4KEc core were actually R1 before switching to R2, so this CPU can report 
-either revision.
-
- I don't know why CPU_XBURST is also listed as both R1 and R2, the history 
-looks convoluted with no explanation.  Paul, is the CPU also dual-revision 
-or is it just a bug and it is supposed to be listed under one ISA revision
-only, presumably R2?
-
-  Maciej
