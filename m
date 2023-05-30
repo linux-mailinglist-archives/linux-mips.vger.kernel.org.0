@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9197E715CC1
-	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591E3715D5C
+	for <lists+linux-mips@lfdr.de>; Tue, 30 May 2023 13:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjE3LNC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 May 2023 07:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S231756AbjE3Lht (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 May 2023 07:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjE3LNB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:13:01 -0400
+        with ESMTP id S231349AbjE3Lhs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 May 2023 07:37:48 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF4793;
-        Tue, 30 May 2023 04:12:56 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9E5085C010B;
-        Tue, 30 May 2023 07:12:53 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D607F0;
+        Tue, 30 May 2023 04:37:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E3DF45C017D;
+        Tue, 30 May 2023 07:37:43 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 30 May 2023 07:12:53 -0400
+  by compute5.internal (MEProxy); Tue, 30 May 2023 07:37:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
          h=cc:cc:content-type:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685445173; x=
-        1685531573; bh=jzxR1ScglUhfxqqGJjgvOS5NAqJpfFc/FG469x51F+w=; b=z
-        Gm7H8q2xAwH65t7g76y5CpNRNA5QhcTT9CVh8xcZZdtfZF7xTv87d7VZCAAC/TEk
-        ggEOsQ0d0JIIol5LaBUgMQPQGyyrsBk+MQRBvYZ8pzb0V1hZ+o8+a0kCFt4nMBVi
-        DLzwKpOEDjkVtg8s4OlRz2e20pJZ/fwWcSqsVwRSlWLupRb6L8t3scy1jBdt+w58
-        H4dOxL5cdxo5A2z1zjta/UDnxuIDN5al4owNBMvK5avlfyNWjfjgnHrYuUWsxjca
-        YIUFnkT6n2B1y7mZnyFLTJy4jGY7MofSeCiX3Ash7A71fm447OX0Nrg2/sSqQhHc
-        7lxckU497HvK26OalRNAg==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685446663; x=
+        1685533063; bh=O6qShh+asEKKf+CBp8F6HZvUgA+aseK9FX7RcXKq70E=; b=T
+        PxfL1LB8q81/rUHg2XvMW3/4dxt+oSWRPKcAA/VfwYJOvqRMkuXbP9hfoQUPlVSO
+        3soZ2+X/mMLCpkpE36IZk2R8xohb+JFPwPG226Er1VdHwSTvTSzW4L1L4BfMdTAl
+        cyvBNn8WObkCH3dHEG0vdM9jEvph3Kqx1tVbGsUe3WZ44vXaE8v5maJ2RJe+YrSC
+        GX5joEHfNuuIsxFWMg4QoCYDUUuSy4hBfDCbYL5QS75GdWcak7oLD0I/A7g5ySLZ
+        97gbvYvfHV4/mUcIJk6wxGA0aOki4z2l3aOHQ/J9CG6pEcuQByuQm5NukOQOPZXq
+        vPq3NVhuEDvhWnhHty/kQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685445173; x=1685531573; bh=jzxR1ScglUhfx
-        qqGJjgvOS5NAqJpfFc/FG469x51F+w=; b=IGCHqhWWcbyh6MB/CW4j9E5nOLkNc
-        MB5S7AG5+9Uao8lFbpTrQFWDCxAgeAz50TkB7sSIqfCZe4GJqucU4q2of+fNzkAZ
-        ozqucMxrSsKk8D4vwBp0M3nOXWfV55tZ+BwneK280TDjbxLiTaJ04HPIW2zPIAzi
-        QzLxwlWrF7USZaAaKKXFYwDt4taOmxnalJUHUqeeb5tBFH5OcyG/0aW3BAk2IrsU
-        OTU0Fx6sm6GJ4r1ZrQShU6ReUHcyoxDjL+s0xU4PF/zfeUk6T4mjxgMP+QeS1d22
-        +L+cEp2vpyKyphRpU18a5qW3k8RyRCCLLIP2NVTJQFY/VyVoSdg5pTTFA==
-X-ME-Sender: <xms:M9p1ZLUzh5h-xIjt6EAne-fkiWy-kfD7ehnMMU_n6uQ0E_sH7qrIXw>
-    <xme:M9p1ZDm-11Kzq75g9bzZ4p8Bi8CqYoAD14uu63oHoN1nDRaGTkH9tbS6Rn2eXj1TR
-    VcIvL-6SC1XJjuj0OE>
-X-ME-Received: <xmr:M9p1ZHaMr9z-1bjaM9Y_FvwiQDZ_vreipQ5XsEQ_ONZ948J3EC_eQlPIq8aNlT8QB7lFHw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgfeeiucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm1; t=1685446663; x=1685533063; bh=O6qShh+asEKKf
+        +CBp8F6HZvUgA+aseK9FX7RcXKq70E=; b=l0ULuSdSAZxz4Id4NCjNDvSuSOjMi
+        QqSMBgGatnuAwLmz3fq+W4g/oun3yPwfK//TkFcZ6Qq+DMdNuFKSZkR/czNaanZ3
+        gznyzrlaJqmjlULYXIN7dHt3y127wCGCkXO0rr+NHuFgCc4N3xN5GwyOadZlstUV
+        a3o1mniuANA9XqsFbG+jwBgNe/OGqk/sN44MUk+0RSsbIyYvHHYSTkvoRnOn6SeF
+        rv4hWOEyn4GZwmVgc+SFsnrI01HOSbZcYCrd6IFT0pqXMDUW4Vmh2gZ04tO5eISK
+        EoKkp0YR75uKBoU43kRStRyPv6JkVt6WDRCdPoFTo8MuPbZ66elW67kDQ==
+X-ME-Sender: <xms:BuB1ZOy_Q46awEmN2n8G6kx8lsnsXgrIxRUOpUzTmTdMa1-A14ViIw>
+    <xme:BuB1ZKTbzE4D__kHwieS6qeKhQFl4uQ6IxouuMedEdB1YUPeLzq8gSfMAkpVKHfMg
+    QLPoAR-6feJERNRsXc>
+X-ME-Received: <xmr:BuB1ZAU1H0WyeO0sWr9ctDyadG9xs8jMn7SxVF4JQokcsMi1YeZCk5CAfCZUAhfjSHSbbg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
@@ -54,16 +54,16 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgfeeiucetufdoteggod
     grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
     tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
     epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:M9p1ZGU-nMSgIfCHDflrZ16Mmf4jTfAlm-Zv1KLq8HvnripwLe3DCg>
-    <xmx:M9p1ZFkT9W3_xU5ax-ZWYNbzzY95_f0M5iBw8JZc7bVNl4xwOKbMPQ>
-    <xmx:M9p1ZDfPrYWia5RjOy_0Tv69hBZV6AtJ3i_LBbPY9C8gWBh8gDMEvg>
-    <xmx:Ndp1ZImdm_XgLH-WrJ7Wtzk8AriLHd8rHSyyZMbNAkgODwQ0ohRd5A>
+X-ME-Proxy: <xmx:BuB1ZEh9a_Nx2KnEl0bxE_6wFFsAAHJjtQ7tVuZLckQsjbx72eMOOw>
+    <xmx:BuB1ZADM9mF7NSxqOPQgVmbPy_3aGLmt_VDiuZpBghOrn8S6GDODfQ>
+    <xmx:BuB1ZFJ4QwIW-3zwUMfEScRRvHHBGJkOJozaJp0tgTSGdiBfitkTXw>
+    <xmx:B-B1ZGgs54qOEGkAg2SG46XGOwz7zUTLzQh2fKV_ve3nUjRgpDEsOg>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 07:12:51 -0400 (EDT)
+ 30 May 2023 07:37:42 -0400 (EDT)
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 3A8FC10CE6B; Tue, 30 May 2023 14:12:48 +0300 (+03)
-Date:   Tue, 30 May 2023 14:12:48 +0300
+        id 177A51098DC; Tue, 30 May 2023 14:37:40 +0300 (+03)
+Date:   Tue, 30 May 2023 14:37:40 +0300
 From:   "Kirill A. Shutemov" <kirill@shutemov.name>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
@@ -100,21 +100,22 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/realmode: Make stack lock work in trampoline_compat()
-Message-ID: <20230530111248.lzt77sydi7x3wau7@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+Message-ID: <20230530113740.lbvg4to747xo32a7@box.shutemov.name>
+References: <20230508185218.962208640@linutronix.de>
  <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
  <87y1lbl7r6.ffs@tglx>
  <87sfbhlwp9.ffs@tglx>
  <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
  <87bki3kkfi.ffs@tglx>
  <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <87h6rujdvl.ffs@tglx>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
+ <87mt1mjhk3.ffs@tglx>
+ <87jzwqjeey.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87h6rujdvl.ffs@tglx>
+In-Reply-To: <87jzwqjeey.ffs@tglx>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -126,28 +127,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 30, 2023 at 12:46:22PM +0200, Thomas Gleixner wrote:
-> The stack locking and stack assignment macro LOAD_REALMODE_ESP fails to
-> work when invoked from the 64bit trampoline entry point:
+On Tue, May 30, 2023 at 12:34:45PM +0200, Thomas Gleixner wrote:
+> On Tue, May 30 2023 at 11:26, Thomas Gleixner wrote:
+> > On Tue, May 30 2023 at 03:54, Kirill A. Shutemov wrote:
+> >> On Mon, May 29, 2023 at 11:31:29PM +0300, Kirill A. Shutemov wrote:
+> >>> Disabling parallel bringup helps. I didn't look closer yet. If you have
+> >>> an idea let me know.
+> >>
+> >> Okay, it crashes around .Lread_apicid due to touching MSRs that trigger #VE.
+> >>
+> >> Looks like the patch had no intention to enable parallel bringup on TDX.
+> >>
+> >> +        * Intel-TDX has a secure RDMSR hypercall, but that needs to be
+> >> +        * implemented seperately in the low level startup ASM code.
+> >>
+> >> But CC_ATTR_GUEST_STATE_ENCRYPT that used to filter it out is
+> >> SEV-ES-specific thingy and doesn't cover TDX. I don't think we have an
+> >> attribute that fits nicely here.
+> >
+> > Bah. That sucks.
 > 
-> trampoline_start64
->   trampoline_compat
->     LOAD_REALMODE_ESP <- lock
-> 
-> Accessing tr_lock is only possible from 16bit mode. For the compat entry
-> point this needs to be pa_tr_lock so that the required relocation entry is
-> generated. Otherwise it locks the non-relocated address which is
-> aside of being wrong never cleared in secondary_startup_64() causing all
-> but the first CPU to get stuck on the lock.
-> 
-> Make the macro take an argument lock_pa which defaults to 0 and rename it
-> to LOCK_AND_LOAD_REALMODE_ESP to make it clear what this is about.
-> 
-> Fixes: f6f1ae9128d2 ("x86/smpboot: Implement a bit spinlock to protect the realmode stack")
-> Reported-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Can we have something consistent in this CC space or needs everything to
+> be extra magic per CC variant?
 
-Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+IIUC, CC_ATTR_GUEST_MEM_ENCRYPT should cover all AMD SEV flavours and
+Intel TDX. But the name is confusing in this context: memory encryption
+has nothing to do with the APIC.
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
