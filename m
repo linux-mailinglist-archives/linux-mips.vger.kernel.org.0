@@ -2,86 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEF3719439
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Jun 2023 09:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265D9719470
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Jun 2023 09:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbjFAH2v convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 1 Jun 2023 03:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S232067AbjFAHih (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Jun 2023 03:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjFAH2t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 03:28:49 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9350219F;
-        Thu,  1 Jun 2023 00:28:42 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1q4cjY-001s7N-3r; Thu, 01 Jun 2023 09:28:32 +0200
-Received: from p57bd9d78.dip0.t-ipconnect.de ([87.189.157.120] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1q4cjX-002tZZ-RO; Thu, 01 Jun 2023 09:28:32 +0200
-Message-ID: <025fc34a24e1a1c26b187f15dba86d382d9617eb.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v3 30/34] sh: Convert pte_free_tlb() to use ptdescs
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Date:   Thu, 01 Jun 2023 09:28:30 +0200
-In-Reply-To: <CAMuHMdU4t4ac_eCH0UaX9F+GQ5-9kYjB_=e+pSfTkxG=3b8DsA@mail.gmail.com>
-References: <20230531213032.25338-1-vishal.moola@gmail.com>
-         <20230531213032.25338-31-vishal.moola@gmail.com>
-         <CAMuHMdU4t4ac_eCH0UaX9F+GQ5-9kYjB_=e+pSfTkxG=3b8DsA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.1 
+        with ESMTP id S232046AbjFAHgg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 03:36:36 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA41197
+        for <linux-mips@vger.kernel.org>; Thu,  1 Jun 2023 00:33:10 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 4C8A483CC1; Thu,  1 Jun 2023 08:33:07 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1685604788; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=ol6edJ/jPQDWz3KalzHrhXJm5l87E93DNmMdds9sssrIo2P2KT3/w1+UcpOubhT46
+         btDM6r/WVLqV1c93ONj6T3qWSxLsH0fgmkbjd8shIMGHn3KFasB6JQ/D26hIp8kGBP
+         Ng8l70BpdNWJAw5JujIJeKG6ypZGhTzTfTfOKGZzACZUtaJfMtrmI+H6Q9yfkMWKla
+         +y4LhsWoVYYvZc+s5oQaOWCJYMtpgFp4Uu8UCyviOpUKzaWUj0fMEmjEjAXZJNwGZy
+         fs3ZqMR5vM5fsCEFzsfOxBOlK/l5fOLdeAu6MyTDxwdpl5jhPPrkDs2nHJJXVwN+ty
+         NQPYqtEA0QQvg==
+Received: by mail.lokoho.com for <linux-mips@vger.kernel.org>; Thu,  1 Jun 2023 07:30:57 GMT
+Message-ID: <20230601074503-0.1.6c.2g5e0.0.1mg8r388g7@lokoho.com>
+Date:   Thu,  1 Jun 2023 07:30:57 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-mips@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.157.120
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert!
+Dzie=C5=84 dobry,
 
-On Thu, 2023-06-01 at 09:20 +0200, Geert Uytterhoeven wrote:
-> On Wed, May 31, 2023 at 11:33 PM Vishal Moola (Oracle)
-> <vishal.moola@gmail.com> wrote:
-> > Part of the conversions to replace pgtable constructor/destructors with
-> > ptdesc equivalents. Also cleans up some spacing issues.
-> > 
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> 
-> LGTM, so
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-I assume this series is supposed to go through some mm tree?
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Adrian
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+
+Pozdrawiam
+Adam Charachuta
