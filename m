@@ -2,335 +2,257 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4D5719EE5
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Jun 2023 15:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98441719FD6
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Jun 2023 16:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjFANzY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Jun 2023 09:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S234046AbjFAOYl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Jun 2023 10:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbjFANzW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 09:55:22 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AED3FC
-        for <linux-mips@vger.kernel.org>; Thu,  1 Jun 2023 06:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=xqhRMpVRwKGnSR4yTg3S/+wq82xe
-        UEL1Dnls53yl8Mw=; b=zVwx/d3ot8d8N9TH4vhGyszu0niC+gq3K8uG69HepK4Y
-        t1CR6rvFAw11dWupGg+KHJZM9VXnrwmpTZ00C0OaIHORagTv0B9jH9XPBTNbwemP
-        vFoXYAeQFLs6rY1Vz3Ww188uwFKNR5sYWZndJ8YSYXkXS19jf7QjsglAtmCGf5U=
-Received: (qmail 1670469 invoked from network); 1 Jun 2023 15:54:54 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jun 2023 15:54:54 +0200
-X-UD-Smtp-Session: l3s3148p1@qP6/xxH9ruwujnsI
-Date:   Thu, 1 Jun 2023 15:54:50 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
-        Elie Morisse <syniurge@gmail.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jochen Friedrich <jochen@scram.de>,
-        Benson Leung <bleung@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chris Pringle <chris.pringle@phabrix.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Michael Shych <michaelsh@nvidia.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stefan Roese <sr@denx.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, Robert Richter <rric@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wei Chen <harperchen1110@gmail.com>,
-        George Cherian <gcherian@marvell.com>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        linux-aspeed@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jan Dabros <jsd@semihalf.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-riscv@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-rockchip@lists.infradead.org, openbmc@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nancy Yuen <yuenn@google.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-sunxi@lists.linux.dev, Joel Stanley <joel@jms.id.au>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Patrick Venture <venture@google.com>,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, asahi@lists.linux.dev,
-        kernel@pengutronix.de, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 00/89] i2c: Convert to platform remove callback returning
- void
-Message-ID: <ZHijKtBbH2sCSuT4@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        Elie Morisse <syniurge@gmail.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jochen Friedrich <jochen@scram.de>,
-        Benson Leung <bleung@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chris Pringle <chris.pringle@phabrix.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Michael Shych <michaelsh@nvidia.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stefan Roese <sr@denx.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
-        Robert Richter <rric@kernel.org>, Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Vignesh R <vigneshr@ti.com>, Michael Ellerman <mpe@ellerman.id.au>,
-        Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wei Chen <harperchen1110@gmail.com>,
-        George Cherian <gcherian@marvell.com>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        linux-aspeed@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jan Dabros <jsd@semihalf.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-riscv@lists.infradead.org, Fabio Estevam <festevam@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-rockchip@lists.infradead.org, openbmc@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nancy Yuen <yuenn@google.com>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-sunxi@lists.linux.dev, Joel Stanley <joel@jms.id.au>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Patrick Venture <venture@google.com>, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, asahi@lists.linux.dev,
-        kernel@pengutronix.de, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
- <20230601073322.ww25ajaurktqsryr@pengutronix.de>
+        with ESMTP id S233865AbjFAOYj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 10:24:39 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6161FC;
+        Thu,  1 Jun 2023 07:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685629478; x=1717165478;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BaD1zw6V2jf+wne8NUiF1WEc49QRybnZ2yKptn30Dmk=;
+  b=g1aybGChwSwwHLtrLrIonUYSm1lYhIMMZTtMV4TPym8PLnzuLenQ5iHe
+   nNMYHLT0quEiRdF1lKyNG/Aeql87GJVSx6MCsQcp0n7kBbC7emNU5gC4J
+   +VSQmF/A3I+2fbt8d9bSDTMPO8zDM25CUSFd1adPzKJc2iMVzwDoZXYns
+   N7siqRkUQVx0wb9SPPGZ1wZ8TdC3t8ywtN+XkPPVaxBJeT91jaoq0bLGr
+   T5G898YHxNqpz4HZIHhYF3CPl02VXWoIgOlTrxXPvL+2Qng0uJUX+3DT8
+   uc/qTX0VgID7snj30MS2pH9rK0Wk3HlIrJU6zPsXfkCvl6ou3yXMFpqtt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="419088767"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="419088767"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:19:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657813870"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="657813870"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2023 07:19:17 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4j92-0002Lp-1h;
+        Thu, 01 Jun 2023 14:19:16 +0000
+Date:   Thu, 1 Jun 2023 22:18:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
+Message-ID: <202306011704.i8xMWKPl-lkp@intel.com>
+References: <20230531213032.25338-26-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gpYQGInw32d3wriv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601073322.ww25ajaurktqsryr@pengutronix.de>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230531213032.25338-26-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Vishal,
 
---gpYQGInw32d3wriv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20230531]
+[cannot apply to akpm-mm/mm-everything s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus linus/master v6.4-rc4 v6.4-rc3 v6.4-rc2 v6.4-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230601-053454
+base:   next-20230531
+patch link:    https://lore.kernel.org/r/20230531213032.25338-26-vishal.moola%40gmail.com
+patch subject: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
+config: m68k-randconfig-r002-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011704.i8xMWKPl-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/915ab62dc3315fe0a0544fccb4ee5f3ee32694b5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230601-053454
+        git checkout 915ab62dc3315fe0a0544fccb4ee5f3ee32694b5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011704.i8xMWKPl-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from arch/m68k/include/asm/pgalloc.h:12,
+                    from arch/m68k/mm/init.c:26:
+   arch/m68k/include/asm/mcf_pgalloc.h: In function 'pgd_alloc':
+>> arch/m68k/include/asm/mcf_pgalloc.h:83:59: error: 'GFP_NOWARN' undeclared (first use in this function); did you mean 'GFP_NOWAIT'?
+      83 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+         |                                                           ^~~~~~~~~~
+         |                                                           GFP_NOWAIT
+   arch/m68k/include/asm/mcf_pgalloc.h:83:59: note: each undeclared identifier is reported only once for each function it appears in
+   arch/m68k/include/asm/mcf_pgalloc.h: At top level:
+>> arch/m68k/include/asm/mcf_pgalloc.h:22:27: warning: 'ptdesc_address' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      22 |         return (pte_t *) (ptdesc_address(ptdesc));
+         |                           ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:17:33: warning: 'pagetable_alloc' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      17 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+         |                                 ^~~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:24: warning: 'virt_to_ptdesc' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |                        ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:9: warning: 'pagetable_free' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |         ^~~~~~~~~~~~~~
+--
+   In file included from arch/m68k/mm/mcfmmu.c:21:
+   arch/m68k/include/asm/mcf_pgalloc.h: In function 'pgd_alloc':
+>> arch/m68k/include/asm/mcf_pgalloc.h:83:59: error: 'GFP_NOWARN' undeclared (first use in this function); did you mean 'GFP_NOWAIT'?
+      83 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+         |                                                           ^~~~~~~~~~
+         |                                                           GFP_NOWAIT
+   arch/m68k/include/asm/mcf_pgalloc.h:83:59: note: each undeclared identifier is reported only once for each function it appears in
+   arch/m68k/mm/mcfmmu.c: At top level:
+   arch/m68k/mm/mcfmmu.c:36:13: warning: no previous prototype for 'paging_init' [-Wmissing-prototypes]
+      36 | void __init paging_init(void)
+         |             ^~~~~~~~~~~
+   arch/m68k/mm/mcfmmu.c: In function 'paging_init':
+   arch/m68k/mm/mcfmmu.c:41:37: warning: variable 'bootmem_end' set but not used [-Wunused-but-set-variable]
+      41 |         unsigned long next_pgtable, bootmem_end;
+         |                                     ^~~~~~~~~~~
+   arch/m68k/include/asm/mcf_pgalloc.h: At top level:
+>> arch/m68k/include/asm/mcf_pgalloc.h:22:27: warning: 'ptdesc_address' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      22 |         return (pte_t *) (ptdesc_address(ptdesc));
+         |                           ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:17:33: warning: 'pagetable_alloc' is static but used in inline function 'pte_alloc_one_kernel' which is not static
+      17 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+         |                                 ^~~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:24: warning: 'virt_to_ptdesc' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |                        ^~~~~~~~~~~~~~
+>> arch/m68k/include/asm/mcf_pgalloc.h:10:9: warning: 'pagetable_free' is static but used in inline function 'pte_free_kernel' which is not static
+      10 |         pagetable_free(virt_to_ptdesc(pte));
+         |         ^~~~~~~~~~~~~~
 
 
-> I wonder how this series will go in. My expectation was that Wolfram
-> picks up the whole series via his tree?!
+vim +83 arch/m68k/include/asm/mcf_pgalloc.h
 
-Will do. I am currently super-busy, though.
+     7	
+     8	extern inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+     9	{
+  > 10		pagetable_free(virt_to_ptdesc(pte));
+    11	}
+    12	
+    13	extern const char bad_pmd_string[];
+    14	
+    15	extern inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+    16	{
+  > 17		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+    18	
+    19		if (!ptdesc)
+    20			return NULL;
+    21	
+  > 22		return (pte_t *) (ptdesc_address(ptdesc));
+    23	}
+    24	
+    25	extern inline pmd_t *pmd_alloc_kernel(pgd_t *pgd, unsigned long address)
+    26	{
+    27		return (pmd_t *) pgd;
+    28	}
+    29	
+    30	#define pmd_populate(mm, pmd, pte) (pmd_val(*pmd) = (unsigned long)(pte))
+    31	
+    32	#define pmd_populate_kernel pmd_populate
+    33	
+    34	static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pgtable,
+    35					  unsigned long address)
+    36	{
+    37		struct ptdesc *ptdesc = virt_to_ptdesc(pgtable);
+    38	
+    39		pagetable_pte_dtor(ptdesc);
+    40		pagetable_free(ptdesc);
+    41	}
+    42	
+    43	static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
+    44	{
+    45		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA, 0);
+    46		pte_t *pte;
+    47	
+    48		if (!ptdesc)
+    49			return NULL;
+    50		if (!pagetable_pte_ctor(ptdesc)) {
+    51			pagetable_free(ptdesc);
+    52			return NULL;
+    53		}
+    54	
+    55		pte = ptdesc_address(ptdesc);
+    56		pagetable_clear(pte);
+    57	
+    58		return pte;
+    59	}
+    60	
+    61	static inline void pte_free(struct mm_struct *mm, pgtable_t pgtable)
+    62	{
+    63		struct ptdesc *ptdesc = virt_to_ptdesc(ptdesc);
+    64	
+    65		pagetable_pte_dtor(ptdesc);
+    66		pagetable_free(ptdesc);
+    67	}
+    68	
+    69	/*
+    70	 * In our implementation, each pgd entry contains 1 pmd that is never allocated
+    71	 * or freed.  pgd_present is always 1, so this should never be called. -NL
+    72	 */
+    73	#define pmd_free(mm, pmd) BUG()
+    74	
+    75	static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+    76	{
+    77		pagetable_free(virt_to_ptdesc(pgd));
+    78	}
+    79	
+    80	static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+    81	{
+    82		pgd_t *new_pgd;
+  > 83		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+    84	
+    85		if (!ptdesc)
+    86			return NULL;
+    87		new_pgd = (pgd_t *) ptdesc_address(ptdesc);
+    88	
+    89		memcpy(new_pgd, swapper_pg_dir, PTRS_PER_PGD * sizeof(pgd_t));
+    90		memset(new_pgd, 0, PAGE_OFFSET >> PGDIR_SHIFT);
+    91		return new_pgd;
+    92	}
+    93	
 
-
-
---gpYQGInw32d3wriv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR4oyYACgkQFA3kzBSg
-KbYkxRAAgf5VeQe2YA/rv9xTTFOLsiZ2yYaKqe5cSG8ORritsNgMayx5mytBy0Eb
-vLblB6pyYYUuu3M8/UNmMh+ud1b9uX4klUjd/spaehbsehFeEKn6qXIp8cwcSIYf
-Urcj54jsziLug9CQlidx+Zv9cK5qBCkmgMqzf+Nsc/qUEnZFhpblZkoqV1cEMbkQ
-ZrFXWEauQuCK9R9A4x6GrmfmdMn3c792FdLYJIL6bVJ3YJbN27vqzC8e+5NJqhs4
-KxCJ0LH0/M3rfhuDi//PfKk116qlUNYOkukv86eih76CBDm8sef221IfgFmLQx0h
-Hhvgc9g5MZNb9gSZP3UBsdXIiQgOEMztVEnWROaMIPLhab4G/rJhF0YMEAq132/Q
-4F6E5uIBY055Hdc4rrfounk8Ia3VRfuqG9B7bmaujkDmOBkLTB33+93c+b9xsJMh
-njdGaRmhDm3FnKzUqe//7kjRC2Eh004VP4Yr4JZ4byJWDkHtLLx2foYlV/Vry+Ka
-vajzcCTXVcDghWSXcd60VkXpI8cePJeHF6pnJfq6gTGFSrE3nH27ERG0zM8T7ADq
-E3PRusML2KJhpLcPuqnF2ntYSo8cwt2MW5gtEtaFlizmjuIZ/sLCTrDZKRUN9XAX
-k3ic9QCDUVLlKLXBftokeMi0I1NEhto6+ck+Fc8SNGnNnWxYJZ8=
-=ijai
------END PGP SIGNATURE-----
-
---gpYQGInw32d3wriv--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
