@@ -2,236 +2,211 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A91571947C
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Jun 2023 09:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BEA719495
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Jun 2023 09:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjFAHko (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Jun 2023 03:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S231802AbjFAHom convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 1 Jun 2023 03:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjFAHig (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 03:38:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318E31B5
-        for <linux-mips@vger.kernel.org>; Thu,  1 Jun 2023 00:34:09 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q4coI-0002fI-SS; Thu, 01 Jun 2023 09:33:26 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q4coF-004Iia-Ri; Thu, 01 Jun 2023 09:33:23 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q4coF-00A54n-3w; Thu, 01 Jun 2023 09:33:23 +0200
-Date:   Thu, 1 Jun 2023 09:33:22 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
-        Elie Morisse <syniurge@gmail.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jochen Friedrich <jochen@scram.de>,
-        Benson Leung <bleung@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chris Pringle <chris.pringle@phabrix.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Michael Shych <michaelsh@nvidia.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stefan Roese <sr@denx.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, Robert Richter <rric@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wei Chen <harperchen1110@gmail.com>,
-        George Cherian <gcherian@marvell.com>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        linux-aspeed@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jan Dabros <jsd@semihalf.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-riscv@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-rockchip@lists.infradead.org, openbmc@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nancy Yuen <yuenn@google.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-sunxi@lists.linux.dev, Joel Stanley <joel@jms.id.au>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Patrick Venture <venture@google.com>,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, asahi@lists.linux.dev,
-        kernel@pengutronix.de, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 00/89] i2c: Convert to platform remove callback returning
- void
-Message-ID: <20230601073322.ww25ajaurktqsryr@pengutronix.de>
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S232131AbjFAHmh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 03:42:37 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0737110CC;
+        Thu,  1 Jun 2023 00:40:24 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-568928af8f5so9443097b3.1;
+        Thu, 01 Jun 2023 00:40:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685605223; x=1688197223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+Vy5gwXbACIYw+FA/+yi3OHDGD1kIURAtfeea/c7peI=;
+        b=MXtZUSLN8cbjATgjlAJ9vAmeIzlXVy7iupF0PTCKFrw8acmi3JcT1VtVE/8vGrh2OK
+         SdOWHyAZvXiBlW5dI6btWOSTWZSz7PFyBc3DAEqCWchERfKAfxIPhZ1ofT0cbYAcDShu
+         mOZpc451rTZUyCtB4J25znh7d8y1NlWjwHRnnLbPcO9KunpAgoSexYvkcTL+BxMAgtob
+         GLldu+1+FYebvrXDD4RDJCzLaIoweT7EOsywplDOz44/VajnIfod9vbSShNiTWoxhdyU
+         SSFeyXBQgkf8x+a2vtVtsNXzhOU5mNXfsRDLqs3UgO+ZB9W7qol2g7T31sPnz71AP6I5
+         Xzdw==
+X-Gm-Message-State: AC+VfDw4+0QhiSWiV66tPV9Aj8YNsBHnfWh1HZeQpD/PF9B8Apkd/aX+
+        Q7my6i5wpRMDihqvn0XkkhZcxF05md8rQg==
+X-Google-Smtp-Source: ACHHUZ49BXjkr/FRB9hIFKfzLi0jJtK8aNJjrwykqWch00dqJsfmzTBaySBSGZ/S/6+clJol7GGTtw==
+X-Received: by 2002:a81:92d6:0:b0:564:fb0a:abe9 with SMTP id j205-20020a8192d6000000b00564fb0aabe9mr1087191ywg.22.1685605222838;
+        Thu, 01 Jun 2023 00:40:22 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id m129-20020a0de387000000b00561e83db519sm6085211ywe.3.2023.06.01.00.40.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 00:40:21 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so2796881276.0;
+        Thu, 01 Jun 2023 00:40:21 -0700 (PDT)
+X-Received: by 2002:a81:a041:0:b0:565:9f61:c771 with SMTP id
+ x62-20020a81a041000000b005659f61c771mr1176431ywg.9.1685605221248; Thu, 01 Jun
+ 2023 00:40:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t3p72aozx6nadzgj"
-Content-Disposition: inline
-In-Reply-To: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230531213032.25338-1-vishal.moola@gmail.com> <20230531213032.25338-26-vishal.moola@gmail.com>
+In-Reply-To: <20230531213032.25338-26-vishal.moola@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 1 Jun 2023 09:40:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWCe=VsTJYNA_-k=JipeAGKzgBFjZ8i+XRK7U1DBei=7A@mail.gmail.com>
+Message-ID: <CAMuHMdWCe=VsTJYNA_-k=JipeAGKzgBFjZ8i+XRK7U1DBei=7A@mail.gmail.com>
+Subject: Re: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Vishal,
 
---t3p72aozx6nadzgj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 31, 2023 at 11:32 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+> As part of the conversions to replace pgtable constructor/destructors with
+> ptdesc equivalents, convert various page table functions to use ptdescs.
+>
+> Some of the functions use the *get*page*() helper functions. Convert
+> these to use pagetable_alloc() and ptdesc_address() instead to help
+> standardize page tables further.
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-[Dropped Phil Edworthy from recipents as his email address has problems]
+Thanks for your patch!
 
-Hello,
+> --- a/arch/m68k/include/asm/mcf_pgalloc.h
+> +++ b/arch/m68k/include/asm/mcf_pgalloc.h
+> @@ -7,20 +7,19 @@
+>
+>  extern inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+>  {
+> -       free_page((unsigned long) pte);
+> +       pagetable_free(virt_to_ptdesc(pte));
+>  }
+>
+>  extern const char bad_pmd_string[];
+>
+>  extern inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+>  {
+> -       unsigned long page = __get_free_page(GFP_DMA);
+> +       struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
+>
+> -       if (!page)
+> +       if (!ptdesc)
+>                 return NULL;
+>
+> -       memset((void *)page, 0, PAGE_SIZE);
+> -       return (pte_t *) (page);
+> +       return (pte_t *) (ptdesc_address(ptdesc));
 
-On Mon, May 08, 2023 at 10:51:37PM +0200, Uwe Kleine-K=F6nig wrote:
-> this series convers the drivers below drivers/i2c to the .remove_new()
-> callback of struct platform_driver(). The motivation is to make the
-> remove callback less prone for errors and wrong assumptions. See commit
-> 5c5a7680e67b ("platform: Provide a remove callback that returns no
-> value") for a more detailed rationale.
->=20
-> All but one driver already returned zero unconditionally in their
-> .remove() callback, so converting them to .remove_new() is trivial.
-> i2c-davinci has two patches in this series, first the error path is
-> improved to not return an error code, then it's converted as the others
-> drivers are.
->=20
-> The two davinci patches are also the only interdependency in this
-> series. I was unsure if I should split the series in two, the busses and
-> the mux changes; if convenient these can be applied independent of each
-> other.
+No need to cast "void *" when returning a different pointer type.
 
-I wonder how this series will go in. My expectation was that Wolfram
-picks up the whole series via his tree?!
+>  }
+>
+>  extern inline pmd_t *pmd_alloc_kernel(pgd_t *pgd, unsigned long address)
+> @@ -35,36 +34,36 @@ extern inline pmd_t *pmd_alloc_kernel(pgd_t *pgd, unsigned long address)
+>  static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pgtable,
+>                                   unsigned long address)
+>  {
+> -       struct page *page = virt_to_page(pgtable);
+> +       struct ptdesc *ptdesc = virt_to_ptdesc(pgtable);
+>
+> -       pgtable_pte_page_dtor(page);
+> -       __free_page(page);
+> +       pagetable_pte_dtor(ptdesc);
+> +       pagetable_free(ptdesc);
+>  }
+>
+>  static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
+>  {
+> -       struct page *page = alloc_pages(GFP_DMA, 0);
+> +       struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA, 0);
+>         pte_t *pte;
+>
+> -       if (!page)
+> +       if (!ptdesc)
+>                 return NULL;
+> -       if (!pgtable_pte_page_ctor(page)) {
+> -               __free_page(page);
+> +       if (!pagetable_pte_ctor(ptdesc)) {
+> +               pagetable_free(ptdesc);
+>                 return NULL;
+>         }
+>
+> -       pte = page_address(page);
+> -       clear_page(pte);
+> +       pte = ptdesc_address(ptdesc);
+> +       pagetable_clear(pte);
+>
+>         return pte;
+>  }
+>
+>  static inline void pte_free(struct mm_struct *mm, pgtable_t pgtable)
+>  {
+> -       struct page *page = virt_to_page(pgtable);
+> +       struct ptdesc *ptdesc = virt_to_ptdesc(ptdesc);
 
-Best regards
-Uwe
+virt_to_ptdesc(pgtable)
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+(You can build this using m5475evb_defconfig)
 
---t3p72aozx6nadzgj
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> -       pgtable_pte_page_dtor(page);
+> -       __free_page(page);
+> +       pagetable_pte_dtor(ptdesc);
+> +       pagetable_free(ptdesc);
+>  }
+>
+>  /*
+> @@ -75,16 +74,18 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t pgtable)
+>
+>  static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+>  {
+> -       free_page((unsigned long) pgd);
+> +       pagetable_free(virt_to_ptdesc(pgd));
+>  }
+>
+>  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+>  {
+>         pgd_t *new_pgd;
+> +       struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
+>
+> -       new_pgd = (pgd_t *)__get_free_page(GFP_DMA | __GFP_NOWARN);
+> -       if (!new_pgd)
+> +       if (!ptdesc)
+>                 return NULL;
+> +       new_pgd = (pgd_t *) ptdesc_address(ptdesc);
 
------BEGIN PGP SIGNATURE-----
+No need to cast "void *" when assigning to a different pointer type.
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR4ScIACgkQj4D7WH0S
-/k5tFwgAlOnFyNSd/y+RTxXNPFfhdLDFrGmy0vVlKgNWr54rj45mpn2vKbWNVNMh
-uHJkfu86+59kw2Z0mV0P0MetDeJReqHGuXrjQe87Pkus+gNIQ6yV0pH5TFAVpTxR
-eD04UBlV5+o939pFIOX+jBdeGDvPcSeECFfwxplSVVvUU6jJ6g0LiCDNdn6eNxHD
-g2Dnl8SpsU1t5iM62pyjZlBoscqvjfFiBCGdT80CmYeMPJM5UnBEdJOmpybfa8Ce
-scJdDvHFUP2jh1LC+0RQ43raxUyZon0Lie6tT6IbAoOXUiTqpcZ6NOhyobMzOcHq
-FIkEZoeC8nKcmthV7foaEY5TgzmK+w==
-=LLVA
------END PGP SIGNATURE-----
+> +
+>         memcpy(new_pgd, swapper_pg_dir, PTRS_PER_PGD * sizeof(pgd_t));
+>         memset(new_pgd, 0, PAGE_OFFSET >> PGDIR_SHIFT);
+>         return new_pgd;
 
---t3p72aozx6nadzgj--
+The rest LGTM.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
