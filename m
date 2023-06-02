@@ -2,197 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEB27208CC
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 20:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EC1720901
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 20:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbjFBSGA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Jun 2023 14:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
+        id S235686AbjFBSVR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Jun 2023 14:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236351AbjFBSF7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Jun 2023 14:05:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F101A2;
-        Fri,  2 Jun 2023 11:05:57 -0700 (PDT)
+        with ESMTP id S235519AbjFBSVQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Jun 2023 14:21:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253991A1;
+        Fri,  2 Jun 2023 11:21:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF8764F54;
-        Fri,  2 Jun 2023 18:05:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1789C433EF;
-        Fri,  2 Jun 2023 18:05:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4DF36523F;
+        Fri,  2 Jun 2023 18:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C87DC433AA;
+        Fri,  2 Jun 2023 18:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685729156;
-        bh=ZmtyVX1rvrwo8dBJSs85rA89E8Un7RBuOwm/RAw17mM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bVPLdTBhdzfpWlspifVfXoWdaiiGjN8v6O4uLln4CK+nJtKma0woQLxRCI9gJgU4M
-         8iPrD4vnSBowXmLVcBHMZvG4ljr0qtlGHii+qN5PZFCx4SfdeLZKEC/Ah14mpdjyku
-         45szIHBeXAUNGqDsIyJIeljFFKAsvvna53X+ITox8mDOL0MPxTOJSoY1GWxLrGcj+S
-         ZSluzLQ0sGg3m4eWXpVuZsjIdxukYzIlirNdoqUBFxPnI0sx5qqkHKy3L2YxQ+Znf2
-         EEFZJc5tCKHRM8ePz+JD5UgqUvnZOm8gVujVChtWWIEqZI+BDnjk7C2x/7uD8b/k1w
-         NyTDUqS3vAgew==
-Date:   Fri, 2 Jun 2023 19:05:50 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, Xuerui Wang <kernel@xen0n.name>,
-        loongarch@lists.linux.dev,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        zhao zhang <zhzhl555@gmail.com>, Yang Ling <gnaygnil@gmail.com>
-Subject: Re: [PATCH V5 1/5] dt-bindings: rtc: Remove the LS2X from the
- trivial RTCs
-Message-ID: <20230602-giveaway-tipping-4c420a13f2f1@spud>
-References: <cover.1685693501.git.zhoubinbin@loongson.cn>
- <1b0bb443bd74647c17b7902f3d719700f81a1dba.1685693501.git.zhoubinbin@loongson.cn>
+        s=k20201202; t=1685730074;
+        bh=X+6D25ac/ynfkYhL6CVIatM+QSgTz3ZdfLV95/xOw/s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m8QqKBlwUZ1OdVsi3iL4i/wpx/dFY6BbtHjhKMAoPALO9d9S1Of5z7SZF4QL6sTbP
+         1AkumCJkUSaKm4k7dCVk+lOGEFZdfq22cqjqj27S/pPlmB3p+6xXv2CNvliSMKoASM
+         /hdXoCMRwv6EJy8J6GYtUkCvLB9u0rcyusLTXlpDOf8Lr4f24TWYjjjFg1gay1e8Ak
+         p/JJ9xBOtMt5dIZYwKQ9oFJD8MWj9f1lt6ZhCj0XTqBGpkRKgNx/tS3niGcx/Matut
+         0hwyzJfj74d+iBjmUiHb0LPXzSLbkWfgBPmkBtc2NCOoUpEnhn1N5112VQidBofQtB
+         l46PC2/nl/Dww==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2af189d323fso46352391fa.1;
+        Fri, 02 Jun 2023 11:21:14 -0700 (PDT)
+X-Gm-Message-State: AC+VfDy6tUtSTkY4WimD0ve8ZiSIIh10ZMJfMY+q87EfuCPbr3gZqly6
+        Qk5lO3wACNYGAPPmYAAU39rdvk/Wpx+a3HieDNM=
+X-Google-Smtp-Source: ACHHUZ7u+3QRkPB700ZRWSkZS34WuzRLSBXiPs+mDMX8Rtj0TALCowhBg47HVf6nzRS8a/FS2UP95/Ck0Au4nvQTBcE=
+X-Received: by 2002:a2e:b55a:0:b0:2b0:59c3:29c9 with SMTP id
+ a26-20020a2eb55a000000b002b059c329c9mr217540ljn.6.1685730071990; Fri, 02 Jun
+ 2023 11:21:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="RKfPwvtmTLjD8Gp5"
-Content-Disposition: inline
-In-Reply-To: <1b0bb443bd74647c17b7902f3d719700f81a1dba.1685693501.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601101257.530867-1-rppt@kernel.org> <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan> <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+In-Reply-To: <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 2 Jun 2023 11:20:58 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
+Message-ID: <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org,
+        Puranjay Mohan <puranjay12@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, Jun 2, 2023 at 2:35=E2=80=AFAM Mark Rutland <mark.rutland@arm.com> =
+wrote:
+>
+> On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
+> > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
+> > > For a while I have wanted to give kprobes its own allocator so that i=
+t can work
+> > > even with CONFIG_MODULES=3Dn, and so that it doesn't have to waste VA=
+ space in
+> > > the modules area.
+> > >
+> > > Given that, I think these should have their own allocator functions t=
+hat can be
+> > > provided independently, even if those happen to use common infrastruc=
+ture.
+> >
+> > How much memory can kprobes conceivably use? I think we also want to tr=
+y
+> > to push back on combinatorial new allocators, if we can.
+>
+> That depends on who's using it, and how (e.g. via BPF).
+>
+> To be clear, I'm not necessarily asking for entirely different allocators=
+, but
+> I do thinkg that we want wrappers that can at least pass distinct start+e=
+nd
+> parameters to a common allocator, and for arm64's modules code I'd expect=
+ that
+> we'd keep the range falblack logic out of the common allcoator, and just =
+call
+> it twice.
+>
+> > > > Several architectures override module_alloc() because of various
+> > > > constraints where the executable memory can be located and this cau=
+ses
+> > > > additional obstacles for improvements of code allocation.
+> > > >
+> > > > This set splits code allocation from modules by introducing
+> > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces ca=
+ll
+> > > > sites of module_alloc() and module_memfree() with the new APIs and
+> > > > implements core text and related allocation in a central place.
+> > > >
+> > > > Instead of architecture specific overrides for module_alloc(), the
+> > > > architectures that require non-default behaviour for text allocatio=
+n must
+> > > > fill jit_alloc_params structure and implement jit_alloc_arch_params=
+() that
+> > > > returns a pointer to that structure. If an architecture does not im=
+plement
+> > > > jit_alloc_arch_params(), the defaults compatible with the current
+> > > > modules::module_alloc() are used.
+> > >
+> > > As above, I suspect that each of the callsites should probably be usi=
+ng common
+> > > infrastructure, but I don't think that a single jit_alloc_arch_params=
+() makes
+> > > sense, since the parameters for each case may need to be distinct.
+> >
+> > I don't see how that follows. The whole point of function parameters is
+> > that they may be different :)
+>
+> What I mean is that jit_alloc_arch_params() tries to aggregate common
+> parameters, but they aren't actually common (e.g. the actual start+end ra=
+nge
+> for allocation).
+>
+> > Can you give more detail on what parameters you need? If the only extra
+> > parameter is just "does this allocation need to live close to kernel
+> > text", that's not that big of a deal.
+>
+> My thinking was that we at least need the start + end for each caller. Th=
+at
+> might be it, tbh.
 
---RKfPwvtmTLjD8Gp5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jun 02, 2023 at 05:50:20PM +0800, Binbin Zhou wrote:
-> Move Loongson RTC bindings from trivial-rtc.yaml into loongson,rtc.yaml.
-
-$subject: dt-bindings: rtc: Remove the LS2X from the trivial RTCs
-
-If you end up resubmitting, could you use a subject like that better
-describes the changes?
-Say "dt-bindings: rtc: Split loongson,ls2x-rtc into SoC-based compatibles"?
-Otherwise,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+IIUC, arm64 uses VMALLOC address space for BPF programs. The reason
+is each BPF program uses at least 64kB (one page) out of the 128MB
+address space. Puranjay Mohan (CC'ed) is working on enabling
+bpf_prog_pack for arm64. Once this work is done, multiple BPF programs
+will be able to share a page. Will this improvement remove the need to
+specify a different address range for BPF programs?
 
 Thanks,
-Conor.
->=20
-> The architectures associated with this driver use the built-in DTB, so
-> we can just drop the compatible(rtc-ls2x) with wildcards.
-> Also, soc-based compatible is more accurate for hardware differences
-> between chips.
->=20
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../devicetree/bindings/rtc/loongson,rtc.yaml | 57 +++++++++++++++++++
->  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
->  2 files changed, 57 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/loongson,rtc.ya=
-ml
->=20
-> diff --git a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml b/Do=
-cumentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> new file mode 100644
-> index 000000000000..f89c1f660aee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/loongson,rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson Real-Time Clock
-> +
-> +description:
-> +  The Loongson family chips use an on-chip counter 0 (Time Of Year
-> +  counter) as the RTC.
-> +
-> +maintainers:
-> +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - loongson,ls1b-rtc
-> +          - loongson,ls1c-rtc
-> +          - loongson,ls7a-rtc
-> +          - loongson,ls2k1000-rtc
-> +      - items:
-> +          - enum:
-> +              - loongson,ls2k2000-rtc
-> +              - loongson,ls2k0500-rtc
-> +          - const: loongson,ls7a-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    rtc@1fe27800 {
-> +        compatible =3D "loongson,ls2k1000-rtc";
-> +        reg =3D <0x1fe27800 0x100>;
-> +
-> +        interrupt-parent =3D <&liointc1>;
-> +        interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Doc=
-umentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> index a3603e638c37..9af77f21bb7f 100644
-> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> @@ -47,8 +47,6 @@ properties:
->        - isil,isl1218
->        # Intersil ISL12022 Real-time Clock
->        - isil,isl12022
-> -      # Loongson-2K Socs/LS7A bridge Real-time Clock
-> -      - loongson,ls2x-rtc
->        # Real Time Clock Module with I2C-Bus
->        - microcrystal,rv3029
->        # Real Time Clock
-> --=20
-> 2.39.1
->=20
-
---RKfPwvtmTLjD8Gp5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHovfgAKCRB4tDGHoIJi
-0io4AP9OszbOoh51H3qHi/Cte3fW3fV7kObq3JzfUri47dWC9wEA+VMY5z2mV9Ui
-Phg0Rra9Vn5oeISQKSPXEl/n/wcAjgw=
-=kAmc
------END PGP SIGNATURE-----
-
---RKfPwvtmTLjD8Gp5--
+Song
