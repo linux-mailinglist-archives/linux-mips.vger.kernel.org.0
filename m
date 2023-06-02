@@ -2,103 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBFF71F705
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 02:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D9271F726
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 02:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjFBAHi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Jun 2023 20:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S232876AbjFBAgj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Jun 2023 20:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjFBAHh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 20:07:37 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC9AD1
-        for <linux-mips@vger.kernel.org>; Thu,  1 Jun 2023 17:07:36 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-9745c5fed21so59869366b.3
-        for <linux-mips@vger.kernel.org>; Thu, 01 Jun 2023 17:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685664455; x=1688256455;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vE40mJuVkISt0zg8IVAmmNvtPq9ArtEbvKSLEgCOttk=;
-        b=QXbnrNIFXYJPUub6nM+ubFSNT6tZ7H9rOkOGiyM5OklolJF61iZhl65VMn/hG7da/w
-         +IFUQP1/FKyozgiHO+ixlAqh5IXzNuSJvbecmsKmirXUE6mWmJDT4DuKBg4amB7ZxeXW
-         V0CM2FW/H2LCkLzQE9PhkkD7IZeVzw7PovAnpanhWKrTh/hiBvqr2aZ62FqorIO1XNgR
-         0amNtoew66edvIotRljg2pjO0cNPWlgseRWntUUkFXJQmt9qNJiDa+X81dM6sMThew2Q
-         9k5ULEnpufOr1qlYEBgU/7kkv2Ulrwhunu6LlZxH233pXtgfVrHuxKOl3O0Ck4ihDegs
-         iN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685664455; x=1688256455;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vE40mJuVkISt0zg8IVAmmNvtPq9ArtEbvKSLEgCOttk=;
-        b=aR1awkhBWgdnE9j5bOFECw6G8SremmI9Sarx246J6U9/GbMc5bzkIj9ESU8ksxIj4f
-         AU8VwL5Ho/F2Y+VKnGgGq7OS0v0Hi7q/63xhoZQaNAdfgR18lX6ejzG1+pTdvyrY/KbV
-         Zojcao4D8RAHdvpGLbWUjiwb171Sr1KDZt8pUxz5doHaA8LuVIwil0Psa3cRBusx9lPU
-         WmRX/pSDpSwrLJIAdtxVk9gbLzqRpGafFoRkzC8HAVSjbCezAI0KRN00r5VgysQcv7nh
-         yypgpzJqtcuB0o2uscdh13CjQRKOVUqdlhjSMqbb3wGThngWyvNe/YJB2637iBQiJsu8
-         zQSQ==
-X-Gm-Message-State: AC+VfDzghhQY8rSYafW37a/LMOTZ+kAH0cSw5reSaPejBb2dKukUmRfq
-        5LBQj7W/rfrP1a9yWHJw2awog4VryJAZHdlGTYc=
-X-Google-Smtp-Source: ACHHUZ6LthU6X2KnnnmAczj+RAZI5/3MvcEkOrGUYnN1B63tDmiDnubQTUlntrzcclCQOPf9+r2l7N4mhyP4nMtQ2Yg=
-X-Received: by 2002:a17:907:a426:b0:96f:c988:93b with SMTP id
- sg38-20020a170907a42600b0096fc988093bmr9971181ejc.35.1685664454616; Thu, 01
- Jun 2023 17:07:34 -0700 (PDT)
+        with ESMTP id S231241AbjFBAgi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 20:36:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16869123;
+        Thu,  1 Jun 2023 17:36:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF7C3647BA;
+        Fri,  2 Jun 2023 00:36:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E5AC433A1;
+        Fri,  2 Jun 2023 00:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685666196;
+        bh=8680DMzx0gtVOisbuW5F5FI58VdZiV3S7sDNyC66jIs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XTmFrz6x8P+uu4p7+8CwwHHAR8ToxETybv3aokjIkUt8au2/bliIWtKwA0GAbEtXU
+         35MXE4ZwOYCOUbquOW3LQoZZDXhPbam+LWuZhJ0mqETvOfa2/rMGWxD+GJruYpNbS6
+         ci30bYJW5Xs8iSRMEPad+knzjZDpipv9dxPxlL70NiYXhKXJnUs1HWnqvirj5dSWAN
+         B2cCO/rarwHERSu66gvzGkFtyDmlSmQAJPI3dJJQqihBq56qTMR5zptT8HtrJ2b10S
+         TMFJdORTSry9D8pvsZGiWSqPLVC1lC/A7oq6hOwBZbEcU0/jUM34HuLUgEBSnU29a0
+         P+mvZ51/iQCoA==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f60bc818d7so1269054e87.1;
+        Thu, 01 Jun 2023 17:36:35 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz01X/xqtBxs2VBC7kbZ7774EbwDGMYrk1Mdk03I6HzRaiW0yxT
+        U5plHKTKxbuE+J/FKIt2iVbdgdr0HQJB0Rp5MwY=
+X-Google-Smtp-Source: ACHHUZ4rAYUoiHYEWWqFuntxOuL06QmDCDII8lO4o2SuljgVgQXswY+xn62uFOnPiNtfcw4WXcIV+P9v/6p/Zkld05w=
+X-Received: by 2002:ac2:44ca:0:b0:4f3:b18a:6497 with SMTP id
+ d10-20020ac244ca000000b004f3b18a6497mr927744lfm.52.1685666193979; Thu, 01 Jun
+ 2023 17:36:33 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:907:9282:b0:96f:94df:3652 with HTTP; Thu, 1 Jun 2023
- 17:07:34 -0700 (PDT)
-Reply-To: saguadshj564@gmail.com
-From:   Ms Nadage Lassou <lassounadage5@gmail.com>
-Date:   Fri, 2 Jun 2023 01:07:34 +0100
-Message-ID: <CAB-+XyUCKDUJh7wOS9Ru6G0NU1bsfsi9LTPHhr5-98uVT17QtA@mail.gmail.com>
-Subject: REPLY BACK FOR DETAILS
-To:     undisclosed-recipients:;
+References: <20230601101257.530867-1-rppt@kernel.org>
+In-Reply-To: <20230601101257.530867-1-rppt@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 1 Jun 2023 17:36:21 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5Em5Sj9uCGyfM6BheTuvA4pviavRTUK-3MbGsd9yCRbQ@mail.gmail.com>
+Message-ID: <CAPhsuW5Em5Sj9uCGyfM6BheTuvA4pviavRTUK-3MbGsd9yCRbQ@mail.gmail.com>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:642 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [saguadshj564[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lassounadage5[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [lassounadage5[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Greetings.
+On Thu, Jun 1, 2023 at 3:13=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+>
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> Hi,
+>
+> module_alloc() is used everywhere as a mean to allocate memory for code.
+>
+> Beside being semantically wrong, this unnecessarily ties all subsystmes
+> that need to allocate code, such as ftrace, kprobes and BPF to modules
+> and puts the burden of code allocation to the modules code.
+>
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+>
+> This set splits code allocation from modules by introducing
+> jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
+> sites of module_alloc() and module_memfree() with the new APIs and
+> implements core text and related allocation in a central place.
+>
+> Instead of architecture specific overrides for module_alloc(), the
+> architectures that require non-default behaviour for text allocation must
+> fill jit_alloc_params structure and implement jit_alloc_arch_params() tha=
+t
+> returns a pointer to that structure. If an architecture does not implemen=
+t
+> jit_alloc_arch_params(), the defaults compatible with the current
+> modules::module_alloc() are used.
+>
+> The new jitalloc infrastructure allows decoupling of kprobes and ftrace
+> from modules, and most importantly it enables ROX allocations for
+> executable memory.
 
-I am Ms Nadage Lassou,I have something important to discuss with you.
-i will send you the details once i hear from you.
+This set does look cleaner than my version [1]. However, this is
+partially because this set only separates text and data; while [1]
+also separates rw data, ro data, and ro_after_init data. We need
+such separation to fully cover module usage, and to remove
+VM_FLUSH_RESET_PERMS. Once we add these logic to this
+set, the two versions will look similar.
+
+OTOH, I do like the fact this version enables kprobes (and
+potentially ftrace and bpf) without CONFIG_MODULES. And
+mm/ seems a better home for the logic.
+
+That being said, besides comments in a few patches, this
+version looks good to me. With the fix I suggested for patch
+12/13, it passed my tests on x86_64 with modules, kprobes,
+ftrace, and BPF.
+
+If we decided to ship this version, I would appreciate it if I
+could get more credit for my work in [1] and research work
+before that.
+
 Thanks,
-Ms Nadage Lassou
+Song
+
+[1] https://lore.kernel.org/lkml/20230526051529.3387103-1-song@kernel.org/
