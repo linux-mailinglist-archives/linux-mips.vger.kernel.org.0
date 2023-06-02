@@ -2,194 +2,197 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FCD720720
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 18:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEB27208CC
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 20:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbjFBQLP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Jun 2023 12:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S237020AbjFBSGA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Jun 2023 14:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbjFBQK6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Jun 2023 12:10:58 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E62A1BC
-        for <linux-mips@vger.kernel.org>; Fri,  2 Jun 2023 09:10:13 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-65252a80823so833193b3a.1
-        for <linux-mips@vger.kernel.org>; Fri, 02 Jun 2023 09:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685722192; x=1688314192;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnaTvciscS5chSJrFdy/XWmGw+v5DL+sKG313yn6vtE=;
-        b=3qM+gPLnKOcFkte53nrFJ4yxYHfRvj6VAQ74elJ+qIzLMj97WYlQnMm+LRqHDvoho4
-         8AW7RUIjuOvTDqJRc6MGpLfknZTHUVt0ac+jf1e4fznmqTNQB1YeAez2Pbf+vu4gX/wo
-         xA9uw3YiFJ59xCiKuG3PqvgkOpwn1kfOyfDGnV3P6/41gfMjzqB9OHhb0wbZKNfck3ux
-         QuubqPWPIMr2dr+usJ/0oHW/nWAg0PkVCfHTFjYBlz4FbohVSt4JZLXej+/lCcVIkw51
-         dikq26nIlv8414HoG8qlckcW0gk8fed5eU7B/bJPELllDOCa6K4cYwpu/yZBPdgX/sdW
-         NMYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722192; x=1688314192;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnaTvciscS5chSJrFdy/XWmGw+v5DL+sKG313yn6vtE=;
-        b=WVwVIrxdsDU8L+tVyDUVLRkRBxQVjq+VB9rUNUFv6A5RXykUEAQmsnKAjPBshJnOJD
-         ylqdIHmeyYf9SZsgAUFtbmk7rBgA2SmHViYaYpqepO8CJ8jzuhRc5LEi5bO8XzaUfkYe
-         yb7X3COZEO7rnI121DUlcpAbLEtVPrU787Zmb4utrM4XC3qjo1iHdNF7r7n0/GyS7aw5
-         BSal6eeQe/XZlCZHQUkrPoVd7K7C6dNtT1N/PUFsSvYQYjDLnXv6Tfj9btKyBErKvWMl
-         DObM723nf2XrPyIZrUT9ZbVS+p41AiD73SjYU1gXlpqa1LiZ4qWBlkcFND02Ve031qro
-         aKYQ==
-X-Gm-Message-State: AC+VfDzD1cuya1nwArjDG+cPzNUJ7vrYokO/eaf8vDkNE0U6qQD5MCDN
-        RSXjcE6gbVGhb2x21DsCoJPc0zI1jAEV
-X-Google-Smtp-Source: ACHHUZ7CrgQcXBBk0scZtBwPutYqwQ0i1jeHWFv03iHedZStcHfAHgjqtsGQJinldbGkFtIY3nwdqwhDBsPu
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6a00:2e1a:b0:64f:9e1b:d4a8 with SMTP
- id fc26-20020a056a002e1a00b0064f9e1bd4a8mr4922796pfb.1.1685722192061; Fri, 02
- Jun 2023 09:09:52 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 09:09:14 -0700
-In-Reply-To: <20230602160914.4011728-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20230602160914.4011728-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602160914.4011728-17-vipinsh@google.com>
-Subject: [PATCH v2 16/16] KVM: arm64: Split huge pages during clear-dirty-log
- under MMU read lock
-From:   Vipin Sharma <vipinsh@google.com>
-To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, ricarkol@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S236351AbjFBSF7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Jun 2023 14:05:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F101A2;
+        Fri,  2 Jun 2023 11:05:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF8764F54;
+        Fri,  2 Jun 2023 18:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1789C433EF;
+        Fri,  2 Jun 2023 18:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685729156;
+        bh=ZmtyVX1rvrwo8dBJSs85rA89E8Un7RBuOwm/RAw17mM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bVPLdTBhdzfpWlspifVfXoWdaiiGjN8v6O4uLln4CK+nJtKma0woQLxRCI9gJgU4M
+         8iPrD4vnSBowXmLVcBHMZvG4ljr0qtlGHii+qN5PZFCx4SfdeLZKEC/Ah14mpdjyku
+         45szIHBeXAUNGqDsIyJIeljFFKAsvvna53X+ITox8mDOL0MPxTOJSoY1GWxLrGcj+S
+         ZSluzLQ0sGg3m4eWXpVuZsjIdxukYzIlirNdoqUBFxPnI0sx5qqkHKy3L2YxQ+Znf2
+         EEFZJc5tCKHRM8ePz+JD5UgqUvnZOm8gVujVChtWWIEqZI+BDnjk7C2x/7uD8b/k1w
+         NyTDUqS3vAgew==
+Date:   Fri, 2 Jun 2023 19:05:50 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
+Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>, Yang Ling <gnaygnil@gmail.com>
+Subject: Re: [PATCH V5 1/5] dt-bindings: rtc: Remove the LS2X from the
+ trivial RTCs
+Message-ID: <20230602-giveaway-tipping-4c420a13f2f1@spud>
+References: <cover.1685693501.git.zhoubinbin@loongson.cn>
+ <1b0bb443bd74647c17b7902f3d719700f81a1dba.1685693501.git.zhoubinbin@loongson.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RKfPwvtmTLjD8Gp5"
+Content-Disposition: inline
+In-Reply-To: <1b0bb443bd74647c17b7902f3d719700f81a1dba.1685693501.git.zhoubinbin@loongson.cn>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Split huge pages under MMU read lock instead of write when clearing
-dirty log.
 
-Running huge page split under read lock will unblock vCPUs execution and
-allow whole clear-dirty-log operation run parallelly to vCPUs.
+--RKfPwvtmTLjD8Gp5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Note that splitting huge pages involves two walkers. First walker calls
-stage2_split_walker() callback on each huge page. This callback will call
-another walker which creates an unlinked page table. This commit makes
-first walker as shared page walker which means, -EAGAIN will be retried.
-Before this patch, -EAGAIN would have been ignored and walker would go
-to next huge page. In practice this would not happen as the first walker
-was holding MMU write lock. Inner walker is unchanged as it is working
-on unlinked page table so no other thread will have access to it.
+On Fri, Jun 02, 2023 at 05:50:20PM +0800, Binbin Zhou wrote:
+> Move Loongson RTC bindings from trivial-rtc.yaml into loongson,rtc.yaml.
 
-To improve confidence in correctness tested via dirty_log_test.
+$subject: dt-bindings: rtc: Remove the LS2X from the trivial RTCs
 
-To measure performance improvement tested via dirty_log_perf_test.
+If you end up resubmitting, could you use a subject like that better
+describes the changes?
+Say "dt-bindings: rtc: Split loongson,ls2x-rtc into SoC-based compatibles"?
+Otherwise,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Set up:
--------
-Host: ARM Ampere Altra host (64 CPUs, 256 GB memory and single NUMA
-      node)
+Thanks,
+Conor.
+>=20
+> The architectures associated with this driver use the built-in DTB, so
+> we can just drop the compatible(rtc-ls2x) with wildcards.
+> Also, soc-based compatible is more accurate for hardware differences
+> between chips.
+>=20
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  .../devicetree/bindings/rtc/loongson,rtc.yaml | 57 +++++++++++++++++++
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
+>  2 files changed, 57 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/loongson,rtc.ya=
+ml
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml b/Do=
+cumentation/devicetree/bindings/rtc/loongson,rtc.yaml
+> new file mode 100644
+> index 000000000000..f89c1f660aee
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/loongson,rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson Real-Time Clock
+> +
+> +description:
+> +  The Loongson family chips use an on-chip counter 0 (Time Of Year
+> +  counter) as the RTC.
+> +
+> +maintainers:
+> +  - Binbin Zhou <zhoubinbin@loongson.cn>
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - loongson,ls1b-rtc
+> +          - loongson,ls1c-rtc
+> +          - loongson,ls7a-rtc
+> +          - loongson,ls2k1000-rtc
+> +      - items:
+> +          - enum:
+> +              - loongson,ls2k2000-rtc
+> +              - loongson,ls2k0500-rtc
+> +          - const: loongson,ls7a-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    rtc@1fe27800 {
+> +        compatible =3D "loongson,ls2k1000-rtc";
+> +        reg =3D <0x1fe27800 0x100>;
+> +
+> +        interrupt-parent =3D <&liointc1>;
+> +        interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Doc=
+umentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> index a3603e638c37..9af77f21bb7f 100644
+> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> @@ -47,8 +47,6 @@ properties:
+>        - isil,isl1218
+>        # Intersil ISL12022 Real-time Clock
+>        - isil,isl12022
+> -      # Loongson-2K Socs/LS7A bridge Real-time Clock
+> -      - loongson,ls2x-rtc
+>        # Real Time Clock Module with I2C-Bus
+>        - microcrystal,rv3029
+>        # Real Time Clock
+> --=20
+> 2.39.1
+>=20
 
-Test VM: 48 vCPU, 192 GB total memory.
+--RKfPwvtmTLjD8Gp5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Ran dirty_log_perf_test for 400 iterations.
- ./dirty_log_perf_test -k 192G -v 48 -b 4G -m 2 -i 4000 -s anonymous_hugetlb_2mb -j
+-----BEGIN PGP SIGNATURE-----
 
-Observation:
-------------
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHovfgAKCRB4tDGHoIJi
+0io4AP9OszbOoh51H3qHi/Cte3fW3fV7kObq3JzfUri47dWC9wEA+VMY5z2mV9Ui
+Phg0Rra9Vn5oeISQKSPXEl/n/wcAjgw=
+=kAmc
+-----END PGP SIGNATURE-----
 
-+==================+=============================+===================+
-| Clear Chunk size | Clear dirty log time change | vCPUs improvement |
-+==================+=============================+===================+
-| 192GB            | 56%                         | 152%              |
-+------------------+-----------------------------+-------------------+
-| 1GB              | -81%                        | 72%               |
-+------------------+-----------------------------+-------------------+
-
-When larger chunks are used, clear dirty log time increases due to lots
-of cmpxchg() but vCPUs are also able to execute parallelly causing
-better performance of guest.
-
-When chunk size is small, read lock is very fast in clearing dirty logs
-as it is not waiting for MMU write lock and vCPUs are also able to run
-parallelly.
-
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
- arch/arm64/kvm/mmu.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 6dd964e3682c..aa278f5d27a2 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -126,7 +126,10 @@ static int kvm_mmu_split_huge_pages(struct kvm *kvm, phys_addr_t addr,
- 	int ret, cache_capacity;
- 	u64 next, chunk_size;
- 
--	lockdep_assert_held_write(&kvm->mmu_lock);
-+	if (flags & KVM_PGTABLE_WALK_SHARED)
-+		lockdep_assert_held_read(&kvm->mmu_lock);
-+	else
-+		lockdep_assert_held_write(&kvm->mmu_lock);
- 
- 	chunk_size = kvm->arch.mmu.split_page_chunk_size;
- 	cache_capacity = kvm_mmu_split_nr_page_tables(chunk_size);
-@@ -138,13 +141,19 @@ static int kvm_mmu_split_huge_pages(struct kvm *kvm, phys_addr_t addr,
- 
- 	do {
- 		if (need_split_memcache_topup_or_resched(kvm)) {
--			write_unlock(&kvm->mmu_lock);
-+			if (flags & KVM_PGTABLE_WALK_SHARED)
-+				read_unlock(&kvm->mmu_lock);
-+			else
-+				write_unlock(&kvm->mmu_lock);
- 			cond_resched();
- 			/* Eager page splitting is best-effort. */
- 			ret = __kvm_mmu_topup_memory_cache(cache,
- 							   cache_capacity,
- 							   cache_capacity);
--			write_lock(&kvm->mmu_lock);
-+			if (flags & KVM_PGTABLE_WALK_SHARED)
-+				read_lock(&kvm->mmu_lock);
-+			else
-+				write_lock(&kvm->mmu_lock);
- 			if (ret)
- 				break;
- 		}
-@@ -1139,9 +1148,7 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
- 
- 	read_lock(&kvm->mmu_lock);
- 	stage2_wp_range(&kvm->arch.mmu, start, end, KVM_PGTABLE_WALK_SHARED);
--	read_unlock(&kvm->mmu_lock);
- 
--	write_lock(&kvm->mmu_lock);
- 	/*
- 	 * Eager-splitting is done when manual-protect is set.  We
- 	 * also check for initially-all-set because we can avoid
-@@ -1151,8 +1158,8 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
- 	 * again.
- 	 */
- 	if (kvm_dirty_log_manual_protect_and_init_set(kvm))
--		kvm_mmu_split_huge_pages(kvm, start, end, 0);
--	write_unlock(&kvm->mmu_lock);
-+		kvm_mmu_split_huge_pages(kvm, start, end, KVM_PGTABLE_WALK_SHARED);
-+	read_unlock(&kvm->mmu_lock);
- }
- 
- static void kvm_send_hwpoison_signal(unsigned long address, short lsb)
--- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+--RKfPwvtmTLjD8Gp5--
