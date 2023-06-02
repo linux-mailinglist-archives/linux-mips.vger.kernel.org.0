@@ -2,82 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D9271F726
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jun 2023 02:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA24720EED
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Jun 2023 11:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjFBAgj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Jun 2023 20:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S229692AbjFCJ3y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Jun 2023 05:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjFBAgi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Jun 2023 20:36:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16869123;
-        Thu,  1 Jun 2023 17:36:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF7C3647BA;
-        Fri,  2 Jun 2023 00:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E5AC433A1;
-        Fri,  2 Jun 2023 00:36:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685666196;
-        bh=8680DMzx0gtVOisbuW5F5FI58VdZiV3S7sDNyC66jIs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XTmFrz6x8P+uu4p7+8CwwHHAR8ToxETybv3aokjIkUt8au2/bliIWtKwA0GAbEtXU
-         35MXE4ZwOYCOUbquOW3LQoZZDXhPbam+LWuZhJ0mqETvOfa2/rMGWxD+GJruYpNbS6
-         ci30bYJW5Xs8iSRMEPad+knzjZDpipv9dxPxlL70NiYXhKXJnUs1HWnqvirj5dSWAN
-         B2cCO/rarwHERSu66gvzGkFtyDmlSmQAJPI3dJJQqihBq56qTMR5zptT8HtrJ2b10S
-         TMFJdORTSry9D8pvsZGiWSqPLVC1lC/A7oq6hOwBZbEcU0/jUM34HuLUgEBSnU29a0
-         P+mvZ51/iQCoA==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f60bc818d7so1269054e87.1;
-        Thu, 01 Jun 2023 17:36:35 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz01X/xqtBxs2VBC7kbZ7774EbwDGMYrk1Mdk03I6HzRaiW0yxT
-        U5plHKTKxbuE+J/FKIt2iVbdgdr0HQJB0Rp5MwY=
-X-Google-Smtp-Source: ACHHUZ4rAYUoiHYEWWqFuntxOuL06QmDCDII8lO4o2SuljgVgQXswY+xn62uFOnPiNtfcw4WXcIV+P9v/6p/Zkld05w=
-X-Received: by 2002:ac2:44ca:0:b0:4f3:b18a:6497 with SMTP id
- d10-20020ac244ca000000b004f3b18a6497mr927744lfm.52.1685666193979; Thu, 01 Jun
- 2023 17:36:33 -0700 (PDT)
+        with ESMTP id S230013AbjFCJ3x (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Jun 2023 05:29:53 -0400
+X-Greylist: delayed 89947 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 02:29:52 PDT
+Received: from mail.webtopbits.pl (mail.webtopbits.pl [195.231.64.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CE3E4C
+        for <linux-mips@vger.kernel.org>; Sat,  3 Jun 2023 02:29:51 -0700 (PDT)
+Received: by mail.webtopbits.pl (Postfix, from userid 1001)
+        id 0AC19A38A6; Fri,  2 Jun 2023 09:30:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=webtopbits.pl;
+        s=mail; t=1685694644;
+        bh=Eh8ECMiYd4baGAwPAzhz8mhJACXX7NSRkYjh+plaY18=;
+        h=Date:From:To:Subject:From;
+        b=Ry2C8/OAlGtEgLUt7Y4IWheBpRfD+Nj5c0xnlCMFeBKtpJOSBVCaufln5pgnWTjZp
+         BRvUxGAJ7xLLCW5yn5cxfyO8Lr6w0Gm6TJwiRwBQsuJ6AKe2Z4HuR8e1KbkvKdFXUq
+         koZH56gk3h8tfOXxyqrJIXLIVcoHZzas9h+q6ejRbl2KIWFM5JPSGfjveWUTu1D3RN
+         8FTpEScTZOHs/ESsr2x+sgr8pacAxK69SkRs3hqZpZhxB11PfOSBn7PYUKPi/SRm5B
+         jfYcIXbSIpS7RSwX6QNSw09BOZtwRZ2F6+GK1fQWd3kX29zy5xmjPhwVtawwCzElgY
+         5srAt0QJZA9Mg==
+Received: by mail.webtopbits.pl for <linux-mips@vger.kernel.org>; Fri,  2 Jun 2023 08:30:38 GMT
+Message-ID: <20230602085530-0.1.8w.5jty.0.pyujbb2xjy@webtopbits.pl>
+Date:   Fri,  2 Jun 2023 08:30:38 GMT
+From:   "Kamil Durjasz" <kamil.durjasz@webtopbits.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: =?UTF-8?Q?Wy=C5=BCsza_konwersja_w_e-sklepie_?=
+X-Mailer: mail.webtopbits.pl
 MIME-Version: 1.0
-References: <20230601101257.530867-1-rppt@kernel.org>
-In-Reply-To: <20230601101257.530867-1-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 1 Jun 2023 17:36:21 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5Em5Sj9uCGyfM6BheTuvA4pviavRTUK-3MbGsd9yCRbQ@mail.gmail.com>
-Message-ID: <CAPhsuW5Em5Sj9uCGyfM6BheTuvA4pviavRTUK-3MbGsd9yCRbQ@mail.gmail.com>
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,62 +47,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 3:13=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Hi,
->
-> module_alloc() is used everywhere as a mean to allocate memory for code.
->
-> Beside being semantically wrong, this unnecessarily ties all subsystmes
-> that need to allocate code, such as ftrace, kprobes and BPF to modules
-> and puts the burden of code allocation to the modules code.
->
-> Several architectures override module_alloc() because of various
-> constraints where the executable memory can be located and this causes
-> additional obstacles for improvements of code allocation.
->
-> This set splits code allocation from modules by introducing
-> jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> sites of module_alloc() and module_memfree() with the new APIs and
-> implements core text and related allocation in a central place.
->
-> Instead of architecture specific overrides for module_alloc(), the
-> architectures that require non-default behaviour for text allocation must
-> fill jit_alloc_params structure and implement jit_alloc_arch_params() tha=
-t
-> returns a pointer to that structure. If an architecture does not implemen=
-t
-> jit_alloc_arch_params(), the defaults compatible with the current
-> modules::module_alloc() are used.
->
-> The new jitalloc infrastructure allows decoupling of kprobes and ftrace
-> from modules, and most importantly it enables ROX allocations for
-> executable memory.
+Dzie=C5=84 dobry,
 
-This set does look cleaner than my version [1]. However, this is
-partially because this set only separates text and data; while [1]
-also separates rw data, ro data, and ro_after_init data. We need
-such separation to fully cover module usage, and to remove
-VM_FLUSH_RESET_PERMS. Once we add these logic to this
-set, the two versions will look similar.
+w jaki spos=C3=B3b docieraj=C4=85 Pa=C5=84stwo do odbiorc=C3=B3w?
 
-OTOH, I do like the fact this version enables kprobes (and
-potentially ftrace and bpf) without CONFIG_MODULES. And
-mm/ seems a better home for the logic.
+Tworzymy pot=C4=99=C5=BCne narz=C4=99dzia sprzeda=C5=BCy, kt=C3=B3re pozw=
+alaj=C4=85 kompleksowo rozwi=C4=85za=C4=87 problemy potencjalnych klient=C3=
+=B3w i skutecznie wp=C5=82yn=C4=85=C4=87 na ich decyzje zakupowe.=20
 
-That being said, besides comments in a few patches, this
-version looks good to me. With the fix I suggested for patch
-12/13, it passed my tests on x86_64 with modules, kprobes,
-ftrace, and BPF.
+Skupiamy si=C4=99 na Pa=C5=84stwa potrzebach zwi=C4=85zanych z obs=C5=82u=
+g=C4=85 sklepu, oczekiwaniach i planach sprzeda=C5=BCowych. Szczeg=C3=B3=C5=
+=82owo dopasowujemy grafik=C4=99, funkcjonalno=C5=9Bci, struktur=C4=99 i =
+mikrointerakcje do Pa=C5=84stwa grupy docelowej, co przek=C5=82ada si=C4=99=
+ na oczekiwane rezultaty.
 
-If we decided to ship this version, I would appreciate it if I
-could get more credit for my work in [1] and research work
-before that.
+Ch=C4=99tnie przedstawi=C4=99 dotychczasowe realizacje, aby mogli Pa=C5=84=
+stwo przekona=C4=87 si=C4=99 o naszych mo=C5=BCliwo=C5=9Bciach. Mog=C4=99=
+ si=C4=99 skontaktowa=C4=87?
 
-Thanks,
-Song
 
-[1] https://lore.kernel.org/lkml/20230526051529.3387103-1-song@kernel.org/
+Pozdrawiam
+Kamil Durjasz
