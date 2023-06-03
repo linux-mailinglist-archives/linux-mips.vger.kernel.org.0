@@ -2,41 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13925721000
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Jun 2023 14:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E674721003
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Jun 2023 14:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjFCMId (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Jun 2023 08:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S230023AbjFCMLE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Jun 2023 08:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjFCMIc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Jun 2023 08:08:32 -0400
-X-Greylist: delayed 125 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 05:08:31 PDT
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8F71A2
-        for <linux-mips@vger.kernel.org>; Sat,  3 Jun 2023 05:08:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685793973; cv=none; 
+        with ESMTP id S229529AbjFCMLE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Jun 2023 08:11:04 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4104CCE;
+        Sat,  3 Jun 2023 05:11:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685794255; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=dPp8+RIHW3Y0LWp9Lg1UfbigkqIq6GFIvQTZ1F3j30CtwhCzevw4P70IgCkQ+cSHs86Rir3wAYuLv2AJeT3O3ArMfWWhiF+g4vRjezAoj5yN/1qI9iuzDk2mznXuTQZB4lLajOQ6dRJxlD6rUwwZdksqWv1tEstcD9MvtbzENGc=
+        b=Q4vgihNxWamUIp6hhm1CPF4OmZKseP4OOpxwYILmFHh6KeWvIfSg3iEl7HbydsLdYbdeO4Rwr61VWthX6J2HJ9OAPVur74Y+R7iUlEa4CX4I6EqkR2BFrxvyDg85tWEAwv39slPGLrR4TsCIrHUGP1LvfvnBG3X66XTRsQB7u2I=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685793973; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=qZ+DRMrEQSMFmYN6TOQ1EMiUZqQZdc1StxPgV97rvEI=; 
-        b=R1AxWdWnhecGuIJDCennf6pM8qbp7vctQuTgRTNdRf6xQ28rWnwZ45vj3zVa2JfRPSF3Oe/qSy8JtCnKS75YKI4JWsqpD8TUeC73m8dalo5kc+NX0kHCvKX9588FQsaSmrdXgJ3Njp0R42T81q23qFxV7mI0StQtG81rnwbZK8s=
+        t=1685794255; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=sspiJ2UNJF/OQjMABt9qvOk84h7ByX3vdD0+pnSanSM=; 
+        b=blC2P+7qFk5sIiteVQPi/C9/eLCHL1XLsCHIRZWLYOU5lZdp9N17YS4DZDhTEdUJ5hBxJuAhhnTZORg1PQGMOzrswbXf4eHX9E1CXOn2mqqnJQjy3Kpma+Ax2Py5me1R6uFZMrtQ7BNZwo0bN3vyL3wE0ekvCBYxsSrwFOo1ym8=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=arinc9.com;
         spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
         dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685793973;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685794255;
         s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
         h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=qZ+DRMrEQSMFmYN6TOQ1EMiUZqQZdc1StxPgV97rvEI=;
-        b=M4TUDHQ/5V4ny6KYmxJPjQ+Aje1hytUzVNcOLQNJu/eKfCoeuatCDOP9Od2O6KbF
-        /10KxBPDXNbFKRaZLayWJ26OiD07m/6EMGPOqh4oBIR1scjVWgFVPrTl99mU71Civ41
-        nBAbrdybyNEZF+aArUHkklCD2SMnG51xTHCANYNQ=
+        bh=sspiJ2UNJF/OQjMABt9qvOk84h7ByX3vdD0+pnSanSM=;
+        b=LXsNNFMVwEzXm4TlB93GED6M+RVG6zyX6FU1AkI8bwD9slLcsMbJI3s5fHt9/aLs
+        rMMW7dJmnkfPueUOkc8W/b0nyn4hvgkuRqaHztEAwXC6joiP1aUq0oUzTHUg9aAUlCw
+        DpN1vBGwtzHeGx0AzMWVh83QyRzHALg1mTxWjAcw=
 Received: from [192.168.83.218] (62.74.57.39 [62.74.57.39]) by mx.zohomail.com
-        with SMTPS id 1685793972225528.2250753986209; Sat, 3 Jun 2023 05:06:12 -0700 (PDT)
-Message-ID: <cc70b28c-7bbe-0766-4a43-c0d7584e108a@arinc9.com>
-Date:   Sat, 3 Jun 2023 15:06:08 +0300
+        with SMTPS id 1685794253072363.46218317190653; Sat, 3 Jun 2023 05:10:53 -0700 (PDT)
+Message-ID: <18b72d1d-7e9a-7c99-9f0e-ca20349eff82@arinc9.com>
+Date:   Sat, 3 Jun 2023 15:10:48 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -62,8 +61,8 @@ X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,17 +73,10 @@ On 29.05.2023 18:55, Liviu Dudau wrote:
 > On Mon, May 29, 2023 at 04:08:32PM +0100, Liviu Dudau wrote:
 >> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
 >> a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
-
-Do you mean MT7662 5GHz WiFi?
-
 >> connected to the main SoC over PCIe.
 >>
 >> The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
 >> improve routing bandwidth.
-
-This is not always true, I'd prefer you remove this sentence from the 
-patch log.
-
 >>
 >> The device uses NMBM over NAND, which is not currently supported in the
 >> mainline, so NAND node is skipped in this revision.
@@ -131,20 +123,11 @@ patch log.
 >> +	memory@0 {
 >> +		device_type = "memory";
 >> +		reg = <0x0 0x0 0x0 0x8000000>;
-
-What's going on here? Just do 'reg = <0x00000000 0x08000000>;'.
-
 >> +	};
 >> +
 >> +	chosen {
 >> +		/* add 'earlycon=uart8260,mmio32,0x1e000c00' to
-
-8260?
-
 >> +		 * bootargs for early boot messages
-
-Isn't just adding "earlycon" to bootargs enough?
-
 >> +		 */
 >> +		bootargs = "console=ttyS0,115200";
 >> +	};
@@ -192,32 +175,19 @@ Isn't just adding "earlycon" to bootargs enough?
 >> +		compatible = "ralink,rt2880-reset";
 >> +		#reset-cells = <1>;
 >> +	};
-
-We don't use this anymore.
-
 >> +
 >> +	mtd {
 >> +		compatible = "mediatek,mt7622-nfc";
 >> +	};
-
-What's this got to do with this device?
-
 >> +};
 >> +
 >> +&i2c {
 >> +	status = "okay";
 >> +};
-
-Why does this device need i2c?
-
 >> +
 >> +&pcie {
 >> +	status = "okay";
 >> +};
-
-Do both WiFi chips work by just enabling pcie? I was expecting 
-'compatible = "mediatek,mt76";' on pcie@0,0 and pcie@1,0.
-
 >> +
 >> +&spi0 {
 >> +	status = "okay";
@@ -230,9 +200,6 @@ Do both WiFi chips work by just enabling pcie? I was expecting
 >> +		spi-max-frequency = <50000000>;
 >> +	};
 >> +};
-
-I thought you said this device had NAND flash, not NOR.
-
 >> +
 >> +/* gmac1 connected to MT7530's phy0 */
 >> +&gmac1 {
@@ -249,24 +216,11 @@ I thought you said this device had NAND flash, not NOR.
 >> +		reg = <0>;
 >> +	};
 >> +};
-
-Remove the two nodes above.
-
 >> +
 >> +&switch0 {
 >> +	ports {
 >> +		/* phy0 is muxed to gmac1 */
->> +		port@0 {
->> +			status = "okay";
->> +			label = "lan2";
->> +		};
-> 
-> I've made the changes to look similar to the gnubee-gb-pc2, and things mostly
-> work, with the exception that I can mount an NFS root filesystem only on "lan2"
-> interface at boot time. All other interfaces (ports) hang forever waiting for
-> an DHCP response from my server. The only difference is where I plug in the
-> ethernet cable, no other change (not even a restart) on the server.
 
-This sounds like a userspace configuration issue.
+I already suggested not doing this, please remove this line.
 
 Arınç
