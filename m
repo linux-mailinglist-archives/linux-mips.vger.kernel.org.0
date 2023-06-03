@@ -2,96 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE076720E6D
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Jun 2023 09:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13925721000
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Jun 2023 14:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbjFCHHn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Jun 2023 03:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S229829AbjFCMId (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Jun 2023 08:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbjFCHHX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Jun 2023 03:07:23 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77110DE;
-        Sat,  3 Jun 2023 00:06:02 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D7D125C0184;
-        Sat,  3 Jun 2023 03:04:53 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute2.internal (MEProxy); Sat, 03 Jun 2023 03:04:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1685775893; x=1685862293; bh=lNGhPmFc2QnROARGrjsHczGXZjVuecyubn0
-        WdIMCxlM=; b=KZqz/U161dhdhc50B3ztQ1AmJoTx5eCByl5sjINFYmZkpgz9ouA
-        To79XvcvUVuhl/rEMw8Bai94mya3BGphjS8xRvFHBY42rvNg0a+027AxNQrr6qR4
-        2EwKEQvjOxBLTfh1Vt3S8TShnM8CkV4VNir2MknYUQohI/tMaxVuvNg4pXQhpCn3
-        S3zsekR0IGRD+JjQ+qiTXhtKqpmVRaJDdissJvNjeSjDfjjYK4WSI0dzgNxnv7DA
-        a8RTUp90wsSRXaq7jHtM42iWFG8B2h77ocIeUwSdiL6DIcEmgelY/HMUAkAoe+h6
-        goBgLY95aosBYDYNZEUMvM+Mzb6cnpoASAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1685775893; x=1685862293; bh=lNGhPmFc2QnROARGrjsHczGXZjVuecyubn0
-        WdIMCxlM=; b=Lfi7CduJgjhpaSJDRMH2HzNMx+5ocTmYO0t691pNo4HG3GQJ6kl
-        yLqljK1jQKRENFFC0j9buLJ7befG7jJ5ppWLdSHudjaty0aVj4V+bOe9RiazXdrZ
-        A8j3xpaSHCSvTxx67ixCZ11wx13tnU+vlwOs9el+NQ0nEPbG7MwGmyYC54anniAO
-        E7JkW4cP2G0fSouTGbwwZO1rr/AhSHbaQAWmk6MumbElIs/nbiRc3ZQClCbaqVvN
-        Qhml8wCEAOaIaKZkG9EffMXhLe7kBp4qNfvSgQIC+raMb49g+8HpcuxzOIIT82Sk
-        V6QZblYUjVP+1D0t8ExJch66G/mxjwNaPfA==
-X-ME-Sender: <xms:E-Z6ZI4N1JZRHQS7nRqSNvSUFXLTz1f51kwJiJTP73ljY6DI70lZlA>
-    <xme:E-Z6ZJ51VaflhAEwP9-PFezzbRMiH3UUe4e3SpUYgmWN3vv9KirMMWm1l9DXfULOe
-    2dLGuIbKmTw8k0o_ZA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelgedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
-    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
-    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:E-Z6ZHdgF3BVdtDiztIsa9Gk6HNcxIgkWTdtCWPQeFfvAuflfXIhsA>
-    <xmx:E-Z6ZNJoNh8vaztf_2wKU5RvPhrfpQmjKkyPGb8qk803WWszfWNkiw>
-    <xmx:E-Z6ZMIRMyavbGV0j9YDlcBC6pBFcBtHoF6OWY2s6Z9YppD-JSWNgg>
-    <xmx:FeZ6ZFcL0oMGI25u3RPQTcB9mLDQqJJRsJLUZ5KVSfNKdu93uNoFiQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 97C8D36A0073; Sat,  3 Jun 2023 03:04:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <3ad508a0-f880-4b30-bada-211582155356@app.fastmail.com>
-In-Reply-To: <0c5171156390f614d72f36ceb04a20f432ca639e.1685693501.git.zhoubinbin@loongson.cn>
-References: <cover.1685693501.git.zhoubinbin@loongson.cn>
- <0c5171156390f614d72f36ceb04a20f432ca639e.1685693501.git.zhoubinbin@loongson.cn>
-Date:   Sat, 03 Jun 2023 15:04:31 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Binbin Zhou" <zhoubinbin@loongson.cn>,
-        "Binbin Zhou" <zhoubb.aaron@gmail.com>,
-        "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Cc:     "Huacai Chen" <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn,
-        "Xuerui Wang" <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Kelvin Cheung" <keguang.zhang@gmail.com>,
-        "zhao zhang" <zhzhl555@gmail.com>,
-        "Yang Ling" <gnaygnil@gmail.com>, "WANG Xuerui" <git@xen0n.name>
-Subject: Re: [PATCH V5 3/5] rtc: Add rtc driver for the Loongson family chips
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        with ESMTP id S229529AbjFCMIc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Jun 2023 08:08:32 -0400
+X-Greylist: delayed 125 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 05:08:31 PDT
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8F71A2
+        for <linux-mips@vger.kernel.org>; Sat,  3 Jun 2023 05:08:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685793973; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=dPp8+RIHW3Y0LWp9Lg1UfbigkqIq6GFIvQTZ1F3j30CtwhCzevw4P70IgCkQ+cSHs86Rir3wAYuLv2AJeT3O3ArMfWWhiF+g4vRjezAoj5yN/1qI9iuzDk2mznXuTQZB4lLajOQ6dRJxlD6rUwwZdksqWv1tEstcD9MvtbzENGc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685793973; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qZ+DRMrEQSMFmYN6TOQ1EMiUZqQZdc1StxPgV97rvEI=; 
+        b=R1AxWdWnhecGuIJDCennf6pM8qbp7vctQuTgRTNdRf6xQ28rWnwZ45vj3zVa2JfRPSF3Oe/qSy8JtCnKS75YKI4JWsqpD8TUeC73m8dalo5kc+NX0kHCvKX9588FQsaSmrdXgJ3Njp0R42T81q23qFxV7mI0StQtG81rnwbZK8s=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685793973;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=qZ+DRMrEQSMFmYN6TOQ1EMiUZqQZdc1StxPgV97rvEI=;
+        b=M4TUDHQ/5V4ny6KYmxJPjQ+Aje1hytUzVNcOLQNJu/eKfCoeuatCDOP9Od2O6KbF
+        /10KxBPDXNbFKRaZLayWJ26OiD07m/6EMGPOqh4oBIR1scjVWgFVPrTl99mU71Civ41
+        nBAbrdybyNEZF+aArUHkklCD2SMnG51xTHCANYNQ=
+Received: from [192.168.83.218] (62.74.57.39 [62.74.57.39]) by mx.zohomail.com
+        with SMTPS id 1685793972225528.2250753986209; Sat, 3 Jun 2023 05:06:12 -0700 (PDT)
+Message-ID: <cc70b28c-7bbe-0766-4a43-c0d7584e108a@arinc9.com>
+Date:   Sat, 3 Jun 2023 15:06:08 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] mips: dts: ralink: Add support for TP-Link HC220
+ G5 v1 board
+Content-Language: en-US
+To:     Liviu Dudau <liviu@dudau.co.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <84b31c59-81d3-c83d-ece9-a120b1cdcdd7@arinc9.com>
+ <20230529150833.526084-1-liviu@dudau.co.uk>
+ <20230529150833.526084-2-liviu@dudau.co.uk>
+ <ZHTK+qG0xBWfn9gt@bart.dudau.co.uk>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZHTK+qG0xBWfn9gt@bart.dudau.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,486 +70,203 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 29.05.2023 18:55, Liviu Dudau wrote:
+> On Mon, May 29, 2023 at 04:08:32PM +0100, Liviu Dudau wrote:
+>> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+>> a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
 
+Do you mean MT7662 5GHz WiFi?
 
-=E5=9C=A82023=E5=B9=B46=E6=9C=882=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8B=E5=
-=8D=885:50=EF=BC=8CBinbin Zhou=E5=86=99=E9=81=93=EF=BC=9A
-> The Loongson family chips use an on-chip counter 0 (Time Of Year
-> counter) as the RTC. We will refer to them as rtc-loongson.
->
-> Cc: Keguang Zhang <keguang.zhang@gmail.com>
-> Cc: Yang Ling <gnaygnil@gmail.com>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
+>> connected to the main SoC over PCIe.
+>>
+>> The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
+>> improve routing bandwidth.
 
-Reviewed-by:  Jiaxun Yang <jiaxun.yang@flygoat.com>
-Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # LS7A
+This is not always true, I'd prefer you remove this sentence from the 
+patch log.
 
-> ---
->  drivers/rtc/Kconfig        |  13 ++
->  drivers/rtc/Makefile       |   1 +
->  drivers/rtc/rtc-loongson.c | 397 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 411 insertions(+)
->  create mode 100644 drivers/rtc/rtc-loongson.c
->
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 599f5110a251..9f5b0afdbad0 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1685,6 +1685,19 @@ config RTC_DRV_JZ4740
->  	  This driver can also be built as a module. If so, the module
->  	  will be called rtc-jz4740.
->=20
-> +config RTC_DRV_LOONGSON
-> +	tristate "Loongson On-chip RTC"
-> +	depends on MACH_LOONGSON32 || MACH_LOONGSON64 || COMPILE_TEST
-> +	select REGMAP_MMIO
-> +	help
-> +	  This is a driver for the Loongson on-chip Counter0 (Time-Of-Year
-> +	  counter) to be used as a RTC.
-> +	  It can be found on Loongson-1 series cpu, Loongson-2K series cpu
-> +	  and Loongson LS7A bridge chips.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called rtc-loongson.
-> +
->  config RTC_DRV_LPC24XX
->  	tristate "NXP RTC for LPC178x/18xx/408x/43xx"
->  	depends on ARCH_LPC18XX || COMPILE_TEST
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index c50afd8fb9f4..fd209883ee2e 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -78,6 +78,7 @@ obj-$(CONFIG_RTC_DRV_ISL12022)	+=3D rtc-isl12022.o
->  obj-$(CONFIG_RTC_DRV_ISL12026)	+=3D rtc-isl12026.o
->  obj-$(CONFIG_RTC_DRV_ISL1208)	+=3D rtc-isl1208.o
->  obj-$(CONFIG_RTC_DRV_JZ4740)	+=3D rtc-jz4740.o
-> +obj-$(CONFIG_RTC_DRV_LOONGSON)	+=3D rtc-loongson.o
->  obj-$(CONFIG_RTC_DRV_LP8788)	+=3D rtc-lp8788.o
->  obj-$(CONFIG_RTC_DRV_LPC24XX)	+=3D rtc-lpc24xx.o
->  obj-$(CONFIG_RTC_DRV_LPC32XX)	+=3D rtc-lpc32xx.o
-> diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
-> new file mode 100644
-> index 000000000000..e8ffc1ab90b0
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-loongson.c
-> @@ -0,0 +1,397 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Loongson RTC driver
-> + *
-> + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
-> + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
-> + *                           Binbin Zhou <zhoubinbin@loongson.cn>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/rtc.h>
-> +#include <linux/acpi.h>
-> +
-> +/* Time Of Year(TOY) counters registers */
-> +#define TOY_TRIM_REG		0x20 /* Must be initialized to 0 */
-> +#define TOY_WRITE0_REG		0x24 /* TOY low 32-bits value (write-only) */
-> +#define TOY_WRITE1_REG		0x28 /* TOY high 32-bits value (write-only) */
-> +#define TOY_READ0_REG		0x2c /* TOY low 32-bits value (read-only) */
-> +#define TOY_READ1_REG		0x30 /* TOY high 32-bits value (read-only) */
-> +#define TOY_MATCH0_REG		0x34 /* TOY timing interrupt 0 */
-> +#define TOY_MATCH1_REG		0x38 /* TOY timing interrupt 1 */
-> +#define TOY_MATCH2_REG		0x3c /* TOY timing interrupt 2 */
-> +
-> +/* RTC counters registers */
-> +#define RTC_CTRL_REG		0x40 /* TOY and RTC control register */
-> +#define RTC_TRIM_REG		0x60 /* Must be initialized to 0 */
-> +#define RTC_WRITE0_REG		0x64 /* RTC counters value (write-only) */
-> +#define RTC_READ0_REG		0x68 /* RTC counters value (read-only) */
-> +#define RTC_MATCH0_REG		0x6c /* RTC timing interrupt 0 */
-> +#define RTC_MATCH1_REG		0x70 /* RTC timing interrupt 1 */
-> +#define RTC_MATCH2_REG		0x74 /* RTC timing interrupt 2 */
-> +
-> +/* bitmask of TOY_WRITE0_REG */
-> +#define TOY_MON			GENMASK(31, 26)
-> +#define TOY_DAY			GENMASK(25, 21)
-> +#define TOY_HOUR		GENMASK(20, 16)
-> +#define TOY_MIN			GENMASK(15, 10)
-> +#define TOY_SEC			GENMASK(9, 4)
-> +#define TOY_MSEC		GENMASK(3, 0)
-> +
-> +/* bitmask of TOY_MATCH0/1/2_REG */
-> +#define TOY_MATCH_YEAR		GENMASK(31, 26)
-> +#define TOY_MATCH_MON		GENMASK(25, 22)
-> +#define TOY_MATCH_DAY		GENMASK(21, 17)
-> +#define TOY_MATCH_HOUR		GENMASK(16, 12)
-> +#define TOY_MATCH_MIN		GENMASK(11, 6)
-> +#define TOY_MATCH_SEC		GENMASK(5, 0)
-> +
-> +/* bitmask of RTC_CTRL_REG */
-> +#define RTC_ENABLE		BIT(13) /* 1: RTC counters enable */
-> +#define TOY_ENABLE		BIT(11) /* 1: TOY counters enable */
-> +#define OSC_ENABLE		BIT(8) /* 1: 32.768k crystal enable */
-> +#define TOY_ENABLE_MASK		(TOY_ENABLE | OSC_ENABLE)
-> +
-> +/* PM domain registers */
-> +#define PM1_STS_REG		0x0c	/* Power management 1 status register */
-> +#define RTC_STS			BIT(10)	/* RTC status */
-> +#define PM1_EN_REG		0x10	/* Power management 1 enable register */
-> +#define RTC_EN			BIT(10)	/* RTC event enable */
-> +
-> +/*
-> + * According to the LS1C manual, RTC_CTRL and alarm-related registers=20
-> are not defined.
-> + * Accessing the relevant registers will cause the system to hang.
-> + */
-> +#define LS1C_RTC_CTRL_WORKAROUND	BIT(0)
-> +
-> +struct loongson_rtc_config {
-> +	u32 pm_offset;	/* Offset of PM domain, for RTC alarm wakeup */
-> +	u32 flags;	/* Workaround bits */
-> +};
-> +
-> +struct loongson_rtc_priv {
-> +	spinlock_t lock;	/* protects PM registers access */
-> +	u32 fix_year;		/* RTC alarm year compensation value */
-> +	struct rtc_device *rtcdev;
-> +	struct regmap *regmap;
-> +	void __iomem *pm_base;	/* PM domain base, for RTC alarm wakeup */
-> +	const struct loongson_rtc_config *config;
-> +};
-> +
-> +static const struct loongson_rtc_config ls1b_rtc_config =3D {
-> +	.pm_offset =3D 0,
-> +	.flags =3D 0,
-> +};
-> +
-> +static const struct loongson_rtc_config ls1c_rtc_config =3D {
-> +	.pm_offset =3D 0,
-> +	.flags =3D LS1C_RTC_CTRL_WORKAROUND,
-> +};
-> +
-> +static const struct loongson_rtc_config generic_rtc_config =3D {
-> +	.pm_offset =3D 0x100,
-> +	.flags =3D 0,
-> +};
-> +
-> +static const struct loongson_rtc_config ls2k1000_rtc_config =3D {
-> +	.pm_offset =3D 0x800,
-> +	.flags =3D 0,
-> +};
-> +
-> +static const struct regmap_config loongson_rtc_regmap_config =3D {
-> +	.reg_bits =3D 32,
-> +	.val_bits =3D 32,
-> +	.reg_stride =3D 4,
-> +};
-> +
-> +/* RTC alarm irq handler */
-> +static irqreturn_t loongson_rtc_isr(int irq, void *id)
-> +{
-> +	struct loongson_rtc_priv *priv =3D (struct loongson_rtc_priv *)id;
-> +
-> +	rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/* For ACPI fixed event handler */
-> +static u32 loongson_rtc_handler(void *id)
-> +{
-> +	struct loongson_rtc_priv *priv =3D (struct loongson_rtc_priv *)id;
-> +
-> +	spin_lock(&priv->lock);
-> +	/* Disable RTC alarm wakeup and interrupt */
-> +	writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
-> +	       priv->pm_base + PM1_EN_REG);
-> +
-> +	/* Clear RTC interrupt status */
-> +	writel(RTC_STS, priv->pm_base + PM1_STS_REG);
-> +	spin_unlock(&priv->lock);
-> +
-> +	/*
-> +	 * The TOY_MATCH0_REG should be cleared 0 here,
-> +	 * otherwise the interrupt cannot be cleared.
-> +	 */
-> +	return regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
-> +}
-> +
-> +static int loongson_rtc_set_enabled(struct device *dev)
-> +{
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	if (priv->config->flags & LS1C_RTC_CTRL_WORKAROUND)
-> +		return 0;
-> +
-> +	/* Enable RTC TOY counters and crystal */
-> +	return regmap_update_bits(priv->regmap, RTC_CTRL_REG, TOY_ENABLE_MAS=
-K,
-> +				  TOY_ENABLE_MASK);
-> +}
-> +
-> +static bool loongson_rtc_get_enabled(struct device *dev)
-> +{
-> +	int ret;
-> +	u32 ctrl_data;
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	if (priv->config->flags & LS1C_RTC_CTRL_WORKAROUND)
-> +		return true;
-> +
-> +	ret =3D regmap_read(priv->regmap, RTC_CTRL_REG, &ctrl_data);
-> +	if (ret < 0)
-> +		return false;
-> +
-> +	return ctrl_data & TOY_ENABLE_MASK;
-> +}
-> +
-> +static int loongson_rtc_read_time(struct device *dev, struct rtc_time=20
-> *tm)
-> +{
-> +	int ret;
-> +	u32 rtc_data[2];
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	if (!loongson_rtc_get_enabled(dev))
-> +		return -EINVAL;
-> +
-> +	ret =3D regmap_bulk_read(priv->regmap, TOY_READ0_REG, rtc_data,
-> +			       ARRAY_SIZE(rtc_data));
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	tm->tm_sec =3D FIELD_GET(TOY_SEC, rtc_data[0]);
-> +	tm->tm_min =3D FIELD_GET(TOY_MIN, rtc_data[0]);
-> +	tm->tm_hour =3D FIELD_GET(TOY_HOUR, rtc_data[0]);
-> +	tm->tm_mday =3D FIELD_GET(TOY_DAY, rtc_data[0]);
-> +	tm->tm_mon =3D FIELD_GET(TOY_MON, rtc_data[0]) - 1;
-> +	tm->tm_year =3D rtc_data[1];
-> +
-> +	/* Prepare for RTC alarm year compensation value. */
-> +	priv->fix_year =3D tm->tm_year / 64 * 64;
-> +	return 0;
-> +}
-> +
-> +static int loongson_rtc_set_time(struct device *dev, struct rtc_time=20
-> *tm)
-> +{
-> +	int ret;
-> +	u32 rtc_data[2];
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	rtc_data[0] =3D FIELD_PREP(TOY_SEC, tm->tm_sec)
-> +		    | FIELD_PREP(TOY_MIN, tm->tm_min)
-> +		    | FIELD_PREP(TOY_HOUR, tm->tm_hour)
-> +		    | FIELD_PREP(TOY_DAY, tm->tm_mday)
-> +		    | FIELD_PREP(TOY_MON, tm->tm_mon + 1);
-> +	rtc_data[1] =3D tm->tm_year;
-> +
-> +	ret =3D regmap_bulk_write(priv->regmap, TOY_WRITE0_REG, rtc_data,
-> +				ARRAY_SIZE(rtc_data));
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return loongson_rtc_set_enabled(dev);
-> +}
-> +
-> +static int loongson_rtc_read_alarm(struct device *dev, struct=20
-> rtc_wkalrm *alrm)
-> +{
-> +	int ret;
-> +	u32 alarm_data;
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	ret =3D regmap_read(priv->regmap, TOY_MATCH0_REG, &alarm_data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	alrm->time.tm_sec =3D FIELD_GET(TOY_MATCH_SEC, alarm_data);
-> +	alrm->time.tm_min =3D FIELD_GET(TOY_MATCH_MIN, alarm_data);
-> +	alrm->time.tm_hour =3D FIELD_GET(TOY_MATCH_HOUR, alarm_data);
-> +	alrm->time.tm_mday =3D FIELD_GET(TOY_MATCH_DAY, alarm_data);
-> +	alrm->time.tm_mon =3D FIELD_GET(TOY_MATCH_MON, alarm_data) - 1;
-> +	/*
-> +	 * This is a hardware bug: the year field of SYS_TOYMATCH is only 6=20
-> bits,
-> +	 * making it impossible to save year values larger than 64.
-> +	 *
-> +	 * SYS_TOYMATCH is used to match the alarm time value and determine =
-if
-> +	 * an alarm is triggered, so we must keep the lower 6 bits of the ye=
-ar
-> +	 * value constant during the value conversion.
-> +	 *
-> +	 * In summary, we need to manually add 64(or a multiple of 64) to the
-> +	 * year value to avoid the invalid alarm prompt at startup.
-> +	 */
-> +	alrm->time.tm_year =3D FIELD_GET(TOY_MATCH_YEAR, alarm_data) +=20
-> priv->fix_year;
-> +
-> +	alrm->enabled =3D !!(readl(priv->pm_base + PM1_EN_REG) & RTC_EN);
-> +	return 0;
-> +}
-> +
-> +static int loongson_rtc_alarm_irq_enable(struct device *dev, unsigned=20
-> int enabled)
-> +{
-> +	u32 val;
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	spin_lock(&priv->lock);
-> +	val =3D readl(priv->pm_base + PM1_EN_REG);
-> +	/* Enable RTC alarm wakeup */
-> +	writel(enabled ? val | RTC_EN : val & ~RTC_EN,
-> +	       priv->pm_base + PM1_EN_REG);
-> +	spin_unlock(&priv->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson_rtc_set_alarm(struct device *dev, struct=20
-> rtc_wkalrm *alrm)
-> +{
-> +	int ret;
-> +	u32 alarm_data;
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	alarm_data =3D FIELD_PREP(TOY_MATCH_SEC, alrm->time.tm_sec)
-> +		   | FIELD_PREP(TOY_MATCH_MIN, alrm->time.tm_min)
-> +		   | FIELD_PREP(TOY_MATCH_HOUR, alrm->time.tm_hour)
-> +		   | FIELD_PREP(TOY_MATCH_DAY, alrm->time.tm_mday)
-> +		   | FIELD_PREP(TOY_MATCH_MON, alrm->time.tm_mon + 1)
-> +		   | FIELD_PREP(TOY_MATCH_YEAR, alrm->time.tm_year - priv->fix_year=
-);
-> +
-> +	ret =3D regmap_write(priv->regmap, TOY_MATCH0_REG, alarm_data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return loongson_rtc_alarm_irq_enable(dev, alrm->enabled);
-> +}
-> +
-> +static const struct rtc_class_ops loongson_rtc_ops =3D {
-> +	.read_time =3D loongson_rtc_read_time,
-> +	.set_time =3D loongson_rtc_set_time,
-> +	.read_alarm =3D loongson_rtc_read_alarm,
-> +	.set_alarm =3D loongson_rtc_set_alarm,
-> +	.alarm_irq_enable =3D loongson_rtc_alarm_irq_enable,
-> +};
-> +
-> +static int loongson_rtc_probe(struct platform_device *pdev)
-> +{
-> +	int ret, alarm_irq;
-> +	void __iomem *regs;
-> +	struct loongson_rtc_priv *priv;
-> +	struct device *dev =3D &pdev->dev;
-> +
-> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	regs =3D devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(regs))
-> +		return dev_err_probe(dev, PTR_ERR(regs),
-> +				     "devm_platform_ioremap_resource failed\n");
-> +
-> +	priv->regmap =3D devm_regmap_init_mmio(dev, regs,
-> +					     &loongson_rtc_regmap_config);
-> +	if (IS_ERR(priv->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
-> +				     "devm_regmap_init_mmio failed\n");
-> +
-> +	priv->config =3D device_get_match_data(dev);
-> +	spin_lock_init(&priv->lock);
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	priv->rtcdev =3D devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(priv->rtcdev))
-> +		return dev_err_probe(dev, PTR_ERR(priv->rtcdev),
-> +				     "devm_rtc_allocate_device failed\n");
-> +
-> +	/* Get RTC alarm irq */
-> +	alarm_irq =3D platform_get_irq(pdev, 0);
-> +	if (alarm_irq > 0) {
-> +		ret =3D devm_request_irq(dev, alarm_irq, loongson_rtc_isr,
-> +				       0, "loongson-alarm", priv);
-> +		if (ret < 0)
-> +			return dev_err_probe(dev, ret, "Unable to request irq %d\n",
-> +					     alarm_irq);
-> +
-> +		priv->pm_base =3D regs - priv->config->pm_offset;
-> +		device_init_wakeup(dev, 1);
-> +
-> +		if (has_acpi_companion(dev))
-> +			acpi_install_fixed_event_handler(ACPI_EVENT_RTC,
-> +							 loongson_rtc_handler, priv);
-> +	} else {
-> +		/* Loongson-1C RTC does not support alarm */
-> +		clear_bit(RTC_FEATURE_ALARM, priv->rtcdev->features);
-> +	}
-> +
-> +	/* Loongson RTC does not support UIE */
-> +	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, priv->rtcdev->features);
-> +	priv->rtcdev->ops =3D &loongson_rtc_ops;
-> +	priv->rtcdev->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
-> +	priv->rtcdev->range_max =3D RTC_TIMESTAMP_END_2099;
-> +
-> +	return devm_rtc_register_device(priv->rtcdev);
-> +}
-> +
-> +static void loongson_rtc_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct loongson_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	if (!test_bit(RTC_FEATURE_ALARM, priv->rtcdev->features))
-> +		return;
-> +
-> +	if (has_acpi_companion(dev))
-> +		acpi_remove_fixed_event_handler(ACPI_EVENT_RTC,
-> +						loongson_rtc_handler);
-> +
-> +	device_init_wakeup(dev, 0);
-> +	loongson_rtc_alarm_irq_enable(dev, 0);
-> +}
-> +
-> +static const struct of_device_id loongson_rtc_of_match[] =3D {
-> +	{ .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1b_rtc_config },
-> +	{ .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1c_rtc_config },
-> +	{ .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_config=
- },
-> +	{ .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000_rtc_c=
-onfig=20
-> },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, loongson_rtc_of_match);
-> +
-> +static const struct acpi_device_id loongson_rtc_acpi_match[] =3D {
-> +	{ "LOON0001", .driver_data =3D (kernel_ulong_t)&generic_rtc_config },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, loongson_rtc_acpi_match);
-> +
-> +static struct platform_driver loongson_rtc_driver =3D {
-> +	.probe		=3D loongson_rtc_probe,
-> +	.remove_new	=3D loongson_rtc_remove,
-> +	.driver		=3D {
-> +		.name	=3D "loongson-rtc",
-> +		.of_match_table =3D loongson_rtc_of_match,
-> +		.acpi_match_table =3D loongson_rtc_acpi_match,
-> +	},
-> +};
-> +module_platform_driver(loongson_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("Loongson RTC driver");
-> +MODULE_AUTHOR("Binbin Zhou <zhoubinbin@loongson.cn>");
-> +MODULE_AUTHOR("WANG Xuerui <git@xen0n.name>");
-> +MODULE_AUTHOR("Huacai Chen <chenhuacai@kernel.org>");
-> +MODULE_LICENSE("GPL");
-> --=20
-> 2.39.1
+>>
+>> The device uses NMBM over NAND, which is not currently supported in the
+>> mainline, so NAND node is skipped in this revision.
+>>
+>> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+>> ---
+>>   arch/mips/boot/dts/ralink/Makefile            |   3 +-
+>>   .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 129 ++++++++++++++++++
+>>   2 files changed, 131 insertions(+), 1 deletion(-)
+>>   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+>>
+>> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+>> index 11732b8c8163a..d27d7e8c700fe 100644
+>> --- a/arch/mips/boot/dts/ralink/Makefile
+>> +++ b/arch/mips/boot/dts/ralink/Makefile
+>> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
+>>   
+>>   dtb-$(CONFIG_SOC_MT7621) += \
+>>   	mt7621-gnubee-gb-pc1.dtb \
+>> -	mt7621-gnubee-gb-pc2.dtb
+>> +	mt7621-gnubee-gb-pc2.dtb \
+>> +	mt7621-tplink-hc220-g5-v1.dtb
+>>   
+>>   obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+>> diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+>> new file mode 100644
+>> index 0000000000000..f003ae615a58e
+>> --- /dev/null
+>> +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+>> @@ -0,0 +1,129 @@
+>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +/dts-v1/;
+>> +
+>> +#include "mt7621.dtsi"
+>> +
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/leds/common.h>
+>> +
+>> +/ {
+>> +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
+>> +	model = "TP-Link HC220 G5 v1";
+>> +
+>> +	memory@0 {
+>> +		device_type = "memory";
+>> +		reg = <0x0 0x0 0x0 0x8000000>;
 
---=20
-- Jiaxun
+What's going on here? Just do 'reg = <0x00000000 0x08000000>;'.
+
+>> +	};
+>> +
+>> +	chosen {
+>> +		/* add 'earlycon=uart8260,mmio32,0x1e000c00' to
+
+8260?
+
+>> +		 * bootargs for early boot messages
+
+Isn't just adding "earlycon" to bootargs enough?
+
+>> +		 */
+>> +		bootargs = "console=ttyS0,115200";
+>> +	};
+>> +
+>> +	gpio-keys {
+>> +		compatible = "gpio-keys";
+>> +
+>> +		key-reset {
+>> +			label = "reset";
+>> +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+>> +			linux,code = <KEY_RESTART>;
+>> +		};
+>> +
+>> +		key-wps {
+>> +			label = "wps";
+>> +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+>> +			linux,code = <KEY_WPS_BUTTON>;
+>> +		};
+>> +	};
+>> +
+>> +	leds {
+>> +		compatible = "gpio-leds";
+>> +
+>> +		red {
+>> +			color = <LED_COLOR_ID_RED>;
+>> +			function = LED_FUNCTION_FAULT;
+>> +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
+>> +		};
+>> +
+>> +		green {
+>> +			color = <LED_COLOR_ID_GREEN>;
+>> +			function = LED_FUNCTION_POWER;
+>> +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+>> +			linux,default-trigger = "default-on";
+>> +		};
+>> +
+>> +		blue {
+>> +			color = <LED_COLOR_ID_BLUE>;
+>> +			function = LED_FUNCTION_WPS;
+>> +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+>> +		};
+>> +	};
+>> +
+>> +	resetc: reset-controller {
+>> +		compatible = "ralink,rt2880-reset";
+>> +		#reset-cells = <1>;
+>> +	};
+
+We don't use this anymore.
+
+>> +
+>> +	mtd {
+>> +		compatible = "mediatek,mt7622-nfc";
+>> +	};
+
+What's this got to do with this device?
+
+>> +};
+>> +
+>> +&i2c {
+>> +	status = "okay";
+>> +};
+
+Why does this device need i2c?
+
+>> +
+>> +&pcie {
+>> +	status = "okay";
+>> +};
+
+Do both WiFi chips work by just enabling pcie? I was expecting 
+'compatible = "mediatek,mt76";' on pcie@0,0 and pcie@1,0.
+
+>> +
+>> +&spi0 {
+>> +	status = "okay";
+>> +
+>> +	flash@0 {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		compatible = "jedec,spi-nor";
+>> +		reg = <0>;
+>> +		spi-max-frequency = <50000000>;
+>> +	};
+>> +};
+
+I thought you said this device had NAND flash, not NOR.
+
+>> +
+>> +/* gmac1 connected to MT7530's phy0 */
+>> +&gmac1 {
+>> +	phy-handle = <&ethphy0>;
+>> +
+>> +	fixed-link {
+>> +		status = "disabled";
+>> +	};
+>> +};
+>> +
+>> +&mdio {
+>> +	/* MT7530's phy0 */
+>> +	ethphy0: ethernet-phy@0 {
+>> +		reg = <0>;
+>> +	};
+>> +};
+
+Remove the two nodes above.
+
+>> +
+>> +&switch0 {
+>> +	ports {
+>> +		/* phy0 is muxed to gmac1 */
+>> +		port@0 {
+>> +			status = "okay";
+>> +			label = "lan2";
+>> +		};
+> 
+> I've made the changes to look similar to the gnubee-gb-pc2, and things mostly
+> work, with the exception that I can mount an NFS root filesystem only on "lan2"
+> interface at boot time. All other interfaces (ports) hang forever waiting for
+> an DHCP response from my server. The only difference is where I plug in the
+> ethernet cable, no other change (not even a restart) on the server.
+
+This sounds like a userspace configuration issue.
+
+Arınç
