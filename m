@@ -2,42 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF407216EF
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Jun 2023 14:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4077B7217F6
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Jun 2023 16:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjFDM1k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Jun 2023 08:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S232006AbjFDO4x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Jun 2023 10:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjFDM1g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Jun 2023 08:27:36 -0400
+        with ESMTP id S231909AbjFDO4w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Jun 2023 10:56:52 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1411BF;
-        Sun,  4 Jun 2023 05:27:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235BC83;
+        Sun,  4 Jun 2023 07:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1685881633;
+        s=mail; t=1685890609;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s1RJUCGj4nB1iNY8d5w8aIK40sAZLfxM8ksgaf5zRXc=;
-        b=cPQrviulFS4Raq43BCRWx1X92wf5oie9PpfnuONQ1O9WBlIBs4bGm+zEjfv/TlHWHMrP0m
-        w1g8C+Oe7vEwEoN/NXgKazr8ZnhNniDtFc55i7ELZtAkjQhvS1Y7ZHJaBI59wQWOr0Fj85
-        HsfTgp0jXbE2xhp81GiE3SlEPOC0CaM=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aUm8nxoMkt5vtIyk2EeQbuAcNEwuQxxePTczf1+Ra6o=;
+        b=giN82oAIH5BKybRITpljyFWW87PlYw3IFJsVU/Wdt9jABVxhXA7zQE5ZuQMC7wPgXqlEbC
+        GmOQmzszVA5nHRq14QisUWI8hiB6nYqJOAjgoL6b4DcX2iIQizd5OEflO8CcY9hAvxWB9z
+        +X7MWAU+zbuJNjg7tLKkfDPixJ7qfrI=
 From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Siarhei Volkau <lis8215@gmail.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, list@opendingux.net,
-        Paul Cercueil <paul@crapouillou.net>,
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH 4/4] MIPS: DTS: qi_lb60: Don't use unit address for regulators
-Date:   Sun,  4 Jun 2023 14:26:55 +0200
-Message-Id: <20230604122655.69698-4-paul@crapouillou.net>
-In-Reply-To: <20230604122655.69698-1-paul@crapouillou.net>
-References: <20230604122655.69698-1-paul@crapouillou.net>
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, list@opendingux.net,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
+Date:   Sun,  4 Jun 2023 16:56:33 +0200
+Message-Id: <20230604145642.200577-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam: Yes
@@ -50,50 +47,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The regulators don't have any "reg" property, and therefore shouldn't
-use an unit address in their node names.
+Hi,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: devicetree@vger.kernel.org
----
- arch/mips/boot/dts/ingenic/qi_lb60.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Here's a set of patches to add support for the WiFi / Bluetooth chip on
+the CI20.
 
-diff --git a/arch/mips/boot/dts/ingenic/qi_lb60.dts b/arch/mips/boot/dts/ingenic/qi_lb60.dts
-index ba0218971572..24f987244a12 100644
---- a/arch/mips/boot/dts/ingenic/qi_lb60.dts
-+++ b/arch/mips/boot/dts/ingenic/qi_lb60.dts
-@@ -27,7 +27,7 @@ chosen {
- 		stdout-path = &uart0;
- 	};
- 
--	vcc: regulator@0 {
-+	vcc: regulator-0 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc";
- 
-@@ -36,7 +36,7 @@ vcc: regulator@0 {
- 		regulator-always-on;
- 	};
- 
--	mmc_power: regulator@1 {
-+	mmc_power: regulator-1 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "mmc_vcc";
- 		gpio = <&gpd 2 0>;
-@@ -45,7 +45,7 @@ mmc_power: regulator@1 {
- 		regulator-max-microvolt = <3300000>;
- 	};
- 
--	amp_supply: regulator@2 {
-+	amp_supply: regulator-2 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "amp_supply";
- 		gpio = <&gpd 4 0>;
+WiFi works pretty well, provided it is used with the latest firmware
+provided by linux-firmware. Bluetooth does not work very well here, as
+I cannot get my wireless keyboard to pair; but it does detect it, and it
+does see they key presses when I type the pairing code.
+
+I only tested with a somewhat recent (~2022) Buildroot-based userspace.
+I enabled WEXT compatibility because the CI20 is typically used with a
+very old userspace, but I did not try to use it with old tools like
+ifconfig/iwconfig.
+
+Cheers,
+-Paul
+
+Paul Cercueil (9):
+  MIPS: DTS: CI20: Fix regulators
+  MIPS: DTS: CI20: Fix ACT8600 regulator node names
+  MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators
+  MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators
+  MIPS: DTS: CI20: Misc. cleanups
+  MIPS: DTS: CI20: Parent MSCMUX clock to MPLL
+  MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
+  MIPS: configs: CI20: Regenerate defconfig
+  MIPS: configs: CI20: Enable WiFi / Bluetooth
+
+ arch/mips/boot/dts/ingenic/ci20.dts | 148 +++++++++++++++++++---------
+ arch/mips/configs/ci20_defconfig    |  47 ++++++---
+ 2 files changed, 133 insertions(+), 62 deletions(-)
+
 -- 
 2.39.2
 
