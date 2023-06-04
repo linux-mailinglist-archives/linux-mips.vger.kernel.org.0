@@ -2,27 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4077B7217F6
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Jun 2023 16:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB43D7217F9
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Jun 2023 16:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbjFDO4x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Jun 2023 10:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S232217AbjFDO5E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Jun 2023 10:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbjFDO4w (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Jun 2023 10:56:52 -0400
+        with ESMTP id S232287AbjFDO5D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 4 Jun 2023 10:57:03 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235BC83;
-        Sun,  4 Jun 2023 07:56:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D735BE3;
+        Sun,  4 Jun 2023 07:56:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1685890609;
+        s=mail; t=1685890610;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aUm8nxoMkt5vtIyk2EeQbuAcNEwuQxxePTczf1+Ra6o=;
-        b=giN82oAIH5BKybRITpljyFWW87PlYw3IFJsVU/Wdt9jABVxhXA7zQE5ZuQMC7wPgXqlEbC
-        GmOQmzszVA5nHRq14QisUWI8hiB6nYqJOAjgoL6b4DcX2iIQizd5OEflO8CcY9hAvxWB9z
-        +X7MWAU+zbuJNjg7tLKkfDPixJ7qfrI=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ifqQeQGnnzV13/cFXnaYHZyXnfxZDj76WFVwrDE4Edg=;
+        b=oO7orWjt7QQ63CskpU2DxU6A80UhBTRt3YqOrZqqOtMJPOhN+vR8wV4Kcf8/9T/OIDzcV/
+        b0Gj4AkMcjnnf27WBNY8lJhZFpHahKJgpqZ7xm8IFrB/HZJdAVKC030nq2qkzwcBYTxtCt
+        TqulaHg+Dv8DYvR/YJSMwiWhQucNQFY=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
@@ -32,9 +33,11 @@ Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, list@opendingux.net,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-Date:   Sun,  4 Jun 2023 16:56:33 +0200
-Message-Id: <20230604145642.200577-1-paul@crapouillou.net>
+Subject: [PATCH 1/9] MIPS: DTS: CI20: Fix regulators
+Date:   Sun,  4 Jun 2023 16:56:34 +0200
+Message-Id: <20230604145642.200577-2-paul@crapouillou.net>
+In-Reply-To: <20230604145642.200577-1-paul@crapouillou.net>
+References: <20230604145642.200577-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam: Yes
@@ -47,39 +50,65 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+The regulators don't have any "reg" property, and therefore shouldn't
+use an unit address in their node names. They also don't need to specify
+the GPIO_ACTIVE_LOW flag, which will be ignored anyway, as they are
+active-high.
 
-Here's a set of patches to add support for the WiFi / Bluetooth chip on
-the CI20.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/boot/dts/ingenic/ci20.dts | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-WiFi works pretty well, provided it is used with the latest firmware
-provided by linux-firmware. Bluetooth does not work very well here, as
-I cannot get my wireless keyboard to pair; but it does detect it, and it
-does see they key presses when I type the pairing code.
-
-I only tested with a somewhat recent (~2022) Buildroot-based userspace.
-I enabled WEXT compatibility because the CI20 is typically used with a
-very old userspace, but I did not try to use it with old tools like
-ifconfig/iwconfig.
-
-Cheers,
--Paul
-
-Paul Cercueil (9):
-  MIPS: DTS: CI20: Fix regulators
-  MIPS: DTS: CI20: Fix ACT8600 regulator node names
-  MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators
-  MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators
-  MIPS: DTS: CI20: Misc. cleanups
-  MIPS: DTS: CI20: Parent MSCMUX clock to MPLL
-  MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
-  MIPS: configs: CI20: Regenerate defconfig
-  MIPS: configs: CI20: Enable WiFi / Bluetooth
-
- arch/mips/boot/dts/ingenic/ci20.dts | 148 +++++++++++++++++++---------
- arch/mips/configs/ci20_defconfig    |  47 ++++++---
- 2 files changed, 133 insertions(+), 62 deletions(-)
-
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index 239c4537484d..e76953dce2e7 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -67,14 +67,14 @@ led-3 {
+ 		};
+ 	};
+ 
+-	eth0_power: fixedregulator@0 {
++	eth0_power: fixedregulator-0 {
+ 		compatible = "regulator-fixed";
+ 
+ 		regulator-name = "eth0_power";
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
+ 
+-		gpio = <&gpb 25 GPIO_ACTIVE_LOW>;
++		gpio = <&gpb 25 0>;
+ 		enable-active-high;
+ 	};
+ 
+@@ -97,23 +97,23 @@ ir: ir {
+ 		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
+ 	};
+ 
+-	wlan0_power: fixedregulator@1 {
++	wlan0_power: fixedregulator-1 {
+ 		compatible = "regulator-fixed";
+ 
+ 		regulator-name = "wlan0_power";
+ 
+-		gpio = <&gpb 19 GPIO_ACTIVE_LOW>;
++		gpio = <&gpb 19 0>;
+ 		enable-active-high;
+ 	};
+ 
+-	otg_power: fixedregulator@2 {
++	otg_power: fixedregulator-2 {
+ 		compatible = "regulator-fixed";
+ 
+ 		regulator-name = "otg_power";
+ 		regulator-min-microvolt = <5000000>;
+ 		regulator-max-microvolt = <5000000>;
+ 
+-		gpio = <&gpf 15 GPIO_ACTIVE_LOW>;
++		gpio = <&gpf 15 0>;
+ 		enable-active-high;
+ 	};
+ };
 -- 
 2.39.2
 
