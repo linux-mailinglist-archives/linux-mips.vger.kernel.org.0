@@ -2,139 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB618722838
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Jun 2023 16:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F0E7228E8
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Jun 2023 16:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbjFEOIU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Jun 2023 10:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
+        id S233761AbjFEOgJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Jun 2023 10:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbjFEOH7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Jun 2023 10:07:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8F2E5C;
-        Mon,  5 Jun 2023 07:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685974071; x=1717510071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zjA9XYetqLmj2er7YOpXmYqZcR8z8Fh+g5Flt9xdytk=;
-  b=O96WqxzlUCNQyd33mgmV+U+gO7Lgr+/55QF6BKqVKFY53MIvHhzdcl4N
-   xdGbsU6vvWdH65EhEc1Dup08XLUzSGM/ENIdjVfI38q1DmbrtZ7RqIXSU
-   XFhU8HQpR0b9EMsblU4xIi2zBUPnZaOK6MXv7t6Th5nf7GVtcKncqMWRs
-   2pA+rVgzMjtJx8OUe2PgpIprtmvCUcz6OINPgM06ruHWparvphAN7ftf2
-   GODvFHSgy+5VSlcBcv7oGKlEdMT2nWOvsjhUn0zTnzNTLi57F2vd8qIMa
-   fuMqRNsqppppAcn0BAHJHrQ7FODn+RVT8PBKus4oetqfPBskfYs5StpT2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="335993888"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="335993888"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 07:04:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="882915325"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="882915325"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2023 07:04:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q6AoX-001O9h-1D;
-        Mon, 05 Jun 2023 17:04:05 +0300
-Date:   Mon, 5 Jun 2023 17:04:05 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Andrew Lunn <andrew@lunn.ch>, sparclinux@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        xen-devel@lists.xenproject.org, Matt Turner <mattst88@gmail.com>,
-        Anatolij Gustschin <agust@denx.de>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-mips@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-alpha@vger.kernel.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <ZH3rVcSr+m8DHmo9@smile.fi.intel.com>
-References: <CAOiHx==5YWhDiZP2PyHZiJrmtqRzvqCqoSO59RwuYuR85BezBg@mail.gmail.com>
- <ZHe8dKb3f392MfBO@bhelgaas>
+        with ESMTP id S234127AbjFEOgI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Jun 2023 10:36:08 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346EBED;
+        Mon,  5 Jun 2023 07:36:06 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50d897af77bso684379a12.1;
+        Mon, 05 Jun 2023 07:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685975764; x=1688567764;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/nEIx2pKx8MANmuUD53PuQCkyn4NP8umHBPTpshdhtE=;
+        b=X4pOGtiEGzl58GIFHbyV096t93IrJzELqcypLc4QMyHeBwAan/aALSMopAZ+lqPIs/
+         PZNtR1f+KboWQSY8gUKV8bP6VLPOPyLj9X+PcDBik6Rb1GkoW1dQzGRxs/VB+cefUAHk
+         oqOoq9ZzN1ix9J54M/O922WWDlAgpQE5AKeuQY1UWV5aftGRdFXROUT/wO25J2bq7tvJ
+         ntDFTIewi2nWrpz4P99jP9etHFIKzZEQQ2s93Ttnro2HDYWUBGQU+f9mpHNbRQ5IlJbB
+         1OEzF7yvggyK3Clsj7G1B3wcFoRHXo6xJ+JId++mQ9eGPjlFHkVYB7SLL19lfxy+iJ6r
+         HQbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685975764; x=1688567764;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/nEIx2pKx8MANmuUD53PuQCkyn4NP8umHBPTpshdhtE=;
+        b=SdyEPM1jdpO9UOjc0wb88OGty/2k7gzfz84pMrlR/hf04x2sNQsdH1kLGenOSnkhxC
+         Xed8E54J/t3ug3QhcTKKK9S6FyI+GU2Nfdy8cGyACpdQSsAJJ5OFZ1LEYjBQIb0EkKQI
+         tJJXJxCHPvOLDAw4vDc4XhESB+5cK7+73Rb3lgOuasUOzGUJK37tQ2cXI1+WCiuxAInz
+         o181SDEEJ3+Vhd+oKmOzYltAwTl6rm6kl+wGo0zJEQpEs6aEkoZ59zeV0cjGMG3vAhlx
+         alKcLY3f9/woPFYXzZHbAJgs4sRWY+Oz0rP4+K7vORK2mCY8PoBfWMRqewxfYcGb40WL
+         mClg==
+X-Gm-Message-State: AC+VfDwVqPXhfqSKpU9vMuVKLCbgVychtSfjpQQQ9MfKX1HXgt/fCgeD
+        EPuFSTDv/gyQV+PxqlAhg+c=
+X-Google-Smtp-Source: ACHHUZ64cK7Y08p9XC1fThPd/qyz85iOAi9xrRj76BmDStiQbKH5iM+XYS3Sd25RTQiQg9fupo3QbA==
+X-Received: by 2002:a17:906:7a17:b0:974:56cb:9dfc with SMTP id d23-20020a1709067a1700b0097456cb9dfcmr9788715ejo.1.1685975764343;
+        Mon, 05 Jun 2023 07:36:04 -0700 (PDT)
+Received: from localhost ([134.191.220.83])
+        by smtp.gmail.com with ESMTPSA id i21-20020a170906851500b00965e9a23f2bsm4364473ejx.134.2023.06.05.07.35.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 07:36:04 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 22:35:20 +0800
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/16] KVM: arm64: Document the page table walker
+ actions based on the callback's return value
+Message-ID: <20230605223520.00007fbd.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230602160914.4011728-10-vipinsh@google.com>
+References: <20230602160914.4011728-1-vipinsh@google.com>
+        <20230602160914.4011728-10-vipinsh@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHe8dKb3f392MfBO@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 31, 2023 at 04:30:28PM -0500, Bjorn Helgaas wrote:
-> On Wed, May 31, 2023 at 08:48:35PM +0200, Jonas Gorski wrote:
+On Fri,  2 Jun 2023 09:09:07 -0700
+Vipin Sharma <vipinsh@google.com> wrote:
 
-...
-
-> > Looking at the code I understand where coverity is coming from:
-> > 
-> > #define __pci_dev_for_each_res0(dev, res, ...)                         \
-> >        for (unsigned int __b = 0;                                      \
-> >             res = pci_resource_n(dev, __b), __b < PCI_NUM_RESOURCES;   \
-> >             __b++)
-> > 
-> >  res will be assigned before __b is checked for being less than
-> > PCI_NUM_RESOURCES, making it point to behind the array at the end of
-> > the last loop iteration.
-> > 
-> > Rewriting the test expression as
-> > 
-> > __b < PCI_NUM_RESOURCES && (res = pci_resource_n(dev, __b));
-> > 
-> > should avoid the (coverity) warning by making use of lazy evaluation.
-> > 
-> > It probably makes the code slightly less performant as res will now be
-> > checked for being not NULL (which will always be true), but I doubt it
-> > will be significant (or in any hot paths).
+> Document what the page table walker do when walker callback function returns
+> a value.
 > 
-> Thanks a lot for looking into this!  I think you're right, and I think
-> the rewritten expression is more logical as well.  Do you want to post
-> a patch for it?
+> Current documentation is not correct as negative error of -EAGAIN on a
+> non-shared page table walker doesn't terminate the walker and continues
+> to the next step.
+> 
+> There might be a better place to keep this information, for now this
+> documentation will work as a reference guide until a better way is
+> found.
+>
 
-Gimme some time, I was on a long leave and now it's a pile to handle.
+After reading the whole patch series, I was thinking it might be a good
+time to improve the way how the visitor function and page table walker
+talk to each other. The error code is good enough before, but its meaning
+seems limited and vague when the visitor function wants to express more about
+what exactly happens inside. I am not sure if it is a good idea to continue
+that way: 1. found a new situation. 2. choosing a error code for visitor
+function. 3. walker translates the error code into the situation to
+handle. 4. document the error code and its actual meaning.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Eventually I am afraid that we are going to abuse the error code.
 
+What about introducing a set of flags for the visitor function to express
+what happened and simplify the existing error code?
+
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_pgtable.h | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index 8ef7e8f3f054..957bc20dab00 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -711,8 +711,19 @@ int kvm_pgtable_stage2_split(struct kvm_pgtable *pgt, u64 addr, u64 size,
+>   * after invoking the walker callback, allowing the walker to descend into
+>   * a newly installed table.
+>   *
+> - * Returning a negative error code from the walker callback function will
+> - * terminate the walk immediately with the same error code.
+> + * Depending on the return value from the walker callback function, the page
+> + * table walk will continue or exit the walk. This is also dependent on the
+> + * type of the walker, i.e. shared walker (vCPU fault handlers) or non-shared
+> + * walker.
+> + *
+> + * Walker Type  | Callback         | Walker action
+> + * -------------|------------------|--------------
+> + * Non-Shared   | 0                | Continue
+> + * Non-Shared   | -EAGAIN          | Continue
+> + * Non-Shared   | Any other        | Exit
+> + * -------------|------------------|--------------
+> + * Shared       | 0                | Continue
+> + * Shared       | Any other        | Exit
+>   *
+>   * Return: 0 on success, negative error code on failure.
+>   */
 
