@@ -2,249 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6301F7231D6
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Jun 2023 23:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D237231F5
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Jun 2023 23:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233303AbjFEVBb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Jun 2023 17:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S232493AbjFEVLo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Jun 2023 17:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbjFEVB3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Jun 2023 17:01:29 -0400
-Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D27F7F7;
-        Mon,  5 Jun 2023 14:01:27 -0700 (PDT)
-Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id 1DC6041D13A6;
-        Mon,  5 Jun 2023 22:01:26 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Mon, 05 Jun 2023 22:01:26 +0100
-Date:   Mon, 5 Jun 2023 22:01:26 +0100
-From:   Liviu Dudau <liviu@dudau.co.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-Message-ID: <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
-References: <20230605150114.601102-1-liviu@dudau.co.uk>
- <20230605150114.601102-2-liviu@dudau.co.uk>
- <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231495AbjFEVLn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Jun 2023 17:11:43 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A404ED;
+        Mon,  5 Jun 2023 14:11:41 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so4561552a91.0;
+        Mon, 05 Jun 2023 14:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685999501; x=1688591501;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zh4jJxTAKzbJ9SX27hDt/5kPD49tOPRL7suMPY4/khA=;
+        b=HQ7E4KTQocAnFq6ymEbiyQe+71wz1QqkMTqstF6yByE1aQ/3L9xGlsoHE2ty/KmNGx
+         kkEIZdBdUpFN5pBuGWGPof3JHvwTsAFbFOBh8LvcbfvZDQcWxan7GhR3qRzMUhCbsynv
+         VMO/o8hLS0MUfiw6kmRJdp5TDSqJf1Z98tzNg0TBILGUxmterYeS+YBt+Dmye8jo/cGp
+         xxgae6ukPX27OAi5ZxAJI04J0vRi0aYxFh2wrhremSn2C6an+j6jLOUDoZZnWpJAGoFM
+         QcM8CesR+0JfQo9SpvdWxAM1li3oZzB0tJjW4MpOn6edHy3LBmjFeUMOqWOY59vgg4DJ
+         JYag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685999501; x=1688591501;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zh4jJxTAKzbJ9SX27hDt/5kPD49tOPRL7suMPY4/khA=;
+        b=GW0+fjMMwHvn/EUwctN+yNljKAGIzWHs8mQ2TQ9xwKHzWXX8xA+25xqMgpX3ksUsLO
+         dSUDEC4eHITWu2mX07+7MQHvOz7mDIY9acicwIk3jzAl5MfSUM9l1B1yNCzBXB6mxDMC
+         B9drTk8qLxI1Nt/aEcw0mmlIIUKXqSi3gIs7iLdXYPr9MuFphU8/zwQsspmy040Dmnfh
+         9gvD9aV608+UhTexp4yNDNavub2dhRIziYocETy2PCZ6wOk5CGIC+CiAiVHQlLRECwIl
+         OD75x9nlKcgi5z+/fEEeped4MA9cPAW1VRe2//N99eR219ZFCQ/wPncb/jv2ylYcuN/B
+         MY+w==
+X-Gm-Message-State: AC+VfDxeOaomLjcMbmPj3aD2xU2svtNHmsaw6gyzCY236Q0/4+sAsyxy
+        1AIZ9WY13/Hrkx9Hs3FVQg4=
+X-Google-Smtp-Source: ACHHUZ7ezCBLFh/r5MtsTw99vS986tpwZwM/H7CRc906oLC1p2PgTYZQRvrDYW2mCxZli0+0MYt3BQ==
+X-Received: by 2002:a17:90b:1c06:b0:258:9180:1999 with SMTP id oc6-20020a17090b1c0600b0025891801999mr8816659pjb.32.1685999500386;
+        Mon, 05 Jun 2023 14:11:40 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id gz18-20020a17090b0ed200b00246f9725ffcsm6255974pjb.33.2023.06.05.14.11.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Jun 2023 14:11:39 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
+ memory as ROX
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
+Date:   Mon, 5 Jun 2023 14:11:26 -0700
+Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B021EE82-9741-4B41-8FF7-91A9336EDD7C@gmail.com>
+References: <20230601101257.530867-1-rppt@kernel.org>
+ <20230601101257.530867-13-rppt@kernel.org>
+ <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
+ <ZHjcr26YskTm+0EF@moria.home.lan>
+ <a51c041b61e2916d2b91c990349aabc6cb9836aa.camel@intel.com>
+ <ZHjljJfQjhVV/jNS@moria.home.lan>
+ <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
+ <50D768D7-15BF-43B8-A5FD-220B25595336@gmail.com>
+ <20230604225244.65be9103@rorschach.local.home>
+ <20230605081143.GA3460@kernel.org>
+ <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+X-Mailer: Apple Mail (2.3731.600.7)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 07:35:44PM +0300, Arınç ÜNAL wrote:
-> On 5.06.2023 18:01, Liviu Dudau wrote:
-> > This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> > a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
-> > connected to the main SoC over PCIe.
-> > 
-> > The device uses NMBM over NAND, which is not currently supported in the
-> > mainline, so NAND node is skipped in this revision.
-> > 
-> > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> > ---
-> >   arch/mips/boot/dts/ralink/Makefile            |  3 +-
-> >   .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 92 +++++++++++++++++++
-> >   2 files changed, 94 insertions(+), 1 deletion(-)
-> >   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > 
-> > diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
-> > index 11732b8c8163a..d27d7e8c700fe 100644
-> > --- a/arch/mips/boot/dts/ralink/Makefile
-> > +++ b/arch/mips/boot/dts/ralink/Makefile
-> > @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
-> >   dtb-$(CONFIG_SOC_MT7621) += \
-> >   	mt7621-gnubee-gb-pc1.dtb \
-> > -	mt7621-gnubee-gb-pc2.dtb
-> > +	mt7621-gnubee-gb-pc2.dtb \
-> > +	mt7621-tplink-hc220-g5-v1.dtb
-> >   obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-> > diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > new file mode 100644
-> > index 0000000000000..859aaa1c1bc2b
-> > --- /dev/null
-> > +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > @@ -0,0 +1,92 @@
-> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +/dts-v1/;
-> > +
-> > +#include "mt7621.dtsi"
-> > +
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/input/input.h>
-> > +#include <dt-bindings/leds/common.h>
-> > +
-> > +/ {
-> > +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
-> > +	model = "TP-Link HC220 G5 v1";
-> > +
-> > +	memory@0 {
-> > +		device_type = "memory";
-> > +		reg = <0x00000000 0x8000000>;
-> 
-> Please use 8 digit addressing for the memory start and size offsets:
-> 
-> 0x00000000 0x08000000
-
-Will do.
-
-> 
-> > +	};
-> > +
-> > +	chosen {
-> > +		bootargs = "earlycon console=ttyS0,115200";
-> > +	};
-> > +
-> > +	gpio-keys {
-> > +		compatible = "gpio-keys";
-> > +
-> > +		key-reset {
-> > +			label = "reset";
-> > +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-> > +			linux,code = <KEY_RESTART>;
-> > +		};
-> > +
-> > +		key-wps {
-> > +			label = "wps";
-> > +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
-> > +			linux,code = <KEY_WPS_BUTTON>;
-> > +		};
-> > +	};
-> > +
-> > +	leds {
-> > +		compatible = "gpio-leds";
-> > +
-> > +		red {
-> 
-> Usually the led name would point to the component the LED is used for.
-
-These are "generic" LEDs controlled from the userspace. The original firmware
-uses GREEN for normal operations, RED for faults and BLUE for when WPS is
-enabled. I'm not sure if there are any standard bindings that I can use here.
-
-> 
-> > +			color = <LED_COLOR_ID_RED>;
-> > +			function = LED_FUNCTION_FAULT;
-> 
-> Is there a specific reason you're using leds/common.h,
-> color & function instead of 'label = "red:ledname"'?
-
-I actually can't remember why I've created them this way. I might've been
-under the impression that giving them standard colour names will make it
-easier for userspace to identify and use them, but as I haven't yet
-investigated into how I'm going to use the device I'm unaware of any
-userspace requirements. It's possible OpenWRT or LEDE have some strong
-definitions, but I'm not aware of them as I don't use any of the distros.
 
 
-> 
-> > +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
-> > +		};
-> > +
-> > +		green {
-> > +			color = <LED_COLOR_ID_GREEN>;
-> > +			function = LED_FUNCTION_POWER;
-> > +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
-> > +			linux,default-trigger = "default-on";
-> > +		};
-> > +
-> > +		blue {
-> > +			color = <LED_COLOR_ID_BLUE>;
-> > +			function = LED_FUNCTION_WPS;
-> > +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
-> > +		};
-> 
-> Every led node needs the "led-" prefix to satisfy the leds-gpio.yaml
-> schema. You can check for dt-schema warnings using this command:
-> 
-> ARCH=mips make clean dtbs_check
-> 
-> Ignore the warning for mediatek,mt7621-eth.
+> On Jun 5, 2023, at 9:10 AM, Edgecombe, Rick P =
+<rick.p.edgecombe@intel.com> wrote:
+>=20
+> On Mon, 2023-06-05 at 11:11 +0300, Mike Rapoport wrote:
+>> On Sun, Jun 04, 2023 at 10:52:44PM -0400, Steven Rostedt wrote:
+>>> On Thu, 1 Jun 2023 16:54:36 -0700
+>>> Nadav Amit <nadav.amit@gmail.com> wrote:
+>>>=20
+>>>>> The way text_poke() is used here, it is creating a new writable
+>>>>> alias
+>>>>> and flushing it for *each* write to the module (like for each
+>>>>> write of
+>>>>> an individual relocation, etc). I was just thinking it might
+>>>>> warrant
+>>>>> some batching or something. =20
+>>=20
+>>>> I am not advocating to do so, but if you want to have many
+>>>> efficient
+>>>> writes, perhaps you can just disable CR0.WP. Just saying that if
+>>>> you
+>>>> are about to write all over the memory, text_poke() does not
+>>>> provide
+>>>> too much security for the poking thread.
+>>=20
+>> Heh, this is definitely and easier hack to implement :)
+>=20
+> I don't know the details, but previously there was some strong dislike
+> of CR0.WP toggling. And now there is also the problem of CET. Setting
+> CR0.WP=3D0 will #GP if CR4.CET is 1 (as it currently is for kernel =
+IBT).
+> I guess you might get away with toggling them both in some controlled
+> situation, but it might be a lot easier to hack up then to be made
+> fully acceptable. It does sound much more efficient though.
 
-Sure, will run the checks before submitting v4.
+Thanks for highlighting this issue. I understand the limitations of
+CR0.WP. There is also always the concerns that without CET or other
+control flow integrity mechanism, someone would abuse (using ROP/JOP)
+functions that clear CR0.WP=E2=80=A6
 
-> 
-> > +	};
-> > +};
-> > +
-> > +&pcie {
-> > +	status = "okay";
-> > +
-> > +	pcie@0,0 {
-> > +		compatible = "mediatek,mt76";
-> > +	};
-> > +
-> > +	pcie@1,0 {
-> > +		compatible = "mediatek,mt76";
-> > +	};
-> 
-> Both radios work with this then?
-
-Yes, they work with and without the compatible property.
-
-> 
-> Also, I see a bunch of warnings now that the mediatek,mt76 compatible
-> string is added. The warning from schemas/pci/pci-bus.yaml is concerning.
-> 
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0:compatible: ['mediatek,mt76'] does not contain items matching the given schema
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0: Unevaluated properties are not allowed ('compatible' was unexpected)
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'reset-gpios' were unexpected)
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0:compatible: ['mediatek,mt76'] does not contain items matching the given schema
-> 	From schema: /usr/lib/python3/dist-packages/dtschema/schemas/pci/pci-bus.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@0,0: clocks: [[2, 23]] is too short
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@0,0: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'clocks', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'phy-names', 'phys', 'ranges' were unexpected)
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-> 
-> Rob, Krzysztof any ideas what to do? The PCI child node is supposed to
-> be the properties of the wireless device. But the compatible string
-> doesn't match the schema on schemas/pci/pci-bus.yaml.
-
-TBH, I've always found the attempts to add device tree nodes for PCI(e) devices
-amusing. The bus is supposed to be queried and one can learn from device ID
-what hardware they're talking to. But then you need device tree (or ACPI for x86_64)
-to layer on top of that information about where EEPROM data might be, and other
-metadata that blurs the "DT describes the hardware" line (you could technically
-reformat the NAND and place the EEPROM data somewhere else on this platform).
-
-> 
->       compatible:
->         contains:
->           pattern: "^(pci[0-9a-f]{3,4},[0-9a-f]{1,4}|pciclass,[0-9a-f]{4,6})$"
-> 
-> Liviu, in the meantime, you should submit this patch without this
-> compatible string. I will handle this issue.
-
-OK, I will drop the compatible strings from v4.
-
-Thanks for the quick review!
-
-Best regards,
-Liviu
-
-> 
-> Arınç
-
--- 
-Everyone who uses computers frequently has had, from time to time,
-a mad desire to attack the precocious abacus with an axe.
-       	   	      	     	  -- John D. Clark, Ignition!
