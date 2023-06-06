@@ -2,173 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA6E724B24
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jun 2023 20:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DC9724CCD
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jun 2023 21:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238493AbjFFSWT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jun 2023 14:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S239341AbjFFTP2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jun 2023 15:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbjFFSWQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jun 2023 14:22:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA00F170A;
-        Tue,  6 Jun 2023 11:22:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4586963696;
-        Tue,  6 Jun 2023 18:22:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A236EC433A8;
-        Tue,  6 Jun 2023 18:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686075733;
-        bh=08bgDTu6K2r14VqmkEIMfCPJQ/ZZrnAx7Zh60inB9tQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PvVbLJcYr9sEPc4KvXnz7da5hnzjz64447Y1vyViBiCb+fl59qj0pvbLDlkg7Wuob
-         rzrnBjSOFtiQecuq+LZ/SRRxmzgXLdbIbqyyYrcYGhY29RsiV56QlreCUSnVm+stVt
-         UoVEGKhBSdT54YRh1gXdKSmvd62cZB1711kSzDIW8D76YUK3gBLlfz43UtqujOAa4M
-         WNIOBkfcw2WKv0IUzEzdSsuoiqNT0iAk+aytnzF0p5Ex5Qs+2o2gd4vHHiQKTwquZM
-         rFReB/rrpz7owlp/MdxR2Mp3uAIDm8MwdFNdtC8Gq4wlspi7VJYfgsGIf9GhxSZs3/
-         0v9cbIwE3cmiA==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2b1a4250b07so75710911fa.3;
-        Tue, 06 Jun 2023 11:22:13 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzCXm5+70Ovpz7W746cGaUigh8vo5Bs482Vva0c0k6BOaC8cWYw
-        xXE/STitpg+B5AXPalqdCtTYAhMWQ+XDi+gPtfw=
-X-Google-Smtp-Source: ACHHUZ5bLSr3tA3IB8xCjeC0rEYdnEDeq7vmc1y/QuS5oHjyhnnuqZDpSw2PwmODz4CMTnRxT8zG59Qp1zLSa+hdG70=
-X-Received: by 2002:a2e:82d0:0:b0:2b0:297c:cbdf with SMTP id
- n16-20020a2e82d0000000b002b0297ccbdfmr1546782ljh.1.1686075731505; Tue, 06 Jun
- 2023 11:22:11 -0700 (PDT)
+        with ESMTP id S239796AbjFFTPW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jun 2023 15:15:22 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970361BD
+        for <linux-mips@vger.kernel.org>; Tue,  6 Jun 2023 12:15:19 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565aa2cc428so60644867b3.1
+        for <linux-mips@vger.kernel.org>; Tue, 06 Jun 2023 12:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686078919; x=1688670919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z5L89tB8wkQBFqziHGie36QGbrdPo8qwmA+HXjQV+vM=;
+        b=Oubagn6lNYCvFolZHgBbvAxTse+fxYO7QOc8PsA9iZP9e2t8ETUtUWYpW1X4aol5Pp
+         py6kevZaycKSmSBo4Z6ISBISiqD/7iIAwBWyBerIW3RreJJ9HEAvuTJFC1L1gIxClE8B
+         Zo1Jho7S8zqD4w+aESDk8wwKPZczPNjCqaahODZegcGR0bAXcfGkhfpy0GiU9nZoxYH5
+         3tSmdOg9aItl0cd9p5EIa1kuQY2vPS7IZIU1+jsUKFLETbT+lwkEGP2w54vB26myg4Sn
+         aFZsKajhIoQKKCk8+V/q1rcIuw5atboBqOS6WM8DoES2EgCSQ+vS7fzVbSeDtG9bQjao
+         +WFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686078919; x=1688670919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z5L89tB8wkQBFqziHGie36QGbrdPo8qwmA+HXjQV+vM=;
+        b=WUtCc4AZQ0F31mJ027SRXvmTU6hJsT4qHZCoJ2SkmBEXuKTAvrC4fFMUOww79An1yY
+         HC2TaApd3FpuRSFMwpCUHjHfo/Oa5Zf0o3grDtTNfj1GnLpr7lKzOxo9B04LozfnP4lF
+         YFU73AFmDhBJKuY3OOPds2JU1nLvAKro0HgbpbBZ/XNvNspz1PU8/TSc3x3qO0Djy/X6
+         UYI3CfALzJYx41sd7Ysci5SMm0BwXjjT3u6bX8PCWHWlFKASTYxW2GE7QESE9Vxscpa8
+         KbPRELR+s2H+gO2N5yI1q5xZcXxyl4evesl83lSKz3BVDX5qBLmFqXgqKsnIPJcWUk4E
+         mByw==
+X-Gm-Message-State: AC+VfDyzqzdScjOa0hBtRt8iTdwViL/I+cjL2zyHOvsA3UvCTvYZDGGq
+        8NXs5CS4USMbFT+DjKcX+uegXEiiVCG6cBajyYZjWQ==
+X-Google-Smtp-Source: ACHHUZ7lY+3AI76qpzpoSr0j2ZD5ERQQbLahw7zOYjKWi6Cuk/Te9kSx2WMaK6q/Ss77uvK92hSSK8RRBBpnLOmJ/uE=
+X-Received: by 2002:a81:52d3:0:b0:561:e565:3678 with SMTP id
+ g202-20020a8152d3000000b00561e5653678mr2718930ywb.11.1686078918837; Tue, 06
+ Jun 2023 12:15:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601101257.530867-1-rppt@kernel.org> <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan> <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
- <20230605092040.GB3460@kernel.org> <ZH20XkD74prrdN4u@FVFF77S0Q05N>
-In-Reply-To: <ZH20XkD74prrdN4u@FVFF77S0Q05N>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 6 Jun 2023 11:21:59 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7ntn_HpVWdGK_hYVd3zsPEFToBNfmtt0m6K8SwfxJ66Q@mail.gmail.com>
-Message-ID: <CAPhsuW7ntn_HpVWdGK_hYVd3zsPEFToBNfmtt0m6K8SwfxJ66Q@mail.gmail.com>
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
+ <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org> <ac6ef7f2-0d7a-ba43-4b63-0a23d899230f@wanadoo.fr>
+In-Reply-To: <ac6ef7f2-0d7a-ba43-4b63-0a23d899230f@wanadoo.fr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 6 Jun 2023 21:15:07 +0200
+Message-ID: <CACRpkdYObM_rv2xDhvfNs9Wn-iZoZjY7HpB1hWdc15XgtkA-HA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] Input: ads7846 - Convert to use software nodes
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
         Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 3:09=E2=80=AFAM Mark Rutland <mark.rutland@arm.com> =
-wrote:
+On Sun, Jun 4, 2023 at 5:44=E2=80=AFPM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 
-[...]
-
-> > > > Can you give more detail on what parameters you need? If the only e=
-xtra
-> > > > parameter is just "does this allocation need to live close to kerne=
-l
-> > > > text", that's not that big of a deal.
-> > >
-> > > My thinking was that we at least need the start + end for each caller=
-. That
-> > > might be it, tbh.
-> >
-> > Do you mean that modules will have something like
-> >
-> >       jit_text_alloc(size, MODULES_START, MODULES_END);
-> >
-> > and kprobes will have
-> >
-> >       jit_text_alloc(size, KPROBES_START, KPROBES_END);
-> > ?
+> > +     /* Asserts RESET */
+> > +     gpiod_set_value(md->reset, 1);
 >
-> Yes.
-
-How about we start with two APIs:
-     jit_text_alloc(size);
-     jit_text_alloc_range(size, start, end);
-
-AFAICT, arm64 is the only arch that requires the latter API. And TBH, I am
-not quite convinced it is needed.
-
+> Hi,
 >
-> > It sill can be achieved with a single jit_alloc_arch_params(), just by
-> > adding enum jit_type parameter to jit_text_alloc().
->
-> That feels backwards to me; it centralizes a bunch of information about
-> distinct users to be able to shove that into a static array, when the cal=
-lsites
-> can pass that information.
+> should this also be done in the probe if mipid_detect() fails?
 
-I think we only two type of users: module and everything else (ftrace, kpro=
-be,
-bpf stuff). The key differences are:
+It's a nice bonus but surely not urgent or necessary.
 
-  1. module uses text and data; while everything else only uses text.
-  2. module code is generated by the compiler, and thus has stronger
-  requirements in address ranges; everything else are generated via some
-  JIT or manual written assembly, so they are more flexible with address
-  ranges (in JIT, we can avoid using instructions that requires a specific
-  address range).
+> If yes, please also look at [1], that I've just sent, which introduces
+> an error handling path in the probe.
 
-The next question is, can we have the two types of users share the same
-address ranges? If not, we can reserve the preferred range for modules,
-and let everything else use the other range. I don't see reasons to further
-separate users in the "everything else" group.
+Looks good to me.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
->
-> What's *actually* common after separating out the ranges? Is it just the
-> permissions?
-
-I believe permission is the key, as we need the hardware to enforce
-permission.
-
->
-> If we want this to be able to share allocations and so on, why can't we d=
-o this
-> like a kmem_cache, and have the callsite pass a pointer to the allocator =
-data?
-> That would make it easy for callsites to share an allocator or use a dist=
-inct
-> one.
-
-Sharing among different call sites will give us more benefit (in TLB
-misses rate,
-etc.). For example, a 2MB page may host text of two kernel modules, 4 kprob=
-es,
-6 ftrace trampolines, and 10 BPF programs. All of these only require one en=
-try
-in the iTLB.
-
-Thanks,
-Song
+Yours,
+Linus Walleij
