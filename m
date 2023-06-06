@@ -2,172 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE277231FE
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Jun 2023 23:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D357236C4
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jun 2023 07:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbjFEVN4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Jun 2023 17:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
+        id S229536AbjFFFZe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jun 2023 01:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjFEVNm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Jun 2023 17:13:42 -0400
-X-Greylist: delayed 84808 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Jun 2023 14:13:40 PDT
-Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [IPv6:2001:41d0:1004:224b::11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31625F9
-        for <linux-mips@vger.kernel.org>; Mon,  5 Jun 2023 14:13:40 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 17:13:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685999618;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oI/D2KsCHwim00FnKX8JEpI3trD4/Ay4oLN6y5jMs+w=;
-        b=Ou0t5k0wdLvYQe4I1KiKwwoZvxsvVwlNJliRyeWssvJBsu1TjLT0R5xnAEF8ghzWl5EIl9
-        wvjRxKwXo9+fHBI+ActLKXfymEdPx4wflBDdlUy8yktx25QJFLEuEOLWYXAN1GppOyjRcm
-        hR70f2tpuOItMjMDbRE2yoaC4QllkuI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <ZH5P+iKOnoqYjbPq@moria.home.lan>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan>
- <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
- <20230605092040.GB3460@kernel.org>
+        with ESMTP id S229596AbjFFFZd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jun 2023 01:25:33 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B90B197;
+        Mon,  5 Jun 2023 22:25:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686029097; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=d/DqrB0VcCvMNNwiGP0PDTYPvnQSp+LO7Y+tmw5nChOsFuhNypCMJBcwKdDbrbBtinya9au0W9gZhMOrg1VCCOl6xkYy4U9hcduIl8B1yd0LPTfddbqu2KZaCvG7uHi/IUf5vYY3dN0XqCom5uSJ3gBYc4YzXpw8ox3x7YXR+r0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686029097; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=9Po+XWXaAzNpUyuRg3cTc3e8NRWFI9cCB7gdE96Q3dI=; 
+        b=kun1f2Q0tedGLnesfebku0h56uvHzhzaKPSvFFOJag7pBaRbVTekSKFBLiev5kHP8wtK2jZlj93sle4IqSwGrA0yl5INUTSCGYvXLu8BjItUQBVc3Ryt6v1wd+C9IPSJniniGFjcXBbjCjB7yJr19Pkw3Jx+jflTUJedR/bOEf4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686029097;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=9Po+XWXaAzNpUyuRg3cTc3e8NRWFI9cCB7gdE96Q3dI=;
+        b=TZbYP4Tk0akq4Khzhtdf81C7Y42puFgW6WFEg7tm0vV3QoTB50RRkoWtSjPyakpT
+        QMEt6MyoQ07hxySqfuLmzhwl284fW1/wJLnC5lcaunRhoTNrxPPNmJSq80ZEUTC2OF8
+        /nGiuMQj7iPPnEJ4i6qNEb+R/PeAbDsOzWskc4no=
+Received: from [192.168.66.198] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686029095455783.4973963121519; Mon, 5 Jun 2023 22:24:55 -0700 (PDT)
+Message-ID: <43c95286-a3f4-6c68-c59c-0c86bbb74928@arinc9.com>
+Date:   Tue, 6 Jun 2023 08:24:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605092040.GB3460@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/2] mips: dts: ralink: Add support for TP-Link HC220
+ G5 v1 board
+To:     Liviu Dudau <liviu@dudau.co.uk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230605150114.601102-1-liviu@dudau.co.uk>
+ <20230605150114.601102-2-liviu@dudau.co.uk>
+ <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
+ <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 12:20:40PM +0300, Mike Rapoport wrote:
-> On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
-> > On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
-> > > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
-> > > > For a while I have wanted to give kprobes its own allocator so that it can work
-> > > > even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
-> > > > the modules area.
-> > > > 
-> > > > Given that, I think these should have their own allocator functions that can be
-> > > > provided independently, even if those happen to use common infrastructure.
-> > > 
-> > > How much memory can kprobes conceivably use? I think we also want to try
-> > > to push back on combinatorial new allocators, if we can.
-> > 
-> > That depends on who's using it, and how (e.g. via BPF).
-> > 
-> > To be clear, I'm not necessarily asking for entirely different allocators, but
-> > I do thinkg that we want wrappers that can at least pass distinct start+end
-> > parameters to a common allocator, and for arm64's modules code I'd expect that
-> > we'd keep the range falblack logic out of the common allcoator, and just call
-> > it twice.
-> > 
-> > > > > Several architectures override module_alloc() because of various
-> > > > > constraints where the executable memory can be located and this causes
-> > > > > additional obstacles for improvements of code allocation.
-> > > > > 
-> > > > > This set splits code allocation from modules by introducing
-> > > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> > > > > sites of module_alloc() and module_memfree() with the new APIs and
-> > > > > implements core text and related allocation in a central place.
-> > > > > 
-> > > > > Instead of architecture specific overrides for module_alloc(), the
-> > > > > architectures that require non-default behaviour for text allocation must
-> > > > > fill jit_alloc_params structure and implement jit_alloc_arch_params() that
-> > > > > returns a pointer to that structure. If an architecture does not implement
-> > > > > jit_alloc_arch_params(), the defaults compatible with the current
-> > > > > modules::module_alloc() are used.
-> > > > 
-> > > > As above, I suspect that each of the callsites should probably be using common
-> > > > infrastructure, but I don't think that a single jit_alloc_arch_params() makes
-> > > > sense, since the parameters for each case may need to be distinct.
-> > > 
-> > > I don't see how that follows. The whole point of function parameters is
-> > > that they may be different :)
-> > 
-> > What I mean is that jit_alloc_arch_params() tries to aggregate common
-> > parameters, but they aren't actually common (e.g. the actual start+end range
-> > for allocation).
+On 6.06.2023 00:01, Liviu Dudau wrote:
+> On Mon, Jun 05, 2023 at 07:35:44PM +0300, Arınç ÜNAL wrote:
+>> On 5.06.2023 18:01, Liviu Dudau wrote:
+>>> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+>>> a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
+>>> connected to the main SoC over PCIe.
+>>>
+>>> The device uses NMBM over NAND, which is not currently supported in the
+>>> mainline, so NAND node is skipped in this revision.
+>>>
+>>> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+>>> ---
+>>>    arch/mips/boot/dts/ralink/Makefile            |  3 +-
+>>>    .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 92 +++++++++++++++++++
+>>>    2 files changed, 94 insertions(+), 1 deletion(-)
+>>>    create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+>>>
+>>> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+>>> index 11732b8c8163a..d27d7e8c700fe 100644
+>>> --- a/arch/mips/boot/dts/ralink/Makefile
+>>> +++ b/arch/mips/boot/dts/ralink/Makefile
+>>> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
+>>>    dtb-$(CONFIG_SOC_MT7621) += \
+>>>    	mt7621-gnubee-gb-pc1.dtb \
+>>> -	mt7621-gnubee-gb-pc2.dtb
+>>> +	mt7621-gnubee-gb-pc2.dtb \
+>>> +	mt7621-tplink-hc220-g5-v1.dtb
+>>>    obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+>>> diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+>>> new file mode 100644
+>>> index 0000000000000..859aaa1c1bc2b
+>>> --- /dev/null
+>>> +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+>>> @@ -0,0 +1,92 @@
+>>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +/dts-v1/;
+>>> +
+>>> +#include "mt7621.dtsi"
+>>> +
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/input/input.h>
+>>> +#include <dt-bindings/leds/common.h>
+>>> +
+>>> +/ {
+>>> +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
+>>> +	model = "TP-Link HC220 G5 v1";
+>>> +
+>>> +	memory@0 {
+>>> +		device_type = "memory";
+>>> +		reg = <0x00000000 0x8000000>;
+>>
+>> Please use 8 digit addressing for the memory start and size offsets:
+>>
+>> 0x00000000 0x08000000
 > 
-> jit_alloc_arch_params() tries to aggregate architecture constraints and
-> requirements for allocations of executable memory and this exactly what
-> the first 6 patches of this set do.
+> Will do.
 > 
-> A while ago Thomas suggested to use a structure that parametrizes
-> architecture constraints by the memory type used in modules [1] and Song
-> implemented the infrastructure for it and x86 part [2].
+>>
+>>> +	};
+>>> +
+>>> +	chosen {
+>>> +		bootargs = "earlycon console=ttyS0,115200";
+>>> +	};
+>>> +
+>>> +	gpio-keys {
+>>> +		compatible = "gpio-keys";
+>>> +
+>>> +		key-reset {
+>>> +			label = "reset";
+>>> +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+>>> +			linux,code = <KEY_RESTART>;
+>>> +		};
+>>> +
+>>> +		key-wps {
+>>> +			label = "wps";
+>>> +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+>>> +			linux,code = <KEY_WPS_BUTTON>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	leds {
+>>> +		compatible = "gpio-leds";
+>>> +
+>>> +		red {
+>>
+>> Usually the led name would point to the component the LED is used for.
 > 
-> I liked the idea of defining parameters in a single structure, but I
-> thought that approaching the problem from the arch side rather than from
-> modules perspective will be better starting point, hence these patches.
-> 
-> I don't see a fundamental reason why a single structure cannot describe
-> what is needed for different code allocation cases, be it modules, kprobes
-> or bpf. There is of course an assumption that the core allocations will be
-> the same for all the users, and it seems to me that something like 
-> 
-> * allocate physical memory if allocator caches are empty
-> * map it in vmalloc or modules address space
-> * return memory from the allocator cache to the caller
-> 
-> will work for all usecases.
-> 
-> We might need separate caches for different cases on different
-> architectures, and a way to specify what cache should be used in the
-> allocator API, but that does not contradict a single structure for arch
-> specific parameters, but only makes it more elaborate, e.g. something like
-> 
-> enum jit_type {
-> 	JIT_MODULES_TEXT,
-> 	JIT_MODULES_DATA,
-> 	JIT_KPROBES,
-> 	JIT_FTRACE,
-> 	JIT_BPF,
-> 	JIT_TYPE_MAX,
-> };
+> These are "generic" LEDs controlled from the userspace. The original firmware
+> uses GREEN for normal operations, RED for faults and BLUE for when WPS is
+> enabled. I'm not sure if there are any standard bindings that I can use here.
 
-Why would we actually need different enums for modules_text, kprobes,
-ftrace and bpf? Why can't we treat all text allocations the same?
+Looking at:
 
-The reason we can't do that currently is because modules need to go in a
-128Mb region on some archs, and without sub page allocation
-bpf/kprobes/etc. burn a full page for each allocation. But we're doing
-sub page allocation - right?
+https://www.kernel.org/doc/html/latest/leds/leds-class.html#led-device-naming
 
-That leaves module data - which really needs to be split out into rw,
-ro, ro_after_init - but I'm not sure we'd even want the same API for
-those, they need fairly different page permissions handling.
+You could use red:fault, green:power, and blue:wps. For node names, 
+led-fault, led-power, and led-wps.
+
+Arınç
