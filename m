@@ -2,170 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D357236C4
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jun 2023 07:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36506723F14
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jun 2023 12:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjFFFZe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jun 2023 01:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S234566AbjFFKQo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jun 2023 06:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjFFFZd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jun 2023 01:25:33 -0400
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B90B197;
-        Mon,  5 Jun 2023 22:25:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686029097; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=d/DqrB0VcCvMNNwiGP0PDTYPvnQSp+LO7Y+tmw5nChOsFuhNypCMJBcwKdDbrbBtinya9au0W9gZhMOrg1VCCOl6xkYy4U9hcduIl8B1yd0LPTfddbqu2KZaCvG7uHi/IUf5vYY3dN0XqCom5uSJ3gBYc4YzXpw8ox3x7YXR+r0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1686029097; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=9Po+XWXaAzNpUyuRg3cTc3e8NRWFI9cCB7gdE96Q3dI=; 
-        b=kun1f2Q0tedGLnesfebku0h56uvHzhzaKPSvFFOJag7pBaRbVTekSKFBLiev5kHP8wtK2jZlj93sle4IqSwGrA0yl5INUTSCGYvXLu8BjItUQBVc3Ryt6v1wd+C9IPSJniniGFjcXBbjCjB7yJr19Pkw3Jx+jflTUJedR/bOEf4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686029097;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=9Po+XWXaAzNpUyuRg3cTc3e8NRWFI9cCB7gdE96Q3dI=;
-        b=TZbYP4Tk0akq4Khzhtdf81C7Y42puFgW6WFEg7tm0vV3QoTB50RRkoWtSjPyakpT
-        QMEt6MyoQ07hxySqfuLmzhwl284fW1/wJLnC5lcaunRhoTNrxPPNmJSq80ZEUTC2OF8
-        /nGiuMQj7iPPnEJ4i6qNEb+R/PeAbDsOzWskc4no=
-Received: from [192.168.66.198] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 1686029095455783.4973963121519; Mon, 5 Jun 2023 22:24:55 -0700 (PDT)
-Message-ID: <43c95286-a3f4-6c68-c59c-0c86bbb74928@arinc9.com>
-Date:   Tue, 6 Jun 2023 08:24:48 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-To:     Liviu Dudau <liviu@dudau.co.uk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S232817AbjFFKQl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jun 2023 06:16:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A440E47;
+        Tue,  6 Jun 2023 03:16:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 986FB6305D;
+        Tue,  6 Jun 2023 10:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CCDC433EF;
+        Tue,  6 Jun 2023 10:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686046599;
+        bh=K3mQNwoT9j+uKtNH0+N5SGAruipqVMe0nyrOVYu8zmA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ex2boOSbFX9F8vILoj2ER6OMGqZieI/qXxa+Cl88F6P5WueebucHT8gXYMljU/UwF
+         W4Vwtw16CB66Ckf8CUcEwiMgsp0Rl7Zp+sWmc7WhCTWF54CsHU5is7Yegd2qZ+FcpB
+         7HYr90xDXGc4Q+jlXpM3iwKf1+z1TAE79jym8dBpk7/sIwryEOoaJwZE+mZ+/dgO9Q
+         jbUZZ/yVspF9cToZ4ExktC3lUSHmqXSahqJcQT5b1PfE/IsSC9GrwIVg8JzQsfRBlA
+         +FWytBECVY5td4H8LIUSl6ZWwnci/X0OdWg6sGet7yNw0Tt3OFZ9/6khP83arPzxeP
+         mpCOpEPlPas8A==
+Date:   Tue, 6 Jun 2023 13:16:08 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230605150114.601102-1-liviu@dudau.co.uk>
- <20230605150114.601102-2-liviu@dudau.co.uk>
- <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
- <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+Message-ID: <20230606101608.GC52412@kernel.org>
+References: <20230601101257.530867-1-rppt@kernel.org>
+ <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan>
+ <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+ <20230605092040.GB3460@kernel.org>
+ <ZH20XkD74prrdN4u@FVFF77S0Q05N>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH20XkD74prrdN4u@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6.06.2023 00:01, Liviu Dudau wrote:
-> On Mon, Jun 05, 2023 at 07:35:44PM +0300, Arınç ÜNAL wrote:
->> On 5.06.2023 18:01, Liviu Dudau wrote:
->>> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
->>> a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
->>> connected to the main SoC over PCIe.
->>>
->>> The device uses NMBM over NAND, which is not currently supported in the
->>> mainline, so NAND node is skipped in this revision.
->>>
->>> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
->>> ---
->>>    arch/mips/boot/dts/ralink/Makefile            |  3 +-
->>>    .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 92 +++++++++++++++++++
->>>    2 files changed, 94 insertions(+), 1 deletion(-)
->>>    create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
->>>
->>> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
->>> index 11732b8c8163a..d27d7e8c700fe 100644
->>> --- a/arch/mips/boot/dts/ralink/Makefile
->>> +++ b/arch/mips/boot/dts/ralink/Makefile
->>> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
->>>    dtb-$(CONFIG_SOC_MT7621) += \
->>>    	mt7621-gnubee-gb-pc1.dtb \
->>> -	mt7621-gnubee-gb-pc2.dtb
->>> +	mt7621-gnubee-gb-pc2.dtb \
->>> +	mt7621-tplink-hc220-g5-v1.dtb
->>>    obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
->>> diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
->>> new file mode 100644
->>> index 0000000000000..859aaa1c1bc2b
->>> --- /dev/null
->>> +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
->>> @@ -0,0 +1,92 @@
->>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +/dts-v1/;
->>> +
->>> +#include "mt7621.dtsi"
->>> +
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +#include <dt-bindings/input/input.h>
->>> +#include <dt-bindings/leds/common.h>
->>> +
->>> +/ {
->>> +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
->>> +	model = "TP-Link HC220 G5 v1";
->>> +
->>> +	memory@0 {
->>> +		device_type = "memory";
->>> +		reg = <0x00000000 0x8000000>;
->>
->> Please use 8 digit addressing for the memory start and size offsets:
->>
->> 0x00000000 0x08000000
+On Mon, Jun 05, 2023 at 11:09:34AM +0100, Mark Rutland wrote:
+> On Mon, Jun 05, 2023 at 12:20:40PM +0300, Mike Rapoport wrote:
+> > On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
+> >
+> > It sill can be achieved with a single jit_alloc_arch_params(), just by
+> > adding enum jit_type parameter to jit_text_alloc().
 > 
-> Will do.
-> 
->>
->>> +	};
->>> +
->>> +	chosen {
->>> +		bootargs = "earlycon console=ttyS0,115200";
->>> +	};
->>> +
->>> +	gpio-keys {
->>> +		compatible = "gpio-keys";
->>> +
->>> +		key-reset {
->>> +			label = "reset";
->>> +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
->>> +			linux,code = <KEY_RESTART>;
->>> +		};
->>> +
->>> +		key-wps {
->>> +			label = "wps";
->>> +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
->>> +			linux,code = <KEY_WPS_BUTTON>;
->>> +		};
->>> +	};
->>> +
->>> +	leds {
->>> +		compatible = "gpio-leds";
->>> +
->>> +		red {
->>
->> Usually the led name would point to the component the LED is used for.
-> 
-> These are "generic" LEDs controlled from the userspace. The original firmware
-> uses GREEN for normal operations, RED for faults and BLUE for when WPS is
-> enabled. I'm not sure if there are any standard bindings that I can use here.
+> That feels backwards to me; it centralizes a bunch of information about
+> distinct users to be able to shove that into a static array, when the callsites
+> can pass that information. 
 
-Looking at:
+The goal was not to shove everything into an array, but centralize
+architecture requirements for code allocations. The callsites don't have
+that information per se, they get it from the arch code, so having this
+information in a single place per arch is better than spreading
+MODULE_START, KPROBES_START etc all over.
 
-https://www.kernel.org/doc/html/latest/leds/leds-class.html#led-device-naming
+I'd agree though that having types for jit_text_alloc is ugly and this
+should be handled differently.
+ 
+> What's *actually* common after separating out the ranges? Is it just the
+> permissions?
 
-You could use red:fault, green:power, and blue:wps. For node names, 
-led-fault, led-power, and led-wps.
+On x86 everything, on arm64 apparently just the permissions.
 
-Arınç
+I've started to summarize what are the restrictions for code placement for
+modules, kprobes and bpf on different architectures, that's roughly what
+I've got so far:
+
+* x86 and s390 need everything within modules address space because of
+PC-relative
+* arm, arm64, loongarch, sparc64, riscv64, some of mips and
+powerpc32 configurations require a dedicated modules address space; the
+rest just use vmalloc address space
+* all architectures that support kprobes except x86 and s390 don't use
+relative jumps, so they don't care where kprobes insn_page will live
+* not sure yet about BPF. Looks like on arm and arm64 it does not use
+relative jumps, so it can be anywhere, didn't dig enough about the others.
+
+> If we want this to be able to share allocations and so on, why can't we do this
+> like a kmem_cache, and have the callsite pass a pointer to the allocator data?
+> That would make it easy for callsites to share an allocator or use a distinct
+> one.
+
+This maybe something worth exploring.
+ 
+> Thanks,
+> Mark.
+
+-- 
+Sincerely yours,
+Mike.
