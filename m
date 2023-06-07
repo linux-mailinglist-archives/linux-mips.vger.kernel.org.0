@@ -2,242 +2,478 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3230B725EC3
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Jun 2023 14:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD551725FAC
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Jun 2023 14:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240650AbjFGMTg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Jun 2023 08:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S240433AbjFGMiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Jun 2023 08:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240645AbjFGMTf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Jun 2023 08:19:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8FB170E;
-        Wed,  7 Jun 2023 05:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DB0A63E6A;
-        Wed,  7 Jun 2023 12:19:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD412C433D2;
-        Wed,  7 Jun 2023 12:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686140372;
-        bh=sVlBMXZgb2WeMO8wyewjKVLUTq3MSJdNX3OB4y/Ih0A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=syPHLxNbaTloM+A4Y+SyVpODXo9hKoYl8uIYzugXbU1evZIQwJSUqGOUXJIAudKOv
-         BxET4O/2JAWaTLx67Hc7fHT31a7Y/R2C/cfLQe5IPSVSWO2U7RLArg+nIu82pF4D0f
-         bQt7AgAJckwuYC/VxhduACtREzcSPAf+OaWwd2b98JXVn5O1J4/yeszzZeUy3XQ5Mt
-         CUcJs8WOYh4GSRx2KAAd+9rm8NR5/QXLkVk4NJBgEDaRDu0ugFQFnJQ3Jg0Kpg7NFQ
-         F1XNEUlGiXK+H4kRvYqf0oezsxt+Q0RmOIUXpW8etepWYW7V5pHqflo7h1yp93nbm5
-         jBbDys4w0BVfg==
-Date:   Wed, 7 Jun 2023 14:19:29 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-Message-ID: <l343rk4s6mrppjl3vxxvnwc52wlovg6bojduiy3qf5zup5ifzx@7qu7jilrsgn5>
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
+        with ESMTP id S240984AbjFGMhk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Jun 2023 08:37:40 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688B31BE5;
+        Wed,  7 Jun 2023 05:37:34 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-974604c1394so152454466b.0;
+        Wed, 07 Jun 2023 05:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686141453; x=1688733453;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bnQ/nlpXFdeDPVk23AiI85QWmxk4si1+qvDGQ2nGaVk=;
+        b=WdCmcmi6gOeqxet6yu45NdHenR/U+n90arFfFlbF92f1bGKkUxUJcZbgN70kep5JoH
+         a28BTB/g1yUqMFuaG0oRtd+goDlcr5IWteNAtcdGtDczLW8T1oEfO1zTMkyTMRaZJtQB
+         ir+U2yW2RefYHyPwHgNGGRPwn6aj18N5pbozR/bcopObOpzeXEEOp07mvxZqVBNwEVIe
+         yWIxPf8xE1ekX5iNx4B6NJLu89rJegQoaHG0VgWHmVeUJMK8n5fB53uUYnBE4gm8PGlp
+         SKTO0QDN5jtwxOicVMnJC1LrNlR3ChPRu1/lnsVAY0E2cXz/zvyddhTzMSmMi6PuMb1P
+         T2VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686141453; x=1688733453;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bnQ/nlpXFdeDPVk23AiI85QWmxk4si1+qvDGQ2nGaVk=;
+        b=lX88z+Utkb0Odtzzv1eFd1qHyDMKFAIH2EXJgQpUcjsu8hjOuFyZ8OuSxVTouB+YCT
+         gX437yQD91RJMxvXzQs6xVBB3icsehcDazRRwmdGErL1c2Yg6lC4jJ9gqCYVWeQHM3H+
+         QmzkTODCLnbkMMLVlNXWm3FehgJOilnJosbCZbMR38vxfQOrE/qQy8gj+RInYBUvJEv6
+         2nu9VOA8Lc2mJlFjprjke84Gr36Z2drCmJ/HMfXDMPQYJ0ElF7uXt28Xlr8V8lOGXtH0
+         PjHbYLXy78qdAJiVXc18108niaDWqene89P7uMYAALsOpMH3Gnr0vxhAZ8VQdMlJbNc6
+         t/yQ==
+X-Gm-Message-State: AC+VfDwn0RuDIy1EES+5q3PH2HG3x0nvdcxeQqwuk3DFpi3GxYfFksvK
+        kiTtmcwon11YyGV48FPl6RM=
+X-Google-Smtp-Source: ACHHUZ5Os8gHz/sUk05VCKCffL41JXPyEnL05xlbL7bdzUPi2lubA4aZLrQ2dJfHDa3HHg5XmuWhRQ==
+X-Received: by 2002:a17:906:9d:b0:977:c446:3a24 with SMTP id 29-20020a170906009d00b00977c4463a24mr1734728ejc.7.1686141452404;
+        Wed, 07 Jun 2023 05:37:32 -0700 (PDT)
+Received: from localhost ([134.191.220.83])
+        by smtp.gmail.com with ESMTPSA id pw12-20020a17090720ac00b00973fac6065esm6777913ejb.223.2023.06.07.05.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 05:37:32 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 20:37:11 +0800
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/16] KVM: arm64: Document the page table walker
+ actions based on the callback's return value
+Message-ID: <20230607203711.000054ae.zhi.wang.linux@gmail.com>
+In-Reply-To: <ZH9tQjQk7QLyhUQR@google.com>
+References: <20230602160914.4011728-1-vipinsh@google.com>
+        <20230602160914.4011728-10-vipinsh@google.com>
+        <20230605223520.00007fbd.zhi.wang.linux@gmail.com>
+        <ZH9tQjQk7QLyhUQR@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rvdpeqztss6vkzn5"
-Content-Disposition: inline
-In-Reply-To: <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, 6 Jun 2023 10:30:42 -0700
+Vipin Sharma <vipinsh@google.com> wrote:
 
---rvdpeqztss6vkzn5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 07, 2023 at 06:30:01PM +0800, Sui Jingfeng wrote:
-> On 2023/6/7 17:36, Paul Cercueil wrote:
-> > Hi Sui,
-> >=20
-> > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =E9crit=A0:
-> > > The single map_noncoherent member of struct drm_gem_dma_object may
-> > > not
-> > > sufficient for describing the backing memory of the GEM buffer
-> > > object.
-> > >=20
-> > > Especially on dma-coherent systems, the backing memory is both cached
-> > > coherent for multi-core CPUs and dma-coherent for peripheral device.
-> > > Say architectures like X86-64, LoongArch64, Loongson Mips64, etc.
-> > >=20
-> > > Whether a peripheral device is dma-coherent or not can be
-> > > implementation-dependent. The single map_noncoherent option is not
-> > > enough
-> > > to reflect real hardware anymore. For example, the Loongson LS3A4000
-> > > CPU
-> > > and LS2K2000/LS2K1000 SoC, peripheral device of such hardware
-> > > platform
-> > > allways snoop CPU's cache. Doing the allocation with
-> > > dma_alloc_coherent
-> > > function is preferred. The return buffer is cached, it should not
-> > > using
-> > > the default write-combine mapping. While with the current implement,
-> > > there
-> > > no way to tell the drm core to reflect this.
-> > >=20
-> > > This patch adds cached and coherent members to struct
-> > > drm_gem_dma_object.
-> > > which allow driver implements to inform the core. Introducing new
-> > > mappings
-> > > while keeping the original default behavior unchanged.
-> > Did you try to simply set the "dma-coherent" property to the device's
-> > node?
->=20
-> But this approach can only be applied for the device driver with DT suppo=
-rt.
+> On Mon, Jun 05, 2023 at 10:35:20PM +0800, Zhi Wang wrote:
+> > On Fri,  2 Jun 2023 09:09:07 -0700
+> > Vipin Sharma <vipinsh@google.com> wrote:
+> > 
+> > > Document what the page table walker do when walker callback function returns
+> > > a value.
+> > > 
+> > > Current documentation is not correct as negative error of -EAGAIN on a
+> > > non-shared page table walker doesn't terminate the walker and continues
+> > > to the next step.
+> > > 
+> > > There might be a better place to keep this information, for now this
+> > > documentation will work as a reference guide until a better way is
+> > > found.
+> > >
+> > 
+> > After reading the whole patch series, I was thinking it might be a good
+> > time to improve the way how the visitor function and page table walker
+> > talk to each other. The error code is good enough before, but its meaning
+> > seems limited and vague when the visitor function wants to express more about
+> > what exactly happens inside. I am not sure if it is a good idea to continue
+> > that way: 1. found a new situation. 2. choosing a error code for visitor
+> > function. 3. walker translates the error code into the situation to
+> > handle. 4. document the error code and its actual meaning.
+> > 
+> > Eventually I am afraid that we are going to abuse the error code.
+> 
+> I agree that error numbers are not sufficient and this will become more
+> difficult and cumbersome for more cases in future if we need different
+> behavior based on different error codes for different visitor functions.
 >
-> X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typically do not
-> have DT support.
->=20
-> They using ACPI to pass parameter from the firmware to Linux kernel.
->=20
-> You approach will lost the effectiveness on such a case.
+> > 
+> > What about introducing a set of flags for the visitor function to express
+> > what happened and simplify the existing error code?
+> > 
+> 
+> If I understood correctly what you meant, I think this will also end up
+> having the same issue down the line, we are just switching errors with
+> flags as they might not be able to express everything.
+> 
+> "Flags for visitor function to express what happened"  - This is what
+> ret val and errors do.
+> 
 
-Not really, no. All DT support is doing is setting some generic device
-parameter based on that property, but the infrastructure is very much
-generic and can be used on systems without a DT.
+Thanks so much for the efforts of the sample code.
 
-> >  From what I understand if you add that property then Linux will use DMA
-> > coherent memory even though you use dma_alloc_noncoherent() and the
-> > sync_single_for_cpu() / sync_single_for_device() are then NOPs.
- >
-> Please do not mitigate the problems with confusing method.
+But when the "ret val" is an error code for pgtable matters, It turns vague.
+We have -EAGAIN to represent "retry" and "-ENONET" to represent PTE not there,
+and they seems end up with different behaviors in different types of pgtable
+walk. That is what I feels off.
 
-It's not a confusing method, it's one of the two main API to deal with
-DMA buffers. And you might disagree with Paul but there's no need to be
-rude about it.
+visitor_cb has two different requirements of returning the status: 1)
+something wrong happens *not* related to the pgtable, e.g. failing to
+allocate memory. 2) something happens related to the pgtable. e.g PTE doesn't
+exists.
 
-> This approach not only tend to generate confusion but also
-> implement-dependent and arch-dependent. It's definitely problematic.
->=20
->=20
-> How does the dma_alloc_coherent/dma_alloc_noncoherent is a ARCH specific
-> thing.
->=20
-> Dependent on how does the arch_dma_ops is implemented.
->=20
->=20
-> The definition of the coherent on different ARCH has different meanings.
->=20
-> The definition of the wirte-combine on different ARCH has different
-> meanings.
->=20
->=20
-> The wirte-combine(uncache acceleration) on mips is non dma-coherent.
+For 1) It is natural to return an error code and the caller might just bail out
+via its error handling path.
 
-Then MIPS breaks the DMA allocation semantics. A buffer allocated with
-dma_alloc_wc is supposed to be coherent.
+I think the core problem is: the two different usages are mixed and they don't
+actually fit with each other. 2) is requiring more details in the future other
+than a simple error code. 
 
-> But on arm, It seem that wirte-combine is coherent. (guaranteed by arch
-> implement).
->=20
->=20
-> I also heard using dma_alloc_coherent=A0 to allocation the buffer for the
-> non-coherent doesn't hurt, but the reverse is not true.
->=20
->=20
-> But please do not create confusion.
->=20
-> software composite is faster because better cacheusing rate and
->=20
-> cache is faster to read.
->=20
-> It is faster because it is cached, not because it is non-coherent.
->=20
-> non-coherent is arch thing and/or driver-side thing,
->=20
-> it is a side effect of=A0 using the cached mapping.
 
-Honestly, it's not clear to me what your point or issue is.
+For 2) I think it is better have a set of flags. the name of the flags can
+carry more explicit meanings than error code. E.g.:
 
-Going back to the description in your commit log, you mention that you
-want to support multiple hardware that might or might not be DMA
-coherent, and thus you want to allocate a buffer with different
-attributes depending on that?
+------------------
 
-Like, you say that the LS3A4000 has a coherency unit and thus doing the
-allocation with dma_alloc_coherent is preferred. Preferred to what? A WC
-buffer? Why?
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 4cd6762bda80..b3f24b321cd7 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -204,6 +204,15 @@ enum kvm_pgtable_walk_flags {
+        KVM_PGTABLE_WALK_HANDLE_FAULT           = BIT(4),
+ };
 
-A WC buffer is a coherent buffer that is allowed to cache writes.
++struct kvm_pgtable_walk_status {
++       union {
++               u8 raw;
++               struct {
++                       unsigned retry:1;
++                       unsigned stop:1;
++                       unsigned ignore:1;
++               	/* more to come */
++               };
++       };
++};
++
+ struct kvm_pgtable_visit_ctx {
+        kvm_pte_t                               *ptep;
+        kvm_pte_t                               old;
+@@ -213,8 +222,10 @@ struct kvm_pgtable_visit_ctx {
+        u64                                     end;
+        u32                                     level;
+        enum kvm_pgtable_walk_flags             flags;
++       struct kvm_pgtable_walk_status          *status;
+ };
 
-It doesn't have to, and worst case scenario you're inexactly the same
-case than a dma_alloc_coherent buffer.
+ typedef int (*kvm_pgtable_visitor_fn_t)(const struct kvm_pgtable_visit_ctx *ctx,
+                                        enum kvm_pgtable_walk_flags visit);
 
-> It should left to driver to handle such a side effect. The device
-> driver know their device, so its the device driver's responsibility to
-> maintain the coherency.
+----------------
 
-Not really, no. Some driver are used across multiple SoCs and multiple
-arch. It doesn't make any sense to encode this in the driver... which is
-why it's in the DT in the first place, and abstracted away by the DMA
-API. Like, do you really expect the amdgpu driver to know the DMA
-attributes it needs to allocate a buffer from when running from a
-RaspberryPi?
+Visitor functions sets the flags via ctx->status and kvm_pgtable_walk_xxx can
+check the bits in the ctx to decide what to do for the next.
 
-> On loongson platform, we don't need to call
-> drm_fb_dma_sync_non_coherent() function, Its already guaranteed by
-> hardware.
+I can cook a patch for re-factoring this part if we think it is a good idea. 
 
-And mostly guaranteed by dma_alloc_coherent. And if you wanted to call
-it anyway, it would be a nop if the device is declared as coherent
-already.
+> "simplify existing error code" - is very dependent on visitor function
+> and caller of page table walker. This might not be able to cover all
+> cases for the future also.
+> 
+> But I do agree that just error code is not sufficient and it will make
+> it harder to handle shared vs non-shared walkers combinations with error
+> code from visitor functions and walk action (exit, next, retry).
+> 
+> One approach I can think of is:
+> Based on the visitor function return value, a page table walker will do
+> 3 things:
+> 
+> 1. Move to next SPTE
+> 2. Retry the current SPTE
+> 3. Exit the walk and return the exit code.
+> 
+> struct kvm_pgtable_walker{}  will have two more callbacks
+> 1. kvm_pgtable_walk_ignore(int ret, enum kvm_pgtable_walk_flags):
+>    This will be set for each walker and walker will check with this
+>    function intead of kvm_pgtable_walk_continue().
+> 
+> 2. kvm_pgtable_walk_retry(int ret, enum kvm_pgtable_walk_flags):
+>    This will be set for each walker and walker will use it in
+>    __kvm_pgtable_walk()  on the return value of __kvm_pgtable_visit() to
+>    retry again.
+> 
+> This will allow to have walker be more configurable and each type of
+> walker can be customized based on vistor function return and
+> shared/non-shared walker combo. It will avoid having visitor function
+> error code handling same in all walkers.
+> 
+> Below is a sample code (compile tested only):
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index 850d65f705fa..9a96f61208af 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -243,6 +243,10 @@ struct kvm_pgtable_visit_ctx {
+>  
+>  typedef int (*kvm_pgtable_visitor_fn_t)(const struct kvm_pgtable_visit_ctx *ctx,
+>  					enum kvm_pgtable_walk_flags visit);
+> +struct kvm_pgtable_walker;
+> +typedef bool (*kvm_pgtable_walker_action_fn_t)(const struct kvm_pgtable_walker *walker,
+> +					      int ret);
+> +
+>  
+>  static inline bool kvm_pgtable_walk_shared(const struct kvm_pgtable_visit_ctx *ctx)
+>  {
+> @@ -258,6 +262,8 @@ static inline bool kvm_pgtable_walk_shared(const struct kvm_pgtable_visit_ctx *c
+>   */
+>  struct kvm_pgtable_walker {
+>  	const kvm_pgtable_visitor_fn_t		cb;
+> +	const kvm_pgtable_walker_action_fn_t	ignore;
+> +	const kvm_pgtable_walker_action_fn_t	retry;
+>  	void * const				arg;
+>  	const enum kvm_pgtable_walk_flags	flags;
+>  };
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 364b68013038..28891a9c463a 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -180,6 +180,12 @@ static int kvm_pgtable_visitor_cb(struct kvm_pgtable_walk_data *data,
+>  	return walker->cb(ctx, visit);
+>  }
+>  
+> +static bool kvm_pgtable_walk_retry(const struct kvm_pgtable_walker *walker,
+> +				      int r)
+> +{
+> +	return false;
+> +}
+> +
+>  static bool kvm_pgtable_walk_continue(const struct kvm_pgtable_walker *walker,
+>  				      int r)
+>  {
+> @@ -231,7 +237,7 @@ static inline int __kvm_pgtable_visit(struct kvm_pgtable_walk_data *data,
+>  		table = kvm_pte_table(ctx.old, level);
+>  	}
+>  
+> -	if (!kvm_pgtable_walk_continue(data->walker, ret))
+> +	if (!data->walker->ignore(data->walker, ret))
+>  		goto out;
+>  
+>  	if (!table) {
+> @@ -242,14 +248,14 @@ static inline int __kvm_pgtable_visit(struct kvm_pgtable_walk_data *data,
+>  
+>  	childp = (kvm_pteref_t)kvm_pte_follow(ctx.old, mm_ops);
+>  	ret = __kvm_pgtable_walk(data, mm_ops, childp, level + 1);
+> -	if (!kvm_pgtable_walk_continue(data->walker, ret))
+> +	if (!data->walker->ignore(data->walker, ret))
+>  		goto out;
+>  
+>  	if (ctx.flags & KVM_PGTABLE_WALK_TABLE_POST)
+>  		ret = kvm_pgtable_visitor_cb(data, &ctx, KVM_PGTABLE_WALK_TABLE_POST);
+>  
+>  out:
+> -	if (kvm_pgtable_walk_continue(data->walker, ret))
+> +	if (!data->walker->ignore(data->walker, ret))
+>  		return 0;
+>  
+>  	return ret;
+> @@ -260,19 +266,25 @@ static int __kvm_pgtable_walk(struct kvm_pgtable_walk_data *data,
+>  {
+>  	u32 idx;
+>  	int ret = 0;
+> +	kvm_pteref_t pteref;
+>  
+>  	if (WARN_ON_ONCE(level >= KVM_PGTABLE_MAX_LEVELS))
+>  		return -EINVAL;
+>  
+>  	for (idx = kvm_pgtable_idx(data, level); idx < PTRS_PER_PTE; ++idx) {
+> -		kvm_pteref_t pteref = &pgtable[idx];
+> +retry:
+> +		pteref = &pgtable[idx];
+>  
+>  		if (data->addr >= data->end)
+>  			break;
+>  
+>  		ret = __kvm_pgtable_visit(data, mm_ops, pteref, level);
+> -		if (ret)
+> +		if (ret) {
+> +			if (data->walker->retry(data->walker, ret)) {
+> +				goto retry;
+> +			}
+>  			break;
+> +		}
+>  	}
+>  
+>  	return ret;
+> @@ -343,6 +355,8 @@ int kvm_pgtable_get_leaf(struct kvm_pgtable *pgt, u64 addr,
+>  	struct leaf_walk_data data;
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= leaf_walker,
+> +		.ignore = kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF,
+>  		.arg	= &data,
+>  	};
+> @@ -474,6 +488,8 @@ int kvm_pgtable_hyp_map(struct kvm_pgtable *pgt, u64 addr, u64 size, u64 phys,
+>  	};
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= hyp_map_walker,
+> +		.ignore = kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF,
+>  		.arg	= &map_data,
+>  	};
+> @@ -533,6 +549,8 @@ u64 kvm_pgtable_hyp_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+>  	u64 unmapped = 0;
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= hyp_unmap_walker,
+> +		.ignore = kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.arg	= &unmapped,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+> @@ -582,6 +600,8 @@ void kvm_pgtable_hyp_destroy(struct kvm_pgtable *pgt)
+>  {
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= hyp_free_walker,
+> +		.ignore = kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+>  
+> @@ -958,6 +978,8 @@ int kvm_pgtable_stage2_map(struct kvm_pgtable *pgt, u64 addr, u64 size,
+>  	};
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb		= stage2_map_walker,
+> +		.ignore		= kvm_pgtable_walk_continue,
+> +		.retry		= kvm_pgtable_walk_retry,
+>  		.flags		= flags |
+>  				  KVM_PGTABLE_WALK_TABLE_PRE |
+>  				  KVM_PGTABLE_WALK_LEAF,
+> @@ -989,6 +1011,8 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtable *pgt, u64 addr, u64 size,
+>  	};
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb		= stage2_map_walker,
+> +		.ignore		= kvm_pgtable_walk_continue,
+> +		.retry		= kvm_pgtable_walk_retry,
+>  		.flags		= KVM_PGTABLE_WALK_TABLE_PRE |
+>  				  KVM_PGTABLE_WALK_LEAF,
+>  		.arg		= &map_data,
+> @@ -1048,6 +1072,8 @@ int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+>  {
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_unmap_walker,
+> +		.ignore	= kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.arg	= pgt,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+> @@ -1070,7 +1096,7 @@ static int stage2_attr_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
+>  
+>  	if (!kvm_pte_valid(ctx->old))
+> -		return -EAGAIN;
+> +		return -ENOENT;
+>  
+>  	data->level = ctx->level;
+>  	data->pte = pte;
+> @@ -1099,6 +1125,23 @@ static int stage2_attr_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  	return 0;
+>  }
+>  
+> +static bool stage2_attr_walker_retry(const struct kvm_pgtable_walker *walker, int ret)
+> +{
+> +	if (ret == -EAGAIN)
+> +		return walker->flags & KVM_PGTABLE_WALK_SHARED
+> +				&& !(walker->flags & KVM_PGTABLE_WALK_HANDLE_FAULT);
+> +	return false;
+> +}
+> +
+> +static bool stage2_attr_walker_ignore(const struct kvm_pgtable_walker * walker, int ret)
+> +{
+> +	if (ret == -EAGAIN)
+> +		return !(walker->flags & KVM_PGTABLE_WALK_SHARED);
+> +	if (ret == -ENOENT)
+> +		return !(walker->flags & KVM_PGTABLE_WALK_HANDLE_FAULT);
+> +	return false;
+> +}
+> +
+>  static int stage2_update_leaf_attrs(struct kvm_pgtable *pgt, u64 addr,
+>  				    u64 size, kvm_pte_t attr_set,
+>  				    kvm_pte_t attr_clr, kvm_pte_t *orig_pte,
+> @@ -1112,6 +1155,8 @@ static int stage2_update_leaf_attrs(struct kvm_pgtable *pgt, u64 addr,
+>  	};
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb		= stage2_attr_walker,
+> +		.ignore		= stage2_attr_walker_ignore,
+> +		.retry		= stage2_attr_walker_retry,
+>  		.arg		= &data,
+>  		.flags		= flags | KVM_PGTABLE_WALK_LEAF,
+>  	};
+> @@ -1217,6 +1262,8 @@ int kvm_pgtable_stage2_flush(struct kvm_pgtable *pgt, u64 addr, u64 size)
+>  {
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_flush_walker,
+> +		.ignore	= kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF,
+>  		.arg	= pgt,
+>  	};
+> @@ -1240,6 +1287,8 @@ kvm_pte_t *kvm_pgtable_stage2_create_unlinked(struct kvm_pgtable *pgt,
+>  	};
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb		= stage2_map_walker,
+> +		.ignore		= kvm_pgtable_walk_continue,
+> +		.retry		= kvm_pgtable_walk_retry,
+>  		.flags		= KVM_PGTABLE_WALK_LEAF |
+>  				  KVM_PGTABLE_WALK_SKIP_BBM_TLBI |
+>  				  KVM_PGTABLE_WALK_SKIP_CMO,
+> @@ -1377,6 +1426,8 @@ int kvm_pgtable_stage2_split(struct kvm_pgtable *pgt, u64 addr, u64 size,
+>  {
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_split_walker,
+> +		.ignore	= kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF,
+>  		.arg	= mc,
+>  	};
+> @@ -1442,6 +1493,8 @@ void kvm_pgtable_stage2_destroy(struct kvm_pgtable *pgt)
+>  	size_t pgd_sz;
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_free_walker,
+> +		.ignore	= kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF |
+>  			  KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+> @@ -1457,6 +1510,8 @@ void kvm_pgtable_stage2_free_unlinked(struct kvm_pgtable_mm_ops *mm_ops, void *p
+>  	kvm_pteref_t ptep = (kvm_pteref_t)pgtable;
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_free_walker,
+> +		.ignore	= kvm_pgtable_walk_continue,
+> +		.retry	= kvm_pgtable_walk_retry,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF |
+>  			  KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
 
-I think you're thinking about this backward. A buffer has mapping
-attributes, and a device has hardware properties.
-
-The driver (ie, software) will allocate a buffer with some mapping
-attributes, and will assume that they are met in the rest of its code.
-How they are met is an implementation detail of the hardware, and for
-all the driver cares, it doesn't have to match.
-
-You can allocate a WC buffer to use on a non-coherent device and that's
-fine. You can allocate a non-coherent buffer on a coherent device and
-that's fine too. The DMA API will make everything work when it needs to,
-and if the hardware already provides stronger guarantees, then it will
-just skip whatever is redundant.
-
-So you need to write your driver using buffer is the most convenient for
-you, and it's really all that matters at the driver level. But for that
-to work, you need to flag the coherence-ness of your devices properly,
-like Paul suggested.
-
-Maxime
-
---rvdpeqztss6vkzn5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIB10QAKCRDj7w1vZxhR
-xRD3AP4+CuKSClOhR6Tk+iHUSE+0W1zUPXL6Vw6z9e2OOEHMwQD/Y0tjh52EyZ91
-R/egrhpeLpiA8WFUrMSUE2jKmKrJjgI=
-=XMoq
------END PGP SIGNATURE-----
-
---rvdpeqztss6vkzn5--
