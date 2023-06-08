@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CA77288BF
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Jun 2023 21:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490907288C7
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Jun 2023 21:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbjFHTgf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Jun 2023 15:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S236906AbjFHTh4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Jun 2023 15:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234336AbjFHTge (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 15:36:34 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0A72134
-        for <linux-mips@vger.kernel.org>; Thu,  8 Jun 2023 12:36:31 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-565d354b59fso9549537b3.0
-        for <linux-mips@vger.kernel.org>; Thu, 08 Jun 2023 12:36:31 -0700 (PDT)
+        with ESMTP id S235568AbjFHTh4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 15:37:56 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411172D4F
+        for <linux-mips@vger.kernel.org>; Thu,  8 Jun 2023 12:37:54 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-568f9caff33so8814397b3.2
+        for <linux-mips@vger.kernel.org>; Thu, 08 Jun 2023 12:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686252991; x=1688844991;
+        d=google.com; s=20221208; t=1686253073; x=1688845073;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UmemeLuI+WpEQXgz9TQT0mwehV8FTU9BDTa5EhoH+Rw=;
-        b=7iZl7qFoE643/vqqfaylOOM4UugSzxQOXfGxIkvhFgrLBJMpREbmLbhzK1Dfpeq7sW
-         vLxMNbMxtYruESXi/vLA/FRPFy86oy/Rlv/K+QRhWyPjxrgHE6clF71I8HICL+Wbu4D8
-         52TIPF5OsTmaSTlVcpOmlJ2hXgN4iVitvobit3uBB1+XryThJwAiK1B3ovBLWTXnWBEi
-         ML7bTpBpfErXrO5jZn41yk5x35HzdiBPWQx9RrfkGfIWSKYY13HndzOzcbi8dz53N7Pe
-         Ykc3xEYKN/aDtb36dEI3aYN9owd5brP5GXTjP0NKjFTbVVbOSNnZMLMGudJLdaSlcXEi
-         8u1g==
+        bh=4B5saBu/vw3gaGnlmIPZ9pQkqfzbj7+JgYM5jpygjcc=;
+        b=wrjU6S4EMiU3Ufcg2KZPT551Y8sNhg4QKjD2hAgSPlGh9yj39Rxf3Ke0FjcZO6VxtG
+         ALh4CVjSqM9GtJPRdIfEgNIlV/EEkptkG6e4IMSsrcpQSqGrj44uojyylNmPW3FhQBzm
+         h+3YVxQpJctPazelaypN7o1DBk1YFmyjCLOyVuE0ZSJNDZN1IWkDf39Bng35IMFfYc2S
+         OuTO6+N3JH4bhYslynL29X9VjGEwK1A0ffza+fgs91l3oerVxPUep2x461PcKgDhp6i7
+         yNPgK4idQjhQRO3vK4IICQL9mYykeSLt5G3Lqvr2ymPPunZsH8KwR6J1BbGlfhLHc47C
+         HKFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686252991; x=1688844991;
+        d=1e100.net; s=20221208; t=1686253073; x=1688845073;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UmemeLuI+WpEQXgz9TQT0mwehV8FTU9BDTa5EhoH+Rw=;
-        b=KJAcx1c2DhoxRjD3yGZlTqZH3DbXRqv0qeyjfO+wEHuvEBcEXRPu1gI1+YUdJ32fhN
-         YmkxQEBi/EgP/PgViqnjyQEATrpKXZ0699U7CH5P4lX315VtRNDU03/NL6aDxGVBNG2z
-         Kf+VCwEJTb1X/s3QAEayjLsa3mBSrURD7/00LCKaLb5obvB6jG0VNhnFDj2MxHAn7TdW
-         lMg4Xc3NG/W96Vlc2aBLRJsr/SzmbvDJPOIvx0xUejG29+CvEK/iWqBc9IroaNf47h0Z
-         gXmmMehO9raLzVU8qAOYTrybCulUxwD414rEDG0tRw3T7IQSxXYrA2fT8zD+7zaOed45
-         YFgA==
-X-Gm-Message-State: AC+VfDySxu6fKglMGtKtTxZj7IxvklDOrFAWp+GLzUecTlGjUWIHKWSo
-        +ywjsySOzkuGBV6E5vBiDOFbZA==
-X-Google-Smtp-Source: ACHHUZ5QdxKuy9jo3MUvUBLJWa7hkCRN4WqLqFRikF/N35P5/sjJc9i1Jxr6DqBjKGQqjHCt1+UtTA==
-X-Received: by 2002:a0d:ef01:0:b0:568:d586:77bb with SMTP id y1-20020a0def01000000b00568d58677bbmr743298ywe.14.1686252990588;
-        Thu, 08 Jun 2023 12:36:30 -0700 (PDT)
+        bh=4B5saBu/vw3gaGnlmIPZ9pQkqfzbj7+JgYM5jpygjcc=;
+        b=QfUvec1QfyguAJIlGR9AxGtb1dHgVcJBTDIQBOUe5b9v8wyDlN5nMrAoVRqVmNBIwb
+         YV88f6i4kgU16EtxM4VqoED5oWwVTUMUvut10KIrCumyT+1IzAaucK/m5p0YQIWTQ/7k
+         e68nf5PvHRbokRRwPvQZH4F9H86gjjjmdfr3fklJSUWWTxVIZinpu9TIl7vwOXfVEfs5
+         842T04tDWKLK6j4NRa5ybtYDNPkB8+z5I0I5rDMIlI8BM8GN9nM2I3Ad6G98Lp/hHRlx
+         VxZAX4z+7eJPUpnI45rnH0KtPLQJiQCJaRS9zEBUwaE9oi01lmhFgjWadcDRv0Y7pT/3
+         uSow==
+X-Gm-Message-State: AC+VfDwidgemLDx4Xa+0cj1pkOg9yg+vES5hAQcZGatrWUVQVq5cqakB
+        KNedMXdz8/l4V1EKj18efJ01/Q==
+X-Google-Smtp-Source: ACHHUZ7Ebli0p9041CLEfO4CyQQvBmxN41VJwJsuM0MQnf822wu8ZsrJRZ2ru1aILLAWUog5xqYpmw==
+X-Received: by 2002:a81:72d4:0:b0:560:f6ae:a71b with SMTP id n203-20020a8172d4000000b00560f6aea71bmr508956ywc.48.1686253073290;
+        Thu, 08 Jun 2023 12:37:53 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a11-20020a81bb4b000000b00545dc7c4a9esm108298ywl.111.2023.06.08.12.36.27
+        by smtp.gmail.com with ESMTPSA id i133-20020a816d8b000000b0056953ab06c5sm114950ywc.95.2023.06.08.12.37.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:36:30 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:36:26 -0700 (PDT)
+        Thu, 08 Jun 2023 12:37:52 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 12:37:48 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -86,9 +86,10 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 22/23] x86: sme_populate_pgd() use pte_offset_kernel()
+Subject: [PATCH v2 23/23] xtensa: add pte_unmap() to balance
+ pte_offset_map()
 In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <497d7777-736e-85f2-c37-aa6bcf155e4@google.com>
+Message-ID: <ab2581eb-daa6-894e-4aa6-97c81de3b8c@google.com>
 References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -103,28 +104,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-sme_populate_pgd() is an __init function for sme_encrypt_kernel():
-it should use pte_offset_kernel() instead of pte_offset_map(), to avoid
-the question of whether a pte_unmap() will be needed to balance.
+To keep balance in future, remember to pte_unmap() after a successful
+pte_offset_map().  And act as if get_pte_for_vaddr() really needs a map
+there, to read the pteval before "unmapping", to be sure page table is
+not removed.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- arch/x86/mm/mem_encrypt_identity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/xtensa/mm/tlb.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index c6efcf559d88..a1ab542bdfd6 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -188,7 +188,7 @@ static void __init sme_populate_pgd(struct sme_populate_pgd_data *ppd)
- 	if (pmd_large(*pmd))
- 		return;
+diff --git a/arch/xtensa/mm/tlb.c b/arch/xtensa/mm/tlb.c
+index 27a477dae232..0a11fc5f185b 100644
+--- a/arch/xtensa/mm/tlb.c
++++ b/arch/xtensa/mm/tlb.c
+@@ -179,6 +179,7 @@ static unsigned get_pte_for_vaddr(unsigned vaddr)
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+ 	pte_t *pte;
++	unsigned int pteval;
  
--	pte = pte_offset_map(pmd, ppd->vaddr);
-+	pte = pte_offset_kernel(pmd, ppd->vaddr);
- 	if (pte_none(*pte))
- 		set_pte(pte, __pte(ppd->paddr | ppd->pte_flags));
+ 	if (!mm)
+ 		mm = task->active_mm;
+@@ -197,7 +198,9 @@ static unsigned get_pte_for_vaddr(unsigned vaddr)
+ 	pte = pte_offset_map(pmd, vaddr);
+ 	if (!pte)
+ 		return 0;
+-	return pte_val(*pte);
++	pteval = pte_val(*pte);
++	pte_unmap(pte);
++	return pteval;
  }
+ 
+ enum {
 -- 
 2.35.3
 
