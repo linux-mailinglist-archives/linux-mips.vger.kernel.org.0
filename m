@@ -2,69 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EB47285D5
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Jun 2023 18:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C44D728624
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Jun 2023 19:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236229AbjFHQyB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Jun 2023 12:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S236852AbjFHRTZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Jun 2023 13:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbjFHQx7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 12:53:59 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E40F2711
-        for <linux-mips@vger.kernel.org>; Thu,  8 Jun 2023 09:53:55 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-77807e43b7cso35410539f.1
-        for <linux-mips@vger.kernel.org>; Thu, 08 Jun 2023 09:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686243234; x=1688835234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hmEOm3Skn8Jl/sRC6hqqJWkitptFK5F761thwbnVCkg=;
-        b=AU0cOsG+KDlMjOtruSu/fUXNn7aeo5vacPNkFZtSeYuyt/xBFrZWoSgtMIx/UTNamu
-         pOFUnVkAjgZxWE55LttACjxNXCoYJYSM52Ekk3At8WXoYbT8KQBfCxjsiLbEo/ZSZJHK
-         dxEUtY9fYoq7B9Pb3H6IYWMUB4X6ViW2NLXTk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686243234; x=1688835234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hmEOm3Skn8Jl/sRC6hqqJWkitptFK5F761thwbnVCkg=;
-        b=IR8p0xktVnsmw9lg2GdOVg4wREiqhLCJRmRgXTCa3LbRQlKQeJWsmVa8C/SdvE7x5Y
-         PqdqrR+IIwLAsnle7hRBnL/aMb0tp2n7zc/NqwGPJnYUuPGFu3HaV9VHa508t49PWQhW
-         SG78yzAemAl7W1eHWB14bAxJQ5gcEtIryfiBO5T5k+2Qm6Hx56ScbqxqM+va1KldRe0C
-         cmHawKiaZrO1SKesKSvCXKf6A58314Zmgg1lChB/ohp/WmTyKdNyhPBqskesyKOGFkUQ
-         LZFoLRubPkHeK/r06uMEyXmTrIrV3RIuxp3lXQhQenYkRuJRs8OdD56T8A4AGUE8VBaE
-         2Ghw==
-X-Gm-Message-State: AC+VfDxjh9/6fBfdePzqc7TNu5Wrj0qHrSWtaoqfiSImgINq6eg0W/Yh
-        jbdRFN30u1sqIsdFw6C1YhO8/SV/fpPBFONN2xapeQ==
-X-Google-Smtp-Source: ACHHUZ70DoxEK8BN4d1TlVJzP8xwKliZfwIQb0ueeLiSRdLO27CtApkQms4kWQElL9lf+ZMhPh2mnw==
-X-Received: by 2002:a5e:a611:0:b0:777:a970:b382 with SMTP id q17-20020a5ea611000000b00777a970b382mr13012611ioi.18.1686243234493;
-        Thu, 08 Jun 2023 09:53:54 -0700 (PDT)
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com. [209.85.166.178])
-        by smtp.gmail.com with ESMTPSA id f7-20020a6be807000000b0076c5c927acesm474074ioh.13.2023.06.08.09.53.54
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 09:53:54 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-33d928a268eso145225ab.0
-        for <linux-mips@vger.kernel.org>; Thu, 08 Jun 2023 09:53:54 -0700 (PDT)
-X-Received: by 2002:a05:6e02:18ca:b0:33b:68fb:ea0 with SMTP id
- s10-20020a056e0218ca00b0033b68fb0ea0mr145479ilu.26.1686242834959; Thu, 08 Jun
- 2023 09:47:14 -0700 (PDT)
+        with ESMTP id S236294AbjFHRTX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 13:19:23 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144F12D52;
+        Thu,  8 Jun 2023 10:19:19 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 869151424;
+        Thu,  8 Jun 2023 19:18:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686244727;
+        bh=QCp8g9xbRRzi5prPR0P8JsS2fOCtTw24NgdzRtNAQkA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ivurqXuacySqj7S5bBj29CW1kOJEhzPVX1wUbbe7JjGtmaeDnNDrp9ES7xz5sou7/
+         9SxWEvF253nRIvAd0xO3RIxe1NHh8UBjYsr6TpHlRJXbv0I3E64FJ/IqZp0bSQeO4O
+         iBcyUJnbVzHVylvQf0/AKIbigSnsRT2cigQiHQWY=
+Message-ID: <2b8ccac8-2828-1279-93aa-a601d8d72e43@ideasonboard.com>
+Date:   Thu, 8 Jun 2023 20:19:02 +0300
 MIME-Version: 1.0
-References: <20230507162616.1368908-1-u.kleine-koenig@pengutronix.de>
- <20230601154002.uv2wfatpb7b45duz@pengutronix.de> <CAD=FV=WvP--wJwBQtnSoW_xb57R1Wf9dH0XzWxe+NorczXfeAw@mail.gmail.com>
- <20230608162642.GA23400@pendragon.ideasonboard.com>
-In-Reply-To: <20230608162642.GA23400@pendragon.ideasonboard.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Jun 2023 09:47:02 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Vwz9+jhZ94DvagVyAq=4TtWLMEVLRi8rTKaishoPQEfw@mail.gmail.com>
-Message-ID: <CAD=FV=Vwz9+jhZ94DvagVyAq=4TtWLMEVLRi8rTKaishoPQEfw@mail.gmail.com>
-Subject: Re: [PATCH 00/53] drm: Convert to platform remove callback returning void
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 00/53] drm: Convert to platform remove callback returning
+ void
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Liviu Dudau <liviu.dudau@arm.com>,
         Mihail Atanassov <mihail.atanassov@arm.com>,
         Brian Starkey <brian.starkey@arm.com>,
@@ -78,9 +48,7 @@ Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?=
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Rahul T R <r-ravikumar@ti.com>,
+        Robert Foss <rfoss@kernel.org>, Rahul T R <r-ravikumar@ti.com>,
         Jayshri Pawar <jpawar@cadence.com>,
         Liu Ying <victor.liu@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -136,7 +104,7 @@ Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?=
         Rob Herring <robh@kernel.org>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
         Orson Zhai <orsonzhai@gmail.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         Chunyan Zhang <zhang.lyra@gmail.com>,
@@ -154,8 +122,8 @@ Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?=
         Samuel Holland <samuel@sholland.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
         Jyri Sarha <jyri.sarha@iki.fi>,
         Alexey Brodkin <abrodkin@synopsys.com>,
         Emma Anholt <emma@anholt.net>, Melissa Wen <mwen@igalia.com>,
@@ -188,37 +156,102 @@ Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?=
         linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         kernel@pengutronix.de, Yongqin Liu <yongqin.liu@linaro.org>,
         freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230507162616.1368908-1-u.kleine-koenig@pengutronix.de>
+ <20230601154002.uv2wfatpb7b45duz@pengutronix.de>
+ <CAD=FV=WvP--wJwBQtnSoW_xb57R1Wf9dH0XzWxe+NorczXfeAw@mail.gmail.com>
+ <20230608162642.GA23400@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230608162642.GA23400@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On Thu, Jun 8, 2023 at 9:26=E2=80=AFAM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> > The following ones appeared to apply to the top of drm-misc-next, but
-> > I didn't apply them since get_maintainer didn't say they were part of
-> > drm-misc-next:
-> >
-> > drm/tiny: Convert to platform remove callback returning void
-> > drm/tilcdc: Convert to platform remove callback returning void
-> > drm/sprd: Convert to platform remove callback returning void
-> > drm/shmobile: Convert to platform remove callback returning void
-> > drm/rcar-du: Convert to platform remove callback returning void
->
+On 08/06/2023 19:26, Laurent Pinchart wrote:
+> Hi Doug,
+> 
+> On Thu, Jun 08, 2023 at 09:08:15AM -0700, Doug Anderson wrote:
+>> On Thu, Jun 1, 2023 at 8:40 AM Uwe Kleine-König wrote:
+>>> On Sun, May 07, 2023 at 06:25:23PM +0200, Uwe Kleine-König wrote:
+>>>> this patch series adapts the platform drivers below drivers/gpu/drm
+>>>> to use the .remove_new() callback. Compared to the traditional .remove()
+>>>> callback .remove_new() returns no value. This is a good thing because
+>>>> the driver core doesn't (and cannot) cope for errors during remove. The
+>>>> only effect of a non-zero return value in .remove() is that the driver
+>>>> core emits a warning. The device is removed anyhow and an early return
+>>>> from .remove() usually yields a resource leak.
+>>>>
+>>>> By changing the remove callback to return void driver authors cannot
+>>>> reasonably (but wrongly) assume any more that there happens some kind of
+>>>> cleanup later.
+>>>
+>>> I wonder if someone would volunteer to add the whole series to
+>>> drm-misc-next?!
+>>
+>> It looks as if Neil applied quite a few of them already, so I looked
+>> at what was left...
+>>
+>> I'm a little hesitant to just apply the whole kit-and-caboodle to
+>> drm-misc-next since there are specific DRM trees for a bunch of them
+>> and it would be better if they landed there. ...so I went through all
+>> the patches that still applied to drm-misc-next, then used
+>> 'scripts/get_maintainer.pl --scm' to check if they were maintained
+>> through drm-misc. That still left quite a few patches. I've applied
+>> those ones and pushed to drm-misc-next:
+>>
+>> 71722685cd17 drm/xlnx/zynqmp_dpsub: Convert to platform remove
+>> callback returning void
+>> 1ed54a19f3b3 drm/vc4: Convert to platform remove callback returning void
+>> b957812839f8 drm/v3d: Convert to platform remove callback returning void
+>> e2fd3192e267 drm/tve200: Convert to platform remove callback returning void
+>> 84e6da7ad553 drm/tiny: Convert to platform remove callback returning void
+>> 34cdd1f691ad drm/tidss: Convert to platform remove callback returning void
+>> d665e3c9d37a drm/sun4i: Convert to platform remove callback returning void
+>> 0c259ab19146 drm/stm: Convert to platform remove callback returning void
+>> 9a865e45884a drm/sti: Convert to platform remove callback returning void
+>> 3c855610840e drm/rockchip: Convert to platform remove callback returning void
+>> e41977a83b71 drm/panfrost: Convert to platform remove callback returning void
+>> cef3776d0b5a drm/panel: Convert to platform remove callback returning void
+>> bd296a594e87 drm/mxsfb: Convert to platform remove callback returning void
+>> 38ca2d93d323 drm/meson: Convert to platform remove callback returning void
+>> fd1457d84bae drm/mcde: Convert to platform remove callback returning void
+>> 41a56a18615c drm/logicvc: Convert to platform remove callback returning void
+>> 980ec6444372 drm/lima: Convert to platform remove callback returning void
+>> 82a2c0cc1a22 drm/hisilicon: Convert to platform remove callback returning void
+>> c3b28b29ac0a drm/fsl-dcu: Convert to platform remove callback returning void
+>> a118fc6e71f9 drm/atmel-hlcdc: Convert to platform remove callback returning void
+>> 9a32dd324c46 drm/aspeed: Convert to platform remove callback returning void
+>> 2c7d291c498c drm/arm/malidp: Convert to platform remove callback returning void
+>> a920028df679 drm/arm/hdlcd: Convert to platform remove callback returning void
+>> 1bf3d76a7d15 drm/komeda: Convert to platform remove callback returning void
+>>
+>> The following ones appeared to apply to the top of drm-misc-next, but
+>> I didn't apply them since get_maintainer didn't say they were part of
+>> drm-misc-next:
+>>
+>> drm/tiny: Convert to platform remove callback returning void
+>> drm/tilcdc: Convert to platform remove callback returning void
+>> drm/sprd: Convert to platform remove callback returning void
+>> drm/shmobile: Convert to platform remove callback returning void
+>> drm/rcar-du: Convert to platform remove callback returning void
+> 
 > If you don't mind, could you take the rcar-du patch through drm-misc too
 > ? I don't plan to send another pull request for v6.5.
+> 
+>> drm/omap: Convert to platform remove callback returning void
+> 
+> Tomi, should drm/omap moved to being maintained through drm-misc ?
 
-Done.
+Yes. tilcdc, tidss and omapdrm are all maintained through drm-misc. But 
+I guess I need to add something to the MAINTAINERS to make this clear. 
+I'll look at it.
 
-2510a2579324 drm/rcar-du: Convert to platform remove callback returning voi=
-d
+  Tomi
+
