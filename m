@@ -2,329 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF437279CC
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Jun 2023 10:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4675F727C78
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Jun 2023 12:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234906AbjFHISG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Jun 2023 04:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S235928AbjFHKMa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 8 Jun 2023 06:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbjFHISF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 04:18:05 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB4FFE43;
-        Thu,  8 Jun 2023 01:17:59 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxLuuyjoFklnYAAA--.1833S3;
-        Thu, 08 Jun 2023 16:17:54 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTMqwjoFkTfwGAA--.13801S3;
-        Thu, 08 Jun 2023 16:17:52 +0800 (CST)
-Message-ID: <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
-Date:   Thu, 8 Jun 2023 16:17:52 +0800
+        with ESMTP id S235782AbjFHKMW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 06:12:22 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05A01FE9;
+        Thu,  8 Jun 2023 03:12:19 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1q7Cck-000hkd-IA; Thu, 08 Jun 2023 12:12:10 +0200
+Received: from p57bd96d9.dip0.t-ipconnect.de ([87.189.150.217] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1q7Cck-0049Nn-9l; Thu, 08 Jun 2023 12:12:10 +0200
+Message-ID: <0e74974450a15870f13ff36ab5dd60924368c0d9.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 30/34] sh: Convert pte_free_tlb() to use ptdescs
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>
+Date:   Thu, 08 Jun 2023 12:12:09 +0200
+In-Reply-To: <20230531213032.25338-31-vishal.moola@gmail.com>
+References: <20230531213032.25338-1-vishal.moola@gmail.com>
+         <20230531213032.25338-31-vishal.moola@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
- <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
- <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
- <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
- <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
- <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxTMqwjoFkTfwGAA--.13801S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFyDZF4kArWfKF15JryktFc_yoW3Cr1kpF
-        W5KF4jkFWDJr1rtw18Kw4UXFyYyayrJry5Wr1DJ34xu3s0yr1UWr12kr1UuFyUXr18KF4F
-        v34jvFyxZF1DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUD529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4YLvDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.150.217
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Wed, 2023-05-31 at 14:30 -0700, Vishal Moola (Oracle) wrote:
+> Part of the conversions to replace pgtable constructor/destructors with
+> ptdesc equivalents. Also cleans up some spacing issues.
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  arch/sh/include/asm/pgalloc.h | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgalloc.h
+> index a9e98233c4d4..5d8577ab1591 100644
+> --- a/arch/sh/include/asm/pgalloc.h
+> +++ b/arch/sh/include/asm/pgalloc.h
+> @@ -2,6 +2,7 @@
+>  #ifndef __ASM_SH_PGALLOC_H
+>  #define __ASM_SH_PGALLOC_H
+>  
+> +#include <linux/mm.h>
+>  #include <asm/page.h>
+>  
+>  #define __HAVE_ARCH_PMD_ALLOC_ONE
+> @@ -31,10 +32,10 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
+>  	set_pmd(pmd, __pmd((unsigned long)page_address(pte)));
+>  }
+>  
+> -#define __pte_free_tlb(tlb,pte,addr)			\
+> -do {							\
+> -	pgtable_pte_page_dtor(pte);			\
+> -	tlb_remove_page((tlb), (pte));			\
+> +#define __pte_free_tlb(tlb, pte, addr)				\
+> +do {								\
+> +	pagetable_pte_dtor(page_ptdesc(pte));			\
+> +	tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));	\
+>  } while (0)
+>  
+>  #endif /* __ASM_SH_PGALLOC_H */
 
-On 2023/6/8 15:39, Maxime Ripard wrote:
-> On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/6/8 00:12, Paul Cercueil wrote:
->>> Hi Sui,
->>>
->>> Le mercredi 07 juin 2023 à 22:38 +0800, Sui Jingfeng a écrit :
->>>> Hi,  welcome to discussion.
->>>>
->>>>
->>>> I have limited skills in manipulating English.
->>>>
->>>> It may not express what I'm really means in the short time.
->>>>
->>>> Part of word in the sentence may not as accurate as your.
->>>>
->>>> Well, please don't misunderstand, I'm not doing the rude to you.
->>> No problem.
->>>
->>>> I will explain it with more details.
->>>>
->>>> See below:
->>>>
->>>>
->>>> On 2023/6/7 20:09, Paul Cercueil wrote:
->>>>> Hi Sui,
->>>>>
->>>>> Le mercredi 07 juin 2023 à 18:30 +0800, Sui Jingfeng a écrit :
->>>>>> Hi,
->>>>>>
->>>>>>
->>>>>> On 2023/6/7 17:36, Paul Cercueil wrote:
->>>>>>> Hi Sui,
->>>>>>>
->>>>>>> Le mercredi 07 juin 2023 à 13:30 +0800, Sui Jingfeng a écrit :
->>>>>>>> The single map_noncoherent member of struct
->>>>>>>> drm_gem_dma_object
->>>>>>>> may
->>>>>>>> not
->>>>>>>> sufficient for describing the backing memory of the GEM
->>>>>>>> buffer
->>>>>>>> object.
->>>>>>>>
->>>>>>>> Especially on dma-coherent systems, the backing memory is
->>>>>>>> both
->>>>>>>> cached
->>>>>>>> coherent for multi-core CPUs and dma-coherent for peripheral
->>>>>>>> device.
->>>>>>>> Say architectures like X86-64, LoongArch64, Loongson Mips64,
->>>>>>>> etc.
->>>>>>>>
->>>>>>>> Whether a peripheral device is dma-coherent or not can be
->>>>>>>> implementation-dependent. The single map_noncoherent option
->>>>>>>> is
->>>>>>>> not
->>>>>>>> enough
->>>>>>>> to reflect real hardware anymore. For example, the Loongson
->>>>>>>> LS3A4000
->>>>>>>> CPU
->>>>>>>> and LS2K2000/LS2K1000 SoC, peripheral device of such hardware
->>>>>>>> platform
->>>>>>>> allways snoop CPU's cache. Doing the allocation with
->>>>>>>> dma_alloc_coherent
->>>>>>>> function is preferred. The return buffer is cached, it should
->>>>>>>> not
->>>>>>>> using
->>>>>>>> the default write-combine mapping. While with the current
->>>>>>>> implement,
->>>>>>>> there
->>>>>>>> no way to tell the drm core to reflect this.
->>>>>>>>
->>>>>>>> This patch adds cached and coherent members to struct
->>>>>>>> drm_gem_dma_object.
->>>>>>>> which allow driver implements to inform the core. Introducing
->>>>>>>> new
->>>>>>>> mappings
->>>>>>>> while keeping the original default behavior unchanged.
->>>>>>> Did you try to simply set the "dma-coherent" property to the
->>>>>>> device's
->>>>>>> node?
->>>>>> But this approach can only be applied for the device driver with
->>>>>> DT
->>>>>> support.
->>>>>>
->>>>>> X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typically
->>>>>> do
->>>>>> not
->>>>>> have DT support.
->>>>>>
->>>>>> They using ACPI to pass parameter from the firmware to Linux
->>>>>> kernel.
->>>>>>
->>>>>> You approach will lost the effectiveness on such a case.
->>>>> Well, I don't really know how ACPI handles it - but it should just
->>>>> be a
->>>>> matter of setting dev->dma_coherent. That's basically what the DT
->>>>> code
->>>>> does.
->>>>>
->>>>> Some MIPS boards set it in their setup code for instance.
->>>>>
->>>> This is a *strategy*, not a *mechanism*.
->>>>
->>>> In this case, DT is just used to describing the hardware.
->>>>
->>>> (It is actually a hardware feature describing language, the
->>>> granularity
->>>> is large)
->>>>
->>>> It does not changing the state of the hardware.
->>>>
->>>> It's your platform firmware or kernel setting up code who actually do
->>>> such a things.
->>>>
->>>>
->>>> It's just that it works on *one* platform, it does not guarantee it
->>>> will
->>>> works on others.
->>> If you add the "dma-coherent" property in a device node in DT, you
->>> effectively specify that the device is DMA-coherent; so you describe
->>> the hardware, which is what DT is for, and you are not changing the
->>> state of the hardware.
->>>
->>> Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
->>> default to DMA-coherent mapping; I believe you could do something
->>> similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
->>>
->> The preblem is that device driver can have various demand.
->>
->> It probably want to create different kind of buffers for different thing
->> simultaneously.
->>
->> Say, one allocated with dma_alloc_coherent for command buffer or dma
->> descriptor
->>
->> another one allocated with  dma_alloc_wc for uploading shader etc.
->>
->> also has the third one allocated with dma_alloc_noncoherent() for doing some
->> else.
-> And it will work just fine.
->
-> struct device dma_coherent, or DT's dma-coherent property define that
-> the device doesn't need any kind of cache maintenance, ever. If it's
-> missing, we need to perform cache maintenance to keep coherency.
->
-> dma_alloc_* functions provide guarantees to the driver. With
-> dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
-> you don't need to perform cache maintenance operations by hand in the
-> driver.
-
-BO returned by dma_alloc_wc() doesn't works on some platform.
-
-This may only guarantee for the CPU side. There is no guarantee for the 
-GPU side.
-
-For example, the GPU always snoop CPU's cache. The GPU fetch data from 
-the CPU's cache if hit.
-
-if not hit, the GPU fetch the data from the system RAM.
-
-
-But when call dma_alloc_wc(), the BO at cpu side is marked as write 
-combine property.
-
-The write buffer within the CPU will gather the CPU side write access.
-
-This is to say, there may have some data reside(stall) in the write buffer.
-
-while the GPU will fetch data from the system RAM or CPU's cache.
-
-the GPU will fetch wrong data.
-
-
-This is the condition for our hardware, I don't know how does the ARM 
-platform guarantee
-
-the coherency in this case.
-
-
-If it relay on software to guarantee, then it is still non hardware 
-maintained coherency.
-
-
-When it relay on software, I called it implement-dependent.
-
-there are some archs without the implement or don't know how to implement.
-
-
-If it can't even snoop cpu's cache, I don't believe it can snoop cpu's 
-write buffer.
-
-I not sure dma api can do guarantee for all arch.
-
-
-> With dma_alloc_noncoherent, the buffer is non-coherent and the driver
-> needs to perform them when relevant.
->
-> How those buffers are created is platform specific, but the guarantees
-> provided *to the driver* are always there.
->
-> A buffer allocated with dma_alloc_coherent might be provided by
-> different means (at the hardware level with a coherency unit, by mapping
-> it non-cacheable), but as far as the driver is concerned it's always
-> going to be coherent.
->
-> Similarly, a driver using dma_alloc_noncoherent will always require
-> cache maintenance operations to use the API properly, even if the
-> hardware provides coherency (in which case, those operations will be
-> nop).
->
-> So, yeah, like I was saying in the other mail, it looks like you're
-> confusing a bunch of things. dma_alloc_* functions are about the driver
-> expectations and guarantees. DT's dma-coherent property is about how we
-> can implement them on a given platform.
-
-That is ideal situation.
-
-You don't have seen the actual bugs.
-
-Yeah, I do have a bit confusing about the DMA api.
-
-Maybe you and Paul can continue work on this.
-
-
-But DT's dma-coherent property is definitely not a system level solution.
-
-drm/amdgpu, drm/radeon and drm/i915 don't support DT.
-
-If ARM is dma-noncoherent, I suspect drm/amdgpu, drm/radeon will not works on ARM.
-
-there no function call dma_sync_for_device() dma_sync_for_cpu() etc
-
-These driver assume dma-coherent hardware.
-
-> They don't have to match, and that's precisely how we can have drivers
-> that run on any combination of platforms: the driver only cares about
-> the buffer guarantees, the platform description takes care of how they
-> are implemented.
->
-> Maxime
+Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
 -- 
-Jingfeng
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
