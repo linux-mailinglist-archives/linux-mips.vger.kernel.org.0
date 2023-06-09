@@ -2,37 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96087729305
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 10:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DCC7292FD
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 10:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240531AbjFII0k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Jun 2023 04:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S240036AbjFII0i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Jun 2023 04:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241417AbjFIIZx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 04:25:53 -0400
+        with ESMTP id S241435AbjFIIZz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 04:25:55 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37E6F3C03;
-        Fri,  9 Jun 2023 01:24:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6E6C3C27;
+        Fri,  9 Jun 2023 01:24:55 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q7XQE-0004Jv-00; Fri, 09 Jun 2023 10:24:38 +0200
+        id 1q7XQE-0004Jv-01; Fri, 09 Jun 2023 10:24:38 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 7C157C02EB; Fri,  9 Jun 2023 10:16:25 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:16:25 +0200
+        id 47F93C02EE; Fri,  9 Jun 2023 10:19:55 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:19:55 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mips: provide unxlate_dev_mem_ptr() in asm/io.h
-Message-ID: <20230609081625.GA8160@alpha.franken.de>
+Subject: Re: [PATCH 2/2] mips: asm-offsets: add missing prototypes
+Message-ID: <20230609081955.GB8160@alpha.franken.de>
 References: <20230516194000.548487-1-arnd@kernel.org>
+ <20230516194000.548487-2-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516194000.548487-1-arnd@kernel.org>
+In-Reply-To: <20230516194000.548487-2-arnd@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -43,27 +45,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 16, 2023 at 09:39:42PM +0200, Arnd Bergmann wrote:
+On Tue, May 16, 2023 at 09:39:43PM +0200, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The unxlate_dev_mem_ptr() function has no prototype on the mips
-> architecture, which does not include asm-generic/io.h, so gcc warns
-> about the __weak definition:
+> Building with -Werror and W=1 fails entirely because of warnings in
+> asm-offsets.c:
 > 
-> drivers/char/mem.c:94:29: error: no previous prototype for 'unxlate_dev_mem_ptr' [-Werror=missing-prototypes]
+> arch/mips/kernel/asm-offsets.c:26:6: error: no previous prototype for 'output_ptreg_defines' [-Werror=missing-prototypes]
+> arch/mips/kernel/asm-offsets.c:78:6: error: no previous prototype for 'output_task_defines' [-Werror=missing-prototypes]
+> arch/mips/kernel/asm-offsets.c:92:6: error: no previous prototype for 'output_thread_info_defines' [-Werror=missing-prototypes]
+> arch/mips/kernel/asm-offsets.c:108:6: error: no previous prototype for 'output_thread_defines' [-Werror=missing-prototypes]
+> arch/mips/kernel/asm-offsets.c:136:6: error: no previous prototype for 'output_thread_fpu_defines' [-Werror=missing-prototypes]
 > 
-> Since everyone else already gets the generic definition or has a custom
-> one, there is not really much point in having a __weak version as well.
-> 
-> Remove this one, and instead add a trivial macro to the mips header.
-> Once we convert mips to use the asm-generic header, this can go away
-> again.
+> Nothing actually calls these functions, so just add prototypes to shut
+> up the warnings.
 > 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/mips/include/asm/io.h | 1 +
->  drivers/char/mem.c         | 7 -------
->  2 files changed, 1 insertion(+), 7 deletions(-)
 
 applied to mips-next.
 
