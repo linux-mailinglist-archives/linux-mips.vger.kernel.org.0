@@ -2,42 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09977294D3
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 11:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D017294F5
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 11:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241478AbjFIJXa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Jun 2023 05:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S231300AbjFIJZl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Jun 2023 05:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239432AbjFIJXF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 05:23:05 -0400
+        with ESMTP id S241632AbjFIJY7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 05:24:59 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D5EE4685;
-        Fri,  9 Jun 2023 02:17:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AC6D4C3D;
+        Fri,  9 Jun 2023 02:19:04 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q7XQE-0004Jv-0B; Fri, 09 Jun 2023 10:24:38 +0200
+        id 1q7XQE-0004Jv-0C; Fri, 09 Jun 2023 10:24:38 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id AE685C02EE; Fri,  9 Jun 2023 10:24:10 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:24:10 +0200
+        id 73C6EC02EE; Fri,  9 Jun 2023 10:24:23 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:24:23 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Liviu Dudau <liviu@dudau.co.uk>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-Message-ID: <20230609082410.GL8160@alpha.franken.de>
-References: <20230606211600.1601694-1-liviu@dudau.co.uk>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: cpu-features: Use boot_cpu_type for CPU type based
+ features
+Message-ID: <20230609082423.GM8160@alpha.franken.de>
+References: <20230607055122.26175-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606211600.1601694-1-liviu@dudau.co.uk>
+In-Reply-To: <20230607055122.26175-1-jiaxun.yang@flygoat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -48,50 +42,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 10:15:58PM +0100, Liviu Dudau wrote:
-> Add device tree and bindings for the TP-Link HC220 G5 v1 wireless AP,
-> a consumer product from TP-Link based on MT7621.
+On Wed, Jun 07, 2023 at 01:51:22PM +0800, Jiaxun Yang wrote:
+> Some CPU feature macros were using current_cpu_type to mark feature
+> availability.
 > 
-> Changes since v3:
->  - Turns out that adding sub-nodes to the pcie invites more warnings from
->    dtbs_check so we're dropping those
->  - Running dtbs_check made me realise that I need to re-order the patches
->    so that the bindings are introduced first. Hence the major change in v4
->    is the re-ordering of patches
->  - Renamed the LEDs nodes to match the schema.
+> However current_cpu_type will use smp_processor_id, which is prohibited
+> under preemptable context.
 > 
-> Changes since v2:
->  - Remove WIP nodes for NAND flash that accidentally got included in v2
->  - Fix commit message with the actual 5GHz WiFi chip name
->  - Remove gmac and mdio nodes from device tree as defaults are sufficient
->  - Added sub-nodes under pcie for each of the WiFi chip with appropriate
->    compatible string.
->  - Collect Acks received for the device tree bindings patch
+> Since those features are all uniform on all CPUs in a SMP system, use
+> boot_cpu_type instead of current_cpu_type to fix preemptable kernel.
 > 
-> Changes since v1:
->  - Changed compatible for the board to "tplink,hc220-g5-v1"
->  - Updated the DSA switch nodes to better reflect actual usage.
->  - Disabled the fixed-link in gmac1
->  - Added device tree bindings in Documentation/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/include/asm/cpu-features.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> v3: https://lore.kernel.org/linux-mips/20230605150114.601102-1-liviu@dudau.co.uk/
-> v2: https://lore.kernel.org/linux-mips/20230529150833.526084-1-liviu@dudau.co.uk/
-> v1: https://lore.kernel.org/linux-mips/20230509200125.309026-1-liviu@dudau.co.uk/
-> 
-> Liviu Dudau (2):
->   dt-bindings: mips: Add bindings for TP-Link HC220 G5 v1 board
->   mips: dts: ralink: Add support for TP-Link HC220 G5 v1 board
-> 
->  .../devicetree/bindings/mips/ralink.yaml      |  1 +
->  arch/mips/boot/dts/ralink/Makefile            |  3 +-
->  .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 84 +++++++++++++++++++
->  3 files changed, 87 insertions(+), 1 deletion(-)
->  create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> 
+> diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+> index 2a0b90077b50..8c6d4a87db37 100644
+> --- a/arch/mips/include/asm/cpu-features.h
+> +++ b/arch/mips/include/asm/cpu-features.h
+> @@ -125,7 +125,7 @@
+>  ({									\
+>  	int __res;							\
+>  									\
+> -	switch (current_cpu_type()) {					\
+> +	switch (boot_cpu_type()) {					\
+>  	case CPU_CAVIUM_OCTEON:						\
+>  	case CPU_CAVIUM_OCTEON_PLUS:					\
+>  	case CPU_CAVIUM_OCTEON2:					\
+> @@ -373,7 +373,7 @@
+>  ({									\
+>  	int __res;							\
+>  									\
+> -	switch (current_cpu_type()) {					\
+> +	switch (boot_cpu_type()) {					\
+>  	case CPU_M14KC:							\
+>  	case CPU_74K:							\
+>  	case CPU_1074K:							\
 > -- 
-> 2.40.1
+> 2.39.2 (Apple Git-143)
 
-series applied to mips-next.
+applied to mips-next.
 
 Thomas.
 
