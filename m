@@ -2,159 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C689C729252
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 10:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96087729305
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 10:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239180AbjFIIKW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Jun 2023 04:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
+        id S240531AbjFII0k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Jun 2023 04:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240166AbjFIIJ2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 04:09:28 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF93835B5
-        for <linux-mips@vger.kernel.org>; Fri,  9 Jun 2023 01:09:07 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-565eb83efe4so13743627b3.0
-        for <linux-mips@vger.kernel.org>; Fri, 09 Jun 2023 01:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686298146; x=1688890146;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+JG9ScbeIgWCoIoD1lrBSynxF7pZ7ZmtCOtSuAlDGQ=;
-        b=RfeoHUBLwqk9vTTBDLCpOuzNXpllWDEkPYc6yjXtxGCPNmX/rvie991AU10lJs4XbF
-         9RzbOtcSEpi5Rh8KstlxITQN3Ffo4ROyfYENBHFqs9HkcG3CFgO7j5lBQrxeeGMGBjp2
-         NZdxOQon49qNf9HZ1Qgrz3xC18+gnVg36Hvk5SsHYUm7h4j5tszvUdFL2KV4ehwHCBOk
-         gyj3AdqSIMMtQdGmRCxc7HYtfEU+n7ezPeWYkyEIY3KjdS94V8qvWswp+jF2hFiGMFim
-         NoPZGExtzKBOx7SOm5zC/zUvIhzRSqstVSVI3uYZkXeW9ex9SLXGk6aLeA5PY5ojGjGB
-         epOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686298146; x=1688890146;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+JG9ScbeIgWCoIoD1lrBSynxF7pZ7ZmtCOtSuAlDGQ=;
-        b=JB2TGS6TK8cMk3LxoEtBoHoA5Ip7PPSvq12gEWaR34g1465jVgrO0eFoGR/qVL+dDH
-         sa16d9kM0wir7FKGplrYPDfQwFziGqwcwpObXsRu8gs7mkyFtKpVhIC8yJDA5QB88/Sg
-         OElI+EWVGCr27bj65cZAPY7wBNp29stlwUWwa2f6y3f+2palQAKR3wPVdlQaWuNToJwg
-         qWijM4B80tNp7s0cNMhKhYx5ggxxhn+nDyMiMWx3KYk0a5r2WxpNLr5NW3JaM1/fPEdC
-         q5o1wXIBDoA3y6ZFNsEziIkjE5bN2RprdGNbmGrO/8OZE6P6obTTH60aKn1hRT3526KJ
-         1ZUw==
-X-Gm-Message-State: AC+VfDxp5TIdlu4ZDb7KxJhi5DrRI5fyMj5ttZuXGFFd/V6hxDEH9TTd
-        KMIDi5errPt7bgtaF8eTLMgABQ==
-X-Google-Smtp-Source: ACHHUZ5DQYcZ9JTl8EUp4l7QLImYygbjncdx8ql55YYe3IsFqc7F1XNEab87Po2zAxMo3TGE3P0BfA==
-X-Received: by 2002:a0d:e684:0:b0:565:e87f:a78f with SMTP id p126-20020a0de684000000b00565e87fa78fmr500342ywe.25.1686298145738;
-        Fri, 09 Jun 2023 01:09:05 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id n19-20020a819c53000000b005688f7596ccsm453200ywa.78.2023.06.09.01.09.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:09:04 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 01:08:52 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        with ESMTP id S241417AbjFIIZx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 04:25:53 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37E6F3C03;
+        Fri,  9 Jun 2023 01:24:52 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1q7XQE-0004Jv-00; Fri, 09 Jun 2023 10:24:38 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 7C157C02EB; Fri,  9 Jun 2023 10:16:25 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:16:25 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 07/23 fix] mips: update_mmu_cache() can replace __update_tlb():
- fix
-In-Reply-To: <178970b0-1539-8aac-76fd-972c6c46ec17@google.com>
-Message-ID: <6852be98-64e6-6092-d1c-13124b97bc75@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com> <178970b0-1539-8aac-76fd-972c6c46ec17@google.com>
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] mips: provide unxlate_dev_mem_ptr() in asm/io.h
+Message-ID: <20230609081625.GA8160@alpha.franken.de>
+References: <20230516194000.548487-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516194000.548487-1-arnd@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I expect this to fix the
-arch/mips/mm/tlb-r4k.c:300:16: warning: variable 'pmdp' set but not used
-reported by the kernel test robot; but I am uncomfortable rearranging
-lines in this tlb_probe_hazard() area, and would be glad for review and
-testing by someone familiar with mips - thanks in advance!
+On Tue, May 16, 2023 at 09:39:42PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The unxlate_dev_mem_ptr() function has no prototype on the mips
+> architecture, which does not include asm-generic/io.h, so gcc warns
+> about the __weak definition:
+> 
+> drivers/char/mem.c:94:29: error: no previous prototype for 'unxlate_dev_mem_ptr' [-Werror=missing-prototypes]
+> 
+> Since everyone else already gets the generic definition or has a custom
+> one, there is not really much point in having a __weak version as well.
+> 
+> Remove this one, and instead add a trivial macro to the mips header.
+> Once we convert mips to use the asm-generic header, this can go away
+> again.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/mips/include/asm/io.h | 1 +
+>  drivers/char/mem.c         | 7 -------
+>  2 files changed, 1 insertion(+), 7 deletions(-)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306091304.cNVIspK0-lkp@intel.com/
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/mips/mm/tlb-r4k.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+applied to mips-next.
 
-diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
-index c96725d17cab..80fc90d8d2f1 100644
---- a/arch/mips/mm/tlb-r4k.c
-+++ b/arch/mips/mm/tlb-r4k.c
-@@ -293,11 +293,13 @@ void local_flush_tlb_one(unsigned long page)
- void update_mmu_cache(struct vm_area_struct *vma,
- 		      unsigned long address, pte_t *ptep)
- {
--	unsigned long flags;
-+#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- 	pgd_t *pgdp;
- 	p4d_t *p4dp;
- 	pud_t *pudp;
- 	pmd_t *pmdp;
-+#endif
-+	unsigned long flags;
- 	int idx, pid;
- 
- 	/*
-@@ -316,15 +318,15 @@ void update_mmu_cache(struct vm_area_struct *vma,
- 		pid = read_c0_entryhi() & cpu_asid_mask(&current_cpu_data);
- 		write_c0_entryhi(address | pid);
- 	}
--	pgdp = pgd_offset(vma->vm_mm, address);
- 	mtc0_tlbw_hazard();
- 	tlb_probe();
- 	tlb_probe_hazard();
-+	idx = read_c0_index();
-+#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
-+	pgdp = pgd_offset(vma->vm_mm, address);
- 	p4dp = p4d_offset(pgdp, address);
- 	pudp = pud_offset(p4dp, address);
- 	pmdp = pmd_offset(pudp, address);
--	idx = read_c0_index();
--#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- 	/* this could be a huge page  */
- 	if (ptep == (pte_t *)pmdp) {
- 		unsigned long lo;
+Thomas.
+
 -- 
-2.35.3
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
