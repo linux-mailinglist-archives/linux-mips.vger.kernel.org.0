@@ -2,147 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16783728C55
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 02:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A587E729068
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 08:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjFIAXC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Jun 2023 20:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S238108AbjFIGvO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Jun 2023 02:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjFIAXB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jun 2023 20:23:01 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0A22D72;
-        Thu,  8 Jun 2023 17:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686270180; x=1717806180;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hfORcgQzuOPbSklLPJdOW8LVCo5d5Go2LF+sADUuhiU=;
-  b=KKj2g/8okkDMbg1JK1vlqBo5WO8T2Yg1lw+o3aF091wCdUalOduElHZE
-   /Dm25vHxeFMHoGjV6sWSn5Su2YITlWNga4vMxgXE7dDv2kaHbMS3GgBB+
-   DCsYj58YJHY0MfAkyw2mT/fLUsyKAEFZ2x91wIwyDoHDjHnn0rfnygqnq
-   udMIAAAlFmWvv9fmmv5e32stVYtfwOz2z395WKhNnSwHjmxOv0irJ/KtP
-   KzeYl+aU2ZmFXkRyjXDZ/qalA+IdSgFWcYDGP09H4ACBHSCXnlwt9A+rT
-   1DmVw/jx3J7LG0OkeF6IfOuLjqXQU3ZbmHyMi3UlFPQ34jSHNAptUCuBJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="421061871"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="421061871"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 17:22:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="884393196"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="884393196"
-Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 17:22:57 -0700
-Date:   Thu, 8 Jun 2023 17:22:57 -0700
-From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/realmode: Make stack lock work in trampoline_compat()
-Message-ID: <20230609002257.GA3661@yjiang5-mobl.amr.corp.intel.com>
-References: <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <87h6rujdvl.ffs@tglx>
- <20230608233402.GA3430@yjiang5-mobl.amr.corp.intel.com>
- <a56a06c2-73fd-5295-3f6c-922ccb078488@citrix.com>
+        with ESMTP id S229482AbjFIGvK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 02:51:10 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0DA81BEB;
+        Thu,  8 Jun 2023 23:51:02 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxrOrVy4JkcfAAAA--.2919S3;
+        Fri, 09 Jun 2023 14:51:01 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuTSy4Jk8QsKAA--.30794S3;
+        Fri, 09 Jun 2023 14:51:00 +0800 (CST)
+Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
+To:     Arnd Bergmann <arnd@arndb.de>
+References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
+ <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
+ <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
+ <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+        linux-ia64@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-parisc@vger.kernel.org, x86@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
+Date:   Fri, 9 Jun 2023 14:50:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a56a06c2-73fd-5295-3f6c-922ccb078488@citrix.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8AxZuTSy4Jk8QsKAA--.30794S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Cr1UWFy8Kr1kJFy7Kr47KFX_yoW5JFyrpF
+        4UGF1j9r4kAr1fAFn2yw4jqa4Fyws7KF1aq3s0gryxJFs0gFyrtry29w4agFWqvr18Jr4j
+        93yUXFy5uay0yFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUmlb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
+        wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxV
+        AFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr
+        1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjxU7uc_DUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 12:57:46AM +0100, Andrew Cooper wrote:
-> On 09/06/2023 12:34 am, Yunhong Jiang wrote:
-> > On Tue, May 30, 2023 at 12:46:22PM +0200, Thomas Gleixner wrote:
-> >> The stack locking and stack assignment macro LOAD_REALMODE_ESP fails to
-> >> work when invoked from the 64bit trampoline entry point:
-> >>
-> >> trampoline_start64
-> >>   trampoline_compat
-> >>     LOAD_REALMODE_ESP <- lock
-> > One possibly dumb question and hope get some hints.
-> 
-> There's a phrase.  "The only dumb question is the one not asked".
-> 
-> If you have this question, there's an excellent chance that someone else
-> reading this thread has the same question.
-> 
-> >  The LOAD_REALMODE_ESP is
-> > defined under .code16 directive and will be used by 32-bit mode caller also. Is
-> > it ok because the instructions there will be same for both 16-bit and 32-bit? I
-> > checked
-> > https://ftp.gnu.org/old-gnu/Manuals/gas-2.9.1/html_chapter/as_16.html#SEC205 and
-> > don't find much information there.
-> 
-> The position of the LOAD_REALMODE_ESP .macro itself doesn't matter. 
-> It's just some text which gets pasted elsewhere.  Imagine it just the
-> same as running the C preprocessor on a file before compiling it.
-> 
-> As you note, some expansions of the macro are in .code16, and some are
-> not.  This does result in different bytes being emitted.  The default
-> operands size flips between .code16 and .code32, so there will be some
-> 0x66 prefixes in one mode, and not in others.
-> 
-> The important point is the l suffix on btsl, which forces it to be long
-> (32bit) irrespective of the default operand size.
-> 
-> So yes, it will work, but that's because gas is handling the differing
-> encodings automatically based on the default operand size where the
-> LOAD_REALMODE_ESP gets expanded.
-> 
-> Hope this helps,
-Thank you for the explaination, it's quite clear now.
-> 
-> ~Andrew
+
+
+On 06/08/2023 08:56 PM, Arnd Bergmann wrote:
+> On Thu, Jun 8, 2023, at 09:04, Tiezhu Yang wrote:
+>> On 05/09/2023 05:37 PM, Arnd Bergmann wrote:
+>>> On Tue, May 9, 2023, at 09:05, Tiezhu Yang wrote:
+>>>
+>>> I think we are completely safe on the architectures that were
+>>> added since the linux-3.x days (arm64, riscv, csky, openrisc,
+>>> loongarch, nios2, and hexagon), but for the older ones there
+>>> is a regression risk. Especially on targets that are not that
+>>> actively maintained (sparc, alpha, ia64, sh, ...) there is
+>>> a good chance that users are stuck on ancient toolchains.
+>>> It's probably also a safe assumption that anyone with an older
+>>> libc version won't be using the latest kernel headers, so
+>>> I think we can still do this across architectures if both
+>>> glibc and musl already require a compiler that is new enough,
+>>> or alternatively if we know that the kernel headers require
+>>> a new compiler for other reasons and nobody has complained.
+>>>
+>>> For glibc, it looks the minimum compiler version was raised
+>>> from gcc-5 to gcc-8 four years ago, so we should be fine.
+>>>
+>>> In musl, the documentation states that at least gcc-3.4 or
+>>> clang-3.2 are required, which probably predate the
+>>> __SIZEOF_LONG__ macro. On the other hand, musl was only
+>>> released in 2011, and building musl itself explicitly
+>>> does not require kernel uapi headers, so this may not
+>>> be too critical.
+>>>
+>>> There is also uClibc, but I could not find any minimum
+>>> supported compiler version for that. Most commonly, this
+>>> one is used for cross-build environments, so it's also
+>>> less likely to have libc/gcc/headers being wildly out of
+>>> sync. Not sure.
+>>>
+>>>       Arnd
+>>>
+>>> [1] https://sourceware.org/pipermail/libc-alpha/2019-January/101010.html
+>>>
+>>
+>> Thanks Arnd for the detailed reply.
+>> Any more comments? What should I do in the next step?
+>
+> I think the summary is "it's probably fine", but I don't know
+> for sure, and it may not be worth the benefit.
+
+Thank you, it is very clear now.
+
+> Maybe you can prepare a v2 that only does this for the newer
+> architectures I mentioned above, with and an explanation and
+> link to my above reply in the file comments?
+
+Only arm64, riscv and loongarch belong to the newer architectures
+which are related with this change, I am not sure it is necessary
+to "unify" uapi bitsperlong.h for them.
+
+Anyway, let me try, I will send a new version, maybe this is going
+to progress in the right direction.
+
+Thanks,
+Tiezhu
+
