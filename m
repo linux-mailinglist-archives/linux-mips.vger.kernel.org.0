@@ -2,92 +2,237 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2484A729B00
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 15:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA80572A0CE
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jun 2023 19:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240609AbjFINFT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Jun 2023 09:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S230005AbjFIRCe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Jun 2023 13:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjFINFR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 09:05:17 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9EF2D70;
-        Fri,  9 Jun 2023 06:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1686315913;
-        bh=hT63nSeqfXe+w/wcTH/EVqDDlEdDBDYjRZhYbxbpM9E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=npo+qrCHsIrTavth6RFp9whOgzBlVXmzRzYXUH+dxBlx16fsDq62B5M0BsrtN4VtJ
-         1fdfpCWNVPfQBRPxlsk/T5jnywsDDxzlQF9T3tubgjW3v4DrYce6kTsX/rRJiWMx5i
-         hBEItCRBrPuBf/r8DMY+d6WFyBryIiRnxabHdAlU=
-Received: from [192.168.124.11] (unknown [113.140.11.3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 48AE16638D;
-        Fri,  9 Jun 2023 09:05:09 -0400 (EDT)
-Message-ID: <5de9d69817138f2ccae0867b5ccb602dcfa007a3.camel@xry111.site>
-Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-        linux-ia64@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-parisc@vger.kernel.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        loongson-kernel@lists.loongnix.cn
-Date:   Fri, 09 Jun 2023 21:05:07 +0800
-In-Reply-To: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
-References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
-         <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
-         <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
-         <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
-         <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
+        with ESMTP id S229573AbjFIRCe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Jun 2023 13:02:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F601706;
+        Fri,  9 Jun 2023 10:02:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 661E165A32;
+        Fri,  9 Jun 2023 17:02:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C774BC433A1;
+        Fri,  9 Jun 2023 17:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686330151;
+        bh=vxAb82+vAl+BH98Z/zX2UFkfYunrykLKznTO4Bf32/o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mi+1/ju1etiB6d0wiW4caAjQqZLe00FeV1NkWgT7OHTC7YXhbWrImPhkjcdfLthep
+         R4NctZPvMcT6YU1NN0hlAPJu7mKlMOhF8XW1w/JUcKEX6IymvTValQ7iJLgbthe+rr
+         JB0Y/WdslTbhCTkFmElAt6A2q9AjkZ65JlkLpT6RWSVvoxHuctv3jAm4tkLSY6DnGo
+         sjANix/3DDuGcfUiGq4bVWyWyi4Aib0wLcEVEjV2uGWiQih+ufGfWA3fM021KKgeWY
+         Dt91VQ5xBfF0lTdjr2IkoyUEOPUU+/xMsQaC1Ua+lm/Kg5AHwmxvY3mxjDI1kZZXq8
+         eusqU7U1U5lpg==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f644dffd71so2619959e87.1;
+        Fri, 09 Jun 2023 10:02:31 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx+c0l4S1qiuEKAlyt/LCqcUkiHM3tSjSq0oVFlun3511lj+UTt
+        ZK2TksPRMtOFMcLNOK/fpzzBuN4Bs/Joh/DUnuY=
+X-Google-Smtp-Source: ACHHUZ4u3y79XyQLMHF4er59h6QhhYai8KonYYOOA8YDDos4NgFbnLZdqPfEIRGQCpyydTzD04kcj6u0lkxU6y+OWW4=
+X-Received: by 2002:a2e:9891:0:b0:2b1:e5d8:d008 with SMTP id
+ b17-20020a2e9891000000b002b1e5d8d008mr1338098ljj.37.1686330149805; Fri, 09
+ Jun 2023 10:02:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230601101257.530867-1-rppt@kernel.org> <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan> <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+ <20230605092040.GB3460@kernel.org> <ZH20XkD74prrdN4u@FVFF77S0Q05N>
+ <CAPhsuW7ntn_HpVWdGK_hYVd3zsPEFToBNfmtt0m6K8SwfxJ66Q@mail.gmail.com> <20230608184116.GJ52412@kernel.org>
+In-Reply-To: <20230608184116.GJ52412@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 9 Jun 2023 10:02:16 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5YYa6nQhO2=zor75XkdKpFysZD42DgDRkKZvQT6aMqcA@mail.gmail.com>
+Message-ID: <CAPhsuW5YYa6nQhO2=zor75XkdKpFysZD42DgDRkKZvQT6aMqcA@mail.gmail.com>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2023-06-09 at 14:50 +0800, Tiezhu Yang wrote:
+On Thu, Jun 8, 2023 at 11:41=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> On Tue, Jun 06, 2023 at 11:21:59AM -0700, Song Liu wrote:
+> > On Mon, Jun 5, 2023 at 3:09=E2=80=AFAM Mark Rutland <mark.rutland@arm.c=
+om> wrote:
+> >
+> > [...]
+> >
+> > > > > > Can you give more detail on what parameters you need? If the on=
+ly extra
+> > > > > > parameter is just "does this allocation need to live close to k=
+ernel
+> > > > > > text", that's not that big of a deal.
+> > > > >
+> > > > > My thinking was that we at least need the start + end for each ca=
+ller. That
+> > > > > might be it, tbh.
+> > > >
+> > > > Do you mean that modules will have something like
+> > > >
+> > > >       jit_text_alloc(size, MODULES_START, MODULES_END);
+> > > >
+> > > > and kprobes will have
+> > > >
+> > > >       jit_text_alloc(size, KPROBES_START, KPROBES_END);
+> > > > ?
+> > >
+> > > Yes.
+> >
+> > How about we start with two APIs:
+> >      jit_text_alloc(size);
+> >      jit_text_alloc_range(size, start, end);
+> >
+> > AFAICT, arm64 is the only arch that requires the latter API. And TBH, I=
+ am
+> > not quite convinced it is needed.
+>
+> Right now arm64 and riscv override bpf and kprobes allocations to use the
+> entire vmalloc address space, but having the ability to allocate generate=
+d
+> code outside of modules area may be useful for other architectures.
+>
+> Still the start + end for the callers feels backwards to me because the
+> callers do not define the ranges, but rather the architectures, so we sti=
+ll
+> need a way for architectures to define how they want allocate memory for
+> the generated code.
 
-/* snip */
+Yeah, this makes sense.
 
-> > > > In musl, the documentation states that at least gcc-3.4 or
-> > > > clang-3.2 are required, which probably predate the
-> > > > __SIZEOF_LONG__ macro.
+>
+> > > > It sill can be achieved with a single jit_alloc_arch_params(), just=
+ by
+> > > > adding enum jit_type parameter to jit_text_alloc().
+> > >
+> > > That feels backwards to me; it centralizes a bunch of information abo=
+ut
+> > > distinct users to be able to shove that into a static array, when the=
+ callsites
+> > > can pass that information.
+> >
+> > I think we only two type of users: module and everything else (ftrace, =
+kprobe,
+> > bpf stuff). The key differences are:
+> >
+> >   1. module uses text and data; while everything else only uses text.
+> >   2. module code is generated by the compiler, and thus has stronger
+> >   requirements in address ranges; everything else are generated via som=
+e
+> >   JIT or manual written assembly, so they are more flexible with addres=
+s
+> >   ranges (in JIT, we can avoid using instructions that requires a speci=
+fic
+> >   address range).
+> >
+> > The next question is, can we have the two types of users share the same
+> > address ranges? If not, we can reserve the preferred range for modules,
+> > and let everything else use the other range. I don't see reasons to fur=
+ther
+> > separate users in the "everything else" group.
+>
+> I agree that we can define only two types: modules and everything else an=
+d
+> let the architectures define if they need different ranges for these two
+> types, or want the same range for everything.
+>
+> With only two types we can have two API calls for alloc, and a single
+> structure that defines the ranges etc from the architecture side rather
+> than spread all over.
+>
+> Like something along these lines:
+>
+>         struct execmem_range {
+>                 unsigned long   start;
+>                 unsigned long   end;
+>                 unsigned long   fallback_start;
+>                 unsigned long   fallback_end;
+>                 pgprot_t        pgprot;
+>                 unsigned int    alignment;
+>         };
+>
+>         struct execmem_modules_range {
+>                 enum execmem_module_flags flags;
+>                 struct execmem_range text;
+>                 struct execmem_range data;
+>         };
+>
+>         struct execmem_jit_range {
+>                 struct execmem_range text;
+>         };
+>
+>         struct execmem_params {
+>                 struct execmem_modules_range    modules;
+>                 struct execmem_jit_range        jit;
+>         };
+>
+>         struct execmem_params *execmem_arch_params(void);
+>
+>         void *execmem_text_alloc(size_t size);
+>         void *execmem_data_alloc(size_t size);
+>         void execmem_free(void *ptr);
 
-Indeed, I've digged some history and __SIZEOF_LONG__ was added into GCC-
-4.3 (in 2008).  And I didn't realize the bitsperlong.h in tools
-directory is a copy from uapi.
+With the jit variation, maybe we can just call these
+module_[text|data]_alloc()?
 
-> > > > On the other hand, musl was only
-> > > > released in 2011, and building musl itself explicitly
-> > > > does not require kernel uapi headers, so this may not
-> > > > be too critical.
+btw: Depending on the implementation of the allocator, we may also
+need separate free()s for text and data.
 
-> Only arm64, riscv and loongarch belong to the newer architectures
-> which are related with this change, I am not sure it is necessary
-> to "unify" uapi bitsperlong.h for them.
+>
+>         void *jit_text_alloc(size_t size);
+>         void jit_free(void *ptr);
+>
 
-At least it will stop the engineers working on "the next architecture"
-from adding an unneeded bitsperlong.h :).
+[...]
 
+How should we move ahead from here?
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+AFAICT, all these changes can be easily extended and refactored
+in the future, so we don't have to make it perfect the first time.
+OTOH, having the interface committed (either this set or my
+module_alloc_type version) can unblock works in the binpack
+allocator and the users side. Therefore, I think we can move
+relatively fast here?
+
+Thanks,
+Song
