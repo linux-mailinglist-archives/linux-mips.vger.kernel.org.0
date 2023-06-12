@@ -2,364 +2,599 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7910F72C987
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Jun 2023 17:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3893C72CCA7
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Jun 2023 19:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235867AbjFLPPJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Jun 2023 11:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S237101AbjFLR32 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Jun 2023 13:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbjFLPPI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jun 2023 11:15:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2A198;
-        Mon, 12 Jun 2023 08:15:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8481861E2D;
-        Mon, 12 Jun 2023 15:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8ACC433D2;
-        Mon, 12 Jun 2023 15:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686582905;
-        bh=dGC149c5x01RTzK/Vu79dUHLei19YO73aaltgb70V8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yz7WOJ9+2MdrrAB7Pu166c9/NWzPb/G53ppcA3TywMNI0ghx0CvTLpr2SkwqeMS/l
-         zJuAc95rD8LjN4nwHGn0O7wmSH0uxEp+M9z56ZPfhIjkzMtVW7xYq7Bbbg9WuGKqIa
-         ViB9KeD13dEkiLDGZwqGZaaz4my+ePX5gH/HhI7XflKDZmweXD2VPXdgoPLlO475Ni
-         JATJY/Uea9wMGDT6BSa1Di3EBpewvTORQMx8sg2RwpoUf3Eb95VPiMAp/CMbNyu7QT
-         F3RzcJsHxY/yku5H8fFk1c26LoChFrHz+CySAOjRtJRxDDDnzxVKBxZU0NAmBJm7CD
-         lrHA6UZlJ/kuA==
-Date:   Mon, 12 Jun 2023 17:15:03 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-Message-ID: <lebytp7civogcw3eluwja74g5w4jvpnjug7jp4ec5rzuch6wu6@inmzzvnaozuq>
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
- <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
- <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
- <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
- <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
- <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
- <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
+        with ESMTP id S237507AbjFLR3Q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jun 2023 13:29:16 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C49130;
+        Mon, 12 Jun 2023 10:29:14 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CHOHL2004976;
+        Mon, 12 Jun 2023 17:28:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=UQ1EtoSFF6VEAIpCeRGrEoZ14NhzzOwMZTfGYtyD96g=;
+ b=dqQiZO3MfgmlJHTe14dIpcLTM7wcBW1/dHHVYOVyodlqdhqz7on/qVvzt1gdxb9x8GNE
+ J0L4hfwCXQmdej97wKv3Ib0oIlkDX8vC/pCO/YmNtCkgFhW43mgLn/bh2WU2w0+wYVly
+ E465RGASMKOOpZzWSZeF7hUzuKlOAJCpnYHzHBQKWz3PTnk/DKaLB/64kAMRslzxqF7+
+ q1PVX+dUGkVN7UJvq1Fca8N2Jpx3De/gCmcL++qFmFpfh8O9nmdaDNWo+CIUTjVGMEdS
+ +CsZpFtrFMmdla2yrsDSHigWHyqf5BYS8G9mpGOhp4KJSfIIHwRxZ9uTmhJtS75B92JP 5Q== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4g3bkjny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Jun 2023 17:28:41 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35CH4Ml1016344;
+        Mon, 12 Jun 2023 17:28:39 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm32y0u-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Jun 2023 17:28:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GcKyi087Ez0PnmCstn0HRSci/0KCjlR+TSBRg17zMWZEUYdZr5panMljrlH3aSfPhactqbwm1CJJLqME/WmSq9aJ+rbSX4pP/T/ZVU795WotQ/ZfGLfcKlypQNq25ugLqkTMDPRId4mwAi1GbuunaoWrHk65DXIy8l4pRwSeGWLs7EUn/OfigFUmAyr9uRh6syDSAjlPtYH0X6E7w7Lje2x/hQKXSZKsung9+y0W9rLrhpdBY9hNd6i/eLT8Zu6gkSdAiT2H4Q90v92an8JDFOSz3sBBBetCBQarlm2Li2hKE3PTkOc/h6IXNYauuUeqkXPvyCacM/qZBYmk+tL/yA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UQ1EtoSFF6VEAIpCeRGrEoZ14NhzzOwMZTfGYtyD96g=;
+ b=n/06Ii0xez02M41kzGYDHHaiEvOXBWp6QFgMa9PV641VCQ2NJGPlY1Pxpg9MUMyqE7q+QufIF46NQpOYAEU0rjbOiYxtiMA5K5Tq4JrKP5ZMksE0B3LXtP6CfdzNEmDPKgwAtcjr+hkV8rvCBdLDCFwOBuuj4r+RfsDCmHufRqp2/rpQRGykaSlD08HEArtx1MiXgWMHUagHSO07N0B4XBfjixPM4CVms1+h228ia6RCdOTK7oC4nSCo2pxFxpWeHvpFGsIND7rcdvjlqksUq8h/kKPG58pBM3d/lB6iIC/BkHdyrG47CJdIWhUSuU3y2k7+zq21cciFqAcItvuCwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UQ1EtoSFF6VEAIpCeRGrEoZ14NhzzOwMZTfGYtyD96g=;
+ b=uD0xfMyxJNayxiT5TzKJGjHHwz1vKQpARcX9jXbbX8bMS4Xr5aAnt8h3g8E8QZnk6E22cUTqXgmBik2f3xNPWaaIKOcvd9oY5MUa+Xc+q4BjtCHshbwgZwHjGRQaWlsCnS3fz5mxilXZFJa028y8cZ72vpBNQ6NskBCfy/oMiqo=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by MW4PR10MB6509.namprd10.prod.outlook.com (2603:10b6:303:21b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
+ 2023 17:28:15 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
+ 17:28:15 +0000
+From:   Eric DeVolder <eric.devolder@oracle.com>
+To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, 86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org
+Cc:     kernel@xen0n.name, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
+        keescook@chromium.org, paulmck@kernel.org, peterz@infradead.org,
+        frederic@kernel.org, akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        eric.devolder@oracle.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
+Subject: [PATCH v1 00/21] refactor Kconfig to consolidate KEXEC and CRASH options
+Date:   Mon, 12 Jun 2023 13:27:52 -0400
+Message-Id: <20230612172805.681179-1-eric.devolder@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SA0PR11CA0028.namprd11.prod.outlook.com
+ (2603:10b6:806:d3::33) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dtzbhhtxjptopns7"
-Content-Disposition: inline
-In-Reply-To: <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|MW4PR10MB6509:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8edb41f7-f1c4-4d3d-479f-08db6b6a6760
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6ICJx/j60PsYhcVAbjEvSsvIErXvARMIsdJyI1LiLS9r78yMolqbcPFKREruuF4OYxoSIFBPsy+gZPqks6DEfVVoLd+N6r1Dy9uUXMIFuwk+FQV5sLZGe2zZ3QNiEe6f0kZGclJjJabaK9UT+tOLKru77QoZPzyHEbfAwaVVxToikRYyD46Gz2Mg0Vxp0Bt7Et/1AKS79ZVGvU5q/fgdMqw1ck4jwEYLhFBxfFtmy3HECCWQhB9jj7XBymmvIcrKxyNKkYCIjtSUZ4eSYp6ZKpRPdl5xJ58TLklHhVdzFnHZXaRObt2mtARjkr14njNkiTFxUmnsF6InKAVj+YUPfogLZNB0pnBeG8YRgHBTpyxnk3nG2J7hXlAmu5vDjpn68uUl6wbslra7R74ARI8lmk+9WQabgvdcNsGL4VaVpTHh7ql+dllG7nbBhF4+Aa2amH7jYM0odz1S6XTw+YklSXSPjgYffQH2kpwxUq+Y1N4u6bTr5E3MrcgK60s49figpaUSdeT/4DZThpn/R54UjfXulCwLQ941LJzhHpG2gqz7ZbLz+V9vxNzjTn0JcGcqundZsMumcEbutvDjsanqNN6Kpu06yU0CS+2Xj1GhD8EN+Kyagr1CXNXXnLuRNplf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199021)(66556008)(66476007)(66946007)(6666004)(966005)(107886003)(316002)(4326008)(478600001)(86362001)(36756003)(6512007)(6506007)(1076003)(26005)(83380400001)(186003)(5660300002)(8936002)(7366002)(7416002)(8676002)(30864003)(2906002)(6486002)(7406005)(921005)(41300700001)(2616005)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gP7R+InWkzgQOqGTeSYuGNBiH7iderwHfwrhCSv/bUeRTuREzN26RemUG78x?=
+ =?us-ascii?Q?MtMZCL1DfSOcIP3KBtkG1fz1+nAOhXcW+Ph9XpXLPCYbBSThIVJPR2Psq9Zv?=
+ =?us-ascii?Q?RPIvKwpngFoJDOKmYQqcTQad+k6bAuMRVI/P5MBLMyTRB9zq4ECTbQYlhChr?=
+ =?us-ascii?Q?G8V9zwfllqo8K32a9CdvNOdyTIdjLHnlyT5vQwSm1O0bSC3ju+QJkGzkyg1S?=
+ =?us-ascii?Q?XqAhROgFTnEoPSlxh634UkJOo8mEkSsqSyViWro9keYAktS9nUAEHU0Rxc9E?=
+ =?us-ascii?Q?/zu51KVr/NOB9JFWjAs1ndmyu44a9tMjyzChbvpOxZSR+xvbM4lrbgVp83wl?=
+ =?us-ascii?Q?J7cVd0rlrLLZrmxnASCctXLBZxu4j0dKrU9F5jnqirDuzmc+PPeDucLwwuGg?=
+ =?us-ascii?Q?sQDfhxDhtoEqB0tQgTtxGlXx7YzRWFB+L53bbeFLnO3o4ISQPRMFDJc5Pjpx?=
+ =?us-ascii?Q?OOhiJr9jF33Ye6XfBctXHhhFxlLZSxN+cgLelFbLu8pvluBADc0Mm/1Hirua?=
+ =?us-ascii?Q?3vdnhLC2zAvEiEAffM7I5qriB5ybOUefJW4TT/J8WZwdWchZb/1q67FgXTec?=
+ =?us-ascii?Q?cZDos6BMCQ8PBlwyTDUmMoPiEMkZ1bJXbQuZNP+AEQomh5zcOskWVLswa1qx?=
+ =?us-ascii?Q?F4eTd4t2NaYeE3MNSoLva2hhkL2DAfzu9WzWq/SCAxaPkquOx24XUOZJY2UK?=
+ =?us-ascii?Q?Igm+PuLKYEUGsgEpZyzyKozwA49VwNjns+KPPl5rcHje2Mevv8uTa1zaFkiC?=
+ =?us-ascii?Q?FecYwS6NT0rNkoIUjeYk9B+bQ/diXOGZ87tPzahzP6WrCbuYQE36IAhgfRO9?=
+ =?us-ascii?Q?ZIs5rCJyL9DZlCq2PvLBkKq2LxTJfqJCmXt4jWnPgh+x9BoO3SPiReKIcYRk?=
+ =?us-ascii?Q?RKquaLMU6VVBTo4YRAb4n2qk4L2zbKMbIBspQDW3EYasbUVCc4jQJK/Q61Z7?=
+ =?us-ascii?Q?dvIPyMAUGiY4IEZImVcpGDvVsrGmJZfAtbNnnL11zoLFzkYtqZmEHGoQN9+I?=
+ =?us-ascii?Q?9npAPQvZtTJggosQTf7IszVBf+AIjzIcGN1n0ExsRMQBrcjs9rKDRdDR9lbg?=
+ =?us-ascii?Q?wvasuoZkIdrO4zukrS8Ld0GsmVoLHaOSjg3PRuWHXQ6IpqRrr2CeBDXP4pD3?=
+ =?us-ascii?Q?eVvlSs+ZkMSCrBAFY5+o0FN3/HXC+mTEmQExrbtRiz7uLeMhORh0EcPNfAtX?=
+ =?us-ascii?Q?XNwVmuumHDCoOQBela7KAvSecxS/AGW4+/KIsGyiwLOSP9Xn0RjDuoAIiQIb?=
+ =?us-ascii?Q?kmDrkCRk8wxLlk5vqd/1L/FlkRHrRGcPhaCd91fsajOUwi638qzRTSGS9C/e?=
+ =?us-ascii?Q?ZO77qhZIP+r5oabgLYNkhIJ4VUHjuXCIlqGRu4T276a5Ss94/firSN/0YJcH?=
+ =?us-ascii?Q?WHMTzNlHaF/7FQUIpdOFezLE/kieinv1IBmOI9gGeLNzkGgoh0FOK36wwz66?=
+ =?us-ascii?Q?E9z2IXuWAYUBX9xcMcoMR7SY97ZcadEqV/QB/GdXGRHBBfgmxUzAkvhnQvOk?=
+ =?us-ascii?Q?496bS8fi2gdZMG9gORgbgl0K8zoaa4VyT6it0EaTshRulcUNTRZIz59cH8fy?=
+ =?us-ascii?Q?xhweLk0cbk9WB6WvIcADbeUfNXEdmUleWXXyY2W8pg9CYmt2Y/SY/1q9Pk6Y?=
+ =?us-ascii?Q?3g=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?NQKEe9oB6j3u2vRAK2LzwK7zh0j+xrHJYP57EUHRqFjEdxfHLcFiN/C82NaW?=
+ =?us-ascii?Q?RATI74B4i8q30u8ulW8J9FUn1R3XMUDdCjsRLmAxU/1nnZd9EZG3+dxGLnod?=
+ =?us-ascii?Q?0l1N0JBXEng8u10DpmaV93uZsw4IpcljzmxPCfQbjYNc7v2F7+5cVgy8sa0T?=
+ =?us-ascii?Q?XGoubJKsUsAn9zz+5xWdkTODtvRXl7xXtIm/VbrUzF4SCGzxWT9K0eBzgMaM?=
+ =?us-ascii?Q?yNz2co1oqazE7BM+hfSRMdb6dXyeysohtX2iuce6DhvSdHj8OQj8kX3Ux8Bj?=
+ =?us-ascii?Q?AX4dDpGFCYCIfLxu04oCPZGJoUL4QqpNmDcL3zSA6KYTb/N6B1v/RbrIjqSd?=
+ =?us-ascii?Q?LUVsp5lNU6KM1YqyiuvEzIEJSfMsLXRPfYqEbcN1NH8pZFc6kwlZpvPXGKho?=
+ =?us-ascii?Q?VxJW7+qvcrV1hhRypftQyws66XWH5XdFuANqWiDD3tk2Z4ZBKp6tmyhU5iAY?=
+ =?us-ascii?Q?13PrCCOUkG/oTFzRtLfrgYifG1H6FcypkjI8OgsszoN94erChrg+xsrDBI7x?=
+ =?us-ascii?Q?u9YzPs7m7wxjFXqGyIDaTn88CjRlCIZMneacwAEXaeoyjyUqlyj2fPRds4yU?=
+ =?us-ascii?Q?4F2u+y0MN6p28fKToMwX+jHJ7EQKHjVfEeNCU6/UVwUucPV1O5//bckwNxnN?=
+ =?us-ascii?Q?32ocsUPq7E/lNPPFUM4YHztQ9TxWSdAzqbyn8ivyFFYcbwBGsFBIro7wz2Ut?=
+ =?us-ascii?Q?w3aTME8u8KcFuW6T25GGghTFxdjmOVO26ACr1MPXKoI6BM+TGQQTBY6Pw5C8?=
+ =?us-ascii?Q?rzj1yeVTa2IbNZEpJDoD2JgTRyMTCV/ZmVKILKWI2idmkVr6CHnz5TEErY1V?=
+ =?us-ascii?Q?K9fiOvdxZGGXUzdg8SP+ktOT8OKnwdOp7vb8Qjw5v3za1DXW9mRAofc6bKeO?=
+ =?us-ascii?Q?hYy1sni042zDwXBN/Cle+rrzUBb0LXY+/ie5jLK+lVUH6Q6dhcbLF1OvAKOt?=
+ =?us-ascii?Q?d87S20N9Lw0DCdJMDaELHycCc9g5KFDXHZ0cWUU2Oidf+MfZh4wvIpsOpJqj?=
+ =?us-ascii?Q?kLIwIBTo8cK+1+52V7a4Nm1kuSLtLtwEI5KepCa5Rn1q6CK5ggW4yrJrF4Et?=
+ =?us-ascii?Q?jiAFGfCW7QfwmWxSmm4cheDPgdy8VK2jiPyMXN6gQg2CMqcpyA3lFS7HcQBI?=
+ =?us-ascii?Q?EzkFrMzxtdUOQxc5wW+AO7vzz9HAE43t2Xfds3COYbRt+0/UvlmI+vmoFle+?=
+ =?us-ascii?Q?H0LuuT07hjNqsIpGQtyRxMaiIWt5xJwgVYws2SbnoqMcgWqNIHRJTEXNDDDC?=
+ =?us-ascii?Q?7h5YZXi40Uy0g+tBLIfvSF1zhAP7uia/Z2Mpq9mvVIRG5m6G23d58zgl2mpt?=
+ =?us-ascii?Q?gSRRsSJb3yZtNl0bahXY9LuR83l/x6A7d2OmxBuxZz3FBprLaQ/GexcZo0P+?=
+ =?us-ascii?Q?pnJnayW79jv2LsdWgUrXykuh1f7j81uIHQ13uj0FWWcYSfk/7iIkf+ObrPRk?=
+ =?us-ascii?Q?Z6rYUyo7IRZIm6PyosY3jd3RXsrYgUoB9+i70jQpeMe//rvUMhCx2ryHY2KU?=
+ =?us-ascii?Q?vsfxh+6ixbXadSQqJzBYC6xLq+LQah81dgIzMbTocguw/xownZOm+EXWhIb6?=
+ =?us-ascii?Q?mS3zM6bpcUkhPuy5j5Lny8wnozlxyfZUWV2SiXLAy8F4wXeU3spmBKKQOCFW?=
+ =?us-ascii?Q?g/hysUu/uVqOshKMfVpJzA6ooxJMIkkX8jh3WRKqTziDU8qCmnSyEWs+FLvW?=
+ =?us-ascii?Q?5g3p13koPok5q5q0iOvB+x8pzs1447dnboHgYvLBtB6k5uYpnRZDLwnpAKqD?=
+ =?us-ascii?Q?S6V3gwFoQjKvdt1qn2JmGfd/zcPh/Cvly+TwUv6jELCnvvABrd/11dmH4sjQ?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: SQ0fwUlpOTCNSqrAiODFf3RQCLwuGMfY22iSIW5uirX19/0rfDgKUeJpydxWJ7Yi9v0KudxR1mzew1ooA8z2bnsmwRJI2lzRRaEkP3Yr+pElRTqTl3BqpG5ybnvF1xHpiLfrzjj2HR6AUkMAssO8gnc3Bzmo5WRZkn7O4xQfk/B12HjDO/8eDvCftpsAS5h0ve5FIJn1TJXFdcY7GsRAk+iYZa+dQjMjqQos2m9w8xW5VcdSdLcRJgII41giQ5fhgMTihjIWqJTayrNjbDe5TZAZ9T3akb+4AGg+WXqoQLC1TluimGAdbYP5AYje1aMmSt1NQ6kvold1Ns8QFt9ZHdWOSu3mCQJX4XuB2Ywb16CF6N481n/F6wPGEAlRQN3x8JAjQS1C3BUYNjoxmS/SSkio6Op250RscyRYo1IklmCP5/hjCBu+0HML38w1JxUUVSy8Mv2fALewIg==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8edb41f7-f1c4-4d3d-479f-08db6b6a6760
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 17:28:14.9727
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X/v9fb7OcLIQGpABj2lNlTiwOOnkjggrUYXzsEuIGtABMGtnGczWCdHQtYiGaRNpPzateFqmkCP2Dhs7hgF3drqkerGh5/p2D2bpOskJ5+s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6509
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_12,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=923 bulkscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306120152
+X-Proofpoint-ORIG-GUID: JZylBnPhuTcQ40X3OuS9cpgo1Bpwsxdw
+X-Proofpoint-GUID: JZylBnPhuTcQ40X3OuS9cpgo1Bpwsxdw
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The Kconfig is refactored to consolidate KEXEC and CRASH options from
+various arch/<arch>/Kconfig files into new file kernel/Kconfig.kexec.
 
---dtzbhhtxjptopns7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The Kconfig.kexec is now a submenu titled "Kexec and crash features"
+located under "General Setup".
 
-On Thu, Jun 08, 2023 at 04:17:52PM +0800, Sui Jingfeng wrote:
-> Hi,
->=20
-> On 2023/6/8 15:39, Maxime Ripard wrote:
-> > On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
-> > > Hi,
-> > >=20
-> > > On 2023/6/8 00:12, Paul Cercueil wrote:
-> > > > Hi Sui,
-> > > >=20
-> > > > Le mercredi 07 juin 2023 =E0 22:38 +0800, Sui Jingfeng a =E9crit=A0:
-> > > > > Hi,=A0 welcome to discussion.
-> > > > >=20
-> > > > >=20
-> > > > > I have limited skills in manipulating English.
-> > > > >=20
-> > > > > It may not express what I'm really means in the short time.
-> > > > >=20
-> > > > > Part of word in the sentence may not as accurate as your.
-> > > > >=20
-> > > > > Well, please don't misunderstand, I'm not doing the rude to you.
-> > > > No problem.
-> > > >=20
-> > > > > I will explain it with more details.
-> > > > >=20
-> > > > > See below:
-> > > > >=20
-> > > > >=20
-> > > > > On 2023/6/7 20:09, Paul Cercueil wrote:
-> > > > > > Hi Sui,
-> > > > > >=20
-> > > > > > Le mercredi 07 juin 2023 =E0 18:30 +0800, Sui Jingfeng a =E9cri=
-t=A0:
-> > > > > > > Hi,
-> > > > > > >=20
-> > > > > > >=20
-> > > > > > > On 2023/6/7 17:36, Paul Cercueil wrote:
-> > > > > > > > Hi Sui,
-> > > > > > > >=20
-> > > > > > > > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =
-=E9crit=A0:
-> > > > > > > > > The single map_noncoherent member of struct
-> > > > > > > > > drm_gem_dma_object
-> > > > > > > > > may
-> > > > > > > > > not
-> > > > > > > > > sufficient for describing the backing memory of the GEM
-> > > > > > > > > buffer
-> > > > > > > > > object.
-> > > > > > > > >=20
-> > > > > > > > > Especially on dma-coherent systems, the backing memory is
-> > > > > > > > > both
-> > > > > > > > > cached
-> > > > > > > > > coherent for multi-core CPUs and dma-coherent for periphe=
-ral
-> > > > > > > > > device.
-> > > > > > > > > Say architectures like X86-64, LoongArch64, Loongson Mips=
-64,
-> > > > > > > > > etc.
-> > > > > > > > >=20
-> > > > > > > > > Whether a peripheral device is dma-coherent or not can be
-> > > > > > > > > implementation-dependent. The single map_noncoherent opti=
-on
-> > > > > > > > > is
-> > > > > > > > > not
-> > > > > > > > > enough
-> > > > > > > > > to reflect real hardware anymore. For example, the Loongs=
-on
-> > > > > > > > > LS3A4000
-> > > > > > > > > CPU
-> > > > > > > > > and LS2K2000/LS2K1000 SoC, peripheral device of such hard=
-ware
-> > > > > > > > > platform
-> > > > > > > > > allways snoop CPU's cache. Doing the allocation with
-> > > > > > > > > dma_alloc_coherent
-> > > > > > > > > function is preferred. The return buffer is cached, it sh=
-ould
-> > > > > > > > > not
-> > > > > > > > > using
-> > > > > > > > > the default write-combine mapping. While with the current
-> > > > > > > > > implement,
-> > > > > > > > > there
-> > > > > > > > > no way to tell the drm core to reflect this.
-> > > > > > > > >=20
-> > > > > > > > > This patch adds cached and coherent members to struct
-> > > > > > > > > drm_gem_dma_object.
-> > > > > > > > > which allow driver implements to inform the core. Introdu=
-cing
-> > > > > > > > > new
-> > > > > > > > > mappings
-> > > > > > > > > while keeping the original default behavior unchanged.
-> > > > > > > > Did you try to simply set the "dma-coherent" property to the
-> > > > > > > > device's
-> > > > > > > > node?
-> > > > > > > But this approach can only be applied for the device driver w=
-ith
-> > > > > > > DT
-> > > > > > > support.
-> > > > > > >=20
-> > > > > > > X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typic=
-ally
-> > > > > > > do
-> > > > > > > not
-> > > > > > > have DT support.
-> > > > > > >=20
-> > > > > > > They using ACPI to pass parameter from the firmware to Linux
-> > > > > > > kernel.
-> > > > > > >=20
-> > > > > > > You approach will lost the effectiveness on such a case.
-> > > > > > Well, I don't really know how ACPI handles it - but it should j=
-ust
-> > > > > > be a
-> > > > > > matter of setting dev->dma_coherent. That's basically what the =
-DT
-> > > > > > code
-> > > > > > does.
-> > > > > >=20
-> > > > > > Some MIPS boards set it in their setup code for instance.
-> > > > > >=20
-> > > > > This is a *strategy*, not a *mechanism*.
-> > > > >=20
-> > > > > In this case, DT is just used to describing the hardware.
-> > > > >=20
-> > > > > (It is actually a hardware feature describing language, the
-> > > > > granularity
-> > > > > is large)
-> > > > >=20
-> > > > > It does not changing the state of the hardware.
-> > > > >=20
-> > > > > It's your platform firmware or kernel setting up code who actuall=
-y do
-> > > > > such a things.
-> > > > >=20
-> > > > >=20
-> > > > > It's just that it works on *one* platform, it does not guarantee =
-it
-> > > > > will
-> > > > > works on others.
-> > > > If you add the "dma-coherent" property in a device node in DT, you
-> > > > effectively specify that the device is DMA-coherent; so you describe
-> > > > the hardware, which is what DT is for, and you are not changing the
-> > > > state of the hardware.
-> > > >=20
-> > > > Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
-> > > > default to DMA-coherent mapping; I believe you could do something
-> > > > similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
-> > > >=20
-> > > The preblem is that device driver can have various demand.
-> > >=20
-> > > It probably want to create different kind of buffers for different th=
-ing
-> > > simultaneously.
-> > >=20
-> > > Say, one allocated with dma_alloc_coherent for command buffer or dma
-> > > descriptor
-> > >=20
-> > > another one allocated with=A0 dma_alloc_wc for uploading shader etc.
-> > >=20
-> > > also has the third one allocated with dma_alloc_noncoherent() for doi=
-ng some
-> > > else.
-> > And it will work just fine.
-> >=20
-> > struct device dma_coherent, or DT's dma-coherent property define that
-> > the device doesn't need any kind of cache maintenance, ever. If it's
-> > missing, we need to perform cache maintenance to keep coherency.
-> >=20
-> > dma_alloc_* functions provide guarantees to the driver. With
-> > dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
-> > you don't need to perform cache maintenance operations by hand in the
-> > driver.
->=20
-> BO returned by dma_alloc_wc() doesn't works on some platform.
+The following options are impacted:
 
-What do you mean by "it doesn't work" ? Because then, it's definitely
-the platform that's broken if it doesn't provide a coherent buffer.
+ - KEXEC
+ - KEXEC_FILE
+ - KEXEC_SIG
+ - KEXEC_SIG_FORCE
+ - KEXEC_BZIMAGE_VERIFY_SIG
+ - KEXEC_JUMP
+ - CRASH_DUMP
 
-> This may only guarantee for the CPU side. There is no guarantee for
-> the GPU side.
->=20
-> For example, the GPU always snoop CPU's cache. The GPU fetch data from
-> the CPU's cache if hit.
->=20
-> if not hit, the GPU fetch the data from the system RAM.
+Over time, these options have been copied between Kconfig files and
+are very similar to one another, but with slight differences.
 
-Right, that's still a coherent buffer.
+The following architectures are impacted by the refactor (because of
+use of one or more KEXEC/CRASH options):
 
-> But when call dma_alloc_wc(), the BO at cpu side is marked as write
-> combine property.
->=20
-> The write buffer within the CPU will gather the CPU side write access.
->=20
-> This is to say, there may have some data reside(stall) in the write buffe=
-r.
->=20
-> while the GPU will fetch data from the system RAM or CPU's cache.
->=20
-> the GPU will fetch wrong data.
+ - arm
+ - arm64
+ - ia64
+ - loongarch
+ - m68k
+ - mips
+ - parisc
+ - powerpc
+ - riscv
+ - s390
+ - sh
+ - x86 
 
-If that's the case, your buffer isn't coherent, and your platform
-probably breaks the expectations of the DMA API.
+More information:
 
-> This is the condition for our hardware, I don't know how does the ARM
-> platform guarantee
->=20
-> the coherency in this case.
->
-> If it relay on software to guarantee, then it is still non hardware
-> maintained coherency.
->=20
->=20
-> When it relay on software, I called it implement-dependent.
->=20
-> there are some archs without the implement or don't know how to implement.
->=20
->=20
-> If it can't even snoop cpu's cache, I don't believe it can snoop cpu's wr=
-ite
-> buffer.
->=20
-> I not sure dma api can do guarantee for all arch.
->=20
->=20
-> > With dma_alloc_noncoherent, the buffer is non-coherent and the driver
-> > needs to perform them when relevant.
-> >=20
-> > How those buffers are created is platform specific, but the guarantees
-> > provided *to the driver* are always there.
-> >=20
-> > A buffer allocated with dma_alloc_coherent might be provided by
-> > different means (at the hardware level with a coherency unit, by mapping
-> > it non-cacheable), but as far as the driver is concerned it's always
-> > going to be coherent.
-> >=20
-> > Similarly, a driver using dma_alloc_noncoherent will always require
-> > cache maintenance operations to use the API properly, even if the
-> > hardware provides coherency (in which case, those operations will be
-> > nop).
-> >=20
-> > So, yeah, like I was saying in the other mail, it looks like you're
-> > confusing a bunch of things. dma_alloc_* functions are about the driver
-> > expectations and guarantees. DT's dma-coherent property is about how we
-> > can implement them on a given platform.
->=20
-> That is ideal situation.
->=20
-> You don't have seen the actual bugs.
+In the patch series "crash: Kernel handling of CPU and memory hot
+un/plug"
 
-Probably not :)
+ https://lore.kernel.org/lkml/20230503224145.7405-1-eric.devolder@oracle.com/
 
-> Yeah, I do have a bit confusing about the DMA api.
->=20
-> Maybe you and Paul can continue work on this.
+the new kernel feature introduces the config option CRASH_HOTPLUG.
 
-As far as I'm concerned, there's nothing to fix but your platform
-support. I won't work on that.
+In reviewing, Thomas Gleixner requested that the new config option
+not be placed in x86 Kconfig. Rather the option needs a generic/common
+home. To Thomas' point, the KEXEC and CRASH options have largely been
+duplicated in the various arch/<arch>/Kconfig files, with minor
+differences. This kind of proliferation is to be avoid/stopped.
 
-> But DT's dma-coherent property is definitely not a system level
-> solution.
->=20
-> drm/amdgpu, drm/radeon and drm/i915 don't support DT.
->=20
-> If ARM is dma-noncoherent, I suspect drm/amdgpu, drm/radeon will not
-> works on ARM.
->=20
-> there no function call dma_sync_for_device() dma_sync_for_cpu() etc
->=20
-> These driver assume dma-coherent hardware.
+ https://lore.kernel.org/lkml/875y91yv63.ffs@tglx/
 
-No, these drivers assume they have a dma-coherent *buffer*. Which on
-devices that don't get hardware coherency mean that they probably get a
-non-cacheable buffer.
+To that end, I have refactored the arch Kconfigs so as to consolidate
+the various KEXEC and CRASH options. Generally speaking, this work has
+the following themes:
 
-Maxime
+- KEXEC and CRASH options are moved into new file kernel/Kconfig.kexec
+  - These items from arch/Kconfig:
+      CRASH_CORE KEXEC_CORE KEXEC_ELF HAVE_IMA_KEXEC
+  - These items from arch/x86/Kconfig form the common options:
+      KEXEC KEXEC_FILE KEXEC_SIG KEXEC_SIG_FORCE
+      KEXEC_BZIMAGE_VERIFY_SIG KEXEC_JUMP CRASH_DUMP
+  - The crash hotplug series appends CRASH_HOTPLUG to Kconfig.kexec
+  NOTE: PHYSICAL_START could be argued to be included in this series.
+- The Kconfig.kexec is now a submenu titled "Kexec and crash features"
+- The Kconfig.kexec is now listed in "General Setup" submenu from
+  init/Kconfig
+- To control the main common options, new options ARCH_HAS_KEXEC,
+  ARCH_HAS_KEXEC_FILE and ARCH_HAS_CRASH_DUMP are introduced.
+  NOTE: I went with ARCH_HAS_ due to the existing ARCH_HAS_KEXEC_PURGATORY.
+- To account for the slight differences, new options ARCH_SUPPORTS_KEXEC,
+  ARCH_SUPPORTS_KEXEC_FILE and ARCH_SUPPORTS_CRASH_DUMP are used to
+  elicit the same side effects as the original arch/<arch>/Kconfig
+  files for KEXEC and CRASH options.
+  NOTE: I'm open to a better name than 'ARCH_SUPPORTS', perhaps
+  ARCH_CUSTOMIZE ?
 
---dtzbhhtxjptopns7
-Content-Type: application/pgp-signature; name="signature.asc"
+An example, 'make menuconfig' illustrating the submenu:
 
------BEGIN PGP SIGNATURE-----
+  > General setup > Kexec and crash features
+  [*] Enable kexec system call
+  [*] Enable kexec file based system call
+  [*]   Verify kernel signature during kexec_file_load() syscall
+  [ ]     Require a valid signature in kexec_file_load() syscall
+  [ ]     Enable bzImage signature verification support
+  [*] kexec jump
+  [*] kernel crash dumps
+  [*]   Update the crash elfcorehdr on system configuration changes
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIc2dwAKCRDj7w1vZxhR
-xX+KAP0f01Nyls5VR0A4BOxlsfmnHMEa2CQZB8CAewfcNEhfwgD9GFfwHIQI4Wy1
-nJs179eAwl3YIf5EMc3ffWlphla2SQU=
-=SfdS
------END PGP SIGNATURE-----
+The three main options are KEXEC, KEXEC_FILE and CRASH_DUMP. In the
+process of consolidating these options, I encountered slight differences
+in the coding of these options in several of the architectures. As a
+result, I settled on the following solution:
 
---dtzbhhtxjptopns7--
+- Each of three main options has a 'depends on ARCH_HAS_<option>'
+  statement: ARCH_HAS_KEXEC, ARCH_HAS_KEXEC_FILE, ARCH_HAS_CRASH_DUMP.
+
+  For example, the KEXEC_FILE option has a 'depends on
+  ARCH_HAS_KEXEC_FILE' statement.
+
+- The boolean ARCH_HAS_<option> in effect allows the arch to determine
+  when the feature is allowed.  Archs which don't have the feature
+  simply do not provide the corresponding ARCH_HAS_<option>.
+  For each arch, where there previously were KEXEC and/or CRASH
+  options, these have been replaced with the corresponding boolean
+  ARCH_HAS_<option>, and an appropriate def_bool statement.
+
+  For example, if the arch supports KEXEC_FILE, then the
+  ARCH_HAS_KEXEC_FILE simply has a 'def_bool y'. This permits the
+  KEXEC_FILE option to be available.
+
+  If the arch has a 'depends on' statement in its original coding
+  of the option, then that expression becomes part of the def_bool
+  expression. For example, arm64 had:
+
+  config KEXEC
+    depends on PM_SLEEP_SMP
+
+  and in this solution, this converts to:
+
+  config ARCH_HAS_KEXEC
+    def_bool PM_SLEEP_SMP
+
+
+- In order to account for the differences in the config coding for
+  the three common options, the ARCH_SUPPORTS_<option> is used.
+  This options has a 'depends on <option>' statement to couple it
+  to the main option, and from there can insert the differences
+  from the common option and the arch original coding of that option.
+
+  For example, a few archs enable CRYPTO and CRYTPO_SHA256 for
+  KEXEC_FILE. These require a ARCH_SUPPORTS_KEXEC_FILE and
+  'select CRYPTO' and 'select CRYPTO_SHA256' statements.
+
+Illustrating the option relationships:
+
+For KEXEC:
+ ARCH_HAS_KEXEC <- KEXEC <- ARCH_SUPPORTS_KEXEC
+
+ KEXEC                      # in Kconfig.kexec
+ ARCH_HAS_KEXEC             # in arch/<arch>/Kconfig, as needed
+ ARCH_SUPPORTS_KEXEC        # in arch/<arch>/Kconfig, as needed
+
+
+For KEXEC_FILE:
+ ARCH_HAS_KEXEC_FILE <- KEXEC_FILE <- ARCH_SUPPORTS_KEXEC_FILE
+
+ KEXEC_FILE                 # in Kconfig.kexec
+ ARCH_HAS_KEXEC_FILE        # in arch/<arch>/Kconfig, as needed
+ ARCH_SUPPORTS_KEXEC_FILE   # in arch/<arch>/Kconfig, as needed
+
+
+For CRASH:
+ ARCH_HAS_CRASH_DUMP <- CRASH_DUMP <- ARCH_SUPPORTS_CRASH_DUMP
+
+ CRASH_DUMP                 # in Kconfig.kexec
+ ARCH_HAS_CRASH_DUMP        # in arch/<arch>/Kconfig, as needed
+ ARCH_SUPPORTS_CRASH_DUMP   # in arch/<arch>/Kconfig, as needed
+
+To summarize, the ARCH_HAS_<option> permits the <option> to be
+enabled, and the ARCH_SUPPORTS_<option> handles side effects (ie.
+select statements).
+
+Examples:
+A few examples to show the new strategy in action:
+
+===== x86 (minus the help section) =====
+Original:
+ config KEXEC
+    bool "kexec system call"
+    select KEXEC_CORE
+
+ config KEXEC_FILE
+    bool "kexec file based system call"
+    select KEXEC_CORE
+    select HAVE_IMA_KEXEC if IMA
+    depends on X86_64
+    depends on CRYPTO=y
+    depends on CRYPTO_SHA256=y
+
+ config ARCH_HAS_KEXEC_PURGATORY
+    def_bool KEXEC_FILE
+
+ config KEXEC_SIG
+    bool "Verify kernel signature during kexec_file_load() syscall"
+    depends on KEXEC_FILE
+
+ config KEXEC_SIG_FORCE
+    bool "Require a valid signature in kexec_file_load() syscall"
+    depends on KEXEC_SIG
+
+ config KEXEC_BZIMAGE_VERIFY_SIG
+    bool "Enable bzImage signature verification support"
+    depends on KEXEC_SIG
+    depends on SIGNED_PE_FILE_VERIFICATION
+    select SYSTEM_TRUSTED_KEYRING
+
+ config CRASH_DUMP
+    bool "kernel crash dumps"
+    depends on X86_64 || (X86_32 && HIGHMEM)
+
+ config KEXEC_JUMP
+    bool "kexec jump"
+    depends on KEXEC && HIBERNATION
+    help
+
+becomes...
+New:
+ config ARCH_HAS_KEXEC
+    def_bool y
+
+ config ARCH_HAS_KEXEC_FILE
+    def_bool X86_64 && CRYPTO && CRYPTO_SHA256
+
+ config ARCH_SUPPORTS_KEXEC_FILE
+    def_bool y
+    depends on KEXEC_FILE
+    select HAVE_IMA_KEXEC if IMA
+
+ config ARCH_HAS_KEXEC_PURGATORY
+    def_bool KEXEC_FILE
+
+ config ARCH_HAS_KEXEC_JUMP
+    def_bool y
+
+ config ARCH_HAS_CRASH_DUMP
+    def_bool X86_64 || (X86_32 && HIGHMEM)
+
+
+===== powerpc (minus the help section) =====
+Original:
+ config KEXEC
+    bool "kexec system call"
+    depends on PPC_BOOK3S || PPC_E500 || (44x && !SMP)
+    select KEXEC_CORE
+
+ config KEXEC_FILE
+    bool "kexec file based system call"
+    select KEXEC_CORE
+    select HAVE_IMA_KEXEC if IMA
+    select KEXEC_ELF
+    depends on PPC64
+    depends on CRYPTO=y
+    depends on CRYPTO_SHA256=y
+
+ config ARCH_HAS_KEXEC_PURGATORY
+    def_bool KEXEC_FILE
+
+ config CRASH_DUMP
+    bool "Build a dump capture kernel"
+    depends on PPC64 || PPC_BOOK3S_32 || PPC_85xx || (44x && !SMP)
+    select RELOCATABLE if PPC64 || 44x || PPC_85xx
+
+becomes...
+New:
+config ARCH_HAS_KEXEC
+    def_bool PPC_BOOK3S || PPC_E500 || (44x && !SMP)
+
+config ARCH_HAS_KEXEC_FILE
+    def_bool PPC64 && CRYPTO && CRYPTO_SHA256
+
+config ARCH_HAS_KEXEC_PURGATORY
+    def_bool KEXEC_FILE
+
+config ARCH_SUPPORTS_KEXEC_FILE
+    def_bool y
+    depends on KEXEC_FILE
+    select KEXEC_ELF
+    select HAVE_IMA_KEXEC if IMA
+
+config ARCH_HAS_CRASH_DUMP
+    def_bool PPC64 || PPC_BOOK3S_32 || PPC_85xx || (44x && !SMP)
+
+config ARCH_SUPPORTS_CRASH_DUMP
+    def_bool y
+    depends on CRASH_DUMP
+    select RELOCATABLE if PPC64 || 44x || PPC_85xx
+
+
+Testing Approach and Results
+
+There are 388 config files in the arch/<arch>/configs directories.
+For each of these config files, a .config is generated both before and
+after this Kconfig series, and checked for equivalence. This approach
+allows for a rather rapid check of all architectures and a wide
+variety of configs wrt/ KEXEC and CRASH, and avoids requiring
+compiling for all architectures and running kernels and run-time
+testing.
+
+As such, I developed the following script to compare the before and
+after of 'make olddefconfig'. The new symbols introduced by this
+series are filtered out, but otherwise the config files are PASS
+only if they were equivalent, and FAIL otherwise.
+
+The script performs the test by doing the following:
+
+ # Obtain the "golden" .config output for given config file
+ # Reset test sandbox
+ git checkout master
+ git branch -D test_Kconfig
+ git checkout -B test_Kconfig master
+ make distclean
+ # Write out updated config
+ cp -f <config file> .config
+ make ARCH=<arch> olddefconfig
+ # Track each item in .config, LHSB is "golden"
+ scoreboard .config 
+
+ # Obtain the "changed" .config output for given config file
+ # Reset test sandbox
+ make distclean
+ # Apply this Kconfig series
+ git am <this Kconfig series>
+ # Write out updated config
+ cp -f <config file> .config
+ make ARCH=<arch> olddefconfig
+ # Track each item in .config, RHSB is "changed"
+ scoreboard .config 
+
+ # Determine test result
+ # Filter-out new symbols introduced by this series
+ # Filter-out symbol=n which not in either scoreboard
+ # Compare LHSB "golden" and RHSB "changed" scoreboards and issue PASS/FAIL
+
+The script was instrumental during the refactoring of Kconfig as it
+continually revealed problems. The end result being that the solution
+presented in this series passes all configs as checked by the script.
+
+Regards,
+eric
+
+
+---
+v1: 12jun2023
+ - Initial
+ - Based on 6.4.0-rc6
+
+---
+Eric DeVolder (21):
+  kexec: consolidate kexec and crash options into kernel/Kconfig.kexec
+  x86/kexec: refactor for kernel/Kconfig.kexec
+  arm/kexec: refactor for kernel/Kconfig.kexec
+  ia64/kexec: refactor for kernel/Kconfig.kexec
+  arm64/kexec: refactor for kernel/Kconfig.kexec
+  loongarch/kexec: refactor for kernel/Kconfig.kexec
+  m68k/kexec: refactor for kernel/Kconfig.kexec
+  mips/kexec: refactor for kernel/Kconfig.kexec
+  parisc/kexec: refactor for kernel/Kconfig.kexec
+  powerpc/kexec: refactor for kernel/Kconfig.kexec
+  riscv/kexec: refactor for kernel/Kconfig.kexec
+  s390/kexec: refactor for kernel/Kconfig.kexec
+  sh/kexec: refactor for kernel/Kconfig.kexec
+  crash: move a few code bits to setup support of crash hotplug
+  crash: add generic infrastructure for crash hotplug support
+  kexec: exclude elfcorehdr from the segment digest
+  crash: memory and CPU hotplug sysfs attributes
+  x86/crash: add x86 crash hotplug support
+  crash: hotplug support for kexec_load()
+  crash: change crash_prepare_elf64_headers() to for_each_possible_cpu()
+  x86/crash: optimize CPU changes
+
+ .../admin-guide/mm/memory-hotplug.rst         |   8 +
+ Documentation/core-api/cpu_hotplug.rst        |  18 +
+ arch/Kconfig                                  |  13 -
+ arch/arm/Kconfig                              |  29 +-
+ arch/arm64/Kconfig                            |  61 +--
+ arch/ia64/Kconfig                             |  28 +-
+ arch/loongarch/Kconfig                        |  26 +-
+ arch/m68k/Kconfig                             |  19 +-
+ arch/mips/Kconfig                             |  32 +-
+ arch/parisc/Kconfig                           |  34 +-
+ arch/powerpc/Kconfig                          |  55 +--
+ arch/riscv/Kconfig                            |  48 +--
+ arch/s390/Kconfig                             |  65 +---
+ arch/sh/Kconfig                               |  46 +--
+ arch/x86/Kconfig                              |  90 +----
+ arch/x86/include/asm/kexec.h                  |  18 +
+ arch/x86/kernel/crash.c                       | 140 ++++++-
+ drivers/base/cpu.c                            |  14 +
+ drivers/base/memory.c                         |  13 +
+ include/linux/crash_core.h                    |   9 +
+ include/linux/kexec.h                         |  63 +++-
+ include/uapi/linux/kexec.h                    |   1 +
+ init/Kconfig                                  |   2 +
+ kernel/Kconfig.kexec                          | 134 +++++++
+ kernel/crash_core.c                           | 355 ++++++++++++++++++
+ kernel/kexec.c                                |   5 +
+ kernel/kexec_core.c                           |   6 +
+ kernel/kexec_file.c                           | 187 +--------
+ kernel/ksysfs.c                               |  15 +
+ 29 files changed, 900 insertions(+), 634 deletions(-)
+ create mode 100644 kernel/Kconfig.kexec
+
+-- 
+2.31.1
+
