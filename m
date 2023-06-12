@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80FF72D522
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 01:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761CB72D530
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 01:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238186AbjFLXqK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Jun 2023 19:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S229674AbjFLXta (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Jun 2023 19:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234959AbjFLXqK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jun 2023 19:46:10 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B118D1727
-        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:46:04 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5169f614977so8537655a12.3
-        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:46:04 -0700 (PDT)
+        with ESMTP id S233893AbjFLXt3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jun 2023 19:49:29 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6231709
+        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:49:27 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9823de726c3so10690466b.0
+        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686613563; x=1689205563;
+        d=linaro.org; s=google; t=1686613766; x=1689205766;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8wbDZKmo9VP00ABKYaLGQ28GM2QOo4QwYdlCxLvFQV0=;
-        b=xTqZLje4stFH7gdg9tw2fGuaNoAlSVyZ9bZDgTUiGpVn1rKnmnRRB/wOdsBKdk3M45
-         XyM6zqrGB41V6amFO878oAEpaEipM+J+IhZ6OUQnO6vb96iOf43xb+cTOPWDW6SPGUvU
-         wbzhN3iKgf+ErheqSRMoxFxfGjuBsXPFyA9Nf8eealnhw6j5dxAexUg8TC0HYjPKNm9+
-         cmH1X+muu7EXkJdtUp+5TMYcw4rbxC4VhQQvi+yG5WIIqUjSEFDaY+a9WqK4wgXHrhfU
-         58f1vI8ofPwecC+2UBaX1dI7mOlCr37zZFNYbepf9z+FBvhotWk1bkOhqbtAhvfg0arh
-         BtYA==
+        bh=KdDi50ZcI/FLwaJCGeRMVNgmMDqblajVGcvGtWq/rU0=;
+        b=h14Y/off+2kKH+CZ9xuEqnth8dkIR68MU6fTRlm6+a1ccdcM0M0IsU1vvHNgsK8p2Y
+         0C3NyMHNpdoVINJwXJ2UsLvgZ4NTbFLvy78i26qPyTkArpsvqQO8P3rqJaQrm8rGzPXS
+         b21ZAicO32Ry1R7mkMJ6NNUImtgdcpa22tAe3I7ZxvHegVAwZ0w/UvF0S48EVuSzeqn9
+         b3JjK1ZAX8STmHG870Zb54I4LTDZcNLOHVNCHnZhE6ryjThlXIgkPKnQSaTbHbmt0aPo
+         YIMzeRPPStNBrG12bFe/IsSOLZJnGkaCG+swAqxSi4tHTnfqr5byW4FG9+MbQBtCjN2v
+         e6sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686613563; x=1689205563;
+        d=1e100.net; s=20221208; t=1686613766; x=1689205766;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8wbDZKmo9VP00ABKYaLGQ28GM2QOo4QwYdlCxLvFQV0=;
-        b=hC8REQS7pSqCeqQ7LczcWvi/2F7airgW5Q6i5z7KXiv4SHWla/gScQAohsToHjO5nw
-         9Gp6n6nUbo/AbhVHBmSpTKMMy8syq5elcIxJyqGZ4OerpA0+wI2tBn2/Z1SgzPzYt5FK
-         skPL0gsLOUOBGxQymY7MI4XeG00RNowtjbMsC/Urj/o4jm3HFTYAzVlDxfEx6/HCUh5S
-         ZP1KSe2aCBoRFgrQjp6B9h/ANwHKwWy4y+m9OKjHCTvPQO8OkDhWwxQTEtKIXxgbJwUW
-         pF40VGB+LTi37e/0ZocOzJGTuHKiROxNGXEskS6mviljkOXV69W7DOyxDlHrugN8O2/3
-         9MVA==
-X-Gm-Message-State: AC+VfDyyvQeitg3tDIA983fEnnncrSAiQl290bCWpnVTQroQlJeTCx4o
-        5oUkwnFOR2qlNPgbqa+dGbYWYg==
-X-Google-Smtp-Source: ACHHUZ5ctYtCeisGQ2uomlCypPix/oMuhk7GCBAQ91QMqgz33FoH6mnEV6NDszFqNC1dju2nqgRtMA==
-X-Received: by 2002:a05:6402:898:b0:514:77f5:d77c with SMTP id e24-20020a056402089800b0051477f5d77cmr6507743edy.1.1686613563154;
-        Mon, 12 Jun 2023 16:46:03 -0700 (PDT)
+        bh=KdDi50ZcI/FLwaJCGeRMVNgmMDqblajVGcvGtWq/rU0=;
+        b=Ez+esoJx3BEDOAUsK3JEm83Qm35Qwcjq9X5bEJCg5al0vzfxhyZDzEF5TLpbGV1fCm
+         nneYbf4HkQdoXTdm0G6tgTjUXG9Dkf5o7AZovdSn9OvjPvqhfKph1rQrPwaYI0XvJb88
+         vvoKd19WSdHPS+f7/izUnlDhUeNIOl5ShJHldpLK4HpRUigWr3XwciDmlAtGHC6qtrNx
+         Zp42vszLQvoXYdRJcboAJ/0+nhvSQZ8O7XHIjur0nERtGgk4/J7JEXMNy59FBxmWz8Kb
+         688A/S8q5N1PM4ypH00LL5EIFCS0JFjeMb95I6t/g5xOlQm3XS+zacj5TGugDXbXfHxR
+         Iovw==
+X-Gm-Message-State: AC+VfDzGEMkDnXwdrf1oDYWPT7m3xp+pNwXYk4C8VPwQf9BS6UQC/477
+        /J5Miw/wH1JbHmhZOnoll9Aieg==
+X-Google-Smtp-Source: ACHHUZ5d+tF+AAPixk/kFmtV+CtWpDVmOxGFS7Q1zOS4cdYHHVXnx1KgJdGHPbzDoYU+p/rh+kAXUw==
+X-Received: by 2002:a17:907:7207:b0:978:9e92:f903 with SMTP id dr7-20020a170907720700b009789e92f903mr11221800ejc.46.1686613765790;
+        Mon, 12 Jun 2023 16:49:25 -0700 (PDT)
 Received: from [10.10.0.115] ([185.140.244.249])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa7cd96000000b0050bca43ff55sm5689515edv.68.2023.06.12.16.46.00
+        by smtp.gmail.com with ESMTPSA id g20-20020aa7c854000000b005169cd0edffsm5568532edt.35.2023.06.12.16.49.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 16:46:02 -0700 (PDT)
-Message-ID: <a242cbd8-3ae5-62b0-fbb8-92a51dd7bc18@linaro.org>
-Date:   Tue, 13 Jun 2023 01:46:00 +0200
+        Mon, 12 Jun 2023 16:49:25 -0700 (PDT)
+Message-ID: <94b05905-df3a-4534-a28c-fe9e3030fc4a@linaro.org>
+Date:   Tue, 13 Jun 2023 01:49:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [patch V4 07/37] x86/smpboot: Restrict soft_restart_cpu() to SEV
+Subject: Re: [patch V4 10/37] x86/smpboot: Get rid of cpu_init_secondary()
 Content-Language: en-US
 To:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>
@@ -92,9 +92,9 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Ross Philipson <ross.philipson@oracle.com>
 References: <20230512203426.452963764@linutronix.de>
- <20230512205255.822234014@linutronix.de>
+ <20230512205255.981999763@linutronix.de>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230512205255.822234014@linutronix.de>
+In-Reply-To: <20230512205255.981999763@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -110,15 +110,21 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On 12/5/23 23:07, Thomas Gleixner wrote:
 > From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> Now that the CPU0 hotplug cruft is gone, the only user is AMD SEV.
+> The synchronization of the AP with the control CPU is a SMP boot problem
+> and has nothing to do with cpu_init().
+> 
+> Open code cpu_init_secondary() in start_secondary() and move
+> wait_for_master_cpu() into the SMP boot code.
+> 
+> No functional change.
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > Tested-by: Michael Kelley <mikelley@microsoft.com>
 > ---
->   arch/x86/kernel/callthunks.c |    2 +-
->   arch/x86/kernel/head_32.S    |   14 --------------
->   arch/x86/kernel/head_64.S    |    2 +-
->   3 files changed, 2 insertions(+), 16 deletions(-)
+>   arch/x86/include/asm/processor.h |    1 -
+>   arch/x86/kernel/cpu/common.c     |   27 ---------------------------
+>   arch/x86/kernel/smpboot.c        |   24 +++++++++++++++++++-----
+>   3 files changed, 19 insertions(+), 33 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
