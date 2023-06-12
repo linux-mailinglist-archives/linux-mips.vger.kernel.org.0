@@ -2,60 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D155972D51D
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 01:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80FF72D522
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 01:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237728AbjFLXpt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Jun 2023 19:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
+        id S238186AbjFLXqK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Jun 2023 19:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236810AbjFLXpt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jun 2023 19:45:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AF3171A
-        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:45:46 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso7301112a12.0
-        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:45:46 -0700 (PDT)
+        with ESMTP id S234959AbjFLXqK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jun 2023 19:46:10 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B118D1727
+        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:46:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5169f614977so8537655a12.3
+        for <linux-mips@vger.kernel.org>; Mon, 12 Jun 2023 16:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686613545; x=1689205545;
+        d=linaro.org; s=google; t=1686613563; x=1689205563;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=J6RKBwJ1snfOShsMKSa/kdTwHRc2sX8E52+VmBrW73M=;
-        b=d3xgiOjtTog0mLVt0UUF6SYGGd8ZNr4HF7QbG3ANNB0F9pm2Mnfq6cMKvB6sbMuSRV
-         QgWIqQPT0Bz/c6PzgCrCP7PjhIQEf53F9Hq1ZzRfje3zYm9eFWGopD2mOQlyY3W6Ct1C
-         diLMaiEHR/d2lY6XdYCuUVT8MxiBw26YRbJ+vLXKhx4eckjH/IBs8Vu650PjnGgHLZfm
-         F+52i+6LlG/DNA9AL6mhi/Ytu30a/yapXnU8e4vUqRcJdEh8s8OFO1YXOUJadub+iQHv
-         z6vbdQtv6OfPN8ZdleCLjbUevHZa+Wcr6lxGX03ENnGWHZ1Zg+XQGmkr7kxiw7qx+njU
-         qXkA==
+        bh=8wbDZKmo9VP00ABKYaLGQ28GM2QOo4QwYdlCxLvFQV0=;
+        b=xTqZLje4stFH7gdg9tw2fGuaNoAlSVyZ9bZDgTUiGpVn1rKnmnRRB/wOdsBKdk3M45
+         XyM6zqrGB41V6amFO878oAEpaEipM+J+IhZ6OUQnO6vb96iOf43xb+cTOPWDW6SPGUvU
+         wbzhN3iKgf+ErheqSRMoxFxfGjuBsXPFyA9Nf8eealnhw6j5dxAexUg8TC0HYjPKNm9+
+         cmH1X+muu7EXkJdtUp+5TMYcw4rbxC4VhQQvi+yG5WIIqUjSEFDaY+a9WqK4wgXHrhfU
+         58f1vI8ofPwecC+2UBaX1dI7mOlCr37zZFNYbepf9z+FBvhotWk1bkOhqbtAhvfg0arh
+         BtYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686613545; x=1689205545;
+        d=1e100.net; s=20221208; t=1686613563; x=1689205563;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J6RKBwJ1snfOShsMKSa/kdTwHRc2sX8E52+VmBrW73M=;
-        b=gqJ1+mRdDvKJPpNQ+zWJx1DAE2ifPke/f8Cq/9QpOcilCONA85Ft/bGvX0odhZrSOm
-         JQhN0FespaAuvkBZsSepL60Q/g45G5w/lFjHNQ8ca22O8hDndi1ey3X4yEk32p+qAbpV
-         n735k7Fgf302l4Mb2j8S88Ehz2e0p4HKQMaq9LtsC+Be3o52UX9wSSHQqbuEFVHnfl/B
-         jVbOvRjH1iaSYKdz4mMiflIpnki5aOSrE2O5p/WA4WWRAP5ts41XfkY6F8tJn9NRHaB1
-         VvPy6fJz3cVLlaPKaPSoOLnyRA0+IOzAgWRRKLu//58YYpGjQPfC/lA96x8ivzleoqFN
-         MQ2g==
-X-Gm-Message-State: AC+VfDzTQBsmccJPJI7mpjrz+tiMPLcjrrN4DB5K85yqoBuif+GbOHMG
-        MEy0rLQ2ZB43GZAjYO2rp/wllA==
-X-Google-Smtp-Source: ACHHUZ6dtuV5DoYQYE0R52xSIR6NpJYLC8VAvw2sPNu3DqvDkPqqCuCfv+mCrhCPNNxlAI9Ns3XUug==
-X-Received: by 2002:a17:906:dac3:b0:96f:9608:da7c with SMTP id xi3-20020a170906dac300b0096f9608da7cmr11947868ejb.36.1686613544905;
-        Mon, 12 Jun 2023 16:45:44 -0700 (PDT)
+        bh=8wbDZKmo9VP00ABKYaLGQ28GM2QOo4QwYdlCxLvFQV0=;
+        b=hC8REQS7pSqCeqQ7LczcWvi/2F7airgW5Q6i5z7KXiv4SHWla/gScQAohsToHjO5nw
+         9Gp6n6nUbo/AbhVHBmSpTKMMy8syq5elcIxJyqGZ4OerpA0+wI2tBn2/Z1SgzPzYt5FK
+         skPL0gsLOUOBGxQymY7MI4XeG00RNowtjbMsC/Urj/o4jm3HFTYAzVlDxfEx6/HCUh5S
+         ZP1KSe2aCBoRFgrQjp6B9h/ANwHKwWy4y+m9OKjHCTvPQO8OkDhWwxQTEtKIXxgbJwUW
+         pF40VGB+LTi37e/0ZocOzJGTuHKiROxNGXEskS6mviljkOXV69W7DOyxDlHrugN8O2/3
+         9MVA==
+X-Gm-Message-State: AC+VfDyyvQeitg3tDIA983fEnnncrSAiQl290bCWpnVTQroQlJeTCx4o
+        5oUkwnFOR2qlNPgbqa+dGbYWYg==
+X-Google-Smtp-Source: ACHHUZ5ctYtCeisGQ2uomlCypPix/oMuhk7GCBAQ91QMqgz33FoH6mnEV6NDszFqNC1dju2nqgRtMA==
+X-Received: by 2002:a05:6402:898:b0:514:77f5:d77c with SMTP id e24-20020a056402089800b0051477f5d77cmr6507743edy.1.1686613563154;
+        Mon, 12 Jun 2023 16:46:03 -0700 (PDT)
 Received: from [10.10.0.115] ([185.140.244.249])
-        by smtp.gmail.com with ESMTPSA id h18-20020a1709063b5200b0097457363fc0sm5849378ejf.33.2023.06.12.16.45.43
+        by smtp.gmail.com with ESMTPSA id x22-20020aa7cd96000000b0050bca43ff55sm5689515edv.68.2023.06.12.16.46.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 16:45:44 -0700 (PDT)
-Message-ID: <41b22e82-fd6c-5bcd-44ae-e5b799ed0175@linaro.org>
-Date:   Tue, 13 Jun 2023 01:45:42 +0200
+        Mon, 12 Jun 2023 16:46:02 -0700 (PDT)
+Message-ID: <a242cbd8-3ae5-62b0-fbb8-92a51dd7bc18@linaro.org>
+Date:   Tue, 13 Jun 2023 01:46:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [patch V4 04/37] x86/smpboot: Rename start_cpu0() to
- soft_restart_cpu()
+Subject: Re: [patch V4 07/37] x86/smpboot: Restrict soft_restart_cpu() to SEV
 Content-Language: en-US
 To:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>
@@ -93,9 +92,9 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Ross Philipson <ross.philipson@oracle.com>
 References: <20230512203426.452963764@linutronix.de>
- <20230512205255.662319599@linutronix.de>
+ <20230512205255.822234014@linutronix.de>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230512205255.662319599@linutronix.de>
+In-Reply-To: <20230512205255.822234014@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -111,18 +110,15 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On 12/5/23 23:07, Thomas Gleixner wrote:
 > From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> This is used in the SEV play_dead() implementation to re-online CPUs. But
-> that has nothing to do with CPU0.
+> Now that the CPU0 hotplug cruft is gone, the only user is AMD SEV.
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > Tested-by: Michael Kelley <mikelley@microsoft.com>
 > ---
->   arch/x86/include/asm/cpu.h   |    2 +-
 >   arch/x86/kernel/callthunks.c |    2 +-
->   arch/x86/kernel/head_32.S    |   10 +++++-----
->   arch/x86/kernel/head_64.S    |   10 +++++-----
->   arch/x86/kernel/sev.c        |    2 +-
->   5 files changed, 13 insertions(+), 13 deletions(-)
+>   arch/x86/kernel/head_32.S    |   14 --------------
+>   arch/x86/kernel/head_64.S    |    2 +-
+>   3 files changed, 2 insertions(+), 16 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
