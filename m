@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEE872F056
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 01:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2955C72F05C
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 01:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241345AbjFMXlX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Jun 2023 19:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
+        id S241942AbjFMXli (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Jun 2023 19:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjFMXkI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 19:40:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051311985;
-        Tue, 13 Jun 2023 16:39:46 -0700 (PDT)
-Message-ID: <20230613224545.783704297@linutronix.de>
+        with ESMTP id S240983AbjFMXkQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 19:40:16 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A46D2120;
+        Tue, 13 Jun 2023 16:39:47 -0700 (PDT)
+Message-ID: <20230613224545.841685728@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686699584;
+        s=2020; t=1686699585;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=Gb5sLOwcDGGXCtx9H68t6SKa9rJuuFgNMIgGpRA1Cww=;
-        b=OnpchWKJJhpq6ONVVpZ9c6pjV8+YWD6D9ACsa/8z515oMg42/3uYESxEQtaaT0ZhA+Bg4D
-        buKV/TS+gn3oROep32cD9pSlOuxkNN9gN1FI793/jM6gaP61aGgNBMspBhF24cVrqNkwmP
-        6ZpLhrFqrdHTnl2F9db2HisP72PB5PFG31yDOZj7xCPFtzA0i/wVmqWvn4/B7KPU4C+g+A
-        Hb0tBXmvL2dCVGkZKLYp8zxv+/uly8bkLAHYCsjdnPbgTYze9gOUtyNazJsma861n1vfxT
-        FzX8CKJnzmPKSylUT3jSpbeQwCYY0b1DBlyPWRtKlKctXCqDI1gfU4iKjo3u0Q==
+         references:references; bh=mdLair9MyWDVqPCo3VYZYQwXMBzE274L3lUc1PUjYzw=;
+        b=tvknF4JQcwX0lM5O4DZTQuc30Yg9yiLzqRi4X2iQXF/rYttRwxZcIK6EcdK55DoYlMxRE5
+        P0mkYs/iQ/cjRO8mk7MV5JkV9ZuQJgcw6JUtB19cZ9EwRnDimk9Xo7AZ4YRq3EGrHOt5Vb
+        DNs4nYJlWr7TOx07NfCBW8Nrn51ARUbYjrw+8SDW/PGmeyNd2IDUAJhiC+0QYh3J9YfV+0
+        /f5g54ndBGu+vtkKj+HwXcVCPNpr9uulVNkO8WM/YoNZsNhpzWGKWCdvrsa3VYL1p1Fo92
+        IXzaQeVfRZJ2lNBrphRMdwLF4GZBfuZ5ZhQbSHtQVs0QBCTVHkh6rWWIAukLVg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686699584;
+        s=2020e; t=1686699585;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=Gb5sLOwcDGGXCtx9H68t6SKa9rJuuFgNMIgGpRA1Cww=;
-        b=KeoNcLCZt1pscWtsZI+qPvC+QWWzBTddeaCrGnRrGuOteDQ3sqa2Z5VDUdEJeOoM1IwMZE
-        +u5kYsrLmjkwanCA==
+         references:references; bh=mdLair9MyWDVqPCo3VYZYQwXMBzE274L3lUc1PUjYzw=;
+        b=weToH2Qa1SQqSJH8nQz8yPWHP67Y8ikgQP8AOS2+GL2sffNVONPBGYNLIgL4AGgEn4bpWa
+        yxpMUxbA/N9sffBw==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
@@ -59,14 +59,14 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Chris Zankel <chris@zankel.net>,
         Tom Lendacky <thomas.lendacky@amd.com>
-Subject: [patch 15/17] x86/fpu: Remove cpuinfo argument from init functions
+Subject: [patch 16/17] x86/fpu: Mark init functions __init
 References: <20230613223827.532680283@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 14 Jun 2023 01:39:43 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 01:39:45 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,59 +74,31 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Nothing in the call chain requires it
+No point in keeping them around.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/include/asm/fpu/api.h |    2 +-
- arch/x86/kernel/cpu/common.c   |    2 +-
- arch/x86/kernel/fpu/init.c     |    6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/kernel/fpu/init.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -109,7 +109,7 @@ extern void fpu_reset_from_exception_fix
- 
- /* Boot, hotplug and resume */
- extern void fpu__init_cpu(void);
--extern void fpu__init_system(struct cpuinfo_x86 *c);
-+extern void fpu__init_system(void);
- extern void fpu__init_check_bugs(void);
- extern void fpu__resume_cpu(void);
- 
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1604,7 +1604,7 @@ static void __init early_identify_cpu(st
- 
- 	sld_setup(c);
- 
--	fpu__init_system(c);
-+	fpu__init_system();
- 
- #ifdef CONFIG_X86_32
- 	/*
 --- a/arch/x86/kernel/fpu/init.c
 +++ b/arch/x86/kernel/fpu/init.c
+@@ -53,7 +53,7 @@ void fpu__init_cpu(void)
+ 	fpu__init_cpu_xstate();
+ }
+ 
+-static bool fpu__probe_without_cpuid(void)
++static bool __init fpu__probe_without_cpuid(void)
+ {
+ 	unsigned long cr0;
+ 	u16 fsw, fcw;
 @@ -71,7 +71,7 @@ static bool fpu__probe_without_cpuid(voi
  	return fsw == 0 && (fcw & 0x103f) == 0x003f;
  }
  
--static void fpu__init_system_early_generic(struct cpuinfo_x86 *c)
-+static void fpu__init_system_early_generic(void)
+-static void fpu__init_system_early_generic(void)
++static void __init fpu__init_system_early_generic(void)
  {
  	if (!boot_cpu_has(X86_FEATURE_CPUID) &&
  	    !test_bit(X86_FEATURE_FPU, (unsigned long *)cpu_caps_cleared)) {
-@@ -211,10 +211,10 @@ static void __init fpu__init_system_xsta
-  * Called on the boot CPU once per system bootup, to set up the initial
-  * FPU state that is later cloned into all processes:
-  */
--void __init fpu__init_system(struct cpuinfo_x86 *c)
-+void __init fpu__init_system(void)
- {
- 	fpstate_reset(&current->thread.fpu);
--	fpu__init_system_early_generic(c);
-+	fpu__init_system_early_generic();
- 
- 	/*
- 	 * The FPU has to be operational for some of the
 
