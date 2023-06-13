@@ -2,123 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD37E72EB4F
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 20:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928A272ECD1
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 22:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjFMS42 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Jun 2023 14:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S240106AbjFMUVL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Jun 2023 16:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237431AbjFMS41 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 14:56:27 -0400
-Received: from out-55.mta1.migadu.com (out-55.mta1.migadu.com [IPv6:2001:41d0:203:375::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D3E1A7
-        for <linux-mips@vger.kernel.org>; Tue, 13 Jun 2023 11:56:25 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 14:56:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686682581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cI/+VKexODe7tgazUH0uBbszHN+Sh5VjQJKMcYicSKU=;
-        b=UteSpuaAfbQ2NCJDHT0DaE6LH+0KCxqxliA1u1CiHpYLEp/BHx0yHT4z2wyOm1k0K155IH
-        1TdtqXMsJtk9bqAzUZ31aQXTksL2s2n1Q4RGfHebraQUDr3MhWO8yy+4wsaox2mGxQ3YRe
-        XgmITo5ci4OCni1zywcC85bIuHv1vdI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Song Liu <song@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <ZIi7zmey0w61EG25@moria.home.lan>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan>
- <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
- <20230605092040.GB3460@kernel.org>
- <ZH20XkD74prrdN4u@FVFF77S0Q05N>
- <CAPhsuW7ntn_HpVWdGK_hYVd3zsPEFToBNfmtt0m6K8SwfxJ66Q@mail.gmail.com>
- <20230608184116.GJ52412@kernel.org>
+        with ESMTP id S235642AbjFMUVK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 16:21:10 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C168198D
+        for <linux-mips@vger.kernel.org>; Tue, 13 Jun 2023 13:21:07 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b02fcde49aso33035255ad.0
+        for <linux-mips@vger.kernel.org>; Tue, 13 Jun 2023 13:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686687666; x=1689279666;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xxCRqTUpCdcaL5d+zxoNNIGdAwVO5d6gYOiArNvEfDk=;
+        b=MdG3P+8ihRjSOh7LybABvISRLscCMBxkCXrypPOlWdC+OtYj0yftCdz/uUj98Dw73e
+         FhGLYHBT+mUIwYBKA7+2i75jw7j0RCQu7cApPRXOzrZZaHzRGXsKvoXhl03dGB8ouUuG
+         /A5TFZGtg2AeZl6z7cZS08VFOGBVeakdEkhkM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686687666; x=1689279666;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xxCRqTUpCdcaL5d+zxoNNIGdAwVO5d6gYOiArNvEfDk=;
+        b=AnmhBrSCbKFMLeFULYeIjTw4eZV++WZScLkQYz1vgADAaEdrRJaUF8mElThhwuFlqe
+         qvbh/4tWIiRMDP5AgaaXObzEBYSl8BvZQXKLNJrutX7cxmdix8kCih+kN67I9uRXG+hs
+         93sQgPRgxvCjt5ppTAS4Z+BJ5ggw6jv6ZhTwsp6W+pAJakYRW4NohhAMYs9gy1+HH7f7
+         p4xznCt1umfSFq/BtwAHEwhA88xsNfYtkIVl7IS36ZzIIEylVRvANERM48oDMYw5zWXJ
+         rNAeZQXkmGjyShJ5nQufYx6A2Tj59+I4QZQA5JvvPrlqcNLhi9hEYIZmlrU5l/T0eXIe
+         Miyw==
+X-Gm-Message-State: AC+VfDwMb09UJBsrHQEXFM68LUa9wzOJPdcSXcpsvocNhWYDnDnJopg7
+        Hvmz+P1pM8eD1xfHxVVcfS2z2A==
+X-Google-Smtp-Source: ACHHUZ4FjJE13zDDzcDgsWgBZwhdFAkpwfh7UQt9gQTWfr+WAlSvDzNOiSEYdsJRmv+1hwafinJSyA==
+X-Received: by 2002:a17:902:8d8a:b0:1ad:e633:ee96 with SMTP id v10-20020a1709028d8a00b001ade633ee96mr8591788plo.55.1686687666576;
+        Tue, 13 Jun 2023 13:21:06 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001b034d2e71csm10608371plk.34.2023.06.13.13.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 13:21:06 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 13:21:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, 86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, hpa@zytor.com, paulmck@kernel.org,
+        peterz@infradead.org, frederic@kernel.org,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v1 00/21] refactor Kconfig to consolidate KEXEC and CRASH
+ options
+Message-ID: <202306131314.EFA558B7@keescook>
+References: <20230612172805.681179-1-eric.devolder@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230608184116.GJ52412@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230612172805.681179-1-eric.devolder@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 09:41:16PM +0300, Mike Rapoport wrote:
-> On Tue, Jun 06, 2023 at 11:21:59AM -0700, Song Liu wrote:
-> > On Mon, Jun 5, 2023 at 3:09 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> > 
-> > [...]
-> > 
-> > > > > > Can you give more detail on what parameters you need? If the only extra
-> > > > > > parameter is just "does this allocation need to live close to kernel
-> > > > > > text", that's not that big of a deal.
-> > > > >
-> > > > > My thinking was that we at least need the start + end for each caller. That
-> > > > > might be it, tbh.
-> > > >
-> > > > Do you mean that modules will have something like
-> > > >
-> > > >       jit_text_alloc(size, MODULES_START, MODULES_END);
-> > > >
-> > > > and kprobes will have
-> > > >
-> > > >       jit_text_alloc(size, KPROBES_START, KPROBES_END);
-> > > > ?
-> > >
-> > > Yes.
-> > 
-> > How about we start with two APIs:
-> >      jit_text_alloc(size);
-> >      jit_text_alloc_range(size, start, end);
-> > 
-> > AFAICT, arm64 is the only arch that requires the latter API. And TBH, I am
-> > not quite convinced it is needed.
->  
-> Right now arm64 and riscv override bpf and kprobes allocations to use the
-> entire vmalloc address space, but having the ability to allocate generated
-> code outside of modules area may be useful for other architectures.
-> 
-> Still the start + end for the callers feels backwards to me because the
-> callers do not define the ranges, but rather the architectures, so we still
-> need a way for architectures to define how they want allocate memory for
-> the generated code.
+On Mon, Jun 12, 2023 at 01:27:52PM -0400, Eric DeVolder wrote:
+> The Kconfig is refactored to consolidate KEXEC and CRASH options from
+> various arch/<arch>/Kconfig files into new file kernel/Kconfig.kexec.
 
-So, the start + end just comes from the need to keep relative pointers
-under a certain size. I think this could be just a flag, I see no reason
-to expose actual addresses here.
+This looks very nice!
+
+> [...]
+> - The boolean ARCH_HAS_<option> in effect allows the arch to determine
+>   when the feature is allowed.  Archs which don't have the feature
+>   simply do not provide the corresponding ARCH_HAS_<option>.
+>   For each arch, where there previously were KEXEC and/or CRASH
+>   options, these have been replaced with the corresponding boolean
+>   ARCH_HAS_<option>, and an appropriate def_bool statement.
+> 
+>   For example, if the arch supports KEXEC_FILE, then the
+>   ARCH_HAS_KEXEC_FILE simply has a 'def_bool y'. This permits the
+>   KEXEC_FILE option to be available.
+> 
+>   If the arch has a 'depends on' statement in its original coding
+>   of the option, then that expression becomes part of the def_bool
+>   expression. For example, arm64 had:
+> 
+>   config KEXEC
+>     depends on PM_SLEEP_SMP
+> 
+>   and in this solution, this converts to:
+> 
+>   config ARCH_HAS_KEXEC
+>     def_bool PM_SLEEP_SMP
+> 
+> 
+> - In order to account for the differences in the config coding for
+>   the three common options, the ARCH_SUPPORTS_<option> is used.
+>   This options has a 'depends on <option>' statement to couple it
+>   to the main option, and from there can insert the differences
+>   from the common option and the arch original coding of that option.
+> 
+>   For example, a few archs enable CRYPTO and CRYTPO_SHA256 for
+>   KEXEC_FILE. These require a ARCH_SUPPORTS_KEXEC_FILE and
+>   'select CRYPTO' and 'select CRYPTO_SHA256' statements.
+
+Naming nit: "HAS" and "SUPPORTS" feel very similar, and looking at
+existing configs, "ARCH_SUPPORTS_..." is already used for doing this
+kind of bare "bool" management. e.g. see ARCH_SUPPORTS_INT128
+
+It looks like you need to split "depends" and "select" so the options
+can be chosen separately from the "selectable" configs.
+
+How about naming this ARCH_SELECTS_<option>, since that's what it's
+there for?
+
+-Kees
+
+-- 
+Kees Cook
