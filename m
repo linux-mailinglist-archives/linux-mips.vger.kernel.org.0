@@ -2,72 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D838172EEF9
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 00:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB4B72EEFF
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 00:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjFMWQ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Jun 2023 18:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S232263AbjFMWQ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Jun 2023 18:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjFMWQ1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 18:16:27 -0400
+        with ESMTP id S229785AbjFMWQ5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 18:16:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66B10CC;
-        Tue, 13 Jun 2023 15:16:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86C3E3;
+        Tue, 13 Jun 2023 15:16:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E87960A5A;
-        Tue, 13 Jun 2023 22:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27C1C433C0;
-        Tue, 13 Jun 2023 22:16:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A14AB62012;
+        Tue, 13 Jun 2023 22:16:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155E5C433C8;
+        Tue, 13 Jun 2023 22:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686694582;
-        bh=+WIGytSpx4hFIJZtH+suKZCZHkq5JBHItki5+7BFPsc=;
+        s=k20201202; t=1686694614;
+        bh=u1U2JS+u6wM6OBhkKijCKkdxF/PQ2U4e1EnjjkO0qgU=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KvuDR5kbBMLh2VXVzw7NO5wtSshJHEiPMI72MOW96V4/U71ZPwOvtZcgx4igXxMM9
-         em+vyycTpMJAdlxzRDVkQnWhkW0lpSv1w5OfUlveeKzndjtlhfIAlz6KkyJhYm9vAL
-         YeOSX6iUcPzAZQxfDfXnUCMYGVKsXS4ueWqr5sAFUnmWDNkxen775E7afX9ThgAUDG
-         /zY+Rb3OkZn0TBkz1JEvYtOijN22lxlf2MhOYND5RFEYMsncR0Ru0UtWG3QgShOTYr
-         rTOglNLVYb9iCLUk1lIGArlo4nilYPoAaYiuRtfBAW2VjixrTzTJsPA6zdb5t+Q6uZ
-         QAuDp1N4POaTw==
-Message-ID: <032f8239-bb82-e20e-e42b-e7a54754298b@kernel.org>
-Date:   Tue, 13 Jun 2023 17:16:18 -0500
+        b=hQuqhvJn3yNLy2Olxjnd1xuxCkh0wfTthUElblk3SWD5APhbp2A8h/GrhfZUDe0CA
+         msAOI8lTM4SDCJH4Jw/egXw9kHffrgpSBDU2Lq/B7FL9Ncb4kZlGiVq95JuesT+7qf
+         YEh5WOURMYPSU7yAQJlo+F3GFXuLwUg0ZCA7ynIU6Zby2JiopTRsMlBw6pN58eDxfr
+         P7S7QpyZ+fotvuzUysUkJnW2doGlPUjxnxuveW2tzsGyBUdpBclirEyYiSIpPiSYAo
+         M8uN4PP8S1NMMmXoKD0EuORe3OhQDCHvxGL87kEJWcKBMzzECpxbOCX8TRFljoINsE
+         8Ubz3n0NLn6FQ==
+Message-ID: <e52c7a74-da68-08d2-54e2-f95a8c5b52e7@kernel.org>
+Date:   Tue, 13 Jun 2023 17:16:50 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 01/13] nios2: define virtual address space for modules
+Subject: Re: [PATCH v4 27/34] nios2: Convert __pte_free_tlb() to use ptdescs
 Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-References: <20230601101257.530867-1-rppt@kernel.org>
- <20230601101257.530867-2-rppt@kernel.org>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-28-vishal.moola@gmail.com>
 From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230601101257.530867-2-rppt@kernel.org>
+In-Reply-To: <20230612210423.18611-28-vishal.moola@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -82,69 +69,36 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 6/1/23 05:12, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 6/12/23 16:04, Vishal Moola (Oracle) wrote:
+> Part of the conversions to replace pgtable constructor/destructors with
+> ptdesc equivalents.
 > 
-> nios2 uses kmalloc() to implement module_alloc() because CALL26/PCREL26
-> cannot reach all of vmalloc address space.
-> 
-> Define module space as 32MiB below the kernel base and switch nios2 to
-> use vmalloc for module allocations.
-> 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 > ---
->   arch/nios2/include/asm/pgtable.h |  5 ++++-
->   arch/nios2/kernel/module.c       | 19 ++++---------------
->   2 files changed, 8 insertions(+), 16 deletions(-)
+>   arch/nios2/include/asm/pgalloc.h | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 0f5c2564e9f5..0073b289c6a4 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -25,7 +25,10 @@
->   #include <asm-generic/pgtable-nopmd.h>
+> diff --git a/arch/nios2/include/asm/pgalloc.h b/arch/nios2/include/asm/pgalloc.h
+> index ecd1657bb2ce..ce6bb8e74271 100644
+> --- a/arch/nios2/include/asm/pgalloc.h
+> +++ b/arch/nios2/include/asm/pgalloc.h
+> @@ -28,10 +28,10 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
 >   
->   #define VMALLOC_START		CONFIG_NIOS2_KERNEL_MMU_REGION_BASE
-> -#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
-> +#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M - 1)
-> +
-> +#define MODULES_VADDR		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M)
-> +#define MODULES_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
+>   extern pgd_t *pgd_alloc(struct mm_struct *mm);
 >   
->   struct mm_struct;
+> -#define __pte_free_tlb(tlb, pte, addr)				\
+> -	do {							\
+> -		pgtable_pte_page_dtor(pte);			\
+> -		tlb_remove_page((tlb), (pte));			\
+> +#define __pte_free_tlb(tlb, pte, addr)					\
+> +	do {								\
+> +		pagetable_pte_dtor(page_ptdesc(pte));			\
+> +		tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));	\
+>   	} while (0)
 >   
-> diff --git a/arch/nios2/kernel/module.c b/arch/nios2/kernel/module.c
-> index 76e0a42d6e36..9c97b7513853 100644
-> --- a/arch/nios2/kernel/module.c
-> +++ b/arch/nios2/kernel/module.c
-> @@ -21,23 +21,12 @@
->   
->   #include <asm/cacheflush.h>
->   
-> -/*
-> - * Modules should NOT be allocated with kmalloc for (obvious) reasons.
-> - * But we do it for now to avoid relocation issues. CALL26/PCREL26 cannot reach
-> - * from 0x80000000 (vmalloc area) to 0xc00000000 (kernel) (kmalloc returns
-> - * addresses in 0xc0000000)
-> - */
->   void *module_alloc(unsigned long size)
->   {
-> -	if (size == 0)
-> -		return NULL;
-> -	return kmalloc(size, GFP_KERNEL);
-> -}
-> -
-> -/* Free memory returned from module_alloc */
-> -void module_memfree(void *module_region)
-> -{
-> -	kfree(module_region);
-> +	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
-> +				    GFP_KERNEL, PAGE_KERNEL_EXEC,
-> +				    VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-> +				    __builtin_return_address(0));
->   }
->   
->   int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
+>   #endif /* _ASM_NIOS2_PGALLOC_H */
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Applied!
+
+Thanks,
+Dinh
