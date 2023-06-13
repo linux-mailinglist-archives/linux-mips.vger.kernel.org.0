@@ -2,98 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0773872DACE
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 09:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F6F72DB00
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jun 2023 09:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbjFMH3N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 13 Jun 2023 03:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S240480AbjFMHc3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Jun 2023 03:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjFMH3L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 03:29:11 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D13AA;
-        Tue, 13 Jun 2023 00:29:10 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so5348185276.0;
-        Tue, 13 Jun 2023 00:29:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686641350; x=1689233350;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gKEzJjzBKla4S0x8jxwIAxVSx314J/aF9PC4BBXNBUc=;
-        b=O/Qgik+keNnu5W/ripF9MuXw5uie4lrFN7GFG0ipslGi3ZQee/TgWENlvdMee5Gpqo
-         0+o31MhB6jqzNKVbgTiickkV71vfZbCYnr7kfGcuyUkfP9ZPGGZXxVKkKl6g4FR7GjN9
-         lkfoKHdeLiVE976H1HTNyVI+jLeAsREXo678dQWLSFslceozZqf8rcXbzQQQgkz/fBYz
-         yPojg2j9jHpPE8vkoTswAsvl9kQEpWMX6Z9R7Su60NwfLoJSuWIVCHGiNmYDCpDlOv/b
-         iLZj1ATjunJm8lGaGq2Qi3npr4/R/Zmau1WE+dUPJ44FHMMtZPpF1cysRy25xngbMtGn
-         RdGQ==
-X-Gm-Message-State: AC+VfDxdvE1X10rWnv8Uu+OqfpsF0hWuZuuThD1NcrzycNc/SbxN562x
-        iOUDikmDRR6YWpgq/pFjH9xd9KPAiDIt1Q==
-X-Google-Smtp-Source: ACHHUZ4yyzfk2dKTO7/ChlMLJuq/byIx5/VbZj9Su9mWsasd4QMjz/UO+qc8km3I9JTUtbNCjoFjyA==
-X-Received: by 2002:a25:420f:0:b0:bcd:7017:5893 with SMTP id p15-20020a25420f000000b00bcd70175893mr926167yba.24.1686641349766;
-        Tue, 13 Jun 2023 00:29:09 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id r123-20020a25c181000000b00babd2eef59dsm2983215ybf.27.2023.06.13.00.29.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 00:29:08 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-56d378b75f0so17179997b3.1;
-        Tue, 13 Jun 2023 00:29:08 -0700 (PDT)
-X-Received: by 2002:a0d:d611:0:b0:56d:ddc:cdbb with SMTP id
- y17-20020a0dd611000000b0056d0ddccdbbmr1077781ywd.25.1686641348561; Tue, 13
- Jun 2023 00:29:08 -0700 (PDT)
+        with ESMTP id S240535AbjFMHcH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jun 2023 03:32:07 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6BD6171A;
+        Tue, 13 Jun 2023 00:32:02 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxL_BwG4hkXIAEAA--.9700S3;
+        Tue, 13 Jun 2023 15:32:00 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxGOVuG4hkSaMYAA--.5221S3;
+        Tue, 13 Jun 2023 15:31:58 +0800 (CST)
+Message-ID: <19745770-0a63-dfeb-741f-5bfe2ed11b1c@loongson.cn>
+Date:   Tue, 13 Jun 2023 15:31:58 +0800
 MIME-Version: 1.0
-References: <20230612210423.18611-1-vishal.moola@gmail.com> <20230612210423.18611-26-vishal.moola@gmail.com>
-In-Reply-To: <20230612210423.18611-26-vishal.moola@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Jun 2023 09:28:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUk2OM+j_j8XSkMxRnNqmKy3qwUA8Mq-RA+p+ByfY-+4g@mail.gmail.com>
-Message-ID: <CAMuHMdUk2OM+j_j8XSkMxRnNqmKy3qwUA8Mq-RA+p+ByfY-+4g@mail.gmail.com>
-Subject: Re: [PATCH v4 25/34] m68k: Convert various functions to use ptdescs
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [v2] drm/ingenic: Kconfig: select REGMAP and REGMAP_MMIO
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230607110650.569522-1-suijingfeng@loongson.cn>
+Content-Language: en-US
+Organization: Loongson
+In-Reply-To: <20230607110650.569522-1-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxGOVuG4hkSaMYAA--.5221S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFy3Kw45XryfKF4xZr4rXrc_yoW8Gw1xpr
+        s8twn5uFZ7ZFWYyrW2yF1xKFy3X3WrXFWFkr9xtwn09r98AFyjkrZayFZxGF9rAr17urW7
+        Xas3KFy7JF17AacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+        67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+        x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r
+        1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
+        7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
+        WxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
+        07UEYLkUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:05 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
-> As part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents, convert various page table functions to use ptdescs.
+Hi,
+
+
+Humble ping ?
+
+
+On 2023/6/7 19:06, Sui Jingfeng wrote:
+> Otherwise its failed to pass basic compile test on platform without
+> REGMAP_MMIO selected by defconfig
 >
-> Some of the functions use the *get*page*() helper functions. Convert
-> these to use pagetable_alloc() and ptdesc_address() instead to help
-> standardize page tables further.
+> make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64-
 >
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+>    SYNC    include/config/auto.conf.cmd
+>    Checking missing-syscalls for N32
+>    CALL    scripts/checksyscalls.sh
+>    Checking missing-syscalls for O32
+>    CALL    scripts/checksyscalls.sh
+>    CALL    scripts/checksyscalls.sh
+>    MODPOST Module.symvers
+> ERROR: modpost: "__devm_regmap_init_mmio_clk" [drivers/gpu/drm/ingenic/ingenic-drm.ko] undefined!
+> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+> make: *** [Makefile:1978: modpost] Error 2
+>
+> V2: Order alphabetically
+>
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>   drivers/gpu/drm/ingenic/Kconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/ingenic/Kconfig b/drivers/gpu/drm/ingenic/Kconfig
+> index a53f475d33df..b440e0cdc057 100644
+> --- a/drivers/gpu/drm/ingenic/Kconfig
+> +++ b/drivers/gpu/drm/ingenic/Kconfig
+> @@ -9,6 +9,8 @@ config DRM_INGENIC
+>   	select DRM_PANEL_BRIDGE
+>   	select DRM_KMS_HELPER
+>   	select DRM_GEM_DMA_HELPER
+> +	select REGMAP
+> +	select REGMAP_MMIO
+>   	select VT_HW_CONSOLE_BINDING if FRAMEBUFFER_CONSOLE
+>   	help
+>   	  Choose this option for DRM support for the Ingenic SoCs.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Jingfeng
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
