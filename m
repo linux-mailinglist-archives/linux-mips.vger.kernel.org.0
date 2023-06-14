@@ -2,61 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C4E730532
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 18:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9035473061F
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 19:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbjFNQln (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Jun 2023 12:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S237086AbjFNRhF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Jun 2023 13:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbjFNQlm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Jun 2023 12:41:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BC41A3;
-        Wed, 14 Jun 2023 09:41:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ABE5637F1;
-        Wed, 14 Jun 2023 16:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2092EC433C8;
-        Wed, 14 Jun 2023 16:41:32 +0000 (UTC)
-Date:   Wed, 14 Jun 2023 17:41:30 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v4 21/34] arm64: Convert various functions to use ptdescs
-Message-ID: <ZIntusCSpsSHISYp@arm.com>
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
- <20230612210423.18611-22-vishal.moola@gmail.com>
+        with ESMTP id S230388AbjFNRhD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Jun 2023 13:37:03 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DE9119;
+        Wed, 14 Jun 2023 10:37:03 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-777ac4344f9so262076239f.0;
+        Wed, 14 Jun 2023 10:37:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686764222; x=1689356222;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=htWbyJD2n8RFcV5K4ncv4g5SpZeEJ2ahD8odx4XGKqw=;
+        b=MVPT+PbwEzWFtiviMuhSY1JUEs3Kq60Ul5HDK7cslzx0HUtaMguClr3ssWDfTepbtL
+         ovw71FO+uB/p10MXXU5wV+FIxm0Alg9Xfg1lqmgaPK/yDdgBhQd5vPYVh0wLIgVDZZx3
+         dPAmXJguxPARU7QCPufSpOAUCeK5cRMp0B6imZW0V4ANInZvTJ7ajB0Inm4x0EjGp6Es
+         Wbhnm26b0wmsT+fHGwEX6zAjQiYHHqHxJy3s6z89Aw7MPCfImieSNgdkVd2ObcJP/Wk8
+         /e4hxQL0Ul5uq82/NO0aycsMoBsd7TRX8K5nZ45NaS1+aftC4UtV28u1uZweZBmA1YUo
+         9jHg==
+X-Gm-Message-State: AC+VfDwcJODNBTdZeVedeemosg2fCE7nVno9zr4sK1JIqQHyCEtHpDaH
+        1c7wQsyEdYn4wtgKgzUORw==
+X-Google-Smtp-Source: ACHHUZ4vr3xNzpq9w6LSGrgva6wTJyFPGqe9G/sPXOrmaY8BYB8TJO4CxLbWsDOLGNnSMzeY3U7/Ow==
+X-Received: by 2002:a6b:db14:0:b0:777:b765:661a with SMTP id t20-20020a6bdb14000000b00777b765661amr15349944ioc.14.1686764222059;
+        Wed, 14 Jun 2023 10:37:02 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t13-20020a5edd0d000000b0076373f90e46sm5518847iop.33.2023.06.14.10.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 10:37:01 -0700 (PDT)
+Received: (nullmailer pid 2431248 invoked by uid 1000);
+        Wed, 14 Jun 2023 17:36:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] MIPS: octeon: Fix cvmx_writeq_csr/cvmx_readq_csr on 32-bit builds
+Date:   Wed, 14 Jun 2023 11:36:31 -0600
+Message-Id: <20230614173633.2430653-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612210423.18611-22-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 02:04:10PM -0700, Vishal Moola (Oracle) wrote:
-> As part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents, convert various page table functions to use ptdescs.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Test 32-bit builds have an error in cvmx_writeq_csr/cvmx_readq_csr:
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+arch/mips/include/asm/octeon/cvmx.h:282:24: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+
+As the default for allyesconfig/allmodconfig is 32-bit, fixing these
+functions for 32-bit is needed to enable Cavium Octeon drivers for
+COMPILE_TEST.
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/mips/include/asm/octeon/cvmx.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/include/asm/octeon/cvmx.h b/arch/mips/include/asm/octeon/cvmx.h
+index 72e775bf31e6..2265a92995a8 100644
+--- a/arch/mips/include/asm/octeon/cvmx.h
++++ b/arch/mips/include/asm/octeon/cvmx.h
+@@ -279,7 +279,7 @@ static inline void cvmx_write_csr(uint64_t csr_addr, uint64_t val)
+ 
+ static inline void cvmx_writeq_csr(void __iomem *csr_addr, uint64_t val)
+ {
+-	cvmx_write_csr((__force uint64_t)csr_addr, val);
++	cvmx_write_csr((__force uintptr_t)csr_addr, val);
+ }
+ 
+ static inline void cvmx_write_io(uint64_t io_addr, uint64_t val)
+@@ -296,7 +296,7 @@ static inline uint64_t cvmx_read_csr(uint64_t csr_addr)
+ 
+ static inline uint64_t cvmx_readq_csr(void __iomem *csr_addr)
+ {
+-	return cvmx_read_csr((__force uint64_t) csr_addr);
++	return cvmx_read_csr((__force uintptr_t) csr_addr);
+ }
+ 
+ static inline void cvmx_send_single(uint64_t data)
+-- 
+2.39.2
+
