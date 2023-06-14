@@ -2,118 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C47D730622
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 19:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEBD7306AC
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jun 2023 20:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbjFNRie (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Jun 2023 13:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S229958AbjFNSFT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Jun 2023 14:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjFNRid (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Jun 2023 13:38:33 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416EF10FE;
-        Wed, 14 Jun 2023 10:38:32 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-77a62a84855so273308139f.1;
-        Wed, 14 Jun 2023 10:38:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686764311; x=1689356311;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4AzIfgp2T+o1encwZlg2BP9N2PGCvG8KAxb0WUXTbaA=;
-        b=WsaDMIrpnSLwIqqldn34MWu2sKw3HindMBvKSXpBROS/Q7ZdF29tfkcMXzh5LiJV3H
-         Z8Sihnu5vkJuwegr9BO4WcCh6Zzd2p7rhdO3JTtDKUEj2EQbSbxoVX4ksYeDuYCUs/JO
-         SOj+TUukxh8tv6VYr4opnW7YR3DRTj8ZAPUMy2Mkyuag+8HbM6mHbFaYjxVw3hOGNJXq
-         xRvvnvqz9ekWc5uw0K9YiS279Pt7M7mhO+kPanBU4SLe1EpaiUIHG46FPWWb0Qm77c+y
-         iY9oxKZxvrBWKy3Zi7+uW/awMZG4M9SKSAbP1qZCaG4dEXp1+0rdtVD+ZscREXmarrRe
-         P48w==
-X-Gm-Message-State: AC+VfDxR+u1kOEyYajaNviVWAtWvB1KjCG7anS52RuMxCdDIU8ljgmAW
-        TYCLBjrGkr6q+L3ObLmxAEUxpvIVFg==
-X-Google-Smtp-Source: ACHHUZ4+zkUe4iA37124C8HV/+nPoXe1InO+Fi+eyYwXZkiDrm2NeUOpaRk5ZdFyrjJz8LtEtGs6Cg==
-X-Received: by 2002:a05:6e02:684:b0:33b:ef57:65bc with SMTP id o4-20020a056e02068400b0033bef5765bcmr13558330ils.20.1686764311406;
-        Wed, 14 Jun 2023 10:38:31 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id p20-20020a02c814000000b004165ce4456fsm5009151jao.33.2023.06.14.10.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 10:38:30 -0700 (PDT)
-Received: (nullmailer pid 2433146 invoked by uid 1000);
-        Wed, 14 Jun 2023 17:38:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ata: octeon: Add compile test support
-Date:   Wed, 14 Jun 2023 11:36:33 -0600
-Message-Id: <20230614173633.2430653-2-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230614173633.2430653-1-robh@kernel.org>
-References: <20230614173633.2430653-1-robh@kernel.org>
+        with ESMTP id S231723AbjFNSEm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Jun 2023 14:04:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6DFE52;
+        Wed, 14 Jun 2023 11:04:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2166643F8;
+        Wed, 14 Jun 2023 18:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0459AC433C9;
+        Wed, 14 Jun 2023 18:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686765879;
+        bh=wp7B/trtTxzsWZYBY9l+01nfl6ED3uURUNkOtUU1+Uw=;
+        h=From:Subject:Date:To:Cc:From;
+        b=KO+nORZYd0v91v7U3AQT65+13B2bxKZ62jI/Ssc83UeUa6tH/JtUBKI2/u9dsSZie
+         3zV6tW9LHmRALXQI5dip9HaX+lnGYFFwzz1Kmf0yrNgzXCSbd+ZSEd8mgu3sdh/2RZ
+         YuFyVwtNUta3juu+bhbJeeV86ZC2x+PZvwV7rcnNwkDNnTv2W+L7m9IVv6CzDKtz3n
+         a+PEjsUuwWbgKeIyYJeXGJ0KvQYE2g/rn470WL7w610jeXCk7ihdDAJVh2wLB8KSqU
+         zZzrPSKSPP8NQ1zktrapzwwpDv7eOMG/QREVkzgO/L1nEKi+RuRxHVnNsDxRuOWzE4
+         BZVrHz/TbKVcw==
+From:   Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 6.1 0/4] Update as-{instr,option} to use KBUILD_AFLAGS
+Date:   Wed, 14 Jun 2023 11:04:34 -0700
+Message-Id: <20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADIBimQC/x2NQQrDIBAAvxL23C2uARv6ldKD2jUR1JZdCYWQv
+ zfpcRiY2UBZMivchw2E16z53Q6gywBx8W1mzK+DwRo7GkcWHRJ6VeUaCgt2LzN3LGWtSDcc00S
+ GUjRmSnA0glfGIL7F5axUr53lFB/hlL//8QPcleC57z/FxGyejQAAAA==
+To:     gregkh@linuxfoundation.org, sashal@kernel.org,
+        ndesaulniers@google.com
+Cc:     naresh.kamboju@linaro.org, stable@vger.kernel.org,
+        llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2123; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=wp7B/trtTxzsWZYBY9l+01nfl6ED3uURUNkOtUU1+Uw=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCldjKa+03bXmv4Q4tlR8/9Ul6HG72wZl847SrlXE1OFT
+ nfxbYvoKGVhEONgkBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABO5EMzI8PiV3c+9Yan7hX9f
+ vr23bvXyrBV365fWpDdtYbOYzrt0cwIjw1eZh8cyP9z0Y91Vk9RieOhxQr2cyvS6Gc7H9/ZrfPn
+ JxwwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
-allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
-so other arches can't be enabled.
+Hi all,
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+This series backports commit d5c8d6e0fa61 ("kbuild: Update assembler
+calls to use proper flags and language target") to linux-6.1.y to
+address a recent issue caused by a change in behavior in clang:
+
+https://lore.kernel.org/CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com/
+https://lore.kernel.org/20230612185424.GA2891387@dev-arch.thelio-3990X/
+
+While that was not the original intention of the aforementioned change,
+it ends up resolving the issue for the same reason, by not passing flags
+that are not supported or necessary for the current language target
+(KBUILD_CFLAGS for .c files and KBUILD_AFLAGS for .S files) when testing
+flags for that language target.
+
+All patches except the second one are direct backports from mainline.
+The second patch is a stable specific patch because the upstream
+solution could break stable due to the minimum supported version of
+binutils in mainline being a newer version than 6.1 and earlier; it
+chooses to do the more conservative fix, which was alluded to in the
+changelog of the upstream commit.
+
+For now, this is just a 6.1 issue. If the issue occurs in older
+releases, I will send separate backports. If there are any issues or
+objections to this series, please let me know.
+
+Cheers,
+Nathan
+
 ---
-Tested on allmodconfig build. Not sure if there's other MIPS configs 
-where this doesn't work. We'll see what 0-day says.
+Nathan Chancellor (2):
+      MIPS: Move '-Wa,-msoft-float' check from as-option to cc-option
+      MIPS: Prefer cc-option for additions to cflags
 
- drivers/ata/Kconfig          | 4 ++--
- drivers/ata/pata_octeon_cf.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Nick Desaulniers (2):
+      x86/boot/compressed: prefer cc-option for CFLAGS additions
+      kbuild: Update assembler calls to use proper flags and language target
 
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index 42b51c9812a0..4572f837e504 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -239,7 +239,7 @@ config AHCI_MVEBU
- 
- config AHCI_OCTEON
- 	tristate "Cavium Octeon Soc Serial ATA"
--	depends on SATA_AHCI_PLATFORM && CAVIUM_OCTEON_SOC
-+	depends on SATA_AHCI_PLATFORM && MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
- 	default y
- 	help
- 	  This option enables support for Cavium Octeon SoC Serial ATA.
-@@ -373,7 +373,7 @@ config PDC_ADMA
- 
- config PATA_OCTEON_CF
- 	tristate "OCTEON Boot Bus Compact Flash support"
--	depends on CAVIUM_OCTEON_SOC
-+	depends on MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
- 	select PATA_TIMINGS
- 	help
- 	  This option enables a polled compact flash driver for use with
-diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-index 57b2166a6d5d..cc9e4b63ded9 100644
---- a/drivers/ata/pata_octeon_cf.c
-+++ b/drivers/ata/pata_octeon_cf.c
-@@ -853,8 +853,8 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 					of_node_put(dma_node);
- 					return -EINVAL;
- 				}
--				cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
--									 resource_size(res_dma));
-+				cf_port->dma_base = (uintptr_t)devm_ioremap(&pdev->dev, res_dma->start,
-+									    resource_size(res_dma));
- 				if (!cf_port->dma_base) {
- 					put_device(&dma_dev->dev);
- 					of_node_put(dma_node);
+ arch/mips/Makefile                | 4 ++--
+ arch/mips/loongson2ef/Platform    | 2 +-
+ arch/x86/boot/compressed/Makefile | 2 +-
+ scripts/Kconfig.include           | 2 +-
+ scripts/Makefile.compiler         | 8 ++++----
+ scripts/as-version.sh             | 2 +-
+ 6 files changed, 10 insertions(+), 10 deletions(-)
+---
+base-commit: ca87e77a2ef8b298aa9f69658d5898e72ee450fe
+change-id: 20230612-6-1-asssembler-target-llvm-17-3f8101fc008f
+
+Best regards,
 -- 
-2.39.2
+Nathan Chancellor <nathan@kernel.org>
 
