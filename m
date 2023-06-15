@@ -2,108 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1923B731DAD
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 18:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B8D732029
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 20:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjFOQVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 12:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S229535AbjFOSkn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 14:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjFOQV3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 12:21:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC6D184
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 09:21:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71FC360C28
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 16:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6707CC433C8;
-        Thu, 15 Jun 2023 16:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686846087;
-        bh=CMQKT8ObhlIs/9yTVJn9B5e8S9RnKJusjioFlwPJBJs=;
-        h=From:Date:Subject:To:Cc:From;
-        b=NsWAOQYgx7xp4t/t+WJ8we297HK1TaOr7G80WxyPwR6940xy4KQYIy0A4TRHVuemN
-         P87mvubInkuwvv0q0a+Jd/NEIFFRHid+7puFtdNnpp+fuEwuIlVCFhvUAuk60NNPcD
-         KiizxEq5TtOdV5O7h9kU3eEKTh7lEQe1BOOSr5nY2R1Rp4MuI5AqW7/LgLbfo9b7EO
-         ktZNKIR19X4F2JaPfmYZ/yWDgjX+Wt/UMRgcH7V+4k33qhsXa8Wr0XbGJ+Jd5lS4zi
-         azNrpEuZdpeJfGv1shMUzOWqmb4Mc2UkDXPSBVp4PXF4/MhH9xOXEF2zE7U1lfRRJG
-         OnoYlNgPTSFIQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Thu, 15 Jun 2023 09:21:18 -0700
-Subject: [PATCH] MIPS: Mark core_vpe_count() as __init
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAH06i2QC/x2NWwqDMBAAryL57kJUGqFXKUXWZFuXkge7qRTEu
- zf2cxiY2Y2SMKm5dbsR2lg5pwb9pTN+xfQi4NDYDHYYreuvELkoRJQ3+Cw0b4Vmnz+pAipw4gr
- O2uCnkUY3BdMyCyrBIpj8eoYiaiU5RRF68vf/vj+O4weQxqugiwAAAA==
-To:     tsbogend@alpha.franken.de
-Cc:     ndesaulniers@google.com, trix@redhat.com, jiaxun.yang@flygoat.com,
-        linux-mips@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1632; i=nathan@kernel.org;
- h=from:subject:message-id; bh=CMQKT8ObhlIs/9yTVJn9B5e8S9RnKJusjioFlwPJBJs=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCndVu3p3FVHExyuKgR0pDQdf2WQmXMxYpPz5bz1kWZnu
- rZ6xup3lLIwiHEwyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgIkUeDAynJHT3eesr5Ao/zTw
- urBy3/993bI7pLeyTWPX2LXv5JsEXob/sXmP9uZfNP21M9vv/ukUE+YitocdfpPWy67h+VH1PkS
- JEwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231377AbjFOSjy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 14:39:54 -0400
+X-Greylist: delayed 3526 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 11:39:44 PDT
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C52A82695;
+        Thu, 15 Jun 2023 11:39:44 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 35FGJsTl017085;
+        Thu, 15 Jun 2023 11:19:54 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 35FGJqSI017082;
+        Thu, 15 Jun 2023 11:19:52 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 15 Jun 2023 11:19:52 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        geert@linux-m68k.org, tsbogend@alpha.franken.de,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        ysato@users.osdn.me, dalias@libc.org, glaubitz@physik.fu-berlin.de,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, 86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, peterz@infradead.org,
+        linus.walleij@linaro.org, thunder.leizhen@huawei.com,
+        hpa@zytor.com, kernel@xen0n.name, ardb@kernel.org, tsi@tuyoix.net,
+        agordeev@linux.ibm.com, paulmck@kernel.org, bhe@redhat.com,
+        masahiroy@kernel.org, konrad.wilk@oracle.com,
+        sebastian.reichel@collabora.com, samitolvanen@google.com,
+        ojeda@kernel.org, juerg.haefliger@canonical.com,
+        borntraeger@linux.ibm.com, frederic@kernel.org, arnd@arndb.de,
+        mhiramat@kernel.org, aou@eecs.berkeley.edu, keescook@chromium.org,
+        gor@linux.ibm.com, anshuman.khandual@arm.com, hca@linux.ibm.com,
+        xin3.li@intel.com, npiggin@gmail.com, rmk+kernel@armlinux.org.uk,
+        paul.walmsley@sifive.com, boris.ostrovsky@oracle.com,
+        ziy@nvidia.com, hbathini@linux.ibm.com, gregkh@linuxfoundation.org,
+        kirill.shutemov@linux.intel.com, ndesaulniers@google.com,
+        sourabhjain@linux.ibm.com, palmer@dabbelt.com, svens@linux.ibm.com,
+        tj@kernel.org, akpm@linux-foundation.org, rppt@kernel.org
+Subject: Re: [PATCH v1 10/21] powerpc/kexec: refactor for kernel/Kconfig.kexec
+Message-ID: <20230615161952.GD19790@gate.crashing.org>
+References: <20230612172805.681179-1-eric.devolder@oracle.com> <20230612172805.681179-11-eric.devolder@oracle.com> <87fs6tflfi.fsf@mail.lhotse>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fs6tflfi.fsf@mail.lhotse>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters"),
-modpost complains when building with clang:
+On Thu, Jun 15, 2023 at 01:34:25PM +1000, Michael Ellerman wrote:
+> Eric DeVolder <eric.devolder@oracle.com> writes:
+> > -config KEXEC_FILE
+> > -	bool "kexec file based system call"
+> > -	select KEXEC_CORE
+> > -	select HAVE_IMA_KEXEC if IMA
+> > -	select KEXEC_ELF
+> > -	depends on PPC64
+> > -	depends on CRYPTO=y
+> > -	depends on CRYPTO_SHA256=y
+> ...
+> > +
+> > +config ARCH_HAS_KEXEC_FILE
+> > +	def_bool PPC64 && CRYPTO && CRYPTO_SHA256
+> 
+> The =y's got lost here.
+> 
+> I think they were both meaningful, because both options are tristate. So
+> this previously required them to be built-in (=y), whereas after your
+> patch it will allow them to be modules.
+> 
+> I don't know for sure that those options need to be built-in, but that's
+> what the code does now, so this patch shouldn't change it, at least
+> without an explanation.
 
-  WARNING: modpost: vmlinux.o: section mismatch in reference: core_vpe_count (section: .text) -> smp_max_threads (section: .init.data)
+This patch shouldn't change it at all, period.  If you want to change it
+(and that sounds like a good idea, if it is possible anyway), that
+should be a separate patch.
 
-This warning occurs when core_vpe_count() is not inlined, as it appears
-that a non-init function is referring to an init symbol. However, this
-is not a problem in practice because core_vpe_count() is only called
-from __init functions, cps_smp_setup() and cps_prepare_cpus().
 
-Resolve the warning by marking core_vpe_count() as __init, as it is only
-called in an init context so it can refer to init functions and symbols
-and have its memory freed on boot.
-
-Fixes: 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/kernel/smp-cps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index bea6a13ea464..92575222713b 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -29,7 +29,7 @@ static DECLARE_BITMAP(core_power, NR_CPUS);
- 
- struct core_boot_config *mips_cps_core_bootcfg;
- 
--static unsigned core_vpe_count(unsigned int cluster, unsigned core)
-+static unsigned __init core_vpe_count(unsigned int cluster, unsigned core)
- {
- 	return min(smp_max_threads, mips_cps_numvps(cluster, core));
- }
-
----
-base-commit: 5cad8323040bb8d47e130c10ea4dcb7175c7602a
-change-id: 20230615-mips-mark-core_vpe_count-as-init-600dc73e367d
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Segher
