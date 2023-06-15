@@ -2,215 +2,226 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB7473117A
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 09:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C5B731294
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 10:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239020AbjFOH5d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 03:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S245303AbjFOIq6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 04:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238184AbjFOH5c (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 03:57:32 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306341A3
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 00:57:30 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5702415be17so9154487b3.2
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 00:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686815849; x=1689407849;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLt61v9ssqW8THTFBubZKFO6yUx9jJyRuoagCfuj5p4=;
-        b=sqOjHZl7egAhowGBIl8syIGU5uGIW1wSh5YqCADkB0Zmhbwaikuj12BL/Atk+qYS71
-         8dY5tiV1rX4DjXNhrE2xJeIEdceT4TUB4AfmV60Sg7nUR26TxpBkZUfQbEPDRpELwXiM
-         3HDz0uXJ5pPS05kzKVjfB3TERQuwjHm7feUY48emv6g2FTDXB9kM0valHSq3MAkeYNdE
-         mA/iBYPYSlEE3tWbGq5EWumSWyWn91B8nqrAaue3xEBOGl9H7R/5SfVVFZg7lrOxN+sl
-         dQY9293XfHEDMeAx5R4qX4oCaN7KwBo3Iv/M+KCSiSSfPpdtHzovKysKwSYDtQgZOCuN
-         1f9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686815849; x=1689407849;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLt61v9ssqW8THTFBubZKFO6yUx9jJyRuoagCfuj5p4=;
-        b=HN8IwyuhqBkdhDDhCmp1Se3xW9DbXKchCI6I4CURgiVXz2dLJcOEv283s3Wjk125xl
-         tik1CCht02EFCx1vcD4YWkE3XGr6NSdpTbayb9F4hegYlizFZkrdSm+GCt2m/GrxXtUo
-         XINMAxPoiyZUJWB150yGAY9zF1vvfOAj9fQrRgECs92AsuJPXChJDo5wUGxCk/LPUTmX
-         umd/G4jVPrGLB/DrR3vtt2qBFDOiYMThv/w6rdDB+x6ZabVRVMLDAE1gdpdBoZmS99z2
-         YW7HXOae3D7VkKS8aPRBLiOMhctwnxICoAzW6672wpwMldq4AQFgyj3jeBrRRAfmYi3t
-         ZHcw==
-X-Gm-Message-State: AC+VfDzgfYwqg5her5NvgWnENxiQyWM+8FQxyQOwAzQA8ai5MuWLojUs
-        Ng2TV0QFCWlx/mrs0pjr99/C5A==
-X-Google-Smtp-Source: ACHHUZ7WkxW4gg02vDJcQOsCLmdXn2XBXedO6GCP0YsU33dh0gQYY291P8lwRaex9WlgnYowIiPsYQ==
-X-Received: by 2002:a0d:d9c9:0:b0:56d:244:ab13 with SMTP id b192-20020a0dd9c9000000b0056d0244ab13mr4185666ywe.28.1686815849226;
-        Thu, 15 Jun 2023 00:57:29 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id w10-20020a0dd40a000000b00568a207aaedsm4237877ywd.68.2023.06.15.00.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 00:57:28 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 00:57:19 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
-In-Reply-To: <20230612210423.18611-5-vishal.moola@gmail.com>
-Message-ID: <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
-References: <20230612210423.18611-1-vishal.moola@gmail.com> <20230612210423.18611-5-vishal.moola@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S244598AbjFOIq2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 04:46:28 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD07297F;
+        Thu, 15 Jun 2023 01:45:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686818735; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=F+XAGKtmcxaW8cC7OPstgEhgK0E9xzd5esV/63evVetA1voYWK1P6Lnjz5rogjwKx5
+    P8IFuMFBx5OLpxC7aV78YPqvTWABUHsq42hPD9Pc/0n6RS6d1PaxNt/l3/yDhOCb7zd8
+    mzTvi/dByRadddhimo2YjDTlCnS6SPq0u80bp4fomX8Fnt9P+kNl/hgb3ijbQhl3ZmmN
+    6gcriTRwXfA6ifdOZgkAEKV30KnKI9x3+jjVl2BypbQ0xZFkTbXHZEDPQ/IG49sKPNUg
+    d1b8vrLCInZtKljPi4cn+N9A0g6WWYzFJpKb2lqmonIqNsL7HozFoHZlbEmDTqJb4duG
+    9gsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686818735;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=r9yoRyTCv75wwFXzzcG+dHR3NLOvYX2zRmFLfs7WaEE=;
+    b=hI8shaWvAoddTpEsvASmBLHJiTaPfxsLnO6gwwG1DaOwU8CALXooIeZCCrtvGtV1m/
+    1Y7B/p5p90j0VXZTmI8V968lT2/tJG+Ymaz83PLZR8QrMURffD4y/rlv21LpQpakt2uc
+    703YYLzA3Wvlp9bqjC/cUImEt/dEA1XyvUXDtx7LPhhBh/bDK/SbnKld1psTpZwMTIBV
+    iHNMn1IVA/WJgAbHm8dI59b4t3LpclrgUZNHjlJJVltAGWO2JLMYHPO5FHCKMZpIDz8c
+    0nKlK7hwdnayjvJjYRNTYRCc0rJyUQlHMW9k5bNwfn3utQtyl1ou2DuzJO0ESpDD3+8t
+    ECRA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686818735;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=r9yoRyTCv75wwFXzzcG+dHR3NLOvYX2zRmFLfs7WaEE=;
+    b=YJFJ8zVkXrlehkkl/0/ovSvcN2ADIWFW+j3OqO84pSOJ3D4rli57DEdqK5HOPeiYh4
+    ZzHrcPbpiAqoQ3EAJRBxSrckhL/p0oLTFbeoDkHDr3eAkP7BbKP6N6VGwTw8WEQbnStv
+    9eSrNgeniNOvYIR2Z6sLugZwSk6u13DKxAJbEAL+voAAi5rEr0VEdLPDlSxi2Q0mvbEO
+    15CCo069BvZkbID+OL23pIHnUYViOjOmGwkvENZef66UHKdvlTRPEGtX6WDSNw6+bMkb
+    W0KIkkuyTz9uhhQq4InbFTaCSGk5hT5JIMnQ8Ai8W2e8UKJ2/vPpWE4bQvWCvsjZ42mV
+    gZTQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686818735;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=r9yoRyTCv75wwFXzzcG+dHR3NLOvYX2zRmFLfs7WaEE=;
+    b=7h7MQm/blWPwp6wjdBECY0iiSo5T/v7KlupaLkhc0JijjOOSeNjri1nXdtysH0wJEi
+    /P1NjqYZ4Y8531+pTcCA==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeonQ="
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id jaf17fz5F8jZ2fK
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 15 Jun 2023 10:45:35 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20230615084006.79194526F801@goldelico.com>
+Date:   Thu, 15 Jun 2023 10:45:34 +0200
+Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
+References: <20230615084006.79194526F801@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 12 Jun 2023, Vishal Moola (Oracle) wrote:
+Hi Paul,
 
-> Currently, page table information is stored within struct page. As part
-> of simplifying struct page, create struct ptdesc for page table
-> information.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> Am 15.06.2023 um 10:39 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le 15 juin 2023 09:00, "H. Nikolaus Schaller" <hns@goldelico.com> a =
+=C3=A9crit :
+>>=20
+>> Hi Paul,=20
+>> I was in holidays and could not review this series earlier.=20
+>>=20
+>>=20
+>>> Am 04.06.2023 um 16:56 schrieb Paul Cercueil <paul@crapouillou.net>:=20=
 
-Vishal, as I think you have already guessed, your ptdesc series and
-my pte_free_defer() "mm: free retracted page table by RCU" series are
-on a collision course.
+>>>=20
+>>> Hi,=20
+>>>=20
+>>> Here's a set of patches to add support for the WiFi / Bluetooth chip =
+on=20
+>>> the CI20.=20
+>>>=20
+>>> WiFi works pretty well, provided it is used with the latest firmware=20=
 
-Probably just trivial collisions in most architectures, which either
-of us can easily adjust to the other; powerpc likely to be more awkward,
-but fairly easily resolved; s390 quite a problem.
+>>> provided by linux-firmware. Bluetooth does not work very well here, =
+as=20
+>>> I cannot get my wireless keyboard to pair; but it does detect it, =
+and it=20
+>>> does see they key presses when I type the pairing code.=20
+>>>=20
+>>> I only tested with a somewhat recent (~2022) Buildroot-based =
+userspace.=20
+>>> I enabled WEXT compatibility because the CI20 is typically used with =
+a=20
+>>> very old userspace, but I did not try to use it with old tools like=20=
 
-I've so far been unable to post a v2 of my series (and powerpc and s390
-were stupidly wrong in the v1), because a good s390 patch is not yet
-decided - Gerald Schaefer and I are currently working on that, on the
-s390 list (I took off most Ccs until we are settled and I can post v2).
+>>> ifconfig/iwconfig.=20
+>>=20
+>> ^^^ great since not everyone is using memory hungry latest user-space =
+and=20
+>> ifconfig/iwconfig is also available on some other OS so users like me=20=
 
-As you have no doubt found yourself, s390 has sophisticated handling of
-free half-pages already, and I need to add rcu_head usage in there too:
-it's tricky to squeeze it all in, and ptdesc does not appear to help us
-in any way (though mostly it's just changing some field names, okay).
+>> can share scripts.=20
+>>=20
+>>=20
+>> But I had quite some issues with this series.=20
+>>=20
+>> 1. I could not boot my CI20 V2a board after applying the full series =
+to v6.4-rc6=20
+>> 2. bisecting failed because vcc_33v is used in a patch preceding its =
+definition=20
+>>    leading to DTC compile abort=20
+>> 3. after fixing I could bisect that "MIPS: DTS: CI20: Fix ACT8600 =
+regulator node names"=20
+>>    is the first bad commit - although I don't see immediately why=20
+>>=20
+>> So this series seems to be severely broken and I could not even come =
+to=20
+>> a test of WiFi and/or Bluetooth which the series claims to support.=20=
 
-If ptdesc were actually allowing a flexible structure which architectures
-could add into, that would (in some future) be nice; but of course at
-present it's still fitting it all into one struct page, and mandating
-new restrictions which just make an architecture's job harder.
+>=20
+> Well, that's strange. I can assure you it boots and works here.
+>=20
+> Maybe it is a board difference; I have a non-square green board - so =
+the earlier version.
 
-Some notes on problematic fields below FYI.
+Ok, my V2a is the bordeaux one. That may indeed make a difference.
 
-> ---
->  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
-> 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index c5a51481bbb9..330de96ebfd6 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
->  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
->  #endif /* CONFIG_MMU */
->  
-> +
-> +/**
-> + * struct ptdesc - Memory descriptor for page tables.
-> + * @__page_flags: Same as page flags. Unused for page tables.
-> + * @pt_list: List of used page tables. Used for s390 and x86.
-> + * @_pt_pad_1: Padding that aliases with page's compound head.
-> + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
-> + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap only.
-> + * @pt_mm: Used for x86 pgds.
-> + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and s390 only.
-> + * @ptl: Lock for the page table.
-> + *
-> + * This struct overlays struct page for now. Do not modify without a good
-> + * understanding of the issues.
-> + */
-> +struct ptdesc {
-> +	unsigned long __page_flags;
-> +
-> +	union {
-> +		struct list_head pt_list;
+>=20
+> Since this patch will actually make the various ACT8600 regulators =
+work at their specified voltage, maybe the voltage on one of the updated =
+regulators is wrong?
+>=20
+> Maybe change the regulators one by one back to their old name, until =
+you find the one that is problematic? That may give us more info.
 
-I shall be needing struct rcu_head rcu_head (or pt_rcu_head or whatever,
-if you prefer) in this union too.  Sharing the lru or pt_list with rcu_head
-is what's difficult to get right and efficient on s390 - and if ptdesc gave
-us an independent rcu_head for each page table, that would be a blessing!
-but sadly not, it still has to squeeze into a struct page.
+That is what I also have though about but have not yet done.
+Will try as soon as I find a time slot.
 
-> +		struct {
-> +			unsigned long _pt_pad_1;
-> +			pgtable_t pmd_huge_pte;
-> +		};
-> +	};
-> +	unsigned long _pt_s390_gaddr;
-> +
-> +	union {
-> +		struct mm_struct *pt_mm;
-> +		atomic_t pt_frag_refcount;
+>=20
+>> Comments to some individual patches follow.=20
+>=20
+> Sorry about the vcc_33v. Honest mistake.
+>=20
+> Thomas: are you able to drop this series from mips-next, or should =
+I/we send fixup patches instead?
 
-Whether s390 will want pt_mm is not yet decided: I want to use it,
-Gerald prefers to go without it; but if we do end up using it,
-then pt_frag_refcount is a luxury we would have to give up.
+Well, mistakes happen.
 
-s390 does very well already with its _refcount tricks, and I'd expect
-powerpc's simpler but more wasteful implementation to work as well
-with _refcount too - I know that a few years back, powerpc did misuse
-_refcount (it did not allow for speculative accesses, thought it had
-sole ownership of that field); but s390 copes well with that, and I
-expect powerpc can do so too, without the luxury of pt_frag_refcount.
+Best regards,
+Nikolaus
 
-But I've no desire to undo powerpc's use of pt_frag_refcount:
-just warning that we may want to undo any use of it in s390.
+>=20
+> Cheers,
+> -Paul
+>=20
+>> Best regards and looking forward to a v2 for testing,=20
+>> Nikolaus=20
+>>=20
+>>=20
+>>>=20
+>>> Cheers,=20
+>>> -Paul=20
+>>>=20
+>>> Paul Cercueil (9):=20
+>>>   MIPS: DTS: CI20: Fix regulators=20
+>>>   MIPS: DTS: CI20: Fix ACT8600 regulator node names=20
+>>>   MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators=20
+>>=20
+>> ^^^ should IMHO be a separate series since it is not directly related =
+to WiFi / Bluetooth=20
+>>=20
+>>>   MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators=20
+>>>   MIPS: DTS: CI20: Misc. cleanups=20
+>>=20
+>> ^^^ these two do not compile=20
+>> The Misc. cleanups do not belong to this topic.=20
+>>=20
+>>>   MIPS: DTS: CI20: Parent MSCMUX clock to MPLL=20
+>>=20
+>> ^^^ this is only loosely related to Wifi / Bluetooth=20
+>>=20
+>>>   MIPS: DTS: CI20: Enable support for WiFi / Bluetooth=20
+>>>   MIPS: configs: CI20: Regenerate defconfig=20
+>>>   MIPS: configs: CI20: Enable WiFi / Bluetooth=20
+>>>=20
+>>> arch/mips/boot/dts/ingenic/ci20.dts | 148 =
++++++++++++++++++++---------=20
+>>> arch/mips/configs/ci20_defconfig    |  47 ++++++---=20
+>>> 2 files changed, 133 insertions(+), 62 deletions(-)=20
+>>>=20
+>>> --=20
+>>> 2.39.2=20
+>>>=20
+>>=20
 
-I thought I had more issues to mention, probably Gerald will
-remind me of a whole new unexplored dimension! gmap perhaps.
-
-Hugh
-
-> +	};
-> +
-> +#if ALLOC_SPLIT_PTLOCKS
-> +	spinlock_t *ptl;
-> +#else
-> +	spinlock_t ptl;
-> +#endif
-> +};
-> +
-> +#define TABLE_MATCH(pg, pt)						\
-> +	static_assert(offsetof(struct page, pg) == offsetof(struct ptdesc, pt))
-> +TABLE_MATCH(flags, __page_flags);
-> +TABLE_MATCH(compound_head, pt_list);
-> +TABLE_MATCH(compound_head, _pt_pad_1);
-> +TABLE_MATCH(pmd_huge_pte, pmd_huge_pte);
-> +TABLE_MATCH(mapping, _pt_s390_gaddr);
-> +TABLE_MATCH(pt_mm, pt_mm);
-> +TABLE_MATCH(ptl, ptl);
-> +#undef TABLE_MATCH
-> +static_assert(sizeof(struct ptdesc) <= sizeof(struct page));
-> +
->  /*
->   * No-op macros that just return the current protection value. Defined here
->   * because these macros can be used even if CONFIG_MMU is not defined.
-> -- 
-> 2.40.1
