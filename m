@@ -2,127 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BCA732073
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 21:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABA373218E
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 23:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjFOTmc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 15:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S230016AbjFOVWX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 17:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFOTmb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 15:42:31 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081022959
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 12:42:31 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-43f519c0888so891073137.3
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 12:42:30 -0700 (PDT)
+        with ESMTP id S236130AbjFOVWW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 17:22:22 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768B21FC2
+        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 14:22:20 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5701810884aso1427957b3.0
+        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 14:22:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686858150; x=1689450150;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EEzNrFy4XtnBJchIRCyudJpLzlojDK3YzlAqwYMXFT0=;
-        b=lBwTUjIilesidUCNGaAvZ+xj4jRGP9ZPcdF6CpMtEeTbtwKGGC9zJYJcwMkwh5GDSj
-         6TO/HyTtOMlwBDHVt0L6hSeGPFlURYJRwbR0dz4PRCJYntqmF/3cCuuu0h/v1jxKA888
-         pcmBRHsiMmLRBAi8IYio5/cKlRMvzj4FcDxzkLhnj050yvQrc9Y1F2XzKmuYr5NBlcP1
-         EpPbrkvpKqrj1yDytJDpzeEKUPlcQGBPnhKCW4YtvBC64iiFEdkoC0QwKJLipXFkq7wc
-         jGtl3rS0rfb7Pcfqsc0daraaxrNMh7MKpbrNuhkhT76TdPMOj1SNGsX7ycRIVoJ3AQy9
-         BDIQ==
+        d=google.com; s=20221208; t=1686864139; x=1689456139;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S2y2ag2VSA5iJWjnLMJgW21sD26IXOkwRb84bIEjNFc=;
+        b=xQ0UEfbeHsvyF9P9GSzV8sPaDnCduWem82QRocOPVTimyNaz+TtzXunPSdeRzXvvAi
+         vai/I3V4xnGwkuPBK2C8BxgXmG/grI3PNJPpvIXErHwA9uzmeBRdld+oVJisQfogsxl0
+         vGLKSwM0YFacwx/AmX5Id6XW9gRfBLJoOHHDKed5GhoMi63Kk25c1kBjAvC4IVlUHe3e
+         oelGGGI8RCOSrTPLR5K32xFZslyRFLZPbM5b3aFNmrO++aNzcuug8bpdMx1IF1HOO2ol
+         NHDhCqI2eK44IOXmk4glSuyplwnvkIK/n7XkQCIImv5fgRh6qF4f64HAb8zfCbRE0z7D
+         2CQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686858150; x=1689450150;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EEzNrFy4XtnBJchIRCyudJpLzlojDK3YzlAqwYMXFT0=;
-        b=evK9XcKYvby8kIu6SOmKF6x5//fgQ5KesSfu8CwK2aq4xBp/JIYE90DR0x2iKaGnOb
-         shf2iO+HVgpDcjwxLIIYXr5REiTzLJMzlYHMAYegK7Y9lrsj1CQIZozm2P4ps4ZStyjc
-         ejx8Ebv7uuMAcvYiU4sHroMH9BABlVlVwV5MUnIb96XcJiYjYuI69Eo7717J8Z9B6Txk
-         i/MDjrxF1xK/eEY6OBy8coD6j1+TYm9OdtIkMLG7GTKAAmEhkyi1+QN4IQEZnllBry0F
-         hBb5qtDpWNgYSb4Ym6+PVfVYQPI0iPREhneeLbJqvifUXlgqKEMeVFIcMYAsM+CegSLs
-         mtOg==
-X-Gm-Message-State: AC+VfDwNXzqF3HXlWUVmEWrjWQfhRGNFqzhaqSuYYI1/JyVzheakZgEH
-        x0lG1vNjvcCnZNRuxPHdlrt54rR1AI04tGYpSN3wS4kr0uk6CBt5CEs=
-X-Google-Smtp-Source: ACHHUZ4DAcb8XJ7cK5trIjfYu8JayVxt4ZPxnD/vGCWza1Eoy4aPA1/eOXTHCyXUZSdlUS0q7KBknTMFqsdih3/7QPM=
-X-Received: by 2002:a67:f34d:0:b0:43b:38a5:f8a0 with SMTP id
- p13-20020a67f34d000000b0043b38a5f8a0mr494060vsm.14.1686858149899; Thu, 15 Jun
- 2023 12:42:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
-In-Reply-To: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 15 Jun 2023 15:42:16 -0400
-Message-ID: <CAKwvOdndp=2h9se6ddGiYJ6S4o_ROFLD2CH5ZuW-SRa=DMapzw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Mark core_vpe_count() as __init
+        d=1e100.net; s=20221208; t=1686864139; x=1689456139;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S2y2ag2VSA5iJWjnLMJgW21sD26IXOkwRb84bIEjNFc=;
+        b=IT9Yhmnfwuwi0g9ZGP9iVOsjht3vR5pyg6x2K+aIyAUWctXFiNG8mDVNSFsCWWXJZb
+         LrszNMoJJy5Nhn5qliTaqi305wX8+bkp9CKf9su1WlMVPrrGAkEZSDgt05qNUXHRnBDw
+         8XG/3EBD6H+EY8XtVTFg70EikKQ+JObdbCwHf5ool6JIc9ZV06EKQBx+fzQ8av9UcJvg
+         r+KvHxtq0X0Cg/Bs9QM9BV6mSQj+fuy/xlL7mERzHcYUcCp7N3lg2Bd+gaDGWGVSqTc9
+         2Esag4EyEyuwMwfH6GkDePlCZwsVXvwmuRy/l8yl/uTssAh3CY5fbLW5oPLf2AmbP94Y
+         ciyQ==
+X-Gm-Message-State: AC+VfDwYeAjfHlxAllDMbUX0gW3dgjbPpmq928YL8lTifv93cVDIf8Cz
+        8Ll2ad2a33bBwgGZmAGBBZbM5A==
+X-Google-Smtp-Source: ACHHUZ7Wn443nNp7TXnOUS1g0CwvPfeS1ec2zVwJBnOAceqd4kD8IQUnTLQfS40NfWgzNKeH64ll/A==
+X-Received: by 2002:a81:83d3:0:b0:56c:ea2c:5cb2 with SMTP id t202-20020a8183d3000000b0056cea2c5cb2mr5787878ywf.49.1686864139515;
+        Thu, 15 Jun 2023 14:22:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id s189-20020a0de9c6000000b0054f80928ea4sm4626438ywe.140.2023.06.15.14.22.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 14:22:19 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 14:22:15 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
 To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     tsbogend@alpha.franken.de, trix@redhat.com,
-        jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/23] mips: update_mmu_cache() can replace
+ __update_tlb()
+In-Reply-To: <20230615155059.GB3665766@dev-arch.thelio-3990X>
+Message-ID: <76b41825-30fa-b9e8-d043-2affcba24317@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com> <178970b0-1539-8aac-76fd-972c6c46ec17@google.com> <20230614231758.GA1503611@dev-arch.thelio-3990X> <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com> <344a4da-3890-45fd-607e-b5f85ca6ad48@google.com>
+ <20230615155059.GB3665766@dev-arch.thelio-3990X>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:21=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> After commit 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters"),
-> modpost complains when building with clang:
->
->   WARNING: modpost: vmlinux.o: section mismatch in reference: core_vpe_co=
-unt (section: .text) -> smp_max_threads (section: .init.data)
->
-> This warning occurs when core_vpe_count() is not inlined, as it appears
-> that a non-init function is referring to an init symbol. However, this
-> is not a problem in practice because core_vpe_count() is only called
-> from __init functions, cps_smp_setup() and cps_prepare_cpus().
->
-> Resolve the warning by marking core_vpe_count() as __init, as it is only
-> called in an init context so it can refer to init functions and symbols
-> and have its memory freed on boot.
->
-> Fixes: 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Thu, 15 Jun 2023, Nathan Chancellor wrote:
+> On Wed, Jun 14, 2023 at 10:43:30PM -0700, Hugh Dickins wrote:
+> > 
+> > I do hope that you find the first fixes the breakage; but if not, then
+> 
+> I hate to be the bearer of bad news but the first patch did not fix the
+> breakage, I see the same issue.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Boo!
 
-> ---
->  arch/mips/kernel/smp-cps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index bea6a13ea464..92575222713b 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -29,7 +29,7 @@ static DECLARE_BITMAP(core_power, NR_CPUS);
->
->  struct core_boot_config *mips_cps_core_bootcfg;
->
-> -static unsigned core_vpe_count(unsigned int cluster, unsigned core)
-> +static unsigned __init core_vpe_count(unsigned int cluster, unsigned cor=
-e)
->  {
->         return min(smp_max_threads, mips_cps_numvps(cluster, core));
->  }
->
-> ---
-> base-commit: 5cad8323040bb8d47e130c10ea4dcb7175c7602a
-> change-id: 20230615-mips-mark-core_vpe_count-as-init-600dc73e367d
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+> 
+> > I even more fervently hope that the second will, despite my hating it.
+> > Touch wood for the first, fingers crossed for the second, thanks,
+> 
+> Thankfully, the second one does. Thanks for the quick and thoughtful
+> responses!
 
+Hurrah!
 
---=20
-Thanks,
-~Nick Desaulniers
+Thanks a lot, Nathan.  I'll set aside my disappointment and curiosity,
+clearly I'm not going to have much of a future as a MIPS programmer.
+
+I must take a break, then rush Andrew the second patch, well, not
+exactly that second patch, since most of that is revert: I'll just
+send the few lines of replacement patch (with a new Subject line, as
+update_mmu_cache() goes back to being separate from __update_tlb()).
+
+Unless you object, I'll include a Tested-by: you.  I realize that
+your testing is limited to seeing it running; but that's true of
+most of the testing at this stage - it gets to be more interesting
+when the patch that adds the rcu_read_lock() and rcu_read_unlock()
+is added on top later.
+
+Thanks again,
+Hugh
