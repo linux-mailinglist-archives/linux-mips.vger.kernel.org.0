@@ -2,85 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A62731008
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 09:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884B7731040
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 09:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244563AbjFOHBu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 03:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S244711AbjFOHLL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 03:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244415AbjFOHB3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 03:01:29 -0400
-X-Greylist: delayed 72 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:01:27 PDT
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D44E69;
-        Thu, 15 Jun 2023 00:01:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686812484; cv=none;
+        with ESMTP id S244722AbjFOHJz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 03:09:55 -0400
+X-Greylist: delayed 152 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:08:44 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A1C297B;
+        Thu, 15 Jun 2023 00:08:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686812912; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=Vb8J5hlpBpDscIpZvCg4fL5GPQw0Jyrxhg14slnomTWlIc3o0MkYNnPFi4//7BLF/U
-    Z87v+Z/xFtz1JOad3BNjoWKAf3hQm+L2xesOn+eSqObdSlF36OyeSVC4xa+fQe4F5oik
-    oSyBqasUqr04O80qhGV9r4gbtdYHKaWsnMH5HwUI3jS4Kb/zc+nuk6WNIC+9X+WtVCSB
-    24661gIQO1TIoSP/qUl2Ef5jPBnxDdyESalX5NrOzCa7yIy+V8QwCKV96sQFXbWzu0oA
-    HGpSvMwJyBZTHGt0qf7Zh6Mia3WyhCLh1CE+Yt/Uw7uNTN1fVMv/KvXx/YcRPU2fyoha
-    ZqVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812484;
+    b=L6Unz2wogBCGZpNCk/2gHso29R2v034P4hfnLPsJ2uHlUoEw/91KrSQzzKrauhOxYe
+    QLBj0RtcSRB/beCifgPIxx0kT38gihAKzCZe7WX4kB2uwOO3lmYQenLXUZst+xO2qJil
+    klfLGP8Sw1CRAFNBwHhQV1waUwfydLi2zIOdl5qAfBy5nDtARx8a/eVo2oqVNOmMCB7z
+    AdZZM7qHb87PdnD3IQIchCtuFXAcf9oxWzrksiSaFg2zw1bZQL+YomXGPPCnYg2xBxnc
+    ag4v7tZjlhYcGKDIO/XGLaGNdrnDcAGFvK9KSyCKaQocbLb74GMR+RbBDg+WdX7fahRY
+    nnuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812912;
     s=strato-dkim-0002; d=strato.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=oqU6vtEUqUneCaoXlYhx1C1KT91EWd18pV4a4GHvvcA=;
-    b=CTtNwddp5loY/hLr+MJV+VEOS0YgFg49FuuIcFaw50jKQGhBeVIUzj7fRG+J8NBrCA
-    QnbNtqPeo4m+DjDbvZvVlpVzG4fxVHJpKNpg5l9eiTHeEvkdgl9sbwu3bOmVH2Fm/I5D
-    +kfSEuivU4Q2MlbK5U5cz0pmxh1Q3XEHxNF+NsEprjV72lGZBR2mHXelL9Tfadn19vC1
-    AZdhyQqpTMnnJRyAuJh9GRUbnFoe7t81QIwa6MpbtJQVZhlBgJWzb7W8FgqR/kTgKm3T
-    WHPKQ/XX3x9b7/Xbm1E6qBkJRPFbfA1Oe1iMKRuQvVMZU9XlbXjk7aE/7S9mywChVFR0
-    UMiQ==
+    bh=8+qFfB1rN2Sj/O8U/wDDRxw1z4CJQphmlltjDLoIQFU=;
+    b=tSAjbAtEsAWBhxQGs1TY183UuZlIbWR3xA/T+9FpUCYYgH/WIbR22bnvWfzB4o//Xk
+    48t7wqwXrtvUDk4NX52PR2wUmEDaf8gFey3I8AWgl+PHgs1Ogt5g6DoFAMuXLXu2bPmU
+    dnLjuc0ovZHm57YUgsIO+tQrYxa7+gCbYAxonwq2HM8dWv7g86GBjP8oDzHWHWfPiTPu
+    GFneu73YJfOSoWOFkHqnG4VRJ+BiBfVvqhonyJYpoQp48SEAlQaM7Ho+h0zOVNT47b0M
+    D94KJIMgDNyQgE5jZ1VtHwWIbz6QtTNdFL16CYdX3St+aWvR9b/oBsJulNuEW5pIj2Jm
+    Usfg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812484;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812912;
     s=strato-dkim-0002; d=goldelico.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=oqU6vtEUqUneCaoXlYhx1C1KT91EWd18pV4a4GHvvcA=;
-    b=NV/Jsex/nrPXZNb8IVjgwHQVO3+srUudwRsrfUBsVUZVvk+mFLwS5H8KSWsLyonsJ6
-    wr3C6V/z5cMIK79jVHwCPQ/s1ztjDHZuizz+pn0UTCMmYDq18cev1OjEpphrwDMZc/Tb
-    fnUG2vqOLhV+4mwBjSdKh5/4DUjlqo65tSO8x5hR0CSfKWhPv7g61wGIBuJKSj2iflew
-    yRH4CRTWKkMR4tFu9+mPCB6W0/m8W6x0fFOj3503p2gSEfwPM5OtaaDg30XuSRZFW7dq
-    yZpmmKhrI/3KZmH5R3hehPjSwa5ndoFCqsu3D8vGKiY8MRenhKN3x5Kg7yj422OhHSIW
-    +yDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686812484;
+    bh=8+qFfB1rN2Sj/O8U/wDDRxw1z4CJQphmlltjDLoIQFU=;
+    b=fqsxASzjL94hytAHlMkUBSz2aEPp+JdkcxdjbQvHDS1gaILhHXC6l8eKPjhNBIg9IM
+    EBheQZN42MweYYolbuctyWuGz0e/ZRfR0hoHsafu8qvGTht3hN8bQC3NgyULvoJ0YJ8o
+    C8MVp1zbKAiiEac/h+wtgU+Rb2800aTBbVBUA7HVfJKYuBIV0eqA6QXAriI+ZEACVqdX
+    HIqPMYpKszjTYaIdk1ktSBUVoaPYijhe1dyOj24j3tYeclc7Hsw6L8bUWUD8UcGKEnK1
+    VUp+XRvEI1E+6qBu4t5xJ7jO3F8EyyDY5Bq70z8yp+ZkcfbCbQFOwRD/2QlvE/0R5wF7
+    V6Kw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686812912;
     s=strato-dkim-0003; d=goldelico.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=oqU6vtEUqUneCaoXlYhx1C1KT91EWd18pV4a4GHvvcA=;
-    b=QNzWB98CX3cvsRij7QRdmJvBW3fbWxnEeWk5UTVcdpGIaYc/VWSkTnm2V0AsSHdpd7
-    fezuBSQDOHbZYLspxuCw==
+    bh=8+qFfB1rN2Sj/O8U/wDDRxw1z4CJQphmlltjDLoIQFU=;
+    b=G5prsUdaZypuOfJGqNK67nTIA8+mflVABVlfs7lbDsZEKLKnrcq3m8VVM3kEq2vw/s
+    LjwkO1m/d6GaGJy2pnAQ==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeonQ="
 Received: from imac.fritz.box
     by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5F71O23n
+    with ESMTPSA id jaf17fz5F78W25s
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
         (Client did not present a certificate);
-    Thu, 15 Jun 2023 09:01:24 +0200 (CEST)
+    Thu, 15 Jun 2023 09:08:32 +0200 (CEST)
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 7/9] MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
+Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20230604145642.200577-8-paul@crapouillou.net>
-Date:   Thu, 15 Jun 2023 09:01:23 +0200
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+In-Reply-To: <20230609082348.GK8160@alpha.franken.de>
+Date:   Thu, 15 Jun 2023 09:08:32 +0200
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         list@opendingux.net
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <0855AAAC-72E8-4A2D-8B30-C00986915AAB@goldelico.com>
+Message-Id: <E3586962-A5A0-476E-8B5C-AFB1E1B0C4E6@goldelico.com>
 References: <20230604145642.200577-1-paul@crapouillou.net>
- <20230604145642.200577-8-paul@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
+ <20230609082348.GK8160@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 X-Mailer: Apple Mail (2.3445.104.21)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -92,181 +92,67 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Thomas,
 
+> Am 09.06.2023 um 10:23 schrieb Thomas Bogendoerfer =
+<tsbogend@alpha.franken.de>:
+>=20
+> On Sun, Jun 04, 2023 at 04:56:33PM +0200, Paul Cercueil wrote:
+>> Hi,
+>>=20
+>> Here's a set of patches to add support for the WiFi / Bluetooth chip =
+on
+>> the CI20.
+>>=20
+>> WiFi works pretty well, provided it is used with the latest firmware
+>> provided by linux-firmware. Bluetooth does not work very well here, =
+as
+>> I cannot get my wireless keyboard to pair; but it does detect it, and =
+it
+>> does see they key presses when I type the pairing code.
+>>=20
+>> I only tested with a somewhat recent (~2022) Buildroot-based =
+userspace.
+>> I enabled WEXT compatibility because the CI20 is typically used with =
+a
+>> very old userspace, but I did not try to use it with old tools like
+>> ifconfig/iwconfig.
+>>=20
+>> Cheers,
+>> -Paul
+>>=20
+>> Paul Cercueil (9):
+>>  MIPS: DTS: CI20: Fix regulators
+>>  MIPS: DTS: CI20: Fix ACT8600 regulator node names
+>>  MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators
+>>  MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators
+>>  MIPS: DTS: CI20: Misc. cleanups
+>>  MIPS: DTS: CI20: Parent MSCMUX clock to MPLL
+>>  MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
+>>  MIPS: configs: CI20: Regenerate defconfig
+>>  MIPS: configs: CI20: Enable WiFi / Bluetooth
+>>=20
+>> arch/mips/boot/dts/ingenic/ci20.dts | 148 =
++++++++++++++++++++---------
+>> arch/mips/configs/ci20_defconfig    |  47 ++++++---
+>> 2 files changed, 133 insertions(+), 62 deletions(-)
+>>=20
+>> --=20
+>> 2.39.2
+>=20
+> series applied to mips-next.
 
-> Am 04.06.2023 um 16:56 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Wire the WiFi/Bluetooth chip properly in the Device Tree.
->=20
-> - Provide it with the correct regulators and clocks;
-> - Change the MMC I/O bus to 1.8V which seems to be enough;
-> - Change the MMC I/O bus frequency to 25 MHz as 50 MHz causes errors;
-> - Fix the Bluetooth powerdown GPIO being inverted and add reset GPIO;
-> - Convert host-wakeup-gpios to IRQ.
->=20
-> With these changes, the WiFi works properly with the latest firmware
-> provided by linux-firmware. The Bluetooth does not work very well =
-here,
-> as I cannot get my wireless keyboard to pair; but it does detect it, =
-and
-> it does see the key presses when I type the pairing code.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
-> arch/mips/boot/dts/ingenic/ci20.dts | 88 ++++++++++++++++++++++++-----
-> 1 file changed, 73 insertions(+), 15 deletions(-)
->=20
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
-b/arch/mips/boot/dts/ingenic/ci20.dts
-> index bdbd064c90e1..cec0caa2350c 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -97,10 +97,15 @@ ir: ir {
-> 		gpios =3D <&gpe 3 GPIO_ACTIVE_LOW>;
-> 	};
->=20
-> -	wlan0_power: fixedregulator-1 {
-> +	bt_power: fixedregulator-1 {
-> 		compatible =3D "regulator-fixed";
->=20
-> -		regulator-name =3D "wlan0_power";
-> +		regulator-name =3D "bt_power";
-> +		regulator-min-microvolt =3D <3300000>;
-> +		regulator-max-microvolt =3D <3300000>;
-> +		regulator-settling-time-us =3D <1400>;
-> +
-> +		vin-supply =3D <&vcc_50>;
->=20
-> 		gpio =3D <&gpb 19 0>;
-> 		enable-active-high;
-> @@ -116,6 +121,40 @@ otg_power: fixedregulator-2 {
-> 		gpio =3D <&gpf 15 0>;
-> 		enable-active-high;
-> 	};
-> +
-> +	wifi_power: fixedregulator-4 {
-> +		compatible =3D "regulator-fixed";
-> +
-> +		regulator-name =3D "wifi_power";
-> +
-> +		/*
-> +		 * Technically it's 5V, the WiFi chip has its own =
-internal
-> +		 * regulators; but the MMC/SD subsystem won't accept =
-such a
-> +		 * value.
-> +		 */
-> +		regulator-min-microvolt =3D <3300000>;
-> +		regulator-max-microvolt =3D <3300000>;
-> +		regulator-settling-time-us =3D <150000>;
-> +
-> +		vin-supply =3D <&bt_power>;
-> +	};
-> +
-> +	vcc_33v: fixedregulator-5 {
+I think this was a little too early. Please see my review.
 
-why is this defined here? It is used earlier in [3/9] and not directly =
-related to WiFi / Bluetooth
+Best regards,
+Nikolaus
 
-So please move into [3/9] or even before [3/9] as a separate patch.
-
-> +		compatible =3D "regulator-fixed";
-> +
-> +		regulator-name =3D "vcc_33v";
-> +		regulator-min-microvolt =3D <3300000>;
-> +		regulator-max-microvolt =3D <3300000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	wifi_pwrseq: pwrseq {
-> +		compatible =3D "mmc-pwrseq-simple";
-> +		reset-gpios =3D <&gpf 7 GPIO_ACTIVE_LOW>;
-> +
-> +		clocks =3D <&rtc_dev>;
-> +		clock-names =3D "ext_clock";
-> +	};
-> };
 >=20
-> &ext {
-> @@ -161,24 +200,33 @@ &mmc0 {
-> 	pinctrl-0 =3D <&pins_mmc0>;
+> Thomas.
 >=20
-> 	cd-gpios =3D <&gpf 20 GPIO_ACTIVE_LOW>;
-> +	vmmc-supply =3D <&vcc_33v>;
-> +	vqmmc-supply =3D <&vcc_33v>;
-> };
->=20
-> &mmc1 {
-> 	status =3D "okay";
->=20
-> 	bus-width =3D <4>;
-> -	max-frequency =3D <50000000>;
-> +	max-frequency =3D <25000000>;
-> +	mmc-pwrseq =3D <&wifi_pwrseq>;
-> +	vmmc-supply =3D <&wifi_power>;
-> +	vqmmc-supply =3D <&wifi_io>;
-> 	non-removable;
->=20
-> 	pinctrl-names =3D "default";
-> 	pinctrl-0 =3D <&pins_mmc1>;
->=20
-> -	brcmf: wifi@1 {
-> -/*		reg =3D <4>;*/
-> -		compatible =3D "brcm,bcm4330-fmac";
-> -		vcc-supply =3D <&wlan0_power>;
-> -		device-wakeup-gpios =3D <&gpd 9 GPIO_ACTIVE_HIGH>;
-> -		shutdown-gpios =3D <&gpf 7 GPIO_ACTIVE_LOW>;
-> +	#address-cells =3D <1>;
-> +	#size-cells =3D <0>;
-> +
-> +	wifi@1 {
-> +		compatible =3D "brcm,bcm4329-fmac";
-> +		reg =3D <1>;
-> +
-> +		interrupt-parent =3D <&gpd>;
-> +		interrupts =3D <9 IRQ_TYPE_EDGE_FALLING>;
-> +		interrupt-names =3D "host-wake";
-> 	};
-> };
->=20
-> @@ -205,11 +253,20 @@ &uart2 {
->=20
-> 	bluetooth {
-> 		compatible =3D "brcm,bcm4330-bt";
-> -		reset-gpios =3D <&gpf 8 GPIO_ACTIVE_HIGH>;
-> -		vcc-supply =3D <&wlan0_power>;
-> +
-> +		vbat-supply =3D <&bt_power>;
-> +		vddio-supply =3D <&wifi_io>;
-> +
-> +		interrupt-parent =3D <&gpf>;
-> +		interrupts =3D <6 IRQ_TYPE_EDGE_RISING>;
-> +		interrupt-names =3D "host-wakeup";
-> +
-> +		clocks =3D <&rtc_dev>;
-> +		clock-names =3D "lpo";
-> +
-> +		reset-gpios =3D <&gpf 8 GPIO_ACTIVE_LOW>;
-> 		device-wakeup-gpios =3D <&gpf 5 GPIO_ACTIVE_HIGH>;
-> -		host-wakeup-gpios =3D <&gpf 6 GPIO_ACTIVE_HIGH>;
-> -		shutdown-gpios =3D <&gpf 4 GPIO_ACTIVE_LOW>;
-> +		shutdown-gpios =3D <&gpf 4 GPIO_ACTIVE_HIGH>;
-> 	};
-> };
->=20
-> @@ -270,8 +327,9 @@ vcc_25: LDO5 {
-> 				regulator-always-on;
-> 			};
-> 			wifi_io: LDO6 {
-> -				regulator-min-microvolt =3D <2500000>;
-> -				regulator-max-microvolt =3D <2500000>;
-> +				regulator-min-microvolt =3D <1800000>;
-> +				regulator-max-microvolt =3D <1800000>;
-> +				regulator-settling-time-us =3D <150000>;
-> 				inl-supply =3D <&vcc_33v>;
-> 			};
-> 			cim_io_28: LDO7 {
 > --=20
-> 2.39.2
->=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
 
