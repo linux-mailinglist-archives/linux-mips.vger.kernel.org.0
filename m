@@ -2,311 +2,246 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D86730EB9
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 07:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971E6731023
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 09:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjFOFnt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 01:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S244662AbjFOHHO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 03:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjFOFnr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 01:43:47 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C81926AD
-        for <linux-mips@vger.kernel.org>; Wed, 14 Jun 2023 22:43:44 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f9b7345fb1so26404281cf.1
-        for <linux-mips@vger.kernel.org>; Wed, 14 Jun 2023 22:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686807823; x=1689399823;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRrd2SfL4Xq+Qzlde4byl/Mqw4CTwFxn/EHYJGCDi2o=;
-        b=2Z7L9X7Cuz2Oyte+IvVcvqPnbKLYUfuY1R9BtMGG0J05LIt9GtujxDwMANNce+H9be
-         1z+5fSn5rZbBfwpNBHMCHQTEt7r2ARnJZD4HmYlbiXjep29V5NVaOTCftWc9gkoAhWJa
-         uPYbDVoQWXGt21wgmIfd4jJ+zSKMxHNxejY3S9955YhxFpNw8KNOVdBeTBK9VcMzXdSf
-         zW63lp/Nu61EnGTo9OCeOBp2j7uYJVihGlKySXjg4jBQHLrqGrUqoqqvFs3XFDuMKL/D
-         /4nh40CVn9AErK+sDDluhaEObQY5QmYX3G2ELxb8vXLyXw9UPuCRujZhQgGomIHrlC9p
-         H4sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686807823; x=1689399823;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRrd2SfL4Xq+Qzlde4byl/Mqw4CTwFxn/EHYJGCDi2o=;
-        b=HZ/XHOmpPvbFAAwVU3XOSLAFjol5mHWrP9Pa0A830Yg2sY1fqUZx7bsEo6x7OC7s0+
-         zU2V9rdgKXIJCi5nq/3cFXPRS/NkSgEKjHimtf5gUFcHmvtlh8LHcWldhdokhMa1xtCf
-         adQupQBZXS9Hxd7fopOo8FBeUq+eHR6RZK+2z+HS9A8FIOd2J3TYYXkFyurv4yvERQkv
-         1xuiKnhxyRT5jkkMipKAjm3FAXLKNU+aMokzh44TfdCnaQVAJ5IeICXW4DQ/8vInTIvz
-         TUcFhxan4Z0mzDJB5GYAC4p4RyiQs7woSuk8BzmkXsftOCxNlkGO8L0SbhdCeSI7kWdU
-         opDQ==
-X-Gm-Message-State: AC+VfDwJH/w7KaRleq05KvgZs/+9I5F3L3DEAmHSUinEkmQLAbAN4Rgt
-        YghD8MUm1F97XH5DamdWUrM/yw==
-X-Google-Smtp-Source: ACHHUZ6zMyIyOB2jswKUAs88szNyVc0zWzzsUusKENsgVVPW4FW+EMXzWPoYN4vcolCRWWFQ+K0QSA==
-X-Received: by 2002:a05:622a:148a:b0:3f9:a73b:57a2 with SMTP id t10-20020a05622a148a00b003f9a73b57a2mr5187181qtx.26.1686807823123;
-        Wed, 14 Jun 2023 22:43:43 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k34-20020a25b2a2000000b00bcdb7d2a03bsm1631948ybj.17.2023.06.14.22.43.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 22:43:42 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 22:43:30 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Nathan Chancellor <nathan@kernel.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/23] mips: update_mmu_cache() can replace
- __update_tlb()
-In-Reply-To: <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com>
-Message-ID: <344a4da-3890-45fd-607e-b5f85ca6ad48@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com> <178970b0-1539-8aac-76fd-972c6c46ec17@google.com> <20230614231758.GA1503611@dev-arch.thelio-3990X> <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463760895-383800441-1686807822=:3640"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S244490AbjFOHG0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 03:06:26 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D4D2962;
+        Thu, 15 Jun 2023 00:06:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686812425; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=HxGSyn8024JvxM9iE2pitobZ0wCSrDUNgSMdruJ/srxzjs6iSRKhzAkby7Y0OetjUD
+    q5CxT8cuy6GcovrEL37zQPBv0oC0vxdarAFfZxH8iRG69EftQENfNCkdFCgWG0QK2Jyb
+    UVi6AR1F9VQHfFjMf4aTswXNi50gej+ZYNxqLNUwzAf6VKpRqb9kPYH6Gk+/pCULWG8Y
+    I7hR3UT/Rqboo9JDF9SgyjNby2cmGIZ5GEctdXwu2lqcxOfv+FZDyqZzdKpmLHApVAbX
+    +pyf2Ug+M5dtVqm84fWSX3RdzTB5nxnstLdYeUf+mfE2pcbL1UjlA49fZAZC7GuK0WFP
+    Gv7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812425;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=nqYC2aoHjaFYIB8A5bxnY0eGOB/K80yE07iesPu9ias=;
+    b=Yi8xLRKtt+UFPVaad5mNfmgx1t6PAt+3YRV7XhF5m1QKYHgHTO8YS5sP62HyE2qSLb
+    Z8gRr5KK4cvCL0s5S2YYM3oL1QiA8CKpFmi1vF8EMT2NZavAyWb7LOWuRIKQ3DeARWA5
+    qewaPni/Dv0kD+2fd83tqHx541h383JIRTHIGrjeWdkvP8JrfA06L2x3r3q7WtAQH0Dh
+    +rR6WWn/td44d97m6LEz6YSCmPk5x/bGAO/XOwKVuqH4Y/jXiJIctULdApbooLnSvvK5
+    imkEuDPp+La2MGGfN7Z2TekC4K+5JpLJ1VScSxFg+9GxEjwotW9+W0NG7k3KD1bVAATi
+    XKoQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812425;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=nqYC2aoHjaFYIB8A5bxnY0eGOB/K80yE07iesPu9ias=;
+    b=ZzxwyVVSC5AS2Ynu5YjGX4VBIRJOZ3XCXXgR0p7ZmXiIH5WXkL4fY90z/ViR4KRCDD
+    iQy7D2tfKZoLsT8KTl6Pj8qcQIUWUs2W2qV6FaDotcGoAoM6ZAAxBXfC8DVylStxlxJ7
+    DSq5lwHaQKBjrocOfQFhRC59duwrcgfSBVwmVVRA5+PTr9A64QGIAmqC7PEGG8D+XxSG
+    2JGfp0an3CNVItSZ28QFsngkTNbq5oTXY35Xs/d906wcwqdMMiG+CwKbS6wSBaSwqeCT
+    jaC+LUkwR+7KGU6v1aC2Ot1IYBEsQlPpYhkjrI4l9TBVPfYnZx/TBhSMPXEnh1gVgBnV
+    AwUA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686812425;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=nqYC2aoHjaFYIB8A5bxnY0eGOB/K80yE07iesPu9ias=;
+    b=yI8oiLuTQJu2pUQUvkVL7zsXdIzI0wLF7PVeglekQ17n+na5DSjkrQek3zNn01CE4l
+    R5pvzE+GNH+tv2RDisBg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeonQ="
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id jaf17fz5F70P23K
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 15 Jun 2023 09:00:25 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 2/9] MIPS: DTS: CI20: Fix ACT8600 regulator node names
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20230604145642.200577-3-paul@crapouillou.net>
+Date:   Thu, 15 Jun 2023 09:00:25 +0200
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        list@opendingux.net
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8FC21AA8-AD08-433A-868B-78A58D9A0F9A@goldelico.com>
+References: <20230604145642.200577-1-paul@crapouillou.net>
+ <20230604145642.200577-3-paul@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
----1463760895-383800441-1686807822=:3640
-Content-Type: text/plain; charset=US-ASCII
 
-On Wed, 14 Jun 2023, Hugh Dickins wrote:
-> On Wed, 14 Jun 2023, Nathan Chancellor wrote:
-> > 
-> > I just bisected a crash while powering down a MIPS machine in QEMU to
-> > this change as commit 8044511d3893 ("mips: update_mmu_cache() can
-> > replace __update_tlb()") in linux-next.
-> 
-> Thank you, Nathan, that's very helpful indeed.  This patch certainly knew
-> that it wanted testing, and I'm glad to hear that it is now seeing some.
-> 
-> While powering down?  The messages below look like it was just coming up,
-> but no doubt that's because you were bisecting (or because I'm unfamiliar
-> with what messages to expect there).  It's probably irrelevant information,
-> but I wonder whether the (V)machine worked well enough for a while before
-> you first powered down and spotted the problem, or whether it's never got
-> much further than trying to run init (busybox)?  I'm trying to get a feel
-> for whether the problem occurs under common or uncommon conditions.
-> 
-> > Unfortunately, I can still
-> > reproduce it with the existing fix you have for this change on the
-> > mailing list, which is present in next-20230614.
-> 
-> Right, that later fix was only for a build warning, nothing functional
-> (or at least I hoped that it wasn't making any functional difference).
-> 
-> Thanks a lot for the detailed instructions below: unfortunately, those
-> would draw me into a realm of testing I've never needed to enter before,
-> so a lot of time spent on setup and learning.  Usually, I just stare at
-> the source.
-> 
-> What this probably says is that I should revert most my cleanup there,
-> and keep as close to the existing code as possible.  But some change is
-> needed, and I may need to understand (or have a good guess at) what was
-> going wrong, to decide what kind of retreat will be successful.
-> 
-> Back to the source for a while: I hope I'll find examples in nearby MIPS
-> kernel source (and git history), which will hint at the right way forward.
-> Then send you a patch against next-20230614 to try, when I'm reasonably
-> confident that it's enough to satisfy my purpose, but likely not to waste
-> your time.
+> Am 04.06.2023 um 16:56 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> The Device Tree was using invalid node names for the ACT8600 =
+regulators.
+> To be fair, it is not the original committer's fault, as the
+> documentation did gives invalid names as well.
 
-I'm going to take advantage of your good nature by attaching
-two alternative patches, either to go on top of next-20230614.
+s/did gives /did give /
 
-mips1.patch,
- arch/mips/mm/tlb-r4k.c |   12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+>=20
+> In theory, the fix should have been to modify the driver to accept the
+> alternative names. However, even though the act8865 driver spits
+> warnings, the kernel seemed to work fine with what is currently
+> supported upstream. For that reason, I think it is okay to just update
+> the DTS.
+>=20
+> I removed the "regulator-name" too, since they really didn't bring any
+> information. The node names are enough.
 
-is by far my favourite.  I couldn't see anything wrong with what's
-already there for mips, but it seems possible that (though I didn't
-find it) somewhere calls update_mmu_cache_pmd() on a page table.  So
-mips1.patch restores the pmd_huge() check, and cleans up further by
-removing the silly pgdp, p4dp, pudp, pmdp stuff: the pointer has now
-been passed in by the caller, why walk the tree again?  I should have
-done it this way before.
+For me this patch breaks boot on my CI20 V2a - but I don't see why.
+Maybe the driver or something else relies on regulator names indirectly?
 
-But if that doesn't work, then I'm afraid it will have to be
-mips2.patch,
- arch/mips/include/asm/pgtable.h |   15 ++++++++++++---
- arch/mips/mm/tlb-r3k.c          |    5 ++---
- arch/mips/mm/tlb-r4k.c          |   27 ++++++++++++++++++---------
- 3 files changed, 32 insertions(+), 15 deletions(-)
+Last and only signs of activity:
 
-which reverts all of the original patch and its build warning fix,
-and does a pte_unmap() to balance the silly pte_offset_map() there;
-with an apologetic comment for this being about the only place in
-the tree where I have no idea what to do if ptep were NULL.
+U-Boot 2013.10-rc3-00096-gef995a1-dirty (Apr 13 2019 - 19:15:18)
 
-I do hope that you find the first fixes the breakage; but if not, then
-I even more fervently hope that the second will, despite my hating it.
-Touch wood for the first, fingers crossed for the second, thanks,
+Board: ci20 (r2) (Ingenic XBurst JZ4780 SoC)
+DRAM:  1 GiB
+NAND:  8192 MiB
+MMC:   jz_mmc msc1: 0
+*** Warning - bad CRC, using default environment
 
-Hugh
----1463760895-383800441-1686807822=:3640
-Content-Type: text/x-patch; name=mips1.patch
-Content-Transfer-Encoding: BASE64
-Content-ID: <dfc4bf4-a2b3-2391-3c22-48bdb4bf1fe@google.com>
-Content-Description: 
-Content-Disposition: attachment; filename=mips1.patch
+In:    eserial4
+Out:   eserial4
+Err:   eserial4
+Net:   dm9000
+Hit any key to stop autoboot:  0=20
+4357173 bytes read in 724 ms (5.7 MiB/s)
+## Booting kernel from Legacy Image at 88000000 ...
+   Image Name:   Linux-6.4.0-rc6+
+   Image Type:   MIPS Linux Kernel Image (gzip compressed)
+   Data Size:    4357109 Bytes =3D 4.2 MiB
+   Load Address: 80100000
+   Entry Point:  80718080
+   Verifying Checksum ... OK
+   Uncompressing Kernel Image ... OK
 
-LS0tIGEvYXJjaC9taXBzL21tL3RsYi1yNGsuYw0KKysrIGIvYXJjaC9taXBz
-L21tL3RsYi1yNGsuYw0KQEAgLTI5MywxMiArMjkzLDYgQEAgdm9pZCBsb2Nh
-bF9mbHVzaF90bGJfb25lKHVuc2lnbmVkIGxvbmcgcGFnZSkNCiB2b2lkIHVw
-ZGF0ZV9tbXVfY2FjaGUoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsDQog
-CQkgICAgICB1bnNpZ25lZCBsb25nIGFkZHJlc3MsIHB0ZV90ICpwdGVwKQ0K
-IHsNCi0jaWZkZWYgQ09ORklHX01JUFNfSFVHRV9UTEJfU1VQUE9SVA0KLQlw
-Z2RfdCAqcGdkcDsNCi0JcDRkX3QgKnA0ZHA7DQotCXB1ZF90ICpwdWRwOw0K
-LQlwbWRfdCAqcG1kcDsNCi0jZW5kaWYNCiAJdW5zaWduZWQgbG9uZyBmbGFn
-czsNCiAJaW50IGlkeCwgcGlkOw0KIA0KQEAgLTMyMywxMiArMzE3LDggQEAg
-dm9pZCB1cGRhdGVfbW11X2NhY2hlKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAq
-dm1hLA0KIAl0bGJfcHJvYmVfaGF6YXJkKCk7DQogCWlkeCA9IHJlYWRfYzBf
-aW5kZXgoKTsNCiAjaWZkZWYgQ09ORklHX01JUFNfSFVHRV9UTEJfU1VQUE9S
-VA0KLQlwZ2RwID0gcGdkX29mZnNldCh2bWEtPnZtX21tLCBhZGRyZXNzKTsN
-Ci0JcDRkcCA9IHA0ZF9vZmZzZXQocGdkcCwgYWRkcmVzcyk7DQotCXB1ZHAg
-PSBwdWRfb2Zmc2V0KHA0ZHAsIGFkZHJlc3MpOw0KLQlwbWRwID0gcG1kX29m
-ZnNldChwdWRwLCBhZGRyZXNzKTsNCiAJLyogdGhpcyBjb3VsZCBiZSBhIGh1
-Z2UgcGFnZSAgKi8NCi0JaWYgKHB0ZXAgPT0gKHB0ZV90ICopcG1kcCkgew0K
-KwlpZiAocG1kX2h1Z2UoKihwbWRfdCAqKXB0ZXApKSB7DQogCQl1bnNpZ25l
-ZCBsb25nIGxvOw0KIAkJd3JpdGVfYzBfcGFnZW1hc2soUE1fSFVHRV9NQVNL
-KTsNCiAJCWxvID0gcHRlX3RvX2VudHJ5bG8ocHRlX3ZhbCgqcHRlcCkpOw0K
+Starting kernel ...
 
----1463760895-383800441-1686807822=:3640
-Content-Type: text/x-patch; name=mips2.patch
-Content-Transfer-Encoding: BASE64
-Content-ID: <fcb37a0-1034-08e-eaf8-eb90a6338585@google.com>
-Content-Description: 
-Content-Disposition: attachment; filename=mips2.patch
+[    0.070854] jz4780-nemc 13410000.nemc: /nemc@13410000/efuse@d0 =
+requests invalid bank 0
+[    0.078858] jz4780-nemc 13410000.nemc: /nemc@13410000/efuse@d0 has no =
+addresses
+[    0.109013] jz4740-rtc 10003000.rtc: hctosys: unable to read the =
+hardware clock
+[    0.199104] dm9000 16000000.dm9000: read wrong id 0x00000a46
 
-LS0tIGEvYXJjaC9taXBzL2luY2x1ZGUvYXNtL3BndGFibGUuaA0KKysrIGIv
-YXJjaC9taXBzL2luY2x1ZGUvYXNtL3BndGFibGUuaA0KQEAgLTU2NSw4ICs1
-NjUsMTUgQEAgc3RhdGljIGlubGluZSBwdGVfdCBwdGVfc3dwX2NsZWFyX2V4
-Y2x1c2l2ZShwdGVfdCBwdGUpDQogfQ0KICNlbmRpZg0KIA0KLWV4dGVybiB2
-b2lkIHVwZGF0ZV9tbXVfY2FjaGUoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2
-bWEsDQotCXVuc2lnbmVkIGxvbmcgYWRkcmVzcywgcHRlX3QgKnB0ZXApOw0K
-K2V4dGVybiB2b2lkIF9fdXBkYXRlX3RsYihzdHJ1Y3Qgdm1fYXJlYV9zdHJ1
-Y3QgKnZtYSwgdW5zaWduZWQgbG9uZyBhZGRyZXNzLA0KKwlwdGVfdCBwdGUp
-Ow0KKw0KK3N0YXRpYyBpbmxpbmUgdm9pZCB1cGRhdGVfbW11X2NhY2hlKHN0
-cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLA0KKwl1bnNpZ25lZCBsb25nIGFk
-ZHJlc3MsIHB0ZV90ICpwdGVwKQ0KK3sNCisJcHRlX3QgcHRlID0gKnB0ZXA7
-DQorCV9fdXBkYXRlX3RsYih2bWEsIGFkZHJlc3MsIHB0ZSk7DQorfQ0KIA0K
-ICNkZWZpbmUJX19IQVZFX0FSQ0hfVVBEQVRFX01NVV9UTEINCiAjZGVmaW5l
-IHVwZGF0ZV9tbXVfdGxiCXVwZGF0ZV9tbXVfY2FjaGUNCkBAIC01NzQsNyAr
-NTgxLDkgQEAgZXh0ZXJuIHZvaWQgdXBkYXRlX21tdV9jYWNoZShzdHJ1Y3Qg
-dm1fYXJlYV9zdHJ1Y3QgKnZtYSwNCiBzdGF0aWMgaW5saW5lIHZvaWQgdXBk
-YXRlX21tdV9jYWNoZV9wbWQoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEs
-DQogCXVuc2lnbmVkIGxvbmcgYWRkcmVzcywgcG1kX3QgKnBtZHApDQogew0K
-LQl1cGRhdGVfbW11X2NhY2hlKHZtYSwgYWRkcmVzcywgKHB0ZV90ICopcG1k
-cCk7DQorCXB0ZV90IHB0ZSA9ICoocHRlX3QgKilwbWRwOw0KKw0KKwlfX3Vw
-ZGF0ZV90bGIodm1hLCBhZGRyZXNzLCBwdGUpOw0KIH0NCiANCiAvKg0KLS0t
-IGEvYXJjaC9taXBzL21tL3RsYi1yM2suYw0KKysrIGIvYXJjaC9taXBzL21t
-L3RsYi1yM2suYw0KQEAgLTE3Niw4ICsxNzYsNyBAQCB2b2lkIGxvY2FsX2Zs
-dXNoX3RsYl9wYWdlKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLCB1bnNp
-Z25lZCBsb25nIHBhZ2UpDQogCX0NCiB9DQogDQotdm9pZCB1cGRhdGVfbW11
-X2NhY2hlKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLA0KLQkJICAgICAg
-dW5zaWduZWQgbG9uZyBhZGRyZXNzLCBwdGVfdCAqcHRlcCkNCit2b2lkIF9f
-dXBkYXRlX3RsYihzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSwgdW5zaWdu
-ZWQgbG9uZyBhZGRyZXNzLCBwdGVfdCBwdGUpDQogew0KIAl1bnNpZ25lZCBs
-b25nIGFzaWRfbWFzayA9IGNwdV9hc2lkX21hc2soJmN1cnJlbnRfY3B1X2Rh
-dGEpOw0KIAl1bnNpZ25lZCBsb25nIGZsYWdzOw0KQEAgLTIwNCw3ICsyMDMs
-NyBAQCB2b2lkIHVwZGF0ZV9tbXVfY2FjaGUoc3RydWN0IHZtX2FyZWFfc3Ry
-dWN0ICp2bWEsDQogCUJBUlJJRVI7DQogCXRsYl9wcm9iZSgpOw0KIAlpZHgg
-PSByZWFkX2MwX2luZGV4KCk7DQotCXdyaXRlX2MwX2VudHJ5bG8wKHB0ZV92
-YWwoKnB0ZXApKTsNCisJd3JpdGVfYzBfZW50cnlsbzAocHRlX3ZhbChwdGUp
-KTsNCiAJd3JpdGVfYzBfZW50cnloaShhZGRyZXNzIHwgcGlkKTsNCiAJaWYg
-KGlkeCA8IDApIHsJCQkJCS8qIEJBUlJJRVIgKi8NCiAJCXRsYl93cml0ZV9y
-YW5kb20oKTsNCi0tLSBhL2FyY2gvbWlwcy9tbS90bGItcjRrLmMNCisrKyBi
-L2FyY2gvbWlwcy9tbS90bGItcjRrLmMNCkBAIC0yOTAsMTYgKzI5MCwxNCBA
-QCB2b2lkIGxvY2FsX2ZsdXNoX3RsYl9vbmUodW5zaWduZWQgbG9uZyBwYWdl
-KQ0KICAqIHVwZGF0ZXMgdGhlIFRMQiB3aXRoIHRoZSBuZXcgcHRlKHMpLCBh
-bmQgYW5vdGhlciB3aGljaCBhbHNvIGNoZWNrcw0KICAqIGZvciB0aGUgUjRr
-ICJlbmQgb2YgcGFnZSIgaGFyZHdhcmUgYnVnIGFuZCBkb2VzIHRoZSBuZWVk
-eS4NCiAgKi8NCi12b2lkIHVwZGF0ZV9tbXVfY2FjaGUoc3RydWN0IHZtX2Fy
-ZWFfc3RydWN0ICp2bWEsDQotCQkgICAgICB1bnNpZ25lZCBsb25nIGFkZHJl
-c3MsIHB0ZV90ICpwdGVwKQ0KK3ZvaWQgX191cGRhdGVfdGxiKHN0cnVjdCB2
-bV9hcmVhX3N0cnVjdCAqIHZtYSwgdW5zaWduZWQgbG9uZyBhZGRyZXNzLCBw
-dGVfdCBwdGUpDQogew0KLSNpZmRlZiBDT05GSUdfTUlQU19IVUdFX1RMQl9T
-VVBQT1JUDQorCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQogCXBnZF90ICpwZ2Rw
-Ow0KIAlwNGRfdCAqcDRkcDsNCiAJcHVkX3QgKnB1ZHA7DQogCXBtZF90ICpw
-bWRwOw0KLSNlbmRpZg0KLQl1bnNpZ25lZCBsb25nIGZsYWdzOw0KKwlwdGVf
-dCAqcHRlcCwgKnB0ZW1hcCA9IE5VTEw7DQogCWludCBpZHgsIHBpZDsNCiAN
-CiAJLyoNCkBAIC0zMTgsMTkgKzMxNiwyMCBAQCB2b2lkIHVwZGF0ZV9tbXVf
-Y2FjaGUoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsDQogCQlwaWQgPSBy
-ZWFkX2MwX2VudHJ5aGkoKSAmIGNwdV9hc2lkX21hc2soJmN1cnJlbnRfY3B1
-X2RhdGEpOw0KIAkJd3JpdGVfYzBfZW50cnloaShhZGRyZXNzIHwgcGlkKTsN
-CiAJfQ0KKwlwZ2RwID0gcGdkX29mZnNldCh2bWEtPnZtX21tLCBhZGRyZXNz
-KTsNCiAJbXRjMF90bGJ3X2hhemFyZCgpOw0KIAl0bGJfcHJvYmUoKTsNCiAJ
-dGxiX3Byb2JlX2hhemFyZCgpOw0KLQlpZHggPSByZWFkX2MwX2luZGV4KCk7
-DQotI2lmZGVmIENPTkZJR19NSVBTX0hVR0VfVExCX1NVUFBPUlQNCi0JcGdk
-cCA9IHBnZF9vZmZzZXQodm1hLT52bV9tbSwgYWRkcmVzcyk7DQogCXA0ZHAg
-PSBwNGRfb2Zmc2V0KHBnZHAsIGFkZHJlc3MpOw0KIAlwdWRwID0gcHVkX29m
-ZnNldChwNGRwLCBhZGRyZXNzKTsNCiAJcG1kcCA9IHBtZF9vZmZzZXQocHVk
-cCwgYWRkcmVzcyk7DQorCWlkeCA9IHJlYWRfYzBfaW5kZXgoKTsNCisjaWZk
-ZWYgQ09ORklHX01JUFNfSFVHRV9UTEJfU1VQUE9SVA0KIAkvKiB0aGlzIGNv
-dWxkIGJlIGEgaHVnZSBwYWdlICAqLw0KLQlpZiAocHRlcCA9PSAocHRlX3Qg
-KilwbWRwKSB7DQorCWlmIChwbWRfaHVnZSgqcG1kcCkpIHsNCiAJCXVuc2ln
-bmVkIGxvbmcgbG87DQogCQl3cml0ZV9jMF9wYWdlbWFzayhQTV9IVUdFX01B
-U0spOw0KKwkJcHRlcCA9IChwdGVfdCAqKXBtZHA7DQogCQlsbyA9IHB0ZV90
-b19lbnRyeWxvKHB0ZV92YWwoKnB0ZXApKTsNCiAJCXdyaXRlX2MwX2VudHJ5
-bG8wKGxvKTsNCiAJCXdyaXRlX2MwX2VudHJ5bG8xKGxvICsgKEhQQUdFX1NJ
-WkUgPj4gNykpOw0KQEAgLTM0NSw2ICszNDQsMTMgQEAgdm9pZCB1cGRhdGVf
-bW11X2NhY2hlKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLA0KIAl9IGVs
-c2UNCiAjZW5kaWYNCiAJew0KKwkJcHRlbWFwID0gcHRlcCA9IHB0ZV9vZmZz
-ZXRfbWFwKHBtZHAsIGFkZHJlc3MpOw0KKwkJLyoNCisJCSAqIHVwZGF0ZV9t
-bXVfY2FjaGUoKSBpcyBjYWxsZWQgYmV0d2VlbiBwdGVfb2Zmc2V0X21hcF9s
-b2NrKCkNCisJCSAqIGFuZCBwdGVfdW5tYXBfdW5sb2NrKCksIHNvIHdlIGNh
-biBhc3N1bWUgdGhhdCBwdGVwIGlzIG5vdA0KKwkJICogTlVMTCBoZXJlOiBh
-bmQgd2hhdCBzaG91bGQgYmUgZG9uZSBiZWxvdyBpZiBpdCB3ZXJlIE5VTEw/
-DQorCQkgKi8NCisNCiAjaWYgZGVmaW5lZChDT05GSUdfUEhZU19BRERSX1Rf
-NjRCSVQpICYmIGRlZmluZWQoQ09ORklHX0NQVV9NSVBTMzIpDQogI2lmZGVm
-IENPTkZJR19YUEENCiAJCXdyaXRlX2MwX2VudHJ5bG8wKHB0ZV90b19lbnRy
-eWxvKHB0ZXAtPnB0ZV9oaWdoKSk7DQpAQCAtMzcyLDYgKzM3OCw5IEBAIHZv
-aWQgdXBkYXRlX21tdV9jYWNoZShzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZt
-YSwNCiAJdGxid191c2VfaGF6YXJkKCk7DQogCWh0d19zdGFydCgpOw0KIAlm
-bHVzaF9taWNyb190bGJfdm0odm1hKTsNCisNCisJaWYgKHB0ZW1hcCkNCisJ
-CXB0ZV91bm1hcChwdGVtYXApOw0KIAlsb2NhbF9pcnFfcmVzdG9yZShmbGFn
-cyk7DQogfQ0KIA0K
+--- hangs ---
 
----1463760895-383800441-1686807822=:3640--
+>=20
+> Fixes: 73f2b940474d ("MIPS: CI20: DTS: Add I2C nodes")
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> arch/mips/boot/dts/ingenic/ci20.dts | 27 ++++++++-------------------
+> 1 file changed, 8 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
+b/arch/mips/boot/dts/ingenic/ci20.dts
+> index e76953dce2e7..5361606c5e13 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -237,59 +237,49 @@ &i2c0 {
+> 	act8600: act8600@5a {
+> 		compatible =3D "active-semi,act8600";
+> 		reg =3D <0x5a>;
+> -		status =3D "okay";
+>=20
+> 		regulators {
+> -			vddcore: SUDCDC1 {
+> -				regulator-name =3D "DCDC_REG1";
+> +			vddcore: DCDC1 {
+> 				regulator-min-microvolt =3D <1100000>;
+> 				regulator-max-microvolt =3D <1100000>;
+> 				regulator-always-on;
+> 			};
+> -			vddmem: SUDCDC2 {
+> -				regulator-name =3D "DCDC_REG2";
+> +			vddmem: DCDC2 {
+> 				regulator-min-microvolt =3D <1500000>;
+> 				regulator-max-microvolt =3D <1500000>;
+> 				regulator-always-on;
+> 			};
+> -			vcc_33: SUDCDC3 {
+> -				regulator-name =3D "DCDC_REG3";
+> +			vcc_33: DCDC3 {
+> 				regulator-min-microvolt =3D <3300000>;
+> 				regulator-max-microvolt =3D <3300000>;
+> 				regulator-always-on;
+> 			};
+> -			vcc_50: SUDCDC4 {
+> -				regulator-name =3D "SUDCDC_REG4";
+> +			vcc_50: SUDCDC_REG4 {
+> 				regulator-min-microvolt =3D <5000000>;
+> 				regulator-max-microvolt =3D <5000000>;
+> 				regulator-always-on;
+> 			};
+> -			vcc_25: LDO_REG5 {
+> -				regulator-name =3D "LDO_REG5";
+> +			vcc_25: LDO5 {
+> 				regulator-min-microvolt =3D <2500000>;
+> 				regulator-max-microvolt =3D <2500000>;
+> 				regulator-always-on;
+> 			};
+> -			wifi_io: LDO_REG6 {
+> -				regulator-name =3D "LDO_REG6";
+> +			wifi_io: LDO6 {
+> 				regulator-min-microvolt =3D <2500000>;
+> 				regulator-max-microvolt =3D <2500000>;
+> 				regulator-always-on;
+> 			};
+> -			vcc_28: LDO_REG7 {
+> -				regulator-name =3D "LDO_REG7";
+> +			cim_io_28: LDO7 {
+> 				regulator-min-microvolt =3D <2800000>;
+> 				regulator-max-microvolt =3D <2800000>;
+> 				regulator-always-on;
+> 			};
+> -			vcc_15: LDO_REG8 {
+> -				regulator-name =3D "LDO_REG8";
+> +			cim_io_15: LDO8 {
+> 				regulator-min-microvolt =3D <1500000>;
+> 				regulator-max-microvolt =3D <1500000>;
+> 				regulator-always-on;
+> 			};
+> 			vrtc_18: LDO_REG9 {
+> -				regulator-name =3D "LDO_REG9";
+> 				/* Despite the datasheet stating 3.3V
+> 				 * for REG9 and the driver expecting =
+that,
+> 				 * REG9 outputs 1.8V.
+> @@ -303,7 +293,6 @@ vrtc_18: LDO_REG9 {
+> 				regulator-always-on;
+> 			};
+> 			vcc_11: LDO_REG10 {
+> -				regulator-name =3D "LDO_REG10";
+> 				regulator-min-microvolt =3D <1200000>;
+> 				regulator-max-microvolt =3D <1200000>;
+> 				regulator-always-on;
+> --=20
+> 2.39.2
+>=20
+
