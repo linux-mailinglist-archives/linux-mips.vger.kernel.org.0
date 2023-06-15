@@ -2,180 +2,296 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F832731D1D
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 17:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48449731D96
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 18:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345050AbjFOPwI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 11:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
+        id S233835AbjFOQTH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 12:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345021AbjFOPvr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 11:51:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02BE30EF;
-        Thu, 15 Jun 2023 08:51:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 393AE615D9;
-        Thu, 15 Jun 2023 15:51:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A065C433C0;
-        Thu, 15 Jun 2023 15:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686844263;
-        bh=4vpbcLIWH8N9kUhfy14gCg44JnNZ7tmcDbTQofjr2PY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HtfzZGG4h7OB0EE/lQpmPVeug5hEItWTKVdQh4sHq5pkRyi+IBc4bQYhPGfLUyXAE
-         O6q85QbbLOckkkq+ZDCntMP7kzjRH0BvUgQTZTsRtxOQVhMz+kPywYdC329KKPHRCd
-         EzHAMzGxIY08qUxBzBs5hhcSI+TdpRxjxhxRYluzPI7qsWgQhBwbTOga8HmP1oqokR
-         Nfn1KKfQ7SfISyWUrNFe+l7vvHqttosQ0oHQWcCUmbPCzjqzV6ZQmJ6Lgxc8I7me24
-         3i0BNy8Yi/K34Ad5bteBhAQILk/jkgdXefVdp3M52mTzK8Ji4AXkYMW3KmuCjB1GQn
-         39zP25YPwdB6Q==
-Date:   Thu, 15 Jun 2023 08:50:59 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        with ESMTP id S231295AbjFOQSx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 12:18:53 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F441C3;
+        Thu, 15 Jun 2023 09:18:52 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FEOKH1029534;
+        Thu, 15 Jun 2023 16:18:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=egzuNSKSK+qIHfc8O9DXl7XhkqwOecL5pACkhjEBS4E=;
+ b=wyat3ELL3fB6apGs5rSUcLjbgjrtm3A7Y+kudvrxf1vz8/iq/1gQ8v9U1v7T6+DB3qAp
+ 7Umi4OfQyRwjU6wCmJ0XgtG/CNL+xurQ+ugaFcJMAtNllYDTxptdX4EO0XbremYtDXSM
+ wWiajxKWEiISCovzSFXQgQO7bBRMry497k9ksaF+suJ9LIXdrq7GOZqqBRIdnhyBSxSc
+ YxRa27n5cipr39Ga2IWzRXHJB+eBzTeCL1aBoWAGJ7/2BHWz6d6KeU+ZiXWA1ErggyED
+ 4YLqtuMIcd0zdho3vkEwwnbfVwjKlf5sbwqVPom+Utnb/AUA6kAkvgcBkoV3k7wtZTiZ YQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4g3btj1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Jun 2023 16:18:25 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35FExxMJ011520;
+        Thu, 15 Jun 2023 16:18:24 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2041.outbound.protection.outlook.com [104.47.74.41])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm75xfv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Jun 2023 16:18:24 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bh6AvlrRzxMaOPgYyChM1lQMqHWVIBou3wlNIBps3TFKbnrc/VEh3Bb5TpbuYH0pNP2Sdg3sjeoXv8YoF2R6eTMLt5jY+YxcdVdYPWYr0d953ThSODF5/xzxUAytLjiT8Ca7D40X6yFqkOGlkgB3xcCgRg8b14zI5qQJuxn3SW89DGNHHkdqNT+kHbZBPnmk/4FP1JcE2DoocpXBPt7mWHwiqWkvhS+nR+ivbouqF5G6dctIlEl8RZiFvE4nAZ5omuXziK2UsN8oJm0Esg2MHbx1el+3suTKj6GjkhCeptvkHA7PQxTRPOPMvUuxBOpPMfnplUKWE8YjG7lMrvLN9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=egzuNSKSK+qIHfc8O9DXl7XhkqwOecL5pACkhjEBS4E=;
+ b=jJzMQ4y3LluVbG0nqvt258rnhnM29wwlzpFeufZG66E7eBM8zzn+Ehx6kRskOHKgweJlHTgAAjQ+TWbiDx3Hb4jlNfNVRSwPdfemWEZCSxLPdkJxofiz/tFf6vT5t+EKlQPdSIq1xW7l1nQunM5q6+fwSYVvztSgaYQICnm53s/Nwu2Dv31jQ9UsoxWl7DtszWs52MmTBIZqEadyDK6iRTJuELpOg0IO1moas1Y2RRJ7vw977G8xOcEyXw70i/9Laqs1hxGOKjBK+kbZ5UGMW28zyYlqw/xZhq3ELKdPdhIzu8C7SoSXP9j8jSEtF/kJadr/cfMARPWtamxpEWPIqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=egzuNSKSK+qIHfc8O9DXl7XhkqwOecL5pACkhjEBS4E=;
+ b=Hg9v3ejaKwec4+0T6E3LOY9ZjUiuQmCgUolacHbpnqRT4YBFiYcMXpLoQ2pTnnGXA4WBB//jJKd2cjXzgSyzLFBaXsbKoaiD8sjAl5xA72ajzZ83rx+L1mBa9Xh9IhFslRNcmEtw6+q4M70tDzaBWvR4E9Upq5zm5Yhi0J/rkrc=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by PH7PR10MB7105.namprd10.prod.outlook.com (2603:10b6:510:27f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Thu, 15 Jun
+ 2023 16:17:54 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
+ 16:17:54 +0000
+Message-ID: <aaddd54b-d1d6-d979-ba48-a2f89552a809@oracle.com>
+Date:   Thu, 15 Jun 2023 11:17:30 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 10/21] powerpc/kexec: refactor for kernel/Kconfig.kexec
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        geert@linux-m68k.org, tsbogend@alpha.franken.de,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/23] mips: update_mmu_cache() can replace
- __update_tlb()
-Message-ID: <20230615155059.GB3665766@dev-arch.thelio-3990X>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
- <178970b0-1539-8aac-76fd-972c6c46ec17@google.com>
- <20230614231758.GA1503611@dev-arch.thelio-3990X>
- <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com>
- <344a4da-3890-45fd-607e-b5f85ca6ad48@google.com>
+        linux-sh@vger.kernel.org
+Cc:     kernel@xen0n.name, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
+        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20230612172805.681179-1-eric.devolder@oracle.com>
+ <20230612172805.681179-11-eric.devolder@oracle.com>
+ <87fs6tflfi.fsf@mail.lhotse>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <87fs6tflfi.fsf@mail.lhotse>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0486.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:13a::11) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <344a4da-3890-45fd-607e-b5f85ca6ad48@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|PH7PR10MB7105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ab6c3de-adbe-4ef5-553a-08db6dbc12c2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DsLIy7lKv9Di/mt385Itvl/Ec+uFFbgpvOBVVueYZ+L1lKplDIzxCh4BltNluVr9YvOJGddDK9E4AzX7t1gqvsc33tF6eZY2efzFkYchT00k8WWEBJExqtlfbTgobdiGWT5y0vrcInkgfZ1B+UxRSFkf7Aae9kpyYWNoLkmC22/nHkvGgTURXYVdJw0oj7/tE0bvNI4lcmYSr9E8yLgpiDxiJSDqwrzW6o5p51/2+mh406k4IUeMI0ZIyebJIedviZfNV9dt5j1bUxen/IiAyE/SVL0lunLagWzfaNF7GfC+hB6H0rVXg3PWdqeDb1fD2evjk+pGY7iQaI7xUiMrXVRjZzq9YH1FQAgTl+nf9WoKjXbiCk4py5fQJTh9bCS1Vxn03n8Xw3Ed+1XEvbCj8GCRvoJ/BmzfEsirmOeqFHlmTMt4sMaruKKEvnJMlKyd9ElP8Q/WTZc8DJSH5cMSA8Ur3P0JV5gnLLMYYAAYj1+9GsEEMAkHRlI1GKtsXV08peqiRm3ncCKeTLsEdmVHTjmlra+e+PQXiCQUgpzANizye7LDaGQXKP8a1Ri9y0dxWIr2MSGk4s0hwvNZfZsm1oUw3MVqwyUx5zeN0J5XcmklIlJDBpGK2zDLe8uo1DbXlSBOIU3zSF5FGr3aAXuM+jJl8r+UWOiVrEj3kj9FqQs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(376002)(346002)(136003)(39860400002)(451199021)(186003)(6666004)(478600001)(921005)(66946007)(41300700001)(8936002)(8676002)(4326008)(66476007)(316002)(38100700002)(2616005)(66556008)(107886003)(83380400001)(53546011)(6512007)(26005)(6486002)(6506007)(86362001)(7416002)(7406005)(5660300002)(2906002)(31696002)(7366002)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHowNUZjVnlva2VPaGMyRU9YWCt3WnU3V21tNVpSeEFBanA5Y0kxZk5nWFFD?=
+ =?utf-8?B?L21RUU9zWjRoRXFmNnM4MlZkM3lINVkvaDh0RzY5Zmk2Y2k4QnVENHNwQkI4?=
+ =?utf-8?B?RXpmdm5tUzJYZ2FjY2NhUzZwWHMySjhrcitQT2NkaXowaW1sZkxmajg3aVhU?=
+ =?utf-8?B?by9Ma1RJM2dFYXBrVm01dENjNGtReGxrUXNFN04zR0JWL0FCbmR6U3MwZWIr?=
+ =?utf-8?B?WER5eFBLUlZuV1lNcDVCUGtTRWorTHN2aENSYlpSMjlveUhxdjhSUE5sN0ZL?=
+ =?utf-8?B?RGFzQnRNdjlNM01yL0F6ODFWSmQxS3ZPK3p3ejBIR0pOQzFiTExMRmxrU1F6?=
+ =?utf-8?B?a2lGZWVEUUxKQ0VCbklJeTZPM0wzWDNRT05aRDMzaHYxd25PR3lIaWdDUjFk?=
+ =?utf-8?B?TVZSTk5ubkdpcmhBRzU1RmI5cUlaSHZnc25uYWhHL2p6blRXZklvRjI2MFh3?=
+ =?utf-8?B?TzlQRFNGYk9FbE5PajBpSWVmNWJsR3RIZ1A2dExYUTFmK1dsaW82RUdlUERV?=
+ =?utf-8?B?c0dOWEYrcHozSkJzTXhJN0F4bW1HblJZV0UwaUdVMkp3RHlqK0d4VXlBSFFI?=
+ =?utf-8?B?UkU2RFRXdmFSWk8rM2RqdHRrN0VQQmVIeFNxY2tpdHZvN01YZ2F6Ky9Ed3k0?=
+ =?utf-8?B?SExxbC85OFJ5MTVSYjdGbjJ1Z0ZHQkpHREplMllvdmNkM3BWU29VK21WdWVP?=
+ =?utf-8?B?WUZqdm5WazJyT1AydU9pZU5TcTZqWmZIVmJPalVpM3B1ZkUzakQ0cGdMQzh4?=
+ =?utf-8?B?NU1JWTF1cEZPbDdGdEMvOU9ML0VUVXFmSHdBTmhNWFIwaWJuNGMzMU9wUDJN?=
+ =?utf-8?B?dnhqb210VHBjYUNNcTBEUXNaUGpYMFc2Ly9ibUxST0lyTHpMcjBBU3RXNTJH?=
+ =?utf-8?B?aXJiQkJ6VXVUT3FRSWtObXFZSzFId1pmS0JFQ3RTKzdycE9wMGVWWWtvNTVT?=
+ =?utf-8?B?MWExOEZNdmRST2R2SVFVVENmamF2N0dha0RqTFB1S2ZNMkRVRkpSZVdVOG93?=
+ =?utf-8?B?ekNQWWVXemhSSUpqdEJxbk5jUGFKcjhNN3RXNWF1K0lxSnQza0hSQ09VK2JX?=
+ =?utf-8?B?RThWMWRoOXVaMVVwMGJiMkpRKzdBbzdvcUdwV1Zjd0xGWTVDUU1FcHQ5anFt?=
+ =?utf-8?B?ZSt4WWFPcWp3MkNablFGdXU1Vi92STBSNWJ5NUFiazBoVy9Uek5SVmU5Z05x?=
+ =?utf-8?B?dEZDM0RFTTJab0FocDFzY0wwcG5WdDJrQ3JjT2NCTWpBMW0xOXdOemJ0WHp1?=
+ =?utf-8?B?aTBFUkNYVzNKa0kwVTYxaHJYcUZibWdkbldmV2d5Zm9uaFVuc3JZVi9aL1I3?=
+ =?utf-8?B?UkhFV0xqTzNxbVN5RExTYTJzcFc4bnlkdExrV2huektRY2NGcmJlS1Vab0Jx?=
+ =?utf-8?B?ZVBscEI2YmE2TlZmbURqbFVEbTI4Ty9rYVhBOHpGU1hWVG5UenVna0hvaS9V?=
+ =?utf-8?B?amdmT3hqRDZuTStVNnN0NllaVlNlYWt5TWpad3hwNHUvZ0Nwa1MwVUZ1Qkta?=
+ =?utf-8?B?YmdkRmRRaXBsWkVLOXJNZHZPdVI4NFBGeUJmRWdEbFM2VERhWFhyWnNiWkUv?=
+ =?utf-8?B?WGhZeHZ0QU5SWnp6N080L1RKbE1vL2RIVXo1MzAyejZMTkJEVlZFeTZhMyth?=
+ =?utf-8?B?cWpSRnV2T0tTVDNDWFRtS2RPNzlya29PeHpDcFlhNmMvSFhpOHRwZldlSFJk?=
+ =?utf-8?B?Zis2YVhSSERJVlNjZldHU3E3bEpCMi9uUkNmWWt6S1drSEdLdzdQUHRoSVhL?=
+ =?utf-8?B?Tmk4aDkyOXdVZmU4WWN3ckNWcnhKcSszS0hsRkdSaVVwaTlrTDBiQzFtNzdP?=
+ =?utf-8?B?eG1vYVdzWHM3eVpBYk0zbWtXYk56dm9WNGptUDY5VkN5L3dKV29DWFZUaFkx?=
+ =?utf-8?B?WGIzbDh5bHNUUjMxRTIzR2ZJTWEwaWM1R05FR00zWVdNUjFUUlV6RGVMRjdv?=
+ =?utf-8?B?cW5mRnRUVjMvL25TRGJpNTE5RlQ0Sm1BK0xyZEVUenU1SWJPWDdjNlBVckdv?=
+ =?utf-8?B?d2xDN3Nwc1EyRWFpSjBjekZQRitiaFgzZVl2cld3c0J4aFdTbFZZSzlmMUU4?=
+ =?utf-8?B?WTVjV2pEMytMblFIUkxnUmtBMllJSkNRQ2tBaDJNWThMblVFMVZ0d3hkc2Fq?=
+ =?utf-8?B?VUpIL1ozb0lsN3pOaU1QZEgrVlhLbFNYVUlFQ1JzK1FTWTNXS25TcktKQVRC?=
+ =?utf-8?B?Umc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?dTZvblZXNldaZmRaaUpHQmNxZy9CWmE5dXp5MWJuWTZCeVRjK1FzR1JlUDQ2?=
+ =?utf-8?B?NWpobS84V3VrRElCeFo3Q3g2cWRsRllIWFBqaDNFVllMV1hkVnQ5a2JIMWhQ?=
+ =?utf-8?B?Z09Pbm1VQm8xVzBVMUs1RWFGTDNqd2RuT2V3eDh5Rk8rRFhVaXlzOVdudnFj?=
+ =?utf-8?B?RW5rYnRpRkVlSUZ4SlJBRXhkNDFwZ1BhSUpYZjZtTUdEVkpmaXBWN1MwMXRz?=
+ =?utf-8?B?cUJpcjFQZ3NmZU9vTWhHaGcyRXl3S1dBSWRsNHFUS0pONVJEL3k5VGM4NmVL?=
+ =?utf-8?B?allEUWk2bTVKSkw1d1UzL2o3aEY4NDRnSjN3dTlwclZLWldHclpaMkNadmFl?=
+ =?utf-8?B?VHY3SjdUdjFGOHpsZ2ltU0RjK3hXTTJxVFJia2VMd0pyYzFYQTZaeHk3blR1?=
+ =?utf-8?B?Q1Z0d1p1WHdlazBLdmZFN0oxNmorb3BCR3hpY3Jqd1BRdFJlYktNRUFCOUJU?=
+ =?utf-8?B?MzVSMnhYeWhRaGk4cHVFZ3BXVnpveTNsWTZFVHhETnlIZ0JTeTEyZWlPeHN6?=
+ =?utf-8?B?S2QrK3hTN3l1N0ltbmlQRWprYVg4bjhjckp3eW5YalVaTjJpdTB2YU9oWDY3?=
+ =?utf-8?B?eG9zOEhVaHhOZ0xpNyt4aS9TZDZFRjNCUXM4NlNSTmlidk5mSG1ZdzhMcEs1?=
+ =?utf-8?B?eE1VcDF1UmIyWmdYR2pXU1VzU2VaSE1IdkU5Rnd1b1ZxektBMFcvSElFcGw4?=
+ =?utf-8?B?TG41OW5mekJ0RHZMU3k3OFUzOENJZDI2MVgwTXRCYzgyNG16YllWc3ZHSUlB?=
+ =?utf-8?B?bVJlSDdRcUlpQ2NrZEZlU0pUS2c0Z1ZtaVJDVUN4alQ3YWlHYTZ1OE5zVldy?=
+ =?utf-8?B?SzhQUUtJbFFJN0c2b2V3eW5BTzdjVTBYdkVKdVJXNm50SFJoSlo5SmxLOWRE?=
+ =?utf-8?B?cG1YM2kzM1dTMFpWOHBSck93NHJqaUhrM1pQUmJUZ29EQ3h6WUJVVTNyaElF?=
+ =?utf-8?B?Z0J2azNVYmZuNXphakZNQkNqVFk2S3ZhazFZNkN2WjZVR0FQRDA1aUFCQzZF?=
+ =?utf-8?B?MHRsSHhvcHhFK3VGbzdoYUp3WjQ5L1R0MWlFMktzdmFwb1pKL1FZU2g3YlpM?=
+ =?utf-8?B?QlFvNXRXWWVlUVNCekJkdzBtSkYyOUkvVEY1TTdmN2ZiVkNNUDhiUzZYclBV?=
+ =?utf-8?B?Wit6dlIrYmw5K2RCSkUxZGhGZWNDWmZGWXlOWHNlajJMWkcvNFNrbnNnK0hp?=
+ =?utf-8?B?QjBhUnVBdHZLNTA2ZmU4cXhZNG9IdG1LR2dWYWdkT0hZWTRuNWVubDl2RCtU?=
+ =?utf-8?B?S3lSWFBMOTFGYVRRTmRRWUNiUzNGSThRNGNUeEIyVzY3QjN0M2ZOU2Z3VUx0?=
+ =?utf-8?B?L3Bqa1JoU1U4a0V1YVJwK2cxRVhTa0JEQjFLTFl5YzBaWmtPN3JoNkJMLzFD?=
+ =?utf-8?B?bG1Hd1kxc3pSZXNqbTVna3NqSE5oQ1licU5zSEhDWkluV0h6Rys0S3IzU3pT?=
+ =?utf-8?B?bmlHOFdZaHcxN2thU1dBeisvTHVzaDd1dUdWRk9zUTM0N2hDUVZYQ2Racldq?=
+ =?utf-8?B?UG1DRHVyTHFLTjFCSGlla0ZNTU5xc251d3I2bXFEUlE3WWsrM3RESVRtUHFY?=
+ =?utf-8?B?U1RldGxqN1pLOUc1ZEhnUytGYzlQb3VhWEIxK2lhVU43RlVpV1FoZFRlc3NV?=
+ =?utf-8?B?OWo1eXJtbUtWL1M4NGo3cWlOaHRPVEdpVHU1M0k5SU95TnJxenNMZDJWcDdI?=
+ =?utf-8?B?REdNS0pvZkUrbGRsTk95TDhmSHRDRzRkTEw2RmhzNy8wY25TRlRaYmhPS011?=
+ =?utf-8?B?Qm1mVkxtQ3RyOEpsVlBxaXRnWTV3d3BhQW9WWDV4aS9Wam9NOG5pOGZWL2kz?=
+ =?utf-8?B?M2lJVzZBdDlWMWVxTUZpV1N4VWdCS1RCK2phZlQ0cEl3bkRqT2pZb2FpQmhP?=
+ =?utf-8?B?ZnRYWXdyWWZvazFrUWNZVU5qOS9SSDVWdnNHOHlWT2ZmOEpWWC9Kc3hValUy?=
+ =?utf-8?B?VThDc3MzOEtEdXpnNi92bWs5VlU3MzhXTEs2azk1MWwyejBUMTcwRGJkb1Ru?=
+ =?utf-8?B?dG1XNlIxbldXVTdZU2YzU0RJMmM1a2FRWUpZdldFTms4MEp0L252Ymx3d2Jh?=
+ =?utf-8?B?QlFsNm9XbEdXTG5XNEJuZE0raVdWbDB1Njk1TVlIUERDRjNkMmI2NlF2N0xs?=
+ =?utf-8?B?V0Y3THBtWm1hMnMrSW9zTFp1bjZNNlloTXNPN2NmZmI2RlFwdmpVZGliNjhj?=
+ =?utf-8?B?d2hrNGhPTTRmaE5lQzRhUFpnNW94SU40RFM3OUtBT25xZ2tISDBFZ3NsQnpQ?=
+ =?utf-8?B?YUJWekpsYkk3WEs5eXgxY1NWS3VOa1NTVHpxZGk3blZNbFVtcy9kd2p1ZXNB?=
+ =?utf-8?B?YjRhZnFveEVEQzJMa2p4bngvemh1SVdTYnZyZ0JKNmJwNDlicittWkpUVUdt?=
+ =?utf-8?Q?bjG1MeNCPZFjMF3qmZ3sScw8qTN2j7XKCpx83udbqUfyj?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: 9ewZtt6tpEXmtGdDw6MiZ6y9IObPKFBG731Hh7KVRlVFmghrcap4gNDt0CKQ1jkORdo57HygL7gVC+GPckeVuhFv7XFCAJ5L2eqneKfYObh72aUv8HD7Ei7EHPr/ZPgLSXfMNj7MxRUTjO9mDfe78sbdIbl/KUKZeN+kI+D0ROR/xDHB3Lx8X8zZPxNTTFM17DqV/DgxSjPoOokpgUuZdt1J8hqbkTc15Zl4cJWOnC4pyKtnyLOU104u1i/Q4q+wfYQzPTHREdK734f6Djt4DXUsv+/GhegJ4S3GrsuqZ9Nt7bMWYRkLH//8X+tra07jpmYHIF12jpYCNUPvT3O2UXH5XO8Pg5wva44BNQvSuZLF8pv7sQl25MAVJjNqjX/TMHr8JeLZP09OFrFad2ulGUzvT5ANxgUucPiEz2HHLpwvYCrkOC4sRN0RbazuJHOx6xd+boMdWlW8mA==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ab6c3de-adbe-4ef5-553a-08db6dbc12c2
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 16:17:54.2091
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DRuF9eTAuNV+EiNtCuzVOMF701zGEDD0NV6VZFdvSbQ0cKx4PCSCZQxG93GZVGOXCFFbu6qbifDx/UOnc0J8o0JuGOCLxrL3GhxzNkxxbig=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB7105
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_13,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306150143
+X-Proofpoint-ORIG-GUID: GIS-WB9q4G03piAM7RqkoUwRFWt3haOi
+X-Proofpoint-GUID: GIS-WB9q4G03piAM7RqkoUwRFWt3haOi
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:43:30PM -0700, Hugh Dickins wrote:
-> On Wed, 14 Jun 2023, Hugh Dickins wrote:
-> > On Wed, 14 Jun 2023, Nathan Chancellor wrote:
-> > > 
-> > > I just bisected a crash while powering down a MIPS machine in QEMU to
-> > > this change as commit 8044511d3893 ("mips: update_mmu_cache() can
-> > > replace __update_tlb()") in linux-next.
-> > 
-> > Thank you, Nathan, that's very helpful indeed.  This patch certainly knew
-> > that it wanted testing, and I'm glad to hear that it is now seeing some.
-> > 
-> > While powering down?  The messages below look like it was just coming up,
-> > but no doubt that's because you were bisecting (or because I'm unfamiliar
-> > with what messages to expect there).  It's probably irrelevant information,
-> > but I wonder whether the (V)machine worked well enough for a while before
-> > you first powered down and spotted the problem, or whether it's never got
-> > much further than trying to run init (busybox)?  I'm trying to get a feel
-> > for whether the problem occurs under common or uncommon conditions.
 
-Ugh sorry, I have been looking into too many bugs lately and got my
-wires crossed :) this is indeed a problem when running init (which is
-busybox, this is a simple Buildroot file system).
 
-> > > Unfortunately, I can still
-> > > reproduce it with the existing fix you have for this change on the
-> > > mailing list, which is present in next-20230614.
-> > 
-> > Right, that later fix was only for a build warning, nothing functional
-> > (or at least I hoped that it wasn't making any functional difference).
-> > 
-> > Thanks a lot for the detailed instructions below: unfortunately, those
-> > would draw me into a realm of testing I've never needed to enter before,
-> > so a lot of time spent on setup and learning.  Usually, I just stare at
-> > the source.
-> > 
-> > What this probably says is that I should revert most my cleanup there,
-> > and keep as close to the existing code as possible.  But some change is
-> > needed, and I may need to understand (or have a good guess at) what was
-> > going wrong, to decide what kind of retreat will be successful.
-> > 
-> > Back to the source for a while: I hope I'll find examples in nearby MIPS
-> > kernel source (and git history), which will hint at the right way forward.
-> > Then send you a patch against next-20230614 to try, when I'm reasonably
-> > confident that it's enough to satisfy my purpose, but likely not to waste
-> > your time.
+On 6/14/23 22:34, Michael Ellerman wrote:
+> Eric DeVolder <eric.devolder@oracle.com> writes:
 > 
-> I'm going to take advantage of your good nature by attaching
-> two alternative patches, either to go on top of next-20230614.
+>> The kexec and crash kernel options are provided in the common
+>> kernel/Kconfig.kexec. Utilize the common options and provide
+>> the ARCH_HAS_ and ARCH_SUPPORTS_ entries to recreate the
+>> equivalent set of KEXEC and CRASH options.
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> Reviewed-by: Sourabh Jain <sourabhjain@linux.ibm.com>
+>> ---
+>>   arch/powerpc/Kconfig | 55 ++++++++++++++------------------------------
+>>   1 file changed, 17 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index bff5820b7cda..36f2fe0cc8a5 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -588,41 +588,21 @@ config PPC64_SUPPORTS_MEMORY_FAILURE
+>>   	default "y" if PPC_POWERNV
+>>   	select ARCH_SUPPORTS_MEMORY_FAILURE
+>>   
+>> -config KEXEC
+>> -	bool "kexec system call"
+>> -	depends on PPC_BOOK3S || PPC_E500 || (44x && !SMP)
+>> -	select KEXEC_CORE
+>> -	help
+>> -	  kexec is a system call that implements the ability to shutdown your
+>> -	  current kernel, and to start another kernel.  It is like a reboot
+>> -	  but it is independent of the system firmware.   And like a reboot
+>> -	  you can start any kernel with it, not just Linux.
+>> -
+>> -	  The name comes from the similarity to the exec system call.
+>> -
+>> -	  It is an ongoing process to be certain the hardware in a machine
+>> -	  is properly shutdown, so do not be surprised if this code does not
+>> -	  initially work for you.  As of this writing the exact hardware
+>> -	  interface is strongly in flux, so no good recommendation can be
+>> -	  made.
+>> -
+>> -config KEXEC_FILE
+>> -	bool "kexec file based system call"
+>> -	select KEXEC_CORE
+>> -	select HAVE_IMA_KEXEC if IMA
+>> -	select KEXEC_ELF
+>> -	depends on PPC64
+>> -	depends on CRYPTO=y
+>> -	depends on CRYPTO_SHA256=y
+> ...
+>> +
+>> +config ARCH_HAS_KEXEC_FILE
+>> +	def_bool PPC64 && CRYPTO && CRYPTO_SHA256
 > 
-> mips1.patch,
->  arch/mips/mm/tlb-r4k.c |   12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
+> The =y's got lost here.
 > 
-> is by far my favourite.  I couldn't see anything wrong with what's
-> already there for mips, but it seems possible that (though I didn't
-> find it) somewhere calls update_mmu_cache_pmd() on a page table.  So
-> mips1.patch restores the pmd_huge() check, and cleans up further by
-> removing the silly pgdp, p4dp, pudp, pmdp stuff: the pointer has now
-> been passed in by the caller, why walk the tree again?  I should have
-> done it this way before.
+> I think they were both meaningful, because both options are tristate. So
+> this previously required them to be built-in (=y), whereas after your
+> patch it will allow them to be modules.
 > 
-> But if that doesn't work, then I'm afraid it will have to be
-> mips2.patch,
->  arch/mips/include/asm/pgtable.h |   15 ++++++++++++---
->  arch/mips/mm/tlb-r3k.c          |    5 ++---
->  arch/mips/mm/tlb-r4k.c          |   27 ++++++++++++++++++---------
->  3 files changed, 32 insertions(+), 15 deletions(-)
+> I don't know for sure that those options need to be built-in, but that's
+> what the code does now, so this patch shouldn't change it, at least
+> without an explanation.
 > 
-> which reverts all of the original patch and its build warning fix,
-> and does a pte_unmap() to balance the silly pte_offset_map() there;
-> with an apologetic comment for this being about the only place in
-> the tree where I have no idea what to do if ptep were NULL.
-> 
-> I do hope that you find the first fixes the breakage; but if not, then
-
-I hate to be the bearer of bad news but the first patch did not fix the
-breakage, I see the same issue.
-
-> I even more fervently hope that the second will, despite my hating it.
-> Touch wood for the first, fingers crossed for the second, thanks,
-
-Thankfully, the second one does. Thanks for the quick and thoughtful
-responses!
-
-Cheers,
-Nathan
+> cheers
+Thanks Michael, I've applied =y's. Good catch!
+eric
