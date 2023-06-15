@@ -2,124 +2,215 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0209C73105B
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 09:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB7473117A
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jun 2023 09:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244841AbjFOHRf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jun 2023 03:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S239020AbjFOH5d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jun 2023 03:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244251AbjFOHQY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 03:16:24 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 522952688;
-        Thu, 15 Jun 2023 00:14:46 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxV+lkuopk4XcFAA--.9700S3;
-        Thu, 15 Jun 2023 15:14:44 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxNeRiuopk1qcbAA--.13198S3;
-        Thu, 15 Jun 2023 15:14:43 +0800 (CST)
-Message-ID: <f2fae469-2a39-119b-8512-c4ad78a896f8@loongson.cn>
-Date:   Thu, 15 Jun 2023 15:14:42 +0800
+        with ESMTP id S238184AbjFOH5c (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jun 2023 03:57:32 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306341A3
+        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 00:57:30 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5702415be17so9154487b3.2
+        for <linux-mips@vger.kernel.org>; Thu, 15 Jun 2023 00:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686815849; x=1689407849;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLt61v9ssqW8THTFBubZKFO6yUx9jJyRuoagCfuj5p4=;
+        b=sqOjHZl7egAhowGBIl8syIGU5uGIW1wSh5YqCADkB0Zmhbwaikuj12BL/Atk+qYS71
+         8dY5tiV1rX4DjXNhrE2xJeIEdceT4TUB4AfmV60Sg7nUR26TxpBkZUfQbEPDRpELwXiM
+         3HDz0uXJ5pPS05kzKVjfB3TERQuwjHm7feUY48emv6g2FTDXB9kM0valHSq3MAkeYNdE
+         mA/iBYPYSlEE3tWbGq5EWumSWyWn91B8nqrAaue3xEBOGl9H7R/5SfVVFZg7lrOxN+sl
+         dQY9293XfHEDMeAx5R4qX4oCaN7KwBo3Iv/M+KCSiSSfPpdtHzovKysKwSYDtQgZOCuN
+         1f9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686815849; x=1689407849;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLt61v9ssqW8THTFBubZKFO6yUx9jJyRuoagCfuj5p4=;
+        b=HN8IwyuhqBkdhDDhCmp1Se3xW9DbXKchCI6I4CURgiVXz2dLJcOEv283s3Wjk125xl
+         tik1CCht02EFCx1vcD4YWkE3XGr6NSdpTbayb9F4hegYlizFZkrdSm+GCt2m/GrxXtUo
+         XINMAxPoiyZUJWB150yGAY9zF1vvfOAj9fQrRgECs92AsuJPXChJDo5wUGxCk/LPUTmX
+         umd/G4jVPrGLB/DrR3vtt2qBFDOiYMThv/w6rdDB+x6ZabVRVMLDAE1gdpdBoZmS99z2
+         YW7HXOae3D7VkKS8aPRBLiOMhctwnxICoAzW6672wpwMldq4AQFgyj3jeBrRRAfmYi3t
+         ZHcw==
+X-Gm-Message-State: AC+VfDzgfYwqg5her5NvgWnENxiQyWM+8FQxyQOwAzQA8ai5MuWLojUs
+        Ng2TV0QFCWlx/mrs0pjr99/C5A==
+X-Google-Smtp-Source: ACHHUZ7WkxW4gg02vDJcQOsCLmdXn2XBXedO6GCP0YsU33dh0gQYY291P8lwRaex9WlgnYowIiPsYQ==
+X-Received: by 2002:a0d:d9c9:0:b0:56d:244:ab13 with SMTP id b192-20020a0dd9c9000000b0056d0244ab13mr4185666ywe.28.1686815849226;
+        Thu, 15 Jun 2023 00:57:29 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w10-20020a0dd40a000000b00568a207aaedsm4237877ywd.68.2023.06.15.00.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 00:57:28 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 00:57:19 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
+In-Reply-To: <20230612210423.18611-5-vishal.moola@gmail.com>
+Message-ID: <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
+References: <20230612210423.18611-1-vishal.moola@gmail.com> <20230612210423.18611-5-vishal.moola@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/ingenic: Kconfig: select REGMAP and REGMAP_MMIO
-To:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230607072253.440613-1-suijingfeng@loongson.cn>
- <845a483ed09728c712ad57b1fe9bc5c930a72d98.camel@crapouillou.net>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <845a483ed09728c712ad57b1fe9bc5c930a72d98.camel@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxNeRiuopk1qcbAA--.13198S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxJry8tFy5tr1DJF18Zr13GFX_yoW8CF15pF
-        s5ta45uFWxuF4vkr42yFy7WFy5Xw15Ja4rCr1kJa4q9ryDAr1jqrZrZFWY9FyDAr4xGr4U
-        X3s3GFy7ZF17XrbCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jY
-        SoJUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Mon, 12 Jun 2023, Vishal Moola (Oracle) wrote:
 
-On 2023/6/7 17:46, Paul Cercueil wrote:
-> Hi Sui,
->
-> Le mercredi 07 juin 2023 à 15:22 +0800, Sui Jingfeng a écrit :
->> Otherwise its failed to pass basic compile test on platform without
->> REGMAP_MMIO selected by defconfig
->>
->> make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64-
->>
->>    SYNC    include/config/auto.conf.cmd
->>    Checking missing-syscalls for N32
->>    CALL    scripts/checksyscalls.sh
->>    Checking missing-syscalls for O32
->>    CALL    scripts/checksyscalls.sh
->>    CALL    scripts/checksyscalls.sh
->>    MODPOST Module.symvers
->> ERROR: modpost: "__devm_regmap_init_mmio_clk"
->> [drivers/gpu/drm/ingenic/ingenic-drm.ko] undefined!
->> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
->> make: *** [Makefile:1978: modpost] Error 2
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/ingenic/Kconfig | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/ingenic/Kconfig
->> b/drivers/gpu/drm/ingenic/Kconfig
->> index a53f475d33df..7457c0b65034 100644
->> --- a/drivers/gpu/drm/ingenic/Kconfig
->> +++ b/drivers/gpu/drm/ingenic/Kconfig
->> @@ -5,6 +5,8 @@ config DRM_INGENIC
->>          depends on CMA
->>          depends on OF
->>          depends on COMMON_CLK
->> +       select REGMAP
->> +       select REGMAP_MMIO
-> nit: order alphabetically (move them after the DRM_* ones).
+> Currently, page table information is stored within struct page. As part
+> of simplifying struct page, create struct ptdesc for page table
+> information.
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-Fixed, I already send a updated version[1].
+Vishal, as I think you have already guessed, your ptdesc series and
+my pte_free_defer() "mm: free retracted page table by RCU" series are
+on a collision course.
 
-[1] 
-https://lore.kernel.org/dri-devel/20230607110650.569522-1-suijingfeng@loongson.cn/
+Probably just trivial collisions in most architectures, which either
+of us can easily adjust to the other; powerpc likely to be more awkward,
+but fairly easily resolved; s390 quite a problem.
 
-> Cheers,
-> -Paul
->
->>          select DRM_BRIDGE
->>          select DRM_PANEL_BRIDGE
->>          select DRM_KMS_HELPER
+I've so far been unable to post a v2 of my series (and powerpc and s390
+were stupidly wrong in the v1), because a good s390 patch is not yet
+decided - Gerald Schaefer and I are currently working on that, on the
+s390 list (I took off most Ccs until we are settled and I can post v2).
 
--- 
-Jingfeng
+As you have no doubt found yourself, s390 has sophisticated handling of
+free half-pages already, and I need to add rcu_head usage in there too:
+it's tricky to squeeze it all in, and ptdesc does not appear to help us
+in any way (though mostly it's just changing some field names, okay).
 
+If ptdesc were actually allowing a flexible structure which architectures
+could add into, that would (in some future) be nice; but of course at
+present it's still fitting it all into one struct page, and mandating
+new restrictions which just make an architecture's job harder.
+
+Some notes on problematic fields below FYI.
+
+> ---
+>  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+> 
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index c5a51481bbb9..330de96ebfd6 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
+>  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
+>  #endif /* CONFIG_MMU */
+>  
+> +
+> +/**
+> + * struct ptdesc - Memory descriptor for page tables.
+> + * @__page_flags: Same as page flags. Unused for page tables.
+> + * @pt_list: List of used page tables. Used for s390 and x86.
+> + * @_pt_pad_1: Padding that aliases with page's compound head.
+> + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
+> + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap only.
+> + * @pt_mm: Used for x86 pgds.
+> + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and s390 only.
+> + * @ptl: Lock for the page table.
+> + *
+> + * This struct overlays struct page for now. Do not modify without a good
+> + * understanding of the issues.
+> + */
+> +struct ptdesc {
+> +	unsigned long __page_flags;
+> +
+> +	union {
+> +		struct list_head pt_list;
+
+I shall be needing struct rcu_head rcu_head (or pt_rcu_head or whatever,
+if you prefer) in this union too.  Sharing the lru or pt_list with rcu_head
+is what's difficult to get right and efficient on s390 - and if ptdesc gave
+us an independent rcu_head for each page table, that would be a blessing!
+but sadly not, it still has to squeeze into a struct page.
+
+> +		struct {
+> +			unsigned long _pt_pad_1;
+> +			pgtable_t pmd_huge_pte;
+> +		};
+> +	};
+> +	unsigned long _pt_s390_gaddr;
+> +
+> +	union {
+> +		struct mm_struct *pt_mm;
+> +		atomic_t pt_frag_refcount;
+
+Whether s390 will want pt_mm is not yet decided: I want to use it,
+Gerald prefers to go without it; but if we do end up using it,
+then pt_frag_refcount is a luxury we would have to give up.
+
+s390 does very well already with its _refcount tricks, and I'd expect
+powerpc's simpler but more wasteful implementation to work as well
+with _refcount too - I know that a few years back, powerpc did misuse
+_refcount (it did not allow for speculative accesses, thought it had
+sole ownership of that field); but s390 copes well with that, and I
+expect powerpc can do so too, without the luxury of pt_frag_refcount.
+
+But I've no desire to undo powerpc's use of pt_frag_refcount:
+just warning that we may want to undo any use of it in s390.
+
+I thought I had more issues to mention, probably Gerald will
+remind me of a whole new unexplored dimension! gmap perhaps.
+
+Hugh
+
+> +	};
+> +
+> +#if ALLOC_SPLIT_PTLOCKS
+> +	spinlock_t *ptl;
+> +#else
+> +	spinlock_t ptl;
+> +#endif
+> +};
+> +
+> +#define TABLE_MATCH(pg, pt)						\
+> +	static_assert(offsetof(struct page, pg) == offsetof(struct ptdesc, pt))
+> +TABLE_MATCH(flags, __page_flags);
+> +TABLE_MATCH(compound_head, pt_list);
+> +TABLE_MATCH(compound_head, _pt_pad_1);
+> +TABLE_MATCH(pmd_huge_pte, pmd_huge_pte);
+> +TABLE_MATCH(mapping, _pt_s390_gaddr);
+> +TABLE_MATCH(pt_mm, pt_mm);
+> +TABLE_MATCH(ptl, ptl);
+> +#undef TABLE_MATCH
+> +static_assert(sizeof(struct ptdesc) <= sizeof(struct page));
+> +
+>  /*
+>   * No-op macros that just return the current protection value. Defined here
+>   * because these macros can be used even if CONFIG_MMU is not defined.
+> -- 
+> 2.40.1
