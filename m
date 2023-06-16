@@ -2,107 +2,222 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D02C7336B4
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 18:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A8E7336ED
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 18:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345728AbjFPQxY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jun 2023 12:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        id S1346075AbjFPQ7J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Jun 2023 12:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345835AbjFPQww (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 12:52:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9FF4218
-        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 09:51:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qACfb-0000Dm-Hx; Fri, 16 Jun 2023 18:51:31 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qACfa-007rU6-IN; Fri, 16 Jun 2023 18:51:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qACfZ-00Eos1-BF; Fri, 16 Jun 2023 18:51:29 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] MIPS: PCI: Convert to platform remove callback returning void
-Date:   Fri, 16 Jun 2023 18:51:27 +0200
-Message-Id: <20230616165127.1055386-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S1345619AbjFPQ6t (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 12:58:49 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7310A558E;
+        Fri, 16 Jun 2023 09:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686934615; x=1718470615;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Js61kklOp4BQ1rwerQRjlhJ3sV165mZhQX0vvO8dy+U=;
+  b=f9ONZQI7iyhNzlxv/blEoRBENm1wlVs/q3+fxagg9IqSl5xi+k2zBxQl
+   0y1O8A5GQWc0kP9LBKRKtQEgln9JPjmMfToS1dpnRlgelEI9jCKsFnWbt
+   p1B0+z/Om4+/Pz2mw5OJdKQC+dYMFMkUEsrHKDx0L4P0wkyZsX6Qe5XIf
+   jcG9nW3Fc02W26zZpx5/nYsRfjcfKKOxMn2mZe9jbf1iXjoexsI9Er/ov
+   4NycKPqbgi0AH73opd51CMTVBEUxchyLbE9fYKYKJH1+O48YFCzQOAji4
+   C2N8oIu1sKaUkPkyy4Ar112Nz45upAbrumTjuADNerXIJU3KsoA2bacSC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="388029676"
+X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
+   d="scan'208";a="388029676"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:55:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="690308661"
+X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
+   d="scan'208";a="690308661"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 16 Jun 2023 09:55:58 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:55:57 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:55:57 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 16 Jun 2023 09:55:57 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:55:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GLFm7Ts/De8RA8GmO6FLJQKRIVWusJVHr6s+fqv/EeCdguWQNuWrOVnNfdryqbyG365gk51qGQYq44uluAF6B0tXjnqS8wv3pXEsxkpBDqejK4mxoTx51q1LcWKm6LpKgLN3OLxBMz2Jt5j4ecV4JgfTjtz7ncCF0v9TrsjJzzNmUjxIKCGQETBBugoagWzxpotQffXMLzDyPY+6HFx5KcSDm8rTaq9S2rpENT+twKiMGdxQzLAH4BeKFF7OBzi55hTEGPmgLN3reZl8oATWxy6DtuXf9uSBDZE0+DMp9+9zHuknSPpYr4iKdInSSsvEd1cjsLSLDJ8gsRVBbAt3PA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Js61kklOp4BQ1rwerQRjlhJ3sV165mZhQX0vvO8dy+U=;
+ b=OScAWFPfVesu83HbP6tyN3+R3jZvs6O8YrxYDjOcYFI1b7LC1mfGiMr1z88h1i7t9pIXdqG+cbv8eLEQygrbPEGlpu8uwB+gYeRIMene/VU9DyCNRwuXjaxaJ0ZldlXYZIrPMRIvdIwDrQqD2r6VG1VqFH2zAw4Lgk7RTXdWS5SngXeRpWI/bdkzi4cwkK5St0Kyf8FUxsvctQALOS4mT4WjHZ2F81XZb6gXbsFwDmV7bhzebuv1Y7dpdZFkEL5PTn0HlOyHDwPDPnle2aDePkXNg0l244xnmrQedEN5KZ39sl0cA+lC9I6wXimNr8W6ZC+9omft/6bbc2DD8lBfxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
+ by MW3PR11MB4697.namprd11.prod.outlook.com (2603:10b6:303:2c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 16:55:55 +0000
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::6984:19a5:fe1c:dfec]) by MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::6984:19a5:fe1c:dfec%7]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
+ 16:55:54 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "puranjay12@gmail.com" <puranjay12@gmail.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+Thread-Topic: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+Thread-Index: AQHZoC/TR3JgcIuStE2G0Xd9KghheK+NpnKA
+Date:   Fri, 16 Jun 2023 16:55:53 +0000
+Message-ID: <90a64b6f040491da16af0694172a6cbdaba33669.camel@intel.com>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+         <20230616085038.4121892-7-rppt@kernel.org>
+In-Reply-To: <20230616085038.4121892-7-rppt@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|MW3PR11MB4697:EE_
+x-ms-office365-filtering-correlation-id: 5b3da7c8-1546-4167-f029-08db6e8a8c34
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 55tymwny0+p9AJrKuV6Lw9CTmKI2ItrnVOstrECWigv9Z8cjWvqSfeaHWQSUGW5VU+mfWIG70rMyttZ4EwUgfMSBR60zyCn9smiGC8YCcUF9fASq/sC8Cf2dDIhithsBz5Pv3FICtzSk8YB9Zy6t+fjAjTY3WFEcUEpLYsXokYmKWva3797Cuef1kpDYCqUXOwnCkMsyPHXxoOjJ9K8kxRC5IZQs/sp1uhaQ96/0lfABWqm8JzoRMTX4njLk8N8x7zKahweTPSQQpeIJZlqaPehuz+tjJWsFaOaBpCf/9MxW2f/Zdg34HyKEakHRwPelRpxZTl6XnoAfILl4qjk7VHWnEIn45mflQ88cnbto+XP8To0FsI7A9yitE7wAos5Z/Nhitl0w/BDdicTSi9b00kfMVBLSNw1qutwPd7+O6rqImZeoBea0Izxc7C00bjhNQBI3I4BrR3icZ/8zLO+vFqr15e/7HLRkTZoKRQF00ZsutWPPAA7Lq/Sld7ITjrMrLcU3r7xzpraFc1dU+lhwUDI8PERloI68A5kU3/DKilTBOiDW/cjVfh1sRC8Yh34F/bABmj8G78GVUV/+ee6mjIdta/q3/kArkkrK2q1g/VDGIkmd2VetbOxFwzTPjuL1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199021)(2616005)(71200400001)(26005)(186003)(6506007)(6512007)(54906003)(478600001)(110136005)(6486002)(38070700005)(82960400001)(38100700002)(86362001)(122000001)(7406005)(8676002)(8936002)(7416002)(41300700001)(5660300002)(76116006)(316002)(4326008)(66946007)(66446008)(66476007)(66556008)(4744005)(2906002)(64756008)(91956017)(36756003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VlNzbFFxSis4ZmpHV0ZCYXQyTFNsVFY2NnVoOHV1OXpnSjVxTVVNVlg4VlNX?=
+ =?utf-8?B?ejdRVnZJWFVMUmpuM2ZxbXZvd2hNdlN4aWxCV2VuTGE3WU8xSXpzVWJvY2xR?=
+ =?utf-8?B?bVU4cE0wSitZMms2SEFURzlwN2NDTnQ3TnBCNEhodkdtYkdETTVGWjA1emVY?=
+ =?utf-8?B?VlgvTGRHU3JRRnc3NEJ0eUp4Skdpd0x6VXYrRitKS1dFM3VGMk5yZWxWbmxB?=
+ =?utf-8?B?SklVUENkaXJjY0tGRmxZNmRKNi9hQnJHa040WUFYamZmZzFmRklaZVRBNkc4?=
+ =?utf-8?B?dkhZOGdTb052NHUrYkM0VE9rOExuQXJjeXlERllVeWNENDllMWgrc2FwUDhG?=
+ =?utf-8?B?STEwSzdUVDR0bVhiOGZXdjZTV2JWdy9GY0VLeXA1V1grNE1ZVldnNGIybUJr?=
+ =?utf-8?B?ajFycDVEd3RrSXBUZHhCeVR3R2JLWXB5ZWFnU2NsS3AxY0c0UlB4S3hrUDJP?=
+ =?utf-8?B?OWJhTWRtaU0wSXloc0sxek01cFp3VXMyc21QV2ZIa1BObjRNdkwyVHJXTmo4?=
+ =?utf-8?B?WFhUa1lNKzZLem9nbnJEVk9NQ0loWHJ2RE13U0J3aUV6eEMrRnFTWEQwMlg5?=
+ =?utf-8?B?ZjJ4WjhDU0U4WDUwNEJpWU9wcXBwcm04NVJ2VEJsTXVBVzNaSVJBSENjWTR6?=
+ =?utf-8?B?VGdnaDNlTWNURzJNd1dvUnliaUQzUVlHZHVOalUxaDhtdk94UEVtZ2NaWk9a?=
+ =?utf-8?B?M1FFa3dDVEllK205NnlKd3VPTVMwNm1oZ2o5RVIrcjlsWGpYa2hDNkx4WEM2?=
+ =?utf-8?B?cVZiaHRGbEZ2T3JvVE1aQ2ZhQ2NETkpONEVmT0w2Z3FZTXVwZUVZT2lzeUF1?=
+ =?utf-8?B?N3orcnhNZ2ZyYVQ5aTVHdUM5R2Y1UmxjWHdQdFd1ckhoM1JYbnZ5QzVVeWlv?=
+ =?utf-8?B?Z3Y0UWlHb3ZHb1NWNkVIL3dvZVF4T21pRGRtZnRGT01idDE4Q0pTTVMzY0gw?=
+ =?utf-8?B?QzJaWUR5eERKSzRsNStsZ3oxeFd4Tm1uazNuWDNpTnJMdnFIV1pOVnFyMnhF?=
+ =?utf-8?B?M3FaeFBLRkd6bEt0Y1FNTkE5ZlZmWWVEdEx3N1ZBR3hUWUFYRzVob2ZKSy9U?=
+ =?utf-8?B?Nkt3TWtCbDFWd0thdGFLMGN1NmpnMGxBUTZ6S21wVldZejRCeUR2YUw1aTNz?=
+ =?utf-8?B?aE81elRTSVVQejlRZGpKL2Z4Nk05ZjluVUUyWHBGaUV4cXJTTWxlWWZZUWFo?=
+ =?utf-8?B?WUJVTVFTeWhHZEJoWG50Ykg1QTRkaDdwa1dOU0VBZnIrNHZMSUo1Y1VQbDFP?=
+ =?utf-8?B?SExGWmFUbkcxMmVQTW5EU3psNTg1ZTVVbExMT1lUdkRlTHNLakl4azBYM0JI?=
+ =?utf-8?B?T2RBQ2tsWisyUU1VTzNFMW1VeFQvRWVvWEh3NXp5Tjl3SE9HK3AxZmNqVXhs?=
+ =?utf-8?B?Q3RkdSt6djh4TkFLeU1sZWcvMnlvVWNIOWRTSjkzQnN3ZXI4WUkrd1FXZXBG?=
+ =?utf-8?B?UmRtWVBmSnAzSjZ5UU93M2VabU1PS2FPbi9vVnhzR25vSjducmJ6V0cvUXlJ?=
+ =?utf-8?B?S1dPQldkRitHTUxpUHlHUVN3ZUU0TTkxQmFlOUMrcTIyU2FWMjVPcHh5K0ZP?=
+ =?utf-8?B?aGRWUCtJOEFzdUFlVjMrZ0t0RWxLSHZGNElvWDNXYitjTGxiZEVzblZVQW5Y?=
+ =?utf-8?B?S3RLRis1aVYrbnhsRjdrcE13YnI3MGxGb2xjL2xpY2RtVVVNcXBaeUVSUlZn?=
+ =?utf-8?B?azFod1BHUmZKSmNiTWp4V1ZWOHJFeUVVMHlCNlAvWTFtU085WC9yTFM3dEpH?=
+ =?utf-8?B?dkk5MmpCTDBiZ2pLZlhaVkh4K1VUZTBrY3NiVXVpL2lpZ2lMWXJ6ZmMxYjJs?=
+ =?utf-8?B?SEJ0ZEs2cFNESjZLdjBWOEJmS1FFRkdndU9YNG8wUEpocXBhZ2ljeDZxSVJR?=
+ =?utf-8?B?MXVObHYyOTBrR2xHNGdZZVlDd1JpanlXYnlGYWE3OG53K1B4dFlOaDgrRnlZ?=
+ =?utf-8?B?RHpiY1Z3cTFsSk9Bc0NDVlhkSjlmYmlvbWQzYjMwOFpVMzZPNTlYSGMxdDdB?=
+ =?utf-8?B?dVRoWlJjMDVEa1Q3K3dNQU1NeVp6SStycVI0ZEZmdmU2dGNvaXRPdTRtbmlO?=
+ =?utf-8?B?WHZwOTB1ZGZYN0phUjJFMGlTSC90OFIyVHFpN2R6YUI0RllGN1QvY3h2OEo4?=
+ =?utf-8?B?aks1d2JhQUFETThkWUJCK3crOUFZeEl5VGcwY3F3RkIxc1ZyR1hXSGp2Nm95?=
+ =?utf-8?B?OHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <296480AEB1784F438AF55677428C8428@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1962; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Xxm+6kAbJGo5kAxvEECJfQpDBwL0a/CyRctjGwg4iZQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkjJMOtiU37lKelG5JUI8phwY2FAPmgs8C4YrV7 6Y5QGrPnqGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZIyTDgAKCRCPgPtYfRL+ TvaACACEBhnp5Ac1D9pI/0IE00wZMXMVh1YU4nJBjnU2fEI+3UUrywnsvVnPEjqFsmY4UM8LMvo BAPND1NlDJkeFT+vpSnVpledeC6V6kd1Q3rFUZ40yt5pl1zn966cWatBiRsSYb2GmuJAb8anidX XhTph799MOQDPL84CJoJjAM9UqLH/4ee7N8bE3c+AYndoECdbM7rg/Czc/ejgegXClfzID5RG61 rRDVqGN+oniTWDuFslWiqnhR2sHfOfsj6mYNKSfv1SPGZ0g72yDPbBChw/gP95enicPkeqhEY70 OyCGbcTpGcDHM8vgX2dCLZo2SelQbdpSadLAB1LkQVIGw/Li
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3da7c8-1546-4167-f029-08db6e8a8c34
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2023 16:55:53.8380
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: djtwhzK5rIuDoNODv1diC0gNewajiVZ3/uT8OfCTcgK3MGfFfnfk6NQh4QGrKI8Mn/9WaTKi1BcoE2Fi1Wv+cbhC/2Z1m3nfYDGQ4vxU7DA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4697
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is ignored (apart
-from emitting a warning) and this typically results in resource leaks.
-To improve here there is a quest to make the remove callback return
-void. In the first step of this quest all drivers are converted to
-.remove_new() which already returns void. Eventually after all drivers
-are converted, .remove_new() is renamed to .remove().
-
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
-
-While destroying alignment of the assignments in bridge_driver, do it
-consistently and use a single space before =.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- arch/mips/pci/pci-xtalk-bridge.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
-index ab9bedb82b28..68d5211afea8 100644
---- a/arch/mips/pci/pci-xtalk-bridge.c
-+++ b/arch/mips/pci/pci-xtalk-bridge.c
-@@ -733,7 +733,7 @@ static int bridge_probe(struct platform_device *pdev)
- 	return err;
- }
- 
--static int bridge_remove(struct platform_device *pdev)
-+static void bridge_remove(struct platform_device *pdev)
- {
- 	struct pci_bus *bus = platform_get_drvdata(pdev);
- 	struct bridge_controller *bc = BRIDGE_CONTROLLER(bus);
-@@ -745,13 +745,11 @@ static int bridge_remove(struct platform_device *pdev)
- 	pci_stop_root_bus(bus);
- 	pci_remove_root_bus(bus);
- 	pci_unlock_rescan_remove();
--
--	return 0;
- }
- 
- static struct platform_driver bridge_driver = {
--	.probe  = bridge_probe,
--	.remove = bridge_remove,
-+	.probe = bridge_probe,
-+	.remove_new = bridge_remove,
- 	.driver = {
- 		.name = "xtalk-bridge",
- 	}
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
--- 
-2.39.2
-
+T24gRnJpLCAyMDIzLTA2LTE2IGF0IDExOjUwICswMzAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
+PiBGcm9tOiAiTWlrZSBSYXBvcG9ydCAoSUJNKSIgPHJwcHRAa2VybmVsLm9yZz4NCj4gDQo+IERh
+dGEgcmVsYXRlZCB0byBjb2RlIGFsbG9jYXRpb25zLCBzdWNoIGFzIG1vZHVsZSBkYXRhIHNlY3Rp
+b24sIG5lZWQNCj4gdG8NCj4gY29tcGx5IHdpdGggYXJjaGl0ZWN0dXJlIGNvbnN0cmFpbnRzIGZv
+ciBpdHMgcGxhY2VtZW50IGFuZCBpdHMNCj4gYWxsb2NhdGlvbiByaWdodCBub3cgd2FzIGRvbmUg
+dXNpbmcgZXhlY21lbV90ZXh0X2FsbG9jKCkuDQo+IA0KPiBDcmVhdGUgYSBkZWRpY2F0ZWQgQVBJ
+IGZvciBhbGxvY2F0aW5nIGRhdGEgcmVsYXRlZCB0byBjb2RlDQo+IGFsbG9jYXRpb25zDQo+IGFu
+ZCBhbGxvdyBhcmNoaXRlY3R1cmVzIHRvIGRlZmluZSBhZGRyZXNzIHJhbmdlcyBmb3IgZGF0YQ0K
+PiBhbGxvY2F0aW9ucy4NCg0KUmlnaHQgbm93IHRoZSBjcm9zcy1hcmNoIHdheSB0byBzcGVjaWZ5
+IGtlcm5lbCBtZW1vcnkgcGVybWlzc2lvbnMgaXMNCmVuY29kZWQgaW4gdGhlIGZ1bmN0aW9uIG5h
+bWVzIG9mIGFsbCB0aGUgc2V0X21lbW9yeV9mb28oKSdzLiBZb3UgY2FuJ3QNCmp1c3QgaGF2ZSB1
+bmlmaWVkIHByb3QgbmFtZXMgYmVjYXVzZSBzb21lIGFyY2gncyBoYXZlIE5YIGFuZCBzb21lIGhh
+dmUNClggYml0cywgZXRjLiBDUEEgd291bGRuJ3Qga25vdyBpZiBpdCBuZWVkcyB0byBzZXQgb3Ig
+dW5zZXQgYSBiaXQgaWYgeW91DQpwYXNzIGluIGEgUFJPVC4NCg0KQnV0IHRoZW4geW91IGVuZCB1
+cCB3aXRoIGEgbmV3IGZ1bmN0aW9uIGZvciAqZWFjaCogY29tYmluYXRpb24gKGkuZS4NCnNldF9t
+ZW1vcnlfcm94KCkpLiBJIHdpc2ggQ1BBIGhhcyBmbGFncyBsaWtlIG1tYXAoKSBkb2VzLCBhbmQg
+SSB3b25kZXINCmlmIGl0IG1ha2VzIHNlbnNlIGhlcmUgaW5zdGVhZCBvZiBleGVjbWVtX2RhdGFf
+YWxsb2MoKS4NCg0KTWF5YmUgdGhhdCBpcyBhbiBvdmVyaGF1bCBmb3IgYW5vdGhlciBkYXkgdGhv
+dWdoLi4uDQo=
