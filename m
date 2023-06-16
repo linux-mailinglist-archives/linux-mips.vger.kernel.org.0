@@ -2,73 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04628733672
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 18:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D02C7336B4
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 18:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345607AbjFPQsQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jun 2023 12:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S1345728AbjFPQxY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Jun 2023 12:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345628AbjFPQsN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 12:48:13 -0400
-Received: from out-63.mta0.migadu.com (out-63.mta0.migadu.com [91.218.175.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0793592
-        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 09:48:10 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 12:48:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686934088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IfKIglpY59qnffneasZzBrgWBI/BVVKcO3nvK+88q6Q=;
-        b=f7uDVOP+LriTx1GPKpO/iGQAeI7fAgmRpvVnoi5jo3ti6yVsQ9wInwSxipV6MgfOy574mI
-        FDCFPj1N9Nd5bgTFZS6HIo1mpnuNsg8Mx89vQT9KdcpGA0IcSmQVrnh8mL+CQCqd9x3abe
-        jZmmh6fZtZim0+prcqCTRKU0uIKCYhg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
- jit_text_alloc()
-Message-ID: <ZIySQgafdTHk5Yet@moria.home.lan>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
+        with ESMTP id S1345835AbjFPQww (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 12:52:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9FF4218
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 09:51:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qACfb-0000Dm-Hx; Fri, 16 Jun 2023 18:51:31 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qACfa-007rU6-IN; Fri, 16 Jun 2023 18:51:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qACfZ-00Eos1-BF; Fri, 16 Jun 2023 18:51:29 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] MIPS: PCI: Convert to platform remove callback returning void
+Date:   Fri, 16 Jun 2023 18:51:27 +0200
+Message-Id: <20230616165127.1055386-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616085038.4121892-3-rppt@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1962; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Xxm+6kAbJGo5kAxvEECJfQpDBwL0a/CyRctjGwg4iZQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkjJMOtiU37lKelG5JUI8phwY2FAPmgs8C4YrV7 6Y5QGrPnqGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZIyTDgAKCRCPgPtYfRL+ TvaACACEBhnp5Ac1D9pI/0IE00wZMXMVh1YU4nJBjnU2fEI+3UUrywnsvVnPEjqFsmY4UM8LMvo BAPND1NlDJkeFT+vpSnVpledeC6V6kd1Q3rFUZ40yt5pl1zn966cWatBiRsSYb2GmuJAb8anidX XhTph799MOQDPL84CJoJjAM9UqLH/4ee7N8bE3c+AYndoECdbM7rg/Czc/ejgegXClfzID5RG61 rRDVqGN+oniTWDuFslWiqnhR2sHfOfsj6mYNKSfv1SPGZ0g72yDPbBChw/gP95enicPkeqhEY70 OyCGbcTpGcDHM8vgX2dCLZo2SelQbdpSadLAB1LkQVIGw/Li
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,44 +52,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 11:50:28AM +0300, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> module_alloc() is used everywhere as a mean to allocate memory for code.
-> 
-> Beside being semantically wrong, this unnecessarily ties all subsystems
-> that need to allocate code, such as ftrace, kprobes and BPF to modules
-> and puts the burden of code allocation to the modules code.
-> 
-> Several architectures override module_alloc() because of various
-> constraints where the executable memory can be located and this causes
-> additional obstacles for improvements of code allocation.
-> 
-> Start splitting code allocation from modules by introducing
-> execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
-> 
-> Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
-> module_alloc() and execmem_free() and jit_free() are replacements of
-> module_memfree() to allow updating all call sites to use the new APIs.
-> 
-> The intention semantics for new allocation APIs:
-> 
-> * execmem_text_alloc() should be used to allocate memory that must reside
->   close to the kernel image, like loadable kernel modules and generated
->   code that is restricted by relative addressing.
-> 
-> * jit_text_alloc() should be used to allocate memory for generated code
->   when there are no restrictions for the code placement. For
->   architectures that require that any code is within certain distance
->   from the kernel image, jit_text_alloc() will be essentially aliased to
->   execmem_text_alloc().
-> 
-> The names execmem_text_alloc() and jit_text_alloc() emphasize that the
-> allocated memory is for executable code, the allocations of the
-> associated data, like data sections of a module will use
-> execmem_data_alloc() interface that will be added later.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is ignored (apart
+from emitting a warning) and this typically results in resource leaks.
+To improve here there is a quest to make the remove callback return
+void. In the first step of this quest all drivers are converted to
+.remove_new() which already returns void. Eventually after all drivers
+are converted, .remove_new() is renamed to .remove().
 
-I like the API split - at the risk of further bikeshedding, perhaps
-near_text_alloc() and far_text_alloc()? Would be more explicit.
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
+While destroying alignment of the assignments in bridge_driver, do it
+consistently and use a single space before =.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ arch/mips/pci/pci-xtalk-bridge.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
+index ab9bedb82b28..68d5211afea8 100644
+--- a/arch/mips/pci/pci-xtalk-bridge.c
++++ b/arch/mips/pci/pci-xtalk-bridge.c
+@@ -733,7 +733,7 @@ static int bridge_probe(struct platform_device *pdev)
+ 	return err;
+ }
+ 
+-static int bridge_remove(struct platform_device *pdev)
++static void bridge_remove(struct platform_device *pdev)
+ {
+ 	struct pci_bus *bus = platform_get_drvdata(pdev);
+ 	struct bridge_controller *bc = BRIDGE_CONTROLLER(bus);
+@@ -745,13 +745,11 @@ static int bridge_remove(struct platform_device *pdev)
+ 	pci_stop_root_bus(bus);
+ 	pci_remove_root_bus(bus);
+ 	pci_unlock_rescan_remove();
+-
+-	return 0;
+ }
+ 
+ static struct platform_driver bridge_driver = {
+-	.probe  = bridge_probe,
+-	.remove = bridge_remove,
++	.probe = bridge_probe,
++	.remove_new = bridge_remove,
+ 	.driver = {
+ 		.name = "xtalk-bridge",
+ 	}
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.39.2
+
