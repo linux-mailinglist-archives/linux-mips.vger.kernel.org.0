@@ -2,52 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29CF732F15
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 12:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BAC732F16
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 12:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjFPKuT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jun 2023 06:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S244275AbjFPKuj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Jun 2023 06:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345449AbjFPKtr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 06:49:47 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD4295B
-        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 03:41:43 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f8c5d0b19dso4484815e9.1
-        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 03:41:42 -0700 (PDT)
+        with ESMTP id S244763AbjFPKuX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 06:50:23 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F8F55AC
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 03:42:13 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so4227875e9.0
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 03:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686912053; x=1689504053;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7UUUCEiDOQDFLQBmgYOU/VRB87rfpeTkrh78SXewlQ=;
-        b=YB7kBgIofaOVhvltAeI5pDi9y3XFJCzJ5Xl/Gq9D3rCU4rxSVLcD0mDvB/WVBq8KO9
-         jGOpbuToVtd7gBUNw6hi2h8eDKM7mz7s1R+8EWEQbCyKJLME+B1tPJcvvFEBfl1E6xZi
-         FS7T4ol+qnPtJDVHCllpw9hiozr+jWXQRnUB/syqyrvxNKx8+hwmYT6cOfw638kWlWD2
-         BWrwt2d79+DYo7qDXOHtIsQDyLE0RU52Bt47SMYfTm/AlTqShmffPVK73NRpyauvdMOt
-         8VqN2nXp16OZo7eeGpzxRnnCvoAGIAkKQoW3sbUtL86cHY4SlnNuDILjHAVvSS9UQtAI
-         TdGA==
+        d=linaro.org; s=google; t=1686912094; x=1689504094;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kaBTG2zxwhnxmGeWEEvsgJ1P9b9NURsoufZiPInkKEc=;
+        b=fXSeEJuukMDErM3faMgJwNN/MXuzgrjHOXYggA+6jR8uajnSL/xJWlP0JVNOfQI+ow
+         aHLZ4PWemWhQIGO5GTCv71qqRTrNVPO6dsZmy6NpbntXyFyyMWZtNPHrZhoSEvGFYo+V
+         IvfzXxZvn2zy4EeVsBasSU00/oW79mSRwlP0F19/PMzLzgR+rgpk9HEIroTC8DurHaCs
+         qnf2D4jg0wAMHPHZeM+R+fHVb954rNwI16pHEkAk7j3ZcdLBPATW8b2+VcFSauH3e5VO
+         aRB7VoYhm3+DG9CJmQ4k77Ura9OlfE6GZYCX+V3wfFFkT4000OofjF5Syre7XihikRqZ
+         mCLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686912053; x=1689504053;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l7UUUCEiDOQDFLQBmgYOU/VRB87rfpeTkrh78SXewlQ=;
-        b=jEmbs55GtmrTvP2yn0qMEHCIcqtGRJr3IZHXV3GcRnQIwreR0yctlQBfLCOgL07RtM
-         P1ZuPpfra+Sz/SNzqfgRb3nKA1omrrswXZ8HYHAtwQVcisBECO9L0rgsuPwPg8roe9Gd
-         dM87cAwTmRrD/8C/3WmoNO7mu6uAM04j27XQq+5GjKuUtuVy2bNjRSaftCV96FjfVHnj
-         QYV8KANWU6Qei2KI5RQ2/zhkJcm2/MB3JqY7cg3Ejm6mVXaOGhpJo0WlUgjR1YblyrY9
-         cG79mbhqBlFONriSwquC0EWwLb6v7RnsRkq0XCb2KKbnc3lIBTVa+c/edMGVnEcf909k
-         CmPw==
-X-Gm-Message-State: AC+VfDw//p80aCl2TBcj8aF5k7wO5iIfoFonDLomsL8wEHmwowm3LVcq
-        palAPBVyIFFLJ0a+abmB5g71HQb6gpt17bauSbU=
-X-Google-Smtp-Source: ACHHUZ79+WHZQfcfy/frvys94Lo80cA+tl2FV9KD8MCaSKzol/5ipwbVMZ3T04P7GsrXRUhcD5vRDw==
-X-Received: by 2002:a17:906:da8a:b0:96f:e45f:92e9 with SMTP id xh10-20020a170906da8a00b0096fe45f92e9mr1493906ejb.16.1686911495167;
-        Fri, 16 Jun 2023 03:31:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686912094; x=1689504094;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kaBTG2zxwhnxmGeWEEvsgJ1P9b9NURsoufZiPInkKEc=;
+        b=NHKNywP0t4U+JFS4QxTjduIUoo3WsrwlrdDXYSaVN9lkxbk+hjZL0zm+cVLZQjaqdV
+         Whmz/FhjYMMWLBeGn4ew9/6E355PXc/tOHlYbZn+reXQoCzYW21sJIInbuh/YpEiDQ69
+         p5x0sSgmzSvLIojugRm0HqcjbzBuKqd/QGwQ/JNy12FP+t7/7h28zx/fpuVX2wfuvqEM
+         CyVa1V4UxSdZelRLEKeWMjNOEI+PC9UWkwQBrh1tgaIWjVARWnxZJj+uCO7SnECg5HVX
+         aCknzTt6UvWsYr/JbSZzA6oN7tOYPK7tERsyOemA32aAUU0jfLP/3kfV4k4N6d62cFzu
+         cKYw==
+X-Gm-Message-State: AC+VfDw2E08QTPRl1wGcwnUmgHILq7m/4PPHn3ZvDBB3C6McAu0NwU4o
+        2xloCyyz4AmvQ4sutYHDISxU32QIgI4C1M0FV64=
+X-Google-Smtp-Source: ACHHUZ46d2PnNLTuBJzAtrPzWBhQyazG0ug3ioL29Qy1uIyi1v1EBT6OTUHZcgKN9qMGn18t6oaADg==
+X-Received: by 2002:a17:907:6ea4:b0:978:94b1:25ac with SMTP id sh36-20020a1709076ea400b0097894b125acmr1625268ejc.40.1686911498060;
+        Fri, 16 Jun 2023 03:31:38 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s20-20020a170906961400b009829d2e892csm2251098ejx.15.2023.06.16.03.31.33
+        by smtp.gmail.com with ESMTPSA id s20-20020a170906961400b009829d2e892csm2251098ejx.15.2023.06.16.03.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 03:31:34 -0700 (PDT)
+        Fri, 16 Jun 2023 03:31:37 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -66,10 +67,12 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH 1/2] stmmac: dwmac-loongson: drop useless check for compatible fallback
-Date:   Fri, 16 Jun 2023 12:31:26 +0200
-Message-Id: <20230616103127.285608-1-krzysztof.kozlowski@linaro.org>
+Subject: [RFT PATCH 2/2] MIPS: dts: loongson: drop incorrect dwmac fallback compatible
+Date:   Fri, 16 Jun 2023 12:31:27 +0200
+Message-Id: <20230616103127.285608-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230616103127.285608-1-krzysztof.kozlowski@linaro.org>
+References: <20230616103127.285608-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,26 +92,44 @@ bound to unsupported platform.
 Drop useless, incorrect (space in between) and undocumented compatible.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c | 5 -----
- 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c
-index a25c187d3185..900972521b59 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c
-@@ -59,11 +59,6 @@ static int loongson_dwmac_probe(struct pci_dev *pdev, const struct pci_device_id
- 		return -ENODEV;
- 	}
+---
+
+This patch depends on driver change, thus it should be accepted a
+release after the driver is merged.
+---
+ arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 3 +--
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi          | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+index 8143a61111e3..c16b521308cb 100644
+--- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
++++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+@@ -123,8 +123,7 @@ gmac@3,0 {
+ 				compatible = "pci0014,7a03.0",
+ 						   "pci0014,7a03",
+ 						   "pciclass0c0320",
+-						   "pciclass0c03",
+-						   "loongson, pci-gmac";
++						   "pciclass0c03";
  
--	if (!of_device_is_compatible(np, "loongson, pci-gmac")) {
--		pr_info("dwmac_loongson_pci: Incompatible OF node\n");
--		return -ENODEV;
--	}
--
- 	plat = devm_kzalloc(&pdev->dev, sizeof(*plat), GFP_KERNEL);
- 	if (!plat)
- 		return -ENOMEM;
+ 				reg = <0x1800 0x0 0x0 0x0 0x0>;
+ 				interrupts = <12 IRQ_TYPE_LEVEL_LOW>,
+diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+index 2f45fce2cdc4..ed99ee316feb 100644
+--- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
++++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+@@ -186,8 +186,7 @@ gmac@3,0 {
+ 				compatible = "pci0014,7a03.0",
+ 						   "pci0014,7a03",
+ 						   "pciclass020000",
+-						   "pciclass0200",
+-						   "loongson, pci-gmac";
++						   "pciclass0200";
+ 
+ 				reg = <0x1800 0x0 0x0 0x0 0x0>;
+ 				interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 
