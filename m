@@ -2,195 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE01733ABB
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 22:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D45F733B00
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 22:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjFPUVP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jun 2023 16:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S1345135AbjFPUio (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Jun 2023 16:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245204AbjFPUVO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 16:21:14 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F42930DD;
-        Fri, 16 Jun 2023 13:21:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686946867; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=RDhlvKviJcIJZZ+e8/63pZ7BoQH6Ms2if5eOoegECQ3OvW7ONUbbLvR8rwtoVW0bkG
-    hv9ZySLIw4FIbWi9ijdr5pCPg+eqGcKNhrmOOZxdZ5btbUZCgySCgaCxwsbEzfEy52v3
-    g7jDCQyQDGuq903qLmW4Y706q+D9UB4SYNgK5cMBXdTLq+4Rpn2GOPdJaUz6MehCeyxY
-    UAqptKx6VcMw+8ERoDHNXpMvJsAnYtFvtHQfA+arpLfx6ls2i5WxYR9JAa4gksfdaRTK
-    z6btof5BfE2vA653w9jEgqScWDgZg3nQpE4mDJHCyBpqmNaFyV+xfKe6a7m8lGSI9+YM
-    d1/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686946867;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CvIsHqQnmjr0eGXnWhVaV9/eTMH/5xXtMixI9v/UBwU=;
-    b=Hc32MS90aJbqtDKHt0BHyT+8qWPrnld52SGf3KJNzI0AEUfNQplMdTHhnm6A1NmLHe
-    hoAjxqbh8FNUwbFp7NnGK2VquGpmOKqa6Av105lyDfAeVoCatcuLCj4iWR3S0GZWC8Pg
-    Q41Ej2fL2zpOpbOhc+efvHQ181mKZbJsJp4syoDbIbv1Au/OKowZzROPerE9Q0yWIpUQ
-    l5VHn2PfJdYbHLfuzbqIWc2GfZdR8cdnwl7h4ZbeXInchSMuxboHMjv/KrPGcqcIGLmq
-    HkcZ75jta09dE59xdwU/ylL4oZHnWC5e/hFF9XP1z7qde8EF0SnHm2h8rNlSBz8T3CQc
-    EN3Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686946867;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CvIsHqQnmjr0eGXnWhVaV9/eTMH/5xXtMixI9v/UBwU=;
-    b=lHFH0t4sD0RMKNjQzdIYilqY0G8/Z2lBDtNry+33zFAZQhMI5OXYw5XW0CKAhyCgfX
-    /5a57sDtdMCrONMiOgt3A0ayBRnFA2KuHqs8kiyTRo8gou32lTJUygtQZSl0AafPPcHx
-    L7ixFBCtCx1OPw+d2ty66cy+g62vWHRmByO7/PUhPphX60qDYvbSgVf0/+dujUVnOeHI
-    bLH+GDf5kCn5zFBNv2QD8arUhG4nU0qg0XLqcoHL49RlAsb0o0zk0xrTl6Z2IWQoihrS
-    lShbZUuAEvcSNyqS1RHPKs6BSAampnGNRFRB3AhoejIocf++d5EsCbOgSFpKGZ4xzKiE
-    wn3Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686946867;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CvIsHqQnmjr0eGXnWhVaV9/eTMH/5xXtMixI9v/UBwU=;
-    b=5Q9Pj2P8L8MPgaoGeK+2pgSxK1bbbgd7AqV5o+W/PNE25TZ9YXyKsy4ITRFGtGoEpU
-    FxoBKh/cEMMbzf6mjWDQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGYkv8="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5GKL7A5f
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Fri, 16 Jun 2023 22:21:07 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-Date:   Fri, 16 Jun 2023 22:21:06 +0200
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
- <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
- <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
- <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235280AbjFPUih (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 16:38:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802C3AA0;
+        Fri, 16 Jun 2023 13:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fw74FAZhkocnJnJyLR/WQNNOz26kiObyhL++hGG0nWw=; b=QBNdm8qv6j/A/iWrMKfpB6M7G8
+        dX02GHdjAg9rPGckqaKAq0nuLHgnEOZOUcT5iS1KFKrWFBJlTrkF2I4g5N2YgCfsexrQECwyFoHPp
+        z6yd+/vIl/PequagU7pGV8UNE2yhdOrdkDT+t3SJSVONZj6Q1cQWhoxiK+7FUVh/Fb17OdOH8kjtt
+        OWIuj2P4ze5K/i70TfCVLOSJSXO+Ry9WEoIoy6BlMNh0EJ1wlu/c8zXDIuEPPIicVlz2AV+6m8LDv
+        lA4vOEDBJYuPKGoF8lu2OSuuFhx10iSF/LiB0UcYpqrALuMFJM02PbH03w+/bd9OLb/nrxdqasmpe
+        J/m6D//w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qAGD7-009Lj7-EI; Fri, 16 Jun 2023 20:38:21 +0000
+Date:   Fri, 16 Jun 2023 21:38:21 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
+Message-ID: <ZIzIPQBXvnMtQekj@casper.infradead.org>
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-5-vishal.moola@gmail.com>
+ <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Thu, Jun 15, 2023 at 12:57:19AM -0700, Hugh Dickins wrote:
+> Probably just trivial collisions in most architectures, which either
+> of us can easily adjust to the other; powerpc likely to be more awkward,
+> but fairly easily resolved; s390 quite a problem.
+> 
+> I've so far been unable to post a v2 of my series (and powerpc and s390
+> were stupidly wrong in the v1), because a good s390 patch is not yet
+> decided - Gerald Schaefer and I are currently working on that, on the
+> s390 list (I took off most Ccs until we are settled and I can post v2).
+> 
+> As you have no doubt found yourself, s390 has sophisticated handling of
+> free half-pages already, and I need to add rcu_head usage in there too:
+> it's tricky to squeeze it all in, and ptdesc does not appear to help us
+> in any way (though mostly it's just changing some field names, okay).
+> 
+> If ptdesc were actually allowing a flexible structure which architectures
+> could add into, that would (in some future) be nice; but of course at
+> present it's still fitting it all into one struct page, and mandating
+> new restrictions which just make an architecture's job harder.
 
->=20
->>>> Since this patch will actually make the various ACT8600 regulators =
-work at their specified voltage, maybe the voltage on one of the updated =
-regulators is wrong?
->>>>=20
->>>> Maybe change the regulators one by one back to their old name, =
-until you find the one that is problematic? That may give us more info.
->>>=20
->>> That is what I also have thought about but have not yet done.
->>> Will try as soon as I find a time slot.
->>=20
->> I have reverted the whole patch (had only a conflict in wifi_io / =
-LDO6) and now I can boot.
->>=20
->> But do not see a WiFi or Bluetooth interface.
->>=20
->> So it looks as if the CI20 variants are indeed different. Which would =
-also explain why we
->> originally came up with two different solutions to add WiFi.
->>=20
->> Next I will try to bisect the individual changes...
->=20
-> It is this and not the regulator names:
->=20
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
-b/arch/mips/boot/dts/ingenic/ci20.dts
-> index e2221d44e4269..391be48e6427a 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -295,7 +295,6 @@ &i2c0 {
->        act8600: act8600@5a {
->                compatible =3D "active-semi,act8600";
->                reg =3D <0x5a>;
-> -               status =3D "okay";
->=20
->                regulators {
->                        vddcore: SUDCDC1 {
->=20
->=20
-> Now I wonder how it works without status =3D "okay" for you but not =
-for me.
+The intent is to get ptdescs to be dynamically allocated at some point
+in the ~2-3 years out future when we have finished the folio project ...
+which is not a terribly helpful thing for me to say.
 
-I have not found a reason for this and it was difficult to repeat. =
-Potentially a bisect
-with failed boot and wrong setup of some voltages may have damaged the =
-file system on my
-SD card (see below). At least I had to fsck -f after running the bisect, =
-but I did not
-do it for every bisect step. Sometimes bisecting is difficult if =
-hardware effects are
-involved...
+I have three suggestions, probably all dreadful:
 
-So I started with the series + a revert of the offending patch, added =
-some more logging
-to the kernel and printk() in the driver.
+1. s390 could change its behaviour to always allocate page tables in
+pairs.  That is, it fills in two pmd_t entries any time it takes a fault
+in either of them.
 
-Results:
+2. We could allocate two or four pages at a time for s390 to allocate
+2kB pages from.  That gives us a lot more space to store RCU heads.
 
-- driver is always loaded, so the status =3D "okay" was spurious and not =
-the problem.
+3. We could use s390 as a guinea-pig for dynamic ptdesc allocation.
+Every time we allocate a struct page, we have a slab cache for an
+s390-special definition of struct ptdesc, we allocate a ptdesc and store
+a pointer to that in compound_head.
 
-- Adding/Removing the regulator names also does not make a difference.
+We could sweeten #3 by doing that not just for s390 but also for every
+configuration which has ALLOC_SPLIT_PTLOCKS today.  That would get rid
+of the ambiguity between "is ptl a pointer or a lock".
 
-- But renaming the DT nodes (e.g. SUDCDC1 -> DCDC1) (with or without =
-regulator_name) makes
-boot hang with strange errors which indicate that the processor power =
-supply is not stable.
-Once a while it did even automatically reboot. In most cases there are =
-some EXT4 errors
-afterwards.
+> But I've no desire to undo powerpc's use of pt_frag_refcount:
+> just warning that we may want to undo any use of it in s390.
 
-Example:
-
-[    3.003096] EXT4-fs error (device mmcblk0p1): =
-ext4_mb_generate_buddy:1100: group 81, block bitmap and bg descriptor =
-inconsistent: 30994 vs 31229 free clusters
-/sbin/init: error while loading shared libraries: /lib/mipsel-li
-[    3.291901] Kernel panic - not syncing: Attempted to kill init! =
-exitcode=3D0x00007f00
-[    3.305122] Rebooting in 10 seconds..
-
-I have not found a reason but it appears that if the DT nodes do match =
-the
-struct regulator_desc list, it is different from having them not match.
-
-At least the result of regulator_of_get_init_data() is NULL if there is =
-no
-match and then some other code path is followed in regulator_register().
-
-So at the moment I think that matching DT node names with the =
-act8600_regulators[] list
-changes something in the chip initialization which has influence =
-depending on hardware
-variation. Maybe your board is simply more robust than mine to that.
-
-Deeper analysis will reveal the issue and indicate a solution...
-
-BR,
-Nikolaus
-
+I would dearly love ppc & s390 to use the _same_ scheme to solve the
+same problem.
