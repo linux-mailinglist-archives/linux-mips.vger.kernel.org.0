@@ -2,247 +2,277 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD04E733B85
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jun 2023 23:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526F0733D82
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 03:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbjFPV27 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jun 2023 17:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S232130AbjFQBwz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Jun 2023 21:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjFPV25 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 17:28:57 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5F235A5;
-        Fri, 16 Jun 2023 14:28:56 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57012b2973eso14367907b3.2;
-        Fri, 16 Jun 2023 14:28:56 -0700 (PDT)
+        with ESMTP id S232072AbjFQBwy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jun 2023 21:52:54 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4633AB8
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 18:52:52 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so65615ab.0
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jun 2023 18:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686950935; x=1689542935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S8f4Qp7cwj4O2kdf7qLqLnrTRkxhB0m+8FmgrZaxSBc=;
-        b=kDqKbU7P9edSk/BgMH9xSstpKqVCZCkotk48bdhsv9CQedo7tgzNx594G7ZL6GQuxg
-         jA1o2JPcz0QDYMp8Gk7IfVIBu/Qb0pO39azZ5F7HLfZC1IgCGAp3b3idtV3rR/BwTQDN
-         x0xETay6eu3ghZcxBbeBHYOXCm+0UdQ18fM+kmxKxAuiYRqF/zWkw4LlfaXk/Ol9POup
-         f5e5C/WGoi8jmqXjJwP7rx3T/q8TLMKNW53qsepy7E0u9eKRuHWvS7CgQ60QFJLvcMrS
-         P+YDUzuxecN+sqBu1rA+X9cuH9CB9q1H/97ksOSagJnc4ZVXc8JgbNn89oLF/7saT6Tn
-         z99g==
+        d=google.com; s=20221208; t=1686966772; x=1689558772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kEx6innLEQVDjO+KUz6QEj9ltKpqkGjnhR99asCdiUE=;
+        b=QphXl/2Kh86Rw8vZwPqdALqpoFTwHim7ppYbqz5YDUCqSUqys9oFCfG65/uyJumyTG
+         cqfZYsYQ6BJFBdMXrUoPeAvZzm+zSeYolbHaf8bMswb6Smoa7LBXZpY9WnwU5wcixKhC
+         +pFPmqpwFh23N3KPhBH9FkQzPnb9iacCfpU0A3DGZIdwQFRg9dhZUm6zqnmUFwwVmYnq
+         JfHRpasniZQSM3GoONU/5RysXbyktl4G/r89iTprm6dSg6ZtSnhg+Z2Liv4dS1BdlwBj
+         qokecKVcDIBiJ4VTgu68imILXZ3QxoEBuMg1AYmFGg/WgRSlnKfonbEGogzZDyHHmAAr
+         QnnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686950935; x=1689542935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S8f4Qp7cwj4O2kdf7qLqLnrTRkxhB0m+8FmgrZaxSBc=;
-        b=ZrXo6OGWoVcQQbpgSbyYmx/wep0NhiK1CbM5FA33HDEZhjFAYw6cpaTSwH2pl4EIZ4
-         uqHvBSbe+yg5iRF4pulMPHrmfDZqn82BubWlNex2re7YRiI8fSyoROaFxuEegUAgLIz5
-         1/zBxI6dFB6mvJR8PSP+kM0XLTJIh8bae3D1kf8uZ0BmPLVWZYISOGk6jEO+5Psy3jDG
-         XAHZosySLp+lcb3KgOOHA/4cP3Jrw6t/W7sYW16eKnJQXS4c6t014uDv3qve/2HHLULL
-         7UX2qrrpfztAc2KkUnBkfSpKyo7ntriTw10HOnd3UKus2hnk0CtDDJjrdk0NxXNxeExU
-         0hEw==
-X-Gm-Message-State: AC+VfDxXqdrtJTkK2x9HIV+45N/Muj9IZabhuAv0GNkviw0qbN2+vX37
-        3pSRG1hCidM3bEqy7HTqAnD5MASoi8d1d9cH3fNMh2CJTIoP+A==
-X-Google-Smtp-Source: ACHHUZ7/iv7DGmrSbI7dWoycmh8dvViREYGBrKV5KnrTS1VkZy/HhcudLLxyAMIf5U1P44XX8eoY39CR0V8jmRNeXMA=
-X-Received: by 2002:a81:6c02:0:b0:56c:f684:b4f0 with SMTP id
- h2-20020a816c02000000b0056cf684b4f0mr2990065ywc.27.1686950935072; Fri, 16 Jun
- 2023 14:28:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686966772; x=1689558772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kEx6innLEQVDjO+KUz6QEj9ltKpqkGjnhR99asCdiUE=;
+        b=GTBdHYrD2CdColzzRrjrVgeKHy69DOQOsWs9+M1T8kqO3UkbIJwkDEHTOEMFOQm4iy
+         cjDfkb5QyaK+jK6xDivGJqJkHy0f7X+D2J8V/dylrI++TdVE7xpirXW25tnIG6pxBOXX
+         ePKuRd2BtnK3d8++EEgIqh1+3m7EAgCNaTUkyqLydW+QfKzthBYivrr7ciA4p5R2hZEG
+         l1QYhmwEqewGu/djfRT+5P7v2meXKPgayBUwQXLvLpkhc1xUhK+ioPjQjIOwCIRVeqY6
+         zmX6mBjjdGapJTkOtlXlRLIdtQKv0yJnlBjkqVv+cxRORZvP1052qYaDst/CjEhQGtC5
+         lF6g==
+X-Gm-Message-State: AC+VfDzsXjejM7du/5JePNDvPiSvpo9wJ0GdS4V/6q1SxzxQEPQNzJdv
+        rfrdRALVWsO/7mG6xML0kf8bRw==
+X-Google-Smtp-Source: ACHHUZ5m8J3/6DvcGTTGPBJNW8eEzUuKY5VG5Eg+bRo+QUZFe3m/BKpP1wvItKQYg6hpHAL4W1efbg==
+X-Received: by 2002:a05:6e02:20e4:b0:32f:7831:dea5 with SMTP id q4-20020a056e0220e400b0032f7831dea5mr626341ilv.8.1686966772132;
+        Fri, 16 Jun 2023 18:52:52 -0700 (PDT)
+Received: from google.com ([2620:15c:183:202:bdb2:a15e:7a58:c3a3])
+        by smtp.gmail.com with ESMTPSA id h3-20020a02c723000000b004161fafff97sm6616226jao.136.2023.06.16.18.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 18:52:51 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 19:52:47 -0600
+From:   Yu Zhao <yuzhao@google.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com,
+        jiaxun.yang@flygoat.com, kvm@vger.kernel.org,
+        linux-mips@vger.kernel.org, pbonzini@redhat.com,
+        robh+dt@kernel.org, zhangfx@lemote.com
+Subject: Re: [PATCH 5/5] MAINTAINERS: Update KVM/MIPS maintainers
+Message-ID: <ZI0R76Fx25Q2EThZ@google.com>
+References: <1596005919-29365-5-git-send-email-chenhc@lemote.com>
+ <20230616071831.1452507-1-yuzhao@google.com>
+ <20230616082322.GA7323@alpha.franken.de>
 MIME-Version: 1.0
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
- <20230612210423.18611-5-vishal.moola@gmail.com> <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
-In-Reply-To: <fd63179-6ad6-fd86-79d6-2833c91111f8@google.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Fri, 16 Jun 2023 14:28:44 -0700
-Message-ID: <CAOzc2pwhoF=XNCoe-+w2Z5MRoRJGvTfSr56HV00OGitEBMtPcw@mail.gmail.com>
-Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616082322.GA7323@alpha.franken.de>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:57=E2=80=AFAM Hugh Dickins <hughd@google.com> wr=
-ote:
->
-> On Mon, 12 Jun 2023, Vishal Moola (Oracle) wrote:
->
-> > Currently, page table information is stored within struct page. As part
-> > of simplifying struct page, create struct ptdesc for page table
-> > information.
-> >
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
->
-> Vishal, as I think you have already guessed, your ptdesc series and
-> my pte_free_defer() "mm: free retracted page table by RCU" series are
-> on a collision course.
->
-> Probably just trivial collisions in most architectures, which either
-> of us can easily adjust to the other; powerpc likely to be more awkward,
-> but fairly easily resolved; s390 quite a problem.
->
-> I've so far been unable to post a v2 of my series (and powerpc and s390
-> were stupidly wrong in the v1), because a good s390 patch is not yet
-> decided - Gerald Schaefer and I are currently working on that, on the
-> s390 list (I took off most Ccs until we are settled and I can post v2).
->
-> As you have no doubt found yourself, s390 has sophisticated handling of
-> free half-pages already, and I need to add rcu_head usage in there too:
-> it's tricky to squeeze it all in, and ptdesc does not appear to help us
-> in any way (though mostly it's just changing some field names, okay).
->
-> If ptdesc were actually allowing a flexible structure which architectures
-> could add into, that would (in some future) be nice; but of course at
-> present it's still fitting it all into one struct page, and mandating
-> new restrictions which just make an architecture's job harder.
+On Fri, Jun 16, 2023 at 10:23:22AM +0200, Thomas Bogendoerfer wrote:
+> On Fri, Jun 16, 2023 at 01:18:31AM -0600, Yu Zhao wrote:
+> > On Tue, Jul 28, 2020 at 23:58:20PM -0700, Huacai Chen wrote:
+> > > James Hogan has become inactive for a long time and leaves KVM for MIPS
+> > > orphan. I'm working on KVM/Loongson and attempt to make it upstream both
+> > > in kernel and QEMU, while Aleksandar Markovic is already a maintainer of
+> > > QEMU/MIPS. We are both interested in QEMU/KVM/MIPS, and we have already
+> > > made some contributions in kernel and QEMU. If possible, we want to take
+> > > the KVM/MIPS maintainership.
+> > >
+> > > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > > Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > ---
+> > >  MAINTAINERS | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index bddc79a..5f9c2fd 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -9441,9 +9441,11 @@ F:	arch/arm64/kvm/
+> > >  F:	include/kvm/arm_*
+> > >
+> > >  KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+> > > +M:	Huacai Chen <chenhc@lemote.com>
+> > > +M:	Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> > >  L:	linux-mips@vger.kernel.org
+> > >  L:	kvm@vger.kernel.org
+> > > -S:	Orphan
+> > > +S:	Maintained
+> > >  F:	arch/mips/include/asm/kvm*
+> > >  F:	arch/mips/include/uapi/asm/kvm*
+> > >  F:	arch/mips/kvm/
+> > 
+> > Hi,
+> > 
+> > Is kvm/mips still maintained? Thanks.
+> > 
+> > I tried v6.4-rc6 and hit the following crash. It seems it has been broken since
+> > 
+> >   commit 45c7e8af4a5e3f0bea4ac209eea34118dd57ac64
+> >   Author: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> >   Date:   Mon Mar 1 16:29:57 2021 +0100
+> >   
+> >       MIPS: Remove KVM_TE support
+> 
+> ok, I see what I missed when removing TE support, d'oh. Does the patch
+> below fix the issue for you ?
 
-A goal of ptdescs is to make architecture's jobs simpler and standardized.
-Unfortunately, ptdescs are nowhere near isolated from struct page yet.
-This version of struct ptdesc contains the exact number of fields architect=
-ures
-need right now, just reorganized to be located next to each other. It *prob=
-ably*
-shouldn't make an architectures job harder, aside from discouraging their u=
-se
-of yet even more members of struct page.
+Thanks!
 
-> Some notes on problematic fields below FYI.
->
-> > ---
-> >  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 51 insertions(+)
-> >
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index c5a51481bbb9..330de96ebfd6 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct =
-vm_area_struct *vma,
-> >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
-> >  #endif /* CONFIG_MMU */
-> >
-> > +
-> > +/**
-> > + * struct ptdesc - Memory descriptor for page tables.
-> > + * @__page_flags: Same as page flags. Unused for page tables.
-> > + * @pt_list: List of used page tables. Used for s390 and x86.
-> > + * @_pt_pad_1: Padding that aliases with page's compound head.
-> > + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
-> > + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap on=
-ly.
-> > + * @pt_mm: Used for x86 pgds.
-> > + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and =
-s390 only.
-> > + * @ptl: Lock for the page table.
-> > + *
-> > + * This struct overlays struct page for now. Do not modify without a g=
-ood
-> > + * understanding of the issues.
-> > + */
-> > +struct ptdesc {
-> > +     unsigned long __page_flags;
-> > +
-> > +     union {
-> > +             struct list_head pt_list;
->
-> I shall be needing struct rcu_head rcu_head (or pt_rcu_head or whatever,
-> if you prefer) in this union too.  Sharing the lru or pt_list with rcu_he=
-ad
-> is what's difficult to get right and efficient on s390 - and if ptdesc ga=
-ve
-> us an independent rcu_head for each page table, that would be a blessing!
-> but sadly not, it still has to squeeze into a struct page.
+It made some progress but somehow crashed the guest kernel.
 
-I can add a pt_rcu_head along with a comment to deter aliasing issues :)
-Independent rcu_heads aren't coming any time soon though :(
+$ qemu-system-mips64el --version
+QEMU emulator version 7.2.2 (Debian 1:7.2+dfsg-7)
+Copyright (c) 2003-2022 Fabrice Bellard and the QEMU Project developers
 
-> > +             struct {
-> > +                     unsigned long _pt_pad_1;
-> > +                     pgtable_t pmd_huge_pte;
-> > +             };
-> > +     };
-> > +     unsigned long _pt_s390_gaddr;
-> > +
-> > +     union {
-> > +             struct mm_struct *pt_mm;
-> > +             atomic_t pt_frag_refcount;
->
-> Whether s390 will want pt_mm is not yet decided: I want to use it,
-> Gerald prefers to go without it; but if we do end up using it,
-> then pt_frag_refcount is a luxury we would have to give up.
+# w/o KVM
 
-I don't like the use of pt_mm for s390 either. s390 uses space equivalent
-to all five words allocated in the page table struct (albeit in various pla=
-ces
-of struct page). Using extra space (especially allocated for unrelated
-reasons) just because it exists makes things more complicated and
-confusing, and s390 is already confusing enough as a result of that.
+  # malta: working (but slow)
 
-If having access to pt_mm is necessary I can drop the
-pt_frag_refcount patch, but I'd rather avoid it.
+    $ qemu-system-mips64el -nographic -kernel lede-malta-le64-vmlinux-initramfs.elf
+    [    0.000000] Linux version 4.9.58 (buildbot@builds) (gcc version 5.5.0 (LEDE GCC 5.5.0 r5218-f90f94d) ) #0 SMP Wed Nov 1 21:08:14 2017
+    ...
 
-> s390 does very well already with its _refcount tricks, and I'd expect
-> powerpc's simpler but more wasteful implementation to work as well
-> with _refcount too - I know that a few years back, powerpc did misuse
-> _refcount (it did not allow for speculative accesses, thought it had
-> sole ownership of that field); but s390 copes well with that, and I
-> expect powerpc can do so too, without the luxury of pt_frag_refcount.
->
-> But I've no desire to undo powerpc's use of pt_frag_refcount:
-> just warning that we may want to undo any use of it in s390.
->
-> I thought I had more issues to mention, probably Gerald will
-> remind me of a whole new unexplored dimension! gmap perhaps.
->
-> Hugh
->
-> > +     };
-> > +
-> > +#if ALLOC_SPLIT_PTLOCKS
-> > +     spinlock_t *ptl;
-> > +#else
-> > +     spinlock_t ptl;
-> > +#endif
-> > +};
-> > +
-> > +#define TABLE_MATCH(pg, pt)                                          \
-> > +     static_assert(offsetof(struct page, pg) =3D=3D offsetof(struct pt=
-desc, pt))
-> > +TABLE_MATCH(flags, __page_flags);
-> > +TABLE_MATCH(compound_head, pt_list);
-> > +TABLE_MATCH(compound_head, _pt_pad_1);
-> > +TABLE_MATCH(pmd_huge_pte, pmd_huge_pte);
-> > +TABLE_MATCH(mapping, _pt_s390_gaddr);
-> > +TABLE_MATCH(pt_mm, pt_mm);
-> > +TABLE_MATCH(ptl, ptl);
-> > +#undef TABLE_MATCH
-> > +static_assert(sizeof(struct ptdesc) <=3D sizeof(struct page));
-> > +
-> >  /*
-> >   * No-op macros that just return the current protection value. Defined=
- here
-> >   * because these macros can be used even if CONFIG_MMU is not defined.
-> > --
-> > 2.40.1
+  # loongson3-virt: hanged
+
+    $ qemu-system-mips64el -M loongson3-virt -m 512m -nographic -kernel vmlinuz-6.1.0-9-loongson-3 -initrd initrd.gz
+    [    0.000000] Linux version 6.1.0-9-loongson-3 (debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT Debian 6.1.27-1 (2023-05-08)
+    ...
+    [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000009fffffff]
+
+# w/ KVM
+
+  # malta: qemu error
+
+    $ sudo qemu-system-mips64el -M accel=kvm -nographic -kernel lede-malta-le64-vmlinux-initramfs.elf
+    qemu-system-mips64el: KVM guest kernels must be linked in useg. Did you forget to enable CONFIG_KVM_GUEST?
+
+  # loongson3-virt: qemu error
+
+    $ sudo qemu-system-mips64el -M loongson3-virt,accel=kvm -m 512m -nographic -kernel vmlinuz-6.1.0-9-loongson-3 -initrd initrd.gz
+    qemu-system-mips64el: ../../accel/kvm/kvm-all.c:2310: kvm_init: Assertion `TARGET_PAGE_SIZE <= qemu_real_host_page_size()' failed.
+    Aborted
+
+$ qemu-system-mips64el --version
+QEMU emulator version 8.0.2 (Debian 1:8.0.2+dfsg-1)
+Copyright (c) 2003-2022 Fabrice Bellard and the QEMU Project developers
+
+# w/o KVM
+
+  # malta: no change
+  # loongson3-virt: no change
+
+# w/ KVM
+
+  # loongson3-virt: the same qemu error
+
+  # malta: booted very fast but guest crashed:
+
+$ sudo qemu-system-mips64el -M accel=kvm -nographic -kernel lede-malta-le64-vmlinux-initramfs.elf
+[    0.000000] Linux version 4.9.58 (buildbot@builds) (gcc version 5.5.0 (LEDE GCC 5.5.0 r5218-f90f94d) ) #0 SMP Wed Nov 1 21:08:14 2017
+[    0.000000] earlycon: uart8250 at I/O port 0x3f8 (options '38400n8')
+[    0.000000] bootconsole [uart8250] enabled
+[    0.000000] Config serial console: console=ttyS0,38400n8r
+[    0.000000] CPU0 revision is: 000d9602 (Cavium Octeon III)
+[    0.000000] FPU revision is: 00739600
+[    0.000000] Checking for the multiply/shift bug... [    0.000000] no.
+[    0.000000] Checking for the daddiu bug... [    0.000000] no.
+[    0.000000] MIPS: machine is mti,malta
+[    0.000000] Software DMA cache coherency enabled
+[    0.000000] Determined physical RAM map:
+[    0.000000]  memory: 0000000008000000 @ 0000000000000000 (usable)
+[    0.000000] Initrd not found or empty - disabling initrd
+[    0.000000] Primary instruction cache 16kB, VIVT, 8-way, linesize 128 bytes.
+[    0.000000] Primary data cache 8kB, 8-way, VIPT, no aliases, linesize 128 bytes
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000000000000-0x0000000000ffffff]
+[    0.000000]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x0000000007ffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x0000000007ffffff]
+[    0.000000] percpu: Embedded 18 pages/cpu @80000000011c5000 s33120 r8192 d32416 u73728
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 32320
+[    0.000000] Kernel command line:  console=ttyS0,38400n8r
+[    0.000000] PID hash table entries: 512 (order: 0, 4096 bytes)
+[    0.000000] Dentry cache hash table entries: 16384 (order: 5, 131072 bytes)
+[    0.000000] Inode-cache hash table entries: 8192 (order: 4, 65536 bytes)
+[    0.000000] Memory: 114464K/131072K available (4299K kernel code, 322K rwdata, 1168K rodata, 7368K init, 295K bss, 16608K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] Hierarchical RCU implementation.
+[    0.000000]  CONFIG_RCU_FANOUT set to non-default value of 32
+[    0.000000]  RCU restricting CPUs from NR_CPUS=2 to nr_cpu_ids=1.
+[    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS:256
+[    0.000000] CPU frequency 1999.99 MHz
+[    0.000000] clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911270662 ns
+[    0.000007] sched_clock: 32 bits at 999MHz, resolution 1ns, wraps every 2147494911ns
+[    0.003394] Console: colour dummy device 80x25
+[    0.004942] Calibrating delay loop... 653.72 BogoMIPS (lpj=3268608)
+[    0.276221] pid_max: default: 32768 minimum: 301
+[    0.277862] Mount-cache hash table entries: 512 (order: 0, 4096 bytes)
+[    0.280038] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes)
+[    0.284299] Checking for the daddi bug... [    0.286094] no.
+[    0.289633] Brought up 1 CPUs
+[    0.292878] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.296595] futex hash table entries: 256 (order: 2, 16384 bytes)
+[    0.299743] CPU 0 Unable to handle kernel paging request at virtual address c000000000002002, epc == ffffffff804445d4, ra == ffffffff80444cb8
+[    0.303942] Oops[#1]:
+[    0.304738] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.9.58 #0
+[    0.307060] task: 8000000007c58000 task.stack: 8000000007c54000
+[    0.309171] $ 0   : 0000000000000000 0000000000000000 0000000000000042 80000000011cf1a8
+[    0.312027] $ 4   : c000000000002000 0000000000000000 0000000000000000 0000000000000001
+[    0.314882] $ 8   : 0000000000000006 c000000000002238 0000000e00000030 0000000800000054
+[    0.317913] $12   : 0000000004000015 ffffffff80326c1c 0000000000000000 0000000e00000028
+[    0.320774] $16   : c000000000002000 0000000000000210 8000000007c57d90 ffffffff8067b730
+[    0.323622] $20   : ffffffff80680000 ffffffff806e5298 ffffffff806ae2b0 ffffffff80de0000
+[    0.326675] $24   : 0000000000000000 ffffffff8016036c
+[    0.329539] $28   : 8000000007c54000 8000000007c57cf0 ffffffff80de0000 ffffffff80444cb8
+[    0.332388] Hi    : 0000000000000000
+[    0.333656] Lo    : 00000000001b4760
+[    0.335001] epc   : ffffffff804445d4 bpf_prepare_filter+0x2c/0x674
+[    0.337394] ra    : ffffffff80444cb8 bpf_prog_create+0x9c/0xdc
+[    0.339461] Status: 140027e3 KX SX UX KERNEL EXL IE
+[    0.341260] Cause : 0080004c (ExcCode 13)
+[    0.342683] PrId  : 000d9602 (Cavium Octeon III)
+[    0.344321] Modules linked in:
+[    0.345617] Process swapper/0 (pid: 1, threadinfo=8000000007c54000, task=8000000007c58000, tls=0000000000000000)
+[    0.349216] Stack : ffffffff806ae2b0 c000000000002000 00000000024080c2 0000000000001000
+[    0.352066]         c000000000002000 0000000000000210 8000000007c57d90 ffffffff8067b730
+[    0.354914]         ffffffff80680000 ffffffff806e5298 ffffffff806ae2b0 ffffffff80de0000
+[    0.357959]         ffffffff80de0000 ffffffff80444cb8 ffffffff80680000 0000000000000000
+[    0.360809]         ffffffff806a0000 0000000000000000 ffffffff806d4848 ffffffff806cce20
+[    0.363664]         ffffffff80680042 ffffffff806dfdb0 ffffffff806a0000 ffffffff806cc1b0
+[    0.366714]         ffffffff80680000 ffffffff80680000 ffffffff806cc108 ffffffff80100608
+[    0.369591]         0000000000000001 0000000000000000 0000000000000000 ffffffff80555660
+[    0.372440]         ffffffff805f6338 ffffffff805f0000 0000000000000061 0000000000000002
+[    0.375490]         ffffffff806d4888 000000000004093a 0000000000000061 0000000000000002
+[    0.378343]         ...
+[    0.379220] Call Trace:
+[    0.380111] [<ffffffff804445d4>] bpf_prepare_filter+0x2c/0x674
+[    0.382177] [<ffffffff80444cb8>] bpf_prog_create+0x9c/0xdc
+[    0.384160] [<ffffffff806cce20>] ptp_classifier_init+0x2c/0x3c
+[    0.386465] [<ffffffff806cc1b0>] sock_init+0xa8/0xc0
+[    0.388276] [<ffffffff80100608>] do_one_initcall+0xa8/0x180
+[    0.390289] [<ffffffff806aede0>] kernel_init_freeable+0x180/0x234
+[    0.392482] [<ffffffff8052aa38>] kernel_init+0x10/0x10c
+[    0.394372] [<ffffffff801062e8>] ret_from_kernel_thread+0x14/0x1c
+[    0.396780] Code: ffb10028  ffb00020  ffbe0060 <90820002> 00808025  304200fe  a0820002  fc800020  64920028
+[    0.400307]
+[    0.401013] ---[ end trace 7278246801a7bc60 ]---
+[    0.402570] Kernel panic - not syncing: Fatal exception
+[    0.404311] Rebooting in 1 seconds..
+[    2.385408] Reboot failed -- System halted
+
+openwrt/malta: https://downloads.openwrt.org/snapshots/targets/malta/le64/
+debian/loongson-3: https://deb.debian.org/debian/dists/sid/main/installer-mips64el/current/images/
+debian/malta: not working
