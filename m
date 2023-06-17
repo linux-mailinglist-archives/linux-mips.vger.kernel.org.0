@@ -2,237 +2,323 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F95C73405B
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 12:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D7E73410D
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 14:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbjFQKqZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Jun 2023 06:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S234593AbjFQMzT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Jun 2023 08:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbjFQKqA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jun 2023 06:46:00 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768BE10F7;
-        Sat, 17 Jun 2023 03:45:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686998745; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=EsrNNKykNruT/Z6vXMkVby4XVMgK5ed/ePXZff5aVLXLiGG4HZOHML3ID/oYm4peOP
-    jRkIvL/1GQNLPBMUzh6a+jLQH3CPg6eUbPcqX903ndxclYFeJknpkEy67njI95X52Evv
-    +i4oh406cg3WXHKjjMn6a6iyI7qLfi38pOGLviL+k4IgAq+RT3uO05LgSpZCyZseESw9
-    SMaovUQ2C3QbKcd2aUqgaqHwzNYfbdDIxXuhwR13GGPOqMO8Ped/s0hNCLNA7rVxH8RT
-    Oy7Eb0IUSqX5XBO/G1K7e+bWoo25UyU0i0G2xLwiOwYiKAGDMm0y/PET5fRN80BzVF40
-    D82g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686998745;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Zo1aYoXQPVQhd4Ack1fHIk+3jiMLxZtS4fgIWvguVR8=;
-    b=Gmjckf+beQ75KMu3ygJ6AocwYs7wP0jKcd4zUKSqwlLLG+dJ888dCrDAAST4r138Ol
-    ZNeK+EGQY56go5Srex+LW8H8oed+t/nrtxyg8oHc/sO16Q7HUb2TijZG+InBuxTCESGn
-    JuWmgBnw0iuxFEVpysMk40EV0fpDxQak3xmJ9l5al2pthvHyzcHWevMpfjV/b6lyEiGa
-    xm5GDkao1h0qguRrKr6/6NGLgcoyQl6saxGIe0ycow1h5eQjeuVjz2pIosi5J8v0+jfO
-    k62ECHbm8rvIUarqP3/28DrX9MWTG0N4QeoLJzDlhFVhS4W9X01oivpalDy9lOZ5JHC0
-    LQYQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686998745;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Zo1aYoXQPVQhd4Ack1fHIk+3jiMLxZtS4fgIWvguVR8=;
-    b=M0w0vMpCzyYilxF5WgambLdjEIJy5j8LDhZ4diUPSwLEmX3VxQYkG34ojD9B/bZxTl
-    fZnVTEsWVq0jezNfagr7DPxDiYOent+jGdIXaD7e5ZMwCkiNTfps/HnfcgGHLF7CfBNk
-    PebQkwux6nKH7BedtGbmbJC71ISMp+/4MrsH006iPlTizuRf/gHpDHuTJ5r5ENDPO376
-    /BtowAZb99jewaq71y0y2gZjl6EPzFJo5akO/QNskHMFX5os+IaDJZNWNoRJfpnqbq4c
-    2bZMFotS2gM27gZd1kXRYghObCAr8UirzYssK/W6LgLpf+W3VJ4VYiDO4b6QVQXMZ+kS
-    aerA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686998745;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Zo1aYoXQPVQhd4Ack1fHIk+3jiMLxZtS4fgIWvguVR8=;
-    b=a8JbrUwhjV4lZW1szwNF2WzwVYZHyJ3zBRhoZ/howI367UFstEjbbKrFrkYNKGTXkd
-    ZkrNvwc35jOQr8Zi1MCQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeqHQ="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5HAjjAg3
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 17 Jun 2023 12:45:45 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-Date:   Sat, 17 Jun 2023 12:45:44 +0200
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Boddie <paul@boddie.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
- <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
- <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
- <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
- <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231877AbjFQMzS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jun 2023 08:55:18 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2104.outbound.protection.outlook.com [40.92.99.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1623C1BC9;
+        Sat, 17 Jun 2023 05:55:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DD2xShfuhV2BQHjobR9KZEAiY5u41zAQ4EIPFlhlJ/EKVLDhBjER46H3mItBIu+KJ6msR9YYFWBP2PfHj8/nIjeEpOSRQV/l/Ii/FItEm7l4wpNco5GKzokPil7XSSxz9MCS9MV4oiroziJqhodb+nxDvhmGxnN7V43Xdu1KEXhbYjBv64who6LDplzXakrEqEzUKi+hFaGP8qWkUoo5N9jNQuStDe5PkBFmGK7S2Dsp25Mi+ZpzEGCdsUJe5yK/z6N12Ej+jK4YJ8gkXyB/6vT6zsMw/1dUPa5P0Xf5VusoRdv09X719vicQA32yR9whLcDy/l0PCCsQLHIqqOiJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gV1BP9OcwA74LrD2DU5tDuLMa2Q3Hm0CVsd3U8w/7/k=;
+ b=ijkIvmSWYtsdQ759ozPTaBHIR7uPfEd7F20EDBnya9QKeuBrDuyTP2b7htSHATyz76U+Z0NyLamHySCUYUmWV0j9fWwS3LlH/HKGyZPtCX1jUbqoq5IHa+tzBK8obJqJrrnT/4iBFnmDMKICsa7yHV6BJKS1Nxw+CgmUL36PNtyMBgJmv8LpWDLQfUWQMExcNgMc41YzaGKhUoH0YQKmuP23DXMUV945Zs1yGpaOKbgshp9gMxU9r638eavyfbTeBR2uhNUqZZZY9Ejdln5kwdYm3bjc61L8/uIug+QyPVpjGhtHgB06dwjdcD9vRMVJv52LhiNEtysqLSCD0uWXlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gV1BP9OcwA74LrD2DU5tDuLMa2Q3Hm0CVsd3U8w/7/k=;
+ b=ovGOqLoLQzx73VhVLopj4tGtFKqYELz417DoxMLq/lYwguCEwllK4Zis5VFeybjkTEj7YwW0LrFNCY4bJVrsyfeFuvMufqD/T+omWGDXf1nPrNUyAnHt6i4TtYlcK1+CW6AGv3ojOyYRmInrOt/Nk4NUC7AE5bQ3nVtsBQwIbW1ZYs8kE0Od4Uga5KPqRQkZPc0Hhy+pZTa6YEnipazGpQ5t4zi7c+tA8HoHrgMO8CNLisTeg19OSKjlAJqVm6saycXZtamle6huKgaxStHRAefIIceyHwagJsYmludEDyJCN2f8rPkQFLT0b3WorM/U71Ui2jpNFs4zTBZfB1b8Gw==
+Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:8041::8)
+ by TY3P286MB3691.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:3d1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.32; Sat, 17 Jun
+ 2023 12:55:11 +0000
+Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ca7e:d73d:ba3f:64a6]) by TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ca7e:d73d:ba3f:64a6%5]) with mapi id 15.20.6500.031; Sat, 17 Jun 2023
+ 12:55:11 +0000
+From:   Shiji Yang <yangshiji66@outlook.com>
+To:     sergio.paracuellos@gmail.com
+Cc:     arinc.unal@arinc9.com, devicetree@vger.kernel.org,
+        john@phrozen.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, sboyd@kernel.org, tsbogend@alpha.franken.de
+Subject: Re: [PATCH v3 2/9] clk: ralink: add clock and reset driver for MTMIPS SoCs
+Date:   Sat, 17 Jun 2023 20:54:58 +0800
+Message-ID: <TYAP286MB0315AB8274CDD341D49809A2BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230617052435.359177-3-sergio.paracuellos@gmail.com>
+References: <20230617052435.359177-3-sergio.paracuellos@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [P4BjHO16O5m1gUqPEvLlNCwaweHkLVS9]
+X-ClientProxiedBy: TYCPR01CA0143.jpnprd01.prod.outlook.com
+ (2603:1096:400:2b7::15) To TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:404:8041::8)
+X-Microsoft-Original-Message-ID: <20230617125458.1617-1-yangshiji66@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYAP286MB0315:EE_|TY3P286MB3691:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5389e610-d2c7-4f11-142f-08db6f3215da
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KBtw0NySEeDzUUOh5uGbtfk5vdWm2Vv1OTr41qDdBBZT0tJ5ZeNznazi6Be43d6HM+hINQ4BdNE/AqYehLpgYTOS2xuUq4WCpBEoqi+tPZcw4myW3XSiigCP+WfCXHcEzcy5UKN2wMwhEvXHQiaUtYzKfu1jU4R7aXCzqJ70qGzsYcM6JBInzoDZRFyrM9Fgymja88Nj3aNJz7gOSeJR/OBIxQR7PaHfVdflL5Jf3i4QMCRAnROCUyyt1Ez0MckXkuLWcOJz+mRCtirzsF6vb8PGj5C6it3C6Xla8MA2tPkrMfv0dWB1QVqWyD8E53+4K1ISJPlNH7/izXViycvCWzE4uSLx9jM6ztZlw4NKH6fGVChtPXsLQNhObTpkk6mz4SsypTSDx2J1YTOYvZA8bu2p0pbcV3FU4hSJrDg4r/vKuk0gh938e+ADi1pLD8Xc4n09Uf9TOAGT3F2H910ocu1tUIHBLbau9vY6XdW0N79tZDCCJAqzaAmJ+EUlXOWeYYRYsKns1Vt7aueCLXg6YVFTP59MoEbbC8a0LGu2oIav8ZETs+G8JlXLINjXCFV331ZbyWcJp363lhU0xiiUrGH+gt0qjgJy0/cwxOyS5Fo=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?z60Wsta9Qa68tro2pDK3K4tynHXNNQE5YMVPJ5IME06eon1vFxuh6Aq2HY02?=
+ =?us-ascii?Q?tzhmiMN81uHTWVPk8qcg9x2FPn0RMgZSyVnON3D8jvDcGzMvvziFkQILROF+?=
+ =?us-ascii?Q?6tPjQ8yi5Lz9kE4KM7y0J5weQJ4OVGle8MnSjW8hCdC3hnL4zCrgTacIFqGa?=
+ =?us-ascii?Q?4Hy3gbFfWpR5qgpQH6HcAdpenRmTW1Cd0sy+KyAXis3e3ck6csRKuK0D/N86?=
+ =?us-ascii?Q?4NqDpo98pYlT63xOaA+zj3D0KTY4so0WPspf0Kf8NIrXIheWXf91e/uzkVPT?=
+ =?us-ascii?Q?d2/g86AitISOMoUs6dQINM017yf6S+33iKDDoGNoWTVHHepvbxDm4xFfQbFL?=
+ =?us-ascii?Q?sUkJPWtj+C+XlzjIiGlNVxax8kmJEt/8r7waII0yx1zvZGmZR1aNrrLHmzsj?=
+ =?us-ascii?Q?Y5hzZjczz3zSqvWrEyCu3pDj3obfY3zFFMsLE2TvyTzTDpHX4Fn9jTXQKlUG?=
+ =?us-ascii?Q?Wk1XMeMsXazOl1N5UFJGYXZwhFWPLfJ8majiBYScp1nuPBdvfr8s2X+YJPvi?=
+ =?us-ascii?Q?39QMwcKba1CFiwGRA6zNIhvfgjUGaWJrEMhgJLEcVHc0eHBMhodLn4fvexLe?=
+ =?us-ascii?Q?VYrYzhn3ZtyFU9UbQLhLbE5d1SfR0ESktQ6XzIMtfQFdWvYx7wGQG4Yp3Sdr?=
+ =?us-ascii?Q?ZSaqKlHqq7AiwBVJ0aRSRzdcii2Ex1gcPpSp0zueIfD0Ruo1gkvrYhPEUjVF?=
+ =?us-ascii?Q?44nWiZgTLG3abAEXwtGhq2aSkvvlL9J+sgc+JGxjs7DHy2MfQz7Exl73odZu?=
+ =?us-ascii?Q?BkqsFi7eetmFBs72ECrWnfSfu5J44w54JR+uRQE/KUFOOv192wxdMnB62dAu?=
+ =?us-ascii?Q?O7MYHcyP3+MXOR1Un7y97TAaOJlkRG13Q99FZO2FaWnXZuoibfXOtY+qIQPU?=
+ =?us-ascii?Q?gRM+mbnPR+2oc8N30Pd/xMPg6a8VgwPHYOxiy4uGXAGATocx+KIi4NrDPn2q?=
+ =?us-ascii?Q?PgdjIvGcYDl4z2ga15mIkuA7dMUYT+XaWi/gT9JMI631o3z9NGqNvLeXzQ5v?=
+ =?us-ascii?Q?iNJULxKbxDou+HzTzLqXCTSx5aq//fo7ttizid/A2DAQk7zasU9nQo3GXyQU?=
+ =?us-ascii?Q?+q9iqmjlzYL+QUV9iqafhlijgrdNVAAOzeS5LWuZjQfpKPRe0wmkiYpc1n7s?=
+ =?us-ascii?Q?Qk3sqGh1BrJSXi/PVxVDuW8wKoWHLvFhzR8HMyBK9S85L8A7V+SPlmPcWNoQ?=
+ =?us-ascii?Q?9cgd7oC55zeQnXzDpQU3fqXv4clDu4oY8hheBTooCc0VVTF9k7g20P3BNtQ?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5389e610-d2c7-4f11-142f-08db6f3215da
+X-MS-Exchange-CrossTenant-AuthSource: TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2023 12:55:11.4182
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3P286MB3691
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Hi Sergio Paracuellos!
 
-> Am 16.06.2023 um 22:21 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
+I found there are still some areas that need improvement.
 
-> - But renaming the DT nodes (e.g. SUDCDC1 -> DCDC1) (with or without =
-regulator_name) makes
-> boot hang with strange errors which indicate that the processor power =
-supply is not stable.
-> Once a while it did even automatically reboot. In most cases there are =
-some EXT4 errors
-> afterwards.
+>+
+>+static unsigned long rt3883_bus_recalc_rate(struct clk_hw *hw,
+>+					    unsigned long parent_rate)
+>+{
+>+	struct mtmips_clk *clk = to_mtmips_clk(hw);
+>+	struct regmap *sysc = clk->priv->sysc;
+>+	u32 ddr2;
+>+	u32 t;
+>+
+>+	regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
+>+	ddr2 = t & RT3883_SYSCFG0_DRAM_TYPE_DDR2;
+>+
+>+	switch (parent_rate) {
+>+	case 250000000:
+>+		return (ddr2) ? 125000000 : 83000000;
+>+	case 384000000:
+>+		return (ddr2) ? 128000000 : 96000000;
+>+	case 480000000:
+>+		return (ddr2) ? 160000000 : 120000000;
+>+	case 500000000:
+>+		return (ddr2) ? 166000000 : 125000000;
+>+	default:
+>+		WARN_ON_ONCE(parent_rate == 0);
 
-I am coming closer, I think. I have now touched only the DCDC1 node =
-name.
+drivers/clk/ralink/clk-mtmips.c: In function 'rt3883_bus_recalc_rate':
+drivers/clk/ralink/clk-mtmips.c:502:1: error: control reaches end of non-void function [-Werror=return-type]
+  502 | }
+      | ^
 
-a) with "SUDCDC1" -> "DCDC1" (bad bood):
+Build error here, need to return a value, `parent_rate / 4` should be okay.
+It seems that the program will never run into this default case.
 
-regulator_of_get_init_node() returns the child node
+>+	}
+>+}
+>+
 
-Then:
-[    0.666962] act8865 0-005a: Looking up vp1-supply from device tree
-[    0.673191] DCDC1: supplied by vcc_33v
-[    0.727070] DCDC1: Bringing 1200000uV into 1100000-1100000uV
-[    0.739398] DCDC1: 1100 mV, enabled
 
-b) without patch/series or reverted (good boot):
+>+
+>+static const struct of_device_id mtmips_clk_of_match[] = {
+>+	{ .compatible = "ralink,rt2880-reset" },
+>+	{ .compatible = "ralink,rt2880-sysc" },
+>+	{ .compatible = "ralink,rt3050-sysc" },
+>+	{ .compatible = "ralink,rt3050-sysc" },
 
-regulator_of_get_init_node() returns NULL
+There are two `ralink,rt3050-sysc`. I think the second one should be
+`ralink,rt3052-sysc`.
 
-Then:
-[    1.016487] DCDC1: at 1200 mV, enabled
-[    1.020578] act8865 0-005a: Looking up vp1-supply from device tree
-[    1.026917] DCDC1: supplied by vcc_33v
+>+	{ .compatible = "ralink,rt3352-sysc" },
+>+	{ .compatible = "ralink,rt3883-sysc" },
+>+	{ .compatible = "ralink,rt5350-sysc" },
+>+	{ .compatible = "ralink,mt7620a-sysc" },
+>+	{ .compatible = "ralink,mt7620-sysc" },
+>+	{ .compatible = "ralink,mt7628-sysc" },
+>+	{ .compatible = "ralink,mt7688-sysc" },
+>+	{}
+>+};
+>+
 
-So at least for my board the patched series seems to reduce DCDC1 =
-voltage
-to 1.1V which may trigger the boot and stability problems on my board =
-while
-it is fine for yours. This could explain the hardware dependency.
 
-Now I have no data sheets or information which voltages are the right =
-ones
-and where the 1200mV come from (most likely some default programmed
-into the PMU chip).
+> void __init plat_time_init(void)
+> {
+>+	struct of_phandle_args clkspec;
+> 	struct clk *clk;
+>+	int cpu_clk_idx;
+> 
+> 	ralink_of_remap();
+> 
+>-	ralink_clk_init();
+>-	clk = clk_get_sys("cpu", NULL);
+>+	cpu_clk_idx = clk_cpu_index();
+>+	if (cpu_clk_idx == -1)
+>+		panic("unable to get CPU clock index");
+>+
+>+	of_clk_init(NULL);
+>+	clkspec.np = of_find_node_by_name(NULL, "sysc");
 
-And the issue seems to be that without matching the node names the
-voltages in the device tree may have been ignored completely all the
-time... Now it sets up voltages, which should happen. But different
-ones for my board which breaks boot.
+The node name should be "syscon" as the example node name in the
+dt-bindings document is "syscon".
 
-Finally I did risk (I have no replacement CI20 board and they are no =
-longer
-on sale... RS part# was 125-3305 Mouser 456-VL-62851) to run a test with
-rename to "DCDC1" but changing the voltage to 1200mV. And this version =
-boots.
+>+	clkspec.args_count = 1;
+>+	clkspec.args[0] = cpu_clk_idx;
+>+	clk = of_clk_get_from_provider(&clkspec);
+> 	if (IS_ERR(clk))
+> 		panic("unable to get CPU clock, err=%ld", PTR_ERR(clk));
+> 	pr_info("CPU Clock: %ldMHz\n", clk_get_rate(clk) / 1000000);
 
-Still without WiFi/Bluetooth but that may be related to missing rename
-of the other regulators.
 
-So I tried renaming all regulators as by your [PATCH 2/9], and now I
-see something from WiFi (haven't installed firmware yet) and the =
-Bluetooth chip:
+It seems that the clock calculation logic of the mt7620 has changed.
+The kernel got an incorrect clock frequency 3480MHz. The correct CPU
+clock should be 580MHz = 3480MHz / 6.
 
-[    1.977876] mmc1: new high speed SDIO card at address 0001
+I will test and report mt7628 later.
 
-[   11.341994] Bluetooth: hci0: BCM: chip id 62
-[   11.348811] Bluetooth: hci0: BCM: features 0x0f
-[   11.376698] Bluetooth: hci0: BCM4330B1
-[   11.380662] Bluetooth: hci0: BCM4330B1 (002.001.003) build 0000
-[   11.392053] Bluetooth: hci0: BCM4330B1 'brcm/BCM4330B1.hcd' Patch
+mt7620 dmesg:
+[    0.000000] Linux version 5.15.117 (db@Aspire-V-Nitro) (mipsel-openwrt-linux-musl-gcc (OpenWrt GCC 12.3.0 r23471+7-816fcf88f6) 12.3.0, GNU ld (GNU Binutils) 2.40.0) #0 Sat Jun 17 08:41:01 2023
+[    0.000000] Board has DDR2
+[    0.000000] Analog PMU set to hw control
+[    0.000000] Digital PMU set to hw control
+[    0.000000] SoC Type: MediaTek MT7620A ver:2 eco:6
+[    0.000000] printk: bootconsole [early0] enabled
+[    0.000000] CPU0 revision is: 00019650 (MIPS 24KEc)
+[    0.000000] MIPS: machine is Haier HW-L1W
+[    0.000000] Initrd not found or empty - disabling initrd
+[    0.000000] Primary instruction cache 64kB, VIPT, 4-way, linesize 32 bytes.
+[    0.000000] Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 32 bytes
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000000000000-0x0000000007ffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x0000000007ffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x0000000007ffffff]
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 32480
+[    0.000000] Kernel command line: console=ttyS0,115200 rootfstype=squashfs,jffs2
+[    0.000000] Dentry cache hash table entries: 16384 (order: 4, 65536 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 8192 (order: 3, 32768 bytes, linear)
+[    0.000000] Writing ErrCtl register=00064000
+[    0.000000] Readback ErrCtl register=00064000
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 120992K/131072K available (5518K kernel code, 600K rwdata, 1192K rodata, 1192K init, 215K bss, 10080K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] NR_IRQS: 256
+[    0.000000] CPU Clock: 3480MHz
+[    0.000000] clocksource: systick: mask: 0xffff max_cycles: 0xffff, max_idle_ns: 583261500 ns
+[    0.000000] systick: enable autosleep mode
+[    0.000000] systick: running - mult: 214748, shift: 32
+[    0.000000] clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1098425544 ns
+[    0.000000] sched_clock: 32 bits at 1740MHz, resolution 0ns, wraps every 1234186239ns
+[    0.001354] Calibrating delay loop... 385.84 BogoMIPS (lpj=1929216)
+[    0.012389] pid_max: default: 32768 minimum: 301
+[    0.013357] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.014589] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.017429] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.019103] futex hash table entries: 256 (order: -1, 3072 bytes, linear)
+[    0.020288] pinctrl core: initialized pinctrl subsystem
+[    0.021415] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.105370] rt2880_gpio 10000600.gpio: registering 24 gpios
+[    0.106328] rt2880_gpio 10000600.gpio: registering 24 irq handlers
+[    0.107446] rt2880_gpio 10000688.gpio: registering 1 gpios
+[    0.108381] rt2880_gpio 10000688.gpio: registering 1 irq handlers
+[    0.109673] PCI host bridge to bus 0000:00
+[    0.110372] pci_bus 0000:00: root bus resource [mem 0x20000000-0x2fffffff]
+[    0.111528] pci_bus 0000:00: root bus resource [io  0x10160000-0x1016ffff]
+[    0.112695] pci_bus 0000:00: No busn resource found for root bus, will use [bus 00-ff]
+[    0.114046] pci 0000:00:00.0: [1814:0801] type 01 class 0x060400
+[    0.115059] pci 0000:00:00.0: reg 0x10: [mem 0x00000000-0x7fffffff]
+[    0.116118] pci 0000:00:00.0: reg 0x14: [mem 0x00000000-0x0000ffff]
+[    0.117195] pci 0000:00:00.0: supports D1
+[    0.117862] pci 0000:00:00.0: PME# supported from D0 D1 D3hot
+[    0.119156] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
+[    0.120556] pci 0000:01:00.0: [14c3:7650] type 00 class 0x028000
+[    0.121570] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x000fffff]
+[    0.122658] pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+[    0.123749] pci 0000:01:00.1: [14c3:8650] type 00 class 0x0d1100
+[    0.124769] pci 0000:01:00.1: reg 0x10: [mem 0x00000000-0x000fffff]
+[    0.125844] pci 0000:01:00.1: supports D1
+[    0.126513] pci 0000:01:00.1: PME# supported from D0 D1 D3hot D3cold
+[    0.127897] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
+[    0.129018] pci_bus 0000:00: busn_res: [bus 00-ff] end is updated to 01
+[    0.130138] pci 0000:00:00.0: BAR 0: no space for [mem size 0x80000000]
+[    0.131255] pci 0000:00:00.0: BAR 0: failed to assign [mem size 0x80000000]
+[    0.132434] pci 0000:00:00.0: BAR 8: assigned [mem 0x20000000-0x201fffff]
+[    0.133587] pci 0000:00:00.0: BAR 1: assigned [mem 0x20200000-0x2020ffff]
+[    0.134738] pci 0000:01:00.0: BAR 0: assigned [mem 0x20000000-0x200fffff]
+[    0.135890] pci 0000:01:00.1: BAR 0: assigned [mem 0x20100000-0x201fffff]
+[    0.137040] pci 0000:00:00.0: PCI bridge to [bus 01]
+[    0.137882] pci 0000:00:00.0:   bridge window [mem 0x20000000-0x201fffff]
+[    0.139123] clocksource: Switched to clocksource MIPS
+[    0.140241] NET: Registered PF_INET protocol family
+[    0.141106] IP idents hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.142473] tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 4096 bytes, linear)
+[    0.143893] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.145199] TCP established hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.146499] TCP bind hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.147695] TCP: Hash tables configured (established 1024 bind 1024)
+[    0.148803] UDP hash table entries: 256 (order: 0, 4096 bytes, linear)
+[    0.149920] UDP-Lite hash table entries: 256 (order: 0, 4096 bytes, linear)
+[    0.151177] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.152149] PCI: CLS 0 bytes, default 32
+[    0.152847] rt-timer 10000100.timer: failed get clock rate
+[    0.153771] rt-timer: probe of 10000100.timer failed with error -2
+[    0.155602] workingset: timestamp_bits=14 max_order=15 bucket_order=1
+[    0.157808] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.158792] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
+[    0.161032] Serial: 8250/16550 driver, 2 ports, IRQ sharing disabled
+[    0.162284] of_serial 10000c00.uartlite: failed to get clock: -2
+[    0.163300] of_serial: probe of 10000c00.uartlite failed with error -2
+[    0.164624] spi-rt2880 10000b00.spi: unable to get SYS clock
+[    0.165580] spi-rt2880: probe of 10000b00.spi failed with error -2
+[    0.171098] gsw: setting port4 to ephy mode
+[    0.171828] mtk_soc_eth 10100000.ethernet: generated random MAC address f6:6c:93:9a:c8:ca
+[    0.173208] mtk_soc_eth 10100000.ethernet: mdio-bus disabled
+[    0.174205] mtk_soc_eth 10100000.ethernet: loaded mt7620 driver
+[    0.175329] mtk_soc_eth 10100000.ethernet eth0: mediatek frame engine at 0xb0100000, irq 5
+[    0.176805] rt2880_wdt: probe of 10000120.watchdog failed with error -2
+[    0.178187] NET: Registered PF_INET6 protocol family
+[    0.179980] Segment Routing with IPv6
+[    0.180607] In-situ OAM (IOAM) with IPv6
+[    0.181290] NET: Registered PF_PACKET protocol family
+[    0.182148] 8021q: 802.1Q VLAN Support v1.8
+[    0.183347] Warning: unable to open an initial console.
+[    0.184558] /dev/root: Can't open blockdev
+[    0.185253] VFS: Cannot open root device "(null)" or unknown-block(0,0): error -6
+[    0.186516] Please append a correct "root=" boot option; here are the available partitions:
+[    0.187934] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+[    0.189335] Rebooting in 1 seconds..
 
-[   12.145330] brcmfmac mmc1:0001:1: Direct firmware load for =
-brcm/brcmfmac4330-sdio.img,ci20.bin failed with error -2
-[   12.208001] brcmfmac mmc1:0001:1: Direct firmware load for =
-brcm/brcmfmac4330-sdio.clm_blob failed with error -2
 
-Unfortunatley systemd bailed out starting Bluetooth service but
-failed to provide a login:
-
-In summary it looks like a potential fix could be to replace the DCDC1
-min/max range by 1.0 - 1.2V instead of 1.1 - 1.1V but we need deeper
-understanding first. Usually this has something to do with dynamic =
-voltage
-scaling depending on processor clock and lower voltages are only allowed
-for lower frequencies but max. clock requires the highest possible =
-voltage.
-AFAIK we have no cpufreq integrated and therefore always run at max. =
-speed.
-
-BR,
-Nikolaus
-
-PS: here is what I read back from the regulator voltages (for DCDC1  =
-min/max =3D 1.2V):
-
-root@letux:~# cat /sys/kernel/debug/regulator/regulator_summary
- regulator                      use open bypass  opmode voltage current  =
-   min     max
-=
---------------------------------------------------------------------------=
--------------
- regulator-dummy                  1    0      0 unknown     0mV     0mA  =
-   0mV     0mV=20
- eth0_power                       1    1      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    16000000.dm9000-vcc           1                                 0mA  =
-   0mV     0mV
- otg_power                        0    0      0 unknown  5000mV     0mA  =
-5000mV  5000mV=20
- vcc_33v                          4    9      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    13450000.mmc-vqmmc            1                                 0mA  =
-   0mV     0mV
-    13450000.mmc-vmmc             1                                 0mA  =
-3300mV  3400mV
-    DCDC1                         1    0      0 standby  1200mV     0mA  =
-1200mV  1200mV=20
-    DCDC2                         0    0      0 standby  1500mV     0mA  =
-   0mV     0mV=20
-    DCDC3                         0    0      0 unknown  3300mV     0mA  =
-   0mV     0mV=20
-    LDO5                          0    0      0 unknown  2500mV     0mA  =
-   0mV     0mV=20
-    LDO6                          0    0      0  normal  1800mV     0mA  =
-1800mV  1800mV=20
-    LDO7                          0    0      0 unknown  3300mV     0mA  =
-   0mV     0mV=20
-    LDO8                          0    0      0 unknown  3300mV     0mA  =
-   0mV     0mV=20
- SUDCDC_REG4                      0    0      0  normal  5000mV     0mA  =
-   0mV     0mV=20
- LDO_REG9                         1    0      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
- LDO_REG10                        1    0      0 unknown  1200mV     0mA  =
-1200mV  1200mV=20
- bt_power                         0    0      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-root@letux:~#=20
-
-This matches device tree except DCDC1, LDO7 and LDO8 (camera).
-
+Thanks,
+    Shiji Yang
