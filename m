@@ -2,135 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5698734247
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 18:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35DF734296
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 19:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjFQQie (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Jun 2023 12:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S1346327AbjFQRUx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Jun 2023 13:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjFQQid (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jun 2023 12:38:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F73E5C;
-        Sat, 17 Jun 2023 09:38:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35857611A1;
-        Sat, 17 Jun 2023 16:38:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962CAC433CC;
-        Sat, 17 Jun 2023 16:38:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687019911;
-        bh=wsV5PAOYMtSK534qTONYBGMJADMTf/thu6AVR5VKWFg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=q5TvC7wXcesBdrAtVwBAqlybicfQ3l31tWhe47gCHoheDPlgSrgt59SLSMZIhYDmm
-         jGSI/AbGdyvh5m2k3AnGCSYg1w5Ip7D6pqCyW2WpiRZOEAGiOwo2Hmd+1j6rAUprE/
-         b4HC/Njwt5Mk8bqvMnWE6kMHhKXtbhBU8/LPHAhQqUf6bNYjoID11JcNvnbHR/Wty1
-         Ci4aW7m3E0aYzqV5URi12B3tlQTJav9/V3UGVH6RUi6w1dQdJ06xsBzhXtuLm5kC4A
-         9lTOU3FN61E41TP3c36eHFu7PswdRbNKM83MrM077JEeujQ0StC2gBK9V8FMll8Kgo
-         IyVxt6UshhCrg==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f841b7a697so2303490e87.3;
-        Sat, 17 Jun 2023 09:38:31 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzAKM11ayayk1YGXRKJGqccm1KymiYuK6icL39q047Ur3K0n+i4
-        CvKqQ4Dlr2qxqdJHLsshBAmx/groT4nmUV5dJW4=
-X-Google-Smtp-Source: ACHHUZ7/x1kYUhYXMtUENPjhDtD48HKOo5oy2K5VqpfigImzwjTDz7CrLzlDpzPNd4SA2zOD7D4teoP7FVQzMuuaU40=
-X-Received: by 2002:ac2:5bd1:0:b0:4eb:42b7:8c18 with SMTP id
- u17-20020ac25bd1000000b004eb42b78c18mr3005243lfn.53.1687019909491; Sat, 17
- Jun 2023 09:38:29 -0700 (PDT)
+        with ESMTP id S1346260AbjFQRUj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jun 2023 13:20:39 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC572978
+        for <linux-mips@vger.kernel.org>; Sat, 17 Jun 2023 10:20:33 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51a324beca6so2655724a12.1
+        for <linux-mips@vger.kernel.org>; Sat, 17 Jun 2023 10:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687022431; x=1689614431;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xCt3kM+nBMBe594FBcfTM0tt8nk7YD6lBO7D+bNK+No=;
+        b=Du9+514DgcGtUB/CaouAziyCXzCocuhrAmwZwLu6Z6o0f4YiuIHbJOceqpoKwVRKrb
+         IMis+k9vJdE5dbGMD2oCg08ZrpdMEe5vS/XLdO+vYFSCKeJS7p4QgoYChiyLTQDqXq0Z
+         2PYg/KZD7wTPTOCfHXVr7RUZyt1AxrTRvcCLXg2sKU/iZDSbWGas4gC9BsuQSMuhZjhT
+         ey8zHuLGJtKL7v+T0V6TfRQuPizD1MfVzcLXv32b2wcNQzoosSzCTA034X90qaXaZMV9
+         eVuvlLjZiUUoqePtRhUTmBi2jur4eeNEeWHCWhq/3tP/stLhB6WkNFh/A+SbQ81JaNx9
+         i2GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687022431; x=1689614431;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xCt3kM+nBMBe594FBcfTM0tt8nk7YD6lBO7D+bNK+No=;
+        b=YXlW3mecHeZZdQmzZ+qGDjCU8rnhm7em7haOyoYeeD13/DlHR7lU3FJh7ruXkmgcoj
+         2rvZbWtSrvCHTI7+GfFBFvf1Fc4YsnyKr9AzisI2OqeOhKFYOs2hXGI7Q4fmrWGSk5cL
+         vEA+3NRyI1KPFB97q35DdJqEPDY7fhSxaWDj2xktO9caMiAcCpn7D86Vxw7hvpmVXnSV
+         51KEb9nhTD+FypUIoB6AwfaymmDLvc0mqTJeBwpYHmH7nGmBFaPxeaVWutMMhtuvbb6M
+         uKH8dPtvIyCGQnp4lm9BLYiquwZoGz6OlxT38mh3uDWKmLdKbUQXhliv7tZj+l4sDfrT
+         gV+Q==
+X-Gm-Message-State: AC+VfDzGtSk/rsVXFDqwDh7y6yUrOe/9TX+lPngzPKQrS003AelnA3rt
+        XoZ/KvxnoqghRgDpxrhOsd8Q1Q==
+X-Google-Smtp-Source: ACHHUZ67Jnv01Z/zOyUpAp9dkjkqX8yvoTR8yCwjGiZup7X6z/Xq1Sk3420wgPlDdVWG0UkP1sqHVQ==
+X-Received: by 2002:a05:6402:1252:b0:514:a0e9:3deb with SMTP id l18-20020a056402125200b00514a0e93debmr4012221edw.23.1687022431641;
+        Sat, 17 Jun 2023 10:20:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id b13-20020aa7c90d000000b0051879590e06sm1375373edt.24.2023.06.17.10.20.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 10:20:31 -0700 (PDT)
+Message-ID: <10f01535-ab4f-b0d4-306b-a90f4ad19008@linaro.org>
+Date:   Sat, 17 Jun 2023 19:20:28 +0200
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-8-rppt@kernel.org>
- <CAPhsuW6BG2oVrGDOpCKyOEvU9fBOboYYhducv96KUBe276Mvng@mail.gmail.com>
- <20230617065759.GT52412@kernel.org> <ZI3TGhJ2y5SBWmnA@moria.home.lan>
-In-Reply-To: <ZI3TGhJ2y5SBWmnA@moria.home.lan>
-From:   Song Liu <song@kernel.org>
-Date:   Sat, 17 Jun 2023 09:38:17 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4KDriCDfQ40MKKQ3AjyeRbEUJxjqoBLipe5AJMxY3U-w@mail.gmail.com>
-Message-ID: <CAPhsuW4KDriCDfQ40MKKQ3AjyeRbEUJxjqoBLipe5AJMxY3U-w@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] arm64, execmem: extend execmem_params for
- generated code definitions
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 2/9] clk: ralink: add clock and reset driver for MTMIPS
+ SoCs
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Shiji Yang <yangshiji66@outlook.com>, arinc.unal@arinc9.com,
+        devicetree@vger.kernel.org, john@phrozen.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        matthias.bgg@gmail.com, mturquette@baylibre.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, sboyd@kernel.org,
+        tsbogend@alpha.franken.de
+References: <20230617052435.359177-3-sergio.paracuellos@gmail.com>
+ <TYAP286MB0315AB8274CDD341D49809A2BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
+ <e0f74bdc-3a4b-596a-5ec7-83054377813e@linaro.org>
+ <CAMhs-H9M_c8+AkqUTpYeS2q7_+wBA-jhhiXj-QVXNUDmuERcOA@mail.gmail.com>
+ <05e3ff33-ad4e-d2fb-dfd5-7b5265881b74@linaro.org>
+ <CAMhs-H-ncXC37SAMkLfrFmpRi0ORkkCV9rQmrtmw_ndOLo+J0Q@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H-ncXC37SAMkLfrFmpRi0ORkkCV9rQmrtmw_ndOLo+J0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 8:37=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> On Sat, Jun 17, 2023 at 09:57:59AM +0300, Mike Rapoport wrote:
-> > > This is growing fast. :) We have 3 now: text, data, jit. And it will =
-be
-> > > 5 when we split data into rw data, ro data, ro after init data. I won=
-der
-> > > whether we should still do some type enum here. But we can revisit
-> > > this topic later.
-> >
-> > I don't think we'd need 5. Four at most :)
-> >
-> > I don't know yet what would be the best way to differentiate RW and RO
-> > data, but ro_after_init surely won't need a new type. It either will be
-> > allocated as RW and then the caller will have to set it RO after
-> > initialization is done, or it will be allocated as RO and the caller wi=
-ll
-> > have to do something like text_poke to update it.
->
-> Perhaps ro_after_init could use the same allocation interface and share
-> pages with ro pages - if we just added a refcount for "this page
-> currently needs to be rw, module is still loading?"
+On 17/06/2023 17:37, Sergio Paracuellos wrote:
+>>> The case of
+>>> searching for compatible is a mess since as you can see in the
+>>> bindings there are tons of compatibles to search for, then (this code
+>>> is common to all ralink platforms).
+>>
+>> Compatible is one of the ways using ABI.
+> 
+> Ok so it is also a broken approach, then.
 
-If we don't relax rules with read only, we will have to separate rw, ro,
-and ro_after_init. But we can still have page sharing:
+What is exactly broken approach? Fetching by compatibles? Somehow many
+other platforms do not have problem with that, even for multiple
+compatibles. Why yours is special?
 
-Two modules can put rw data on the same page.
-With text poke (ro data poke to be accurate), two modules can put
-ro data on the same page.
+Anyway, it is not a correct way to get clocks frequency. There is CCF
+for this, although maybe Ralink does not support it?
 
-> text_poke() approach wouldn't be workable, you'd have to audit and fix
-> all module init code in the entire kernel.
+Best regards,
+Krzysztof
 
-Agreed. For this reason, each module has to have its own page(s) for
-ro_after_init data.
-
-To eventually remove VM_FLUSH_RESET_PERMS, we want
-ro_after_init data to share the same allocation interface.
-
-Thanks,
-Song
