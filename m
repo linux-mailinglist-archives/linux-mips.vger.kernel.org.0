@@ -2,78 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC9D73439F
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 22:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A687343AE
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Jun 2023 22:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346478AbjFQUho (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Jun 2023 16:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S229816AbjFQUi4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Jun 2023 16:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346499AbjFQUhk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jun 2023 16:37:40 -0400
-Received: from out-12.mta1.migadu.com (out-12.mta1.migadu.com [95.215.58.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9521992
-        for <linux-mips@vger.kernel.org>; Sat, 17 Jun 2023 13:37:37 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 16:37:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687034256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0VmYCbqCGEwwRm9p2gHyBMkJehgKoo9YX+I+uEXlwI=;
-        b=dfNjewHVuYudVnc8TKpcch6UyyxsC62EekInr+KCF+/d5W19oLEbYgWNkxwMPmu6LU+6YJ
-        DDxDUAUrcbSRUp/oMghsBWa2J9HukZTCZ/JGCQrtkNxjPDHNM3pSHNKVBsHXTHpr3HEdfU
-        c38+ELnaz0YDpRbuK0hGGk55HYtUVFk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Song Liu <song@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        with ESMTP id S1346515AbjFQUiz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jun 2023 16:38:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DFAE68;
+        Sat, 17 Jun 2023 13:38:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 289A4612EC;
+        Sat, 17 Jun 2023 20:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD68C433C9;
+        Sat, 17 Jun 2023 20:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687034333;
+        bh=WVP/rhexoYDXJAhdCS8+aXf4gLUVAzDkioEZAL3bkuY=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=JKzE4z2tSEoLkc7ndZWnN4X7rPbZEhhlfrZyLWi07NSuE063OnjnC6kfUU9bDE7Q9
+         dYA+ZpDXUBD2TgjoWFjLAe+1VQ5WrMEQP2Oc9RGbVW9Wm4fut1k9el1xGXrGAH5XMV
+         Vnj1FFJmE2x7cDhuvv0urvwR7eE2IJsG6wxHbKmZVXtzDiEbQttYBzKZysC9OE/47n
+         JBkqqNwFgve/J61DF6GlrPrdaUiX2HWbrE8tfOts8C1LTzC7qOduTMdCt7JxlC8PRU
+         FJrqMxXtr7sBOMLN0/Tey+NujGr9peRqjts6e1zOlWFY5KMatDCGIXdhGrkirNWaIE
+         ASCBN9CMJq/6w==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 4D15627C005B;
+        Sat, 17 Jun 2023 16:38:51 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Sat, 17 Jun 2023 16:38:51 -0400
+X-ME-Sender: <xms:2RmOZAtF4kawe3C5LWsJNWQ25geVFsDB-J3eVTm4naED3U4-j3ZFyA>
+    <xme:2RmOZNdjefCtSEpuXyhr3rhTFxcEuYpuIPYT9noXuC5ioHZHbuzE6pY15kbU4Az-n
+    KsL6vgRcAh63E8_HrY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvjedgudehudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeevfffgvefhieetudeuteegvedvveduveetfeevffduieevfedu
+    tdeliedtledugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnugihodhmvghsmhhtphgr
+    uhhthhhpvghrshhonhgrlhhithihqdduudeiudekheeifedvqddvieefudeiiedtkedqlh
+    huthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:2hmOZLwE9-bVWo7RnP5AgBJjz5OzMrxujaBVgN9FDA0qATIFW3Zhpw>
+    <xmx:2hmOZDNYoe8sH-Qwz4aFz3clai7LpDSTfbbgbACuWdxzEgAb13tbEg>
+    <xmx:2hmOZA8kOMIqCUhH3mWr1mKvGVtcde2JYkSEZ4c4kedl90XEPGeTog>
+    <xmx:2xmOZO8tHx8Uf0_GzjXidaY35xpRYs0lINfwa1sT1FrfVdAWjlcBDg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E1AA531A0063; Sat, 17 Jun 2023 16:38:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+In-Reply-To: <20230616085038.4121892-3-rppt@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+Date:   Sat, 17 Jun 2023 13:38:29 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Mike Rapoport" <rppt@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
         "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Kent Overstreet" <kent.overstreet@linux.dev>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nadav Amit" <nadav.amit@gmail.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Puranjay Mohan" <puranjay12@gmail.com>,
+        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Song Liu" <song@kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Will Deacon" <will@kernel.org>, bpf@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 07/12] arm64, execmem: extend execmem_params for
- generated code definitions
-Message-ID: <ZI4Zifzfi/5qBNMw@moria.home.lan>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-8-rppt@kernel.org>
- <CAPhsuW6BG2oVrGDOpCKyOEvU9fBOboYYhducv96KUBe276Mvng@mail.gmail.com>
- <20230617065759.GT52412@kernel.org>
- <ZI3TGhJ2y5SBWmnA@moria.home.lan>
- <CAPhsuW4KDriCDfQ40MKKQ3AjyeRbEUJxjqoBLipe5AJMxY3U-w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW4KDriCDfQ40MKKQ3AjyeRbEUJxjqoBLipe5AJMxY3U-w@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,40 +110,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 09:38:17AM -0700, Song Liu wrote:
-> On Sat, Jun 17, 2023 at 8:37 AM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> >
-> > On Sat, Jun 17, 2023 at 09:57:59AM +0300, Mike Rapoport wrote:
-> > > > This is growing fast. :) We have 3 now: text, data, jit. And it will be
-> > > > 5 when we split data into rw data, ro data, ro after init data. I wonder
-> > > > whether we should still do some type enum here. But we can revisit
-> > > > this topic later.
-> > >
-> > > I don't think we'd need 5. Four at most :)
-> > >
-> > > I don't know yet what would be the best way to differentiate RW and RO
-> > > data, but ro_after_init surely won't need a new type. It either will be
-> > > allocated as RW and then the caller will have to set it RO after
-> > > initialization is done, or it will be allocated as RO and the caller will
-> > > have to do something like text_poke to update it.
-> >
-> > Perhaps ro_after_init could use the same allocation interface and share
-> > pages with ro pages - if we just added a refcount for "this page
-> > currently needs to be rw, module is still loading?"
-> 
-> If we don't relax rules with read only, we will have to separate rw, ro,
-> and ro_after_init. But we can still have page sharing:
-> 
-> Two modules can put rw data on the same page.
-> With text poke (ro data poke to be accurate), two modules can put
-> ro data on the same page.
-> 
-> > text_poke() approach wouldn't be workable, you'd have to audit and fix
-> > all module init code in the entire kernel.
-> 
-> Agreed. For this reason, each module has to have its own page(s) for
-> ro_after_init data.
+On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> module_alloc() is used everywhere as a mean to allocate memory for code.
+>
+> Beside being semantically wrong, this unnecessarily ties all subsystems
+> that need to allocate code, such as ftrace, kprobes and BPF to modules
+> and puts the burden of code allocation to the modules code.
+>
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+>
+> Start splitting code allocation from modules by introducing
+> execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
+>
+> Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
+> module_alloc() and execmem_free() and jit_free() are replacements of
+> module_memfree() to allow updating all call sites to use the new APIs.
+>
+> The intention semantics for new allocation APIs:
+>
+> * execmem_text_alloc() should be used to allocate memory that must reside
+>   close to the kernel image, like loadable kernel modules and generated
+>   code that is restricted by relative addressing.
+>
+> * jit_text_alloc() should be used to allocate memory for generated code
+>   when there are no restrictions for the code placement. For
+>   architectures that require that any code is within certain distance
+>   from the kernel image, jit_text_alloc() will be essentially aliased to
+>   execmem_text_alloc().
+>
 
-Relaxing page permissions to allow for page sharing could also be a
-config option. For archs with 64k pages it seems worthwhile.
+Is there anything in this series to help users do the appropriate synchronization when the actually populate the allocated memory with code?  See here, for example:
+
+https://lore.kernel.org/linux-fsdevel/cb6533c6-cea0-4f04-95cf-b8240c6ab405@app.fastmail.com/T/#u
