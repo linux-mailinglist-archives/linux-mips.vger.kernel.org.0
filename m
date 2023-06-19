@@ -2,195 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7E3735E37
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 22:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB07735E39
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 22:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjFSUMk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jun 2023 16:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S230165AbjFSUNT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jun 2023 16:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFSUMj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 16:12:39 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F35E63
-        for <linux-mips@vger.kernel.org>; Mon, 19 Jun 2023 13:12:37 -0700 (PDT)
+        with ESMTP id S229852AbjFSUNS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 16:13:18 -0400
+Received: from h3.cmg1.smtp.forpsi.com (h3.cmg1.smtp.forpsi.com [185.129.138.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8AE130
+        for <linux-mips@vger.kernel.org>; Mon, 19 Jun 2023 13:13:17 -0700 (PDT)
 Received: from lenoch ([91.218.190.200])
         by cmgsmtp with ESMTPSA
-        id BLEoqAqsDv5uIBLEqqiBLs; Mon, 19 Jun 2023 22:12:36 +0200
+        id BLFTq51krPm6CBLFUqL76A; Mon, 19 Jun 2023 22:13:17 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687205556; bh=lyCbjqHo7qkwYB9OohFbhbYIko9aM20GhJlzYuX2OhY=;
+        t=1687205597; bh=La5RVvh62/rh2LKqh8/r8tTls0RHx4TgLGa6q6WIl7g=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=rMTeh3n0tWsPXHQGL7oVdumJ8UPBh8msvZNzAEEWpiVjDNiOWDecvvgVyC1D+XCjS
-         GPAZnYHFBBRwhiWOW791fP6rmZOYlF25DT2EvnlcNosYzW7IAgdTsYmcB/lY8ULfvr
-         hAy93ejCaI05jF1jfe9jVBNEqN/aTvt0SCt9RVqhGXzjGfAV4P0uW3BX0gVLqGPE3q
-         T0cvQXcEVhSHp0MSniyqsTNbROt4QkYSsr6+2Z21JHtBKm+RgWVPjFvYvJqCILPAgK
-         48PJHpDHIG4dh2C2AiQBZO/2FHFF/+93OJBdyo2/sPqK0OQ3yWdKNl3G7mbtCXj7uq
-         pIjwoetHhH+4w==
+        b=nxN1eeaOBMm4vLOJm4c4W+M4x5AuV5Ol4VWv5QGpQOBBC+GCFP+Y3yFUvOyLN7tyT
+         rszT/0xKpEdfMscDXpVUsh3PzETBiuHPTqX4f5hT/L09az0XSN26NRNWMw7GfGtR+R
+         VD/ZvpalDUmxGOAKrg9xX/H/c2FXUI/SXb3TatnAS5c2E7xvYSLe3lex2CwmWvNz8H
+         BmonnCBsBVX01I2J6tBPoA27W0q3lqZi84NmB6jf8ZOTOxz6ywYDNN93yh/VUoNvI7
+         qW4gCzUvVMYTwpRWAH6oHjkCA0Aq8zfoaXcDhY6vl2LcG+0DFcMbu5QcBtu8t4Hyea
+         SotDa+3/rWj8g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687205556; bh=lyCbjqHo7qkwYB9OohFbhbYIko9aM20GhJlzYuX2OhY=;
+        t=1687205597; bh=La5RVvh62/rh2LKqh8/r8tTls0RHx4TgLGa6q6WIl7g=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=rMTeh3n0tWsPXHQGL7oVdumJ8UPBh8msvZNzAEEWpiVjDNiOWDecvvgVyC1D+XCjS
-         GPAZnYHFBBRwhiWOW791fP6rmZOYlF25DT2EvnlcNosYzW7IAgdTsYmcB/lY8ULfvr
-         hAy93ejCaI05jF1jfe9jVBNEqN/aTvt0SCt9RVqhGXzjGfAV4P0uW3BX0gVLqGPE3q
-         T0cvQXcEVhSHp0MSniyqsTNbROt4QkYSsr6+2Z21JHtBKm+RgWVPjFvYvJqCILPAgK
-         48PJHpDHIG4dh2C2AiQBZO/2FHFF/+93OJBdyo2/sPqK0OQ3yWdKNl3G7mbtCXj7uq
-         pIjwoetHhH+4w==
-Date:   Mon, 19 Jun 2023 22:12:34 +0200
+        b=nxN1eeaOBMm4vLOJm4c4W+M4x5AuV5Ol4VWv5QGpQOBBC+GCFP+Y3yFUvOyLN7tyT
+         rszT/0xKpEdfMscDXpVUsh3PzETBiuHPTqX4f5hT/L09az0XSN26NRNWMw7GfGtR+R
+         VD/ZvpalDUmxGOAKrg9xX/H/c2FXUI/SXb3TatnAS5c2E7xvYSLe3lex2CwmWvNz8H
+         BmonnCBsBVX01I2J6tBPoA27W0q3lqZi84NmB6jf8ZOTOxz6ywYDNN93yh/VUoNvI7
+         qW4gCzUvVMYTwpRWAH6oHjkCA0Aq8zfoaXcDhY6vl2LcG+0DFcMbu5QcBtu8t4Hyea
+         SotDa+3/rWj8g==
+Date:   Mon, 19 Jun 2023 22:13:14 +0200
 From:   Ladislav Michl <oss-lists@triops.cz>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH 04/11] MIPS: OCTEON: octeon-usb: use bitfields for shim
- register
-Message-ID: <ZJC2sipL99ClOwV+@lenoch>
+Subject: [PATCH 05/11] MIPS: OCTEON: octeon-usb: move gpio config to separate
+ function
+Message-ID: <ZJC22uFYvtc1mqRU@lenoch>
 References: <ZJC165p0Mj4jHcBh@lenoch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <ZJC165p0Mj4jHcBh@lenoch>
-X-CMAE-Envelope: MS4wfOQoUkTR/cfOd95jOLfVwC6n+t1GYeXJD8XUFvnQY46yvUrjKYLc3q/fQNiDOm9Kmp1TvXon6sCiV1J9/WOzPVHnC11qHegcf448WKMW2trGZXBFzzOl
- MGKCjxHzqehjuF0OTpX9XmqIAFeewY4wC1POc3jKJ09oKLoeOMzFGfXKBFJd5+KArGtmqTJsSGLax5qRjc1CVk/L6/OykHKMMHqnx8Atn9H/nI/okvapCwI8
- 32a///sr6rjLtdXjEmAeCA==
+X-CMAE-Envelope: MS4wfHEMptSr/xQTLVSvx4YLnxQfTwq4AfmkXmluBzlj5HV4LagHlBTN9ng0H6DBzlQp2RhZcI1cjmienFcjYKVEg90aioEz6UlVOIZZjPy4gyEj/pEZ9YZ4
+ 60P5Lubzc99dYKfU3wdRJaaPZKKWhsI/KlhZ1IsaqaJCUfwJxB0EXRkubKNTLwVZTV9MiEP3DBx5N70Pd9lhqEnIF28EehrCa/543n6PkA+oJsfSKDOpyRp8
+ hJr0U6glvZ4uP6/VwVk+Xw==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ladislav Michl <ladis@linux-mips.org>
-
-Use Linux standard bitfield access macros to manipulate
-shim register.
+Power gpio configuration is using Octeon specific code, so
+move it to separate function, that can later be guarded
+with ifdefs.
 
 Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
 ---
- arch/mips/cavium-octeon/octeon-usb.c | 96 ++++++++++++----------------
- 1 file changed, 41 insertions(+), 55 deletions(-)
+ arch/mips/cavium-octeon/octeon-usb.c | 45 +++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 20 deletions(-)
 
 diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
-index 17051aee491d..1c48ee77125a 100644
+index 1c48ee77125a..0f9800b3d373 100644
 --- a/arch/mips/cavium-octeon/octeon-usb.c
 +++ b/arch/mips/cavium-octeon/octeon-usb.c
-@@ -152,57 +152,43 @@
-  */
- # define USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN	BIT(24)
+@@ -197,13 +197,35 @@ static DEFINE_MUTEX(dwc3_octeon_clocks_mutex);
+ static uint8_t clk_div[OCTEON_H_CLKDIV_SEL] = {1, 2, 4, 6, 8, 16, 24, 32};
  
-+/*
-+ * UCTL Shim Features Register
-+ */
- #define USBDRD_UCTL_SHIM_CFG			0xe8
-+/* Out-of-bound UAHC register access: 0 = read, 1 = write */
-+# define USBDRD_UCTL_SHIM_CFG_XS_NCB_OOB_WRN	BIT(63)
-+/* SRCID error log for out-of-bound UAHC register access:
-+ *	[59:58] = chipID
-+ *	[57] = Request source: 0 = core, 1 = NCB-device
-+ *	[56:51] = Core/NCB-device number, [56] always 0 for NCB devices
-+ *	[50:48] = SubID
-+ */
-+# define USBDRD_UCTL_SHIM_CFG_XS_NCB_OOB_OSRC	GENMASK(59, 48)
-+/* Error log for bad UAHC DMA access: 0 = Read log, 1 = Write log */
-+# define USBDRD_UCTL_SHIM_CFG_XM_BAD_DMA_WRN	BIT(47)
-+/* Encoded error type for bad UAHC DMA */
-+# define USBDRD_UCTL_SHIM_CFG_XM_BAD_DMA_TYPE	GENMASK(43, 40)
-+/* Select the IOI read command used by DMA accesses */
-+# define USBDRD_UCTL_SHIM_CFG_DMA_READ_CMD	BIT(12)
-+/* Select endian format for DMA accesses to the L2C:
-+ *	0x0 = Little endian
-+ *	0x1 = Big endian
-+ *	0x2 = Reserved
-+ *	0x3 = Reserved
-+ */
-+# define USBDRD_UCTL_SHIM_CFG_DMA_ENDIAN_MODE	GENMASK(9, 8)
-+/* Select endian format for IOI CSR access to UAHC:
-+ *	0x0 = Little endian
-+ *	0x1 = Big endian
-+ *	0x2 = Reserved
-+ *	0x3 = Reserved
-+ */
-+# define USBDRD_UCTL_SHIM_CFG_CSR_ENDIAN_MODE	GENMASK(1, 0)
-+
- #define USBDRD_UCTL_ECC				0xf0
- #define USBDRD_UCTL_SPARE1			0xf8
  
--/* UCTL Shim Features Register */
--union cvm_usbdrd_uctl_shim_cfg {
--	uint64_t u64;
--	struct cvm_usbdrd_uctl_shim_cfg_s {
--	/* Out-of-bound UAHC register access: 0 = read, 1 = write */
--	__BITFIELD_FIELD(uint64_t xs_ncb_oob_wrn:1,
--	/* Reserved */
--	__BITFIELD_FIELD(uint64_t reserved_60_62:3,
--	/* SRCID error log for out-of-bound UAHC register access:
--	 *	[59:58] = chipID
--	 *	[57] = Request source: 0 = core, 1 = NCB-device
--	 *	[56:51] = Core/NCB-device number, [56] always 0 for NCB devices
--	 *	[50:48] = SubID
--	 */
--	__BITFIELD_FIELD(uint64_t xs_ncb_oob_osrc:12,
--	/* Error log for bad UAHC DMA access: 0 = Read log, 1 = Write log */
--	__BITFIELD_FIELD(uint64_t xm_bad_dma_wrn:1,
--	/* Reserved */
--	__BITFIELD_FIELD(uint64_t reserved_44_46:3,
--	/* Encoded error type for bad UAHC DMA */
--	__BITFIELD_FIELD(uint64_t xm_bad_dma_type:4,
--	/* Reserved */
--	__BITFIELD_FIELD(uint64_t reserved_13_39:27,
--	/* Select the IOI read command used by DMA accesses */
--	__BITFIELD_FIELD(uint64_t dma_read_cmd:1,
--	/* Reserved */
--	__BITFIELD_FIELD(uint64_t reserved_10_11:2,
--	/* Select endian format for DMA accesses to the L2c:
--	 *	0x0 = Little endian
--	 *`	0x1 = Big endian
--	 *	0x2 = Reserved
--	 *	0x3 = Reserved
--	 */
--	__BITFIELD_FIELD(uint64_t dma_endian_mode:2,
--	/* Reserved */
--	__BITFIELD_FIELD(uint64_t reserved_2_7:6,
--	/* Select endian format for IOI CSR access to UAHC:
--	 *	0x0 = Little endian
--	 *`	0x1 = Big endian
--	 *	0x2 = Reserved
--	 *	0x3 = Reserved
--	 */
--	__BITFIELD_FIELD(uint64_t csr_endian_mode:2,
--	;))))))))))))
--	} s;
--};
--
- #define OCTEON_H_CLKDIV_SEL		8
- #define OCTEON_MIN_H_CLK_RATE		150000000
- #define OCTEON_MAX_H_CLK_RATE		300000000
-@@ -456,17 +442,17 @@ static int dwc3_octeon_clocks_start(struct device *dev, u64 base)
- 
- static void __init dwc3_octeon_set_endian_mode(u64 base)
+-static int dwc3_octeon_config_power(struct device *dev, u64 base)
++static void dwc3_octeon_config_gpio(int index, int gpio)
  {
--	union cvm_usbdrd_uctl_shim_cfg shim_cfg;
-+	u64 val;
-+	u64 uctl_shim_cfg_reg = base + USBDRD_UCTL_SHIM_CFG;
+ 	union cvmx_gpio_bit_cfgx gpio_bit;
++
++	if ((OCTEON_IS_MODEL(OCTEON_CN73XX) ||
++	    OCTEON_IS_MODEL(OCTEON_CNF75XX))
++	    && gpio <= 31) {
++		gpio_bit.u64 = cvmx_read_csr(CVMX_GPIO_BIT_CFGX(gpio));
++		gpio_bit.s.tx_oe = 1;
++		gpio_bit.s.output_sel = (index == 0 ? 0x14 : 0x15);
++		cvmx_write_csr(CVMX_GPIO_BIT_CFGX(gpio), gpio_bit.u64);
++	} else if (gpio <= 15) {
++		gpio_bit.u64 = cvmx_read_csr(CVMX_GPIO_BIT_CFGX(gpio));
++		gpio_bit.s.tx_oe = 1;
++		gpio_bit.s.output_sel = (index == 0 ? 0x14 : 0x19);
++		cvmx_write_csr(CVMX_GPIO_BIT_CFGX(gpio), gpio_bit.u64);
++	} else {
++		gpio_bit.u64 = cvmx_read_csr(CVMX_GPIO_XBIT_CFGX(gpio));
++		gpio_bit.s.tx_oe = 1;
++		gpio_bit.s.output_sel = (index == 0 ? 0x14 : 0x19);
++		cvmx_write_csr(CVMX_GPIO_XBIT_CFGX(gpio), gpio_bit.u64);
++	}
++}
++
++static int dwc3_octeon_config_power(struct device *dev, u64 base)
++{
+ 	uint32_t gpio_pwr[3];
+ 	int gpio, len, power_active_low;
+ 	struct device_node *node = dev->of_node;
+-	int index = (base >> 24) & 1;
+ 	u64 val;
+ 	u64 uctl_host_cfg_reg = base + USBDRD_UCTL_HOST_CFG;
  
--	shim_cfg.u64 = cvmx_read_csr(base + USBDRD_UCTL_SHIM_CFG);
-+	val = cvmx_read_csr(uctl_shim_cfg_reg);
-+	val &= ~USBDRD_UCTL_SHIM_CFG_DMA_ENDIAN_MODE;
-+	val &= ~USBDRD_UCTL_SHIM_CFG_CSR_ENDIAN_MODE;
- #ifdef __BIG_ENDIAN
--	shim_cfg.s.dma_endian_mode = 1;
--	shim_cfg.s.csr_endian_mode = 1;
--#else
--	shim_cfg.s.dma_endian_mode = 0;
--	shim_cfg.s.csr_endian_mode = 0;
-+	val |= FIELD_PREP(USBDRD_UCTL_SHIM_CFG_DMA_ENDIAN_MODE, 1);
-+	val |= FIELD_PREP(USBDRD_UCTL_SHIM_CFG_CSR_ENDIAN_MODE, 1);
- #endif
--	cvmx_write_csr(base + USBDRD_UCTL_SHIM_CFG, shim_cfg.u64);
-+	cvmx_write_csr(uctl_shim_cfg_reg, val);
- }
+@@ -220,24 +242,7 @@ static int dwc3_octeon_config_power(struct device *dev, u64 base)
+ 			dev_err(dev, "invalid power configuration\n");
+ 			return -EINVAL;
+ 		}
+-		if ((OCTEON_IS_MODEL(OCTEON_CN73XX) ||
+-		    OCTEON_IS_MODEL(OCTEON_CNF75XX))
+-		    && gpio <= 31) {
+-			gpio_bit.u64 = cvmx_read_csr(CVMX_GPIO_BIT_CFGX(gpio));
+-			gpio_bit.s.tx_oe = 1;
+-			gpio_bit.s.output_sel = (index == 0 ? 0x14 : 0x15);
+-			cvmx_write_csr(CVMX_GPIO_BIT_CFGX(gpio), gpio_bit.u64);
+-		} else if (gpio <= 15) {
+-			gpio_bit.u64 = cvmx_read_csr(CVMX_GPIO_BIT_CFGX(gpio));
+-			gpio_bit.s.tx_oe = 1;
+-			gpio_bit.s.output_sel = (index == 0 ? 0x14 : 0x19);
+-			cvmx_write_csr(CVMX_GPIO_BIT_CFGX(gpio), gpio_bit.u64);
+-		} else {
+-			gpio_bit.u64 = cvmx_read_csr(CVMX_GPIO_XBIT_CFGX(gpio));
+-			gpio_bit.s.tx_oe = 1;
+-			gpio_bit.s.output_sel = (index == 0 ? 0x14 : 0x19);
+-			cvmx_write_csr(CVMX_GPIO_XBIT_CFGX(gpio), gpio_bit.u64);
+-		}
++		dwc3_octeon_config_gpio((base >> 24) & 1, gpio);
  
- static void __init dwc3_octeon_phy_reset(u64 base)
+ 		/* Enable XHCI power control and set if active high or low. */
+ 		val = cvmx_read_csr(uctl_host_cfg_reg);
 -- 
 2.39.2
 
