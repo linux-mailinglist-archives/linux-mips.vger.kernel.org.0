@@ -2,58 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76753735E47
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 22:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E04735E4A
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 22:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjFSUP6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jun 2023 16:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S229929AbjFSUQ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jun 2023 16:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjFSUP5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 16:15:57 -0400
+        with ESMTP id S229601AbjFSUQZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 16:16:25 -0400
 Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC1413D
-        for <linux-mips@vger.kernel.org>; Mon, 19 Jun 2023 13:15:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBA5130
+        for <linux-mips@vger.kernel.org>; Mon, 19 Jun 2023 13:16:24 -0700 (PDT)
 Received: from lenoch ([91.218.190.200])
         by cmgsmtp with ESMTPSA
-        id BLI0qArmnv5uIBLI2qiBaV; Mon, 19 Jun 2023 22:15:54 +0200
+        id BLITqArwFv5uIBLIUqiBcT; Mon, 19 Jun 2023 22:16:23 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687205754; bh=kCW1OvVhiRLcDIqlNc8IFhO8A4j05h0+3MdDtVLQLHE=;
+        t=1687205783; bh=K9MvvSB44/NAwPzUv3A6w1ipANWPhZ+J7Fw+3w/YxmQ=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=l2yaE0hR4ACg4u+JlQsSiQ9QcKnU6Yaqu1EBbo5BYO4rVhPHdHjkBD82PNPnpCg0L
-         pD2ohs3erEoYEsrMf7b0JAmOD2vHMtoRnDMtfWRMIhDRYCBVCIOlZfjg9qIYCWtDmO
-         OrTitZ3fDJb3GooW1FdoWWPfajuY5YW6doEBwn0nnyT6GU7mmBfG1OGUVToOkEyG0r
-         mRcvnWsDFr2rEndgJZu6d0xQsToaRXuADDgXhwUTHxWFNcwMNTt+OAAtrT3u9UV2GG
-         zd/jkaB7jUWWJEZMgOyqUAyix37U7FCc+vklK9pyZSDgldtL0BADVYLk2e0D0xyc/P
-         c3ccwZC8XvuNw==
+        b=Yds0iDJ00rtqBvolFxDm5ZgtaEJAm9dg0cmkkc5d+lbDmFSvTMpq8mzbbFKErYbo2
+         VHbYYi874uV/dvXjn/MhjN5X4mjOVm103PtJZlx4L1u/a0kce6BXXhNld+NLUYY0l9
+         QnelYh4Q84k4d8lVdBzLMQBg2YjZb4S2Dmnb+v/bZEDDdS/UWt3jTRIuQ7tZ1XLxck
+         4+xtbuz2OYq2a0XCDHjhnp1c0Eg2Pi1pvNPNeGXqNekMmQlAck2FPwjrIFPREWudr5
+         1D933UCPJQPTGzOeCRakXZlmAHkb0gu+aex7gRYHe/OIOktuTi9ZGic4EaTRWj5Vls
+         6jDofvnGORPAw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1687205754; bh=kCW1OvVhiRLcDIqlNc8IFhO8A4j05h0+3MdDtVLQLHE=;
+        t=1687205783; bh=K9MvvSB44/NAwPzUv3A6w1ipANWPhZ+J7Fw+3w/YxmQ=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=l2yaE0hR4ACg4u+JlQsSiQ9QcKnU6Yaqu1EBbo5BYO4rVhPHdHjkBD82PNPnpCg0L
-         pD2ohs3erEoYEsrMf7b0JAmOD2vHMtoRnDMtfWRMIhDRYCBVCIOlZfjg9qIYCWtDmO
-         OrTitZ3fDJb3GooW1FdoWWPfajuY5YW6doEBwn0nnyT6GU7mmBfG1OGUVToOkEyG0r
-         mRcvnWsDFr2rEndgJZu6d0xQsToaRXuADDgXhwUTHxWFNcwMNTt+OAAtrT3u9UV2GG
-         zd/jkaB7jUWWJEZMgOyqUAyix37U7FCc+vklK9pyZSDgldtL0BADVYLk2e0D0xyc/P
-         c3ccwZC8XvuNw==
-Date:   Mon, 19 Jun 2023 22:15:52 +0200
+        b=Yds0iDJ00rtqBvolFxDm5ZgtaEJAm9dg0cmkkc5d+lbDmFSvTMpq8mzbbFKErYbo2
+         VHbYYi874uV/dvXjn/MhjN5X4mjOVm103PtJZlx4L1u/a0kce6BXXhNld+NLUYY0l9
+         QnelYh4Q84k4d8lVdBzLMQBg2YjZb4S2Dmnb+v/bZEDDdS/UWt3jTRIuQ7tZ1XLxck
+         4+xtbuz2OYq2a0XCDHjhnp1c0Eg2Pi1pvNPNeGXqNekMmQlAck2FPwjrIFPREWudr5
+         1D933UCPJQPTGzOeCRakXZlmAHkb0gu+aex7gRYHe/OIOktuTi9ZGic4EaTRWj5Vls
+         6jDofvnGORPAw==
+Date:   Mon, 19 Jun 2023 22:16:21 +0200
 From:   Ladislav Michl <oss-lists@triops.cz>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH 10/11] usb: dwc3: dwc3-octeon: Move node parsing into driver
- probe
-Message-ID: <ZJC3eK8QMxShyZDt@lenoch>
+Subject: [PATCH 11/11] usb: dwc3: Add SPDX header and copyright
+Message-ID: <ZJC3lfCKcr4QkMJh@lenoch>
 References: <ZJC165p0Mj4jHcBh@lenoch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <ZJC165p0Mj4jHcBh@lenoch>
-X-CMAE-Envelope: MS4wfD791L9CvcO2cS3ct+H45CrfbSuJTNIWMjVNFohBfHcQmbrU9HksRbPHgnALDptbzoZYNz8O45hh5l7K2O3F8CSpD3bZey5SfnmOwkj677Vl7IZDRkRB
- JvIBw6Hazy0iqeoINgj/Ijc7V+SPKt6x0e5dThYWbJolsCcr/W9AbO1JIvvhvx29W8AjIZRstOpyPjtPMwjH6N8iQRGMHNf8PQfFwLbZ1rlMystemUSquMnQ
- bKXJPhq6acwbPJ00fkoHWg==
+X-CMAE-Envelope: MS4wfKT14AIUFGIofVKyXtsTGI8XNvGTl/IpaMKz8UMtyAjwgqfKS4Ll2tsH7X8iJFLOzv0LhOvUBDwDp1gt32zIWI4kOWMEmUe4oj5hUpmHj/0Gtccj7S8I
+ 3v/09Nve7DZFXSZ2SiijodI9L79YjHOi4p64o0XPjhQ0mDdWoPhF2LyYhfExhuRIP2owghzOEiezjCuu8GjeMbdtkj5OQp1Vh51YtPLF1scGV5N/dB98qQ/5
+ 5rXFfyZN+Nk+wSwFxuEQ7Q==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
         RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,198 +61,41 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Ladislav Michl <ladis@linux-mips.org>
 
-Make dwc3_octeon_clocks_start just start the clocks.
+As driver is rewritten and David no longer works for Marvell (Cavium),
+I'm to blame for breakage.
 
 Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
 ---
- drivers/usb/dwc3/dwc3-octeon.c | 150 ++++++++++++++++-----------------
- 1 file changed, 71 insertions(+), 79 deletions(-)
+ drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index 3ebcf2a61233..4ad2d8887cf0 100644
+index 4ad2d8887cf0..1776bbaf28c0 100644
 --- a/drivers/usb/dwc3/dwc3-octeon.c
 +++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -295,67 +295,14 @@ static int dwc3_octeon_config_power(struct device *dev, void __iomem *base)
- 	return 0;
- }
+@@ -1,11 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
+ /*
+- * XHCI HCD glue for Cavium Octeon III SOCs.
++ * DWC3 glue for Cavium Octeon III SOCs.
+  *
+  * Copyright (C) 2010-2017 Cavium Networks
+- *
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details.
++ * Copyright (C) 2023 Ladislav Michl <ladis@linux-mips.org>
+  */
  
--static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
-+static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base,
-+				    int ref_clk_sel, int ref_clk_fsel,
-+				    int mpll_mul)
- {
--	int i, div, mpll_mul, ref_clk_fsel, ref_clk_sel = 2;
--	u32 clock_rate;
-+	int div;
- 	u64 val;
- 	void __iomem *uctl_ctl_reg = base + USBDRD_UCTL_CTL;
+ #include <linux/bitfield.h>
+@@ -542,6 +540,6 @@ static struct platform_driver dwc3_octeon_driver = {
+ module_platform_driver(dwc3_octeon_driver);
  
--	if (dev->of_node) {
--		const char *ss_clock_type;
--		const char *hs_clock_type;
--
--		i = of_property_read_u32(dev->of_node,
--					 "refclk-frequency", &clock_rate);
--		if (i) {
--			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
--			return -EINVAL;
--		}
--		i = of_property_read_string(dev->of_node,
--					    "refclk-type-ss", &ss_clock_type);
--		if (i) {
--			dev_err(dev, "No UCTL \"refclk-type-ss\"\n");
--			return -EINVAL;
--		}
--		i = of_property_read_string(dev->of_node,
--					    "refclk-type-hs", &hs_clock_type);
--		if (i) {
--			dev_err(dev, "No UCTL \"refclk-type-hs\"\n");
--			return -EINVAL;
--		}
--		if (strcmp("dlmc_ref_clk0", ss_clock_type) == 0) {
--			if (strcmp(hs_clock_type, "dlmc_ref_clk0") == 0)
--				ref_clk_sel = 0;
--			else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
--				ref_clk_sel = 2;
--			else
--				dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
--					 hs_clock_type);
--		} else if (strcmp(ss_clock_type, "dlmc_ref_clk1") == 0) {
--			if (strcmp(hs_clock_type, "dlmc_ref_clk1") == 0)
--				ref_clk_sel = 1;
--			else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
--				ref_clk_sel = 3;
--			else {
--				dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
--					 hs_clock_type);
--				ref_clk_sel = 3;
--			}
--		} else
--			dev_warn(dev, "Invalid SS clock type %s, using dlmc_ref_clk0 instead\n",
--				 ss_clock_type);
--
--		if ((ref_clk_sel == 0 || ref_clk_sel == 1) &&
--		    (clock_rate != 100000000))
--			dev_warn(dev, "Invalid UCTL clock rate of %u, using 100000000 instead\n",
--				 clock_rate);
--
--	} else {
--		dev_err(dev, "No USB UCTL device node\n");
--		return -EINVAL;
--	}
--
- 	/*
- 	 * Step 1: Wait for all voltages to be stable...that surely
- 	 *         happened before starting the kernel. SKIP
-@@ -399,24 +346,6 @@ static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
- 	val &= ~USBDRD_UCTL_CTL_REF_CLK_SEL;
- 	val |= FIELD_PREP(USBDRD_UCTL_CTL_REF_CLK_SEL, ref_clk_sel);
- 
--	ref_clk_fsel = 0x07;
--	switch (clock_rate) {
--	default:
--		dev_warn(dev, "Invalid ref_clk %u, using 100000000 instead\n",
--			 clock_rate);
--		fallthrough;
--	case 100000000:
--		mpll_mul = 0x19;
--		if (ref_clk_sel < 2)
--			ref_clk_fsel = 0x27;
--		break;
--	case 50000000:
--		mpll_mul = 0x32;
--		break;
--	case 125000000:
--		mpll_mul = 0x28;
--		break;
--	}
- 	val &= ~USBDRD_UCTL_CTL_REF_CLK_FSEL;
- 	val |= FIELD_PREP(USBDRD_UCTL_CTL_REF_CLK_FSEL, ref_clk_fsel);
- 
-@@ -502,8 +429,72 @@ static void __init dwc3_octeon_phy_reset(void __iomem *base)
- static int dwc3_octeon_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->of_node;
- 	struct dwc3_data *data;
--	int err;
-+	int err, ref_clk_sel, ref_clk_fsel, mpll_mul;
-+	uint32_t clock_rate;
-+	const char *hs_clock_type, *ss_clock_type;
-+
-+	if (!node) {
-+		dev_err(dev, "No USB UCTL device node\n");
-+		return -EINVAL;
-+	}
-+
-+	if (of_property_read_u32(node, "refclk-frequency", &clock_rate)) {
-+		dev_err(dev, "No UCTL \"refclk-frequency\"\n");
-+		return -EINVAL;
-+	}
-+	if (of_property_read_string(node, "refclk-type-ss", &ss_clock_type)) {
-+		dev_err(dev, "No UCTL \"refclk-type-ss\"\n");
-+		return -EINVAL;
-+	}
-+	if (of_property_read_string(node, "refclk-type-hs", &hs_clock_type)) {
-+		dev_err(dev, "No UCTL \"refclk-type-hs\"\n");
-+		return -EINVAL;
-+	}
-+
-+	ref_clk_sel = 2;
-+	if (strcmp("dlmc_ref_clk0", ss_clock_type) == 0) {
-+		if (strcmp(hs_clock_type, "dlmc_ref_clk0") == 0)
-+			ref_clk_sel = 0;
-+		else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
-+			ref_clk_sel = 2;
-+		else
-+			dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-+				 hs_clock_type);
-+	} else if (strcmp(ss_clock_type, "dlmc_ref_clk1") == 0) {
-+		if (strcmp(hs_clock_type, "dlmc_ref_clk1") == 0)
-+			ref_clk_sel = 1;
-+		else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
-+			ref_clk_sel = 3;
-+		else {
-+			dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-+				 hs_clock_type);
-+			ref_clk_sel = 3;
-+		}
-+	} else {
-+		dev_warn(dev, "Invalid SS clock type %s, using dlmc_ref_clk0 instead\n",
-+			 ss_clock_type);
-+	}
-+
-+	ref_clk_fsel = 0x07;
-+	switch (clock_rate) {
-+	default:
-+		dev_warn(dev, "Invalid ref_clk %u, using 100000000 instead\n",
-+			 clock_rate);
-+		fallthrough;
-+	case 100000000:
-+		mpll_mul = 0x19;
-+		if (ref_clk_sel < 2)
-+			ref_clk_fsel = 0x27;
-+		break;
-+	case 50000000:
-+		mpll_mul = 0x32;
-+		break;
-+	case 125000000:
-+		mpll_mul = 0x28;
-+		break;
-+	}
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -516,7 +507,8 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
- 	if (IS_ERR(data->base))
- 		return PTR_ERR(data->base);
- 
--	err = dwc3_octeon_clocks_start(dev, data->base);
-+	err = dwc3_octeon_clocks_start(dev, data->base,
-+				       ref_clk_sel, ref_clk_fsel, mpll_mul);
- 	if (err)
- 		return err;
- 
+ MODULE_ALIAS("platform:dwc3-octeon");
+-MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
++MODULE_AUTHOR("Ladislav Michl <ladis@linux-mips.org>");
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
 -- 
 2.39.2
 
