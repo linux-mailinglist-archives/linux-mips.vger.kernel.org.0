@@ -2,197 +2,247 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691E7734AC7
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 05:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345A4734ADF
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 06:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjFSD5S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 18 Jun 2023 23:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S229743AbjFSEJz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jun 2023 00:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFSD5R (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 18 Jun 2023 23:57:17 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4F5C5;
-        Sun, 18 Jun 2023 20:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687146949; x=1687751749; i=deller@gmx.de;
- bh=2fndrLIH+tdYpXaN3a+B2+gpkPc6UJVTkZbYPRfVVB8=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=tHEzjmtG0VENHAd2DsNX0VdgvhB3svy7eaGOu9NFOvFGhn1vMbEvw1DJ+6Ro8SfR+zYO8Jk
- oQyuTgSliiEbg8vZLpHgVzlyXTGg39KCzCetFU2QY1sIGcgFZePrwHb9ybGVXL+myxIM7zyFW
- vutzWxYp5k3P7CbcRS0bdRBQ3OV2xelDwHz+H2/Evbu2z8c/2sLPc4ox6wVqaIps6PKmnyug3
- Uh162w8Lsy86g+eUKl1+1tWZwxCjWi6j5hYhUWVVAHRKRfHvDjtn4aElpEf0t4RvU0/z6Fz8/
- PwGLztv0XjhmK7HYbqINh4rNCYiEBBtnOqKRgIMD0/NnASTKw8BA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.148.114]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1My36N-1ptYsd3hol-00zXMS; Mon, 19
- Jun 2023 05:55:49 +0200
-Message-ID: <2f5a3805-b7a5-1c45-e5a4-e273ea289ba6@gmx.de>
-Date:   Mon, 19 Jun 2023 05:55:42 +0200
+        with ESMTP id S229599AbjFSEJr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 00:09:47 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD227136;
+        Sun, 18 Jun 2023 21:09:45 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30adc51b65cso3045795f8f.0;
+        Sun, 18 Jun 2023 21:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687147784; x=1689739784;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z4cDqLgnjeO8/PHbpEjSl3NPzIPpeeEqnA8amK7VqmU=;
+        b=dTrjkApE9Bp6yvsnHGfTMHaPIHgQU68Bx4RnewArlftFMjC72fAaOhojkOXPesUscj
+         KBdVHsHEAPQrtryp6UYMkTIBtIfWneG6z+EPeG37ImQtdUPwWuMXTsMZcUS70c/TxWA6
+         5O1yKESZf1ayjRYX6rEyXfQpD1hdL0GCbIFsZ9X0oBDmtVHEsWphg0M9l+4OwsR4maz/
+         /T2vLgCiof6BtCyZsNsykGWK+dD2dGz9rLOmPLKGnetEhAmZ/uxkeia/kgNqzHfdL5u1
+         tJJr2BIy2/KkWaUxZXPw0JM14MIiQG3EM8rT9aoF7RpuHaWReb/cngL8nFQ8yCizCe7x
+         nfAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687147784; x=1689739784;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z4cDqLgnjeO8/PHbpEjSl3NPzIPpeeEqnA8amK7VqmU=;
+        b=dYmbL1iJDvWNCwfQxexfhvtdB2JNMlR8OyslYxqBb33BN82kQMauTZki9PZwGec3K4
+         4Rar9BsE9MRgBTCWvD5hn0tnRBnJZ0FgecFXCBBixCLZjELsWoRXKO5V8yAP89ch9h9E
+         M/DH+cvYrLn/mnTDP4wZA+4ZaKNkV9hWaP7rbW10W6PbQRlfd3k78C+VnvNX/xPoew5E
+         h/GHe8W7dZFk2sNbaEcjl8oy2kNJ81uvuDnWPUW3RZhkOkd/hvx76boTyPsr8k6QJu+v
+         Q9ZYu23i6hv83Kg7DJBDHbzqLFZ0+/6t55FADKDJthQ/HabjITE/fwf3a9XmUks4JeCo
+         8nww==
+X-Gm-Message-State: AC+VfDxTwKcbonSoVujT6wZft2zO/auAOQwuMch+Vut+wMBq8Aq+fqhE
+        qPN6NlajCWakAk/8PT7an2A09KgubSM=
+X-Google-Smtp-Source: ACHHUZ6vnO9OSmH7IP8tW4a0zKUwpxCSj62f94izw2mFs8kWL5NCdfEeynUpXyp6EeLnyHqTGkgGIw==
+X-Received: by 2002:a5d:4149:0:b0:311:1b83:e1e4 with SMTP id c9-20020a5d4149000000b003111b83e1e4mr8856371wrq.5.1687147783728;
+        Sun, 18 Jun 2023 21:09:43 -0700 (PDT)
+Received: from localhost.localdomain (61.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.61])
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d6e0e000000b003078354f774sm30004052wrz.36.2023.06.18.21.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 21:09:43 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        john@phrozen.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        arinc.unal@arinc9.com, yangshiji66@outlook.com
+Subject: [PATCH v5 0/9] mips: ralink: add complete clock and reset driver for mtmips SoCs
+Date:   Mon, 19 Jun 2023 06:09:32 +0200
+Message-Id: <20230619040941.1340372-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 08/23] parisc: add pte_unmap() to balance get_ptep()
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
- <653369-95ef-acd2-d6ea-e95f5a997493@google.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <653369-95ef-acd2-d6ea-e95f5a997493@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:E3xdg5CpQcjOoKW8Y56OwqWPK69wZz6OC3pXUq5sC4koD4vx6TE
- 8yx7mlAVEcBGQCbXtdVKp5UUdnr/61/KwgdLsdsCeafoXWrwMUBr6cWiQIGAUgINT3sBkXj
- YUQ+i02IXhG0ZBE1C7Dv9zl3aVQVXzwfFiVekkVC97MGOBsK+OwPv4gKZzvDYcrI9sx6vlb
- RKMhNKB17Raa0wGb+9IJg==
-UI-OutboundReport: notjunk:1;M01:P0:f2v0q5B++HE=;Da2Hd/q80C0hblRDasa115R7ipH
- ITP+kxg7e8qZRipjLb6CGqyHPdG/Zhb8pEJIpXAWFU3ar1yt+BeqPp25z1tD2fgQoomDBafSI
- T2JI0cHyhX9oBPPhCH37HzO5OqjXai1apVVEetq9P184N6g33p3cSDDZYP4I6GoLDN9DvQEFu
- QGd3zrkWkqEmZ6Vad/7T9wzoz6Iy73Cj+YnQUayxP/WmDRLwi5RNxp1O83PFQIH+w3CKE1EWO
- 23kOMxcrgAD7YqjQU4alZc4K1Phuaj4FBExhBg+66ocbKtD9nfb6PZRuchNLX/Q5VmxOlBfea
- +unhX9xz0F4yej82C9a9Ahzf2WFmqaqduJ4GfxBBVMpA2OodPCXovgqDmB1veKiq8vZA6X5yk
- wU+Jcnh+QmfWXd/xL82C8EjAYdwJcDg+eEk6he/T2BpLkdrJqvUsbwmL1s6vm3h2xfZdv9HjP
- HDqKexAwIHyONgbwbztyEJNTMjILHQtvalYaPHd4cLJWdj/f+xdGeWpPd11qIZv0pNRC6RmzG
- BMRyfjmCQkvWDZio/DHwSQ9i0PRIQ+8+VjmSj1b6Y6CsaT5/J9RXXe4kiJxSG4snZdzRGYY2O
- 4McI1b8tXhq5e63I/ekb0ajHKJ5Bor2QBVqDM68FKmYbJv/bR6oV8WIMMsLewJ2LUtXAfXAbu
- x/EEjEq7JGtus66za+aX5Yazu6PYy0EIzEn+QO1Pnloxqaq1TITSpEEXtzuFrLPYbW8qHKqNl
- aMzyEK7bpqATAUqTeGQYGs5kvHwxHgsW47YV5D9G3+QzisWw4SSUG2zUA0IqSI6i/fK/bZUUg
- 9s7lXJW9HE6ObKs8Fk2cZGz0H9VAEPLoLgBcumMBsPE0yNFDqFiHwKmbJ24rQM7wtujiIH8eg
- Du+92nPxZgAKb8/YuRr6Rozc58x213b7vXjIz4uu3TcvqL6TMGK4B5hLfnDu5CfN3qfqxkdKR
- hKk8rTZjPetTc5al7ev4qbwvKGA=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/8/23 21:18, Hugh Dickins wrote:
-> To keep balance in future, remember to pte_unmap() after a successful
-> get_ptep().  And act as if flush_cache_pages() really needs a map there,
-> to read the pfn before "unmapping", to be sure page table is not removed=
-.
->
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+Hi all!
 
-For the parisc parts:
+This patchset is a big effort to properly implement a clock and reset
+driver for old ralink SoCs. This allow to properly define clocks in 
+device tree and avoid to use fixed-clocks directly from 'arch/mips/ralink'
+architecture directory code.
 
-Acked-by: Helge Deller <deller@gmx.de> # parisc
+Device tree 'sysc' node will be both clock and reset provider using 
+'clock-cells' and 'reset-cells' properties.
 
-Helge
+The ralink SoCs we are taking about are RT2880, RT3050, RT3052, RT3350,
+RT3352, RT3883, RT5350, MT7620, MT7628 and MT7688. Mostly the code in
+this new driver has been extracted from 'arch/mips/ralink' and cleanly
+put using kernel clock and reset driver APIs. The clock plans for this
+SoCs only talks about relation between CPU frequency and BUS frequency.
+This relation is different depending on the particular SoC. CPU clock is
+derived from XTAL frequencies.
 
+ Depending on the SoC we have the following frequencies:
+ * RT2880 SoC:
+     - XTAL: 40 MHz.
+     - CPU: 250, 266, 280 or 300 MHz.
+     - BUS: CPU / 2 MHz.
+  * RT3050, RT3052, RT3350:
+     - XTAL: 40 MHz.
+     - CPU: 320 or 384 MHz.
+     - BUS: CPU / 3 MHz.
+  * RT3352:
+     - XTAL: 40 MHz.
+     - CPU: 384 or 400 MHz.
+     - BUS: CPU / 3 MHz.
+     - PERIPH: 40 MHz.
+  * RT3383:
+     - XTAL: 40 MHz.
+     - CPU: 250, 384, 480 or 500 MHz.
+     - BUS: Depends on RAM Type and CPU:
+       + RAM DDR2: 125. ELSE 83 MHz.
+       + RAM DDR2: 128. ELSE 96 MHz.
+       + RAM DDR2: 160. ELSE 120 MHz.
+       + RAM DDR2: 166. ELSE 125 MHz.
+  * RT5350:
+      - XTAL: 40 MHz.
+      - CPU: 300, 320 or 360 MHz.
+      - BUS: CPU / 3, CPU / 4, CPU / 3 MHz.
+      - PERIPH: 40 MHz.
+  * MT7628 and MT7688:
+     - XTAL: 20 MHz or 40 MHz.
+     - CPU: 575 or 580 MHz.
+     - BUS: CPU / 3.
+     - PCMI2S: 480 MHz.
+     - PERIPH: 40 MHz.
+  * MT7620:
+     - XTAL: 20 MHz or 40 MHz.
+     - PLL: XTAL, 480, 600 MHz.
+     - CPU: depends on PLL and some mult and dividers.
+     - BUS: depends on PLL and some mult and dividers.
+     - PERIPH: 40 or XTAL MHz.
 
-> ---
->   arch/parisc/kernel/cache.c | 26 +++++++++++++++++++++-----
->   1 file changed, 21 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-> index ca4a302d4365..501160250bb7 100644
-> --- a/arch/parisc/kernel/cache.c
-> +++ b/arch/parisc/kernel/cache.c
-> @@ -426,10 +426,15 @@ void flush_dcache_page(struct page *page)
->   		offset =3D (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
->   		addr =3D mpnt->vm_start + offset;
->   		if (parisc_requires_coherency()) {
-> +			bool needs_flush =3D false;
->   			pte_t *ptep;
->
->   			ptep =3D get_ptep(mpnt->vm_mm, addr);
-> -			if (ptep && pte_needs_flush(*ptep))
-> +			if (ptep) {
-> +				needs_flush =3D pte_needs_flush(*ptep);
-> +				pte_unmap(ptep);
-> +			}
-> +			if (needs_flush)
->   				flush_user_cache_page(mpnt, addr);
->   		} else {
->   			/*
-> @@ -561,14 +566,20 @@ EXPORT_SYMBOL(flush_kernel_dcache_page_addr);
->   static void flush_cache_page_if_present(struct vm_area_struct *vma,
->   	unsigned long vmaddr, unsigned long pfn)
->   {
-> -	pte_t *ptep =3D get_ptep(vma->vm_mm, vmaddr);
-> +	bool needs_flush =3D false;
-> +	pte_t *ptep;
->
->   	/*
->   	 * The pte check is racy and sometimes the flush will trigger
->   	 * a non-access TLB miss. Hopefully, the page has already been
->   	 * flushed.
->   	 */
-> -	if (ptep && pte_needs_flush(*ptep))
-> +	ptep =3D get_ptep(vma->vm_mm, vmaddr);
-> +	if (ptep) {
-> +		needs_flush =3D pte_needs_flush(*ptep);
-> +		pte_unmap(ptep);
-> +	}
-> +	if (needs_flush)
->   		flush_cache_page(vma, vmaddr, pfn);
->   }
->
-> @@ -635,17 +646,22 @@ static void flush_cache_pages(struct vm_area_struc=
-t *vma, unsigned long start, u
->   	pte_t *ptep;
->
->   	for (addr =3D start; addr < end; addr +=3D PAGE_SIZE) {
-> +		bool needs_flush =3D false;
->   		/*
->   		 * The vma can contain pages that aren't present. Although
->   		 * the pte search is expensive, we need the pte to find the
->   		 * page pfn and to check whether the page should be flushed.
->   		 */
->   		ptep =3D get_ptep(vma->vm_mm, addr);
-> -		if (ptep && pte_needs_flush(*ptep)) {
-> +		if (ptep) {
-> +			needs_flush =3D pte_needs_flush(*ptep);
-> +			pfn =3D pte_pfn(*ptep);
-> +			pte_unmap(ptep);
-> +		}
-> +		if (needs_flush) {
->   			if (parisc_requires_coherency()) {
->   				flush_user_cache_page(vma, addr);
->   			} else {
-> -				pfn =3D pte_pfn(*ptep);
->   				if (WARN_ON(!pfn_valid(pfn)))
->   					return;
->   				__flush_cache_page(vma, addr, PFN_PHYS(pfn));
+MT7620 is a bit more complex deriving CPU clock from a PLL and an bunch of
+register reads and predividers. To derive CPU and BUS frequencies in the
+MT7620 SoC 'mt7620_calc_rate()' helper is used.
+In the case XTAL can have different frequencies and we need a different
+clock frequency for peripherals 'periph' clock in introduced.
+The rest of the peripherals present in the SoC just follow their parent
+frequencies.
+
+I am using 'mtmips' inside for ralink clock driver. This is aligned with
+pinctrl series recently merged through pinctrl git tree [0].
+
+I am maintaining ralink as prefix for compatible strings after discussions
+between Rob and Arinc in v2 of this series [1].
+
+Changes have been compile tested for:
+- RT2880
+- RT3883
+
+Changes have been properly tested in: 
+- RT5350 SoC based board (ALL5003 board)
+- MT7620A SoC based board (Haier HW-L1W)
+- MT7628AN SoC based board (Motorola MWR03)
+
+All of them resulting in a working platform.
+
+Dts files for these SoCs in-tree except MT7621 are incomplete. We are
+planning to align with openWRT files at some point and add extra needed
+changes. Hence I am not touching them at all in these series. If this is
+a problem, please let me know and I will update them.
+
+Talking about merging this series I'd like all of the patches going through
+the MIPS tree if possible.
+
+Thanks in advance for your time.
+
+Best regards,
+    Sergio Paracuellos
+
+Changes in v5:
+- Address comments of Shiji Yang in v4.
+- Make use 'of_find_compatible_node()' instead of 'of_find_node_by_name()' since
+  node names must not be an ABI (Thanks Krzysztof!!!)
+- Test this changes in mt7620a Soc based board and MT7628AN Soc based board (Thanks Shiji Yang!!!)
+
+Changes in v4:
+- Collect Reviewed-by and Acked-by tags.
+- Pass proper data for 'ralink,rt3352-sysc' and 'ralink,rt3883-sysc' compatible string.
+
+Changes in v3:
+- Address Stephen comments in v2:
+    + Drop unsused include '<linux/clk.h>'.
+    + Add fixed and factor clocks when it makes sense.
+    + Make 'mtmips_periph_clk_ops' named variable.
+    + WARN_ON -> WARN_ON_ONCE.
+    + Avoid CONFIG_USB dependent code. Introduce new 'mtmips_clk_regs_init'.
+    + Don't validate the bindings in the driver.
+    + Make const 'struct clk_init_data' used inside macros.
+    + do_div -> div_u64.
+    + Make use of dev_err_probe.
+
+Changes in v2:
+- Address bindings documentation changes pointed out by Krzysztof:
+    + Rename the file into 'mediatek,mtmips-sysc.yaml'.
+    + Redo commit subject and log message.
+    + Order compatibles alphabetically.
+    + Redo bindings description taking into account this is a system
+      controller node which provides both clocks and resets to the world.
+    + Drop label from example.
+    + Use 'syscon' as node name in example.
+    + Drop no sense 'ralink,rt2880-reset' compatible string 
+- Squash patches 6 and 7 together as pointed out by Stephen Boyd.
+
+Previoous series:
+v4: https://lore.kernel.org/linux-clk/20230617052435.359177-1-sergio.paracuellos@gmail.com/T/#t
+v3: https://lore.kernel.org/linux-mips/20230616064735.GA6380@alpha.franken.de/T/#mafbc1704938b94a367c4b6240d9880a67be1f92f
+v2: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=LeJ4vT22uibQ1DnaZsfTrtRxSiv=8L5RA@mail.gmail.com/T/#t
+v1: https://lore.kernel.org/linux-clk/20230320161823.1424278-1-sergio.paracuellos@gmail.com/T/#t
+
+[0]: https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06185@arinc9.com/T/#t
+[1]: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=LeJ4vT22uibQ1DnaZsfTrtRxSiv=8L5RA@mail.gmail.com/T/#mfe725b6e3382c6fb09736472a846cbbc84f264dc
+
+Sergio Paracuellos (9):
+  dt-bindings: clock: add mtmips SoCs system controller
+  clk: ralink: add clock and reset driver for MTMIPS SoCs
+  mips: ralink: rt288x: remove clock related code
+  mips: ralink: rt305x: remove clock related code
+  mips: ralink: rt3883: remove clock related code
+  mips: ralink: mt7620: remove clock related code
+  mips: ralink: remove reset related code
+  mips: ralink: get cpu rate from new driver code
+  MAINTAINERS: add Mediatek MTMIPS Clock maintainer
+
+ .../bindings/clock/mediatek,mtmips-sysc.yaml  |   64 +
+ MAINTAINERS                                   |    6 +
+ arch/mips/include/asm/mach-ralink/mt7620.h    |   35 -
+ arch/mips/include/asm/mach-ralink/rt288x.h    |   10 -
+ arch/mips/include/asm/mach-ralink/rt305x.h    |   21 -
+ arch/mips/include/asm/mach-ralink/rt3883.h    |    8 -
+ arch/mips/ralink/clk.c                        |   61 +-
+ arch/mips/ralink/common.h                     |    5 -
+ arch/mips/ralink/mt7620.c                     |  226 ----
+ arch/mips/ralink/of.c                         |    4 -
+ arch/mips/ralink/reset.c                      |   61 -
+ arch/mips/ralink/rt288x.c                     |   31 -
+ arch/mips/ralink/rt305x.c                     |   78 --
+ arch/mips/ralink/rt3883.c                     |   44 -
+ drivers/clk/ralink/Kconfig                    |    7 +
+ drivers/clk/ralink/Makefile                   |    1 +
+ drivers/clk/ralink/clk-mtmips.c               | 1115 +++++++++++++++++
+ 17 files changed, 1245 insertions(+), 532 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+ create mode 100644 drivers/clk/ralink/clk-mtmips.c
+
+-- 
+2.25.1
 
