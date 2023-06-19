@@ -2,96 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D470F734B28
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 06:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A2A734CB1
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jun 2023 09:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjFSEnH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jun 2023 00:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
+        id S229902AbjFSHv7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jun 2023 03:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjFSEnG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 00:43:06 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BCB1B8;
-        Sun, 18 Jun 2023 21:43:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1687149771; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=rAFzMqOIjUMwUOxvEdxda/6JlKhnuX3m4bmFHco8dWZ5VutApgp+eGbyc14YLl0J9K
-    WEFHjXgomL/iugopOKXC0EIQTLtORvjKenwNvJ4qHJiHKiFVnnUFY7UltRfgjr2wSrms
-    7RQa7s51VIesK9DIkbJppLiRsFU7VycZYcCSC3fx6n91pUJ4NDzsH24BJaACo3JE3I6f
-    ufBkqc53xTHLdg0a9rWJHatOThb8K7kKSvjr0EJhvSorEzbnjH/oBSlMkMK9qbQjPciZ
-    cL3IEZbWkbbQ923ESIYPp5D3Tpv22Qp18ix85p7yJJR2u7heTJyc46egPO2WY0J+3ezV
-    cTYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687149771;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Mdck7Fur16Xgvhc0gVxr6hne89YRw586RNysMK1GlZI=;
-    b=EuFAqdQqBt2oV+OFudpA/6SMXw597iSGJw950Vf/SFxyFEE3BxU72g29Uw9ItZI8ZG
-    iR7msc3+A8HjWb4v0tcjxgS+SOn8cDAt+jxXvbP1gyHz6Z35kFdyPsxGZME+PiyWId/c
-    fHMhrH4oaeBpNNg29qmbVJTlv8Qc0kWJFSpP9aJHDhF6D3yqHMW3/a2TAm5ZXce2olbu
-    G0JxGf3jYYEDOk/wkAjnG5WEVbewp7RRWVfsm7KhUrAoAx2keWacu0xGGS17ZACqTKfF
-    XgBhzvh8BH5dn/N/ZUC3SJRKJTiTayNqXD96bCRI7TBuJvOkxr03RSY9pB4gV03vBjBJ
-    gPDw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687149771;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Mdck7Fur16Xgvhc0gVxr6hne89YRw586RNysMK1GlZI=;
-    b=rF15MINuEOCIYgSAtwCWzsiaDS8OFvjU3OTXdzKkYh+HvtJI5mkcxlY4ooJHhykpTb
-    jFR3EU5BlzHwRyeISSI9gbG10OpixBlma4h1C/BLFC97n+RnuoryhTsGgsW16VeYyxIX
-    I5xRP1vucPhTh+0bqVf1SuzcGTHc7Et4ic5WqYz8SQQ/mpRUCSB25CdzoAaLRaxybHzu
-    fHQI6hoJ7i4860GILIfwMr2KG1Y8l+byp3BZSkwOOLqP7ZbA4yVvAUe+43yPHILgNOz9
-    v8lP8Fkh7OFV5cle6nrc4VPY0XHPTtsNHqXyYy1uW+SHoEkt0pABU2oZf7vQ4VDcL1yz
-    9sBA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687149771;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Mdck7Fur16Xgvhc0gVxr6hne89YRw586RNysMK1GlZI=;
-    b=tqWfycPMHro6c9pln2gb0rsIZ2pZW+SUb2YgjjFQxdTmoXBV5V8/ds7eB2eo+LEojc
-    lwfgZHAR6uG+j/KSY3CQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGfpWU="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5J4gpD2u
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 19 Jun 2023 06:42:51 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <5511fba10119cdc08a18ea2cca98fed343f9cd33.camel@crapouillou.net>
-Date:   Mon, 19 Jun 2023 06:42:50 +0200
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Paul Burton <paulburton@kernel.org>,
-        Christophe Branchereau <cbranchereau@gmail.com>
-Content-Transfer-Encoding: 7bit
-Message-Id: <2A9DA240-CEEC-48D3-9B3F-48AB3AF8302A@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
- <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
- <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
- <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
- <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
- <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
- <ebf776a8fb8dee045e7661daaca4564fe39917a6.camel@crapouillou.net>
- <5511fba10119cdc08a18ea2cca98fed343f9cd33.camel@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229974AbjFSHv6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jun 2023 03:51:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA75137;
+        Mon, 19 Jun 2023 00:51:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D081A61529;
+        Mon, 19 Jun 2023 07:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC68C433C8;
+        Mon, 19 Jun 2023 07:51:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687161115;
+        bh=wcUFCTgaQzOZpExfHFs7UPcmfiTCw61/ZsId+1DngaM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LDhMTQB+nLNSZH8KLJtCtru9gT8PJM8FnYCvCdr9lTYVhknLTaa+dPsLi4e6qNBCX
+         wU1nhHPF7Ec9b9CXy3F7EsHFXvs9FvGrslHnW9cuIt2cSC2jox/Q/7n6KrHtCt529L
+         +YudYYV0R7X75c5CVWQ5XXje2fcVTPxeN3m2l1eU=
+Date:   Mon, 19 Jun 2023 09:51:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     sashal@kernel.org, ndesaulniers@google.com,
+        naresh.kamboju@linaro.org, stable@vger.kernel.org,
+        llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: Re: [PATCH 6.1 0/4] Update as-{instr,option} to use KBUILD_AFLAGS
+Message-ID: <2023061934-scuttle-unveiled-1801@gregkh>
+References: <20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,95 +56,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
-
-> Am 18.06.2023 um 15:58 schrieb Paul Cercueil <paul@crapouillou.net>:
+On Wed, Jun 14, 2023 at 11:04:34AM -0700, Nathan Chancellor wrote:
+> Hi all,
 > 
-> Hi All,
+> This series backports commit d5c8d6e0fa61 ("kbuild: Update assembler
+> calls to use proper flags and language target") to linux-6.1.y to
+> address a recent issue caused by a change in behavior in clang:
 > 
-> [...]
+> https://lore.kernel.org/CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com/
+> https://lore.kernel.org/20230612185424.GA2891387@dev-arch.thelio-3990X/
 > 
->> Looking at the JZ4780_DS.PDF file, the SoC actually wants 1.1V so the
->> DT is not wrong - in theory. But in practice it does not work, as you
->> experienced yourself. However, if the ACT8600 defaults to 1.2V, or if
->> the bootloader configures it to 1.2V, I would think that this is
->> actually a voltage that the SoC can handle - otherwise the SoC would
->> be
->> overvolted until the kernel starts, and the board design would be
->> flawed.
->> 
->> I measured that the old 3.x kernel keeps the SoC voltage at 1.2V, so
->> it
->> sounds like a better default. Therefore the fix here would be to
->> raise
->> the DCDC1 regulator to 1.2V.
->> 
->> I'll send a patch later today.
+> While that was not the original intention of the aforementioned change,
+> it ends up resolving the issue for the same reason, by not passing flags
+> that are not supported or necessary for the current language target
+> (KBUILD_CFLAGS for .c files and KBUILD_AFLAGS for .S files) when testing
+> flags for that language target.
 > 
-> After a talk with Christophe (Cc'd), I changed my mind.
+> All patches except the second one are direct backports from mainline.
+> The second patch is a stable specific patch because the upstream
+> solution could break stable due to the minimum supported version of
+> binutils in mainline being a newer version than 6.1 and earlier; it
+> chooses to do the more conservative fix, which was alluded to in the
+> changelog of the upstream commit.
 > 
-> A +100 mV overvolt is a *huge* step up, and although the SoC doesn't
-> burst into flames, it could very well reduce its life span.
+> For now, this is just a 6.1 issue. If the issue occurs in older
+> releases, I will send separate backports. If there are any issues or
+> objections to this series, please let me know.
 
-Well, 1.2V is still within the recommended and absolute limits. See my
-previous mail. And it appears that my board simply did run at 1.2V
-since I bought it many years ago...
+All now queued up, thanks.
 
-So it should neither burn nor burst into flames since it is no change
-at least for my board :)
-
-Anyways running at the lowest possible voltage would be good.
-The question is if the driver should enforce this more than e.g. U-Boot.
-
-> 
-> I used to have huge stability issues (kernel not booting to userspace
-> half the times, or just plain reboots after a few minutes of uptime)
-
-That is exactly what I see with the new 1.10V.
-
-> and I now realize it's because I was running the core at 1.1V, because
-> these issues disappeared the moment I switched to 1.2V.
-
-For me as well (and I had 1.2V over the past years).
-
-> 
-> However, I am now running at 1.125 volts, which is just 25mV above the
-> nominal voltage - and it's been extremely stable so far.
-
-Well, what also could be is that the transient of changing the voltage
-from the default 1.20V (it either gets from U-Boot or a preprogrammed
-chip setting) to the new 1.1V voltage gives an undershoot.
-
-I remember that I studied the OMAP OPP and dynamic voltage scaling control
-some years ago and there it was very critical that voltages and clock
-frequencies are changed in a specific sequence and with some delays.
-
-And for the OMAP5 we did find a band within the permitted range where
-everything was fine and spurious kernel issues (sudden illegal instructions
-or segfaults) outside. The result was that there was a minimum voltage
-for low frequencies higher than the maximum voltage for higher frequencies.
-So there was not even a single core voltage that could support all
-clock frequencies.
-
-> 
-> Nikolaus: could you test at 1.125 volts? If it's stable for you as
-> well, I'd suggest to use this as the new default.
-
-Yes, this is a good idea!
-
-Especially as there are wires between the regulator output inside
-the act chip and the core. There may be a small voltage drop so
-that setting 1.10V may be too low and 1.25V may end up in real
-1.1V.
-
-> 
-> Paul (Burton): As you wrote most of the drivers (and uboot?) for the
-> board, do you know why VDDCORE was set to 1.2V?
-> 
-> Cheers,
-> -Paul
-
-Best regards,
-Nikolaus
-
-
+greg k-h
