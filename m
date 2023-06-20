@@ -2,193 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CB27372AE
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Jun 2023 19:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFA8737587
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Jun 2023 22:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjFTRZE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Jun 2023 13:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S229727AbjFTUBx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Jun 2023 16:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjFTRY4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Jun 2023 13:24:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F02FC;
-        Tue, 20 Jun 2023 10:24:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8D946132D;
-        Tue, 20 Jun 2023 17:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40CCC433C8;
-        Tue, 20 Jun 2023 17:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687281894;
-        bh=Rd2KQT7Sg/jj2vpD/+cypNQq21vO707uBhL4Wt60ONQ=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=qVLzEw3DYllRsW1kHmBV862G6LOZFXc4fKTQnIpsgdD3rkTdoAKKcvq1gRTVFpyy5
-         XbCuDXOA1g1mZTF7xKYW2DvV4WvN2nArEOEJgYcwd4dfupuNCgrJ1TcrC087JauSrD
-         bRc/e3gFOmGsVaMU9qcLfWmy5T2ln7Jbkx9hx3XU2mUqramf+q8rMAFYMpM7+uX76N
-         kL3uRI0aY94qeKbLwAOT9R5Vt7d0a4F/1qUypEQw4GZYFbdsYPH/DlFJM0rqVnm3R6
-         pFduwHV7iGgrpKWkxEPmXRIlBYyw1sOUEKglC1dG6CWAHw+KOuedQ+eu2dj3ec+4eB
-         /QpIQ01kgaTbg==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C920427C005A;
-        Tue, 20 Jun 2023 13:24:51 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Tue, 20 Jun 2023 13:24:51 -0400
-X-ME-Sender: <xms:4uCRZGPuv7m8KaXFojrVeCbfWrMZ7IJoui-4aoDexdm_V34ZG0-I6g>
-    <xme:4uCRZE-OH2xt14uLz-FF7dbdv-gHG5w14JwsdNtUTTBditVKBbvq_q8tXxJx8iDzO
-    WaowhDX_m63-nZ50aI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:4uCRZNTpfg2cGu-JZbGK0lauKT6LTXTvSpjwrRQTqsoePCHX_VolEg>
-    <xmx:4uCRZGtzcXFiHy54TUV3vETkj3W0NygxpQUty3hSE43wjAfN8bvT-A>
-    <xmx:4uCRZOcK6KfTYx9uY7noUEoncUDShNm2IP8FjLgB4nFv3QpkDL6MpA>
-    <xmx:4-CRZOAOrENLDeV3AOynkkTJ3wDHPyrZf0jxchqFsnzGmPnTrQoXvQ>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 85C9831A0063; Tue, 20 Jun 2023 13:24:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <6145cabf-d016-4dba-b5d2-0fb793352058@app.fastmail.com>
-In-Reply-To: <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
- <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
-Date:   Tue, 20 Jun 2023 10:24:29 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Nadav Amit" <nadav.amit@gmail.com>, "Song Liu" <song@kernel.org>
-Cc:     "Mike Rapoport" <rppt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Kent Overstreet" <kent.overstreet@linux.dev>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Puranjay Mohan" <puranjay12@gmail.com>,
-        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Will Deacon" <will@kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
-Content-Type: text/plain;charset=utf-8
+        with ESMTP id S229655AbjFTUBw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Jun 2023 16:01:52 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A28F1726;
+        Tue, 20 Jun 2023 13:01:50 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b5853a140cso1903733a34.2;
+        Tue, 20 Jun 2023 13:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687291309; x=1689883309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q4F3qXm8x1AVi+0TrKGx40m/sFxYrt6Lj9IeE/BrpeU=;
+        b=g8Wha6YZBIQ4F35wQ8P6Y0c98+3LfOEjAen8YviDIN/VpMlvLwu/TwEQtEhwi2wLbk
+         4/b97qENpIhbKycIE1G3aUVCeb+vz/rCN/gI0l10ch7iG8C6c3ywB5bQ5tQe6ryGYXul
+         5XkEWnvnLWIaJ1vsJQRh6tPgKWpuL7AyPHBFZQZGhCATWoDKR1D2YRUNFvvEx6dCnM6X
+         zMyQcs2OOhmWkXYBbd2Z3eHBKxjZIMZIeFLBGw0YYdvfY15fMS5Ra2rC/awJj+k/fir6
+         OMXeho7/p64d1/Gcc6dtEtZlx65PVhnR78rxvmM8tH1fn8015FZgY0Ml6WWkfDm6BXzA
+         dR7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687291309; x=1689883309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q4F3qXm8x1AVi+0TrKGx40m/sFxYrt6Lj9IeE/BrpeU=;
+        b=JQLKRzwQ7nZhKyR6Ozm4YrJP4sRWt23EaikeHuf4S1Z0Op843eoHbLLGN8Wna9YdTh
+         1lrwwOypHlcPXDzhFblTdVU9ddkbvjV4S5qYufCOlbwZIdTA6v5sbENpdmP8fJ7i1PIu
+         BTFcMdi/5piXgvOaDNlIaVdMZaE5mMJB4Wp0IpGU/LAxHPWhgFCKAQ8GGnQQsv67B6uI
+         5xxxvSQzoFEF24E2HX4BxivM2wuNl+z1wvsSpwxlLmEZuguGrLrZFIzpzTicdvDFvj5A
+         tNT8Rea/ULBdqckZ6kL/0rkCSo7e3bESeM21f4gbxdFzC1J1Gu/R3XAN5hJ+fz8qmCCy
+         h8pg==
+X-Gm-Message-State: AC+VfDxMXl+I7JyUgVRyXYGYsnxIeO9OUuQAsPZTPW5Fi0Fkb5jvVdlt
+        Y24iengrTZF5lNy88ri4sXDe9KcJir/Sg78vvxEpwokn
+X-Google-Smtp-Source: ACHHUZ4Hj3uSYs4sk8lvmBdlBVPXrs6qDttIob0+AqgPuiIWdgPfm9A1hihEUgTK87y6a2gHhIBkt791vtKGzbzprm8=
+X-Received: by 2002:a05:6358:f0e:b0:12b:ed05:18bb with SMTP id
+ b14-20020a0563580f0e00b0012bed0518bbmr8612256rwj.27.1687291309110; Tue, 20
+ Jun 2023 13:01:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-5-vishal.moola@gmail.com> <ZIxXw9ERkYv+ipdd@nvidia.com>
+In-Reply-To: <ZIxXw9ERkYv+ipdd@nvidia.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Tue, 20 Jun 2023 13:01:39 -0700
+Message-ID: <CAOzc2pwMW64O0m4Zu4zVFTY+qCJRK7V+7niN_t1m7pLaJrtb2A@mail.gmail.com>
+Subject: Re: [PATCH v4 04/34] pgtable: Create struct ptdesc
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On Mon, Jun 19, 2023, at 1:18 PM, Nadav Amit wrote:
->> On Jun 19, 2023, at 10:09 AM, Andy Lutomirski <luto@kernel.org> wrote:
->>=20
->> But jit_text_alloc() can't do this, because the order of operations d=
-oesn't match.  With jit_text_alloc(), the executable mapping shows up be=
-fore the text is populated, so there is no atomic change from not-there =
-to populated-and-executable.  Which means that there is an opportunity f=
-or CPUs, speculatively or otherwise, to start filling various caches wit=
-h intermediate states of the text, which means that various architecture=
-s (even x86!) may need serialization.
->>=20
->> For eBPF- and module- like use cases, where JITting/code gen is quite=
- coarse-grained, perhaps something vaguely like:
->>=20
->> jit_text_alloc() -> returns a handle and an executable virtual addres=
-s, but does *not* map it there
->> jit_text_write() -> write to that handle
->> jit_text_map() -> map it and synchronize if needed (no sync needed on=
- x86, I think)
+On Fri, Jun 16, 2023 at 5:38=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
 >
-> Andy, would you mind explaining why you think a sync is not needed? I=20
-> mean I have a =E2=80=9Cfeeling=E2=80=9D that perhaps TSO can guarantee=
- something based=20
-> on the order of write and page-table update. Is that the argument?
-
-Sorry, when I say "no sync" I mean no cross-CPU synchronization.  I'm as=
-suming the underlying sequence of events is:
-
-allocate physical pages (jit_text_alloc)
-
-write to them (with MOV, memcpy, whatever), via the direct map or via a =
-temporary mm
-
-do an appropriate *local* barrier (which, on x86, is probably implied by=
- TSO, as the subsequent pagetable change is at least a release; also, an=
-y any previous temporary mm stuff would have done MOV CR3 afterwards, wh=
-ich is a full "serializing" barrier)
-
-optionally zap the direct map via IPI, assuming the pages are direct map=
-ped (but this could be avoided with a smart enough allocator and tempora=
-ry_mm above)
-
-install the final RX PTE (jit_text_map), which does a MOV or maybe a LOC=
-K CMPXCHG16B.  Note that the virtual address in question was not readabl=
-e or executable before this, and all CPUs have serialized since the last=
- time it was executable.
-
-either jump to the new text locally, or:
-
-1. Do a store-release to tell other CPUs that the text is mapped
-2. Other CPU does a load-acquire to detect that the text is mapped and j=
-umps to the text
-
-This is all approximately the same thing that plain old mmap(..., PROT_E=
-XEC, ...) does.
-
+> On Mon, Jun 12, 2023 at 02:03:53PM -0700, Vishal Moola (Oracle) wrote:
+> > Currently, page table information is stored within struct page. As part
+> > of simplifying struct page, create struct ptdesc for page table
+> > information.
+> >
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >  include/linux/pgtable.h | 51 +++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 51 insertions(+)
+> >
+> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > index c5a51481bbb9..330de96ebfd6 100644
+> > --- a/include/linux/pgtable.h
+> > +++ b/include/linux/pgtable.h
+> > @@ -975,6 +975,57 @@ static inline void ptep_modify_prot_commit(struct =
+vm_area_struct *vma,
+> >  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
+> >  #endif /* CONFIG_MMU */
+> >
+> > +
+> > +/**
+> > + * struct ptdesc - Memory descriptor for page tables.
+> > + * @__page_flags: Same as page flags. Unused for page tables.
+> > + * @pt_list: List of used page tables. Used for s390 and x86.
+> > + * @_pt_pad_1: Padding that aliases with page's compound head.
+> > + * @pmd_huge_pte: Protected by ptdesc->ptl, used for THPs.
+> > + * @_pt_s390_gaddr: Aliases with page's mapping. Used for s390 gmap on=
+ly.
+> > + * @pt_mm: Used for x86 pgds.
+> > + * @pt_frag_refcount: For fragmented page table tracking. Powerpc and =
+s390 only.
+> > + * @ptl: Lock for the page table.
+> > + *
+> > + * This struct overlays struct page for now. Do not modify without a g=
+ood
+> > + * understanding of the issues.
+> > + */
+> > +struct ptdesc {
+> > +     unsigned long __page_flags;
+> > +
+> > +     union {
+> > +             struct list_head pt_list;
+> > +             struct {
+> > +                     unsigned long _pt_pad_1;
+> > +                     pgtable_t pmd_huge_pte;
+> > +             };
+> > +     };
+> > +     unsigned long _pt_s390_gaddr;
+> > +
+> > +     union {
+> > +             struct mm_struct *pt_mm;
+> > +             atomic_t pt_frag_refcount;
+> > +     };
+> > +
+> > +#if ALLOC_SPLIT_PTLOCKS
+> > +     spinlock_t *ptl;
+> > +#else
+> > +     spinlock_t ptl;
+> > +#endif
+> > +};
 >
-> On this regard, one thing that I clearly do not understand is why=20
-> *today* it is ok for users of bpf_arch_text_copy() not to call=20
-> text_poke_sync(). Am I missing something?
+> I think you should include the memcg here too? It needs to be valid
+> for a ptdesc, even if we don't currently deref it through the ptdesc
+> type.
 
-I cannot explain this, because I suspect the current code is wrong.  But=
- it's only wrong across CPUs, because bpf_arch_text_copy goes through te=
-xt_poke_copy, which calls unuse_temporary_mm(), which is serializing.  A=
-nd it's plausible that most eBPF use cases don't actually cause the load=
-ed program to get used on a different CPU without first serializing on t=
-he CPU that ends up using it.  (Context switches and interrupts are seri=
-alizing.)
+Yes, thanks for catching that! I'll add it to v5.
 
-FRED could make interrupts non-serializing. I sincerely hope that FRED d=
-oesn't cause this all to fall apart.
+> Also, do you see a way to someday put a 'struct rcu_head' into here?
 
---Andy
+Eventually, when they're being dynamically allocated independent of
+struct page. Although at that point I'm not sure if we'll need one.
+
+> Thanks,
+> Jason
