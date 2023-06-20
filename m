@@ -2,113 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8333A73639A
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Jun 2023 08:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848457365F9
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Jun 2023 10:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjFTGc3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Jun 2023 02:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S230037AbjFTIWj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Jun 2023 04:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjFTGc2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Jun 2023 02:32:28 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15328E6E;
-        Mon, 19 Jun 2023 23:32:27 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9741caaf9d4so524892266b.0;
-        Mon, 19 Jun 2023 23:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687242745; x=1689834745;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VUvrsoyBTmnKwq3+8NmvZjbs7IhL2HPMWhiZTI6kb+Y=;
-        b=ZEE334ZWv8vcBQ/MCJ00ulzngLHrVcY1wTQSPc+SpMZ6rg6D+I3zxUuRQhClkRjmDk
-         muXVm7pM6RQVMIIqSJs9sati3YdpcMyOQyI81m5xpyt10qCdmHng7G1eWqm6ENVXz8au
-         PHHiXA2hlcWKgVXnvYJLyvQTH6RDk1rVJXE9wrLtps8mP0khJ0DmLfjYrEuwsacjZ1q+
-         ZRiZoMHJlaelzcWetMRVN8ky7urpa8MF8g91sD70T5YcnexoEB12Y1g6YyrGjwIoKDpE
-         ddHbW5hLxd60G+KWF45fifg/S3hwYukd//CA8b/rtofjX+yUyRN2OElvuOw25Nv+O+ho
-         N/pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687242745; x=1689834745;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VUvrsoyBTmnKwq3+8NmvZjbs7IhL2HPMWhiZTI6kb+Y=;
-        b=TmlsnBKQDPMkKMc6i6qN1xK0/gYDX8MnR2KzQr1hswKJVbALmyO2QK+d4Eha+H6/QU
-         5DYQKEjPGI6EW5hy40hnroHI0ZTvTbE2UhIzF8M/AsY40xo9j1ltKyM4D2A+ntxFe/Rv
-         SgNv4pFvCIUBASx2tvLqBNAWcSQqPM+awziHo6nANN+t/GZJhJ+EtdqxXl+RMKud3nuc
-         lKXpXjVmLuXi1zqL/cUcedc+RWjDiwWApFMdxFhWcQHoAtjShiU+I9zycKt2sdc0s/L1
-         rps3Y0RfYs4Xtu+eTWCNFkuAnOvlamzJ+3JHnyQql99/AYRxL88YAWb/BrvMZo/yQxJg
-         3IpA==
-X-Gm-Message-State: AC+VfDwYw8tjfNAsGPx4vwuQDb77JOLbspAyfiq4JoOBPOK+cAOE2DtP
-        nH+/XBag4SwYqXx+RzcIEgYIw/LaeN70TSDqvio2erIzNXQ=
-X-Google-Smtp-Source: ACHHUZ7U1T13g/LzdepRWVqy66RRXWlJzNeRXfB7bSb8JDJlYZRZDL82+nYiuGLc3eSPGbeYp4jH7QInpQ1S6WRUv/M=
-X-Received: by 2002:a17:906:eecd:b0:988:699d:64d0 with SMTP id
- wu13-20020a170906eecd00b00988699d64d0mr4877634ejb.32.1687242745230; Mon, 19
- Jun 2023 23:32:25 -0700 (PDT)
+        with ESMTP id S229683AbjFTIWh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Jun 2023 04:22:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95A8DD
+        for <linux-mips@vger.kernel.org>; Tue, 20 Jun 2023 01:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687249312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5XHdbMNys0EMjfbiSdwj8lWyGP51R68NotGh4ls9XCg=;
+        b=GktkLPERUZkxkruZZxsklEQXEHNoLA3aNPSHYWXk2FzCp20YzSFfFVvri5DpuwGl6TCBaD
+        Q5iZWVRK1hnDmRYoNghwoJak+8YkSNEX3F6jDVekJzXhv9fy068/uh1oN9XEXj4PRjyXZO
+        Bnke85b16b4IL3Al94JROr1CjANmBd8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-DHNnL6O0PoOX-_3jeDwo5g-1; Tue, 20 Jun 2023 04:21:49 -0400
+X-MC-Unique: DHNnL6O0PoOX-_3jeDwo5g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 918E73806739;
+        Tue, 20 Jun 2023 08:21:48 +0000 (UTC)
+Received: from localhost (ovpn-12-166.pek2.redhat.com [10.72.12.166])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2B95A2166B26;
+        Tue, 20 Jun 2023 08:21:46 +0000 (UTC)
+Date:   Tue, 20 Jun 2023 16:21:42 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
+        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, hbathini@linux.ibm.com,
+        sourabhjain@linux.ibm.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v2 02/13] x86/kexec: refactor for kernel/Kconfig.kexec
+Message-ID: <ZJFhlsFN6DxnWsQE@MiWiFi-R3L-srv>
+References: <20230619145801.1064716-1-eric.devolder@oracle.com>
+ <20230619145801.1064716-3-eric.devolder@oracle.com>
 MIME-Version: 1.0
-References: <20230531134606.3385210-1-sashal@kernel.org> <20230531134606.3385210-8-sashal@kernel.org>
- <ZIy4GjSrV654NsBw@duo.ucw.cz> <CAOLZvyHQL7T33O9fSdBZMtjrLKO2uN6Gr6g_p0oKVUtnMuXheQ@mail.gmail.com>
- <ZI7GorATfHRiqOn9@duo.ucw.cz>
-In-Reply-To: <ZI7GorATfHRiqOn9@duo.ucw.cz>
-From:   Manuel Lauss <manuel.lauss@gmail.com>
-Date:   Tue, 20 Jun 2023 08:31:49 +0200
-Message-ID: <CAOLZvyGhOpZ1NAfOKTOOq34Khh6nXAuLYVVB0DhLa4VRqsi-Vg@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 4.14 08/10] MIPS: Alchemy: fix dbdma2
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619145801.1064716-3-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 10:56=E2=80=AFAM Pavel Machek <pavel@denx.de> wrote=
-:
->
-> On Sun 2023-06-18 07:43:10, Manuel Lauss wrote:
-> > On Fri, Jun 16, 2023 at 9:33=E2=80=AFPM Pavel Machek <pavel@denx.de> wr=
-ote:
-> >
-> > > Hi!
-> > >
-> > > > From: Manuel Lauss <manuel.lauss@gmail.com>
-> > > >
-> > > > [ Upstream commit 2d645604f69f3a772d58ead702f9a8e84ab2b342 ]
-> > > >
-> > > > Various fixes for the Au1200/Au1550/Au1300 DBDMA2 code:
-> > > >
-> > > > - skip cache invalidation if chip has working coherency circuitry.
-> > > > - invalidate KSEG0-portion of the (physical) data address.
-> > > > - force the dma channel doorbell write out to bus immediately with
-> > > >   a sync.
-> > > >
-> > > > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > >
-> > > I believe author's signoff is missing here.
-> > >
-> >
-> > As the author, I say this patch should not be applied to 4.xx at all.  =
-Same
-> > for my other 2 MIPS patches.
->
-> Thanks for info, where is the threshold, do we need them for 5.10?
+Hi Eric,
 
-Drop this one "MIPS: Alchemy: fix dbdma2" from all stable,
-the other 2 can be applied to 5.10 if need be.  I seem to be the only activ=
-e
-user of this hardware and I only test mainline, so it's probably not a big =
-issue
-if you drop the all from stable.
+On 06/19/23 at 10:57am, Eric DeVolder wrote:
+......
+> +config ARCH_SUPPORTS_KEXEC
+> +	def_bool y
+>  
+> -config ARCH_HAS_KEXEC_PURGATORY
+> -	def_bool KEXEC_FILE
+> +config ARCH_SUPPORTS_KEXEC_FILE
+> +	def_bool X86_64 && CRYPTO && CRYPTO_SHA256
+......  
+> +config ARCH_SELECTS_KEXEC_FILE
+> +	def_bool y
+>  	depends on KEXEC_FILE
+> -	help
 
-    Manuel
+I am a little confused about this ARCH_SELECTS_XX adding. Wondering what
+limits us defining the ARCH_SUPPORTS_KEXEC_FILE like below? I have limited
+knowledge about Kconfig, please correct me if I am wrong. Thanks in
+advance.
+
+ +config ARCH_SUPPORTS_KEXEC_FILE
+ +	def_bool y
+  	depends on KEXEC_FILE
+  	depends on X86_64 && CRYPTO && CRYPTO_SHA256
+
+> -
+> -	  This option makes the kexec_file_load() syscall check for a valid
+> -	  signature of the kernel image.  The image can still be loaded without
+> -	  a valid signature unless you also enable KEXEC_SIG_FORCE, though if
+> -	  there's a signature that we can check, then it must be valid.
+> -
+> -	  In addition to this option, you need to enable signature
+> -	  verification for the corresponding kernel image type being
+> -	  loaded in order for this to work.
+> -
+
