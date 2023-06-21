@@ -2,38 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1579738642
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jun 2023 16:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D1D738C4D
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jun 2023 18:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjFUOI4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Jun 2023 10:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S229628AbjFUQvW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Jun 2023 12:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjFUOIx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jun 2023 10:08:53 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6139218C;
-        Wed, 21 Jun 2023 07:08:52 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qByVq-0004Ap-00; Wed, 21 Jun 2023 16:08:46 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F1A4EC0346; Wed, 21 Jun 2023 16:08:22 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 16:08:22 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Shiji Yang <yangshiji66@outlook.com>
-Cc:     linux-mips@vger.kernel.org, john@phrozen.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] mips: ralink: introduce commonly used remap node function
-Message-ID: <20230621140822.GC7206@alpha.franken.de>
-References: <OSYP286MB03120BABB25900E113ED42B7BC5CA@OSYP286MB0312.JPNP286.PROD.OUTLOOK.COM>
+        with ESMTP id S229802AbjFUQvG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jun 2023 12:51:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18E51BE1;
+        Wed, 21 Jun 2023 09:50:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F422615F7;
+        Wed, 21 Jun 2023 16:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96030C433C8;
+        Wed, 21 Jun 2023 16:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687366253;
+        bh=nRDgHtA8hqej023ToUhLoZFNoVkS+qHIHVfPG/sX2HM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZyW7hIwOiMuVBWbNLKkUGG4I9ld9sU+55M4ZDtjpb54AQkZkjrW2BAQpUQDsBScUV
+         3PuViCowDv3Bh65idoeIVGTOkyHEoIL1b2dC7j3xNY75mpWFddVIKrc+1BtooEGsEG
+         e/W29ML5aWligBRBGCkUt8zz0q42K8B1DFB8acM9a3AodCf3X2UrAc7M5tj+QzaIJ3
+         BNU9X9pGdKljGOCb/rjllAVrKb5Q0YONOpcuvdetSA7nDoLJjqbTznsYdA3e/pOQr+
+         ICEH22H0gKf07QhrEh2lPU2+jAbQ9m6lwbXYETYMIVq5QZlLXIOlJBhglEsFLf9vur
+         hkWXTdIwRXM4w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 241B6CE3A04; Wed, 21 Jun 2023 09:50:53 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 09:50:53 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 05/37] x86/topology: Remove CPU0 hotplug option
+Message-ID: <b487a394-0a70-4ec9-ac43-0e8fb14ad110@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232309.510911744@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OSYP286MB03120BABB25900E113ED42B7BC5CA@OSYP286MB0312.JPNP286.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230414232309.510911744@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,30 +88,69 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 07:44:32PM +0800, Shiji Yang wrote:
-> The ralink_of_remap() function is repeated several times on SoC specific
-> source files. They have the same structure, but just differ in compatible
-> strings. In order to make commonly use of these codes, this patch
-> introduces a newly designed mtmips_of_remap_node() function to match and
-> remap all supported system controller and memory controller nodes.
+On Sat, Apr 15, 2023 at 01:44:21AM +0200, Thomas Gleixner wrote:
+> This was introduced together with commit e1c467e69040 ("x86, hotplug: Wake
+> up CPU0 via NMI instead of INIT, SIPI, SIPI") to eventually support
+> physical hotplug of CPU0:
 > 
-> Build and run tested on MT7620 and MT7628.
+>  "We'll change this code in the future to wake up hard offlined CPU0 if
+>   real platform and request are available."
 > 
-> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
+> 11 years later this has not happened and physical hotplug is not officially
+> supported. Remove the cruft.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  arch/mips/ralink/common.h |  2 --
->  arch/mips/ralink/mt7620.c |  9 ---------
->  arch/mips/ralink/mt7621.c |  9 ---------
->  arch/mips/ralink/of.c     | 42 ++++++++++++++++++++++++++++++++-------
->  arch/mips/ralink/rt288x.c |  9 ---------
->  arch/mips/ralink/rt305x.c |  9 ---------
->  arch/mips/ralink/rt3883.c |  9 ---------
->  7 files changed, 35 insertions(+), 54 deletions(-)
+>  Documentation/admin-guide/kernel-parameters.txt |   14 ---
+>  Documentation/core-api/cpu_hotplug.rst          |   13 ---
+>  arch/x86/Kconfig                                |   43 ----------
+>  arch/x86/include/asm/cpu.h                      |    3 
+>  arch/x86/kernel/topology.c                      |   98 ------------------------
+>  arch/x86/power/cpu.c                            |   37 ---------
+>  6 files changed, 6 insertions(+), 202 deletions(-)
 
-applied to mips-next.
+[ . . . ]
 
-Thomas.
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2294,49 +2294,6 @@ config HOTPLUG_CPU
+>  	def_bool y
+>  	depends on SMP
+>  
+> -config BOOTPARAM_HOTPLUG_CPU0
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Removing this requires also removing its use in rcutorture.
+
+I have therefore queued the commit below in -rcu, but please feel
+free to take it along with the BOOTPARAM_HOTPLUG_CPU0-removal patch.
+Just please let me know if you do.
+
+(Yes, I finally got back to testing -next.  Why do you ask?)
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 95588de780c0e81004b72526aa3e3ef5ce054719
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Wed Jun 21 09:44:52 2023 -0700
+
+    rcutorture: Remove obsolete BOOTPARAM_HOTPLUG_CPU0 Kconfig option
+    
+    Now that the BOOTPARAM_HOTPLUG_CPU0 Kconfig option is in the process of
+    being removed, it is time to remove rcutorture's use of it.
+    
+    Link: https://lore.kernel.org/lkml/20230414232309.510911744@linutronix.de/
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Thomas Gleixner <tglx@linutronix.de>
+    Cc: <x86@kernel.org>
+
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+index 04831ef1f9b5..8ae41d5f81a3 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+@@ -15,4 +15,3 @@ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+-CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
