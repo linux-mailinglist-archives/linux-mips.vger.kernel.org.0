@@ -2,167 +2,319 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C78E738CCE
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jun 2023 19:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2613738DA2
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jun 2023 19:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjFURMg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Jun 2023 13:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
+        id S231137AbjFURum (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Jun 2023 13:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjFURMf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jun 2023 13:12:35 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2073.outbound.protection.outlook.com [40.107.100.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF3AB3;
-        Wed, 21 Jun 2023 10:12:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Eho4tAFb4UX0DE4JyB69vWCuPwudKtjHbtXzKAep9jozwF75YKuV8NiwLu996CwKyP9t2dkaAI3Vy3vSsvt6NjCqFfrHVgXztzHUJKw6Kz5/0OMBJcf1unN5SbremBZDhNBKajzsTvoHI4dZG3Mkz1eRPEO8Z7XQqQW78bLaqoMJe4NLUqOw+JmeAt28YvUSf0nmFKG/C39hMvV+OD503XFlZ65iomWDQSDfYjEcUiUU7eRROPb62w9kU9Cq0DtHa9o7DEo6gDVS8ppJblwNlHeKZhM6VB35jIAlOm5NDgVJ7aTUkysegCJMECU7m3Ab4E1TOFl8L+MiOVrK+wQJ/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7A9DVQgzS9DWRv6ZiGnJmNF/wMnib+H4UxmcsW8hGUM=;
- b=lR6GnOd4nkZQvukrObBttWK1qtgyxPKThTyIuZl4Xu4px1foN1aJMlpmxEyXq3SOsaUm6WrdYoIp6yl5jySdisCoV0ZK4CGzwEt+QV9QwNlo+E1cG3QkfW8+WkFXoeuiVlD+qMJOncGxLtgxbLYVeoIGwo2CzEdE8u6nKzgcL4yehRko4q0gWiyUZ9nXoiM/m1/CpN1K31z77q7MVABRhWY8lwGp/5wQPNjkP3A3KMz+hhmQ+tH/scQX88ObEaj8o1fLfSWC/MHpMGH3+6/FqDWZPFaFZFqsjeXJYUNVcamOoFwiNunEotuR49KpA4DA+AdwjEMWS3czChKDLzbqvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7A9DVQgzS9DWRv6ZiGnJmNF/wMnib+H4UxmcsW8hGUM=;
- b=Fteqe1Fx1sx+auPqpnkXIxooCe+wDGJPMC6KmKFI6gQ6wVBlnprRrdPjvC3wc+/CF316VvH4zXAiCSfsrJ2JmbYkamneoke7m5MJA5Sxywt7jwi/bmVsTExbXVSbbYrLIL2eADucN6/nT3jeQMtBY3iUpBZfnjQwdbjiHPbmasc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by CH3PR12MB8356.namprd12.prod.outlook.com (2603:10b6:610:130::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 17:12:30 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::1629:622f:93d0:f72f]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::1629:622f:93d0:f72f%7]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
- 17:12:30 +0000
-Message-ID: <6c572cce-f596-1e95-f834-efb6b49b2ea6@amd.com>
-Date:   Wed, 21 Jun 2023 12:12:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [patch 13/17] init, x86: Move mem_encrypt_init() into
- arch_cpu_finalize_init()
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        with ESMTP id S231636AbjFURue (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jun 2023 13:50:34 -0400
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C20C1BE7
+        for <linux-mips@vger.kernel.org>; Wed, 21 Jun 2023 10:50:21 -0700 (PDT)
+Received: by mail-io1-xd4a.google.com with SMTP id ca18e2360f4ac-77e357f9033so318432039f.0
+        for <linux-mips@vger.kernel.org>; Wed, 21 Jun 2023 10:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687369821; x=1689961821;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=M2Pi5NoHESj8Z3cVyjIxHBZGJuUOmh0ZEAwy6lBZcrU=;
+        b=hJzB2Nn+BXbJOesj3BRdRalcdIS0aZKiICVYVvpJ3ITu86QerkEAcsP0kJnwKKxlm7
+         LWZZBvLLQNjmdlsblij+vLZ31OghtrxdjK1mMtB6EZslpQdRkzgyvZPEV4r5AxEh52GH
+         LPUhNJOi8cnJQ5nABmiaBw3nf5m5Zttm49kZmBn66qa3l0fn6vjiDKpIoZ3PxqXLfqPR
+         cmAeyEzBmUgHB5BSoi6Wn7CoIro+OdMJdw94IP7BUcA0TrUAph4sNmOmfNSBlWyizxAM
+         ZFdcdE/8bB0bHLWyhJe1kKrYdkgYEOh0nCOJd58opPaK9O4dNl1T/rOphsjHFFCKaD2n
+         mnxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687369821; x=1689961821;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M2Pi5NoHESj8Z3cVyjIxHBZGJuUOmh0ZEAwy6lBZcrU=;
+        b=ceMmgc7hzsqNU/im8dnHGNzD+T5ZRX9TxvC+aukgPz5kJoZ66vJVxAdrN3RiZEkrGN
+         I7utlOSYCOa87I7soFMQO01VJ40oHoYEnACmOaiL/N4J2HF/GUNHOb+lAOkPcvymiEwb
+         OpbPNA1cMFVWd1+6EA0nSsBqXD/yxNOCIwjXV2XLO4ezhFHDfOZCPieCHFvXrEWNEhuR
+         jxYNzKs6jCNDyuZBYylMuVaepwQYtdTQXedNYDwbEWxe7rEppt2JUYLQxH7QoSfSvttR
+         sMX1DGHUD+rtPn5eFwSf8XC1g+IykpJx7GZC7g9DbIqBvw4mP89aBzLEFF5wbD2OFeC9
+         yzEg==
+X-Gm-Message-State: AC+VfDzQr/i20TcT/Rm6ChgWUqqmyLvUR31OZK3Tne27zRQk6vERgv88
+        EkVENj+cbLVAshsp6gzw1vXDqKRhfOUk
+X-Google-Smtp-Source: ACHHUZ6jd+CficbuyDuk8zE7kXanXSvf9kb2DPEw0WaC/8oltZOemjbHmf512hoWU2WdxW4XtM8DzAzxnyx6
+X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
+ (user=rananta job=sendgmr) by 2002:a05:6602:2013:b0:77e:2301:4b15 with SMTP
+ id y19-20020a056602201300b0077e23014b15mr6271858iod.1.1687369821170; Wed, 21
+ Jun 2023 10:50:21 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 17:49:51 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230621175002.2832640-1-rananta@google.com>
+Subject: [RESEND PATCH v5 00/11] KVM: arm64: Add support for FEAT_TLBIRANGE
+From:   Raghavendra Rao Ananta <rananta@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
         Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>
-References: <20230613223827.532680283@linutronix.de>
- <20230613224545.670360645@linutronix.de>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230613224545.670360645@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0001.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:22c::34) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CH3PR12MB8356:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24402f93-bede-4422-8375-08db727aafcd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g5aJ9csGD0kvQEmNMbSQFlus/1FpIRNC3pRqIwojT4vrjbYqYoXfi7ny2Af/y/6b25ECvUoW0LV1phFIphuwG1Nb/ls6iWAh/cCVyqiusEDOT1UAi36aMPLNo3ZZPhQdqg7Y2kXXHvoOYyq95BvkOg6utlH2WxLaG86Q7Iuku3VZM0lO4FrZoeYGnY2aickD/yroxR2Q6q8/ihr+ZLy9Gy6J32Olkircl02r+vBv9XRE5Z+p0HnOEVWpeD9zgscjncAoVyeuwA5LozzyrChEmFrVPePmnxpwhM/NTNQabslXfW+GbsoHsjkhFvYt0FNmdgtsAVow5zTwMMyMb0VPNZMa9vFAGP9edm4VWw5G5IkZfizdegGbFd5mFcEpur3OoZc8OAyI9bQO9Tf+Zbl/oKqIE03xZqnI+saeS9evaSsf5K1q0zwwgHVRWaHZt0bc9OdFtbMl1Q1oxCBYNSBrIrQdEyMn0AAwoy8Dc/rTSLoX6Uirih7AMXhJv82tztZKljDYqPx1FM0NLdjzL2k8XBWQy67DiuDxtIVKZ6tSuqQCvrnIo5Vc7D4PcgzAkHQD2Hzmw4NT7cKbx0CgKtuTDb10DTpPTtXrQFrVZfR75D9m+Hjo4x6xzpVt4TG2GtSonnJQAaN9gvNp083Gpk7sgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(366004)(39860400002)(451199021)(31686004)(478600001)(66946007)(66556008)(66476007)(36756003)(6666004)(316002)(54906003)(86362001)(110136005)(31696002)(6512007)(83380400001)(6506007)(26005)(186003)(2616005)(6486002)(38100700002)(53546011)(8936002)(8676002)(41300700001)(4744005)(5660300002)(2906002)(4326008)(7416002)(7406005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y2cwVWRxY2UwaWdjRE9vNERDUHJOM25UTWYrZGpualFEUkJlUkdsUXZyZzhs?=
- =?utf-8?B?WXBoWHE5MHZPUHJ4dWFaTThRQkRoUkR2YVV1b2VmVUlaN1A3MVdLVS9xZXM2?=
- =?utf-8?B?OUVuNVpOWS9Oa3B3TWpCUkllcWpxdzlUWDd1dVZOSU5PRGpGTlVGNUhUcE5u?=
- =?utf-8?B?UnlEaExEaUNLNzdKQ08wZDNQdzFHYWdSK25BOHVNMXRNS01vTEQzMXRZeHVF?=
- =?utf-8?B?OXNYeVNHTEFla0FxVzJHclk2UUI4QXlWUjNKZ3ptdm9nZGJYdHllSGdKR2Jt?=
- =?utf-8?B?VXFacTQwdFQ2bm5IREpROUFCTnpoQmtxS2lwR1pvRkVxU1lKUlkyM2MvNkRp?=
- =?utf-8?B?bWRybUpLaVFNNmJ4MVlBYkluWmhOS2JucWF6aDBHd1c4c0lwemlraDRxYXBt?=
- =?utf-8?B?ZThITWVMOFNyRDlTc1NaaGc1cVlZeFcrc0dSS0NvVzZqS1FUY0ErZVdRN2Jq?=
- =?utf-8?B?Q3EySnB0UEI5QSt3OUV4TzVVSDhKYjJPN1NCNlFLcmtSQU16SkcrWlBkSDdJ?=
- =?utf-8?B?NnpuMDJid0hac1h4T2dYTkl2ZnZsM2FGbGRxQ1JTc1UwVzBjZHFLeHNkdGZL?=
- =?utf-8?B?VElHMHFNVDM0ekx4cVIzUlRnR2hTdlJWazR5STQ4b2N3TjJyNU9tM0Y3QVhh?=
- =?utf-8?B?M21pZDd4TVBZdzR2Rzd5K0ZoUnF0Y3hoQTBWL2grb0FDYmZvY3pVVU9FdkRq?=
- =?utf-8?B?VU1ub0I2NVFLNHBRSXpCcFFVWnBUR25KcmxzK3NuUkVuZ3FIMEdXODgzeW42?=
- =?utf-8?B?UzVlK1MyMGZiRmdHb0FJRzM3REdqcGNVVnRVRG44M053M1ZjYW1VY3VManVn?=
- =?utf-8?B?MDRlaWRUcUtQRzdKZlI3d1F5Sktidy9iNS9ONTczREFkVFBOTHA4V2EwN3d0?=
- =?utf-8?B?TW5DZ3czZ0ZoRVVJNStLbWwxOUVFNU9SSzI2eXdwc2l1VlhCaysyeCtwQWVN?=
- =?utf-8?B?VHdpU1ZuUWhWemlCTU50eVVkTkltZFdlQmUzR1krNEVCbktyNzNsM0pvY1Jr?=
- =?utf-8?B?WEFLcmRrZXJRd0NsTDlmQ08zY3NRcEV0RVMwaWl1NXJsQ2dPMEVtaVVraTVX?=
- =?utf-8?B?MWcwb01hOXNZbmdEM1BqaXV6KzVjMDJTV0VMYXNTVDIwZk5Wa29RbFhibzBJ?=
- =?utf-8?B?c1JDaGJhblFHYngxaC82K1V0YmdJSGhYS3p4cFAyRFJ4MlJ6VmN5QzFFMERk?=
- =?utf-8?B?ckwrdFdaSklXM2ZaR3k3MmdnNGgra0JrbFBoajZDVkIwSXJHK0QvTEhINERh?=
- =?utf-8?B?Ui84b082WGhLM3kyQ0gwbnI5N0JqeXNMTG5kOC96TTJWYW1sSm1iVzhQck9u?=
- =?utf-8?B?V05hMWRSc0Q4N0lSQVZjaTh3RGt6cjFqZTZCRkJhRHM3cnZTRVVoeGk0RWpW?=
- =?utf-8?B?SVd5VnhuUERTZWNhbVcyRnFONFBrR1BBaHFTRjhMRGR1Z1BmQnJVVllxRXdM?=
- =?utf-8?B?VHlDcndnZXR2THBRbG82c2tOelF6NFZ5ZHlJZytPVkEraERneFgwU3I2eXFQ?=
- =?utf-8?B?dm43QWFMa1J6MlJWU2tIY2RHV0ZJKzJ2eFZpUTRrYXFyVGNmWk41eExWRVdp?=
- =?utf-8?B?UE92aUJVRHkwZmNrVzNFeGFuWlp1Q0NHZUhvV2lpSU1sV2VicDgzem9IQ0M5?=
- =?utf-8?B?TkMrdXlZWmlMcWEyWTVQRlR3bE9YSE9BYUtWNngwcDBSQTd4NkFlUyt5OHNG?=
- =?utf-8?B?UWNDdHZGeStlUjBMK08yZ0JZOU5vdWxhWklxR3V5Vm5CQ3hMa0pLUThXSno3?=
- =?utf-8?B?MjFBc21oQWdEMU9pWm5wdWpKK0FQL0RTejJSTmk0bE5pcHVuNFBLL3FhYnU2?=
- =?utf-8?B?UW11azF2R2N2VkdGRVQ4SWx6YmZXdk9USlRKYWpKdXM0RnFqWDJNK3VrcXhI?=
- =?utf-8?B?Vld3aHVwNys2OGw4TUZvdU13OVZFMC9ITDJKZ2I2M21qT3VWbjhNVW9ja3FE?=
- =?utf-8?B?ai9BSEV3QjlxRzdOSXR3bEFYQ0VxamprY0lsOU10S2Y1VUw5ZzA3QzZpR1dl?=
- =?utf-8?B?ZkRyYmJrZ2swcllaK3Bqd2JINCt5RmlubVExQWJIRkUzNkZZSGd6WXJwSlpL?=
- =?utf-8?B?NHY1UGExL090SDNyc1JPT0pZeStDWk9jdXdDcmJyV29OdnlRZVFLK1FaWjVp?=
- =?utf-8?Q?M9/01UBEybqWEphqZo7GApvPD?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24402f93-bede-4422-8375-08db727aafcd
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 17:12:30.2143
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SnyXSgu0SNegjMGQqQhBFywene8hE3DCzXzvACM17ckySPa0s4eHBRHV2rguFDYFsJr4E57od4RvjdfVMm+ZAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8356
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Raghavendra Rao Anata <rananta@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/13/23 18:39, Thomas Gleixner wrote:
-> Invoke the X86ism mem_encrypt_init() from X86 arch_cpu_finalize_init() and
-> remove the weak fallback from the core code.
-> 
-> No functional change.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+In certain code paths, KVM/ARM currently invalidates the entire VM's
+page-tables instead of just invalidating a necessary range. For example,
+when collapsing a table PTE to a block PTE, instead of iterating over
+each PTE and flushing them, KVM uses 'vmalls12e1is' TLBI operation to
+flush all the entries. This is inefficient since the guest would have
+to refill the TLBs again, even for the addresses that aren't covered
+by the table entry. The performance impact would scale poorly if many
+addresses in the VM is going through this remapping.
 
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+For architectures that implement FEAT_TLBIRANGE, KVM can replace such
+inefficient paths by performing the invalidations only on the range of
+addresses that are in scope. This series tries to achieve the same in
+the areas of stage-2 map, unmap and write-protecting the pages.
 
-> ---
->   arch/x86/include/asm/mem_encrypt.h |    7 ++++---
->   arch/x86/kernel/cpu/common.c       |   11 +++++++++++
->   init/main.c                        |   13 -------------
->   3 files changed, 15 insertions(+), 16 deletions(-)
-> 
+As suggested by Oliver in the original v5 of the series [1], I'm
+reposting the series by including v2 of David Matlack's 'KVM: Add a
+common API for range-based TLB invalidation' series [2].
+
+Patches 1-4 includes David M.'s patches 1, 2, 6, and 7 from [2].
+
+Patch-5 refactors the core arm64's __flush_tlb_range() to be used by
+other entities.
+
+Patch-6,7 adds a range-based TLBI mechanism for KVM (VHE and nVHE).
+
+Patch-8 implements the kvm_arch_flush_remote_tlbs_range() for arm64.
+
+Patch-9 aims to flush only the memslot that undergoes a write-protect,
+instead of the entire VM.
+
+Patch-10 operates on stage2_try_break_pte() to use the range based
+TLBI instructions when collapsing a table entry. The map path is the
+immediate consumer of this when KVM remaps a table entry into a block.
+
+Patch-11 modifies the stage-2 unmap path in which, if the system supports
+FEAT_TLBIRANGE, the TLB invalidations are skipped during the page-table.
+walk. Instead it's done in one go after the entire walk is finished.
+
+The series is based off of upstream v6.4-rc2.
+
+The performance evaluation was done on a hardware that supports
+FEAT_TLBIRANGE, on a VHE configuration, using a modified
+kvm_page_table_test.
+The modified version updates the guest code in the ADJUST_MAPPINGS case
+to not only access this page but also to access up to 512 pages
+backwards
+for every new page it iterates through. This is done to test the effect
+of TLBI misses after KVM has handled a fault.
+
+The series captures the impact in the map and unmap paths as described
+above.
+
+$ kvm_page_table_test -m 2 -v 128 -s anonymous_hugetlb_2mb -b $i
+
++--------+------------------------------+------------------------------+
+| mem_sz |    ADJUST_MAPPINGS (s)       |      Unmap VM (s)            |
+|  (GB)  | Baseline | Baseline + series | Baseline | Baseline + series |
++--------+----------|-------------------+------------------------------+
+|   1    |   3.44   |   2.97            | 0.007     | 0.005            |
+|   2    |   5.56   |   5.63            | 0.010     | 0.006            |
+|   4    |  11.03   |  10.44            | 0.015     | 0.008            |
+|   8    |  24.54   |  19.00            | 0.024     | 0.011            |
+|  16    |  40.16   |  36.83            | 0.041     | 0.018            |
+|  32    |  75.76   |  73.84            | 0.074     | 0.029            |
+|  64    | 151.58   | 152.62            | 0.148     | 0.050            |
+| 128    | 330.42   | 306.86            | 0.280     | 0.090            |
++--------+----------+-------------------+----------+-------------------+
+
+$ kvm_page_table_test -m 2 -b 128G -s anonymous_hugetlb_2mb -v $i
+
++--------+------------------------------+
+| vCPUs  |    ADJUST_MAPPINGS (s)       |
+|        | Baseline | Baseline + series |
++--------+----------|-------------------+
+|   1    | 138.69   | 135.58            |
+|   2    | 138.77   | 137.54            |
+|   4    | 162.57   | 135.82            |
+|   8    | 154.92   | 143.67            |
+|  16    | 122.02   | 118.86            |
+|  32    | 119.99   | 118.81            |
+|  64    | 190.70   | 169.36            |
+| 128    | 330.42   | 306.86            |   
++--------+----------+-------------------+
+
+For the ADJUST_MAPPINGS cases, which maps back the 4K table entries to
+2M hugepages, the series sees an average improvement of ~7%. For
+unmapping 2M hugepages, we see at least a 3x improvement.
+
+$ kvm_page_table_test -m 2 -b $i
+
++--------+------------------------------+
+| mem_sz |      Unmap VM (s)            |
+|  (GB)  | Baseline | Baseline + series |
++--------+------------------------------+
+|   1    |  0.52    |  0.13             |
+|   2    |  1.03    |  0.25             |
+|   4    |  2.04    |  0.47             |
+|   8    |  4.05    |  0.94             |
+|  16    |  8.11    |  1.82             |
+|  32    | 16.11    |  3.69             |
+|  64    | 32.35    |  7.22             |
+| 128    | 64.66    | 14.69             |   
++--------+----------+-------------------+
+
+The series sees an average gain of 4x when the guest backed by
+PAGE_SIZE (4K) pages.
+
+Other testing:
+ - Booted on x86_64 and ran KVM selftests.
+ - Build tested for MIPS and RISCV architectures.
+
+Cc: David Matlack <dmatlack@google.com>
+
+v5:
+https://lore.kernel.org/all/20230606192858.3600174-1-rananta@google.com/
+Thank you, Marc and Oliver for the comments
+- Introduced a helper, kvm_tlb_flush_vmid_range(), to handle
+  the decision of using range-based TLBI instructions or
+  invalidating the entire VMID, rather than depending on
+  __kvm_tlb_flush_vmid_range() for it.
+- kvm_tlb_flush_vmid_range() splits the range-based invalidations
+  if the requested range exceeds MAX_TLBI_RANGE_PAGES.
+- All the users in need of invalidating the TLB upon a range
+  now depends on kvm_tlb_flush_vmid_range() rather than directly
+  on __kvm_tlb_flush_vmid_range().
+- stage2_unmap_defer_tlb_flush() introduces a WARN_ON() to
+  track if there's any change in TLBIRANGE or FWB support
+  during the unmap process as the features are based on
+  alternative patching and the TLBI operations solely depend
+  on this check.
+- Corrected an incorrect hunk being present on v4's patch-3.
+- Updated the patches changelog and code comments as per the
+  suggestions.
+
+v4:
+https://lore.kernel.org/all/20230519005231.3027912-1-rananta@google.com/
+Thanks again, Oliver for all the comments
+- Updated the __kvm_tlb_flush_vmid_range() implementation for
+  nVHE to adjust with the modfied __tlb_switch_to_guest() that
+  accepts a new 'bool nsh' arg.
+- Renamed stage2_put_pte() to stage2_unmap_put_pte() and removed
+  the 'skip_flush' argument.
+- Defined stage2_unmap_defer_tlb_flush() to check if the PTE
+  flushes can be deferred during the unmap table walk. It's
+  being called from stage2_unmap_put_pte() and
+  kvm_pgtable_stage2_unmap().
+- Got rid of the 'struct stage2_unmap_data'.
+
+v3:
+https://lore.kernel.org/all/20230414172922.812640-1-rananta@google.com/
+Thanks, Oliver for all the suggestions.
+- The core flush API (__kvm_tlb_flush_vmid_range()) now checks if
+  the system support FEAT_TLBIRANGE or not, thus elimiating the
+  redundancy in the upper layers.
+- If FEAT_TLBIRANGE is not supported, the implementation falls
+  back to invalidating all the TLB entries with the VMID, instead
+  of doing an iterative flush for the range.
+- The kvm_arch_flush_remote_tlbs_range() doesn't return -EOPNOTSUPP
+  if the system doesn't implement FEAT_TLBIRANGE. It depends on
+  __kvm_tlb_flush_vmid_range() to do take care of the decisions
+  and return 0 regardless of the underlying feature support.
+- __kvm_tlb_flush_vmid_range() doesn't take 'level' as input to
+  calculate the 'stride'. Instead, it always assumes PAGE_SIZE.
+- Fast unmap path is eliminated. Instead, the existing unmap walker
+  is modified to skip the TLBIs during the walk, and do it all at
+  once after the walk, using the range-based instructions.
+
+v2:
+https://lore.kernel.org/all/20230206172340.2639971-1-rananta@google.com/
+- Rebased the series on top of David Matlack's series for common
+  TLB invalidation API[1].
+- Implement kvm_arch_flush_remote_tlbs_range() for arm64, by extending
+  the support introduced by [1].
+- Use kvm_flush_remote_tlbs_memslot() introduced by [1] to flush
+  only the current memslot after write-protect.
+- Modified the __kvm_tlb_flush_range() macro to accepts 'level' as an
+  argument to calculate the 'stride' instead of just using PAGE_SIZE.
+- Split the patch that introduces the range-based TLBI to KVM and the
+  implementation of IPA-based invalidation into its own patches.
+- Dropped the patch that tries to optimize the mmu notifiers paths.
+- Rename the function kvm_table_pte_flush() to
+  kvm_pgtable_stage2_flush_range(), and accept the range of addresses to
+  flush. [Oliver]
+- Drop the 'tlb_level' argument for stage2_try_break_pte() and directly
+  pass '0' as 'tlb_level' to kvm_pgtable_stage2_flush_range(). [Oliver]
+
+v1:
+https://lore.kernel.org/all/20230109215347.3119271-1-rananta@google.com/
+
+Thank you.
+Raghavendra
+
+[1]: https://lore.kernel.org/all/ZIrONR6cSegiK1e2@linux.dev/
+[2]:
+https://lore.kernel.org/linux-arm-kernel/20230126184025.2294823-1-dmatlack@google.com/
+
+David Matlack (4):
+  KVM: Rename kvm_arch_flush_remote_tlb() to
+    kvm_arch_flush_remote_tlbs()
+  KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+  KVM: Allow range-based TLB invalidation from common code
+  KVM: Move kvm_arch_flush_remote_tlbs_memslot() to common code
+
+Raghavendra Rao Ananta (7):
+  arm64: tlb: Refactor the core flush algorithm of __flush_tlb_range
+  KVM: arm64: Implement  __kvm_tlb_flush_vmid_range()
+  KVM: arm64: Define kvm_tlb_flush_vmid_range()
+  KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+  KVM: arm64: Flush only the memslot after write-protect
+  KVM: arm64: Invalidate the table entries upon a range
+  KVM: arm64: Use TLBI range-based intructions for unmap
+
+ arch/arm64/include/asm/kvm_asm.h     |   3 +
+ arch/arm64/include/asm/kvm_host.h    |   6 ++
+ arch/arm64/include/asm/kvm_pgtable.h |  10 +++
+ arch/arm64/include/asm/tlbflush.h    | 108 ++++++++++++++-------------
+ arch/arm64/kvm/Kconfig               |   1 -
+ arch/arm64/kvm/arm.c                 |   6 --
+ arch/arm64/kvm/hyp/nvhe/hyp-main.c   |  11 +++
+ arch/arm64/kvm/hyp/nvhe/tlb.c        |  30 ++++++++
+ arch/arm64/kvm/hyp/pgtable.c         |  90 +++++++++++++++++++---
+ arch/arm64/kvm/hyp/vhe/tlb.c         |  28 +++++++
+ arch/arm64/kvm/mmu.c                 |  15 +++-
+ arch/mips/include/asm/kvm_host.h     |   4 +-
+ arch/mips/kvm/mips.c                 |  12 +--
+ arch/riscv/kvm/mmu.c                 |   6 --
+ arch/x86/include/asm/kvm_host.h      |   7 +-
+ arch/x86/kvm/mmu/mmu.c               |  25 ++-----
+ arch/x86/kvm/mmu/mmu_internal.h      |   3 -
+ arch/x86/kvm/x86.c                   |   2 +-
+ include/linux/kvm_host.h             |  20 +++--
+ virt/kvm/Kconfig                     |   3 -
+ virt/kvm/kvm_main.c                  |  35 +++++++--
+ 21 files changed, 294 insertions(+), 131 deletions(-)
+
+-- 
+2.41.0.162.gfafddb0af9-goog
+
