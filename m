@@ -2,114 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14930737BD8
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jun 2023 09:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26B87385BF
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jun 2023 15:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjFUGlG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Jun 2023 02:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S229982AbjFUNwo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Jun 2023 09:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjFUGlG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jun 2023 02:41:06 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1DB135;
-        Tue, 20 Jun 2023 23:41:01 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-5608a4eb782so1342226eaf.1;
-        Tue, 20 Jun 2023 23:41:01 -0700 (PDT)
+        with ESMTP id S229549AbjFUNwn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jun 2023 09:52:43 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C06DD;
+        Wed, 21 Jun 2023 06:52:42 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666eb03457cso2638438b3a.1;
+        Wed, 21 Jun 2023 06:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687329660; x=1689921660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ysgQF8RYTV72R+xlp4a6KaZs3qrJaZLA5K9nlPSfL8=;
-        b=UrmUfJacn2+Atvc85yd2QHDTNkeCmZuwEcsNObQV/K1H4n5F6lKNWsgGd4G3uV0x4Y
-         us55bgdQD2yOnTXEdqthaJHycm0y9/pO+1u5ivlXTQ8TOAY6TmR9+VTBFzWP5SMGVrZZ
-         MtaBHZUwFFwwGxyC82Zn4OYc+pXux7fhJa97O5rpfKuwbsn+ZvQTONgDc0nRuAi68br/
-         CHchTdXao7Xnz5rw/IO4kNCfw8ShfrS6jwZZFh6/9g55yJsfMWtvnp1qLFFxATp+o7J7
-         uSoS7uvjWKsgSnyeZB7mBUr3Pekfiy8TVHuAeGAVX81HMTJVfSLEV7sake2t2v03PDKs
-         gpXA==
+        d=gmail.com; s=20221208; t=1687355562; x=1689947562;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F9tiahjZelkiWueW79yhn3HufREz9PXyjdEwpdn04DE=;
+        b=BcMZ6kU3UqZBlpy9HEMbWpQBoF0GGm4mmzRUAIXLGfQZRmnyTWViSHOMowQOK6fNwY
+         mYXStDTp1JovTM0RayLr/jBGhEj/VuJJ7svTPwtpKY4G/5i/1vfsEtjNijbdFuDGtxK7
+         GbG557T123C/ul1l5emioT3j0hsL0uxeZAhvpHam8ovRI1U+8qxgAkYWNK1tAd8oG0kU
+         NZU7ATkBaz2SSAyaGjEzqy9g4a50j69Hb0FXoIUYn4w8u673gIpFwaFk2bHaAkkJwvzS
+         SEVX79Idjzai9siiGK+z5JRt7GC+QqCFrkDTKRind9+a4yFviPN+wtBN8DTrxxtwFawL
+         i49A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687329660; x=1689921660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687355562; x=1689947562;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7ysgQF8RYTV72R+xlp4a6KaZs3qrJaZLA5K9nlPSfL8=;
-        b=TqITqtROuw0RYNZEk3wNSy3tYzU1eoxWcKHswYT9k8OSKfq7AApDaKWqV6jpSQdkTB
-         lyhnqSYo5Gdflx52a9ZMGx8anoHzpc8xwWP+Jz5qmhyqBHJ2mWeLulRd8yWnhk5lUDkN
-         ilpLesJPQXXhSmnHUs8O3QMPPqc/2chmkFg4tsTDxeAlKXoaCFpaJS4F/5R+fgofPUZe
-         +r4/BNm9MByVQqpjV7963gHwWLFaSt6djk93YzrV1Xt4EaYtTlVluuRorV9mefLO6YPw
-         YRJAIxI3j1ZU5TYjVHD7tNRsXY0/w8P92IeXP9QnZk1OlZEdpIVMrmAZMSB79vzRT8Fz
-         4FnQ==
-X-Gm-Message-State: AC+VfDxitYac2ebFi61m93rEHZaa/KKCjbZrtomayk58PIgFd1V78xAf
-        iEuqmxeAz4SspcL/9KbZZ/i7XT6GXiE+uLHqkA4=
-X-Google-Smtp-Source: ACHHUZ68f8CiCQt9dfD89/gQ6qGI0fl6Y8NNKMolJ+1obYgCjNI0UpYMRqc3N1fNLeEw9V04zXGXrgcnlnhTNJI7ioE=
-X-Received: by 2002:a4a:ead0:0:b0:54f:629a:f581 with SMTP id
- s16-20020a4aead0000000b0054f629af581mr7898897ooh.7.1687329660557; Tue, 20 Jun
- 2023 23:41:00 -0700 (PDT)
+        bh=F9tiahjZelkiWueW79yhn3HufREz9PXyjdEwpdn04DE=;
+        b=lx7u3zVZRicyX3QrPtRW4Ippv/F2S/F1HdbC8wBIXjMVpuw4Lo1O1avgRV12WPqlUJ
+         ai2E1N3YEi3hbCXxA20FsZEZqbxamAECfUo530ptDc8Dngxva8Z1V+hHUsXjFYvdyeC1
+         UA5KAzK00rPRhOgIMSju6FikGcSuKt6dhD8YOgTrhs7REcTGM843NUBWLl6QamF8meLm
+         B0vp47/OPcTtCVJIzxV8SRvzSGNffUYJsju4GYPdcgEjRnxLQUU3wwmdJSF2vmtUEoA1
+         FV2jGhayyu1GgDIUbKTBdPQydoarx/LZapqsq0lmNTy/+5ZK0yYiGAJl4s5Pmsw/02lA
+         Yd4A==
+X-Gm-Message-State: AC+VfDyh+wBP1gjRgwOOH02cXt7D4ksZHrfAhWKbiOIsQaHTwqG+QSxJ
+        gqJInZh8R0qGyd2P0Z7uMG4=
+X-Google-Smtp-Source: ACHHUZ41Q1vIMF6WNqQygbFdcnGFz9ipkUjr1jeaQGLyO2JD8aSc9phrrqCziBBcKPUwU7lfeVZnEw==
+X-Received: by 2002:a05:6a00:2e8d:b0:644:d775:60bb with SMTP id fd13-20020a056a002e8d00b00644d77560bbmr13235480pfb.20.1687355561956;
+        Wed, 21 Jun 2023 06:52:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k10-20020aa790ca000000b006661562429fsm3046110pfk.97.2023.06.21.06.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 06:52:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Jun 2023 06:52:38 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] mips: provide unxlate_dev_mem_ptr() in asm/io.h
+Message-ID: <7cddcd24-c26c-43e3-8da5-88bd12e27709@roeck-us.net>
+References: <20230516194000.548487-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <CAMhs-H96z65X5L-8=ouuKS-fkBUS4Uo4GTaYYgMDkw5G+v73hQ@mail.gmail.com>
- <TYAP286MB0315167833A9801E56BBFE91BC5DA@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYAP286MB0315167833A9801E56BBFE91BC5DA@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 21 Jun 2023 08:40:49 +0200
-Message-ID: <CAMhs-H-YVy20KxWgyovGmGh8UtVadDKA8O=mbRv7x6Y3PeEbQg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] mips: pci-mt7620: reduce unnecessary error logs
-To:     Shiji Yang <yangshiji66@outlook.com>
-Cc:     angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, matthias.bgg@gmail.com,
-        tsbogend@alpha.franken.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516194000.548487-1-arnd@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 3:04=E2=80=AFAM Shiji Yang <yangshiji66@outlook.com=
-> wrote:
->
-> >On Tue, Jun 20, 2023 at 12:48=E2=80=AFPM Shiji Yang <yangshiji66@outlook=
-.com> wrote:
-> >>
-> >> These patches silence some mt7620 PCIe driver error messeges by
-> >> removing the useless debugging codes and replacing incorrectly
-> >> used 'dev_err()' with 'dev_info()'.
-> >>
-> >> Shiji Yang (2):
-> >>   mips: pci-mt7620: do not print NFTS register value as error log
-> >>   mips: pci-mt7620: use dev_info() to log PCIe device detection result
-> >>
-> >>  arch/mips/pci/pci-mt7620.c | 7 ++-----
-> >>  1 file changed, 2 insertions(+), 5 deletions(-)
-> >
-> >For the series:
-> >Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >
-> >I'd really love to have this driver ported to PCI_DRIVERS_GENERIC
-> >moved to 'drivers/pci/controller/pcie-mt7621.c' since they are pretty
-> >similar just changing that mt7620 and mt7628 init the hardware
-> >different and only use one virtual bridge. My problem is that I don't
-> >have and cannot find hardware to test. Do you have interest in helping
-> >me to do this?
->
-> Thanks,
->     Sergio Paracuellos
->
-> Thank you for rewriting these drivers! I am glad to help test them. Pleas=
-e
-> let me know at any time when they are ready.
+On Tue, May 16, 2023 at 09:39:42PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The unxlate_dev_mem_ptr() function has no prototype on the mips
+> architecture, which does not include asm-generic/io.h, so gcc warns
+> about the __weak definition:
+> 
+> drivers/char/mem.c:94:29: error: no previous prototype for 'unxlate_dev_mem_ptr' [-Werror=missing-prototypes]
+> 
+> Since everyone else already gets the generic definition or has a custom
+> one, there is not really much point in having a __weak version as well.
+> 
+> Remove this one, and instead add a trivial macro to the mips header.
+> Once we convert mips to use the asm-generic header, this can go away
+> again.
+> 
 
-Thanks! I need to build time for this but I will do it for sure at any
-time and let you know.
+This results in build failures when trying to build sh4 images.
 
-Best regards,
-    Sergio Paracuellos
->
-> Best regards,
->     Shiji Yang
+drivers/char/mem.c: In function 'read_mem':
+drivers/char/mem.c:164:25: error: implicit declaration of function 'unxlate_dev_mem_ptr'
+
+Guenter
