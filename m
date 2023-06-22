@@ -2,61 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3F773ABE1
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Jun 2023 23:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F4C73AC53
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Jun 2023 00:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjFVVwG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Jun 2023 17:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S231167AbjFVWFY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Jun 2023 18:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjFVVwF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 17:52:05 -0400
+        with ESMTP id S230502AbjFVWFT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 18:05:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EF2C3;
-        Thu, 22 Jun 2023 14:52:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0220E1FCE;
+        Thu, 22 Jun 2023 15:05:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A87FB61923;
-        Thu, 22 Jun 2023 21:52:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A15C433C8;
-        Thu, 22 Jun 2023 21:52:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88D476191D;
+        Thu, 22 Jun 2023 22:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB652C433C8;
+        Thu, 22 Jun 2023 22:05:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687470724;
-        bh=dvLWGOBwNTXN6E/yM+CESlG/rZNvOG86KIsYDcJNubQ=;
+        s=k20201202; t=1687471516;
+        bh=dnifwmEwN5EPVqltpiQCF3MdFT37QyzPJA5VU9yHeeQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=baGy2bzOYdXCYc4YfBw/zVvO2zhb1DeCBmAjoIFxDO0dlvEJBA5BL+yzwZTGHr3BU
-         cTMS9lrjn9wCt9Aw3eKcm+UdF5RMnm3T4E2V/x8YY7OFUPh6+ima/DX82wb3Z0oLAq
-         Thh1meLV0NwX7iqtqYeKbazqI6h6NDvHtoKGT3SSpsWew2CE/fEnKY7os1UhRzXn4M
-         FQ5Icj/D2+Y222kt6DT6306ESdc63LSl0oDcougFFwcha30t+7MSWmZ4Q6H3wpoqB9
-         svVbiJoMH4wq6Dcy1WOszrrOvvIhKqsA3B105dWcJCU7Ixz1Yw48qMDRUHAqLd71Cd
-         VpWzO/dDXf0lA==
-Message-ID: <06ded84e-f5ba-c9e6-ce5b-72eaca56bc88@kernel.org>
-Date:   Fri, 23 Jun 2023 06:52:02 +0900
+        b=RzL6J1fXaBDz0XMnNSx8x8mXcyvopQkvOXbep39IPzJX6IZTiyxdwE2nHfhbPls3L
+         N+mS72rPbV5Hplxc5fgNpJiDPbV/HNUcjlNM0k72bojGJ4KjFY1InlFqwVw3x6nnQC
+         91+lFDGDXPX57EeoiKgvynYAipkz9J96TnpYMaik9KnCYZuHYn0BitFhgrP4G1fgbY
+         6R4Jpwcj42qDrlJ2D+uH33pP6SPXmc0IbmA4+yG9XAiy7RYgb0iOqdFeCCR7TQblLZ
+         fmEHl1XvZkPJVwZHZ1ypNXpY1N8YMHO70VuR9LvpNAy1Wj1k/paRgs0NZSlBf4+f5g
+         0uQe2Ka6aNE0g==
+Message-ID: <bf396b3f-a3f3-817e-8241-222591f88c97@kernel.org>
+Date:   Thu, 22 Jun 2023 17:05:13 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] ata: octeon: Add compile test support
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 26/33] nios2: Convert __pte_free_tlb() to use ptdescs
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230614173633.2430653-1-robh@kernel.org>
- <20230614173633.2430653-2-robh@kernel.org>
- <23325977-ba37-4360-afb5-4ab38a66107e@roeck-us.net>
- <feef6589-d0d6-8e64-fefd-914c234dcfba@kernel.org>
- <167e83a0-8666-27af-5e2c-4ddda917795a@roeck-us.net>
- <78cce73d-16d1-e357-bee7-2176479604f4@kernel.org>
- <CAL_JsqLdEoiiCR6n1XqQe-6_9-9Hu1t_r17hXG9rTmSAMBZ9OA@mail.gmail.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <CAL_JsqLdEoiiCR6n1XqQe-6_9-9Hu1t_r17hXG9rTmSAMBZ9OA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20230622205745.79707-1-vishal.moola@gmail.com>
+ <20230622205745.79707-27-vishal.moola@gmail.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230622205745.79707-27-vishal.moola@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -67,46 +68,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/22/23 22:41, Rob Herring wrote:
-> On Wed, Jun 21, 2023 at 10:26 PM Damien Le Moal <dlemoal@kernel.org> wrote:
->>
->> On 6/22/23 12:01, Guenter Roeck wrote:
->>> On 6/21/23 17:57, Damien Le Moal wrote:
->>>> On 6/22/23 01:51, Guenter Roeck wrote:
->>>>> On Wed, Jun 14, 2023 at 11:36:33AM -0600, Rob Herring wrote:
->>>>>> Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
->>>>>> allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
->>>>>> so other arches can't be enabled.
->>>>>>
->>>>>> Signed-off-by: Rob Herring <robh@kernel.org>
->>>>>> ---
->>>>>> Tested on allmodconfig build. Not sure if there's other MIPS configs
->>>>>> where this doesn't work. We'll see what 0-day says.
->>>>>
->>>>> Odd, in next-20230621 I get:
->>>>>
->>>>> Building mips:allmodconfig ... failed
->>>>
->>>> Indeed odd. Given that this is an allmodconfig, I would assume that
->>>> CONFIG_CAVIUM_OCTEON_SOC is set ?
->>>>
->>>
->>> No, it is not. CONFIG_CAVIUM_OCTEON_SOC is a choice option,
->>> meaning only one of the choices can be set, and mips:allmodconfig
->>> selects a different choice.
->>
->> OK. Then I think I need to drop this patch as I do not see how to allow
->> COMPILE_TEST without CONFIG_CAVIUM_OCTEON_SOC being set.
->>
->> Rob ?
+
+
+On 6/22/23 15:57, Vishal Moola (Oracle) wrote:
+> Part of the conversions to replace pgtable constructor/destructors with
+> ptdesc equivalents.
 > 
-> These could be fixed, but not sure it's worth the effort.
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>   arch/nios2/include/asm/pgalloc.h | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/nios2/include/asm/pgalloc.h b/arch/nios2/include/asm/pgalloc.h
+> index ecd1657bb2ce..ce6bb8e74271 100644
+> --- a/arch/nios2/include/asm/pgalloc.h
+> +++ b/arch/nios2/include/asm/pgalloc.h
+> @@ -28,10 +28,10 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
+>   
+>   extern pgd_t *pgd_alloc(struct mm_struct *mm);
+>   
+> -#define __pte_free_tlb(tlb, pte, addr)				\
+> -	do {							\
+> -		pgtable_pte_page_dtor(pte);			\
+> -		tlb_remove_page((tlb), (pte));			\
+> +#define __pte_free_tlb(tlb, pte, addr)					\
+> +	do {								\
+> +		pagetable_pte_dtor(page_ptdesc(pte));			\
+> +		tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));	\
+>   	} while (0)
+>   
+>   #endif /* _ASM_NIOS2_PGALLOC_H */
 
-Agreed. And given that we are at rc7 already, this effort should not be now
-anyway. I will drop this patch.
-
-
--- 
-Damien Le Moal
-Western Digital Research
-
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
