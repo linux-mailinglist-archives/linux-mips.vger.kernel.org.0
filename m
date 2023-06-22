@@ -2,164 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5A273A423
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Jun 2023 17:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B6E73A574
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Jun 2023 17:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjFVPCw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Jun 2023 11:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S229927AbjFVP4s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Jun 2023 11:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjFVPCv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 11:02:51 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27DC1FF6
-        for <linux-mips@vger.kernel.org>; Thu, 22 Jun 2023 08:02:25 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b55bc0c907so39898525ad.0
-        for <linux-mips@vger.kernel.org>; Thu, 22 Jun 2023 08:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687446130; x=1690038130;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=faWv91VP2z/YbKZA+qDwvC+H5Ebg0LphINaB6C6XGBI=;
-        b=mt+u4MU2N69BdCB48EipZPFZvxxegmfx/OHOcyc/fM4PZHcrYAkSQWkcdFUsmp5rNU
-         a6j2G9cgP05nAPrTpXTrKstR8E5BoO42DmiP6/AZUuIG/6/BBMLFuw5aAo/SAHPeZdEg
-         DNvDehDx9+J7nZG9sBU7G6/wpPi2vu+msKWiZ8QFox3/ruMzFIOZCnfnj843xufxdgu9
-         MeGUmiA7Z/dRVBK3NdT9B4ymhpM9c0qpwKNXpegEvvYhn5T1kxweIZjlNE+fattEVIvn
-         jG1RiXKH3SvzlebwvUPYmft34NdlnUAiikYo4SRSggxh+pPF10pxJtEKozp+lS8TepIG
-         aHrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687446130; x=1690038130;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=faWv91VP2z/YbKZA+qDwvC+H5Ebg0LphINaB6C6XGBI=;
-        b=hfi8ERNSFL0M2mM4D0dFNPcOZ2+wT583gOCFNw3KUvgnlXfAI/wvzmasYI+yda9p9P
-         qhmJ4RTlseoOJbpghoSDeQuxU8vdMpzL1vDpNtOM/iv2Q+y+6qGPyDGHjSfBRIXcrcCy
-         e+nsgJmEXpEVER7P/VmR5WovfXjFA/MVorUomyu91glIJJsBneOvfY42vAdi6bYNAUW6
-         +vHIkZCcKgc4JxVtmcAVzw97DPlcAj0RuvEDP3PBQ10oZ3UR3FYA/zVzfUmLoZN+NMik
-         +4SN33OP8QGXH8kEacxNX36Wur1wI5baX3BH7SG1N8pZ6o+jkotWCP87jbxUrfP6rOHV
-         vwXA==
-X-Gm-Message-State: AC+VfDxj/TD0RP2GM9hyRA4hxsa9hiYoV1d947Ej8FJcjDIQKUFiqyWX
-        NqdxDMPw58/ryC0xH3P+dPft6A==
-X-Google-Smtp-Source: ACHHUZ7sxI2/l9NYWY43UXjLd7//zIrvDML1M6VqO+WFrtnEGO/KRuc42ZZ7KlADjiu835vi4h/IOA==
-X-Received: by 2002:a17:902:f7c6:b0:1ae:14d:8d0a with SMTP id h6-20020a170902f7c600b001ae014d8d0amr15965819plw.29.1687446130063;
-        Thu, 22 Jun 2023 08:02:10 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170902708700b001b3dada0e78sm5466709plk.258.2023.06.22.08.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 08:02:09 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 08:02:09 -0700 (PDT)
-X-Google-Original-Date: Thu, 22 Jun 2023 08:01:29 PDT (-0700)
-Subject:     Re: [PATCH 11/14] init: consolidate prototypes in linux/init.h
-In-Reply-To: <20230517131102.934196-12-arnd@kernel.org>
-CC:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, deller@gmx.de, mpe@ellerman.id.au,
-        hca@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        x86@kernel.org, rafael@kernel.org, paul@paul-moore.com,
-        eparis@redhat.com, dennis@kernel.org, tj@kernel.org, cl@linux.com,
-        pavel@ucw.cz, peterz@infradead.org, longman@redhat.com,
-        boqun.feng@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, audit@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     arnd@kernel.org
-Message-ID: <mhng-eb6e6d97-fe40-4755-9be5-eb75a690d88c@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231140AbjFVP4p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 11:56:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EAA2125;
+        Thu, 22 Jun 2023 08:56:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB17C6189D;
+        Thu, 22 Jun 2023 15:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E905C433C0;
+        Thu, 22 Jun 2023 15:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687449397;
+        bh=KuNfl/le8W+tk5pj4CEfMdhcf3haC1/lnKFZoEA+xQ8=;
+        h=From:Date:Subject:To:Cc:From;
+        b=DkEDIT4UBYHIa99zqkTxpmTrj4B/F3AK2eaeyiXA4pIt+ZstWnbGy1jV9/rFeJ3Sm
+         OX0+mkZeAyml/vm0tc2UUgIqKzrc7UL9QohZBE/H8xjEZUj0pyCWOoMda1PLv2EhNe
+         qGohq7oWexD1eoMC04cR0aKmyUWxc1LEip0FIAJRNvEzff3cDZRw1L+/+aDpyqbjnp
+         11HDjYwel8qzRaKAqb8mkaouY1PTLcJiobdnhQSwVRzU9FJNrU/7UQJDLuMnZ0SpUD
+         jBFiids4vJJx/WVOFVn9dA9rZQby1ODx+Q2ui3Rzwi8N6EYvaBOyZbG7LXseb9dEOA
+         M9Rn/oS54iUMA==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Thu, 22 Jun 2023 15:56:19 +0000
+Subject: [PATCH] clk: ralink: mtmips: Fix uninitialized use of ret in
+ mtmips_register_{fixed,factor}_clocks()
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230622-mips-ralink-clk-wuninitialized-v1-1-ea9041240d10@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACJvlGQC/x2NSw6CQBAFr0J6bSfziWi8CnEBTKsvYENm+AXC3
+ Z24rFpUHZQkQhI9ioOiLEgYNIO9FNR+an0LI2QmZ5w3pXP8xZg41j2047bveJ0VignZ7BLYXk0
+ TjPelvd8oR8YoL2z/QfU8zx8nr3sycAAAAA==
+To:     tsbogend@alpha.franken.de
+Cc:     sergio.paracuellos@gmail.com, sboyd@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        patches@lists.linux.dev, llvm@lists.linux.dev
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2238; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=KuNfl/le8W+tk5pj4CEfMdhcf3haC1/lnKFZoEA+xQ8=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDClT8k3W7xfiYss4OC/2w2LP13xJWld9nMv+hl7qa1gwd
+ d7iC+e7OkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEDP0YGeb++aLxN1z75LLv
+ u16dZ5P6HXd5qv7OL96FZvv7yh/Oc33M8D/l6z7ZfA6D07JSd048mv3/kHNG2qkad4P3U//pmys
+ vVeADAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 17 May 2023 06:10:59 PDT (-0700), arnd@kernel.org wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The init/main.c file contains some extern declarations for functions
-> defined in architecture code, and it defines some other functions that
-> are called from architecture code with a custom prototype. Both of those
-> result in warnings with 'make W=1':
->
-> init/calibrate.c:261:37: error: no previous prototype for 'calibrate_delay_is_known' [-Werror=missing-prototypes]
-> init/main.c:790:20: error: no previous prototype for 'mem_encrypt_init' [-Werror=missing-prototypes]
-> init/main.c:792:20: error: no previous prototype for 'poking_init' [-Werror=missing-prototypes]
-> arch/arm64/kernel/irq.c:122:13: error: no previous prototype for 'init_IRQ' [-Werror=missing-prototypes]
-> arch/arm64/kernel/time.c:55:13: error: no previous prototype for 'time_init' [-Werror=missing-prototypes]
-> arch/x86/kernel/process.c:935:13: error: no previous prototype for 'arch_post_acpi_subsys_init' [-Werror=missing-prototypes]
-> init/calibrate.c:261:37: error: no previous prototype for 'calibrate_delay_is_known' [-Werror=missing-prototypes]
-> kernel/fork.c:991:20: error: no previous prototype for 'arch_task_cache_init' [-Werror=missing-prototypes]
->
-> Add prototypes for all of these in include/linux/init.h or another
-> appropriate header, and remove the duplicate declarations from
-> architecture specific code.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/include/asm/irq.h          |  1 -
->  arch/microblaze/include/asm/setup.h |  2 --
->  arch/mips/include/asm/irq.h         |  1 -
->  arch/parisc/kernel/smp.c            |  1 -
->  arch/powerpc/include/asm/irq.h      |  1 -
->  arch/riscv/include/asm/irq.h        |  2 --
->  arch/riscv/include/asm/timex.h      |  2 --
->  arch/s390/kernel/entry.h            |  2 --
->  arch/sh/include/asm/irq.h           |  1 -
->  arch/sh/include/asm/rtc.h           |  2 --
->  arch/sparc/include/asm/irq_32.h     |  1 -
->  arch/sparc/include/asm/irq_64.h     |  1 -
->  arch/sparc/include/asm/timer_64.h   |  1 -
->  arch/sparc/kernel/kernel.h          |  4 ----
->  arch/x86/include/asm/irq.h          |  2 --
->  arch/x86/include/asm/mem_encrypt.h  |  3 ---
->  arch/x86/include/asm/time.h         |  1 -
->  arch/x86/include/asm/tsc.h          |  1 -
->  include/linux/acpi.h                |  3 ++-
->  include/linux/delay.h               |  1 +
->  include/linux/init.h                | 20 ++++++++++++++++++++
->  init/main.c                         | 18 ------------------
->  22 files changed, 23 insertions(+), 48 deletions(-)
+Clang warns:
 
-...
+  drivers/clk/ralink/clk-mtmips.c:309:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    309 |         return ret;
+        |                ^~~
+  drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable 'ret' to silence this warning
+    285 |         int ret, i;
+        |                ^
+        |                 = 0
+  drivers/clk/ralink/clk-mtmips.c:359:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    359 |         return ret;
+        |                ^~~
+  drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable 'ret' to silence this warning
+    335 |         int ret, i;
+        |                ^
+        |                 = 0
+  2 errors generated.
 
-> diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
-> index 43b9ebfbd943..8e10a94430a2 100644
-> --- a/arch/riscv/include/asm/irq.h
-> +++ b/arch/riscv/include/asm/irq.h
-> @@ -16,6 +16,4 @@ void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
->
->  struct fwnode_handle *riscv_get_intc_hwnode(void);
->
-> -extern void __init init_IRQ(void);
-> -
->  #endif /* _ASM_RISCV_IRQ_H */
-> diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
-> index d6a7428f6248..a06697846e69 100644
-> --- a/arch/riscv/include/asm/timex.h
-> +++ b/arch/riscv/include/asm/timex.h
-> @@ -88,6 +88,4 @@ static inline int read_current_timer(unsigned long *timer_val)
->  	return 0;
->  }
->
-> -extern void time_init(void);
-> -
->  #endif /* _ASM_RISCV_TIMEX_H */
+Set ret to the return value of clk_hw_register_fixed_rate() using the
+PTR_ERR() macro, which ensures ret is not used uninitialized, clearing
+up the warning.
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for MTMIPS SoCs")
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1879
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/clk/ralink/clk-mtmips.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks!
+diff --git a/drivers/clk/ralink/clk-mtmips.c b/drivers/clk/ralink/clk-mtmips.c
+index 9322c6210a33..1e7991439527 100644
+--- a/drivers/clk/ralink/clk-mtmips.c
++++ b/drivers/clk/ralink/clk-mtmips.c
+@@ -292,6 +292,7 @@ static int mtmips_register_fixed_clocks(struct clk_hw_onecell_data *clk_data,
+ 						      sclk->parent, 0,
+ 						      sclk->rate);
+ 		if (IS_ERR(sclk->hw)) {
++			ret = PTR_ERR(sclk->hw);
+ 			pr_err("Couldn't register fixed clock %d\n", idx);
+ 			goto err_clk_unreg;
+ 		}
+@@ -342,6 +343,7 @@ static int mtmips_register_factor_clocks(struct clk_hw_onecell_data *clk_data,
+ 						  sclk->parent, sclk->flags,
+ 						  sclk->mult, sclk->div);
+ 		if (IS_ERR(sclk->hw)) {
++			ret = PTR_ERR(sclk->hw);
+ 			pr_err("Couldn't register factor clock %d\n", idx);
+ 			goto err_clk_unreg;
+ 		}
 
+---
+base-commit: fd99ac5055d4705e91c73d1adba18bc71c8511a8
+change-id: 20230622-mips-ralink-clk-wuninitialized-150bd0336187
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
