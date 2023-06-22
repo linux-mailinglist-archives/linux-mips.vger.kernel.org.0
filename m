@@ -2,403 +2,202 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032773A993
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Jun 2023 22:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D1D73A9C9
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Jun 2023 22:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjFVUim (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Jun 2023 16:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S231348AbjFVU6o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Jun 2023 16:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjFVUil (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 16:38:41 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1B5FD3;
-        Thu, 22 Jun 2023 13:38:37 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxHMdMsZRk8IwAAA--.951S3;
-        Fri, 23 Jun 2023 04:38:36 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax8uRKsZRkR4oCAA--.14009S3;
-        Fri, 23 Jun 2023 04:38:34 +0800 (CST)
-Message-ID: <02d6f220-b457-b980-8623-8da636cb495c@loongson.cn>
-Date:   Fri, 23 Jun 2023 04:38:34 +0800
+        with ESMTP id S229832AbjFVU6k (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 16:58:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D52685;
+        Thu, 22 Jun 2023 13:58:01 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bff0beb2d82so2082570276.2;
+        Thu, 22 Jun 2023 13:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687467476; x=1690059476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q4Ig2n4cGI8BP25CqcNRq43JhOmkIIdJVFlb5elIpOA=;
+        b=mqvv9g7FTX6YZrTAez67m8G0SADgQWX+ct2Q2ktq+TbKMG/cOnFNL1HUEejNSN9nds
+         9vEK9L2HpCPHz3mnLHm7QE7bazoap9KPjRBuUT4kw6MBU7tHylSDou09veevPp+Qm5tI
+         J6+0hmA98DudaYxzAoNczqxDp5g6z2tqapGcR3NSEAPAgqMiM1eNh+iIzBq7ayejKjj9
+         5MP9SwhVaQTCo1G312fdQXe7vTjboPcFBobNzdFt65RtUbRTWvFRUfh7ZZb+Tak5rboQ
+         uGsNAcBwqdQTtsTo7UoikA/hvdu33PxWnma34tmu5wLmqc0vL2bNnLhMWuiaLjOulKtx
+         4JUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687467476; x=1690059476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q4Ig2n4cGI8BP25CqcNRq43JhOmkIIdJVFlb5elIpOA=;
+        b=T8nREzyu0AIfFz+bk+HY0hPF5qMPGhi9FDohPgTWUfDGef1LEKtVyqXgZZPWTjno/S
+         pS/jUOva9BpdIJnYSrniU5E0wWJK+t3tsNS/qJWTHPprMxLmV0nGLLX95DhINFln19GP
+         gBjDSr5vF5YEuq4pAebIZoudxZepfqB59eb+08+S8ykjdvHIMuNuc2PcJ46tqPIWUir0
+         qf/5/qmTrPvc8ssR8O9x2U25h9sFm5Oxbjo0SrV+Mqis16Iccct90PoG8U00n1uLKsvP
+         dTnFnVKfGV5lpcoNKcQa/s2GSEZRZKkYydbRlfTxAiPrA1pFw2m240TDKGrByWIkBLDR
+         DkCg==
+X-Gm-Message-State: AC+VfDyxX+BxUqykjOGGFvggnQsQ3N6NrZUQvVMBv+6hqRqS9iE6gDnR
+        UcQ/Cc05ZRrrowQD/L/hTfk=
+X-Google-Smtp-Source: ACHHUZ5QdSwF+iokSIDxxYwBaWLG1oGIRpritBhsZ3H79UKVTTkrzsNTtfFGV/ude8v+TVUUcB2uCQ==
+X-Received: by 2002:a05:6902:92:b0:bba:558e:df05 with SMTP id h18-20020a056902009200b00bba558edf05mr14486764ybs.10.1687467476004;
+        Thu, 22 Jun 2023 13:57:56 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::36])
+        by smtp.googlemail.com with ESMTPSA id d18-20020a5b0c52000000b00bc501a1b062sm1684937ybr.42.2023.06.22.13.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 13:57:55 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v5 00/33] Split ptdesc from struct page
+Date:   Thu, 22 Jun 2023 13:57:12 -0700
+Message-Id: <20230622205745.79707-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-Content-Language: en-US
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
- <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
- <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
- <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
- <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
- <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax8uRKsZRkR4oCAA--.14009S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFyDZF4kArWfKF15JryktFc_yoWfuFyrpF
-        W5KF4jkF4DXryrKw1jkw4UZFyYyayrJFy5Wr1DJ34Ik3s0yF10gr17Kr15uFyDJr10gF40
-        vrWYvFyxuF1DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUD529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4YLvDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On 2023/6/8 15:39, Maxime Ripard wrote:
-> On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/6/8 00:12, Paul Cercueil wrote:
->>> Hi Sui,
->>>
->>> Le mercredi 07 juin 2023 à 22:38 +0800, Sui Jingfeng a écrit :
->>>> Hi,  welcome to discussion.
->>>>
->>>>
->>>> I have limited skills in manipulating English.
->>>>
->>>> It may not express what I'm really means in the short time.
->>>>
->>>> Part of word in the sentence may not as accurate as your.
->>>>
->>>> Well, please don't misunderstand, I'm not doing the rude to you.
->>> No problem.
->>>
->>>> I will explain it with more details.
->>>>
->>>> See below:
->>>>
->>>>
->>>> On 2023/6/7 20:09, Paul Cercueil wrote:
->>>>> Hi Sui,
->>>>>
->>>>> Le mercredi 07 juin 2023 à 18:30 +0800, Sui Jingfeng a écrit :
->>>>>> Hi,
->>>>>>
->>>>>>
->>>>>> On 2023/6/7 17:36, Paul Cercueil wrote:
->>>>>>> Hi Sui,
->>>>>>>
->>>>>>> Le mercredi 07 juin 2023 à 13:30 +0800, Sui Jingfeng a écrit :
->>>>>>>> The single map_noncoherent member of struct
->>>>>>>> drm_gem_dma_object
->>>>>>>> may
->>>>>>>> not
->>>>>>>> sufficient for describing the backing memory of the GEM
->>>>>>>> buffer
->>>>>>>> object.
->>>>>>>>
->>>>>>>> Especially on dma-coherent systems, the backing memory is
->>>>>>>> both
->>>>>>>> cached
->>>>>>>> coherent for multi-core CPUs and dma-coherent for peripheral
->>>>>>>> device.
->>>>>>>> Say architectures like X86-64, LoongArch64, Loongson Mips64,
->>>>>>>> etc.
->>>>>>>>
->>>>>>>> Whether a peripheral device is dma-coherent or not can be
->>>>>>>> implementation-dependent. The single map_noncoherent option
->>>>>>>> is
->>>>>>>> not
->>>>>>>> enough
->>>>>>>> to reflect real hardware anymore. For example, the Loongson
->>>>>>>> LS3A4000
->>>>>>>> CPU
->>>>>>>> and LS2K2000/LS2K1000 SoC, peripheral device of such hardware
->>>>>>>> platform
->>>>>>>> allways snoop CPU's cache. Doing the allocation with
->>>>>>>> dma_alloc_coherent
->>>>>>>> function is preferred. The return buffer is cached, it should
->>>>>>>> not
->>>>>>>> using
->>>>>>>> the default write-combine mapping. While with the current
->>>>>>>> implement,
->>>>>>>> there
->>>>>>>> no way to tell the drm core to reflect this.
->>>>>>>>
->>>>>>>> This patch adds cached and coherent members to struct
->>>>>>>> drm_gem_dma_object.
->>>>>>>> which allow driver implements to inform the core. Introducing
->>>>>>>> new
->>>>>>>> mappings
->>>>>>>> while keeping the original default behavior unchanged.
->>>>>>> Did you try to simply set the "dma-coherent" property to the
->>>>>>> device's
->>>>>>> node?
->>>>>> But this approach can only be applied for the device driver with
->>>>>> DT
->>>>>> support.
->>>>>>
->>>>>> X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typically
->>>>>> do
->>>>>> not
->>>>>> have DT support.
->>>>>>
->>>>>> They using ACPI to pass parameter from the firmware to Linux
->>>>>> kernel.
->>>>>>
->>>>>> You approach will lost the effectiveness on such a case.
->>>>> Well, I don't really know how ACPI handles it - but it should just
->>>>> be a
->>>>> matter of setting dev->dma_coherent. That's basically what the DT
->>>>> code
->>>>> does.
->>>>>
->>>>> Some MIPS boards set it in their setup code for instance.
->>>>>
->>>> This is a *strategy*, not a *mechanism*.
->>>>
->>>> In this case, DT is just used to describing the hardware.
->>>>
->>>> (It is actually a hardware feature describing language, the
->>>> granularity
->>>> is large)
->>>>
->>>> It does not changing the state of the hardware.
->>>>
->>>> It's your platform firmware or kernel setting up code who actually do
->>>> such a things.
->>>>
->>>>
->>>> It's just that it works on *one* platform, it does not guarantee it
->>>> will
->>>> works on others.
->>> If you add the "dma-coherent" property in a device node in DT, you
->>> effectively specify that the device is DMA-coherent; so you describe
->>> the hardware, which is what DT is for, and you are not changing the
->>> state of the hardware.
->>>
->>> Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
->>> default to DMA-coherent mapping; I believe you could do something
->>> similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
->>>
->> The preblem is that device driver can have various demand.
->>
->> It probably want to create different kind of buffers for different thing
->> simultaneously.
->>
->> Say, one allocated with dma_alloc_coherent for command buffer or dma
->> descriptor
->>
->> another one allocated with  dma_alloc_wc for uploading shader etc.
->>
->> also has the third one allocated with dma_alloc_noncoherent() for doing some
->> else.
-> And it will work just fine.
->
-> struct device dma_coherent, or DT's dma-coherent property define that
-> the device doesn't need any kind of cache maintenance, ever. If it's
-> missing, we need to perform cache maintenance to keep coherency.
->
-> dma_alloc_* functions provide guarantees to the driver. With
-> dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
-> you don't need to perform cache maintenance operations by hand in the
-> driver.
->
-> With dma_alloc_noncoherent, the buffer is non-coherent and the driver
-> needs to perform them when relevant.
->
-> How those buffers are created is platform specific, but the guarantees
-> provided *to the driver* are always there.
->
-> A buffer allocated with dma_alloc_coherent might be provided by
-> different means (at the hardware level with a coherency unit, by mapping
-> it non-cacheable), but as far as the driver is concerned it's always
-> going to be coherent.
->
-> Similarly, a driver using dma_alloc_noncoherent will always require
-> cache maintenance operations to use the API properly, even if the
-> hardware provides coherency (in which case, those operations will be
-> nop).
->
-> So, yeah, like I was saying in the other mail, it looks like you're
-> confusing a bunch of things. dma_alloc_* functions are about the driver
-> expectations and guarantees. DT's dma-coherent property is about how we
-> can implement them on a given platform.
->
-> They don't have to match, and that's precisely how we can have drivers
-> that run on any combination of platforms: the driver only cares about
-> the buffer guarantees, the platform description takes care of how they
-> are implemented.
-
-You are right in overall.
-
-Yeah, you have better understanding than me.
-
-
-But let me give you an example which may made people confusing:
-
-
-The the drm/ingenic and drm/etnaviv (KMS-RO) as an example:
-
-
-
-when drm/etnaviv's etnaviv_gem_prime_import_sg_table() function get called,
-
-drm/etnaviv is importing buffer from drm/ingenic.
-
-drm/etnaviv is the importer, and drm/ingenic is the exporter.
-
-drm/ingenic choose non-coherent mapping by default for JZ4770(this is 
-gc800 in it).
-
-It's cached, for fast CPU software rendering.
-
-
-While drm/etnaviv import the buffer, get the SG, using the WC mapping by 
-default.
-
-Dose this cause *cache aliasing* because of different driver using 
-different cache
-
-mapping for the same backing memory ?
-
-
-Because the imported buffer originally belong to the KMS driver side.
-
-For drm/ingenic(jz4770), the BO will be cached, but their hardware can't 
-guarantee coherency.
-
-when etnaviv finished the rendering, they will do the resolve.
-
-By using the WC mapping, the GPU will write directly to the system RAM.
-
-
-1)
-
-If CPU flush the cache back to the system RAM(framebuffer when running 
-glmark-es2-drm).
-
-then the image(resolved by GPU) in framebuffer will be overwrite by the 
-stall data in the cache.
-
-
-2)
-
-Think about occasions when we need the CPU to do the read access to the 
-rendered image.
-
-(snap shoot, or using with X server fake EXA)
-
-The CPU still think the share buffer as cached, it will read from the 
-cache if hit.
-
-while GPU write to RAM directly by using WC mapping.
-
-
-Even it call dma_sync_single_for_device(), it only get SYNC-ed for the 
-device.
-
-there is no SYNC for the CPU's cached.
-
-I think, In the end, it will lost of coherency.
-
-
-3)
-
-If the user want to use X server graphic environment,
-
-then the case will be more complex for 3D acceleration support.
-
-
-Even it hacks somewhere to call the sync for CPU,
-
-they still may need invalid the cache frequently.
-
-In this case, it will not get a good performance.
-
-
-At any case,  such a KMS-RO combination((cached no-coherent + WC)) will 
-be a misery./
-/
-
-While drm/ingenic could give up the hardware acceleration and the 3D 
-acceleration in X environment.
-
-it's OK, as its for low-ended graphic application.
-
-
-But, at the other hand, it is say also why arm soc adhere to the 
-write-combine.
-
-because they have no choice.
-
-While ingenic is the first exception, thanks Paul's patch which help us 
-to understand a lot thing .
-
-
-4)
-
-While Loongson LS2K1000 SoC is DMA-coherent,
-
-We are also prefer cached framebuffer for fast CPU software rendering.
-
-I also get the hardware accelerated 3D works successfully,
-
-even only for the GL client (such as glxgears and glmark2).
-
-
-Therefore, on our hardware platform.
-
-I force both the KMS driver and RO drivers to use cached mapping.
-
-with the hardware maintained cache coherence blessing us.
-
-It turn out that is works.
-
-
-We don't need ( and don't want ) to call the dma_sync_*() series function,
-
-not because we don't know it is no-op for DMA-coherent.
-
-It is because that we realized that it is not needed with 100% confident.
-
-
-We want to keep the code clean.
-
-We are ZERO tolerate to the not needed function calls.
-
-
-> Maxime
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
+
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
+
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
+
+This is rebased on next-20230621.
+
+There is a minor conflict with patch 24 and the mm-unstable tree in
+arch/m68k/mm/motorola.c - The end result of applying the patch should
+be the same.
+
+
+v5:
+  More Acked-bys :)
+  Cleanup some documentation wording and formatting
+  Add pt_rcu_head to ptdesc
+  Add memcg to ptdesc (and align it with struct page)
+  Ensure all get_free_page() callers prohibit HIGHMEM for 32 bit support.
+  Renamed folio_{set, clear}_table() to folio_{set, clear}_pgtable()
+  Removed pagetable_clear() as it is not necessary right now
+  pagetable_free() now sets page->mapping = NULL
+  Dropped s390 _refcount to _pt_frag_refcount conversion patch
+
+Vishal Moola (Oracle) (33):
+  mm: Add PAGE_TYPE_OP folio functions
+  s390: Use _pt_s390_gaddr for gmap address tracking
+  pgtable: Create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() to pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various gmap functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: Remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
+
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   7 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++-
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  43 ++--
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  32 +--
+ arch/mips/mm/pgtable.c                        |   8 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 +--
+ arch/powerpc/mm/pgtable-frag.c                |  46 ++--
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/gmap.c                           | 207 ++++++++++--------
+ arch/s390/mm/pgalloc.c                        | 108 ++++-----
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +-
+ arch/x86/mm/pgtable.c                         |  47 ++--
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  88 +++++---
+ include/asm-generic/tlb.h                     |  11 +
+ include/linux/mm.h                            | 153 +++++++++----
+ include/linux/mm_types.h                      |  14 --
+ include/linux/page-flags.h                    |  30 ++-
+ include/linux/pgtable.h                       |  77 +++++++
+ mm/memory.c                                   |   8 +-
+ 39 files changed, 684 insertions(+), 453 deletions(-)
 
 -- 
-Jingfeng
+2.40.1
 
