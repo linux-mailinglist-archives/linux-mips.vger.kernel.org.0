@@ -2,67 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663E073AF28
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Jun 2023 05:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A776773B09A
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Jun 2023 08:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjFWDtS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Jun 2023 23:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        id S230503AbjFWGMv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Jun 2023 02:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFWDtR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Jun 2023 23:49:17 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162181BFA;
-        Thu, 22 Jun 2023 20:49:16 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-5607cdb0959so124536eaf.2;
-        Thu, 22 Jun 2023 20:49:16 -0700 (PDT)
+        with ESMTP id S229907AbjFWGMm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Jun 2023 02:12:42 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDED19BF
+        for <linux-mips@vger.kernel.org>; Thu, 22 Jun 2023 23:12:38 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f9bff0a543so3819075e9.3
+        for <linux-mips@vger.kernel.org>; Thu, 22 Jun 2023 23:12:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687492155; x=1690084155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fK2w5YLLWQfyLk99c4dGrp7Ry7D+7sXRqTp8uyJMcJM=;
-        b=T3YaPZi6VVQUWV3/gIIm0WyKD92ym3iOMxnT/zcEdfrtJaBPbHlnXFbfSzRUbFOyg3
-         h/z/vZZ43apQzumWua4w8F5B67B+o/YVs47BlCqE3uOMgSEfBE98bJts1Akjfp1RsORO
-         OzYm+U9t7tA510ujkWATyROhvwK7/ponSa7GA8a8VXTmXyfMaiOgObOwEo8dF0D/RuT4
-         +duLqRoW7EQ9fcAHSeVcocQcLP+aadt8Psy3WhIATrbIouqnWzFY6egSnWpaU/iAhRAZ
-         aLWduzseYl7vIcmqRyLzMsv3GSJ7bCKpGPeftTPeRbYga1f5VmBW/yjX8OLtBqmC43nH
-         a6kQ==
+        d=linaro.org; s=google; t=1687500757; x=1690092757;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cH76kt6UTmIx3qjb+jJaF/n8MOD0hF4u7nMAFs65XK0=;
+        b=ablaUhmcEHIJieh3y2uEPumflActhxF3w2uUefbopG41DHD/4IguWMQM6LmV/eJhJt
+         kpI7kJ5qu5GvsxvZSFC1bv08urkcOCWNjpGXKhMXgLLBQbjpZIHbnnDaNjtTfu7HrHqm
+         D+CZvJKvv5wH8Yp01G63XjLTf7zlnBPerepHcijNPVszvDde1LQhbzMrLXjCJpo/RmXF
+         fM0SVswubH6P8O9+WABzmAsRwQmO5592fKrXGcw1DKmZrnUtoslz7swOR3UT0Cg3Z6J0
+         33bOaM6NV7AWp2EcM9SmM8h+gd5GPjLp3Ze0ZXCWJTo2EEnlJILk5ILZMoZbCi8Tgda8
+         PsYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687492155; x=1690084155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fK2w5YLLWQfyLk99c4dGrp7Ry7D+7sXRqTp8uyJMcJM=;
-        b=CU+3Dt2joQt7GM/Ai5B1WIgd/9rApXeCfBYvfw+7XrCKjxEq7wX32HhXmKInqHNrNy
-         0mWyooTJohDvHFBLAZB1+W2ldCgH8OXwnHqt3d5UhBnE+JTymFSLvUFoQ11nnQ+QLGBE
-         akjUkE50F0P9YK1G/WkuRVV9iLs+x9M430aQpiFk+QoPyUJHCDWKQQCUBKH4qduZdyRr
-         lHivMKTCN2cJu2UMMel+kkm+ZF2rt3tk5O9CNpzCD2VrCtlVJVOhXf2VeNnG/iNqlNcB
-         yi8Qbbydn1gCdLbEd/t3hn5qmWmegwNe29zWLUNRnZf08zGXIZi7OGUpLQDX0AhaXOby
-         kRiA==
-X-Gm-Message-State: AC+VfDwL09LqaEcTAWdJtn4GYcbMF4xxeRbadCuzEyv1m3S5EXSom+5Z
-        cY0WXhtsEu0Ycz3tmFL8ytVtt7rxBOkQk6as/yi96ilS
-X-Google-Smtp-Source: ACHHUZ62yiEw9wU9b+2HtfuVVpHp1AudqNYYveH4M7OXy9pdZOfp+EDgIDLumZpFAV1g9ySL9bOTNHjv+lfU+RLEGeQ=
-X-Received: by 2002:a4a:dc8f:0:b0:562:ef98:51f6 with SMTP id
- g15-20020a4adc8f000000b00562ef9851f6mr1868853oou.9.1687492155213; Thu, 22 Jun
- 2023 20:49:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687500757; x=1690092757;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cH76kt6UTmIx3qjb+jJaF/n8MOD0hF4u7nMAFs65XK0=;
+        b=WlBJUnHQpb3jCMNNMipLShOsFUZUP01g7nxh6+CbAPApEwoeZgoEoCDAghUUaOJPPX
+         HRQw7jR9df81wu9PQJcdmQ4LCeDf9PRrFBHsluhuo2lUwdpaiqhAC2ZRDxsCZIC4emAW
+         HcEZV30PSanRYrdiEV1AKybCtSl3pNdzlxFlVW9yrnTSBwIhcuss/Fqo8oEtixcFCD3e
+         R1mdAvrX9yNkDQ4aT4Kv6/TU7IRnu2S+Dd2Cl2CFtj0p1D3CSdGvNiwl28LGb+zXxgEi
+         p7eOJ1PeM4Sx42i3BR36745m/W6ar2E+NkGZrwGWzJWGFwDulZAjO1vaeIc16edfbW1P
+         MHQQ==
+X-Gm-Message-State: AC+VfDzhyMDV7+H7Zs0SX77tlwiovpjqZGx6qDJFk3gXxvkopXbsi1Un
+        KL8RAqQV3Y3Gsk6hWMFPOXmkqxlqivCzOiGn/Oc=
+X-Google-Smtp-Source: ACHHUZ49+GAafnSTu35IsubJ8ajqMPMD2FfaOa0PM7wZ1CfvRVc4avU2TwVtAfElopHYu6azWxfjgA==
+X-Received: by 2002:adf:ffce:0:b0:30a:ec3b:58d8 with SMTP id x14-20020adfffce000000b0030aec3b58d8mr16321353wrs.3.1687500757261;
+        Thu, 22 Jun 2023 23:12:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id r7-20020adfce87000000b0030af54c5f33sm8635028wrn.113.2023.06.22.23.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 23:12:35 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 09:12:30 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, tsbogend@alpha.franken.de,
+        sergio.paracuellos@gmail.com, sboyd@kernel.org, trix@redhat.com,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        patches@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH] clk: ralink: mtmips: Fix uninitialized use of ret in
+ mtmips_register_{fixed,factor}_clocks()
+Message-ID: <27507a23-c1f4-40b2-a999-d6ebd10269f0@moroto.mountain>
+References: <20230622-mips-ralink-clk-wuninitialized-v1-1-ea9041240d10@kernel.org>
+ <CAKwvOd=jaaf7jpjFYe=J0uBiOkGbY3hQ1JsSThp+171cyOsP7Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <TYAP286MB03151148AF8C054621DD55C3BC23A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYAP286MB03151148AF8C054621DD55C3BC23A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 23 Jun 2023 05:49:04 +0200
-Message-ID: <CAMhs-H_4Q2uqizru+ePKbHsdaZ2qT50yzhVh2DqaV51414yzFQ@mail.gmail.com>
-Subject: Re: [PATCH] mips: ralink: match all supported system controller
- compatible strings
-To:     Shiji Yang <yangshiji66@outlook.com>
-Cc:     linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=jaaf7jpjFYe=J0uBiOkGbY3hQ1JsSThp+171cyOsP7Q@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,25 +76,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 2:18=E2=80=AFAM Shiji Yang <yangshiji66@outlook.com=
-> wrote:
->
-> Recently, A new clock and reset controller driver has been introduced to
-> the ralink mips target[1]. It provides proper system control and adds mor=
-e
-> SoC specific compatible strings. In order to better initialize CPUs, this
-> patch removes the outdated "ralink,mt7620a-sysc" and add all dt-binding
-> documented compatible strings to the system controller match table.
->
-> [1] https://lore.kernel.org/all/20230619040941.1340372-1-sergio.paracuell=
-os@gmail.com/
->
-> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
-> ---
->  arch/mips/ralink/of.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+On Thu, Jun 22, 2023 at 09:36:53AM -0700, Nick Desaulniers wrote:
+> On Thu, Jun 22, 2023 at 8:56 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Clang warns:
+> >
+> >   drivers/clk/ralink/clk-mtmips.c:309:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+> >     309 |         return ret;
+> >         |                ^~~
+> >   drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable 'ret' to silence this warning
+> >     285 |         int ret, i;
+> >         |                ^
+> >         |                 = 0
+> >   drivers/clk/ralink/clk-mtmips.c:359:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+> >     359 |         return ret;
+> >         |                ^~~
+> >   drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable 'ret' to silence this warning
+> >     335 |         int ret, i;
+> >         |                ^
+> >         |                 = 0
+> >   2 errors generated.
+> >
+> > Set ret to the return value of clk_hw_register_fixed_rate() using the
+> > PTR_ERR() macro, which ensures ret is not used uninitialized, clearing
+> > up the warning.
+> >
+> > Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for MTMIPS SoCs")
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1879
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Thanks for the patch!
+> PTR_ERR returns a long; assigning to an int risks truncation of the
+> error.  The use of PTR_ERR on L1079 has a similar risk...]
+> 
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+If PTR_ERR() ever returns anything outside of the (-4095)-(0) range then
+we are already screwed.
 
-Thanks,
-    Sergio Paracuellos
+I'm 90% sure there is a reason why PTR_ERR() returns long but I can't
+think off the top of my head why that is...  It's been that way since
+before the git era.  I could imagine type promotion bugs involving
+u32 and int if we changed it.
+
+	ssize_t ret_val = PTR_ERR(x) ?: u32_something;
+
+Or maybe Linus just felt casting a pointer to int was ugly.
+
+regards,
+dan carpenter
+
