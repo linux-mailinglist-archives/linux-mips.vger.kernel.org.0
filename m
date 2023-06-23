@@ -2,126 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A776773B09A
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Jun 2023 08:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEF973B226
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Jun 2023 09:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjFWGMv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Jun 2023 02:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S230125AbjFWH5O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Jun 2023 03:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjFWGMm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Jun 2023 02:12:42 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDED19BF
-        for <linux-mips@vger.kernel.org>; Thu, 22 Jun 2023 23:12:38 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f9bff0a543so3819075e9.3
-        for <linux-mips@vger.kernel.org>; Thu, 22 Jun 2023 23:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687500757; x=1690092757;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cH76kt6UTmIx3qjb+jJaF/n8MOD0hF4u7nMAFs65XK0=;
-        b=ablaUhmcEHIJieh3y2uEPumflActhxF3w2uUefbopG41DHD/4IguWMQM6LmV/eJhJt
-         kpI7kJ5qu5GvsxvZSFC1bv08urkcOCWNjpGXKhMXgLLBQbjpZIHbnnDaNjtTfu7HrHqm
-         D+CZvJKvv5wH8Yp01G63XjLTf7zlnBPerepHcijNPVszvDde1LQhbzMrLXjCJpo/RmXF
-         fM0SVswubH6P8O9+WABzmAsRwQmO5592fKrXGcw1DKmZrnUtoslz7swOR3UT0Cg3Z6J0
-         33bOaM6NV7AWp2EcM9SmM8h+gd5GPjLp3Ze0ZXCWJTo2EEnlJILk5ILZMoZbCi8Tgda8
-         PsYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687500757; x=1690092757;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cH76kt6UTmIx3qjb+jJaF/n8MOD0hF4u7nMAFs65XK0=;
-        b=WlBJUnHQpb3jCMNNMipLShOsFUZUP01g7nxh6+CbAPApEwoeZgoEoCDAghUUaOJPPX
-         HRQw7jR9df81wu9PQJcdmQ4LCeDf9PRrFBHsluhuo2lUwdpaiqhAC2ZRDxsCZIC4emAW
-         HcEZV30PSanRYrdiEV1AKybCtSl3pNdzlxFlVW9yrnTSBwIhcuss/Fqo8oEtixcFCD3e
-         R1mdAvrX9yNkDQ4aT4Kv6/TU7IRnu2S+Dd2Cl2CFtj0p1D3CSdGvNiwl28LGb+zXxgEi
-         p7eOJ1PeM4Sx42i3BR36745m/W6ar2E+NkGZrwGWzJWGFwDulZAjO1vaeIc16edfbW1P
-         MHQQ==
-X-Gm-Message-State: AC+VfDzhyMDV7+H7Zs0SX77tlwiovpjqZGx6qDJFk3gXxvkopXbsi1Un
-        KL8RAqQV3Y3Gsk6hWMFPOXmkqxlqivCzOiGn/Oc=
-X-Google-Smtp-Source: ACHHUZ49+GAafnSTu35IsubJ8ajqMPMD2FfaOa0PM7wZ1CfvRVc4avU2TwVtAfElopHYu6azWxfjgA==
-X-Received: by 2002:adf:ffce:0:b0:30a:ec3b:58d8 with SMTP id x14-20020adfffce000000b0030aec3b58d8mr16321353wrs.3.1687500757261;
-        Thu, 22 Jun 2023 23:12:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id r7-20020adfce87000000b0030af54c5f33sm8635028wrn.113.2023.06.22.23.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 23:12:35 -0700 (PDT)
-Date:   Fri, 23 Jun 2023 09:12:30 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>, tsbogend@alpha.franken.de,
-        sergio.paracuellos@gmail.com, sboyd@kernel.org, trix@redhat.com,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        patches@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH] clk: ralink: mtmips: Fix uninitialized use of ret in
- mtmips_register_{fixed,factor}_clocks()
-Message-ID: <27507a23-c1f4-40b2-a999-d6ebd10269f0@moroto.mountain>
-References: <20230622-mips-ralink-clk-wuninitialized-v1-1-ea9041240d10@kernel.org>
- <CAKwvOd=jaaf7jpjFYe=J0uBiOkGbY3hQ1JsSThp+171cyOsP7Q@mail.gmail.com>
+        with ESMTP id S229484AbjFWH5O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Jun 2023 03:57:14 -0400
+Received: from h4.cmg1.smtp.forpsi.com (h4.cmg1.smtp.forpsi.com [185.129.138.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BD910D
+        for <linux-mips@vger.kernel.org>; Fri, 23 Jun 2023 00:57:11 -0700 (PDT)
+Received: from lenoch ([80.95.121.122])
+        by cmgsmtp with ESMTPSA
+        id CbfIqcb0fPm6CCbfJqV2Gq; Fri, 23 Jun 2023 09:57:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1687507029; bh=QoB62eMd+PzjPV+XKDJnYkzx9hrgIoE2s5IcTPgrTbc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=39BWEsiCVRja17yq8umxc+tiFN/Nqm3cl0ydBLKR4gqK/iRlKG+VLGtC1h1uBwV7d
+         J2+qVXYZ11aIP3TOzIOp44hwmIPTSf2xNz3XK4kz3JS9fr3qIyZtqOkxgxXG8hnZze
+         3VHkyi3t4cmGPOZqCB0skG4+pQsBpP/Wy2ETekFOLLZuuH0wUOo1NrGls92sOS8maB
+         90Q2EIjcU18Nt8D6JolsVB4EPDiqQH8cZTW3qdJMO+ccciOEAMv5Stw23Z0WdxkWsB
+         ejWRbBh3oBOqGWWZwtOagoEc8LlW7m5kBL+ywDpfQ26nl46PmzTwC/ixT47cHSQBLh
+         9FZHY+MG7fOAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1687507029; bh=QoB62eMd+PzjPV+XKDJnYkzx9hrgIoE2s5IcTPgrTbc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=39BWEsiCVRja17yq8umxc+tiFN/Nqm3cl0ydBLKR4gqK/iRlKG+VLGtC1h1uBwV7d
+         J2+qVXYZ11aIP3TOzIOp44hwmIPTSf2xNz3XK4kz3JS9fr3qIyZtqOkxgxXG8hnZze
+         3VHkyi3t4cmGPOZqCB0skG4+pQsBpP/Wy2ETekFOLLZuuH0wUOo1NrGls92sOS8maB
+         90Q2EIjcU18Nt8D6JolsVB4EPDiqQH8cZTW3qdJMO+ccciOEAMv5Stw23Z0WdxkWsB
+         ejWRbBh3oBOqGWWZwtOagoEc8LlW7m5kBL+ywDpfQ26nl46PmzTwC/ixT47cHSQBLh
+         9FZHY+MG7fOAw==
+Date:   Fri, 23 Jun 2023 09:57:07 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 00/11] Cleanup Octeon DWC3 glue code
+Message-ID: <ZJVQUzVW+NzCgH7i@lenoch>
+References: <ZJC165p0Mj4jHcBh@lenoch>
+ <20230622230149.4wpvtlpsu7473txr@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=jaaf7jpjFYe=J0uBiOkGbY3hQ1JsSThp+171cyOsP7Q@mail.gmail.com>
+In-Reply-To: <20230622230149.4wpvtlpsu7473txr@synopsys.com>
+X-CMAE-Envelope: MS4wfJintxM30TZ37w43kOiAuZzWtIgmzBHD7Ryj8hATIO+pMyEsNl7d+h9w1CY8UImasrX/+ReVLUCZVg7jmN8YTDHNx1/J6mzdtPYgf5e/SbHjOSbsloL7
+ 7EUY/JM916nb/gwmm7VelEjBrsmUcHq9GHIhRwDGmb06HloLXNS4y+0zXg+ZUfs/IZ1qwhohgK8WYayTD8zo3yqDTJBb7Hxhpdi3vCcwMBXRpE32opQTbMOR
+ 167XoQYQv1a+l3HmVvjv9Q==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 09:36:53AM -0700, Nick Desaulniers wrote:
-> On Thu, Jun 22, 2023 at 8:56 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Clang warns:
-> >
-> >   drivers/clk/ralink/clk-mtmips.c:309:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-> >     309 |         return ret;
-> >         |                ^~~
-> >   drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable 'ret' to silence this warning
-> >     285 |         int ret, i;
-> >         |                ^
-> >         |                 = 0
-> >   drivers/clk/ralink/clk-mtmips.c:359:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-> >     359 |         return ret;
-> >         |                ^~~
-> >   drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable 'ret' to silence this warning
-> >     335 |         int ret, i;
-> >         |                ^
-> >         |                 = 0
-> >   2 errors generated.
-> >
-> > Set ret to the return value of clk_hw_register_fixed_rate() using the
-> > PTR_ERR() macro, which ensures ret is not used uninitialized, clearing
-> > up the warning.
-> >
-> > Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for MTMIPS SoCs")
-> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1879
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Thanks for the patch!
-> PTR_ERR returns a long; assigning to an int risks truncation of the
-> error.  The use of PTR_ERR on L1079 has a similar risk...]
-> 
+Hi,
 
-If PTR_ERR() ever returns anything outside of the (-4095)-(0) range then
-we are already screwed.
+On Thu, Jun 22, 2023 at 11:01:54PM +0000, Thinh Nguyen wrote:
+> Hi,
+[snip]
+> Please use get_maintainer.pl to get all the proper maintainers to review
+> the changes.
 
-I'm 90% sure there is a reason why PTR_ERR() returns long but I can't
-think off the top of my head why that is...  It's been that way since
-before the git era.  I could imagine type promotion bugs involving
-u32 and int if we changed it.
+That's what I did. Thomas, MIPS maintainer is reading linux-mips list,
+Greg is reading linux-usb list, you were the one who receives changes,
+hence all patcheset was sent to you in a hope you provide some comments
+about actual code changes.
 
-	ssize_t ret_val = PTR_ERR(x) ?: u32_something;
+> Since this is a large change involving different subsystems, if
+> possible, please split the changes related to MIPS and try to upstream
+> those first as they will affect how dwc3 glue driver will look.
 
-Or maybe Linus just felt casting a pointer to int was ugly.
+That's pretty straightforward as patchset is arranged exactly this way,
+so MIPS maintainer is free to apply patches till driver move.
+However, any actual feedback would be still usefull. In case it gets
+some acks I'll add them and rebase patches to the latest -next.
 
-regards,
-dan carpenter
+> Thanks,
+> Thinh
 
+Thanks,
+ladis
