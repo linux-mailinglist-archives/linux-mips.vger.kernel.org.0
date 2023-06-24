@@ -2,135 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E0373CA1F
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jun 2023 11:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1683D73CAF4
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jun 2023 15:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbjFXJ2d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jun 2023 05:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S229704AbjFXNEZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jun 2023 09:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbjFXJ2Q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jun 2023 05:28:16 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895CE26B0;
-        Sat, 24 Jun 2023 02:28:09 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3DD9B5842D1;
-        Sat, 24 Jun 2023 05:28:05 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 24 Jun 2023 05:28:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687598885; x=1687606085; bh=qY
-        ntvL1gKhXrmWH0tTXfCuX8ddCTc/3rP2W4LxyKhm0=; b=2fzrhKF90cpXdCJJhX
-        LNQ5t74+BoUFAWu2Z9oVvwfRP+G2j+kHetfXDo7jXuv6MZjlVNDYMOe5uMBuCdrY
-        tfPOeSOrdnMHi5ExY6XX7AWMG7KA6nVtCTrwrLskcwomUPvEud6GLH7At6wunV8T
-        1xjw8VbSHv+R4fEe2U3K0VAbm+xpbPHip2N4n+Wjl5qhwQ5ZCL9UOgj1O/Ev3fUz
-        wFoNMcX1DQqOGh3VF3wDQoCuthyjHY5xOlhizC1sa5RpiNIFDzQpiYdpxDZoyaus
-        Jb8lK1gCGSw8zq5XV56wA5i2aAdBsF5Nj6taOY18hsohd5+dcepsDuWV8vsh6/Bp
-        FnCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687598885; x=1687606085; bh=qYntvL1gKhXrm
-        WH0tTXfCuX8ddCTc/3rP2W4LxyKhm0=; b=Ss12EnHU4AcwmUdUHarRTM5S6SQng
-        s1jzkZTwt45UxEwaoXOe27PqNaIoImQzAcGstwg5plJ41roH3XuppaxR7+klgqAT
-        t2qTaZahs2nvwu7r3H1VhEDI35lYik3jAGEsIHR2BPHNrkn6lrob8XsuLvH5a0nS
-        3PctpKkR+/0CA0SYvMYr+Yi8zJioA3pDKC07QmhNdD7FSzOplFMmbgKTCxZsf7qJ
-        UiCtm5Hf06e/mrw5KEp0RhzySvecvFKrkEIZ3jIqTxjSlYxkPmMjRGDkZYisUHdp
-        Ltzzz1MP7nRj6pHsmgact/qcePRWHX8qnnokQvpv2K8E68y0F1jWwV5xw==
-X-ME-Sender: <xms:JLeWZFOBFglxl1i5bI3l1p0oN8XlQzdcdm1l_G7s8_E-sM0HZytL4g>
-    <xme:JLeWZH--P5FdBTJ_umdmBwIQ3BaF9UxuoF5B2lSO_XD_aJ1GsWYULUTZ9P4U_i4Wt
-    0CGKV6DR5IBfrDLmGM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegjedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JLeWZESOvtN3WRtL4qcbs1TxlvwwnmscUJ664LO5SZIsEeCM99_NTw>
-    <xmx:JLeWZBsXh796y04w6P0GVP04uwY_zKhNkC-ozsUZCaW2YmXR9CpM-Q>
-    <xmx:JLeWZNfcbt5O64mkJb1sR3C8x8YFQCpWT18ij9tkQXIoWlLXKJHfnQ>
-    <xmx:JbeWZOBhhQ4yvPgqPpUS3E42vsWe4WTrrcu1uDU2wkIyXn5yBFMoWw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 03220B60086; Sat, 24 Jun 2023 05:28:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <55130a50-d129-4336-99ce-3be4229b1c7d@app.fastmail.com>
-In-Reply-To: <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
-References: <20230417125651.25126-18-tzimmermann@suse.de>
- <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
-Date:   Sat, 24 Jun 2023 11:27:42 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Guenter Roeck" <linux@roeck-us.net>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>
-Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [v3,17/19] arch/sparc: Implement fb_is_primary_device() in source file
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229452AbjFXNEY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jun 2023 09:04:24 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3E3F3
+        for <linux-mips@vger.kernel.org>; Sat, 24 Jun 2023 06:04:20 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id D2w4qsQhCv5uID2w6quZLq; Sat, 24 Jun 2023 15:04:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1687611858; bh=A8Qf65Rob09U35oGENSWDKjvcQjFxw6Jr7EPtXZ0RBs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ddhgenzM9l5OX3VPJHJHnjXam1iTTPHItMmcnb1nzdS49b+PiY9FUzxmQ7qqSsPRv
+         8twLuDnQgujybwJQ7j9EmTNgm71tIg1O7K+voRaNLx4pkPGHcnUnyFbPZtomGLI4R4
+         7GB0lDmrln18PC2Ql7RZ+RzzramRbjxDStmf85zhsrSJDtRba/wV1tmeUerLMovaly
+         WaHEkao40VDR9pymw/FKcNiGX7+v47uHh2UpAliOjdtTC9F/IiMyO8kFwM5C3PcuWY
+         a3AXXSzfuiKRRfxvzJXEDVf8gvIleG6gJy4m41s1sm8qY9khc9+KUDc147ez8/b5Gq
+         WVwc9aPoiE3Og==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1687611858; bh=A8Qf65Rob09U35oGENSWDKjvcQjFxw6Jr7EPtXZ0RBs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ddhgenzM9l5OX3VPJHJHnjXam1iTTPHItMmcnb1nzdS49b+PiY9FUzxmQ7qqSsPRv
+         8twLuDnQgujybwJQ7j9EmTNgm71tIg1O7K+voRaNLx4pkPGHcnUnyFbPZtomGLI4R4
+         7GB0lDmrln18PC2Ql7RZ+RzzramRbjxDStmf85zhsrSJDtRba/wV1tmeUerLMovaly
+         WaHEkao40VDR9pymw/FKcNiGX7+v47uHh2UpAliOjdtTC9F/IiMyO8kFwM5C3PcuWY
+         a3AXXSzfuiKRRfxvzJXEDVf8gvIleG6gJy4m41s1sm8qY9khc9+KUDc147ez8/b5Gq
+         WVwc9aPoiE3Og==
+Date:   Sat, 24 Jun 2023 15:04:16 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 00/11] Cleanup Octeon DWC3 glue code
+Message-ID: <ZJbp0P5fYkvTLN5g@lenoch>
+References: <ZJC165p0Mj4jHcBh@lenoch>
+ <20230622230149.4wpvtlpsu7473txr@synopsys.com>
+ <ZJVQUzVW+NzCgH7i@lenoch>
+ <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
+X-CMAE-Envelope: MS4wfOY9Vg2wt24jzn69gegLtgwCyOhJpUAcjTsDrgSrenZBywKfuBRP9r8Citz+FhztjMyh2WYzeSQAyaOLWN2TpFn7nY6DtpnIp+tGw84MGRlGvGWxS5qp
+ gi2i8ALgyVzdiDxeKt8vVl1Cpb/Sl1s4BENivLS7x9YmL7U200Etyj+Z7YtU4T/VcQwq07SjLEHFECx0g9fHObTfO0mQuMAII7tTNvJuRnaNVffJAwc8lVmQ
+ lJk/SAOIXs3qocBd/etP0w==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 24, 2023, at 03:55, Guenter Roeck wrote:
->
-> On Mon, Apr 17, 2023 at 02:56:49PM +0200, Thomas Zimmermann wrote:
->> Other architectures implment fb_is_primary_device() in a source
->> file. Do the same on sparc. No functional changes, but allows to
->> remove several include statement from <asm/fb.h>.
->> 
->> v2:
->> 	* don't include <asm/prom.h> in header file
->> 
->> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: "David S. Miller" <davem@davemloft.net>
->
-> This patch results (or appears to result) in the following build error
-> when trying to build sparc64:allmodconfig.
->
-> Error log:
-> <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-> WARNING: modpost: drivers/cpufreq/sparc-us2e-cpufreq: section mismatch 
-> in reference: cpufreq_us2e_driver+0x20 (section: .data) -> 
-> us2e_freq_cpu_init (section: .init.text)
-> WARNING: modpost: drivers/cpufreq/sparc-us3-cpufreq: section mismatch 
-> in reference: cpufreq_us3_driver+0x20 (section: .data) -> 
-> us3_freq_cpu_init (section: .init.text)
-> ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] 
-> undefined!
+Hi,
 
-These all look like old bugs that would be trivially fixed if
-anyone cared about sparc.
+On Fri, Jun 23, 2023 at 11:24:24PM +0000, Thinh Nguyen wrote:
+> On Fri, Jun 23, 2023, Ladislav Michl wrote:
+> > Hi,
+> > 
+> > On Thu, Jun 22, 2023 at 11:01:54PM +0000, Thinh Nguyen wrote:
+> > > Hi,
+> > [snip]
+> > > Please use get_maintainer.pl to get all the proper maintainers to review
+> > > the changes.
+> > 
+> > That's what I did. Thomas, MIPS maintainer is reading linux-mips list,
+> > Greg is reading linux-usb list, you were the one who receives changes,
+> > hence all patcheset was sent to you in a hope you provide some comments
+> > about actual code changes.
+> 
+> I can take a look at the changes. However, the patches were sent
+> directly To: me for patches related MIPS and no one else except the
+> linux-usb linux-mips (without Thomas), which doesn't look right.
+> 
+> I'm not familiar with the MIPS subsystem, but typically for the USB
+> mailing list, we capture all the emails generated from get_maintainer.pl
+> and include them To: and Cc: should they need attention to the changes.
+> Often we filter our emails based on whether it's directed toward us, at
+> least I do that. Also, we can't be sure if everyone still subscribes to
+> the corresponding mailing list.
 
-> ERROR: modpost: missing MODULE_LICENSE() in arch/sparc/video/fbdev.o
+Did you run get_maintainer.pl yourself? Because here (for v6.3) I get:
+$ ./scripts/get_maintainer.pl -f arch/mips/cavium-octeon/octeon-usb.c 
+Thomas Bogendoerfer <tsbogend@alpha.franken.de> (maintainer:MIPS,commit_signer:1/1=100%)
+Ladislav Michl <ladis@linux-mips.org> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:20/20=100%,removed_lines:22/22=100%)
+linux-mips@vger.kernel.org (open list:MIPS)
+linux-kernel@vger.kernel.org (open list)
+$ ./scripts/get_maintainer.pl -f drivers/usb/dwc3
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> (maintainer:DESIGNWARE USB3 DRD IP DRIVER)
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+linux-usb@vger.kernel.org (open list:DESIGNWARE USB3 DRD IP DRIVER)
+linux-kernel@vger.kernel.org (open list)
 
-I checked that there are no callers of fb_is_primary_device()
-in built-in code when CONFIG_FB is =m, so adding the MODULE_LICENSE()
-and MODULE_DESCRIPTION() tags to the file is the correct fix.
+So I have no clue who else should I add to Cc list...
 
-    Arnd
+> > 
+> > > Since this is a large change involving different subsystems, if
+> > > possible, please split the changes related to MIPS and try to upstream
+> > > those first as they will affect how dwc3 glue driver will look.
+> > 
+> > That's pretty straightforward as patchset is arranged exactly this way,
+> > so MIPS maintainer is free to apply patches till driver move.
+> > However, any actual feedback would be still usefull. In case it gets
+> > some acks I'll add them and rebase patches to the latest -next.
+> > 
+> 
+> Then that's good. If the MIPS maintainer approves all the MIPS related
+> changes and already pick them up, there should be no problem.
+
+Well, remaining question is how to make it comfortable for you to take
+changes. Patches 1-7 are in mips-next already, so I propose to wait until
+they propagate upstream then I rebase remaining patches to whatever is
+in linux-next.
+
+Please note I added glue driver into Makefile and Kconfig at random
+locations as I failed to find any logic here. If you have any preference
+or want to sort those files alphabetically first for example, just let
+me know and I'll add some cleanup patches before sending v2.
+
+Also coleagues of mine meanwhile found that PLL indeed ocassionally
+fails to lock, so workaround attached to cover letter is really needed.
+Naturally it cannot sneak in as it is, so unless you have better idea
+I'll just port it to recent driver state and we can start discussion
+from there in a separate thread.
+
+Thank you,
+	ladis
