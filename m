@@ -2,155 +2,204 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E654B73CB55
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jun 2023 16:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88BD73CE0F
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Jun 2023 04:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjFXOWV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jun 2023 10:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
+        id S230045AbjFYCfg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jun 2023 22:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjFXOWU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jun 2023 10:22:20 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979561BDB;
-        Sat, 24 Jun 2023 07:22:18 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9D1445801DE;
-        Sat, 24 Jun 2023 10:22:17 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 24 Jun 2023 10:22:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687616537; x=1687623737; bh=Ih
-        z6/bi511oP4d526TPPtM1blBZt4arV1NypQDvLup8=; b=Owr1gNHl98uY/LqghJ
-        ew6TAsiUgTWjuGMsxDEW7dPPnLV3e7dQ48EjTdP5xHC8mtn8gOYupnCSHk4hfivP
-        2548A0+ELQQlya9a+Jj0JkYOlxNPXvbMtrvZE4ZYuMEg0oeEVRQxH3fZk7dq7fcR
-        K2FnnRvxLC2ctHogIIPsu5AzKYi/b1l8LHXlg+nhxQKDQbQ2GgNgOE7o0SLx/lJl
-        ZJl/F2RHs+ZN1HfuzBUUYja0J54XdNJ5XYphhB2SZMV3SOmTcHA6JZT0U9/SAmVC
-        9c8VJBDM16nnBrphov+n9ifuK0VIrDEcUy1gZSuUHvkasNoYZlMz0wEqqeUYovQg
-        985w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687616537; x=1687623737; bh=Ihz6/bi511oP4
-        d526TPPtM1blBZt4arV1NypQDvLup8=; b=VK5TgDjVEpiEaunZZwRRAQPsTnjFp
-        zkoDEEdhdFioqudleRGZjNuek0JsRnk3YrU4OgaJsTS63QgF8QOtf7vg2z1azqmX
-        zbJgS5KJT8RVEJGWIcWXoccJV7DsEUPIM7fQrw314Non4B0AcKCTS2tiu4ftIj8G
-        sBy+JyOj8lBXvLnjyDAYLzzz21cS9Rw6GZ1k8qjXXnVcAj+7YV4car/+OJ2Hz1Vy
-        XzKWDBO3QquHdDPcc9ZnIK0trCu+0GLImpYfYIOCCwLguVtAkJf4TryNcTfPhMob
-        qjIlOfgux2mxV3SnTy++07Z7K6tSNSgFgk6q7BXZ1w+17nZskwCf6fCwA==
-X-ME-Sender: <xms:GPyWZCp4xCyzgIT7Kv57_S9Fj_YrOyXXtQi7KxbKTITt5sPxujuEgA>
-    <xme:GPyWZAoCSw5-QOKYgYL1kqq0dPmclQVYtInH9cHAwaW4i2eRqwCURn45oRtWD_RQc
-    xQUs-Q4Qr9LCBw-SYo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegjedgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:GPyWZHMyXf5Kvsllp2a13R-ZdsUa5Eyn9zm8e_TevTvdOPqjcW5nlQ>
-    <xmx:GPyWZB456YmIlexKtameEvfzxT6jb_S5LP8U4ZZ8x8ftCJgDf8Imbw>
-    <xmx:GPyWZB4KiilRGFPdEeCPRk6Xvib-UQo3Rc6SHJIcWlgnWs25oEFPvQ>
-    <xmx:GfyWZDvcJNvUjndis2HwHYCG9wl31VYvNLjRzs3Fi5XOZJ7a0ROd8w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B8029B60086; Sat, 24 Jun 2023 10:22:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <d9ffc44c-c4ae-4f01-bc0b-ee5359a24a0a@app.fastmail.com>
-In-Reply-To: <d4156e51-102f-36b4-e42c-938268b4b608@roeck-us.net>
-References: <20230417125651.25126-18-tzimmermann@suse.de>
- <c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net>
- <55130a50-d129-4336-99ce-3be4229b1c7d@app.fastmail.com>
- <d4156e51-102f-36b4-e42c-938268b4b608@roeck-us.net>
-Date:   Sat, 24 Jun 2023 16:21:47 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Guenter Roeck" <linux@roeck-us.net>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>
-Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [v3,17/19] arch/sparc: Implement fb_is_primary_device() in source file
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229550AbjFYCff (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jun 2023 22:35:35 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAF0180;
+        Sat, 24 Jun 2023 19:35:33 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-57688a146ecso13939727b3.2;
+        Sat, 24 Jun 2023 19:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687660532; x=1690252532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iGVGx8SjqYwUfEzfo92AjXT3wg7PYePtDlAlKCZ2ZtI=;
+        b=PlDZbM5fazgJxBiQ/GPeqoFVq9els2RF3xcTCCoES5Pf0WroXG2sbEhL/hLEmB0tn+
+         YqXNmsatWzstYXfkCmVU9n16mbEUCIVS+jjCnXAD6TbzBaHL5lgaglljWB/UXQnPZuzG
+         pSjOlMuJMWX1I6AkQW0uF/VN2BGFT8EZPZqhRqfm0eFMcJ56VU/hjmpnyiHWerZtE+69
+         ajXXSALxq7JOFQt05MSWE3nceZSB6v+iBEQN0acYvQ79VnvZHb+1A3ky0usimm2p22gY
+         7bfMS/WCvRHuAV/slHNEnJpd/8GgJyiQdopVRir6llBBJpLkJgT1VdxH2yM+icNqJqa3
+         P5yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687660532; x=1690252532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iGVGx8SjqYwUfEzfo92AjXT3wg7PYePtDlAlKCZ2ZtI=;
+        b=bSan+HoFN4c0RVhD5CSWgLM/bn5JBtCxRcwF4kB41941Gw4soEgOV/Ja3rjXML+rbr
+         fXqmKhnVLRjlVyeSPywy9hpk4gF0io2Zofr2Q3VVoYARMcP30W91mq/a59L7MDdAPhS5
+         KZExyXtdRfzXbSolhf1IduTCRIFGbSNPv61CNvRIQTejV8wG3HJYe2vtr35/9keRw1sT
+         YSyXdAUUVqHt6H4N0OPRP7t1+8EvD6PUkOnR178QBm19m5h9gSQZFcHbW4+IDeztD79e
+         +QXs4dx1yWBl0xq7SB35dGwD6QhZI9PHox5rRKBS30T04TPe8Z8XOpdDIPmSs7i47XiH
+         7wkQ==
+X-Gm-Message-State: AC+VfDzETsRIy/Hvqft5o1BZtVvUyJcO/t0+XOp9oZ7N3Az05B4Qb+yW
+        tjGHcPCHG/zLLUp4sFjfcL6GO0/bfHbiVUjdK1Y=
+X-Google-Smtp-Source: ACHHUZ6eEFiyGlRr28sg4+XcHRCAdRZBjnVwQfmZ89hVYgHtqdZoNOTKSPIRPwYYqU72cXkW+O9dM3yz26Ki7V8ID34=
+X-Received: by 2002:a81:4815:0:b0:56c:e563:23fc with SMTP id
+ v21-20020a814815000000b0056ce56323fcmr27701408ywa.24.1687660532611; Sat, 24
+ Jun 2023 19:35:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1685693501.git.zhoubinbin@loongson.cn>
+In-Reply-To: <cover.1685693501.git.zhoubinbin@loongson.cn>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Sun, 25 Jun 2023 10:35:20 +0800
+Message-ID: <CAMpQs4LFunPW_7FAe+0Zyq5LMhcsRJ+qSGvARiQd-o6ZFn2qJg@mail.gmail.com>
+Subject: Re: [PATCH V5 0/5] Add rtc driver for the Loongson family chips
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>, Yang Ling <gnaygnil@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 24, 2023, at 15:26, Guenter Roeck wrote:
-> On 6/24/23 02:27, Arnd Bergmann wrote:
->> On Sat, Jun 24, 2023, at 03:55, Guenter Roeck wrote:
->>>
->>> On Mon, Apr 17, 2023 at 02:56:49PM +0200, Thomas Zimmermann wrote:
->>>> Other architectures implment fb_is_primary_device() in a source
->>>> file. Do the same on sparc. No functional changes, but allows to
->>>> remove several include statement from <asm/fb.h>.
->>>>
->>>> v2:
->>>> 	* don't include <asm/prom.h> in header file
->>>>
->>>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->>>> Cc: "David S. Miller" <davem@davemloft.net>
->>>
->>> This patch results (or appears to result) in the following build error
->>> when trying to build sparc64:allmodconfig.
->>>
->>> Error log:
->>> <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->>> WARNING: modpost: drivers/cpufreq/sparc-us2e-cpufreq: section mismatch
->>> in reference: cpufreq_us2e_driver+0x20 (section: .data) ->
->>> us2e_freq_cpu_init (section: .init.text)
->>> WARNING: modpost: drivers/cpufreq/sparc-us3-cpufreq: section mismatch
->>> in reference: cpufreq_us3_driver+0x20 (section: .data) ->
->>> us3_freq_cpu_init (section: .init.text)
->>> ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko]
->>> undefined!
->> 
->> These all look like old bugs that would be trivially fixed if
->> anyone cared about sparc.
->> 
+Hi Alexandre:
+
+Gentle ping.
+The dt-binding part of the patchset looks good now, do you have any
+more comments on the driver part?
+
+Thanks.
+Binbin
+
+
+
+
+
+
+
+On Fri, Jun 2, 2023 at 5:51=E2=80=AFPM Binbin Zhou <zhoubinbin@loongson.cn>=
+ wrote:
 >
-> Odd argument, given that this _is_ a sparc patch. Those may be old
-> bugs, but at least in 6.4-rc7 sparc64:allmodconfig does at least compile.
-
-The first three are non-fatal warnings even with CONFIG_WERROR=y, I'm
-sure they have been there for years. I don't immediately see what
-caused the __xchg_called_with_bad_pointer error, but it does not
-look related to the fbdev patch. I would guess that this is a second
-regression that happened to come in at the same time.
-
-> Sure, I can stop build testing it if that is where things are going.
-
-I think we clearly want to fix the fbdev regression you found, and
-maybe bisect the atomic64_test as well to see if that was caused by
-a recent patch to get it into a working state again.
-
-Regarding whether to continue build testing: if every kernel build
-warns about a missing syscall for almost four years (clone3 was
-added in 5.3 and requires a minimal review to hook it up to asm
-code), it shows that the architecture is seriously neglected
-already.
-
-     Arnd
+> Hi all:
+>
+> The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
+> released five versions of patchset before, and all related mail records
+> are shown below if you are interested:
+>
+> https://lore.kernel.org/all/?q=3Dls2x-rtc
+>
+> In this series of patches, based on the code above, I have added the
+> following support:
+>
+> 1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
+>    by default under LoongArch architecture;
+> 2. Add rtc alarm/walarm related functions;
+> 3. Merge LS1X rtc and LS2X rtc into a unified rtc-loongson driver.
+>
+> I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA,
+> Loongson-2K0500 and Loongson-2K2000(ACPI/DT).
+>
+> Thanks to everyone for reviewing and testing the code.
+>
+> -------
+> v5:
+> patch(1/5)
+>   - The reason why ls2x can be removed directly is explained in the
+>     commit message;
+>   - Use fallback compatible;
+>     Thanks to all who participated in the fallback compatible discussion.
+> patch(3/5)
+>   - Since ls1b and ls1c have different register definitions, we'd better
+>     distinguish them with different
+>     configurations(ls1b_rtc_config/ls1c_rtc_config);
+>   - Due to the use of fallback compatible, the redundant compatible is
+>     removed. We can see the full list of supported chips in dt-binding..
+>
+> v4:
+> https://lore.kernel.org/linux-rtc/cover.1684983279.git.zhoubinbin@loongso=
+n.cn/
+>
+> - Rebase on the top of rtc-next;
+> - Drop defconfig-related patches;
+> patch(1/5)
+>   - New patch, Loongson RTC bindings have been rewritten and we have
+>     dropped the wildcard (ls2x) in compatible.
+>     Thanks to Krzysztof for your comments;
+> patch(2/5)
+>   - New patch, drop the ls1x rtc driver;
+> patch(3/5)
+>   - Clear RTC_FEATURE_UPDATE_INTERRUPT bit, for the rtc does not support
+>     UIE;
+>   - Add LS2K2000 support(DT/ACPI);
+>   - Merge ls1x support and name the driver rtc-loongson;
+>     Thanks to Jiaxun for his comments and Keguang for his assistance in
+> testing.
+>
+> v3:
+> https://lore.kernel.org/linux-rtc/cover.1681370153.git.zhoubinbin@loongso=
+n.cn/
+>
+> patch(2/7):
+>  - Check patchset with "checkpatch.pl --strict";
+>  - Drop static inline functions which are used only once, such as
+>    ls2x_rtc_regs_to_time;
+>  - Remove the suruct ls2x_rtc_regs and regmap_bulk_xxx() is used to read
+>    and write rtc registers;
+>  - Clear the RTC wakeup interrupt manually;
+>  - Enable the RTC in set_time() and check in read_time();
+>  - device_get_match_data() is used to get ls2x_pm_offset, for LS2k1000
+>    has the different value;
+>  - Remove some inexact CONFIG_ACPI.
+>
+> v2:
+> 1. Rebased on top of latest loongarch-next;
+> 2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
+> errors when the driver gets the IRQ number, Thanks to Qing Zhang for
+> testing;
+> 3. Remove some inexact CONFIG_ACPI.
+>
+> Thanks.
+>
+> Binbin Zhou (5):
+>   dt-bindings: rtc: Remove the LS2X from the trivial RTCs
+>   rtc: Remove the Loongson-1 RTC driver
+>   rtc: Add rtc driver for the Loongson family chips
+>   MIPS: Loongson64: DTS: Add RTC support to LS7A PCH
+>   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000
+>
+>  .../devicetree/bindings/rtc/loongson,rtc.yaml |  57 +++
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 -
+>  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
+>  drivers/rtc/Kconfig                           |  23 +-
+>  drivers/rtc/Makefile                          |   2 +-
+>  drivers/rtc/rtc-loongson.c                    | 397 ++++++++++++++++++
+>  drivers/rtc/rtc-ls1x.c                        | 192 ---------
+>  8 files changed, 482 insertions(+), 205 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/loongson,rtc.ya=
+ml
+>  create mode 100644 drivers/rtc/rtc-loongson.c
+>  delete mode 100644 drivers/rtc/rtc-ls1x.c
+>
+> --
+> 2.39.1
+>
+>
