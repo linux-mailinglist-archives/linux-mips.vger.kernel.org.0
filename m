@@ -2,550 +2,283 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A3073DC54
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jun 2023 12:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5875D73DF12
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Jun 2023 14:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjFZKej (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Jun 2023 06:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S231223AbjFZMZf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Jun 2023 08:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFZKeX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jun 2023 06:34:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEEF10C8
-        for <linux-mips@vger.kernel.org>; Mon, 26 Jun 2023 03:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687775603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nu3FHlZzfqrgZe6PPdqmQT1KQUBhnZWJcF18p4bSr50=;
-        b=GEu5/AcWdZEBY2rQ4QdmwjNN57aI9uGtKfrtcawLCLcuIUIuVgvvnAPeMHeYKRqp/pdJur
-        d0peB2THiMJ7Z/HdRZgiEHSZP83bGPjH7FEs0stnyw7zZtPZUA6oBFqsy4Ke41VW/Y9VF6
-        K6Fvf59AKoB5rvejWEMMNRf+OR+9Vok=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-299-n9sBcyTrNrypjAqsj3wdEw-1; Mon, 26 Jun 2023 06:33:21 -0400
-X-MC-Unique: n9sBcyTrNrypjAqsj3wdEw-1
-Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-47617204c14so2910323e0c.1
-        for <linux-mips@vger.kernel.org>; Mon, 26 Jun 2023 03:33:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687775601; x=1690367601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nu3FHlZzfqrgZe6PPdqmQT1KQUBhnZWJcF18p4bSr50=;
-        b=dCQz+cZ11impaahnEjRFI7fIASiq2UF6AKBhnkjNYdg4Rf4/T+M79eEniX7AKwREKK
-         yRbTG8O8VzrhjBylG3TfP3hnXR5FtbdVKUTCZHgJparm9+wuiPNCo4WXXqNNrBs2uTDd
-         71Yprjo8uxxcD8kif9qZC2pAuuEbWzniCHoZ713oywcc/vBsfQ3rq7sgjhyK1rUwu0bj
-         RrfMOyOos86wIAvYHJ2Fm5jCckWfBzgMPr6OQ68ty3TehvHhgGs7CXYZitWowwVeCnhW
-         kK129M5CcxRIFH//bM7Ta5tS35fLa6+J6hCwljZ8xbv5k04shIvwVP45sw2bVsK0yZdo
-         M4TA==
-X-Gm-Message-State: AC+VfDzVJhNAwfUirhHWIcH2D4pS4H0nRWxGanZixV79DzTVGwbvCISV
-        GZ37fXB1F/eM7RJCnVZne5bGKMVwQRR/NR7d460jDtIZLXs6pPjRWAji7o2mufguBGfAn+5t9U0
-        XheK2CcfCiKqWH+k3g7AsVvQSMhjceaoMJRcSFg==
-X-Received: by 2002:a05:6122:430d:b0:47a:e101:b25 with SMTP id cp13-20020a056122430d00b0047ae1010b25mr893345vkb.3.1687775601289;
-        Mon, 26 Jun 2023 03:33:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ76bh45/XsIuKOogwEH0/lTy5mnLXzdnOCxbVB3ZGpBofWQFsd62MGjW/tQAyT4L12BEwALWFagsz969Y2fLPg=
-X-Received: by 2002:a05:6122:430d:b0:47a:e101:b25 with SMTP id
- cp13-20020a056122430d00b0047ae1010b25mr893336vkb.3.1687775600777; Mon, 26 Jun
- 2023 03:33:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626074919.1871944-1-chenhuacai@loongson.cn>
-In-Reply-To: <20230626074919.1871944-1-chenhuacai@loongson.cn>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Date:   Mon, 26 Jun 2023 12:33:09 +0200
-Message-ID: <CABgObfYLnhW0qrPvFnMW_B9xZzLF6Ysn2uL4w9B815fUNVKK5A@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: KVM: Fix NULL pointer dereference
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        with ESMTP id S231470AbjFZMYy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jun 2023 08:24:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5889810E3;
+        Mon, 26 Jun 2023 05:23:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E14312F4;
+        Mon, 26 Jun 2023 05:24:12 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.23.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA5173F64C;
+        Mon, 26 Jun 2023 05:23:22 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 13:23:17 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Puranjay Mohan <puranjay12@gmail.com>
+Cc:     Song Liu <song@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
         Huacai Chen <chenhuacai@kernel.org>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        the arch/x86 maintainers <x86@kernel.org>, pjt@google.com,
+        torvalds@linux-foundation.org
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
+ jit_text_alloc()
+Message-ID: <ZJmDNbY009G3haH9@FVFF77S0Q05N>
+References: <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230618080027.GA52412@kernel.org>
+ <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+ <20230625161417.GK52412@kernel.org>
+ <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com>
+ <20230625174257.GL52412@kernel.org>
+ <20230625180741.jrrtkq55c4jrqh3t@moria.home.lan>
+ <CAPhsuW45gmtCVgA0mg6X87x5EOzSmVqq3SCMSR6agyiukiJvEQ@mail.gmail.com>
+ <CANk7y0jcakmuF4e9x8z7ZUra=MPx-=xxb0JZ3RrJ+S9Eb9-0_g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANk7y0jcakmuF4e9x8z7ZUra=MPx-=xxb0JZ3RrJ+S9Eb9-0_g@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 9:59=E2=80=AFAM Huacai Chen <chenhuacai@loongson.cn=
-> wrote:
->
-> After commit 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support") we
-> get a NULL pointer dereference when creating a KVM guest:
+On Mon, Jun 26, 2023 at 11:54:02AM +0200, Puranjay Mohan wrote:
+> On Mon, Jun 26, 2023 at 8:13 AM Song Liu <song@kernel.org> wrote:
+> >
+> > On Sun, Jun 25, 2023 at 11:07 AM Kent Overstreet
+> > <kent.overstreet@linux.dev> wrote:
+> > >
+> > > On Sun, Jun 25, 2023 at 08:42:57PM +0300, Mike Rapoport wrote:
+> > > > On Sun, Jun 25, 2023 at 09:59:34AM -0700, Andy Lutomirski wrote:
+> > > > >
+> > > > >
+> > > > > On Sun, Jun 25, 2023, at 9:14 AM, Mike Rapoport wrote:
+> > > > > > On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
+> > > > > >>
+> > > > > >> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
+> > > > > >> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
+> > > > > >> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+> > > > > >> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > > > >> >> >
+> > > > > >> >> > module_alloc() is used everywhere as a mean to allocate memory for code.
+> > > > > >> >> >
+> > > > > >> >> > Beside being semantically wrong, this unnecessarily ties all subsystems
+> > > > > >> >> > that need to allocate code, such as ftrace, kprobes and BPF to modules
+> > > > > >> >> > and puts the burden of code allocation to the modules code.
+> > > > > >> >> >
+> > > > > >> >> > Several architectures override module_alloc() because of various
+> > > > > >> >> > constraints where the executable memory can be located and this causes
+> > > > > >> >> > additional obstacles for improvements of code allocation.
+> > > > > >> >> >
+> > > > > >> >> > Start splitting code allocation from modules by introducing
+> > > > > >> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
+> > > > > >> >> >
+> > > > > >> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
+> > > > > >> >> > module_alloc() and execmem_free() and jit_free() are replacements of
+> > > > > >> >> > module_memfree() to allow updating all call sites to use the new APIs.
+> > > > > >> >> >
+> > > > > >> >> > The intention semantics for new allocation APIs:
+> > > > > >> >> >
+> > > > > >> >> > * execmem_text_alloc() should be used to allocate memory that must reside
+> > > > > >> >> >   close to the kernel image, like loadable kernel modules and generated
+> > > > > >> >> >   code that is restricted by relative addressing.
+> > > > > >> >> >
+> > > > > >> >> > * jit_text_alloc() should be used to allocate memory for generated code
+> > > > > >> >> >   when there are no restrictions for the code placement. For
+> > > > > >> >> >   architectures that require that any code is within certain distance
+> > > > > >> >> >   from the kernel image, jit_text_alloc() will be essentially aliased to
+> > > > > >> >> >   execmem_text_alloc().
+> > > > > >> >> >
+> > > > > >> >>
+> > > > > >> >> Is there anything in this series to help users do the appropriate
+> > > > > >> >> synchronization when the actually populate the allocated memory with
+> > > > > >> >> code?  See here, for example:
+> > > > > >> >
+> > > > > >> > This series only factors out the executable allocations from modules and
+> > > > > >> > puts them in a central place.
+> > > > > >> > Anything else would go on top after this lands.
+> > > > > >>
+> > > > > >> Hmm.
+> > > > > >>
+> > > > > >> On the one hand, there's nothing wrong with factoring out common code. On
+> > > > > >> the other hand, this is probably the right time to at least start
+> > > > > >> thinking about synchronization, at least to the extent that it might make
+> > > > > >> us want to change this API.  (I'm not at all saying that this series
+> > > > > >> should require changes -- I'm just saying that this is a good time to
+> > > > > >> think about how this should work.)
+> > > > > >>
+> > > > > >> The current APIs, *and* the proposed jit_text_alloc() API, don't actually
+> > > > > >> look like the one think in the Linux ecosystem that actually
+> > > > > >> intelligently and efficiently maps new text into an address space:
+> > > > > >> mmap().
+> > > > > >>
+> > > > > >> On x86, you can mmap() an existing file full of executable code PROT_EXEC
+> > > > > >> and jump to it with minimal synchronization (just the standard implicit
+> > > > > >> ordering in the kernel that populates the pages before setting up the
+> > > > > >> PTEs and whatever user synchronization is needed to avoid jumping into
+> > > > > >> the mapping before mmap() finishes).  It works across CPUs, and the only
+> > > > > >> possible way userspace can screw it up (for a read-only mapping of
+> > > > > >> read-only text, anyway) is to jump to the mapping too early, in which
+> > > > > >> case userspace gets a page fault.  Incoherence is impossible, and no one
+> > > > > >> needs to "serialize" (in the SDM sense).
+> > > > > >>
+> > > > > >> I think the same sequence (from userspace's perspective) works on other
+> > > > > >> architectures, too, although I think more cache management is needed on
+> > > > > >> the kernel's end.  As far as I know, no Linux SMP architecture needs an
+> > > > > >> IPI to map executable text into usermode, but I could easily be wrong.
+> > > > > >> (IIRC RISC-V has very developer-unfriendly icache management, but I don't
+> > > > > >> remember the details.)
+> > > > > >>
+> > > > > >> Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is
+> > > > > >> rather fraught, and I bet many things do it wrong when userspace is
+> > > > > >> multithreaded.  But not in production because it's mostly not used in
+> > > > > >> production.)
+> > > > > >>
+> > > > > >> But jit_text_alloc() can't do this, because the order of operations
+> > > > > >> doesn't match.  With jit_text_alloc(), the executable mapping shows up
+> > > > > >> before the text is populated, so there is no atomic change from not-there
+> > > > > >> to populated-and-executable.  Which means that there is an opportunity
+> > > > > >> for CPUs, speculatively or otherwise, to start filling various caches
+> > > > > >> with intermediate states of the text, which means that various
+> > > > > >> architectures (even x86!) may need serialization.
+> > > > > >>
+> > > > > >> For eBPF- and module- like use cases, where JITting/code gen is quite
+> > > > > >> coarse-grained, perhaps something vaguely like:
+> > > > > >>
+> > > > > >> jit_text_alloc() -> returns a handle and an executable virtual address,
+> > > > > >> but does *not* map it there
+> > > > > >> jit_text_write() -> write to that handle
+> > > > > >> jit_text_map() -> map it and synchronize if needed (no sync needed on
+> > > > > >> x86, I think)
+> > > > > >>
+> > > > > >> could be more efficient and/or safer.
+> > > > > >>
+> > > > > >> (Modules could use this too.  Getting alternatives right might take some
+> > > > > >> fiddling, because off the top of my head, this doesn't match how it works
+> > > > > >> now.)
+> > > > > >>
+> > > > > >> To make alternatives easier, this could work, maybe (haven't fully
+> > > > > >> thought it through):
+> > > > > >>
+> > > > > >> jit_text_alloc()
+> > > > > >> jit_text_map_rw_inplace() -> map at the target address, but RW, !X
+> > > > > >>
+> > > > > >> write the text and apply alternatives
+> > > > > >>
+> > > > > >> jit_text_finalize() -> change from RW to RX *and synchronize*
+> > > > > >>
+> > > > > >> jit_text_finalize() would either need to wait for RCU (possibly extra
+> > > > > >> heavy weight RCU to get "serialization") or send an IPI.
+> > > > > >
+> > > > > > This essentially how modules work now. The memory is allocated RW, written
+> > > > > > and updated with alternatives and then made ROX in the end with set_memory
+> > > > > > APIs.
+> > > > > >
+> > > > > > The issue with not having the memory mapped X when it's written is that we
+> > > > > > cannot use large pages to map it. One of the goals is to have executable
+> > > > > > memory mapped with large pages and make code allocator able to divide that
+> > > > > > page among several callers.
+> > > > > >
+> > > > > > So the idea was that jit_text_alloc() will have a cache of large pages
+> > > > > > mapped ROX, will allocate memory from those caches and there will be
+> > > > > > jit_update() that uses text poking for writing to that memory.
+> > > > > >
+> > > > > > Upon allocation of a large page to increase the cache, that large page will
+> > > > > > be "invalidated" by filling it with breakpoint instructions (e.g int3 on
+> > > > > > x86)
+> > > > >
+> > > > > Is this actually valid?  In between int3 and real code, there’s a
+> > > > > potential torn read of real code mixed up with 0xcc.
+> > > >
+> > > > You mean while doing text poking?
+> > >
+> > > I think we've been getting distracted by text_poke(). text_poke() does
+> > > updates via a different virtual address which introduce new
+> > > synchroniation wrinkles, but it's not the main issue.
+> > >
+> > > As _think_ I understand it, the root of the issue is that speculative
+> > > execution - and that per Andy, speculative execution doesn't obey memory
+> > > barriers.
+> > >
+> > > I have _not_ dug into the details of how retpolines work and all the
+> > > spectre stuff that was going on, but - retpoline uses lfence, doesn't
+> > > it? And if speculative execution is the issue here, isn't retpoline what
+> > > we need?
+> > >
+> > > For this particular issue, I'm not sure "invalidate by filling with
+> > > illegal instructions" makes sense. For that to work, would the processor
+> > > have to execute a serialize operation and a retry on hitting an illegal
+> > > instruction - or perhaps we do in the interrupt handler?
+> > >
+> > > But if filling with illegal instructions does act as a speculation
+> > > barrier, then the issue is that a torn read could generate a legal but
+> > > incorrect instruction.
+> >
+> > What is a "torn read" here? I assume it is an instruction read that
+> > goes at the wrong instruction boundary (CISC). If this is correct, do
+> > we need to handle torn read caused by software bug, or hardware
+> > bit flip, or both?
+> 
+> On ARM64 (RISC), torn reads can't happen because the instruction fetch
+> is word aligned. If we replace the whole instruction atomically then there
+> won't be half old - half new instruction fetches.
 
-To be honest, a bug that needed 2 years to be reproduced is probably a
-sign that KVM/MIPS has no users. Any objections to removing it
-altogether?
+Unfortunately, that's only guaranteed for a subset of instructions (e.g. B,
+NOP), and in general CPUs can fetch an instruction multiple times, and could
+fetch arbitrary portions of the instruction each time.
 
-Paolo
+Please see the "Concurrent Modification and Execution of instructions" rules in
+the ARM ARM.
 
->
-> [  146.243409] Starting KVM with MIPS VZ extensions
-> [  149.849151] CPU 3 Unable to handle kernel paging request at virtual ad=
-dress 0000000000000300, epc =3D=3D ffffffffc06356ec, ra =3D=3D ffffffffc063=
-568c
-> [  149.849177] Oops[#1]:
-> [  149.849182] CPU: 3 PID: 2265 Comm: qemu-system-mip Not tainted 6.4.0-r=
-c3+ #1671
-> [  149.849188] Hardware name: THTF CX TL630 Series/THTF-LS3A4000-7A1000-M=
-L4A, BIOS KL4.1F.TF.D.166.201225.R 12/25/2020
-> [  149.849192] $ 0   : 0000000000000000 000000007400cce0 0000000000400004=
- ffffffff8119c740
-> [  149.849209] $ 4   : 000000007400cce1 000000007400cce1 0000000000000000=
- 0000000000000000
-> [  149.849221] $ 8   : 000000240058bb36 ffffffff81421ac0 0000000000000000=
- 0000000000400dc0
-> [  149.849233] $12   : 9800000102a07cc8 ffffffff80e40e38 0000000000000001=
- 0000000000400dc0
-> [  149.849245] $16   : 0000000000000000 9800000106cd0000 9800000106cd0000=
- 9800000100cce000
-> [  149.849257] $20   : ffffffffc0632b28 ffffffffc05b31b0 9800000100ccca00=
- 0000000000400000
-> [  149.849269] $24   : 9800000106cd09ce ffffffff802f69d0
-> [  149.849281] $28   : 9800000102a04000 9800000102a07cd0 98000001106a8000=
- ffffffffc063568c
-> [  149.849293] Hi    : 00000335b2111e66
-> [  149.849295] Lo    : 6668d90061ae0ae9
-> [  149.849298] epc   : ffffffffc06356ec kvm_vz_vcpu_setup+0xc4/0x328 [kvm=
-]
-> [  149.849324] ra    : ffffffffc063568c kvm_vz_vcpu_setup+0x64/0x328 [kvm=
-]
-> [  149.849336] Status: 7400cce3 KX SX UX KERNEL EXL IE
-> [  149.849351] Cause : 1000000c (ExcCode 03)
-> [  149.849354] BadVA : 0000000000000300
-> [  149.849357] PrId  : 0014c004 (ICT Loongson-3)
-> [  149.849360] Modules linked in: kvm nfnetlink_queue nfnetlink_log nfnet=
-link fuse sha256_generic libsha256 cfg80211 rfkill binfmt_misc vfat fat snd=
-_hda_codec_hdmi input_leds led_class snd_hda_intel snd_intel_dspcfg snd_hda=
-_codec snd_hda_core snd_pcm snd_timer snd serio_raw xhci_pci radeon drm_sub=
-alloc_helper drm_display_helper xhci_hcd ip_tables x_tables
-> [  149.849432] Process qemu-system-mip (pid: 2265, threadinfo=3D00000000a=
-e2982d2, task=3D0000000038e09ad4, tls=3D000000ffeba16030)
-> [  149.849439] Stack : 9800000000000003 9800000100ccca00 9800000100ccc000=
- ffffffffc062cef4
-> [  149.849453]         9800000102a07d18 c89b63a7ab338e00 0000000000000000=
- ffffffff811a0000
-> [  149.849465]         0000000000000000 9800000106cd0000 ffffffff80e59938=
- 98000001106a8920
-> [  149.849476]         ffffffff80e57f30 ffffffffc062854c ffffffff811a0000=
- 9800000102bf4240
-> [  149.849488]         ffffffffc05b0000 ffffffff80e3a798 000000ff78000000=
- 000000ff78000010
-> [  149.849500]         0000000000000255 98000001021f7de0 98000001023f0078=
- ffffffff81434000
-> [  149.849511]         0000000000000000 0000000000000000 9800000102ae0000=
- 980000025e92ae28
-> [  149.849523]         0000000000000000 c89b63a7ab338e00 0000000000000001=
- ffffffff8119dce0
-> [  149.849535]         000000ff78000010 ffffffff804f3d3c 9800000102a07eb0=
- 0000000000000255
-> [  149.849546]         0000000000000000 ffffffff8049460c 000000ff78000010=
- 0000000000000255
-> [  149.849558]         ...
-> [  149.849565] Call Trace:
-> [  149.849567] [<ffffffffc06356ec>] kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
-> [  149.849586] [<ffffffffc062cef4>] kvm_arch_vcpu_create+0x184/0x228 [kvm=
-]
-> [  149.849605] [<ffffffffc062854c>] kvm_vm_ioctl+0x64c/0xf28 [kvm]
-> [  149.849623] [<ffffffff805209c0>] sys_ioctl+0xc8/0x118
-> [  149.849631] [<ffffffff80219eb0>] syscall_common+0x34/0x58
->
-> The root cause is the deletion of kvm_mips_commpage_init() leaves vcpu->
-> arch.cop0 NULL. So fix it by make cop0 from a pointer to an embed object.
->
-> Fixes: 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/mips/include/asm/kvm_host.h |  6 +++---
->  arch/mips/kvm/emulate.c          | 22 +++++++++++-----------
->  arch/mips/kvm/mips.c             | 16 ++++++++--------
->  arch/mips/kvm/trace.h            |  8 ++++----
->  arch/mips/kvm/vz.c               | 20 ++++++++++----------
->  5 files changed, 36 insertions(+), 36 deletions(-)
->
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm=
-_host.h
-> index 957121a495f0..04cedf9f8811 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -317,7 +317,7 @@ struct kvm_vcpu_arch {
->         unsigned int aux_inuse;
->
->         /* COP0 State */
-> -       struct mips_coproc *cop0;
-> +       struct mips_coproc cop0;
->
->         /* Resume PC after MMIO completion */
->         unsigned long io_pc;
-> @@ -698,7 +698,7 @@ static inline bool kvm_mips_guest_can_have_fpu(struct=
- kvm_vcpu_arch *vcpu)
->  static inline bool kvm_mips_guest_has_fpu(struct kvm_vcpu_arch *vcpu)
->  {
->         return kvm_mips_guest_can_have_fpu(vcpu) &&
-> -               kvm_read_c0_guest_config1(vcpu->cop0) & MIPS_CONF1_FP;
-> +               kvm_read_c0_guest_config1(&vcpu->cop0) & MIPS_CONF1_FP;
->  }
->
->  static inline bool kvm_mips_guest_can_have_msa(struct kvm_vcpu_arch *vcp=
-u)
-> @@ -710,7 +710,7 @@ static inline bool kvm_mips_guest_can_have_msa(struct=
- kvm_vcpu_arch *vcpu)
->  static inline bool kvm_mips_guest_has_msa(struct kvm_vcpu_arch *vcpu)
->  {
->         return kvm_mips_guest_can_have_msa(vcpu) &&
-> -               kvm_read_c0_guest_config3(vcpu->cop0) & MIPS_CONF3_MSA;
-> +               kvm_read_c0_guest_config3(&vcpu->cop0) & MIPS_CONF3_MSA;
->  }
->
->  struct kvm_mips_callbacks {
-> diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-> index edaec93a1a1f..e64372b8f66a 100644
-> --- a/arch/mips/kvm/emulate.c
-> +++ b/arch/mips/kvm/emulate.c
-> @@ -312,7 +312,7 @@ int kvm_get_badinstrp(u32 *opc, struct kvm_vcpu *vcpu=
-, u32 *out)
->   */
->  int kvm_mips_count_disabled(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->
->         return  (vcpu->arch.count_ctl & KVM_REG_MIPS_COUNT_CTL_DC) ||
->                 (kvm_read_c0_guest_cause(cop0) & CAUSEF_DC);
-> @@ -384,7 +384,7 @@ static inline ktime_t kvm_mips_count_time(struct kvm_=
-vcpu *vcpu)
->   */
->  static u32 kvm_mips_read_count_running(struct kvm_vcpu *vcpu, ktime_t no=
-w)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         ktime_t expires, threshold;
->         u32 count, compare;
->         int running;
-> @@ -444,7 +444,7 @@ static u32 kvm_mips_read_count_running(struct kvm_vcp=
-u *vcpu, ktime_t now)
->   */
->  u32 kvm_mips_read_count(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->
->         /* If count disabled just read static copy of count */
->         if (kvm_mips_count_disabled(vcpu))
-> @@ -502,7 +502,7 @@ ktime_t kvm_mips_freeze_hrtimer(struct kvm_vcpu *vcpu=
-, u32 *count)
->  static void kvm_mips_resume_hrtimer(struct kvm_vcpu *vcpu,
->                                     ktime_t now, u32 count)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         u32 compare;
->         u64 delta;
->         ktime_t expire;
-> @@ -603,7 +603,7 @@ int kvm_mips_restore_hrtimer(struct kvm_vcpu *vcpu, k=
-time_t before,
->   */
->  void kvm_mips_write_count(struct kvm_vcpu *vcpu, u32 count)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         ktime_t now;
->
->         /* Calculate bias */
-> @@ -649,7 +649,7 @@ void kvm_mips_init_count(struct kvm_vcpu *vcpu, unsig=
-ned long count_hz)
->   */
->  int kvm_mips_set_count_hz(struct kvm_vcpu *vcpu, s64 count_hz)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         int dc;
->         ktime_t now;
->         u32 count;
-> @@ -696,7 +696,7 @@ int kvm_mips_set_count_hz(struct kvm_vcpu *vcpu, s64 =
-count_hz)
->   */
->  void kvm_mips_write_compare(struct kvm_vcpu *vcpu, u32 compare, bool ack=
-)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         int dc;
->         u32 old_compare =3D kvm_read_c0_guest_compare(cop0);
->         s32 delta =3D compare - old_compare;
-> @@ -779,7 +779,7 @@ void kvm_mips_write_compare(struct kvm_vcpu *vcpu, u3=
-2 compare, bool ack)
->   */
->  static ktime_t kvm_mips_count_disable(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         u32 count;
->         ktime_t now;
->
-> @@ -806,7 +806,7 @@ static ktime_t kvm_mips_count_disable(struct kvm_vcpu=
- *vcpu)
->   */
->  void kvm_mips_count_disable_cause(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->
->         kvm_set_c0_guest_cause(cop0, CAUSEF_DC);
->         if (!(vcpu->arch.count_ctl & KVM_REG_MIPS_COUNT_CTL_DC))
-> @@ -826,7 +826,7 @@ void kvm_mips_count_disable_cause(struct kvm_vcpu *vc=
-pu)
->   */
->  void kvm_mips_count_enable_cause(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         u32 count;
->
->         kvm_clear_c0_guest_cause(cop0, CAUSEF_DC);
-> @@ -852,7 +852,7 @@ void kvm_mips_count_enable_cause(struct kvm_vcpu *vcp=
-u)
->   */
->  int kvm_mips_set_count_ctl(struct kvm_vcpu *vcpu, s64 count_ctl)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         s64 changed =3D count_ctl ^ vcpu->arch.count_ctl;
->         s64 delta;
->         ktime_t expire, now;
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index 884be4ef99dc..aa5583a7b05b 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -649,7 +649,7 @@ static int kvm_mips_copy_reg_indices(struct kvm_vcpu =
-*vcpu, u64 __user *indices)
->  static int kvm_mips_get_reg(struct kvm_vcpu *vcpu,
->                             const struct kvm_one_reg *reg)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         struct mips_fpu_struct *fpu =3D &vcpu->arch.fpu;
->         int ret;
->         s64 v;
-> @@ -761,7 +761,7 @@ static int kvm_mips_get_reg(struct kvm_vcpu *vcpu,
->  static int kvm_mips_set_reg(struct kvm_vcpu *vcpu,
->                             const struct kvm_one_reg *reg)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         struct mips_fpu_struct *fpu =3D &vcpu->arch.fpu;
->         s64 v;
->         s64 vs[2];
-> @@ -1086,7 +1086,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, l=
-ong ext)
->  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
->  {
->         return kvm_mips_pending_timer(vcpu) ||
-> -               kvm_read_c0_guest_cause(vcpu->arch.cop0) & C_TI;
-> +               kvm_read_c0_guest_cause(&vcpu->arch.cop0) & C_TI;
->  }
->
->  int kvm_arch_vcpu_dump_regs(struct kvm_vcpu *vcpu)
-> @@ -1110,7 +1110,7 @@ int kvm_arch_vcpu_dump_regs(struct kvm_vcpu *vcpu)
->         kvm_debug("\thi: 0x%08lx\n", vcpu->arch.hi);
->         kvm_debug("\tlo: 0x%08lx\n", vcpu->arch.lo);
->
-> -       cop0 =3D vcpu->arch.cop0;
-> +       cop0 =3D &vcpu->arch.cop0;
->         kvm_debug("\tStatus: 0x%08x, Cause: 0x%08x\n",
->                   kvm_read_c0_guest_status(cop0),
->                   kvm_read_c0_guest_cause(cop0));
-> @@ -1232,7 +1232,7 @@ static int __kvm_mips_handle_exit(struct kvm_vcpu *=
-vcpu)
->
->         case EXCCODE_TLBS:
->                 kvm_debug("TLB ST fault:  cause %#x, status %#x, PC: %p, =
-BadVaddr: %#lx\n",
-> -                         cause, kvm_read_c0_guest_status(vcpu->arch.cop0=
-), opc,
-> +                         cause, kvm_read_c0_guest_status(&vcpu->arch.cop=
-0), opc,
->                           badvaddr);
->
->                 ++vcpu->stat.tlbmiss_st_exits;
-> @@ -1304,7 +1304,7 @@ static int __kvm_mips_handle_exit(struct kvm_vcpu *=
-vcpu)
->                 kvm_get_badinstr(opc, vcpu, &inst);
->                 kvm_err("Exception Code: %d, not yet handled, @ PC: %p, i=
-nst: 0x%08x  BadVaddr: %#lx Status: %#x\n",
->                         exccode, opc, inst, badvaddr,
-> -                       kvm_read_c0_guest_status(vcpu->arch.cop0));
-> +                       kvm_read_c0_guest_status(&vcpu->arch.cop0));
->                 kvm_arch_vcpu_dump_regs(vcpu);
->                 run->exit_reason =3D KVM_EXIT_INTERNAL_ERROR;
->                 ret =3D RESUME_HOST;
-> @@ -1377,7 +1377,7 @@ int noinstr kvm_mips_handle_exit(struct kvm_vcpu *v=
-cpu)
->  /* Enable FPU for guest and restore context */
->  void kvm_own_fpu(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         unsigned int sr, cfg5;
->
->         preempt_disable();
-> @@ -1421,7 +1421,7 @@ void kvm_own_fpu(struct kvm_vcpu *vcpu)
->  /* Enable MSA for guest and restore context */
->  void kvm_own_msa(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         unsigned int sr, cfg5;
->
->         preempt_disable();
-> diff --git a/arch/mips/kvm/trace.h b/arch/mips/kvm/trace.h
-> index a8c7fd7bf6d2..136c3535a1cb 100644
-> --- a/arch/mips/kvm/trace.h
-> +++ b/arch/mips/kvm/trace.h
-> @@ -322,11 +322,11 @@ TRACE_EVENT_FN(kvm_guest_mode_change,
->             ),
->
->             TP_fast_assign(
-> -                       __entry->epc =3D kvm_read_c0_guest_epc(vcpu->arch=
-.cop0);
-> +                       __entry->epc =3D kvm_read_c0_guest_epc(&vcpu->arc=
-h.cop0);
->                         __entry->pc =3D vcpu->arch.pc;
-> -                       __entry->badvaddr =3D kvm_read_c0_guest_badvaddr(=
-vcpu->arch.cop0);
-> -                       __entry->status =3D kvm_read_c0_guest_status(vcpu=
-->arch.cop0);
-> -                       __entry->cause =3D kvm_read_c0_guest_cause(vcpu->=
-arch.cop0);
-> +                       __entry->badvaddr =3D kvm_read_c0_guest_badvaddr(=
-&vcpu->arch.cop0);
-> +                       __entry->status =3D kvm_read_c0_guest_status(&vcp=
-u->arch.cop0);
-> +                       __entry->cause =3D kvm_read_c0_guest_cause(&vcpu-=
->arch.cop0);
->             ),
->
->             TP_printk("EPC: 0x%08lx PC: 0x%08lx Status: 0x%08x Cause: 0x%=
-08x BadVAddr: 0x%08lx",
-> diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
-> index 3d21cbfa7443..99d5a71e4300 100644
-> --- a/arch/mips/kvm/vz.c
-> +++ b/arch/mips/kvm/vz.c
-> @@ -422,7 +422,7 @@ static void _kvm_vz_restore_htimer(struct kvm_vcpu *v=
-cpu,
->   */
->  static void kvm_vz_restore_timer(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         u32 cause, compare;
->
->         compare =3D kvm_read_sw_gc0_compare(cop0);
-> @@ -517,7 +517,7 @@ static void _kvm_vz_save_htimer(struct kvm_vcpu *vcpu=
-,
->   */
->  static void kvm_vz_save_timer(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         u32 gctl0, compare, cause;
->
->         gctl0 =3D read_c0_guestctl0();
-> @@ -863,7 +863,7 @@ static unsigned long mips_process_maar(unsigned int o=
-p, unsigned long val)
->
->  static void kvm_write_maari(struct kvm_vcpu *vcpu, unsigned long val)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->
->         val &=3D MIPS_MAARI_INDEX;
->         if (val =3D=3D MIPS_MAARI_INDEX)
-> @@ -876,7 +876,7 @@ static enum emulation_result kvm_vz_gpsi_cop0(union m=
-ips_instruction inst,
->                                               u32 *opc, u32 cause,
->                                               struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         enum emulation_result er =3D EMULATE_DONE;
->         u32 rt, rd, sel;
->         unsigned long curr_pc;
-> @@ -1911,7 +1911,7 @@ static int kvm_vz_get_one_reg(struct kvm_vcpu *vcpu=
-,
->                               const struct kvm_one_reg *reg,
->                               s64 *v)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         unsigned int idx;
->
->         switch (reg->id) {
-> @@ -2081,7 +2081,7 @@ static int kvm_vz_get_one_reg(struct kvm_vcpu *vcpu=
-,
->         case KVM_REG_MIPS_CP0_MAARI:
->                 if (!cpu_guest_has_maar || cpu_guest_has_dyn_maar)
->                         return -EINVAL;
-> -               *v =3D kvm_read_sw_gc0_maari(vcpu->arch.cop0);
-> +               *v =3D kvm_read_sw_gc0_maari(&vcpu->arch.cop0);
->                 break;
->  #ifdef CONFIG_64BIT
->         case KVM_REG_MIPS_CP0_XCONTEXT:
-> @@ -2135,7 +2135,7 @@ static int kvm_vz_set_one_reg(struct kvm_vcpu *vcpu=
-,
->                               const struct kvm_one_reg *reg,
->                               s64 v)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         unsigned int idx;
->         int ret =3D 0;
->         unsigned int cur, change;
-> @@ -2562,7 +2562,7 @@ static void kvm_vz_vcpu_load_tlb(struct kvm_vcpu *v=
-cpu, int cpu)
->
->  static int kvm_vz_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         bool migrated, all;
->
->         /*
-> @@ -2704,7 +2704,7 @@ static int kvm_vz_vcpu_load(struct kvm_vcpu *vcpu, =
-int cpu)
->
->  static int kvm_vz_vcpu_put(struct kvm_vcpu *vcpu, int cpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->
->         if (current->flags & PF_VCPU)
->                 kvm_vz_vcpu_save_wired(vcpu);
-> @@ -3076,7 +3076,7 @@ static void kvm_vz_vcpu_uninit(struct kvm_vcpu *vcp=
-u)
->
->  static int kvm_vz_vcpu_setup(struct kvm_vcpu *vcpu)
->  {
-> -       struct mips_coproc *cop0 =3D vcpu->arch.cop0;
-> +       struct mips_coproc *cop0 =3D &vcpu->arch.cop0;
->         unsigned long count_hz =3D 100*1000*1000; /* default to 100 MHz *=
-/
->
->         /*
-> --
-> 2.39.3
->
+For arm64, in general, you need to inhibit any concurrent execution (e.g. by
+stopping-the-world) when patching text, and afterwards you need cache maintence
+followed by a context-syncrhonization-event (aking to an x86 serializing
+instruction) on CPUs which will execute the new instruction(s).
 
+There are a bunch of special cases where we can omit some of that, but in
+general the architectural guarnatees are *very* weak and require SW to perform
+several bits of work to guarantee the new instructions will be executed without issues.
+
+Thanks,
+Mark.
