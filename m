@@ -2,236 +2,435 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A9C73E001
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jun 2023 15:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F22373E06B
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Jun 2023 15:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjFZNCN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Jun 2023 09:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S229562AbjFZNUQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Jun 2023 09:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjFZNCJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jun 2023 09:02:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 482ECD2;
-        Mon, 26 Jun 2023 06:02:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF2D62F4;
-        Mon, 26 Jun 2023 06:02:47 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.23.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 14E543F64C;
-        Mon, 26 Jun 2023 06:01:57 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 14:01:55 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
- jit_text_alloc()
-Message-ID: <ZJmMQ62fW7RO5W2O@FVFF77S0Q05N>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+        with ESMTP id S229660AbjFZNUE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jun 2023 09:20:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6C310A;
+        Mon, 26 Jun 2023 06:20:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3329960C87;
+        Mon, 26 Jun 2023 13:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBA3C433C8;
+        Mon, 26 Jun 2023 13:20:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687785601;
+        bh=yMQFKEOUbbLx0TpxByXcJPO7nUBP5tMGqjH5D51qxFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cpDfVC37gFTH9nEZE/L7ecqhPrV/wnDnhwXZYMzgklvn885TaQZV/dv+OlrJ/sNDM
+         6UhKd7rX6qcs/3Xzjpqo+l5OxAX38E5oyvceG2iwIi/NBjezR+RA2a19ex+D+vZCuz
+         DiWsrQ8UrHzS5iC3MU9zY9+vhQ+KuGGMu/Q6WA7jxK5QfrG1q47AX0Rsnh0vPdYDI6
+         RoRTVGPp9BQimY/UJHKT7t9M+feTA5wgO6auyY8YC6lbSCpdHGj4hbziG6kvoNjLIH
+         qROKZXoU6luxOz6kVyCecwc0+Yxs5CUoccck13R7UhhDTR06peL8nshm2gwhvZGGzU
+         4Hq7mfSTnSefg==
+Date:   Mon, 26 Jun 2023 15:19:58 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
+ hardware.
+Message-ID: <gmxnkyjkpedrem4ltixtgxruytbwsjrk5ggdvnqeqnncckti4r@tcsaokp3u6ax>
+References: <20230607053053.345101-1-suijingfeng@loongson.cn>
+ <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
+ <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
+ <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
+ <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
+ <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
+ <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
+ <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
+ <02d6f220-b457-b980-8623-8da636cb495c@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="a2btcfxmbyj4gv5j"
 Content-Disposition: inline
-In-Reply-To: <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DIET_1,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <02d6f220-b457-b980-8623-8da636cb495c@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
-> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
-> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
-> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
-> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> >> >
-> >> > module_alloc() is used everywhere as a mean to allocate memory for code.
-> >> >
-> >> > Beside being semantically wrong, this unnecessarily ties all subsystems
-> >> > that need to allocate code, such as ftrace, kprobes and BPF to modules
-> >> > and puts the burden of code allocation to the modules code.
-> >> >
-> >> > Several architectures override module_alloc() because of various
-> >> > constraints where the executable memory can be located and this causes
-> >> > additional obstacles for improvements of code allocation.
-> >> >
-> >> > Start splitting code allocation from modules by introducing
-> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
-> >> >
-> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
-> >> > module_alloc() and execmem_free() and jit_free() are replacements of
-> >> > module_memfree() to allow updating all call sites to use the new APIs.
-> >> >
-> >> > The intention semantics for new allocation APIs:
-> >> >
-> >> > * execmem_text_alloc() should be used to allocate memory that must reside
-> >> >   close to the kernel image, like loadable kernel modules and generated
-> >> >   code that is restricted by relative addressing.
-> >> >
-> >> > * jit_text_alloc() should be used to allocate memory for generated code
-> >> >   when there are no restrictions for the code placement. For
-> >> >   architectures that require that any code is within certain distance
-> >> >   from the kernel image, jit_text_alloc() will be essentially aliased to
-> >> >   execmem_text_alloc().
-> >> >
-> >> 
-> >> Is there anything in this series to help users do the appropriate
-> >> synchronization when the actually populate the allocated memory with
-> >> code?  See here, for example:
-> >
-> > This series only factors out the executable allocations from modules and
-> > puts them in a central place.
-> > Anything else would go on top after this lands.
-> 
-> Hmm.
-> 
-> On the one hand, there's nothing wrong with factoring out common code. On the
-> other hand, this is probably the right time to at least start thinking about
-> synchronization, at least to the extent that it might make us want to change
-> this API.  (I'm not at all saying that this series should require changes --
-> I'm just saying that this is a good time to think about how this should
-> work.)
-> 
-> The current APIs, *and* the proposed jit_text_alloc() API, don't actually
-> look like the one think in the Linux ecosystem that actually intelligently
-> and efficiently maps new text into an address space: mmap().
-> 
-> On x86, you can mmap() an existing file full of executable code PROT_EXEC and
-> jump to it with minimal synchronization (just the standard implicit ordering
-> in the kernel that populates the pages before setting up the PTEs and
-> whatever user synchronization is needed to avoid jumping into the mapping
-> before mmap() finishes).  It works across CPUs, and the only possible way
-> userspace can screw it up (for a read-only mapping of read-only text, anyway)
-> is to jump to the mapping too early, in which case userspace gets a page
-> fault.  Incoherence is impossible, and no one needs to "serialize" (in the
-> SDM sense).
-> 
-> I think the same sequence (from userspace's perspective) works on other
-> architectures, too, although I think more cache management is needed on the
-> kernel's end.  As far as I know, no Linux SMP architecture needs an IPI to
-> map executable text into usermode, but I could easily be wrong.  (IIRC RISC-V
-> has very developer-unfriendly icache management, but I don't remember the
-> details.)
 
-That's my understanding too, with a couple of details:
+--a2btcfxmbyj4gv5j
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1) After the copy we perform and complete all the data + instruction cache
-   maintenance *before* marking the mapping as executable.
+On Fri, Jun 23, 2023 at 04:38:34AM +0800, Sui Jingfeng wrote:
+> On 2023/6/8 15:39, Maxime Ripard wrote:
+> > On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
+> > > Hi,
+> > >=20
+> > > On 2023/6/8 00:12, Paul Cercueil wrote:
+> > > > Hi Sui,
+> > > >=20
+> > > > Le mercredi 07 juin 2023 =E0 22:38 +0800, Sui Jingfeng a =E9crit=A0:
+> > > > > Hi,=A0 welcome to discussion.
+> > > > >=20
+> > > > >=20
+> > > > > I have limited skills in manipulating English.
+> > > > >=20
+> > > > > It may not express what I'm really means in the short time.
+> > > > >=20
+> > > > > Part of word in the sentence may not as accurate as your.
+> > > > >=20
+> > > > > Well, please don't misunderstand, I'm not doing the rude to you.
+> > > > No problem.
+> > > >=20
+> > > > > I will explain it with more details.
+> > > > >=20
+> > > > > See below:
+> > > > >=20
+> > > > >=20
+> > > > > On 2023/6/7 20:09, Paul Cercueil wrote:
+> > > > > > Hi Sui,
+> > > > > >=20
+> > > > > > Le mercredi 07 juin 2023 =E0 18:30 +0800, Sui Jingfeng a =E9cri=
+t=A0:
+> > > > > > > Hi,
+> > > > > > >=20
+> > > > > > >=20
+> > > > > > > On 2023/6/7 17:36, Paul Cercueil wrote:
+> > > > > > > > Hi Sui,
+> > > > > > > >=20
+> > > > > > > > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =
+=E9crit=A0:
+> > > > > > > > > The single map_noncoherent member of struct
+> > > > > > > > > drm_gem_dma_object
+> > > > > > > > > may
+> > > > > > > > > not
+> > > > > > > > > sufficient for describing the backing memory of the GEM
+> > > > > > > > > buffer
+> > > > > > > > > object.
+> > > > > > > > >=20
+> > > > > > > > > Especially on dma-coherent systems, the backing memory is
+> > > > > > > > > both
+> > > > > > > > > cached
+> > > > > > > > > coherent for multi-core CPUs and dma-coherent for periphe=
+ral
+> > > > > > > > > device.
+> > > > > > > > > Say architectures like X86-64, LoongArch64, Loongson Mips=
+64,
+> > > > > > > > > etc.
+> > > > > > > > >=20
+> > > > > > > > > Whether a peripheral device is dma-coherent or not can be
+> > > > > > > > > implementation-dependent. The single map_noncoherent opti=
+on
+> > > > > > > > > is
+> > > > > > > > > not
+> > > > > > > > > enough
+> > > > > > > > > to reflect real hardware anymore. For example, the Loongs=
+on
+> > > > > > > > > LS3A4000
+> > > > > > > > > CPU
+> > > > > > > > > and LS2K2000/LS2K1000 SoC, peripheral device of such hard=
+ware
+> > > > > > > > > platform
+> > > > > > > > > allways snoop CPU's cache. Doing the allocation with
+> > > > > > > > > dma_alloc_coherent
+> > > > > > > > > function is preferred. The return buffer is cached, it sh=
+ould
+> > > > > > > > > not
+> > > > > > > > > using
+> > > > > > > > > the default write-combine mapping. While with the current
+> > > > > > > > > implement,
+> > > > > > > > > there
+> > > > > > > > > no way to tell the drm core to reflect this.
+> > > > > > > > >=20
+> > > > > > > > > This patch adds cached and coherent members to struct
+> > > > > > > > > drm_gem_dma_object.
+> > > > > > > > > which allow driver implements to inform the core. Introdu=
+cing
+> > > > > > > > > new
+> > > > > > > > > mappings
+> > > > > > > > > while keeping the original default behavior unchanged.
+> > > > > > > > Did you try to simply set the "dma-coherent" property to the
+> > > > > > > > device's
+> > > > > > > > node?
+> > > > > > > But this approach can only be applied for the device driver w=
+ith
+> > > > > > > DT
+> > > > > > > support.
+> > > > > > >=20
+> > > > > > > X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typic=
+ally
+> > > > > > > do
+> > > > > > > not
+> > > > > > > have DT support.
+> > > > > > >=20
+> > > > > > > They using ACPI to pass parameter from the firmware to Linux
+> > > > > > > kernel.
+> > > > > > >=20
+> > > > > > > You approach will lost the effectiveness on such a case.
+> > > > > > Well, I don't really know how ACPI handles it - but it should j=
+ust
+> > > > > > be a
+> > > > > > matter of setting dev->dma_coherent. That's basically what the =
+DT
+> > > > > > code
+> > > > > > does.
+> > > > > >=20
+> > > > > > Some MIPS boards set it in their setup code for instance.
+> > > > > >=20
+> > > > > This is a *strategy*, not a *mechanism*.
+> > > > >=20
+> > > > > In this case, DT is just used to describing the hardware.
+> > > > >=20
+> > > > > (It is actually a hardware feature describing language, the
+> > > > > granularity
+> > > > > is large)
+> > > > >=20
+> > > > > It does not changing the state of the hardware.
+> > > > >=20
+> > > > > It's your platform firmware or kernel setting up code who actuall=
+y do
+> > > > > such a things.
+> > > > >=20
+> > > > >=20
+> > > > > It's just that it works on *one* platform, it does not guarantee =
+it
+> > > > > will
+> > > > > works on others.
+> > > > If you add the "dma-coherent" property in a device node in DT, you
+> > > > effectively specify that the device is DMA-coherent; so you describe
+> > > > the hardware, which is what DT is for, and you are not changing the
+> > > > state of the hardware.
+> > > >=20
+> > > > Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
+> > > > default to DMA-coherent mapping; I believe you could do something
+> > > > similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
+> > > >=20
+> > > The preblem is that device driver can have various demand.
+> > >=20
+> > > It probably want to create different kind of buffers for different th=
+ing
+> > > simultaneously.
+> > >=20
+> > > Say, one allocated with dma_alloc_coherent for command buffer or dma
+> > > descriptor
+> > >=20
+> > > another one allocated with=A0 dma_alloc_wc for uploading shader etc.
+> > >=20
+> > > also has the third one allocated with dma_alloc_noncoherent() for doi=
+ng some
+> > > else.
+> > And it will work just fine.
+> >=20
+> > struct device dma_coherent, or DT's dma-coherent property define that
+> > the device doesn't need any kind of cache maintenance, ever. If it's
+> > missing, we need to perform cache maintenance to keep coherency.
+> >=20
+> > dma_alloc_* functions provide guarantees to the driver. With
+> > dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
+> > you don't need to perform cache maintenance operations by hand in the
+> > driver.
+> >=20
+> > With dma_alloc_noncoherent, the buffer is non-coherent and the driver
+> > needs to perform them when relevant.
+> >=20
+> > How those buffers are created is platform specific, but the guarantees
+> > provided *to the driver* are always there.
+> >=20
+> > A buffer allocated with dma_alloc_coherent might be provided by
+> > different means (at the hardware level with a coherency unit, by mapping
+> > it non-cacheable), but as far as the driver is concerned it's always
+> > going to be coherent.
+> >=20
+> > Similarly, a driver using dma_alloc_noncoherent will always require
+> > cache maintenance operations to use the API properly, even if the
+> > hardware provides coherency (in which case, those operations will be
+> > nop).
+> >=20
+> > So, yeah, like I was saying in the other mail, it looks like you're
+> > confusing a bunch of things. dma_alloc_* functions are about the driver
+> > expectations and guarantees. DT's dma-coherent property is about how we
+> > can implement them on a given platform.
+> >=20
+> > They don't have to match, and that's precisely how we can have drivers
+> > that run on any combination of platforms: the driver only cares about
+> > the buffer guarantees, the platform description takes care of how they
+> > are implemented.
+>=20
+> You are right in overall.
+>=20
+> Yeah, you have better understanding than me.
+>=20
+>=20
+> But let me give you an example which may made people confusing:
+>=20
+>=20
+> The the drm/ingenic and drm/etnaviv (KMS-RO) as an example:
+>=20
+>=20
+>=20
+> when drm/etnaviv's etnaviv_gem_prime_import_sg_table() function get calle=
+d,
+>=20
+> drm/etnaviv is importing buffer from drm/ingenic.
+>=20
+> drm/etnaviv is the importer, and drm/ingenic is the exporter.
+>=20
+> drm/ingenic choose non-coherent mapping by default for JZ4770(this is gc8=
+00
+> in it).
+>=20
+> It's cached, for fast CPU software rendering.
+>=20
+>=20
+> While drm/etnaviv import the buffer, get the SG, using the WC mapping by
+> default.
+>=20
+> Dose this cause *cache aliasing* because of different driver using differ=
+ent
+> cache
+>=20
+> mapping for the same backing memory ?
 
-2) Even *after* the mapping is marked executable, a thread could take a
-   spurious fault on an instruction fetch for the new instructions. One way to
-   think about this is that the CPU attempted to speculate the instructions
-   earlier, saw that the mapping was faulting, and placed a "generate a fault
-   here" operation into its pipeline to generate that later.
+This is a slightly different problem though. The main issue here is
+that there's multiple mapping with different attributes. Why is
+etnaviv even mapping the KMS buffer in the first place?
 
-   The CPU pipeline/OoO-engine/whatever is effectively a transient cache for
-   operations in-flight which is only ever "invalidated" by a
-   context-synchronization-event (akin to an x86 serializing effect).
+I'd say it's largely a dma-buf problem if that actually happens.
 
-   We're only guarnateed to have a new instruction fetch (from the I-cache into
-   the CPU pipeline) after the next context synchronization event (akin to an x86
-   serializing effect), and luckily out exception entry/exit is architecturally
-   guarnateed to provide that (unless we explicitly opt out via a control bit).
+> Because the imported buffer originally belong to the KMS driver side.
+>=20
+> For drm/ingenic(jz4770), the BO will be cached, but their hardware can't
+> guarantee coherency.
 
-I know we're a bit lax with that today: I think we omit the
-context-synchronization-event when enabling ftrace callsites, and worse, for
-static keys. Those are both on my TODO list of nasty problems that require
-careful auditing...
+You don't need to have hardware coherency to have a coherent buffer. A
+buffer mapped non-cacheable is coherent.
 
-> Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is
-> rather fraught, and I bet many things do it wrong when userspace is
-> multithreaded.  But not in production because it's mostly not used in
-> production.)
+> when etnaviv finished the rendering, they will do the resolve.
+>=20
+> By using the WC mapping, the GPU will write directly to the system RAM.
 
-I suspect uprobes needs a look too...
+I'm confused. The WC mapping is for the *CPU* mapping. The GPU doesn't
+use the CPU mapping.
 
-I'll need to go dig into all that a bit before I have more of an opinion on the
-shape of the API.
+> 1)
+>=20
+> If CPU flush the cache back to the system RAM(framebuffer when running
+> glmark-es2-drm).
+>=20
+> then the image(resolved by GPU) in framebuffer will be overwrite by the
+> stall data in the cache.
+>=20
+>=20
+> 2)
+>=20
+> Think about occasions when we need the CPU to do the read access to the
+> rendered image.
+>=20
+> (snap shoot, or using with X server fake EXA)
+>=20
+> The CPU still think the share buffer as cached, it will read from the cac=
+he
+> if hit.
+>=20
+> while GPU write to RAM directly by using WC mapping.
+>=20
+>=20
+> Even it call dma_sync_single_for_device(), it only get SYNC-ed for the
+> device.
+>=20
+> there is no SYNC for the CPU's cached.
+>=20
+> I think, In the end, it will lost of coherency.
+>=20
+>=20
+> 3)
+>=20
+> If the user want to use X server graphic environment,
+>=20
+> then the case will be more complex for 3D acceleration support.
+>=20
+>=20
+> Even it hacks somewhere to call the sync for CPU,
+>=20
+> they still may need invalid the cache frequently.
+>=20
+> In this case, it will not get a good performance.
+>=20
+>=20
+> At any case,=A0 such a KMS-RO combination((cached no-coherent + WC)) will=
+ be a
+> misery./
+> /
+>=20
+> While drm/ingenic could give up the hardware acceleration and the 3D
+> acceleration in X environment.
+>=20
+> it's OK, as its for low-ended graphic application.
+>=20
+>=20
+> But, at the other hand, it is say also why arm soc adhere to the
+> write-combine.
+>=20
+> because they have no choice.
+>=20
+> While ingenic is the first exception, thanks Paul's patch which help us to
+> understand a lot thing .
+>=20
+>=20
+> 4)
+>=20
+> While Loongson LS2K1000 SoC is DMA-coherent,
+>=20
+> We are also prefer cached framebuffer for fast CPU software rendering.
+>=20
+> I also get the hardware accelerated 3D works successfully,
+>=20
+> even only for the GL client (such as glxgears and glmark2).
+>=20
+>=20
+> Therefore, on our hardware platform.
+>=20
+> I force both the KMS driver and RO drivers to use cached mapping.
+>=20
+> with the hardware maintained cache coherence blessing us.
+>=20
+> It turn out that is works.
+>=20
+>=20
+> We don't need ( and don't want ) to call the dma_sync_*() series function,
+> not because we don't know it is no-op for DMA-coherent.
 
-Thanks,
-Mark.
+Then don't do that? Ingenic is the only driver that does. That means
+that all the other drivers don't, so follow their lead instead of
+ingenic if the trade-off doesn't work for you.
 
-> But jit_text_alloc() can't do this, because the order of operations doesn't
-> match.  With jit_text_alloc(), the executable mapping shows up before the
-> text is populated, so there is no atomic change from not-there to
-> populated-and-executable.  Which means that there is an opportunity for CPUs,
-> speculatively or otherwise, to start filling various caches with intermediate
-> states of the text, which means that various architectures (even x86!) may
-> need serialization.
-> 
-> For eBPF- and module- like use cases, where JITting/code gen is quite
-> coarse-grained, perhaps something vaguely like:
-> 
-> jit_text_alloc() -> returns a handle and an executable virtual address, but does *not* map it there
-> jit_text_write() -> write to that handle
-> jit_text_map() -> map it and synchronize if needed (no sync needed on x86, I think)
-> 
-> could be more efficient and/or safer.
-> 
-> (Modules could use this too.  Getting alternatives right might take some
-> fiddling, because off the top of my head, this doesn't match how it works
-> now.)
-> 
-> To make alternatives easier, this could work, maybe (haven't fully thought it through):
-> 
-> jit_text_alloc()
-> jit_text_map_rw_inplace() -> map at the target address, but RW, !X
-> 
-> write the text and apply alternatives
-> 
-> jit_text_finalize() -> change from RW to RX *and synchronize*
-> 
-> jit_text_finalize() would either need to wait for RCU (possibly extra heavy
-> weight RCU to get "serialization") or send an IPI.
-> 
-> This is slower than the alloc, write, map solution, but allows alternatives
-> to be applied at the final address.
-> 
-> 
-> Even fancier variants where the writing is some using something like
-> use_temporary_mm() might even make sense.
-> 
-> 
-> To what extent does performance matter for the various users?  module loading
-> is slow, and I don't think we care that much.  eBPF loaded is not super fast,
-> and we care to a limited extent.  I *think* the bcachefs use case needs to be
-> very fast, but I'm not sure it can be fast and supportable.
-> 
-> Anyway, food for thought.
-> 
+Maxime
+--a2btcfxmbyj4gv5j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZJmQfgAKCRDj7w1vZxhR
+xUuOAQCS1dAJnoIB9DknItLXnQoXEMKUJoDkl7jaqDjVuTph3gEA+1dCTWDdz5pm
+xJpehTZ4TZoElpcb9//oz8kMccVd2gw=
+=3yBT
+-----END PGP SIGNATURE-----
+
+--a2btcfxmbyj4gv5j--
