@@ -2,354 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6B773DBDE
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jun 2023 11:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957DD73DC37
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Jun 2023 12:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjFZJyS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Jun 2023 05:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S229526AbjFZK2f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Jun 2023 06:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFZJyR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jun 2023 05:54:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CB99B;
-        Mon, 26 Jun 2023 02:54:15 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b4826ba943so40168211fa.0;
-        Mon, 26 Jun 2023 02:54:15 -0700 (PDT)
+        with ESMTP id S229768AbjFZK2e (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jun 2023 06:28:34 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E44E6F
+        for <linux-mips@vger.kernel.org>; Mon, 26 Jun 2023 03:28:26 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b698dd515dso20396941fa.3
+        for <linux-mips@vger.kernel.org>; Mon, 26 Jun 2023 03:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687773253; x=1690365253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BkJiT0hPCVGufk3wfK9OYfFQLFeH4WpXrH92jiyy/So=;
-        b=LI5UZd6nWq3K7Pk9RsvstakVLfRy9rPrPfGF9Jxi7xqsukDqd54gYlmkO8NO2qWlHY
-         laEGLm0NqwaArg2B0U1mb2ZrqnQ9DVwimD6R9fGkz1Yd2PDLrxg65lZLZigg5lTSIx2l
-         56OJh1znTXpgfq6PeFjAtc4vfilcMyYO/Wyxt9uZPzTfS51DnEEvSczgbxwfbCIBHHC0
-         7ypRQx2o2pgmpeEfRoHRRO1a/N4rztkHAi5QRE7HA32OEPIVtwvl4zPvnFeZBbFS9Pc3
-         +XHYPCfQMMO7KjwgAec1IpnT5/TZoHL4STHkcCNJVmExNECcWBSghyv+4KQ48cIUrCZM
-         M6Jg==
+        d=linaro.org; s=google; t=1687775304; x=1690367304;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SlLbl4k7Er5MQ2EA7lMi/0F7IALSlRv5Fiy4Evgi9NE=;
+        b=Ssjc1BHbGaR9A4gKSXlL7IVZE/RfC/VGfw7qGPcCGJUtq9CC+jBNbe559pNwfsI6s1
+         jZHODCoCYY+pTqKbr69r+oXXajtEuTi5cyKRmkhAWtGeg1H52yUdvp/CLyRVKAOAsi5+
+         LVd472ZxTDuyTYNs0hvqOeTv2O3b7OySo5tFjj/xpUEFSsgKCNO3QLDLTawpraCwFOa4
+         eKOaHA490v9OBloda9XgGX2pmLtyDYbrFP4/p7Z+xZpWdAsrZ/AOu3f8MMpnVsfbnrM5
+         4+ngYIfYzBFi/rNNw9YYrzJD1iPiWkk+apccKInd5WEg3NjgchuC9M3+ngKXpIXGrMeu
+         YDnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687773253; x=1690365253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BkJiT0hPCVGufk3wfK9OYfFQLFeH4WpXrH92jiyy/So=;
-        b=h/ytM4r15EXzkLlLP9BWwqS1EzNlZDiH9pFRp4U5/vIFMQse0ELN2FDxdoK7OfmHnZ
-         SLCkAlYve22PQlgbF7cbXzHrQ7Op0n1rbEmGgOtVdACNpUxmU3RDo+dK96eTvOdLjEgP
-         I4P5VNH5R1TvkR+c6vkQEPZ9v4SEM58b+fGRBdE6vuj51CXqtx+zeX49EGoBKxr43vcN
-         2aDGSR6QRAe3D/4r10Fc3DCHitICPWkoUWN6jzeGr9Iejv9bXGXtCzOhGvzVwEsYrLgG
-         vkssWe3DlXo3l67yw9Gq4+VNLvVPL5jhZ+IToqIyyyABW150naACnQMW3qUkA55i+Jcb
-         ktrg==
-X-Gm-Message-State: AC+VfDzuN2YpesW80J6m8oucIyo8m+OVaHJDvfp4fAe6o+a8GlY+zAlV
-        TAKWNeaR+LXz7PMmk+yrNpqbYrjfRE713M/iLh07NeXCn3S/tjDD
-X-Google-Smtp-Source: ACHHUZ67jMr16NDRNLWv9518HCJB3Am5wfZo0UzBIm/hvCg0LmCzdDMhboQHv94rDq5VEGtQPY2hBiRv+xQ6CfYSFdg=
-X-Received: by 2002:a2e:9183:0:b0:2b4:6e21:637e with SMTP id
- f3-20020a2e9183000000b002b46e21637emr13282046ljg.16.1687773253077; Mon, 26
- Jun 2023 02:54:13 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687775304; x=1690367304;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SlLbl4k7Er5MQ2EA7lMi/0F7IALSlRv5Fiy4Evgi9NE=;
+        b=ORieOex8yByblcgMKZSl4YB7Q08aWC0eFY5A7WWA0xb8A71DpgKfoSKRogXTcZi4S0
+         FlK5z49acV6dBCKpmf/stS3q8geOTrNPfvl6X2cwwkCPjvhXM30WjkLPBH0dTTy9p0+y
+         aOPa2L6rY3u1B9f5sc7AsPRG1FvoFZ+kuUq9KLG8Lx3skBL8/1T2owYzFUFC7b57ZQat
+         JwNoPv4nKa6usu7iqU0UtMTZDEmQLDo6oiaksKvUVS4IrC3r9ONFgaEjJA/Nm7keCOWu
+         BQgdTc2YuzfEpY+eUdqZL3jOuOPrgBYIHissibDrEnOCCNjw7WXIddCP60zYH7NI9Tdl
+         Zh7A==
+X-Gm-Message-State: AC+VfDxIeTbllL3hjdHcP0eTKu/hnB8mNQJzFdUWLnq+YfOiXW/5x0A/
+        qidPivva0qAruNB0PMQub3cV0Q==
+X-Google-Smtp-Source: ACHHUZ7oJcNjPAQBg785ZTjQJK+Q1euOzsgaxFLR4hb3MnQ9cnOnNLL9QSgex5oep26+zntiSFw3kw==
+X-Received: by 2002:a2e:9619:0:b0:2b6:a59c:5e02 with SMTP id v25-20020a2e9619000000b002b6a59c5e02mr765933ljh.20.1687775304450;
+        Mon, 26 Jun 2023 03:28:24 -0700 (PDT)
+Received: from [192.168.69.115] ([176.187.199.226])
+        by smtp.gmail.com with ESMTPSA id i16-20020aa7c710000000b0051a2d4d85fesm2653281edq.75.2023.06.26.03.28.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 03:28:23 -0700 (PDT)
+Message-ID: <961c855a-81ea-c628-3e67-81877a748027@linaro.org>
+Date:   Mon, 26 Jun 2023 12:28:21 +0200
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com> <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com> <20230625161417.GK52412@kernel.org>
- <90161ac9-3ca0-4c72-b1c4-ab1293e55445@app.fastmail.com> <20230625174257.GL52412@kernel.org>
- <20230625180741.jrrtkq55c4jrqh3t@moria.home.lan> <CAPhsuW45gmtCVgA0mg6X87x5EOzSmVqq3SCMSR6agyiukiJvEQ@mail.gmail.com>
-In-Reply-To: <CAPhsuW45gmtCVgA0mg6X87x5EOzSmVqq3SCMSR6agyiukiJvEQ@mail.gmail.com>
-From:   Puranjay Mohan <puranjay12@gmail.com>
-Date:   Mon, 26 Jun 2023 11:54:02 +0200
-Message-ID: <CANk7y0jcakmuF4e9x8z7ZUra=MPx-=xxb0JZ3RrJ+S9Eb9-0_g@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
-To:     Song Liu <song@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] MIPS: KVM: Fix NULL pointer dereference
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>, pjt@google.com,
-        torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+References: <20230626074919.1871944-1-chenhuacai@loongson.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230626074919.1871944-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 8:13=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> On Sun, Jun 25, 2023 at 11:07=E2=80=AFAM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> >
-> > On Sun, Jun 25, 2023 at 08:42:57PM +0300, Mike Rapoport wrote:
-> > > On Sun, Jun 25, 2023 at 09:59:34AM -0700, Andy Lutomirski wrote:
-> > > >
-> > > >
-> > > > On Sun, Jun 25, 2023, at 9:14 AM, Mike Rapoport wrote:
-> > > > > On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
-> > > > >>
-> > > > >> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
-> > > > >> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrot=
-e:
-> > > > >> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
-> > > > >> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > > >> >> >
-> > > > >> >> > module_alloc() is used everywhere as a mean to allocate mem=
-ory for code.
-> > > > >> >> >
-> > > > >> >> > Beside being semantically wrong, this unnecessarily ties al=
-l subsystems
-> > > > >> >> > that need to allocate code, such as ftrace, kprobes and BPF=
- to modules
-> > > > >> >> > and puts the burden of code allocation to the modules code.
-> > > > >> >> >
-> > > > >> >> > Several architectures override module_alloc() because of va=
-rious
-> > > > >> >> > constraints where the executable memory can be located and =
-this causes
-> > > > >> >> > additional obstacles for improvements of code allocation.
-> > > > >> >> >
-> > > > >> >> > Start splitting code allocation from modules by introducing
-> > > > >> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit=
-_free() APIs.
-> > > > >> >> >
-> > > > >> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wr=
-appers for
-> > > > >> >> > module_alloc() and execmem_free() and jit_free() are replac=
-ements of
-> > > > >> >> > module_memfree() to allow updating all call sites to use th=
-e new APIs.
-> > > > >> >> >
-> > > > >> >> > The intention semantics for new allocation APIs:
-> > > > >> >> >
-> > > > >> >> > * execmem_text_alloc() should be used to allocate memory th=
-at must reside
-> > > > >> >> >   close to the kernel image, like loadable kernel modules a=
-nd generated
-> > > > >> >> >   code that is restricted by relative addressing.
-> > > > >> >> >
-> > > > >> >> > * jit_text_alloc() should be used to allocate memory for ge=
-nerated code
-> > > > >> >> >   when there are no restrictions for the code placement. Fo=
-r
-> > > > >> >> >   architectures that require that any code is within certai=
-n distance
-> > > > >> >> >   from the kernel image, jit_text_alloc() will be essential=
-ly aliased to
-> > > > >> >> >   execmem_text_alloc().
-> > > > >> >> >
-> > > > >> >>
-> > > > >> >> Is there anything in this series to help users do the appropr=
-iate
-> > > > >> >> synchronization when the actually populate the allocated memo=
-ry with
-> > > > >> >> code?  See here, for example:
-> > > > >> >
-> > > > >> > This series only factors out the executable allocations from m=
-odules and
-> > > > >> > puts them in a central place.
-> > > > >> > Anything else would go on top after this lands.
-> > > > >>
-> > > > >> Hmm.
-> > > > >>
-> > > > >> On the one hand, there's nothing wrong with factoring out common=
- code. On
-> > > > >> the other hand, this is probably the right time to at least star=
-t
-> > > > >> thinking about synchronization, at least to the extent that it m=
-ight make
-> > > > >> us want to change this API.  (I'm not at all saying that this se=
-ries
-> > > > >> should require changes -- I'm just saying that this is a good ti=
-me to
-> > > > >> think about how this should work.)
-> > > > >>
-> > > > >> The current APIs, *and* the proposed jit_text_alloc() API, don't=
- actually
-> > > > >> look like the one think in the Linux ecosystem that actually
-> > > > >> intelligently and efficiently maps new text into an address spac=
-e:
-> > > > >> mmap().
-> > > > >>
-> > > > >> On x86, you can mmap() an existing file full of executable code =
-PROT_EXEC
-> > > > >> and jump to it with minimal synchronization (just the standard i=
-mplicit
-> > > > >> ordering in the kernel that populates the pages before setting u=
-p the
-> > > > >> PTEs and whatever user synchronization is needed to avoid jumpin=
-g into
-> > > > >> the mapping before mmap() finishes).  It works across CPUs, and =
-the only
-> > > > >> possible way userspace can screw it up (for a read-only mapping =
-of
-> > > > >> read-only text, anyway) is to jump to the mapping too early, in =
-which
-> > > > >> case userspace gets a page fault.  Incoherence is impossible, an=
-d no one
-> > > > >> needs to "serialize" (in the SDM sense).
-> > > > >>
-> > > > >> I think the same sequence (from userspace's perspective) works o=
-n other
-> > > > >> architectures, too, although I think more cache management is ne=
-eded on
-> > > > >> the kernel's end.  As far as I know, no Linux SMP architecture n=
-eeds an
-> > > > >> IPI to map executable text into usermode, but I could easily be =
-wrong.
-> > > > >> (IIRC RISC-V has very developer-unfriendly icache management, bu=
-t I don't
-> > > > >> remember the details.)
-> > > > >>
-> > > > >> Of course, using ptrace or any other FOLL_FORCE to modify text o=
-n x86 is
-> > > > >> rather fraught, and I bet many things do it wrong when userspace=
- is
-> > > > >> multithreaded.  But not in production because it's mostly not us=
-ed in
-> > > > >> production.)
-> > > > >>
-> > > > >> But jit_text_alloc() can't do this, because the order of operati=
-ons
-> > > > >> doesn't match.  With jit_text_alloc(), the executable mapping sh=
-ows up
-> > > > >> before the text is populated, so there is no atomic change from =
-not-there
-> > > > >> to populated-and-executable.  Which means that there is an oppor=
-tunity
-> > > > >> for CPUs, speculatively or otherwise, to start filling various c=
-aches
-> > > > >> with intermediate states of the text, which means that various
-> > > > >> architectures (even x86!) may need serialization.
-> > > > >>
-> > > > >> For eBPF- and module- like use cases, where JITting/code gen is =
-quite
-> > > > >> coarse-grained, perhaps something vaguely like:
-> > > > >>
-> > > > >> jit_text_alloc() -> returns a handle and an executable virtual a=
-ddress,
-> > > > >> but does *not* map it there
-> > > > >> jit_text_write() -> write to that handle
-> > > > >> jit_text_map() -> map it and synchronize if needed (no sync need=
-ed on
-> > > > >> x86, I think)
-> > > > >>
-> > > > >> could be more efficient and/or safer.
-> > > > >>
-> > > > >> (Modules could use this too.  Getting alternatives right might t=
-ake some
-> > > > >> fiddling, because off the top of my head, this doesn't match how=
- it works
-> > > > >> now.)
-> > > > >>
-> > > > >> To make alternatives easier, this could work, maybe (haven't ful=
-ly
-> > > > >> thought it through):
-> > > > >>
-> > > > >> jit_text_alloc()
-> > > > >> jit_text_map_rw_inplace() -> map at the target address, but RW, =
-!X
-> > > > >>
-> > > > >> write the text and apply alternatives
-> > > > >>
-> > > > >> jit_text_finalize() -> change from RW to RX *and synchronize*
-> > > > >>
-> > > > >> jit_text_finalize() would either need to wait for RCU (possibly =
-extra
-> > > > >> heavy weight RCU to get "serialization") or send an IPI.
-> > > > >
-> > > > > This essentially how modules work now. The memory is allocated RW=
-, written
-> > > > > and updated with alternatives and then made ROX in the end with s=
-et_memory
-> > > > > APIs.
-> > > > >
-> > > > > The issue with not having the memory mapped X when it's written i=
-s that we
-> > > > > cannot use large pages to map it. One of the goals is to have exe=
-cutable
-> > > > > memory mapped with large pages and make code allocator able to di=
-vide that
-> > > > > page among several callers.
-> > > > >
-> > > > > So the idea was that jit_text_alloc() will have a cache of large =
-pages
-> > > > > mapped ROX, will allocate memory from those caches and there will=
- be
-> > > > > jit_update() that uses text poking for writing to that memory.
-> > > > >
-> > > > > Upon allocation of a large page to increase the cache, that large=
- page will
-> > > > > be "invalidated" by filling it with breakpoint instructions (e.g =
-int3 on
-> > > > > x86)
-> > > >
-> > > > Is this actually valid?  In between int3 and real code, there=E2=80=
-=99s a
-> > > > potential torn read of real code mixed up with 0xcc.
-> > >
-> > > You mean while doing text poking?
-> >
-> > I think we've been getting distracted by text_poke(). text_poke() does
-> > updates via a different virtual address which introduce new
-> > synchroniation wrinkles, but it's not the main issue.
-> >
-> > As _think_ I understand it, the root of the issue is that speculative
-> > execution - and that per Andy, speculative execution doesn't obey memor=
-y
-> > barriers.
-> >
-> > I have _not_ dug into the details of how retpolines work and all the
-> > spectre stuff that was going on, but - retpoline uses lfence, doesn't
-> > it? And if speculative execution is the issue here, isn't retpoline wha=
-t
-> > we need?
-> >
-> > For this particular issue, I'm not sure "invalidate by filling with
-> > illegal instructions" makes sense. For that to work, would the processo=
-r
-> > have to execute a serialize operation and a retry on hitting an illegal
-> > instruction - or perhaps we do in the interrupt handler?
-> >
-> > But if filling with illegal instructions does act as a speculation
-> > barrier, then the issue is that a torn read could generate a legal but
-> > incorrect instruction.
->
-> What is a "torn read" here? I assume it is an instruction read that
-> goes at the wrong instruction boundary (CISC). If this is correct, do
-> we need to handle torn read caused by software bug, or hardware
-> bit flip, or both?
+On 26/6/23 09:49, Huacai Chen wrote:
+> After commit 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support") we
+> get a NULL pointer dereference when creating a KVM guest:
+> 
+> [  146.243409] Starting KVM with MIPS VZ extensions
+> [  149.849151] CPU 3 Unable to handle kernel paging request at virtual address 0000000000000300, epc == ffffffffc06356ec, ra == ffffffffc063568c
+> [  149.849177] Oops[#1]:
+> [  149.849182] CPU: 3 PID: 2265 Comm: qemu-system-mip Not tainted 6.4.0-rc3+ #1671
+> [  149.849188] Hardware name: THTF CX TL630 Series/THTF-LS3A4000-7A1000-ML4A, BIOS KL4.1F.TF.D.166.201225.R 12/25/2020
+> [  149.849192] $ 0   : 0000000000000000 000000007400cce0 0000000000400004 ffffffff8119c740
+> [  149.849209] $ 4   : 000000007400cce1 000000007400cce1 0000000000000000 0000000000000000
+> [  149.849221] $ 8   : 000000240058bb36 ffffffff81421ac0 0000000000000000 0000000000400dc0
+> [  149.849233] $12   : 9800000102a07cc8 ffffffff80e40e38 0000000000000001 0000000000400dc0
+> [  149.849245] $16   : 0000000000000000 9800000106cd0000 9800000106cd0000 9800000100cce000
+> [  149.849257] $20   : ffffffffc0632b28 ffffffffc05b31b0 9800000100ccca00 0000000000400000
+> [  149.849269] $24   : 9800000106cd09ce ffffffff802f69d0
+> [  149.849281] $28   : 9800000102a04000 9800000102a07cd0 98000001106a8000 ffffffffc063568c
+> [  149.849293] Hi    : 00000335b2111e66
+> [  149.849295] Lo    : 6668d90061ae0ae9
+> [  149.849298] epc   : ffffffffc06356ec kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
+> [  149.849324] ra    : ffffffffc063568c kvm_vz_vcpu_setup+0x64/0x328 [kvm]
+> [  149.849336] Status: 7400cce3 KX SX UX KERNEL EXL IE
+> [  149.849351] Cause : 1000000c (ExcCode 03)
+> [  149.849354] BadVA : 0000000000000300
+> [  149.849357] PrId  : 0014c004 (ICT Loongson-3)
+> [  149.849360] Modules linked in: kvm nfnetlink_queue nfnetlink_log nfnetlink fuse sha256_generic libsha256 cfg80211 rfkill binfmt_misc vfat fat snd_hda_codec_hdmi input_leds led_class snd_hda_intel snd_intel_dspcfg snd_hda_codec snd_hda_core snd_pcm snd_timer snd serio_raw xhci_pci radeon drm_suballoc_helper drm_display_helper xhci_hcd ip_tables x_tables
+> [  149.849432] Process qemu-system-mip (pid: 2265, threadinfo=00000000ae2982d2, task=0000000038e09ad4, tls=000000ffeba16030)
+> [  149.849439] Stack : 9800000000000003 9800000100ccca00 9800000100ccc000 ffffffffc062cef4
+> [  149.849453]         9800000102a07d18 c89b63a7ab338e00 0000000000000000 ffffffff811a0000
+> [  149.849465]         0000000000000000 9800000106cd0000 ffffffff80e59938 98000001106a8920
+> [  149.849476]         ffffffff80e57f30 ffffffffc062854c ffffffff811a0000 9800000102bf4240
+> [  149.849488]         ffffffffc05b0000 ffffffff80e3a798 000000ff78000000 000000ff78000010
+> [  149.849500]         0000000000000255 98000001021f7de0 98000001023f0078 ffffffff81434000
+> [  149.849511]         0000000000000000 0000000000000000 9800000102ae0000 980000025e92ae28
+> [  149.849523]         0000000000000000 c89b63a7ab338e00 0000000000000001 ffffffff8119dce0
+> [  149.849535]         000000ff78000010 ffffffff804f3d3c 9800000102a07eb0 0000000000000255
+> [  149.849546]         0000000000000000 ffffffff8049460c 000000ff78000010 0000000000000255
+> [  149.849558]         ...
+> [  149.849565] Call Trace:
+> [  149.849567] [<ffffffffc06356ec>] kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
+> [  149.849586] [<ffffffffc062cef4>] kvm_arch_vcpu_create+0x184/0x228 [kvm]
+> [  149.849605] [<ffffffffc062854c>] kvm_vm_ioctl+0x64c/0xf28 [kvm]
+> [  149.849623] [<ffffffff805209c0>] sys_ioctl+0xc8/0x118
+> [  149.849631] [<ffffffff80219eb0>] syscall_common+0x34/0x58
+> 
+> The root cause is the deletion of kvm_mips_commpage_init() leaves vcpu->
+> arch.cop0 NULL. So fix it by make cop0 from a pointer to an embed object.
 
-On ARM64 (RISC), torn reads can't happen because the instruction fetch
-is word aligned. If we replace the whole instruction atomically then there
-won't be half old - half new instruction fetches.
+"by making ... to an embedded object."
 
-Thanks,
-Puranjay
+> 
+> Fixes: 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support")
+> Cc: stable@vger.kernel.org
+
+Reported-by: Yu Zhao <yuzhao@google.com>
+
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   arch/mips/include/asm/kvm_host.h |  6 +++---
+>   arch/mips/kvm/emulate.c          | 22 +++++++++++-----------
+>   arch/mips/kvm/mips.c             | 16 ++++++++--------
+>   arch/mips/kvm/trace.h            |  8 ++++----
+>   arch/mips/kvm/vz.c               | 20 ++++++++++----------
+>   5 files changed, 36 insertions(+), 36 deletions(-)
+
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
