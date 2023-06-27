@@ -2,172 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E89C7401AB
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jun 2023 18:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B591740216
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jun 2023 19:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjF0Qwl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 27 Jun 2023 12:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S229809AbjF0RYX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Jun 2023 13:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjF0Qwj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jun 2023 12:52:39 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094AF10F;
-        Tue, 27 Jun 2023 09:52:36 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3a04cb10465so3423329b6e.3;
-        Tue, 27 Jun 2023 09:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687884755; x=1690476755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3lIZI96K9vdLoSwUwpQZZH+ZWrx3VsFWqYpi3+69yqU=;
-        b=j8UVkCGUTQm4cypu9sZY06fFuoeRVjQB3Tcp1KkWVs8FGlEHu5iHdNIL4L9wAZSM3g
-         o4IxO8Yjz1rxMpjtE0FC2o+TnQVwgEALAAeErTkDjqwi9Txf4BFzLkDPhmxurP8dOGvv
-         6sBmGi48HC+3bWDJAN9+L8+tOUyW0OQshYw3hG3ayOYi9hCVkkay00SSMPSnOOeg/8oT
-         /RfaJjmecA8jEludnHWb5IJaeqiO3yIiPyuqsHeZWrUYYc0lBFfJEZfvTj+MKg8fqRs5
-         buW6R+8RofQtFLa49bmBVE2sw9UTywsX2woGDUBwI0GcPVUY2mavaXttbB14mwpFnMXH
-         MYsw==
-X-Gm-Message-State: AC+VfDyA0/0QXiyqbweQsnfFKdaey+PECZBQGXRxM4Hd3MUGu+nNAybG
-        uJRNp8H4MIRqzCRL9XaME3Ew094+gDnpUecO
-X-Google-Smtp-Source: ACHHUZ7sEtTDbMtXMYZM4wQdcH42Gj87XiCWCRSbYSHNx3mT9t9vREEcit/ZxlmEgYFy4cLekney/A==
-X-Received: by 2002:a05:6808:3098:b0:3a3:3a0b:aab8 with SMTP id bl24-20020a056808309800b003a33a0baab8mr1642135oib.48.1687884755254;
-        Tue, 27 Jun 2023 09:52:35 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id l1-20020a544501000000b003a3600182f8sm337192oil.57.2023.06.27.09.52.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 09:52:34 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6b44b5adfd3so3927087a34.3;
-        Tue, 27 Jun 2023 09:52:34 -0700 (PDT)
-X-Received: by 2002:a05:6358:f55:b0:132:d3b1:c34a with SMTP id
- c21-20020a0563580f5500b00132d3b1c34amr12105551rwj.7.1687884753801; Tue, 27
- Jun 2023 09:52:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-22-arnd@kernel.org>
- <OS0PR01MB5922EDAFCD6DA0313DB99C5E86989@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <66899d69-1339-4a61-8612-6f8e452b0b26@app.fastmail.com>
-In-Reply-To: <66899d69-1339-4a61-8612-6f8e452b0b26@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Jun 2023 18:52:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV5gT1GDLODsUe0XibPRsRHazF4K-UhxTOQCjtC9Ba4mQ@mail.gmail.com>
-Message-ID: <CAMuHMdV5gT1GDLODsUe0XibPRsRHazF4K-UhxTOQCjtC9Ba4mQ@mail.gmail.com>
-Subject: Re: [PATCH 21/21] dma-mapping: replace custom code with generic implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Michal Simek <monstr@monstr.eu>,
+        with ESMTP id S229437AbjF0RYW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jun 2023 13:24:22 -0400
+X-Greylist: delayed 22395 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Jun 2023 10:24:21 PDT
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FE6198;
+        Tue, 27 Jun 2023 10:24:21 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id A106C8CA7A;
+        Tue, 27 Jun 2023 19:24:17 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1687886658; bh=9vOPDa2+EN3LYAg4BMAohZm6Jl+lEOuMGaVCuwssnaA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cNk0Wgm3mOOYkdgD7o2P8zkmXB9DlvZdjG1JAbNclP/xyBhjIkW/MPZDpjjOIIR/4
+         B9+HxmW+8I3uNmUoF2WJM3IeX5oZSGC91EY5GZSR8WKa47+bB0udthwtHptF4jFmDq
+         lFCLX6B2Yr/tH2MwMKBIsmuFeha/poInE0dXhO4Y7A7lA05YKl5OI/Eyk1xSheX2cy
+         h14303BG8tneIYkRKh6qzWOQX7gkga2Yzn2C/EfYREZxN+VAdmn3fVxCXSQk6+WedL
+         KZR5SVZBabIZT9t27FMrWa5mVOrttNHWaNXGkP2NNngdNbplu/tQyrPCNag/3ednN1
+         lN2OqtGQuTTlA==
+Date:   Tue, 27 Jun 2023 19:24:14 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v3 1/7] swiotlb: make io_tlb_default_mem local to
+ swiotlb.c
+Message-ID: <20230627192414.6b78fdb8@meshulam.tesarici.cz>
+In-Reply-To: <20230627154802.GA29567@lst.de>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+        <a1ef6eeab8b64fac817b9734da4a056f05a68d01.1687859323.git.petr.tesarik.ext@huawei.com>
+        <2023062745-routing-palace-d0b4@gregkh>
+        <73f11258-1562-17c1-969e-b134dcb5f35c@arm.com>
+        <20230627133006.16ee11af@meshulam.tesarici.cz>
+        <20230627154802.GA29567@lst.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 2:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Thu, Apr 13, 2023, at 14:13, Biju Das wrote:
-> > FYI, this patch breaks on RZ/G2L SMARC EVK board and Arnd will send V2
-> > for fixing this issue.
-> >
-> > [10:53] <biju> [    3.384408] Unable to handle kernel paging request at
-> > virtual address 000000004afb0080
->
-> Right, sorry about this, I accidentally removed the 'phys_to_virt()'
-> conversion on arm64.
+On Tue, 27 Jun 2023 17:48:02 +0200
+Christoph Hellwig <hch@lst.de> wrote:
 
-Meh, I missed that, so I ended up bisecting this same failure...
+> On Tue, Jun 27, 2023 at 01:30:06PM +0200, Petr Tesa=C5=99=C3=ADk wrote:
+> > Xen is the only user of an "is SWIOTLB present" interface. IIUC Xen
+> > needs bounce buffers for the PCI frontend driver, but if there is no
+> > other reason to have a SWIOTLB, the system does not set up one at boot.=
+ =20
+>=20
+> Please take a look at my "unexport swiotlb_active v2" series that
+> unfortunately missed the 6.5 merge window waiting for reviews.
 
-This patch is now commit 801f1883c4bb70cc ("dma-mapping: replace
-custom code with generic implementation") in esmil/jh7100-dmapool,
-and broke booting on R-Car Gen3.
+I noticed it, but it seems I missed the part which completely removes
+pci_xen_swiotlb_init_late().
 
-The following gmail-whitespace-damaged patch fixes that:
+Then we're left only with a reference from xen_mm_init() in
+arch/arm/xen/mm.c, and I believe this one can also be solved
+differently.
 
-diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
-index 97b7cea5eb23aedd..77e0b68b43e5849a 100644
---- a/arch/arm64/mm/dma-mapping.c
-+++ b/arch/arm64/mm/dma-mapping.c
-@@ -15,17 +15,23 @@
-
- static inline void arch_dma_cache_wback(phys_addr_t paddr, size_t size)
- {
--       dcache_clean_poc(paddr, paddr + size);
-+       unsigned long start = (unsigned long)phys_to_virt(paddr);
-+
-+       dcache_clean_poc(start, start + size);
- }
-
- static inline void arch_dma_cache_inv(phys_addr_t paddr, size_t size)
- {
--       dcache_inval_poc(paddr, paddr + size);
-+       unsigned long start = (unsigned long)phys_to_virt(paddr);
-+
-+       dcache_inval_poc(start, start + size);
- }
-
- static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
- {
--       dcache_clean_inval_poc(paddr, paddr + size);
-+       unsigned long start = (unsigned long)phys_to_virt(paddr);
-+
-+       dcache_clean_inval_poc(start, start + size);
- }
-
- static inline bool arch_sync_dma_clean_before_fromdevice(void)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Petr T
