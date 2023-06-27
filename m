@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B5F73FACB
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jun 2023 13:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B103D73FB1D
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jun 2023 13:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjF0LLM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Jun 2023 07:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        id S230075AbjF0LaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Jun 2023 07:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjF0LLL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jun 2023 07:11:11 -0400
+        with ESMTP id S229501AbjF0LaM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jun 2023 07:30:12 -0400
 Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8581BE8
-        for <linux-mips@vger.kernel.org>; Tue, 27 Jun 2023 04:11:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8880C10C;
+        Tue, 27 Jun 2023 04:30:10 -0700 (PDT)
 Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 8C5948C9CB;
-        Tue, 27 Jun 2023 13:11:01 +0200 (CEST)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 0630888EE8;
+        Tue, 27 Jun 2023 13:30:06 +0200 (CEST)
 Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1687864261; bh=qV5FgT4RgSJppKtj0fLN/J7cUeZK9GPTjiJP3fPSLqg=;
+        t=1687865407; bh=PMTYuWEHp4RzWxSHWEhXWEo5d5MHLxZfnxLeMEnfGD4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gjFY6ZJmmGKpykzVlsS77fpY32kAzzHLfddjKOGLIrtTY1sRj1XTgGb6CUYpBqlnR
-         imB7mHimhNMwspVUHmIKcQ8Y0HXaUGDkHBp/D9bPQbjM/D+ZEeO16xMudTMMfH7PqQ
-         PVKMOyjp718f6Jq5gC2N5P9/n0EqDfu7iZbW+wN+uUzOxQwga+bgmDJQNKt7AMOfQm
-         hBW7r7pIi48iOcROYf/m1SZa6iv6yiuGnOQ6g1G1ALFlIXupl4u+XiSYvbUimKHDR3
-         0fuJtcV4xwQLNeWpXtYdoz4z9GX7+FH8MF1QOBR+NdXzUxvGRAgSZH/KaQumsOtEmU
-         Vdnpw+LVD4PcQ==
-Date:   Tue, 27 Jun 2023 13:11:00 +0200
+        b=pcG7sqNkBFFgow2Mmh7j1elzlR0/jjXSQNzKLduKGlzVYfZajP/QiJ4lkbDtFwJLi
+         pESn5wq4anP0MZET52ZTEyNhiqUsxP6UEtpu4YIthoSaYFSns/v6oXVDnx7k0HKw2V
+         fYAaQSUKIxmzf+4SjVZDWmH+40O4FvNXNR2gRt4a7LRHTWA5RAf9DfPWrmi6XJhYTD
+         rriJpAd+AMIr+QRiWzJl6V91faWGK5BevB3Xt+t2O00J/1rFoj0fHl+yvxQGUd1PD2
+         VqpnCoIh+9t2srRILgq8MxkRXkjjqcpIMUU0TxphHFBmcdXdM+KPz3HUteGJKKi+tI
+         tEwiLAN1YW+8Q==
+Date:   Tue, 27 Jun 2023 13:30:06 +0200
 From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
 To:     Robin Murphy <robin.murphy@arm.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -61,7 +61,7 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
 Subject: Re: [PATCH v3 1/7] swiotlb: make io_tlb_default_mem local to
  swiotlb.c
-Message-ID: <20230627131100.661d5297@meshulam.tesarici.cz>
+Message-ID: <20230627133006.16ee11af@meshulam.tesarici.cz>
 In-Reply-To: <73f11258-1562-17c1-969e-b134dcb5f35c@arm.com>
 References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
         <a1ef6eeab8b64fac817b9734da4a056f05a68d01.1687859323.git.petr.tesarik.ext@huawei.com>
@@ -73,19 +73,21 @@ Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Oops, originally sent only to Robin. Restoring the recipient list here...
+
 On Tue, 27 Jun 2023 11:55:00 +0100
 Robin Murphy <robin.murphy@arm.com> wrote:
 
-> On 27/06/2023 11:24 am, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 27, 2023 at 11:54:23AM +0200, Petr Tesarik wrote:  
+> On 27/06/2023 11:24 am, Greg Kroah-Hartman wrote:  
+> > On Tue, Jun 27, 2023 at 11:54:23AM +0200, Petr Tesarik wrote:    
 > >> +/**
 > >> + * is_swiotlb_active() - check if the software IO TLB is initialized
 > >> + * @dev:	Device to check, or %NULL for the default IO TLB.
@@ -95,41 +97,37 @@ Robin Murphy <robin.murphy@arm.com> wrote:
 > >> -	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
 > >> +	struct io_tlb_mem *mem = dev
 > >> +		? dev->dma_io_tlb_mem
-> >> +		: &io_tlb_default_mem;  
+> >> +		: &io_tlb_default_mem;    
 > > 
 > > That's impossible to read and maintain over time, sorry.
 > > 
 > > Please use real "if () else" lines, so that it can be maintained over
-> > time.  
+> > time.    
 > 
 > Moreover, it makes for a horrible interface anyway. If there's a need 
 > for a non-specific "is SWIOTLB present at all?" check unrelated to any 
 > particular device (which arguably still smells of poking into 
 > implementation details...), please encapsulate it in its own distinct 
-> helper like, say, is_swiotlb_present(void).
-> 
-> However, the more I think about it, the more I doubt that logic like 
-> octeon_pci_setup() can continue to work properly at all if SWIOTLB 
-> allocation becomes dynamic... :/
+> helper like, say, is_swiotlb_present(void).  
 
-Good, so I'm not alone. I don't know enough of the Octeon hardware to
-understand how much magic is behind these PCI BARs and why one of them
-should be (sometimes) programmed the way it is.
+I'm sorry for writing two replies, but I realized too late that this
+part is unrelated to the MIPS Octeon platform.
 
-OTOH it doesn't seem to me that this platform forces DMA through
-SWIOTLB. At least all calls to swiotlb_init() under arch/mips take this
-form:
+Xen is the only user of an "is SWIOTLB present" interface. IIUC Xen
+needs bounce buffers for the PCI frontend driver, but if there is no
+other reason to have a SWIOTLB, the system does not set up one at boot.
 
-	swiotlb_init(true, SWIOTLB_VERBOSE);
+Yeah, they should probably do things differently. At least this code in
+arch/x86/kernel/pci-dma.c is fishy:
 
-This makes me believe that this PCI BAR setup is merely an optimization.
+	/* XXX: this switches the dma ops under live devices! */
+	dma_ops = &xen_swiotlb_dma_ops;
 
-However, if nobody has a clear answer, a fallback solution is to stay
-on the safe side and add a flag to struct io_tlb_mem whether SWIOTLB
-can grow dynamically. The helper function would then set this flag and
-make sure that on this Octeon platform, the SWIOTLB stays restricted to
-the default pool.
+However, I don't think it's up to me to fix that...
 
-Hopefully, Thomas Bogendoerfer can shed some light on that code.
+To sum it up, I can certainly provide a separate function instead of
+overloading the is_swiotlb_active() API.
+
+Thanks for the suggestion!
 
 Petr T
