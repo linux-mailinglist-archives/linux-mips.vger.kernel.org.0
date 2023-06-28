@@ -2,226 +2,327 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D967410A2
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 14:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F276B7412A2
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 15:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbjF1MCL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jun 2023 08:02:11 -0400
-Received: from elvis.franken.de ([193.175.24.41]:45244 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229456AbjF1MCK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:02:10 -0400
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qETs8-0001nL-00; Wed, 28 Jun 2023 14:02:08 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C1436C02FD; Wed, 28 Jun 2023 14:02:01 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 14:02:01 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.5
-Message-ID: <20230628120201.GA10364@alpha.franken.de>
+        id S232124AbjF1Ng5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jun 2023 09:36:57 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:4698 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232042AbjF1Ngq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:36:46 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBTAjI003640;
+        Wed, 28 Jun 2023 13:30:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
+ b=B7iFCq4AiRJoab2n565ObD7zPfsEWNjMbOBpi6NAQvaSJKVw2SHfwYNSS/MOQJRtXLYb
+ xFhYZGRBT8u/JrB91PeSRmuwMUbhFEvQpAShQDK2m/ndAygIzt0g1AFARDg+X1H2bCy6
+ ppXQ9xFm73lZ6ZCp2s90yaOIHbUpcoV5+3uo4Dr5M1x+UtHTBpyizCrHeQITenvg5WTh
+ gqR0VJhx/jcsxXDEFuai+LEDIArJbaKdCpGd43XvgBtEmpODciqBGa/JExy6LbDWXGg7
+ isTZ0r9QTfELcHNFoXdI085/oQW7wPXNhY71QXYrJfHb5g0lOri4oKktCBFiSMTw4UEq qQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rdq937gpf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jun 2023 13:30:58 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35SDAuRI029607;
+        Wed, 28 Jun 2023 13:30:57 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpx60t3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jun 2023 13:30:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aeveih347uUKwE1PDfVU57+tr4eH5JKzsVVt/v8abvGjwL+F1UBL1P7Z26LAGM6O+120ol04oUrZ5O2LuOEZCJo+GR1D5ShYXjsm390q/wvaW/E1AspsWfVd6rVGqf3JmbQeo2op4v7GGrD/uIO6us13R4Pfuc8chXkNTqKE59zWdJU2VCUoR8u2B5Crj0ZHsVD7FMOEawrd++srGfo+mQ8ZNe8g7koD6hQsWWzPdbZp1yasd+wBZ3uM6AwEdAAs+EWlKGw+okOWnGeCl6gLOBOb6ZYEeIAuBeG9y6WruuNhDxbN9XrhXomSMQZXysRp6F12MmQ0ql6VpJYArhLf+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
+ b=mXHeitUqH2kTcf/MfQZu7aWw91qXQpiCJazn4bCa0PA6vWp2JbvB6SaLV1t+ZSC9o0aZTSt/1qoIaqsiTMblzNE1p0SYA9FEb1X3uBhSFCycy5Z+99xNOZqqEBvtwmEzZRCKb2VAV6D5f7SCnCj1U2kx83zmm+it0a9WfTU2PuhE9wrLcQJ4a8SByOtH84zy9B7aWofBlqLI8DEaIVJR4ywd9i0XrNsuDi1Egg/33rCbER64jzOH1srbwZymPuMJqme8dhYhqxuhGgXbe1kRiRnkfAQkKOK99jZ6Hd9u6CtcP5CqKiytRjr78TOaND0g1EJ1fbBSC+5MeL9BvNj/mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
+ b=hU8IxlnpBnRF7rbSH+e5c7Fhvh7R1YCUVx9ZbWMZW1yM+EYv2ToEBUoPUDvEZUpTsY/mme7fIvgqzAtzSdfZ3O3E04XeKODyBOZetKAighM6wSbg7xYEmkFrbBg9ZLISVbBjMfp+HuO1iYD1SF9jClyctiWcOXe1aMv+5rtpoqA=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by DS7PR10MB5166.namprd10.prod.outlook.com (2603:10b6:5:3a4::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
+ 2023 13:30:53 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
+ 13:30:53 +0000
+Message-ID: <8158b5de-c2c5-2b4b-a2c4-5ace9a17a99b@oracle.com>
+Date:   Wed, 28 Jun 2023 08:30:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 11/13] riscv/kexec: refactor for kernel/Kconfig.kexec
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
+        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20230626161332.183214-1-eric.devolder@oracle.com>
+ <20230626161332.183214-12-eric.devolder@oracle.com>
+ <20230628-urologist-faction-42ebe5372206@wendy>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <20230628-urologist-faction-42ebe5372206@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0015.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::20) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|DS7PR10MB5166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2821a4fd-9f1b-4999-2bed-08db77dbe55d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zV/pq6YnW3nCMf2W925/J71RpoglFBi7KV9BQS2Doy+7D3xkEVzt+RhRBGJTPElZtAD1XaK3YXya2bl1PmdwIOlzt+i3SsoB0mnUtnwwEH1EAXQs2b0aX7ENqgVluJK0bC/UXugKelwt2gYbVgIokKafZABpzz/jslnkOXfmfQ2K0ixdT9GVQCL89GGxQnxsYPgKQHfBblep3RG2K3k8TYVZM2DyuW5airj7Af0OZTTHtHs180lYl7GuIIOfpRe60Q+unKejClhF4Q4xY6aKVP1+qZX6eQNeM7fhWAiripb0B3bKRWMrPDais4JcHGjKQl3GhZxsdytT7VhpKyrdZNYc8Wqf97ZmR80H8eJ3tEzuRpdPZL4l8sRTLDaFYZ0HrcQPT4MOWVfWJvoaw2UoYIVyFUecJ3Qn9yPOQ2hORIYi+J60oqlQiDB7ofr9FWKg2ncaRNyRRKZB+uWSxKuVqVyvXbQiVlYuLnCJb6k5NDBPgsFj6tHXm3HNILl0zB13rimyDtQIgymAEVSOspbQY1kzOWNMHESq4Mgcztuqx/nnHlBwZ8nOriQ+Y0FglaVlmn0Hi2jxfC+wqmw6rnb+F4phYYS8EcF7ZZScBib7qxs9YgDxborFwT2kKAHZcMzuGkfHw5hxqisueGrR4eYklg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199021)(38100700002)(36756003)(83380400001)(31696002)(86362001)(31686004)(2616005)(8936002)(6486002)(6666004)(41300700001)(66556008)(66946007)(66476007)(8676002)(316002)(53546011)(6916009)(26005)(4326008)(6512007)(107886003)(186003)(6506007)(478600001)(7406005)(2906002)(7366002)(5660300002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bU1CQVhtRmtkWkhNRS9tTFpCVytXdVhhVXBNSzAyaHhGcTg5VHlpTUhmSjlr?=
+ =?utf-8?B?SDY1Z1VsOGo4Ylc1bmgzMExTbWlUSDNkN3hRWjUvVUJWM09rNVh0aFZIdDNx?=
+ =?utf-8?B?NVpYR3MyNU11bVNYY3NqSTdvckdCRkdSQ25nS0h2R2FvR2MwaEJSU0hCMlhW?=
+ =?utf-8?B?aW1jbzJkb21rVDM3emVKSHFNUEx6MVZydGdGVG1KblhRSlVORkJVMWs5aFlF?=
+ =?utf-8?B?MTNBR0lJZ00zSHEvODR3T0gvRnA5cnJiQXFFSHZYM0N6eDlZU09vNHlEcDQ5?=
+ =?utf-8?B?SVd4TlkrazYySmp1YjRxWk9oVkVBc3lHMWRKT1dmRmJtMk5RVnNtMmhrdndV?=
+ =?utf-8?B?eVVnQkttU3JtRk4zRHhoUFZra0hMN1ozT1dxaUhDd3hvc3BEVnFjamZGSG5M?=
+ =?utf-8?B?YzBJNGdqall3U0JoZ0hwQXdLeWJzZi9xL21qcWdwdGUrbTFtdGI5S3QvY25n?=
+ =?utf-8?B?ZnFlelVvQ08zSUFnMFZoNjI4R2lmaFhDLytCbjUvMnhIOGVJZnlUdFFSeU50?=
+ =?utf-8?B?SHBYTyt2UTk0T0wvU3dsQlo3a2t1WW1yQkhDcWFXQ1U3Q0FzZjIzaHA4MktH?=
+ =?utf-8?B?YTBYS3FQYzJNanhFejJ3ZytwOGdSaXZ6ZXk0b0pHWXhUU1VhNnVYdlVJSjAy?=
+ =?utf-8?B?TnY3L1pjMkJ6aUwyd2ViVC8rZHNIZjdXdCtmajk3eEpnalJuR01vaTZZbzZx?=
+ =?utf-8?B?L2dldk9adzZydHQ1dHVRUW0yWmtjZlFqMUZKMEVTMm9lRUp0V2hyUDllTDBX?=
+ =?utf-8?B?ellzL0JvMXJJZENScDhwQjJGUnBoYTNwNjFXQ1NKbHgxTWpURTdPRlJ3Tkdu?=
+ =?utf-8?B?dWI2endTV3ZTa2ZFUS9zaDA5MEhhRXViRFl0UzJhbUMzdkQ0SGVkWkZaV3JO?=
+ =?utf-8?B?YTVRTEJQVGtoOVprUlpUdGEzNGpTcUJqRG5FUGljTFBJY3JOZ0dEZ0ZEdlB4?=
+ =?utf-8?B?Tk04RkZrb0VTWlk5UFVONUVrWU50OGV2cENTMm1YWEJBSUdYZ0l0QkxaV1R2?=
+ =?utf-8?B?RTJkVGZtZ08yT1RCUEpjL2hjVlNacUxWMG1MZjdwMUtuSWwvSEw1V2dUQVJS?=
+ =?utf-8?B?OTlQd1puQ2ZTcEtSc01xOUdQR3VPNVJHK2FicVhRMi9wZmdkY2o5UEZkV1Yr?=
+ =?utf-8?B?ZW56MDFTaXpNUkhJN0o1MlpLWncvUnpIZFJ1R3VEbzg5THpMdng1aTNJMUY2?=
+ =?utf-8?B?MmVnL3lPMVBuQXVzM2FtUExQOWJXSk5aN1NLK0RTeTlKd2ZGRDZuaHROTDBJ?=
+ =?utf-8?B?NlJSUzRteEQ2VlRRNjRnNjlhR0g1Z2RXQW45Y2psTnRNQ2N6K3R5RGdHK28r?=
+ =?utf-8?B?NDVYd0tzdDQrWkhjaFh0QWQwV0lDVFkwck0zR1A2aW80OVBzVFV3ajYxK29t?=
+ =?utf-8?B?SEZDa0lpZnNHczErbjVEako0TXU2Qm9xdnNyaXRtdHdxZTM0MlVUVEpxejhL?=
+ =?utf-8?B?VnlXSEk3bkU5TzhMRmg5RXlaV2FFY3YrRjQyVVE1enZLM2ZPSDhpUEpQVTlq?=
+ =?utf-8?B?aWhLUFBjbExvcXVaekhRcTBwbk0rMSt0YjM2MEZwYlRiSEhDd2t5L3QxUzhi?=
+ =?utf-8?B?cmw1YkJWUFA4R3NldWw2dWpHYlcwRU0ydEdNZXVPTDNSeFc5N05TWlpTSDJQ?=
+ =?utf-8?B?bVpKYWxhY1UrTGg2ZFcybHJLenBPOWQ0Wk9iOTZ3UEhCNjhXNHJ3VjVXSEtY?=
+ =?utf-8?B?ZE1IdEgwTGtTd1BVSVVETVBKTU9wZDg1cTRjclBLMXJBL1pDVG5rQkt6M05k?=
+ =?utf-8?B?YXF1emkraFpBTWV6djliVi9ZcWluYm5Obm5IeVZLZjJIOTRGbUUySk02endM?=
+ =?utf-8?B?TVZQQ1ZSL3dicDFKd1ZqQWlteXdxd2xnSk00MlNYall2ZGNsU0lSZWMrQjlD?=
+ =?utf-8?B?VTE2S0N2N1BYT2sxNVQ3UGNQUGhGL1JuOHMySk1rQlEzbWxESm5XOHZSR2Vu?=
+ =?utf-8?B?blFzTzhMRnN1dGlyeXR2T3J3cS9YV21YcFRuaGY5SXdha2ZxcDF2L2xsSlNE?=
+ =?utf-8?B?S090SkNibVpoVXlsSFp3WTgvcEFtMmt2QkFpUmhHTHp5UllFclBReklRK1R0?=
+ =?utf-8?B?Y1lMMjE0N20wOFRpVlpsU3pSdDNwZjVtbFpYTmJTemhxdmQ5bnVPVnkvQ3dC?=
+ =?utf-8?B?VEVsVjhqMFR1SGlUSDJCZDltdmZOU0Znck1qTG02djlSMVRiZmhvcFdJTUpC?=
+ =?utf-8?B?Unc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?U1V3aUI3VkE2MWNRWjl6bVhIdFNSbXhyTkxTSWRyekR0ZFJwQUhOYW5MUG1U?=
+ =?utf-8?B?QUtqdVQ0R3c1akFvejNIMHRWVXNjS0o2NjB4T1dKQ2tkeHQ3NkdKUi9uTEpU?=
+ =?utf-8?B?YmF0OW4wUlpoUEphRHdneXE2bngzQk51TGFHQ3hOMHBuUEE0elg5UWlFaXNP?=
+ =?utf-8?B?YnFqS3QzdGh4WWdyc1NSTUlEOHlTcjhsK0pBTDVEZ3pDS0ZBRFF2QzIvTHFa?=
+ =?utf-8?B?R0JKcjVtUEwwOWluOFUrRThzdTkyK1dmNUxXQ0VVTitUeXR5NEZBNFd0S0Ja?=
+ =?utf-8?B?WTBFS2twZDlDbGV1RWFiUUNwV0UveDBOU3JlVzFXNjJmS1NMRnoxZHRsVGpz?=
+ =?utf-8?B?cnc3eXpNUTYyTFpPTElmZHVHZkNoZGJjREFWZWVudllxdytYSS9yQnk4TmNz?=
+ =?utf-8?B?R0JxRndvTkloc09JNGwrRTZDN0F3Szl0SUk3MSt6N25kOS9VdkFYSFk3NlZ4?=
+ =?utf-8?B?TUx6cURzdytVd2NBSjhvd0pLcTd4WmhVNEkxUUVBcFFpN1d4dVJEYkhJR3c4?=
+ =?utf-8?B?aU4rTjE3dTl0VTJHZEtvVk40VTZheXRTVmhhckxZdjFpaXdYaDVac3Njbzl6?=
+ =?utf-8?B?R1Z1eFduN1dNUHBzTkk5bmlrNFhUY0FQTkRCaUlIdFNhODF2TUluMlZUaDA1?=
+ =?utf-8?B?Q3p5ZGRtSmhnRzlCcjU3ZGdxcTlCZk8vU1YrTTIvTmorc0JMQURmTUxxMy9Q?=
+ =?utf-8?B?cHlRbG1WTy92UnFEcGhhVkl0blBGQ2xJUmU2eUJwWmZmRXZuUGVTNWVxVEsx?=
+ =?utf-8?B?OXlvamdvQ3QvZFk0eDU3dEs1VXh4L0s4TjYzWFNmWWFJbTB4anN4VDh4dVZa?=
+ =?utf-8?B?cmZCdGZ1Z1dzbVJyYkl5bUhZWnJONEFMWk04Qmw3aXdoQW1SUlNPSEdDSXBh?=
+ =?utf-8?B?WTdIYUhhT2VzZlBWRVBEbDhMdlNvOE9GQi9TSWg2LzhVZkFkRExoekFlRmhl?=
+ =?utf-8?B?MlhxTWJhQ3JyMldRQmdrNXhuQUFhT1hWVTdBdlZMUm9nbHJSZ3pvbnV4clBq?=
+ =?utf-8?B?WjljUC9TMmNtL1BqSEl5UXNQTWVjUGNvbUoyT2RnUjJHUDA2VkJjZHRpQVBK?=
+ =?utf-8?B?TzRXNW9HRjdMRHNlSE5VTkVlMlRmRnNHellBRjRlaFR2R3NVN1drRnFrdTNT?=
+ =?utf-8?B?Z05PNDZVY3FsRkgzU1VXaFlwQW4xeWltUE5mV0t5dDdJSy95SDlvTWNjK0RX?=
+ =?utf-8?B?aS82aWYyTmcvcmhqQjVPM0dOREhSN3VzaTh4Q2ovZlAzYVhWbng3UmNNVGlj?=
+ =?utf-8?B?TFl6SHVjcWV2OEFvK1JjaXU3emJFN3FyZUpTUVM4Mk9GYzBtWStFWDNUYVBH?=
+ =?utf-8?B?NDJGUDRNRWNWb01NMGdLOVgxQ2hoRHFpN3g3M3FmT09xL01zejd2dFk1RVVv?=
+ =?utf-8?B?Y0Y2VGcyaElOWU9kWkRzVGQ4M0duOTdRV2haSTRJdk5ybDRZQ2haaE5Ea2Zx?=
+ =?utf-8?B?Vkd6Mkg2LzFQaERzdkF5L2FEdWQzR01zSy9yK09JT2tPUFR6bHp0Y0NmaWRS?=
+ =?utf-8?B?cFIydUYrWFB4RlBzbjB2NlZvbERLUEN4VndGWTJWMGpoWWlsejdaQTg5QVE4?=
+ =?utf-8?B?dkdkbzIrYUxzNi9BbEVQMGJuZkJxQVRIUXBvYWJqeEEzbkdESHRMcTM1SnEv?=
+ =?utf-8?B?UHZjekR5aFFCa0VhbllSdjJWU1loSS9HNzFhaCtqdmx2dk5vMC9RS3FUZXNu?=
+ =?utf-8?B?VjJmemhvS2k3NCtIYitQMmR1N2drTmlOeWFVYUdad1RaVVJ0dHNrVFhlL3Fl?=
+ =?utf-8?B?eWlST2l1Zm16cHBFaHd1OENma0F1TTEwZEFjVDE5N2hab2QyR0FIY1IzQmtH?=
+ =?utf-8?B?d3FjQk1NenEyTkpsSml4Z1FTOXNvRXlPR0FmWUMxSFpQOGxqbnQ4MTJielc3?=
+ =?utf-8?B?VFZjd2V4STZTbS9kN2kvemsweFREOWZmNElQSUVhdkVXaGpySk9DZ3FXWDBF?=
+ =?utf-8?B?emkrTlp4UnExNVg2cm1VRXpSaHN4S1lxdnpzSTBhM1Y2S2dmd1FWVmtTallo?=
+ =?utf-8?B?Y0JqMW5XaU5OSHlUenFFL3lUSHFKZ2hTYW9sOTZ2ZGhkTlVZUnJxYXhZSStw?=
+ =?utf-8?B?L3hVcXNQaFJMSS9aY0h4Tk83TEt1WW00RHE2NmMydUx3cDRpQ0Fadkp4Vm5Z?=
+ =?utf-8?B?YTVkMmJyVm5OK2FRR2FpNzJGSy9JQklJazhxd0NmbSt6bFh3T2ZiQSswTUZ4?=
+ =?utf-8?B?VmFJUXJ1VUk3ZTMwRGRHN1hydDBxZ2N5cEEzMFptZnpsUGoyWUFsazBLeVhI?=
+ =?utf-8?B?aFEvU3BMZ2VQZ05teGlUa3I0MkVsREgrM2NOWTNoODJMLzVqQWxGZWIvOElz?=
+ =?utf-8?B?VVJ5ZmVlWFdFdStKOGtyZDZ4MWlRMXpuUFJDRTBGOWxMM3JjdjA1a0FwRkNy?=
+ =?utf-8?Q?tJ9cXQYTHDEphrs2oOJaUADo4LKqGHJ1AwK3Hzjw/vbfs?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: +Fjfx9FFApqFEiWXGg4T15wvTc7KISa+SbUl1w2rWgdRG6T7LnEfs5UnH84DJlVXdb/qMwchq5Br1GDpCLQVvUCIl2Su78MVSCIpJUO9aYFHi0DUBTwl/ocV3OBXWc5A28IWWwPimacWOuI0fd9hGkdVsGT718MRTWIuBVnFLYCDPgBx3yZJxfxlatFZeSL+QbxGqgXPdB0bD9+FNeFCBMBTh8xoWQMjiYrx08w787VzqO+nB7NeY8b0KhRjAtwmBToJzQqbrhL2UnT5CZ8NR+rIXNP6dPe8fPJkkImG54wcLZO074kjGhEU9yiArF2McRsaSlWZiQtH1T4h/a+D7GoYUfEeo/AOyaFCShgKHd/btYtbcGx2fAnPhFciItV4inKb0DPa0rYQO3CqjpYIF66MINgUcxWLcZb18aJgNX60PcGSUy9Uy5mO1ss2pgIGsuWJw8sqE5n9IFjvWQMmf5AK/KxIncFFGwXG4vDQRLZP77Unf5os9jWC
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2821a4fd-9f1b-4999-2bed-08db77dbe55d
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 13:30:53.5530
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: COj5tdljajzTM5GwjG/czGSUNDPZ9ctwfGiNtWCfNMmto4UrgcbtO8em+fl4jgvIDH4RWyM61fTA1BHJMGSJgZPYQC0CVr890Xq56GMnkwo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5166
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_09,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280120
+X-Proofpoint-ORIG-GUID: 2R7_TIJwpnZhb78eOaUZ1eLNDHaj7McR
+X-Proofpoint-GUID: 2R7_TIJwpnZhb78eOaUZ1eLNDHaj7McR
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Linus,
 
-there will be small conflict with the slab tree. Resolution is to
-keep CONFIG_SLAB removed. See also
 
-https://lore.kernel.org/all/20230613151008.28167567@canb.auug.org.au/
+On 6/28/23 03:20, Conor Dooley wrote:
+> Hey Eric,
+> 
+> On Mon, Jun 26, 2023 at 12:13:30PM -0400, Eric DeVolder wrote:
+>> The kexec and crash kernel options are provided in the common
+>> kernel/Kconfig.kexec. Utilize the common options and provide
+>> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
+> 
+>> equivalent set of KEXEC and CRASH options.
+> 
+> I find this diff a little hard to follow (since the other half off the
+> change is in another patch), so it may be me missing something, but are
+> you sure?
+> 
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> ---
+>>   arch/riscv/Kconfig | 48 ++++++++++++++--------------------------------
+>>   1 file changed, 14 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 5966ad97c30c..c484abd9bbfd 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -585,48 +585,28 @@ config RISCV_BOOT_SPINWAIT
+>>   
+>>   	  If unsure what to do here, say N.
+>>   
+>> -config KEXEC
+>> -	bool "Kexec system call"
+>> -	depends on MMU
+>> +config ARCH_SUPPORTS_KEXEC
+>> +	def_bool MMU
+>> +
+>> +config ARCH_SELECTS_KEXEC
+>> +	def_bool y
+>> +	depends on KEXEC
+>>   	select HOTPLUG_CPU if SMP
+>> -	select KEXEC_CORE
+>> -	help
+>> -	  kexec is a system call that implements the ability to shutdown your
+>> -	  current kernel, and to start another kernel. It is like a reboot
+>> -	  but it is independent of the system firmware. And like a reboot
+>> -	  you can start any kernel with it, not just Linux.
+>>   
+>> -	  The name comes from the similarity to the exec system call.
+>> +config ARCH_SUPPORTS_KEXEC_FILE
+>> +	def_bool 64BIT && MMU && CRYPTO=y && CRYPTO_SHA256=y
+> 
+> This looks like a change to me. Previously, only KEXEC_PURGATORY
+> required these crypto options to be like so, but now KEXEC_FILE needs
+> them too.
+> 
+> What am I missing?
+Conor,
+Thanks for looking at this! Indeed I erroneously applied the CRYPTO=y && CRYPTO_SHA256=y
+to KEXEC_FILE rather than PURGATORY. I will correct for v4!
+Thanks!
+eric
 
-Other than that my test merge didn't show anything.
-
-Thomas.
-
-The following changes since commit 4897a898a216058dec55e5e5902534e6e224fcdf:
-
-  mips: Move initrd_start check after initrd address sanitisation. (2023-05-23 11:01:38 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5
-
-for you to fetch changes up to e47084e116fccaa43644360d7c0b997979abce3e:
-
-  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000 (2023-06-26 09:18:43 +0200)
-
-----------------------------------------------------------------
-- added support for TP-Link HC220 G5 v1
-- added support for Wifi/Bluetooth on CI20
-- reworked Ralink clock and reset handling
-- cleanups and fixes
-
-----------------------------------------------------------------
-Aidan MacDonald (2):
-      mips: dts: ingenic: Remove unnecessary AIC clocks
-      mips: dts: ingenic: x1000: Add AIC device tree node
-
-Arnd Bergmann (2):
-      mips: provide unxlate_dev_mem_ptr() in asm/io.h
-      mips: asm-offsets: add missing prototypes
-
-Binbin Zhou (2):
-      MIPS: Loongson64: DTS: Add RTC support to LS7A PCH
-      MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000
-
-Franziska Naepelt (1):
-      mips: Fix spacing issue
-
-Gustavo A. R. Silva (1):
-      MIPS: dec: prom: Address -Warray-bounds warning
-
-Jiaxun Yang (4):
-      MIPS: generic: Allow R5 CPUs to be selected
-      MIPS: cpu-features: Use boot_cpu_type for CPU type based features
-      MIPS: Rework smt cmdline parameters
-      MIPS: Select CONFIG_GENERIC_IDLE_POLL_SETUP
-
-Keguang Zhang (1):
-      MIPS: Loongson32: Remove reset.c
-
-Ladislav Michl (7):
-      MIPS: OCTEON: octeon-usb: add all register offsets
-      MIPS: OCTEON: octeon-usb: use bitfields for control register
-      MIPS: OCTEON: octeon-usb: use bitfields for host config register
-      MIPS: OCTEON: octeon-usb: use bitfields for shim register
-      MIPS: OCTEON: octeon-usb: move gpio config to separate function
-      MIPS: OCTEON: octeon-usb: introduce dwc3_octeon_{read,write}q
-      MIPS: OCTEON: octeon-usb: cleanup divider calculation
-
-Liviu Dudau (2):
-      dt-bindings: mips: Add bindings for TP-Link HC220 G5 v1 board
-      mips: dts: ralink: Add support for TP-Link HC220 G5 v1 board
-
-Maciej W. Rozycki (2):
-      MIPS: Alchemy: Enable PATA_PLATFORM support
-      Revert "MIPS: unhide PATA_PLATFORM"
-
-Nathan Chancellor (2):
-      MIPS: Mark core_vpe_count() as __init
-      clk: ralink: mtmips: Fix uninitialized use of ret in mtmips_register_{fixed,factor}_clocks()
-
-Paul Cercueil (13):
-      mips: ingenic: Remove useless __maybe_unused
-      mips: ingenic: Enable EXT/2 divider on JZ4750/55/60 if EXT is 24 MHz
-      MIPS: DTS: qi_lb60: Don't use unit address for regulators
-      MIPS: DTS: CI20: Fix regulators
-      MIPS: DTS: CI20: Fix ACT8600 regulator node names
-      MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators
-      MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators
-      MIPS: DTS: CI20: Misc. cleanups
-      MIPS: DTS: CI20: Parent MSCMUX clock to MPLL
-      MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
-      MIPS: configs: CI20: Regenerate defconfig
-      MIPS: configs: CI20: Enable WiFi / Bluetooth
-      MIPS: DTS: CI20: Raise VDDCORE voltage to 1.125 volts
-
-Sergio Paracuellos (9):
-      dt-bindings: clock: add mtmips SoCs system controller
-      clk: ralink: add clock and reset driver for MTMIPS SoCs
-      mips: ralink: rt288x: remove clock related code
-      mips: ralink: rt305x: remove clock related code
-      mips: ralink: rt3883: remove clock related code
-      mips: ralink: mt7620: remove clock related code
-      mips: ralink: remove reset related code
-      mips: ralink: get cpu rate from new driver code
-      MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-
-Shiji Yang (4):
-      mips: pci-mt7620: do not print NFTS register value as error log
-      mips: pci-mt7620: use dev_info() to log PCIe device detection result
-      mips: ralink: introduce commonly used remap node function
-      mips: ralink: match all supported system controller compatible strings
-
-Siarhei Volkau (1):
-      MIPS: uaccess: emulate Ingenic LXW/LXH/LXHU uaccess
-
-Sui Jingfeng (1):
-      MIPS: Loongson64: loongson3_defconfig: Enable amdgpu drm driver
-
-Thomas Bogendoerfer (2):
-      Merge tag 'mips-fixes_6.4_1' into mips-next
-      MIPS: mm: Remove special handling for OCTEON CPUs
-
-Tony Lindgren (1):
-      mips: dts: ralink: mt7628a: Unify pinctrl-single pin group nodes
-
-Uwe Kleine-König (1):
-      MIPS: PCI: Convert to platform remove callback returning void
-
-Yu Zhao (1):
-      kvm/mips: update MAINTAINERS
-
- Documentation/admin-guide/kernel-parameters.txt    |    8 +-
- .../bindings/clock/mediatek,mtmips-sysc.yaml       |   64 ++
- Documentation/devicetree/bindings/mips/ralink.yaml |    1 +
- MAINTAINERS                                        |    7 +-
- arch/mips/Kconfig                                  |    4 +-
- arch/mips/alchemy/Kconfig                          |    1 +
- arch/mips/boot/dts/ingenic/ci20.dts                |  152 ++-
- arch/mips/boot/dts/ingenic/jz4725b.dtsi            |    7 +-
- arch/mips/boot/dts/ingenic/jz4740.dtsi             |    7 +-
- arch/mips/boot/dts/ingenic/jz4770.dtsi             |    5 +-
- arch/mips/boot/dts/ingenic/qi_lb60.dts             |    6 +-
- arch/mips/boot/dts/ingenic/x1000.dtsi              |   18 +
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi |    7 +
- arch/mips/boot/dts/loongson/ls7a-pch.dtsi          |    7 +
- arch/mips/boot/dts/ralink/Makefile                 |    3 +-
- .../boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts  |   84 ++
- arch/mips/boot/dts/ralink/mt7628a.dtsi             |   40 +-
- arch/mips/cavium-octeon/octeon-usb.c               |  629 +++++------
- arch/mips/configs/ci20_defconfig                   |   47 +-
- arch/mips/configs/loongson3_defconfig              |    7 +
- arch/mips/generic/board-ingenic.c                  |   61 +-
- arch/mips/include/asm/cpu-features.h               |    4 +-
- arch/mips/include/asm/dec/prom.h                   |    2 +-
- arch/mips/include/asm/io.h                         |    1 +
- arch/mips/include/asm/mach-loongson32/loongson1.h  |    1 -
- arch/mips/include/asm/mach-loongson32/regs-wdt.h   |   15 -
- arch/mips/include/asm/mach-ralink/mt7620.h         |   35 -
- arch/mips/include/asm/mach-ralink/rt288x.h         |   10 -
- arch/mips/include/asm/mach-ralink/rt305x.h         |   21 -
- arch/mips/include/asm/mach-ralink/rt3883.h         |    8 -
- arch/mips/include/asm/smp.h                        |    2 +
- arch/mips/include/uapi/asm/inst.h                  |   33 +
- arch/mips/kernel/asm-offsets.c                     |   14 +
- arch/mips/kernel/smp-cps.c                         |   15 +-
- arch/mips/kernel/smp-mt.c                          |    3 +-
- arch/mips/kernel/smp.c                             |   18 +
- arch/mips/kernel/unaligned.c                       |   41 +
- arch/mips/loongson32/common/Makefile               |    2 +-
- arch/mips/loongson32/common/reset.c                |   51 -
- arch/mips/mm/tlbex.c                               |   24 +-
- arch/mips/pci/pci-mt7620.c                         |    7 +-
- arch/mips/pci/pci-xtalk-bridge.c                   |    8 +-
- arch/mips/ralink/clk.c                             |   61 +-
- arch/mips/ralink/common.h                          |    7 -
- arch/mips/ralink/mt7620.c                          |  235 ----
- arch/mips/ralink/mt7621.c                          |    9 -
- arch/mips/ralink/of.c                              |   51 +-
- arch/mips/ralink/reset.c                           |   61 --
- arch/mips/ralink/rt288x.c                          |   40 -
- arch/mips/ralink/rt305x.c                          |   87 --
- arch/mips/ralink/rt3883.c                          |   53 -
- arch/mips/sibyte/swarm/platform.c                  |   14 +-
- drivers/char/mem.c                                 |    7 -
- drivers/clk/ralink/Kconfig                         |    7 +
- drivers/clk/ralink/Makefile                        |    1 +
- drivers/clk/ralink/clk-mtmips.c                    | 1117 ++++++++++++++++++++
- 56 files changed, 2093 insertions(+), 1137 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
- create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
- delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
- delete mode 100644 arch/mips/loongson32/common/reset.c
- create mode 100644 drivers/clk/ralink/clk-mtmips.c
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> 
+> Cheers,
+> Conor.
+> 
+>>   
+>> -config KEXEC_FILE
+>> -	bool "kexec file based systmem call"
+>> -	depends on 64BIT && MMU
+>> -	select HAVE_IMA_KEXEC if IMA
+>> -	select KEXEC_CORE
+>> +config ARCH_SELECTS_KEXEC_FILE
+>> +	def_bool y
+>> +	depends on KEXEC_FILE
+>>   	select KEXEC_ELF
+>> -	help
+>> -	  This is new version of kexec system call. This system call is
+>> -	  file based and takes file descriptors as system call argument
+>> -	  for kernel and initramfs as opposed to list of segments as
+>> -	  accepted by previous system call.
+>> -
+>> -	  If you don't know what to do here, say Y.
+>> +	select HAVE_IMA_KEXEC if IMA
+>>   
+>>   config ARCH_HAS_KEXEC_PURGATORY
+>>   	def_bool KEXEC_FILE
+>> -	depends on CRYPTO=y
+>> -	depends on CRYPTO_SHA256=y
+>>   
+>> -config CRASH_DUMP
+>> -	bool "Build kdump crash kernel"
+>> -	help
+>> -	  Generate crash dump after being started by kexec. This should
+>> -	  be normally only set in special crash dump kernels which are
+>> -	  loaded in the main kernel with kexec-tools into a specially
+>> -	  reserved region and then later executed after a crash by
+>> -	  kdump/kexec.
+>> -
+>> -	  For more details see Documentation/admin-guide/kdump/kdump.rst
+>> +config ARCH_SUPPORTS_CRASH_DUMP
+>> +	def_bool y
+>>   
+>>   config COMPAT
+>>   	bool "Kernel support for 32-bit U-mode"
+>> -- 
+>> 2.31.1
+>>
