@@ -2,55 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380227414CC
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 17:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D51741844
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 20:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjF1PWO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jun 2023 11:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S232637AbjF1Svq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jun 2023 14:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjF1PWN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jun 2023 11:22:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C940A1;
-        Wed, 28 Jun 2023 08:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93B966124B;
-        Wed, 28 Jun 2023 15:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DEAFC433C8;
-        Wed, 28 Jun 2023 15:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687965731;
-        bh=DIfgwnSvq5Mxxls/Etv1JS9SwA20ZNhaVjbRUbdW3vU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WkMgkDRZzxHIlfocJxGPSMnwGdh2t0tHJw0stYAC0jiV9ydQgkXfcIh1iGiTHExsS
-         bZFHPFXt6XjyOWwjwhhgtsDy/VmN2mP1xTUChODc0dJwz0VMP7BdY5tPki0S+h5y7D
-         2eDLH5Vt9tRv0932vipOZ2h/sgFUay1NdXhy/Tc3M+8AyYwbPgetRg+frCu2sJAJwU
-         5wjgXUSPa/vfa+zHIhTPpceFAwJpBN/7Fz+McyPiJGiqMDc5874c8Q7Paao86F5kAO
-         ALAjROf+4T40/0BdxmEoTcavMKQbS6RrslmIvLNyGJuxHhC6FMGsHJb0i9vd9b2bqm
-         AbgjiQ0k2bzkw==
-Date:   Wed, 28 Jun 2023 08:22:08 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@gmail.com>, linux-mips@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH V2] MIPS: Loongson: Fix build error when make
- modules_install
-Message-ID: <20230628152208.GA250029@dev-arch.thelio-3990X>
-References: <20230628110847.3168269-1-chenhuacai@loongson.cn>
+        with ESMTP id S231588AbjF1SvZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jun 2023 14:51:25 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6161FF7;
+        Wed, 28 Jun 2023 11:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gzBVL7uWfH/0QncUeiWSVvNT7tu19KKFpZm/SdtHfy0=; b=F0geF1mDFUhFwejscu79P5AerF
+        ChPxlz8AungTNw2nYlH8TmeT0FdBYZ403uLo6dwYbFZivePasVeM2QOKhl+SGZUnj3aelPYXtEfM9
+        SrOHM/3oUTni3eU+S6cGIy3fXu368hUaiU/EA6YN2NOx+dDC0fkki3YX0I7X5QXDEfuDII33co6YT
+        AgpMwEBC4ya/EPvRDl80CtdVgP3e2XagbMLqDsAoh6VP3gh2KZpEwz3m1/E0HTdSv3vSxKIUbldmu
+        z9Fsmk0Dd2L6fefBSyj6JHJ0VqW7vTaNglMS0xkY6KNSksqhU+OkIfDiDfBXKznANmEoK/ikyWU4U
+        7raG+AtA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEaFx-0047Cx-Rw; Wed, 28 Jun 2023 18:51:09 +0000
+Date:   Wed, 28 Jun 2023 19:51:09 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v6 00/33] Split ptdesc from struct page
+Message-ID: <ZJyBHdcjuaykIRG9@casper.infradead.org>
+References: <20230627031431.29653-1-vishal.moola@gmail.com>
+ <e8992eee-4140-427e-bacb-9449f346318@google.com>
+ <ac1c162c-07d8-6084-44ca-a2c1a4183df2@redhat.com>
+ <90e643ca-de72-2f4c-f4fe-35e06e1a9277@google.com>
+ <26282cb8-b6b0-f3a0-e82d-b4fec45c5f72@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628110847.3168269-1-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <26282cb8-b6b0-f3a0-e82d-b4fec45c5f72@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,72 +75,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 07:08:47PM +0800, Huacai Chen wrote:
-> After commit 0e96ea5c3eb5904e5dc2f ("MIPS: Loongson64: Clean up use of
-> cc-ifversion") we get a build error when make modules_install:
+On Wed, Jun 28, 2023 at 09:41:18AM +0200, David Hildenbrand wrote:
+> I'm not a friend of these "overlays"; it all only really makes sense to me
+> once we actually allocate the descriptors dynamically. Maybe some of the
+> existing/ongoing conversions were different (that's why I was asking for the
+> difference, as you said the "struct slab" thing was well received).
 > 
-> cc1: error: '-mloongson-mmi' must be used with '-mhard-float'
-> 
-> The reason is when make modules_install, 'call cc-option' doesn't work
-> in $(KBUILD_CFLAGS) of 'CHECKFLAGS'. Then there is no -mno-loongson-mmi
-> applied and -march=loongson3a enable MMI instructions.
-> 
-> To be detail, the error message comes from the CHECKFLAGS invocation of
-> $(CC) but it has no impact on the final result of make modules_install,
-> it is purely a cosmetic issue. The error occurs because cc-option is
-> defined in scripts/Makefile.compiler, which is not included in Makefile
-> when running 'make modules_install', as install targets are not supposed
-> to require the compiler; see commit 805b2e1d427aab4b ("kbuild: include
-> Makefile.compiler only when compiler is needed"). As a result, the call
-> to check for '-mno-loongson-mmi' just never happens.
-> 
-> Fix this by partially reverting to the old logic, use 'call cc-option'
-> to conditionally apply -march=loongson3a and -march=mips64r2.
-> 
-> By the way, Loongson-2E/2F is also broken in commit 13ceb48bc19c563e05f4
-> ("MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls") so fix it
-> together.
-> 
-> Fixes: 13ceb48bc19c563e05f4 ("MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls")
-> Fixes: 0e96ea5c3eb5904e5dc2 ("MIPS: Loongson64: Clean up use of cc-ifversion")
-> Cc: stable@vger.kernel.org
-> Cc: Feiyang Chen <chenfeiyang@loongson.cn>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> If they are primarily only unnecessary churn for now (and unclear when/how
+> it will become useful), I share your opinion.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+One of the reasons for doing these conversions "early" is that it helps
+people who work on this code know what fields they can actually use in
+their memory descriptor.  We have a _lot_ of historical baggage with
+people just using random bits in struct page for their own purposes
+without necessarily considering the effects on the rest of the system.
 
-> ---
-> V2: Update commit message and fix for LOONGSON2EF together.
-> 
->  arch/mips/Makefile | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index a7a4ee66a9d3..35a1b9b34734 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -181,16 +181,12 @@ endif
->  cflags-$(CONFIG_CAVIUM_CN63XXP1) += -Wa,-mfix-cn63xxp1
->  cflags-$(CONFIG_CPU_BMIPS)	+= -march=mips32 -Wa,-mips32 -Wa,--trap
->  
-> -cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e -Wa,--trap
-> -cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f -Wa,--trap
-> +cflags-$(CONFIG_CPU_LOONGSON2E) += $(call cc-option,-march=loongson2e) -Wa,--trap
-> +cflags-$(CONFIG_CPU_LOONGSON2F) += $(call cc-option,-march=loongson2f) -Wa,--trap
-> +cflags-$(CONFIG_CPU_LOONGSON64) += $(call cc-option,-march=loongson3a,-march=mips64r2) -Wa,--trap
->  # Some -march= flags enable MMI instructions, and GCC complains about that
->  # support being enabled alongside -msoft-float. Thus explicitly disable MMI.
->  cflags-$(CONFIG_CPU_LOONGSON2EF) += $(call cc-option,-mno-loongson-mmi)
-> -ifdef CONFIG_CPU_LOONGSON64
-> -cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
-> -cflags-$(CONFIG_CC_IS_GCC) += -march=loongson3a
-> -cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
-> -endif
->  cflags-$(CONFIG_CPU_LOONGSON64) += $(call cc-option,-mno-loongson-mmi)
->  
->  cflags-$(CONFIG_CPU_R4000_WORKAROUNDS)	+= $(call cc-option,-mfix-r4000,)
-> -- 
-> 2.39.3
-> 
+By creating specific types for each user of struct page, we can see
+what's actually going on.  Before the ptdesc conversion started, I could
+not have told you which bits in struct page were used by the s390 code.
+I knew they were playing some fun games with the refcount (it's even
+documented in the s390 code!) but I didn't know they were using ...
+whetever it is; page->private to point to the kvm private data?
+
+So maybe it is harder for MM developers right now to see what fields in
+memdesc A overlap with which fields in memdesc B.  That _ought_ not to
+be a concern!  We document which fields are available in each memdesc,
+and have various assertions to trip when people make things not line up
+any more.  There can still be problems, of course; we haven't set the
+assertions quite tightly enough in some cases.
+
+People are going to keep adding crap to struct page, and they're going
+to keep misusing the crap that's in struct page.  That has to stop.
