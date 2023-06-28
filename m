@@ -2,170 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC26740AE1
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 10:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD98D740B61
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 10:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbjF1IMp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jun 2023 04:12:45 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:51716 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbjF1IJv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jun 2023 04:09:51 -0400
+        id S233919AbjF1I1O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jun 2023 04:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234241AbjF1IZJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jun 2023 04:25:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804574201;
+        Wed, 28 Jun 2023 01:14:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA9726132E;
-        Wed, 28 Jun 2023 07:34:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35155C433CB;
-        Wed, 28 Jun 2023 07:34:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 354656132F;
+        Wed, 28 Jun 2023 07:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CD1C43395;
+        Wed, 28 Jun 2023 07:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687937685;
-        bh=1RvYG/zNfvaMvzYdsiasDFPUFxo2X7mXbyQadTutm14=;
+        s=k20201202; t=1687937821;
+        bh=FHd2lTbvsIIzHQmCcMNd3oy0ZJaK0w1A6wsgplCYx0Y=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=H1RUK0rPadZYlBM2PFBs8Y0zb/rFJtcnbd93GXhOMrDxiioXfaMYeAd7wReRjzdIJ
-         5c2d+9mB3qnRUAmgYHBuRW7U/Noyj0Kf916vuTKLEH29vtLN9OBZG0warX9jo9TLfu
-         +1mL1UsWSs/jzhPKDy9eqDrte27NWRt6UOFApwBwA18eF/xKj1xV8EBizjvuD7mISE
-         F8VBNyCWr84HEhddggLUfgN5ttYZqqw8MnL2mJfDrLmFKyRZlt5KKJlulxIKC+2O5/
-         G4gIsWLxQpyFkOBiQ7uaM+iq/VWY5BPgoVPQ85wr7nmGDou3+LC9FEQO4JCzRfRw3W
-         vHAjecBBlNjGA==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-991aac97802so447145066b.1;
-        Wed, 28 Jun 2023 00:34:45 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxAYnTgj7qb3u7386i7C0IAOBrP9iQGf7wjQVhVWIZIPwBTEiWM
-        J75zbNlcVIq3Atw/Vf+TRisbSX/7/RNLeX7BWTk=
-X-Google-Smtp-Source: ACHHUZ6JL3g1iyyrEhvtgl6EfKUhA+/PI4WX7hcVO+KzuuEGLTNZV4wFqRkqjAXpyVuNwo4/H31vvrP4Aght7wyWGN8=
-X-Received: by 2002:a17:907:80c:b0:974:1d8b:ca5f with SMTP id
- wv12-20020a170907080c00b009741d8bca5fmr30253899ejb.9.1687937683374; Wed, 28
- Jun 2023 00:34:43 -0700 (PDT)
+        b=epi3Q9iu50HKC/yrjUTLCNGFjXwatUn07RqG5KEcnk5iICVsWh8vTqMgNZFsP/vug
+         3+HkNGr33pAMFS4gWSgIIVxRk/UVvtFWZClfqQ5WWNayoynyyZ6nv4dzQviGv3v0qE
+         iu3OH6yE5fKUwX0UF1CJDnamufoAdAEQEzNWGalNT6OI31Jcphms3/Iz0TT7hjpwMd
+         Al6Dvy7YMKls0dz3YCgR1HXVfprvtqcpIl99CQxGQQFfX6NC2Bd2IiXN+woaWIB/8a
+         OOyF2K3QGEOMe/lNwv+nM/DBIOM1TaW8cgwCVAwmpsFy17bqBKFgczugdKl6PmpPaH
+         b7DbX9rmZVU6A==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-51d884a22e7so5306688a12.3;
+        Wed, 28 Jun 2023 00:37:01 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwwYnwOaDz0P3eyqjbiY1z9F72YdEmNo7NhwUR2iFymOU4plO+U
+        pLFMhbAHqcoHZSdYwej+6Laos88Q6fbe1sy8u0U=
+X-Google-Smtp-Source: ACHHUZ6NB5UruUH/V0e7QCYg9qAl4dtFgcinn2A4NlMDpQnIZXsZ+O8yFsnpArkDKOcNDewJivafbdv7a7wjyVxNDSA=
+X-Received: by 2002:a50:ef01:0:b0:51d:adc5:22c1 with SMTP id
+ m1-20020a50ef01000000b0051dadc522c1mr2565093eds.36.1687937819590; Wed, 28 Jun
+ 2023 00:36:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230626074919.1871944-1-chenhuacai@loongson.cn> <961c855a-81ea-c628-3e67-81877a748027@linaro.org>
-In-Reply-To: <961c855a-81ea-c628-3e67-81877a748027@linaro.org>
+References: <20230626075047.1872818-1-chenhuacai@loongson.cn>
+ <20230626160720.GA2174263@dev-arch.thelio-3990X> <CAAhV-H6nyXa+wG-J50d=FrHX=4saVNAePW8HHQ2hm+EsGR9Umw@mail.gmail.com>
+ <20230627212839.GA1806408@dev-arch.thelio-3990X>
+In-Reply-To: <20230627212839.GA1806408@dev-arch.thelio-3990X>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 28 Jun 2023 15:34:31 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7FL73KQiciTUCSwzOBQ9KDH5bfwbChV3oe+A+qpx=gsg@mail.gmail.com>
-Message-ID: <CAAhV-H7FL73KQiciTUCSwzOBQ9KDH5bfwbChV3oe+A+qpx=gsg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: KVM: Fix NULL pointer dereference
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Date:   Wed, 28 Jun 2023 15:36:47 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5VDvNnBixrm9nhKeSQ1pj9N-fkW-cRY99OpduVd=5+Mw@mail.gmail.com>
+Message-ID: <CAAhV-H5VDvNnBixrm9nhKeSQ1pj9N-fkW-cRY99OpduVd=5+Mw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Loongson: Fix build error when make modules_install
+To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Philippe,
+Hi, Nathan,
 
-On Mon, Jun 26, 2023 at 6:28=E2=80=AFPM Philippe Mathieu-Daud=C3=A9
-<philmd@linaro.org> wrote:
+On Wed, Jun 28, 2023 at 5:28=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> On 26/6/23 09:49, Huacai Chen wrote:
-> > After commit 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support") w=
-e
-> > get a NULL pointer dereference when creating a KVM guest:
+> Hi Huacai,
+>
+> + Masahiro
+>
+> On Tue, Jun 27, 2023 at 11:11:27AM +0800, Huacai Chen wrote:
+> > Hi, Nathan,
 > >
-> > [  146.243409] Starting KVM with MIPS VZ extensions
-> > [  149.849151] CPU 3 Unable to handle kernel paging request at virtual =
-address 0000000000000300, epc =3D=3D ffffffffc06356ec, ra =3D=3D ffffffffc0=
-63568c
-> > [  149.849177] Oops[#1]:
-> > [  149.849182] CPU: 3 PID: 2265 Comm: qemu-system-mip Not tainted 6.4.0=
--rc3+ #1671
-> > [  149.849188] Hardware name: THTF CX TL630 Series/THTF-LS3A4000-7A1000=
--ML4A, BIOS KL4.1F.TF.D.166.201225.R 12/25/2020
-> > [  149.849192] $ 0   : 0000000000000000 000000007400cce0 00000000004000=
-04 ffffffff8119c740
-> > [  149.849209] $ 4   : 000000007400cce1 000000007400cce1 00000000000000=
-00 0000000000000000
-> > [  149.849221] $ 8   : 000000240058bb36 ffffffff81421ac0 00000000000000=
-00 0000000000400dc0
-> > [  149.849233] $12   : 9800000102a07cc8 ffffffff80e40e38 00000000000000=
-01 0000000000400dc0
-> > [  149.849245] $16   : 0000000000000000 9800000106cd0000 9800000106cd00=
-00 9800000100cce000
-> > [  149.849257] $20   : ffffffffc0632b28 ffffffffc05b31b0 9800000100ccca=
-00 0000000000400000
-> > [  149.849269] $24   : 9800000106cd09ce ffffffff802f69d0
-> > [  149.849281] $28   : 9800000102a04000 9800000102a07cd0 98000001106a80=
-00 ffffffffc063568c
-> > [  149.849293] Hi    : 00000335b2111e66
-> > [  149.849295] Lo    : 6668d90061ae0ae9
-> > [  149.849298] epc   : ffffffffc06356ec kvm_vz_vcpu_setup+0xc4/0x328 [k=
-vm]
-> > [  149.849324] ra    : ffffffffc063568c kvm_vz_vcpu_setup+0x64/0x328 [k=
-vm]
-> > [  149.849336] Status: 7400cce3 KX SX UX KERNEL EXL IE
-> > [  149.849351] Cause : 1000000c (ExcCode 03)
-> > [  149.849354] BadVA : 0000000000000300
-> > [  149.849357] PrId  : 0014c004 (ICT Loongson-3)
-> > [  149.849360] Modules linked in: kvm nfnetlink_queue nfnetlink_log nfn=
-etlink fuse sha256_generic libsha256 cfg80211 rfkill binfmt_misc vfat fat s=
-nd_hda_codec_hdmi input_leds led_class snd_hda_intel snd_intel_dspcfg snd_h=
-da_codec snd_hda_core snd_pcm snd_timer snd serio_raw xhci_pci radeon drm_s=
-uballoc_helper drm_display_helper xhci_hcd ip_tables x_tables
-> > [  149.849432] Process qemu-system-mip (pid: 2265, threadinfo=3D0000000=
-0ae2982d2, task=3D0000000038e09ad4, tls=3D000000ffeba16030)
-> > [  149.849439] Stack : 9800000000000003 9800000100ccca00 9800000100ccc0=
-00 ffffffffc062cef4
-> > [  149.849453]         9800000102a07d18 c89b63a7ab338e00 00000000000000=
-00 ffffffff811a0000
-> > [  149.849465]         0000000000000000 9800000106cd0000 ffffffff80e599=
-38 98000001106a8920
-> > [  149.849476]         ffffffff80e57f30 ffffffffc062854c ffffffff811a00=
-00 9800000102bf4240
-> > [  149.849488]         ffffffffc05b0000 ffffffff80e3a798 000000ff780000=
-00 000000ff78000010
-> > [  149.849500]         0000000000000255 98000001021f7de0 98000001023f00=
-78 ffffffff81434000
-> > [  149.849511]         0000000000000000 0000000000000000 9800000102ae00=
-00 980000025e92ae28
-> > [  149.849523]         0000000000000000 c89b63a7ab338e00 00000000000000=
-01 ffffffff8119dce0
-> > [  149.849535]         000000ff78000010 ffffffff804f3d3c 9800000102a07e=
-b0 0000000000000255
-> > [  149.849546]         0000000000000000 ffffffff8049460c 000000ff780000=
-10 0000000000000255
-> > [  149.849558]         ...
-> > [  149.849565] Call Trace:
-> > [  149.849567] [<ffffffffc06356ec>] kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
-> > [  149.849586] [<ffffffffc062cef4>] kvm_arch_vcpu_create+0x184/0x228 [k=
-vm]
-> > [  149.849605] [<ffffffffc062854c>] kvm_vm_ioctl+0x64c/0xf28 [kvm]
-> > [  149.849623] [<ffffffff805209c0>] sys_ioctl+0xc8/0x118
-> > [  149.849631] [<ffffffff80219eb0>] syscall_common+0x34/0x58
-> >
-> > The root cause is the deletion of kvm_mips_commpage_init() leaves vcpu-=
+> > On Tue, Jun 27, 2023 at 12:07=E2=80=AFAM Nathan Chancellor <nathan@kern=
+el.org> wrote:
+> > >
+> > > On Mon, Jun 26, 2023 at 03:50:47PM +0800, Huacai Chen wrote:
+> > > > After commit 0e96ea5c3eb5904e5dc2f ("MIPS: Loongson64: Clean up use=
+ of
+> > > > cc-ifversion") we get a build error when make modules_install:
+> > > >
+> > > > cc1: error: '-mloongson-mmi' must be used with '-mhard-float'
+> > > >
+> > > > The reason is when make modules_install, 'call cc-option' doesn't w=
+ork
+> > > > in $(KBUILD_CFLAGS) of 'CHECKFLAGS'. Then there is no -mno-loongson=
+-mmi
+> > > > applied and -march=3Dloongson3a enable MMI instructions.
+> > >
+> > > The first sentence does not make much sense to me, specifically "in
+> > > $(KBUILD_CFLAGS) of 'CHECKFLAGS'". What configuration and build comma=
+nd
+> > > reproduces this? I do not see how '-mno-loongson-mmi' would fail to g=
+et
+> > > added to cflags-y after 0e96ea5c3eb5, which should have had no
+> > > functional change... I don't want to hang this change up since there =
+is
+> > > real breakage but I want to make sure we fully understand why
+> > > 0e96ea5c3eb5 broke things and why this patch resolves it.
+> > Please use loongson3_defconfig to build a loongson kernel with
+> > toolchains from here [1]:
+> > 'make' will succeed, but there is a build error when 'make
+> > modules_install'. And you should be careful because 'make
+> > modules_install' doesn't stop when the error occurs.
 >
-> > arch.cop0 NULL. So fix it by make cop0 from a pointer to an embed objec=
-t.
+> Excellent, thank you! I understand what is going on here and your patch
+> should work to resolve it (although I think the commit message should be
+> flushed out a little more with the following details) but I am curious
+> if Masahiro has any thoughts around this.
 >
-> "by making ... to an embedded object."
-OK, thanks.
-
+> As you note, the error message comes from the CHECKFLAGS invocation of
+> $(CC) but it has no impact on the final result of modules_install, it is
+> purely a cosmetic issue from what I can tell. The error occurs because
+> cc-option is defined in scripts/Makefile.compiler, which is not included
+> in Makefile when running modules_install, as install targets are not
+> supposed to require the compiler; see commit 805b2e1d427a ("kbuild:
+> include Makefile.compiler only when compiler is needed"). As a result,
+> the call to check for '-mno-loongson-mmi' just never happens.
 >
-> >
-> > Fixes: 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support")
-> > Cc: stable@vger.kernel.org
+> It would nice if '-mno-loongson-mmi' could be added unconditionally when
+> using GCC but I can see that the flag has only existed since 9.x, so we
+> do need to keep the cc-option call.
 >
-> Reported-by: Yu Zhao <yuzhao@google.com>
-OK, thanks.
-
+> I am fine with your change as long as it includes some of the above
+> information (basically noting that while the original change should have
+> been equivalent, the requirement of '-mno-loongson-mmi' when using
+> certain Loongson '-march=3D' values with '-msoft-float' means that those
+> Loongson '-march=3D' values need to be called with cc-option as well),
+> even if clang will incur two more cc-option calls as a result (not the
+> end of the world).
 >
-> > Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/mips/include/asm/kvm_host.h |  6 +++---
-> >   arch/mips/kvm/emulate.c          | 22 +++++++++++-----------
-> >   arch/mips/kvm/mips.c             | 16 ++++++++--------
-> >   arch/mips/kvm/trace.h            |  8 ++++----
-> >   arch/mips/kvm/vz.c               | 20 ++++++++++----------
-> >   5 files changed, 36 insertions(+), 36 deletions(-)
+> Additionally, it seems like the same issue will occur when running
+> modules_install when CONFIG_CPU_LOONGSON2E or CONFIG_CPU_LOONGSON2F are
+> enabled, which I guess I also broke in commit 13ceb48bc19c ("MIPS:
+> Loongson2ef: Remove unnecessary {as,cc}-option calls") :/
 >
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-OK, thanks.
+> Sorry again for the breakage and thanks for the fix!
+OK, I will update the commit message and fix for LOONGSON2EF together.
 
 Huacai
 >
+> Cheers,
+> Nathan
+>
+> > > > Fix this by partially reverting to the old logic, use 'call cc-opti=
+on'
+> > > > to conditionally apply -march=3Dloongson3a and -march=3Dmips64r2.
+> > > >
+> > > > Fixes: 0e96ea5c3eb5904e5dc2f ("MIPS: Loongson64: Clean up use of cc=
+-ifversion")
+> > > > Cc: stable@vger.kernel.org
+> > > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > ---
+> > > >  arch/mips/Makefile | 5 +----
+> > > >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> > > > index a7a4ee66a9d3..7fb76d12829e 100644
+> > > > --- a/arch/mips/Makefile
+> > > > +++ b/arch/mips/Makefile
+> > > > @@ -186,11 +186,8 @@ cflags-$(CONFIG_CPU_LOONGSON2F) +=3D -march=3D=
+loongson2f -Wa,--trap
+> > > >  # Some -march=3D flags enable MMI instructions, and GCC complains =
+about that
+> > > >  # support being enabled alongside -msoft-float. Thus explicitly di=
+sable MMI.
+> > > >  cflags-$(CONFIG_CPU_LOONGSON2EF) +=3D $(call cc-option,-mno-loongs=
+on-mmi)
+> > > > -ifdef CONFIG_CPU_LOONGSON64
+> > > >  cflags-$(CONFIG_CPU_LOONGSON64)      +=3D -Wa,--trap
+> > > > -cflags-$(CONFIG_CC_IS_GCC) +=3D -march=3Dloongson3a
+> > > > -cflags-$(CONFIG_CC_IS_CLANG) +=3D -march=3Dmips64r2
+> > > > -endif
+> > > > +cflags-$(CONFIG_CPU_LOONGSON64) +=3D $(call cc-option,-march=3Dloo=
+ngson3a,-march=3Dmips64r2)
+> > > >  cflags-$(CONFIG_CPU_LOONGSON64) +=3D $(call cc-option,-mno-loongso=
+n-mmi)
+> > > >
+> > > >  cflags-$(CONFIG_CPU_R4000_WORKAROUNDS)       +=3D $(call cc-option=
+,-mfix-r4000,)
+> > > > --
+> > > > 2.39.3
+> > > >
