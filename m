@@ -2,111 +2,226 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9974E740FC2
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 13:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D967410A2
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 14:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjF1LJW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jun 2023 07:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjF1LJE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jun 2023 07:09:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3182102;
-        Wed, 28 Jun 2023 04:09:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D48F86124A;
-        Wed, 28 Jun 2023 11:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3244C433C8;
-        Wed, 28 Jun 2023 11:08:59 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhuacai@gmail.com>, linux-mips@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH V2] MIPS: Loongson: Fix build error when make modules_install
-Date:   Wed, 28 Jun 2023 19:08:47 +0800
-Message-Id: <20230628110847.3168269-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+        id S231186AbjF1MCL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jun 2023 08:02:11 -0400
+Received: from elvis.franken.de ([193.175.24.41]:45244 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229456AbjF1MCK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 28 Jun 2023 08:02:10 -0400
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+        id 1qETs8-0001nL-00; Wed, 28 Jun 2023 14:02:08 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id C1436C02FD; Wed, 28 Jun 2023 14:02:01 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 14:02:01 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v6.5
+Message-ID: <20230628120201.GA10364@alpha.franken.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 0e96ea5c3eb5904e5dc2f ("MIPS: Loongson64: Clean up use of
-cc-ifversion") we get a build error when make modules_install:
+Hi Linus,
 
-cc1: error: '-mloongson-mmi' must be used with '-mhard-float'
+there will be small conflict with the slab tree. Resolution is to
+keep CONFIG_SLAB removed. See also
 
-The reason is when make modules_install, 'call cc-option' doesn't work
-in $(KBUILD_CFLAGS) of 'CHECKFLAGS'. Then there is no -mno-loongson-mmi
-applied and -march=loongson3a enable MMI instructions.
+https://lore.kernel.org/all/20230613151008.28167567@canb.auug.org.au/
 
-To be detail, the error message comes from the CHECKFLAGS invocation of
-$(CC) but it has no impact on the final result of make modules_install,
-it is purely a cosmetic issue. The error occurs because cc-option is
-defined in scripts/Makefile.compiler, which is not included in Makefile
-when running 'make modules_install', as install targets are not supposed
-to require the compiler; see commit 805b2e1d427aab4b ("kbuild: include
-Makefile.compiler only when compiler is needed"). As a result, the call
-to check for '-mno-loongson-mmi' just never happens.
+Other than that my test merge didn't show anything.
 
-Fix this by partially reverting to the old logic, use 'call cc-option'
-to conditionally apply -march=loongson3a and -march=mips64r2.
+Thomas.
 
-By the way, Loongson-2E/2F is also broken in commit 13ceb48bc19c563e05f4
-("MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls") so fix it
-together.
+The following changes since commit 4897a898a216058dec55e5e5902534e6e224fcdf:
 
-Fixes: 13ceb48bc19c563e05f4 ("MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls")
-Fixes: 0e96ea5c3eb5904e5dc2 ("MIPS: Loongson64: Clean up use of cc-ifversion")
-Cc: stable@vger.kernel.org
-Cc: Feiyang Chen <chenfeiyang@loongson.cn>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-V2: Update commit message and fix for LOONGSON2EF together.
+  mips: Move initrd_start check after initrd address sanitisation. (2023-05-23 11:01:38 +0200)
 
- arch/mips/Makefile | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+are available in the Git repository at:
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index a7a4ee66a9d3..35a1b9b34734 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -181,16 +181,12 @@ endif
- cflags-$(CONFIG_CAVIUM_CN63XXP1) += -Wa,-mfix-cn63xxp1
- cflags-$(CONFIG_CPU_BMIPS)	+= -march=mips32 -Wa,-mips32 -Wa,--trap
- 
--cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e -Wa,--trap
--cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f -Wa,--trap
-+cflags-$(CONFIG_CPU_LOONGSON2E) += $(call cc-option,-march=loongson2e) -Wa,--trap
-+cflags-$(CONFIG_CPU_LOONGSON2F) += $(call cc-option,-march=loongson2f) -Wa,--trap
-+cflags-$(CONFIG_CPU_LOONGSON64) += $(call cc-option,-march=loongson3a,-march=mips64r2) -Wa,--trap
- # Some -march= flags enable MMI instructions, and GCC complains about that
- # support being enabled alongside -msoft-float. Thus explicitly disable MMI.
- cflags-$(CONFIG_CPU_LOONGSON2EF) += $(call cc-option,-mno-loongson-mmi)
--ifdef CONFIG_CPU_LOONGSON64
--cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
--cflags-$(CONFIG_CC_IS_GCC) += -march=loongson3a
--cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
--endif
- cflags-$(CONFIG_CPU_LOONGSON64) += $(call cc-option,-mno-loongson-mmi)
- 
- cflags-$(CONFIG_CPU_R4000_WORKAROUNDS)	+= $(call cc-option,-mfix-r4000,)
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5
+
+for you to fetch changes up to e47084e116fccaa43644360d7c0b997979abce3e:
+
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000 (2023-06-26 09:18:43 +0200)
+
+----------------------------------------------------------------
+- added support for TP-Link HC220 G5 v1
+- added support for Wifi/Bluetooth on CI20
+- reworked Ralink clock and reset handling
+- cleanups and fixes
+
+----------------------------------------------------------------
+Aidan MacDonald (2):
+      mips: dts: ingenic: Remove unnecessary AIC clocks
+      mips: dts: ingenic: x1000: Add AIC device tree node
+
+Arnd Bergmann (2):
+      mips: provide unxlate_dev_mem_ptr() in asm/io.h
+      mips: asm-offsets: add missing prototypes
+
+Binbin Zhou (2):
+      MIPS: Loongson64: DTS: Add RTC support to LS7A PCH
+      MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000
+
+Franziska Naepelt (1):
+      mips: Fix spacing issue
+
+Gustavo A. R. Silva (1):
+      MIPS: dec: prom: Address -Warray-bounds warning
+
+Jiaxun Yang (4):
+      MIPS: generic: Allow R5 CPUs to be selected
+      MIPS: cpu-features: Use boot_cpu_type for CPU type based features
+      MIPS: Rework smt cmdline parameters
+      MIPS: Select CONFIG_GENERIC_IDLE_POLL_SETUP
+
+Keguang Zhang (1):
+      MIPS: Loongson32: Remove reset.c
+
+Ladislav Michl (7):
+      MIPS: OCTEON: octeon-usb: add all register offsets
+      MIPS: OCTEON: octeon-usb: use bitfields for control register
+      MIPS: OCTEON: octeon-usb: use bitfields for host config register
+      MIPS: OCTEON: octeon-usb: use bitfields for shim register
+      MIPS: OCTEON: octeon-usb: move gpio config to separate function
+      MIPS: OCTEON: octeon-usb: introduce dwc3_octeon_{read,write}q
+      MIPS: OCTEON: octeon-usb: cleanup divider calculation
+
+Liviu Dudau (2):
+      dt-bindings: mips: Add bindings for TP-Link HC220 G5 v1 board
+      mips: dts: ralink: Add support for TP-Link HC220 G5 v1 board
+
+Maciej W. Rozycki (2):
+      MIPS: Alchemy: Enable PATA_PLATFORM support
+      Revert "MIPS: unhide PATA_PLATFORM"
+
+Nathan Chancellor (2):
+      MIPS: Mark core_vpe_count() as __init
+      clk: ralink: mtmips: Fix uninitialized use of ret in mtmips_register_{fixed,factor}_clocks()
+
+Paul Cercueil (13):
+      mips: ingenic: Remove useless __maybe_unused
+      mips: ingenic: Enable EXT/2 divider on JZ4750/55/60 if EXT is 24 MHz
+      MIPS: DTS: qi_lb60: Don't use unit address for regulators
+      MIPS: DTS: CI20: Fix regulators
+      MIPS: DTS: CI20: Fix ACT8600 regulator node names
+      MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators
+      MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators
+      MIPS: DTS: CI20: Misc. cleanups
+      MIPS: DTS: CI20: Parent MSCMUX clock to MPLL
+      MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
+      MIPS: configs: CI20: Regenerate defconfig
+      MIPS: configs: CI20: Enable WiFi / Bluetooth
+      MIPS: DTS: CI20: Raise VDDCORE voltage to 1.125 volts
+
+Sergio Paracuellos (9):
+      dt-bindings: clock: add mtmips SoCs system controller
+      clk: ralink: add clock and reset driver for MTMIPS SoCs
+      mips: ralink: rt288x: remove clock related code
+      mips: ralink: rt305x: remove clock related code
+      mips: ralink: rt3883: remove clock related code
+      mips: ralink: mt7620: remove clock related code
+      mips: ralink: remove reset related code
+      mips: ralink: get cpu rate from new driver code
+      MAINTAINERS: add Mediatek MTMIPS Clock maintainer
+
+Shiji Yang (4):
+      mips: pci-mt7620: do not print NFTS register value as error log
+      mips: pci-mt7620: use dev_info() to log PCIe device detection result
+      mips: ralink: introduce commonly used remap node function
+      mips: ralink: match all supported system controller compatible strings
+
+Siarhei Volkau (1):
+      MIPS: uaccess: emulate Ingenic LXW/LXH/LXHU uaccess
+
+Sui Jingfeng (1):
+      MIPS: Loongson64: loongson3_defconfig: Enable amdgpu drm driver
+
+Thomas Bogendoerfer (2):
+      Merge tag 'mips-fixes_6.4_1' into mips-next
+      MIPS: mm: Remove special handling for OCTEON CPUs
+
+Tony Lindgren (1):
+      mips: dts: ralink: mt7628a: Unify pinctrl-single pin group nodes
+
+Uwe Kleine-König (1):
+      MIPS: PCI: Convert to platform remove callback returning void
+
+Yu Zhao (1):
+      kvm/mips: update MAINTAINERS
+
+ Documentation/admin-guide/kernel-parameters.txt    |    8 +-
+ .../bindings/clock/mediatek,mtmips-sysc.yaml       |   64 ++
+ Documentation/devicetree/bindings/mips/ralink.yaml |    1 +
+ MAINTAINERS                                        |    7 +-
+ arch/mips/Kconfig                                  |    4 +-
+ arch/mips/alchemy/Kconfig                          |    1 +
+ arch/mips/boot/dts/ingenic/ci20.dts                |  152 ++-
+ arch/mips/boot/dts/ingenic/jz4725b.dtsi            |    7 +-
+ arch/mips/boot/dts/ingenic/jz4740.dtsi             |    7 +-
+ arch/mips/boot/dts/ingenic/jz4770.dtsi             |    5 +-
+ arch/mips/boot/dts/ingenic/qi_lb60.dts             |    6 +-
+ arch/mips/boot/dts/ingenic/x1000.dtsi              |   18 +
+ arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi |    7 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi          |    7 +
+ arch/mips/boot/dts/ralink/Makefile                 |    3 +-
+ .../boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts  |   84 ++
+ arch/mips/boot/dts/ralink/mt7628a.dtsi             |   40 +-
+ arch/mips/cavium-octeon/octeon-usb.c               |  629 +++++------
+ arch/mips/configs/ci20_defconfig                   |   47 +-
+ arch/mips/configs/loongson3_defconfig              |    7 +
+ arch/mips/generic/board-ingenic.c                  |   61 +-
+ arch/mips/include/asm/cpu-features.h               |    4 +-
+ arch/mips/include/asm/dec/prom.h                   |    2 +-
+ arch/mips/include/asm/io.h                         |    1 +
+ arch/mips/include/asm/mach-loongson32/loongson1.h  |    1 -
+ arch/mips/include/asm/mach-loongson32/regs-wdt.h   |   15 -
+ arch/mips/include/asm/mach-ralink/mt7620.h         |   35 -
+ arch/mips/include/asm/mach-ralink/rt288x.h         |   10 -
+ arch/mips/include/asm/mach-ralink/rt305x.h         |   21 -
+ arch/mips/include/asm/mach-ralink/rt3883.h         |    8 -
+ arch/mips/include/asm/smp.h                        |    2 +
+ arch/mips/include/uapi/asm/inst.h                  |   33 +
+ arch/mips/kernel/asm-offsets.c                     |   14 +
+ arch/mips/kernel/smp-cps.c                         |   15 +-
+ arch/mips/kernel/smp-mt.c                          |    3 +-
+ arch/mips/kernel/smp.c                             |   18 +
+ arch/mips/kernel/unaligned.c                       |   41 +
+ arch/mips/loongson32/common/Makefile               |    2 +-
+ arch/mips/loongson32/common/reset.c                |   51 -
+ arch/mips/mm/tlbex.c                               |   24 +-
+ arch/mips/pci/pci-mt7620.c                         |    7 +-
+ arch/mips/pci/pci-xtalk-bridge.c                   |    8 +-
+ arch/mips/ralink/clk.c                             |   61 +-
+ arch/mips/ralink/common.h                          |    7 -
+ arch/mips/ralink/mt7620.c                          |  235 ----
+ arch/mips/ralink/mt7621.c                          |    9 -
+ arch/mips/ralink/of.c                              |   51 +-
+ arch/mips/ralink/reset.c                           |   61 --
+ arch/mips/ralink/rt288x.c                          |   40 -
+ arch/mips/ralink/rt305x.c                          |   87 --
+ arch/mips/ralink/rt3883.c                          |   53 -
+ arch/mips/sibyte/swarm/platform.c                  |   14 +-
+ drivers/char/mem.c                                 |    7 -
+ drivers/clk/ralink/Kconfig                         |    7 +
+ drivers/clk/ralink/Makefile                        |    1 +
+ drivers/clk/ralink/clk-mtmips.c                    | 1117 ++++++++++++++++++++
+ 56 files changed, 2093 insertions(+), 1137 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+ create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
+ delete mode 100644 arch/mips/loongson32/common/reset.c
+ create mode 100644 drivers/clk/ralink/clk-mtmips.c
+
 -- 
-2.39.3
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
