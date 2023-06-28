@@ -2,57 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366D0740684
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 00:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A12740900
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 05:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjF0WjA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 27 Jun 2023 18:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S229934AbjF1DjK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Jun 2023 23:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjF0Wi7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jun 2023 18:38:59 -0400
-X-Greylist: delayed 4007 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Jun 2023 15:38:56 PDT
-Received: from mailgw.kefri.org (mail.kefri.org [197.139.36.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5892102;
-        Tue, 27 Jun 2023 15:38:56 -0700 (PDT)
-Received: by mailgw.kefri.org (Postfix, from userid 1001)
-        id A3378A7B397; Tue, 27 Jun 2023 22:37:59 +0300 (EAT)
+        with ESMTP id S231213AbjF1DjK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jun 2023 23:39:10 -0400
+Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3D22D74;
+        Tue, 27 Jun 2023 20:39:04 -0700 (PDT)
+Received: by a3.inai.de (Postfix, from userid 25121)
+        id 3EAFB5880BBDB; Wed, 28 Jun 2023 05:38:57 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by a3.inai.de (Postfix) with ESMTP id 3CBF860DE22B8;
+        Wed, 28 Jun 2023 05:38:57 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 05:38:57 +0200 (CEST)
+From:   Jan Engelhardt <jengelh@inai.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nikolay Borisov <nik.borisov@suse.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chris Zankel <chris@zankel.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [patch 00/17] init, treewide, x86: Cleanup check_bugs() and
+ start sanitizing the x86 boot process
+In-Reply-To: <20230613223827.532680283@linutronix.de>
+Message-ID: <8qpp1r32-pr73-8477-nso-327o845o1149@vanv.qr>
+References: <20230613223827.532680283@linutronix.de>
+User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.3 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
-        BAYES_50,LOTS_OF_MONEY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-Received: from [45.81.39.165] (unknown [10.10.1.178])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailgw.kefri.org (Postfix) with ESMTPS id 7B9D6A459C4;
-        Tue, 27 Jun 2023 21:48:52 +0300 (EAT)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: I will send you more details once you reply
-To:     Recipients <poballa@kefri.org>
-From:   "Ms. Al-Hashimi" <poballa@kefri.org>
-Date:   Tue, 27 Jun 2023 20:48:47 +0200
-Reply-To: nationalbureau@kakao.com
-Message-Id: <20230627203820.A3378A7B397@mailgw.kefri.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Friday,
+On Wednesday 2023-06-14 01:39, Thomas Gleixner wrote:
 
-My name is Mrs. Reem E. Al-Hashimi, the Emirates Minister of State . I am writing to you to stand as my partner to receive Funds as my partner.
+>Hi!
+>
+>My team and myself are working on sanitizing the x86 boot process,
+>especially the complete horror show of CPUID evaluation, which is
+>constructed with hay-wire circuits, duct tape and superglue.
 
-I reached with the foreign companies to direct the gratifications to an open beneficiary account with a financial institution where it will be possible for me to instruct further transfer of the fund to a third party account through bank transfer or Cryptocurrency.
-
-The amount is valued at $ 47,745,533.00 with a financial institution waiting my instruction for further transfer to a destination account as soon as I have your information indicating interest and I will compensate you with 30% of the total amount and you will also benefit from the investment.
-
-Please take note that the details so explained is the condition I will work with you as a partner and also add  my  WhatsApp number: +971581890339 to enable chat more. 
-
-My details and profile is below my website. https://www.mofaic.gov.ae/en/the-ministry/the-ministers/uae-minister-of-state-for-international-cooperation/minister-of-the-state-for-international-cooperation
-
-Regards,
-Mrs. Reem
+What's with Intel and its glue analogies? Not to mention it stuck very 
+well, if I may say so myself (not to mention the glue in the co 
+struction of the 12th Intel series).
