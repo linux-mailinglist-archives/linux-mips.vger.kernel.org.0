@@ -2,157 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8861740A38
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 10:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC26740AE1
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jun 2023 10:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjF1IAm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jun 2023 04:00:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46990 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232166AbjF1H5x (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 28 Jun 2023 03:57:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687939023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SH32jNlN6Jqg7DPKFWcTzn8QudVshhtxY6DizRJx1h4=;
-        b=ideQvy88SNbKhc5JTrQv+TcDAe3sucVehbLnb/K41JeLGGE0ZdVI4TCPQlSh0x27gs+7dA
-        QgRIVMgwDlaB2r3bg1HlvlKPrqBSbsKy8WPZ3e7wJzWefGYWgfRZCKWmNWPqvcipq8uAws
-        jKntEk6iYgyQU25/R6IkQTXIU0y8MTQ=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-9I1ebg6oMGSHplOUqzrMQQ-1; Wed, 28 Jun 2023 03:41:22 -0400
-X-MC-Unique: 9I1ebg6oMGSHplOUqzrMQQ-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4fb76659d44so3295859e87.3
-        for <linux-mips@vger.kernel.org>; Wed, 28 Jun 2023 00:41:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687938081; x=1690530081;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SH32jNlN6Jqg7DPKFWcTzn8QudVshhtxY6DizRJx1h4=;
-        b=Cq05i/X3c/8hEeHdwOEkOPSnLDCEZdHXrdl9A1D78yx0Vm7Y/bN7gU7mM/vGzVaaNh
-         YCLMXrrLI/P7/rihFkIgBmnFk9NGr6oyYUmCVqtWI5L2oILFOjPUKUDXfODKS7HFmzOB
-         grRyRjGWB7rONPHSgLbriajVvDaM6V4Hgu0NgRvDj1SpPYR2JNcoMfAkpDoss1Pk0+MT
-         ehf2eGmfxSopp/VBq2mJj4F4JfTlfwRiitvv0PqhPYmHciDuCAw9qmMuF74oHTqpxJJ1
-         Sdwj0vdM2QpRNA6otRXYuceIYjdkW+2k+acgBWX5yF6r/99qLcjNGR9Mf17H/EfsDmFr
-         aJqA==
-X-Gm-Message-State: AC+VfDzz0U62CrhIeU2pSP5P4+kGhK4NMp4A4Biq5zlsmQ8CWmVTjR0m
-        LwjSsTwwt25trl0nC9Uuac78UCbtWm5jmExHEqWbqO899gdkH/KtCFd1siDW84EBy1Wyv+y1p6M
-        Ely6z/nrDz7m9NEmNiMCg/Q==
-X-Received: by 2002:a05:6512:10cb:b0:4fb:9341:9921 with SMTP id k11-20020a05651210cb00b004fb93419921mr540035lfg.52.1687938081183;
-        Wed, 28 Jun 2023 00:41:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4/LL8Q6ptsPVewMKWY4urM5AzIoWSMnfr2lL0PypvevicnXRpVgfkYzOOBDpLnug9qgwbQPw==
-X-Received: by 2002:a05:6512:10cb:b0:4fb:9341:9921 with SMTP id k11-20020a05651210cb00b004fb93419921mr540021lfg.52.1687938080672;
-        Wed, 28 Jun 2023 00:41:20 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c715:ef00:fa40:f6df:a68d:a0e4? (p200300cbc715ef00fa40f6dfa68da0e4.dip0.t-ipconnect.de. [2003:cb:c715:ef00:fa40:f6df:a68d:a0e4])
-        by smtp.gmail.com with ESMTPSA id hn10-20020a05600ca38a00b003fba586100fsm3970092wmb.6.2023.06.28.00.41.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 00:41:20 -0700 (PDT)
-Message-ID: <26282cb8-b6b0-f3a0-e82d-b4fec45c5f72@redhat.com>
-Date:   Wed, 28 Jun 2023 09:41:18 +0200
+        id S233698AbjF1IMp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jun 2023 04:12:45 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:51716 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233752AbjF1IJv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jun 2023 04:09:51 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA9726132E;
+        Wed, 28 Jun 2023 07:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35155C433CB;
+        Wed, 28 Jun 2023 07:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687937685;
+        bh=1RvYG/zNfvaMvzYdsiasDFPUFxo2X7mXbyQadTutm14=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H1RUK0rPadZYlBM2PFBs8Y0zb/rFJtcnbd93GXhOMrDxiioXfaMYeAd7wReRjzdIJ
+         5c2d+9mB3qnRUAmgYHBuRW7U/Noyj0Kf916vuTKLEH29vtLN9OBZG0warX9jo9TLfu
+         +1mL1UsWSs/jzhPKDy9eqDrte27NWRt6UOFApwBwA18eF/xKj1xV8EBizjvuD7mISE
+         F8VBNyCWr84HEhddggLUfgN5ttYZqqw8MnL2mJfDrLmFKyRZlt5KKJlulxIKC+2O5/
+         G4gIsWLxQpyFkOBiQ7uaM+iq/VWY5BPgoVPQ85wr7nmGDou3+LC9FEQO4JCzRfRw3W
+         vHAjecBBlNjGA==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-991aac97802so447145066b.1;
+        Wed, 28 Jun 2023 00:34:45 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxAYnTgj7qb3u7386i7C0IAOBrP9iQGf7wjQVhVWIZIPwBTEiWM
+        J75zbNlcVIq3Atw/Vf+TRisbSX/7/RNLeX7BWTk=
+X-Google-Smtp-Source: ACHHUZ6JL3g1iyyrEhvtgl6EfKUhA+/PI4WX7hcVO+KzuuEGLTNZV4wFqRkqjAXpyVuNwo4/H31vvrP4Aght7wyWGN8=
+X-Received: by 2002:a17:907:80c:b0:974:1d8b:ca5f with SMTP id
+ wv12-20020a170907080c00b009741d8bca5fmr30253899ejb.9.1687937683374; Wed, 28
+ Jun 2023 00:34:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-To:     Hugh Dickins <hughd@google.com>
-Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+References: <20230626074919.1871944-1-chenhuacai@loongson.cn> <961c855a-81ea-c628-3e67-81877a748027@linaro.org>
+In-Reply-To: <961c855a-81ea-c628-3e67-81877a748027@linaro.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 28 Jun 2023 15:34:31 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7FL73KQiciTUCSwzOBQ9KDH5bfwbChV3oe+A+qpx=gsg@mail.gmail.com>
+Message-ID: <CAAhV-H7FL73KQiciTUCSwzOBQ9KDH5bfwbChV3oe+A+qpx=gsg@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: KVM: Fix NULL pointer dereference
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20230627031431.29653-1-vishal.moola@gmail.com>
- <e8992eee-4140-427e-bacb-9449f346318@google.com>
- <ac1c162c-07d8-6084-44ca-a2c1a4183df2@redhat.com>
- <90e643ca-de72-2f4c-f4fe-35e06e1a9277@google.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v6 00/33] Split ptdesc from struct page
-In-Reply-To: <90e643ca-de72-2f4c-f4fe-35e06e1a9277@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 27.06.23 22:13, Hugh Dickins wrote:
-> On Tue, 27 Jun 2023, David Hildenbrand wrote:
->> On 27.06.23 06:44, Hugh Dickins wrote:
->>> On Mon, 26 Jun 2023, Vishal Moola (Oracle) wrote:
->>>
->>>> The MM subsystem is trying to shrink struct page. This patchset
->>>> introduces a memory descriptor for page table tracking - struct ptdesc.
->>> ...
->>>>    39 files changed, 686 insertions(+), 455 deletions(-)
->>>
->>> I don't see the point of this patchset: to me it is just obfuscation of
->>> the present-day tight relationship between page table and struct page.
->>>
->>> Matthew already explained:
->>>
->>>> The intent is to get ptdescs to be dynamically allocated at some point
->>>> in the ~2-3 years out future when we have finished the folio project ...
->>>
->>> So in a kindly mood, I'd say that this patchset is ahead of its time.
->>> But I can certainly adapt to it, if everyone else sees some point to it.
->>
->> I share your thoughts, that code churn which will help eventually in the far,
->> far future (not wanting to sound too pessimistic, but it's not going to be
->> there tomorrow ;) ).
->>
->> However, if it's just the same as the other conversions we already did (e.g.,
->> struct slab), then I guess there is no reason to stop now -- the obfuscation
->> already happened.
->>
->> ... or is there a difference regarding this conversion and the previous ones?
-> 
-> I was aware of the struct slab thing, didn't see much point there myself
-> either; but it was welcomed by Vlastimil, and barely affected outside of
-> slab allocators, so I had no reason to object.
-> 
-> You think that if a little unnecessary churn (a *lot* of churn if you
-> include folios, which did save some repeated calls to compound_head())
-> has already occurred, that's a good precedent for allowing more and more?
+Hi, Philippe,
 
-Well, if you phrase it like that ... no, I'm not in favor of unnecessary 
-churn at all. Yes, folios were/are a lot of churn (IMHO not unnecessary, 
-though).
+On Mon, Jun 26, 2023 at 6:28=E2=80=AFPM Philippe Mathieu-Daud=C3=A9
+<philmd@linaro.org> wrote:
+>
+> On 26/6/23 09:49, Huacai Chen wrote:
+> > After commit 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support") w=
+e
+> > get a NULL pointer dereference when creating a KVM guest:
+> >
+> > [  146.243409] Starting KVM with MIPS VZ extensions
+> > [  149.849151] CPU 3 Unable to handle kernel paging request at virtual =
+address 0000000000000300, epc =3D=3D ffffffffc06356ec, ra =3D=3D ffffffffc0=
+63568c
+> > [  149.849177] Oops[#1]:
+> > [  149.849182] CPU: 3 PID: 2265 Comm: qemu-system-mip Not tainted 6.4.0=
+-rc3+ #1671
+> > [  149.849188] Hardware name: THTF CX TL630 Series/THTF-LS3A4000-7A1000=
+-ML4A, BIOS KL4.1F.TF.D.166.201225.R 12/25/2020
+> > [  149.849192] $ 0   : 0000000000000000 000000007400cce0 00000000004000=
+04 ffffffff8119c740
+> > [  149.849209] $ 4   : 000000007400cce1 000000007400cce1 00000000000000=
+00 0000000000000000
+> > [  149.849221] $ 8   : 000000240058bb36 ffffffff81421ac0 00000000000000=
+00 0000000000400dc0
+> > [  149.849233] $12   : 9800000102a07cc8 ffffffff80e40e38 00000000000000=
+01 0000000000400dc0
+> > [  149.849245] $16   : 0000000000000000 9800000106cd0000 9800000106cd00=
+00 9800000100cce000
+> > [  149.849257] $20   : ffffffffc0632b28 ffffffffc05b31b0 9800000100ccca=
+00 0000000000400000
+> > [  149.849269] $24   : 9800000106cd09ce ffffffff802f69d0
+> > [  149.849281] $28   : 9800000102a04000 9800000102a07cd0 98000001106a80=
+00 ffffffffc063568c
+> > [  149.849293] Hi    : 00000335b2111e66
+> > [  149.849295] Lo    : 6668d90061ae0ae9
+> > [  149.849298] epc   : ffffffffc06356ec kvm_vz_vcpu_setup+0xc4/0x328 [k=
+vm]
+> > [  149.849324] ra    : ffffffffc063568c kvm_vz_vcpu_setup+0x64/0x328 [k=
+vm]
+> > [  149.849336] Status: 7400cce3 KX SX UX KERNEL EXL IE
+> > [  149.849351] Cause : 1000000c (ExcCode 03)
+> > [  149.849354] BadVA : 0000000000000300
+> > [  149.849357] PrId  : 0014c004 (ICT Loongson-3)
+> > [  149.849360] Modules linked in: kvm nfnetlink_queue nfnetlink_log nfn=
+etlink fuse sha256_generic libsha256 cfg80211 rfkill binfmt_misc vfat fat s=
+nd_hda_codec_hdmi input_leds led_class snd_hda_intel snd_intel_dspcfg snd_h=
+da_codec snd_hda_core snd_pcm snd_timer snd serio_raw xhci_pci radeon drm_s=
+uballoc_helper drm_display_helper xhci_hcd ip_tables x_tables
+> > [  149.849432] Process qemu-system-mip (pid: 2265, threadinfo=3D0000000=
+0ae2982d2, task=3D0000000038e09ad4, tls=3D000000ffeba16030)
+> > [  149.849439] Stack : 9800000000000003 9800000100ccca00 9800000100ccc0=
+00 ffffffffc062cef4
+> > [  149.849453]         9800000102a07d18 c89b63a7ab338e00 00000000000000=
+00 ffffffff811a0000
+> > [  149.849465]         0000000000000000 9800000106cd0000 ffffffff80e599=
+38 98000001106a8920
+> > [  149.849476]         ffffffff80e57f30 ffffffffc062854c ffffffff811a00=
+00 9800000102bf4240
+> > [  149.849488]         ffffffffc05b0000 ffffffff80e3a798 000000ff780000=
+00 000000ff78000010
+> > [  149.849500]         0000000000000255 98000001021f7de0 98000001023f00=
+78 ffffffff81434000
+> > [  149.849511]         0000000000000000 0000000000000000 9800000102ae00=
+00 980000025e92ae28
+> > [  149.849523]         0000000000000000 c89b63a7ab338e00 00000000000000=
+01 ffffffff8119dce0
+> > [  149.849535]         000000ff78000010 ffffffff804f3d3c 9800000102a07e=
+b0 0000000000000255
+> > [  149.849546]         0000000000000000 ffffffff8049460c 000000ff780000=
+10 0000000000000255
+> > [  149.849558]         ...
+> > [  149.849565] Call Trace:
+> > [  149.849567] [<ffffffffc06356ec>] kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
+> > [  149.849586] [<ffffffffc062cef4>] kvm_arch_vcpu_create+0x184/0x228 [k=
+vm]
+> > [  149.849605] [<ffffffffc062854c>] kvm_vm_ioctl+0x64c/0xf28 [kvm]
+> > [  149.849623] [<ffffffff805209c0>] sys_ioctl+0xc8/0x118
+> > [  149.849631] [<ffffffff80219eb0>] syscall_common+0x34/0x58
+> >
+> > The root cause is the deletion of kvm_mips_commpage_init() leaves vcpu-=
+>
+> > arch.cop0 NULL. So fix it by make cop0 from a pointer to an embed objec=
+t.
+>
+> "by making ... to an embedded object."
+OK, thanks.
 
-I'm not a friend of these "overlays"; it all only really makes sense to 
-me once we actually allocate the descriptors dynamically. Maybe some of 
-the existing/ongoing conversions were different (that's why I was asking 
-for the difference, as you said the "struct slab" thing was well received).
+>
+> >
+> > Fixes: 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support")
+> > Cc: stable@vger.kernel.org
+>
+> Reported-by: Yu Zhao <yuzhao@google.com>
+OK, thanks.
 
-If they are primarily only unnecessary churn for now (and unclear 
-when/how it will become useful), I share your opinion.
+>
+> > Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/mips/include/asm/kvm_host.h |  6 +++---
+> >   arch/mips/kvm/emulate.c          | 22 +++++++++++-----------
+> >   arch/mips/kvm/mips.c             | 16 ++++++++--------
+> >   arch/mips/kvm/trace.h            |  8 ++++----
+> >   arch/mips/kvm/vz.c               | 20 ++++++++++----------
+> >   5 files changed, 36 insertions(+), 36 deletions(-)
+>
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+OK, thanks.
 
--- 
-Cheers,
-
-David / dhildenb
-
+Huacai
+>
