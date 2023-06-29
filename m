@@ -2,146 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58897420ED
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 09:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF09374210D
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 09:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjF2H0x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jun 2023 03:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S232060AbjF2Hdh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jun 2023 03:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjF2H0a (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 03:26:30 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAC12705;
-        Thu, 29 Jun 2023 00:26:27 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d5569e4d1so359908a12.2;
-        Thu, 29 Jun 2023 00:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688023586; x=1690615586;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bwd8c3qXwoH1vFVBqWX6B3qa2lR9FJmw4aF8E8qCwNg=;
-        b=dTXi1f7xlD0Ie/gaDiuFQj/Hw8qCXx3/DCXiW7SlI2WkVFyk0JWhudAqELJglAIjRR
-         UwNoA43JoQ28lWlFLf830FKyDG6piDFGZm/90IquO1K1b3dICxfIF6bzI69K1HOWvfFg
-         g6iTAgh3PfRELcwLNJkdO78DFFMiU4g+MlrZc/SFHlLFcQM9uVxAa57omWgLIh63J9pp
-         qUbzal9TKNlJkWJwGarJPA9g4ELvNOI34BCeDZZCBaYTlPhcO+d12o+0TfqCTxmSsYcV
-         GlmMnJ3hvsjEounX5CD+YzbtwiyrTQFWYsW0jmk271AHoBhNBPlAo86JlTQu/lA+Ghyz
-         ZSHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688023586; x=1690615586;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bwd8c3qXwoH1vFVBqWX6B3qa2lR9FJmw4aF8E8qCwNg=;
-        b=O+7pOhvINZ7jEeAeM+erol3C8oCpt4udGSp3uOCm25MCHvvaWrlNRQWzCwlu9paI5F
-         q6+OZC2ihMUfa5wMkS12wheQl7SG49g4iLaUupTQtmUUQto2N0t6wTiaFp/IjtZD7OFU
-         VVEbmymIm+ucxHJrrW7x173ovtBIRi72Qlj94jd1y3npOC74YokY/bHV7HgAtSJkfVBH
-         AMztfdw6lYApWZi56n30+ux/Bf5/fYpum8ZMqiwcmvQ/WL1f8d2zqnhem6uGN6Md0ZvB
-         EcgSFyTCJtrTNkTA67N4KNIvCwJCdWzTNxhzqmX7HPHICKRD/3XQk6hr3NXEVHgDcWTX
-         45GQ==
-X-Gm-Message-State: AC+VfDxhUqzrvByATU7OZBUMAPyE19haCJdmzM9/r3L5L9XqrN4YcR0P
-        Db2KhncYaYWDqZTLcEZ4T8Y=
-X-Google-Smtp-Source: ACHHUZ4vwC0hNGyj9xa+pU3QuPUItbnkmq3FHWMi2GRg1PQt5aKy7aR89OjqeYmZkqKgzr+Q2J8grQ==
-X-Received: by 2002:a17:907:3605:b0:96a:52e:5379 with SMTP id bk5-20020a170907360500b0096a052e5379mr26518474ejc.63.1688023586078;
-        Thu, 29 Jun 2023 00:26:26 -0700 (PDT)
-Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
-        by smtp.gmail.com with ESMTPSA id qc23-20020a170906d8b700b0098dfec235ccsm6101756ejb.47.2023.06.29.00.26.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 00:26:25 -0700 (PDT)
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Simon Arlott <simon@octiron.net>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] irq-bcm6345-l1: do not assume a fixed block to cpu mapping
-Date:   Thu, 29 Jun 2023 09:26:20 +0200
-Message-Id: <20230629072620.62527-1-jonas.gorski@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232180AbjF2Hcv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 03:32:51 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0D72974
+        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 00:32:50 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id CD5E4839CC; Thu, 29 Jun 2023 08:32:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1688023940; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=PfB0OEraMHz3gDiRnTA7jhpghSBSYyzkDCLTkxbhAweUwdewse8FrSoWfqR36IltQ
+         OXE/cwpgp13q4lEUJo+O2K/gxRu6xiXgg4QPqfPZvjLaRaQug+q7QNIOP9C+2twbDr
+         6+PXpPBD+Rb2IO+mxepr/sG+q2i2tvCsnWqVI/YaQpcKAC7j4UloNv/yYGTeObLG7Z
+         BLe0U4+OtwnVHXktYQd2bdjSwuCIgbvAzOnkp6rIaHVPiP031/f0vN+/VQD/XeJLKb
+         bpadT91tTrLSOPglm1BKvlh8Xjt2R4MpWFSpssMJMkpuO8jmaMSeP0MMpmDc1iZyKy
+         XnJXWrNlVBNZw==
+Received: by mail.lokoho.com for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 07:30:21 GMT
+Message-ID: <20230629074502-0.1.6y.2sxg1.0.giea33b61t@lokoho.com>
+Date:   Thu, 29 Jun 2023 07:30:21 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-mips@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The irq to block mapping is fixed, and interrupts from the first block
-will always be routed to the first parent IRQ. But the parent interrupts
-themselves can be routed to any available CPU.
+Dzie=C5=84 dobry,
 
-This is used by the bootloader to map the first parent interrupt to the
-boot CPU, regardless wether the boot CPU is the first one or the second
-one.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-When booting from the second CPU, the assumption that the first block's
-IRQ is mapped to the first CPU breaks, and the system hangs because
-interrupts do not get routed correctly.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Fix this by passing the appropriate bcm6434_l1_cpu to the interrupt
-handler instead of the chip itself, so the handler always has the right
-block.
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Fixes: c7c42ec2baa1 ("irqchips/bmips: Add bcm6345-l1 interrupt controller")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
----
- drivers/irqchip/irq-bcm6345-l1.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
-index fa113cb2529a..6341c0167c4a 100644
---- a/drivers/irqchip/irq-bcm6345-l1.c
-+++ b/drivers/irqchip/irq-bcm6345-l1.c
-@@ -82,6 +82,7 @@ struct bcm6345_l1_chip {
- };
- 
- struct bcm6345_l1_cpu {
-+	struct bcm6345_l1_chip	*intc;
- 	void __iomem		*map_base;
- 	unsigned int		parent_irq;
- 	u32			enable_cache[];
-@@ -115,17 +116,11 @@ static inline unsigned int cpu_for_irq(struct bcm6345_l1_chip *intc,
- 
- static void bcm6345_l1_irq_handle(struct irq_desc *desc)
- {
--	struct bcm6345_l1_chip *intc = irq_desc_get_handler_data(desc);
--	struct bcm6345_l1_cpu *cpu;
-+	struct bcm6345_l1_cpu *cpu = irq_desc_get_handler_data(desc);
-+	struct bcm6345_l1_chip *intc = cpu->intc;
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	unsigned int idx;
- 
--#ifdef CONFIG_SMP
--	cpu = intc->cpus[cpu_logical_map(smp_processor_id())];
--#else
--	cpu = intc->cpus[0];
--#endif
--
- 	chained_irq_enter(chip, desc);
- 
- 	for (idx = 0; idx < intc->n_words; idx++) {
-@@ -253,6 +248,7 @@ static int __init bcm6345_l1_init_one(struct device_node *dn,
- 	if (!cpu)
- 		return -ENOMEM;
- 
-+	cpu->intc = intc;
- 	cpu->map_base = ioremap(res.start, sz);
- 	if (!cpu->map_base)
- 		return -ENOMEM;
-@@ -271,7 +267,7 @@ static int __init bcm6345_l1_init_one(struct device_node *dn,
- 		return -EINVAL;
- 	}
- 	irq_set_chained_handler_and_data(cpu->parent_irq,
--						bcm6345_l1_irq_handle, intc);
-+						bcm6345_l1_irq_handle, cpu);
- 
- 	return 0;
- }
--- 
-2.34.1
-
+Pozdrawiam
+Adam Charachuta
