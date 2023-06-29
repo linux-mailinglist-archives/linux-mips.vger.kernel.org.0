@@ -2,62 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF09374210D
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 09:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9B67422C2
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 10:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjF2Hdh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jun 2023 03:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S232106AbjF2Iza (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jun 2023 04:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbjF2Hcv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 03:32:51 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0D72974
-        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 00:32:50 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id CD5E4839CC; Thu, 29 Jun 2023 08:32:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1688023940; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=PfB0OEraMHz3gDiRnTA7jhpghSBSYyzkDCLTkxbhAweUwdewse8FrSoWfqR36IltQ
-         OXE/cwpgp13q4lEUJo+O2K/gxRu6xiXgg4QPqfPZvjLaRaQug+q7QNIOP9C+2twbDr
-         6+PXpPBD+Rb2IO+mxepr/sG+q2i2tvCsnWqVI/YaQpcKAC7j4UloNv/yYGTeObLG7Z
-         BLe0U4+OtwnVHXktYQd2bdjSwuCIgbvAzOnkp6rIaHVPiP031/f0vN+/VQD/XeJLKb
-         bpadT91tTrLSOPglm1BKvlh8Xjt2R4MpWFSpssMJMkpuO8jmaMSeP0MMpmDc1iZyKy
-         XnJXWrNlVBNZw==
-Received: by mail.lokoho.com for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 07:30:21 GMT
-Message-ID: <20230629074502-0.1.6y.2sxg1.0.giea33b61t@lokoho.com>
-Date:   Thu, 29 Jun 2023 07:30:21 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-mips@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S232141AbjF2Iz2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 04:55:28 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91582E9
+        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 01:55:26 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-40079620a83so249911cf.0
+        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 01:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688028925; x=1690620925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iLSx+IibbbFO3eoieeQ0ahfVThh114dnzZVKXKMPytk=;
+        b=R2NV18E8eGwxVId5xlR/et2NMPrHy1x+Kd+uELH+C5Z6QLpMYj53Qtd7NTe9vvl+dI
+         Qz3QcKegMT+55v+aeQa1kcAditI7nAaLBuyZM36+iROvkx/Isysw4+FpbXNHPqMj1FeI
+         oT2OOGnrHaVltLlVP6bzc3Ozs6/shKr0q8SwhLrNYIukwWaTuZR3eNqInxz5lqdCoebt
+         NI1331PyQr7S3udY7/lXE2ywGPgw3VenPkcMV3AUyh0CGZKodnZbRFidaf5FPw9ZGzDv
+         DnTw7PgFj2s0wesachAMtBi+s+f18ndCrF1epkmhe4DNSXnUzz7wIetew2t0A35ZwZ6O
+         0KhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688028925; x=1690620925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iLSx+IibbbFO3eoieeQ0ahfVThh114dnzZVKXKMPytk=;
+        b=OcqCWFg4rY2nlm0CMkld1BpMRYAwNWPg5RczQYOHqohQb2mqCTgI+Eqfit/kpbPjD0
+         /Op7FOYE6ViTEnmr/odsz6h9QhnSMlMCea3p2hAyvICN5c9H6/WP7NOsn4autSFeNNb9
+         6qFeZ+qO08Dty2nkugZ847pcw/23PhiVhi2V82XJh2edsmEwauhWRPfyiLuCb192BJ9E
+         sM2Zg0m4SkNGcs2i2Q0DCd0rRU3sIBcpORp7GcNFgdEGMOeKZx42YNFYUmoG4RpYeb68
+         QfQe7ATLEpfH0/9t/fY3i7/AuRZvt6BkgFJLmaliONdeq+pStNjPNdhpwz7m5uWEd5T0
+         cxyw==
+X-Gm-Message-State: AC+VfDxadXwWI/lyCpVx3NdIDO58Nf0kiaWkCVG5wBxWmssbPjKtom24
+        DB2LkOL3K0xDfMIlPaaT9VgA4qQDKqWXk9/DAyJHXQ==
+X-Google-Smtp-Source: ACHHUZ4FMOfJIC0Hituk7BUmqP60oyWZYdWSfPJ2bAwb5vMGv+QKSdp3IUJlDw0dUODOJYWbC85JxkhSlHkovKXXUMY=
+X-Received: by 2002:ac8:5882:0:b0:3e0:c2dd:fd29 with SMTP id
+ t2-20020ac85882000000b003e0c2ddfd29mr450540qta.4.1688028925505; Thu, 29 Jun
+ 2023 01:55:25 -0700 (PDT)
 MIME-Version: 1.0
+References: <CABgObfYLnhW0qrPvFnMW_B9xZzLF6Ysn2uL4w9B815fUNVKK5A@mail.gmail.com>
+ <20230629000729.1223067-1-yuzhao@google.com> <CAAhV-H73BgeU=Vw+X+R+1pTrbZb_y9WLy66iu9=d3SXXeD0SBw@mail.gmail.com>
+In-Reply-To: <CAAhV-H73BgeU=Vw+X+R+1pTrbZb_y9WLy66iu9=d3SXXeD0SBw@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 29 Jun 2023 02:54:49 -0600
+Message-ID: <CAOUHufYHANwC-YZ0W5D89spuA693-PKnZ+9JwkNEN05AagUETw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: KVM: Fix NULL pointer dereference
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     pbonzini@redhat.com, chenhuacai@loongson.cn,
+        jiaxun.yang@flygoat.com, kvm@vger.kernel.org,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        tsbogend@alpha.franken.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Thu, Jun 29, 2023 at 12:24=E2=80=AFAM Huacai Chen <chenhuacai@kernel.org=
+> wrote:
+>
+> Hi, Zhao,
+>
+> On Thu, Jun 29, 2023 at 8:07=E2=80=AFAM Yu Zhao <yuzhao@google.com> wrote=
+:
+> >
+> > On Mon, Jun 26, 2023 at 6:33 AM Paolo Bonzini <pbonzini@redhat.com> wro=
+te:
+> > >
+> > > On Mon, Jun 26, 2023 at 9:59 AM Huacai Chen <chenhuacai@loongson.cn> =
+wrote:
+> > > >
+> > > > After commit 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support=
+") we
+> > > > get a NULL pointer dereference when creating a KVM guest:
+> > >
+> > > To be honest, a bug that needed 2 years to be reproduced is probably =
+a
+> > > sign that KVM/MIPS has no users. Any objections to removing it
+> > > altogether?
+> >
+> > ACK:
+> > 1. It's still broken after this patch [1]. The most well-tested MIPS
+> >    distros, i.e., Debian/OpenWrt, have CONFIG_KVM=3Dn. (The latter does=
+n't
+> >    even provide the QEMU package on MIPS.)
+> > 2. Burden on QEMU dev. There is no guarantee that QEMU would work with
+> >    KVM even if we could fix the kernel -- it actually does not until
+> >    v8.0 [1], which is by luck:
+> >
+> >    commit a844873512400fae6bed9e87694dc96ff2f15f39
+> >    Author: Paolo Bonzini <pbonzini@redhat.com>
+> >    Date:   Sun Dec 18 01:06:45 2022 +0100
+> >
+> >        mips: Remove support for trap and emulate KVM
+> >
+> >        This support was limited to the Malta board, drop it.
+> >        I do not have a machine that can run VZ KVM, so I am assuming
+> >        that it works for -M malta as well.
+> >
+> >    (The latest Debian stable only ships v7.2.)
+> >
+> > [1] https://lore.kernel.org/r/ZI0R76Fx25Q2EThZ@google.com/
+> My testbed is Loongson-3A4000 host + Loongson-3A4000 guest + Qemu8.0,
+> both TCG and KVM works.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+I tried TCG too, as reported in the link above, and had no luck.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+> Some thoughts:
+> 1, I think your host is malta, but you cannot use a malta host to boot
+> a Loongson guest, at least their kernels use different page sizes.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Good to know. Thanks.
 
+> 2, commit a844873512400fae6bed9e87694dc96f remove the TE KVM, so if
+> you are trying VZ KVM (but it seems you are using TE KVM), it can
+> break nothing.
 
-Pozdrawiam
-Adam Charachuta
+I fully understand :) I was trying to point out that QEMU/KVM had been
+broken for over 2 years -- neither TE (removed from KVM) nor VZ works
+with 7.2, which is probably why you used 8.0 too -- until that commit
+*accidentally* fixed VZ (it was supposed to be a cleanup, not a fix).
