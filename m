@@ -2,74 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68607430AC
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jun 2023 00:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72957430C8
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jun 2023 00:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbjF2Wj2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jun 2023 18:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
+        id S231455AbjF2Wzl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jun 2023 18:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjF2Wj1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 18:39:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADC11FC0;
-        Thu, 29 Jun 2023 15:39:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE70C6162A;
-        Thu, 29 Jun 2023 22:39:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 45109C433C9;
-        Thu, 29 Jun 2023 22:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688078365;
-        bh=QzkeXqkKfrWk5qaOGndnqsB6ssY1lvYVMppCLbvt8nc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=i2iEghgURwhLXMIKD9QinxPOIxEfbdxDH1LyLP2ncBKreBGqu/a+6iP3hFFhKMGsO
-         bF4xdE4dkJdpGOVdWrF5+K+trFXPU+4TQ0oYPOXJdWLBPIRXrQnJ9qy6MnV/V1mxd/
-         Dp2rpW3QwsKiUrSL6D5agu+tTjei6VArLP3C+KkwN99arKBmXUE3oVzAeAjZ4KlfS9
-         1k7ISN1F8QGqdNy3/5TK2X9b2Gt9dYYQVjnX5NoYu2k0qrgQvfpvU4ZHDEZOunWDqN
-         SMwi/QNZI78on46NKk6NtjrHmEBR0FZ+aJUYCOTohRX7UUFw76eMQt0kP0Uspkmw33
-         mAddK/H2c9T1Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 331E0C40C5E;
-        Thu, 29 Jun 2023 22:39:25 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS changes for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230628120201.GA10364@alpha.franken.de>
-References: <20230628120201.GA10364@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230628120201.GA10364@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5
-X-PR-Tracked-Commit-Id: e47084e116fccaa43644360d7c0b997979abce3e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b775d6c5859affe00527cbe74263de05cfe6b9f9
-Message-Id: <168807836520.26000.16561200645678922511.pr-tracker-bot@kernel.org>
-Date:   Thu, 29 Jun 2023 22:39:25 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231843AbjF2Wzk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 18:55:40 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103052728;
+        Thu, 29 Jun 2023 15:55:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1688079337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wEIr5z1x+jp+LXHn1pTpDTIoXopj5PtkFmRIdw0m8qE=;
+        b=ysVsAx3vbFQvscKRO+Zy1dJAntSPxmPETtks0F3r3NBinLvthxNnTEfr8wiJsVmapOofv0
+        7gPe04k+3Fz7x8aOKYs0serspuPg2Angqzae0b93I0rcIf2Yt9ufQOkDYJzT3tTrw5PrI4
+        PC8WmDG2ZZUrlhphmUj8itutJ6hZqYw=
+Date:   Fri, 30 Jun 2023 00:55:29 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 3/8] pwm: jz4740: Put per-channel clk into driver data
+To:     Uwe =?iso-8859-1?q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-pwm@vger.kernel.org, kernel@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mips@vger.kernel.org
+Message-Id: <HCE1XR.D74206DFB5G5@crapouillou.net>
+In-Reply-To: <20230629140745.fknzjerunbl2wr3k@pengutronix.de>
+References: <notmuch-sha1-d2bb15a9dcb5470a6eebca0b1a01c57918a22695>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Wed, 28 Jun 2023 14:02:01 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b775d6c5859affe00527cbe74263de05cfe6b9f9
+Le jeu. 29 juin 2023 =E0 16:07:45 +0200, Uwe Kleine-K=F6nig=20
+<u.kleine-koenig@pengutronix.de> a =E9crit :
+> Hello Paul,
+>=20
+> first of all, your mail is strange. I think the problem is that it
+> doesn't contain a Message-Id. The result is that I got it twice and in
+> return vger.kernel.org seems to have refused to take it. At least it's
+> neither in lore.kernel.org nor in
+> https://patchwork.ozlabs.org/project/linux-pwm/patch/20230629094839.75709=
+2-4-u.kleine-koenig@pengutronix.de/
+> .
 
-Thank you!
+Sorry about that, I'm at the Embedded Linux conference in Prague=20
+without my computer, so I just answered from my Android phone. I didn't=20
+know it would cause problems, I guess I'll refrain from doing that from=20
+now on.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+-Paul
+
+>=20
+> On Thu, Jun 29, 2023 at 01:12:25PM +0200, Paul Cercueil wrote:
+>>  Le 29 juin 2023 11:48, Uwe Kleine-K=F6nig=20
+>> <u.kleine-koenig@pengutronix.de> a =E9crit :
+>>  >
+>>  > Stop using chip_data which is about to go away. Instead track the
+>>  > per-channel clk in struct jz4740_pwm_chip.
+>>  >
+>>  > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>>  > ---
+>>  > drivers/pwm/pwm-jz4740.c | 11 +++++++----
+>>  > 1 file changed, 7 insertions(+), 4 deletions(-)
+>>  >
+>>  > diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+>>  > index 3b7067f6cd0d..e0a57d71a60c 100644
+>>  > --- a/drivers/pwm/pwm-jz4740.c
+>>  > +++ b/drivers/pwm/pwm-jz4740.c
+>>  > @@ -27,6 +27,7 @@ struct soc_info {
+>>  > struct jz4740_pwm_chip {
+>>  > struct pwm_chip chip;
+>>  > struct regmap *map;
+>>  > + struct clk *clk[];
+>>  > };
+>>  >
+>>  > static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip=20
+>> *chip)
+>>  > @@ -70,14 +71,15 @@ static int jz4740_pwm_request(struct pwm_chip=20
+>> *chip, struct pwm_device *pwm)
+>>  > return err;
+>>  > }
+>>  >
+>>  > - pwm_set_chip_data(pwm, clk);
+>>  > + jz->clk[pwm->hwpwm] =3D clk;
+>>  >
+>>  > return 0;
+>>  > }
+>>  >
+>>  > static void jz4740_pwm_free(struct pwm_chip *chip, struct=20
+>> pwm_device *pwm)
+>>  > {
+>>  > - struct clk *clk =3D pwm_get_chip_data(pwm);
+>>  > + struct jz4740_pwm_chip *jz =3D to_jz4740(chip);
+>>  > + struct clk *clk =3D jz->clk[pwm->hwpwm];
+>>  >
+>>  > clk_disable_unprepare(clk);
+>>  > clk_put(clk);
+>>  > @@ -123,7 +125,7 @@ static int jz4740_pwm_apply(struct pwm_chip=20
+>> *chip, struct pwm_device *pwm,
+>>  > {
+>>  > struct jz4740_pwm_chip *jz4740 =3D to_jz4740(pwm->chip);
+>>  > unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;
+>>  > - struct clk *clk =3D pwm_get_chip_data(pwm);
+>>  > + struct clk *clk =3D jz4740->clk[pwm->hwpwm];
+>>  > unsigned long period, duty;
+>>  > long rate;
+>>  > int err;
+>>  > @@ -229,7 +231,8 @@ static int jz4740_pwm_probe(struct=20
+>> platform_device *pdev)
+>>  > if (!info)
+>>  > return -EINVAL;
+>>  >
+>>  > - jz4740 =3D devm_kzalloc(dev, sizeof(*jz4740), GFP_KERNEL);
+>>  > + jz4740 =3D devm_kzalloc(dev, sizeof(*jz4740) + info->num_pwms *=20
+>> sizeof(jz4740->clk[0]),
+>>  > +       GFP_KERNEL);
+>>=20
+>>  LGTM, but please use struct_size() from <linux/overflow.h>.
+>=20
+> Ah, I thought there is such a macro, but I didn't find it neither by
+> grepping nor by asking in #kernelnewbies. Thanks, will respin the=20
+> series
+> in a few days.
+>=20
+> Best regards
+> Uwe
+>=20
+> --
+> Pengutronix e.K.                           | Uwe Kleine-K=F6nig       =20
+>     |
+> Industrial Linux Solutions                 |=20
+> https://www.pengutronix.de/ |
+
+
