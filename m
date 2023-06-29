@@ -2,50 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4027427F2
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 16:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF8F742810
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 16:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjF2OH4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jun 2023 10:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S232460AbjF2OQR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jun 2023 10:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjF2OHz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 10:07:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150202D4E
-        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 07:07:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEsJH-0004AX-9P; Thu, 29 Jun 2023 16:07:47 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEsJG-00AvCP-Hv; Thu, 29 Jun 2023 16:07:46 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEsJF-000nt6-T6; Thu, 29 Jun 2023 16:07:45 +0200
-Date:   Thu, 29 Jun 2023 16:07:45 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-pwm@vger.kernel.org, kernel@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 3/8] pwm: jz4740: Put per-channel clk into driver data
-Message-ID: <20230629140745.fknzjerunbl2wr3k@pengutronix.de>
-References: <notmuch-sha1-d2bb15a9dcb5470a6eebca0b1a01c57918a22695>
+        with ESMTP id S232013AbjF2OP5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 10:15:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB2510F8;
+        Thu, 29 Jun 2023 07:15:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 115BD1F8BE;
+        Thu, 29 Jun 2023 14:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688048146; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q65MrPND/7yigyGkkVaQv3PQCRFF3v8RQQr5wgYKJ4U=;
+        b=s5JOc8n8tpgL5OXiwnL8w6zpYIqqlCDaOLW3w88YMpIjRUxkvQkO6NRNIt9jOHN0HgF2Fq
+        CEE12CMxPsuHuR2Rj56wE5TKKGpQSVoKooSGAMqklM3JJkq6OL25h3K07P4Eug37hDXLAc
+        7g/kM59z8HFYepLM6955/HcgLHYADmc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688048146;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q65MrPND/7yigyGkkVaQv3PQCRFF3v8RQQr5wgYKJ4U=;
+        b=tEVfZk/EBx5R152Y3wRTv3qKOoinL0AeH3IvxHdRals/NwSpUpuzUq/YkJoHDuV95SXcm2
+        yZ5mytzsE1+h/pAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 92DC813905;
+        Thu, 29 Jun 2023 14:15:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BK8tIhGSnWS0EQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 14:15:45 +0000
+Message-ID: <f9185435-74bb-a325-8fe6-3beb51a66e0a@suse.de>
+Date:   Thu, 29 Jun 2023 16:15:44 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wljg7bv56o5fj4s5"
-Content-Disposition: inline
-In-Reply-To: <notmuch-sha1-d2bb15a9dcb5470a6eebca0b1a01c57918a22695>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 00/12] arch,fbdev: Move screen_info into arch/
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-mips@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongarch@lists.linux.dev,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <4d711508-c299-49f2-8691-e75d68f2485e@app.fastmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <4d711508-c299-49f2-8691-e75d68f2485e@app.fastmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------CFrYrwjwiHrQCUAXlrkYN4LE"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,113 +84,117 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------CFrYrwjwiHrQCUAXlrkYN4LE
+Content-Type: multipart/mixed; boundary="------------LMXlbR5vBx4VnpM1p0HGCgvn";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+ Daniel Vetter <daniel@ffwll.ch>, Dave Airlie <airlied@gmail.com>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-hyperv@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-ia64@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-mips@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, loongarch@lists.linux.dev,
+ linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-arm-kernel@lists.infradead.org
+Message-ID: <f9185435-74bb-a325-8fe6-3beb51a66e0a@suse.de>
+Subject: Re: [PATCH 00/12] arch,fbdev: Move screen_info into arch/
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <4d711508-c299-49f2-8691-e75d68f2485e@app.fastmail.com>
+In-Reply-To: <4d711508-c299-49f2-8691-e75d68f2485e@app.fastmail.com>
 
---wljg7bv56o5fj4s5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--------------LMXlbR5vBx4VnpM1p0HGCgvn
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Hello Paul,
+SGkNCg0KQW0gMjkuMDYuMjMgdW0gMTU6MzEgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
+biBUaHUsIEp1biAyOSwgMjAyMywgYXQgMTM6NDUsIFRob21hcyBaaW1tZXJtYW5uIHdyb3Rl
+Og0KPj4gVGhlIHZhcmlhYmxlcyBzY3JlZW5faW5mbyBhbmQgZWRpZF9pbmZvIHByb3ZpZGUg
+aW5mb3JtYXRpb24gYWJvdXQNCj4+IHRoZSBzeXN0ZW0ncyBzY3JlZW4sIGFuZCBwb3NzaWJs
+eSBFRElEIGRhdGEgb2YgdGhlIGNvbm5lY3RlZCBkaXNwbGF5Lg0KPj4gQm90aCBhcmUgZGVm
+aW5lZCBhbmQgc2V0IGJ5IGFyY2hpdGVjdHVyZSBjb2RlLiBCdXQgYm90aCB2YXJpYWJsZXMg
+YXJlDQo+PiBkZWNsYXJlZCBpbiBub24tYXJjaCBoZWFkZXIgZmlsZXMuIERlcGVuZGVuY2ll
+cyBhcmUgYXQgYmVhc2UgbG9vc2VseQ0KPj4gdHJhY2tlZC4gVG8gcmVzb2x2ZSB0aGlzLCBt
+b3ZlIHRoZSBnbG9iYWwgc3RhdGUgc2NyZWVuX2luZm8gYW5kIGl0cw0KPj4gY29tcGFuaW9u
+IGVkaWRfaW5mbyBpbnRvIGFyY2gvLiBPbmx5IGRlY2xhcmUgdGhlbSBvbiBhcmNoaXRlY3R1
+cmVzDQo+PiB0aGF0IGRlZmluZSB0aGVtLiBMaXN0IGRlcGVuZGVuY2llcyBvbiB0aGUgdmFy
+aWFibGVzIGluIHRoZSBLY29uZmlnDQo+PiBmaWxlcy4gQWxzbyBjbGVhbiB1cCB0aGUgY2Fs
+bGVycy4NCj4+DQo+PiBQYXRjaCAxIHRvIDQgcmVzb2x2ZSBhIG51bWJlciBvZiB1bm5lY2Vz
+c2FyeSBpbmNsdWRlIHN0YXRlbWVudHMgb2YNCj4+IDxsaW51eC9zY3JlZW5faW5mby5oPi4g
+VGhlIGhlYWRlciBzaG91bGQgb25seSBiZSBpbmNsdWRlZCBpbiBzb3VyY2UNCj4+IGZpbGVz
+IHRoYXQgYWNjZXNzIHN0cnVjdCBzY3JlZW5faW5mby4NCj4+DQo+PiBQYXRjaGVzIDUgdG8g
+NyBtb3ZlIHRoZSBkZWNsYXJhdGlvbiBvZiBzY3JlZW5faW5mbyBhbmQgZWRpZF9pbmZvIHRv
+DQo+PiA8YXNtLWdlbmVyaWMvc2NyZWVuX2luZm8uaD4uIEFyY2hpdGVjdHVyZXMgdGhhdCBw
+cm92aWRlIGVpdGhlciBzZXQNCj4+IGEgS2NvbmZpZyB0b2tlbiB0byBlbmFibGUgdGhlbS4N
+Cj4+DQo+PiBQYXRjaGVzIDggdG8gOSBtYWtlIHVzZXJzIG9mIHNjcmVlbl9pbmZvIGRlcGVu
+ZCBvbiB0aGUgYXJjaGl0ZWN0dXJlJ3MNCj4+IGZlYXR1cmUuDQo+Pg0KPj4gRmluYWxseSwg
+cGF0Y2hlcyAxMCB0byAxMiByZXdvcmsgZmJkZXYncyBoYW5kbGluZyBvZiBmaXJtd2FyZSBF
+RElEDQo+PiBkYXRhIHRvIG1ha2UgdXNlIG9mIGV4aXN0aW5nIGhlbHBlcnMgYW5kIHRoZSBy
+ZWZhY3RvcmVkIGVkaWRfaW5mby4NCj4+DQo+PiBUZXN0ZWQgb24geDg2LTY0LiBCdWlsdCBm
+b3IgYSB2YXJpZXR5IG9mIHBsYXRmb3Jtcy4NCj4gDQo+IFRoaXMgYWxsIGxvb2tzIGxpa2Ug
+YSBuaWNlIGNsZWFudXAhDQoNCkkgZ3Vlc3MgdGhhdCBwYXRjaGVzIDEgdG8gNCBhcmUgdW5j
+b250cm92ZXJzaWFsIGFuZCBjb3VsZCBiZSBsYW5kZWQgDQpxdWlja2x5LiBQYXRjaGVzIDEw
+IHRvIDEyIGFyZSBwcm9iYWJseSBhcyB3ZWxsLg0KDQo+IA0KPj4gRnV0dXJlIGRpcmVjdGlv
+bnM6IHdpdGggdGhlIHBhdGNoc2V0IGluIHBsYWNlLCBpdCB3aWxsIGJlY29tZSBwb3NzaWJs
+ZQ0KPj4gdG8gcHJvdmlkZSBzY3JlZW5faW5mbyBhbmQgZWRpZF9pbmZvIG9ubHkgaWYgdGhl
+cmUgYXJlIHVzZXJzLiBTb21lDQo+PiBhcmNoaXRlY3R1cmVzIGRvIHRoaXMgYnkgdGVzdGlu
+ZyBmb3IgQ09ORklHX1ZULCBDT05GSUdfRFVNTVlfQ09OU09MRSwNCj4+IGV0Yy4gQSBtb3Jl
+IHVuaWZvcm0gYXBwcm9hY2ggd291bGQgYmUgbmljZS4gV2Ugc2hvdWxkIGFsc28gYXR0ZW1w
+dA0KPj4gdG8gbWluaW1pemUgYWNjZXNzIHRvIHRoZSBnbG9iYWwgc2NyZWVuX2luZm8gYXMg
+bXVjaCBhcyBwb3NzaWJsZS4gVG8NCj4+IGRvIHNvLCBzb21lIGRyaXZlcnMsIHN1Y2ggYXMg
+ZWZpZmIgYW5kIHZlc2FmYiwgd291bGQgcmVxdWlyZSBhbiB1cGRhdGUuDQo+PiBUaGUgZmly
+bXdhcmUncyBFRElEIGRhdGEgY291bGQgcG9zc2libHkgbWFkZSBhdmFpbGFibGUgb3V0c2lk
+ZSBvZiBmYmRldi4NCj4+IEZvciBleGFtcGxlLCB0aGUgc2ltcGxlZHJtIGFuZCBvZmRybSBk
+cml2ZXJzIGNvdWxkIHByb3ZpZGUgc3VjaCBkYXRhDQo+PiB0byB1c2Vyc3BhY2UgY29tcG9z
+aXRvcnMuDQo+IA0KPiBJIHN1c3BlY3QgdGhhdCBtb3N0IGFyY2hpdGVjdHVyZXMgdGhhdCBw
+cm92aWRlIGEgc2NyZWVuX2luZm8gb25seQ0KPiBoYXZlIHRoaXMgaW4gb3JkZXIgdG8gY29t
+cGlsZSB0aGUgZnJhbWVidWZmZXIgZHJpdmVycywgYW5kIHByb3ZpZGUNCj4gaGFyZGNvZGVk
+IGRhdGEgdGhhdCBkb2VzIG5vdCBldmVuIHJlZmxlY3QgYW55IHJlYWwgaGFyZHdhcmUuDQoN
+ClRoYXQncyBxdWl0ZSBwb3NzaWJsZS4gT25seSB4ODYncyBib290cGFyYW0gYW5kIEVGSSBj
+b2RlIHNldHMgDQpzY3JlZW5faW5mbyBmcm9tIGV4dGVybmFsIGRhdGEuIFRoZSByZXN0IGlz
+IGhhcmRjb2RlZC4gQSBudW1iZXIgb2YgDQphcmNoaXRlY3R1cmVzIHByb3RlY3Qgc2NyZWVu
+X2luZm8gd2l0aCBDT05GSUdfVlQsIENPTkZJR19EVU1NWV9DT05TT0xFLCANCmV0Yy4gSW4g
+YSBsYXRlciBwYXRjaHNldCwgSSB3YW50ZWQgdG8gY2hhbmdlIHRoaXMgc3VjaCB0aGF0IHRo
+ZXNlIHVzZXJzIA0Kb2Ygc2NyZWVuX2luZm8gd291bGQgZW5hYmxlIHRoZSBmZWF0dXJlIHZp
+YSBzZWxlY3QgaW4gdGhlaXIgS2NvbmZpZy4NCg0KRG8geW91IGtub3cgdGhlIHJlYXNvbiBm
+b3IgdGhpcyBicmFuY2ggaW4gZHVtbXljb246DQoNCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4u
+Y29tL2xpbnV4L3Y2LjQvc291cmNlL2RyaXZlcnMvdmlkZW8vY29uc29sZS9kdW1teWNvbi5j
+I0wyMQ0KDQpXaGF0IGlzIHNwZWNpYWwgYWJvdXQgYXJtIHRoYXQgZHVtbXljb24gdXNlcyB0
+aGUgc2NyZWVuaW5mbz8NCg0KPiANCj4gV2UgY2FuIHByb2JhYmx5IHJlZHVjZSB0aGUgbnVt
+YmVyIG9mIGFyY2hpdGVjdHVyZXMgdGhhdCBkbyB0aGlzDQo+IGEgbG90LCBlc3BlY2lhbGx5
+IGlmIHdlIGdldCBFRkkgb3V0IG9mIHRoZSBwaWN0dXJlLg0KDQpDYW4geW91IGVsYWJvcmF0
+ZT8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gICAgICAgIEFybmQNCg0KLS0g
+DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
+b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkw
+NDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBB
+bmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJl
+cmcpDQo=
 
-first of all, your mail is strange. I think the problem is that it
-doesn't contain a Message-Id. The result is that I got it twice and in
-return vger.kernel.org seems to have refused to take it. At least it's
-neither in lore.kernel.org nor in
-https://patchwork.ozlabs.org/project/linux-pwm/patch/20230629094839.757092-=
-4-u.kleine-koenig@pengutronix.de/
-=2E
+--------------LMXlbR5vBx4VnpM1p0HGCgvn--
 
-On Thu, Jun 29, 2023 at 01:12:25PM +0200, Paul Cercueil wrote:
-> Le 29 juin 2023 11:48, Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de=
-> a =E9crit :
-> >
-> > Stop using chip_data which is about to go away. Instead track the=20
-> > per-channel clk in struct jz4740_pwm_chip.=20
-> >
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>=20
-> > ---=20
-> > drivers/pwm/pwm-jz4740.c | 11 +++++++----=20
-> > 1 file changed, 7 insertions(+), 4 deletions(-)=20
-> >
-> > diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c=20
-> > index 3b7067f6cd0d..e0a57d71a60c 100644=20
-> > --- a/drivers/pwm/pwm-jz4740.c=20
-> > +++ b/drivers/pwm/pwm-jz4740.c=20
-> > @@ -27,6 +27,7 @@ struct soc_info {=20
-> > struct jz4740_pwm_chip {=20
-> > struct pwm_chip chip;=20
-> > struct regmap *map;=20
-> > + struct clk *clk[];=20
-> > };=20
-> >
-> > static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip *chip)=
-=20
-> > @@ -70,14 +71,15 @@ static int jz4740_pwm_request(struct pwm_chip *chip=
-, struct pwm_device *pwm)=20
-> > return err;=20
-> > }=20
-> >
-> > - pwm_set_chip_data(pwm, clk);=20
-> > + jz->clk[pwm->hwpwm] =3D clk;=20
-> >
-> > return 0;=20
-> > }=20
-> >
-> > static void jz4740_pwm_free(struct pwm_chip *chip, struct pwm_device *p=
-wm)=20
-> > {=20
-> > - struct clk *clk =3D pwm_get_chip_data(pwm);=20
-> > + struct jz4740_pwm_chip *jz =3D to_jz4740(chip);=20
-> > + struct clk *clk =3D jz->clk[pwm->hwpwm];=20
-> >
-> > clk_disable_unprepare(clk);=20
-> > clk_put(clk);=20
-> > @@ -123,7 +125,7 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, =
-struct pwm_device *pwm,=20
-> > {=20
-> > struct jz4740_pwm_chip *jz4740 =3D to_jz4740(pwm->chip);=20
-> > unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;=20
-> > - struct clk *clk =3D pwm_get_chip_data(pwm);=20
-> > + struct clk *clk =3D jz4740->clk[pwm->hwpwm];=20
-> > unsigned long period, duty;=20
-> > long rate;=20
-> > int err;=20
-> > @@ -229,7 +231,8 @@ static int jz4740_pwm_probe(struct platform_device =
-*pdev)=20
-> > if (!info)=20
-> > return -EINVAL;=20
-> >
-> > - jz4740 =3D devm_kzalloc(dev, sizeof(*jz4740), GFP_KERNEL);=20
-> > + jz4740 =3D devm_kzalloc(dev, sizeof(*jz4740) + info->num_pwms * sizeo=
-f(jz4740->clk[0]),=20
-> > + =A0=A0=A0=A0=A0 GFP_KERNEL);=20
->=20
-> LGTM, but please use struct_size() from <linux/overflow.h>.
-
-Ah, I thought there is such a macro, but I didn't find it neither by
-grepping nor by asking in #kernelnewbies. Thanks, will respin the series
-in a few days.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---wljg7bv56o5fj4s5
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------CFrYrwjwiHrQCUAXlrkYN4LE
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSdkDEACgkQj4D7WH0S
-/k4CWQf5AR+UGq3YoDMlRby6ypTdN4uJvofxaSs65alvczNoXx3KreoOSmEld+MC
-TsmGYDKYb+B/CKCc4VCtiMNKMyUT+urvylbsVTtY7CWZIjx7l5+3R+KTSBE2lgG/
-vhEp8ZjgaQDodCjWpVDXTzVmaUklW49kKucKCPDX9gYL4BLaehvsk+NN6lrxcrGH
-aESLTqAn8aM2y35hxatPkro8v2oxfdKi/zgqtp+cXGMh62UdszMae3BVadtvuP8z
-YK+DYIjHbK1qK3OkTYq09RbG+66bl/JmPSeeTrmsivApEB31QL+8+Taf06gmrqsl
-+NhbCg7xd1YKtA7Iy6y2VPcsvvnq8Q==
-=Q0mH
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSdkhAFAwAAAAAACgkQlh/E3EQov+Cu
+Tg//bygjjxurZdvVdIVUnqm52gTBbmuqrg1+0a2A1NhLl3ItDa+Fa8VdwKZMYjT82NZWf6ztWWO+
+3ld/w0vPq53sC5ezkR4UqQVTns8H+SQfIDfmrzAUaZAA/nuW3YSUqb7bdxT20Y5jusJRTE1SwAVr
+e10d9BwV6PFQhW+5B2nKjA+l6ydKSaFtuuk+LcqcPk3hUhjkjCbyde0wQ/xz8vYyQDUnDDu3ps1m
+2eHKIiZYKwio5jBjDHu+VJXenpJlUKoY73Gg07rYULY2oF8gsVojrvrOdPdChtQIICQ8Tfcopx2p
+CZK3p6e6BENp3jZ+LFxTK5vGhU2H3Sqca+8lre6km/Rvndo25RRp0Lx4zQAK4qev3ED7v9IYl5jA
+QypuI5zTr/ZM2gCNznpmRh2nPgI0ANwxXiQ1mwUGNF8WQXcN1AzPXRDol1cgfmR57hBKmSA+hB8u
+NtLxVCUy25j+hFBKSy//2mP1Fs2/rb6Lo5FysOtYvI09HHNN+1LGhVNQ88E2ro22tNMWMKF+3Cws
+NNYJoCXaihkeLtqPXup+tUh3zl2H9QoVMephO9RQlUKK3TyMYW64yXoCpxkeqTdWdFJAHOMgb4DS
+PKAUhXyJn0b4KQ61EqybTsYXnaIt/LglY+Itk1p0OqlJp8p7Pl0LiD520nE2QkO4XKRkehoctFaN
+zKs=
+=lOlT
 -----END PGP SIGNATURE-----
 
---wljg7bv56o5fj4s5--
+--------------CFrYrwjwiHrQCUAXlrkYN4LE--
