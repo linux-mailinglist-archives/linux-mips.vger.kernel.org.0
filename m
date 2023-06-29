@@ -2,116 +2,173 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01C674236E
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 11:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324CF7425B8
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 14:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjF2Js7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jun 2023 05:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S232355AbjF2MUH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jun 2023 08:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbjF2Js4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 05:48:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E86297C
-        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 02:48:53 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEoGh-0006UR-0Q; Thu, 29 Jun 2023 11:48:51 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEoGf-00Aro6-UN; Thu, 29 Jun 2023 11:48:49 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEoGf-000kwn-A6; Thu, 29 Jun 2023 11:48:49 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 3/8] pwm: jz4740: Put per-channel clk into driver data
-Date:   Thu, 29 Jun 2023 11:48:34 +0200
-Message-Id: <20230629094839.757092-4-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230629094839.757092-1-u.kleine-koenig@pengutronix.de>
-References: <20230629094839.757092-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S231208AbjF2MT5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 08:19:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA03E1FD8;
+        Thu, 29 Jun 2023 05:19:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4573E1F8D6;
+        Thu, 29 Jun 2023 12:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688041195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=nwKCg0ASpMSj/N7nk6+LAWl9eqN5SgDZ9SSsI3CKIes=;
+        b=ifsv+rsuemSFYPhJ/STIdTvx6x75qUEhLLGZ2g9AvONK3jL91ZNzeWNAtZraZVcGWThcHM
+        EfQbM+qs5azyCMPqS9sZhBhwKPyBWCHJQhLVHCTMFRSDdi3SXNdEiGVeBJdlRqG6pE2rO7
+        z3oGS2FeItnucroHvhtx1EF9mKdmXIA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688041195;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=nwKCg0ASpMSj/N7nk6+LAWl9eqN5SgDZ9SSsI3CKIes=;
+        b=E6n/U6MQ4f+3rPbM2UsNu1qwtOXOlMais+WpB4FpCxfnJZvfgaxmYOknSshObU0+YcztfQ
+        wODdqbuTw1DsqWBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CCBF713905;
+        Thu, 29 Jun 2023 12:19:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1lzwMOp2nWRlVAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 12:19:54 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     arnd@arndb.de, deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-hyperv@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-arch@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 00/12] arch,fbdev: Move screen_info into arch/
+Date:   Thu, 29 Jun 2023 13:45:39 +0200
+Message-ID: <20230629121952.10559-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1843; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=BNcyLyO1aA/JMy+GZlQNt66HAk1rZSLQbjRlPuLBvLY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBknVNnFbjMM5/BgK4deOspaDLNeW9SamEzyGCOO R0ENB5uJpaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZJ1TZwAKCRCPgPtYfRL+ TuvoB/9mmEbYVFZlMGzt3UAaIge2vFt34ojHkfUSiPlZLlcAyXN3XxGRua4wEXl6XXHY+k35cth 15E16TZkwqxy2PnEcwnFv5kFcnpVTqxnKc/p4atZu67wImhFRuTPLsiHEaIYNo3BhEU055KmVxC 4os/o0U7BGOXVdvyPZ2fWgprmbyXWmfNiSGYUyk2UyPjPuiLIINGA3MQavtt9j5iwylSXf5yE7F oGCpGdQz2NgjdqOXixg2A7l/20p63EteIqCPxb53CAbjPKWSXEkVmlP5eUh3giD8K+phIzahSbn k4v5R9oGuaKyG8z3L6+6FOwrYWirSalvG8qtigLlRcyn5nrF
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Stop using chip_data which is about to go away. Instead track the
-per-channel clk in struct jz4740_pwm_chip.
+The variables screen_info and edid_info provide information about
+the system's screen, and possibly EDID data of the connected display.
+Both are defined and set by architecture code. But both variables are
+declared in non-arch header files. Dependencies are at bease loosely
+tracked. To resolve this, move the global state screen_info and its
+companion edid_info into arch/. Only declare them on architectures
+that define them. List dependencies on the variables in the Kconfig
+files. Also clean up the callers.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/pwm/pwm-jz4740.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Patch 1 to 4 resolve a number of unnecessary include statements of
+<linux/screen_info.h>. The header should only be included in source
+files that access struct screen_info.
 
-diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-index 3b7067f6cd0d..e0a57d71a60c 100644
---- a/drivers/pwm/pwm-jz4740.c
-+++ b/drivers/pwm/pwm-jz4740.c
-@@ -27,6 +27,7 @@ struct soc_info {
- struct jz4740_pwm_chip {
- 	struct pwm_chip chip;
- 	struct regmap *map;
-+	struct clk *clk[];
- };
- 
- static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip *chip)
-@@ -70,14 +71,15 @@ static int jz4740_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
- 		return err;
- 	}
- 
--	pwm_set_chip_data(pwm, clk);
-+	jz->clk[pwm->hwpwm] = clk;
- 
- 	return 0;
- }
- 
- static void jz4740_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
- {
--	struct clk *clk = pwm_get_chip_data(pwm);
-+	struct jz4740_pwm_chip *jz = to_jz4740(chip);
-+	struct clk *clk = jz->clk[pwm->hwpwm];
- 
- 	clk_disable_unprepare(clk);
- 	clk_put(clk);
-@@ -123,7 +125,7 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- {
- 	struct jz4740_pwm_chip *jz4740 = to_jz4740(pwm->chip);
- 	unsigned long long tmp = 0xffffull * NSEC_PER_SEC;
--	struct clk *clk = pwm_get_chip_data(pwm);
-+	struct clk *clk = jz4740->clk[pwm->hwpwm];
- 	unsigned long period, duty;
- 	long rate;
- 	int err;
-@@ -229,7 +231,8 @@ static int jz4740_pwm_probe(struct platform_device *pdev)
- 	if (!info)
- 		return -EINVAL;
- 
--	jz4740 = devm_kzalloc(dev, sizeof(*jz4740), GFP_KERNEL);
-+	jz4740 = devm_kzalloc(dev, sizeof(*jz4740) + info->num_pwms * sizeof(jz4740->clk[0]),
-+			      GFP_KERNEL);
- 	if (!jz4740)
- 		return -ENOMEM;
- 
+Patches 5 to 7 move the declaration of screen_info and edid_info to
+<asm-generic/screen_info.h>. Architectures that provide either set
+a Kconfig token to enable them.
+
+Patches 8 to 9 make users of screen_info depend on the architecture's
+feature.
+
+Finally, patches 10 to 12 rework fbdev's handling of firmware EDID
+data to make use of existing helpers and the refactored edid_info.
+
+Tested on x86-64. Built for a variety of platforms.
+
+Future directions: with the patchset in place, it will become possible
+to provide screen_info and edid_info only if there are users. Some
+architectures do this by testing for CONFIG_VT, CONFIG_DUMMY_CONSOLE,
+etc. A more uniform approach would be nice. We should also attempt
+to minimize access to the global screen_info as much as possible. To
+do so, some drivers, such as efifb and vesafb, would require an update.
+The firmware's EDID data could possibly made available outside of fbdev.
+For example, the simpledrm and ofdrm drivers could provide such data
+to userspace compositors.
+
+Thomas Zimmermann (12):
+  efi: Do not include <linux/screen_info.h> from EFI header
+  fbdev/sm712fb: Do not include <linux/screen_info.h>
+  sysfb: Do not include <linux/screen_info.h> from sysfb header
+  staging/sm750fb: Do not include <linux/screen_info.h>
+  arch: Remove trailing whitespaces
+  arch: Declare screen_info in <asm/screen_info.h>
+  arch/x86: Declare edid_info in <asm/screen_info.h>
+  drivers/firmware: Remove trailing whitespaces
+  drivers: Add dependencies on CONFIG_ARCH_HAS_SCREEN_INFO
+  fbdev/core: Use fb_is_primary_device() in fb_firmware_edid()
+  fbdev/core: Protect edid_info with CONFIG_ARCH_HAS_EDID_INFO
+  fbdev/core: Define empty fb_firmware_edid() in <linux/fb.h>
+
+ arch/Kconfig                                  | 12 +++++++
+ arch/alpha/Kconfig                            |  1 +
+ arch/arm/Kconfig                              |  1 +
+ arch/arm/kernel/efi.c                         |  2 ++
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/kernel/efi.c                       |  1 +
+ arch/csky/Kconfig                             |  1 +
+ arch/hexagon/Kconfig                          |  1 +
+ arch/ia64/Kconfig                             |  5 +--
+ arch/loongarch/Kconfig                        |  1 +
+ arch/mips/Kconfig                             |  1 +
+ arch/nios2/Kconfig                            |  1 +
+ arch/powerpc/Kconfig                          |  1 +
+ arch/riscv/Kconfig                            |  1 +
+ arch/sh/Kconfig                               |  7 ++--
+ arch/sparc/Kconfig                            |  1 +
+ arch/x86/Kconfig                              |  2 ++
+ arch/xtensa/Kconfig                           |  1 +
+ drivers/firmware/Kconfig                      |  3 +-
+ drivers/firmware/efi/Kconfig                  |  1 +
+ drivers/firmware/efi/libstub/efi-stub-entry.c |  2 ++
+ drivers/firmware/efi/libstub/screen_info.c    |  2 ++
+ drivers/gpu/drm/Kconfig                       |  1 +
+ drivers/hv/Kconfig                            |  1 +
+ drivers/staging/sm750fb/sm750.c               |  1 -
+ drivers/staging/sm750fb/sm750_accel.c         |  1 -
+ drivers/staging/sm750fb/sm750_cursor.c        |  1 -
+ drivers/staging/sm750fb/sm750_hw.c            |  1 -
+ drivers/video/console/Kconfig                 |  2 ++
+ drivers/video/fbdev/Kconfig                   |  4 +++
+ drivers/video/fbdev/core/fbmon.c              | 34 ++++++-------------
+ drivers/video/fbdev/i810/i810-i2c.c           |  2 +-
+ drivers/video/fbdev/intelfb/intelfbdrv.c      |  2 +-
+ drivers/video/fbdev/nvidia/nv_i2c.c           |  2 +-
+ drivers/video/fbdev/savage/savagefb-i2c.c     |  2 +-
+ drivers/video/fbdev/sm712fb.c                 |  9 +++--
+ include/asm-generic/Kbuild                    |  1 +
+ include/asm-generic/screen_info.h             | 18 ++++++++++
+ include/linux/efi.h                           |  3 +-
+ include/linux/fb.h                            | 10 +++++-
+ include/linux/screen_info.h                   |  2 +-
+ include/linux/sysfb.h                         |  3 +-
+ include/video/edid.h                          |  3 --
+ 43 files changed, 105 insertions(+), 47 deletions(-)
+ create mode 100644 include/asm-generic/screen_info.h
+
+
+base-commit: d2f0af8472494398a42153684b790b723a79f143
 -- 
-2.39.2
+2.41.0
 
