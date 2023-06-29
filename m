@@ -2,141 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD2D74277E
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 15:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4027427F2
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jun 2023 16:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjF2NdX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jun 2023 09:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S232195AbjF2OH4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jun 2023 10:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjF2NdL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 09:33:11 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B835730F6;
-        Thu, 29 Jun 2023 06:33:10 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id B1FAF2B00152;
-        Thu, 29 Jun 2023 09:33:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 29 Jun 2023 09:33:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688045588; x=1688052788; bh=fz
-        Ep5wc1N4xfnU7pMFQwstMWnCUW1KpffY9nt8n1q0E=; b=LcvTxzhqR3NoPlUVvK
-        OSmh2HXq0TKY72TPC0mGFyZL0KXvjsqnUtwwDauvmZMJLb5NJHO5zC7uiIPaXimT
-        gzsidicsFWLRov6t4tFnhjdpszLK6hNyyqPfbDn62gWWs0Kof8U6fw258RVzajax
-        TvEI9fr4nmLUhZ9eWf5cl+Gznh5JCGNWo9vfb9WqVUcXA4M4zI8VmRSOc4Rpqa2j
-        5ha9dObpeYiBRXh4uBF8Bo02V+0ZfPpN2oP/dF7iFMYdXyANDgvRcnqLaw0UQ7TO
-        r1HYR4swvYxxa9cMKtxPWwjmkzaxBCii0Km30Ly6pgOJfleJm4wepJ/1GiUa/suS
-        Y7xQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688045588; x=1688052788; bh=fzEp5wc1N4xfn
-        U7pMFQwstMWnCUW1KpffY9nt8n1q0E=; b=fyh1ajjE7le9b8SLHXPaGdLDEYcOx
-        QNrQVUJ3xaaQqLGBpnORFKOR91qIZo0pC/rbPTctQCecVgWTu8aWuxe/ayiMwhSL
-        eDIob7sa1BmbCpUowwbQwkuGz16jQSanIvdHA2EF8BgyO4NL3hh0u77vR4TeuGFE
-        rEtOhAHeEVwheX+0G+0z5POYm6ret69YXQ+gaXS7thrMG3c0vVj9IaYGsJsEflu+
-        T4OjKxK0ew2/nKXrZblbKAcre4LFmDxtHNMO5w/ZzKHZCdES6wCDDurx5azbCNGj
-        6s0XP9I64f1KhHJXsIN9/c95TfKYzHJGQZmAuCAxQNaTiAIrzIxu8sIYA==
-X-ME-Sender: <xms:E4idZMV1TZ_T3L1OGgGxaQRXCeYkusfJugarzOR0X6ER7zo3j4U1ig>
-    <xme:E4idZAk_XBsf0yPJLS4HpxcfDS_SBW2sZXTpRIz4s9V7CixPu3dvFPi20dtIgIIa2
-    EHaTmwg_vHZ_84GcAE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:FIidZAZFlWj2vEUzG_yB4LQnW0oUG11rZN2F6kzw5SfbSjBKBBEZoA>
-    <xmx:FIidZLUz_b3eHtwof1uextcVJM0xyoPgF2i-WcMz6_OXQ7y-P6HUTw>
-    <xmx:FIidZGlmYz7ER4kw5lF5QmjaRS8oj89uk5aCJueQwjKRM0mTbynAxA>
-    <xmx:FIidZMqKRdv8aLoKEdCQCimSiWgxSqTvj2Xx6DnlK7ipqUPmlhTCgMzDnO4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DA5E4B60086; Thu, 29 Jun 2023 09:33:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <4d711508-c299-49f2-8691-e75d68f2485e@app.fastmail.com>
-In-Reply-To: <20230629121952.10559-1-tzimmermann@suse.de>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
-Date:   Thu, 29 Jun 2023 15:31:28 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>, "Daniel Vetter" <daniel@ffwll.ch>,
-        "Dave Airlie" <airlied@gmail.com>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-mips@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongarch@lists.linux.dev,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 00/12] arch,fbdev: Move screen_info into arch/
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231794AbjF2OHz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jun 2023 10:07:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150202D4E
+        for <linux-mips@vger.kernel.org>; Thu, 29 Jun 2023 07:07:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qEsJH-0004AX-9P; Thu, 29 Jun 2023 16:07:47 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qEsJG-00AvCP-Hv; Thu, 29 Jun 2023 16:07:46 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qEsJF-000nt6-T6; Thu, 29 Jun 2023 16:07:45 +0200
+Date:   Thu, 29 Jun 2023 16:07:45 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     linux-pwm@vger.kernel.org, kernel@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 3/8] pwm: jz4740: Put per-channel clk into driver data
+Message-ID: <20230629140745.fknzjerunbl2wr3k@pengutronix.de>
+References: <notmuch-sha1-d2bb15a9dcb5470a6eebca0b1a01c57918a22695>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wljg7bv56o5fj4s5"
+Content-Disposition: inline
+In-Reply-To: <notmuch-sha1-d2bb15a9dcb5470a6eebca0b1a01c57918a22695>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 29, 2023, at 13:45, Thomas Zimmermann wrote:
-> The variables screen_info and edid_info provide information about
-> the system's screen, and possibly EDID data of the connected display.
-> Both are defined and set by architecture code. But both variables are
-> declared in non-arch header files. Dependencies are at bease loosely
-> tracked. To resolve this, move the global state screen_info and its
-> companion edid_info into arch/. Only declare them on architectures
-> that define them. List dependencies on the variables in the Kconfig
-> files. Also clean up the callers.
->
-> Patch 1 to 4 resolve a number of unnecessary include statements of
-> <linux/screen_info.h>. The header should only be included in source
-> files that access struct screen_info.
->
-> Patches 5 to 7 move the declaration of screen_info and edid_info to
-> <asm-generic/screen_info.h>. Architectures that provide either set
-> a Kconfig token to enable them.
->
-> Patches 8 to 9 make users of screen_info depend on the architecture's
-> feature.
->
-> Finally, patches 10 to 12 rework fbdev's handling of firmware EDID
-> data to make use of existing helpers and the refactored edid_info.
->
-> Tested on x86-64. Built for a variety of platforms.
 
-This all looks like a nice cleanup!
+--wljg7bv56o5fj4s5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Future directions: with the patchset in place, it will become possible
-> to provide screen_info and edid_info only if there are users. Some
-> architectures do this by testing for CONFIG_VT, CONFIG_DUMMY_CONSOLE,
-> etc. A more uniform approach would be nice. We should also attempt
-> to minimize access to the global screen_info as much as possible. To
-> do so, some drivers, such as efifb and vesafb, would require an update.
-> The firmware's EDID data could possibly made available outside of fbdev.
-> For example, the simpledrm and ofdrm drivers could provide such data
-> to userspace compositors.
+Hello Paul,
 
-I suspect that most architectures that provide a screen_info only
-have this in order to compile the framebuffer drivers, and provide
-hardcoded data that does not even reflect any real hardware.
+first of all, your mail is strange. I think the problem is that it
+doesn't contain a Message-Id. The result is that I got it twice and in
+return vger.kernel.org seems to have refused to take it. At least it's
+neither in lore.kernel.org nor in
+https://patchwork.ozlabs.org/project/linux-pwm/patch/20230629094839.757092-=
+4-u.kleine-koenig@pengutronix.de/
+=2E
 
-We can probably reduce the number of architectures that do this
-a lot, especially if we get EFI out of the picture.
+On Thu, Jun 29, 2023 at 01:12:25PM +0200, Paul Cercueil wrote:
+> Le 29 juin 2023 11:48, Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de=
+> a =E9crit :
+> >
+> > Stop using chip_data which is about to go away. Instead track the=20
+> > per-channel clk in struct jz4740_pwm_chip.=20
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>=20
+> > ---=20
+> > drivers/pwm/pwm-jz4740.c | 11 +++++++----=20
+> > 1 file changed, 7 insertions(+), 4 deletions(-)=20
+> >
+> > diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c=20
+> > index 3b7067f6cd0d..e0a57d71a60c 100644=20
+> > --- a/drivers/pwm/pwm-jz4740.c=20
+> > +++ b/drivers/pwm/pwm-jz4740.c=20
+> > @@ -27,6 +27,7 @@ struct soc_info {=20
+> > struct jz4740_pwm_chip {=20
+> > struct pwm_chip chip;=20
+> > struct regmap *map;=20
+> > + struct clk *clk[];=20
+> > };=20
+> >
+> > static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip *chip)=
+=20
+> > @@ -70,14 +71,15 @@ static int jz4740_pwm_request(struct pwm_chip *chip=
+, struct pwm_device *pwm)=20
+> > return err;=20
+> > }=20
+> >
+> > - pwm_set_chip_data(pwm, clk);=20
+> > + jz->clk[pwm->hwpwm] =3D clk;=20
+> >
+> > return 0;=20
+> > }=20
+> >
+> > static void jz4740_pwm_free(struct pwm_chip *chip, struct pwm_device *p=
+wm)=20
+> > {=20
+> > - struct clk *clk =3D pwm_get_chip_data(pwm);=20
+> > + struct jz4740_pwm_chip *jz =3D to_jz4740(chip);=20
+> > + struct clk *clk =3D jz->clk[pwm->hwpwm];=20
+> >
+> > clk_disable_unprepare(clk);=20
+> > clk_put(clk);=20
+> > @@ -123,7 +125,7 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, =
+struct pwm_device *pwm,=20
+> > {=20
+> > struct jz4740_pwm_chip *jz4740 =3D to_jz4740(pwm->chip);=20
+> > unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;=20
+> > - struct clk *clk =3D pwm_get_chip_data(pwm);=20
+> > + struct clk *clk =3D jz4740->clk[pwm->hwpwm];=20
+> > unsigned long period, duty;=20
+> > long rate;=20
+> > int err;=20
+> > @@ -229,7 +231,8 @@ static int jz4740_pwm_probe(struct platform_device =
+*pdev)=20
+> > if (!info)=20
+> > return -EINVAL;=20
+> >
+> > - jz4740 =3D devm_kzalloc(dev, sizeof(*jz4740), GFP_KERNEL);=20
+> > + jz4740 =3D devm_kzalloc(dev, sizeof(*jz4740) + info->num_pwms * sizeo=
+f(jz4740->clk[0]),=20
+> > + =A0=A0=A0=A0=A0 GFP_KERNEL);=20
+>=20
+> LGTM, but please use struct_size() from <linux/overflow.h>.
 
-      Arnd
+Ah, I thought there is such a macro, but I didn't find it neither by
+grepping nor by asking in #kernelnewbies. Thanks, will respin the series
+in a few days.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wljg7bv56o5fj4s5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSdkDEACgkQj4D7WH0S
+/k4CWQf5AR+UGq3YoDMlRby6ypTdN4uJvofxaSs65alvczNoXx3KreoOSmEld+MC
+TsmGYDKYb+B/CKCc4VCtiMNKMyUT+urvylbsVTtY7CWZIjx7l5+3R+KTSBE2lgG/
+vhEp8ZjgaQDodCjWpVDXTzVmaUklW49kKucKCPDX9gYL4BLaehvsk+NN6lrxcrGH
+aESLTqAn8aM2y35hxatPkro8v2oxfdKi/zgqtp+cXGMh62UdszMae3BVadtvuP8z
+YK+DYIjHbK1qK3OkTYq09RbG+66bl/JmPSeeTrmsivApEB31QL+8+Taf06gmrqsl
++NhbCg7xd1YKtA7Iy6y2VPcsvvnq8Q==
+=Q0mH
+-----END PGP SIGNATURE-----
+
+--wljg7bv56o5fj4s5--
