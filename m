@@ -2,61 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07667439C4
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jun 2023 12:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00CC743B8A
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jun 2023 14:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjF3Kmj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Jun 2023 06:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S233126AbjF3MHI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Jun 2023 08:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjF3KmM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jun 2023 06:42:12 -0400
-Received: from h3.cmg2.smtp.forpsi.com (h3.cmg2.smtp.forpsi.com [185.129.138.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC7E3C21
-        for <linux-mips@vger.kernel.org>; Fri, 30 Jun 2023 03:40:52 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id FBYSqlpbfv5uIFBYUq9buV; Fri, 30 Jun 2023 12:40:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1688121646; bh=g8JmLAKcloD23Ue5ykjZvMVtP2qQLeC/ZbtmEMr11J8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=gBpwyphwYnaF52hGCfndrPwfR6s5OJ9iFW9jtQT5LhGTxMom75zz0P5Iz2ggajdtq
-         Z4XyG2rep9QfrKiR22Nl9WxKcKBSs5/py9kNBHgjhUkN5uzVMToUQpxo7Xjg6s8dDF
-         GSe1icMW6TMi3DFTkI8fAvunMypuaKfzclpHcA0IBcM0WUo8JxY9i0B8zkhJjTP07K
-         DhGCF0H/2+C/5hO9kd7wQAPPavrRpIGs2GgKUGvOrVx30hhjGVHw1YhON4ER7yFjUD
-         3JWPuFdS3nz2d5/Dx7lWQeHB+Obmr316EPFx2ts0hNhSxlwgiLi7mMZrPi4xgAbyiY
-         qGzLllc9CdR8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1688121646; bh=g8JmLAKcloD23Ue5ykjZvMVtP2qQLeC/ZbtmEMr11J8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=gBpwyphwYnaF52hGCfndrPwfR6s5OJ9iFW9jtQT5LhGTxMom75zz0P5Iz2ggajdtq
-         Z4XyG2rep9QfrKiR22Nl9WxKcKBSs5/py9kNBHgjhUkN5uzVMToUQpxo7Xjg6s8dDF
-         GSe1icMW6TMi3DFTkI8fAvunMypuaKfzclpHcA0IBcM0WUo8JxY9i0B8zkhJjTP07K
-         DhGCF0H/2+C/5hO9kd7wQAPPavrRpIGs2GgKUGvOrVx30hhjGVHw1YhON4ER7yFjUD
-         3JWPuFdS3nz2d5/Dx7lWQeHB+Obmr316EPFx2ts0hNhSxlwgiLi7mMZrPi4xgAbyiY
-         qGzLllc9CdR8Q==
-Date:   Fri, 30 Jun 2023 12:40:43 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 00/11] Cleanup Octeon DWC3 glue code
-Message-ID: <ZJ6xK7SJ7PwLril7@lenoch>
-References: <ZJC165p0Mj4jHcBh@lenoch>
- <20230622230149.4wpvtlpsu7473txr@synopsys.com>
- <ZJVQUzVW+NzCgH7i@lenoch>
- <20230623232420.vfvkqkcee5jrrkmo@synopsys.com>
- <ZJbp0P5fYkvTLN5g@lenoch>
- <20230626231753.jumwoztg464q5656@synopsys.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626231753.jumwoztg464q5656@synopsys.com>
-X-CMAE-Envelope: MS4wfBm/7bLpCPufczRL3TgHwoq1lwxO80BNdL0imSWmG6RcakHhfQsVhabsohOQiv2I/+t3zEY896SbYadmEHrKG8jTbSPm9c5nyBeEzqv8aIX1rRm5dxxg
- XGECRwZsruGpabHI7hkantZaIZWc0a68MBxnd6fFSVO2Ox/mFVz+A2fXmInD5qn8ZbJKnV25nJLD9REhGFgL4rz/c0B8eUhZy9k6215C3b40OYvVvLU+ziUo
- d0RYTezLrxBZjVH6+njU0Q==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        with ESMTP id S232981AbjF3MG0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jun 2023 08:06:26 -0400
+X-Greylist: delayed 725 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 05:05:52 PDT
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A41449E;
+        Fri, 30 Jun 2023 05:05:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C8F845842A1;
+        Fri, 30 Jun 2023 07:53:45 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 30 Jun 2023 07:53:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688126025; x=1688133225; bh=ya
+        Hy0NgB4QI7znLtjDpufXmMXzZcSHw23m7h8BkLYBc=; b=10KOp+CzUmojO7ZSQ7
+        q9c3tAJBmOd76hg6sonOk40OjKAR6/QOPiz7XUomr8IP6aN19s7N9Q20gnTBA8OU
+        H+ET1KWhVc0oqozGAYUdc7B70SAPMdGIyEmEipUjQs98dHfF9mAUgsaeXHru8OlA
+        Z6b+3BUsGbAouqrpsuvP8THkbsAzAbWArrjQjssrDfLJHYAxMJ1nD0US1BwUxLpH
+        Khsbp9i0wfMK4NjF83UPBZQU2Xe9X8o6q5JmvVGPeBGgXYJSti5i4d4Vr++XzGjN
+        1deBUgFU/w8tfA/bjpGKl2V8A3IgBHPWHWftg2j80IDtUUtjFI/5ldbjH9jVYmeY
+        G2pw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688126025; x=1688133225; bh=yaHy0NgB4QI7z
+        nLtjDpufXmMXzZcSHw23m7h8BkLYBc=; b=VLzmPefoROKUnYgyH59xLO28GGD4n
+        I4lte/pn3WzX95H4eQRtTSBAb90fH5FqIscW92NizI9x3K9rvYkB4k9q6ajV1EbD
+        VxE8AOWeA5gd3Truhe/A9kaDx6LrP7Tl4Y9XFamiioeruNo4WJqflkjaHJ0nsHcv
+        J2r4IJGTVqOt1B1dMbybj/sbd/LzIbl5CzvfvEtuw8uPdvo7PAFEKVHhv2+1X9Xd
+        qEBjQf6xoQoJmFw77YwpNSZG5Kn1KzEpYegVmCRAHDr3owvr/EeqaPrEmVGD6Gmw
+        mfm5v+sxS/9Ml4UMUnNpdnRbqLCJ6zjTnHpvZojc13GhJnUu+kDlq3vDg==
+X-ME-Sender: <xms:SMKeZCxMqe5zxyzHHEyo_jowh1NvQkg3HAWm1oxMk5pEwCXuDt8nPQ>
+    <xme:SMKeZOQSC2GjFmKEVBEJ34bdcsM63u6r5Bbn1HzIVxPff5ENjvEYekcilieyCztL0
+    OOiy6d_8S9V2AG4VWM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:SMKeZEU7QF7lH3eivuj7P9AQVrp-KepGLUxX15AeZTjz07bNrMm_5Q>
+    <xmx:SMKeZIimGJWbUJHe4AXjoJoG2-DRyW8QkepPJWqWF6Y-rgF7svHorw>
+    <xmx:SMKeZEDcwFLycbP_cRSrtSET1YHYJvelMIMgwIjYVgEhFWn2ec6cwQ>
+    <xmx:ScKeZMj8q19ja7k4QwyGQviRl-VaDcpKWJEn2nnWWhOtIymUXjLwrw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 94900B60093; Fri, 30 Jun 2023 07:53:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <dd5aa01e-afad-48d2-bf4c-4a58b74f1644@app.fastmail.com>
+In-Reply-To: <ef7b3899-7d18-8018-47fa-aac0efaa61f4@suse.de>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-8-tzimmermann@suse.de>
+ <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
+ <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
+ <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
+ <ef7b3899-7d18-8018-47fa-aac0efaa61f4@suse.de>
+Date:   Fri, 30 Jun 2023 13:53:24 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Helge Deller" <deller@gmx.de>, "Daniel Vetter" <daniel@ffwll.ch>,
+        "Dave Airlie" <airlied@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Frederic Weisbecker" <frederic@kernel.org>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Sami Tolvanen" <samitolvanen@google.com>,
+        "Juerg Haefliger" <juerg.haefliger@canonical.com>
+Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,55 +113,79 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Fri, Jun 30, 2023, at 09:46, Thomas Zimmermann wrote:
+> Am 29.06.23 um 15:21 schrieb Arnd Bergmann:
+>> On Thu, Jun 29, 2023, at 15:01, Thomas Zimmermann wrote:
+>>> Am 29.06.23 um 14:35 schrieb Arnd Bergmann:
+>>>> On Thu, Jun 29, 2023, at 13:45, Thomas Zimmermann wrote:
+>
+>>>
+>>> FIRMWARE_EDID is a user-selectable feature, while ARCH_HAS_EDID_INFO
+>>> announces an architecture feature. They do different things.
+>> 
+>> I still have trouble seeing the difference.
+>
+> The idea here is that ARCH_HAS_ signals the architecture's support for 
+> the feature.  Drivers set 'depends on' in their Kconfig.
+>
+> Another Kconfig token, VIDEO_SCREEN_INFO or FIRMWARE_EDID, would then 
+> actually enable the feature.  Drivers select VIDEO_SCREEN_INFO or 
+> FIRMWARE_EDID and the architectures contains code like
 
-On Mon, Jun 26, 2023 at 11:17:57PM +0000, Thinh Nguyen wrote:
-> Hi,
-[snip]
-> For each patch, please include all the emails returned from
-> get_maintainer.pl including Greg's and Thomas's.
+Fair enough. In that case, I guess FIRMWARE_EDID will just depend on
+ARCH_HAS_EDID_INFO, or possibly "depends on FIRMWARE_EDID || EFI"
+after it starts calling into an EFI specific function, right?
 
-I already explained why is Cc list constructed the way it is. Despite
-formal rules, time is a scarce resource, so let's not draw people's
-attention too early. Anyway, if you think there's something that
-needs someone's special attention, you can still extend Cc list
-yourself.
+> #ifdef VIDEO_SCREEN_INFO
+> struct screen_info screen_info = {
+> 	/* set values here */
+> }
+> #endif
+>
+> This allows us to disable code that requires screen_info/edid_info, but 
+> also disable screen_info/edid_info unless such code has been enabled in 
+> the kernel config.
+>
+> Some architectures currently mimic this by guarding screen_info with 
+> ifdef CONFIG_VT or similar. I'd like to make this more flexible. The 
+> cost of a few more internal Kconfig tokens seems negligible.
 
-Before sending v2, maintainer's review or ack is needed. I already
-collected Thomas' ack for a move, but have not read a single world
-from you. Do you plan to do some actual review, so we can take next
-step or are you willing to wait for a v2 which will add only
-octeon_get_io_clock_rate stub for non Octeon builds (having clk api
-would be nice here, but that's different story)?
+I definitely get it for the screen_info, which needs the complexity.
+For ARCHARCH_HAS_EDID_INFO I would hope that it's never selected by
+anything other than x86, so I would still go with just a dependency
+on x86 for simplicity, but I don't mind having the extra symbol if that
+keeps it more consistent with how the screen_info is handled.
 
-Also, perhaps it would be reasonable to squash patches 8 and 9.
-Which tree to you want it to be rebased against? Currently I'm at
-linux.git master and changes were retested here.
+>> I suppose you could use FIRMWARE_EDID on EFI or OF systems without
+>> the need for a global edid_info structure, but that would not
+>> share any code with the current fb_firmware_edid() function.
+>
+> The current code is build on top of screen_info and edid_info. I'd 
+> preferably not replace that, if possible.
 
-I'd prefer to send fewer version if possible, so actual comments
-on code would certainly help.
+One way I could imagine this looking in the end would be
+something like
 
-[snip]
-> > Also coleagues of mine meanwhile found that PLL indeed ocassionally
-> > fails to lock, so workaround attached to cover letter is really needed.
-> > Naturally it cannot sneak in as it is, so unless you have better idea
-> > I'll just port it to recent driver state and we can start discussion
-> > from there in a separate thread.
-> 
-> If this causes a regression, then please fix it before sending it in. If
-> it's a new found issue, you can create a fix patch at a later point.
+struct screen_info *fb_screen_info(struct device *dev)
+{
+      struct screen_info *si = NULL;
 
-There are few problems with Octeon's DWC3 implementation and none of them
-can be really solved without documentation. Here I come in trouble as
-Sysnopsys tech support pointed to SoC manufacturer which no longer exists.
-Cavium was bought by Marvell, dumped almost all the staff and those
-still providing technical support were unable to find any revelant
-documentation in past few months.
+      if (IS_ENABLED(CONFIG_EFI))
+            si = efi_get_screen_info(dev);
 
-So unless that changes I can send only hackish patches which kinda
-overcome issues found, but I do not think it is viable solution. That's
-something I'll do at later point as you suggested and we'll see if an
-acceptable solution pops up.
+      if (IS_ENABLED(CONFIG_ARCH_HAS_SCREEN_INFO) && !si)
+            si = screen_info;
 
-Thank you,
-	ladis
+      return si;
+}
+
+corresponding to fb_firmware_edid(). With this, any driver
+that wants to access screen_info would call this function
+instead of using the global pointer, plus either NULL pointer
+check or a CONFIG_ARCH_HAS_SCREEN_INFO dependency.
+
+This way we could completely eliminate the global screen_info
+on arm64, riscv, and loongarch but still use the efi and
+hyperv framebuffer/drm drivers.
+
+    Arnd
