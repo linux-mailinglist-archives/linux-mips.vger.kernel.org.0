@@ -2,239 +2,188 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DCB743C62
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jun 2023 15:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2D1743D7E
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jun 2023 16:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjF3NJa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Jun 2023 09:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S231784AbjF3O3K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Jun 2023 10:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjF3NJ2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jun 2023 09:09:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22835B0;
-        Fri, 30 Jun 2023 06:09:26 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UCvYeb016458;
-        Fri, 30 Jun 2023 13:08:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=FN5rqn/S21W/5bITOEzjFOkTwNe8qQWXAAfpvfDkQwg=;
- b=UJNJ5HvOCH3ioidpoyHaAYNX6R7hWNSBpLoG0wUffy5RnAhXHl86PbBvjDO6nKQ8USPi
- 7sEXar1TkaNkmcJFphUybz6q6Tb4yxl6SQ/ZqNRH66WVQInysN81SF7fQAQUxOBDszhV
- 3b8fRe2gCQIaza7qcDM7mCKwuC6Ilk9aNPGUJxMUw2n8gCQMYiSIO+tnObSPGBU121h5
- ObdAJVNEwAu8GE+11sjrvnwTnAQvi/lRj6vqNWPq1mVeKVoGfrKDv0hlj8okmsgyo6sj
- CZCipRtOJftBTKfcr2t7oYyiWPzb0tjUBJtcpOmD7Kcx/2Zrl+GVqvSu1uoCgmOa264S bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhygwgdcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:08:13 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35UCwN5D019695;
-        Fri, 30 Jun 2023 13:08:03 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhygwgcwe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:08:02 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35U3RosU004120;
-        Fri, 30 Jun 2023 13:07:52 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr4545n4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:07:51 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35UD7mYr35848862
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 13:07:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D1C420040;
-        Fri, 30 Jun 2023 13:07:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20F4620049;
-        Fri, 30 Jun 2023 13:07:46 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 30 Jun 2023 13:07:46 +0000 (GMT)
-Date:   Fri, 30 Jun 2023 15:07:44 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        chenhuacai@kernel.org, geert@linux-m68k.org,
-        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, peterz@infradead.org,
-        frederic@kernel.org, akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v3 12/13] s390/kexec: refactor for kernel/Kconfig.kexec
-Message-ID: <ZJ7ToGgYAq33bwYI@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20230626161332.183214-1-eric.devolder@oracle.com>
- <20230626161332.183214-13-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626161332.183214-13-eric.devolder@oracle.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SRv3tQadK_BLStPKVFehsvtKgdD5bfpY
-X-Proofpoint-ORIG-GUID: SMYiBxc5troNBtSiC2kzVXEEuROkenwR
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S231937AbjF3O3K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jun 2023 10:29:10 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130A93AA4
+        for <linux-mips@vger.kernel.org>; Fri, 30 Jun 2023 07:29:09 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbc59de009so11090315e9.3
+        for <linux-mips@vger.kernel.org>; Fri, 30 Jun 2023 07:29:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1688135347; x=1690727347;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=AKkZd+eU3kYVLX5B5OQj27AnYUCFO1Qeo1qht6zdza0=;
+        b=Qp/EZq1dSVih1w9x285TKDru0EQ/63b1AKwUbA3GjG3r2TzdLx9emGLwU58SCFiNXK
+         shggSCbcCPwGsFLH7sxHbsZb10bLns3t6HVcwnxtiQ1VPeg8/2T13KpeOhyiR925eytF
+         ngAqu9vVQB5xZRVcJKvrSEZxxFT/iP8WV/eZw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688135347; x=1690727347;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AKkZd+eU3kYVLX5B5OQj27AnYUCFO1Qeo1qht6zdza0=;
+        b=W8sSUgr3+QJi68SrpBAsVEOwsBiZqFrEDcqa0hdQ9zX5uM0xj4cp4peGoWAqrIQYBR
+         isd6n+R1pO2Rf6WywcRSLdxmnnst9s8BSJCo1UnCR4V4M07V1TFBCtElUAPfik8WRYlq
+         /9yvLpAsKz71ANPQ86iJHRJzIFgzAHJaLdE60XfRJ76mpe+0hMxjuBq/Z5Aa61zPYPXf
+         2+UlcmpylzOHz9B0j3QlFdrI01QoVyoRAGd7lwtxD+Hy1Q++54KBZ9RLW/AFIr4+kSXO
+         /d/9awHfYMzDH5okoeib/rtLPQikY9cnpzXelJijYrWQ63G/PiPnta8uMZxk9lOb0npC
+         Wscg==
+X-Gm-Message-State: ABy/qLZn39wd74CFtNJv8UIX9WwkoceNoOM1gUmjn5C47UAu3KYE4jAu
+        WH1sTCzujlJdr1jyaxGJO8NXvQ==
+X-Google-Smtp-Source: APBJJlGDh9wtbXIG2fXROi1pa53xby1SlZ4n5AHw32lAEHSDL4H05nh4MzLJMoeJxj9Dzr5fDITXnw==
+X-Received: by 2002:a5d:4143:0:b0:313:f94b:54e6 with SMTP id c3-20020a5d4143000000b00313f94b54e6mr2062771wrq.71.1688135347211;
+        Fri, 30 Jun 2023 07:29:07 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:86f5:6700:e8b4:437a:6bf7:1039? (2a01cb0586f56700e8b4437a6bf71039.ipv6.abo.wanadoo.fr. [2a01:cb05:86f5:6700:e8b4:437a:6bf7:1039])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5d5681000000b0030647449730sm18606092wrv.74.2023.06.30.07.29.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 07:29:06 -0700 (PDT)
+Message-ID: <69bcc286-f28f-0a41-8d39-0f1124f69ca8@broadcom.com>
+Date:   Fri, 30 Jun 2023 16:29:09 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 impostorscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] irq-bcm6345-l1: do not assume a fixed block to cpu
+ mapping
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Simon Arlott <simon@octiron.net>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230629072620.62527-1-jonas.gorski@gmail.com>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230629072620.62527-1-jonas.gorski@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000b8adf805ff59a358"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 12:13:31PM -0400, Eric DeVolder wrote:
-> The kexec and crash kernel options are provided in the common
-> kernel/Kconfig.kexec. Utilize the common options and provide
-> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
-> equivalent set of KEXEC and CRASH options.
-> 
-> NOTE: The original Kconfig has a KEXEC_SIG which depends on
-> MODULE_SIG_FORMAT. However, attempts to keep the MODULE_SIG_FORMAT
-> dependency (using the strategy outlined in this series, and other
-> techniques) results in 'error: recursive dependency detected'
-> on CRYPTO.
-> 
-> Per Alexander Gordeev <agordeev@linux.ibm.com>: "the MODULE_SIG_FORMAT
-> dependency was introduced with [git commit below] and in fact was not
-> necessary, since s390 did/does not use mod_check_sig() anyway.
-> 
->  commit c8424e776b09 ("MODSIGN: Export module signature definitions")
-> 
-> MODULE_SIG_FORMAT is needed to select SYSTEM_DATA_VERIFICATION. But
-> SYSTEM_DATA_VERIFICATION is also selected by FS_VERITY*, so dropping
-> MODULE_SIG_FORMAT does not hurt."
-> 
-> Therefore, the solution is to drop the MODULE_SIG_FORMAT dependency
-> from KEXEC_SIG. Still results in equivalent .config files for s390.
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  arch/s390/Kconfig | 65 ++++++++++++++---------------------------------
->  1 file changed, 19 insertions(+), 46 deletions(-)
-> 
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index 6dab9c1be508..58dc124433ca 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -243,6 +243,25 @@ config PGTABLE_LEVELS
->  
->  source "kernel/livepatch/Kconfig"
->  
-> +config ARCH_DEFAULT_KEXEC
-> +	def_bool y
-> +
-> +config ARCH_SUPPORTS_KEXEC
-> +	def_bool y
-> +
-> +config ARCH_SUPPORTS_KEXEC_FILE
-> +	def_bool CRYPTO && CRYPTO_SHA256 && CRYPTO_SHA256_S390
-> +
-> +config ARCH_HAS_KEXEC_PURGATORY
-> +	def_bool KEXEC_FILE
-> +
-> +config ARCH_SUPPORTS_CRASH_DUMP
-> +	def_bool y
-> +	help
-> +	  Refer to <file:Documentation/s390/zfcpdump.rst> for more details on this.
-> +	  This option also enables s390 zfcpdump.
-> +	  See also <file:Documentation/s390/zfcpdump.rst>
-> +
->  menu "Processor type and features"
->  
->  config HAVE_MARCH_Z10_FEATURES
-> @@ -481,36 +500,6 @@ config SCHED_TOPOLOGY
->  
->  source "kernel/Kconfig.hz"
->  
-> -config KEXEC
-> -	def_bool y
-> -	select KEXEC_CORE
-> -
-> -config KEXEC_FILE
-> -	bool "kexec file based system call"
-> -	select KEXEC_CORE
-> -	depends on CRYPTO
-> -	depends on CRYPTO_SHA256
-> -	depends on CRYPTO_SHA256_S390
-> -	help
-> -	  Enable the kexec file based system call. In contrast to the normal
-> -	  kexec system call this system call takes file descriptors for the
-> -	  kernel and initramfs as arguments.
-> -
-> -config ARCH_HAS_KEXEC_PURGATORY
-> -	def_bool y
-> -	depends on KEXEC_FILE
-> -
-> -config KEXEC_SIG
-> -	bool "Verify kernel signature during kexec_file_load() syscall"
-> -	depends on KEXEC_FILE && MODULE_SIG_FORMAT
-> -	help
-> -	  This option makes kernel signature verification mandatory for
-> -	  the kexec_file_load() syscall.
-> -
-> -	  In addition to that option, you need to enable signature
-> -	  verification for the corresponding kernel image type being
-> -	  loaded in order for this to work.
-> -
->  config KERNEL_NOBP
->  	def_bool n
->  	prompt "Enable modified branch prediction for the kernel by default"
-> @@ -732,22 +721,6 @@ config VFIO_AP
->  
->  endmenu
->  
-> -menu "Dump support"
-> -
-> -config CRASH_DUMP
-> -	bool "kernel crash dumps"
-> -	select KEXEC
-> -	help
-> -	  Generate crash dump after being started by kexec.
-> -	  Crash dump kernels are loaded in the main kernel with kexec-tools
-> -	  into a specially reserved region and then later executed after
-> -	  a crash by kdump/kexec.
-> -	  Refer to <file:Documentation/s390/zfcpdump.rst> for more details on this.
-> -	  This option also enables s390 zfcpdump.
-> -	  See also <file:Documentation/s390/zfcpdump.rst>
-> -
-> -endmenu
-> -
->  config CCW
->  	def_bool y
+--000000000000b8adf805ff59a358
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+
+
+On 6/29/2023 8:26 AM, Jonas Gorski wrote:
+> The irq to block mapping is fixed, and interrupts from the first block
+> will always be routed to the first parent IRQ. But the parent interrupts
+> themselves can be routed to any available CPU.
+> 
+> This is used by the bootloader to map the first parent interrupt to the
+> boot CPU, regardless wether the boot CPU is the first one or the second
+> one.
+> 
+> When booting from the second CPU, the assumption that the first block's
+> IRQ is mapped to the first CPU breaks, and the system hangs because
+> interrupts do not get routed correctly.
+> 
+> Fix this by passing the appropriate bcm6434_l1_cpu to the interrupt
+> handler instead of the chip itself, so the handler always has the right
+> block.
+> 
+> Fixes: c7c42ec2baa1 ("irqchips/bmips: Add bcm6345-l1 interrupt controller")
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
+
+--000000000000b8adf805ff59a358
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBi+2hiVyamCKqCj
+YIXSJuMD5PffCSBdWBtu8JjDxLJaMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYzMDE0MjkwN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBIw4jy6bNmE1tbCtqAN0nUZxXGQXhP1XT1
+cJKr8COQPkbBcD2Ti9mzMJgJ6noagbEDB0qGHSkADzok4Tif5mtRwbvjwW2M27eFDZO/eWK0UMuV
+WqZrZTj+pMfctM6JlOBN2UOaZGblQkyRXZNy+Djc/TtbzWh4UoDPOTss8kmDBLjRpJrIZLf8m5ya
+OqzAZ/0POlY1jCPYN1o554mJ+UyN7FsIGkokCJK1KZIjlIwnQXUhvN4umtYsjhEo9O8oCfnTzHAo
+jWt1JHUBEKHzNoRTcFq8xE/edY14lGGUm16YfQIP2+gcHgAelGfbXtxxJ9069A58Cce1IqFmkeJl
+tCkw
+--000000000000b8adf805ff59a358--
