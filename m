@@ -2,106 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE5F744BEA
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Jul 2023 02:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83030744DB8
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Jul 2023 15:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjGBASD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 Jul 2023 20:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S229791AbjGBNcN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 Jul 2023 09:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjGBASC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 1 Jul 2023 20:18:02 -0400
-Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8F0B2
-        for <linux-mips@vger.kernel.org>; Sat,  1 Jul 2023 17:18:00 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id FkmrqsnIYPm6CFkmtqpD12; Sun, 02 Jul 2023 02:17:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1688257079; bh=3KkCu185G3ZQm3DEAyBLDCiqHHgacxJIMSCHKu0iSJk=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=KQ+G7nlrx/bM40xiPhWPmDy81TBkiQB6RzN2fLXaFXx2Fyl4Ug0IXlnEXkaop9XLY
-         CJu90gFrjWoMqdmCFNEYQ6N50YXtdIZo8ZM1HeNrOwEWm2v4wj3a0rvWmY6kJ7MoMY
-         m9xbiO9IzCGFjYlLL7XTi50Z1UlHrH/F4GHYfQhpc/QzFNM9a0f11TaD6zLCbDU6Ca
-         44DnekckCXEG87kihNj6CppHYN2x6GfAtV+nCSVhZyHS68ewIhwk6NZA3snqtNqZsE
-         qcSBUAhnzjESXx2qJYPs9NVgNq7U8n/VFWFzH0Va/z0H5/9HagXbCl24ydttLoHUfs
-         ArbO/nI0ElkSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1688257079; bh=3KkCu185G3ZQm3DEAyBLDCiqHHgacxJIMSCHKu0iSJk=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=KQ+G7nlrx/bM40xiPhWPmDy81TBkiQB6RzN2fLXaFXx2Fyl4Ug0IXlnEXkaop9XLY
-         CJu90gFrjWoMqdmCFNEYQ6N50YXtdIZo8ZM1HeNrOwEWm2v4wj3a0rvWmY6kJ7MoMY
-         m9xbiO9IzCGFjYlLL7XTi50Z1UlHrH/F4GHYfQhpc/QzFNM9a0f11TaD6zLCbDU6Ca
-         44DnekckCXEG87kihNj6CppHYN2x6GfAtV+nCSVhZyHS68ewIhwk6NZA3snqtNqZsE
-         qcSBUAhnzjESXx2qJYPs9NVgNq7U8n/VFWFzH0Va/z0H5/9HagXbCl24ydttLoHUfs
-         ArbO/nI0ElkSg==
-Date:   Sun, 2 Jul 2023 02:17:57 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>
-Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: dwc3: Add SPDX header and copyright
-Message-ID: <ZKDCNeS+Pi3h08Pc@lenoch>
-References: <ZKDBiY6TKdDKIFK+@lenoch>
+        with ESMTP id S229523AbjGBNcM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Jul 2023 09:32:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE9DE67
+        for <linux-mips@vger.kernel.org>; Sun,  2 Jul 2023 06:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688304684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IhA8PQHFplolrCTEWNVaJX0ddk8c61/nnX2OVi4x/HY=;
+        b=dohvSNlXZFaTc8IdXzTrsMbpC5j6ewjStkc69xFAUlDKFtiW6OCcAsbja1H0mgqmwu9Vw6
+        PqXZBf2dAIINyJdsx4ZA0YnqZj862LMwbs5TMQ1BRpbt/FHt1oAhWptPIsnMWjX7HsU+BW
+        aw5IMGwhDcIPCn2Nxfl20f6iSnfcu+Y=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-360-trsk8quPMSaSo2l3Xw0R0A-1; Sun, 02 Jul 2023 09:31:21 -0400
+X-MC-Unique: trsk8quPMSaSo2l3Xw0R0A-1
+Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3a337ddff03so3566583b6e.0
+        for <linux-mips@vger.kernel.org>; Sun, 02 Jul 2023 06:31:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688304680; x=1690896680;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IhA8PQHFplolrCTEWNVaJX0ddk8c61/nnX2OVi4x/HY=;
+        b=fMJC/LBfB9ZGdG/4hw0ahnGAmS1TKE8LoYI/QuGKWKaZexkTI7qenK4t9cQTmzXquG
+         d2zncMhiiKE+BdHC3fFV744nBHGnAg4ZgDN7SXOxqiH4S0O4MSm+4UasOtCOZ21wWtcg
+         X5KUu7mmNfIkt367IjX2xpMZGM/FyhOhX8LOcPgqVoYRUgppxt7GOplJ1NcyQ14YjRr+
+         EGx5xZ4aY46NOdpE2ln9EIJ0+a8N9Gugrs0YTAzlPQfzbhG3km0tx3oRPin40dZwGmOn
+         X+1Nx6BMzi58GJBEI0Ktc6waGU7H/p4c3AYu7e4jZPBe7oFYLhhqFqHsN+uq7svg00g8
+         BlCw==
+X-Gm-Message-State: AC+VfDxvgsJuCDXuu6nDaa9zgjQ8jHhEhRlv1/8zNt6w+Nj3w+B8UmH0
+        OPUBmF6GR8XNIVho8NHPMRShRfVcdNQH8xsn6aiSylK1M5pUB+CrSr50alT5sdpoVd2CbpWEaBs
+        0SEyuYOeKFwOCV6YkYNcVEY243vXDiQ==
+X-Received: by 2002:a05:6808:150f:b0:3a3:6f81:49e0 with SMTP id u15-20020a056808150f00b003a36f8149e0mr8282881oiw.6.1688304680428;
+        Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6jHs6x35k/Ksnct8fSfwL+ZA8Dffms9gAWwn/v+wOt1OUbuK6xkMVZcapNkzJw/IkWcnNogw==
+X-Received: by 2002:a05:6808:150f:b0:3a3:6f81:49e0 with SMTP id u15-20020a056808150f00b003a36f8149e0mr8282873oiw.6.1688304680123;
+        Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id ev14-20020a0562140a8e00b00631fea4d5c2sm10206248qvb.98.2023.07.02.06.31.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 06:31:19 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     keguang.zhang@gmail.com, daniel.lezcano@linaro.org,
+        tglx@linutronix.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] clocksource/drivers/loongson1: set variable ls1x_timer_lock storage-class-specifier to static
+Date:   Sun,  2 Jul 2023 09:31:13 -0400
+Message-Id: <20230702133113.3438049-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKDBiY6TKdDKIFK+@lenoch>
-X-CMAE-Envelope: MS4wfIAna0uwwLijKGj4cA4Wl0P6kku77D86pxk63eiH+HfiVpIzSWlMkhxZO8tAZvCMarPCyd5l7qEtzKozXrR5puYaQSNU6K8wb/YMGS8sVVF85oDJrqOF
- 19bIOhYDnRo6RWfgZvAGzho0AKqqAlkPWmx5Xup65l5yQeKpCDESHY5cC7xkwm90yKXOax1lPImwnp7Pnpt47/oa6AC22RoG5EoVsF/BaZk4HsR9sHnmM5LR
- 5ClHvMtCOgYyFKKvESrNucGT2UqAyMfY5+e7nFiJ/KDEWExig3JUfSU8w3movX+W95U03+trMMboIECqm0Q4xpmafPMKeNrwOpbEVv77pPs9Y2td4h35LNEu
- yUv5tY0p
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ladislav Michl <ladis@linux-mips.org>
+smatch reports
+drivers/clocksource/timer-loongson1-pwm.c:31:1: warning: symbol
+  'ls1x_timer_lock' was not declared. Should it be static?
 
-As driver is rewritten and David no longer works for Marvell (Cavium),
-I'm to blame for breakage.
+This variable is only used in its defining file, so it should be static.
 
-Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- CHANGES:
- -v2: None
+ drivers/clocksource/timer-loongson1-pwm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index 668f6d3490b1..01c43b2c0ac9 100644
---- a/drivers/usb/dwc3/dwc3-octeon.c
-+++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -1,11 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * XHCI HCD glue for Cavium Octeon III SOCs.
-+ * DWC3 glue for Cavium Octeon III SOCs.
-  *
-  * Copyright (C) 2010-2017 Cavium Networks
-- *
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-+ * Copyright (C) 2023 Ladislav Michl <ladis@linux-mips.org>
-  */
+diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
+index 6335fee03017..244d66835508 100644
+--- a/drivers/clocksource/timer-loongson1-pwm.c
++++ b/drivers/clocksource/timer-loongson1-pwm.c
+@@ -28,7 +28,7 @@
  
- #include <linux/bitfield.h>
-@@ -548,6 +546,6 @@ static struct platform_driver dwc3_octeon_driver = {
- module_platform_driver(dwc3_octeon_driver);
+ #define CNTR_WIDTH		24
  
- MODULE_ALIAS("platform:dwc3-octeon");
--MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
-+MODULE_AUTHOR("Ladislav Michl <ladis@linux-mips.org>");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
+-DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
++static DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
+ 
+ struct ls1x_clocksource {
+ 	void __iomem *reg_base;
 -- 
-2.39.2
+2.27.0
 
