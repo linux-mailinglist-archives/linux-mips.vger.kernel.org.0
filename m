@@ -2,71 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0DA745E3D
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Jul 2023 16:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828367461A5
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jul 2023 19:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjGCOMc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Jul 2023 10:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S229897AbjGCR6E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Jul 2023 13:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbjGCOM1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jul 2023 10:12:27 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9212E59;
-        Mon,  3 Jul 2023 07:12:25 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qGKHs-0008Fp-00; Mon, 03 Jul 2023 16:12:20 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3CA5AC0346; Mon,  3 Jul 2023 16:09:53 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 16:09:53 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org,
-        Huang Pei <huangpei@loongson.cn>
-Subject: Re: [PATCH] MIPS: Loongson: Fix cpu_probe_loongson() again
-Message-ID: <20230703140953.GC16247@alpha.franken.de>
-References: <20230626075014.1872632-1-chenhuacai@loongson.cn>
+        with ESMTP id S229505AbjGCR6D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jul 2023 13:58:03 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA78E64
+        for <linux-mips@vger.kernel.org>; Mon,  3 Jul 2023 10:58:02 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b69f216c73so69926321fa.3
+        for <linux-mips@vger.kernel.org>; Mon, 03 Jul 2023 10:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688407080; x=1690999080;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N3tQa/xAjjFjMbYTIPvabJVdNLC/DkLFMMTZCH3qWNU=;
+        b=AdNPeAd/j5HKXhj2QJOlsZ5nLrBZR/NfGRhv/kRiuXFFU/qNZTkuWxYU2XP0JXZdI4
+         GmJJ06UPc5d4vy94A2m3PiClxllD9UCMFflnRwij87bgeW5bDgbKvZzqt9drkpzcDEov
+         eQ1Z9g+X5UCo2AEBPAk6x61D8LJtOMYbOyTVwvV6roS6qwoOzQVVOc6RGg801X8u+k2z
+         nx9MLfp4bOsguIA/YzObNGR2gb+GMw4CPkRwcj1rA/mGUQ46Ua4amCG80l2LB/eevI0f
+         qfBIABSuHGPxFWtf8WoWHlcWTsnRtFxNX1qdzxJ+FOBKT6tUFF3cCHGtlh9VjoxKAswD
+         j/fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688407080; x=1690999080;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N3tQa/xAjjFjMbYTIPvabJVdNLC/DkLFMMTZCH3qWNU=;
+        b=Fqaa0Tq9ZzsEGoBNIIieB5NVi1RDTmYLRuKkpnazGsj3E/PfVds1sniNIkXoJ9eORL
+         0xzbsf2jq2/+IUHxmgLH726lyRDbgAlmh4rW5u0/letBO00wtNPHADeLJxiz3zk3x0Wu
+         k/oaB7jp6bEyUTbj3OYN/kaMWBbV7B+MgDaPW19+vIKY50C0UuY+t4R+pj9QWQ3RSpsu
+         B3pStBNDyMt/P1PLhjsK4dNIwAk3hzBNfS5gcUcBuiyQ3T5d/S3OgJqDom8ViOrbg6uK
+         v3vmORLI6lII8JY1KXnm1Vn34U+K/orKTut2zlYhhgS2p3CqLz5XZSUDri6RwpK/S7gf
+         wZrA==
+X-Gm-Message-State: ABy/qLZyh3DLaRBhxuiozAonjcTA62bWyzcW5YFDDxvm4r/DFeYTQnBv
+        PrkyMp25hBb+RLrnwQtKXELeS+Zl3640F+pLx/0=
+X-Google-Smtp-Source: APBJJlFua2loJ0u7Q7q6dFel8+hFDbwLBHidHNLCPJxQWlub+iI3K9ThGJjNLye6MUFgn5XNOacEXqfDXzvkzU8DLLI=
+X-Received: by 2002:a05:6512:2007:b0:4f7:604f:f4c8 with SMTP id
+ a7-20020a056512200700b004f7604ff4c8mr6936363lfb.18.1688407079902; Mon, 03 Jul
+ 2023 10:57:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626075014.1872632-1-chenhuacai@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab3:7f06:0:b0:224:152:2993 with HTTP; Mon, 3 Jul 2023
+ 10:57:59 -0700 (PDT)
+Reply-To: elenatudorie987@gmail.com
+From:   Elena Tudorie <mrsahemdamal1@gmail.com>
+Date:   Mon, 3 Jul 2023 17:57:59 +0000
+Message-ID: <CAOCz6JWTre6EAD01J1rCDohPgy8NHb6etkV6+NjZtq6OW9gDyw@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 03:50:14PM +0800, Huacai Chen wrote:
-> Commit 7db5e9e9e5e6c10d7d ("MIPS: loongson64: fix FTLB configuration")
-> move decode_configs() from the beginning of cpu_probe_loongson() to the
-> end in order to fix FTLB configuration. However, it breaks the CPUCFG
-> decoding because decode_configs() use "c->options = xxxx" rather than
-> "c->options |= xxxx", all information get from CPUCFG by decode_cpucfg()
-> is lost.
-> 
-> This causes error when creating a KVM guest on Loongson-3A4000:
-> Exception Code: 4 not handled @ PC: 0000000087ad5981, inst: 0xcb7a1898 BadVaddr: 0x0 Status: 0x0
-> 
-> Fix this by moving the c->cputype setting to the beginning and moving
-> decode_configs() after that.
-> 
-> Fixes: 7db5e9e9e5e6c10d7d ("MIPS: loongson64: fix FTLB configuration")
-> Cc: stable@vger.kernel.org
-> Cc: Huang Pei <huangpei@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/mips/kernel/cpu-probe.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+I am Ms Elena Tudorie, I have a important  business  to discuss with you,
+Thanks for your time and  Attention.
+Regards.
+Mrs.Elena Tudorie
