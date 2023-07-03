@@ -2,193 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23226745682
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Jul 2023 09:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B9E745E3E
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jul 2023 16:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjGCHzE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 3 Jul 2023 03:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S230004AbjGCOMd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Jul 2023 10:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjGCHzB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jul 2023 03:55:01 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5269BA;
-        Mon,  3 Jul 2023 00:54:59 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-579dfae6855so22582167b3.1;
-        Mon, 03 Jul 2023 00:54:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688370899; x=1690962899;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ap+98X7lUU4Mb/R2w4KrLGdPkASGfI2gOWe+xareG/w=;
-        b=gV20QlEGzskXm07NAqjW665ZOYqxSGlkKqWzqoJMbhnIEuBkLxl4oSnIw+4dMp/6Qu
-         rTBskUaVp+NpWb1A2bQDMcw75It6Eze/JvCCstzZHZja06hmfb50w1hES/NOjA7v7dan
-         j7Duf2YvIsW6Pk8YvaKXdM2KKPxORSPfJuOEeQOagyL0bAenCS2mejFCokjJP/pzSc7c
-         Zq+1+yvVojwqbfa83kSVQXXZDAQpRnjQivEcltHnSlHuuWE/kWFqTdswimQT//evGouf
-         OvnNrUQYo//zINW7PYrkA1/fRkmHGfnYqN6PqtMmTIRP0DHWMxMC6lcI9iM1F5rOVIo8
-         yGZw==
-X-Gm-Message-State: ABy/qLZ8JxjsjLPy8UYTLdPS/PjqNX0RSExMIU5yyOlrz4WgP70p8TFd
-        LM2iWpojrFiGfOw7jAWMPsQ8GBURmdfLDg==
-X-Google-Smtp-Source: APBJJlHb87eLaE470shsNSC1acSVhnfK0tWhT1v3ISD1tEI3oo1td+vo0uIBY60+HpW5q2cS4a+/aQ==
-X-Received: by 2002:a0d:f005:0:b0:573:4d8b:471f with SMTP id z5-20020a0df005000000b005734d8b471fmr8421371ywe.26.1688370898728;
-        Mon, 03 Jul 2023 00:54:58 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id l189-20020a0dfbc6000000b0055a931afe48sm4942907ywf.8.2023.07.03.00.54.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 00:54:58 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c4d1b491095so1850181276.0;
-        Mon, 03 Jul 2023 00:54:58 -0700 (PDT)
-X-Received: by 2002:a25:a287:0:b0:c1a:2928:74ab with SMTP id
- c7-20020a25a287000000b00c1a292874abmr8554017ybi.31.1688370898299; Mon, 03 Jul
- 2023 00:54:58 -0700 (PDT)
+        with ESMTP id S231268AbjGCOM1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jul 2023 10:12:27 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9475E5C;
+        Mon,  3 Jul 2023 07:12:25 -0700 (PDT)
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+        id 1qGKHs-0008Fl-00; Mon, 03 Jul 2023 16:12:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6937BC02FD; Mon,  3 Jul 2023 16:08:53 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 16:08:53 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@gmail.com>, kvm@vger.kernel.org,
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        stable@vger.kernel.org, Yu Zhao <yuzhao@google.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: Re: [PATCH V2] MIPS: KVM: Fix NULL pointer dereference
+Message-ID: <20230703140853.GA16247@alpha.franken.de>
+References: <20230628110817.3167337-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-21-arnd@kernel.org>
-In-Reply-To: <20230327121317.4081816-21-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Jul 2023 09:54:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW5bXeE=nr7+hHxL+xhm2q05udkJpMBM-BG7g9S7Nt7Zg@mail.gmail.com>
-Message-ID: <CAMuHMdW5bXeE=nr7+hHxL+xhm2q05udkJpMBM-BG7g9S7Nt7Zg@mail.gmail.com>
-Subject: Re: [PATCH 20/21] ARM: dma-mapping: split out arch_dma_mark_clean() helper
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230628110817.3167337-1-chenhuacai@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arnd,
+On Wed, Jun 28, 2023 at 07:08:17PM +0800, Huacai Chen wrote:
+> After commit 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support") we
+> get a NULL pointer dereference when creating a KVM guest:
+> 
+> [  146.243409] Starting KVM with MIPS VZ extensions
+> [  149.849151] CPU 3 Unable to handle kernel paging request at virtual address 0000000000000300, epc == ffffffffc06356ec, ra == ffffffffc063568c
+> [  149.849177] Oops[#1]:
+> [  149.849182] CPU: 3 PID: 2265 Comm: qemu-system-mip Not tainted 6.4.0-rc3+ #1671
+> [  149.849188] Hardware name: THTF CX TL630 Series/THTF-LS3A4000-7A1000-ML4A, BIOS KL4.1F.TF.D.166.201225.R 12/25/2020
+> [  149.849192] $ 0   : 0000000000000000 000000007400cce0 0000000000400004 ffffffff8119c740
+> [  149.849209] $ 4   : 000000007400cce1 000000007400cce1 0000000000000000 0000000000000000
+> [  149.849221] $ 8   : 000000240058bb36 ffffffff81421ac0 0000000000000000 0000000000400dc0
+> [  149.849233] $12   : 9800000102a07cc8 ffffffff80e40e38 0000000000000001 0000000000400dc0
+> [  149.849245] $16   : 0000000000000000 9800000106cd0000 9800000106cd0000 9800000100cce000
+> [  149.849257] $20   : ffffffffc0632b28 ffffffffc05b31b0 9800000100ccca00 0000000000400000
+> [  149.849269] $24   : 9800000106cd09ce ffffffff802f69d0
+> [  149.849281] $28   : 9800000102a04000 9800000102a07cd0 98000001106a8000 ffffffffc063568c
+> [  149.849293] Hi    : 00000335b2111e66
+> [  149.849295] Lo    : 6668d90061ae0ae9
+> [  149.849298] epc   : ffffffffc06356ec kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
+> [  149.849324] ra    : ffffffffc063568c kvm_vz_vcpu_setup+0x64/0x328 [kvm]
+> [  149.849336] Status: 7400cce3 KX SX UX KERNEL EXL IE
+> [  149.849351] Cause : 1000000c (ExcCode 03)
+> [  149.849354] BadVA : 0000000000000300
+> [  149.849357] PrId  : 0014c004 (ICT Loongson-3)
+> [  149.849360] Modules linked in: kvm nfnetlink_queue nfnetlink_log nfnetlink fuse sha256_generic libsha256 cfg80211 rfkill binfmt_misc vfat fat snd_hda_codec_hdmi input_leds led_class snd_hda_intel snd_intel_dspcfg snd_hda_codec snd_hda_core snd_pcm snd_timer snd serio_raw xhci_pci radeon drm_suballoc_helper drm_display_helper xhci_hcd ip_tables x_tables
+> [  149.849432] Process qemu-system-mip (pid: 2265, threadinfo=00000000ae2982d2, task=0000000038e09ad4, tls=000000ffeba16030)
+> [  149.849439] Stack : 9800000000000003 9800000100ccca00 9800000100ccc000 ffffffffc062cef4
+> [  149.849453]         9800000102a07d18 c89b63a7ab338e00 0000000000000000 ffffffff811a0000
+> [  149.849465]         0000000000000000 9800000106cd0000 ffffffff80e59938 98000001106a8920
+> [  149.849476]         ffffffff80e57f30 ffffffffc062854c ffffffff811a0000 9800000102bf4240
+> [  149.849488]         ffffffffc05b0000 ffffffff80e3a798 000000ff78000000 000000ff78000010
+> [  149.849500]         0000000000000255 98000001021f7de0 98000001023f0078 ffffffff81434000
+> [  149.849511]         0000000000000000 0000000000000000 9800000102ae0000 980000025e92ae28
+> [  149.849523]         0000000000000000 c89b63a7ab338e00 0000000000000001 ffffffff8119dce0
+> [  149.849535]         000000ff78000010 ffffffff804f3d3c 9800000102a07eb0 0000000000000255
+> [  149.849546]         0000000000000000 ffffffff8049460c 000000ff78000010 0000000000000255
+> [  149.849558]         ...
+> [  149.849565] Call Trace:
+> [  149.849567] [<ffffffffc06356ec>] kvm_vz_vcpu_setup+0xc4/0x328 [kvm]
+> [  149.849586] [<ffffffffc062cef4>] kvm_arch_vcpu_create+0x184/0x228 [kvm]
+> [  149.849605] [<ffffffffc062854c>] kvm_vm_ioctl+0x64c/0xf28 [kvm]
+> [  149.849623] [<ffffffff805209c0>] sys_ioctl+0xc8/0x118
+> [  149.849631] [<ffffffff80219eb0>] syscall_common+0x34/0x58
+> 
+> The root cause is the deletion of kvm_mips_commpage_init() leaves vcpu
+> ->arch.cop0 NULL. So fix it by making cop0 from a pointer to an embedded
+> object.
+> 
+> Fixes: 45c7e8af4a5e3f0bea4ac209 ("MIPS: Remove KVM_TE support")
+> Cc: stable@vger.kernel.org
+> Reported-by: Yu Zhao <yuzhao@google.com>
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> V2: Update commit message and add Reported-by/Reviewed-by.
+> 
+>  arch/mips/include/asm/kvm_host.h |  6 +++---
+>  arch/mips/kvm/emulate.c          | 22 +++++++++++-----------
+>  arch/mips/kvm/mips.c             | 16 ++++++++--------
+>  arch/mips/kvm/trace.h            |  8 ++++----
+>  arch/mips/kvm/vz.c               | 20 ++++++++++----------
+>  5 files changed, 36 insertions(+), 36 deletions(-)
 
-On Mon, Mar 27, 2023 at 2:16â€¯PM Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The arm version of the arch_sync_dma_for_cpu() function annotates pages as
-> PG_dcache_clean after a DMA, but no other architecture does this here. On
-> ia64, the same thing is done in arch_sync_dma_for_cpu(), so it makes sense
-> to use the same hook in order to have identical arch_sync_dma_for_cpu()
-> semantics as all other architectures.
->
-> Splitting this out has multiple effects:
->
->  - for dma-direct, this now gets called after arch_sync_dma_for_cpu()
->    for DMA_FROM_DEVICE mappings, but not for DMA_BIDIRECTIONAL. While
->    it would not be harmful to keep doing it for bidirectional mappings,
->    those are apparently not used in any callers that care about the flag.
->
->  - Since arm has its own dma-iommu abstraction, this now also needs to
->    call the same function, so the calls are added there to mirror the
->    dma-direct version.
->
->  - Like dma-direct, the dma-iommu version now marks the dcache clean
->    for both coherent and noncoherent devices after a DMA, but it only
->    does this for DMA_FROM_DEVICE, not DMA_BIDIRECTIONAL.
->
-> [ HELP NEEDED: can anyone confirm that it is a correct assumption
->   on arm that a cache-coherent device writing to a page always results
->   in it being in a PG_dcache_clean state like on ia64, or can a device
->   write directly into the dcache?]
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+applied to mips-next.
 
-Thanks for your patch, which is now commit 322dbe898f82fd8a
-("ARM: dma-mapping: split out arch_dma_mark_clean() helper") in
-esmil/jh7100-dmapool.
-
-If CONFIG_ARM_DMA_USE_IOMMU=y, the build fails.
-
-> --- a/arch/arm/mm/dma-mapping.c
-> +++ b/arch/arm/mm/dma-mapping.c
-
-> @@ -1294,6 +1298,17 @@ static int arm_iommu_map_sg(struct device *dev, struct scatterlist *sg,
->         return -EINVAL;
->  }
->
-> +static void arm_iommu_sync_dma_for_cpu(phys_addr_t phys, size_t len,
-> +                                      enum dma_data_direction dir,
-> +                                      bool dma_coherent)
-> +{
-> +       if (!dma_coherent)
-> +               arch_sync_dma_for_cpu(phys, s->length, dir);
-
-s/s->length/len/
-
-> +
-> +       if (dir == DMA_FROM_DEVICE)
-> +               arch_dma_mark_clean(phys, s->length);
-
-Likewise.
-
-> +}
-> +
->  /**
->   * arm_iommu_unmap_sg - unmap a set of SG buffers mapped by dma_map_sg
->   * @dev: valid struct device pointer
-
-> @@ -1425,9 +1438,9 @@ static void arm_iommu_unmap_page(struct device *dev, dma_addr_t handle,
->         if (!iova)
->                 return;
->
-> -       if (!dev->dma_coherent && !(attrs & DMA_ATTR_SKIP_CPU_SYNC)) {
-> +       if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
-
-Missing opening curly brace.
-
->                 phys = iommu_iova_to_phys(mapping->domain, handle);
-> -               arch_sync_dma_for_cpu(phys, size, dir);
-> +               arm_iommu_sync_dma_for_cpu(phys, size, dir, dev->dma_coherent);
->         }
->
->         iommu_unmap(mapping->domain, iova, len);
-
-With the above fixed, it builds and boots fine (on R-Car M2-W).
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Thomas.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
