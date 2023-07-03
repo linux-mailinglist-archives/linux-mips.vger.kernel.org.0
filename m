@@ -2,104 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064527455E9
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Jul 2023 09:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23226745682
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jul 2023 09:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjGCHYV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Jul 2023 03:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
+        id S230262AbjGCHzE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 3 Jul 2023 03:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjGCHYU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jul 2023 03:24:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1E0CC;
-        Mon,  3 Jul 2023 00:24:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so4581268a12.0;
-        Mon, 03 Jul 2023 00:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688369058; x=1690961058;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YMYA768Yuc+e863XYjfb4koFTu7nhhp3H7iOM5oxBd8=;
-        b=AWfclo1YRw8mHr1mBcQa6Al7/lD8qj8v4Tgi6fnK89pioGVIlQ60ccHh5jMJNntOCA
-         NnpGoMFZc6MXgHx1tehi4WvvVHBzemLSIUxOxdugmro6IaW4e3LFOZx3cQ4orgtunyJc
-         efY5RcAWN0ig2r7V4K4SjstqTNR5Kr9fa/JUxBz19Vo21EYXqKwmmFUtHMbcZi6UKJM4
-         eHWRfftpFaCbQiYIrvSezQkFtpB/Y2Q59+cpkRUI4grdA1RrMNt9gzOqBy7tOEdM2vlP
-         dO15+StPxy3lyKdjQc3vSBfsvvwmpA2iD2KnSmwoGU0IzT+Co2/GD+XPoKB0RQE8Q8Sn
-         GJRg==
+        with ESMTP id S230205AbjGCHzB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jul 2023 03:55:01 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5269BA;
+        Mon,  3 Jul 2023 00:54:59 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-579dfae6855so22582167b3.1;
+        Mon, 03 Jul 2023 00:54:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688369058; x=1690961058;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YMYA768Yuc+e863XYjfb4koFTu7nhhp3H7iOM5oxBd8=;
-        b=CtDPcQQWJ6dIxE9vOWjZy/Gi0lpWy1LXQewk7LuJLUJpk0nAcbqauouWg1ppnvXTJ6
-         VpF+tWoGDdIy1znAIv+w/5PH9s8bKYd3z65yXS2s2YUW1CYCUAlP07JaVF3fVrqlnVT7
-         tny5slzTK6HNyhlHcmZl3hkI7puujidZlcYhNzNo9vy8Tewidl8Ars5DvRGBoP+ESbsx
-         rH0wfHssttl52e0YTbD8gyoDGnzj7Z2IRs5XalImMpejF6A3t3T7H3nknJx7W6PhDrAs
-         utJq/wh/MmsOFEvCB7ohMJTmpOpatVsczf3rH5W7TAcrJcRhf2ybtrMISg5GrogWe9RG
-         hxuw==
-X-Gm-Message-State: ABy/qLaC470NMCr8v9ka4yAaqCiNFJGPtBLSNpKF30Qr7gf8CpIFihtq
-        uxLfqGd8nrA7HBpCfQLsSUlbps1eitcBWDMLxMg=
-X-Google-Smtp-Source: APBJJlHDxu4653ZbuqiolCCAbs5HQRJeGVyhSAZ7vj84ypDu66Lq3AzthAyfxRrPKN2IAwfrFPOLHG/gBI/eS/a5Cf0=
-X-Received: by 2002:a05:6402:14cb:b0:51d:d16f:7e52 with SMTP id
- f11-20020a05640214cb00b0051dd16f7e52mr6090296edx.29.1688369057919; Mon, 03
- Jul 2023 00:24:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688370899; x=1690962899;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ap+98X7lUU4Mb/R2w4KrLGdPkASGfI2gOWe+xareG/w=;
+        b=gV20QlEGzskXm07NAqjW665ZOYqxSGlkKqWzqoJMbhnIEuBkLxl4oSnIw+4dMp/6Qu
+         rTBskUaVp+NpWb1A2bQDMcw75It6Eze/JvCCstzZHZja06hmfb50w1hES/NOjA7v7dan
+         j7Duf2YvIsW6Pk8YvaKXdM2KKPxORSPfJuOEeQOagyL0bAenCS2mejFCokjJP/pzSc7c
+         Zq+1+yvVojwqbfa83kSVQXXZDAQpRnjQivEcltHnSlHuuWE/kWFqTdswimQT//evGouf
+         OvnNrUQYo//zINW7PYrkA1/fRkmHGfnYqN6PqtMmTIRP0DHWMxMC6lcI9iM1F5rOVIo8
+         yGZw==
+X-Gm-Message-State: ABy/qLZ8JxjsjLPy8UYTLdPS/PjqNX0RSExMIU5yyOlrz4WgP70p8TFd
+        LM2iWpojrFiGfOw7jAWMPsQ8GBURmdfLDg==
+X-Google-Smtp-Source: APBJJlHb87eLaE470shsNSC1acSVhnfK0tWhT1v3ISD1tEI3oo1td+vo0uIBY60+HpW5q2cS4a+/aQ==
+X-Received: by 2002:a0d:f005:0:b0:573:4d8b:471f with SMTP id z5-20020a0df005000000b005734d8b471fmr8421371ywe.26.1688370898728;
+        Mon, 03 Jul 2023 00:54:58 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id l189-20020a0dfbc6000000b0055a931afe48sm4942907ywf.8.2023.07.03.00.54.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 00:54:58 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c4d1b491095so1850181276.0;
+        Mon, 03 Jul 2023 00:54:58 -0700 (PDT)
+X-Received: by 2002:a25:a287:0:b0:c1a:2928:74ab with SMTP id
+ c7-20020a25a287000000b00c1a292874abmr8554017ybi.31.1688370898299; Mon, 03 Jul
+ 2023 00:54:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230702133113.3438049-1-trix@redhat.com>
-In-Reply-To: <20230702133113.3438049-1-trix@redhat.com>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 3 Jul 2023 15:24:01 +0800
-Message-ID: <CAJhJPsVWQLD_OeL9E0i0e6hdt5i_TPMkvh5u_+u4e9xUbHxFcQ@mail.gmail.com>
-Subject: Re: [PATCH] clocksource/drivers/loongson1: set variable
- ls1x_timer_lock storage-class-specifier to static
-To:     Tom Rix <trix@redhat.com>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-21-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-21-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 3 Jul 2023 09:54:46 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW5bXeE=nr7+hHxL+xhm2q05udkJpMBM-BG7g9S7Nt7Zg@mail.gmail.com>
+Message-ID: <CAMuHMdW5bXeE=nr7+hHxL+xhm2q05udkJpMBM-BG7g9S7Nt7Zg@mail.gmail.com>
+Subject: Re: [PATCH 20/21] ARM: dma-mapping: split out arch_dma_mark_clean() helper
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> smatch reports
-> drivers/clocksource/timer-loongson1-pwm.c:31:1: warning: symbol
->   'ls1x_timer_lock' was not declared. Should it be static?
->
-> This variable is only used in its defining file, so it should be static.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Arnd,
 
-Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+On Mon, Mar 27, 2023 at 2:16 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The arm version of the arch_sync_dma_for_cpu() function annotates pages as
+> PG_dcache_clean after a DMA, but no other architecture does this here. On
+> ia64, the same thing is done in arch_sync_dma_for_cpu(), so it makes sense
+> to use the same hook in order to have identical arch_sync_dma_for_cpu()
+> semantics as all other architectures.
+>
+> Splitting this out has multiple effects:
+>
+>  - for dma-direct, this now gets called after arch_sync_dma_for_cpu()
+>    for DMA_FROM_DEVICE mappings, but not for DMA_BIDIRECTIONAL. While
+>    it would not be harmful to keep doing it for bidirectional mappings,
+>    those are apparently not used in any callers that care about the flag.
+>
+>  - Since arm has its own dma-iommu abstraction, this now also needs to
+>    call the same function, so the calls are added there to mirror the
+>    dma-direct version.
+>
+>  - Like dma-direct, the dma-iommu version now marks the dcache clean
+>    for both coherent and noncoherent devices after a DMA, but it only
+>    does this for DMA_FROM_DEVICE, not DMA_BIDIRECTIONAL.
+>
+> [ HELP NEEDED: can anyone confirm that it is a correct assumption
+>   on arm that a cache-coherent device writing to a page always results
+>   in it being in a PG_dcache_clean state like on ia64, or can a device
+>   write directly into the dcache?]
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> ---
->  drivers/clocksource/timer-loongson1-pwm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
-> index 6335fee03017..244d66835508 100644
-> --- a/drivers/clocksource/timer-loongson1-pwm.c
-> +++ b/drivers/clocksource/timer-loongson1-pwm.c
-> @@ -28,7 +28,7 @@
->
->  #define CNTR_WIDTH             24
->
-> -DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
-> +static DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
->
->  struct ls1x_clocksource {
->         void __iomem *reg_base;
-> --
-> 2.27.0
->
+Thanks for your patch, which is now commit 322dbe898f82fd8a
+("ARM: dma-mapping: split out arch_dma_mark_clean() helper") in
+esmil/jh7100-dmapool.
 
+If CONFIG_ARM_DMA_USE_IOMMU=y, the build fails.
 
---
-Best regards,
+> --- a/arch/arm/mm/dma-mapping.c
+> +++ b/arch/arm/mm/dma-mapping.c
 
-Keguang Zhang
+> @@ -1294,6 +1298,17 @@ static int arm_iommu_map_sg(struct device *dev, struct scatterlist *sg,
+>         return -EINVAL;
+>  }
+>
+> +static void arm_iommu_sync_dma_for_cpu(phys_addr_t phys, size_t len,
+> +                                      enum dma_data_direction dir,
+> +                                      bool dma_coherent)
+> +{
+> +       if (!dma_coherent)
+> +               arch_sync_dma_for_cpu(phys, s->length, dir);
+
+s/s->length/len/
+
+> +
+> +       if (dir == DMA_FROM_DEVICE)
+> +               arch_dma_mark_clean(phys, s->length);
+
+Likewise.
+
+> +}
+> +
+>  /**
+>   * arm_iommu_unmap_sg - unmap a set of SG buffers mapped by dma_map_sg
+>   * @dev: valid struct device pointer
+
+> @@ -1425,9 +1438,9 @@ static void arm_iommu_unmap_page(struct device *dev, dma_addr_t handle,
+>         if (!iova)
+>                 return;
+>
+> -       if (!dev->dma_coherent && !(attrs & DMA_ATTR_SKIP_CPU_SYNC)) {
+> +       if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
+
+Missing opening curly brace.
+
+>                 phys = iommu_iova_to_phys(mapping->domain, handle);
+> -               arch_sync_dma_for_cpu(phys, size, dir);
+> +               arm_iommu_sync_dma_for_cpu(phys, size, dir, dev->dma_coherent);
+>         }
+>
+>         iommu_unmap(mapping->domain, iova, len);
+
+With the above fixed, it builds and boots fine (on R-Car M2-W).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
