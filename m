@@ -2,96 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB1A7476BA
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jul 2023 18:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26753747A54
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jul 2023 01:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjGDQ3F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jul 2023 12:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S231450AbjGDXYH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jul 2023 19:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjGDQ2y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jul 2023 12:28:54 -0400
+        with ESMTP id S231424AbjGDXYG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jul 2023 19:24:06 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7873D10EF
-        for <linux-mips@vger.kernel.org>; Tue,  4 Jul 2023 09:27:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1B910E0
+        for <linux-mips@vger.kernel.org>; Tue,  4 Jul 2023 16:23:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688488068;
+        s=mimecast20190719; t=1688512999;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gHdgPj1Wm2IgY2fHBO70NHanGv82Rz5Bml4kSaFfUEk=;
-        b=astV7l2QgNLQx7G0QGsEUuVzyHWhqmO6uW61aOeryrxeSBHbThdQQK9eTbzTtxdNz3OUoB
-        vCIX8peWu/rT+he/UJP8MKQmW8WoD5lhj9Y+IZ7Vjyjo3tdFBO/0JTZiZNaRmqTwJy95wM
-        gP6FgqhCw1ULKrlRXs0D2HipJszaGWU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4PCpsOElklGvTmmWH0OQRonwleLOQrzWZC/RGYQTYPQ=;
+        b=Vk17hLkYP+wOQPkcJOBZCYcxM/zpqLXnZtwEu/Ecx0hG/BqHefzFbo4JCQPZp0YVyJciBa
+        bq+qQOMUYoj/4VirRnbR7zCIK/XADcmsJl1/mn/bosmgrSQuDLD7leihWO80znhUa6b6Ov
+        pzRWYIR1riBHnAWEEFPvB1VYUcMbqLc=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-672-hGreXI7iPEyfV3-k5vNMUA-1; Tue, 04 Jul 2023 12:27:46 -0400
-X-MC-Unique: hGreXI7iPEyfV3-k5vNMUA-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3fbdde92299so9103755e9.3
-        for <linux-mips@vger.kernel.org>; Tue, 04 Jul 2023 09:27:45 -0700 (PDT)
+ us-mta-652-8OkouTvPPAWI0uKAyFJFTA-1; Tue, 04 Jul 2023 19:23:17 -0400
+X-MC-Unique: 8OkouTvPPAWI0uKAyFJFTA-1
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-66a634b2cf5so165632b3a.0
+        for <linux-mips@vger.kernel.org>; Tue, 04 Jul 2023 16:23:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688488065; x=1691080065;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gHdgPj1Wm2IgY2fHBO70NHanGv82Rz5Bml4kSaFfUEk=;
-        b=LR4Aom6x2kI5VlBtMSmK4yT14Opk4w3PLHb7pyhG0eXbJSpQk+n+uOrJD5lTnH7Se5
-         bVWhVOwWvCzTR+nHMvg9I6yFOdyxDaoE60ugTK1Cyt1WYev3E765vre2IuslQImnzXeQ
-         6ythgawUIoXF3NW6CLXbVngeid+kvN7SmJnU58DWWsADDDu8FUqmna/oAyjUGlqis159
-         vCHi9Ymt1bM6RvFoOv47WzorGRvAB8MJIUIfvC2R/m4hn4lmpDXeCdno8Z0t0DvsF+eg
-         xafQTRDC50T1IfDH+HWWjg7hKKRQ07priK80NvVuLY5hY3DqTToLEwVarb0cnsjITSy2
-         GzBA==
-X-Gm-Message-State: AC+VfDz8tFd65VO6nJ+Nl9qOpoMub35ujDnwjwkUAKvzqhOfDYiUHUdp
-        UkHHalA4O+KR5f7V1xdNmAPfwPJ4hQm2VnydbEE4PgG2VR30Xy861o3ogxyOnXYOTt733+CC5mK
-        6a34SgYoLNIpXvMf3vt6BnA==
-X-Received: by 2002:a05:600c:2181:b0:3fa:96ae:fd78 with SMTP id e1-20020a05600c218100b003fa96aefd78mr12439020wme.29.1688488065020;
-        Tue, 04 Jul 2023 09:27:45 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ76jB5JrX6TXp/j+SpnZTGNMceWk0U9GUm8msLFZPg0J8xzTJ2Ph/XYxtIjAMzvUbO/YmFVwQ==
-X-Received: by 2002:a05:600c:2181:b0:3fa:96ae:fd78 with SMTP id e1-20020a05600c218100b003fa96aefd78mr12439000wme.29.1688488064598;
-        Tue, 04 Jul 2023 09:27:44 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id s24-20020a7bc398000000b003fb9ebb6b88sm22214385wmj.39.2023.07.04.09.27.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 09:27:44 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
-Cc:     linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, Rich Felker <dalias@libc.org>,
-        sparclinux@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-hexagon@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-csky@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        loongarch@lists.linux.dev,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-alpha@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH 05/12] arch: Remove trailing whitespaces
-In-Reply-To: <20230629121952.10559-6-tzimmermann@suse.de>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
- <20230629121952.10559-6-tzimmermann@suse.de>
-Date:   Tue, 04 Jul 2023 18:27:43 +0200
-Message-ID: <877crflk00.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1688512997; x=1691104997;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PCpsOElklGvTmmWH0OQRonwleLOQrzWZC/RGYQTYPQ=;
+        b=TG5nxbKfDjKjDCGXiIkS5IsPiG//Wcn4fOhWWvLsiwRcXyc+0CL80td6tSoL2NzAPs
+         nxxHxOEwtCEoNxCChnuEU1A6TZ0AcDan/Kwgshf/lyWrcmrWWzlE7QIAKWfa0D6Gneg4
+         qLvoHLAUjLn5A23AePH5OCNX4LH225NbIqGvai93wqsd8Di92t1LE6m6HbkPs6hteRHV
+         rtR18BI7Ccla0bFN4X8CYsydLoeb0AmqIhyFDVj+F7Sb1H+p1is5CThmDz+EP4A2gq44
+         uvwRuxmiELkzt63tn9I5zTMBdCQGDRBHpg6Xui9PsgurdsAKVvTCIUfT7WOFk6eEWceX
+         Np8Q==
+X-Gm-Message-State: ABy/qLYTURl2d9oObPXBMqk4Z5a7jplSYVJ13hVxPevRoN1i0dxaYwlX
+        vUbeZEbi2WqhHnrvyHs/Ynn6iRE9sAJR5g40xo8xBcZP1HwHGtPUa3NSlidX0+Tkn1qVeC3AZbc
+        FORBOr+SdTllKtB+8Hhu1fA==
+X-Received: by 2002:a05:6a00:1ca9:b0:682:5e8f:d8ba with SMTP id y41-20020a056a001ca900b006825e8fd8bamr724735pfw.11.1688512996827;
+        Tue, 04 Jul 2023 16:23:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlG0UBpOEK5SPsF31xr5f/9Wg1BBxO8IhEOWDLX7lSVKCKwsJxsntJWPkQLzTCSx4pQPuvCDfA==
+X-Received: by 2002:a05:6a00:1ca9:b0:682:5e8f:d8ba with SMTP id y41-20020a056a001ca900b006825e8fd8bamr724711pfw.11.1688512996441;
+        Tue, 04 Jul 2023 16:23:16 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id bn10-20020a056a00324a00b0065980654baasm16109591pfb.130.2023.07.04.16.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 16:23:15 -0700 (PDT)
+Message-ID: <b977abe4-71b9-daa1-da1b-b111f0afbe51@redhat.com>
+Date:   Wed, 5 Jul 2023 09:23:05 +1000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND PATCH v5 01/11] KVM: Rename kvm_arch_flush_remote_tlb()
+ to kvm_arch_flush_remote_tlbs()
+Content-Language: en-US
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230621175002.2832640-1-rananta@google.com>
+ <20230621175002.2832640-2-rananta@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20230621175002.2832640-2-rananta@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,31 +98,99 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
-
-> Fix coding style. No functional changes.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Arnd Bergmann <arnd@kernel.org>
-> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
+On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
+> From: David Matlack <dmatlack@google.com>
+> 
+> Rename kvm_arch_flush_remote_tlb() and the associated macro
+> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB to kvm_arch_flush_remote_tlbs() and
+> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS respectively.
+> 
+> Making the name plural matches kvm_flush_remote_tlbs() and makes it more
+> clear that this function can affect more than one remote TLB.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > ---
+>   arch/mips/include/asm/kvm_host.h | 4 ++--
+>   arch/mips/kvm/mips.c             | 2 +-
+>   arch/x86/include/asm/kvm_host.h  | 4 ++--
+>   include/linux/kvm_host.h         | 4 ++--
+>   virt/kvm/kvm_main.c              | 2 +-
+>   5 files changed, 8 insertions(+), 8 deletions(-)
+> 
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 957121a495f0b..1473cf923ee37 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -896,7 +896,7 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>   static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>   static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>   
+> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -int kvm_arch_flush_remote_tlb(struct kvm *kvm);
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+>   
+>   #endif /* __MIPS_KVM_HOST_H__ */
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index 884be4ef99dc1..6e34bbe244462 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -981,7 +981,7 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+>   
+>   }
+>   
+> -int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	kvm_mips_callbacks->prepare_flush_shadow(kvm);
+>   	return 1;
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index fb9d1f2d6136c..f6e3aa617d8b8 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1794,8 +1794,8 @@ static inline struct kvm *kvm_arch_alloc_vm(void)
+>   #define __KVM_HAVE_ARCH_VM_FREE
+>   void kvm_arch_free_vm(struct kvm *kvm);
+>   
+> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	if (kvm_x86_ops.flush_remote_tlbs &&
+>   	    !static_call(kvm_x86_flush_remote_tlbs)(kvm))
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 0e571e973bc28..95c3e364f24b4 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1477,8 +1477,8 @@ static inline void kvm_arch_free_vm(struct kvm *kvm)
+>   }
+>   #endif
+>   
+> -#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	return -ENOTSUPP;
+>   }
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index cb5c13eee1936..a475ff9ef156d 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -366,7 +366,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+>   	 * kvm_make_all_cpus_request() reads vcpu->mode. We reuse that
+>   	 * barrier here.
+>   	 */
+> -	if (!kvm_arch_flush_remote_tlb(kvm)
+> +	if (!kvm_arch_flush_remote_tlbs(kvm)
+>   	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+>   		++kvm->stat.generic.remote_tlb_flush;
+>   }
 
