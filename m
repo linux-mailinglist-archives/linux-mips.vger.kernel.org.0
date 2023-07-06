@@ -2,129 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10DA749715
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Jul 2023 10:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3682749B99
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Jul 2023 14:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbjGFIHS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Jul 2023 04:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S232774AbjGFMTE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Jul 2023 08:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjGFIHR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Jul 2023 04:07:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B3C1B6;
-        Thu,  6 Jul 2023 01:07:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1AC9618C1;
-        Thu,  6 Jul 2023 08:07:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD56C433C8;
-        Thu,  6 Jul 2023 08:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688630835;
-        bh=iNI/V0FUmVFi1ifs3C8XNjXKbihtOUYD+TDijCk37HE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OB+27qMDSzSjagtWO3H4twriHs6EnYntX7f3TliqB+th2ekfBwodAiGjyoiF52+0o
-         SDWo0DcO9dd1onHNcAuM7KPg9vg1oxEShO52NsmMLe5nM7cg41BHSJXYx+G0uAVF8v
-         PtEyANTWI23BraWaPOeLX69jQfpIO3MWHj2Wyu5E=
-Date:   Thu, 6 Jul 2023 09:07:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        with ESMTP id S232746AbjGFMTB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Jul 2023 08:19:01 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B31BC9;
+        Thu,  6 Jul 2023 05:19:00 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E8A865C02FA;
+        Thu,  6 Jul 2023 08:18:58 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Jul 2023 08:18:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688645938; x=1688732338; bh=pm
+        sCsD6NfrkTosVBZWjph1ykYGb9O3Dg+fhXVNC3Rvk=; b=DYU9YRbrNhTzBJuXfZ
+        xZ+Y1O2XI7KfQRyTQF1V8a0rVq8MYc2l4H0B6U1/rBwlwbNvVvTCBUCgruY6Pxoc
+        VaYF1h3LDB2oPT+5yxaP3YTkLrgAaErAuxO/cxKMd7pHGKSppM0I++Q5lIWr9nzw
+        bxdZIxAaU+xs/SLqpbCdozn2UEGm5TT6M5c3WNNmobtsyNNvBu6KcsHLTywYQsSR
+        HtmKZFhQxqax14K0B8DsN6GQIZQck5yQSMFP6o4GM2GDC2jn0q3rPBVQqtylth+I
+        ISX60SEJu5ruEE8cuZmgIMGJq3+lbX3zaRBPrORf/LsaMI4hGMUkAx+lAYjUt2zg
+        o7Ng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688645938; x=1688732338; bh=pmsCsD6NfrkTo
+        sVBZWjph1ykYGb9O3Dg+fhXVNC3Rvk=; b=TfDw4vxXnxU9vNA6hgCsyajS/OCts
+        wQszxsaApShKlVvMRQdDbyNtIWQ+FkjIpzybYwnCBdjxcaVoWSCXr3brSE996vlG
+        1PKuiTvK/Eri8Cf5hnKLtqQy7v1D4Lrf+WDqzYrF2UBnOYiJw7iDiRnBmDhmYUyP
+        yR48T+Z9lKy0yu8WGApPh8AMbRFKyjIagsFjtaFjxi31mrREHRRtg9G+fJ35WLER
+        RTm5PTA/LfOkjDr0eolviLd3yvayhNR0dgWpj/KjK8FNFM6KUmlR6EChEssKMFxK
+        vPabKnTuSWQ0naxSVR4eWja+X3+iE1xWMOlFN7AHnoLKi74y/DdDnk2ug==
+X-ME-Sender: <xms:MbGmZCnXRz8rvIIm-02xlguovFCy3cCMiGr6P8JkTytqrGFEIwkBXg>
+    <xme:MbGmZJ2Op6wwSngvS53MLCr6dcHZ91rJIsWui0mJbwQRHkh8Mm2a0SzG137XXoPI5
+    B0vrIBwLhW2ykG5mdk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelgdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:MbGmZAoflaPhHqipkdsi5mRnq0UbEnAE7k1e13rOugyz-CK1O69kqA>
+    <xmx:MbGmZGmffC6G5IeDL4PkqNLjcETC6c9EAQF_I979pIoiYgbQnbq4DQ>
+    <xmx:MbGmZA36VwFVduytTatUjarqPPwSpX4vSvCVpKuq7oPx5XBXNbHlZw>
+    <xmx:MrGmZI5pH4RZaybwhVCry2F9J71hviXYyMNQoff1YN9MX9L3C13eWQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3EF87B60086; Thu,  6 Jul 2023 08:18:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <c057ba7a-3cc2-44ac-a961-fa062b909876@app.fastmail.com>
+In-Reply-To: <20230705142004.3605799-2-eric.devolder@oracle.com>
+References: <20230705142004.3605799-1-eric.devolder@oracle.com>
+ <20230705142004.3605799-2-eric.devolder@oracle.com>
+Date:   Thu, 06 Jul 2023 14:18:36 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Eric DeVolder" <eric.devolder@oracle.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org
+Cc:     "WANG Xuerui" <kernel@xen0n.name>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "petr@tesarici.cz" <petr@tesarici.cz>
-Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
- transient memory pool
-Message-ID: <2023070626-boxcar-bubbly-471d@gregkh>
-References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
- <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
- <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "Kees Cook" <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Frederic Weisbecker" <frederic@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Sami Tolvanen" <samitolvanen@google.com>,
+        "Juerg Haefliger" <juerg.haefliger@canonical.com>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Sebastian Reichel" <sebastian.reichel@collabora.com>,
+        "Mike Rapoport" <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        "Zi Yan" <ziy@nvidia.com>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Zhen Lei" <thunder.leizhen@huawei.com>,
+        "Xin Li" <xin3.li@intel.com>, "Tejun Heo" <tj@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, tsi@tuyoix.net,
+        "Baoquan He" <bhe@redhat.com>, hbathini@linux.ibm.com,
+        sourabhjain@linux.ibm.com,
+        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>
+Subject: Re: [PATCH v4 01/13] kexec: consolidate kexec and crash options into
+ kernel/Kconfig.kexec
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) wrote:
-> From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday, June 27, 2023 2:54 AM
-> > 
-> > Try to allocate a transient memory pool if no suitable slots can be found,
-> > except when allocating from a restricted pool. The transient pool is just
-> > enough big for this one bounce buffer. It is inserted into a per-device
-> > list of transient memory pools, and it is freed again when the bounce
-> > buffer is unmapped.
-> > 
-> > Transient memory pools are kept in an RCU list. A memory barrier is
-> > required after adding a new entry, because any address within a transient
-> > buffer must be immediately recognized as belonging to the SWIOTLB, even if
-> > it is passed to another CPU.
-> > 
-> > Deletion does not require any synchronization beyond RCU ordering
-> > guarantees. After a buffer is unmapped, its physical addresses may no
-> > longer be passed to the DMA API, so the memory range of the corresponding
-> > stale entry in the RCU list never matches. If the memory range gets
-> > allocated again, then it happens only after a RCU quiescent state.
-> > 
-> > Since bounce buffers can now be allocated from different pools, add a
-> > parameter to swiotlb_alloc_pool() to let the caller know which memory pool
-> > is used. Add swiotlb_find_pool() to find the memory pool corresponding to
-> > an address. This function is now also used by is_swiotlb_buffer(), because
-> > a simple boundary check is no longer sufficient.
-> > 
-> > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_alloc_pages(),
-> > simplified and enhanced to use coherent memory pools if needed.
-> > 
-> > Note that this is not the most efficient way to provide a bounce buffer,
-> > but when a DMA buffer can't be mapped, something may (and will) actually
-> > break. At that point it is better to make an allocation, even if it may be
-> > an expensive operation.
-> 
-> I continue to think about swiotlb memory management from the standpoint
-> of CoCo VMs that may be quite large with high network and storage loads.
-> These VMs are often running mission-critical workloads that can't tolerate
-> a bounce buffer allocation failure.  To prevent such failures, the swiotlb
-> memory size must be overly large, which wastes memory.
+On Wed, Jul 5, 2023, at 16:19, Eric DeVolder wrote:
+> +
+> +config CRASH_DUMP
+> +	bool "kernel crash dumps"
+> +	depends on ARCH_SUPPORTS_CRASH_DUMP
+> +	select CRASH_CORE
+> +	select KEXEC
 
-If "mission critical workloads" are in a vm that allowes overcommit and
-no control over other vms in that same system, then you have worse
-problems, sorry.
+Today's linux-next now runs into a warning on arm64 and
+presumably others, with the same problem as on arm earlier:
 
-Just don't do that.
+WARNING: unmet direct dependencies detected for KEXEC
+  Depends on [n]: ARCH_SUPPORTS_KEXEC [=n]
+  Selected by [y]:
+  - CRASH_DUMP [=y] && ARCH_SUPPORTS_CRASH_DUMP [=y]
 
-thanks,
+I think the easiest way to make this reliable would be
+this fixup:
 
-greg k-h
+diff --git a/kernel/Kconfig.kexec b/kernel/Kconfig.kexec
+index d82a7ce59c051..e58ca6128d6ee 100644
+--- a/kernel/Kconfig.kexec
++++ b/kernel/Kconfig.kexec
+@@ -91,6 +91,7 @@ config KEXEC_JUMP
+ config CRASH_DUMP
+        bool "kernel crash dumps"
+        depends on ARCH_SUPPORTS_CRASH_DUMP
++       depends on ARCH_SUPPORTS_KEXEC
+        select CRASH_CORE
+        select KEXEC
+        help
+
+   Arnd
