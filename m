@@ -2,248 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1695074B286
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 16:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F00D74B313
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 16:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjGGOFD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jul 2023 10:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
+        id S232327AbjGGOdA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jul 2023 10:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232577AbjGGOEw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 10:04:52 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B942105
-        for <linux-mips@vger.kernel.org>; Fri,  7 Jul 2023 07:04:50 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b700e85950so29085881fa.3
-        for <linux-mips@vger.kernel.org>; Fri, 07 Jul 2023 07:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688738688; x=1691330688;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B37Xu/vMDheXY8lYTD8GAgDOjIWMB+sxN84zK2+50sY=;
-        b=kawc8ItC9cmWzRfifiqLJicdU4cwbMtFuX0C94hJ6r94bmcZ3LDThbBK8XnDvkMNRw
-         7ph0D0wcaONyllwuoEScFdGhct+uQ6/l8hXZbyisQv0v8b9A0biQncanffq/EEdfIO/8
-         GarAfWrbW0fWOSbyyBtme6ocAs61DKtd/9Kpi6r+ZnodnmPAl/M/scOyA/6plRFYHsYK
-         oYjcNGIksvPGWYJoREiqoecQB5L4vYbdFF25ooHTU2nmIzXyPijePQ0bDQy6uiJmmg5t
-         SJqjnMHATQ9Upc6KXLxInRWu3p3NAxzV8EvrCen1ocTpiZ7phat+ymG88Hb/D+VxNGZz
-         atBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688738688; x=1691330688;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B37Xu/vMDheXY8lYTD8GAgDOjIWMB+sxN84zK2+50sY=;
-        b=dmMR3SwNYQKUUrf6zW5NwANkWFhKizOCFYMo5R9dxB3A8cQJnSW++N1gb1tcOnwBHr
-         sew8kyZL5UloPdNsXjlpXvj+E1A+f+1olXutlBw/KJPVM2bl7od7Y3BKhscVbmwA5gRl
-         QdkWuhhVg8oASPN9WXYC2EgW3ZWxGYsVyUic423YG29noIajnJwBF7igKmxras7z5e+7
-         OZB4LVvJ4ofToJAluMzlxkHqqmc3rZhVjrzsGtiO59Ki0kqCIkAFMhmxqkLhSjdotBg7
-         tS4I46XiYZl4KCjdQ5n70ZMZGJpd6CB2272HGfpRfNkZkqnRhJZLxjVBrKYfeMvZftfl
-         3Miw==
-X-Gm-Message-State: ABy/qLau9wE8Ji6pS1RAsQ8ssq5bKXNUX+nrIj7gPwmKRpFsroPLV6CW
-        ZCI/qkKypgYWG5xtMUr8UP5tHQ==
-X-Google-Smtp-Source: APBJJlFpNs0g5rZCoqmKKClxn6bLNNiD6cxfdIuVmomJm4irVq1SXMZY0nb6x1jaEozd+QSyScSGtQ==
-X-Received: by 2002:a2e:9c58:0:b0:2b6:e19e:b769 with SMTP id t24-20020a2e9c58000000b002b6e19eb769mr3551612ljj.49.1688738688394;
-        Fri, 07 Jul 2023 07:04:48 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:04:47 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-Subject: [PATCH 05/18] soc: bcm: Move power-domain drivers to the genpd dir
-Date:   Fri,  7 Jul 2023 16:04:21 +0200
-Message-Id: <20230707140434.723349-6-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230707140434.723349-1-ulf.hansson@linaro.org>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231616AbjGGOc4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 10:32:56 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7777E1FC4;
+        Fri,  7 Jul 2023 07:32:54 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id DF4AA5C0110;
+        Fri,  7 Jul 2023 10:32:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 07 Jul 2023 10:32:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688740373; x=1688826773; bh=a8
+        gC4VrFLmC/qpOerDNkuWSQ8w0qNylgReMLmB5sIDo=; b=d1BcLo8CSCj2vEu4sq
+        FKWaxyR2AN5b8VcvmmiC20KmbyIuYFF8AhTGijC4V0ua412/w5d/qLrDdg933k/f
+        usKCtYCCDApg+v87ENqGQ61nnkWgTQpV1Wb1AGsQvwW/fYJVjzQjLFMkKyeU0YOZ
+        s1hwmXO+RTft+W3JhiO6/m0TZDXug31wMUYR+VQEFI1sdjvIpxgueiDQt3xSFTG/
+        ttmShmncqLpqp6iGI3twYl2GhLT+c1ex4gsnYzuVSSIvDqPOAgHL6kYFr5CsYUOZ
+        NXbbLWdB7dAVRzLsfKXGFy7iz+vtg7g31z0DEWCa2cKD1agnmQIsieF+WVg0hT8I
+        p6/g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688740373; x=1688826773; bh=a8gC4VrFLmC/q
+        pOerDNkuWSQ8w0qNylgReMLmB5sIDo=; b=d/QtLAESgocsLBB4JMrqAXbDtF2bk
+        cDqM0ZS1FhJCAGj2VlmVZJjUbZgnxsZJpQcUu2tSdPq/99Dy3HaXJWYhGCOfNkx9
+        iuc2++SBlHplnSQHSdZvWdxQ6V2prPQdPcVg1kl6IN5npnoTIiadc3URbqXZh1fQ
+        zFPqbXVCnZz2CxKl82+xr0U79oV3dTYSRtJJFMYOrLFAFlayBYSKB+udQHm/OkHE
+        kBdRJACO/thHsOdY/rloq4gIMHf135R15M9Kt7/wo6CYV7qHAXRsxEnOBuuXWV63
+        OviduagelG0BPSEovsf162AQOJHo++PWkG7R6JjrnMWuQy8zxDzhlmTbw==
+X-ME-Sender: <xms:EiKoZGtXxcv48dTRTIIeJ8zLC1WMuKcLp_Cti7jnB55vTV9mea93bw>
+    <xme:EiKoZLd2KrjvC-pS6i8CyevFdZf0zZZhxjSpUGOSjopB-lpJavBT_b4l6OcXPBIQM
+    5dK8yBhXlP5mRVmiqM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddugdejjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:EiKoZBxO0aqWZ1EBdhkXXAoMHNpD0B1aYPO3vFtXpcqpB62RKYfzZw>
+    <xmx:EiKoZBPW_lXo_1nEnV_hmVIRAIcJg1hE_4dqDtbwOXBOHMw9puaQWQ>
+    <xmx:EiKoZG_8naHDpdvCKhjiB5IJ0nagswHWxs2OOcBlXT9OjmqZ9swtxg>
+    <xmx:FSKoZIHhGZqhs0ZSwGNE4lwq2tbt5vI87UoN8uZSekAHk-MBzJlbjQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 55D6AB60089; Fri,  7 Jul 2023 10:32:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <ff9bfcfa-fa3b-42d2-b429-059b5103bce2@app.fastmail.com>
+In-Reply-To: <87jzvbyh4p.fsf@minerva.mail-host-address-is-not-set>
+References: <20230707095415.1449376-1-arnd@kernel.org>
+ <20230707095415.1449376-2-arnd@kernel.org>
+ <87jzvbyh4p.fsf@minerva.mail-host-address-is-not-set>
+Date:   Fri, 07 Jul 2023 16:32:29 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Russell King" <linux@armlinux.org.uk>,
+        dri-devel@lists.freedesktop.org,
+        "Ard Biesheuvel" <ardb@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 2/4] vgacon: rework screen_info #ifdef checks
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-While moving the drivers, we end up with a directory for bcm63xx that only
-contains a Kconfig file, which seems a bit silly. Let's therefore also move
-the Kconfig options into the Kconfig file a directory above, as it allows
-us to drop the directory too.
+On Fri, Jul 7, 2023, at 15:40, Javier Martinez Canillas wrote:
+>> diff --git a/arch/ia64/kernel/setup.c b/arch/ia64/kernel/setup.c
+>> index 5a55ac82c13a4..0c09ff7fde46b 100644
+>> --- a/arch/ia64/kernel/setup.c
+>> +++ b/arch/ia64/kernel/setup.c
+>> @@ -86,9 +86,11 @@ EXPORT_SYMBOL(local_per_cpu_offset);
+>>  #endif
+>>  unsigned long ia64_cycles_per_usec;
+>>  struct ia64_boot_param *ia64_boot_param;
+>> +#if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_EFI)
+>>  struct screen_info screen_info;
+>
+> I think that only screen_info should be guarded by both symbols ?
+>
+>>  unsigned long vga_console_iobase;
+>
+> It seems this variable was never used since it was introduced by commit
+> 66b7f8a30437 ("[IA64-SGI] pcdp: add PCDP pci interface support") ?
+>
+>>  unsigned long vga_console_membase;
+>
+> And this is only used by mdacon (not supported by ia64), vgacon and
+> vga16fb (not supported by ia64 either).
+>
+> So this could just be guarded just by CONFIG_VGA_CONSOLE for ia64 ?
 
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Ray Jui <rjui@broadcom.com>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: <linux-mips@vger.kernel.org>
-Cc: <linux-rpi-kernel@lists.infradead.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- MAINTAINERS                                   |  4 ++--
- drivers/genpd/Makefile                        |  1 +
- drivers/genpd/bcm/Makefile                    |  5 +++++
- .../{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c  |  0
- drivers/{soc => genpd}/bcm/bcm2835-power.c    |  0
- .../bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c |  0
- .../{soc => genpd}/bcm/raspberrypi-power.c    |  0
- drivers/soc/bcm/Kconfig                       | 22 ++++++++++++++++++-
- drivers/soc/bcm/Makefile                      |  3 ---
- drivers/soc/bcm/bcm63xx/Kconfig               | 21 ------------------
- drivers/soc/bcm/bcm63xx/Makefile              |  3 ---
- 11 files changed, 29 insertions(+), 30 deletions(-)
- create mode 100644 drivers/genpd/bcm/Makefile
- rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c (100%)
- rename drivers/{soc => genpd}/bcm/bcm2835-power.c (100%)
- rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c (100%)
- rename drivers/{soc => genpd}/bcm/raspberrypi-power.c (100%)
- delete mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
- delete mode 100644 drivers/soc/bcm/bcm63xx/Makefile
+Right, I though about doing this more accurately, but in the end
+went for the simplest change rather than spending much more time
+trying to clean up the unused variables etc.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 98a6847c8c3b..9fad7f6033f4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4007,7 +4007,7 @@ F:	arch/mips/kernel/*bmips*
- F:	drivers/irqchip/irq-bcm63*
- F:	drivers/irqchip/irq-bcm7*
- F:	drivers/irqchip/irq-brcmstb*
--F:	drivers/soc/bcm/bcm63xx
-+F:	drivers/genpd/bcm/bcm63xx-power.c
- F:	include/linux/bcm963xx_nvram.h
- F:	include/linux/bcm963xx_tag.h
- 
-@@ -4222,7 +4222,7 @@ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
- T:	git https://github.com/broadcom/stblinux.git
--F:	drivers/soc/bcm/bcm63xx/bcm-pmb.c
-+F:	drivers/genpd/bcm/bcm-pmb.c
- F:	include/dt-bindings/soc/bcm-pmb.h
- 
- BROADCOM SPECIFIC AMBA DRIVER (BCMA)
-diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index 91d4a3808981..6b9e9fe907f3 100644
---- a/drivers/genpd/Makefile
-+++ b/drivers/genpd/Makefile
-@@ -2,3 +2,4 @@
- obj-y					+= actions/
- obj-y					+= amlogic/
- obj-y					+= apple/
-+obj-y					+= bcm/
-diff --git a/drivers/genpd/bcm/Makefile b/drivers/genpd/bcm/Makefile
-new file mode 100644
-index 000000000000..6bfbe4e4db13
---- /dev/null
-+++ b/drivers/genpd/bcm/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_BCM_PMB)			+= bcm-pmb.o
-+obj-$(CONFIG_BCM2835_POWER)		+= bcm2835-power.o
-+obj-$(CONFIG_BCM63XX_POWER)		+= bcm63xx-power.o
-+obj-$(CONFIG_RASPBERRYPI_POWER)		+= raspberrypi-power.o
-diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/genpd/bcm/bcm-pmb.c
-similarity index 100%
-rename from drivers/soc/bcm/bcm63xx/bcm-pmb.c
-rename to drivers/genpd/bcm/bcm-pmb.c
-diff --git a/drivers/soc/bcm/bcm2835-power.c b/drivers/genpd/bcm/bcm2835-power.c
-similarity index 100%
-rename from drivers/soc/bcm/bcm2835-power.c
-rename to drivers/genpd/bcm/bcm2835-power.c
-diff --git a/drivers/soc/bcm/bcm63xx/bcm63xx-power.c b/drivers/genpd/bcm/bcm63xx-power.c
-similarity index 100%
-rename from drivers/soc/bcm/bcm63xx/bcm63xx-power.c
-rename to drivers/genpd/bcm/bcm63xx-power.c
-diff --git a/drivers/soc/bcm/raspberrypi-power.c b/drivers/genpd/bcm/raspberrypi-power.c
-similarity index 100%
-rename from drivers/soc/bcm/raspberrypi-power.c
-rename to drivers/genpd/bcm/raspberrypi-power.c
-diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
-index 24f92a6e882a..f96906795fa6 100644
---- a/drivers/soc/bcm/Kconfig
-+++ b/drivers/soc/bcm/Kconfig
-@@ -42,7 +42,27 @@ config SOC_BRCMSTB
- 
- 	  If unsure, say N.
- 
--source "drivers/soc/bcm/bcm63xx/Kconfig"
-+config BCM_PMB
-+	bool "Broadcom PMB (Power Management Bus) driver"
-+	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
-+	default ARCH_BCMBCA
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the Broadcom's PMB (Power Management Bus) that
-+	  is used for disabling and enabling SoC devices.
-+
-+if SOC_BCM63XX
-+
-+config BCM63XX_POWER
-+	bool "BCM63xx power domain driver"
-+	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the BCM63xx power domains controller on
-+	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
-+
-+endif # SOC_BCM63XX
-+
- source "drivers/soc/bcm/brcmstb/Kconfig"
- 
- endmenu
-diff --git a/drivers/soc/bcm/Makefile b/drivers/soc/bcm/Makefile
-index 0f0efa28d92b..32424b1032c7 100644
---- a/drivers/soc/bcm/Makefile
-+++ b/drivers/soc/bcm/Makefile
-@@ -1,5 +1,2 @@
- # SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_BCM2835_POWER)	+= bcm2835-power.o
--obj-$(CONFIG_RASPBERRYPI_POWER)	+= raspberrypi-power.o
--obj-y				+= bcm63xx/
- obj-$(CONFIG_SOC_BRCMSTB)	+= brcmstb/
-diff --git a/drivers/soc/bcm/bcm63xx/Kconfig b/drivers/soc/bcm/bcm63xx/Kconfig
-deleted file mode 100644
-index 355c34482076..000000000000
---- a/drivers/soc/bcm/bcm63xx/Kconfig
-+++ /dev/null
-@@ -1,21 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--if SOC_BCM63XX
--
--config BCM63XX_POWER
--	bool "BCM63xx power domain driver"
--	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the BCM63xx power domains controller on
--	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
--
--endif # SOC_BCM63XX
--
--config BCM_PMB
--	bool "Broadcom PMB (Power Management Bus) driver"
--	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
--	default ARCH_BCMBCA
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the Broadcom's PMB (Power Management Bus) that
--	  is used for disabling and enabling SoC devices.
-diff --git a/drivers/soc/bcm/bcm63xx/Makefile b/drivers/soc/bcm/bcm63xx/Makefile
-deleted file mode 100644
-index 557eed3d67bd..000000000000
---- a/drivers/soc/bcm/bcm63xx/Makefile
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_BCM63XX_POWER) += bcm63xx-power.o
--obj-$(CONFIG_BCM_PMB)		+= bcm-pmb.o
--- 
-2.34.1
+Let me know if you'd prefer me to respin this part, otherwise
+I'd call the ia64 bit good enough for the purpose of the series.
 
+     Arnd
