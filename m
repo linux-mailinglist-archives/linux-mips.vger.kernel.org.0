@@ -2,156 +2,248 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7211B74B1F6
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 15:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1695074B286
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 16:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjGGNlX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jul 2023 09:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S232408AbjGGOFD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jul 2023 10:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbjGGNlU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 09:41:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D6F2699
-        for <linux-mips@vger.kernel.org>; Fri,  7 Jul 2023 06:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688737225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eSLQOQX2Flx1G07KYazrMVvBAcWU6hFPEM6DlSyIig8=;
-        b=eI7HLyTquJeltXAjZjlZzjfX1r7qoLqUZYvGh2P/pdIC8xRT8HT6aHAG6nCDCTCDAKQOob
-        deV/8z/8SxIHI5hfBWFQUbqzySdDDzn2lg6ngxmuOLEjH/5cdNgnoEqFfwLUO8+MeAxqmC
-        KvajGha9WdFbG/Wy6k8lEd72MypWH0g=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-520-kONXAyZ6N7C2jVn6Mkz6ag-1; Fri, 07 Jul 2023 09:40:24 -0400
-X-MC-Unique: kONXAyZ6N7C2jVn6Mkz6ag-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2f2981b8364so968092f8f.1
-        for <linux-mips@vger.kernel.org>; Fri, 07 Jul 2023 06:40:24 -0700 (PDT)
+        with ESMTP id S232577AbjGGOEw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 10:04:52 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B942105
+        for <linux-mips@vger.kernel.org>; Fri,  7 Jul 2023 07:04:50 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b700e85950so29085881fa.3
+        for <linux-mips@vger.kernel.org>; Fri, 07 Jul 2023 07:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688738688; x=1691330688;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B37Xu/vMDheXY8lYTD8GAgDOjIWMB+sxN84zK2+50sY=;
+        b=kawc8ItC9cmWzRfifiqLJicdU4cwbMtFuX0C94hJ6r94bmcZ3LDThbBK8XnDvkMNRw
+         7ph0D0wcaONyllwuoEScFdGhct+uQ6/l8hXZbyisQv0v8b9A0biQncanffq/EEdfIO/8
+         GarAfWrbW0fWOSbyyBtme6ocAs61DKtd/9Kpi6r+ZnodnmPAl/M/scOyA/6plRFYHsYK
+         oYjcNGIksvPGWYJoREiqoecQB5L4vYbdFF25ooHTU2nmIzXyPijePQ0bDQy6uiJmmg5t
+         SJqjnMHATQ9Upc6KXLxInRWu3p3NAxzV8EvrCen1ocTpiZ7phat+ymG88Hb/D+VxNGZz
+         atBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688737223; x=1691329223;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eSLQOQX2Flx1G07KYazrMVvBAcWU6hFPEM6DlSyIig8=;
-        b=D+rPnwxo2nFLEcGHCsvXkTjQgLtabEac2K1Pv0zIQvyAVYCYobPvtK0LBD8+Opl8bz
-         fJOX/I0orjuJEgKZY79r89wY8+j/0nKsv6O2vZjbBE3Lh+7N88QNvT5zL27yW6g03oey
-         QejgWoUZVsHqKC7yuDy4p7S2Xd9XV6NTAwjTGH/eS/JKrZ+Z5+PwXzHHVS3251LpRgXf
-         aWHHcWjkwHJofkfjRjd9vopSkkekIOidmd+S60+NxWKfb5AR3vIX0EqNRE0Fqm1/vw0C
-         H5d6Sdrp15STmCUbJJS21GizENCYAD9oX5VD7ACq8y4c5nRWX0yTAsot9U7hGEPnUMiC
-         9sRg==
-X-Gm-Message-State: ABy/qLZA51BeAZJkzet3UZ5041NkTKw+gTfSItulx+DJHYH4OKM3nQ8R
-        h2Fnea4o3w8OvMFKlsXlcZr/hximvGrpmI1IxYGGeBATCFeOeBINICPV4V4AVtJR1quB4B7S4N+
-        dLoyhY/nyVmRnS4Z6XaE1vQ==
-X-Received: by 2002:adf:fd84:0:b0:314:2c7a:d100 with SMTP id d4-20020adffd84000000b003142c7ad100mr3491306wrr.42.1688737223527;
-        Fri, 07 Jul 2023 06:40:23 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGembFVs9w4+Nx6kwExMzgs9gyKSxG86BN2Jn1gUhGo+dJC0cQ0C5x3R9/Olki3X8v+sW6RJQ==
-X-Received: by 2002:adf:fd84:0:b0:314:2c7a:d100 with SMTP id d4-20020adffd84000000b003142c7ad100mr3491295wrr.42.1688737223237;
-        Fri, 07 Jul 2023 06:40:23 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id x4-20020a5d60c4000000b003112ab916cdsm4482161wrt.73.2023.07.07.06.40.22
+        d=1e100.net; s=20221208; t=1688738688; x=1691330688;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B37Xu/vMDheXY8lYTD8GAgDOjIWMB+sxN84zK2+50sY=;
+        b=dmMR3SwNYQKUUrf6zW5NwANkWFhKizOCFYMo5R9dxB3A8cQJnSW++N1gb1tcOnwBHr
+         sew8kyZL5UloPdNsXjlpXvj+E1A+f+1olXutlBw/KJPVM2bl7od7Y3BKhscVbmwA5gRl
+         QdkWuhhVg8oASPN9WXYC2EgW3ZWxGYsVyUic423YG29noIajnJwBF7igKmxras7z5e+7
+         OZB4LVvJ4ofToJAluMzlxkHqqmc3rZhVjrzsGtiO59Ki0kqCIkAFMhmxqkLhSjdotBg7
+         tS4I46XiYZl4KCjdQ5n70ZMZGJpd6CB2272HGfpRfNkZkqnRhJZLxjVBrKYfeMvZftfl
+         3Miw==
+X-Gm-Message-State: ABy/qLau9wE8Ji6pS1RAsQ8ssq5bKXNUX+nrIj7gPwmKRpFsroPLV6CW
+        ZCI/qkKypgYWG5xtMUr8UP5tHQ==
+X-Google-Smtp-Source: APBJJlFpNs0g5rZCoqmKKClxn6bLNNiD6cxfdIuVmomJm4irVq1SXMZY0nb6x1jaEozd+QSyScSGtQ==
+X-Received: by 2002:a2e:9c58:0:b0:2b6:e19e:b769 with SMTP id t24-20020a2e9c58000000b002b6e19eb769mr3551612ljj.49.1688738688394;
+        Fri, 07 Jul 2023 07:04:48 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 06:40:23 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/4] vgacon: rework screen_info #ifdef checks
-In-Reply-To: <20230707095415.1449376-2-arnd@kernel.org>
-References: <20230707095415.1449376-1-arnd@kernel.org>
- <20230707095415.1449376-2-arnd@kernel.org>
-Date:   Fri, 07 Jul 2023 15:40:22 +0200
-Message-ID: <87jzvbyh4p.fsf@minerva.mail-host-address-is-not-set>
+        Fri, 07 Jul 2023 07:04:47 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+Subject: [PATCH 05/18] soc: bcm: Move power-domain drivers to the genpd dir
+Date:   Fri,  7 Jul 2023 16:04:21 +0200
+Message-Id: <20230707140434.723349-6-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230707140434.723349-1-ulf.hansson@linaro.org>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+While moving the drivers, we end up with a directory for bcm63xx that only
+contains a Kconfig file, which seems a bit silly. Let's therefore also move
+the Kconfig options into the Kconfig file a directory above, as it allows
+us to drop the directory too.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> On non-x86 architectures, the screen_info variable is generally only
-> used for the VGA console where supported, and in some cases the EFI
-> framebuffer or vga16fb.
->
-> Now that we have a definite list of which architectures actually use it
-> for what, use consistent #ifdef checks so the global variable is only
-> defined when it is actually used on those architectures.
->
-> On powerpc, there is no support for vgacon, but there is support for
-> vga16fb. Loongarch and riscv have no support for vgacon or vga16fb, but
-> they support EFI firmware, so only that needs to be checked, and the
-> initialization can be removed because that is handled by EFI.
-> IA64 has both vgacon and EFI.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <linux-rpi-kernel@lists.infradead.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ MAINTAINERS                                   |  4 ++--
+ drivers/genpd/Makefile                        |  1 +
+ drivers/genpd/bcm/Makefile                    |  5 +++++
+ .../{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c  |  0
+ drivers/{soc => genpd}/bcm/bcm2835-power.c    |  0
+ .../bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c |  0
+ .../{soc => genpd}/bcm/raspberrypi-power.c    |  0
+ drivers/soc/bcm/Kconfig                       | 22 ++++++++++++++++++-
+ drivers/soc/bcm/Makefile                      |  3 ---
+ drivers/soc/bcm/bcm63xx/Kconfig               | 21 ------------------
+ drivers/soc/bcm/bcm63xx/Makefile              |  3 ---
+ 11 files changed, 29 insertions(+), 30 deletions(-)
+ create mode 100644 drivers/genpd/bcm/Makefile
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c (100%)
+ rename drivers/{soc => genpd}/bcm/bcm2835-power.c (100%)
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c (100%)
+ rename drivers/{soc => genpd}/bcm/raspberrypi-power.c (100%)
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Makefile
 
-[...]
-
-> diff --git a/arch/ia64/kernel/setup.c b/arch/ia64/kernel/setup.c
-> index 5a55ac82c13a4..0c09ff7fde46b 100644
-> --- a/arch/ia64/kernel/setup.c
-> +++ b/arch/ia64/kernel/setup.c
-> @@ -86,9 +86,11 @@ EXPORT_SYMBOL(local_per_cpu_offset);
->  #endif
->  unsigned long ia64_cycles_per_usec;
->  struct ia64_boot_param *ia64_boot_param;
-> +#if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_EFI)
->  struct screen_info screen_info;
-
-I think that only screen_info should be guarded by both symbols ?
-
->  unsigned long vga_console_iobase;
-
-It seems this variable was never used since it was introduced by commit
-66b7f8a30437 ("[IA64-SGI] pcdp: add PCDP pci interface support") ?
-
->  unsigned long vga_console_membase;
-
-And this is only used by mdacon (not supported by ia64), vgacon and
-vga16fb (not supported by ia64 either).
-
-So this could just be guarded just by CONFIG_VGA_CONSOLE for ia64 ?
-
-The rest of the patch looks good to me.
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 98a6847c8c3b..9fad7f6033f4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4007,7 +4007,7 @@ F:	arch/mips/kernel/*bmips*
+ F:	drivers/irqchip/irq-bcm63*
+ F:	drivers/irqchip/irq-bcm7*
+ F:	drivers/irqchip/irq-brcmstb*
+-F:	drivers/soc/bcm/bcm63xx
++F:	drivers/genpd/bcm/bcm63xx-power.c
+ F:	include/linux/bcm963xx_nvram.h
+ F:	include/linux/bcm963xx_tag.h
+ 
+@@ -4222,7 +4222,7 @@ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ T:	git https://github.com/broadcom/stblinux.git
+-F:	drivers/soc/bcm/bcm63xx/bcm-pmb.c
++F:	drivers/genpd/bcm/bcm-pmb.c
+ F:	include/dt-bindings/soc/bcm-pmb.h
+ 
+ BROADCOM SPECIFIC AMBA DRIVER (BCMA)
+diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+index 91d4a3808981..6b9e9fe907f3 100644
+--- a/drivers/genpd/Makefile
++++ b/drivers/genpd/Makefile
+@@ -2,3 +2,4 @@
+ obj-y					+= actions/
+ obj-y					+= amlogic/
+ obj-y					+= apple/
++obj-y					+= bcm/
+diff --git a/drivers/genpd/bcm/Makefile b/drivers/genpd/bcm/Makefile
+new file mode 100644
+index 000000000000..6bfbe4e4db13
+--- /dev/null
++++ b/drivers/genpd/bcm/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_BCM_PMB)			+= bcm-pmb.o
++obj-$(CONFIG_BCM2835_POWER)		+= bcm2835-power.o
++obj-$(CONFIG_BCM63XX_POWER)		+= bcm63xx-power.o
++obj-$(CONFIG_RASPBERRYPI_POWER)		+= raspberrypi-power.o
+diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/genpd/bcm/bcm-pmb.c
+similarity index 100%
+rename from drivers/soc/bcm/bcm63xx/bcm-pmb.c
+rename to drivers/genpd/bcm/bcm-pmb.c
+diff --git a/drivers/soc/bcm/bcm2835-power.c b/drivers/genpd/bcm/bcm2835-power.c
+similarity index 100%
+rename from drivers/soc/bcm/bcm2835-power.c
+rename to drivers/genpd/bcm/bcm2835-power.c
+diff --git a/drivers/soc/bcm/bcm63xx/bcm63xx-power.c b/drivers/genpd/bcm/bcm63xx-power.c
+similarity index 100%
+rename from drivers/soc/bcm/bcm63xx/bcm63xx-power.c
+rename to drivers/genpd/bcm/bcm63xx-power.c
+diff --git a/drivers/soc/bcm/raspberrypi-power.c b/drivers/genpd/bcm/raspberrypi-power.c
+similarity index 100%
+rename from drivers/soc/bcm/raspberrypi-power.c
+rename to drivers/genpd/bcm/raspberrypi-power.c
+diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
+index 24f92a6e882a..f96906795fa6 100644
+--- a/drivers/soc/bcm/Kconfig
++++ b/drivers/soc/bcm/Kconfig
+@@ -42,7 +42,27 @@ config SOC_BRCMSTB
+ 
+ 	  If unsure, say N.
+ 
+-source "drivers/soc/bcm/bcm63xx/Kconfig"
++config BCM_PMB
++	bool "Broadcom PMB (Power Management Bus) driver"
++	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
++	default ARCH_BCMBCA
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the Broadcom's PMB (Power Management Bus) that
++	  is used for disabling and enabling SoC devices.
++
++if SOC_BCM63XX
++
++config BCM63XX_POWER
++	bool "BCM63xx power domain driver"
++	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the BCM63xx power domains controller on
++	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
++
++endif # SOC_BCM63XX
++
+ source "drivers/soc/bcm/brcmstb/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/soc/bcm/Makefile b/drivers/soc/bcm/Makefile
+index 0f0efa28d92b..32424b1032c7 100644
+--- a/drivers/soc/bcm/Makefile
++++ b/drivers/soc/bcm/Makefile
+@@ -1,5 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_BCM2835_POWER)	+= bcm2835-power.o
+-obj-$(CONFIG_RASPBERRYPI_POWER)	+= raspberrypi-power.o
+-obj-y				+= bcm63xx/
+ obj-$(CONFIG_SOC_BRCMSTB)	+= brcmstb/
+diff --git a/drivers/soc/bcm/bcm63xx/Kconfig b/drivers/soc/bcm/bcm63xx/Kconfig
+deleted file mode 100644
+index 355c34482076..000000000000
+--- a/drivers/soc/bcm/bcm63xx/Kconfig
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-if SOC_BCM63XX
+-
+-config BCM63XX_POWER
+-	bool "BCM63xx power domain driver"
+-	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the BCM63xx power domains controller on
+-	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
+-
+-endif # SOC_BCM63XX
+-
+-config BCM_PMB
+-	bool "Broadcom PMB (Power Management Bus) driver"
+-	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+-	default ARCH_BCMBCA
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the Broadcom's PMB (Power Management Bus) that
+-	  is used for disabling and enabling SoC devices.
+diff --git a/drivers/soc/bcm/bcm63xx/Makefile b/drivers/soc/bcm/bcm63xx/Makefile
+deleted file mode 100644
+index 557eed3d67bd..000000000000
+--- a/drivers/soc/bcm/bcm63xx/Makefile
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_BCM63XX_POWER) += bcm63xx-power.o
+-obj-$(CONFIG_BCM_PMB)		+= bcm-pmb.o
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.34.1
 
