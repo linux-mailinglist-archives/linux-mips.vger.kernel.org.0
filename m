@@ -2,109 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3781E74AD56
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 10:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA6F74ADC9
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 11:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjGGIuL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jul 2023 04:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S229572AbjGGJ3O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jul 2023 05:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjGGIuI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 04:50:08 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644782100
-        for <linux-mips@vger.kernel.org>; Fri,  7 Jul 2023 01:50:05 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-993a37b79e2so201605066b.1
-        for <linux-mips@vger.kernel.org>; Fri, 07 Jul 2023 01:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688719804; x=1691311804;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5RjK+qC2yMFJgjkKw6erEN3Jd2b9gaqG22ipLAdc2dU=;
-        b=XrbXfRmQCjUscV2Ba8aT4CeqI8SHGzhgNT19Z+cXVUVjsfjlY727uM5XgaL3/HGEmE
-         rincuPV1ve3upDuPmcKf8yyDZ0uYqQ0RgcFsz3NX051UPBbVCeG/wcrgU9jKo7ealzIF
-         FM0qSpBNBBwnXNaZMFUqTZnhoZ2vVMkDcoPBNiSUEvogy6JTo6ViMLgGEnZK5AtAJfUN
-         H+KmB832D8xMunS52RPmzM8geXB3umrm+7r7KDi4I/dGdIg0v8AXc6NCT68I8aIHJms6
-         zLIccr5zXTaQXVpoWOnsoxD2gaz+QSY9UbEMLWAKhEmS1P5om5naa7O7dZvbYo0reRWc
-         z2mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688719804; x=1691311804;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5RjK+qC2yMFJgjkKw6erEN3Jd2b9gaqG22ipLAdc2dU=;
-        b=MNzy9tZt8cbYEeG2yFAUG5s4xWsDjxHUQJXvEK8hUyeeWx3Sbv90FOW0CaQGK86U3J
-         46R2CQEiOVmJZLiGYL+dP6Oi0XE1CxD1L424lb1o/0WlEDP1K1EwK9JO4LTIuPxdJ1WZ
-         0RTIWHoLF0EYprNHjMDyc2bH3swHooov02in0u/YMpgONaq21sdhHp2I5hjnqUNdMByY
-         dkb1CoBtwtQtzL49yuu4Y7+b8Np7NMyJUoYI2q0lX9W/HvvNMFWWPkzVOfKqNRVUpkP+
-         SQ3dJbfCOPEQKPJL/N6PeSGvaTfmMlFVoiO+Y8BuZfQJ916olxY0zp+BVf6pf9KWFAXC
-         EFpw==
-X-Gm-Message-State: ABy/qLYsUPJ+9BwTSczK+crUt939O9TjkEAHuhyFJImHcTJ9BaMUb6sc
-        UI7CsEj8RkZYLVgDEwgH0QPy7Q==
-X-Google-Smtp-Source: APBJJlFoSNKdTxcrVTzHzXQ9XY797yl1F/eHgY+ESTfu/TLkIN4acobfLB5NWFomyTRDzX+c+XGX5Q==
-X-Received: by 2002:a17:906:5291:b0:973:e5d9:d6ff with SMTP id c17-20020a170906529100b00973e5d9d6ffmr2680060ejm.66.1688719803836;
-        Fri, 07 Jul 2023 01:50:03 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.215.192])
-        by smtp.gmail.com with ESMTPSA id v1-20020a170906b00100b00993a9a951fasm1933484ejy.11.2023.07.07.01.50.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 01:50:03 -0700 (PDT)
-Message-ID: <d662fe0e-e463-5c22-2e31-31aec6307c05@linaro.org>
-Date:   Fri, 7 Jul 2023 10:50:01 +0200
+        with ESMTP id S229636AbjGGJ3N (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 05:29:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443D81FED;
+        Fri,  7 Jul 2023 02:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C992D618DF;
+        Fri,  7 Jul 2023 09:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469D0C433C7;
+        Fri,  7 Jul 2023 09:29:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688722151;
+        bh=TiVqgBQxOT3C3TBkmM/c7nKqqaoif0rl2+UYbMz3sqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LyuLd0FCJEQhqnrVpquSVLKc/9uI0i7rdMICm0QZElUzRmgl1WAypdZRf644WG5w6
+         wVwwOe7uTbd6a5um1d6z2qgLJrXKCpq1rXMHNpxh0jP21HzLgs6LU7p19zMbzFotb4
+         nJtjTSe2HVhiChBbqKoLsix3YSP7/IVd7wy0lWd4=
+Date:   Fri, 7 Jul 2023 10:29:00 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "petr@tesarici.cz" <petr@tesarici.cz>
+Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
+ transient memory pool
+Message-ID: <2023070706-humbling-starfish-c68f@gregkh>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+ <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
+ <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <2023070626-boxcar-bubbly-471d@gregkh>
+ <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] MIPS: kvm: Fix build error with
- KVM_MIPS_DEBUG_COP0_COUNTERS enabled
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230706163610.106938-1-tsbogend@alpha.franken.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230706163610.106938-1-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/7/23 18:36, Thomas Bogendoerfer wrote:
-> Commit e4de20576986 ("MIPS: KVM: Fix NULL pointer dereference") missed
-> converting one place accessing cop0 registers, which results in a build
-> error, if KVM_MIPS_DEBUG_COP0_COUNTERS is enabled.
+On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrote:
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, July 6, 2023 1:07 AM
+> > 
+> > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) wrote:
+> > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday, June 27, 2023
+> > 2:54 AM
+> > > >
+> > > > Try to allocate a transient memory pool if no suitable slots can be found,
+> > > > except when allocating from a restricted pool. The transient pool is just
+> > > > enough big for this one bounce buffer. It is inserted into a per-device
+> > > > list of transient memory pools, and it is freed again when the bounce
+> > > > buffer is unmapped.
+> > > >
+> > > > Transient memory pools are kept in an RCU list. A memory barrier is
+> > > > required after adding a new entry, because any address within a transient
+> > > > buffer must be immediately recognized as belonging to the SWIOTLB, even if
+> > > > it is passed to another CPU.
+> > > >
+> > > > Deletion does not require any synchronization beyond RCU ordering
+> > > > guarantees. After a buffer is unmapped, its physical addresses may no
+> > > > longer be passed to the DMA API, so the memory range of the corresponding
+> > > > stale entry in the RCU list never matches. If the memory range gets
+> > > > allocated again, then it happens only after a RCU quiescent state.
+> > > >
+> > > > Since bounce buffers can now be allocated from different pools, add a
+> > > > parameter to swiotlb_alloc_pool() to let the caller know which memory pool
+> > > > is used. Add swiotlb_find_pool() to find the memory pool corresponding to
+> > > > an address. This function is now also used by is_swiotlb_buffer(), because
+> > > > a simple boundary check is no longer sufficient.
+> > > >
+> > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_alloc_pages(),
+> > > > simplified and enhanced to use coherent memory pools if needed.
+> > > >
+> > > > Note that this is not the most efficient way to provide a bounce buffer,
+> > > > but when a DMA buffer can't be mapped, something may (and will) actually
+> > > > break. At that point it is better to make an allocation, even if it may be
+> > > > an expensive operation.
+> > >
+> > > I continue to think about swiotlb memory management from the standpoint
+> > > of CoCo VMs that may be quite large with high network and storage loads.
+> > > These VMs are often running mission-critical workloads that can't tolerate
+> > > a bounce buffer allocation failure.  To prevent such failures, the swiotlb
+> > > memory size must be overly large, which wastes memory.
+> > 
+> > If "mission critical workloads" are in a vm that allowes overcommit and
+> > no control over other vms in that same system, then you have worse
+> > problems, sorry.
+> > 
+> > Just don't do that.
+> > 
 > 
-> Fixes: e4de20576986 ("MIPS: KVM: Fix NULL pointer dereference")
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->   arch/mips/kvm/stats.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> No, the cases I'm concerned about don't involve memory overcommit.
 > 
-> diff --git a/arch/mips/kvm/stats.c b/arch/mips/kvm/stats.c
-> index 53f851a61554..3e6682018fbe 100644
-> --- a/arch/mips/kvm/stats.c
-> +++ b/arch/mips/kvm/stats.c
-> @@ -54,9 +54,9 @@ void kvm_mips_dump_stats(struct kvm_vcpu *vcpu)
->   	kvm_info("\nKVM VCPU[%d] COP0 Access Profile:\n", vcpu->vcpu_id);
->   	for (i = 0; i < N_MIPS_COPROC_REGS; i++) {
->   		for (j = 0; j < N_MIPS_COPROC_SEL; j++) {
-> -			if (vcpu->arch.cop0->stat[i][j])
-> +			if (vcpu->arch.cop0.stat[i][j])
->   				kvm_info("%s[%d]: %lu\n", kvm_cop0_str[i], j,
-> -					 vcpu->arch.cop0->stat[i][j]);
-> +					 vcpu->arch.cop0.stat[i][j]);
->   		}
->   	}
->   #endif
+> CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current swiotlb
+> code in the Linux guest allocates a configurable, but fixed, amount of guest
+> memory at boot time for this purpose.  But it's hard to know how much
+> swiotlb bounce buffer memory will be needed to handle peak I/O loads.
+> This patch set does dynamic allocation of swiotlb bounce buffer memory,
+> which can help avoid needing to configure an overly large fixed size at boot.
 
-Oops, sorry I missed that :/
+But, as you point out, memory allocation can fail at runtime, so how can
+you "guarantee" that this will work properly anymore if you are going to
+make it dynamic?
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+confused,
 
+greg k-h
