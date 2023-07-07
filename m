@@ -2,99 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5ECC74AE2B
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 11:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CACC74AEAA
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 12:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjGGJyi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jul 2023 05:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S229775AbjGGKWV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jul 2023 06:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbjGGJyf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 05:54:35 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9811FC9;
-        Fri,  7 Jul 2023 02:54:31 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 15BFF5C00FE;
-        Fri,  7 Jul 2023 05:54:31 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 07 Jul 2023 05:54:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688723671; x=1688810071; bh=6X
-        C0Wg3ewP983KQo8iZVYJNXYqhyj/JCtouCPSrRJR8=; b=SiHISIGeprZW8TfAXm
-        scuKV2FcQSvigS+oHDr1qrsHA+cZ8xsBUy9NibPZKzcFtbUaQKsHl8D4ACfN4ZK2
-        RR5Pf/Q8ixQInXaGU299P/H1ZtITQQzaRJX1pWGvn3y/Uue0sbq7Mmo5bkN7L0aR
-        MJQbmVlFPI3Ic02b3ZC+WYpaO1oWSU9Be2mc3JUqIKJCRWf3AtIPufI+G4oe/z1p
-        ZAr3ft3JMUK6xobZSTIBfYOohdVJJnyYJu4DkBpPqqLZHvXarQRoYin1HXkbqQ8O
-        R+isPyFEQM5np2U+BQBLk5jHLnW7qNZPJyB9kjzyLJHa1Y5h8skufzr7BBoK8D+w
-        u4mA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688723671; x=1688810071; bh=6XC0Wg3ewP983
-        KQo8iZVYJNXYqhyj/JCtouCPSrRJR8=; b=otU0ea29ZNcdReu7aQRT+XjJV/YoC
-        PQ6SElyG6RSHMrhoITEVG8rrm0ECTIzGl7Ww1VYB4rQGhglPRC5e8hfj5gAbpx2f
-        wRsw+DWe437MdwxbA2JmYUXYnve0g4NNgaQx4WSCzOs1vkYPRTVKW7cAYlMEpDqg
-        BSUvzrP97YZRwueEltKqEVA9nPQ/uxzovIJmGRR8tp8hGBDWr0ToeyXIY8zDrK59
-        VkTYscq6juW+22/pqDYCYSYUznXN2k5U066fFlVKi/f701+Frtdie1fxYMkzw6R4
-        Pk7LPjM2yBbxW77AeiVqG7NLjETEe2NvJk/oGKZqu+HOLea9LUXay85vQ==
-X-ME-Sender: <xms:1OCnZD70dqB9vQoz6ajAH3tFzzeJWHRbtXSW2yCdwTIvKLdjRUbYPg>
-    <xme:1OCnZI7OM2d6eWnYmSJZUiRk_pd_2XPKp0ZLCGIvgygk3PxmKiwXOXQD08beRdRW1
-    6grwCMvIu2eKXULZLY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddugddvudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:1OCnZKfe6gKQbUt5HJGuarbSCpVB0h47GqtggPjidRh81zzxxLdyIQ>
-    <xmx:1OCnZEJD4prfrTYRJMjNAb5XU05ONXaiv7icxC-BNfPZcsYm0_xJAw>
-    <xmx:1OCnZHKz37MVzq28papqDe0ATgbaiAMjrgT_Yodb6JI5KAg_5mhzhA>
-    <xmx:1-CnZE4gQQBjWOms_HdHq7Ni3Zu17sB5gQd8fxfIgNtRgM8QDVtk5g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5ED25B60089; Fri,  7 Jul 2023 05:54:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <981234cb-5b23-4751-a539-918a686d526b@app.fastmail.com>
-In-Reply-To: <20230707095144.1378789-1-arnd@kernel.org>
-References: <20230707095144.1378789-1-arnd@kernel.org>
-Date:   Fri, 07 Jul 2023 11:54:07 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Arnd Bergmann" <arnd@kernel.org>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>
-Cc:     "Javier Martinez Canillas" <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Russell King" <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org,
-        "Ard Biesheuvel" <ardb@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/3] vgacon: rework screen_info #ifdef checks
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        with ESMTP id S229458AbjGGKWU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 06:22:20 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D61810B;
+        Fri,  7 Jul 2023 03:22:18 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 291D6EB4F0;
+        Fri,  7 Jul 2023 12:22:15 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1688725335; bh=R2JAn8dEc5t5IbxpMIYj+ROpC8mKUwi+oGPWhkhnmps=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hrw3hX5hun3YSXg/bR+StoUqmBtv5Sg4IUiJIG4MBvgSTT8nNjHLDBlwAxI/Bgus2
+         f++y7N3Z1Wa5LMZrneYAvSsBQ3NkH/xvR6QjWjMIveXWXfbNevXIqCBNV4YCOQjBAj
+         WECHj7caN3qm6AJ8He9i9tGPkhCGQg0Krp19h20yz99u5X+9BPg0Gdgz3R9hE7N5mn
+         ozvvrVEjkXoAMyYrINs49hiIRN1hd2XoGedS6hDK0kwmzglSNWF6XGZr8B7FmzvcZ4
+         80/N8K8H+Sxi8onYywDqbBt4L7jxPlco1/GoFG7/OVNeYT14QIYXOD4psk7JWBhyxJ
+         JNUUAHieg1MmQ==
+Date:   Fri, 7 Jul 2023 12:22:13 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
+ transient memory pool
+Message-ID: <20230707122213.3a7378b5@meshulam.tesarici.cz>
+In-Reply-To: <2023070706-humbling-starfish-c68f@gregkh>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+        <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
+        <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070626-boxcar-bubbly-471d@gregkh>
+        <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070706-humbling-starfish-c68f@gregkh>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -103,15 +84,92 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 7, 2023, at 11:50, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> On non-x86 architectures, the screen_info variable is generally only
-> used for the VGA console where supported, and in some cases the EFI
-> framebuffer or vga16fb.
->
+On Fri, 7 Jul 2023 10:29:00 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-This should have been patch 2/4, not 1/3, please ignore this one and
-look at the new version.
+> On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrote:
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, July 6, 2023 1:07 AM  
+> > > 
+> > > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) wrote:  
+> > > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday, June 27, 2023  
+> > > 2:54 AM  
+> > > > >
+> > > > > Try to allocate a transient memory pool if no suitable slots can be found,
+> > > > > except when allocating from a restricted pool. The transient pool is just
+> > > > > enough big for this one bounce buffer. It is inserted into a per-device
+> > > > > list of transient memory pools, and it is freed again when the bounce
+> > > > > buffer is unmapped.
+> > > > >
+> > > > > Transient memory pools are kept in an RCU list. A memory barrier is
+> > > > > required after adding a new entry, because any address within a transient
+> > > > > buffer must be immediately recognized as belonging to the SWIOTLB, even if
+> > > > > it is passed to another CPU.
+> > > > >
+> > > > > Deletion does not require any synchronization beyond RCU ordering
+> > > > > guarantees. After a buffer is unmapped, its physical addresses may no
+> > > > > longer be passed to the DMA API, so the memory range of the corresponding
+> > > > > stale entry in the RCU list never matches. If the memory range gets
+> > > > > allocated again, then it happens only after a RCU quiescent state.
+> > > > >
+> > > > > Since bounce buffers can now be allocated from different pools, add a
+> > > > > parameter to swiotlb_alloc_pool() to let the caller know which memory pool
+> > > > > is used. Add swiotlb_find_pool() to find the memory pool corresponding to
+> > > > > an address. This function is now also used by is_swiotlb_buffer(), because
+> > > > > a simple boundary check is no longer sufficient.
+> > > > >
+> > > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_alloc_pages(),
+> > > > > simplified and enhanced to use coherent memory pools if needed.
+> > > > >
+> > > > > Note that this is not the most efficient way to provide a bounce buffer,
+> > > > > but when a DMA buffer can't be mapped, something may (and will) actually
+> > > > > break. At that point it is better to make an allocation, even if it may be
+> > > > > an expensive operation.  
+> > > >
+> > > > I continue to think about swiotlb memory management from the standpoint
+> > > > of CoCo VMs that may be quite large with high network and storage loads.
+> > > > These VMs are often running mission-critical workloads that can't tolerate
+> > > > a bounce buffer allocation failure.  To prevent such failures, the swiotlb
+> > > > memory size must be overly large, which wastes memory.  
+> > > 
+> > > If "mission critical workloads" are in a vm that allowes overcommit and
+> > > no control over other vms in that same system, then you have worse
+> > > problems, sorry.
+> > > 
+> > > Just don't do that.
+> > >   
+> > 
+> > No, the cases I'm concerned about don't involve memory overcommit.
+> > 
+> > CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current swiotlb
+> > code in the Linux guest allocates a configurable, but fixed, amount of guest
+> > memory at boot time for this purpose.  But it's hard to know how much
+> > swiotlb bounce buffer memory will be needed to handle peak I/O loads.
+> > This patch set does dynamic allocation of swiotlb bounce buffer memory,
+> > which can help avoid needing to configure an overly large fixed size at boot.  
+> 
+> But, as you point out, memory allocation can fail at runtime, so how can
+> you "guarantee" that this will work properly anymore if you are going to
+> make it dynamic?
 
-      Arnd
+In general, there is no guarantee, of course, because bounce buffers
+may be requested from interrupt context. I believe Michael is looking
+for the SWIOTLB_MAY_SLEEP flag that was introduced in my v2 series, so
+new pools can be allocated with GFP_KERNEL instead of GFP_NOWAIT if
+possible, and then there is no need to dip into the coherent pool.
+
+Well, I have deliberately removed all complexities from my v3 series,
+but I have more WIP local topic branches in my local repo:
+
+- allow blocking allocations if possible
+- allocate a new pool before existing pools are full
+- free unused memory pools
+
+I can make a bigger series, or I can send another series as RFC if this
+is desired. ATM I don't feel confident enough that my v3 series will be
+accepted without major changes, so I haven't invested time into
+finalizing the other topic branches.
+
+@Michael: If you know that my plan is to introduce blocking allocations
+with a follow-up patch series, is the present approach acceptable?
+
+Petr T
