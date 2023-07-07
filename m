@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140FC74AE1E
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 11:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE4374AE3E
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 11:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjGGJwQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jul 2023 05:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S232882AbjGGJzo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jul 2023 05:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjGGJwP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 05:52:15 -0400
+        with ESMTP id S232881AbjGGJz1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 05:55:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C082EE72;
-        Fri,  7 Jul 2023 02:52:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F074213B;
+        Fri,  7 Jul 2023 02:55:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2653618E5;
-        Fri,  7 Jul 2023 09:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0AAC433C7;
-        Fri,  7 Jul 2023 09:51:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA732618E8;
+        Fri,  7 Jul 2023 09:55:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8166EC433C8;
+        Fri,  7 Jul 2023 09:55:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688723521;
+        s=k20201202; t=1688723722;
         bh=yMWBZi7OWijpDNbPPVU11zT7Ofk6CC1w0krvsGmTO/Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z07rgcHB9zc3yULQo5sHhLIv44yzQod9z2mXK8VAD2ky6t/sKWYV2RwpBSfsckmOs
-         agjSwU4wXzrOoatycsFhpr/tbEEL/fP69Db446Ge2rJz9mePLl3mySa8jKvq+GyiTu
-         4KWv6txOUukHX9wFw6zAalyyt0ZA7Ebj/AVQMqWWhUVheF2F5R/fyMF7TpsVLgmD7X
-         shT+2s00P6kEvLIw1WqbApGnI1TejLDoiQ7J2yAN5K/Ulrz2OokpUU5d5LLVQA/dtl
-         ZJiLtsDua4qi8vlm2W12s8HzAd4X6pykjOz3jsL1fYX2KFgKUbi6PXqdCCzGX7LPBk
-         1qapI2AldOYXw==
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Bx40Rryc7emWROVA1OI+Fp/RxUN6o7E4nHT9VT58WXacXf2ozSjk5VBIyhlsgZAkr
+         u2TwwPGKbwSH1Jn686GPOGDYyzRhNSXdfDbh0GX7fiSd/Q8SoLRWm81bbNGpy2LvUJ
+         PhRsNMOwag/zbLeNtjsqSzeLonM1K0hAqZM1i3o1LWrschS5ccK6ArPWK+mDI+V+Cg
+         r66yYBAJk5so9iN518mwMOg4/lTZpFgPvXcJ4Lf5e5MhMX/jyTnwECbxcWs7hobvgk
+         c3viAIB8beT+3liXAVktBBRA7/rqn7zOv0uUvmp3KfvN6KOM6o747qiFkc1T1A7sWK
+         NKZl3mjfiXXJw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Thomas Zimmermann <tzimmermann@suse.de>
 Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
@@ -43,6 +43,7 @@ Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
         Richard Henderson <richard.henderson@linaro.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -54,10 +55,12 @@ Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
         linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH 1/3] vgacon: rework screen_info #ifdef checks
-Date:   Fri,  7 Jul 2023 11:50:38 +0200
-Message-Id: <20230707095144.1378789-1-arnd@kernel.org>
+Subject: [PATCH 2/4] vgacon: rework screen_info #ifdef checks
+Date:   Fri,  7 Jul 2023 11:52:24 +0200
+Message-Id: <20230707095415.1449376-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
+References: <20230707095415.1449376-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
