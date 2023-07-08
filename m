@@ -2,126 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF28B74B444
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jul 2023 17:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D6E74BCF4
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Jul 2023 11:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbjGGP2L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jul 2023 11:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S230440AbjGHJBO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Jul 2023 05:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjGGP15 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jul 2023 11:27:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCBF212D
-        for <linux-mips@vger.kernel.org>; Fri,  7 Jul 2023 08:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688743627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+8qlgKJYI7kB6D1e5SNd04VHZ2yM21oq3nfTt/gANL8=;
-        b=Xp3V7QpxR0t4kn3riQcIygCunUkXwI6NZ3Tna1R1/eSSKIttUgnUBIEMa0bUEAsweRM2gc
-        U6nnWomAy9UZxVmI7MDDjcPICPUqvUyj2cWWhWFPcUxqtL/gbiqKCzm2QxuPCdKnlNpwQG
-        VW5QSR7ucZvmaJXYRS7+9Gx7xwPi09M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-75-ZDyvJjCFMfCKP1RODq72iQ-1; Fri, 07 Jul 2023 11:27:05 -0400
-X-MC-Unique: ZDyvJjCFMfCKP1RODq72iQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fbb34f7224so12206385e9.2
-        for <linux-mips@vger.kernel.org>; Fri, 07 Jul 2023 08:27:05 -0700 (PDT)
+        with ESMTP id S229496AbjGHJBN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Jul 2023 05:01:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7631723;
+        Sat,  8 Jul 2023 02:01:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-992acf67388so308664766b.1;
+        Sat, 08 Jul 2023 02:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688806870; x=1691398870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LsGY/iGtzaIgMwA9b3Ok3/pViuvT9eB2lCiEe6DAXmw=;
+        b=ZC9DXKQ4BCjmzF3p8pBZiMSzsDXlNUajNpgzbgfdEtdK3LaC1ilz7ERZEOO3wEXYtO
+         nedwYopczXsFZFxEDFH56U4HhmY5nnWxnzRiWbwLKPslIkGvcrut7zp8pUyBFf1lId5n
+         t+Sy72MHM4qeyZXeDmnZQiqzMVSqYXjlzIHl1tha3BDw4CVjC4BknFu1dC03RFTVkiTs
+         KqunWm00CvMHfOH655Q3VrboGu0bCWdEfUt4tqQ7Mlrf8rdHcpA+7iVyQv+orO/BOef6
+         ZFNyvFHHjxsMWN6gG5EXxKEDP4L3QsRDvTWrnbUSFuGPHmIuWV1piHPT+lOx9nbeoLla
+         d20w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688743624; x=1691335624;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8qlgKJYI7kB6D1e5SNd04VHZ2yM21oq3nfTt/gANL8=;
-        b=NhLFWMpOW26Hhye8yUYTbG58w/xxn544jPHGsKkAeify4uJi70AA6SvniCFZt8PTgO
-         i9bCsfM+R7KBwIGL6cBOHt9XUDzg7M6cSpgq0jMElrDWEk3J1mtHWPnjswBUkTZYh2gq
-         lK/ie2S0fGrPxVVyv7DMX9wraDQoCEghVue7N8hpLUIjaEbUOYlrtnFBQF3QI/NYqaCs
-         XO5/W+EupKvJRNbvhXQOzdSEo/oI/mAWee4iSRaUUVbQk7yxSQJzzE5l6NYvABlACylM
-         04/MdjJPaYaY2TP0du6VhwooiOslwS7SWCn3Bpw2cmL7ncjHCscpQ+NhSlypE6l32V8l
-         Rf3A==
-X-Gm-Message-State: ABy/qLYiTJaIk3OWVNuHsMGLZU+oJexlIkkGD7rek9xU8VDL+i+gfE74
-        hMkBlw/Ckaru/GZOS6j6bz6wk+xs6O1tZ3dXk55F1jPmYRu6Pa1kLguOdrK6hIIkGmlDuneEHyM
-        rQSZarCoIIkCy5epSHYpGvA==
-X-Received: by 2002:adf:f052:0:b0:30a:a15d:eb2f with SMTP id t18-20020adff052000000b0030aa15deb2fmr4668085wro.3.1688743624748;
-        Fri, 07 Jul 2023 08:27:04 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGmxd1jbrrvV1R0iu/TeFKW/e1nuXfI0DnXijMIXAlyALphvzgzqltgfOe8J565vUOEzxyvoA==
-X-Received: by 2002:adf:f052:0:b0:30a:a15d:eb2f with SMTP id t18-20020adff052000000b0030aa15deb2fmr4668074wro.3.1688743624480;
-        Fri, 07 Jul 2023 08:27:04 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bl1-20020adfe241000000b003143c9beeaesm4711005wrb.44.2023.07.07.08.27.04
+        d=1e100.net; s=20221208; t=1688806870; x=1691398870;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LsGY/iGtzaIgMwA9b3Ok3/pViuvT9eB2lCiEe6DAXmw=;
+        b=TLLGtG6TKlXAfecn4KZQ5gLROpWGt1BEN0KBzKHUmUi0v12TDIrOEinO6HPMJIODFL
+         U1cTYqCPvgFXJpYzqSGWQSsvbNPvzbQ0z71le217omS2Umf1U22jnshgXyeEmwmN2Ysw
+         jzCqjRapERz8z+o5ctUH0X+3Rpf5nJ6lVhL8GuNIYKH7/YdZVrLZhSd4cHtdtb8S7EtW
+         ULXpt02K5qz+UAp52FT4TBk4NT7/cHhl2FXs7FWh0JjRtbeTrAQic+A7B5jLPN1k/rzy
+         C2FOTgOsCkGojpforOyiZLwtn1xBbns0X0LelZQlBDJ+MCaabxNtBprHIoCPg6mksSk6
+         qkTw==
+X-Gm-Message-State: ABy/qLY1YLWQRIa0FezQ5blGh7rBXEN+1wGdWXdkiFjNUj7ABAAKB0zC
+        Hpw2Sh88zpW0Cc4jxVTZ0jM=
+X-Google-Smtp-Source: APBJJlGWA9cXPwJQzLfRKpd7yjMu6208psGsPf4ABVaoF4bcrbXZqLcg/CAKOOeOxS8x9SRa1CJCVQ==
+X-Received: by 2002:a17:906:3c46:b0:98d:d6b2:3377 with SMTP id i6-20020a1709063c4600b0098dd6b23377mr5344497ejg.30.1688806870400;
+        Sat, 08 Jul 2023 02:01:10 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id g10-20020a17090613ca00b00992ae4cf3c1sm3204313ejc.186.2023.07.08.02.01.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 08:27:04 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
+        Sat, 08 Jul 2023 02:01:09 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Charlemagne Lasse <charlemagnelasse@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/4] vgacon: rework screen_info #ifdef checks
-In-Reply-To: <ff9bfcfa-fa3b-42d2-b429-059b5103bce2@app.fastmail.com>
-References: <20230707095415.1449376-1-arnd@kernel.org>
- <20230707095415.1449376-2-arnd@kernel.org>
- <87jzvbyh4p.fsf@minerva.mail-host-address-is-not-set>
- <ff9bfcfa-fa3b-42d2-b429-059b5103bce2@app.fastmail.com>
-Date:   Fri, 07 Jul 2023 17:27:03 +0200
-Message-ID: <87bkgnyc6w.fsf@minerva.mail-host-address-is-not-set>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH 1/2] locking/arch: Avoid variable shadowing in local_try_cmpxchg()
+Date:   Sat,  8 Jul 2023 11:00:36 +0200
+Message-ID: <20230708090048.63046-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
+Several architectures define arch_try_local_cmpxchg macro using
+internal temporary variables named ___old, __old or _old. Remove
+temporary varible in local_try_cmpxchg to avoid variable shadowing.
 
-> On Fri, Jul 7, 2023, at 15:40, Javier Martinez Canillas wrote:
+No functional change intended.
 
-[...]
+Fixes: d994f2c8e241 ("locking/arch: Wire up local_try_cmpxchg()")
+Reported-by: Charlemagne Lasse <charlemagnelasse@gmail.com>
+Closes: https://lore.kernel.org/lkml/CAFGhKbyxtuk=LoW-E3yLXgcmR93m+Dfo5-u9oQA_YC5Fcy_t9g@mail.gmail.com/
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jun Yi <yijun@loongson.cn>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/loongarch/include/asm/local.h | 4 ++--
+ arch/mips/include/asm/local.h      | 4 ++--
+ arch/x86/include/asm/local.h       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
->> And this is only used by mdacon (not supported by ia64), vgacon and
->> vga16fb (not supported by ia64 either).
->>
->> So this could just be guarded just by CONFIG_VGA_CONSOLE for ia64 ?
->
-> Right, I though about doing this more accurately, but in the end
-> went for the simplest change rather than spending much more time
-> trying to clean up the unused variables etc.
->
-> Let me know if you'd prefer me to respin this part, otherwise
-> I'd call the ia64 bit good enough for the purpose of the series.
->
-
-No need to re-spin, agreed that makes sense to keep it simpler.
-
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 83e995b30e47..c49675852bdc 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -63,8 +63,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index 5daf6fe8e3e9..e6ae3df0349d 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -101,8 +101,8 @@ static __inline__ long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
+diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+index 56d4ef604b91..635132a12778 100644
+--- a/arch/x86/include/asm/local.h
++++ b/arch/x86/include/asm/local.h
+@@ -127,8 +127,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
+ 
+ static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+ {
+-	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
+-	return try_cmpxchg_local(&l->a.counter, __old, new);
++	return try_cmpxchg_local(&l->a.counter,
++				 (typeof(l->a.counter) *) old, new);
+ }
+ 
+ /* Always has a lock prefix */
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.41.0
 
