@@ -2,94 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6185374C4AE
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Jul 2023 16:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA6874C6D4
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Jul 2023 19:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjGIOT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jul 2023 10:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S232159AbjGIRqh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Jul 2023 13:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjGIOT6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jul 2023 10:19:58 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D406D3
-        for <linux-mips@vger.kernel.org>; Sun,  9 Jul 2023 07:19:56 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QzTmR1bWDzBRmXt
-        for <linux-mips@vger.kernel.org>; Sun,  9 Jul 2023 22:19:51 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1688912391; x=1691504392; bh=7eoWH2OhnKn9YKT20iRjoC4FMLZ
-        NE5srvIsHhiRwjVc=; b=lpwIuW/GOLf76Y0eMfFP1XXKE4yowGuCkvkmSXVmlmG
-        s0B1Xh0WXpReF2S6ekzahDIBWZeEwgTih4UuUo/3MeSDuBUnF3G4msiKsUwQFi1a
-        xhq25voU7zTyP1fRr6gAnCa0/SFGAJOeEoObuqGwE/AJb1ytqrLU2fI0z8p+wASj
-        Z18LgoY5up+4EHSezFTeV9qIbKCeSjfQJZdb95ogg3dcfFj8NIhIRPwnitgSOmzy
-        Oa2Edj/Q+Gw6phNmSFLUulJXaVZwDSWy210g5isgjVyzqQumI3jhRsNf0+3ndw8M
-        1RaeBCMuEuqhgG4RAEvCWH8ZpBoK6GwbS67CbNtni9g==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id x2jqKVGDnG3L for <linux-mips@vger.kernel.org>;
-        Sun,  9 Jul 2023 22:19:51 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QzTmQ6jYPzBRYfX;
-        Sun,  9 Jul 2023 22:19:50 +0800 (CST)
-MIME-Version: 1.0
-Date:   Sun, 09 Jul 2023 22:19:50 +0800
-From:   xuanzhenggang001@208suo.com
-To:     tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: prefer 'unsigned int' to bare use of 'unsigned'
-In-Reply-To: <20230709141701.16324-1-denghuilong@cdjrlc.com>
-References: <20230709141701.16324-1-denghuilong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <e30eb541f2fc615b264a70af2f40a5f9@208suo.com>
-X-Sender: xuanzhenggang001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231920AbjGIRqg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jul 2023 13:46:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798FB107;
+        Sun,  9 Jul 2023 10:46:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C04860C17;
+        Sun,  9 Jul 2023 17:46:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 71B87C433CA;
+        Sun,  9 Jul 2023 17:46:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688924794;
+        bh=4WjXO1MvNfhzJmghOdRqOlpuOXX4aP6smlx1ETAuJUI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=tlEtwFHSenoUnlO9Gka41AQ7/giqkgbD7xZmZCAgNjqXshGZX3SWX0X+Fedc8Z8X0
+         vP9iyIfSFLdmUQ15cn3Xj8kLuA0P4chiTa/z/1C/UkLKYh63ruax1qvUc/EwHV4mzc
+         kqdz/GOvH9g/ovjcqUCeBqnk7pQkCfoJwsFEfJtKq7Jrftgj4LTTJq6g08FSOLVuyA
+         NSwUHKeEECEoVXDXdwt6YT6XBm5tBM63zAeqZKLJWjI1MpUIC/0vBP9uM2HS/Y2TtL
+         69dkSbANRFsBDQUXUZWI9TG5bVqMInmAbfLO894nCyMuRhn4axg6x5a9suFC7xYe9n
+         ixbkEeulKsj0g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60258C4167B;
+        Sun,  9 Jul 2023 17:46:34 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZKpkUhSd/GGm37IM@alpha.franken.de>
+References: <ZKpkUhSd/GGm37IM@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZKpkUhSd/GGm37IM@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5_1
+X-PR-Tracked-Commit-Id: 3a6dbb691782e88e07e5c70b327495dbd58a2e7f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 74099e20348e84e62b5ea6ef270f91db48bc1352
+Message-Id: <168892479439.9789.17791110295946119612.pr-tracker-bot@kernel.org>
+Date:   Sun, 09 Jul 2023 17:46:34 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Fix the following warnings reported by checkpatch:
+The pull request you sent on Sun, 9 Jul 2023 09:40:02 +0200:
 
-arch/mips/kernel/linux32.c:128: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
-arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
-arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
-arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
-use of 'unsigned'
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5_1
 
-Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
----
-  arch/mips/kernel/linux32.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/74099e20348e84e62b5ea6ef270f91db48bc1352
 
-diff --git a/arch/mips/kernel/linux32.c b/arch/mips/kernel/linux32.c
-index 6b61be486303..4bd52b38dd00 100644
---- a/arch/mips/kernel/linux32.c
-+++ b/arch/mips/kernel/linux32.c
-@@ -125,8 +125,8 @@ asmlinkage long sys32_fadvise64_64(int fd, int 
-__pad,
-              flags);
-  }
+Thank you!
 
--asmlinkage long sys32_fallocate(int fd, int mode, unsigned offset_a2,
--    unsigned offset_a3, unsigned len_a4, unsigned len_a5)
-+asmlinkage long sys32_fallocate(int fd, int mode, unsigned int 
-offset_a2,
-+    unsigned int offset_a3, unsigned int len_a4, unsigned int len_a5)
-  {
-      return ksys_fallocate(fd, mode, merge_64(offset_a2, offset_a3),
-                    merge_64(len_a4, len_a5));
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
