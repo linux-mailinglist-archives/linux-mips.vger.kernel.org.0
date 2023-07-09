@@ -2,81 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0342374C178
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Jul 2023 09:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6185374C4AE
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Jul 2023 16:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjGIHkN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jul 2023 03:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S230091AbjGIOT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Jul 2023 10:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjGIHkN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jul 2023 03:40:13 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6414EE46;
-        Sun,  9 Jul 2023 00:40:10 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qIP1d-0000bE-00; Sun, 09 Jul 2023 09:40:09 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 49137C01C1; Sun,  9 Jul 2023 09:40:02 +0200 (CEST)
-Date:   Sun, 9 Jul 2023 09:40:02 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v6.5
-Message-ID: <ZKpkUhSd/GGm37IM@alpha.franken.de>
+        with ESMTP id S229658AbjGIOT6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jul 2023 10:19:58 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D406D3
+        for <linux-mips@vger.kernel.org>; Sun,  9 Jul 2023 07:19:56 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QzTmR1bWDzBRmXt
+        for <linux-mips@vger.kernel.org>; Sun,  9 Jul 2023 22:19:51 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1688912391; x=1691504392; bh=7eoWH2OhnKn9YKT20iRjoC4FMLZ
+        NE5srvIsHhiRwjVc=; b=lpwIuW/GOLf76Y0eMfFP1XXKE4yowGuCkvkmSXVmlmG
+        s0B1Xh0WXpReF2S6ekzahDIBWZeEwgTih4UuUo/3MeSDuBUnF3G4msiKsUwQFi1a
+        xhq25voU7zTyP1fRr6gAnCa0/SFGAJOeEoObuqGwE/AJb1ytqrLU2fI0z8p+wASj
+        Z18LgoY5up+4EHSezFTeV9qIbKCeSjfQJZdb95ogg3dcfFj8NIhIRPwnitgSOmzy
+        Oa2Edj/Q+Gw6phNmSFLUulJXaVZwDSWy210g5isgjVyzqQumI3jhRsNf0+3ndw8M
+        1RaeBCMuEuqhgG4RAEvCWH8ZpBoK6GwbS67CbNtni9g==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id x2jqKVGDnG3L for <linux-mips@vger.kernel.org>;
+        Sun,  9 Jul 2023 22:19:51 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QzTmQ6jYPzBRYfX;
+        Sun,  9 Jul 2023 22:19:50 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 09 Jul 2023 22:19:50 +0800
+From:   xuanzhenggang001@208suo.com
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: prefer 'unsigned int' to bare use of 'unsigned'
+In-Reply-To: <20230709141701.16324-1-denghuilong@cdjrlc.com>
+References: <20230709141701.16324-1-denghuilong@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <e30eb541f2fc615b264a70af2f40a5f9@208suo.com>
+X-Sender: xuanzhenggang001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit e47084e116fccaa43644360d7c0b997979abce3e:
+Fix the following warnings reported by checkpatch:
 
-  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000 (2023-06-26 09:18:43 +0200)
+arch/mips/kernel/linux32.c:128: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
+arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
+arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
+arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
 
-are available in the Git repository at:
+Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
+---
+  arch/mips/kernel/linux32.c | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5_1
+diff --git a/arch/mips/kernel/linux32.c b/arch/mips/kernel/linux32.c
+index 6b61be486303..4bd52b38dd00 100644
+--- a/arch/mips/kernel/linux32.c
++++ b/arch/mips/kernel/linux32.c
+@@ -125,8 +125,8 @@ asmlinkage long sys32_fadvise64_64(int fd, int 
+__pad,
+              flags);
+  }
 
-for you to fetch changes up to 3a6dbb691782e88e07e5c70b327495dbd58a2e7f:
-
-  MIPS: kvm: Fix build error with KVM_MIPS_DEBUG_COP0_COUNTERS enabled (2023-07-07 14:43:01 +0200)
-
-----------------------------------------------------------------
-- fixes for KVM
-- fix for loongson build and cpu probing
-- DT fixes
-
-----------------------------------------------------------------
-Huacai Chen (3):
-      MIPS: Loongson: Fix cpu_probe_loongson() again
-      MIPS: KVM: Fix NULL pointer dereference
-      MIPS: Loongson: Fix build error when make modules_install
-
-Krzysztof Kozlowski (1):
-      MIPS: dts: add missing space before {
-
-Thomas Bogendoerfer (1):
-      MIPS: kvm: Fix build error with KVM_MIPS_DEBUG_COP0_COUNTERS enabled
-
- arch/mips/Makefile                         | 10 +++-------
- arch/mips/boot/dts/mscc/serval_common.dtsi |  2 +-
- arch/mips/boot/dts/pic32/pic32mzda.dtsi    |  2 +-
- arch/mips/include/asm/kvm_host.h           |  6 +++---
- arch/mips/kernel/cpu-probe.c               |  9 +++------
- arch/mips/kvm/emulate.c                    | 22 +++++++++++-----------
- arch/mips/kvm/mips.c                       | 16 ++++++++--------
- arch/mips/kvm/stats.c                      |  4 ++--
- arch/mips/kvm/trace.h                      |  8 ++++----
- arch/mips/kvm/vz.c                         | 20 ++++++++++----------
- 10 files changed, 46 insertions(+), 53 deletions(-)
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+-asmlinkage long sys32_fallocate(int fd, int mode, unsigned offset_a2,
+-    unsigned offset_a3, unsigned len_a4, unsigned len_a5)
++asmlinkage long sys32_fallocate(int fd, int mode, unsigned int 
+offset_a2,
++    unsigned int offset_a3, unsigned int len_a4, unsigned int len_a5)
+  {
+      return ksys_fallocate(fd, mode, merge_64(offset_a2, offset_a3),
+                    merge_64(len_a4, len_a5));
