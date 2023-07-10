@@ -2,282 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4A974D1C8
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jul 2023 11:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A5774D71E
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jul 2023 15:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbjGJJj3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jul 2023 05:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S230479AbjGJNME (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jul 2023 09:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjGJJjD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jul 2023 05:39:03 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3619358C;
-        Mon, 10 Jul 2023 02:36:46 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id E30F414808A;
-        Mon, 10 Jul 2023 11:36:19 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1688981780; bh=cEGhRoXPGRpwdgEcYnOlQCfMzy6z9NfW6eHFlWupbSY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XABk4b2xj/95NSII8KdLFD9UXbqReOD/JSMT78/awbRfpUBqfGBkx8UaOP7uLhMBC
-         3ilozKe2ETT4f5Fu81wNHDCN07rfMRv27v/9Xz75qERHzeG33+YIPLfvMTvoepShXB
-         bp2X4b8fPNU/Y7K2HLpKLrrq+yf2U2JAokof6WBFlaoG05B6pU1H78/xgPW15MdaqE
-         BfIGVqnvqysxdQ4LOZdewoT61n6Z6aso0jS/C+m9Ibd4l2WgvIliFFmHeTIN46rnAB
-         VG7cMrMlXNhKuXURvWmxWocykbHhVETgX2QSYY2w6dFYQnLEHCYsWEc7f2hvRbUR7/
-         o2NH4pbmYxXYQ==
-Date:   Mon, 10 Jul 2023 11:36:18 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        with ESMTP id S231176AbjGJNL5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jul 2023 09:11:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28EB194;
+        Mon, 10 Jul 2023 06:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688994704; x=1720530704;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DJgY4ciUiCYZnuYn9MihHuASvS84fRZSA2ENwfBYIiU=;
+  b=LUorezlukmWp3Vh4ech/a7g+ulF1IxEc7VJO5c+BGVmDUff7pA9Ukgwn
+   uGkuz3F/rm22RAmzHM4vCHPV9dLIQ4meXDXdIaujYCcF5+tCUIgNa6dGV
+   D0htRAFM887s4Xpu6e6pDt+Ply7H+EAhVxR6jzxmY2icYrnBITrvNAJzW
+   SeUR43FgYoMxeqprniKUa+dV2dRp0Q5lFgO6xqRW7Ok13DC64PtjBDK4J
+   xMxQIL6gJsLp2fQjCd81XyQlUjyPfJM/3EtscKgpPh/qT36BFj+jiXE7v
+   xUW8m48FSiiaKlv5VwSgsCIcuAm7ioB8/5YzpVCAq/VM0MIfx61lf/w+i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="344665577"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="344665577"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 06:11:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="697985342"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="697985342"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2023 06:11:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1152F1FC; Mon, 10 Jul 2023 16:11:44 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
- transient memory pool
-Message-ID: <20230710113618.2038e033@meshulam.tesarici.cz>
-In-Reply-To: <BYAPR21MB1688D3AC0C094420733717C4D732A@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
-        <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
-        <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-        <2023070626-boxcar-bubbly-471d@gregkh>
-        <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-        <2023070706-humbling-starfish-c68f@gregkh>
-        <20230707122213.3a7378b5@meshulam.tesarici.cz>
-        <BYAPR21MB1688D3AC0C094420733717C4D732A@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v1 1/1] range.h: Move resource API and constant to respective headers
+Date:   Mon, 10 Jul 2023 16:11:42 +0300
+Message-Id: <20230710131142.32284-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 8 Jul 2023 15:18:32 +0000
-"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
+range.h works with struct range data type. The resource_size_t
+is an alien here. Move the related pieces to the respective
+headers and rename MAX_RESOURCE using pattern ${TYPE}_MAX.
 
-> From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> Sent: Friday, July 7, 202=
-3 3:22 AM
-> >=20
-> > On Fri, 7 Jul 2023 10:29:00 +0100
-> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> >  =20
-> > > On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrot=
-e: =20
-> > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursda=
-y, July 6, =20
-> > 2023 1:07 AM =20
-> > > > >
-> > > > > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) =
-wrote: =20
-> > > > > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday,=
- June 27, 2023 =20
-> > > > > 2:54 AM =20
-> > > > > > >
-> > > > > > > Try to allocate a transient memory pool if no suitable slots =
-can be found,
-> > > > > > > except when allocating from a restricted pool. The transient =
-pool is just
-> > > > > > > enough big for this one bounce buffer. It is inserted into a =
-per-device
-> > > > > > > list of transient memory pools, and it is freed again when th=
-e bounce
-> > > > > > > buffer is unmapped.
-> > > > > > >
-> > > > > > > Transient memory pools are kept in an RCU list. A memory barr=
-ier is
-> > > > > > > required after adding a new entry, because any address within=
- a transient
-> > > > > > > buffer must be immediately recognized as belonging to the SWI=
-OTLB, even if
-> > > > > > > it is passed to another CPU.
-> > > > > > >
-> > > > > > > Deletion does not require any synchronization beyond RCU orde=
-ring
-> > > > > > > guarantees. After a buffer is unmapped, its physical addresse=
-s may no
-> > > > > > > longer be passed to the DMA API, so the memory range of the c=
-orresponding
-> > > > > > > stale entry in the RCU list never matches. If the memory rang=
-e gets
-> > > > > > > allocated again, then it happens only after a RCU quiescent s=
-tate.
-> > > > > > >
-> > > > > > > Since bounce buffers can now be allocated from different pool=
-s, add a
-> > > > > > > parameter to swiotlb_alloc_pool() to let the caller know whic=
-h memory pool
-> > > > > > > is used. Add swiotlb_find_pool() to find the memory pool corr=
-esponding to
-> > > > > > > an address. This function is now also used by is_swiotlb_buff=
-er(), because
-> > > > > > > a simple boundary check is no longer sufficient.
-> > > > > > >
-> > > > > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_a=
-lloc_pages(),
-> > > > > > > simplified and enhanced to use coherent memory pools if neede=
-d.
-> > > > > > >
-> > > > > > > Note that this is not the most efficient way to provide a bou=
-nce buffer,
-> > > > > > > but when a DMA buffer can't be mapped, something may (and wil=
-l) actually
-> > > > > > > break. At that point it is better to make an allocation, even=
- if it may be
-> > > > > > > an expensive operation. =20
-> > > > > >
-> > > > > > I continue to think about swiotlb memory management from the st=
-andpoint
-> > > > > > of CoCo VMs that may be quite large with high network and stora=
-ge loads.
-> > > > > > These VMs are often running mission-critical workloads that can=
-'t tolerate
-> > > > > > a bounce buffer allocation failure.  To prevent such failures, =
-the swiotlb
-> > > > > > memory size must be overly large, which wastes memory. =20
-> > > > >
-> > > > > If "mission critical workloads" are in a vm that allowes overcomm=
-it and
-> > > > > no control over other vms in that same system, then you have worse
-> > > > > problems, sorry.
-> > > > >
-> > > > > Just don't do that.
-> > > > > =20
-> > > >
-> > > > No, the cases I'm concerned about don't involve memory overcommit.
-> > > >
-> > > > CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current sw=
-iotlb
-> > > > code in the Linux guest allocates a configurable, but fixed, amount=
- of guest
-> > > > memory at boot time for this purpose.  But it's hard to know how mu=
-ch
-> > > > swiotlb bounce buffer memory will be needed to handle peak I/O load=
-s.
-> > > > This patch set does dynamic allocation of swiotlb bounce buffer mem=
-ory,
-> > > > which can help avoid needing to configure an overly large fixed siz=
-e at boot. =20
-> > >
-> > > But, as you point out, memory allocation can fail at runtime, so how =
-can
-> > > you "guarantee" that this will work properly anymore if you are going=
- to
-> > > make it dynamic? =20
-> >=20
-> > In general, there is no guarantee, of course, because bounce buffers
-> > may be requested from interrupt context. I believe Michael is looking
-> > for the SWIOTLB_MAY_SLEEP flag that was introduced in my v2 series, so
-> > new pools can be allocated with GFP_KERNEL instead of GFP_NOWAIT if
-> > possible, and then there is no need to dip into the coherent pool.
-> >=20
-> > Well, I have deliberately removed all complexities from my v3 series,
-> > but I have more WIP local topic branches in my local repo:
-> >=20
-> > - allow blocking allocations if possible
-> > - allocate a new pool before existing pools are full
-> > - free unused memory pools
-> >=20
-> > I can make a bigger series, or I can send another series as RFC if this
-> > is desired. ATM I don't feel confident enough that my v3 series will be
-> > accepted without major changes, so I haven't invested time into
-> > finalizing the other topic branches.
-> >=20
-> > @Michael: If you know that my plan is to introduce blocking allocations
-> > with a follow-up patch series, is the present approach acceptable?
-> >  =20
->=20
-> Yes, I think the present approach is acceptable as a first step.  But
-> let me elaborate a bit on my thinking.
->=20
-> I was originally wondering if it is possible for swiotlb_map() to detect
-> whether it is called from a context that allows sleeping, without the use
-> of SWIOTLB_MAY_SLEEP.   This would get the benefits without having to
-> explicitly update drivers to add the flag.  But maybe that's too risky.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/mips/cavium-octeon/setup.c | 2 +-
+ arch/x86/pci/amd_bus.c          | 8 ++++++++
+ arch/x86/pci/bus_numa.c         | 2 +-
+ include/linux/limits.h          | 2 ++
+ include/linux/range.h           | 8 --------
+ 5 files changed, 12 insertions(+), 10 deletions(-)
 
-This is a recurring topic and it has been discussed several times in
-the mailing lists. If you ask me, the best answer is this one by Andrew
-Morton, albeit a bit dated:
+diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
+index c5561016f577..1ad2602a0383 100644
+--- a/arch/mips/cavium-octeon/setup.c
++++ b/arch/mips/cavium-octeon/setup.c
+@@ -1240,7 +1240,7 @@ static int __init octeon_no_pci_init(void)
+ 	 */
+ 	octeon_dummy_iospace = vzalloc(IO_SPACE_LIMIT);
+ 	set_io_port_base((unsigned long)octeon_dummy_iospace);
+-	ioport_resource.start = MAX_RESOURCE;
++	ioport_resource.start = RESOURCE_SIZE_MAX;
+ 	ioport_resource.end = 0;
+ 	return 0;
+ }
+diff --git a/arch/x86/pci/amd_bus.c b/arch/x86/pci/amd_bus.c
+index dd40d3fea74e..631512f7ec85 100644
+--- a/arch/x86/pci/amd_bus.c
++++ b/arch/x86/pci/amd_bus.c
+@@ -51,6 +51,14 @@ static struct pci_root_info __init *find_pci_root_info(int node, int link)
+ 	return NULL;
+ }
+ 
++static inline resource_size_t cap_resource(u64 val)
++{
++	if (val > RESOURCE_SIZE_MAX)
++		return RESOURCE_SIZE_MAX;
++
++	return val;
++}
++
+ /**
+  * early_root_info_init()
+  * called before pcibios_scan_root and pci_scan_bus
+diff --git a/arch/x86/pci/bus_numa.c b/arch/x86/pci/bus_numa.c
+index 2752c02e3f0e..e4a525e59eaf 100644
+--- a/arch/x86/pci/bus_numa.c
++++ b/arch/x86/pci/bus_numa.c
+@@ -101,7 +101,7 @@ void update_res(struct pci_root_info *info, resource_size_t start,
+ 	if (start > end)
+ 		return;
+ 
+-	if (start == MAX_RESOURCE)
++	if (start == RESOURCE_SIZE_MAX)
+ 		return;
+ 
+ 	if (!merge)
+diff --git a/include/linux/limits.h b/include/linux/limits.h
+index f6bcc9369010..38eb7f6f7e88 100644
+--- a/include/linux/limits.h
++++ b/include/linux/limits.h
+@@ -10,6 +10,8 @@
+ #define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
+ #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
+ 
++#define RESOURCE_SIZE_MAX	((resource_size_t)~0)
++
+ #define U8_MAX		((u8)~0U)
+ #define S8_MAX		((s8)(U8_MAX >> 1))
+ #define S8_MIN		((s8)(-S8_MAX - 1))
+diff --git a/include/linux/range.h b/include/linux/range.h
+index 7efb6a9b069b..6ad0b73cb7ad 100644
+--- a/include/linux/range.h
++++ b/include/linux/range.h
+@@ -31,12 +31,4 @@ int clean_sort_range(struct range *range, int az);
+ 
+ void sort_range(struct range *range, int nr_range);
+ 
+-#define MAX_RESOURCE ((resource_size_t)~0)
+-static inline resource_size_t cap_resource(u64 val)
+-{
+-	if (val > MAX_RESOURCE)
+-		return MAX_RESOURCE;
+-
+-	return val;
+-}
+ #endif
+-- 
+2.40.0.1.gaa8946217a0b
 
-https://lore.kernel.org/lkml/20080320201723.b87b3732.akpm@linux-foundation.=
-org/
-
-> For
-> the CoCo VM scenario that I'm most interested in, being a VM implicitly
-> reduces the set of drivers that are being used, and so it's not that hard
-> to add the flag in the key drivers that generate most of the bounce
-> buffer traffic.
-
-Yes, that's my thinking as well.
-
-> Then I was thinking about a slightly different usage for the flag than wh=
-at
-> you implemented in v2 of the series.   In the case where swiotlb_map()
-> can't allocate slots because of the swiotlb pool being full (or mostly fu=
-ll),
-> kick the background thread (if it is not already awake) to allocate a
-> dynamic pool and grow the total size of the swiotlb.  Then if
-> SWIOTLB_MAY_SLEEP is *not* set, allocate a transient pool just as you
-> have implemented in this v3 of the series.  But if SWIOTLB_MAY_SLEEP
-> *is* set, swiotlb_map() should sleep until the background thread has
-> completed the memory allocation and grown the size of the swiotlb.
-> After the sleep, retry the slot allocation.  Maybe what I'm describing
-> is what you mean by "allow blocking allocations".  :-)
-
-Not really, but I like the idea. After all, the only reason to have
-transient pools is when something is needed immediately while the
-background allocation is running.
-
-> This approach effectively throttles incoming swiotlb requests when space
-> is exhausted, and gives the dynamic sizing mechanism a chance to catch
-> up in an efficient fashion.  Limiting transient pools to requests that ca=
-n't
-> sleep will reduce the likelihood of exhausting the coherent memory
-> pools.  And as you mentioned above, kicking the background thread at the
-> 90% full mark (or some such heuristic) also helps the dynamic sizing
-> mechanism keep up with demand.
-
-FWIW I did some testing, and my systems were not able to survive a
-sudden I/O peak without transient pools, no matter how low I set the
-threshold for kicking a background. OTOH I always tested with the
-smallest possible SWIOTLB (256 KiB * rounded up number of CPUs, e.g. 16
-MiB on my VM with 48 CPUs). Other sizes may lead to different results.
-
-As a matter of fact, the size of the initial SWIOTLB memory pool and the
-size(s) of additional pool(s) sound like interesting tunable parameters
-that I haven't explored in depth yet.
-
-Petr T
