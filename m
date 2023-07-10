@@ -2,74 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA6874C6D4
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Jul 2023 19:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EA974CCA2
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jul 2023 08:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjGIRqh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jul 2023 13:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S230319AbjGJGIh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jul 2023 02:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjGIRqg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jul 2023 13:46:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798FB107;
-        Sun,  9 Jul 2023 10:46:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C04860C17;
-        Sun,  9 Jul 2023 17:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 71B87C433CA;
-        Sun,  9 Jul 2023 17:46:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688924794;
-        bh=4WjXO1MvNfhzJmghOdRqOlpuOXX4aP6smlx1ETAuJUI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tlEtwFHSenoUnlO9Gka41AQ7/giqkgbD7xZmZCAgNjqXshGZX3SWX0X+Fedc8Z8X0
-         vP9iyIfSFLdmUQ15cn3Xj8kLuA0P4chiTa/z/1C/UkLKYh63ruax1qvUc/EwHV4mzc
-         kqdz/GOvH9g/ovjcqUCeBqnk7pQkCfoJwsFEfJtKq7Jrftgj4LTTJq6g08FSOLVuyA
-         NSwUHKeEECEoVXDXdwt6YT6XBm5tBM63zAeqZKLJWjI1MpUIC/0vBP9uM2HS/Y2TtL
-         69dkSbANRFsBDQUXUZWI9TG5bVqMInmAbfLO894nCyMuRhn4axg6x5a9suFC7xYe9n
-         ixbkEeulKsj0g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60258C4167B;
-        Sun,  9 Jul 2023 17:46:34 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZKpkUhSd/GGm37IM@alpha.franken.de>
-References: <ZKpkUhSd/GGm37IM@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZKpkUhSd/GGm37IM@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5_1
-X-PR-Tracked-Commit-Id: 3a6dbb691782e88e07e5c70b327495dbd58a2e7f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 74099e20348e84e62b5ea6ef270f91db48bc1352
-Message-Id: <168892479439.9789.17791110295946119612.pr-tracker-bot@kernel.org>
-Date:   Sun, 09 Jul 2023 17:46:34 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229701AbjGJGIg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jul 2023 02:08:36 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC71EFB;
+        Sun,  9 Jul 2023 23:08:35 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f122ff663eso6240678e87.2;
+        Sun, 09 Jul 2023 23:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688969314; x=1691561314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from:sender
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NXia2U3SWywM/hgPSo6QNGfwgRNgV0ikhWDqRGHWyow=;
+        b=HKCxpGZnD2pgMSzpbNh8IquC6IK/Cs60+egpUYi+JkMiQE9ZL8uUawtO1FhUHTMCTM
+         kh/aR1gWDTUL77+cCgzKpna3F8uDKnXrALx7Gixrv8jOxSHZM5fnFTkjKUSWhgSuV7WG
+         CSbct344kxPAt2xJQdMUeiSgfmKGF4Y4htpY09KOD3bOBLnkZuQE+wPweeb4YpwgCd+k
+         w1SvQxA9hSXmf++bwvxDlIhJ2wg3Gx87uVLVT0TwSBytOZWc2NNyMQ2/HUChfWKmWaMI
+         w1VSv8JEfoPf4Hc8XCaJ4c/XVG6xG8pb9iijIUFuFteBnhN9vKjRNiv0E7EtrOCViET5
+         nZIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688969314; x=1691561314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from:sender
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NXia2U3SWywM/hgPSo6QNGfwgRNgV0ikhWDqRGHWyow=;
+        b=YXpa5mub5uUIWHyXTZxgeEEaRe5Oa4apmTU16HR1oj0C3fA6iRG31LbmMP5VyrLxS6
+         8hGeJYvSQ5LWx8YgGggsNB/kn7XoE1YZ6Ikd2T0qXgYbHyF17zuKOXUt6jaieNzI/B1L
+         9p+xtyslICroCIgglsX6hp/h6+Jp4qE9hdcTw8UBsPX3xZFP2W7Xy0L1iyfhiGbIK2gW
+         ID/Co7wIR4FNq1O5Z2ogc4cnK7/wqm0teJxYWJTh3fuqmzS08n7RzM0RSn1+eexatimZ
+         Irr5GyVCqatbBStZzNJ8VjOUKxRZwSjlx+4XenC5PPwxRvgnAx3UatILAgEnTjv39c99
+         QYvw==
+X-Gm-Message-State: ABy/qLamoGsNx6rBWdxhmiicxUq25fXdWKUeS2KPslzoDW/dCCndCPqg
+        HwIpdJVlvBs5yebS2QZDJDZlbK/ISqN05bPwPys=
+X-Google-Smtp-Source: APBJJlE8XIYfjCdCDXPrHG6nw7Sgw5sSnfiFWvlGRkezdt73Fjqia4/P0t1EsaNJnFEs91knAXPndHjlDk95M+E/dNc=
+X-Received: by 2002:a05:6512:3d8e:b0:4f8:7568:e948 with SMTP id
+ k14-20020a0565123d8e00b004f87568e948mr10523457lfv.51.1688969313700; Sun, 09
+ Jul 2023 23:08:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <tencent_54C2A2746A83BA29EE92248CE9683F0C6509@qq.com> <f7fab4fc-a8db-d2f7-52e9-3522f7c298b8@web.de>
+In-Reply-To: <f7fab4fc-a8db-d2f7-52e9-3522f7c298b8@web.de>
+Sender: cl1ntlov3@gmail.com
+X-Google-Sender-Delegation: cl1ntlov3@gmail.com
+From:   linke li <lilinke99@gmail.com>
+Date:   Mon, 10 Jul 2023 14:08:22 +0800
+X-Google-Sender-Auth: Y3flxkSIwAbIAD5U_PVxyV6si1E
+Message-ID: <CAKdjhyAtxk21YR-wxZn5Ga_+3HuHfxuJX7_czLBw8tuJFmXgsg@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Fix undefined behavior in PAGE_MASK calculation
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linke Li <lilinke99@foxmail.com>,
+        =?UTF-8?Q?Thomas_Bogend=C3=B6rfer?= <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Sun, 9 Jul 2023 09:40:02 +0200:
+> How do you think about a wording variant like the following?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.5_1
+What you said is exactly what I want to express.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/74099e20348e84e62b5ea6ef270f91db48bc1352
+> Would you like to add the tag =E2=80=9CFixes=E2=80=9D?
 
-Thank you!
+I agree with that.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thank you for your feedback and suggestion.
