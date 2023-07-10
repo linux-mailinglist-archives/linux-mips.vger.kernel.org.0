@@ -2,59 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C8974D072
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jul 2023 10:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4A974D1C8
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jul 2023 11:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbjGJInX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jul 2023 04:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S232450AbjGJJj3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jul 2023 05:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbjGJIm4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jul 2023 04:42:56 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AD6E79;
-        Mon, 10 Jul 2023 01:41:39 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QzyBd1pnCz1FDnF;
-        Mon, 10 Jul 2023 16:40:41 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 10 Jul 2023 16:41:12 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
-        <linux-mm@kvack.org>, <linux-arm-kernel@lists.infradead.org>,
-        <x86@kernel.org>, <mark.rutland@arm.com>, <ryan.roberts@arm.com>,
-        <will@kernel.org>, <anshuman.khandual@arm.com>,
-        <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
-        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
-        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
-        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
-        <prime.zeng@hisilicon.com>, <Jonathan.Cameron@Huawei.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: [PATCH v10 4/4] arm64: support batched/deferred tlb shootdown during page reclamation/migration
-Date:   Mon, 10 Jul 2023 16:39:14 +0800
-Message-ID: <20230710083914.18336-5-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230710083914.18336-1-yangyicong@huawei.com>
-References: <20230710083914.18336-1-yangyicong@huawei.com>
+        with ESMTP id S232524AbjGJJjD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jul 2023 05:39:03 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3619358C;
+        Mon, 10 Jul 2023 02:36:46 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id E30F414808A;
+        Mon, 10 Jul 2023 11:36:19 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1688981780; bh=cEGhRoXPGRpwdgEcYnOlQCfMzy6z9NfW6eHFlWupbSY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XABk4b2xj/95NSII8KdLFD9UXbqReOD/JSMT78/awbRfpUBqfGBkx8UaOP7uLhMBC
+         3ilozKe2ETT4f5Fu81wNHDCN07rfMRv27v/9Xz75qERHzeG33+YIPLfvMTvoepShXB
+         bp2X4b8fPNU/Y7K2HLpKLrrq+yf2U2JAokof6WBFlaoG05B6pU1H78/xgPW15MdaqE
+         BfIGVqnvqysxdQ4LOZdewoT61n6Z6aso0jS/C+m9Ibd4l2WgvIliFFmHeTIN46rnAB
+         VG7cMrMlXNhKuXURvWmxWocykbHhVETgX2QSYY2w6dFYQnLEHCYsWEc7f2hvRbUR7/
+         o2NH4pbmYxXYQ==
+Date:   Mon, 10 Jul 2023 11:36:18 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v3 4/7] swiotlb: if swiotlb is full, fall back to a
+ transient memory pool
+Message-ID: <20230710113618.2038e033@meshulam.tesarici.cz>
+In-Reply-To: <BYAPR21MB1688D3AC0C094420733717C4D732A@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <cover.1687859323.git.petr.tesarik.ext@huawei.com>
+        <34c2a1ba721a7bc496128aac5e20724e4077f1ab.1687859323.git.petr.tesarik.ext@huawei.com>
+        <BYAPR21MB1688AAC65852E75764F53099D72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070626-boxcar-bubbly-471d@gregkh>
+        <BYAPR21MB168802F691D3041C9B2F9F2DD72CA@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <2023070706-humbling-starfish-c68f@gregkh>
+        <20230707122213.3a7378b5@meshulam.tesarici.cz>
+        <BYAPR21MB1688D3AC0C094420733717C4D732A@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,261 +86,198 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+On Sat, 8 Jul 2023 15:18:32 +0000
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
 
-on x86, batched and deferred tlb shootdown has lead to 90%
-performance increase on tlb shootdown. on arm64, HW can do
-tlb shootdown without software IPI. But sync tlbi is still
-quite expensive.
+> From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> Sent: Friday, July 7, 202=
+3 3:22 AM
+> >=20
+> > On Fri, 7 Jul 2023 10:29:00 +0100
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> >  =20
+> > > On Thu, Jul 06, 2023 at 02:22:50PM +0000, Michael Kelley (LINUX) wrot=
+e: =20
+> > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursda=
+y, July 6, =20
+> > 2023 1:07 AM =20
+> > > > >
+> > > > > On Thu, Jul 06, 2023 at 03:50:55AM +0000, Michael Kelley (LINUX) =
+wrote: =20
+> > > > > > From: Petr Tesarik <petrtesarik@huaweicloud.com> Sent: Tuesday,=
+ June 27, 2023 =20
+> > > > > 2:54 AM =20
+> > > > > > >
+> > > > > > > Try to allocate a transient memory pool if no suitable slots =
+can be found,
+> > > > > > > except when allocating from a restricted pool. The transient =
+pool is just
+> > > > > > > enough big for this one bounce buffer. It is inserted into a =
+per-device
+> > > > > > > list of transient memory pools, and it is freed again when th=
+e bounce
+> > > > > > > buffer is unmapped.
+> > > > > > >
+> > > > > > > Transient memory pools are kept in an RCU list. A memory barr=
+ier is
+> > > > > > > required after adding a new entry, because any address within=
+ a transient
+> > > > > > > buffer must be immediately recognized as belonging to the SWI=
+OTLB, even if
+> > > > > > > it is passed to another CPU.
+> > > > > > >
+> > > > > > > Deletion does not require any synchronization beyond RCU orde=
+ring
+> > > > > > > guarantees. After a buffer is unmapped, its physical addresse=
+s may no
+> > > > > > > longer be passed to the DMA API, so the memory range of the c=
+orresponding
+> > > > > > > stale entry in the RCU list never matches. If the memory rang=
+e gets
+> > > > > > > allocated again, then it happens only after a RCU quiescent s=
+tate.
+> > > > > > >
+> > > > > > > Since bounce buffers can now be allocated from different pool=
+s, add a
+> > > > > > > parameter to swiotlb_alloc_pool() to let the caller know whic=
+h memory pool
+> > > > > > > is used. Add swiotlb_find_pool() to find the memory pool corr=
+esponding to
+> > > > > > > an address. This function is now also used by is_swiotlb_buff=
+er(), because
+> > > > > > > a simple boundary check is no longer sufficient.
+> > > > > > >
+> > > > > > > The logic in swiotlb_alloc_tlb() is taken from __dma_direct_a=
+lloc_pages(),
+> > > > > > > simplified and enhanced to use coherent memory pools if neede=
+d.
+> > > > > > >
+> > > > > > > Note that this is not the most efficient way to provide a bou=
+nce buffer,
+> > > > > > > but when a DMA buffer can't be mapped, something may (and wil=
+l) actually
+> > > > > > > break. At that point it is better to make an allocation, even=
+ if it may be
+> > > > > > > an expensive operation. =20
+> > > > > >
+> > > > > > I continue to think about swiotlb memory management from the st=
+andpoint
+> > > > > > of CoCo VMs that may be quite large with high network and stora=
+ge loads.
+> > > > > > These VMs are often running mission-critical workloads that can=
+'t tolerate
+> > > > > > a bounce buffer allocation failure.  To prevent such failures, =
+the swiotlb
+> > > > > > memory size must be overly large, which wastes memory. =20
+> > > > >
+> > > > > If "mission critical workloads" are in a vm that allowes overcomm=
+it and
+> > > > > no control over other vms in that same system, then you have worse
+> > > > > problems, sorry.
+> > > > >
+> > > > > Just don't do that.
+> > > > > =20
+> > > >
+> > > > No, the cases I'm concerned about don't involve memory overcommit.
+> > > >
+> > > > CoCo VMs must use swiotlb bounce buffers to do DMA I/O.  Current sw=
+iotlb
+> > > > code in the Linux guest allocates a configurable, but fixed, amount=
+ of guest
+> > > > memory at boot time for this purpose.  But it's hard to know how mu=
+ch
+> > > > swiotlb bounce buffer memory will be needed to handle peak I/O load=
+s.
+> > > > This patch set does dynamic allocation of swiotlb bounce buffer mem=
+ory,
+> > > > which can help avoid needing to configure an overly large fixed siz=
+e at boot. =20
+> > >
+> > > But, as you point out, memory allocation can fail at runtime, so how =
+can
+> > > you "guarantee" that this will work properly anymore if you are going=
+ to
+> > > make it dynamic? =20
+> >=20
+> > In general, there is no guarantee, of course, because bounce buffers
+> > may be requested from interrupt context. I believe Michael is looking
+> > for the SWIOTLB_MAY_SLEEP flag that was introduced in my v2 series, so
+> > new pools can be allocated with GFP_KERNEL instead of GFP_NOWAIT if
+> > possible, and then there is no need to dip into the coherent pool.
+> >=20
+> > Well, I have deliberately removed all complexities from my v3 series,
+> > but I have more WIP local topic branches in my local repo:
+> >=20
+> > - allow blocking allocations if possible
+> > - allocate a new pool before existing pools are full
+> > - free unused memory pools
+> >=20
+> > I can make a bigger series, or I can send another series as RFC if this
+> > is desired. ATM I don't feel confident enough that my v3 series will be
+> > accepted without major changes, so I haven't invested time into
+> > finalizing the other topic branches.
+> >=20
+> > @Michael: If you know that my plan is to introduce blocking allocations
+> > with a follow-up patch series, is the present approach acceptable?
+> >  =20
+>=20
+> Yes, I think the present approach is acceptable as a first step.  But
+> let me elaborate a bit on my thinking.
+>=20
+> I was originally wondering if it is possible for swiotlb_map() to detect
+> whether it is called from a context that allows sleeping, without the use
+> of SWIOTLB_MAY_SLEEP.   This would get the benefits without having to
+> explicitly update drivers to add the flag.  But maybe that's too risky.
 
-Even running a simplest program which requires swapout can
-prove this is true,
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <string.h>
+This is a recurring topic and it has been discussed several times in
+the mailing lists. If you ask me, the best answer is this one by Andrew
+Morton, albeit a bit dated:
 
- int main()
- {
- #define SIZE (1 * 1024 * 1024)
-         volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-                                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+https://lore.kernel.org/lkml/20080320201723.b87b3732.akpm@linux-foundation.=
+org/
 
-         memset(p, 0x88, SIZE);
+> For
+> the CoCo VM scenario that I'm most interested in, being a VM implicitly
+> reduces the set of drivers that are being used, and so it's not that hard
+> to add the flag in the key drivers that generate most of the bounce
+> buffer traffic.
 
-         for (int k = 0; k < 10000; k++) {
-                 /* swap in */
-                 for (int i = 0; i < SIZE; i += 4096) {
-                         (void)p[i];
-                 }
+Yes, that's my thinking as well.
 
-                 /* swap out */
-                 madvise(p, SIZE, MADV_PAGEOUT);
-         }
- }
+> Then I was thinking about a slightly different usage for the flag than wh=
+at
+> you implemented in v2 of the series.   In the case where swiotlb_map()
+> can't allocate slots because of the swiotlb pool being full (or mostly fu=
+ll),
+> kick the background thread (if it is not already awake) to allocate a
+> dynamic pool and grow the total size of the swiotlb.  Then if
+> SWIOTLB_MAY_SLEEP is *not* set, allocate a transient pool just as you
+> have implemented in this v3 of the series.  But if SWIOTLB_MAY_SLEEP
+> *is* set, swiotlb_map() should sleep until the background thread has
+> completed the memory allocation and grown the size of the swiotlb.
+> After the sleep, retry the slot allocation.  Maybe what I'm describing
+> is what you mean by "allow blocking allocations".  :-)
 
-Perf result on snapdragon 888 with 8 cores by using zRAM
-as the swap block device.
+Not really, but I like the idea. After all, the only reason to have
+transient pools is when something is needed immediately while the
+background allocation is running.
 
- ~ # perf record taskset -c 4 ./a.out
- [ perf record: Woken up 10 times to write data ]
- [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
- ~ # perf report
- # To display the perf.data header info, please use --header/--header-only options.
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 60K of event 'cycles'
- # Event count (approx.): 35706225414
- #
- # Overhead  Command  Shared Object      Symbol
- # ........  .......  .................  ......
- #
-    21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
-     8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
-     6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
-     6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
-     5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
-     3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
-     3.49%  a.out    [kernel.kallsyms]  [k] memset64
-     1.63%  a.out    [kernel.kallsyms]  [k] clear_page
-     1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
-     1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
-     1.23%  a.out    [kernel.kallsyms]  [k] xas_load
-     1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
+> This approach effectively throttles incoming swiotlb requests when space
+> is exhausted, and gives the dynamic sizing mechanism a chance to catch
+> up in an efficient fashion.  Limiting transient pools to requests that ca=
+n't
+> sleep will reduce the likelihood of exhausting the coherent memory
+> pools.  And as you mentioned above, kicking the background thread at the
+> 90% full mark (or some such heuristic) also helps the dynamic sizing
+> mechanism keep up with demand.
 
-ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
-swapping in/out a page mapped by only one process. If the
-page is mapped by multiple processes, typically, like more
-than 100 on a phone, the overhead would be much higher as
-we have to run tlb flush 100 times for one single page.
-Plus, tlb flush overhead will increase with the number
-of CPU cores due to the bad scalability of tlb shootdown
-in HW, so those ARM64 servers should expect much higher
-overhead.
+FWIW I did some testing, and my systems were not able to survive a
+sudden I/O peak without transient pools, no matter how low I set the
+threshold for kicking a background. OTOH I always tested with the
+smallest possible SWIOTLB (256 KiB * rounded up number of CPUs, e.g. 16
+MiB on my VM with 48 CPUs). Other sizes may lead to different results.
 
-Further perf annonate shows 95% cpu time of ptep_clear_flush
-is actually used by the final dsb() to wait for the completion
-of tlb flush. This provides us a very good chance to leverage
-the existing batched tlb in kernel. The minimum modification
-is that we only send async tlbi in the first stage and we send
-dsb while we have to sync in the second stage.
+As a matter of fact, the size of the initial SWIOTLB memory pool and the
+size(s) of additional pool(s) sound like interesting tunable parameters
+that I haven't explored in depth yet.
 
-With the above simplest micro benchmark, collapsed time to
-finish the program decreases around 5%.
-
-Typical collapsed time w/o patch:
- ~ # time taskset -c 4 ./a.out
- 0.21user 14.34system 0:14.69elapsed
-w/ patch:
- ~ # time taskset -c 4 ./a.out
- 0.22user 13.45system 0:13.80elapsed
-
-Also tested with benchmark in the commit on Kunpeng920 arm64 server
-and observed an improvement around 12.5% with command
-`time ./swap_bench`.
-        w/o             w/
-real    0m13.460s       0m11.771s
-user    0m0.248s        0m0.279s
-sys     0m12.039s       0m11.458s
-
-Originally it's noticed a 16.99% overhead of ptep_clear_flush()
-which has been eliminated by this patch:
-
-[root@localhost yang]# perf record -- ./swap_bench && perf report
-[...]
-16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
-
-It is tested on 4,8,128 CPU platforms and shows to be beneficial on
-large systems but may not have improvement on small systems like on
-a 4 CPU platform. So make this depends on EXPERT at this stage for
-tests on more small platforms.
-
-Also this patch improve the performance of page migration. Using pmbench
-and tries to migrate the pages of pmbench between node 0 and node 1 for
-100 times for 1G memory, this patch decrease the time used around 20%
-(prev 18.338318910 sec after 13.981866350 sec) and saved the time used
-by ptep_clear_flush().
-
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- .../features/vm/TLB/arch-support.txt          |  2 +-
- arch/arm64/Kconfig                            |  1 +
- arch/arm64/include/asm/tlbbatch.h             | 12 +++++
- arch/arm64/include/asm/tlbflush.h             | 48 +++++++++++++++++--
- 4 files changed, 59 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm64/include/asm/tlbbatch.h
-
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 7f049c251a79..76208db88f3b 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: |  ok  |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 7856c3a3e35a..f0ce8208c57f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -96,6 +96,7 @@ config ARM64
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
- 	select ARCH_SUPPORTS_PER_VMA_LOCK
-+	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
-new file mode 100644
-index 000000000000..fedb0b87b8db
---- /dev/null
-+++ b/arch/arm64/include/asm/tlbbatch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ARCH_ARM64_TLBBATCH_H
-+#define _ARCH_ARM64_TLBBATCH_H
-+
-+struct arch_tlbflush_unmap_batch {
-+	/*
-+	 * For arm64, HW can do tlb shootdown, so we don't
-+	 * need to record cpumask for sending IPI
-+	 */
-+};
-+
-+#endif /* _ARCH_ARM64_TLBBATCH_H */
-diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-index 412a3b9a3c25..4bb9cec62e26 100644
---- a/arch/arm64/include/asm/tlbflush.h
-+++ b/arch/arm64/include/asm/tlbflush.h
-@@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
- 	dsb(ish);
- }
- 
--static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
--					 unsigned long uaddr)
-+static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
-+					   unsigned long uaddr)
- {
- 	unsigned long addr;
- 
- 	dsb(ishst);
--	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-+	addr = __TLBI_VADDR(uaddr, ASID(mm));
- 	__tlbi(vale1is, addr);
- 	__tlbi_user(vale1is, addr);
- }
- 
-+static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-+					 unsigned long uaddr)
-+{
-+	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
-+}
-+
- static inline void flush_tlb_page(struct vm_area_struct *vma,
- 				  unsigned long uaddr)
- {
-@@ -272,6 +278,42 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
- 	dsb(ish);
- }
- 
-+#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
-+
-+static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-+{
-+#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-+	/*
-+	 * TLB flush deferral is not required on systems, which are affected with
-+	 * ARM64_WORKAROUND_REPEAT_TLBI, as __tlbi()/__tlbi_user() implementation
-+	 * will have two consecutive TLBI instructions with a dsb(ish) in between
-+	 * defeating the purpose (i.e save overall 'dsb ish' cost).
-+	 */
-+	if (unlikely(cpus_have_const_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-+		return false;
-+#endif
-+	return true;
-+}
-+
-+static inline void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
-+					     struct mm_struct *mm,
-+					     unsigned long uaddr)
-+{
-+	__flush_tlb_page_nosync(mm, uaddr);
-+}
-+
-+static inline void arch_flush_tlb_batched_pending(struct mm_struct *mm)
-+{
-+	dsb(ish);
-+}
-+
-+static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
-+{
-+	dsb(ish);
-+}
-+
-+#endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
-+
- /*
-  * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
-  * necessarily a performance improvement.
--- 
-2.24.0
-
+Petr T
