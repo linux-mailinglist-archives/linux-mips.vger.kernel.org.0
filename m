@@ -2,96 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85D974F0F6
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 16:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A3D74F1BF
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 16:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbjGKOBX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 10:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S230314AbjGKOVY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbjGKOBV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 10:01:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77DBB0;
-        Tue, 11 Jul 2023 07:01:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 554A861504;
-        Tue, 11 Jul 2023 14:01:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD1DC433C7;
-        Tue, 11 Jul 2023 14:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689084078;
-        bh=cdE+rFjbrFVLmzVrU6vfdc/Au2vs/4K/KtQWUN2iOVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uFC0KFw6/M6i8iNMypafGbl8Cu47AhRfSYX/xpea89PI4ZoMwe92EJqP3skNe1e6r
-         wdNiag9bpyADI4zIDbvsfEfC5gi5cG0LiI+uy+iziLVFM+p32F6ViRjBHJmXzejh3K
-         hGryvnrWcowWB4v9G6Utb47tLMTtfXf0Jk5KlXTXblJ68+Ehl7NBgEro6SYLZcBbuG
-         SEhMMw8zZvhNH953cv8zDMYVJb4nE9cNKmW9VcGjlVykyXZpRuOY205drYPWTtbPxy
-         Nee7XyVCXNFnj+xKEgPCEgPFhFOWJaEQgr+bospaDMUJydxlVz0ktUF8W7K96PF8x7
-         FoGj2nXcIV0Uw==
-Date:   Tue, 11 Jul 2023 16:01:03 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        christian@brauner.io, Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        David Howells <dhowells@redhat.com>, fenghua.yu@intel.com,
-        firoz.khan@linaro.org, Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
-        Kim Phillips <kim.phillips@arm.com>, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linuxppc-dev@lists.ozlabs.org, Andy Lutomirski <luto@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>, paul.burton@mips.com,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Zijlstra <peterz@infradead.org>, ralf@linux-mips.org,
-        rth@twiddle.net, schwidefsky@de.ibm.com,
-        sparclinux@vger.kernel.org, stefan@agner.ch,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, tycho@tycho.ws,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
-Message-ID: <20230711-verpennen-turnier-717bb9682e19@brauner>
-References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
- <cover.1689074739.git.legion@kernel.org>
- <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
- <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
- <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
- <ZK1QNRidZuGcfOSd@example.org>
+        with ESMTP id S230238AbjGKOVX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 10:21:23 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A067B1BE7
+        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 07:21:04 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b701e41cd3so94685341fa.3
+        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 07:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689085260; x=1691677260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YSKTBplafBxn9qBTvU+oX8v93f247AJHKPJqc+tN6+8=;
+        b=Ey+zgeTXJXrgW1S8K0Df2HHB93lSYF8p6K4gY0bfDIeiDHTT4Ul7iZ020Vm0rg06go
+         4O8Vw04ajtp0lRaoICRhBBtw/Ony3neabsw0ldmgxkc3WCpJ4iBzxSOO8DR+YdyURz6F
+         gH7ky71KyC0EBC+ZkYebGpLKjNlcnEeqPkZ7HerY7+osh7f5G5KNtui+mziGRaBKD1hC
+         BU2WuleBZJHMzShZ55MNLksXGmpWjvIQmAX0cX3oSLIaVNH6QGGqZe06137GIUbCMzrZ
+         w+fltn9sHuNOgc4TAYY0FdgYOF2166JZLcj1CEFpn09n0Z9uz1+KaeFSaGalnsAByZH+
+         75Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689085260; x=1691677260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YSKTBplafBxn9qBTvU+oX8v93f247AJHKPJqc+tN6+8=;
+        b=BPOqSxgeEeWHFzKIPDWUl9fwxYujfiDuEi+3psdl2gPLmaO0mCwzltg1t8AHyR6HMT
+         0cMDEzdqi8y4dga9gov5s8jtl1h7p3y2dku9/MKV+ptqGhQSu9fxq6u14rj0xGM9T9IN
+         NfFEvX70VbvUmCGlx5Fx8nY0Xva/fQAPNQW91cKpiFAHfMxDaVRlgiTabCO7VNFt6X2g
+         ciWPbwZhL0f8NiX00LC2/3CbGUMblTPyHNU4cxXjGc3BfCICNBVFWtXPVoPv1o42308r
+         ZYmzKzaFRknkqbu7SSG5mr6/zmFz6yioFn+PHjrHNu6JZv1nQWSigVrXfG/rXVNQHzYU
+         QZaA==
+X-Gm-Message-State: ABy/qLbIU2ZoL+IZUdNL12ZzkiUtchEXod8mkuIxWtOur/SHGMjajxz1
+        pjlpIMre09aCHwcSdwCrfRg6pZxW7btTwbUGFY0=
+X-Google-Smtp-Source: APBJJlG+GC2YoALaqzoQBZEEmGwybOkfQoxBAGxVlcX2RBUiIPLaL+TYohG34JVuyxo45xSfKka+nw==
+X-Received: by 2002:a2e:924e:0:b0:2b6:cecb:2f0f with SMTP id v14-20020a2e924e000000b002b6cecb2f0fmr13641040ljg.2.1689085259858;
+        Tue, 11 Jul 2023 07:20:59 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id a6-20020a2e9806000000b002b6bb68c7eesm480090ljj.110.2023.07.11.07.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 07:20:59 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+Subject: [PATCH v2 05/18] soc: bcm: Move power-domain drivers to the genpd dir
+Date:   Tue, 11 Jul 2023 16:20:56 +0200
+Message-Id: <20230711142056.751590-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZK1QNRidZuGcfOSd@example.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,46 +72,179 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 02:51:01PM +0200, Alexey Gladkov wrote:
-> On Tue, Jul 11, 2023 at 01:52:01PM +0200, Christian Brauner wrote:
-> > On Tue, Jul 11, 2023 at 01:42:19PM +0200, Arnd Bergmann wrote:
-> > > On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
-> > > > From: Palmer Dabbelt <palmer@sifive.com>
-> > > >
-> > > > On the userspace side fchmodat(3) is implemented as a wrapper
-> > > > function which implements the POSIX-specified interface. This
-> > > > interface differs from the underlying kernel system call, which does not
-> > > > have a flags argument. Most implementations require procfs [1][2].
-> > > >
-> > > > There doesn't appear to be a good userspace workaround for this issue
-> > > > but the implementation in the kernel is pretty straight-forward.
-> > > >
-> > > > The new fchmodat4() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
-> > > > unlike existing fchmodat.
-> > > >
-> > > > [1] 
-> > > > https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
-> > > > [2] 
-> > > > https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
-> > > >
-> > > > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> > > > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > > 
-> > > I don't know the history of why we ended up with the different
-> > > interface, or whether this was done intentionally in the kernel
-> > > or if we want this syscall.
-> > > 
-> > > Assuming this is in fact needed, I double-checked that the
-> > > implementation looks correct to me and is portable to all the
-> > > architectures, without the need for a compat wrapper.
-> > > 
-> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The system call itself is useful afaict. But please,
-> > 
-> > s/fchmodat4/fchmodat2/
-> 
-> Sure. I will.
+To simplify with maintenance let's move the bcm power-domain drivers to the
+new genpd directory. Going forward, patches are intended to be managed
+through a separate git tree, according to MAINTAINERS.
 
-Thanks. Can you also wire this up for every architecture, please?
-I don't see that this has been done in this series.
+While moving the drivers, we end up with a directory for bcm63xx that only
+contains a Kconfig file, which seems a bit silly. Let's therefore also move
+the Kconfig options into the Kconfig file a directory above, as it allows
+us to drop the directory too.
+
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <linux-rpi-kernel@lists.infradead.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ MAINTAINERS                                   |  4 ++--
+ drivers/genpd/Makefile                        |  1 +
+ drivers/genpd/bcm/Makefile                    |  5 +++++
+ .../{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c  |  0
+ drivers/{soc => genpd}/bcm/bcm2835-power.c    |  0
+ .../bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c |  0
+ .../{soc => genpd}/bcm/raspberrypi-power.c    |  0
+ drivers/soc/bcm/Kconfig                       | 22 ++++++++++++++++++-
+ drivers/soc/bcm/Makefile                      |  3 ---
+ drivers/soc/bcm/bcm63xx/Kconfig               | 21 ------------------
+ drivers/soc/bcm/bcm63xx/Makefile              |  3 ---
+ 11 files changed, 29 insertions(+), 30 deletions(-)
+ create mode 100644 drivers/genpd/bcm/Makefile
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c (100%)
+ rename drivers/{soc => genpd}/bcm/bcm2835-power.c (100%)
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c (100%)
+ rename drivers/{soc => genpd}/bcm/raspberrypi-power.c (100%)
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Makefile
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index caa221fd0c11..77629ab4a5f0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4009,7 +4009,7 @@ F:	arch/mips/kernel/*bmips*
+ F:	drivers/irqchip/irq-bcm63*
+ F:	drivers/irqchip/irq-bcm7*
+ F:	drivers/irqchip/irq-brcmstb*
+-F:	drivers/soc/bcm/bcm63xx
++F:	drivers/genpd/bcm/bcm63xx-power.c
+ F:	include/linux/bcm963xx_nvram.h
+ F:	include/linux/bcm963xx_tag.h
+ 
+@@ -4224,7 +4224,7 @@ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ T:	git https://github.com/broadcom/stblinux.git
+-F:	drivers/soc/bcm/bcm63xx/bcm-pmb.c
++F:	drivers/genpd/bcm/bcm-pmb.c
+ F:	include/dt-bindings/soc/bcm-pmb.h
+ 
+ BROADCOM SPECIFIC AMBA DRIVER (BCMA)
+diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+index 91d4a3808981..6b9e9fe907f3 100644
+--- a/drivers/genpd/Makefile
++++ b/drivers/genpd/Makefile
+@@ -2,3 +2,4 @@
+ obj-y					+= actions/
+ obj-y					+= amlogic/
+ obj-y					+= apple/
++obj-y					+= bcm/
+diff --git a/drivers/genpd/bcm/Makefile b/drivers/genpd/bcm/Makefile
+new file mode 100644
+index 000000000000..6bfbe4e4db13
+--- /dev/null
++++ b/drivers/genpd/bcm/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_BCM_PMB)			+= bcm-pmb.o
++obj-$(CONFIG_BCM2835_POWER)		+= bcm2835-power.o
++obj-$(CONFIG_BCM63XX_POWER)		+= bcm63xx-power.o
++obj-$(CONFIG_RASPBERRYPI_POWER)		+= raspberrypi-power.o
+diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/genpd/bcm/bcm-pmb.c
+similarity index 100%
+rename from drivers/soc/bcm/bcm63xx/bcm-pmb.c
+rename to drivers/genpd/bcm/bcm-pmb.c
+diff --git a/drivers/soc/bcm/bcm2835-power.c b/drivers/genpd/bcm/bcm2835-power.c
+similarity index 100%
+rename from drivers/soc/bcm/bcm2835-power.c
+rename to drivers/genpd/bcm/bcm2835-power.c
+diff --git a/drivers/soc/bcm/bcm63xx/bcm63xx-power.c b/drivers/genpd/bcm/bcm63xx-power.c
+similarity index 100%
+rename from drivers/soc/bcm/bcm63xx/bcm63xx-power.c
+rename to drivers/genpd/bcm/bcm63xx-power.c
+diff --git a/drivers/soc/bcm/raspberrypi-power.c b/drivers/genpd/bcm/raspberrypi-power.c
+similarity index 100%
+rename from drivers/soc/bcm/raspberrypi-power.c
+rename to drivers/genpd/bcm/raspberrypi-power.c
+diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
+index 24f92a6e882a..f96906795fa6 100644
+--- a/drivers/soc/bcm/Kconfig
++++ b/drivers/soc/bcm/Kconfig
+@@ -42,7 +42,27 @@ config SOC_BRCMSTB
+ 
+ 	  If unsure, say N.
+ 
+-source "drivers/soc/bcm/bcm63xx/Kconfig"
++config BCM_PMB
++	bool "Broadcom PMB (Power Management Bus) driver"
++	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
++	default ARCH_BCMBCA
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the Broadcom's PMB (Power Management Bus) that
++	  is used for disabling and enabling SoC devices.
++
++if SOC_BCM63XX
++
++config BCM63XX_POWER
++	bool "BCM63xx power domain driver"
++	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the BCM63xx power domains controller on
++	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
++
++endif # SOC_BCM63XX
++
+ source "drivers/soc/bcm/brcmstb/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/soc/bcm/Makefile b/drivers/soc/bcm/Makefile
+index 0f0efa28d92b..32424b1032c7 100644
+--- a/drivers/soc/bcm/Makefile
++++ b/drivers/soc/bcm/Makefile
+@@ -1,5 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_BCM2835_POWER)	+= bcm2835-power.o
+-obj-$(CONFIG_RASPBERRYPI_POWER)	+= raspberrypi-power.o
+-obj-y				+= bcm63xx/
+ obj-$(CONFIG_SOC_BRCMSTB)	+= brcmstb/
+diff --git a/drivers/soc/bcm/bcm63xx/Kconfig b/drivers/soc/bcm/bcm63xx/Kconfig
+deleted file mode 100644
+index 355c34482076..000000000000
+--- a/drivers/soc/bcm/bcm63xx/Kconfig
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-if SOC_BCM63XX
+-
+-config BCM63XX_POWER
+-	bool "BCM63xx power domain driver"
+-	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the BCM63xx power domains controller on
+-	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
+-
+-endif # SOC_BCM63XX
+-
+-config BCM_PMB
+-	bool "Broadcom PMB (Power Management Bus) driver"
+-	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+-	default ARCH_BCMBCA
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the Broadcom's PMB (Power Management Bus) that
+-	  is used for disabling and enabling SoC devices.
+diff --git a/drivers/soc/bcm/bcm63xx/Makefile b/drivers/soc/bcm/bcm63xx/Makefile
+deleted file mode 100644
+index 557eed3d67bd..000000000000
+--- a/drivers/soc/bcm/bcm63xx/Makefile
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_BCM63XX_POWER) += bcm63xx-power.o
+-obj-$(CONFIG_BCM_PMB)		+= bcm-pmb.o
+-- 
+2.34.1
+
