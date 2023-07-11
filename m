@@ -2,249 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A3D74F1BF
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 16:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D800274F2F1
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 17:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjGKOVY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 10:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S229890AbjGKPGw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 11:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjGKOVX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 10:21:23 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A067B1BE7
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 07:21:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b701e41cd3so94685341fa.3
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 07:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689085260; x=1691677260;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSKTBplafBxn9qBTvU+oX8v93f247AJHKPJqc+tN6+8=;
-        b=Ey+zgeTXJXrgW1S8K0Df2HHB93lSYF8p6K4gY0bfDIeiDHTT4Ul7iZ020Vm0rg06go
-         4O8Vw04ajtp0lRaoICRhBBtw/Ony3neabsw0ldmgxkc3WCpJ4iBzxSOO8DR+YdyURz6F
-         gH7ky71KyC0EBC+ZkYebGpLKjNlcnEeqPkZ7HerY7+osh7f5G5KNtui+mziGRaBKD1hC
-         BU2WuleBZJHMzShZ55MNLksXGmpWjvIQmAX0cX3oSLIaVNH6QGGqZe06137GIUbCMzrZ
-         w+fltn9sHuNOgc4TAYY0FdgYOF2166JZLcj1CEFpn09n0Z9uz1+KaeFSaGalnsAByZH+
-         75Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689085260; x=1691677260;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YSKTBplafBxn9qBTvU+oX8v93f247AJHKPJqc+tN6+8=;
-        b=BPOqSxgeEeWHFzKIPDWUl9fwxYujfiDuEi+3psdl2gPLmaO0mCwzltg1t8AHyR6HMT
-         0cMDEzdqi8y4dga9gov5s8jtl1h7p3y2dku9/MKV+ptqGhQSu9fxq6u14rj0xGM9T9IN
-         NfFEvX70VbvUmCGlx5Fx8nY0Xva/fQAPNQW91cKpiFAHfMxDaVRlgiTabCO7VNFt6X2g
-         ciWPbwZhL0f8NiX00LC2/3CbGUMblTPyHNU4cxXjGc3BfCICNBVFWtXPVoPv1o42308r
-         ZYmzKzaFRknkqbu7SSG5mr6/zmFz6yioFn+PHjrHNu6JZv1nQWSigVrXfG/rXVNQHzYU
-         QZaA==
-X-Gm-Message-State: ABy/qLbIU2ZoL+IZUdNL12ZzkiUtchEXod8mkuIxWtOur/SHGMjajxz1
-        pjlpIMre09aCHwcSdwCrfRg6pZxW7btTwbUGFY0=
-X-Google-Smtp-Source: APBJJlG+GC2YoALaqzoQBZEEmGwybOkfQoxBAGxVlcX2RBUiIPLaL+TYohG34JVuyxo45xSfKka+nw==
-X-Received: by 2002:a2e:924e:0:b0:2b6:cecb:2f0f with SMTP id v14-20020a2e924e000000b002b6cecb2f0fmr13641040ljg.2.1689085259858;
-        Tue, 11 Jul 2023 07:20:59 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id a6-20020a2e9806000000b002b6bb68c7eesm480090ljj.110.2023.07.11.07.20.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 07:20:59 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-Subject: [PATCH v2 05/18] soc: bcm: Move power-domain drivers to the genpd dir
-Date:   Tue, 11 Jul 2023 16:20:56 +0200
-Message-Id: <20230711142056.751590-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229591AbjGKPGv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 11:06:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A7A10D2;
+        Tue, 11 Jul 2023 08:06:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E3461529;
+        Tue, 11 Jul 2023 15:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9569DC433C7;
+        Tue, 11 Jul 2023 15:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689088009;
+        bh=kZIeBvNcC0nOtzMWF800gLz1bn5znzCQrdohaF8tsvc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LrF6V7Vvgxw9nV4mmthPSEIQirtGB3yxNKRuQ0aEGrIB69Reaj8zk77jgJ6cYZ7ta
+         gc8qwDFYulhYV7Woi5zGl8ecXZGmtHOtY6cyvnwhhQw9gZA2Wzol4XnAVkE//IykgS
+         EOud/K9zjpNkyljQvll0KmseIx32s2VNHrTa7x6f7cZCwCln4ZnntcK/UNuejkFt8+
+         GmPEtkDQey2BcKM0y5yIgzomKtDUQhQC/VGn8nzyt8Q4dZCrsKcARbslbLaH90rxZv
+         qP4zAZOtCy1wWjfVFHLqXnJKbbdwuoKDi034fNBrtQylQyD4e31MAApLXPihDfS8h7
+         clSs1BYbKOC/g==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4fb9ae4cef6so9398715e87.3;
+        Tue, 11 Jul 2023 08:06:49 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZJc1aWy2XnucMjwFbF//fv1AJmCl4aI8DS/w5EXknK5GydqPll
+        iXzyUkoSH3xT+0TtSN4Zy7NIEqB78UR5zj3oPu8=
+X-Google-Smtp-Source: APBJJlGrLT89LzutG3S3N9QOzesfJED07ndmWdSZdToL3jggMkVPoM7Sq9DyqiEv1VteQSrNQMJLa07qvnGiWqJRW0k=
+X-Received: by 2002:ac2:58cf:0:b0:4f7:69b9:fa07 with SMTP id
+ u15-20020ac258cf000000b004f769b9fa07mr12515921lfo.45.1689088007614; Tue, 11
+ Jul 2023 08:06:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230711120807.1805186-1-maobibo@loongson.cn> <20230711120807.1805186-2-maobibo@loongson.cn>
+In-Reply-To: <20230711120807.1805186-2-maobibo@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 11 Jul 2023 23:06:36 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5k-FVhrRAQj58dckQAGPT9PNp2ghCCfHOMtsr3gf-wRw@mail.gmail.com>
+Message-ID: <CAAhV-H5k-FVhrRAQj58dckQAGPT9PNp2ghCCfHOMtsr3gf-wRw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
+ checking of eiointc_index
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-To simplify with maintenance let's move the bcm power-domain drivers to the
-new genpd directory. Going forward, patches are intended to be managed
-through a separate git tree, according to MAINTAINERS.
+On Tue, Jul 11, 2023 at 8:08=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
+e:
+>
+> Return value of function eiointc_index is int, however it is converted
+> into uint32_t and then compared smaller than zero. This causes logic
+> problem. There is eioint initialization problem on qemu virt-machine
+> where there is only one eioint node and more than 4 vcpus. Nodemap of
+> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
+> other vcpus can not response any external device interrupts and only loca=
+l
+> processor interrupts like ipi/timer can work.
+I'm sorry but there are still spelling problems...
+"eio", "eio intc", "eioint" should all be "eiointc".
 
-While moving the drivers, we end up with a directory for bcm63xx that only
-contains a Kconfig file, which seems a bit silly. Let's therefore also move
-the Kconfig options into the Kconfig file a directory above, as it allows
-us to drop the directory too.
+Huacai
 
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Ray Jui <rjui@broadcom.com>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: <linux-mips@vger.kernel.org>
-Cc: <linux-rpi-kernel@lists.infradead.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- MAINTAINERS                                   |  4 ++--
- drivers/genpd/Makefile                        |  1 +
- drivers/genpd/bcm/Makefile                    |  5 +++++
- .../{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c  |  0
- drivers/{soc => genpd}/bcm/bcm2835-power.c    |  0
- .../bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c |  0
- .../{soc => genpd}/bcm/raspberrypi-power.c    |  0
- drivers/soc/bcm/Kconfig                       | 22 ++++++++++++++++++-
- drivers/soc/bcm/Makefile                      |  3 ---
- drivers/soc/bcm/bcm63xx/Kconfig               | 21 ------------------
- drivers/soc/bcm/bcm63xx/Makefile              |  3 ---
- 11 files changed, 29 insertions(+), 30 deletions(-)
- create mode 100644 drivers/genpd/bcm/Makefile
- rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c (100%)
- rename drivers/{soc => genpd}/bcm/bcm2835-power.c (100%)
- rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c (100%)
- rename drivers/{soc => genpd}/bcm/raspberrypi-power.c (100%)
- delete mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
- delete mode 100644 drivers/soc/bcm/bcm63xx/Makefile
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index caa221fd0c11..77629ab4a5f0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4009,7 +4009,7 @@ F:	arch/mips/kernel/*bmips*
- F:	drivers/irqchip/irq-bcm63*
- F:	drivers/irqchip/irq-bcm7*
- F:	drivers/irqchip/irq-brcmstb*
--F:	drivers/soc/bcm/bcm63xx
-+F:	drivers/genpd/bcm/bcm63xx-power.c
- F:	include/linux/bcm963xx_nvram.h
- F:	include/linux/bcm963xx_tag.h
- 
-@@ -4224,7 +4224,7 @@ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
- T:	git https://github.com/broadcom/stblinux.git
--F:	drivers/soc/bcm/bcm63xx/bcm-pmb.c
-+F:	drivers/genpd/bcm/bcm-pmb.c
- F:	include/dt-bindings/soc/bcm-pmb.h
- 
- BROADCOM SPECIFIC AMBA DRIVER (BCMA)
-diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index 91d4a3808981..6b9e9fe907f3 100644
---- a/drivers/genpd/Makefile
-+++ b/drivers/genpd/Makefile
-@@ -2,3 +2,4 @@
- obj-y					+= actions/
- obj-y					+= amlogic/
- obj-y					+= apple/
-+obj-y					+= bcm/
-diff --git a/drivers/genpd/bcm/Makefile b/drivers/genpd/bcm/Makefile
-new file mode 100644
-index 000000000000..6bfbe4e4db13
---- /dev/null
-+++ b/drivers/genpd/bcm/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_BCM_PMB)			+= bcm-pmb.o
-+obj-$(CONFIG_BCM2835_POWER)		+= bcm2835-power.o
-+obj-$(CONFIG_BCM63XX_POWER)		+= bcm63xx-power.o
-+obj-$(CONFIG_RASPBERRYPI_POWER)		+= raspberrypi-power.o
-diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/genpd/bcm/bcm-pmb.c
-similarity index 100%
-rename from drivers/soc/bcm/bcm63xx/bcm-pmb.c
-rename to drivers/genpd/bcm/bcm-pmb.c
-diff --git a/drivers/soc/bcm/bcm2835-power.c b/drivers/genpd/bcm/bcm2835-power.c
-similarity index 100%
-rename from drivers/soc/bcm/bcm2835-power.c
-rename to drivers/genpd/bcm/bcm2835-power.c
-diff --git a/drivers/soc/bcm/bcm63xx/bcm63xx-power.c b/drivers/genpd/bcm/bcm63xx-power.c
-similarity index 100%
-rename from drivers/soc/bcm/bcm63xx/bcm63xx-power.c
-rename to drivers/genpd/bcm/bcm63xx-power.c
-diff --git a/drivers/soc/bcm/raspberrypi-power.c b/drivers/genpd/bcm/raspberrypi-power.c
-similarity index 100%
-rename from drivers/soc/bcm/raspberrypi-power.c
-rename to drivers/genpd/bcm/raspberrypi-power.c
-diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
-index 24f92a6e882a..f96906795fa6 100644
---- a/drivers/soc/bcm/Kconfig
-+++ b/drivers/soc/bcm/Kconfig
-@@ -42,7 +42,27 @@ config SOC_BRCMSTB
- 
- 	  If unsure, say N.
- 
--source "drivers/soc/bcm/bcm63xx/Kconfig"
-+config BCM_PMB
-+	bool "Broadcom PMB (Power Management Bus) driver"
-+	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
-+	default ARCH_BCMBCA
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the Broadcom's PMB (Power Management Bus) that
-+	  is used for disabling and enabling SoC devices.
-+
-+if SOC_BCM63XX
-+
-+config BCM63XX_POWER
-+	bool "BCM63xx power domain driver"
-+	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the BCM63xx power domains controller on
-+	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
-+
-+endif # SOC_BCM63XX
-+
- source "drivers/soc/bcm/brcmstb/Kconfig"
- 
- endmenu
-diff --git a/drivers/soc/bcm/Makefile b/drivers/soc/bcm/Makefile
-index 0f0efa28d92b..32424b1032c7 100644
---- a/drivers/soc/bcm/Makefile
-+++ b/drivers/soc/bcm/Makefile
-@@ -1,5 +1,2 @@
- # SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_BCM2835_POWER)	+= bcm2835-power.o
--obj-$(CONFIG_RASPBERRYPI_POWER)	+= raspberrypi-power.o
--obj-y				+= bcm63xx/
- obj-$(CONFIG_SOC_BRCMSTB)	+= brcmstb/
-diff --git a/drivers/soc/bcm/bcm63xx/Kconfig b/drivers/soc/bcm/bcm63xx/Kconfig
-deleted file mode 100644
-index 355c34482076..000000000000
---- a/drivers/soc/bcm/bcm63xx/Kconfig
-+++ /dev/null
-@@ -1,21 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--if SOC_BCM63XX
--
--config BCM63XX_POWER
--	bool "BCM63xx power domain driver"
--	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the BCM63xx power domains controller on
--	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
--
--endif # SOC_BCM63XX
--
--config BCM_PMB
--	bool "Broadcom PMB (Power Management Bus) driver"
--	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
--	default ARCH_BCMBCA
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the Broadcom's PMB (Power Management Bus) that
--	  is used for disabling and enabling SoC devices.
-diff --git a/drivers/soc/bcm/bcm63xx/Makefile b/drivers/soc/bcm/bcm63xx/Makefile
-deleted file mode 100644
-index 557eed3d67bd..000000000000
---- a/drivers/soc/bcm/bcm63xx/Makefile
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_BCM63XX_POWER) += bcm63xx-power.o
--obj-$(CONFIG_BCM_PMB)		+= bcm-pmb.o
--- 
-2.34.1
-
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
+-loongson-eiointc.c
+> index 92d8aa28bdf5..1c5a5b59f199 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -144,12 +144,14 @@ static int eiointc_router_init(unsigned int cpu)
+>         int i, bit;
+>         uint32_t data;
+>         uint32_t node =3D cpu_to_eio_node(cpu);
+> -       uint32_t index =3D eiointc_index(node);
+> +       int index =3D eiointc_index(node);
+>
+> -       if (index < 0) {
+> -               pr_err("Error: invalid nodemap!\n");
+> -               return -1;
+> -       }
+> +       /*
+> +        * qemu virt-machine has only one eio intc and more than four cpu=
+s
+> +        * irq from eio can only be routed to cpu 0-3 on virt machine
+> +        */
+> +       if (index < 0)
+> +               return 0;
+>
+>         if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) =3D=3D 0) {
+>                 eiointc_enable();
+> --
+> 2.27.0
+>
