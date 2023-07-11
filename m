@@ -2,71 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E4574ED5F
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 13:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A66274ED93
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 14:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjGKLxi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 07:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S229548AbjGKMIM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 08:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjGKLxh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 07:53:37 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86672E7E
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 04:53:35 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-992ca792065so704597666b.2
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 04:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689076414; x=1691668414;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ggjdezSq0XBXnmFq0BRmocCfymy1PCWm7Nw1Mg4zaQI=;
-        b=N3zXRtpMralX0T/rmh6eDsEQoZf+YaS8jNrlblaQQRtU/2D5o1pVibrBt/hlK4e8fu
-         Gf287512p4j0zXt2fJXNngmy3XUT9KUEJog5rSpq2tA7+XWddRzClW4HgCd28sEIjA7c
-         7y+5NVR9YS0FusFIqSaUQ5emvkzkR54bn2VWGmBqM/IPgbtgw5COwbWCDeZ65GqGiEKt
-         jImKJPedtQOVb7Ip6V8xnkt4jbzrFr25taSYJzbW3ysUqNWJanXZAGmrqrv0InJ3G6vW
-         CdlM5qPBy1fSZSn41dArM9zM/sUhWI9QJe9yXySkL47/zRHRxnoczRFl6L0f80Har4tK
-         hd5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689076414; x=1691668414;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ggjdezSq0XBXnmFq0BRmocCfymy1PCWm7Nw1Mg4zaQI=;
-        b=R/8TZL2UGnZLh0rYCPTCHb6diLe8kEEkOho9xkwge/n/5AtoEKsPaDlf3dATSbp3eJ
-         j8kKyWvWuq70MOeqg7zKZqWBOAQJAfkVvN3Q6KMCM4an7odAX0c+zDnTzWMCU0fllT16
-         qRgj06XFxf61jltyZ8f7k0G/FmYr2tgOxr4DFd/Te3VD5Nhqb0f43M8SU+EfmKrtfQSK
-         XMsiGIOnnLREyNQzJGfx4jnSxAEp0CWt8QnzJ7cSf3W/HDb+IZKNSBFt0vOkdpsMqV5e
-         d8fxRdfczVL3a+RJ2b9m9zU3/+XLYpZ6EnwHhBRFL6ZIYHBNj1RPHYaTTGBGgTXOuRw+
-         E39w==
-X-Gm-Message-State: ABy/qLakEgxY9Avv66sENZOccP9fkYUDNLGQ/u/HtOqAEHz1GZ2p7bKy
-        yMo+Jpw/5epA6YFPqpVQ2S/dBw==
-X-Google-Smtp-Source: APBJJlHquG8S/uL1eP4Mtl2ZCDFiPHFCkpnm0iFQioH65XkGFwzUjNhHNCofxtpC4Guvyvg362zqqQ==
-X-Received: by 2002:a17:906:360a:b0:992:a836:a194 with SMTP id q10-20020a170906360a00b00992a836a194mr12932511ejb.59.1689076414025;
-        Tue, 11 Jul 2023 04:53:34 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.194.156])
-        by smtp.gmail.com with ESMTPSA id h9-20020a17090619c900b00988b8ff849csm1072834ejd.108.2023.07.11.04.53.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 04:53:33 -0700 (PDT)
-Message-ID: <3d9739d5-655b-2535-0dc1-aafdf7e36e8f@linaro.org>
-Date:   Tue, 11 Jul 2023 13:53:31 +0200
+        with ESMTP id S230078AbjGKMIM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 08:08:12 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E7F0E5F;
+        Tue, 11 Jul 2023 05:08:09 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.9.158])
+        by gateway (Coremail) with SMTP id _____8BxXesoRq1khH8DAA--.4821S3;
+        Tue, 11 Jul 2023 20:08:08 +0800 (CST)
+Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxfSMnRq1k+6goAA--.1095S2;
+        Tue, 11 Jul 2023 20:08:08 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3 0/2] irqchip/loongson-eiointc: Add simple irq routing method
+Date:   Tue, 11 Jul 2023 20:08:05 +0800
+Message-Id: <20230711120807.1805186-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH] MIPS: prefer 'unsigned int' to bare use of 'unsigned'
-To:     xuanzhenggang001@208suo.com, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230709141701.16324-1-denghuilong@cdjrlc.com>
- <e30eb541f2fc615b264a70af2f40a5f9@208suo.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <e30eb541f2fc615b264a70af2f40a5f9@208suo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-CM-TRANSID: AQAAf8DxfSMnRq1k+6goAA--.1095S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7JFWxZr1xAw48tF4fXrW7KFX_yoWxuFgEgF
+        92v395GrWSqFWFva9Fy3W7trZrCay5W3WY9F4v9r15Z348Jr1DGrZFyrZ7JFnFgF18ZFn5
+        CrZ5ur1fZw1ayosvyTuYvTs0mTUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUb7kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+        wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
+        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzZ2-UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,22 +60,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/7/23 16:19, xuanzhenggang001@208suo.com wrote:
-> Fix the following warnings reported by checkpatch:
-> 
-> arch/mips/kernel/linux32.c:128: WARNING: Prefer 'unsigned int' to bare 
-> use of 'unsigned'
-> arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
-> use of 'unsigned'
-> arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
-> use of 'unsigned'
-> arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare 
-> use of 'unsigned'
-> 
-> Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
-> ---
->   arch/mips/kernel/linux32.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+Fix return value checking of eiointc_index where int type
+is converted uint32_t and check smaller than 0.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Add simple irq route support on system with only one eioi node,
+rather than use anysend method.
+
+---
+Changes in v3:
+  Modify some spell checking problems.
+
+Changes in v2:
+  Use the simple irq routing on embeded board like 2K0500 and 2K2000
+board, since there is only one eio node.
+
+---
+Bibo Mao (2):
+  irqchip/loongson-eiointc: Fix return value checking of eiointc_index
+  irqchip/loongson-eiointc: Simplify irq routing on some platforms
+
+ drivers/irqchip/irq-loongson-eiointc.c | 91 ++++++++++++++++++++++----
+ 1 file changed, 80 insertions(+), 11 deletions(-)
+
+-- 
+2.27.0
 
