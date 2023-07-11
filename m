@@ -2,74 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D489C74F58A
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 18:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5874974F686
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 19:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjGKQdb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 12:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S231822AbjGKRGO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 13:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbjGKQdC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 12:33:02 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3461FCF
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 09:32:49 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b702319893so94686411fa.3
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 09:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689093167; x=1691685167;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWtpptzPuOCoLkyZBw7yYHV5FeI36rJVjotbONsdA94=;
-        b=WFibieZ2v0r4nWPy0J1wGTrFtOXxVksWo9Ycvtk6r1viqsBFsWV1+2Luw0tJWYEc2d
-         EybaDJGcl9KBnd0R2+PpSfAnadC6cUCuzXIeMjWw73PxDtrOeheXj3MKd/apxW9S3ScJ
-         Bl58mCaKB5LUAOIUynXr102zB7CYguU8HSAJLcDpZc+IWY8x5SiZcHZRkmcdW0/ue2oa
-         8aXF0EdL9nkFqQ8NQ6NYa+DFo+gCiYHKk0xm586Z7LI3nLfD/P1f+sXgZTNlbdV9CQLJ
-         zPkvhLIsOegU5GpzkADKnE1GLB+w6gcz5zA7aFFk4hLsPcOTQHM9yDbvmbKV8wZAXdVk
-         LFCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689093167; x=1691685167;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VWtpptzPuOCoLkyZBw7yYHV5FeI36rJVjotbONsdA94=;
-        b=g6PZbsQ7P7qhvv9RXKilJlIHEKYO/dQvlTR0YpJOSMAFBOSXqmP+TFaq/bYJraeCBY
-         C/qP2wzJkZV7WlTMlTrh3YxQCxizAkZURnIHUfk0mmCc1lPNtrgvNaEUueMuxXnPor2k
-         NEFY8Sl3SKWYSFL26hMyla4NALd3rBnfXDrL3uZcPLlmSP3IFfeM9p8myLLkMc/CtofH
-         4GbsYWXKPe3swvEnlbk+x0e2DbougiCaUKKgPNJr6zeF1FeHRRdvsWDHJ3S5MsB8OZ17
-         H+LOHq5E3u+0ymmkrfJuAub4qs8RB+4SClR0Na+zt03wVOFP4oRLfr9Bzr4lj9c6sUyC
-         98Xw==
-X-Gm-Message-State: ABy/qLbugGo8Y/qGDBbhZQwgMb5w30QdpkTvnDbvVJgcF3xlwn6i4LjR
-        ++ZLPNt8/zzejXIx1lzF/qienWL+pkffB41rwtQ=
-X-Google-Smtp-Source: APBJJlH1If/svLi3ZvVSK9N5XCgAEROHhzB3qlp5M8M0oO6v2qngfJe3MewXHmdWauY1GePpYxisCh5XUDIQqNBIkDk=
-X-Received: by 2002:a05:651c:120c:b0:2b6:fc80:c45f with SMTP id
- i12-20020a05651c120c00b002b6fc80c45fmr12883371lja.13.1689093167200; Tue, 11
- Jul 2023 09:32:47 -0700 (PDT)
+        with ESMTP id S229928AbjGKRGN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 13:06:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3DCB7;
+        Tue, 11 Jul 2023 10:05:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D31DE61575;
+        Tue, 11 Jul 2023 17:05:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738DBC433CA;
+        Tue, 11 Jul 2023 17:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689095158;
+        bh=/dly5nbaWfwT5KcM51jbms5tjAC68wuJHQC6spfOCes=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MKNiTx0nlXElPNltIH7tVxIYhrH4+PpUD8Dc07/k0Izs3ugMZnUi2in8BaO6VbEdl
+         ry06e5Y33ljoJtzy9osjg2fP4KzV1XbFyEnd7gsG2FIA+RZaLpIe1KkEJHEp9ozM1h
+         EOaLqah9uSCy954cvFhCywNC7IULAlNbcI8NGThYVj4RTqUgmq/J7MW4IPf0RYVQwC
+         iEkSYyAxCJ4VKuJ+m5vcT+TMCnEQM6cKi28dCVN6H+n+FarUeWuBakNOTMmZtmooWW
+         /OA4qpwMaSysa1sQ5LrLbF/l0rN0S2BYe0e4yjaK54AdqbeNEjtyo/zE81SpWj2Nbb
+         YPkf5nTcal/NQ==
+Date:   Tue, 11 Jul 2023 19:05:44 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, James.Bottomley@HansenPartnership.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        axboe@kernel.dk, benh@kernel.crashing.org, borntraeger@de.ibm.com,
+        bp@alien8.de, catalin.marinas@arm.com, christian@brauner.io,
+        dalias@libc.org, davem@davemloft.net, deepa.kernel@gmail.com,
+        deller@gmx.de, dhowells@redhat.com, fenghua.yu@intel.com,
+        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, hpa@zytor.com,
+        ink@jurassic.park.msu.ru, jhogan@kernel.org, kim.phillips@arm.com,
+        ldv@altlinux.org, linux-alpha@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, paulus@samba.org, peterz@infradead.org,
+        ralf@linux-mips.org, sparclinux@vger.kernel.org, stefan@agner.ch,
+        tglx@linutronix.de, tony.luck@intel.com, tycho@tycho.ws,
+        will@kernel.org, x86@kernel.org, ysato@users.sourceforge.jp,
+        Palmer Dabbelt <palmer@sifive.com>
+Subject: Re: [PATCH v4 2/5] fs: Add fchmodat2()
+Message-ID: <20230711-spendabel-lotosblume-f08d23a83ebf@brauner>
+References: <cover.1689074739.git.legion@kernel.org>
+ <cover.1689092120.git.legion@kernel.org>
+ <f2a846ef495943c5d101011eebcf01179d0c7b61.1689092120.git.legion@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:907:1c16:b0:986:7a95:9cc0 with HTTP; Tue, 11 Jul 2023
- 09:32:46 -0700 (PDT)
-Reply-To: mrsvl06@gmail.com
-From:   Veronica Lee <nd4846496@gmail.com>
-Date:   Tue, 11 Jul 2023 18:32:46 +0200
-Message-ID: <CAPadVRx=24t+dtCfxOJ-H_QTG0496dY-ZfFTyFRXoPSEnRePwA@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f2a846ef495943c5d101011eebcf01179d0c7b61.1689092120.git.legion@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-16nXnNeV150g15nXp9eZ16jXqteZINep157Xl9eUINec15TXkteZ16Ig15DXnNeZ15og16nXldeR
-INeZ16kg15zXmSDXnteZ15nXnCDXkdei15HXqCDXnNec15Ag16rXkteV15HXlCDXkNeg15kg157X
-lteb15nXqA0K15zXkteR15kg15fXldeW15Qg16nXkNeg15kg16jXldem15Qg15zXqdeq16Mg15DX
-ldeq15og15fXlteV16gg15DXnNeZ15kg15zXpNeo15jXmdedINeg15XXodek15nXnSDXkNeg15kg
-157Xl9eb15QNCteQ16DXkA0K
+On Tue, Jul 11, 2023 at 06:16:04PM +0200, Alexey Gladkov wrote:
+> On the userspace side fchmodat(3) is implemented as a wrapper
+> function which implements the POSIX-specified interface. This
+> interface differs from the underlying kernel system call, which does not
+> have a flags argument. Most implementations require procfs [1][2].
+> 
+> There doesn't appear to be a good userspace workaround for this issue
+> but the implementation in the kernel is pretty straight-forward.
+> 
+> The new fchmodat2() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
+> unlike existing fchmodat.
+> 
+> [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
+> [2] https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
+> 
+> Co-developed-by: Palmer Dabbelt <palmer@sifive.com>
+> Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  fs/open.c                | 18 ++++++++++++++----
+>  include/linux/syscalls.h |  2 ++
+>  2 files changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/open.c b/fs/open.c
+> index 0c55c8e7f837..39a7939f0d00 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -671,11 +671,11 @@ SYSCALL_DEFINE2(fchmod, unsigned int, fd, umode_t, mode)
+>  	return err;
+>  }
+>  
+> -static int do_fchmodat(int dfd, const char __user *filename, umode_t mode)
+> +static int do_fchmodat(int dfd, const char __user *filename, umode_t mode, int lookup_flags)
+
+Should all be unsigned instead of int here for flags. We also had a
+documentation update to that effect but smh never sent it.
+user_path_at() itself takes an unsigned as well.
+
+I'll fix that up though.
