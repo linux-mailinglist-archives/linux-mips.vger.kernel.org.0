@@ -2,100 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F9B74EFFF
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 15:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766A974F056
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 15:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjGKNSG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 09:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S231674AbjGKNiY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 09:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjGKNSF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 09:18:05 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D52B1
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 06:18:04 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fba1288bbdso8325522e87.1
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 06:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689081482; x=1691673482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1M416nxinRPhMN72vt3UGKfG1j5hFyRnFIH3z1K8CY0=;
-        b=mLWHy13gnfEODDnVaE+Cd9BMvRPT1potqsYTW7tW6KH3+OCJNqCXPRfpaKFPQ+O6UK
-         At5idoRZXXjHXtri/l0U9ytWKOn362jHTwRZIykgJvLMO/RG5uVUhyXEcs1S3qKWpD2R
-         7LGVvosyn4tDvneqDBHdUGMIfhuIzIv5iBCDtnwoKoy3Ae2L9x3tlIzXn8vIJUBsZ8wb
-         g/7SepshLR7SY7Y3uMMbftC1vE3RAMMgAF/Hs3rSfQbe/pWg3wZWQKwb56YZqhQesCPn
-         zZgUHjvpiMy1+qxFHWMdS23fuvMp9YWI1rpkyQs02ronAbtT23DQHtVH45WsEpuFvtx7
-         0DTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689081482; x=1691673482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1M416nxinRPhMN72vt3UGKfG1j5hFyRnFIH3z1K8CY0=;
-        b=hgqtsSRLGLWAXHZfGSy/JhQ5lxjQ3P8kfv6bDBKAXCvtccqAZLs2ZDEIhYWyLOeIiQ
-         bjiqWCDyBNdoY6MkDwwT/5EjSxQOlFul6HPqTltSNKQ2/JKAmCyjGvls1v3apr5nY8++
-         4N6YD4+wka7904qB4/c10kFhII3TXGvaY+nXSVfIBi0nlAwFLBj77BZXWnJug2dHGt50
-         2rwVG1UrQSfJyOIwOai7mJV351dMiiFV3slpH9lrmSxAiI7zqQ+2JuqmZ9JKUJssA4IU
-         Ozd7HrofpaD7d9g8fiAsuTCXX8GsiUwj0dZQcl5O0qWPgct8CjE03BYHFwL5UGePO5sM
-         UFPw==
-X-Gm-Message-State: ABy/qLbccscxEVXECTVUWVI2Z1mwjaoQf0raerL+MtvXenpak7xqEo++
-        8EgtNiDuJss/3G5cZySZOJW5+g==
-X-Google-Smtp-Source: APBJJlG4jJrWm0lu72w6bT3WD8bOW7mvytM/mXWOJRIPSonej9X8klrk5olkHCz3glygAVziSdytAw==
-X-Received: by 2002:ac2:4c52:0:b0:4fb:85b2:cf78 with SMTP id o18-20020ac24c52000000b004fb85b2cf78mr15387499lfk.37.1689081482480;
-        Tue, 11 Jul 2023 06:18:02 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.194.156])
-        by smtp.gmail.com with ESMTPSA id q16-20020a056402033000b0051e2a1502a1sm1239244edw.68.2023.07.11.06.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 06:18:02 -0700 (PDT)
-Message-ID: <9a20851f-7981-bf31-eed1-7dd77528ca02@linaro.org>
-Date:   Tue, 11 Jul 2023 15:18:00 +0200
+        with ESMTP id S229479AbjGKNiX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 09:38:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FED10DD;
+        Tue, 11 Jul 2023 06:38:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C447614F6;
+        Tue, 11 Jul 2023 13:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA99C433C7;
+        Tue, 11 Jul 2023 13:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689082700;
+        bh=MjkY+PryFAt8G+OdjO9LolQHYDzlX27UqcYtpMYnVwU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P4rG0DrQuYuh1KI2SaGRXPxMUodnyuoYxdgPkn1OMlHHieR1kS9r/CQh42NQdCEvi
+         jezSVyuSCMeYDxZrU2qgssSXxMITcDN0wrI2LdTTXRxdvNf91UYOmZ/oeiA0SkLMOm
+         ToPJ01f8m0qnXoBuvUPupXyZM8q39wgUuDsJ0IPd2i86nWZO8OaQ0Z1yj2zbd4H3fH
+         d4apNZ3SHU+N4XnwC2YHNvSjMrA6Ly/31Wexx13nYBwFVH2whpKLnzaVfdu9jfzTjD
+         b8h/GZBzFq03hxHoLJ1T4mgHcoT1KaxayCxO/eDkShAdahq/1VQ+nx1L6a75mBKsMI
+         HsKJyRD7qNvow==
+Date:   Tue, 11 Jul 2023 15:38:03 +0200
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, James.Bottomley@hansenpartnership.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        axboe@kernel.dk, benh@kernel.crashing.org, borntraeger@de.ibm.com,
+        bp@alien8.de, catalin.marinas@arm.com, christian@brauner.io,
+        dalias@libc.org, davem@davemloft.net, deepa.kernel@gmail.com,
+        deller@gmx.de, dhowells@redhat.com, fenghua.yu@intel.com,
+        firoz.khan@linaro.org, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jhogan@kernel.org,
+        kim.phillips@arm.com, ldv@altlinux.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, palmer@sifive.com, paul.burton@mips.com,
+        paulus@samba.org, peterz@infradead.org, ralf@linux-mips.org,
+        rth@twiddle.net, schwidefsky@de.ibm.com,
+        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
+        tony.luck@intel.com, tycho@tycho.ws, will@kernel.org,
+        x86@kernel.org, ysato@users.sourceforge.jp
+Subject: Re: [PATCH v3 5/5] selftests: add fchmodat4(2) selftest
+Message-ID: <ZK1bOxynxdVHR1Fu@example.org>
+References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
+ <cover.1689074739.git.legion@kernel.org>
+ <c3606ec38227d921fa8a3e11613ffdb2f3ea7636.1689074739.git.legion@kernel.org>
+ <87pm4ybqct.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
- checking of eiointc_index
-Content-Language: en-US
-To:     Bibo Mao <maobibo@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230711120807.1805186-1-maobibo@loongson.cn>
- <20230711120807.1805186-2-maobibo@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230711120807.1805186-2-maobibo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87pm4ybqct.fsf@oldenburg.str.redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/7/23 14:08, Bibo Mao wrote:
-> Return value of function eiointc_index is int, however it is converted
-> into uint32_t and then compared smaller than zero. This causes logic
-> problem. There is eioint initialization problem on qemu virt-machine
-> where there is only one eioint node and more than 4 vcpus. Nodemap of
-> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
-> other vcpus can not response any external device interrupts and only local
-> processor interrupts like ipi/timer can work.
+On Tue, Jul 11, 2023 at 02:10:58PM +0200, Florian Weimer wrote:
+> * Alexey Gladkov:
 > 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->   drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
->   1 file changed, 7 insertions(+), 5 deletions(-)
+> > The test marks as skipped if a syscall with the AT_SYMLINK_NOFOLLOW flag
+> > fails. This is because not all filesystems support changing the mode
+> > bits of symlinks properly. These filesystems return an error but change
+> > the mode bits:
+> >
+> > newfstatat(4, "regfile", {st_mode=S_IFREG|0640, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> > newfstatat(4, "symlink", {st_mode=S_IFLNK|0777, st_size=7, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> > syscall_0x1c3(0x4, 0x55fa1f244396, 0x180, 0x100, 0x55fa1f24438e, 0x34) = -1 EOPNOTSUPP (Operation not supported)
+> > newfstatat(4, "regfile", {st_mode=S_IFREG|0640, st_size=0, ...}, AT_SYMLINK_NOFOLLOW) = 0
+> >
+> > This happens with btrfs and xfs:
+> >
+> >  $ /kernel/tools/testing/selftests/fchmodat4/fchmodat4_test
+> >  TAP version 13
+> >  1..1
+> >  ok 1 # SKIP fchmodat4(symlink)
+> >  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> >
+> >  $ stat /tmp/ksft-fchmodat4.*/symlink
+> >    File: /tmp/ksft-fchmodat4.3NCqlE/symlink -> regfile
+> >    Size: 7               Blocks: 0          IO Block: 4096   symbolic link
+> >  Device: 7,0     Inode: 133         Links: 1
+> >  Access: (0600/lrw-------)  Uid: (    0/    root)   Gid: (    0/    root)
+> >
+> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> 
+> This looks like a bug in those file systems?
 
-Fixes: dd281e1a1a93 ("irqchip: Add Loongson Extended I/O interrupt 
-controller support")
+To me this looks like a bug. I'm fine if the operation ends with
+EOPNOTSUPP, but in that case the mode bits shouldn't change.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> As an extra test, “echo 3 > /proc/sys/vm/drop_caches” sometimes has
+> strange effects in such cases because the bits are not actually stored
+> on disk, only in the dentry cache.
+
+tmpfs
+syscall_0x1c3(0xffffff9c, 0x7ffd58758574, 0, 0x100, 0x7f6cf18adc70, 0x7ffd58756ad8) = 0
++++ exited with 0 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+ext4
+syscall_0x1c3(0xffffff9c, 0x7ffedfdb4574, 0, 0x100, 0x7f7f40b45c70, 0x7ffedfdb3ae8) = -1 EOPNOTSUPP (Operation not supported)
++++ exited with 1 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+xfs
+syscall_0x1c3(0xffffff9c, 0x7ffcd03ce574, 0, 0x100, 0x7ff2f2980c70, 0x7ffcd03cdd38) = -1 EOPNOTSUPP (Operation not supported)
++++ exited with 1 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+btrfs
+syscall_0x1c3(0xffffff9c, 0x7fff13d2e574, 0, 0x100, 0x7f9b67f59c70, 0x7fff13d2ca88) = -1 EOPNOTSUPP (Operation not supported)
++++ exited with 1 +++
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:36 /tmp/dir/link -> f
+
+reiserfs
+syscall_0x1c3(0xffffff9c, 0x7ffdf75af574, 0, 0x100, 0x7f7ad0634c70, 0x7ffdf75ae478) = 0
++++ exited with 0 +++
+l--------- 1 root root 1 Jul 11 16:43 /tmp/dir/link -> f
+=== dropping caches ===
+l--------- 1 root root 1 Jul 11 16:43 /tmp/dir/link -> f
+
+-- 
+Rgrds, legion
 
