@@ -2,154 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B51674EF64
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 14:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F9B74EFFF
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 15:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjGKMvZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 08:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S231285AbjGKNSG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 09:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjGKMvX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 08:51:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9DDE6C;
-        Tue, 11 Jul 2023 05:51:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94D1D614BF;
-        Tue, 11 Jul 2023 12:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555A7C433C7;
-        Tue, 11 Jul 2023 12:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689079879;
-        bh=v+qEn9CoklXqxP1Sa+MFkzpKjgr7E+g5iZSiirA+nSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fUjSfsi7J0u/QQbtQMCDtiEKTIE7W5W0WBpPNSQMzTFUcRkYSb04jbHJs21fv800g
-         EThrQaUqs7NsBFe05IcCLgYzLYXYWoW8KeI98C2YcabyFUIYGnWFvDeTxCtiBR76jr
-         w/Zr0d0700gwvjaTe1JlnCUhU8AS5VndNnODqvgRp53hJh/zIs47unszqpTHBzrQaK
-         1xiXUMMc6WfSsUWm4s9ZEif1kEg2vCGCmP2azN/sbKPrUei4Ggr2CXmDG8Mzu44IK0
-         429B8vdVSRgfpn5E02EAVJjTXmzixyzoj9+S/Iq6iOYedIetr84v91WQhSf1jA/jj4
-         7ALpPYBl5adoQ==
-Date:   Tue, 11 Jul 2023 14:51:01 +0200
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        christian@brauner.io, Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        David Howells <dhowells@redhat.com>, fenghua.yu@intel.com,
-        firoz.khan@linaro.org, Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, heiko.carstens@de.ibm.com,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>, jhogan@kernel.org,
-        Kim Phillips <kim.phillips@arm.com>, ldv@altlinux.org,
-        linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linuxppc-dev@lists.ozlabs.org, Andy Lutomirski <luto@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>, paul.burton@mips.com,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Zijlstra <peterz@infradead.org>, ralf@linux-mips.org,
-        rth@twiddle.net, schwidefsky@de.ibm.com,
-        sparclinux@vger.kernel.org, stefan@agner.ch,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, tycho@tycho.ws,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH v3 2/5] fs: Add fchmodat4()
-Message-ID: <ZK1QNRidZuGcfOSd@example.org>
-References: <87o8pscpny.fsf@oldenburg2.str.redhat.com>
- <cover.1689074739.git.legion@kernel.org>
- <d11b93ad8e3b669afaff942e25c3fca65c6a983c.1689074739.git.legion@kernel.org>
- <83363cbb-2431-4520-81a9-0d71f420cb36@app.fastmail.com>
- <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
+        with ESMTP id S229961AbjGKNSF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 09:18:05 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D52B1
+        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 06:18:04 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fba1288bbdso8325522e87.1
+        for <linux-mips@vger.kernel.org>; Tue, 11 Jul 2023 06:18:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689081482; x=1691673482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1M416nxinRPhMN72vt3UGKfG1j5hFyRnFIH3z1K8CY0=;
+        b=mLWHy13gnfEODDnVaE+Cd9BMvRPT1potqsYTW7tW6KH3+OCJNqCXPRfpaKFPQ+O6UK
+         At5idoRZXXjHXtri/l0U9ytWKOn362jHTwRZIykgJvLMO/RG5uVUhyXEcs1S3qKWpD2R
+         7LGVvosyn4tDvneqDBHdUGMIfhuIzIv5iBCDtnwoKoy3Ae2L9x3tlIzXn8vIJUBsZ8wb
+         g/7SepshLR7SY7Y3uMMbftC1vE3RAMMgAF/Hs3rSfQbe/pWg3wZWQKwb56YZqhQesCPn
+         zZgUHjvpiMy1+qxFHWMdS23fuvMp9YWI1rpkyQs02ronAbtT23DQHtVH45WsEpuFvtx7
+         0DTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689081482; x=1691673482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1M416nxinRPhMN72vt3UGKfG1j5hFyRnFIH3z1K8CY0=;
+        b=hgqtsSRLGLWAXHZfGSy/JhQ5lxjQ3P8kfv6bDBKAXCvtccqAZLs2ZDEIhYWyLOeIiQ
+         bjiqWCDyBNdoY6MkDwwT/5EjSxQOlFul6HPqTltSNKQ2/JKAmCyjGvls1v3apr5nY8++
+         4N6YD4+wka7904qB4/c10kFhII3TXGvaY+nXSVfIBi0nlAwFLBj77BZXWnJug2dHGt50
+         2rwVG1UrQSfJyOIwOai7mJV351dMiiFV3slpH9lrmSxAiI7zqQ+2JuqmZ9JKUJssA4IU
+         Ozd7HrofpaD7d9g8fiAsuTCXX8GsiUwj0dZQcl5O0qWPgct8CjE03BYHFwL5UGePO5sM
+         UFPw==
+X-Gm-Message-State: ABy/qLbccscxEVXECTVUWVI2Z1mwjaoQf0raerL+MtvXenpak7xqEo++
+        8EgtNiDuJss/3G5cZySZOJW5+g==
+X-Google-Smtp-Source: APBJJlG4jJrWm0lu72w6bT3WD8bOW7mvytM/mXWOJRIPSonej9X8klrk5olkHCz3glygAVziSdytAw==
+X-Received: by 2002:ac2:4c52:0:b0:4fb:85b2:cf78 with SMTP id o18-20020ac24c52000000b004fb85b2cf78mr15387499lfk.37.1689081482480;
+        Tue, 11 Jul 2023 06:18:02 -0700 (PDT)
+Received: from [192.168.69.115] ([176.187.194.156])
+        by smtp.gmail.com with ESMTPSA id q16-20020a056402033000b0051e2a1502a1sm1239244edw.68.2023.07.11.06.18.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 06:18:02 -0700 (PDT)
+Message-ID: <9a20851f-7981-bf31-eed1-7dd77528ca02@linaro.org>
+Date:   Tue, 11 Jul 2023 15:18:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711-demolieren-nilpferd-80ffe47563ad@brauner>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
+ checking of eiointc_index
+Content-Language: en-US
+To:     Bibo Mao <maobibo@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230711120807.1805186-1-maobibo@loongson.cn>
+ <20230711120807.1805186-2-maobibo@loongson.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230711120807.1805186-2-maobibo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 01:52:01PM +0200, Christian Brauner wrote:
-> On Tue, Jul 11, 2023 at 01:42:19PM +0200, Arnd Bergmann wrote:
-> > On Tue, Jul 11, 2023, at 13:25, Alexey Gladkov wrote:
-> > > From: Palmer Dabbelt <palmer@sifive.com>
-> > >
-> > > On the userspace side fchmodat(3) is implemented as a wrapper
-> > > function which implements the POSIX-specified interface. This
-> > > interface differs from the underlying kernel system call, which does not
-> > > have a flags argument. Most implementations require procfs [1][2].
-> > >
-> > > There doesn't appear to be a good userspace workaround for this issue
-> > > but the implementation in the kernel is pretty straight-forward.
-> > >
-> > > The new fchmodat4() syscall allows to pass the AT_SYMLINK_NOFOLLOW flag,
-> > > unlike existing fchmodat.
-> > >
-> > > [1] 
-> > > https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/fchmodat.c;h=17eca54051ee28ba1ec3f9aed170a62630959143;hb=a492b1e5ef7ab50c6fdd4e4e9879ea5569ab0a6c#l35
-> > > [2] 
-> > > https://git.musl-libc.org/cgit/musl/tree/src/stat/fchmodat.c?id=718f363bc2067b6487900eddc9180c84e7739f80#n28
-> > >
-> > > Signed-off-by: Palmer Dabbelt <palmer@sifive.com>
-> > > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > 
-> > I don't know the history of why we ended up with the different
-> > interface, or whether this was done intentionally in the kernel
-> > or if we want this syscall.
-> > 
-> > Assuming this is in fact needed, I double-checked that the
-> > implementation looks correct to me and is portable to all the
-> > architectures, without the need for a compat wrapper.
-> > 
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+On 11/7/23 14:08, Bibo Mao wrote:
+> Return value of function eiointc_index is int, however it is converted
+> into uint32_t and then compared smaller than zero. This causes logic
+> problem. There is eioint initialization problem on qemu virt-machine
+> where there is only one eioint node and more than 4 vcpus. Nodemap of
+> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
+> other vcpus can not response any external device interrupts and only local
+> processor interrupts like ipi/timer can work.
 > 
-> The system call itself is useful afaict. But please,
-> 
-> s/fchmodat4/fchmodat2/
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>   drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
 
-Sure. I will.
+Fixes: dd281e1a1a93 ("irqchip: Add Loongson Extended I/O interrupt 
+controller support")
 
-> With very few exceptions we don't version by argument number but by
-> revision and we should stick to one scheme:
-> 
-> openat()->openat2()
-> eventfd()->eventfd2()
-> clone()/clone2()->clone3()
-> dup()->dup2()->dup3() // coincides with nr of arguments
-> pipe()->pipe2() // coincides with nr of arguments
-> renameat()->renameat2()
-> 
-
--- 
-Rgrds, legion
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
