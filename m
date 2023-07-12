@@ -2,356 +2,336 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64D9750E21
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jul 2023 18:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2983E7510CD
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jul 2023 20:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjGLQRb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Jul 2023 12:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S230505AbjGLS4L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Jul 2023 14:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbjGLQRE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Jul 2023 12:17:04 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E0910EA;
-        Wed, 12 Jul 2023 09:17:00 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CEiBtN020349;
-        Wed, 12 Jul 2023 16:16:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=6TvQZHdAS5xKcSb/e8jmjxcPhYuqtvf/21CtwvOY5rE=;
- b=a/CzMeF5peQ8YhQP0Y4ZbexRfIv0zhSQasCOiO4qoxALqNhFmOY2O8G+MiXOe2SFVY0R
- u/l9HWo9++JgVN1swVaxnWoccxMuLaK8Q7fdmLKyeoFNrg8wWrs7GpqPSf7QVBYesTLH
- uRQEk4RZVBiz+szYWwG25l+iMBbzbrmglAStmEbwGLF+HfZ22xQFZRhP0nu5MjTGE6DP
- 4Bq8Ijx5c7oYVWsrTuP2IkENr3TY8mqx1J9afqWqEtiIEI+fx4F+JCGYmYkAxs8bPdG0
- C0AolYjD7EVvmAJJTYlaRHrQO7o6rMw3MBKF0LFqhpNhSdWppPAFxG8yPsbspVwttcVF Zw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rrea2wn6d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jul 2023 16:16:39 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36CEoomO004281;
-        Wed, 12 Jul 2023 16:16:38 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx8d4m7a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jul 2023 16:16:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fPiDkQzm1PdE6PLGCTmKJ0p8k8qoznPw2OSJQ0L7/fKFbk55immzk+4+cWIGr2Mf23hXxUPXZ+ZkcpRMLPqg5ahcTn/fyvEJ+yaS6pi0a8mrZol6+9C2GNPWYemLMDALfKZWMYfU6b9BePgOcYB9dv4T82vgV2t9pK4CNXSLRlSi6BI6CtDe0uNJIutaTfacDe0WDzvY4I4m7WsenDvSna1eW8nC+ceLsfnwRIRCULnIKBrQOcaG1VTCagZh6fQMlMEboEST2x2ywE5coUWnqsCsKevZnLySDNJp51FN0pSCtEux2UXf3ZGwJDnMbblEKKkkCpkZ/749yU4xrGR08Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6TvQZHdAS5xKcSb/e8jmjxcPhYuqtvf/21CtwvOY5rE=;
- b=Yp6LaQuAnMBqkXSctUDhGloh3E1Fxa8DxNjYe4JxYnXw6rrGBGvhv4scbpBHDgpJOxS9fqduT1oQHOqDPSWO/pjvYUcnKbhzz6tmAiJkdQKwDC2kRFGFdLid6ibivqwvtnBt/yl4azgulGSzyKWrWZzIVNypSE3Z+8TWKNv+70nVHcnrckYmlh1fNZd9NI6WziMLhzwsfeDCRcpO8TvpNJE2XB773iXAKmaTkbArB6C0JkcGGNswNAwPyho8pEzwj2ZbvdyiCSSXx99McS5BbAo7+jmpVQis3J5F9RXz6MS7ml+rXyiM8fUgfMxCglhxAoKBwgJr8Js5jQC1aVMleA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S229572AbjGLS4K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Jul 2023 14:56:10 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0651BF8
+        for <linux-mips@vger.kernel.org>; Wed, 12 Jul 2023 11:56:08 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666eb03457cso4453469b3a.1
+        for <linux-mips@vger.kernel.org>; Wed, 12 Jul 2023 11:56:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6TvQZHdAS5xKcSb/e8jmjxcPhYuqtvf/21CtwvOY5rE=;
- b=TUKuCravli9QWsrnFQkjnvk4tjvg+k85re83QJHF2I9L1it3CwF2PCAGLeadVFLw7Iy0bz/O+YkWf9Yv/R69+9PSmWlVYvEcdrj6gip5gz15geTEMU2wSqNAySODDGCOCR0i+UQjQSObmRCfcJMl2p/j6aqVA/osfDpzgkQNvVk=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by BN0PR10MB5304.namprd10.prod.outlook.com (2603:10b6:408:129::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
- 2023 16:16:34 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::4c83:52fa:a398:11a8]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::4c83:52fa:a398:11a8%3]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 16:16:33 +0000
-From:   Eric DeVolder <eric.devolder@oracle.com>
-To:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        chenhuacai@kernel.org, geert@linux-m68k.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Cc:     kernel@xen0n.name, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, peterz@infradead.org,
-        frederic@kernel.org, akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        eric.devolder@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: [PATCH v6 14/14] kexec: rename ARCH_HAS_KEXEC_PURGATORY
-Date:   Wed, 12 Jul 2023 12:15:45 -0400
-Message-Id: <20230712161545.87870-15-eric.devolder@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230712161545.87870-1-eric.devolder@oracle.com>
-References: <20230712161545.87870-1-eric.devolder@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SN7PR04CA0057.namprd04.prod.outlook.com
- (2603:10b6:806:120::32) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
+        d=chromium.org; s=google; t=1689188167; x=1691780167;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rTThceHWQZD4Ac2XfATsHd8gywiOPtbGgdMtmxYrl6g=;
+        b=kbqCotZ3UCuabsxyGBnBZQ/ND3HtoVRxWrS7yPWjwHe1EopPDiFYrY0YF8Vv4riXaI
+         bdqrgmTFwNDC7/teKb2TzI11IxZ67GyQRoz7/UOaY8BVL9+AmRctvmiAOS+jVAmLXT/0
+         HOqZ61S+tl3eskbVQrvF4ytcFhzAGn+1rXzeY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689188167; x=1691780167;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rTThceHWQZD4Ac2XfATsHd8gywiOPtbGgdMtmxYrl6g=;
+        b=i7uYs5USCB53WssowLeQD084o8fJeIk7ihR9d7E6Fcd2fEzYqxCiasSY+d9lPzHWlD
+         4/EDrgeLrOtTpaHB0yLnkw0kFlB8NuJlKPOBkTX/7ZbsRWzUt8WrdbSXErj51M2pS1G3
+         wOapFntK3mC9g9z6FLDF6VxB8V1wamm/q9i+84PSAK0zvyKfLNhrzwqFN2ZDekSZPJ+q
+         2IcEYsWc8BzXWiD3iJrB3DZLm8jJIEP8w1wndwJWGvZkoCp+sgpFWBSgxtGt6o8L2QX5
+         sQaWeZjpwdtakJxoTsWZAFh+qIOrFAGkPMjQrMmxsTO8FnfmSFXQaQHdiV/YmrTrRj9q
+         E27Q==
+X-Gm-Message-State: ABy/qLZV9jgouCMtK44hVx8M9/40jjQE85V9TcCXqv1zoKOLvZDTBQeq
+        7MShWPbqK76ldE+5W99SMfNTatm7I8UVFoVW3gn1862P
+X-Google-Smtp-Source: APBJJlEyUsyTrpW5OPX98IZFXccAYYSehpmImuESfB0jYNH4LrtOtMOAosxmJvxStLFVzMNbo+0oTg==
+X-Received: by 2002:a05:6a00:21d6:b0:668:7090:bf18 with SMTP id t22-20020a056a0021d600b006687090bf18mr16954192pfj.34.1689188167554;
+        Wed, 12 Jul 2023 11:56:07 -0700 (PDT)
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com. [209.85.210.178])
+        by smtp.gmail.com with ESMTPSA id x11-20020a63b34b000000b005533c53f550sm3608525pgt.45.2023.07.12.11.56.07
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 11:56:07 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso4434285b3a.3
+        for <linux-mips@vger.kernel.org>; Wed, 12 Jul 2023 11:56:07 -0700 (PDT)
+X-Received: by 2002:a25:50c9:0:b0:c6d:e3e3:5592 with SMTP id
+ e192-20020a2550c9000000b00c6de3e35592mr13511834ybb.54.1689186698646; Wed, 12
+ Jul 2023 11:31:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|BN0PR10MB5304:EE_
-X-MS-Office365-Filtering-Correlation-Id: d61e4658-810c-4da4-daf7-08db82f35b93
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lj+u2Kg3MkfXSO9/cBMfsMKeYOl2C+36IZVu9dE3d2Wg2ji8rIYnIDT+eSySNcYz+1ki3D4XcDN9FAP5PtHAJrXX3SrEn4cFiz/w1beAwExB1XhzALPAg66VuMcxLwOtxZYacbMotrkuH9b5a7TirnfwsNNaLIOsyELhY4XWkBYHtsCXIAL4VdRIK3eHhI/GoYWeFWp6tZ/shDeKq1upmQP3sNdvg+/13s7PNqfNIkEoBo0UzwPO0g2q5SE5dVCOuVUkThDnOEVgVodRJIHE10roDqMxwO3g0C1isyiNePa/POJQMoab0xxEPX/2H6mv7lQ4TVBP8ZJWc1VrZGWqJcfn+yu1ZbpDfTaFb4bJ4rbBoNKf++DaNUtV/9PIGvSu+EIS/bgU1CuC1CnDnzy85/Qh6/lNlbwfpQMIyRFHzg7ZDA3xRecct2E3lqe6o04Nwoq1FTc2aKuInho04jy7217QTzl57Fwfh6nJqeWnOQm8hM/OSRrEiRcPqzSSjuWEf+GsNBr8tFGD27hBi0USsLW8kYsvRfjyUsZ7wE6Zjgu7z10lvOuYCwQp7KzdDQt2TUMLaLMY0L1lcrWoYC4bYCcsEJtffiWdeh9Fz/szYLw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(346002)(396003)(366004)(451199021)(2906002)(921005)(6512007)(38100700002)(83380400001)(186003)(2616005)(26005)(1076003)(107886003)(86362001)(6506007)(5660300002)(8676002)(36756003)(7366002)(7406005)(7416002)(8936002)(6666004)(478600001)(66556008)(66946007)(41300700001)(66476007)(4326008)(316002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WesIdf3HwIOzrLIrt/+hEFnaTGpffE1D12UGqfF5YJRIWwfiA0dLzLhsVSqZ?=
- =?us-ascii?Q?Kseqg8rTANheGbbCrPQSV5FTSaxEd7Ipw4vUP3Kby972Q0vWXGUVQgHT9lQU?=
- =?us-ascii?Q?7Che0mqSQb1Y3jJEjJv+N4EaygGF4zCOess7su/zXjn55rphDuTjP51tAPme?=
- =?us-ascii?Q?azB23uItJ8XOftiyu7DDlekUsq6BR18OdlRvT5f6KTXMP6byUbm76azhtsV3?=
- =?us-ascii?Q?GVflfKTvRgVfs+tMobTYN4qlPvV2MJbxK9wtvlzrOlmNASgZWfiCUibvNVj9?=
- =?us-ascii?Q?u32ISgzaef/DtVcAyJ3ny/ERWP793T8Z30JZCaaLrzmxD9LE0+b7ApjPNu/S?=
- =?us-ascii?Q?X38UMl7yNCmhaG4TDBkGpff+tPeO0g1iL/7QzSw3BhYtQvYAXVkKatFsMRCj?=
- =?us-ascii?Q?5RjkAUyY+2Iq9TJBhruMhM3gNa6U1+4tWAxlGfmgi6Af1GChKey2ivcEBwlj?=
- =?us-ascii?Q?ttOchdUuOWlYOHKyszGGdmfZT4K2J0iX09ta1NehkSlKgcCFRdcHTN70T+Sz?=
- =?us-ascii?Q?3vAKtJa4BugorO34VN41s/PSrwjAuia/bXU3vY8NAIZUfAbSgkiZ+5dLBx6Z?=
- =?us-ascii?Q?R44Pt7EotkPtwxo5Wk7zViLoxy6jAucsMCSxBeFnTcquDh3lAU5X75APcchI?=
- =?us-ascii?Q?64s/JhPIKmN5Cpgmt9QloF4WrhHrIdpy8xEPUs8smk8g5NuK0srS0gJH2XiH?=
- =?us-ascii?Q?PzdL0zbYmg/lgra33uWFRfjtk5FJRkeDTeGsrDPZgAU5slqFSjM/LPR4435q?=
- =?us-ascii?Q?Euo7MhNUxNXkPy8KAIqHoazR8rJx5dni3lAV1o+uc9ImBw8J2xBh23mE2wub?=
- =?us-ascii?Q?T5w2tElgk6yC+Nney4e3HpQ71kuoSq0B23C3HQsp4y6vjvCis+WJLcBsa1sv?=
- =?us-ascii?Q?7b/mp1PJHODusL/2Okokg5O5PV8PVWGFFzsyT3kwq6KVcG9BfR6mCaCs064r?=
- =?us-ascii?Q?YdTpnVE8Kw7g+IFa8ahHgkC6UsckSFjf+TRLeYbbDr5gyFFc+h4mM2JTB4Gc?=
- =?us-ascii?Q?1RYCsrtE80u8f7+OedFV464bZTwVsfL9BRf7wxkDGMWaMYUQ4yNmtd2mQ11t?=
- =?us-ascii?Q?Ba4XmqW8HlJs/OqDzYyCngkq8S8ux1f/iclQZ6qfWzsDO5skJszWO5SD7xY4?=
- =?us-ascii?Q?3JP6X+bYggAUm7povvwhrZiEF30ooiGd1Z6eSpZqnAyDTR018cVWL1NuwQOI?=
- =?us-ascii?Q?Ccmp06j8SE5xX0JBMt/tt8euMLr3LTLfJN3X0cAMFRgjIkfoUoLQheg4kW9e?=
- =?us-ascii?Q?1BOzex87jnyKJio9x9REmEbneyJDvWVKuQVWPyr47eGncTYkTwMpgzyCL68D?=
- =?us-ascii?Q?NUrOaqfTf2tvMlZLsz7OViN7kbt9IwwBKj0GUg33mWPJYNuOMf7tC8wMlx3s?=
- =?us-ascii?Q?Rk0HTeenfgk8t7z2uFV0rDEp8RnmBrZyqjqMbjeKVrpy7ukNF4rfJTg5Fh51?=
- =?us-ascii?Q?Bal4uJXxNVxrF6TUQiRca0H1cf3y+dFWNBRCiEdVrhF3HuyWWDxjBqmzVIj0?=
- =?us-ascii?Q?M5dQL/h22DGLYuCub35sUKhQaJxQ4A8NB8BlhkYv08VwgRWLfPgT0sPvTVHf?=
- =?us-ascii?Q?Id4VdgmM2Cpn+5CfeTeR6gS2gfxnbmD9OJQOROIg1xg80VNh7AWHWzUnzLBP?=
- =?us-ascii?Q?WQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?Uo8/XpB+F1F6H1ylrePPkdnTMb/cV+VySw5fdrBiRPW262ZQUX7Z3iZUxmZC?=
- =?us-ascii?Q?QVJ04LzbpCOkQfBO0GMh9Xe+AYIfu1tz+KnT9I3oAYks9aSTiq0gbtJJbOA0?=
- =?us-ascii?Q?6fOBstj5KPLmIrRpDMKnwBIi+mDiZxZM3sPtfSH+5/RBq7HILtZRokl9wk7g?=
- =?us-ascii?Q?T9PPvo854nV4bGOLw2bSID8DtHW0GmRWo319UxW0QixZxFG4h3Hd6zXpT+IU?=
- =?us-ascii?Q?9ToDKRKFEx+Ff/t4vpjmk1FI4AaMQdQ+YqeocAkc5WiyclNirRURmvrXEDpa?=
- =?us-ascii?Q?j+AeNRkt87Se+vabb8ttF+n50AXTwkt0s1IVGbxD3hr2UbgXGyH7zJMig+6e?=
- =?us-ascii?Q?1whJgQe1dgdJsW6DW13FBaElG3CinfyW5SERlHTE1hkDtS7EwIq0Fc7EANWq?=
- =?us-ascii?Q?8uaQRgr+BMP8oIuWUm7cKjecaiGs9npuJPu4eIk0nDLfie9ZQayJqqMrOPlb?=
- =?us-ascii?Q?KG6LEm3rjwf4iy2k6fETrWGG0JHihTQPQMFAB3quTJ1e//Bh7N20V//3tu1Z?=
- =?us-ascii?Q?HJbbCfNHpsRyXBk8RUQEr6C/iRCHrTxPM8iRvH8v5kg1NQnKakRDasCoxCWv?=
- =?us-ascii?Q?ZqGxVFQacv6UJZdKjwmx/fDJDN8ILNJZYGH37SSdiWuG/OIBwI4ijtDcENOb?=
- =?us-ascii?Q?Lb/p3xu0MTlg6THdfOpNmRe97k5G/1Aqebj7Bc9OUPB7NP6k7RZBGkkEzSAK?=
- =?us-ascii?Q?GeaHvuNb3fF3TVNToqic/1aZrziOLrSrGU0FvzRa9Um+Eljh5ZTMT8ji8Vok?=
- =?us-ascii?Q?IF8bqygQ4gMhWTQs6jB1Qw3qtkq1qAcv62J9l/j2jqltNgYqNAkY3UQ/tVG4?=
- =?us-ascii?Q?6hTCOWmVV088rQLFGhITL7+KXxMxGXTXdcaBrdiYVKfdGQS/qGqGR4r/qT8t?=
- =?us-ascii?Q?LZPsJlFTsyH0ON06/CptVXCraGm6pP1CDO4hJAqEoXtPuKO6X0SFFVDXF0+4?=
- =?us-ascii?Q?QraqwiVhtD94boExMk6FTCirDPqeBWHFgwD9Jh059mAbLMGmyahFWJDi4d/t?=
- =?us-ascii?Q?/qKVBu2sdZItnfxZz9FqS4ggPtkoDNBLx9rlpxS193FeFJXswecqQyXX2SlX?=
- =?us-ascii?Q?NFHvCzj++Anssz3EIAO7OHYXTqGNkZgK4k9W3MK5LxSKIAYV5pBYkTUOAlg/?=
- =?us-ascii?Q?lTAnja9OlW7tYEEWh95wpHkx5fSq6yoHbzTiuny/Vn1QIcVfscwG1txmpLjE?=
- =?us-ascii?Q?9OLto2Wuy+aoDkhZELZCCuzjIIMFw7xdLzCOzt34PkDgFWBYRpxeMgL1/Zu5?=
- =?us-ascii?Q?Miqv+/HWl/v29CJ0/QG60b/5TB0uj6Hx0FbDWd7h4gMByG5BiSD9edpqwTXH?=
- =?us-ascii?Q?/o6UxQmIJ9wJVeL+b6e45UCBFgxyzGwywJLIhmYQU3nw6AhdpBI5+ATL5B3G?=
- =?us-ascii?Q?qiBOqN1/dg/EnUFSXImKCma8oMkF+JDj8I9HycpjaMIncDQPiCcWGMQXoo8d?=
- =?us-ascii?Q?71widge42kk9pSM3bdc2OiwaI2CnU3fVuQXjfdCJJRu0TkChZiZhOcdqyYV+?=
- =?us-ascii?Q?4kc9+H4wModnhWQafH54D0XsHD3ECQ9kfjJFtIxxczppVEQ5hmZ5MInoMGKX?=
- =?us-ascii?Q?S2r0o6f6WGrJlhFiLq9DGwjJOreZnvFHYpp4+Ot6iBq46HFy8p+qNyHKBtyG?=
- =?us-ascii?Q?bFJvPX8twO1zL/xqGkYr5txMR1fnHyF5boQTzx2DXdJbCr5uZF1U8rEChH9m?=
- =?us-ascii?Q?CaunFw/vZcoSXyZiXHcNHygdGPDpUNaVBl/kP3hUYDkSlrorUD3dXU/YjGjy?=
- =?us-ascii?Q?Sr5LIHIh7wm/WoGkGqcffwzCUIkTkxueNiePPTRAgK/2ZczbBdTvLWnfESM0?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: KykEl35OdakgI6ns5P/Cwhnv6Qk3a18Q4q8/yK0rRbN+lDFE8FnYUkKdi3nnDMSXg9HQ453tRUDgdvm5b5G59HPnwjG5RKlFR6k0pUec6Ye87TD/7ABFTuOswP/KNeXxZSGXZDX2W/YEjC+MYumiEGCNLigQnnJze2F7OIML08jD+KxCI6WjQCEVx2Zivl7Js+zdJWrlVrD8dg8yPpfjAq3RiSxTMQLofSOJPiTaQpWkgO2and1jRWIBI2DJo8pB4fZQLJqFxK2yqDPXDT2i7SVF9yBmz4UhKpGAiR4wqv2FkLdjSirVqkWCT+tOq4lnIaXYIz+SF7XxuEH2B1I7ZTNkIpDaZYo+Vti7Ct2bm1zG4T5XGkFzaXBo/k5eJzICmYmbwBvKZ5CYfAoCMb5RuWrf8wEeS5+gd0s/7RyLEOdQdv2d2dEyypx86dJSXKOwju3rQP6YkszM1Q==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d61e4658-810c-4da4-daf7-08db82f35b93
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 16:16:33.0535
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8c8fuAhV+VSriiJME4BWXzw1uxcaweckjBle+PwodjIlqgEZxXVoN5UGGUD9xtrkmmEd1iKw/jklcV3nxy880f0krgqK/U4igPkH0hGo6XA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5304
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_11,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307120146
-X-Proofpoint-GUID: yizQnSStLbFgEoH2tyXb9Bx0i_xBKPtq
-X-Proofpoint-ORIG-GUID: yizQnSStLbFgEoH2tyXb9Bx0i_xBKPtq
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230712094702.1770121-1-u.kleine-koenig@pengutronix.de> <87fs5tgpvv.fsf@intel.com>
+In-Reply-To: <87fs5tgpvv.fsf@intel.com>
+From:   Sean Paul <seanpaul@chromium.org>
+Date:   Wed, 12 Jul 2023 14:31:02 -0400
+X-Gmail-Original-Message-ID: <CAOw6vbLO_UaXDbTCtAQJgthXOUMPqEV+c2MQhP-1DuK44OhGxw@mail.gmail.com>
+Message-ID: <CAOw6vbLO_UaXDbTCtAQJgthXOUMPqEV+c2MQhP-1DuK44OhGxw@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH RFC v1 00/52] drm/crtc: Rename struct
+ drm_crtc::dev to drm_dev
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>,
+        Evan Quan <evan.quan@amd.com>, Likun Gao <Likun.Gao@amd.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <marek.olsak@amd.com>,
+        David Francis <David.Francis@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Graham Sider <Graham.Sider@amd.com>, Lang Yu <Lang.Yu@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        Tim Huang <Tim.Huang@amd.com>, Zack Rusin <zackr@vmware.com>,
+        Sam Ravnborg <sam@ravnborg.org>, xurui <xurui@kylinos.cn>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Hersen Wu <hersenxs.wu@amd.com>,
+        Fangzhi Zuo <jerry.zuo@amd.com>,
+        Stylon Wang <stylon.wang@amd.com>,
+        Alan Liu <haoping.liu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Aaron Liu <aaron.liu@amd.com>, Melissa Wen <mwen@igalia.com>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        David Tadokoro <davidbtadokoro@usp.br>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
+        Roman Li <roman.li@amd.com>,
+        =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, Dave Airlie <airlied@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Alison Wang <alison.wang@nxp.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Radhakrishna Sripada <radhakrishna.sripada@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Vinod Govindapillai <vinod.govindapillai@intel.com>,
+        =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>,
+        Chaitanya Kumar Borah <chaitanya.kumar.borah@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Mitul Golani <mitulkumar.ajitkumar.golani@intel.com>,
+        Swati Sharma <swati2.sharma@intel.com>,
+        =?UTF-8?Q?Jouni_H=C3=B6gander?= <jouni.hogander@intel.com>,
+        Mika Kahola <mika.kahola@intel.com>,
+        =?UTF-8?Q?Jos=C3=A9_Roberto_de_Souza?= <jose.souza@intel.com>,
+        Arun R Murthy <arun.r.murthy@intel.com>,
+        Gustavo Sousa <gustavo.sousa@intel.com>,
+        Khaled Almahallawy <khaled.almahallawy@intel.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Animesh Manna <animesh.manna@intel.com>,
+        Deepak R Varma <drv@mailo.com>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vandita Kulkarni <vandita.kulkarni@intel.com>,
+        Suraj Kandpal <suraj.kandpal@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        Drew Davenport <ddavenport@chromium.org>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marian Cichy <m.cichy@pengutronix.de>,
+        Dan Carpenter <error27@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Edmund Dea <edmund.j.dea@intel.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Marek Vasut <marex@denx.de>, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Emma Anholt <emma@anholt.net>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Lechner <david@lechnology.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        linux-hyperv@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-samsung-soc@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rockchip@lists.infradead.org,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        VMware Graphics Reviewers 
+        <linux-graphics-maintainer@vmware.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        spice-devel@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-mips@vger.kernel.org,
+        Chia-I Wu <olvaffe@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, kernel@pengutronix.de,
+        John Stultz <jstultz@google.com>,
+        freedreno@lists.freedesktop.org,
+        Lucas Stach <l.stach@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The Kconfig refactor to consolidate KEXEC and CRASH options utilized
-option names of the form ARCH_SUPPORTS_<option>. Thus rename the
-ARCH_HAS_KEXEC_PURGATORY to ARCH_SUPPORTS_KEXEC_PURGATORY to follow
-the same.
+On Wed, Jul 12, 2023 at 10:52=E2=80=AFAM Jani Nikula <jani.nikula@intel.com=
+> wrote:
+>
+> On Wed, 12 Jul 2023, Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
+e> wrote:
+> > Hello,
+> >
+> > while I debugged an issue in the imx-lcdc driver I was constantly
+> > irritated about struct drm_device pointer variables being named "dev"
+> > because with that name I usually expect a struct device pointer.
+> >
+> > I think there is a big benefit when these are all renamed to "drm_dev".
+> > I have no strong preference here though, so "drmdev" or "drm" are fine
+> > for me, too. Let the bikesheding begin!
+> >
+> > Some statistics:
+> >
+> > $ git grep -ohE 'struct drm_device *\* *[^ (),;]*' v6.5-rc1 | sort | un=
+iq -c | sort -n
+> >       1 struct drm_device *adev_to_drm
+> >       1 struct drm_device *drm_
+> >       1 struct drm_device          *drm_dev
+> >       1 struct drm_device        *drm_dev
+> >       1 struct drm_device *pdev
+> >       1 struct drm_device *rdev
+> >       1 struct drm_device *vdev
+> >       2 struct drm_device *dcss_drv_dev_to_drm
+> >       2 struct drm_device **ddev
+> >       2 struct drm_device *drm_dev_alloc
+> >       2 struct drm_device *mock
+> >       2 struct drm_device *p_ddev
+> >       5 struct drm_device *device
+> >       9 struct drm_device * dev
+> >      25 struct drm_device *d
+> >      95 struct drm_device *
+> >     216 struct drm_device *ddev
+> >     234 struct drm_device *drm_dev
+> >     611 struct drm_device *drm
+> >    4190 struct drm_device *dev
+> >
+> > This series starts with renaming struct drm_crtc::dev to drm_dev. If
+> > it's not only me and others like the result of this effort it should be
+> > followed up by adapting the other structs and the individual usages in
+> > the different drivers.
+>
+> I think this is an unnecessary change. In drm, a dev is usually a drm
+> device, i.e. struct drm_device *. As shown by the numbers above.
+>
 
-Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
----
- arch/powerpc/Kconfig          | 2 +-
- arch/riscv/Kbuild             | 2 +-
- arch/riscv/Kconfig            | 2 +-
- arch/riscv/kernel/elf_kexec.c | 4 ++--
- arch/s390/Kbuild              | 2 +-
- arch/s390/Kconfig             | 2 +-
- arch/x86/Kconfig              | 2 +-
- kernel/kexec_file.c           | 6 +++---
- 8 files changed, 11 insertions(+), 11 deletions(-)
+I'd really prefer this patch (series or single) is not accepted. This
+will cause problems for everyone cherry-picking patches to a
+downstream kernel (LTS or distro tree). I usually wouldn't expect
+sympathy here, but the questionable benefit does not outweigh the cost
+IM[biased]O.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 1695a71777f0..7709b62e6843 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -595,7 +595,7 @@ config ARCH_SUPPORTS_KEXEC
- config ARCH_SUPPORTS_KEXEC_FILE
- 	def_bool PPC64 && CRYPTO=y && CRYPTO_SHA256=y
- 
--config ARCH_HAS_KEXEC_PURGATORY
-+config ARCH_SUPPORTS_KEXEC_PURGATORY
- 	def_bool KEXEC_FILE
- 
- config ARCH_SELECTS_KEXEC_FILE
-diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
-index afa83e307a2e..d25ad1c19f88 100644
---- a/arch/riscv/Kbuild
-+++ b/arch/riscv/Kbuild
-@@ -5,7 +5,7 @@ obj-$(CONFIG_BUILTIN_DTB) += boot/dts/
- obj-y += errata/
- obj-$(CONFIG_KVM) += kvm/
- 
--obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
-+obj-$(CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY) += purgatory/
- 
- # for cleaning
- subdir- += boot
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 23d0fbbe1367..a39c5d03f59c 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -667,7 +667,7 @@ config ARCH_SELECTS_KEXEC_FILE
- 	select HAVE_IMA_KEXEC if IMA
- 	select KEXEC_ELF
- 
--config ARCH_HAS_KEXEC_PURGATORY
-+config ARCH_SUPPORTS_KEXEC_PURGATORY
- 	def_bool KEXEC_FILE
- 	depends on CRYPTO=y
- 	depends on CRYPTO_SHA256=y
-diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-index 5372b708fae2..cc556beb293a 100644
---- a/arch/riscv/kernel/elf_kexec.c
-+++ b/arch/riscv/kernel/elf_kexec.c
-@@ -260,7 +260,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 		cmdline = modified_cmdline;
- 	}
- 
--#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
-+#ifdef CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY
- 	/* Add purgatory to the image */
- 	kbuf.top_down = true;
- 	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-@@ -274,7 +274,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 					     sizeof(kernel_start), 0);
- 	if (ret)
- 		pr_err("Error update purgatory ret=%d\n", ret);
--#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
-+#endif /* CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY */
- 
- 	/* Add the initrd to the image */
- 	if (initrd != NULL) {
-diff --git a/arch/s390/Kbuild b/arch/s390/Kbuild
-index 76e362277179..48a3588d703c 100644
---- a/arch/s390/Kbuild
-+++ b/arch/s390/Kbuild
-@@ -7,7 +7,7 @@ obj-$(CONFIG_S390_HYPFS_FS)	+= hypfs/
- obj-$(CONFIG_APPLDATA_BASE)	+= appldata/
- obj-y				+= net/
- obj-$(CONFIG_PCI)		+= pci/
--obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
-+obj-$(CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY) += purgatory/
- 
- # for cleaning
- subdir- += boot tools
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 40beaf1f3d73..ab723218c0fb 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -257,7 +257,7 @@ config ARCH_SUPPORTS_KEXEC_FILE
- config ARCH_SUPPORTS_KEXEC_SIG
- 	def_bool MODULE_SIG_FORMAT
- 
--config ARCH_HAS_KEXEC_PURGATORY
-+config ARCH_SUPPORTS_KEXEC_PURGATORY
- 	def_bool KEXEC_FILE
- 
- config ARCH_SUPPORTS_CRASH_DUMP
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 9767a343f7c2..fedc6dddd743 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2051,7 +2051,7 @@ config ARCH_SELECTS_KEXEC_FILE
- 	depends on KEXEC_FILE
- 	select HAVE_IMA_KEXEC if IMA
- 
--config ARCH_HAS_KEXEC_PURGATORY
-+config ARCH_SUPPORTS_KEXEC_PURGATORY
- 	def_bool KEXEC_FILE
- 
- config ARCH_SUPPORTS_KEXEC_SIG
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 881ba0d1714c..dd115571f8fc 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -685,7 +685,7 @@ static int kexec_calculate_store_digests(struct kimage *image)
- 	struct kexec_sha_region *sha_regions;
- 	struct purgatory_info *pi = &image->purgatory_info;
- 
--	if (!IS_ENABLED(CONFIG_ARCH_HAS_KEXEC_PURGATORY))
-+	if (!IS_ENABLED(CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY))
- 		return 0;
- 
- 	zero_buf = __va(page_to_pfn(ZERO_PAGE(0)) << PAGE_SHIFT);
-@@ -790,7 +790,7 @@ static int kexec_calculate_store_digests(struct kimage *image)
- 	return ret;
- }
- 
--#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
-+#ifdef CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY
- /*
-  * kexec_purgatory_setup_kbuf - prepare buffer to load purgatory.
-  * @pi:		Purgatory to be loaded.
-@@ -1150,7 +1150,7 @@ int kexec_purgatory_get_set_symbol(struct kimage *image, const char *name,
- 
- 	return 0;
- }
--#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
-+#endif /* CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY */
- 
- int crash_exclude_mem_range(struct crash_mem *mem,
- 			    unsigned long long mstart, unsigned long long mend)
--- 
-2.31.1
+Sean
 
+> If folks insist on following through with this anyway, I'm firmly in the
+> camp the name should be "drm" and nothing else.
+>
+>
+> BR,
+> Jani.
+>
+>
+> --
+> Jani Nikula, Intel Open Source Graphics Center
