@@ -2,122 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E769F74F753
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jul 2023 19:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F3374FC78
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jul 2023 03:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjGKRhQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jul 2023 13:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S229640AbjGLBDW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jul 2023 21:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjGKRhP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 13:37:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F62E4F;
-        Tue, 11 Jul 2023 10:37:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CE7861579;
-        Tue, 11 Jul 2023 17:37:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E41BC433C8;
-        Tue, 11 Jul 2023 17:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689097032;
-        bh=g+dg42YNtsQJhOjtGMIfYdxeMk+Q5chUUpj1UHPyuI0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OU0fx9r/gW1jdTCG/iJZoodUiAYpTTMgryh+eUwK0SvFFeCzBDxABJWQ/HAhpM8ye
-         yBnM//6OA543xk4QBgEbWFDkvCh7ONFKnet6T2nY6GiJNGe++LpNHsBO53yIxRC1dw
-         CLUi1qmmodaux6upnMNyF/KqqubSxVHA67DwxYH/aO5VwDsXvdD1T4BZZhZWFZrom9
-         +nthUGNjjcFzaX2bY1z9qhdSCg7rB6hz0xgLF1oCv+tCDu8UN7UNhRG5OCUuJUdOw+
-         UBXBTnHv6L2WRueaCic7RFYV1/lmEsdEsvaplXp/1qHno7ehBsSMmEORgYmfsLOmFl
-         vPA4Eb9AXLl0w==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        James.Bottomley@HansenPartnership.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
-        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-        dalias@libc.org, davem@davemloft.net, deepa.kernel@gmail.com,
-        deller@gmx.de, dhowells@redhat.com, fenghua.yu@intel.com,
-        fweimer@redhat.com, geert@linux-m68k.org, glebfm@altlinux.org,
-        gor@linux.ibm.com, hare@suse.com, hpa@zytor.com,
-        ink@jurassic.park.msu.ru, jhogan@kernel.org, kim.phillips@arm.com,
-        ldv@altlinux.org, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
-        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
-        namhyung@kernel.org, peterz@infradead.org, ralf@linux-mips.org,
-        sparclinux@vger.kernel.org, stefan@agner.ch, tglx@linutronix.de,
-        tony.luck@intel.com, will@kernel.org, x86@kernel.org,
-        ysato@users.sourceforge.jp,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: (subset) [PATCH v4 0/5] Add a new fchmodat2() syscall
-Date:   Tue, 11 Jul 2023 19:36:45 +0200
-Message-Id: <20230711-befreien-unwiderruflich-c2265c61e514@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1689092120.git.legion@kernel.org>
-References: <cover.1689074739.git.legion@kernel.org> <cover.1689092120.git.legion@kernel.org>
+        with ESMTP id S229512AbjGLBDV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jul 2023 21:03:21 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67EE3E49;
+        Tue, 11 Jul 2023 18:03:19 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8DxBfHV+61kQr8DAA--.10610S3;
+        Wed, 12 Jul 2023 09:03:17 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxxszV+61k3Y8pAA--.29824S3;
+        Wed, 12 Jul 2023 09:03:17 +0800 (CST)
+Message-ID: <dbe12bfe-d3c9-cdcf-e7a8-7c8582db3488@loongson.cn>
+Date:   Wed, 12 Jul 2023 09:03:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1700; i=brauner@kernel.org; h=from:subject:message-id; bh=g+dg42YNtsQJhOjtGMIfYdxeMk+Q5chUUpj1UHPyuI0=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSsnSxT9aGqYFXo8u/Pv0u8/8n7p3Ja0Z4JQu5vS1/e2JvM Xda7tKOUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiwv8ZGa5HavbtmudR8P/916OJ0j 91rvW3zk3vj11VUnvmNlvDpK2MDJ8umZ/uZt1qWrp9+6sJ/1y98jZJfQleeOMaf2RRS0fvbmYA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/2] irqchip/loongson-eiointc: Fix return value
+ checking of eiointc_index
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230711120807.1805186-1-maobibo@loongson.cn>
+ <20230711120807.1805186-2-maobibo@loongson.cn>
+ <CAAhV-H5k-FVhrRAQj58dckQAGPT9PNp2ghCCfHOMtsr3gf-wRw@mail.gmail.com>
+From:   bibo mao <maobibo@loongson.cn>
+In-Reply-To: <CAAhV-H5k-FVhrRAQj58dckQAGPT9PNp2ghCCfHOMtsr3gf-wRw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+X-CM-TRANSID: AQAAf8BxxszV+61k3Y8pAA--.29824S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7uw43ZryxCFW7Kw43Cw13Jrc_yoW8CF13pF
+        W2yFWqkr4UKa47C3s3tF18JryYvwnYyrWUK3yxJayUXF98J343Gr4rAas0kr1IkrW7CF1I
+        gF4rXF4UC3Z0y3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Jr0_Gr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
+        6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+        vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc4
+        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+        xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+        1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUU
+        U
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 11 Jul 2023 18:16:02 +0200, Alexey Gladkov wrote:
-> In glibc, the fchmodat(3) function has a flags argument according to the
-> POSIX specification [1], but kernel syscalls has no such argument.
-> Therefore, libc implementations do workarounds using /proc. However,
-> this requires procfs to be mounted and accessible.
+
+
+在 2023/7/11 23:06, Huacai Chen 写道:
+> On Tue, Jul 11, 2023 at 8:08 PM Bibo Mao <maobibo@loongson.cn> wrote:
+>>
+>> Return value of function eiointc_index is int, however it is converted
+>> into uint32_t and then compared smaller than zero. This causes logic
+>> problem. There is eioint initialization problem on qemu virt-machine
+>> where there is only one eioint node and more than 4 vcpus. Nodemap of
+>> eioint is 1, and external device intr can only be routed to vcpu 0-3, the
+>> other vcpus can not response any external device interrupts and only local
+>> processor interrupts like ipi/timer can work.
+> I'm sorry but there are still spelling problems...
+> "eio", "eio intc", "eioint" should all be "eiointc".
+Sure, thanks for pointing it out, will modify in next version.
+
+Regards
+Bibo Mao
 > 
-> This patch set adds fchmodat2(), a new syscall. The syscall allows to
-> pass the AT_SYMLINK_NOFOLLOW flag to disable LOOKUP_FOLLOW. In all other
-> respects, this syscall is no different from fchmodat().
+> Huacai
 > 
-> [...]
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>>  drivers/irqchip/irq-loongson-eiointc.c | 12 +++++++-----
+>>  1 file changed, 7 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+>> index 92d8aa28bdf5..1c5a5b59f199 100644
+>> --- a/drivers/irqchip/irq-loongson-eiointc.c
+>> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+>> @@ -144,12 +144,14 @@ static int eiointc_router_init(unsigned int cpu)
+>>         int i, bit;
+>>         uint32_t data;
+>>         uint32_t node = cpu_to_eio_node(cpu);
+>> -       uint32_t index = eiointc_index(node);
+>> +       int index = eiointc_index(node);
+>>
+>> -       if (index < 0) {
+>> -               pr_err("Error: invalid nodemap!\n");
+>> -               return -1;
+>> -       }
+>> +       /*
+>> +        * qemu virt-machine has only one eio intc and more than four cpus
+>> +        * irq from eio can only be routed to cpu 0-3 on virt machine
+>> +        */
+>> +       if (index < 0)
+>> +               return 0;
+>>
+>>         if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
+>>                 eiointc_enable();
+>> --
+>> 2.27.0
+>>
 
-Tools updates usually go separately.
-Flags argument ported to unsigned int; otherwise unchanged.
-
----
-
-Applied to the master branch of the vfs/vfs.git tree.
-Patches in the master branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: master
-
-[1/5] Non-functional cleanup of a "__user * filename"
-      https://git.kernel.org/vfs/vfs/c/0f05a6af6b7e
-[2/5] fs: Add fchmodat2()
-      https://git.kernel.org/vfs/vfs/c/8d593559ec09
-[3/5] arch: Register fchmodat2, usually as syscall 452
-      https://git.kernel.org/vfs/vfs/c/2ee63b04f206
-[5/5] selftests: Add fchmodat2 selftest
-      https://git.kernel.org/vfs/vfs/c/f175b92081ec
