@@ -2,161 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A55752A0C
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Jul 2023 19:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38D3752A6E
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Jul 2023 20:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjGMRxP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Jul 2023 13:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S232377AbjGMSrj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Jul 2023 14:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjGMRxO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jul 2023 13:53:14 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3968271F;
-        Thu, 13 Jul 2023 10:53:12 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 5EE5814DBB9;
-        Thu, 13 Jul 2023 19:53:09 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1689270789; bh=bPL0dJQsO71F+7x2c6oBcd15kYFwAiWbA6uxbyrkpGE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EkihYalIeEcrIel7VgAhcpVNo9/pboyyZekjWK0jOnc5F1ahW2sgtlX2s4G3xz2aa
-         7/pVJP13bkUSQtOnx/qTC561TvfhmkpEWgCjkNF0dnKtNeOHHWOPNueuVhTFgK2ELk
-         wUOXEGu3hH49hYFoW2UWlnrBscc4Wib4CIVTdHzIxE5HMHeeuN7aydOSwzOTqbpdDv
-         gD5Bsyr0BRxuvTKvkDlRDW5xFxEeTF4ZsC7VFVRP05INsvS0TzW3gxx20lzeEnkYdG
-         ce/RvNC6zV5zfoC3oip2w9zTQ1heZ9+LR1nTdovemvPME96D6qgBeJM/SIEWJ77vyR
-         +exPMHF3hrfBg==
-Date:   Thu, 13 Jul 2023 19:53:07 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Petr Tesarik <petrtesarik@huaweicloud.com>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Petr Tesarik <petr.tesarik.ext@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        James Seo <james@equiv.tech>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        xen-devel@lists.xenproject.org (moderated list:XEN HYPERVISOR ARM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-kernel@vger.kernel.org (open list),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        iommu@lists.linux.dev (open list:XEN SWIOTLB SUBSYSTEM),
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH v4 3/8] swiotlb: separate memory pool data from other
- allocator data
-Message-ID: <20230713195307.08d68b01@meshulam.tesarici.cz>
-In-Reply-To: <e309b4a88ffb306c88a3b3cfe5e57483d73d20bc.1689261692.git.petr.tesarik.ext@huawei.com>
-References: <cover.1689261692.git.petr.tesarik.ext@huawei.com>
-        <e309b4a88ffb306c88a3b3cfe5e57483d73d20bc.1689261692.git.petr.tesarik.ext@huawei.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S232297AbjGMSri (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jul 2023 14:47:38 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9737A2698
+        for <linux-mips@vger.kernel.org>; Thu, 13 Jul 2023 11:47:34 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b9ed206018so26145ad.1
+        for <linux-mips@vger.kernel.org>; Thu, 13 Jul 2023 11:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689274054; x=1689878854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cCMwVIQzOUutbhN/GsjN6pM+paFnW3LWSf+I9hKYPpQ=;
+        b=3lxVvYBLFqoAJ02OKTEDfVZUUK0wkW5kJ6VSqGoJM7b4lBnNFpCFUCFtiPuM7u9nOX
+         VSzLx40KDeP0giCms38tanWNG5c8xfii4A4aZi/1HhYtk68VovRyTHE2Tw9kgrwbUWYk
+         lgrmNm/UXJYJ3QUrwEpWVqgYQQt7CWi61h13oFp4tb/Z9qxx4ZK/T0ji1ZZoxOI2eUmA
+         40KTd3OKOpoIH89wLfbNxh4/jZ8GdPRsy6Oxi+4m+Sv9jvQBFc4+hHiNNXGDKsBRO5ya
+         acMC0ar3TRzt2JiLwJDPfGeVijikeplK1YGsCdeFNniK+KiZ+wOosH+qnrRf1sTm/NZ0
+         fP2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689274054; x=1689878854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cCMwVIQzOUutbhN/GsjN6pM+paFnW3LWSf+I9hKYPpQ=;
+        b=c0Aro/NlJenekbKAGfulfgOMv19IXvuzUMdn6Nfl2w4aDSqXGefuFVSl66GLX1n11Y
+         P6DM1M6VZMAbjCf8RfXRTIpTx8JyBEJd4jRwpdKGmxEOsMotpx9s0mG+ezWIYP4QrEkA
+         6D+gFSXNLxn0pggTykm3qtP0ifu4bG/ZIgwqx5cddVZHTmmaPFFDdA3Nrpn4411MW8Zv
+         xifTo8gAC52YM1Hh2eVAD3mZ1n8iGuqk7zZBCe4p54stSh/FFcZlIwgU0K6XX8h9bBqL
+         xkCCVXoR2gWVWVCoeUh/if7++2BsqkXxzWc6bNgyAfPSPwgIi7l/0ZwaT5GvUT3sdRuk
+         EA2Q==
+X-Gm-Message-State: ABy/qLayIu+nmPC5x8QClU8CyNgGbL2oazAKIW4YOWQO/yzf/BkBEvfl
+        TrzZ7UlvQLv+ac+LhXEBdYOitZRv2g7Fmn0CjCif6g==
+X-Google-Smtp-Source: APBJJlFBmm7dpauUp37YeMKq373RcC3tN66u8ZQjiY1ufKfbpQJ/qTz6oxjhnsAqBc5kb4Tn8fRf3T+9JjhqDu8XLg4=
+X-Received: by 2002:a17:902:bb0f:b0:1b8:9044:91d3 with SMTP id
+ im15-20020a170902bb0f00b001b8904491d3mr552902plb.18.1689274053909; Thu, 13
+ Jul 2023 11:47:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621175002.2832640-1-rananta@google.com> <20230621175002.2832640-8-rananta@google.com>
+ <1fe280a7-0f10-e124-00aa-b137df722c33@redhat.com> <CAJHc60xQtjvVsWRE=w-pAioNJW6uh-qKuZz2wp6bkT=X4oCm5A@mail.gmail.com>
+ <60ba5bb4-6fad-0e51-2cd5-845610e6631d@redhat.com>
+In-Reply-To: <60ba5bb4-6fad-0e51-2cd5-845610e6631d@redhat.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu, 13 Jul 2023 11:47:19 -0700
+Message-ID: <CAJHc60y6AaAUVy=V6GHTpVhHGO3Bjn1vpTnYpdFiFLjS-vR-uA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v5 07/11] KVM: arm64: Define kvm_tlb_flush_vmid_range()
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 13 Jul 2023 17:23:14 +0200
-Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
+Hi Gavin,
 
-> From: Petr Tesarik <petr.tesarik.ext@huawei.com>
-> 
-> Carve out memory pool specific fields from struct io_tlb_mem. The original
-> struct now contains shared data for the whole allocator, while the new
-> struct io_tlb_pool contains data that is specific to one memory pool of
-> (potentially) many.
-> 
-> Allocate both structures together for restricted DMA pools to keep the
-> error cleanup path simple.
-> 
-> Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
-> ---
->  include/linux/device.h  |   2 +-
->  include/linux/swiotlb.h |  47 +++++++----
->  kernel/dma/swiotlb.c    | 181 +++++++++++++++++++++++++---------------
->  3 files changed, 147 insertions(+), 83 deletions(-)
-> 
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index bbaeabd04b0d..d9754a68ba95 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -625,7 +625,7 @@ struct device_physical_location {
->   * @dma_pools:	Dma pools (if dma'ble device).
->   * @dma_mem:	Internal for coherent mem override.
->   * @cma_area:	Contiguous memory area for dma allocations
-> - * @dma_io_tlb_mem: Pointer to the swiotlb pool used.  Not for driver use.
-> + * @dma_io_tlb_mem: Software IO TLB allocator.  Not for driver use.
->   * @archdata:	For arch-specific additions.
->   * @of_node:	Associated device tree node.
->   * @fwnode:	Associated device node supplied by platform firmware.
-> diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-> index 39313c3a791a..d669e11e2827 100644
-> --- a/include/linux/swiotlb.h
-> +++ b/include/linux/swiotlb.h
-> @@ -62,8 +62,7 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t phys,
->  #ifdef CONFIG_SWIOTLB
->  
->  /**
-> - * struct io_tlb_mem - IO TLB Memory Pool Descriptor
-> - *
-> + * struct io_tlb_pool - IO TLB memory pool descriptor
->   * @start:	The start address of the swiotlb memory pool. Used to do a quick
->   *		range check to see if the memory was in fact allocated by this
->   *		API.
-> @@ -73,15 +72,36 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t phys,
->   * @vaddr:	The vaddr of the swiotlb memory pool. The swiotlb memory pool
->   *		may be remapped in the memory encrypted case and store virtual
->   *		address for bounce buffer operation.
-> - * @nslabs:	The number of IO TLB blocks (in groups of 64) between @start and
-> - *		@end. For default swiotlb, this is command line adjustable via
-> - *		setup_io_tlb_npages.
-> + * @nslabs:	The number of IO TLB slots between @start and @end. For the
-> + *		default swiotlb, this can be adjusted with a boot parameter,
-> + *		see setup_io_tlb_npages().
-> + * @used:	The number of used IO TLB slots.
-> + * @late_alloc:	%true if allocated using the page allocator.
-> + * @nareas:	Number of areas in the pool.
-> + * @area_nslabs: Number of slots in each area.
-> + * @areas:	Array of memory area descriptors.
-> + * @slots:	Array of slot descriptors.
-> + */
-> +struct io_tlb_pool {
-> +	phys_addr_t start;
-> +	phys_addr_t end;
-> +	void *vaddr;
-> +	unsigned long nslabs;
-> +	unsigned long used;
+On Wed, Jul 5, 2023 at 5:04=E2=80=AFPM Gavin Shan <gshan@redhat.com> wrote:
+>
+> On 7/6/23 04:28, Raghavendra Rao Ananta wrote:
+> > On Tue, Jul 4, 2023 at 5:31=E2=80=AFPM Gavin Shan <gshan@redhat.com> wr=
+ote:
+> >> On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
+> >>> Implement the helper kvm_tlb_flush_vmid_range() that acts
+> >>> as a wrapper for range-based TLB invalidations. For the
+> >>> given VMID, use the range-based TLBI instructions to do
+> >>> the job or fallback to invalidating all the TLB entries.
+> >>>
+> >>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> >>> ---
+> >>>    arch/arm64/include/asm/kvm_pgtable.h | 10 ++++++++++
+> >>>    arch/arm64/kvm/hyp/pgtable.c         | 20 ++++++++++++++++++++
+> >>>    2 files changed, 30 insertions(+)
+> >>>
+> >>
+> >> It may be reasonable to fold this to PATCH[08/11] since kvm_tlb_flush_=
+vmid_range() is
+> >> only called by ARM64's kvm_arch_flush_remote_tlbs_range(), which is ad=
+ded by PATCH[08/11].
+> >> In either way, the changes look good to me:
+> >>
+> > Ah, the patches 10 and 11 also call kvm_tlb_flush_vmid_range(), so
+> > probably it's better to keep the definition isolated?
+> >
+>
+> Thanks for your explanation. It's fine to have two separate patches in th=
+is
+> case. I still need to spend some time to look at PATCH[11/11] whose subje=
+ct
+> includes typo (intructions -> instructions)
+>
+I'm planning to send v6 soon, but I'm happy to wait if you have any
+other comments on v5 patch-11.
+Appreciate your help with the reviews.
 
-Oops. This member should not be re-introduced here after I removed it
-with commit efa76afdde16...
-
-I'm going to fix this in a v5, but I don't think it's critical enough
-to make an immediate resend.
-
-Petr T
+Thank you.
+Raghavendra
+> Thanks,
+> Gavin
+>
+> >> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> >>
+> >>> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/includ=
+e/asm/kvm_pgtable.h
+> >>> index 4cd6762bda805..1b12295a83595 100644
+> >>> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> >>> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> >>> @@ -682,4 +682,14 @@ enum kvm_pgtable_prot kvm_pgtable_stage2_pte_pro=
+t(kvm_pte_t pte);
+> >>>     *     kvm_pgtable_prot format.
+> >>>     */
+> >>>    enum kvm_pgtable_prot kvm_pgtable_hyp_pte_prot(kvm_pte_t pte);
+> >>> +
+> >>> +/**
+> >>> + * kvm_tlb_flush_vmid_range() - Invalidate/flush a range of TLB entr=
+ies
+> >>> + *
+> >>> + * @mmu:     Stage-2 KVM MMU struct
+> >>> + * @addr:    The base Intermediate physical address from which to in=
+validate
+> >>> + * @size:    Size of the range from the base to invalidate
+> >>> + */
+> >>> +void kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> >>> +                             phys_addr_t addr, size_t size);
+> >>>    #endif      /* __ARM64_KVM_PGTABLE_H__ */
+> >>> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtabl=
+e.c
+> >>> index 3d61bd3e591d2..df8ac14d9d3d4 100644
+> >>> --- a/arch/arm64/kvm/hyp/pgtable.c
+> >>> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> >>> @@ -631,6 +631,26 @@ static bool stage2_has_fwb(struct kvm_pgtable *p=
+gt)
+> >>>        return !(pgt->flags & KVM_PGTABLE_S2_NOFWB);
+> >>>    }
+> >>>
+> >>> +void kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> >>> +                             phys_addr_t addr, size_t size)
+> >>> +{
+> >>> +     unsigned long pages, inval_pages;
+> >>> +
+> >>> +     if (!system_supports_tlb_range()) {
+> >>> +             kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> >>> +             return;
+> >>> +     }
+> >>> +
+> >>> +     pages =3D size >> PAGE_SHIFT;
+> >>> +     while (pages > 0) {
+> >>> +             inval_pages =3D min(pages, MAX_TLBI_RANGE_PAGES);
+> >>> +             kvm_call_hyp(__kvm_tlb_flush_vmid_range, mmu, addr, inv=
+al_pages);
+> >>> +
+> >>> +             addr +=3D inval_pages << PAGE_SHIFT;
+> >>> +             pages -=3D inval_pages;
+> >>> +     }
+> >>> +}
+> >>> +
+> >>>    #define KVM_S2_MEMATTR(pgt, attr) PAGE_S2_MEMATTR(attr, stage2_has=
+_fwb(pgt))
+> >>>
+> >>>    static int stage2_set_prot_attr(struct kvm_pgtable *pgt, enum kvm_=
+pgtable_prot prot,
+>
