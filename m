@@ -2,80 +2,240 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421CF751FA0
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Jul 2023 13:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E69752304
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Jul 2023 15:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbjGMLOG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Jul 2023 07:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S234133AbjGMNIn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Jul 2023 09:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjGMLOF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jul 2023 07:14:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52134211C;
-        Thu, 13 Jul 2023 04:14:03 -0700 (PDT)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4R1sNg70PRztR5C;
-        Thu, 13 Jul 2023 19:10:59 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 13 Jul 2023 19:13:58 +0800
-Subject: Re: [PATCH v6 02/14] x86/kexec: refactor for kernel/Kconfig.kexec
-To:     Eric DeVolder <eric.devolder@oracle.com>, <linux@armlinux.org.uk>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <chenhuacai@kernel.org>, <geert@linux-m68k.org>,
-        <tsbogend@alpha.franken.de>,
-        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
-        <ysato@users.sourceforge.jp>, <dalias@libc.org>,
-        <glaubitz@physik.fu-berlin.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-ia64@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
-        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>
-CC:     <kernel@xen0n.name>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <hca@linux.ibm.com>,
-        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-        <hpa@zytor.com>, <keescook@chromium.org>, <paulmck@kernel.org>,
-        <peterz@infradead.org>, <frederic@kernel.org>,
-        <akpm@linux-foundation.org>, <ardb@kernel.org>,
-        <samitolvanen@google.com>, <juerg.haefliger@canonical.com>,
-        <arnd@arndb.de>, <rmk+kernel@armlinux.org.uk>,
-        <linus.walleij@linaro.org>, <sebastian.reichel@collabora.com>,
-        <rppt@kernel.org>, <kirill.shutemov@linux.intel.com>,
-        <anshuman.khandual@arm.com>, <ziy@nvidia.com>,
-        <masahiroy@kernel.org>, <ndesaulniers@google.com>,
-        <mhiramat@kernel.org>, <ojeda@kernel.org>, <xin3.li@intel.com>,
-        <tj@kernel.org>, <gregkh@linuxfoundation.org>, <tsi@tuyoix.net>,
-        <bhe@redhat.com>, <hbathini@linux.ibm.com>,
-        <sourabhjain@linux.ibm.com>, <boris.ostrovsky@oracle.com>,
-        <konrad.wilk@oracle.com>
-References: <20230712161545.87870-1-eric.devolder@oracle.com>
- <20230712161545.87870-3-eric.devolder@oracle.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <d8ddd4bd-fbc9-dbe9-f5c3-daf8d89aa46d@huawei.com>
-Date:   Thu, 13 Jul 2023 19:13:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        with ESMTP id S234412AbjGMNIm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jul 2023 09:08:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99BE273E
+        for <linux-mips@vger.kernel.org>; Thu, 13 Jul 2023 06:08:18 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJvzH-0005FV-62; Thu, 13 Jul 2023 15:04:03 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJvyt-00E7bY-FX; Thu, 13 Jul 2023 15:03:39 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJvys-004Ym0-J0; Thu, 13 Jul 2023 15:03:38 +0200
+Date:   Thu, 13 Jul 2023 15:03:37 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sean Paul <seanpaul@chromium.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
+        dri-devel@lists.freedesktop.org,
+        Vandita Kulkarni <vandita.kulkarni@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Arun R Murthy <arun.r.murthy@intel.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Danilo Krummrich <dakr@redhat.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        spice-devel@lists.freedesktop.org,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        linux-sunxi@lists.linux.dev, Stylon Wang <stylon.wang@amd.com>,
+        Tim Huang <Tim.Huang@amd.com>,
+        Suraj Kandpal <suraj.kandpal@intel.com>,
+        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Hersen Wu <hersenxs.wu@amd.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
+        Radhakrishna Sripada <radhakrishna.sripada@intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        kernel@pengutronix.de, Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-aspeed@lists.ozlabs.org, nouveau@lists.freedesktop.org,
+        Mitul Golani <mitulkumar.ajitkumar.golani@intel.com>,
+        =?utf-8?B?Sm9zw6k=?= Roberto de Souza <jose.souza@intel.com>,
+        virtualization@lists.linux-foundation.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        David Lechner <david@lechnology.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        David Francis <David.Francis@amd.com>,
+        Aaron Liu <aaron.liu@amd.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-rockchip@lists.infradead.org,
+        Fangzhi Zuo <jerry.zuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        VMware Graphics Reviewers 
+        <linux-graphics-maintainer@vmware.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Jouni =?utf-8?B?SMO2Z2FuZGVy?= <jouni.hogander@intel.com>,
+        Dave Airlie <airlied@redhat.com>, linux-mips@vger.kernel.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Animesh Manna <animesh.manna@intel.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Chaitanya Kumar Borah <chaitanya.kumar.borah@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-amlogic@lists.infradead.org, Evan Quan <evan.quan@amd.com>,
+        Michal Simek <michal.simek@amd.com>,
+        linux-arm-kernel@lists.infradead.org, Sean Paul <sean@poorly.run>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Swati Sharma <swati2.sharma@intel.com>,
+        John Stultz <jstultz@google.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Drew Davenport <ddavenport@chromium.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Likun Gao <Likun.Gao@amd.com>, Sam Ravnborg <sam@ravnborg.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Joel Stanley <joel@jms.id.au>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Alan Liu <haoping.liu@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Lyude Paul <lyude@redhat.com>, intel-gfx@lists.freedesktop.org,
+        Alison Wang <alison.wang@nxp.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Gustavo Sousa <gustavo.sousa@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Deepak R Varma <drv@mailo.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Khaled Almahallawy <khaled.almahallawy@intel.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Emma Anholt <emma@anholt.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Roman Li <roman.li@amd.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rob Clark <robdclark@gmail.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        David Airlie <airlied@gmail.com>, Marek Vasut <marex@denx.de>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        xen-devel@lists.xenproject.org, Guchun Chen <guchun.chen@amd.com>,
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Mika Kahola <mika.kahola@intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Vinod Govindapillai <vinod.govindapillai@intel.com>,
+        linux-tegra@vger.kernel.org,
+        Marek =?utf-8?B?T2zFocOhaw==?= <marek.olsak@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?utf-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, Melissa Wen <mwen@igalia.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-mediatek@lists.infradead.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        David Tadokoro <davidbtadokoro@usp.br>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        amd-gfx@lists.freedesktop.org, Jyri Sarha <jyri.sarha@iki.fi>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <Wayne.Lin@amd.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Nirmoy Das <nirmoy.das@intel.com>, Lang Yu <Lang.Yu@amd.com>,
+        Lucas Stach <l.stach@pengutronix.de>
+Subject: Re: [Freedreno] [PATCH RFC v1 00/52] drm/crtc: Rename struct
+ drm_crtc::dev to drm_dev
+Message-ID: <20230713130337.fd2l67r23g2irifx@pengutronix.de>
+References: <20230712094702.1770121-1-u.kleine-koenig@pengutronix.de>
+ <87fs5tgpvv.fsf@intel.com>
+ <CAOw6vbLO_UaXDbTCtAQJgthXOUMPqEV+c2MQhP-1DuK44OhGxw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230712161545.87870-3-eric.devolder@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5p2oc3dth3vpey32"
+Content-Disposition: inline
+In-Reply-To: <CAOw6vbLO_UaXDbTCtAQJgthXOUMPqEV+c2MQhP-1DuK44OhGxw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,152 +243,52 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
+--5p2oc3dth3vpey32
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/7/13 0:15, Eric DeVolder wrote:
-> The kexec and crash kernel options are provided in the common
-> kernel/Kconfig.kexec. Utilize the common options and provide
-> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
-> equivalent set of KEXEC and CRASH options.
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  arch/x86/Kconfig | 92 ++++++++++--------------------------------------
->  1 file changed, 19 insertions(+), 73 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 7422db409770..9767a343f7c2 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2040,88 +2040,34 @@ config EFI_RUNTIME_MAP
->  
->  source "kernel/Kconfig.hz"
->  
-> -config KEXEC
-> -	bool "kexec system call"
-> -	select KEXEC_CORE
-> -	help
-> -	  kexec is a system call that implements the ability to shutdown your
-> -	  current kernel, and to start another kernel.  It is like a reboot
-> -	  but it is independent of the system firmware.   And like a reboot
-> -	  you can start any kernel with it, not just Linux.
-> -
-> -	  The name comes from the similarity to the exec system call.
-> -
-> -	  It is an ongoing process to be certain the hardware in a machine
-> -	  is properly shutdown, so do not be surprised if this code does not
-> -	  initially work for you.  As of this writing the exact hardware
-> -	  interface is strongly in flux, so no good recommendation can be
-> -	  made.
-> -
-> -config KEXEC_FILE
-> -	bool "kexec file based system call"
-> -	select KEXEC_CORE
-> -	select HAVE_IMA_KEXEC if IMA
-> -	depends on X86_64
-> -	depends on CRYPTO=y
-> -	depends on CRYPTO_SHA256=y
-> -	help
-> -	  This is new version of kexec system call. This system call is
-> -	  file based and takes file descriptors as system call argument
-> -	  for kernel and initramfs as opposed to list of segments as
-> -	  accepted by previous system call.
-> +config ARCH_SUPPORTS_KEXEC
-> +	def_bool y
+hello Sean,
 
-In v5, Joel Fernandes seems to suggest you change it to the following form:
-In arch/Kconfig:
-+config ARCH_SUPPORTS_KEXEC
-+	bool
+On Wed, Jul 12, 2023 at 02:31:02PM -0400, Sean Paul wrote:
+> I'd really prefer this patch (series or single) is not accepted. This
+> will cause problems for everyone cherry-picking patches to a
+> downstream kernel (LTS or distro tree). I usually wouldn't expect
+> sympathy here, but the questionable benefit does not outweigh the cost
+> IM[biased]O.
 
-In arch/x86/Kconfig:
-config X86
-	... ...
-+	select ARCH_SUPPORTS_KEXEC
+I agree that for backports this isn't so nice. However with the split
+approach (that was argumented against here) it's not soo bad. Patch #1
+(and similar changes for the other affected structures) could be
+trivially backported and with that it doesn't matter if you write dev or
+drm (or whatever name is chosen in the end); both work in the same way.
 
-In arch/arm64/Kconfig:
-config ARM64
-	... ...
-+	select ARCH_SUPPORTS_KEXEC if PM_SLEEP_SMP
+But even with the one-patch-per-rename approach I'd consider the
+renaming a net win, because ease of understanding code has a big value.
+It's value is not so easy measurable as "conflicts when backporting",
+but it also matters in say two years from now, while backporting
+shouldn't be an issue then any more.
 
-etc..
+Thanks for your input, best regards
+Uwe
 
-You can refer to ARCH_HAS_DEBUG_VIRTUAL.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
->  
-> -config ARCH_HAS_KEXEC_PURGATORY
-> -	def_bool KEXEC_FILE
-> +config ARCH_SUPPORTS_KEXEC_FILE
-> +	def_bool X86_64 && CRYPTO && CRYPTO_SHA256
->  
-> -config KEXEC_SIG
-> -	bool "Verify kernel signature during kexec_file_load() syscall"
-> +config ARCH_SELECTS_KEXEC_FILE
-> +	def_bool y
->  	depends on KEXEC_FILE
-> -	help
-> +	select HAVE_IMA_KEXEC if IMA
->  
-> -	  This option makes the kexec_file_load() syscall check for a valid
-> -	  signature of the kernel image.  The image can still be loaded without
-> -	  a valid signature unless you also enable KEXEC_SIG_FORCE, though if
-> -	  there's a signature that we can check, then it must be valid.
-> +config ARCH_HAS_KEXEC_PURGATORY
-> +	def_bool KEXEC_FILE
->  
-> -	  In addition to this option, you need to enable signature
-> -	  verification for the corresponding kernel image type being
-> -	  loaded in order for this to work.
-> +config ARCH_SUPPORTS_KEXEC_SIG
-> +	def_bool y
->  
-> -config KEXEC_SIG_FORCE
-> -	bool "Require a valid signature in kexec_file_load() syscall"
-> -	depends on KEXEC_SIG
-> -	help
-> -	  This option makes kernel signature verification mandatory for
-> -	  the kexec_file_load() syscall.
-> +config ARCH_SUPPORTS_KEXEC_SIG_FORCE
-> +	def_bool y
->  
-> -config KEXEC_BZIMAGE_VERIFY_SIG
-> -	bool "Enable bzImage signature verification support"
-> -	depends on KEXEC_SIG
-> -	depends on SIGNED_PE_FILE_VERIFICATION
-> -	select SYSTEM_TRUSTED_KEYRING
-> -	help
-> -	  Enable bzImage signature verification support.
-> +config ARCH_SUPPORTS_KEXEC_BZIMAGE_VERIFY_SIG
-> +	def_bool y
->  
-> -config CRASH_DUMP
-> -	bool "kernel crash dumps"
-> -	depends on X86_64 || (X86_32 && HIGHMEM)
-> -	help
-> -	  Generate crash dump after being started by kexec.
-> -	  This should be normally only set in special crash dump kernels
-> -	  which are loaded in the main kernel with kexec-tools into
-> -	  a specially reserved region and then later executed after
-> -	  a crash by kdump/kexec. The crash dump kernel must be compiled
-> -	  to a memory address not used by the main kernel or BIOS using
-> -	  PHYSICAL_START, or it must be built as a relocatable image
-> -	  (CONFIG_RELOCATABLE=y).
-> -	  For more details see Documentation/admin-guide/kdump/kdump.rst
-> +config ARCH_SUPPORTS_KEXEC_JUMP
-> +	def_bool y
->  
-> -config KEXEC_JUMP
-> -	bool "kexec jump"
-> -	depends on KEXEC && HIBERNATION
-> -	help
-> -	  Jump between original kernel and kexeced kernel and invoke
-> -	  code in physical address mode via KEXEC
-> +config ARCH_SUPPORTS_CRASH_DUMP
-> +	def_bool X86_64 || (X86_32 && HIGHMEM)
->  
->  config PHYSICAL_START
->  	hex "Physical address where the kernel is loaded" if (EXPERT || CRASH_DUMP)
-> 
+--5p2oc3dth3vpey32
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Regards,
-  Zhen Lei
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSv9igACgkQj4D7WH0S
+/k6RYAf+Kb/OGUhX7UtaJ7F8lhh4A5MpdV0+zb8XHPmzkL4JlVB9wEVJC/FPN8Ls
+d7eLHeVkntU9o11OhmTy2/1TYBfmcdz9eAte/ft+tAvD4DhDvUPySu9XvRYf1iov
+ksEZynnx3l/QMc+WWmWc+3w7jN+LPiTg3ONEV2zyBDlx1VjCHUZSbmUsEM3o8NnW
+2J2n4ghAkrSQ77hLo6RAshVhlbGx7jstgB7iuFZwsamrdDZSVscJBkclQtvSxLxI
+BleN75F50zT+Gn8wdseapq9FCEZhz/l9JcpAW1IabKTU9puwfuVyUkBQ3qEpRLGB
+GaDEUTla8XGImNxnIA6ElXmraX1ZqA==
+=qokw
+-----END PGP SIGNATURE-----
+
+--5p2oc3dth3vpey32--
