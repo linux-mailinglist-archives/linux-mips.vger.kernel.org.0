@@ -2,201 +2,248 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C61752E6F
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jul 2023 03:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B73752FA9
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jul 2023 05:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbjGNBDV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Jul 2023 21:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S231254AbjGNDBx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Jul 2023 23:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbjGNBDU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jul 2023 21:03:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA672D75
-        for <linux-mips@vger.kernel.org>; Thu, 13 Jul 2023 18:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689296548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RCZyb3R24GuDipQIPDZ95wX4wOQwTE4wykLLz/wfDdA=;
-        b=UIdG4MNe07bfTv1OG8hYWIARq0uwzWYCDBzxERFnIp667ozNVxwUyeTPSsue5wE0wXvMfk
-        ExFAd0IShA0auZ2c2GlsLfwqlYEGvnRF3iPNLRqlch4H1ipXF3QujtNDaF0Wx4Fn16nFQP
-        8J3LuIYB4Fy5HTUXx9BHNu55z2Brzm0=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-373-gOFTL-J7OImjqE3F78hQ5Q-1; Thu, 13 Jul 2023 21:02:27 -0400
-X-MC-Unique: gOFTL-J7OImjqE3F78hQ5Q-1
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-262c77ffb9dso934213a91.2
-        for <linux-mips@vger.kernel.org>; Thu, 13 Jul 2023 18:02:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689296546; x=1691888546;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RCZyb3R24GuDipQIPDZ95wX4wOQwTE4wykLLz/wfDdA=;
-        b=XXpzsrXDgLu089JxncKbZ7Jz48/ZtxxawRM36HL2RRAy2Qb5IVOz/a7eJgavECTl7e
-         ZnQ2d2RlPpMy2M4cxfPl0tvDjPKJ1nYf4qhbuUUp3CmloJirg1cYhkxJ6axcsOKrFcif
-         vYQg/rZLPlNGz6T5TP22aHtqQ8I0rIQd14Df8TxWK8niFBMKa+Zo11Lvjr+A9mTUhl8B
-         GSNfQLfFXRnrkBlxt3KFmH1eZCCWwM9TS2tErfYrLs+Bw5Ql0iHU70RN4z/VP696og7g
-         TATuWJUCHs1hXimLAxBAX6uBibj1SCZgU56LzlVKdpB2vMKrpm7BYWaRV4W7nZ8fauMQ
-         uN2g==
-X-Gm-Message-State: ABy/qLZWXGgTdYzerImfDoCll1AD+5s2850H47pqHb3jq5A+w8gF8+5P
-        8XIM0kXcsZB8apylMiXTNlgVlw719OmrM5M6eAhfFpsiuT3MGyG6flvjNjl0L1kFfp2ZiHPSR+3
-        N5WgG1svLLYWGfKeMSvsP7w==
-X-Received: by 2002:a17:90a:950b:b0:261:1141:b716 with SMTP id t11-20020a17090a950b00b002611141b716mr2709730pjo.33.1689296546061;
-        Thu, 13 Jul 2023 18:02:26 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFSSCf8gGL9MdVrTrliVfiTlZBbSVuaYTkwu2FoRn5pnrMxd9r/+WlBrcYEXoTEJAZF8xXaVA==
-X-Received: by 2002:a17:90a:950b:b0:261:1141:b716 with SMTP id t11-20020a17090a950b00b002611141b716mr2709710pjo.33.1689296545727;
-        Thu, 13 Jul 2023 18:02:25 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id 12-20020a17090a1a0c00b00263dfe1f8d8sm140821pjk.23.2023.07.13.18.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 18:02:25 -0700 (PDT)
-Message-ID: <874fdca6-e029-98fe-8e6f-b21dc1eaa467@redhat.com>
-Date:   Fri, 14 Jul 2023 11:02:15 +1000
+        with ESMTP id S231547AbjGNDBw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jul 2023 23:01:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1675198A;
+        Thu, 13 Jul 2023 20:01:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C91C61BCE;
+        Fri, 14 Jul 2023 03:01:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19B6C433C9;
+        Fri, 14 Jul 2023 03:01:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689303709;
+        bh=n6Ru2YG8bQemRizH6Ky5wTkmeR6qJJB/0NqAULIakvk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XINIChuMdJuvALQ7YAu3gJYqBXCiCHMZer+WGmfpNQ9mSWNYGERqfdBQ1o0w7/x+y
+         Vb6B2+FS/xn4avf6JG+Bh2s/PfF1PSWA4FQFlXztLY5N2o+wU6OjeMZPzFQPJ0cHVj
+         eY6tfNaSNc+yCMS7ef7F91+e/SliZpMU0EEcr0wgIytHyPw5kP/5UxQp8UPs5gwlZp
+         Tr4H3MkfTkjfYk+wYGJKpnp7M2BHghzDJLFez5LaRZBwiZAe52pZAsS4ounGrqr/yh
+         tXCosdZd5S/J0qycuddS4s5FrytHD1TbvTjtZczp8xjlBPA8tQ724vDs2NRNXLVbGV
+         qPbnESPo5/VMw==
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-51e57870becso1588695a12.2;
+        Thu, 13 Jul 2023 20:01:49 -0700 (PDT)
+X-Gm-Message-State: ABy/qLbpOuevhqiYz70wC9gYCizr7snR5pNp+AYc1XAXnCSBjNjnF5Rd
+        u8cB5da2ioX3EYt080s5cv7kfmJYw37u7NQ3+Zs=
+X-Google-Smtp-Source: APBJJlESxE8oxSiU1M+UMSiJRqteeTuy/bBF/en9jhwHrllh1f+wegUn1Vzjsh0/Aoz9PmTEXvah1umANmGo+xLks/k=
+X-Received: by 2002:aa7:d511:0:b0:51d:91d2:335b with SMTP id
+ y17-20020aa7d511000000b0051d91d2335bmr3668047edq.1.1689303707924; Thu, 13 Jul
+ 2023 20:01:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RESEND PATCH v5 07/11] KVM: arm64: Define
- kvm_tlb_flush_vmid_range()
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
+References: <20230713032243.2046205-1-maobibo@loongson.cn> <20230713032243.2046205-3-maobibo@loongson.cn>
+In-Reply-To: <20230713032243.2046205-3-maobibo@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 14 Jul 2023 11:01:36 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5wGkRNcwL52pGzAd7S3GnqqkAGxS0BFC-Ezg4F6ycJ-Q@mail.gmail.com>
+Message-ID: <CAAhV-H5wGkRNcwL52pGzAd7S3GnqqkAGxS0BFC-Ezg4F6ycJ-Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] irqchip/loongson-eiointc: Simplify irq routing on
+ some platforms
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230621175002.2832640-1-rananta@google.com>
- <20230621175002.2832640-8-rananta@google.com>
- <1fe280a7-0f10-e124-00aa-b137df722c33@redhat.com>
- <CAJHc60xQtjvVsWRE=w-pAioNJW6uh-qKuZz2wp6bkT=X4oCm5A@mail.gmail.com>
- <60ba5bb4-6fad-0e51-2cd5-845610e6631d@redhat.com>
- <CAJHc60y6AaAUVy=V6GHTpVhHGO3Bjn1vpTnYpdFiFLjS-vR-uA@mail.gmail.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <CAJHc60y6AaAUVy=V6GHTpVhHGO3Bjn1vpTnYpdFiFLjS-vR-uA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Jianmin Lv <lvjianmin@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Raghavendra,
+Hi, Bibo,
 
-On 7/14/23 04:47, Raghavendra Rao Ananta wrote:
-> On Wed, Jul 5, 2023 at 5:04 PM Gavin Shan <gshan@redhat.com> wrote:
->>
->> On 7/6/23 04:28, Raghavendra Rao Ananta wrote:
->>> On Tue, Jul 4, 2023 at 5:31 PM Gavin Shan <gshan@redhat.com> wrote:
->>>> On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
->>>>> Implement the helper kvm_tlb_flush_vmid_range() that acts
->>>>> as a wrapper for range-based TLB invalidations. For the
->>>>> given VMID, use the range-based TLBI instructions to do
->>>>> the job or fallback to invalidating all the TLB entries.
->>>>>
->>>>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
->>>>> ---
->>>>>     arch/arm64/include/asm/kvm_pgtable.h | 10 ++++++++++
->>>>>     arch/arm64/kvm/hyp/pgtable.c         | 20 ++++++++++++++++++++
->>>>>     2 files changed, 30 insertions(+)
->>>>>
->>>>
->>>> It may be reasonable to fold this to PATCH[08/11] since kvm_tlb_flush_vmid_range() is
->>>> only called by ARM64's kvm_arch_flush_remote_tlbs_range(), which is added by PATCH[08/11].
->>>> In either way, the changes look good to me:
->>>>
->>> Ah, the patches 10 and 11 also call kvm_tlb_flush_vmid_range(), so
->>> probably it's better to keep the definition isolated?
->>>
->>
->> Thanks for your explanation. It's fine to have two separate patches in this
->> case. I still need to spend some time to look at PATCH[11/11] whose subject
->> includes typo (intructions -> instructions)
->>
-> I'm planning to send v6 soon, but I'm happy to wait if you have any
-> other comments on v5 patch-11.
-> Appreciate your help with the reviews.
-> 
+On Thu, Jul 13, 2023 at 11:23=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wro=
+te:
+>
+> Some LoongArch systems have only one eiointc node such as 3A5000/2K2000
+> and qemu virt-machine. If there is only one eiointc node, all cpus can
+> access eiointc registers directly; if there is multiple eiointc nodes, ea=
+ch
+> cpu can only access eiointc belonging to specified node group, so anysend
+> or ipi needs to be used to configure irq routing. IRQ routing is simple o=
+n
+> such systems with one node, hacking method like anysend is not necessary.
+>
+> This patch provides simpile IRQ routing method for systems with one eioin=
+tc
+> node, and is tested on 3A5000 board and qemu virt-machine.
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 80 ++++++++++++++++++++++++--
+>  1 file changed, 74 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
+-loongson-eiointc.c
+> index 603d323b8f8b..e6be9d6a18c8 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -127,6 +127,48 @@ static int eiointc_set_irq_affinity(struct irq_data =
+*d, const struct cpumask *af
+>         return IRQ_SET_MASK_OK;
+>  }
+>
+> +static int eiointc_single_set_irq_affinity(struct irq_data *d,
+> +                               const struct cpumask *affinity, bool forc=
+e)
+> +{
+> +       unsigned int cpu;
+> +       unsigned long flags;
+> +       uint32_t vector, regaddr, data, coremap;
+> +       struct cpumask mask;
+> +       struct eiointc_priv *priv =3D d->domain->host_data;
+> +
+> +       cpumask_and(&mask, affinity, cpu_online_mask);
+> +       cpumask_and(&mask, &mask, &priv->cpuspan_map);
+> +       if (cpumask_empty(&mask))
+> +               return -EINVAL;
+> +
+> +       cpu =3D cpumask_first(&mask);
+> +       vector =3D d->hwirq;
+> +       regaddr =3D EIOINTC_REG_ENABLE + ((vector >> 5) << 2);
+> +       data =3D ~BIT(vector & 0x1F);
+> +       coremap =3D BIT(cpu_logical_map(cpu) % CORES_PER_EIO_NODE);
+> +
+> +       /*
+> +        * simplify for platform with only one eiointc node
+> +        * access eiointc registers directly rather than
+> +        * use any_send method here
+> +        */
+> +       raw_spin_lock_irqsave(&affinity_lock, flags);
+> +       iocsr_write32(EIOINTC_ALL_ENABLE & data, regaddr);
+> +       /*
+> +        * get irq route info for continuous 4 vectors
+> +        * and set affinity for specified vector
+> +        */
+> +       data =3D iocsr_read32(EIOINTC_REG_ROUTE + (vector & ~3));
+> +       data &=3D  ~(0xff << ((vector & 3) * 8));
+> +       data |=3D coremap << ((vector & 3) * 8);
+> +       iocsr_write32(data, EIOINTC_REG_ROUTE + (vector & ~3));
+> +       iocsr_write32(EIOINTC_ALL_ENABLE, regaddr);
+> +       raw_spin_unlock_irqrestore(&affinity_lock, flags);
+> +
+> +       irq_data_update_effective_affinity(d, cpumask_of(cpu));
+> +       return IRQ_SET_MASK_OK;
+> +}
+> +
+>  static int eiointc_index(int node)
+>  {
+>         int i;
+> @@ -238,22 +280,39 @@ static struct irq_chip eiointc_irq_chip =3D {
+>         .irq_set_affinity       =3D eiointc_set_irq_affinity,
+>  };
+>
+> +static struct irq_chip eiointc_irq_chipi_single =3D {
+What does "chipi" mean? Maybe "chip"?
 
-I didn't get a chance to look at PATCH[11/11] yet. Please post v6 and I will
-take a look on PATCH[v6 11/11]. Sorry for the delay.
+And from my point of view, the main goal of this patch is to add
+"virtual eiointc" support which is different from "real eiointc". So I
+think it is better to not touch the "real eiointc" logic, but add a
+variant for "virtual eiointc", and then, the name should be
+"EIOINTC-V", not "EIOINTC-S".
 
-Thanks,
-Gavin
+Huacai
 
->>>> Reviewed-by: Gavin Shan <gshan@redhat.com>
->>>>
->>>>> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
->>>>> index 4cd6762bda805..1b12295a83595 100644
->>>>> --- a/arch/arm64/include/asm/kvm_pgtable.h
->>>>> +++ b/arch/arm64/include/asm/kvm_pgtable.h
->>>>> @@ -682,4 +682,14 @@ enum kvm_pgtable_prot kvm_pgtable_stage2_pte_prot(kvm_pte_t pte);
->>>>>      *     kvm_pgtable_prot format.
->>>>>      */
->>>>>     enum kvm_pgtable_prot kvm_pgtable_hyp_pte_prot(kvm_pte_t pte);
->>>>> +
->>>>> +/**
->>>>> + * kvm_tlb_flush_vmid_range() - Invalidate/flush a range of TLB entries
->>>>> + *
->>>>> + * @mmu:     Stage-2 KVM MMU struct
->>>>> + * @addr:    The base Intermediate physical address from which to invalidate
->>>>> + * @size:    Size of the range from the base to invalidate
->>>>> + */
->>>>> +void kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
->>>>> +                             phys_addr_t addr, size_t size);
->>>>>     #endif      /* __ARM64_KVM_PGTABLE_H__ */
->>>>> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
->>>>> index 3d61bd3e591d2..df8ac14d9d3d4 100644
->>>>> --- a/arch/arm64/kvm/hyp/pgtable.c
->>>>> +++ b/arch/arm64/kvm/hyp/pgtable.c
->>>>> @@ -631,6 +631,26 @@ static bool stage2_has_fwb(struct kvm_pgtable *pgt)
->>>>>         return !(pgt->flags & KVM_PGTABLE_S2_NOFWB);
->>>>>     }
->>>>>
->>>>> +void kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
->>>>> +                             phys_addr_t addr, size_t size)
->>>>> +{
->>>>> +     unsigned long pages, inval_pages;
->>>>> +
->>>>> +     if (!system_supports_tlb_range()) {
->>>>> +             kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
->>>>> +             return;
->>>>> +     }
->>>>> +
->>>>> +     pages = size >> PAGE_SHIFT;
->>>>> +     while (pages > 0) {
->>>>> +             inval_pages = min(pages, MAX_TLBI_RANGE_PAGES);
->>>>> +             kvm_call_hyp(__kvm_tlb_flush_vmid_range, mmu, addr, inval_pages);
->>>>> +
->>>>> +             addr += inval_pages << PAGE_SHIFT;
->>>>> +             pages -= inval_pages;
->>>>> +     }
->>>>> +}
->>>>> +
->>>>>     #define KVM_S2_MEMATTR(pgt, attr) PAGE_S2_MEMATTR(attr, stage2_has_fwb(pgt))
->>>>>
->>>>>     static int stage2_set_prot_attr(struct kvm_pgtable *pgt, enum kvm_pgtable_prot prot,
->>
-> 
-
+> +       .name                   =3D "EIOINTC-S",
+> +       .irq_ack                =3D eiointc_ack_irq,
+> +       .irq_mask               =3D eiointc_mask_irq,
+> +       .irq_unmask             =3D eiointc_unmask_irq,
+> +#ifdef CONFIG_SMP
+> +       .irq_set_affinity       =3D eiointc_single_set_irq_affinity,
+> +#endif
+> +};
+> +
+>  static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int =
+virq,
+>                                 unsigned int nr_irqs, void *arg)
+>  {
+>         int ret;
+>         unsigned int i, type;
+>         unsigned long hwirq =3D 0;
+> -       struct eiointc *priv =3D domain->host_data;
+> +       struct eiointc_priv *priv =3D domain->host_data;
+> +       struct irq_chip *chip;
+>
+>         ret =3D irq_domain_translate_onecell(domain, arg, &hwirq, &type);
+>         if (ret)
+>                 return ret;
+>
+> -       for (i =3D 0; i < nr_irqs; i++) {
+> -               irq_domain_set_info(domain, virq + i, hwirq + i, &eiointc=
+_irq_chip,
+> +       /*
+> +        * use simple irq routing method on single eiointc node
+> +        */
+> +       if ((nr_pics =3D=3D 1) && (nodes_weight(priv->node_map) =3D=3D 1)=
+)
+> +               chip =3D &eiointc_irq_chipi_single;
+> +       else
+> +               chip =3D &eiointc_irq_chip;
+> +       for (i =3D 0; i < nr_irqs; i++)
+> +               irq_domain_set_info(domain, virq + i, hwirq + i, chip,
+>                                         priv, handle_edge_irq, NULL, NULL=
+);
+> -       }
+>
+>         return 0;
+>  }
+> @@ -310,6 +369,7 @@ static void eiointc_resume(void)
+>         int i, j;
+>         struct irq_desc *desc;
+>         struct irq_data *irq_data;
+> +       struct irq_chip *chip;
+>
+>         eiointc_router_init(0);
+>
+> @@ -319,7 +379,8 @@ static void eiointc_resume(void)
+>                         if (desc && desc->handle_irq && desc->handle_irq =
+!=3D handle_bad_irq) {
+>                                 raw_spin_lock(&desc->lock);
+>                                 irq_data =3D irq_domain_get_irq_data(eioi=
+ntc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
+> -                               eiointc_set_irq_affinity(irq_data, irq_da=
+ta->common->affinity, 0);
+> +                               chip =3D irq_data_get_irq_chip(irq_data);
+> +                               chip->irq_set_affinity(irq_data, irq_data=
+->common->affinity, 0);
+>                                 raw_spin_unlock(&desc->lock);
+>                         }
+>                 }
+> @@ -497,7 +558,14 @@ static int __init eiointc_of_init(struct device_node=
+ *of_node,
+>         priv->node =3D 0;
+>         priv->domain_handle =3D of_node_to_fwnode(of_node);
+>
+> -       ret =3D eiointc_init(priv, parent_irq, 0);
+> +       /*
+> +        * 2k0500 and 2k2000 has only one eiointc node
+> +        * set nodemap as 1 for simple irq routing
+> +        *
+> +        * Fixme: what about future embedded boards with more than 4 cpus=
+?
+> +        * nodemap and node need be added in dts like acpi table
+> +        */
+> +       ret =3D eiointc_init(priv, parent_irq, 1);
+>         if (ret < 0)
+>                 goto out_free_priv;
+>
+> --
+> 2.27.0
+>
