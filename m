@@ -2,100 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DD47541C9
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jul 2023 19:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDC4754169
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jul 2023 19:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbjGNRwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Jul 2023 13:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S233758AbjGNRwc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Jul 2023 13:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236489AbjGNRwb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Jul 2023 13:52:31 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C5A35A9;
-        Fri, 14 Jul 2023 10:51:56 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-345f4a3ff76so9691275ab.2;
-        Fri, 14 Jul 2023 10:51:56 -0700 (PDT)
+        with ESMTP id S236442AbjGNRw0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Jul 2023 13:52:26 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B99C1986;
+        Fri, 14 Jul 2023 10:51:52 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-785ccf19489so88203039f.3;
+        Fri, 14 Jul 2023 10:51:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689356967; x=1691948967;
+        d=1e100.net; s=20221208; t=1689357025; x=1691949025;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HhnvM9gixJIVMpRuI188FUpVFikttdi1fELDz+40xxo=;
-        b=Zc6xNUENVqvHeTm4U/sC2bPBHFbc6gy+ymQ9KN8W63K/Tyk96DSDBApr2Z0AlJqL/U
-         qTN+JpwT4rh/Xso4t4uUmMzhKqz2VYhuCXYL5FDBWwCVPyq54IKMXqwx9f3QfGwoNMKh
-         +57dadkkDCxjoNTmRZzgUlhKfLPYHKQ/ZzxlzPGpeSubLekFVvic7z0QgXbleWXCIEw+
-         7gE/qC/fpaLszfWkqIiuTk47NzprtTJrotxycuEWFbcI9WS2FgmIwJVqH69Mm3csVB3A
-         2KooKAz/9PpFSOFlBe1RF3XCkK04PAlfGQFr+cPqQiSHfTArxg9XAfa8be95KLEGwE1w
-         24jg==
-X-Gm-Message-State: ABy/qLZqkeemywqxSvX1QWs4IogORXaCQmDaFTQw0YiswI7k2ziYPI4F
-        Z6LEretdEPE6O4SusdNpfg==
-X-Google-Smtp-Source: APBJJlFh6RzBTn97GyDHCLrzfUOzaI6U5n6O355tArHJ1Cl54zjAGWC4PSZzgdrU82ofGimkiOYsMg==
-X-Received: by 2002:a92:60c:0:b0:345:cf3f:2fd with SMTP id x12-20020a92060c000000b00345cf3f02fdmr5243543ilg.13.1689356966826;
-        Fri, 14 Jul 2023 10:49:26 -0700 (PDT)
+        bh=vLy+fmmmHBD7kQUYFoOu4IPxG3CVYUe0AJr9SRUEQvM=;
+        b=HErU8ZqZsf2fvMBHuLh9EJil+V98tJlV58eB2fKB0u+qGIT/HU6T1DSHA+2e43gqnh
+         vOLLzfDeeJG/sbxMXSeEO4nhNc4cAEJ7/N2BQOY+TiKLBuaCLcfGe0EKJTE4Y+qYHemB
+         jseHe1f4FSCxoIu9RZ80UHKURb6HwGMGD/g1O/qPxic3w+4v/Su/PhuKqdEO23r155Ip
+         +x9zsj8d92VivCJUPVNKAbI32DAJw9qvczho8fK4+NveUgm9z9jb6H9Kt9w6/aCNZKHo
+         P4RiivflEWdH0/BdsXOL1YAr/Yg4w8xLTwcUU/aCm7ObREGAKsX1ovZrddS7JGTkhPU4
+         OWYw==
+X-Gm-Message-State: ABy/qLZPw+Kr0iCqWmW/j9VtloQpihjxw77gbSpTSQmXGfJCtO4FHZjb
+        2tsOM0xNcquE1sr1lA3mJw==
+X-Google-Smtp-Source: APBJJlH6F8DGTAgoPkKNBfHvMuRjeGIOUDsgDFYTU7xAIgttRpRW5jDVDzZiIxVt/yHiIy5rKVsXXg==
+X-Received: by 2002:a92:c807:0:b0:346:4766:9f76 with SMTP id v7-20020a92c807000000b0034647669f76mr4859281iln.13.1689357025190;
+        Fri, 14 Jul 2023 10:50:25 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id o2-20020a92dac2000000b003460b697bc0sm2883862ilq.59.2023.07.14.10.49.23
+        by smtp.gmail.com with ESMTPSA id l18-20020a922912000000b00345d6297aa7sm2888185ilg.16.2023.07.14.10.50.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 10:49:26 -0700 (PDT)
-Received: (nullmailer pid 4062354 invoked by uid 1000);
-        Fri, 14 Jul 2023 17:48:54 -0000
+        Fri, 14 Jul 2023 10:50:24 -0700 (PDT)
+Received: (nullmailer pid 4063952 invoked by uid 1000);
+        Fri, 14 Jul 2023 17:49:46 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Michael Walle <michael@walle.cc>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH] pwm: Explicitly include correct DT includes
-Date:   Fri, 14 Jul 2023 11:48:50 -0600
-Message-Id: <20230714174852.4062251-1-robh@kernel.org>
+        Samuel Holland <samuel@sholland.org>
+Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH] rtc: Explicitly include correct DT includes
+Date:   Fri, 14 Jul 2023 11:49:42 -0600
+Message-Id: <20230714174944.4063829-1-robh@kernel.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -113,393 +94,428 @@ explicitly include the correct includes.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/pwm/core.c               | 1 +
- drivers/pwm/pwm-apple.c          | 1 +
- drivers/pwm/pwm-atmel-hlcdc.c    | 1 +
- drivers/pwm/pwm-atmel-tcb.c      | 3 +--
- drivers/pwm/pwm-atmel.c          | 1 -
- drivers/pwm/pwm-berlin.c         | 1 +
- drivers/pwm/pwm-cros-ec.c        | 1 +
- drivers/pwm/pwm-fsl-ftm.c        | 3 +--
- drivers/pwm/pwm-hibvt.c          | 2 +-
- drivers/pwm/pwm-imx1.c           | 1 -
- drivers/pwm/pwm-jz4740.c         | 2 +-
- drivers/pwm/pwm-lp3943.c         | 1 +
- drivers/pwm/pwm-lpc18xx-sct.c    | 1 +
- drivers/pwm/pwm-mediatek.c       | 1 -
- drivers/pwm/pwm-meson.c          | 1 -
- drivers/pwm/pwm-microchip-core.c | 2 +-
- drivers/pwm/pwm-mtk-disp.c       | 1 -
- drivers/pwm/pwm-pxa.c            | 1 +
- drivers/pwm/pwm-sifive.c         | 1 +
- drivers/pwm/pwm-sl28cpld.c       | 1 +
- drivers/pwm/pwm-sprd.c           | 1 +
- drivers/pwm/pwm-sun4i.c          | 1 -
- drivers/pwm/pwm-sunplus.c        | 1 +
- drivers/pwm/pwm-tegra.c          | 1 -
- drivers/pwm/pwm-tiecap.c         | 2 +-
- drivers/pwm/pwm-tiehrpwm.c       | 2 +-
- drivers/pwm/pwm-visconti.c       | 2 +-
- drivers/pwm/pwm-vt8500.c         | 5 +----
- 28 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/rtc/rtc-abx80x.c        | 2 +-
+ drivers/rtc/rtc-armada38x.c     | 1 -
+ drivers/rtc/rtc-at91rm9200.c    | 1 -
+ drivers/rtc/rtc-ds1742.c        | 1 -
+ drivers/rtc/rtc-fsl-ftm-alarm.c | 5 +----
+ drivers/rtc/rtc-isl12026.c      | 1 -
+ drivers/rtc/rtc-isl1208.c       | 2 +-
+ drivers/rtc/rtc-jz4740.c        | 2 +-
+ drivers/rtc/rtc-lpc24xx.c       | 3 +--
+ drivers/rtc/rtc-m41t80.c        | 2 +-
+ drivers/rtc/rtc-mpc5121.c       | 3 ---
+ drivers/rtc/rtc-mt6397.c        | 2 +-
+ drivers/rtc/rtc-mt7622.c        | 4 ++--
+ drivers/rtc/rtc-mxc.c           | 1 -
+ drivers/rtc/rtc-pcf85063.c      | 2 +-
+ drivers/rtc/rtc-pcf85363.c      | 1 -
+ drivers/rtc/rtc-pxa.c           | 1 -
+ drivers/rtc/rtc-rs5c372.c       | 2 +-
+ drivers/rtc/rtc-rv3028.c        | 2 +-
+ drivers/rtc/rtc-rv3032.c        | 2 +-
+ drivers/rtc/rtc-rv8803.c        | 2 +-
+ drivers/rtc/rtc-rx6110.c        | 1 -
+ drivers/rtc/rtc-rx8581.c        | 1 -
+ drivers/rtc/rtc-rzn1.c          | 2 +-
+ drivers/rtc/rtc-s3c.c           | 1 -
+ drivers/rtc/rtc-stm32.c         | 3 ++-
+ drivers/rtc/rtc-stmp3xxx.c      | 1 -
+ drivers/rtc/rtc-sun6i.c         | 1 -
+ drivers/rtc/rtc-sunxi.c         | 2 --
+ drivers/rtc/rtc-ti-k3.c         | 2 +-
+ 30 files changed, 18 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 3dacceaef4a9..d37617c60eae 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/pwm.h>
- #include <linux/radix-tree.h>
- #include <linux/list.h>
-diff --git a/drivers/pwm/pwm-apple.c b/drivers/pwm/pwm-apple.c
-index a38a62edd713..8e7d67fb5fbe 100644
---- a/drivers/pwm/pwm-apple.c
-+++ b/drivers/pwm/pwm-apple.c
-@@ -12,6 +12,7 @@
-  * - When APPLE_PWM_CTRL is set to 0, the output is constant low
-  */
- 
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-atmel-hlcdc.c b/drivers/pwm/pwm-atmel-hlcdc.c
-index 96a709a9d49a..3c42061e721a 100644
---- a/drivers/pwm/pwm-atmel-hlcdc.c
-+++ b/drivers/pwm/pwm-atmel-hlcdc.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
- #include <linux/mfd/atmel-hlcdc.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/regmap.h>
-diff --git a/drivers/pwm/pwm-atmel-tcb.c b/drivers/pwm/pwm-atmel-tcb.c
-index 4a116dc44f6e..563162d660d8 100644
---- a/drivers/pwm/pwm-atmel-tcb.c
-+++ b/drivers/pwm/pwm-atmel-tcb.c
-@@ -19,8 +19,7 @@
- #include <linux/mfd/syscon.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
--#include <linux/of_device.h>
--#include <linux/of_irq.h>
-+#include <linux/of.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <soc/at91/atmel_tcb.h>
-diff --git a/drivers/pwm/pwm-atmel.c b/drivers/pwm/pwm-atmel.c
-index 5f7d286871cf..4b243c0e8490 100644
---- a/drivers/pwm/pwm-atmel.c
-+++ b/drivers/pwm/pwm-atmel.c
-@@ -25,7 +25,6 @@
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/slab.h>
-diff --git a/drivers/pwm/pwm-berlin.c b/drivers/pwm/pwm-berlin.c
-index 0c5992a046b2..0971c666afd1 100644
---- a/drivers/pwm/pwm-berlin.c
-+++ b/drivers/pwm/pwm-berlin.c
-@@ -13,6 +13,7 @@
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-cros-ec.c b/drivers/pwm/pwm-cros-ec.c
-index 74e863aa1d8d..7f7e4e892930 100644
---- a/drivers/pwm/pwm-cros-ec.c
-+++ b/drivers/pwm/pwm-cros-ec.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/pwm/pwm-fsl-ftm.c b/drivers/pwm/pwm-fsl-ftm.c
-index 5caadbd6194e..b7c6045c5d08 100644
---- a/drivers/pwm/pwm-fsl-ftm.c
-+++ b/drivers/pwm/pwm-fsl-ftm.c
-@@ -11,8 +11,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
--#include <linux/of_address.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-hibvt.c b/drivers/pwm/pwm-hibvt.c
-index b95df1a96127..f7ba6fe9a349 100644
---- a/drivers/pwm/pwm-hibvt.c
-+++ b/drivers/pwm/pwm-hibvt.c
-@@ -10,7 +10,7 @@
- #include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/module.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/reset.h>
-diff --git a/drivers/pwm/pwm-imx1.c b/drivers/pwm/pwm-imx1.c
-index 1f2eb1c8ff6c..0651983bed19 100644
---- a/drivers/pwm/pwm-imx1.c
-+++ b/drivers/pwm/pwm-imx1.c
-@@ -14,7 +14,6 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/slab.h>
-diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-index 3b7067f6cd0d..ef1293f2a897 100644
---- a/drivers/pwm/pwm-jz4740.c
-+++ b/drivers/pwm/pwm-jz4740.c
+diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+index e08d3181bd2a..fde2b8054c2e 100644
+--- a/drivers/rtc/rtc-abx80x.c
++++ b/drivers/rtc/rtc-abx80x.c
 @@ -15,7 +15,7 @@
- #include <linux/mfd/ingenic-tcu.h>
- #include <linux/mfd/syscon.h>
+ #include <linux/i2c.h>
+ #include <linux/kstrtox.h>
  #include <linux/module.h>
 -#include <linux/of_device.h>
 +#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/regmap.h>
-diff --git a/drivers/pwm/pwm-lp3943.c b/drivers/pwm/pwm-lp3943.c
-index 35675e4058c6..a931d3f7a3fc 100644
---- a/drivers/pwm/pwm-lp3943.c
-+++ b/drivers/pwm/pwm-lp3943.c
-@@ -10,6 +10,7 @@
- #include <linux/err.h>
- #include <linux/mfd/lp3943.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/slab.h>
-diff --git a/drivers/pwm/pwm-lpc18xx-sct.c b/drivers/pwm/pwm-lpc18xx-sct.c
-index b9bf5b366f4b..9ff6311bd472 100644
---- a/drivers/pwm/pwm-lpc18xx-sct.c
-+++ b/drivers/pwm/pwm-lpc18xx-sct.c
-@@ -22,6 +22,7 @@
- #include <linux/clk.h>
- #include <linux/err.h>
- #include <linux/io.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-mediatek.c b/drivers/pwm/pwm-mediatek.c
-index 7a51d210a877..6adb0ed01906 100644
---- a/drivers/pwm/pwm-mediatek.c
-+++ b/drivers/pwm/pwm-mediatek.c
-@@ -14,7 +14,6 @@
- #include <linux/module.h>
- #include <linux/clk.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/slab.h>
-diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
-index 22f54db3ae8e..25519cddc2a9 100644
---- a/drivers/pwm/pwm-meson.c
-+++ b/drivers/pwm/pwm-meson.c
-@@ -37,7 +37,6 @@
- #include <linux/math64.h>
- #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/slab.h>
-diff --git a/drivers/pwm/pwm-microchip-core.c b/drivers/pwm/pwm-microchip-core.c
-index 8750b57684a9..e7525c98105e 100644
---- a/drivers/pwm/pwm-microchip-core.c
-+++ b/drivers/pwm/pwm-microchip-core.c
-@@ -37,7 +37,7 @@
- #include <linux/math.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
+ #include <linux/rtc.h>
+ #include <linux/watchdog.h>
  
-diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index 2401b6733241..a83bd6e18b07 100644
---- a/drivers/pwm/pwm-mtk-disp.c
-+++ b/drivers/pwm/pwm-mtk-disp.c
+diff --git a/drivers/rtc/rtc-armada38x.c b/drivers/rtc/rtc-armada38x.c
+index b4139c200676..8abcad38b10c 100644
+--- a/drivers/rtc/rtc-armada38x.c
++++ b/drivers/rtc/rtc-armada38x.c
 @@ -11,7 +11,6 @@
  #include <linux/io.h>
  #include <linux/module.h>
  #include <linux/of.h>
 -#include <linux/of_device.h>
  #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/slab.h>
-diff --git a/drivers/pwm/pwm-pxa.c b/drivers/pwm/pwm-pxa.c
-index 762429d5647f..c8314053bcb0 100644
---- a/drivers/pwm/pwm-pxa.c
-+++ b/drivers/pwm/pwm-pxa.c
-@@ -15,6 +15,7 @@
-  *   input clock (PWMCR_SD is set) and the output is driven to inactive.
-  */
+ #include <linux/rtc.h>
  
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
+diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
+index e9d17232d0a8..245588a7b417 100644
+--- a/drivers/rtc/rtc-at91rm9200.c
++++ b/drivers/rtc/rtc-at91rm9200.c
+@@ -22,7 +22,6 @@
+ #include <linux/io.h>
  #include <linux/kernel.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-index ae49d67ab2b1..3743b2de4597 100644
---- a/drivers/pwm/pwm-sifive.c
-+++ b/drivers/pwm/pwm-sifive.c
-@@ -13,6 +13,7 @@
-  */
- #include <linux/clk.h>
- #include <linux/io.h>
-+#include <linux/mod_devicetable.h>
  #include <linux/module.h>
+-#include <linux/of_device.h>
+ #include <linux/of.h>
  #include <linux/platform_device.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
-index e64900ad4ba1..d497e87f5e03 100644
---- a/drivers/pwm/pwm-sl28cpld.c
-+++ b/drivers/pwm/pwm-sl28cpld.c
-@@ -38,6 +38,7 @@
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/pwm.h>
- #include <linux/regmap.h>
- 
-diff --git a/drivers/pwm/pwm-sprd.c b/drivers/pwm/pwm-sprd.c
-index d43a6fa3f4e0..1499c8c1fe37 100644
---- a/drivers/pwm/pwm-sprd.c
-+++ b/drivers/pwm/pwm-sprd.c
-@@ -7,6 +7,7 @@
- #include <linux/err.h>
- #include <linux/io.h>
- #include <linux/math64.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-sun4i.c b/drivers/pwm/pwm-sun4i.c
-index a8790a8fc53e..c84fcf1a13dc 100644
---- a/drivers/pwm/pwm-sun4i.c
-+++ b/drivers/pwm/pwm-sun4i.c
-@@ -17,7 +17,6 @@
+ #include <linux/rtc.h>
+diff --git a/drivers/rtc/rtc-ds1742.c b/drivers/rtc/rtc-ds1742.c
+index a5026b0514e7..6ae8b9a294fe 100644
+--- a/drivers/rtc/rtc-ds1742.c
++++ b/drivers/rtc/rtc-ds1742.c
+@@ -16,7 +16,6 @@
  #include <linux/jiffies.h>
- #include <linux/module.h>
+ #include <linux/rtc.h>
  #include <linux/of.h>
 -#include <linux/of_device.h>
  #include <linux/platform_device.h>
- #include <linux/pwm.h>
- #include <linux/reset.h>
-diff --git a/drivers/pwm/pwm-sunplus.c b/drivers/pwm/pwm-sunplus.c
-index d6ebe9f03b35..7705c7b86c3a 100644
---- a/drivers/pwm/pwm-sunplus.c
-+++ b/drivers/pwm/pwm-sunplus.c
-@@ -23,6 +23,7 @@
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
-diff --git a/drivers/pwm/pwm-tegra.c b/drivers/pwm/pwm-tegra.c
-index 5810abf66e2a..a169a34e0778 100644
---- a/drivers/pwm/pwm-tegra.c
-+++ b/drivers/pwm/pwm-tegra.c
-@@ -41,7 +41,6 @@
  #include <linux/io.h>
  #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/pm_opp.h>
- #include <linux/pwm.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/pwm/pwm-tiecap.c b/drivers/pwm/pwm-tiecap.c
-index 109449956307..8c94b266c1b2 100644
---- a/drivers/pwm/pwm-tiecap.c
-+++ b/drivers/pwm/pwm-tiecap.c
-@@ -12,7 +12,7 @@
- #include <linux/clk.h>
- #include <linux/pm_runtime.h>
- #include <linux/pwm.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- 
- /* ECAP registers and bits definitions */
- #define CAP1			0x08
-diff --git a/drivers/pwm/pwm-tiehrpwm.c b/drivers/pwm/pwm-tiehrpwm.c
-index bb3959ace6b4..ecbfd7e954ec 100644
---- a/drivers/pwm/pwm-tiehrpwm.c
-+++ b/drivers/pwm/pwm-tiehrpwm.c
-@@ -12,7 +12,7 @@
+diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
+index 3d7c4077fe1c..a72c4ad0cec6 100644
+--- a/drivers/rtc/rtc-fsl-ftm-alarm.c
++++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
+@@ -11,11 +11,8 @@
  #include <linux/err.h>
- #include <linux/clk.h>
- #include <linux/pm_runtime.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- 
- /* EHRPWM registers and bits definitions */
- 
-diff --git a/drivers/pwm/pwm-visconti.c b/drivers/pwm/pwm-visconti.c
-index e3fb79b3e2a7..7f7591a2384c 100644
---- a/drivers/pwm/pwm-visconti.c
-+++ b/drivers/pwm/pwm-visconti.c
-@@ -21,7 +21,7 @@
- #include <linux/err.h>
+ #include <linux/interrupt.h>
  #include <linux/io.h>
- #include <linux/module.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/of_irq.h>
  #include <linux/platform_device.h>
- #include <linux/pwm.h>
- 
-diff --git a/drivers/pwm/pwm-vt8500.c b/drivers/pwm/pwm-vt8500.c
-index d2c48fd98706..6d46db51daac 100644
---- a/drivers/pwm/pwm-vt8500.c
-+++ b/drivers/pwm/pwm-vt8500.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2010 Alexey Charkov <alchark@gmail.com>
-  */
- 
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/platform_device.h>
-@@ -18,10 +19,6 @@
- 
- #include <asm/div64.h>
- 
 -#include <linux/of.h>
 -#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/fsl/ftm.h>
+ #include <linux/rtc.h>
+diff --git a/drivers/rtc/rtc-isl12026.c b/drivers/rtc/rtc-isl12026.c
+index 5abff5d348ac..8b00659fc955 100644
+--- a/drivers/rtc/rtc-isl12026.c
++++ b/drivers/rtc/rtc-isl12026.c
+@@ -11,7 +11,6 @@
+ #include <linux/mutex.h>
+ #include <linux/nvmem-provider.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+index b0712b4e3648..57e65e1b11f0 100644
+--- a/drivers/rtc/rtc-isl1208.c
++++ b/drivers/rtc/rtc-isl1208.c
+@@ -9,7 +9,7 @@
+ #include <linux/clk.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/of_irq.h>
+ #include <linux/rtc.h>
+ 
+diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
+index 36453b008139..6ba889d7d4c4 100644
+--- a/drivers/rtc/rtc-jz4740.c
++++ b/drivers/rtc/rtc-jz4740.c
+@@ -11,7 +11,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_wakeirq.h>
+ #include <linux/property.h>
+diff --git a/drivers/rtc/rtc-lpc24xx.c b/drivers/rtc/rtc-lpc24xx.c
+index a4612e543f35..df17c48ff086 100644
+--- a/drivers/rtc/rtc-lpc24xx.c
++++ b/drivers/rtc/rtc-lpc24xx.c
+@@ -9,9 +9,8 @@
+ #include <linux/clk.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/rtc.h>
+ 
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index 3cc5151e0986..866489ad56d6 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -17,7 +17,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+diff --git a/drivers/rtc/rtc-mpc5121.c b/drivers/rtc/rtc-mpc5121.c
+index 07df43e4c4d0..69a6ab69c5f8 100644
+--- a/drivers/rtc/rtc-mpc5121.c
++++ b/drivers/rtc/rtc-mpc5121.c
+@@ -11,10 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/rtc.h>
+ #include <linux/of.h>
 -#include <linux/of_address.h>
--
+-#include <linux/of_device.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_platform.h>
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ 
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 1d297af80f87..1617063669cc 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -9,7 +9,7 @@
+ #include <linux/mfd/mt6397/core.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+diff --git a/drivers/rtc/rtc-mt7622.c b/drivers/rtc/rtc-mt7622.c
+index 81857a457c32..094c649fc137 100644
+--- a/drivers/rtc/rtc-mt7622.c
++++ b/drivers/rtc/rtc-mt7622.c
+@@ -7,9 +7,9 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/rtc.h>
+ 
+diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
+index 762cf03345f1..dbb935dbbd8a 100644
+--- a/drivers/rtc/rtc-mxc.c
++++ b/drivers/rtc/rtc-mxc.c
+@@ -11,7 +11,6 @@
+ #include <linux/pm_wakeirq.h>
+ #include <linux/clk.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ 
+ #define RTC_INPUT_CLK_32768HZ	(0x00 << 5)
+ #define RTC_INPUT_CLK_32000HZ	(0x01 << 5)
+diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
+index e517abfaee2a..073977d71b18 100644
+--- a/drivers/rtc/rtc-pcf85063.c
++++ b/drivers/rtc/rtc-pcf85063.c
+@@ -14,7 +14,7 @@
+ #include <linux/bcd.h>
+ #include <linux/rtc.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/pm_wakeirq.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
+index 65b8b1338dbb..569c79bac0ee 100644
+--- a/drivers/rtc/rtc-pcf85363.c
++++ b/drivers/rtc/rtc-pcf85363.c
+@@ -15,7 +15,6 @@
+ #include <linux/errno.h>
+ #include <linux/bcd.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/regmap.h>
+ 
  /*
-  * SoC architecture allocates register space for 4 PWMs but only
-  * 2 are currently implemented.
+diff --git a/drivers/rtc/rtc-pxa.c b/drivers/rtc/rtc-pxa.c
+index eeacf480cf36..e400c78252e8 100644
+--- a/drivers/rtc/rtc-pxa.c
++++ b/drivers/rtc/rtc-pxa.c
+@@ -14,7 +14,6 @@
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ 
+ #include "rtc-sa1100.h"
+ 
+diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+index a5a6c8772ecd..ecabeef09196 100644
+--- a/drivers/rtc/rtc-rs5c372.c
++++ b/drivers/rtc/rtc-rs5c372.c
+@@ -12,7 +12,7 @@
+ #include <linux/bcd.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ 
+ /*
+  * Ricoh has a family of I2C based RTCs, which differ only slightly from
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 076e56f4e01a..68d86d06c3c3 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -17,7 +17,7 @@
+ #include <linux/kernel.h>
+ #include <linux/log2.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+ 
+diff --git a/drivers/rtc/rtc-rv3032.c b/drivers/rtc/rtc-rv3032.c
+index 6b8eb2039a33..35b2e36b426a 100644
+--- a/drivers/rtc/rtc-rv3032.c
++++ b/drivers/rtc/rtc-rv3032.c
+@@ -19,7 +19,7 @@
+ #include <linux/kernel.h>
+ #include <linux/log2.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+ 
+diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
+index 98679cae13e8..fd8ab0b2f731 100644
+--- a/drivers/rtc/rtc-rv8803.c
++++ b/drivers/rtc/rtc-rv8803.c
+@@ -15,7 +15,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/rtc.h>
+ 
+ #define RV8803_I2C_TRY_COUNT		4
+diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
+index 8702db6096ba..834274db8c3f 100644
+--- a/drivers/rtc/rtc-rx6110.c
++++ b/drivers/rtc/rtc-rx6110.c
+@@ -13,7 +13,6 @@
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/spi/spi.h>
+ #include <linux/i2c.h>
+ 
+diff --git a/drivers/rtc/rtc-rx8581.c b/drivers/rtc/rtc-rx8581.c
+index 82881fd2e14a..48efd61a114d 100644
+--- a/drivers/rtc/rtc-rx8581.c
++++ b/drivers/rtc/rtc-rx8581.c
+@@ -13,7 +13,6 @@
+ #include <linux/i2c.h>
+ #include <linux/bcd.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+ #include <linux/log2.h>
+diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+index dca736caba85..6f98969eedca 100644
+--- a/drivers/rtc/rtc-rzn1.c
++++ b/drivers/rtc/rtc-rzn1.c
+@@ -15,7 +15,7 @@
+ #include <linux/init.h>
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/rtc.h>
+diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c
+index 70e1a18e5efd..282238818f63 100644
+--- a/drivers/rtc/rtc-s3c.c
++++ b/drivers/rtc/rtc-s3c.c
+@@ -23,7 +23,6 @@
+ #include <linux/log2.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/uaccess.h>
+ #include <linux/io.h>
+ 
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 3d36e11cff80..2c114e3b0f66 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -10,7 +10,8 @@
+ #include <linux/ioport.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ #include <linux/pm_wakeirq.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
+index 6f11b745f34d..7566d0a44af8 100644
+--- a/drivers/rtc/rtc-stmp3xxx.c
++++ b/drivers/rtc/rtc-stmp3xxx.c
+@@ -18,7 +18,6 @@
+ #include <linux/delay.h>
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+-#include <linux/of_device.h>
+ #include <linux/of.h>
+ #include <linux/stmp_device.h>
+ #include <linux/stmp3xxx_rtc_wdt.h>
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index 71548dd59a3a..753a2d9c8a17 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -24,7 +24,6 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+diff --git a/drivers/rtc/rtc-sunxi.c b/drivers/rtc/rtc-sunxi.c
+index 5d019e3a835a..5cab9953c44f 100644
+--- a/drivers/rtc/rtc-sunxi.c
++++ b/drivers/rtc/rtc-sunxi.c
+@@ -14,8 +14,6 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/rtc.h>
+ #include <linux/types.h>
+diff --git a/drivers/rtc/rtc-ti-k3.c b/drivers/rtc/rtc-ti-k3.c
+index 0d90fe923355..ec759d8f7023 100644
+--- a/drivers/rtc/rtc-ti-k3.c
++++ b/drivers/rtc/rtc-ti-k3.c
+@@ -9,7 +9,7 @@
+ #include <linux/delay.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/sys_soc.h>
+ #include <linux/property.h>
 -- 
 2.40.1
 
