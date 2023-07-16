@@ -2,176 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC134754E10
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jul 2023 11:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E82D754EEF
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jul 2023 16:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjGPJ0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Jul 2023 05:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S230058AbjGPOMD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Jul 2023 10:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjGPJ0d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jul 2023 05:26:33 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED13B10E0;
-        Sun, 16 Jul 2023 02:26:30 -0700 (PDT)
-Received: from i53875a6a.versanet.de ([83.135.90.106] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qKy04-0005tq-1S; Sun, 16 Jul 2023 11:25:08 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Liviu Dudau <liviu.dudau@arm.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Liu Ying <victor.liu@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        John Stultz <jstultz@google.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Qiang Yu <yuq825@gmail.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
-        Icenowy Zheng <icenowy@aosc.io>, Ondrej Jirman <megi@xff.cz>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Guido =?ISO-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Jianhua Lu <lujianhua000@gmail.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Artur Weber <aweber.kernel@gmail.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Emma Anholt <emma@anholt.net>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-mips@vger.kernel.org, lima@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH] drm: Explicitly include correct DT includes
-Date:   Sun, 16 Jul 2023 11:25:03 +0200
-Message-ID: <114500369.nniJfEyVGO@phil>
-In-Reply-To: <20230714174545.4056287-1-robh@kernel.org>
-References: <20230714174545.4056287-1-robh@kernel.org>
+        with ESMTP id S230057AbjGPOMC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jul 2023 10:12:02 -0400
+Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0C4CC
+        for <linux-mips@vger.kernel.org>; Sun, 16 Jul 2023 07:12:00 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id L2TaqBUhtPm6CL2TbqINzC; Sun, 16 Jul 2023 16:11:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1689516717; bh=qEEEQe08huDEerbWiAR0cXkc0ghaaeZB3NbaG6DmygU=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=tnPg1fg/ZCNSIJTHsL27cdlRYcyEzU1bfEgzsoQj4h464D2d0t7Mr/7L9OVTPr/u6
+         a9cuYFJ4USHCZZ1EIAANN/8NKFTYppMqKA+rJQr6mpWHMxYST4VV0HC7ucTVWtFPHS
+         7i0biV1VhywxD4rQEj3gnnEhMhjKAc9aGGYuMZTxRMlAv28K+d6zEGnia/CVJuHdxA
+         h7KaIStiVc/Pt3Kc54RsPVIiiP0HqFO9Jk0yFL//9E67ymypL67eMb4i8vvdXRlXI/
+         AfRV+3CgXd1hYwic8jAkJHrQqJJdKmYxiHDNdl0Cim3t/ylOfYIlf+lIhJ0SWXQch7
+         g05d9UdkdxVag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1689516717; bh=qEEEQe08huDEerbWiAR0cXkc0ghaaeZB3NbaG6DmygU=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=tnPg1fg/ZCNSIJTHsL27cdlRYcyEzU1bfEgzsoQj4h464D2d0t7Mr/7L9OVTPr/u6
+         a9cuYFJ4USHCZZ1EIAANN/8NKFTYppMqKA+rJQr6mpWHMxYST4VV0HC7ucTVWtFPHS
+         7i0biV1VhywxD4rQEj3gnnEhMhjKAc9aGGYuMZTxRMlAv28K+d6zEGnia/CVJuHdxA
+         h7KaIStiVc/Pt3Kc54RsPVIiiP0HqFO9Jk0yFL//9E67ymypL67eMb4i8vvdXRlXI/
+         AfRV+3CgXd1hYwic8jAkJHrQqJJdKmYxiHDNdl0Cim3t/ylOfYIlf+lIhJ0SWXQch7
+         g05d9UdkdxVag==
+Date:   Sun, 16 Jul 2023 16:11:53 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Liang He <windhl@126.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 3/3] usb: dwc3: Add SPDX header and copyright
+Message-ID: <ZLP6qXR3O3X654/n@lenoch>
+References: <ZLD7RHvE4eRPoqKN@lenoch>
+ <ZLD8RkrgU/A9pZMf@lenoch>
+ <20230714214609.cemmrkkfvw6p2toz@synopsys.com>
+ <2023071550-exploring-freeload-ef90@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023071550-exploring-freeload-ef90@gregkh>
+X-CMAE-Envelope: MS4wfAFdxZTnfcmhtvkh/GYhLdlU8GEn5atsKhyR0SZDdpcLhoNhg6EZjTrn5AtYYQOPfexHK2ezjOg3epkzV2tYEdbGjRXp5LSBFrzQAyr+80k/2qa/1eyI
+ xjsQS6aI1Vfo3IiVtFi/yF0rB4WmdWt6nT1Mb8DEw8bHcL9Fj1BXhtpG7FtHoZd8B/xR/mTDrL29k9nSrCK4z8lxC7a2I0oHI+j+2KK/zEMLQUlGqT6VCi23
+ Ftmxxlpx0XClIHV1cu2+W89PH3jVW0yIhfbT0r/6SXCldPSAmY0NVCCPOq1MZ7MC8a1VVVuUNV6do/r4zFNSYGuwZSJiP7raoHJNCy75arqvDLAKz84hFQO4
+ gF0IFhUv
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Am Freitag, 14. Juli 2023, 19:45:34 CEST schrieb Rob Herring:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it as merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
+On Sat, Jul 15, 2023 at 07:23:29AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jul 14, 2023 at 09:46:13PM +0000, Thinh Nguyen wrote:
+> > On Fri, Jul 14, 2023, Ladislav Michl wrote:
+> > > From: Ladislav Michl <ladis@linux-mips.org>
+> > > 
+> > > As driver is rewritten and David no longer works for Marvell (Cavium),
+> > > I'm to blame for breakage.
+> > > 
+> > > Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+> > > ---
+> > >  CHANGES:
+> > >  - v2: None
+> > >  - v3: None
+> > > 
+> > >  drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
+> > >  1 file changed, 4 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
+> > > index dd47498f4efb..a68d568b11a9 100644
+> > > --- a/drivers/usb/dwc3/dwc3-octeon.c
+> > > +++ b/drivers/usb/dwc3/dwc3-octeon.c
+> > > @@ -1,11 +1,9 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > >  /*
+> > > - * XHCI HCD glue for Cavium Octeon III SOCs.
+> > > + * DWC3 glue for Cavium Octeon III SOCs.
+> > >   *
+> > >   * Copyright (C) 2010-2017 Cavium Networks
+> > > - *
+> > > - * This file is subject to the terms and conditions of the GNU General Public
+> > > - * License.  See the file "COPYING" in the main directory of this archive
+> > > - * for more details.
+> > > + * Copyright (C) 2023 Ladislav Michl <ladis@linux-mips.org>
+> > 
+> > I may not be an expert with Copyright, but is it correct to put your
+> > name rather than the entity this belongs to?
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+> That is up to the employer of the developer as to what they want to see
+> here.  Ladislav, you have run this by your legal group, right?
 
-[...]
+Not this particular one as I do not have any legal group :) I started
+this cleanup on my own, but it turned out there will be much more work
+needed to make USB on Octeon reliable. So after asking my contact person
+at Racom, copyright will be assigned to them. Note that it is not official
+statement yet, but as Thinh is on holidays anyway, we have quite some
+time to sort this out. I'll either confirm or send v5 - v4 is is on the
+way with Thinh's comments addressed, so I'm lookign forward for feedback.
 
-> diff --git a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-> index 917e79951aac..2744d8f4a6fa 100644
-> --- a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-> +++ b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-> @@ -12,7 +12,9 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_platform.h>
->  #include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
-
-I'm not sure if I'm just misreading something, but in all other places
-of_device.h gets removed while here is stays as an include. Is this
-correct this way?
-
-Thanks
-Heiko
-
-
+Thanks,
+	ladis
