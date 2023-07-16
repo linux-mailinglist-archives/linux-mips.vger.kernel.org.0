@@ -2,61 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0858E754F01
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jul 2023 16:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8ED754F41
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jul 2023 17:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjGPOST (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Jul 2023 10:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S230078AbjGPPMD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Jul 2023 11:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjGPOSS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jul 2023 10:18:18 -0400
-Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755C1BA
-        for <linux-mips@vger.kernel.org>; Sun, 16 Jul 2023 07:18:17 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id L2ZiqGIwyv5uIL2Zjqf7bX; Sun, 16 Jul 2023 16:18:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1689517095; bh=qdO2VOuc14sUkO6Zp+yxVTT9prZLp83cSci1HnsSQuo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=hpq6GmZtwJOTTnmJf+qnRmJmoYZH4/poKRX0SetUv03iuWpcUH3g1C1stphXjGJF2
-         5FqiS10SE3/xwo7D5wKeRt7imNMkvsF1qqP0uwCyEQckCR0jlYVpxO10s+trcpmhX5
-         366KL4lbPsvex7n6yTKiOxFNHfm4CYcS5pC4QZ/hbk2qEb6Tf42u+BuBQ/SSsn6JKo
-         YV6MpfmodXeFyD4ZEi/ey63Jd0ORBdvxQXfCXsB0c05+M23yKmFmsjxtT7TpD+mbuD
-         95B3/J3tJ3XSGb8OIxg5kWtQzX3/OU3OlBfoQlPFSK3WhpuSf6LJIYBVf5OPYnZa8h
-         O/8dZtcPnF1HA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1689517095; bh=qdO2VOuc14sUkO6Zp+yxVTT9prZLp83cSci1HnsSQuo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=hpq6GmZtwJOTTnmJf+qnRmJmoYZH4/poKRX0SetUv03iuWpcUH3g1C1stphXjGJF2
-         5FqiS10SE3/xwo7D5wKeRt7imNMkvsF1qqP0uwCyEQckCR0jlYVpxO10s+trcpmhX5
-         366KL4lbPsvex7n6yTKiOxFNHfm4CYcS5pC4QZ/hbk2qEb6Tf42u+BuBQ/SSsn6JKo
-         YV6MpfmodXeFyD4ZEi/ey63Jd0ORBdvxQXfCXsB0c05+M23yKmFmsjxtT7TpD+mbuD
-         95B3/J3tJ3XSGb8OIxg5kWtQzX3/OU3OlBfoQlPFSK3WhpuSf6LJIYBVf5OPYnZa8h
-         O/8dZtcPnF1HA==
-Date:   Sun, 16 Jul 2023 16:18:14 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>
-Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v4 6/6] usb: dwc3: dwc3-octeon: Add SPDX header and copyright
-Message-ID: <ZLP8JtXnFEWQBM22@lenoch>
-References: <ZLP7CSUm095ADtdw@lenoch>
+        with ESMTP id S229912AbjGPPMC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jul 2023 11:12:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ACB1B7;
+        Sun, 16 Jul 2023 08:12:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D6260D2E;
+        Sun, 16 Jul 2023 15:12:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFB8C433C9;
+        Sun, 16 Jul 2023 15:11:58 +0000 (UTC)
+Date:   Sun, 16 Jul 2023 08:11:56 -0700
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        mark.rutland@arm.com, ryan.roberts@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, linux-doc@vger.kernel.org,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
+        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
+        Jonathan.Cameron@huawei.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH v10 4/4] arm64: support batched/deferred tlb shootdown
+ during page reclamation/migration
+Message-ID: <ZLQIvPpKvjWppc59@arm.com>
+References: <20230710083914.18336-1-yangyicong@huawei.com>
+ <20230710083914.18336-5-yangyicong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZLP7CSUm095ADtdw@lenoch>
-X-CMAE-Envelope: MS4wfKcGgF/V+a04bA69L8vLH3n4OMYWqA7A71apVZStSQL9tApjZP13X1QHh+LqmcKAIqOFuy7ik0vZrkn5C/oVejx/sDeFzLTsk7/u0vIRoFR5ieXZbCVV
- kbXY6esu3kKgvuTvDVhlNfx6g/p7qqVJq6VXdTjy4q1MxM9aBbAI4i+9tFnEabG/AtwdDDKZzpRJF7i+a5gGMRMM8zL3b1lStdQZ1n/JPB/y5irlaQ3/mIY+
- caQIPsyLACcxKQ0Vush+eW7tvDAcPvdWe2PnIMmDMAyxDestPyEMIiDAm7/bd0VemL0WQX1FcbRNavG6dP5oV4l9TF840OowIoMohAGvH0zoYVLev7vlf/kU
- BdxqPWt9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20230710083914.18336-5-yangyicong@huawei.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +58,68 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ladislav Michl <ladis@linux-mips.org>
+On Mon, Jul 10, 2023 at 04:39:14PM +0800, Yicong Yang wrote:
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 7856c3a3e35a..f0ce8208c57f 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -96,6 +96,7 @@ config ARM64
+>  	select ARCH_SUPPORTS_NUMA_BALANCING
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+>  	select ARCH_SUPPORTS_PER_VMA_LOCK
+> +	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
 
-Assign copyright to indicate driver rewrite is done for RACOM s.r.o.
-As David no longer works for Marvell (Cavium), I'm to blame for breakage.
+I don't want EXPERT to turn on a feature that's not selectable by the
+user. This would lead to different performance behaviour based on
+EXPERT. Just select it unconditionally.
 
-Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
----
- CHANGES:
- - v2: None
- - v3: None
- - v4: Assign copyring to RACOM s.r.o., Mírová 1283, Nové Mìsto na Moravì
+> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+> index 412a3b9a3c25..4bb9cec62e26 100644
+> --- a/arch/arm64/include/asm/tlbflush.h
+> +++ b/arch/arm64/include/asm/tlbflush.h
+> @@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
+>  	dsb(ish);
+>  }
+>  
+> -static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+> -					 unsigned long uaddr)
+> +static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
+> +					   unsigned long uaddr)
+>  {
+>  	unsigned long addr;
+>  
+>  	dsb(ishst);
+> -	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
+> +	addr = __TLBI_VADDR(uaddr, ASID(mm));
+>  	__tlbi(vale1is, addr);
+>  	__tlbi_user(vale1is, addr);
+>  }
+>  
+> +static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+> +					 unsigned long uaddr)
+> +{
+> +	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
+> +}
+> +
+>  static inline void flush_tlb_page(struct vm_area_struct *vma,
+>  				  unsigned long uaddr)
+>  {
+> @@ -272,6 +278,42 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>  	dsb(ish);
+>  }
+>  
+> +#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
 
- drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+If it's selected unconditionally, we won't need this #ifdef here.
 
-diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index 9116df7def86..122f062d2822 100644
---- a/drivers/usb/dwc3/dwc3-octeon.c
-+++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -1,11 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * XHCI HCD glue for Cavium Octeon III SOCs.
-+ * DWC3 glue for Cavium Octeon III SOCs.
-  *
-  * Copyright (C) 2010-2017 Cavium Networks
-- *
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-+ * Copyright (C) 2023 RACOM s.r.o.
-  */
- 
- #include <linux/bitfield.h>
-@@ -537,6 +535,6 @@ static struct platform_driver dwc3_octeon_driver = {
- module_platform_driver(dwc3_octeon_driver);
- 
- MODULE_ALIAS("platform:dwc3-octeon");
--MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
-+MODULE_AUTHOR("Ladislav Michl <ladis@linux-mips.org>");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
+> +
+> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> +{
+> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+> +	/*
+> +	 * TLB flush deferral is not required on systems, which are affected with
+
+"affected by" and drop the comma before "which".
+
 -- 
-2.39.2
-
+Catalin
