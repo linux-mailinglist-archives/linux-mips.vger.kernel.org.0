@@ -2,237 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9F27561BF
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 13:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849787562AC
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 14:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjGQLlf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 07:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
+        id S229830AbjGQM0T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 08:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjGQLle (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 07:41:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296E1E4C
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 04:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689594049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yQqyG6oxXaLj0FF/OLRS2ExsXKIdb3iPjfzq0DwkqKY=;
-        b=aIQOe2PDLfRPV2osj4Avq8e0iJ9ytVn3Dm5WEs79aqgWM28VTNEpWsx2+Ng/rpnRcpa+XZ
-        JRz8ks0lsTpdPDWkY6dB8JlqOwxl3+DoTL0JM4CX37c5A8x7lGteDWMnWvd//Kz1iYM6yq
-        2gATf82ZoHC/UlX0/22JF5mkGIThmrM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-295-L8AkUt0SPBGzm3bGTCGPMw-1; Mon, 17 Jul 2023 07:40:46 -0400
-X-MC-Unique: L8AkUt0SPBGzm3bGTCGPMw-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-767edbf73cbso88078385a.1
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 04:40:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689594046; x=1690198846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQqyG6oxXaLj0FF/OLRS2ExsXKIdb3iPjfzq0DwkqKY=;
-        b=ejhd6wyZGhtMWOnMv6W1hLNF4txbtoBPbrzb8MIxdJDlEYqSOs3wsber/NPK0FIz5F
-         4x2mqIjnTGSpnyJf87pkXzz1/mstB/OpmlfrOQu3pJcXy+BnIN9M7uLq5EQm7G5RXVuz
-         mZky9DnmKol0xgQcLSETcVsonwfIAk9VpjNxzgONnrFcCTxYOzCFfH4EWLP/ICmcJ4SN
-         vIzbrnYaW5/Cmo00DPa03JV2XrBiZr6OIxT+QdcUut1pWkLh0of8WtGlLYaD/ptGokTh
-         cUdGWhvC6Hq3S73YLcDlmY2thkAyNWjxuJasYTAiYsmDrJnozENI8g6K3zver1RTxU+L
-         AqVQ==
-X-Gm-Message-State: ABy/qLbs4q2HhBoz3nXE9jGxhnjVTACKvIBBIzPtCePL3C1GYqy8HUco
-        F+bS+jPAh6GDhyEWe/tVfJRFpNA6en6pylvYxvBBAuMxHAFlnWYeAQT2iu9pDPiKInxv4nVHvSq
-        LP0ijQlPbxxCEYFF35NwC3A==
-X-Received: by 2002:a05:620a:24c8:b0:767:7a4c:1b9e with SMTP id m8-20020a05620a24c800b007677a4c1b9emr9266356qkn.7.1689594046115;
-        Mon, 17 Jul 2023 04:40:46 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGDK1i5Bb5hW3SqNn/8w11DLVrfU0l98wShs1NeCy8lsDEALEXS1SLko5LtJ6r2IMuB1Q1XLw==
-X-Received: by 2002:a05:620a:24c8:b0:767:7a4c:1b9e with SMTP id m8-20020a05620a24c800b007677a4c1b9emr9266330qkn.7.1689594045810;
-        Mon, 17 Jul 2023 04:40:45 -0700 (PDT)
-Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id g7-20020a05620a108700b00767d05117fesm6051154qkk.36.2023.07.17.04.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 04:40:45 -0700 (PDT)
-Message-ID: <199d18de-1214-7683-b87a-03cc7e49719a@redhat.com>
-Date:   Mon, 17 Jul 2023 19:40:32 +0800
+        with ESMTP id S229541AbjGQM0S (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 08:26:18 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD28E1;
+        Mon, 17 Jul 2023 05:26:17 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R4Lrp2BrKz18LY9;
+        Mon, 17 Jul 2023 20:25:30 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 17 Jul 2023 20:26:11 +0800
+CC:     <yangyicong@hisilicon.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-arm-kernel@lists.infradead.org>,
+        <x86@kernel.org>, <mark.rutland@arm.com>, <ryan.roberts@arm.com>,
+        <will@kernel.org>, <anshuman.khandual@arm.com>,
+        <linux-doc@vger.kernel.org>, <corbet@lwn.net>,
+        <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <huzhanyuan@oppo.com>,
+        <lipeifeng@oppo.com>, <zhangshiming@oppo.com>, <guojian@oppo.com>,
+        <realmz6@gmail.com>, <linux-mips@vger.kernel.org>,
+        <openrisc@lists.librecores.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        Barry Song <21cnbao@gmail.com>, <wangkefeng.wang@huawei.com>,
+        <xhao@linux.alibaba.com>, <prime.zeng@hisilicon.com>,
+        <Jonathan.Cameron@huawei.com>, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH v10 4/4] arm64: support batched/deferred tlb shootdown
+ during page reclamation/migration
+To:     Catalin Marinas <catalin.marinas@arm.com>
+References: <20230710083914.18336-1-yangyicong@huawei.com>
+ <20230710083914.18336-5-yangyicong@huawei.com> <ZLQIvPpKvjWppc59@arm.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <9438aa19-8eb5-a36a-c4a0-6c8333665637@huawei.com>
+Date:   Mon, 17 Jul 2023 20:26:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 03/11] KVM: Allow range-based TLB invalidation from
- common code
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
-References: <20230715005405.3689586-1-rananta@google.com>
- <20230715005405.3689586-4-rananta@google.com>
-From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20230715005405.3689586-4-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <ZLQIvPpKvjWppc59@arm.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 2023/7/16 23:11, Catalin Marinas wrote:
+> On Mon, Jul 10, 2023 at 04:39:14PM +0800, Yicong Yang wrote:
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 7856c3a3e35a..f0ce8208c57f 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -96,6 +96,7 @@ config ARM64
+>>  	select ARCH_SUPPORTS_NUMA_BALANCING
+>>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+>>  	select ARCH_SUPPORTS_PER_VMA_LOCK
+>> +	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
+> 
+> I don't want EXPERT to turn on a feature that's not selectable by the
+> user. This would lead to different performance behaviour based on
+> EXPERT. Just select it unconditionally.
 
+Got it. will drop it and address the comment below.
 
-On 7/15/23 08:53, Raghavendra Rao Ananta wrote:
-> From: David Matlack <dmatlack@google.com>
-> 
-> Make kvm_flush_remote_tlbs_range() visible in common code and create a
-> default implementation that just invalidates the whole TLB.
-> 
-> This paves the way for several future features/cleanups:
-> 
->   - Introduction of range-based TLBI on ARM.
->   - Eliminating kvm_arch_flush_remote_tlbs_memslot()
->   - Moving the KVM/x86 TDP MMU to common code.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> ---
->   arch/x86/include/asm/kvm_host.h |  3 +++
->   arch/x86/kvm/mmu/mmu.c          |  9 ++++-----
->   arch/x86/kvm/mmu/mmu_internal.h |  3 ---
->   include/linux/kvm_host.h        |  9 +++++++++
->   virt/kvm/kvm_main.c             | 13 +++++++++++++
->   5 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index a2d3cfc2eb75..08900afbf2ad 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1804,6 +1804,9 @@ static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
->   		return -ENOTSUPP;
->   }
->   
-> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
-> +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages);
-> +
->   #define kvm_arch_pmi_in_guest(vcpu) \
->   	((vcpu) && (vcpu)->arch.handling_intr_from_guest)
->   
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index ec169f5c7dce..aaa5e336703a 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -278,16 +278,15 @@ static inline bool kvm_available_flush_remote_tlbs_range(void)
->   	return kvm_x86_ops.flush_remote_tlbs_range;
->   }
->   
-> -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
-> -				 gfn_t nr_pages)
-> +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages)
->   {
->   	int ret = -EOPNOTSUPP;
->   
->   	if (kvm_x86_ops.flush_remote_tlbs_range)
->   		ret = static_call(kvm_x86_flush_remote_tlbs_range)(kvm, start_gfn,
-> -								   nr_pages);
-> -	if (ret)
-> -		kvm_flush_remote_tlbs(kvm);
-> +									pages);
-This will be good if parameter pages aligned with parameter kvm.
+Thanks.
 
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> +
-> +	return ret;
->   }
->   
->   static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index);
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index d39af5639ce9..86cb83bb3480 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -170,9 +170,6 @@ bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm,
->   				    struct kvm_memory_slot *slot, u64 gfn,
->   				    int min_level);
->   
-> -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
-> -				 gfn_t nr_pages);
-> -
->   /* Flush the given page (huge or not) of guest memory. */
->   static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_t gfn, int level)
->   {
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index e3f968b38ae9..a731967b24ff 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1359,6 +1359,7 @@ int kvm_vcpu_yield_to(struct kvm_vcpu *target);
->   void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool yield_to_kernel_mode);
->   
->   void kvm_flush_remote_tlbs(struct kvm *kvm);
-> +void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 pages);
->   
->   #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
->   int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
-> @@ -1486,6 +1487,14 @@ static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
->   }
->   #endif
->   
-> +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
-> +static inline int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm,
-> +						   gfn_t gfn, u64 pages)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +#endif
-> +
->   #ifdef __KVM_HAVE_ARCH_NONCOHERENT_DMA
->   void kvm_arch_register_noncoherent_dma(struct kvm *kvm);
->   void kvm_arch_unregister_noncoherent_dma(struct kvm *kvm);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d6b050786155..804470fccac7 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -366,6 +366,19 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
->   }
->   EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
->   
-> +void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 pages)
-> +{
-> +	if (!kvm_arch_flush_remote_tlbs_range(kvm, gfn, pages))
-> +		return;
-> +
-> +	/*
-> +	 * Fall back to a flushing entire TLBs if the architecture range-based
-> +	 * TLB invalidation is unsupported or can't be performed for whatever
-> +	 * reason.
-> +	 */
-> +	kvm_flush_remote_tlbs(kvm);
-> +}
-> +
->   static void kvm_flush_shadow_all(struct kvm *kvm)
->   {
->   	kvm_arch_flush_shadow_all(kvm);
-
--- 
-Shaoqin
-
+> 
+>> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+>> index 412a3b9a3c25..4bb9cec62e26 100644
+>> --- a/arch/arm64/include/asm/tlbflush.h
+>> +++ b/arch/arm64/include/asm/tlbflush.h
+>> @@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
+>>  	dsb(ish);
+>>  }
+>>  
+>> -static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+>> -					 unsigned long uaddr)
+>> +static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
+>> +					   unsigned long uaddr)
+>>  {
+>>  	unsigned long addr;
+>>  
+>>  	dsb(ishst);
+>> -	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
+>> +	addr = __TLBI_VADDR(uaddr, ASID(mm));
+>>  	__tlbi(vale1is, addr);
+>>  	__tlbi_user(vale1is, addr);
+>>  }
+>>  
+>> +static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+>> +					 unsigned long uaddr)
+>> +{
+>> +	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
+>> +}
+>> +
+>>  static inline void flush_tlb_page(struct vm_area_struct *vma,
+>>  				  unsigned long uaddr)
+>>  {
+>> @@ -272,6 +278,42 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>>  	dsb(ish);
+>>  }
+>>  
+>> +#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+> 
+> If it's selected unconditionally, we won't need this #ifdef here.
+> 
+>> +
+>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+>> +{
+>> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+>> +	/*
+>> +	 * TLB flush deferral is not required on systems, which are affected with
+> 
+> "affected by" and drop the comma before "which".
+> 
