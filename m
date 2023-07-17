@@ -2,198 +2,199 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95298756037
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 12:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D622D756139
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 13:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjGQKRa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 06:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S230253AbjGQLH0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 07:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjGQKR2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 06:17:28 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25791B1;
-        Mon, 17 Jul 2023 03:17:27 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 1B5DF163314;
-        Mon, 17 Jul 2023 12:17:22 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1689589042; bh=Bm0Hy13+JRi9NMlimeswrt8XBhWxLQOI9N21AQMkbyk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GQN14zd3XNWnsUCpxj8CAfDRLfHO3yKbIYH4Z1tY2NuUyB/tEAWXePMgXHClGElXV
-         iclkVMk4nMw7f2dCGMBhAdc3436jIvQ3z8yKAco9Yv+innFM08daK23nD+0JAcJW+d
-         SeEwDCP0ntZA0tOgBwjdzE+yAGotID6XvGHHT1DZyU/IAvL5pRZTbpVCELUjsw0pmk
-         Fjduj/nTRd+WS55sOgt6m/O0blal5FJ8IM4Ma27TYBebyldrBxV45Rul1vue8rpAcD
-         H03pbEhB1HqGfsRaZngbNzSDrUmBPA32acEzxYcaaIy38C9WCKNmg+OPDUsAVC/MnK
-         KgQwEGVvlDo6Q==
-Date:   Mon, 17 Jul 2023 12:17:20 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <philmd@linaro.org>
-Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Petr Tesarik <petr.tesarik.ext@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        James Seo <james@equiv.tech>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH v4 1/8] swiotlb: make io_tlb_default_mem local to
- swiotlb.c
-Message-ID: <20230717121720.093cb1cc@meshulam.tesarici.cz>
-In-Reply-To: <45f89fee-6825-3f5d-9dfb-aad5d47c8c36@linaro.org>
-References: <cover.1689261692.git.petr.tesarik.ext@huawei.com>
-        <7f64111986f4f361a2deb4a1a1b6f588e63a851b.1689261692.git.petr.tesarik.ext@huawei.com>
-        <45f89fee-6825-3f5d-9dfb-aad5d47c8c36@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S230463AbjGQLHQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 07:07:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DC6E52
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 04:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689591987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VGOOqLavhEXg7lyDpvUW6ICkPL0LfcVFnu070bLPGDE=;
+        b=ii5CKAXv00BKMVqd4j9IefrnwfGzba4CF0TNt6gS2XU+LL+mwKVZzGH3dFRqwL5S0PxYyh
+        PJpd+cTWqt80PIdv9NGkePDmjAVF0XYdDYwHkXx0iglcI+/K38q4az/1xnMOBHDVslFQlj
+        ApKpqMMQpAG0av1swU8hvoV7mC7G6ko=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-47-yzwZGJ1iO463V9B9rDXytw-1; Mon, 17 Jul 2023 07:06:26 -0400
+X-MC-Unique: yzwZGJ1iO463V9B9rDXytw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-767d30ab094so104217785a.1
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 04:06:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689591986; x=1692183986;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGOOqLavhEXg7lyDpvUW6ICkPL0LfcVFnu070bLPGDE=;
+        b=TQeTqEaIVUifMxFY1wW3TYK+v0AoqfJKkKmzdZNInNxJaKaj+NjFS/b5Djw9SwCnUQ
+         qCYhboDpLpj9ENzmqFfOZP6cJnNZfzjd/eahh0mmuxXLh/3nLJpdL9RM9zMjjIzUF4jz
+         +V5krWUmyxb+PMuhyiqYeSRxJnDAVh424C87FBUA+FHfQCudlso1QG4Fl59CWqUlVegD
+         XuK9vNjLPvmFFZDS1rTfDFE4w4kW0deCYVx8rqNV+VClLsDFLrbJSV+Ydsj+oKfGRvCr
+         dTFTOy0GkwQFU//ps4VgFe/z2AFKyS8DvcVrLCIY1KqFeY3EEN0NXT0vHQuhNG1sfrYU
+         Ul1g==
+X-Gm-Message-State: ABy/qLbi8EeGVIo2GI+G6izMjKWiJ4xvbzFPMJ/6dFrTPJj2zVTVPFNG
+        oqEi8FFejJv6RRUEnsOlFaxbqb+zfcslxPlmWA3O36vLWNVFGQYWbpxbrn85xZ0FFB3Y4AJxWvW
+        MR3lZOeJTGN23yHZp823uQQ==
+X-Received: by 2002:ad4:4eea:0:b0:634:cdae:9941 with SMTP id dv10-20020ad44eea000000b00634cdae9941mr6281523qvb.0.1689591985909;
+        Mon, 17 Jul 2023 04:06:25 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHPP9caNhe5hJZM2GlWhiygfmGOQVyjdcW0NBVwh6GDivJx65xNuv4iB/a90XMh51kWdiueww==
+X-Received: by 2002:ad4:4eea:0:b0:634:cdae:9941 with SMTP id dv10-20020ad44eea000000b00634cdae9941mr6281491qvb.0.1689591985670;
+        Mon, 17 Jul 2023 04:06:25 -0700 (PDT)
+Received: from [10.66.61.39] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id x26-20020a0ca89a000000b00621268e14efsm6363454qva.55.2023.07.17.04.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jul 2023 04:06:25 -0700 (PDT)
+Message-ID: <4f465d66-baa3-88bc-86f5-d88cc0a73441@redhat.com>
+Date:   Mon, 17 Jul 2023 19:06:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 01/11] KVM: Rename kvm_arch_flush_remote_tlb() to
+ kvm_arch_flush_remote_tlbs()
+Content-Language: en-US
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
+References: <20230715005405.3689586-1-rananta@google.com>
+ <20230715005405.3689586-2-rananta@google.com>
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <20230715005405.3689586-2-rananta@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 17 Jul 2023 08:06:07 +0200
-Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org> wrote:
 
-> Hi Petr,
->=20
-> On 13/7/23 17:23, Petr Tesarik wrote:
-> > From: Petr Tesarik <petr.tesarik.ext@huawei.com>
-> >=20
-> > SWIOTLB implementation details should not be exposed to the rest of the
-> > kernel. This will allow to make changes to the implementation without
-> > modifying non-swiotlb code.
-> >=20
-> > To avoid breaking existing users, provide helper functions for the few
-> > required fields.
-> >=20
-> > As a bonus, using a helper function to initialize struct device allows =
-to
-> > get rid of an #ifdef in driver core.
-> >=20
-> > Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
-> > ---
-> >   arch/arm/xen/mm.c          |  2 +-
-> >   arch/mips/pci/pci-octeon.c |  2 +-
-> >   arch/x86/kernel/pci-dma.c  |  2 +-
-> >   drivers/base/core.c        |  4 +---
-> >   drivers/xen/swiotlb-xen.c  |  2 +-
-> >   include/linux/swiotlb.h    | 25 +++++++++++++++++++++++-
-> >   kernel/dma/swiotlb.c       | 39 +++++++++++++++++++++++++++++++++++++-
-> >   7 files changed, 67 insertions(+), 9 deletions(-) =20
->=20
->=20
-> > diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-> > index 4e52cd5e0bdc..07216af59e93 100644
-> > --- a/include/linux/swiotlb.h
-> > +++ b/include/linux/swiotlb.h
-> > @@ -110,7 +110,6 @@ struct io_tlb_mem {
-> >   	atomic_long_t used_hiwater;
-> >   #endif
-> >   };
-> > -extern struct io_tlb_mem io_tlb_default_mem;
-> >  =20
-> >   static inline bool is_swiotlb_buffer(struct device *dev, phys_addr_t =
-paddr)
-> >   {
-> > @@ -128,13 +127,22 @@ static inline bool is_swiotlb_force_bounce(struct=
- device *dev)
-> >  =20
-> >   void swiotlb_init(bool addressing_limited, unsigned int flags);
-> >   void __init swiotlb_exit(void);
-> > +void swiotlb_dev_init(struct device *dev);
-> >   size_t swiotlb_max_mapping_size(struct device *dev);
-> > +bool is_swiotlb_allocated(void);
-> >   bool is_swiotlb_active(struct device *dev);
-> >   void __init swiotlb_adjust_size(unsigned long size);
-> > +phys_addr_t default_swiotlb_start(void);
-> > +phys_addr_t default_swiotlb_limit(void); =20
->=20
-> Usually we use start/end, base/limit, low[est]/high[est] tuples.
 
-I'm no big fan of start/end, because the "end" sometimes means "highest
-within range" and sometimes "one past range", being responsible for an
-impressive amount of off-by-one errors.
+On 7/15/23 08:53, Raghavendra Rao Ananta wrote:
+> From: David Matlack <dmatlack@google.com>
+> 
+> Rename kvm_arch_flush_remote_tlb() and the associated macro
+> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB to kvm_arch_flush_remote_tlbs() and
+> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS respectively.
+> 
+> Making the name plural matches kvm_flush_remote_tlbs() and makes it more
+> clear that this function can affect more than one remote TLB.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+>   arch/mips/include/asm/kvm_host.h | 4 ++--
+>   arch/mips/kvm/mips.c             | 2 +-
+>   arch/x86/include/asm/kvm_host.h  | 4 ++--
+>   include/linux/kvm_host.h         | 4 ++--
+>   virt/kvm/kvm_main.c              | 2 +-
+>   5 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 04cedf9f8811..9b0ad8f3bf32 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -896,7 +896,7 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>   static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>   static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>   
+> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -int kvm_arch_flush_remote_tlb(struct kvm *kvm);
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+>   
+>   #endif /* __MIPS_KVM_HOST_H__ */
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index aa5583a7b05b..4b7bc39a4173 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -981,7 +981,7 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+>   
+>   }
+>   
+> -int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	kvm_mips_callbacks->prepare_flush_shadow(kvm);
+>   	return 1;
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 28bd38303d70..a2d3cfc2eb75 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1794,8 +1794,8 @@ static inline struct kvm *kvm_arch_alloc_vm(void)
+>   #define __KVM_HAVE_ARCH_VM_FREE
+>   void kvm_arch_free_vm(struct kvm *kvm);
+>   
+> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	if (kvm_x86_ops.flush_remote_tlbs &&
+>   	    !static_call(kvm_x86_flush_remote_tlbs)(kvm))
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 9d3ac7720da9..e3f968b38ae9 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1479,8 +1479,8 @@ static inline void kvm_arch_free_vm(struct kvm *kvm)
+>   }
+>   #endif
+>   
+> -#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	return -ENOTSUPP;
+>   }
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index dfbaafbe3a00..70e5479797ac 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -361,7 +361,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+>   	 * kvm_make_all_cpus_request() reads vcpu->mode. We reuse that
+>   	 * barrier here.
+>   	 */
+> -	if (!kvm_arch_flush_remote_tlb(kvm)
+> +	if (!kvm_arch_flush_remote_tlbs(kvm)
+>   	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+>   		++kvm->stat.generic.remote_tlb_flush;
+>   }
 
-But I agree. When I decided against "end", I should have also replaced
-"start" with "base". Well, this patch series will certainly see a v5,
-so I'll change it there. Thanks for the suggestion!
-
-Petr T
-
-> Possibly clearer to rename, regardless:
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
->=20
-> > diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> > index 2b83e3ad9dca..873b077d7e37 100644
-> > --- a/kernel/dma/swiotlb.c
-> > +++ b/kernel/dma/swiotlb.c =20
->=20
->=20
-> > @@ -958,6 +975,26 @@ bool is_swiotlb_active(struct device *dev)
-> >   }
-> >   EXPORT_SYMBOL_GPL(is_swiotlb_active);
-> >  =20
-> > +/**
-> > + * default_swiotlb_start() - get the start of the default SWIOTLB
-> > + *
-> > + * Get the lowest physical address used by the default software IO TLB=
- pool.
-> > + */
-> > +phys_addr_t default_swiotlb_start(void)
-> > +{
-> > +	return io_tlb_default_mem.start;
-> > +}
-> > +
-> > +/**
-> > + * default_swiotlb_limit() - get the highest address in the default SW=
-IOTLB
-> > + *
-> > + * Get the highest physical address used by the default software IO TL=
-B pool. =20
->=20
-> (note you describe lowest/highest).
->=20
-> > + */
-> > +phys_addr_t default_swiotlb_limit(void)
-> > +{
-> > +	return io_tlb_default_mem.end - 1;
-> > +}
-> > +
-> >   #ifdef CONFIG_DEBUG_FS
-> >  =20
-> >   static int io_tlb_used_get(void *data, u64 *val) =20
->=20
+-- 
+Shaoqin
 
