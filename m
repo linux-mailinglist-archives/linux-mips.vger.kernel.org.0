@@ -2,225 +2,237 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A2475618D
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 13:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BFD7561A5
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 13:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjGQL2i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 07:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S230059AbjGQLgJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 07:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjGQL2i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 07:28:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C1FE4E
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 04:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689593276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cifHTSGxLePrnNdALZCim8wNk8dyI3fwSptrejN9W0Y=;
-        b=hH8aywB18HR0fUMtL7sAtCuiqIdayGaVMYt9aO/J3HCGREN6XDvMQZVw+2j6PoJEqo+rxD
-        cjVYbnYMdwTrjxVnEdeXUKtNxy/phKRDhwo6CdNX60+XiFxdqCtQOokmwA7r4mclM1V8zS
-        tKt0AjkMrB1S5VHP0TFwog4QkyinKBs=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-169--hx4Cg6iNW62ISs4Nb_q9w-1; Mon, 17 Jul 2023 07:27:55 -0400
-X-MC-Unique: -hx4Cg6iNW62ISs4Nb_q9w-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-767a1ad2175so108481485a.0
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 04:27:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689593273; x=1690198073;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cifHTSGxLePrnNdALZCim8wNk8dyI3fwSptrejN9W0Y=;
-        b=D2usmWZHybIvtMq4g2j4sHL3ML7Z7mftoK1j/hA+U4O5QksGm1kS/vIMUZRh6qFrIg
-         bIG+9vLSvpuldclXZV7gGE321qcpvk/1nTjCRny2wg/qGDEOjQjKEh31iPSYgmLoqGCf
-         veQxGNoW4oCkOaXKCdFpxoA7nMvXZf2cABfj5MqJRQx66Xq7tapa28HdphGKdoCqB18R
-         w0TxtvQsRG3i7xs1OKkWh+26MM1VbnE198JrNJWI1h0zpa1KRa5guEGToRUJxaJChmu0
-         6T/d/kGyqXtaf7qSkf6R53obyS7E0jY3vPS1REZAwMnfhrk1v6N8API77yN3j1EZjIbX
-         /Gaw==
-X-Gm-Message-State: ABy/qLaImhjNaizsi0c9Lx/w71qXIzLJmMYBzY5ehRNvW7Z3nVYb2cYW
-        ESV9XF9N+XuXQbWS3ULRLLfQL4vZZ/0iOt5CrUqyDYdX09tb98+meFlg9M6/OYlKsHlprfq17XQ
-        q6stbXoQd2opErzjYhfehMg==
-X-Received: by 2002:a05:620a:454a:b0:763:c764:577c with SMTP id u10-20020a05620a454a00b00763c764577cmr16480735qkp.5.1689593273635;
-        Mon, 17 Jul 2023 04:27:53 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEfp5t2DQS/GjyIoS478X8u5KzsdIEDs8/rcKlb51fLewoRgNMtmXWnZggE+f74jG6LdYamWQ==
-X-Received: by 2002:a05:620a:454a:b0:763:c764:577c with SMTP id u10-20020a05620a454a00b00763c764577cmr16480723qkp.5.1689593273369;
-        Mon, 17 Jul 2023 04:27:53 -0700 (PDT)
-Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id z1-20020a05620a100100b0075b2af4a076sm6028544qkj.16.2023.07.17.04.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 04:27:53 -0700 (PDT)
-Message-ID: <0e5dd611-b047-5565-cf09-ad8844386b81@redhat.com>
-Date:   Mon, 17 Jul 2023 19:27:29 +0800
+        with ESMTP id S229461AbjGQLgI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 07:36:08 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D92E4C;
+        Mon, 17 Jul 2023 04:36:07 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC0DD16C4;
+        Mon, 17 Jul 2023 13:35:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1689593710;
+        bh=Q3mYfdnpaLKlY8/jxmRm80QstU9e0PZzEci91ZZE1j4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=D34b2nk3MBeIsD4Hh9go1cz7KYgQfaVb0QwyTeWrvQudhj3fcvsR86k18n5c2Eh/a
+         11cp7FnDEwboNqdfvQSni7J+NuSf4nawSesO0QfLQ1Tb/Qq/1vhrC/00e2IYaQomU7
+         muczhfhcRx636pqbzTWg6NH753X76UJuCpEmbpUo=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 02/11] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Zenghui Yu <zenghui.yu@linux.dev>,
-        Gavin Shan <gshan@redhat.com>
-References: <20230715005405.3689586-1-rananta@google.com>
- <20230715005405.3689586-3-rananta@google.com>
-From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20230715005405.3689586-3-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230714174545.4056287-1-robh@kernel.org>
+References: <20230714174545.4056287-1-robh@kernel.org>
+Subject: Re: [PATCH] drm: Explicitly include correct DT includes
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     devicetree@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-mips@vger.kernel.org, lima@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Artur Weber <aweber.kernel@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Emma Anholt <emma@anholt.net>,
+        Fabio Estevam <festevam@gmail.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Guido =?utf-8?q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        Heiko =?utf-8?q?St=C3=BCbner?= <heiko@sntech.de>,
+        Icenow y Zheng <icenowy@aosc.io>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
+        Jianhua Lu <lujianhua000@gmail.com>,
+        John Stultz <jstultz@google.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liu Ying <victor.liu@nxp.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Ondrej Jirman <megi@xff.cz>, Orson Zhai <orsonzhai@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Qiang Yu <yuq825@gmail.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Rob Clark <robdclark@gmail.com>, Rob Herring <robh@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Paul <sean@poorly.run>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Steven Price <steven.price@arm.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>
+Date:   Mon, 17 Jul 2023 12:35:59 +0100
+Message-ID: <168959375926.3515353.7529038208688306372@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Quoting Rob Herring (2023-07-14 18:45:34)
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
+>  drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c         | 2 +-
+>  drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c         | 2 ++
+>  drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c         | 1 +
+>  drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c       | 1 -
+>  drivers/gpu/drm/renesas/rcar-du/rzg2l_mipi_dsi.c      | 1 -
 
-On 7/15/23 08:53, Raghavendra Rao Ananta wrote:
-> From: David Matlack <dmatlack@google.com>
-> 
-> Use kvm_arch_flush_remote_tlbs() instead of
-> CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL. The two mechanisms solve the same
-> problem, allowing architecture-specific code to provide a non-IPI
-> implementation of remote TLB flushing.
-> 
-> Dropping CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL allows KVM to standardize
-> all architectures on kvm_arch_flush_remote_tlbs() instead of maintaining
-> two mechanisms.
-> 
-> Opt to standardize on kvm_arch_flush_remote_tlbs() since it avoids
-> duplicating the generic TLB stats across architectures that implement
-> their own remote TLB flush.
-> 
-> This adds an extra function call to the ARM64 kvm_flush_remote_tlbs()
-> path, but that is a small cost in comparison to flushing remote TLBs.
-> 
-> In addition, instead of just incrementing remote_tlb_flush_requests
-> stat, the generic interface would also increment the
-> remote_tlb_flush stat.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> Reviewed-by: Zenghui Yu <zenghui.yu@linux.dev>
-> Acked-by: Oliver Upton <oliver.upton@linux.dev>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
->   arch/arm64/include/asm/kvm_host.h | 3 +++
->   arch/arm64/kvm/Kconfig            | 1 -
->   arch/arm64/kvm/mmu.c              | 6 +++---
->   virt/kvm/Kconfig                  | 3 ---
->   virt/kvm/kvm_main.c               | 2 --
->   5 files changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 8b6096753740..7281222f24ef 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -1111,6 +1111,9 @@ int __init kvm_set_ipa_limit(void);
->   #define __KVM_HAVE_ARCH_VM_ALLOC
->   struct kvm *kvm_arch_alloc_vm(void);
->   
-> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
-> +
->   static inline bool kvm_vm_is_protected(struct kvm *kvm)
->   {
->   	return false;
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index f531da6b362e..6b730fcfee37 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -25,7 +25,6 @@ menuconfig KVM
->   	select MMU_NOTIFIER
->   	select PREEMPT_NOTIFIERS
->   	select HAVE_KVM_CPU_RELAX_INTERCEPT
-> -	select HAVE_KVM_ARCH_TLB_FLUSH_ALL
->   	select KVM_MMIO
->   	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->   	select KVM_XFER_TO_GUEST_WORK
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 6db9ef288ec3..0ac721fa27f1 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -161,15 +161,15 @@ static bool memslot_is_logging(struct kvm_memory_slot *memslot)
->   }
->   
->   /**
-> - * kvm_flush_remote_tlbs() - flush all VM TLB entries for v7/8
-> + * kvm_arch_flush_remote_tlbs() - flush all VM TLB entries for v7/8
->    * @kvm:	pointer to kvm structure.
->    *
->    * Interface to HYP function to flush all VM TLB entries
->    */
-> -void kvm_flush_remote_tlbs(struct kvm *kvm)
-> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
->   {
-> -	++kvm->stat.generic.remote_tlb_flush_requests;
->   	kvm_call_hyp(__kvm_tlb_flush_vmid, &kvm->arch.mmu);
-> +	return 0;
->   }
->   
->   static bool kvm_is_device_pfn(unsigned long pfn)
-> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> index b74916de5183..484d0873061c 100644
-> --- a/virt/kvm/Kconfig
-> +++ b/virt/kvm/Kconfig
-> @@ -62,9 +62,6 @@ config HAVE_KVM_CPU_RELAX_INTERCEPT
->   config KVM_VFIO
->          bool
->   
-> -config HAVE_KVM_ARCH_TLB_FLUSH_ALL
-> -       bool
-> -
->   config HAVE_KVM_INVALID_WAKEUPS
->          bool
->   
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 70e5479797ac..d6b050786155 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -345,7 +345,6 @@ bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req)
->   }
->   EXPORT_SYMBOL_GPL(kvm_make_all_cpus_request);
->   
-> -#ifndef CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
->   void kvm_flush_remote_tlbs(struct kvm *kvm)
->   {
->   	++kvm->stat.generic.remote_tlb_flush_requests;
-> @@ -366,7 +365,6 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
->   		++kvm->stat.generic.remote_tlb_flush;
->   }
->   EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
-> -#endif
->   
->   static void kvm_flush_shadow_all(struct kvm *kvm)
->   {
+For drivers/gpu/drm/renesas/rcar-du/
 
--- 
-Shaoqin
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c b/drivers/gpu/=
+drm/renesas/rcar-du/rcar_du_drv.c
+> index 1ffde19cb87f..3904b0cca814 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c
+> @@ -12,7 +12,7 @@
+>  #include <linux/io.h>
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/slab.h>
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c b/drivers/gpu/=
+drm/renesas/rcar-du/rcar_du_kms.c
+> index adfb36b0e815..9ff4537c26c8 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c
+> @@ -20,8 +20,10 @@
+> =20
+>  #include <linux/device.h>
+>  #include <linux/dma-buf.h>
+> +#include <linux/of.h>
+>  #include <linux/of_graph.h>
+>  #include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/wait.h>
+> =20
+>  #include "rcar_du_crtc.h"
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c b/drivers/gpu/=
+drm/renesas/rcar-du/rcar_du_vsp.c
+> index 45c05d0ffc70..9cbb5e6e2cba 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/bitops.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/slab.h>
+>  #include <linux/videodev2.h>
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c b/drivers/gp=
+u/drm/renesas/rcar-du/rcar_mipi_dsi.c
+> index e10e4d4b89a2..db2e6f16f954 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c
+> @@ -12,7 +12,6 @@
+>  #include <linux/math64.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/of_graph.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/reset.h>
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rzg2l_mipi_dsi.c b/drivers/g=
+pu/drm/renesas/rcar-du/rzg2l_mipi_dsi.c
+> index aa95b85a2964..8048bdca2d6c 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rzg2l_mipi_dsi.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rzg2l_mipi_dsi.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/iopoll.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/of_graph.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
 
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
