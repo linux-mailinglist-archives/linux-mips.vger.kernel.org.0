@@ -2,253 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82137756950
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984E57569A6
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 18:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjGQQhT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 12:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        id S232065AbjGQQwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 12:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjGQQhS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 12:37:18 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1E183
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 09:37:16 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-3460770afe2so412585ab.1
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 09:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689611836; x=1690216636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9uIEdBE5/V8mtrIJ86bMEt1YlGPQReRHT+9wS4K4FB4=;
-        b=OWHrFN2QTW3UJN0pNRFGTth7sEd5Dw7sjggstuUU7FV9QMT2n63OgPRS5VJJVeGyDl
-         Z1aCxXXSSL7lbOeKaqH9uzgIZoOd3a4cSFlQWY8DAAVk2hVhBktYxB3Cjl0Qr6hg0f2N
-         cbxxuZL/fYo6GBCiyMmZc7+utv9P9s70Y7FI287tO+3wr0A+ZGEOlF49j/9FY9aMyq98
-         SQmF6dsU04+/lJBQcBsO5YwCCOp43Pw83PRsVPqbFJUbzaSBmheT5yPv+dkXMPda7xZ+
-         8g2BcY5k4LYQ+33V19zi2oOHswaaMCCFMEfRQKmssQNIZE4Z/gLXt9l18MBgmieiGH90
-         hTug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689611836; x=1690216636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9uIEdBE5/V8mtrIJ86bMEt1YlGPQReRHT+9wS4K4FB4=;
-        b=Re6fgj/a1EOKujQdVzI6AcjT8icMIx2xdBE1kQRUN2HxPlX/abaC9pdoxgr3oP0R/G
-         6yn8qK2PQazwBMPxB6g9PqZTYn0+BgpdtFVq7O8Jzp0AimHtIF35pKO4bparzirzq68+
-         gYARET9HEc9KEcIo2zDFzR7cDob00ID4VuinJ/1h+yqvqaObK0vTav4rK9Zw6k1BkfA3
-         a3MNW5feSh10NGbnfY5xxR0VBb19WPYiPjIom6aKn0waWOhFzjP6s8XowivhOajbzcNP
-         j2uqNQV4GBHe9Tqqr58dkV0B2WBCAR4/0kNFabKeBj25TjCgZL/HMp+FFHrXt2OmmjIM
-         tVRg==
-X-Gm-Message-State: ABy/qLby5JQ3W4K+fSiWZuREW7TCesb/x+KPzioZsNKhzy6u4h93StCI
-        gt/CPlGM1xNAMkJybIpV9kEp7yaGEq7toZ+s33Rvkw==
-X-Google-Smtp-Source: APBJJlGMfnLl/VH8ZDf7IouzF+AemA7yqLQkI7oavRJWnulUuwCOZ3ikGsNQPfEomUZ5dTddNqkXnqp2ix1LaTkk0TQ=
-X-Received: by 2002:a05:6e02:1c2e:b0:348:72eb:150d with SMTP id
- m14-20020a056e021c2e00b0034872eb150dmr599165ilh.21.1689611836063; Mon, 17 Jul
- 2023 09:37:16 -0700 (PDT)
+        with ESMTP id S231623AbjGQQv5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 12:51:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32F7170D;
+        Mon, 17 Jul 2023 09:51:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 063A661181;
+        Mon, 17 Jul 2023 16:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812EAC433C7;
+        Mon, 17 Jul 2023 16:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689612706;
+        bh=GDoZ+CsfFo9PibsTP4iZm+ttTgfHxn11DDJbAlCFH8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZEoHMX2JdQeUVyNkgdWBKI6yr5pe/INc5DfODCru+00fN8J5XJg/01FraxC5Uf+FG
+         XLGyykcZarElT+yfQ88/qw3rxbdtmQwlMm4MVMWcjVA8W1BzI++pek5YZKKBwI7XR6
+         Vc/WH98m5BnS7DdeM2++eaKr94hk2O0k89Bc1b9ybe/FsHvQBWZ/9PaJFm5XUvbhPh
+         78TOOOqQ+Nd6w2oOqOYhgVZm+Y7ykGxydEmczeSZwjlePi5nZMkHrFdDg9hL8zxSio
+         SCc95tvYUaXDed+x2C7VwVXHcnKo0+0JBdhxm/Vl4xw/gxBOwJrvOMJAyCgSMZ+3MK
+         +O+f2UpDtYbxQ==
+Date:   Mon, 17 Jul 2023 17:51:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "torvalds@linuxfoundation.org" <torvalds@linuxfoundation.org>,
+        "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v9 01/42] mm: Rename arch pte_mkwrite()'s to
+ pte_mkwrite_novma()
+Message-ID: <285d346e-14e7-4f43-9b5b-faded6205142@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-2-rick.p.edgecombe@intel.com>
+ <b389274a-abed-40dc-8e33-7ce922ea9b61@sirena.org.uk>
+ <87acbb49fa83b0e3f261315a531e105da9e5b9d6.camel@intel.com>
 MIME-Version: 1.0
-References: <20230715005405.3689586-1-rananta@google.com> <20230715005405.3689586-4-rananta@google.com>
- <199d18de-1214-7683-b87a-03cc7e49719a@redhat.com>
-In-Reply-To: <199d18de-1214-7683-b87a-03cc7e49719a@redhat.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 17 Jul 2023 09:37:04 -0700
-Message-ID: <CAJHc60zhVco3uTq97vDHMk8cgg1psPtwHT6MN1eKP1Yr18d9cw@mail.gmail.com>
-Subject: Re: [PATCH v6 03/11] KVM: Allow range-based TLB invalidation from
- common code
-To:     Shaoqin Huang <shahuang@redhat.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="klyEM8Lfv/18WVhb"
+Content-Disposition: inline
+In-Reply-To: <87acbb49fa83b0e3f261315a531e105da9e5b9d6.camel@intel.com>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 4:40=E2=80=AFAM Shaoqin Huang <shahuang@redhat.com>=
- wrote:
->
->
->
-> On 7/15/23 08:53, Raghavendra Rao Ananta wrote:
-> > From: David Matlack <dmatlack@google.com>
-> >
-> > Make kvm_flush_remote_tlbs_range() visible in common code and create a
-> > default implementation that just invalidates the whole TLB.
-> >
-> > This paves the way for several future features/cleanups:
-> >
-> >   - Introduction of range-based TLBI on ARM.
-> >   - Eliminating kvm_arch_flush_remote_tlbs_memslot()
-> >   - Moving the KVM/x86 TDP MMU to common code.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: David Matlack <dmatlack@google.com>
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > ---
-> >   arch/x86/include/asm/kvm_host.h |  3 +++
-> >   arch/x86/kvm/mmu/mmu.c          |  9 ++++-----
-> >   arch/x86/kvm/mmu/mmu_internal.h |  3 ---
-> >   include/linux/kvm_host.h        |  9 +++++++++
-> >   virt/kvm/kvm_main.c             | 13 +++++++++++++
-> >   5 files changed, 29 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index a2d3cfc2eb75..08900afbf2ad 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1804,6 +1804,9 @@ static inline int kvm_arch_flush_remote_tlbs(stru=
-ct kvm *kvm)
-> >               return -ENOTSUPP;
-> >   }
-> >
-> > +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
-> > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,=
- u64 pages);
-> > +
-> >   #define kvm_arch_pmi_in_guest(vcpu) \
-> >       ((vcpu) && (vcpu)->arch.handling_intr_from_guest)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index ec169f5c7dce..aaa5e336703a 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -278,16 +278,15 @@ static inline bool kvm_available_flush_remote_tlb=
-s_range(void)
-> >       return kvm_x86_ops.flush_remote_tlbs_range;
-> >   }
-> >
-> > -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
-> > -                              gfn_t nr_pages)
-> > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,=
- u64 pages)
-> >   {
-> >       int ret =3D -EOPNOTSUPP;
-> >
-> >       if (kvm_x86_ops.flush_remote_tlbs_range)
-> >               ret =3D static_call(kvm_x86_flush_remote_tlbs_range)(kvm,=
- start_gfn,
-> > -                                                                nr_pag=
-es);
-> > -     if (ret)
-> > -             kvm_flush_remote_tlbs(kvm);
-> > +                                                                     p=
-ages);
-> This will be good if parameter pages aligned with parameter kvm.
->
-Agreed, but pulling 'pages' above brings the char count to 83. If
-that's acceptable, I'm happy to do it in v7.
 
-Thank you.
-Raghavendra
-> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> > +
-> > +     return ret;
-> >   }
-> >
-> >   static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)=
-;
-> > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_int=
-ernal.h
-> > index d39af5639ce9..86cb83bb3480 100644
-> > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > @@ -170,9 +170,6 @@ bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm=
-,
-> >                                   struct kvm_memory_slot *slot, u64 gfn=
-,
-> >                                   int min_level);
-> >
-> > -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
-> > -                              gfn_t nr_pages);
-> > -
-> >   /* Flush the given page (huge or not) of guest memory. */
-> >   static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_t g=
-fn, int level)
-> >   {
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index e3f968b38ae9..a731967b24ff 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1359,6 +1359,7 @@ int kvm_vcpu_yield_to(struct kvm_vcpu *target);
-> >   void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool yield_to_kernel_mod=
-e);
-> >
-> >   void kvm_flush_remote_tlbs(struct kvm *kvm);
-> > +void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 pages=
-);
-> >
-> >   #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
-> >   int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int m=
-in);
-> > @@ -1486,6 +1487,14 @@ static inline int kvm_arch_flush_remote_tlbs(str=
-uct kvm *kvm)
-> >   }
-> >   #endif
-> >
-> > +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
-> > +static inline int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm,
-> > +                                                gfn_t gfn, u64 pages)
-> > +{
-> > +     return -EOPNOTSUPP;
-> > +}
-> > +#endif
-> > +
-> >   #ifdef __KVM_HAVE_ARCH_NONCOHERENT_DMA
-> >   void kvm_arch_register_noncoherent_dma(struct kvm *kvm);
-> >   void kvm_arch_unregister_noncoherent_dma(struct kvm *kvm);
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index d6b050786155..804470fccac7 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -366,6 +366,19 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
-> >   }
-> >   EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
-> >
-> > +void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 pages=
-)
-> > +{
-> > +     if (!kvm_arch_flush_remote_tlbs_range(kvm, gfn, pages))
-> > +             return;
-> > +
-> > +     /*
-> > +      * Fall back to a flushing entire TLBs if the architecture range-=
-based
-> > +      * TLB invalidation is unsupported or can't be performed for what=
-ever
-> > +      * reason.
-> > +      */
-> > +     kvm_flush_remote_tlbs(kvm);
-> > +}
-> > +
-> >   static void kvm_flush_shadow_all(struct kvm *kvm)
-> >   {
-> >       kvm_arch_flush_shadow_all(kvm);
->
-> --
-> Shaoqin
->
+--klyEM8Lfv/18WVhb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Jul 17, 2023 at 03:55:50PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2023-07-14 at 23:57 +0100, Mark Brown wrote:
+
+> > The same issue seems to apply with the version that was in -next
+> > based
+> > on v6.4-rc4 too.
+
+> The version in your branch is not the same as the version in tip (which
+> had a squashed build fix). I was able to reproduce the build error with
+> your branch. But not with the one in tip rebased on v6.5-rc1. So can
+> you try this version:
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/shstk&id=899223d69ce9f338056f4c41ef870d70040fc860
+
+Ah, I'd not seen that patch or that tip had been rebased - I'd actually
+been using literally the branch from tip as my base at whatever point I
+last noticed it changing up until I rebased onto -rc1.
+
+--klyEM8Lfv/18WVhb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS1cZIACgkQJNaLcl1U
+h9DfWwf/Qv2sx8Qywn2HA+F1wJsVWOOqaPIZzIVBQ5Kg2bysQK3YMNLLZWKdXMsh
+sTgXGVlr5oANLjP/hYxvcaxk16N1y51q6PuBh4lJN1w37tEdph1ZIcSejQY/jKpf
+fKFWHZ++2w+lXvIOB/7rYQe+XutmQzCVmL0Cod8zxf2UhC4WJe9/3RCKxi6rfxuV
+NXldTW7h7dqnurbev4TX4npwjcetNGofPUer7VZD7o1vRKXvX9VLG42UbeV4cu+g
+ICKZmGwC9G23gWg0Ql2QkeOr43PLBo4AocKhyO6B22uYLOrA8BQHJUrbnD4ZUyD+
+4rWq0iWXOnrixnw11LOSSIVZ2HkwmQ==
+=SaIl
+-----END PGP SIGNATURE-----
+
+--klyEM8Lfv/18WVhb--
