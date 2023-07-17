@@ -2,75 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C40755E20
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 10:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B67755E56
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 10:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjGQIPj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 04:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S229863AbjGQIUW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 04:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjGQIPi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 04:15:38 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B580137
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 01:15:37 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb7b2e3dacso6562536e87.0
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 01:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689581735; x=1692173735;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AxftnQ3CNTrVOjYH5VYYCvLOpYPsnqVN2ihvqFHedaY=;
-        b=OaVyt1x/nakusfj9bPvL0EcjR/vJkisACkK7ke8H60mvPHsrvxgoGQ8bdW/Lx5uHth
-         gtM8yXWDIjieGQYIHC4esKxgVf/2Hc+Qeyy0+T0kF6FKWgfmA2niCjj0l7wzQ8GCalfu
-         8V5/sPuLDMmZxgIVo+n4tvdDXLHEV9dsUWUOGN80egP+FK5f8+rctieFRPq2JJclgdT8
-         +SxnIKYiEPXDso4Qsp5WAKUwPmL+J25e83BGsfZg9uqyMWFfx6+spg7NMVzeJJxMncbl
-         9zTltd/XjzlF3MfHZbyF4N2mDdLYoJJls7JY+a/3l/I0Uh5YKglHiQ4ZRerCnmaey/Du
-         yjIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689581735; x=1692173735;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxftnQ3CNTrVOjYH5VYYCvLOpYPsnqVN2ihvqFHedaY=;
-        b=WwipVc1wfKWIZMkznjpwpk7KV8PBeHXIHJgxQ8z02qmtRu88dgsq3v8PlmZR8yZ3Cr
-         QI2WOrI0RAhLbuxEqCiBQI41moM8Ctplw0ibuKCy8VvPtUFzvNLe0X511nGhuteQVPHK
-         dQin3O1xM097hv8dDyePUSsENOH0wggOviXNflO01PbQ3vDiIPiPP1CFOSVb0jne+YpN
-         rsSUzSmwlhHgsEDuIUh8vrtKDTAiXV8/gkDT1Ozm7prxBFxkqnsmHaelo5wDMq1KjAq9
-         Rv3bU5WPrMbV9uJQBVSDqvEn3Y8x5u84906xJUuoCQ9qlj2/wT2jxKnE7zFiJOjz5Lky
-         haEA==
-X-Gm-Message-State: ABy/qLbHuooFRMIvTKU+1FYbyaMQqByFVR5L7KtW/sxm7UprDjglFYMB
-        HEeTnjsZPdz00NtowGJhvCZPrg==
-X-Google-Smtp-Source: APBJJlHTmB2ZXqSG2Z7ZQZs43rQgaUnAYkwbYO1fUQdKuwiQICnK30oLhvBIZeIvvQfOxDto3Ng5Sw==
-X-Received: by 2002:ac2:4da3:0:b0:4f8:6e52:68ae with SMTP id h3-20020ac24da3000000b004f86e5268aemr6790640lfe.31.1689581735260;
-        Mon, 17 Jul 2023 01:15:35 -0700 (PDT)
-Received: from [192.168.69.115] ([176.176.144.39])
-        by smtp.gmail.com with ESMTPSA id e14-20020a5d65ce000000b0031437ec7ec1sm18700656wrw.2.2023.07.17.01.15.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 01:15:34 -0700 (PDT)
-Message-ID: <045467d8-1122-b1d3-07b6-bddd92bfa9b3@linaro.org>
-Date:   Mon, 17 Jul 2023 10:15:33 +0200
+        with ESMTP id S229496AbjGQIUV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 04:20:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35916130;
+        Mon, 17 Jul 2023 01:20:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B87413D5;
+        Mon, 17 Jul 2023 01:21:03 -0700 (PDT)
+Received: from [10.57.37.37] (unknown [10.57.37.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41CB33F73F;
+        Mon, 17 Jul 2023 01:19:59 -0700 (PDT)
+Message-ID: <e2c69d34-7523-98ae-93a2-04e132745ebd@arm.com>
+Date:   Mon, 17 Jul 2023 09:19:59 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH] soc: bcm: Explicitly include correct DT includes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm: Explicitly include correct DT includes
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-mips@vger.kernel.org, lima@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Liviu Dudau <liviu.dudau@arm.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Liu Ying <victor.liu@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        John Stultz <jstultz@google.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Qiang Yu <yuq825@gmail.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry B aryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
+        Icenowy Zheng <icenowy@aosc.io>, Ondrej Jirman <megi@xff.cz>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Jianhua Lu <lujianhua000@gmail.com>,
         Florian Fainelli <florian.fainelli@broadcom.com>,
         Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230714175130.4067236-1-robh@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230714175130.4067236-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Artur Weber <aweber.kernel@gmail.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Emma Anholt <emma@anholt.net>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+References: <20230714174545.4056287-1-robh@kernel.org>
+Content-Language: en-GB
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20230714174545.4056287-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,14 +141,9 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
-
-On 14/7/23 19:51, Rob Herring wrote:
+On 14/07/2023 18:45, Rob Herring wrote:
 > The DT of_device.h and of_platform.h date back to the separate
 > of_platform_bus_type before it as merged into the regular platform bus.
-
-"before it was"?
-
 > As part of that merge prepping Arm DT support 13 years ago, they
 > "temporarily" include each other. They also include platform_device.h
 > and of.h. As a result, there's a pretty much random mix of those include
@@ -95,9 +153,26 @@ On 14/7/23 19:51, Rob Herring wrote:
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   drivers/soc/bcm/bcm63xx/bcm-pmb.c       | 1 -
->   drivers/soc/bcm/bcm63xx/bcm63xx-power.c | 1 -
->   2 files changed, 2 deletions(-)
+[...]
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index bbada731bbbd..20c25c836198 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -4,8 +4,9 @@
+>  /* Copyright 2019 Collabora ltd. */
+>  
+>  #include <linux/module.h>
+> -#include <linux/of_platform.h>
+> +#include <linux/of.h>
+>  #include <linux/pagemap.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <drm/panfrost_drm.h>
+>  #include <drm/drm_drv.h>
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Panfrost part:
+
+Reviewed-by: Steven Price <steven.price@arm.com>
+
+Steve
 
