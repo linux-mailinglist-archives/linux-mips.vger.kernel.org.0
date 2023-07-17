@@ -2,118 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984E57569A6
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 18:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25FE756A1F
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 19:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjGQQwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 12:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        id S230445AbjGQRY3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 13:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjGQQv5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 12:51:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32F7170D;
-        Mon, 17 Jul 2023 09:51:47 -0700 (PDT)
+        with ESMTP id S230395AbjGQRY2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 13:24:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87684D8;
+        Mon, 17 Jul 2023 10:24:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 063A661181;
-        Mon, 17 Jul 2023 16:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812EAC433C7;
-        Mon, 17 Jul 2023 16:51:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D69C61185;
+        Mon, 17 Jul 2023 17:24:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2885EC433CA;
+        Mon, 17 Jul 2023 17:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689612706;
-        bh=GDoZ+CsfFo9PibsTP4iZm+ttTgfHxn11DDJbAlCFH8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZEoHMX2JdQeUVyNkgdWBKI6yr5pe/INc5DfODCru+00fN8J5XJg/01FraxC5Uf+FG
-         XLGyykcZarElT+yfQ88/qw3rxbdtmQwlMm4MVMWcjVA8W1BzI++pek5YZKKBwI7XR6
-         Vc/WH98m5BnS7DdeM2++eaKr94hk2O0k89Bc1b9ybe/FsHvQBWZ/9PaJFm5XUvbhPh
-         78TOOOqQ+Nd6w2oOqOYhgVZm+Y7ykGxydEmczeSZwjlePi5nZMkHrFdDg9hL8zxSio
-         SCc95tvYUaXDed+x2C7VwVXHcnKo0+0JBdhxm/Vl4xw/gxBOwJrvOMJAyCgSMZ+3MK
-         +O+f2UpDtYbxQ==
-Date:   Mon, 17 Jul 2023 17:51:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "torvalds@linuxfoundation.org" <torvalds@linuxfoundation.org>,
-        "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH v9 01/42] mm: Rename arch pte_mkwrite()'s to
- pte_mkwrite_novma()
-Message-ID: <285d346e-14e7-4f43-9b5b-faded6205142@sirena.org.uk>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-2-rick.p.edgecombe@intel.com>
- <b389274a-abed-40dc-8e33-7ce922ea9b61@sirena.org.uk>
- <87acbb49fa83b0e3f261315a531e105da9e5b9d6.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="klyEM8Lfv/18WVhb"
-Content-Disposition: inline
-In-Reply-To: <87acbb49fa83b0e3f261315a531e105da9e5b9d6.camel@intel.com>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        s=k20201202; t=1689614665;
+        bh=o+WgjDKzf9AD9b+kUzQGRClRYLlDB82OkTDYfv6a3Yk=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=U55TcGyi7YmJyhzLOTZnjrFVWw0H3+af918Yjk8mPHfHD/clSDnn9R44JznF10IRH
+         Z8KK+n6r0jSrVIOFXY3K9zEUwgWJJmDl6U+xcWuKBgzWtStxy8DJ8vdgvW6lkDoW7B
+         HjBUxuU9UxtzkC9l5ApN5DKkzBCr1VsqK7wmYWuXqa2OawFE6M2Oq9WP6fcTzeqAS1
+         oQr1aLD/6waYS1NoUdY5C7XFt1xXn2X7vRDexou/Ye3pmNVTURfyjeGdd/9YrFIH9l
+         MqvAuz5uF3yGQhNR2S/bV8TY4Zn4vPj0wIo0nVHW6MMTPN4UGDgaMVOo3Hl1Lknk4t
+         QarZtUu8s3ucw==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0594A27C0054;
+        Mon, 17 Jul 2023 13:24:22 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Mon, 17 Jul 2023 13:24:23 -0400
+X-ME-Sender: <xms:RXm1ZG1tVKd235OTAKjb7YgspTMPR-qImOZNagZiOwv_r996Wpl_EA>
+    <xme:RXm1ZJGhtMeEyJx0NHmpmxK7orhG2xuLUV7eaWrGF_5mvemHNiGzAxoeoH8wHPKOx
+    Be-_jfsguKQ7NGLhQY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrgedvgdduuddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
+    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:RXm1ZO5oHfgOl5d-JsrWsEmT0wZ8c7lpn-wGY1Pk1MKOwuxnVn3prQ>
+    <xmx:RXm1ZH3tFnXsbSmPTR9ONplP-mkjz9Tn9-KQt1DQXW36vSF4M5jnmA>
+    <xmx:RXm1ZJEwoQUXW2HC-hvtBktlwQpPz6VjPtqSmOfmC010d9JGpLVfQw>
+    <xmx:Rnm1ZFKtTGUhG1K7QB02N33IARC_1h22efMRZVMJvVFaIkzEJg1UPw>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D060531A0064; Mon, 17 Jul 2023 13:24:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <d305b437-9eef-42da-821e-67365aad520b@app.fastmail.com>
+In-Reply-To: <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230618080027.GA52412@kernel.org>
+ <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+ <20230625161417.GK52412@kernel.org> <ZJmFFmexl_1GUhIL@FVFF77S0Q05N>
+ <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
+Date:   Mon, 17 Jul 2023 10:23:56 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Song Liu" <song@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
+Cc:     "Mike Rapoport" <rppt@kernel.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Kent Overstreet" <kent.overstreet@linux.dev>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nadav Amit" <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Puranjay Mohan" <puranjay12@gmail.com>,
+        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Will Deacon" <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,40 +117,50 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---klyEM8Lfv/18WVhb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Jul 17, 2023 at 03:55:50PM +0000, Edgecombe, Rick P wrote:
-> On Fri, 2023-07-14 at 23:57 +0100, Mark Brown wrote:
+On Mon, Jun 26, 2023, at 10:48 AM, Song Liu wrote:
+> On Mon, Jun 26, 2023 at 5:31=E2=80=AFAM Mark Rutland <mark.rutland@arm=
+.com> wrote:
+>>
+> [...]
+>> >
+>> > So the idea was that jit_text_alloc() will have a cache of large pa=
+ges
+>> > mapped ROX, will allocate memory from those caches and there will be
+>> > jit_update() that uses text poking for writing to that memory.
+>> >
+>> > Upon allocation of a large page to increase the cache, that large p=
+age will
+>> > be "invalidated" by filling it with breakpoint instructions (e.g in=
+t3 on
+>> > x86)
+>>
+>> Does that work on x86?
+>>
+>> That is in no way gauranteed for other architectures; on arm64 you ne=
+ed
+>> explicit cache maintenance (with I-cache maintenance at the VA to be =
+executed
+>> from) followed by context-synchronization-events (e.g. via ISB instru=
+ctions, or
+>> IPIs).
+>
+> I guess we need:
+> 1) Invalidate unused part of the huge ROX pages;
+> 2) Do not put two jit users (including module text, bpf, etc.) in the
+> same cache line;
+> 3) Explicit cache maintenance;
+> 4) context-synchronization-events.
+>
+> Would these (or a subset of them) be sufficient to protect us from tor=
+n read?
 
-> > The same issue seems to apply with the version that was in -next
-> > based
-> > on v6.4-rc4 too.
+Maybe?  #4 is sufficiently vague that I can't really interpret it.
 
-> The version in your branch is not the same as the version in tip (which
-> had a squashed build fix). I was able to reproduce the build error with
-> your branch. But not with the one in tip rebased on v6.5-rc1. So can
-> you try this version:
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/shstk&id=899223d69ce9f338056f4c41ef870d70040fc860
+I have a half-drafted email asking for official clarification on the rul=
+es that might help shed light on this.  I find that this type of request=
+ works best when it's really well written :)
 
-Ah, I'd not seen that patch or that tip had been rebased - I'd actually
-been using literally the branch from tip as my base at whatever point I
-last noticed it changing up until I rebased onto -rc1.
-
---klyEM8Lfv/18WVhb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS1cZIACgkQJNaLcl1U
-h9DfWwf/Qv2sx8Qywn2HA+F1wJsVWOOqaPIZzIVBQ5Kg2bysQK3YMNLLZWKdXMsh
-sTgXGVlr5oANLjP/hYxvcaxk16N1y51q6PuBh4lJN1w37tEdph1ZIcSejQY/jKpf
-fKFWHZ++2w+lXvIOB/7rYQe+XutmQzCVmL0Cod8zxf2UhC4WJe9/3RCKxi6rfxuV
-NXldTW7h7dqnurbev4TX4npwjcetNGofPUer7VZD7o1vRKXvX9VLG42UbeV4cu+g
-ICKZmGwC9G23gWg0Ql2QkeOr43PLBo4AocKhyO6B22uYLOrA8BQHJUrbnD4ZUyD+
-4rWq0iWXOnrixnw11LOSSIVZ2HkwmQ==
-=SaIl
------END PGP SIGNATURE-----
-
---klyEM8Lfv/18WVhb--
+>
+> Thanks,
+> Song
