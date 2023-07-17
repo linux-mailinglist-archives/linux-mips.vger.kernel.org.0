@@ -2,146 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8E0755DFB
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 10:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C40755E20
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 10:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjGQINH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 04:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S229955AbjGQIPj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 04:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjGQINE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 04:13:04 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE76B130
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 01:13:02 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3144bf65ce9so3997591f8f.3
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 01:13:02 -0700 (PDT)
+        with ESMTP id S230247AbjGQIPi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 04:15:38 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B580137
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 01:15:37 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb7b2e3dacso6562536e87.0
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 01:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689581581; x=1692173581;
+        d=linaro.org; s=google; t=1689581735; x=1692173735;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VT24UUIzDMth5tPZL5Y5vTEOs+P0BwYmDWZgKveF0+M=;
-        b=K/iJhKX4wID4O6BHCkqoNDeKizzM0ai2C/JJVSYMd+iQ+t5gkYEyqR8OcId9s6Uw/g
-         +AIOCIIHWgQP5i51DcuabWMLSpL4+g4yBFEaNnFvCFvlOvJtDRtBZSsu4q/eyraIhxnF
-         34lFSWsMuYImH0tASUyIG9UN5kV+zySjXP1wgy3I0PiMTd8SGe0bBTaL1/3m+AIDIUri
-         t2pJXylGN30xSlpLDQiAnrflPN5i2wyDLNiZpxqAYVBhvceI1p6Lvuk8qVu8Vmd37D5M
-         py/+IAtS+moAn/+PGdzK6ETPGkvlELAfB3SP0bODnQ1hd3dVHt1OhCJkizrojhSmGnF9
-         2zag==
+        bh=AxftnQ3CNTrVOjYH5VYYCvLOpYPsnqVN2ihvqFHedaY=;
+        b=OaVyt1x/nakusfj9bPvL0EcjR/vJkisACkK7ke8H60mvPHsrvxgoGQ8bdW/Lx5uHth
+         gtM8yXWDIjieGQYIHC4esKxgVf/2Hc+Qeyy0+T0kF6FKWgfmA2niCjj0l7wzQ8GCalfu
+         8V5/sPuLDMmZxgIVo+n4tvdDXLHEV9dsUWUOGN80egP+FK5f8+rctieFRPq2JJclgdT8
+         +SxnIKYiEPXDso4Qsp5WAKUwPmL+J25e83BGsfZg9uqyMWFfx6+spg7NMVzeJJxMncbl
+         9zTltd/XjzlF3MfHZbyF4N2mDdLYoJJls7JY+a/3l/I0Uh5YKglHiQ4ZRerCnmaey/Du
+         yjIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689581581; x=1692173581;
+        d=1e100.net; s=20221208; t=1689581735; x=1692173735;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VT24UUIzDMth5tPZL5Y5vTEOs+P0BwYmDWZgKveF0+M=;
-        b=GvNgHjTsuZY/H+zDuP95ROmIhChcX3zpK2lpcqxoGUBDS2XhbZO2UDsEBOl8Wb4aOM
-         dIxd6KzM2xd5JpzZMW/8l+hWT5yB6WzFWG9Ww5rvIQydVDjP19PROPIhr57xstJALk0f
-         OS5AxvVVvMaJpntwljJRyvOa363WsC0gQZbcqroB1yM0Vn33fx8oviJg+3PKLCNtPyCN
-         vfRIo7S5S1t7LVMLN5vMhkQ3OMXhh/bAeUMRJg9hT5e3XZ+prYUJKVLWPlMdiDg+5KOn
-         fUqTxv0SlO6Jdy30xb4WYztDnQr8CbpUd3u3hvcqoqL8tWSmwVReffp2ea14q2euSRgm
-         fdOQ==
-X-Gm-Message-State: ABy/qLbwaDUSEvP1e6YkZLWo4CSvkAnfehzT9/euN7P31U/IOHaQUw3S
-        LXFJWEyXpQJCTfZsroIsIrTc7Q==
-X-Google-Smtp-Source: APBJJlHUSWcZYlPppSbFTXSEdHwpgpaTrSSog0KcOaUXq6539rjFQxsogmQ3Co+Knjkf78qoCa1SzQ==
-X-Received: by 2002:adf:f206:0:b0:314:34dd:aaec with SMTP id p6-20020adff206000000b0031434ddaaecmr9504790wro.8.1689581581381;
-        Mon, 17 Jul 2023 01:13:01 -0700 (PDT)
+        bh=AxftnQ3CNTrVOjYH5VYYCvLOpYPsnqVN2ihvqFHedaY=;
+        b=WwipVc1wfKWIZMkznjpwpk7KV8PBeHXIHJgxQ8z02qmtRu88dgsq3v8PlmZR8yZ3Cr
+         QI2WOrI0RAhLbuxEqCiBQI41moM8Ctplw0ibuKCy8VvPtUFzvNLe0X511nGhuteQVPHK
+         dQin3O1xM097hv8dDyePUSsENOH0wggOviXNflO01PbQ3vDiIPiPP1CFOSVb0jne+YpN
+         rsSUzSmwlhHgsEDuIUh8vrtKDTAiXV8/gkDT1Ozm7prxBFxkqnsmHaelo5wDMq1KjAq9
+         Rv3bU5WPrMbV9uJQBVSDqvEn3Y8x5u84906xJUuoCQ9qlj2/wT2jxKnE7zFiJOjz5Lky
+         haEA==
+X-Gm-Message-State: ABy/qLbHuooFRMIvTKU+1FYbyaMQqByFVR5L7KtW/sxm7UprDjglFYMB
+        HEeTnjsZPdz00NtowGJhvCZPrg==
+X-Google-Smtp-Source: APBJJlHTmB2ZXqSG2Z7ZQZs43rQgaUnAYkwbYO1fUQdKuwiQICnK30oLhvBIZeIvvQfOxDto3Ng5Sw==
+X-Received: by 2002:ac2:4da3:0:b0:4f8:6e52:68ae with SMTP id h3-20020ac24da3000000b004f86e5268aemr6790640lfe.31.1689581735260;
+        Mon, 17 Jul 2023 01:15:35 -0700 (PDT)
 Received: from [192.168.69.115] ([176.176.144.39])
-        by smtp.gmail.com with ESMTPSA id b2-20020a5d4b82000000b0031432c2fb95sm18429372wrt.88.2023.07.17.01.12.59
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d65ce000000b0031437ec7ec1sm18700656wrw.2.2023.07.17.01.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 01:13:00 -0700 (PDT)
-Message-ID: <ef2dddcd-f4dd-da9b-c03f-ccd852bb8543@linaro.org>
-Date:   Mon, 17 Jul 2023 10:12:57 +0200
+        Mon, 17 Jul 2023 01:15:34 -0700 (PDT)
+Message-ID: <045467d8-1122-b1d3-07b6-bddd92bfa9b3@linaro.org>
+Date:   Mon, 17 Jul 2023 10:15:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v6 02/11] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+Subject: Re: [PATCH] soc: bcm: Explicitly include correct DT includes
 Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Zenghui Yu <zenghui.yu@linux.dev>,
-        Gavin Shan <gshan@redhat.com>
-References: <20230715005405.3689586-1-rananta@google.com>
- <20230715005405.3689586-3-rananta@google.com>
+To:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230714175130.4067236-1-robh@kernel.org>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230715005405.3689586-3-rananta@google.com>
+In-Reply-To: <20230714175130.4067236-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Raghavendra, David,
+Hi Rob,
 
-On 15/7/23 02:53, Raghavendra Rao Ananta wrote:
-> From: David Matlack <dmatlack@google.com>
+On 14/7/23 19:51, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+
+"before it was"?
+
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
 > 
-> Use kvm_arch_flush_remote_tlbs() instead of
-> CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL. The two mechanisms solve the same
-> problem, allowing architecture-specific code to provide a non-IPI
-> implementation of remote TLB flushing.
-> 
-> Dropping CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL allows KVM to standardize
-> all architectures on kvm_arch_flush_remote_tlbs() instead of maintaining
-> two mechanisms.
-> 
-> Opt to standardize on kvm_arch_flush_remote_tlbs() since it avoids
-> duplicating the generic TLB stats across architectures that implement
-> their own remote TLB flush.
-> 
-> This adds an extra function call to the ARM64 kvm_flush_remote_tlbs()
-> path, but that is a small cost in comparison to flushing remote TLBs.
-> 
-> In addition, instead of just incrementing remote_tlb_flush_requests
-> stat, the generic interface would also increment the
-> remote_tlb_flush stat.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> Reviewed-by: Zenghui Yu <zenghui.yu@linux.dev>
-> Acked-by: Oliver Upton <oliver.upton@linux.dev>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   arch/arm64/include/asm/kvm_host.h | 3 +++
->   arch/arm64/kvm/Kconfig            | 1 -
->   arch/arm64/kvm/mmu.c              | 6 +++---
->   virt/kvm/Kconfig                  | 3 ---
->   virt/kvm/kvm_main.c               | 2 --
->   5 files changed, 6 insertions(+), 9 deletions(-)
+>   drivers/soc/bcm/bcm63xx/bcm-pmb.c       | 1 -
+>   drivers/soc/bcm/bcm63xx/bcm63xx-power.c | 1 -
+>   2 files changed, 2 deletions(-)
 
-You are doing 2 changes in the same patch:
-
-- Have ARM use kvm_arch_flush_remote_tlbs() instead of
-   HAVE_KVM_ARCH_TLB_FLUSH_ALL,
-- Drop the now unused HAVE_KVM_ARCH_TLB_FLUSH_ALL.
-
-Commits should be atomic, to allow partial
-revert or cherry-pick.
-
-Preferably splitting this patch in 2:
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-
-Regards,
-
-Phil.
 
