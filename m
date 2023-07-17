@@ -2,197 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5056C755B23
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 08:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76168755D4D
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 09:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjGQGGV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 02:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S230095AbjGQHqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 03:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjGQGGP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 02:06:15 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DEFE64
-        for <linux-mips@vger.kernel.org>; Sun, 16 Jul 2023 23:06:13 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b9352ff1aeso18039191fa.1
-        for <linux-mips@vger.kernel.org>; Sun, 16 Jul 2023 23:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689573972; x=1692165972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V9PPbgd68wocT4TvRhmcO/nETjGOz62AhMV/Wt93B7Q=;
-        b=ms+Ay07n0lyPm2SMUObQ9GjdsaldYs4VUWpkhI9RsYlip9CudCjC8ofTEhWMxc+gbc
-         K0YtVClyOIFxttDZLliNzf3gbsIu835cEAVjrm05LoLwmD+xEpYYmElER6/tTcPAFvd/
-         p2lztdzYDwdRIgKoaXXCaQGNTdGxMByqHznLfQzrSXnEnAliyuQIuPJ2DHdt8U8hDVUj
-         pIIVhdinE7fn9LMpO4v4GDRrX6wVNxGYi92lYsJ/m30w58uxf/A8pv9pmFF9oslSdX7C
-         f8TXdN/IpdnuJOIClc5E5kJaWu5AzB+RIbuDksQjbE4lIlj/YHAncSTpNp/lY1qETdK/
-         eyqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689573972; x=1692165972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V9PPbgd68wocT4TvRhmcO/nETjGOz62AhMV/Wt93B7Q=;
-        b=UvjkPv3Tmg5lKGYlZabNuxNvrSpZGrytTbJmP+mC7DnBA/KWwSBwJNfCw722E+eb7p
-         QFBe/nEyRBRUsNRaQvSTm1ZljagThY9IQq7cmrO6sNMztSkFbjaCKkCpzekamLe0xTAi
-         hVHEG+SaLE/RnED+mhRFwxp8071VZyvqFQV8EOyi9LH1FRHe19+XGNeDRkqPLVIWd6WG
-         bxeedYqexXozgaKcxn4pgjnFiicLm7Bu5XFnU1lM5oqok7o1/H8RsXNTpzHDbZoIPKAW
-         UnfpDZ/+mDy+GM/WV0EAGlrWnG5k/l+Y9I5Ds2vmQKA0oaXQhN/X5C16H2IG8VvZaJ2h
-         +PJQ==
-X-Gm-Message-State: ABy/qLa5vRslbllZubGO0Ok5dpJxfUGXTGD4hLWAghfstjxH3BInzxON
-        OkSNGlbHtF8pk2fJN5mmttk0ww==
-X-Google-Smtp-Source: APBJJlHW/NFDKdvFhoq+y8xrvjg5fcDRitDcC29a/QX354QST/fiAOhwToFZQukWGxzIAoA8z/fnRA==
-X-Received: by 2002:a05:6512:1181:b0:4fb:7d73:d097 with SMTP id g1-20020a056512118100b004fb7d73d097mr6674575lfr.39.1689573972086;
-        Sun, 16 Jul 2023 23:06:12 -0700 (PDT)
-Received: from [192.168.69.115] ([176.176.144.39])
-        by smtp.gmail.com with ESMTPSA id p5-20020a5d4e05000000b003143d80d11dsm18078305wrt.112.2023.07.16.23.06.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jul 2023 23:06:11 -0700 (PDT)
-Message-ID: <45f89fee-6825-3f5d-9dfb-aad5d47c8c36@linaro.org>
-Date:   Mon, 17 Jul 2023 08:06:07 +0200
+        with ESMTP id S230178AbjGQHqU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 03:46:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67D919AA
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 00:45:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qLItl-0005e3-Cd; Mon, 17 Jul 2023 09:44:01 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qLIte-0004Us-4z; Mon, 17 Jul 2023 09:43:54 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qLItd-005WwB-3s; Mon, 17 Jul 2023 09:43:53 +0200
+Date:   Mon, 17 Jul 2023 09:43:52 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Walle <michael@walle.cc>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        asahi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] pwm: Explicitly include correct DT includes
+Message-ID: <20230717074352.dz3ex7fwi77loayc@pengutronix.de>
+References: <20230714174852.4062251-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v4 1/8] swiotlb: make io_tlb_default_mem local to
- swiotlb.c
-Content-Language: en-US
-To:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Petr Tesarik <petr.tesarik.ext@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        James Seo <james@equiv.tech>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, petr@tesarici.cz
-References: <cover.1689261692.git.petr.tesarik.ext@huawei.com>
- <7f64111986f4f361a2deb4a1a1b6f588e63a851b.1689261692.git.petr.tesarik.ext@huawei.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <7f64111986f4f361a2deb4a1a1b6f588e63a851b.1689261692.git.petr.tesarik.ext@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3pw4fff6xzsrv6pf"
+Content-Disposition: inline
+In-Reply-To: <20230714174852.4062251-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Petr,
 
-On 13/7/23 17:23, Petr Tesarik wrote:
-> From: Petr Tesarik <petr.tesarik.ext@huawei.com>
-> 
-> SWIOTLB implementation details should not be exposed to the rest of the
-> kernel. This will allow to make changes to the implementation without
-> modifying non-swiotlb code.
-> 
-> To avoid breaking existing users, provide helper functions for the few
-> required fields.
-> 
-> As a bonus, using a helper function to initialize struct device allows to
-> get rid of an #ifdef in driver core.
-> 
-> Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
+--3pw4fff6xzsrv6pf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jul 14, 2023 at 11:48:50AM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+
+so the eventual goal here is to prepare for:
+
+ - drop #include <linux/of_device.h> from include/linux/of_platform.h
+ - drop #include <linux/of.h> from include/linux/of_device.h
+ - drop #include <linux/of_platform.h> from include/linux/of_device.h
+ - drop #include <linux/platform_device.h> from include/linux/of_device.h
+ - drop #include <linux/platform_device.h> from include/linux/of_platform.h
+
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   arch/arm/xen/mm.c          |  2 +-
->   arch/mips/pci/pci-octeon.c |  2 +-
->   arch/x86/kernel/pci-dma.c  |  2 +-
->   drivers/base/core.c        |  4 +---
->   drivers/xen/swiotlb-xen.c  |  2 +-
->   include/linux/swiotlb.h    | 25 +++++++++++++++++++++++-
->   kernel/dma/swiotlb.c       | 39 +++++++++++++++++++++++++++++++++++++-
->   7 files changed, 67 insertions(+), 9 deletions(-)
+>  drivers/pwm/core.c               | 1 +
+>  drivers/pwm/pwm-apple.c          | 1 +
+>  drivers/pwm/pwm-atmel-hlcdc.c    | 1 +
+>  drivers/pwm/pwm-atmel-tcb.c      | 3 +--
+>  drivers/pwm/pwm-atmel.c          | 1 -
+>  drivers/pwm/pwm-berlin.c         | 1 +
+>  drivers/pwm/pwm-cros-ec.c        | 1 +
+>  drivers/pwm/pwm-fsl-ftm.c        | 3 +--
+>  drivers/pwm/pwm-hibvt.c          | 2 +-
+>  drivers/pwm/pwm-imx1.c           | 1 -
+>  drivers/pwm/pwm-jz4740.c         | 2 +-
+>  drivers/pwm/pwm-lp3943.c         | 1 +
+>  drivers/pwm/pwm-lpc18xx-sct.c    | 1 +
+>  drivers/pwm/pwm-mediatek.c       | 1 -
+>  drivers/pwm/pwm-meson.c          | 1 -
+>  drivers/pwm/pwm-microchip-core.c | 2 +-
+>  drivers/pwm/pwm-mtk-disp.c       | 1 -
+>  drivers/pwm/pwm-pxa.c            | 1 +
+>  drivers/pwm/pwm-sifive.c         | 1 +
+>  drivers/pwm/pwm-sl28cpld.c       | 1 +
+>  drivers/pwm/pwm-sprd.c           | 1 +
+>  drivers/pwm/pwm-sun4i.c          | 1 -
+>  drivers/pwm/pwm-sunplus.c        | 1 +
+>  drivers/pwm/pwm-tegra.c          | 1 -
+>  drivers/pwm/pwm-tiecap.c         | 2 +-
+>  drivers/pwm/pwm-tiehrpwm.c       | 2 +-
+>  drivers/pwm/pwm-visconti.c       | 2 +-
+>  drivers/pwm/pwm-vt8500.c         | 5 +----
+>  28 files changed, 21 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+> index 3dacceaef4a9..d37617c60eae 100644
+> --- a/drivers/pwm/core.c
+> +++ b/drivers/pwm/core.c
+> @@ -8,6 +8,7 @@
+> =20
+>  #include <linux/acpi.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/pwm.h>
+>  #include <linux/radix-tree.h>
+>  #include <linux/list.h>
 
+This file includes neither of_device.h nor of_platform.h and up to now
+gets of.h via <linux/pwm.h>.
 
-> diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-> index 4e52cd5e0bdc..07216af59e93 100644
-> --- a/include/linux/swiotlb.h
-> +++ b/include/linux/swiotlb.h
-> @@ -110,7 +110,6 @@ struct io_tlb_mem {
->   	atomic_long_t used_hiwater;
->   #endif
->   };
-> -extern struct io_tlb_mem io_tlb_default_mem;
->   
->   static inline bool is_swiotlb_buffer(struct device *dev, phys_addr_t paddr)
->   {
-> @@ -128,13 +127,22 @@ static inline bool is_swiotlb_force_bounce(struct device *dev)
->   
->   void swiotlb_init(bool addressing_limited, unsigned int flags);
->   void __init swiotlb_exit(void);
-> +void swiotlb_dev_init(struct device *dev);
->   size_t swiotlb_max_mapping_size(struct device *dev);
-> +bool is_swiotlb_allocated(void);
->   bool is_swiotlb_active(struct device *dev);
->   void __init swiotlb_adjust_size(unsigned long size);
-> +phys_addr_t default_swiotlb_start(void);
-> +phys_addr_t default_swiotlb_limit(void);
+What is your plan for <linux/pwm.h>'s include? I think it would only need
 
-Usually we use start/end, base/limit, low[est]/high[est] tuples.
+	struct of_phandle_args;
 
-Possibly clearer to rename, regardless:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+to replace that. (But that would need another patch like this one, as
+then e.g. drivers/pwm/pwm-sl28cpld.c fails to compile because
+device_property_read_u32() is undeclared. It would need to #include
+<linux/property.h> which now it gets transitively via <linux/of.h>.)
 
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index 2b83e3ad9dca..873b077d7e37 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
+If <linux/pwm.h> is planed to continue #including <linux/of.h>, the
+explicit include here isn't necessary (and probably elsewhere).
 
+I don't care much either way, but maybe your quest would be a bit
+simpler if you only touch files that include the two files you want to
+modify?
 
-> @@ -958,6 +975,26 @@ bool is_swiotlb_active(struct device *dev)
->   }
->   EXPORT_SYMBOL_GPL(is_swiotlb_active);
->   
-> +/**
-> + * default_swiotlb_start() - get the start of the default SWIOTLB
-> + *
-> + * Get the lowest physical address used by the default software IO TLB pool.
-> + */
-> +phys_addr_t default_swiotlb_start(void)
-> +{
-> +	return io_tlb_default_mem.start;
-> +}
-> +
-> +/**
-> + * default_swiotlb_limit() - get the highest address in the default SWIOTLB
-> + *
-> + * Get the highest physical address used by the default software IO TLB pool.
+*shrug*, this patch is still an improvement so:
 
-(note you describe lowest/highest).
+Acked-by: Uwe Kleine-K=F6ng <u.kleine-koenig@pengutronix.de>
 
-> + */
-> +phys_addr_t default_swiotlb_limit(void)
-> +{
-> +	return io_tlb_default_mem.end - 1;
-> +}
-> +
->   #ifdef CONFIG_DEBUG_FS
->   
->   static int io_tlb_used_get(void *data, u64 *val)
+Another thing I wonder is: How did you identify the files that need
+these includes. I guess you have a list of types for each header and
+search for files that use any of the types but doesn't include the
+respecitve header? I wonder if tracking this type -> header mapping in
+machine readable form somewhere would be nice, to e.g. make checkpatch
+warn if a file uses struct of_node but only gets it by chance?
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--3pw4fff6xzsrv6pf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmS08TgACgkQj4D7WH0S
+/k6d7QgAjn09jbMtpLkxkAPiHCL/fUXRMWWMV76Fu8uZjs4221J2gsMK6PDWTeiP
+ybzv24/V+5/OyOeBVsFqZPw0gxNhTh8zmtyIdEvZO8eMBcZOX6JPcm/DI4YG3WU+
+6nYSRGc7D+AV+eD7s5CxHboHtOwY7RC2RGyPCNPA0yIYNTLYpdIVHYyn+8BpfeXj
+wnBKUiJAcJH7+JGUSFhRV7Xpd4RenRBnT3l8KEm9HUjJlEvqmNpueg64ho1bSXAH
++fbd5TtrHh001xp2BdyJ57uhh+KQggrhgLPhOSiiBQ7+oaro/jiO4IxUODUDCTia
+LGNDfrMHQ1gjS2ZQQPQwRr0vdmwd2w==
+=DUiw
+-----END PGP SIGNATURE-----
+
+--3pw4fff6xzsrv6pf--
