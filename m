@@ -2,216 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76168755D4D
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 09:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7889B755DA4
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 09:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjGQHqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 03:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S231217AbjGQH7p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 03:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjGQHqU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 03:46:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67D919AA
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 00:45:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qLItl-0005e3-Cd; Mon, 17 Jul 2023 09:44:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qLIte-0004Us-4z; Mon, 17 Jul 2023 09:43:54 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qLItd-005WwB-3s; Mon, 17 Jul 2023 09:43:53 +0200
-Date:   Mon, 17 Jul 2023 09:43:52 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Michael Walle <michael@walle.cc>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        asahi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] pwm: Explicitly include correct DT includes
-Message-ID: <20230717074352.dz3ex7fwi77loayc@pengutronix.de>
-References: <20230714174852.4062251-1-robh@kernel.org>
+        with ESMTP id S229817AbjGQH7f (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 03:59:35 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482C7FE
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 00:59:33 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso44138955e9.0
+        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 00:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689580772; x=1692172772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f65L06gbFrKHxS83TTCwRU9AqV0nAbAPQwTAVUkVeVo=;
+        b=uw6ye23Rqfp3pCqe6MyHbosc/p/RzSBMaSxQ9ewY5hf6BXEScK8uIcJx+AW94HfeQU
+         nYxFkQsLJ/loxj7IZwmxFHvQLwD34mob7wOprHNiznQ7eqGXub98q11OiMSGnB/yExCE
+         G147PhwhGeHc1auckNTATsWmffu4m3uHcWwskKgDsnFkF7nWZ/xONheRmGpB4yR+iMX8
+         Obk83TLRMMlgq25yV/Z11dIJXpPQbraGxSEy743BlPyHIn+n69otB7OMjNM/3/zwKudf
+         kKaLE0wkYlKeXj/PU5fZ/QX7bGzRZpWXtqf2vxURDYurW5tkl9FfBDDfD6mxhQxy5ZHc
+         HC9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689580772; x=1692172772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f65L06gbFrKHxS83TTCwRU9AqV0nAbAPQwTAVUkVeVo=;
+        b=WTn7hiPwtxDu6GnKx5wnSlXwofxsC4aLmVNu8kTOh1wuuQ8FXlvgPqn3OjgANCP413
+         BM4KyGfQunTpBs5Lpa8eeRsE87vcXJvBiQEb2VVnidTt3ImoNrIZhEh1MMD+swffUk0D
+         bxd2D34GUHRyEjOnro7yOwGwjc34F6zsyXdOrbJvgRL58Qxlp9Qubpuw5OonbysNHUfv
+         4+WUbPwt4DjdrNo+61FJp5JNKlmi1j0QGYXnLtRbCXVx4ohwT0RPQC6QVXt5v9OtdGpM
+         cuxkRoKl+CMY+LDDVXpAGmlshTYSwl5ofQMgpK/Uhz/TZczIhqWMQlVcMRVFPFD97HNT
+         8N0A==
+X-Gm-Message-State: ABy/qLaUxX/4/XTTZGS/bYliRkkl/BfDlkagbiQDMCAoCAL+S7EV1KNL
+        7fxZu/anQncfDmfe/XoNS8gN2I5NJcWczOI43Gk=
+X-Google-Smtp-Source: APBJJlFQlfYBTUFmTBJsxAfm6tlv+4JE29IQG0DVo4gcJYb8veRdJfETc1pWPi57sjh6sN+U7Z5X+A==
+X-Received: by 2002:a1c:7502:0:b0:3fb:d81a:8b4 with SMTP id o2-20020a1c7502000000b003fbd81a08b4mr10383228wmc.16.1689580771726;
+        Mon, 17 Jul 2023 00:59:31 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.144.39])
+        by smtp.gmail.com with ESMTPSA id c22-20020a05600c0ad600b003fc01495383sm7303733wmr.6.2023.07.17.00.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jul 2023 00:59:31 -0700 (PDT)
+Message-ID: <004bd252-ea93-fcb4-84d9-7c58c5417ce4@linaro.org>
+Date:   Mon, 17 Jul 2023 09:59:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3pw4fff6xzsrv6pf"
-Content-Disposition: inline
-In-Reply-To: <20230714174852.4062251-1-robh@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v4 5/6] usb: dwc3: dwc3-octeon: Dump control register on
+ clock init failure
+Content-Language: en-US
+To:     Ladislav Michl <oss-lists@triops.cz>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liang He <windhl@126.com>
+Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
+References: <ZLP7CSUm095ADtdw@lenoch> <ZLP73wvnW8Ke+7RB@lenoch>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <ZLP73wvnW8Ke+7RB@lenoch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
---3pw4fff6xzsrv6pf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jul 14, 2023 at 11:48:50AM -0600, Rob Herring wrote:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it as merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
-
-so the eventual goal here is to prepare for:
-
- - drop #include <linux/of_device.h> from include/linux/of_platform.h
- - drop #include <linux/of.h> from include/linux/of_device.h
- - drop #include <linux/of_platform.h> from include/linux/of_device.h
- - drop #include <linux/platform_device.h> from include/linux/of_device.h
- - drop #include <linux/platform_device.h> from include/linux/of_platform.h
-
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 16/7/23 16:17, Ladislav Michl wrote:
+> From: Ladislav Michl <ladis@linux-mips.org>
+> 
+> It might be interesting to know control register value in case
+> clock fails to enable.
+> 
+> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
 > ---
->  drivers/pwm/core.c               | 1 +
->  drivers/pwm/pwm-apple.c          | 1 +
->  drivers/pwm/pwm-atmel-hlcdc.c    | 1 +
->  drivers/pwm/pwm-atmel-tcb.c      | 3 +--
->  drivers/pwm/pwm-atmel.c          | 1 -
->  drivers/pwm/pwm-berlin.c         | 1 +
->  drivers/pwm/pwm-cros-ec.c        | 1 +
->  drivers/pwm/pwm-fsl-ftm.c        | 3 +--
->  drivers/pwm/pwm-hibvt.c          | 2 +-
->  drivers/pwm/pwm-imx1.c           | 1 -
->  drivers/pwm/pwm-jz4740.c         | 2 +-
->  drivers/pwm/pwm-lp3943.c         | 1 +
->  drivers/pwm/pwm-lpc18xx-sct.c    | 1 +
->  drivers/pwm/pwm-mediatek.c       | 1 -
->  drivers/pwm/pwm-meson.c          | 1 -
->  drivers/pwm/pwm-microchip-core.c | 2 +-
->  drivers/pwm/pwm-mtk-disp.c       | 1 -
->  drivers/pwm/pwm-pxa.c            | 1 +
->  drivers/pwm/pwm-sifive.c         | 1 +
->  drivers/pwm/pwm-sl28cpld.c       | 1 +
->  drivers/pwm/pwm-sprd.c           | 1 +
->  drivers/pwm/pwm-sun4i.c          | 1 -
->  drivers/pwm/pwm-sunplus.c        | 1 +
->  drivers/pwm/pwm-tegra.c          | 1 -
->  drivers/pwm/pwm-tiecap.c         | 2 +-
->  drivers/pwm/pwm-tiehrpwm.c       | 2 +-
->  drivers/pwm/pwm-visconti.c       | 2 +-
->  drivers/pwm/pwm-vt8500.c         | 5 +----
->  28 files changed, 21 insertions(+), 21 deletions(-)
->=20
-> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-> index 3dacceaef4a9..d37617c60eae 100644
-> --- a/drivers/pwm/core.c
-> +++ b/drivers/pwm/core.c
-> @@ -8,6 +8,7 @@
-> =20
->  #include <linux/acpi.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/pwm.h>
->  #include <linux/radix-tree.h>
->  #include <linux/list.h>
+>   CHANGES:
+>   - v4: new patch
+> 
+>   drivers/usb/dwc3/dwc3-octeon.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 
-This file includes neither of_device.h nor of_platform.h and up to now
-gets of.h via <linux/pwm.h>.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-What is your plan for <linux/pwm.h>'s include? I think it would only need
-
-	struct of_phandle_args;
-
-to replace that. (But that would need another patch like this one, as
-then e.g. drivers/pwm/pwm-sl28cpld.c fails to compile because
-device_property_read_u32() is undeclared. It would need to #include
-<linux/property.h> which now it gets transitively via <linux/of.h>.)
-
-If <linux/pwm.h> is planed to continue #including <linux/of.h>, the
-explicit include here isn't necessary (and probably elsewhere).
-
-I don't care much either way, but maybe your quest would be a bit
-simpler if you only touch files that include the two files you want to
-modify?
-
-*shrug*, this patch is still an improvement so:
-
-Acked-by: Uwe Kleine-K=F6ng <u.kleine-koenig@pengutronix.de>
-
-Another thing I wonder is: How did you identify the files that need
-these includes. I guess you have a list of types for each header and
-search for files that use any of the types but doesn't include the
-respecitve header? I wonder if tracking this type -> header mapping in
-machine readable form somewhere would be nice, to e.g. make checkpatch
-warn if a file uses struct of_node but only gets it by chance?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3pw4fff6xzsrv6pf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmS08TgACgkQj4D7WH0S
-/k6d7QgAjn09jbMtpLkxkAPiHCL/fUXRMWWMV76Fu8uZjs4221J2gsMK6PDWTeiP
-ybzv24/V+5/OyOeBVsFqZPw0gxNhTh8zmtyIdEvZO8eMBcZOX6JPcm/DI4YG3WU+
-6nYSRGc7D+AV+eD7s5CxHboHtOwY7RC2RGyPCNPA0yIYNTLYpdIVHYyn+8BpfeXj
-wnBKUiJAcJH7+JGUSFhRV7Xpd4RenRBnT3l8KEm9HUjJlEvqmNpueg64ho1bSXAH
-+fbd5TtrHh001xp2BdyJ57uhh+KQggrhgLPhOSiiBQ7+oaro/jiO4IxUODUDCTia
-LGNDfrMHQ1gjS2ZQQPQwRr0vdmwd2w==
-=DUiw
------END PGP SIGNATURE-----
-
---3pw4fff6xzsrv6pf--
