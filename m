@@ -2,113 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25FE756A1F
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 19:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C22756AE4
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jul 2023 19:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjGQRY3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jul 2023 13:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S230327AbjGQRnc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jul 2023 13:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbjGQRY2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 13:24:28 -0400
+        with ESMTP id S230293AbjGQRnb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jul 2023 13:43:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87684D8;
-        Mon, 17 Jul 2023 10:24:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372DF91;
+        Mon, 17 Jul 2023 10:43:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D69C61185;
-        Mon, 17 Jul 2023 17:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2885EC433CA;
-        Mon, 17 Jul 2023 17:24:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0A27611AC;
+        Mon, 17 Jul 2023 17:43:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC32C433CB;
+        Mon, 17 Jul 2023 17:43:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689614665;
-        bh=o+WgjDKzf9AD9b+kUzQGRClRYLlDB82OkTDYfv6a3Yk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=U55TcGyi7YmJyhzLOTZnjrFVWw0H3+af918Yjk8mPHfHD/clSDnn9R44JznF10IRH
-         Z8KK+n6r0jSrVIOFXY3K9zEUwgWJJmDl6U+xcWuKBgzWtStxy8DJ8vdgvW6lkDoW7B
-         HjBUxuU9UxtzkC9l5ApN5DKkzBCr1VsqK7wmYWuXqa2OawFE6M2Oq9WP6fcTzeqAS1
-         oQr1aLD/6waYS1NoUdY5C7XFt1xXn2X7vRDexou/Ye3pmNVTURfyjeGdd/9YrFIH9l
-         MqvAuz5uF3yGQhNR2S/bV8TY4Zn4vPj0wIo0nVHW6MMTPN4UGDgaMVOo3Hl1Lknk4t
-         QarZtUu8s3ucw==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0594A27C0054;
-        Mon, 17 Jul 2023 13:24:22 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Mon, 17 Jul 2023 13:24:23 -0400
-X-ME-Sender: <xms:RXm1ZG1tVKd235OTAKjb7YgspTMPR-qImOZNagZiOwv_r996Wpl_EA>
-    <xme:RXm1ZJGhtMeEyJx0NHmpmxK7orhG2xuLUV7eaWrGF_5mvemHNiGzAxoeoH8wHPKOx
-    Be-_jfsguKQ7NGLhQY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrgedvgdduuddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:RXm1ZO5oHfgOl5d-JsrWsEmT0wZ8c7lpn-wGY1Pk1MKOwuxnVn3prQ>
-    <xmx:RXm1ZH3tFnXsbSmPTR9ONplP-mkjz9Tn9-KQt1DQXW36vSF4M5jnmA>
-    <xmx:RXm1ZJEwoQUXW2HC-hvtBktlwQpPz6VjPtqSmOfmC010d9JGpLVfQw>
-    <xmx:Rnm1ZFKtTGUhG1K7QB02N33IARC_1h22efMRZVMJvVFaIkzEJg1UPw>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D060531A0064; Mon, 17 Jul 2023 13:24:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <d305b437-9eef-42da-821e-67365aad520b@app.fastmail.com>
-In-Reply-To: <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
- <20230625161417.GK52412@kernel.org> <ZJmFFmexl_1GUhIL@FVFF77S0Q05N>
- <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
-Date:   Mon, 17 Jul 2023 10:23:56 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Song Liu" <song@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
-Cc:     "Mike Rapoport" <rppt@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Kent Overstreet" <kent.overstreet@linux.dev>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Puranjay Mohan" <puranjay12@gmail.com>,
-        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Will Deacon" <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
-Content-Type: text/plain;charset=utf-8
+        s=k20201202; t=1689615809;
+        bh=WlylA38NBSrHdK1P/Qx5cdKzB17My2bbP8A4hWmtbl8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pCB0qRPm4TViuI8Fg0XfDsRLg2cStX3yi85bE2aX9JM2STvXpFJBkZv01TMRONP0v
+         4BCch5u4Cfxc2q10XF7X8MlYlb8ZrEcmfwNbb6YHXoQY5gQfT+RaoaDjA6FvE1eHjM
+         3v6jimLbsNHKi9Zfa5tpw4Qtn2ufZU3HZ5UK6k1Kc0wXQeqgPxgdOMDAMlvQaNHzn8
+         Z9nrQ9fiOU63aNaOwpzQarIRbUBxsSACl0XHcxEIqNv8Tzec0OZENO5QJUjxlzB7dE
+         CNvQd17kBAqxdZ+5e44s4eiNJhYtgPj4XwQfWrMAVKzXwptm7yM7tvd4Fvk/wJOtao
+         Yn09Vf//WxeFg==
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51e590a8ab5so6444129a12.2;
+        Mon, 17 Jul 2023 10:43:29 -0700 (PDT)
+X-Gm-Message-State: ABy/qLbctizCvB77CWdMJKuja7kiIyj0Q82FW8JIiA7/tYogJBWUEZF0
+        ET2dXZLfYI5i68M5k5rEOTm85x6zFbq8d1UDMw==
+X-Google-Smtp-Source: APBJJlGV73zzxjpVsO/f3440v/5dveoUtTcIX0eLkgnTaVgBrap1rMmgbikswqUTIe4Df1/8A6Rrn+UvYZaRh77UJxY=
+X-Received: by 2002:a2e:9c91:0:b0:2b7:4169:fcf5 with SMTP id
+ x17-20020a2e9c91000000b002b74169fcf5mr11677042lji.37.1689615786908; Mon, 17
+ Jul 2023 10:43:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230714175027.4065135-1-robh@kernel.org>
+In-Reply-To: <20230714175027.4065135-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 17 Jul 2023 11:42:54 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLxL2Mpsi=idA0KkDWNhCZfP3Nw4c79d5CfkjVWnUsqyg@mail.gmail.com>
+Message-ID: <CAL_JsqLxL2Mpsi=idA0KkDWNhCZfP3Nw4c79d5CfkjVWnUsqyg@mail.gmail.com>
+Subject: Re: [PATCH] usb: Explicitly include correct DT includes
+To:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Li Yang <leoyang.li@nxp.com>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Richard Leitner <richard.leitner@linux.dev>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,51 +103,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On Mon, Jun 26, 2023, at 10:48 AM, Song Liu wrote:
-> On Mon, Jun 26, 2023 at 5:31=E2=80=AFAM Mark Rutland <mark.rutland@arm=
-.com> wrote:
->>
-> [...]
->> >
->> > So the idea was that jit_text_alloc() will have a cache of large pa=
-ges
->> > mapped ROX, will allocate memory from those caches and there will be
->> > jit_update() that uses text poking for writing to that memory.
->> >
->> > Upon allocation of a large page to increase the cache, that large p=
-age will
->> > be "invalidated" by filling it with breakpoint instructions (e.g in=
-t3 on
->> > x86)
->>
->> Does that work on x86?
->>
->> That is in no way gauranteed for other architectures; on arm64 you ne=
-ed
->> explicit cache maintenance (with I-cache maintenance at the VA to be =
-executed
->> from) followed by context-synchronization-events (e.g. via ISB instru=
-ctions, or
->> IPIs).
+On Fri, Jul 14, 2023 at 11:50=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+e:
 >
-> I guess we need:
-> 1) Invalidate unused part of the huge ROX pages;
-> 2) Do not put two jit users (including module text, bpf, etc.) in the
-> same cache line;
-> 3) Explicit cache maintenance;
-> 4) context-synchronization-events.
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
 >
-> Would these (or a subset of them) be sufficient to protect us from tor=
-n read?
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Maybe?  #4 is sufficiently vague that I can't really interpret it.
+[...]
 
-I have a half-drafted email asking for official clarification on the rul=
-es that might help shed light on this.  I find that this type of request=
- works best when it's really well written :)
+> diff --git a/drivers/usb/host/fsl-mph-dr-of.c b/drivers/usb/host/fsl-mph-=
+dr-of.c
+> index a9877f2569f4..2574bccc151b 100644
+> --- a/drivers/usb/host/fsl-mph-dr-of.c
+> +++ b/drivers/usb/host/fsl-mph-dr-of.c
+> @@ -10,10 +10,12 @@
+>  #include <linux/fsl_devices.h>
+>  #include <linux/err.h>
+>  #include <linux/io.h>
+> -#include <linux/of_platform.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/clk.h>
+>  #include <linux/module.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/of.h>
 
->
-> Thanks,
-> Song
+Double include of of.h here. v2 coming.
+
+Rob
