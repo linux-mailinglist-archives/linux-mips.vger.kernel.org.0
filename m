@@ -2,65 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E757574D4
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 09:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9537575B3
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 09:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjGRHBO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jul 2023 03:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
+        id S229861AbjGRHvX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jul 2023 03:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjGRHBF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 03:01:05 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA0EA1B5;
-        Tue, 18 Jul 2023 00:01:02 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8BxyeqtOLZkwoMGAA--.7544S3;
-        Tue, 18 Jul 2023 15:01:01 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxzM6sOLZkoNAyAA--.9474S3;
-        Tue, 18 Jul 2023 15:01:00 +0800 (CST)
-Message-ID: <2fd7fa12-c9c7-3c12-fa02-872cbbbfc5e2@loongson.cn>
-Date:   Tue, 18 Jul 2023 15:01:00 +0800
+        with ESMTP id S229573AbjGRHvW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 03:51:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395EEDD
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 00:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689666640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IQV8O6VkoZMK+uzlvNWBITxOlq3iVkMNabGAT3CedZ4=;
+        b=ae8z2YoMLuk9Yo9dhNeMlS9IzML7pU7nsGML6tLhl9oqoL5VpVm6WZUV3BvDA/5FhNLbrE
+        4gmGUdUPMaj/FSp33L0NHC0EcDeUVwxuqjBs7XNQutck9P0E5SWmdSq91GlKWDUsAX6mWT
+        SAl3vkMJHK1FIDfrTDC0j1GgkzxQj/Y=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-338-OsZmym7sNeG14Q4U-LaE6A-1; Tue, 18 Jul 2023 03:50:38 -0400
+X-MC-Unique: OsZmym7sNeG14Q4U-LaE6A-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2633d76a265so1245216a91.0
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 00:50:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689666637; x=1692258637;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IQV8O6VkoZMK+uzlvNWBITxOlq3iVkMNabGAT3CedZ4=;
+        b=PO9GqC6101/Rfe1bFXY+W2onkeQVgmR7WQcIHYMEH0F3lfBDCVFAgQh6tck1ZhYd7W
+         Pyoz5goN2g0HkvgpCWVc7RqhCwE0VWEMw5SYlKQIm6306+n3gTCKaSnGuCpTjrsrDc7M
+         2uvrsM0xPr8zuW8KFNJ5N5a/4S7s4gRC85UF3MF+7LIE370ZHo4hK8wKk3Mooz8GFK7b
+         MQ9dqQ2R5dtoOmjyR58rTEgKJMAm+iZ6ofD5uJogKGhdZTlGcp+kmRSzkkUw7BjM1/2J
+         GUuTpAX39RGTfdm4SZCHMIiLo/KkfA0Pshg9+1rjxBUzWvaMF1YRQXvWrQQOd22/1PzQ
+         pvcQ==
+X-Gm-Message-State: ABy/qLYIF145iJiRQCNIRPmjf5mlhZgirbPJfqDjPFy3rBj3G9faLOcZ
+        oLQbDevx5tmL+4yhciR+W13/jHagd+/MPVhUHWMq270hnniFJLyUSCKaQP1VhMmHytHDGiFioPa
+        Y4FwvjFaCSvwJpCPdl5Y7hQ==
+X-Received: by 2002:a05:6a20:a111:b0:133:6e3d:728a with SMTP id q17-20020a056a20a11100b001336e3d728amr11334189pzk.6.1689666637190;
+        Tue, 18 Jul 2023 00:50:37 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFD2KNTmEnZo1x3FiDeADMJZauRC0v1yUa82OuIn2vMpvvXR2PsgNf3c6C22aGrV8c2mvw/Zg==
+X-Received: by 2002:a05:6a20:a111:b0:133:6e3d:728a with SMTP id q17-20020a056a20a11100b001336e3d728amr11334171pzk.6.1689666636842;
+        Tue, 18 Jul 2023 00:50:36 -0700 (PDT)
+Received: from [10.66.61.39] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id x53-20020a056a000bf500b00684ca1b45b9sm973422pfu.149.2023.07.18.00.50.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jul 2023 00:50:36 -0700 (PDT)
+Message-ID: <0b2b367e-30c7-672e-f249-e4100c4dff5f@redhat.com>
+Date:   Tue, 18 Jul 2023 15:50:31 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 2/2] irqchip/loongson-eiointc: Simplify irq routing on
- some platforms
-From:   bibo mao <maobibo@loongson.cn>
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>
-References: <20230713032243.2046205-1-maobibo@loongson.cn>
- <20230713032243.2046205-3-maobibo@loongson.cn>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 06/11] KVM: arm64: Implement
+ __kvm_tlb_flush_vmid_range()
 Content-Language: en-US
-In-Reply-To: <20230713032243.2046205-3-maobibo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxzM6sOLZkoNAyAA--.9474S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gr1kZFWDtF4rCF1kurWUWrX_yoW7ZF1fpF
-        WUGas0qrW5XFy7Wr9aka1DZa4avr93X3yqqF1fWayxAFZ8ua1UKF1FyFnrZF10k34UAF1j
-        yF45Xry8u3Z8AagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zw
-        Z7UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
+References: <20230715005405.3689586-1-rananta@google.com>
+ <20230715005405.3689586-7-rananta@google.com>
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <20230715005405.3689586-7-rananta@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,164 +98,158 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Jianmin,
+Hi Raghavendra,
 
-Do you have any comments so that I can update in the next version together?
-since you are original author of eiointc driver.
-
-Is it possible to add extra specific version in eiointc acpi table for
-virt-machine in future? For specific eiointc, irq can be routed to all
-cpus rather cpu 0-3, I do not know whether it is deserved for qemu
-virt-machine alone.
-
-Regards
-Bibo Mao
-
-在 2023/7/13 11:22, Bibo Mao 写道:
-> Some LoongArch systems have only one eiointc node such as 3A5000/2K2000
-> and qemu virt-machine. If there is only one eiointc node, all cpus can
-> access eiointc registers directly; if there is multiple eiointc nodes, each
-> cpu can only access eiointc belonging to specified node group, so anysend
-> or ipi needs to be used to configure irq routing. IRQ routing is simple on
-> such systems with one node, hacking method like anysend is not necessary.
+On 7/15/23 08:54, Raghavendra Rao Ananta wrote:
+> Define  __kvm_tlb_flush_vmid_range() (for VHE and nVHE)
+> to flush a range of stage-2 page-tables using IPA in one go.
+> If the system supports FEAT_TLBIRANGE, the following patches
+> would conviniently replace global TLBI such as vmalls12e1is
+> in the map, unmap, and dirty-logging paths with ripas2e1is
+> instead.
 > 
-> This patch provides simpile IRQ routing method for systems with one eiointc
-> node, and is tested on 3A5000 board and qemu virt-machine.
-> 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
 > ---
->  drivers/irqchip/irq-loongson-eiointc.c | 80 ++++++++++++++++++++++++--
->  1 file changed, 74 insertions(+), 6 deletions(-)
+>   arch/arm64/include/asm/kvm_asm.h   |  3 +++
+>   arch/arm64/kvm/hyp/nvhe/hyp-main.c | 11 +++++++++++
+>   arch/arm64/kvm/hyp/nvhe/tlb.c      | 30 ++++++++++++++++++++++++++++++
+>   arch/arm64/kvm/hyp/vhe/tlb.c       | 23 +++++++++++++++++++++++
+>   4 files changed, 67 insertions(+)
 > 
-> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-> index 603d323b8f8b..e6be9d6a18c8 100644
-> --- a/drivers/irqchip/irq-loongson-eiointc.c
-> +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -127,6 +127,48 @@ static int eiointc_set_irq_affinity(struct irq_data *d, const struct cpumask *af
->  	return IRQ_SET_MASK_OK;
->  }
->  
-> +static int eiointc_single_set_irq_affinity(struct irq_data *d,
-> +				const struct cpumask *affinity, bool force)
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index 7d170aaa2db4..2c27cb8cf442 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -70,6 +70,7 @@ enum __kvm_host_smccc_func {
+>   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_ipa,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_ipa_nsh,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid,
+> +	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_range,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_flush_cpu_context,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_timer_set_cntvoff,
+>   	__KVM_HOST_SMCCC_FUNC___vgic_v3_read_vmcr,
+> @@ -229,6 +230,8 @@ extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_t ipa,
+>   extern void __kvm_tlb_flush_vmid_ipa_nsh(struct kvm_s2_mmu *mmu,
+>   					 phys_addr_t ipa,
+>   					 int level);
+> +extern void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +					phys_addr_t start, unsigned long pages);
+>   extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
+>   
+>   extern void __kvm_timer_set_cntvoff(u64 cntvoff);
+> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> index a169c619db60..857d9bc04fd4 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> @@ -135,6 +135,16 @@ static void handle___kvm_tlb_flush_vmid_ipa_nsh(struct kvm_cpu_context *host_ctx
+>   	__kvm_tlb_flush_vmid_ipa_nsh(kern_hyp_va(mmu), ipa, level);
+>   }
+>   
+> +static void
+> +handle___kvm_tlb_flush_vmid_range(struct kvm_cpu_context *host_ctxt)
 > +{
-> +	unsigned int cpu;
-> +	unsigned long flags;
-> +	uint32_t vector, regaddr, data, coremap;
-> +	struct cpumask mask;
-> +	struct eiointc_priv *priv = d->domain->host_data;
+> +	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> +	DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
+> +	DECLARE_REG(unsigned long, pages, host_ctxt, 3);
 > +
-> +	cpumask_and(&mask, affinity, cpu_online_mask);
-> +	cpumask_and(&mask, &mask, &priv->cpuspan_map);
-> +	if (cpumask_empty(&mask))
-> +		return -EINVAL;
-> +
-> +	cpu = cpumask_first(&mask);
-> +	vector = d->hwirq;
-> +	regaddr = EIOINTC_REG_ENABLE + ((vector >> 5) << 2);
-> +	data = ~BIT(vector & 0x1F);
-> +	coremap = BIT(cpu_logical_map(cpu) % CORES_PER_EIO_NODE);
-> +
-> +	/*
-> +	 * simplify for platform with only one eiointc node
-> +	 * access eiointc registers directly rather than
-> +	 * use any_send method here
-> +	 */
-> +	raw_spin_lock_irqsave(&affinity_lock, flags);
-> +	iocsr_write32(EIOINTC_ALL_ENABLE & data, regaddr);
-> +	/*
-> +	 * get irq route info for continuous 4 vectors
-> +	 * and set affinity for specified vector
-> +	 */
-> +	data = iocsr_read32(EIOINTC_REG_ROUTE + (vector & ~3));
-> +	data &=  ~(0xff << ((vector & 3) * 8));
-> +	data |= coremap << ((vector & 3) * 8);
-> +	iocsr_write32(data, EIOINTC_REG_ROUTE + (vector & ~3));
-> +	iocsr_write32(EIOINTC_ALL_ENABLE, regaddr);
-> +	raw_spin_unlock_irqrestore(&affinity_lock, flags);
-> +
-> +	irq_data_update_effective_affinity(d, cpumask_of(cpu));
-> +	return IRQ_SET_MASK_OK;
+> +	__kvm_tlb_flush_vmid_range(kern_hyp_va(mmu), start, pages);
 > +}
 > +
->  static int eiointc_index(int node)
->  {
->  	int i;
-> @@ -238,22 +280,39 @@ static struct irq_chip eiointc_irq_chip = {
->  	.irq_set_affinity	= eiointc_set_irq_affinity,
->  };
->  
-> +static struct irq_chip eiointc_irq_chipi_single = {
-> +	.name			= "EIOINTC-S",
-> +	.irq_ack		= eiointc_ack_irq,
-> +	.irq_mask		= eiointc_mask_irq,
-> +	.irq_unmask		= eiointc_unmask_irq,
-> +#ifdef CONFIG_SMP
-> +	.irq_set_affinity       = eiointc_single_set_irq_affinity,
-> +#endif
-> +};
+>   static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_ctxt)
+>   {
+>   	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> @@ -327,6 +337,7 @@ static const hcall_t host_hcall[] = {
+>   	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
+>   	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa_nsh),
+>   	HANDLE_FUNC(__kvm_tlb_flush_vmid),
+> +	HANDLE_FUNC(__kvm_tlb_flush_vmid_range),
+>   	HANDLE_FUNC(__kvm_flush_cpu_context),
+>   	HANDLE_FUNC(__kvm_timer_set_cntvoff),
+>   	HANDLE_FUNC(__vgic_v3_read_vmcr),
+> diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> index b9991bbd8e3f..09347111c2cd 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> @@ -182,6 +182,36 @@ void __kvm_tlb_flush_vmid_ipa_nsh(struct kvm_s2_mmu *mmu,
+>   	__tlb_switch_to_host(&cxt);
+>   }
+>   
+> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t start, unsigned long pages)
+> +{
+> +	struct tlb_inv_context cxt;
+> +	unsigned long stride;
 > +
->  static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
->  				unsigned int nr_irqs, void *arg)
->  {
->  	int ret;
->  	unsigned int i, type;
->  	unsigned long hwirq = 0;
-> -	struct eiointc *priv = domain->host_data;
-> +	struct eiointc_priv *priv = domain->host_data;
-> +	struct irq_chip *chip;
->  
->  	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
->  	if (ret)
->  		return ret;
->  
-> -	for (i = 0; i < nr_irqs; i++) {
-> -		irq_domain_set_info(domain, virq + i, hwirq + i, &eiointc_irq_chip,
 > +	/*
-> +	 * use simple irq routing method on single eiointc node
+> +	 * Since the range of addresses may not be mapped at
+> +	 * the same level, assume the worst case as PAGE_SIZE
 > +	 */
-> +	if ((nr_pics == 1) && (nodes_weight(priv->node_map) == 1))
-> +		chip = &eiointc_irq_chipi_single;
-> +	else
-> +		chip = &eiointc_irq_chip;
-> +	for (i = 0; i < nr_irqs; i++)
-> +		irq_domain_set_info(domain, virq + i, hwirq + i, chip,
->  					priv, handle_edge_irq, NULL, NULL);
-> -	}
->  
->  	return 0;
->  }
-> @@ -310,6 +369,7 @@ static void eiointc_resume(void)
->  	int i, j;
->  	struct irq_desc *desc;
->  	struct irq_data *irq_data;
-> +	struct irq_chip *chip;
->  
->  	eiointc_router_init(0);
->  
-> @@ -319,7 +379,8 @@ static void eiointc_resume(void)
->  			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
->  				raw_spin_lock(&desc->lock);
->  				irq_data = irq_domain_get_irq_data(eiointc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
-> -				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
-> +				chip = irq_data_get_irq_chip(irq_data);
-> +				chip->irq_set_affinity(irq_data, irq_data->common->affinity, 0);
->  				raw_spin_unlock(&desc->lock);
->  			}
->  		}
-> @@ -497,7 +558,14 @@ static int __init eiointc_of_init(struct device_node *of_node,
->  	priv->node = 0;
->  	priv->domain_handle = of_node_to_fwnode(of_node);
->  
-> -	ret = eiointc_init(priv, parent_irq, 0);
+> +	stride = PAGE_SIZE;
+> +	start = round_down(start, stride);
+> +
+> +	/* Switch to requested VMID */
+> +	__tlb_switch_to_guest(mmu, &cxt, false);
+> +
+> +	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
+> +
+> +	dsb(ish);
+> +	__tlbi(vmalle1is);
+> +	dsb(ish);
+> +	isb();
+> +
+> +	/* See the comment in __kvm_tlb_flush_vmid_ipa() */
+> +	if (icache_is_vpipt())
+> +		icache_inval_all_pou();
+> +
+> +	__tlb_switch_to_host(&cxt);
+> +}
+> +
+>   void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu)
+>   {
+>   	struct tlb_inv_context cxt;
+> diff --git a/arch/arm64/kvm/hyp/vhe/tlb.c b/arch/arm64/kvm/hyp/vhe/tlb.c
+> index e69da550cdc5..4ed8a1786812 100644
+> --- a/arch/arm64/kvm/hyp/vhe/tlb.c
+> +++ b/arch/arm64/kvm/hyp/vhe/tlb.c
+> @@ -138,6 +138,29 @@ void __kvm_tlb_flush_vmid_ipa_nsh(struct kvm_s2_mmu *mmu,
+>   	dsb(nsh);
+>   	__tlbi(vmalle1);
+>   	dsb(nsh);
+> +
+> +	__tlb_switch_to_host(&cxt);
+> +}
+> +
+> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t start, unsigned long pages)
+> +{
+> +	struct tlb_inv_context cxt;
+> +	unsigned long stride;
+> +
 > +	/*
-> +	 * 2k0500 and 2k2000 has only one eiointc node
-> +	 * set nodemap as 1 for simple irq routing
-> +	 *
-> +	 * Fixme: what about future embedded boards with more than 4 cpus?
-> +	 * nodemap and node need be added in dts like acpi table
+> +	 * Since the range of addresses may not be mapped at
+> +	 * the same level, assume the worst case as PAGE_SIZE
 > +	 */
-> +	ret = eiointc_init(priv, parent_irq, 1);
->  	if (ret < 0)
->  		goto out_free_priv;
->  
+> +	stride = PAGE_SIZE;
+> +	start = round_down(start, stride);
+> +
+
+Is there lack of switch VMID to guest?
+	__tlb_switch_to_guest(mmu, &cxt, false);
+
+Thanks,
+Shaoqin
+
+> +	dsb(ishst);
+> +	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
+> +
+> +	dsb(ish);
+> +	__tlbi(vmalle1is);
+> +	dsb(ish);
+>   	isb();
+>   
+>   	__tlb_switch_to_host(&cxt);
+
+-- 
+Shaoqin
 
