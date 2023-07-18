@@ -2,138 +2,395 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C083757A4A
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 13:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449C7757DFE
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 15:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjGRLSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jul 2023 07:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S232808AbjGRNo1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jul 2023 09:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjGRLST (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 07:18:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943110EF
-        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 04:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689679055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OtPAFim1cDpcp/PLXUaQwLiMk8Vxwyxo/NiSi3JW/f0=;
-        b=TjVjCONXNajXgq5t1XpGWWJwqQE3zgXQjCg0K8E+SWHmIxEnOwq4QE6xQ9T6ov3dnKM26S
-        pFKwtlZH559Cbh0V8UIaezc9Kxd+hXAuJ5ZTu1478VQg1xefgwE42jCOUzfeOHM8W5PPMq
-        rhrvzYxbt/XtWrIZPffGjlRoEzuj9oE=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-371-R_kOfkh_PzGzaf4K7MuIag-1; Tue, 18 Jul 2023 07:17:34 -0400
-X-MC-Unique: R_kOfkh_PzGzaf4K7MuIag-1
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-543c2538071so769015a12.1
-        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 04:17:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689679053; x=1692271053;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtPAFim1cDpcp/PLXUaQwLiMk8Vxwyxo/NiSi3JW/f0=;
-        b=TmD8WMUjBmVC2X8FX7iDQ+IbE0wi3ytdNwuvMg3sQzcqQqdySSkJCGXcLbkFg3s1Rs
-         QYSs21x0WrC/wc9gCj8g+iJaG36DT12eQRbFGH/B92Q1YUpJATzzje5KE82oMf6Cht6t
-         ll/m0YTBoLIEO9vj1WUeTADGWxMglB/Wv3UvLIVxLfbfV8R90zHINwh7H8ZQ2s/PtoUS
-         hMiQElNsrIAXzm4TzxjoQ+Qs0/QuKtRMJyK69uuZtiLg1ND1PtJVpicQw26K6hmkrkx3
-         NXDDAJ5ET9K5nS4IjT+q0RlqKJyyy1v2T/2Y7n0wExl74pRVpQQNJONVuS0xVxkZGjti
-         ASfQ==
-X-Gm-Message-State: ABy/qLb25kkoBItwNnc5z1Y6gJhL844JTlYfqvPxdFpG0iIpta1ciVWN
-        LaJQiBsreVmPNTINKh4u7CzOw7u8eJPBT5nm5qZRpUW1ngjYM1kTVd3MwEB6sj1QRUkK0uy1e2H
-        u/z5gjrK3PmNJSQa5V15v+g==
-X-Received: by 2002:a05:6a20:3d07:b0:133:89e:bf1a with SMTP id y7-20020a056a203d0700b00133089ebf1amr12988293pzi.4.1689679053261;
-        Tue, 18 Jul 2023 04:17:33 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGlX4aGknKfPCjhtPs4zbhCwYUKXUWNkmQcI4lBrRW+0354cqKkBfpbN1eJEAJfM+P9UQWRbQ==
-X-Received: by 2002:a05:6a20:3d07:b0:133:89e:bf1a with SMTP id y7-20020a056a203d0700b00133089ebf1amr12988260pzi.4.1689679052990;
-        Tue, 18 Jul 2023 04:17:32 -0700 (PDT)
-Received: from [10.72.112.40] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id k22-20020aa792d6000000b00682868714fdsm1369203pfa.95.2023.07.18.04.17.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 04:17:32 -0700 (PDT)
-Message-ID: <a8a43069-ca4c-07e6-3b65-de749f295365@redhat.com>
-Date:   Tue, 18 Jul 2023 19:17:26 +0800
+        with ESMTP id S231169AbjGRNoZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 09:44:25 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C39D1;
+        Tue, 18 Jul 2023 06:44:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 099DA5C01B9;
+        Tue, 18 Jul 2023 09:44:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 18 Jul 2023 09:44:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1689687863; x=1689774263; bh=CMyNnD4dXf
+        z3wxwhrNtzwsCnZ57GYhNzAQwsalAFITM=; b=EpzGv4WEUOsi9muzilKvQbi9/L
+        V4ZRhoWZb+ZcvWRrLbqPGpokMlWUUfjIGfeWd/3kecoEqzMIUul21Gq6tragDzEe
+        U+VTc+bSFY7OqAHGsDf64FSKzfd8gC6rl2BT7xpKJ81Tz9+S09caMR7CamsGpLC1
+        fyHzfmuGl6Rk3PxFXmqY8UzRIN6mIi2BdoBhPoR1EY2OLrj9guRcMAEaIEFKx1U1
+        hn7EVtYavrTeuCHXHIV31WKPaDDg7lF2dfZ+RJC8bAfV/FCxLnn/yAWx+o3zxVz9
+        NnLIBgmXRWwPoy3Oh/8WWzDYB9HRo1KFS2GmbpH95JbvHExItZpib3rKvwIg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1689687863; x=1689774263; bh=CMyNnD4dXfz3w
+        xwhrNtzwsCnZ57GYhNzAQwsalAFITM=; b=2Yc/DSzxMHaeDQZ5X9lMzN/ga01df
+        vCZd4bz/qNAqb50PrLMoJPv941YBH0csylhHB3HGXmx/gmKFcPdmNIe8tCwRnFyg
+        rxy9p8Ap55GS3zTH3pmDQGWMATU9RDuRws1b4bk6Q9O2i7aqLs8+KKzwi5uNWTb5
+        u1OJ/wPCia9O3LsowiLKrzC69/XJXVX3jq2sQBmSNIiO/iL30BwjUZl0G5eS+gaX
+        73oFKU3ljQRVFPRtv6mFlcQ4gqoRQNcLpcE3gT2/oNBZPtzLhQB1qsBS1xbn7NjS
+        hJ0gh5o6G4w+mHLv5TuK5gvSzfEXP01v0aCmyqlMI/VfrovmjBlqkur0g==
+X-ME-Sender: <xms:Npe2ZKewi2uTK5MLdh1HmjQ6x3ibgn9o8x2FG_cOVkdvFOFdvLWKkg>
+    <xme:Npe2ZENdGj9xUs_pcgF3lQvUQfDAb-KE2Y2FVJ_rm7EjkE4CpajcFZBv-mtc9-zP8
+    etdGMzytiiMCUE-pt4>
+X-ME-Received: <xmr:Npe2ZLg_KJmhwd4YKfAIUiAjLH2D8yj_6jKOocgd8aIi65pEyL3DioXTDUf19qeVRH4QniGtRnQbgw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrgeeggdeihecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
+    dttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpedvueetkeeluedugfeuteehtd
+    dutdfhtdelffeghfeiheefieegvddtueevteeiudenucffohhmrghinhepkhgvrhhnvghl
+    rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:Npe2ZH_d5fG1t-Kl6IHIzwho_oyO0Np_cLJSvtcCFTQNzRTrTp9KgA>
+    <xmx:Npe2ZGstNxOylaN7fCFkzSkGOO0aqCsm-KkGjMphoi5_JUtlUAAINg>
+    <xmx:Npe2ZOEU1-pDje5Ss-6nK1UXMz6o6ktwh2NSotiLkypsteYSUtkSsA>
+    <xmx:N5e2ZKLV3oQbqDs0LDUwhx3VI_vkB5xfxtQHfeALe-NO5C-kta0lIw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Jul 2023 09:44:20 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, chenhuacai@kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] MIPS: Loongson64: Fix more __iomem attributes
+Date:   Tue, 18 Jul 2023 21:44:11 +0800
+Message-Id: <20230718134411.2871477-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 10/11] KVM: arm64: Invalidate the table entries upon a
- range
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
-References: <20230715005405.3689586-1-rananta@google.com>
- <20230715005405.3689586-11-rananta@google.com>
-From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20230715005405.3689586-11-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+There are some __iomem type casting being missed in previous patch.
+Fix them here.
 
+Fixes: 5bd3990723bd ("MIPS: Loongson64: Prefix ipi register address pointers with __iomem")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202307020639.QCZOKp8B-lkp@intel.com/
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/loongson64/smp.c | 168 ++++++++++++++++++-------------------
+ 1 file changed, 84 insertions(+), 84 deletions(-)
 
-On 7/15/23 08:54, Raghavendra Rao Ananta wrote:
-> Currently, during the operations such as a hugepage collapse,
-> KVM would flush the entire VM's context using 'vmalls12e1is'
-> TLBI operation. Specifically, if the VM is faulting on many
-> hugepages (say after dirty-logging), it creates a performance
-> penalty for the guest whose pages have already been faulted
-> earlier as they would have to refill their TLBs again.
-> 
-> Instead, leverage kvm_tlb_flush_vmid_range() for table entries.
-> If the system supports it, only the required range will be
-> flushed. Else, it'll fallback to the previous mechanism.
-> 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
->   arch/arm64/kvm/hyp/pgtable.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index 5d14d5d5819a..5ef098af1736 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -806,7 +806,8 @@ static bool stage2_try_break_pte(const struct kvm_pgtable_visit_ctx *ctx,
->   		 * evicted pte value (if any).
->   		 */
->   		if (kvm_pte_table(ctx->old, ctx->level))
-> -			kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
-> +			kvm_tlb_flush_vmid_range(mmu, ctx->addr,
-> +						kvm_granule_size(ctx->level));
->   		else if (kvm_pte_valid(ctx->old))
->   			kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu,
->   				     ctx->addr, ctx->level);
-
+diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+index cdecd7af11a6..b700ca887c35 100644
+--- a/arch/mips/loongson64/smp.c
++++ b/arch/mips/loongson64/smp.c
+@@ -187,181 +187,181 @@ static void csr_ipi_probe(void)
+ 
+ static void ipi_set0_regs_init(void)
+ {
+-	ipi_set0_regs[0] = (void *)
++	ipi_set0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[1] = (void *)
++	ipi_set0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[2] = (void *)
++	ipi_set0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[3] = (void *)
++	ipi_set0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + SET0);
+-	ipi_set0_regs[4] = (void *)
++	ipi_set0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[5] = (void *)
++	ipi_set0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[6] = (void *)
++	ipi_set0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[7] = (void *)
++	ipi_set0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + SET0);
+-	ipi_set0_regs[8] = (void *)
++	ipi_set0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[9] = (void *)
++	ipi_set0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[10] = (void *)
++	ipi_set0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[11] = (void *)
++	ipi_set0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + SET0);
+-	ipi_set0_regs[12] = (void *)
++	ipi_set0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[13] = (void *)
++	ipi_set0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[14] = (void *)
++	ipi_set0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[15] = (void *)
++	ipi_set0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + SET0);
+ }
+ 
+ static void ipi_clear0_regs_init(void)
+ {
+-	ipi_clear0_regs[0] = (void *)
++	ipi_clear0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[1] = (void *)
++	ipi_clear0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[2] = (void *)
++	ipi_clear0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[3] = (void *)
++	ipi_clear0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + CLEAR0);
+-	ipi_clear0_regs[4] = (void *)
++	ipi_clear0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[5] = (void *)
++	ipi_clear0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[6] = (void *)
++	ipi_clear0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[7] = (void *)
++	ipi_clear0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + CLEAR0);
+-	ipi_clear0_regs[8] = (void *)
++	ipi_clear0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[9] = (void *)
++	ipi_clear0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[10] = (void *)
++	ipi_clear0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[11] = (void *)
++	ipi_clear0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + CLEAR0);
+-	ipi_clear0_regs[12] = (void *)
++	ipi_clear0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[13] = (void *)
++	ipi_clear0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[14] = (void *)
++	ipi_clear0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[15] = (void *)
++	ipi_clear0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + CLEAR0);
+ }
+ 
+ static void ipi_status0_regs_init(void)
+ {
+-	ipi_status0_regs[0] = (void *)
++	ipi_status0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[1] = (void *)
++	ipi_status0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[2] = (void *)
++	ipi_status0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[3] = (void *)
++	ipi_status0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + STATUS0);
+-	ipi_status0_regs[4] = (void *)
++	ipi_status0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[5] = (void *)
++	ipi_status0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[6] = (void *)
++	ipi_status0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[7] = (void *)
++	ipi_status0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + STATUS0);
+-	ipi_status0_regs[8] = (void *)
++	ipi_status0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[9] = (void *)
++	ipi_status0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[10] = (void *)
++	ipi_status0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[11] = (void *)
++	ipi_status0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + STATUS0);
+-	ipi_status0_regs[12] = (void *)
++	ipi_status0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[13] = (void *)
++	ipi_status0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[14] = (void *)
++	ipi_status0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[15] = (void *)
++	ipi_status0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + STATUS0);
+ }
+ 
+ static void ipi_en0_regs_init(void)
+ {
+-	ipi_en0_regs[0] = (void *)
++	ipi_en0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[1] = (void *)
++	ipi_en0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[2] = (void *)
++	ipi_en0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[3] = (void *)
++	ipi_en0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + EN0);
+-	ipi_en0_regs[4] = (void *)
++	ipi_en0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[5] = (void *)
++	ipi_en0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[6] = (void *)
++	ipi_en0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[7] = (void *)
++	ipi_en0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + EN0);
+-	ipi_en0_regs[8] = (void *)
++	ipi_en0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[9] = (void *)
++	ipi_en0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[10] = (void *)
++	ipi_en0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[11] = (void *)
++	ipi_en0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + EN0);
+-	ipi_en0_regs[12] = (void *)
++	ipi_en0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[13] = (void *)
++	ipi_en0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[14] = (void *)
++	ipi_en0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[15] = (void *)
++	ipi_en0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + EN0);
+ }
+ 
+ static void ipi_mailbox_buf_init(void)
+ {
+-	ipi_mailbox_buf[0] = (void *)
++	ipi_mailbox_buf[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[1] = (void *)
++	ipi_mailbox_buf[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[2] = (void *)
++	ipi_mailbox_buf[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[3] = (void *)
++	ipi_mailbox_buf[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + BUF);
+-	ipi_mailbox_buf[4] = (void *)
++	ipi_mailbox_buf[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[5] = (void *)
++	ipi_mailbox_buf[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[6] = (void *)
++	ipi_mailbox_buf[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[7] = (void *)
++	ipi_mailbox_buf[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + BUF);
+-	ipi_mailbox_buf[8] = (void *)
++	ipi_mailbox_buf[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[9] = (void *)
++	ipi_mailbox_buf[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[10] = (void *)
++	ipi_mailbox_buf[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[11] = (void *)
++	ipi_mailbox_buf[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + BUF);
+-	ipi_mailbox_buf[12] = (void *)
++	ipi_mailbox_buf[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[13] = (void *)
++	ipi_mailbox_buf[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[14] = (void *)
++	ipi_mailbox_buf[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[15] = (void *)
++	ipi_mailbox_buf[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + BUF);
+ }
+ 
+@@ -782,7 +782,7 @@ void play_dead(void)
+ 
+ 	if (prid_imp == PRID_IMP_LOONGSON_64G) {
+ 		play_dead_at_ckseg1 =
+-			(void *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
++			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
+ 		goto out;
+ 	}
+ 
+@@ -790,19 +790,19 @@ void play_dead(void)
+ 	case PRID_REV_LOONGSON3A_R1:
+ 	default:
+ 		play_dead_at_ckseg1 =
+-			(void *)CKSEG1ADDR((unsigned long)loongson3_type1_play_dead);
++			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type1_play_dead);
+ 		break;
+ 	case PRID_REV_LOONGSON3B_R1:
+ 	case PRID_REV_LOONGSON3B_R2:
+ 		play_dead_at_ckseg1 =
+-			(void *)CKSEG1ADDR((unsigned long)loongson3_type2_play_dead);
++			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type2_play_dead);
+ 		break;
+ 	case PRID_REV_LOONGSON3A_R2_0:
+ 	case PRID_REV_LOONGSON3A_R2_1:
+ 	case PRID_REV_LOONGSON3A_R3_0:
+ 	case PRID_REV_LOONGSON3A_R3_1:
+ 		play_dead_at_ckseg1 =
+-			(void *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
++			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
+ 		break;
+ 	}
+ 
 -- 
-Shaoqin
+2.39.2
 
