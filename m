@@ -2,142 +2,278 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC61758098
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 17:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE3C75821E
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 18:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbjGRPQg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jul 2023 11:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        id S232766AbjGRQbh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jul 2023 12:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbjGRPQf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 11:16:35 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2021.outbound.protection.outlook.com [40.92.99.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C451726;
-        Tue, 18 Jul 2023 08:16:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iEwNYmfYcdK8eLbnUQsW1Vg2T+oNX+bdNU5gob6R3DHURnBoodDEMdf+FChuWzyyKQpAi659kvQv5YzehwEOhbF8d6ZqDMZPSMBtpZCK0NyiE2PWhd7DA9BGUA6HZGQ6W6XnEb00uFciiO87D2AVYQwL4Y+ralQpzfWfjGgQm5fw3zDGPqFDw7Q7EQRhd3mSqTuc/SpP8ZhG9oHrpfLkiArX76CBqMjNrjN4fYNjSQSUyiIOV6cxMc3Gy1If32r1uBJ6iJFdT6YsLpa3OK8WQMvBPQKQleuZET/UQwbzxsl9QLhMGPZmf58v0uDJOeHkR/KTZMcXvqZWA2N0JTrA5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RnLEhHQWScLLHZqoEPStaexmOu00uTjsXHaDjwDdVW0=;
- b=T3h0Bk4UYZW6G7fsdv6XTNubjhX37Z1MQntvAG+8PoQwwtE8r031FAjWYVPVLJcQ1Tuh/gP8xrRPeK8dMK0GTATnme+mKT3ZpJKE45mTzpOivPhrZOkT8PcZYtRs6wGkE/rVcqm7ywo2yjuT4n5fhHO4I9WMP8tYT77NAmxIHc3fDn3YtXUZaRyAJvXRAot81Yt7l9PtA014glygmBq19UWPmCssFYgW+MBamPPgmdIljPDPK0F+q79SaaM7n6wDSzMV8F2noTqeGDoLHRmppY/C0busY5PC6u1IEoOEM54xVtzaa7Tv0FOK6nDQMnHK/XWwoe6v5SEW+JNLxFvDaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RnLEhHQWScLLHZqoEPStaexmOu00uTjsXHaDjwDdVW0=;
- b=udx0Uprg4zHh6RYQOh8nztpTZBbtoEChRB1LazWfUVN6NsXZRuUmAGexVk1HP0/H36asEV/p64bLFEb1z+VlTj/r2DMTu5gM2Fvs2VGE6ASRVsPb4i4JCGNzlaoejY0i2qPh9emjGbOIccrlVfDuAdoWu8a1H5ih1lSDrz6N1QoMBf7cHyEAe1oetAGm/v6s33noVbS7W8LMGR95Xl8x5fjl+DPyoncnX8Ao3AEiec9abcCoSxfT1HAEMg1/QWBowhed1gXo8PPzM9voevPDgf6S7TPi7RShzcEh4zNm1t+ep7kuMQCiavMPJT+tEEB52eNwHHqFronfOTohj77RCg==
-Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:8041::8)
- by OS3P286MB2215.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.23; Tue, 18 Jul
- 2023 15:16:10 +0000
-Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
- ([fe80::f4c2:4b38:d074:f1e9]) by TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
- ([fe80::f4c2:4b38:d074:f1e9%5]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
- 15:16:09 +0000
-From:   Shiji Yang <yangshiji66@outlook.com>
-To:     linux-gpio@vger.kernel.org
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        Shiji Yang <yangshiji66@outlook.com>
-Subject: [PATCH] pinctrl: mtmips: do not log when repeating the same pinctrl request
-Date:   Tue, 18 Jul 2023 23:13:46 +0800
-Message-ID: <TYAP286MB0315FB4EAD83E36FA371F119BC38A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.30.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [b4oWDF+nRk2gc1a5ICE0Szv/OHSKiDA0Ni0AFMdORW4=]
-X-ClientProxiedBy: TYCPR01CA0102.jpnprd01.prod.outlook.com
- (2603:1096:405:4::18) To TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:404:8041::8)
-X-Microsoft-Original-Message-ID: <20230718151346.2512-1-yangshiji66@outlook.com>
+        with ESMTP id S231319AbjGRQbg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 12:31:36 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1D110F1
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 09:31:34 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-345bc4a438fso141205ab.1
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 09:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689697893; x=1690302693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FOUt0ycfIIC4G92ZHk96f3py83XofJ3hc7BWl3IwSXo=;
+        b=70EYw8mQUne1cNpTuVS0kMr31zvHYUt7jMEY5WFkQMZBfCcJIiLIETbDzK0JXOJ4Nb
+         o7zLGOeq5Y4Kcl59mMGBHYDHb1N2qivCEsecXmwhGzqyIktQtxxQgfZa0nuVzldc1mYK
+         1YVDEGGtjV910sPWe+g+ml5wvq3TqGoCYgLeILNgyRlGhe6eJ3lIRsm7QrAHqbIc16iO
+         xXQvaTZ84vTOaqA9NUMCMXvrhEiThuuMWZhAGrbCWnGHX7sDiEk0cnpqvdzZUB4ghQGY
+         QtT89zT9eN26NqxZPsW6fDAu67sawQDnR4GVx8BwBSuTs2HltUcGsgtm53Amj8OI093n
+         dK0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689697893; x=1690302693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FOUt0ycfIIC4G92ZHk96f3py83XofJ3hc7BWl3IwSXo=;
+        b=F98lWyQdQZJHhudyslO5xlnIdrgeoZBauJcG6uGz9BsJRkbAlTSgMEQE5mTWkRONQm
+         VYt/zaEdj4tJbu+lLJdWkp5mj3Ve7m9p+nW4+9P7P1u2NQ2WsULkuCx5p5yBazgp5eeb
+         oS3kY2KAU2wghHHCmNmZk4jdu3coYccYvu1oERO1tZ2xSYGI+r5sUyvzwbD6BVKv3Lzh
+         jev3XQPEE2C/qOwr1QADldQsS4aQis0DcVMFJSpGQdcSxuMlu6Kyrn3auW/LjXcBzLWw
+         JZxtYkzT3EV3B0EYASvg4IkmwCRR7C0dZW2YMhfMQN7x2GfPLa/wnLnt7rc0IjgL3N5N
+         foNg==
+X-Gm-Message-State: ABy/qLaSPNHrxn3JXpJeqFg/Z8W/JtC/uikjnTVZqfVarwVUE45DVlOR
+        ikGUHR8VgZ2xkOzU3+Q/Y/gBAcgzJRrtIuCSVprVBA==
+X-Google-Smtp-Source: APBJJlFqQdwopGyRSQ6vPehJzW/apQ8j3vOGXsWwGhXT5m1KRrmjOL5Jyef2j1KLskn4+6D/a0FXbZ81TqZtnje6akU=
+X-Received: by 2002:a05:6e02:1a0b:b0:33c:a46c:23b3 with SMTP id
+ s11-20020a056e021a0b00b0033ca46c23b3mr252894ild.1.1689697893605; Tue, 18 Jul
+ 2023 09:31:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYAP286MB0315:EE_|OS3P286MB2215:EE_
-X-MS-Office365-Filtering-Correlation-Id: a2ffe219-22da-43af-eea4-08db87a1ea64
-X-MS-Exchange-SLBlob-MailProps: 9IecXKUgicDvYya0XF0tkOtrlBp/mHl3nDh0vrcNBF+mdsNI54ktcXt8VMBdbQOGC/ZQTfjEWeolhuJ/nwc1u3e2sBrSt4wccnLHNLi+nd//p5eTp0QqJJFF3veRypNPRe3qGVN49CHzHtYnTeUtYLpb31I7Pt4js6/j6uJ27dKr99AOCSGYh1fB6giJM39nIm0SSdtK0an1DqHKZD9cSSCVS3yb5KwkNyhVwep0J8QcQIR7DGKbzmjpq0I1FgudoeDhlwuyKn55kD/5aqSwTLJsXq8Y2zNt9gT3/gB0cJ7zHT8L5+hWN9EDSXdBUKUXzlKuKdz5wQ81TL8yv8L3p6bW5iwp1HRRy/s1mFD8ZrJJK9XWmCwO7lRX5YM0qPEoAepdlYWRXgQoQI5lYIIBowBBTtU2fGCM9cYaiQ+6ETQv2WGuVIEYfRzdQBUT05uy47E1p0dTPptWcf9AYuAVVV/niKYoXaqcXO7s2bXtSxG+xFJFm7X8MHBTNa1yfU42fAhSmINxyszw++sBJtF516hfIwifPnSW3mGKuaeTSvjU+8rQMobjlg+xK9GmLL4g8xrySwrNEDCRANJlisiy8RVbh5WpbGZBi5Wlc0DoSvcY0JTaz5qAYILIrPts5StG86/vxTXlmvxCnTs3ubAtgzWfAN0PYhZfgwMAwSb4KZzxKoKe/L1wAGJyIEhGkta9dJ1G9WOUtIYtjgylWZuWw7h++GS9c4Ti9TrpuqxdAaeKKEU2yTsSyA==
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WLJLlIZ9LuLH2u5Jwnfe7Nusuu2iPi5krLSsWW1ZBcsC7pq8jnAqdehnVokDtxwIH+am5D6rAuNUd4IdSRkXWwxpbSH/cmZHgRARkelNvv/sskeRwCgzN17TIAhbAmNc7UAkcd1p6MMnASZBr0jQkHBcssAqdgSXkOe7eyIg95+K3KvZCWqGmwmFaks+WwNw9Opj7iwCx0qH47yejWEFR1upqp8QHopR3kw8RLAChycqbOpBerNKBP88NwnZu2gDslhBMKRhhDOYjCJ0HwNfZKrhJger4KUKwdZB7g+l9PCaxRzqfgXVHyHalLClmcA58LOx9Hlxnk1FMQxyaZDegiRysB4BTPhOVxt7xf2+YJvtsZRE9ud8cYWPyf7sq2TWe+AqLBdKud5hB0jLJdZz41NzhQ1nk1ZGPOJbZmjKajvwUTBpSAY419REZTIl+kLJUW8km1f/lUnOBLc/uC/d4iAer3KA+4XRZsxmIUJKXDUT56JnOTMjZr96S40Ko+FEVhg1BgL14BFBeXRvxVrrv8jfFdnFwcoPLE7HDYFNZbEscdChfsqtwlBL1zV5ckVt26ikin+KJtbA6g53AUa5Ur+r3l7M0jYYyJiv8WhFEKukSpG3xhKj4trGf7F9fc/2
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aPBQSwZRDPEziWnwJKcVrzESdKMmbAIGPZHDATj0KlzPbaDhsP78mejpBKqr?=
- =?us-ascii?Q?fG+jgln/rii3dRnV5d73OnrQfsGJviG353lnSHnXAqQ7EK8IMakFyb3i+qNK?=
- =?us-ascii?Q?Y+z1asHLnyS874X0lT8JylaeW0jVDsgS/4u144WbEUaOTURVIR0V6C+A8BCY?=
- =?us-ascii?Q?pKFykP9WEGwK1CFR+E5rT737tD8MMelxR+jgGPl8IkaJc4nOFzs3KiLZhf5H?=
- =?us-ascii?Q?6JPTRvx0Hte+IVMRgLU7YnvNJtUzPsHUI3lBS7/luJkw5+Kb5eYnyr8HNUdG?=
- =?us-ascii?Q?oEzBCRwb2B4n9BKf42hHNaFobpdmHctm6adEF/RfImTugNyopT7xV5LjpPUS?=
- =?us-ascii?Q?aDtKMnsuDYKcvVD+KNfIqVp03zHgWgJOwW2LPz4uYNWhv5CNEXIgWD7YIS+1?=
- =?us-ascii?Q?BJRS5FSyiJoVLfthAartCN52FI54ssvk73SUOp51Um8vPx/5yxwy0GL2OVPm?=
- =?us-ascii?Q?COA5+EyVJdDyOYyOK5wj2QqFrHIKLNWA0u08gEZEH/AnIC6DuDHe+eo2RpOj?=
- =?us-ascii?Q?1KvHXD5JZ5aKTZRWu2cth4ofq8jO5t3MmSo/z2nEpzHutvnJ6TmRfDjYW5jX?=
- =?us-ascii?Q?bnBxU5iKNqOkd5tjzlHH07khrXwzYD9SrO6sdkwLxUuCixajvll5RpsZ7GZZ?=
- =?us-ascii?Q?RhyIPOPScmg59Tdc28tf+mHvhrRlJMRL+zI28shTOp4eV7zggDqcz2osgbyd?=
- =?us-ascii?Q?onqbEnsxOSaG7LxqSo3aIShTEOjP8CzP+04nYo5uIJ5VM43XOweIdceplPNE?=
- =?us-ascii?Q?XMO/Qx3zHDHJLfJ5EDWg5TFAjed3V60uEQpdtXUB8S2KzNPUSGo/v991JLFG?=
- =?us-ascii?Q?0GC893FaIiQS4kbmFt+Xvzh2SEnnpJW/jQk+1kDGhcndBtCJ0G1iyvpHGx1F?=
- =?us-ascii?Q?YcRB0qVsv+6jI0kvpPHw23pr1etPYLHNrtS3MWJxqs8bgOBfEuwKT+/8bM7c?=
- =?us-ascii?Q?p9ZQDjbjgpRWokS2iQ19FnIMW/HjyzeYnIkYTLP5lMq3Q2Y3YEw+4Z9LgJbP?=
- =?us-ascii?Q?rrt9MQoeMPV9YxJ5b+bUgKnQFxVtW3nrDM31ET5YYsV/pjNKo/7aEd2Iq0PO?=
- =?us-ascii?Q?SEe2DeZuAzePezNflYSaLhRTF8lVEyZnXgC6QgPhXxaTweK+SnOR5642gAgr?=
- =?us-ascii?Q?2v4rjZ4gVowLVKdhlD9IbQXEnf303XrwVZIy+PaywT5YLhCqcbl1Cj0n5AKL?=
- =?us-ascii?Q?/GszseycEB2tbqT8aDqKLvWC3KD2DqYacsm69d4ESD+EDVi63sfFyQIVQ9U?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2ffe219-22da-43af-eea4-08db87a1ea64
-X-MS-Exchange-CrossTenant-AuthSource: TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 15:16:09.9134
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2215
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230715005405.3689586-1-rananta@google.com> <20230715005405.3689586-4-rananta@google.com>
+ <199d18de-1214-7683-b87a-03cc7e49719a@redhat.com> <CAJHc60zhVco3uTq97vDHMk8cgg1psPtwHT6MN1eKP1Yr18d9cw@mail.gmail.com>
+ <fb52139b-5854-6370-7de3-bd87b31e3148@redhat.com>
+In-Reply-To: <fb52139b-5854-6370-7de3-bd87b31e3148@redhat.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 18 Jul 2023 09:31:20 -0700
+Message-ID: <CAJHc60yYUYnPxdC3PAM_bcd4w2JpMvZFJ6R3mQWXjqt3YMQgUg@mail.gmail.com>
+Subject: Re: [PATCH v6 03/11] KVM: Allow range-based TLB invalidation from
+ common code
+To:     Shaoqin Huang <shahuang@redhat.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sometimes when driver fails to probe a device, the kernel will retry
-it later. However, this will result in duplicate requests for the
-same pinctrl configuration. In this case, we should not throw error
-logs. This patch adds extra check for the pin group function. Now the
-pinctrl driver only prints error log when attempting to configure the
-same group as different functions.
+Hi Shaoqin,
 
-Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
----
- drivers/pinctrl/mediatek/pinctrl-mtmips.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, Jul 17, 2023 at 7:49=E2=80=AFPM Shaoqin Huang <shahuang@redhat.com>=
+ wrote:
+>
+>
+>
+> On 7/18/23 00:37, Raghavendra Rao Ananta wrote:
+> > On Mon, Jul 17, 2023 at 4:40=E2=80=AFAM Shaoqin Huang <shahuang@redhat.=
+com> wrote:
+> >>
+> >>
+> >>
+> >> On 7/15/23 08:53, Raghavendra Rao Ananta wrote:
+> >>> From: David Matlack <dmatlack@google.com>
+> >>>
+> >>> Make kvm_flush_remote_tlbs_range() visible in common code and create =
+a
+> >>> default implementation that just invalidates the whole TLB.
+> >>>
+> >>> This paves the way for several future features/cleanups:
+> >>>
+> >>>    - Introduction of range-based TLBI on ARM.
+> >>>    - Eliminating kvm_arch_flush_remote_tlbs_memslot()
+> >>>    - Moving the KVM/x86 TDP MMU to common code.
+> >>>
+> >>> No functional change intended.
+> >>>
+> >>> Signed-off-by: David Matlack <dmatlack@google.com>
+> >>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> >>> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> >>> ---
+> >>>    arch/x86/include/asm/kvm_host.h |  3 +++
+> >>>    arch/x86/kvm/mmu/mmu.c          |  9 ++++-----
+> >>>    arch/x86/kvm/mmu/mmu_internal.h |  3 ---
+> >>>    include/linux/kvm_host.h        |  9 +++++++++
+> >>>    virt/kvm/kvm_main.c             | 13 +++++++++++++
+> >>>    5 files changed, 29 insertions(+), 8 deletions(-)
+> >>>
+> >>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/k=
+vm_host.h
+> >>> index a2d3cfc2eb75..08900afbf2ad 100644
+> >>> --- a/arch/x86/include/asm/kvm_host.h
+> >>> +++ b/arch/x86/include/asm/kvm_host.h
+> >>> @@ -1804,6 +1804,9 @@ static inline int kvm_arch_flush_remote_tlbs(st=
+ruct kvm *kvm)
+> >>>                return -ENOTSUPP;
+> >>>    }
+> >>>
+> >>> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> >>> +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gf=
+n, u64 pages);
+> >>> +
+> >>>    #define kvm_arch_pmi_in_guest(vcpu) \
+> >>>        ((vcpu) && (vcpu)->arch.handling_intr_from_guest)
+> >>>
+> >>> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> >>> index ec169f5c7dce..aaa5e336703a 100644
+> >>> --- a/arch/x86/kvm/mmu/mmu.c
+> >>> +++ b/arch/x86/kvm/mmu/mmu.c
+> >>> @@ -278,16 +278,15 @@ static inline bool kvm_available_flush_remote_t=
+lbs_range(void)
+> >>>        return kvm_x86_ops.flush_remote_tlbs_range;
+> >>>    }
+> >>>
+> >>> -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
+> >>> -                              gfn_t nr_pages)
+> >>> +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gf=
+n, u64 pages)
+> >>>    {
+> >>>        int ret =3D -EOPNOTSUPP;
+> >>>
+> >>>        if (kvm_x86_ops.flush_remote_tlbs_range)
+> >>>                ret =3D static_call(kvm_x86_flush_remote_tlbs_range)(k=
+vm, start_gfn,
+> >>> -                                                                nr_p=
+ages);
+> >>> -     if (ret)
+> >>> -             kvm_flush_remote_tlbs(kvm);
+> >>> +                                                                    =
+ pages);
+> >> This will be good if parameter pages aligned with parameter kvm.
+> >>
+> > Agreed, but pulling 'pages' above brings the char count to 83. If
+> > that's acceptable, I'm happy to do it in v7.
+> > Hi Raghavendra,
+>
+> no need to pulling 'pages' above, just delete one tab, and add some
+> space before the pages, just like the original `nr_pages` position.
+>
+Oh yes, that can be done. Thanks!
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mtmips.c b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
-index efd77b6c5..8f5493220 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mtmips.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
-@@ -125,8 +125,9 @@ static int mtmips_pmx_group_enable(struct pinctrl_dev *pctrldev,
- 
- 	/* dont allow double use */
- 	if (p->groups[group].enabled) {
--		dev_err(p->dev, "%s is already enabled\n",
--			p->groups[group].name);
-+		if (!p->func[func]->enabled)
-+			dev_err(p->dev, "%s is already enabled\n",
-+				p->groups[group].name);
- 		return 0;
- 	}
- 
--- 
-2.30.2
-
+- Raghavendra
+> Thanks,
+> Shaoqin
+> > Thank you.
+> > Raghavendra
+> >> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> >>> +
+> >>> +     return ret;
+> >>>    }
+> >>>
+> >>>    static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int ind=
+ex);
+> >>> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_i=
+nternal.h
+> >>> index d39af5639ce9..86cb83bb3480 100644
+> >>> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> >>> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> >>> @@ -170,9 +170,6 @@ bool kvm_mmu_slot_gfn_write_protect(struct kvm *k=
+vm,
+> >>>                                    struct kvm_memory_slot *slot, u64 =
+gfn,
+> >>>                                    int min_level);
+> >>>
+> >>> -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
+> >>> -                              gfn_t nr_pages);
+> >>> -
+> >>>    /* Flush the given page (huge or not) of guest memory. */
+> >>>    static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_=
+t gfn, int level)
+> >>>    {
+> >>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> >>> index e3f968b38ae9..a731967b24ff 100644
+> >>> --- a/include/linux/kvm_host.h
+> >>> +++ b/include/linux/kvm_host.h
+> >>> @@ -1359,6 +1359,7 @@ int kvm_vcpu_yield_to(struct kvm_vcpu *target);
+> >>>    void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool yield_to_kernel_=
+mode);
+> >>>
+> >>>    void kvm_flush_remote_tlbs(struct kvm *kvm);
+> >>> +void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 pag=
+es);
+> >>>
+> >>>    #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+> >>>    int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, in=
+t min);
+> >>> @@ -1486,6 +1487,14 @@ static inline int kvm_arch_flush_remote_tlbs(s=
+truct kvm *kvm)
+> >>>    }
+> >>>    #endif
+> >>>
+> >>> +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> >>> +static inline int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm,
+> >>> +                                                gfn_t gfn, u64 pages=
+)
+> >>> +{
+> >>> +     return -EOPNOTSUPP;
+> >>> +}
+> >>> +#endif
+> >>> +
+> >>>    #ifdef __KVM_HAVE_ARCH_NONCOHERENT_DMA
+> >>>    void kvm_arch_register_noncoherent_dma(struct kvm *kvm);
+> >>>    void kvm_arch_unregister_noncoherent_dma(struct kvm *kvm);
+> >>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> >>> index d6b050786155..804470fccac7 100644
+> >>> --- a/virt/kvm/kvm_main.c
+> >>> +++ b/virt/kvm/kvm_main.c
+> >>> @@ -366,6 +366,19 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+> >>>    }
+> >>>    EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
+> >>>
+> >>> +void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 pag=
+es)
+> >>> +{
+> >>> +     if (!kvm_arch_flush_remote_tlbs_range(kvm, gfn, pages))
+> >>> +             return;
+> >>> +
+> >>> +     /*
+> >>> +      * Fall back to a flushing entire TLBs if the architecture rang=
+e-based
+> >>> +      * TLB invalidation is unsupported or can't be performed for wh=
+atever
+> >>> +      * reason.
+> >>> +      */
+> >>> +     kvm_flush_remote_tlbs(kvm);
+> >>> +}
+> >>> +
+> >>>    static void kvm_flush_shadow_all(struct kvm *kvm)
+> >>>    {
+> >>>        kvm_arch_flush_shadow_all(kvm);
+> >>
+> >> --
+> >> Shaoqin
+> >>
+> >
+>
+> --
+> Shaoqin
+>
