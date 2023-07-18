@@ -2,66 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9537575B3
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 09:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E917576CC
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 10:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjGRHvX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jul 2023 03:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S231818AbjGRIkG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jul 2023 04:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGRHvW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 03:51:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395EEDD
-        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 00:50:41 -0700 (PDT)
+        with ESMTP id S231477AbjGRIkF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 04:40:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ADFE4F
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 01:39:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689666640;
+        s=mimecast20190719; t=1689669568;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IQV8O6VkoZMK+uzlvNWBITxOlq3iVkMNabGAT3CedZ4=;
-        b=ae8z2YoMLuk9Yo9dhNeMlS9IzML7pU7nsGML6tLhl9oqoL5VpVm6WZUV3BvDA/5FhNLbrE
-        4gmGUdUPMaj/FSp33L0NHC0EcDeUVwxuqjBs7XNQutck9P0E5SWmdSq91GlKWDUsAX6mWT
-        SAl3vkMJHK1FIDfrTDC0j1GgkzxQj/Y=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=48OfsAs+5NoliWawjnL6mrqynpB+mYbsWNJ2N0teO4w=;
+        b=ZcNcd7BUBnlW5ef07InP4qh+CXmP3//x42h+6KkHe8zJOK0n9oT9g0y6W/ehB+qHMatmcw
+        Kf0/QgsUyWPFa8xrIeo741jLcPHKMcKOuRT/pD7KMZ08fjj2lXPIs25ToXrdu6zX7iyncC
+        ZauNHXYSMNIJlWS18hN+GSvlY76wO7Q=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-338-OsZmym7sNeG14Q4U-LaE6A-1; Tue, 18 Jul 2023 03:50:38 -0400
-X-MC-Unique: OsZmym7sNeG14Q4U-LaE6A-1
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2633d76a265so1245216a91.0
-        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 00:50:38 -0700 (PDT)
+ us-mta-629-AQgMV_wiOQG2SvyskZ8XZQ-1; Tue, 18 Jul 2023 04:39:26 -0400
+X-MC-Unique: AQgMV_wiOQG2SvyskZ8XZQ-1
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-543c2538071so743625a12.1
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 01:39:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689666637; x=1692258637;
+        d=1e100.net; s=20221208; t=1689669566; x=1692261566;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IQV8O6VkoZMK+uzlvNWBITxOlq3iVkMNabGAT3CedZ4=;
-        b=PO9GqC6101/Rfe1bFXY+W2onkeQVgmR7WQcIHYMEH0F3lfBDCVFAgQh6tck1ZhYd7W
-         Pyoz5goN2g0HkvgpCWVc7RqhCwE0VWEMw5SYlKQIm6306+n3gTCKaSnGuCpTjrsrDc7M
-         2uvrsM0xPr8zuW8KFNJ5N5a/4S7s4gRC85UF3MF+7LIE370ZHo4hK8wKk3Mooz8GFK7b
-         MQ9dqQ2R5dtoOmjyR58rTEgKJMAm+iZ6ofD5uJogKGhdZTlGcp+kmRSzkkUw7BjM1/2J
-         GUuTpAX39RGTfdm4SZCHMIiLo/KkfA0Pshg9+1rjxBUzWvaMF1YRQXvWrQQOd22/1PzQ
-         pvcQ==
-X-Gm-Message-State: ABy/qLYIF145iJiRQCNIRPmjf5mlhZgirbPJfqDjPFy3rBj3G9faLOcZ
-        oLQbDevx5tmL+4yhciR+W13/jHagd+/MPVhUHWMq270hnniFJLyUSCKaQP1VhMmHytHDGiFioPa
-        Y4FwvjFaCSvwJpCPdl5Y7hQ==
-X-Received: by 2002:a05:6a20:a111:b0:133:6e3d:728a with SMTP id q17-20020a056a20a11100b001336e3d728amr11334189pzk.6.1689666637190;
-        Tue, 18 Jul 2023 00:50:37 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFD2KNTmEnZo1x3FiDeADMJZauRC0v1yUa82OuIn2vMpvvXR2PsgNf3c6C22aGrV8c2mvw/Zg==
-X-Received: by 2002:a05:6a20:a111:b0:133:6e3d:728a with SMTP id q17-20020a056a20a11100b001336e3d728amr11334171pzk.6.1689666636842;
-        Tue, 18 Jul 2023 00:50:36 -0700 (PDT)
+        bh=48OfsAs+5NoliWawjnL6mrqynpB+mYbsWNJ2N0teO4w=;
+        b=ei9f8zsGiQIZsX1PFG6sx5O3VdlBOSz13tqV/2bd7lcgyc6rpxjajAf+OdorL8AiPr
+         LjT3PAOQpB1mwdb8MRXRFLSnKjeMp5XbwYE/Tv4eFWc88BgItndaF1nYAc5fkpQ8bRaS
+         61YGYOlt2+6X6HgLh5T7trgObWZak8GzJAx7NrIZDqgSj1zDp0+A6YssHkrsy9RdgThe
+         YceB9JUssARQaIKkgk1wDlN4W51WoF9DmLGRN5qtMRZWmbGef/8wvF3wNtSLL3XNtM4S
+         nit5zpa/uuFXV+X/09kHMXz/7qhiQSVGkAtP7AOysRmzSeAYYob77e9MbZu4i8zdB3Ff
+         65+A==
+X-Gm-Message-State: ABy/qLZTKtswWhNz8g0A09N+CVmWX5G1sxUzC1EgkEr1kfDC3a2+8Fte
+        QnimhnyTpMGTgVI//OyTRrAL4BuE4husUkwDLTolY5YRJdMnWdZoz8uhWsKLtuwXbf1u9k9AbXf
+        4sdnqGJatevFWvzNFcqgFFg==
+X-Received: by 2002:a05:6a21:338e:b0:123:149b:a34f with SMTP id yy14-20020a056a21338e00b00123149ba34fmr11522166pzb.1.1689669565976;
+        Tue, 18 Jul 2023 01:39:25 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFn6VTd9NoeqQyeoZ4mz9lw2meP9X5GlAOs2CSTs0WWxzf4uI+E1rzir2tOn6PnHRRKr5e2eQ==
+X-Received: by 2002:a05:6a21:338e:b0:123:149b:a34f with SMTP id yy14-20020a056a21338e00b00123149ba34fmr11522141pzb.1.1689669565640;
+        Tue, 18 Jul 2023 01:39:25 -0700 (PDT)
 Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id x53-20020a056a000bf500b00684ca1b45b9sm973422pfu.149.2023.07.18.00.50.32
+        by smtp.gmail.com with ESMTPSA id p9-20020a639509000000b0055bbc746272sm1140176pgd.17.2023.07.18.01.39.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 00:50:36 -0700 (PDT)
-Message-ID: <0b2b367e-30c7-672e-f249-e4100c4dff5f@redhat.com>
-Date:   Tue, 18 Jul 2023 15:50:31 +0800
+        Tue, 18 Jul 2023 01:39:25 -0700 (PDT)
+Message-ID: <148fecc6-7ad5-1039-4466-7c1e5a9df911@redhat.com>
+Date:   Tue, 18 Jul 2023 16:39:20 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v6 06/11] KVM: arm64: Implement
- __kvm_tlb_flush_vmid_range()
+Subject: Re: [PATCH v6 07/11] KVM: arm64: Define kvm_tlb_flush_vmid_range()
 Content-Language: en-US
 To:     Raghavendra Rao Ananta <rananta@google.com>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -82,9 +81,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>
 References: <20230715005405.3689586-1-rananta@google.com>
- <20230715005405.3689586-7-rananta@google.com>
+ <20230715005405.3689586-8-rananta@google.com>
 From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20230715005405.3689586-7-rananta@google.com>
+In-Reply-To: <20230715005405.3689586-8-rananta@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -98,157 +97,72 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Raghavendra,
+
 
 On 7/15/23 08:54, Raghavendra Rao Ananta wrote:
-> Define  __kvm_tlb_flush_vmid_range() (for VHE and nVHE)
-> to flush a range of stage-2 page-tables using IPA in one go.
-> If the system supports FEAT_TLBIRANGE, the following patches
-> would conviniently replace global TLBI such as vmalls12e1is
-> in the map, unmap, and dirty-logging paths with ripas2e1is
-> instead.
+> Implement the helper kvm_tlb_flush_vmid_range() that acts
+> as a wrapper for range-based TLB invalidations. For the
+> given VMID, use the range-based TLBI instructions to do
+> the job or fallback to invalidating all the TLB entries.
 > 
 > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > Reviewed-by: Gavin Shan <gshan@redhat.com>
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > ---
->   arch/arm64/include/asm/kvm_asm.h   |  3 +++
->   arch/arm64/kvm/hyp/nvhe/hyp-main.c | 11 +++++++++++
->   arch/arm64/kvm/hyp/nvhe/tlb.c      | 30 ++++++++++++++++++++++++++++++
->   arch/arm64/kvm/hyp/vhe/tlb.c       | 23 +++++++++++++++++++++++
->   4 files changed, 67 insertions(+)
+>   arch/arm64/include/asm/kvm_pgtable.h | 10 ++++++++++
+>   arch/arm64/kvm/hyp/pgtable.c         | 20 ++++++++++++++++++++
+>   2 files changed, 30 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-> index 7d170aaa2db4..2c27cb8cf442 100644
-> --- a/arch/arm64/include/asm/kvm_asm.h
-> +++ b/arch/arm64/include/asm/kvm_asm.h
-> @@ -70,6 +70,7 @@ enum __kvm_host_smccc_func {
->   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_ipa,
->   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_ipa_nsh,
->   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid,
-> +	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_range,
->   	__KVM_HOST_SMCCC_FUNC___kvm_flush_cpu_context,
->   	__KVM_HOST_SMCCC_FUNC___kvm_timer_set_cntvoff,
->   	__KVM_HOST_SMCCC_FUNC___vgic_v3_read_vmcr,
-> @@ -229,6 +230,8 @@ extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_t ipa,
->   extern void __kvm_tlb_flush_vmid_ipa_nsh(struct kvm_s2_mmu *mmu,
->   					 phys_addr_t ipa,
->   					 int level);
-> +extern void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
-> +					phys_addr_t start, unsigned long pages);
->   extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
->   
->   extern void __kvm_timer_set_cntvoff(u64 cntvoff);
-> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> index a169c619db60..857d9bc04fd4 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> @@ -135,6 +135,16 @@ static void handle___kvm_tlb_flush_vmid_ipa_nsh(struct kvm_cpu_context *host_ctx
->   	__kvm_tlb_flush_vmid_ipa_nsh(kern_hyp_va(mmu), ipa, level);
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index 8294a9a7e566..5e8b1ff07854 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -754,4 +754,14 @@ enum kvm_pgtable_prot kvm_pgtable_stage2_pte_prot(kvm_pte_t pte);
+>    *	   kvm_pgtable_prot format.
+>    */
+>   enum kvm_pgtable_prot kvm_pgtable_hyp_pte_prot(kvm_pte_t pte);
+> +
+> +/**
+> + * kvm_tlb_flush_vmid_range() - Invalidate/flush a range of TLB entries
+> + *
+> + * @mmu:	Stage-2 KVM MMU struct
+> + * @addr:	The base Intermediate physical address from which to invalidate
+> + * @size:	Size of the range from the base to invalidate
+> + */
+> +void kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t addr, size_t size);
+>   #endif	/* __ARM64_KVM_PGTABLE_H__ */
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index aa740a974e02..5d14d5d5819a 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -670,6 +670,26 @@ static bool stage2_has_fwb(struct kvm_pgtable *pgt)
+>   	return !(pgt->flags & KVM_PGTABLE_S2_NOFWB);
 >   }
 >   
-> +static void
-> +handle___kvm_tlb_flush_vmid_range(struct kvm_cpu_context *host_ctxt)
+> +void kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t addr, size_t size)
 > +{
-> +	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
-> +	DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
-> +	DECLARE_REG(unsigned long, pages, host_ctxt, 3);
+> +	unsigned long pages, inval_pages;
 > +
-> +	__kvm_tlb_flush_vmid_range(kern_hyp_va(mmu), start, pages);
+> +	if (!system_supports_tlb_range()) {
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> +		return;
+> +	}
+> +
+> +	pages = size >> PAGE_SHIFT;
+> +	while (pages > 0) {
+> +		inval_pages = min(pages, MAX_TLBI_RANGE_PAGES);
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid_range, mmu, addr, inval_pages);
+> +
+> +		addr += inval_pages << PAGE_SHIFT;
+> +		pages -= inval_pages;
+> +	}
 > +}
 > +
->   static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_ctxt)
->   {
->   	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
-> @@ -327,6 +337,7 @@ static const hcall_t host_hcall[] = {
->   	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
->   	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa_nsh),
->   	HANDLE_FUNC(__kvm_tlb_flush_vmid),
-> +	HANDLE_FUNC(__kvm_tlb_flush_vmid_range),
->   	HANDLE_FUNC(__kvm_flush_cpu_context),
->   	HANDLE_FUNC(__kvm_timer_set_cntvoff),
->   	HANDLE_FUNC(__vgic_v3_read_vmcr),
-> diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tlb.c
-> index b9991bbd8e3f..09347111c2cd 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
-> @@ -182,6 +182,36 @@ void __kvm_tlb_flush_vmid_ipa_nsh(struct kvm_s2_mmu *mmu,
->   	__tlb_switch_to_host(&cxt);
->   }
+>   #define KVM_S2_MEMATTR(pgt, attr) PAGE_S2_MEMATTR(attr, stage2_has_fwb(pgt))
 >   
-> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
-> +				phys_addr_t start, unsigned long pages)
-> +{
-> +	struct tlb_inv_context cxt;
-> +	unsigned long stride;
-> +
-> +	/*
-> +	 * Since the range of addresses may not be mapped at
-> +	 * the same level, assume the worst case as PAGE_SIZE
-> +	 */
-> +	stride = PAGE_SIZE;
-> +	start = round_down(start, stride);
-> +
-> +	/* Switch to requested VMID */
-> +	__tlb_switch_to_guest(mmu, &cxt, false);
-> +
-> +	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
-> +
-> +	dsb(ish);
-> +	__tlbi(vmalle1is);
-> +	dsb(ish);
-> +	isb();
-> +
-> +	/* See the comment in __kvm_tlb_flush_vmid_ipa() */
-> +	if (icache_is_vpipt())
-> +		icache_inval_all_pou();
-> +
-> +	__tlb_switch_to_host(&cxt);
-> +}
-> +
->   void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu)
->   {
->   	struct tlb_inv_context cxt;
-> diff --git a/arch/arm64/kvm/hyp/vhe/tlb.c b/arch/arm64/kvm/hyp/vhe/tlb.c
-> index e69da550cdc5..4ed8a1786812 100644
-> --- a/arch/arm64/kvm/hyp/vhe/tlb.c
-> +++ b/arch/arm64/kvm/hyp/vhe/tlb.c
-> @@ -138,6 +138,29 @@ void __kvm_tlb_flush_vmid_ipa_nsh(struct kvm_s2_mmu *mmu,
->   	dsb(nsh);
->   	__tlbi(vmalle1);
->   	dsb(nsh);
-> +
-> +	__tlb_switch_to_host(&cxt);
-> +}
-> +
-> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
-> +				phys_addr_t start, unsigned long pages)
-> +{
-> +	struct tlb_inv_context cxt;
-> +	unsigned long stride;
-> +
-> +	/*
-> +	 * Since the range of addresses may not be mapped at
-> +	 * the same level, assume the worst case as PAGE_SIZE
-> +	 */
-> +	stride = PAGE_SIZE;
-> +	start = round_down(start, stride);
-> +
-
-Is there lack of switch VMID to guest?
-	__tlb_switch_to_guest(mmu, &cxt, false);
-
-Thanks,
-Shaoqin
-
-> +	dsb(ishst);
-> +	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
-> +
-> +	dsb(ish);
-> +	__tlbi(vmalle1is);
-> +	dsb(ish);
->   	isb();
->   
->   	__tlb_switch_to_host(&cxt);
+>   static int stage2_set_prot_attr(struct kvm_pgtable *pgt, enum kvm_pgtable_prot prot,
 
 -- 
 Shaoqin
