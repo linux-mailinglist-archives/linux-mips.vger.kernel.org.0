@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C944D758955
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Jul 2023 01:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA9475895C
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Jul 2023 01:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjGRXuf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jul 2023 19:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S231177AbjGRXur (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jul 2023 19:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjGRXto (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 19:49:44 -0400
-Received: from mail-oa1-x4a.google.com (mail-oa1-x4a.google.com [IPv6:2001:4860:4864:20::4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A82D210B
-        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 16:48:53 -0700 (PDT)
-Received: by mail-oa1-x4a.google.com with SMTP id 586e51a60fabf-1ad34f55a63so9569382fac.2
-        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 16:48:53 -0700 (PDT)
+        with ESMTP id S230369AbjGRXty (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 19:49:54 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FA82120
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 16:48:54 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b89e3715acso32241985ad.3
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jul 2023 16:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689724131; x=1692316131;
+        d=google.com; s=20221208; t=1689724133; x=1692316133;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=muvilKyoWvn1tarN80afquV4Wd3ZvyUZATzGD2ucPnA=;
-        b=dy1/NFlQGuJqswhd4jyp5/5Y2DKjXWq8ZhDnL7jyfQUkTP7A9Hvq/HvrZglV4JQg4M
-         0K4GnyosjYX3JEla9t9lm8LJXLHv4GUKKzg9xFm9cJWrlQ5Qmy5LmSHitAR/Xzi9H8/Y
-         MjJIFDOPL8g3wik3LCZjllYyd45Gr2H0qgazCaqc+yiHTFw7sn+VQEAa9DzzRpRQoil4
-         OF2suL13dOrJbxrD1Es2a+3MSZoSnJ4hgva3/KXiELtegBBB1WkzGy/iAanliFh6iYW0
-         B8x8MynR4QN8rTTnTiUPKbxJnJ7ZIBs38bI6aS2sGXphM22HDrUDYnhUpurmEDIvnFzg
-         o5tw==
+        bh=SDxWIrfosG9XJ1i6+ao4lNZmMm/71hk0CPfpAh3rles=;
+        b=oKgQFwiCrPvHzuuXJTxGw9fTJQCZKL9TyIsnHUo20k7J6vJr/dP2UuT8GyfaXNhKWl
+         lfnwI4SNZlla+krW1fx/4HTGrmx9tbRfRVWIu3HGnyMHAJnHjaH8b3Nn7OD9lub8Upfz
+         ScGl6hIrQNtyqOKMdvwG71E9U1LJYrTTZQq71Kwv4L3GIqczSYB1Q2ibrVYwZRMv7ks2
+         QNhyu3W0Ns8Grpmlyc83iZpzHpUsL+aloKwTrirYI0WDq4iN8t2n8ha5cP4AK06m8uQ9
+         dXuqm5q+qG2yKgB+nUEYuog82s4uX9rRPSCnrZx4hsx8m3v5+ZWIujkgaic/poWXwLCP
+         o9Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689724131; x=1692316131;
+        d=1e100.net; s=20221208; t=1689724133; x=1692316133;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=muvilKyoWvn1tarN80afquV4Wd3ZvyUZATzGD2ucPnA=;
-        b=KEjy2VhTM+l68eUCAaO6fB2MwQMYWLLsPWEUXyi9MpG7PJ7XVDfrWp0FI+mExjs7/y
-         kGwLShvZ7A3GuLFHQbAjSm19JXY8JsQPWWbRYoiHk/Sfd4NC3F+Xbe1lZcRpDJcG5zjS
-         dv2CmwQRnHDtLkeqEdQpTtdSWMnooMnBahYaRApUZMaPw8CPk+U3FcXSMYLbRJ5tKia5
-         samPlfjSeMUkYsY+o7RfFAM0Nk8hMWo4cVxLhXG1979gokjDMl5xR6cgkcou8mFhiq9o
-         FQC8gTpxfbaaS8Iyz2qGFaXrzDk7p75i65Jwryjq2EGlcBCublKLabom1TwOlcLnxBJR
-         SaKA==
-X-Gm-Message-State: ABy/qLaK0M7hCAsrTm0hpBMgAUqqGP3gjOPewjhXTgQKqbOMj3im+EGn
-        HY/falBpdLzUaPUTE/eb/rTSHUOCQaI=
-X-Google-Smtp-Source: APBJJlE49QI+GKjHT7/jwtmKHpb+kXt66N6K7QDVRkzJgeGH+MWu0bF/51TSJcseqrb6U54aALrx+EClwNQ=
+        bh=SDxWIrfosG9XJ1i6+ao4lNZmMm/71hk0CPfpAh3rles=;
+        b=I2nZ3VSnazO5tRGmmYolRyGg34+oZMm6gLVbSOnOnLb9UxeG/vO9wfyqM/oPaW5pC7
+         f+EvAlYbkPnu/DSkbuGPLJnFhNuajad10eQt0Q5xRdaxfvODoxdAnYoeu1VcPgM4bKUD
+         9sMSTwgVWQbxEkeagloOVpQz6iwcW8ZDnsV5T94N3KpYL2nIcyi5HXnQDGeZ6GRWpiRM
+         WK/2YypAoI+Q9VhW9Gw5Rd2z+hZtlgi1yy2E5fmoL/IF7sEzBst8uh18EsC+xKJ7imIM
+         uYl7cdP91i2hDr6Wg2U2JobI2gUVxj8cKCz4ai7YJAJI6X+PYkQN583EztXTebwZ5Gvy
+         kciw==
+X-Gm-Message-State: ABy/qLbqsMk/EWnhx7XFSDhUo0qTK3UqBKWAsWlqCC5UXM4HEkpfzbDa
+        eVSyVirGQZjGC3jTVfOeajpq5ZNDbOM=
+X-Google-Smtp-Source: APBJJlFRkrJKR6wk6kjyyawD9jUVadK517ZfNP5yf1yjj9/O0JQ+6He3HEMs3LUDgHlJok/ugi+AWDRSDQU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6870:c796:b0:1b0:20bd:eef with SMTP id
- dy22-20020a056870c79600b001b020bd0eefmr758790oab.2.1689724131216; Tue, 18 Jul
- 2023 16:48:51 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:c412:b0:1ba:1704:89d1 with SMTP id
+ k18-20020a170902c41200b001ba170489d1mr21516plk.10.1689724133087; Tue, 18 Jul
+ 2023 16:48:53 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 18 Jul 2023 16:44:53 -0700
+Date:   Tue, 18 Jul 2023 16:44:54 -0700
 In-Reply-To: <20230718234512.1690985-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230718234512.1690985-1-seanjc@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230718234512.1690985-11-seanjc@google.com>
-Subject: [RFC PATCH v11 10/29] mm: Add AS_UNMOVABLE to mark mapping as
- completely unmovable
+Message-ID: <20230718234512.1690985-12-seanjc@google.com>
+Subject: [RFC PATCH v11 11/29] security: Export security_inode_init_security_anon()
+ for use by KVM
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -104,68 +104,21 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- include/linux/pagemap.h | 11 +++++++++++
- mm/compaction.c         |  4 ++++
- mm/migrate.c            |  2 ++
- 3 files changed, 17 insertions(+)
+ security/security.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 716953ee1ebd..931d2f1da7d5 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -203,6 +203,7 @@ enum mapping_flags {
- 	/* writeback related tags are not used */
- 	AS_NO_WRITEBACK_TAGS = 5,
- 	AS_LARGE_FOLIO_SUPPORT = 6,
-+	AS_UNMOVABLE	= 7,	/* The mapping cannot be moved, ever */
- };
- 
- /**
-@@ -273,6 +274,16 @@ static inline int mapping_use_writeback_tags(struct address_space *mapping)
- 	return !test_bit(AS_NO_WRITEBACK_TAGS, &mapping->flags);
+diff --git a/security/security.c b/security/security.c
+index b720424ca37d..7fc78f0f3622 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1654,6 +1654,7 @@ int security_inode_init_security_anon(struct inode *inode,
+ 	return call_int_hook(inode_init_security_anon, 0, inode, name,
+ 			     context_inode);
  }
++EXPORT_SYMBOL_GPL(security_inode_init_security_anon);
  
-+static inline void mapping_set_unmovable(struct address_space *mapping)
-+{
-+	set_bit(AS_UNMOVABLE, &mapping->flags);
-+}
-+
-+static inline bool mapping_unmovable(struct address_space *mapping)
-+{
-+	return test_bit(AS_UNMOVABLE, &mapping->flags);
-+}
-+
- static inline gfp_t mapping_gfp_mask(struct address_space * mapping)
- {
- 	return mapping->gfp_mask;
-diff --git a/mm/compaction.c b/mm/compaction.c
-index dbc9f86b1934..a3d2b132df52 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1047,6 +1047,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 		if (!mapping && (folio_ref_count(folio) - 1) > folio_mapcount(folio))
- 			goto isolate_fail_put;
- 
-+		/* The mapping truly isn't movable. */
-+		if (mapping && mapping_unmovable(mapping))
-+			goto isolate_fail_put;
-+
- 		/*
- 		 * Only allow to migrate anonymous pages in GFP_NOFS context
- 		 * because those do not depend on fs locks.
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 24baad2571e3..c00a4ca86698 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -954,6 +954,8 @@ static int move_to_new_folio(struct folio *dst, struct folio *src,
- 
- 		if (!mapping)
- 			rc = migrate_folio(mapping, dst, src, mode);
-+		else if (mapping_unmovable(mapping))
-+			rc = -EOPNOTSUPP;
- 		else if (mapping->a_ops->migrate_folio)
- 			/*
- 			 * Most folios have a mapping and most filesystems
+ #ifdef CONFIG_SECURITY_PATH
+ /**
 -- 
 2.41.0.255.g8b1d071c50-goog
 
