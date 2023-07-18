@@ -2,96 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224067573FA
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 08:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DBE757436
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jul 2023 08:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjGRGWU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jul 2023 02:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S231349AbjGRGcJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jul 2023 02:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjGRGWT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 02:22:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F498A6
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 23:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689661299;
+        with ESMTP id S231286AbjGRGcE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jul 2023 02:32:04 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7EE136;
+        Mon, 17 Jul 2023 23:32:01 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E080220008;
+        Tue, 18 Jul 2023 06:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689661919;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RvSmM7MQhdDXRVA2Uryq4YVNwYFzTKNqJe4q9sLr7I8=;
-        b=DW6BHWzoJE4MwF2YvhbOpt7PRqyRpbPvDQ/PVdAVKb9yIMhIfE+6JD8WFhV5/dxUYFgsnH
-        1Y54nwVuos+bdUNcnKpbayTpf9c1h7i4En9fOtIcaDLLs889oRJw3wQzQjKGMzvbYvJBgN
-        iR0ur+ri3Oh4F8chur7Ef7ODAay2bxo=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-428-tFa7JYr9O7ecLmZyEUQDmA-1; Tue, 18 Jul 2023 02:21:38 -0400
-X-MC-Unique: tFa7JYr9O7ecLmZyEUQDmA-1
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1baff697979so7372425ad.0
-        for <linux-mips@vger.kernel.org>; Mon, 17 Jul 2023 23:21:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689661297; x=1690266097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RvSmM7MQhdDXRVA2Uryq4YVNwYFzTKNqJe4q9sLr7I8=;
-        b=PfWSDnaPd5WFZyTV0Q8sN/lSn2x9B649/Ub7GV4RL77WLz0luj+x71ktlk74mzhoUF
-         zS/WUVP53rG+CaqreET8QJ2OYejTui4+R2ZBsrpM9Oiz6/mtjie+swBBb8rFRxIKtjw2
-         fIDEx3HrZwjg2XFdvleAf3vlAmQl+GKYpmLsm3vgRDgmpLfrryxA6BfXtnaU0Q5Q6fiq
-         8/psqkmzlBgcIK8DBe16wmCC21uyQGgGDElMmnl/Bn43nbMPVgcUE3kcXpUzfjQx/TF7
-         kOw+MawXG3VBtGWm8at5w0XquUZWCi5u1nRbVem0VdEYaSH5gJgR+UDFpVq+8ZVTGiit
-         OKdA==
-X-Gm-Message-State: ABy/qLYHXl1v6KmJZhxkCxr+JV7RgXEITsxSmpuJ1+Li26lI4Z3NiT7H
-        ueQpW6c8eLDoHngRjg8EPfYLZ81tYoLCMEfxtiYL0rmmENNmpoCwpf5gbcCFGenUW3r/Oiuwqto
-        Xe3/TJkDkC3waTlsGefNU4Q==
-X-Received: by 2002:a17:902:da85:b0:1b8:9fc4:2733 with SMTP id j5-20020a170902da8500b001b89fc42733mr10753860plx.3.1689661297284;
-        Mon, 17 Jul 2023 23:21:37 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGwK4O80e6YQEGnzMYTYf6ot+mFwRDf85YBN8hCoLDeCfJGnn+lZlhDjDiUb0dFs/RD5ECIfQ==
-X-Received: by 2002:a17:902:da85:b0:1b8:9fc4:2733 with SMTP id j5-20020a170902da8500b001b89fc42733mr10753835plx.3.1689661296887;
-        Mon, 17 Jul 2023 23:21:36 -0700 (PDT)
-Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c20d00b001b392bf9192sm941082pll.145.2023.07.17.23.21.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 23:21:36 -0700 (PDT)
-Message-ID: <8987d68b-d62a-7a9b-3aa3-cd5cc7ad551c@redhat.com>
-Date:   Tue, 18 Jul 2023 14:21:30 +0800
+        bh=RpKAtUiUinq9Lhw+v54h3QcTHPMMcdg2W9j58F9msCI=;
+        b=lVsAfqer8xWiySiEq4z7Whp9otUwyCQXKtPI1tRr5f7imi5WmvidsvbXpCUGXwxk1c+lvE
+        oUHmSljh698Kg7YXWz38yD7YKynczdgakNvh9W31vXeG3ASFtYmUbHMMJvu2jAXs6WXMFe
+        qDOvnq5fNCwuhkU5Pv9JkSJ8uAbs1yjvZIjT+WnxMiQeDJLtUHfZO7aM8YIAG7auX7E6KB
+        neoUdUzoHRJnTzkhM6WLVgYwYyzcHYvDk8cc5I9mppjSrEmHREOSYJaDUdNw61xuiMD/34
+        m7I4N+6JbCgr4Op1Mxo+kriyEeSldJsgWRrKtcIj3mGk+C0lffE+F3dHz9dysw==
+Date:   Tue, 18 Jul 2023 08:31:49 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Li Yang <leoyang.li@nxp.com>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Michal Simek <michal.simek@amd.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Richard Leitner <richard.leitner@linux.dev>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] usb: Explicitly include correct DT includes
+Message-ID: <20230718083149.77fa57ef@bootlin.com>
+In-Reply-To: <20230714175027.4065135-1-robh@kernel.org>
+References: <20230714175027.4065135-1-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 05/11] arm64: tlb: Refactor the core flush algorithm of
- __flush_tlb_range
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Gavin Shan <gshan@redhat.com>
-References: <20230715005405.3689586-1-rananta@google.com>
- <20230715005405.3689586-6-rananta@google.com>
-From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20230715005405.3689586-6-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: herve.codina@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,160 +98,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Rob,
 
+On Fri, 14 Jul 2023 11:50:23 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-On 7/15/23 08:53, Raghavendra Rao Ananta wrote:
-> Currently, the core TLB flush functionality of __flush_tlb_range()
-> hardcodes vae1is (and variants) for the flush operation. In the
-> upcoming patches, the KVM code reuses this core algorithm with
-> ipas2e1is for range based TLB invalidations based on the IPA.
-> Hence, extract the core flush functionality of __flush_tlb_range()
-> into its own macro that accepts an 'op' argument to pass any
-> TLBI operation, such that other callers (KVM) can benefit.
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
 > 
-> No functional changes intended.
-> 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   arch/arm64/include/asm/tlbflush.h | 109 +++++++++++++++---------------
->   1 file changed, 56 insertions(+), 53 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
-> index 412a3b9a3c25..f7fafba25add 100644
-> --- a/arch/arm64/include/asm/tlbflush.h
-> +++ b/arch/arm64/include/asm/tlbflush.h
-> @@ -278,14 +278,62 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
->    */
->   #define MAX_TLBI_OPS	PTRS_PER_PTE
->   
-> +/* When the CPU does not support TLB range operations, flush the TLB
-> + * entries one by one at the granularity of 'stride'. If the TLB
-> + * range ops are supported, then:
-> + *
-> + * 1. If 'pages' is odd, flush the first page through non-range
-> + *    operations;
-> + *
-> + * 2. For remaining pages: the minimum range granularity is decided
-> + *    by 'scale', so multiple range TLBI operations may be required.
-> + *    Start from scale = 0, flush the corresponding number of pages
-> + *    ((num+1)*2^(5*scale+1) starting from 'addr'), then increase it
-> + *    until no pages left.
-> + *
-> + * Note that certain ranges can be represented by either num = 31 and
-> + * scale or num = 0 and scale + 1. The loop below favours the latter
-> + * since num is limited to 30 by the __TLBI_RANGE_NUM() macro.
-> + */
-> +#define __flush_tlb_range_op(op, start, pages, stride,			\
-> +				asid, tlb_level, tlbi_user)		\
-> +do {									\
-> +	int num = 0;							\
-> +	int scale = 0;							\
-> +	unsigned long addr;						\
-> +									\
-> +	while (pages > 0) {						\
-> +		if (!system_supports_tlb_range() ||			\
-> +		    pages % 2 == 1) {					\
-> +			addr = __TLBI_VADDR(start, asid);		\
-> +			__tlbi_level(op, addr, tlb_level);		\
-> +			if (tlbi_user)					\
-> +				__tlbi_user_level(op, addr, tlb_level);	\
-> +			start += stride;				\
-> +			pages -= stride >> PAGE_SHIFT;			\
-> +			continue;					\
-> +		}							\
-> +									\
-> +		num = __TLBI_RANGE_NUM(pages, scale);			\
-> +		if (num >= 0) {						\
-> +			addr = __TLBI_VADDR_RANGE(start, asid, scale,	\
-> +						  num, tlb_level);	\
-> +			__tlbi(r##op, addr);				\
-> +			if (tlbi_user)					\
-> +				__tlbi_user(r##op, addr);		\
-> +			start += __TLBI_RANGE_PAGES(num, scale) << PAGE_SHIFT; \
-> +			pages -= __TLBI_RANGE_PAGES(num, scale);	\
-> +		}							\
-> +		scale++;						\
-> +	}								\
-> +} while (0)
-> +
->   static inline void __flush_tlb_range(struct vm_area_struct *vma,
->   				     unsigned long start, unsigned long end,
->   				     unsigned long stride, bool last_level,
->   				     int tlb_level)
->   {
-> -	int num = 0;
-> -	int scale = 0;
-> -	unsigned long asid, addr, pages;
-> +	unsigned long asid, pages;
->   
->   	start = round_down(start, stride);
->   	end = round_up(end, stride);
-> @@ -307,56 +355,11 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
->   	dsb(ishst);
->   	asid = ASID(vma->vm_mm);
->   
-> -	/*
-> -	 * When the CPU does not support TLB range operations, flush the TLB
-> -	 * entries one by one at the granularity of 'stride'. If the TLB
-> -	 * range ops are supported, then:
-> -	 *
-> -	 * 1. If 'pages' is odd, flush the first page through non-range
-> -	 *    operations;
-> -	 *
-> -	 * 2. For remaining pages: the minimum range granularity is decided
-> -	 *    by 'scale', so multiple range TLBI operations may be required.
-> -	 *    Start from scale = 0, flush the corresponding number of pages
-> -	 *    ((num+1)*2^(5*scale+1) starting from 'addr'), then increase it
-> -	 *    until no pages left.
-> -	 *
-> -	 * Note that certain ranges can be represented by either num = 31 and
-> -	 * scale or num = 0 and scale + 1. The loop below favours the latter
-> -	 * since num is limited to 30 by the __TLBI_RANGE_NUM() macro.
-> -	 */
-> -	while (pages > 0) {
-> -		if (!system_supports_tlb_range() ||
-> -		    pages % 2 == 1) {
-> -			addr = __TLBI_VADDR(start, asid);
-> -			if (last_level) {
-> -				__tlbi_level(vale1is, addr, tlb_level);
-> -				__tlbi_user_level(vale1is, addr, tlb_level);
-> -			} else {
-> -				__tlbi_level(vae1is, addr, tlb_level);
-> -				__tlbi_user_level(vae1is, addr, tlb_level);
-> -			}
-> -			start += stride;
-> -			pages -= stride >> PAGE_SHIFT;
-> -			continue;
-> -		}
-> -
-> -		num = __TLBI_RANGE_NUM(pages, scale);
-> -		if (num >= 0) {
-> -			addr = __TLBI_VADDR_RANGE(start, asid, scale,
-> -						  num, tlb_level);
-> -			if (last_level) {
-> -				__tlbi(rvale1is, addr);
-> -				__tlbi_user(rvale1is, addr);
-> -			} else {
-> -				__tlbi(rvae1is, addr);
-> -				__tlbi_user(rvae1is, addr);
-> -			}
-> -			start += __TLBI_RANGE_PAGES(num, scale) << PAGE_SHIFT;
-> -			pages -= __TLBI_RANGE_PAGES(num, scale);
-> -		}
-> -		scale++;
-> -	}
-> +	if (last_level)
-> +		__flush_tlb_range_op(vale1is, start, pages, stride, asid, tlb_level, true);
-> +	else
-> +		__flush_tlb_range_op(vae1is, start, pages, stride, asid, tlb_level, true);
-> +
->   	dsb(ish);
->   }
->   
 
--- 
-Shaoqin
+[...]
 
+> diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/udc/renesas_usbf.c
+> index 6cd0af83e91e..3482b41d0646 100644
+> --- a/drivers/usb/gadget/udc/renesas_usbf.c
+> +++ b/drivers/usb/gadget/udc/renesas_usbf.c
+> @@ -12,10 +12,9 @@
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+>  #include <linux/kfifo.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+> -#include <linux/of_address.h>
+> -#include <linux/of_irq.h>
+> -#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/types.h>
+>  #include <linux/usb/composite.h>
+
+Acked-by: Herve Codina <herve.codina@bootlin.com>
+
+Best regards,
+Hervé
