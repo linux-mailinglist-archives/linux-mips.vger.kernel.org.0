@@ -2,61 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC58975975A
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Jul 2023 15:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388EA75974C
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Jul 2023 15:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjGSNun (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Jul 2023 09:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S231423AbjGSNuA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Jul 2023 09:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjGSNum (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Jul 2023 09:50:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F38C10FE
-        for <linux-mips@vger.kernel.org>; Wed, 19 Jul 2023 06:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689774556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7gvBqRrgzjiPOFgHQxEB0Nm34S2dkYf27eWyqPPlFhY=;
-        b=MJCgQrIBMcr7wbhfvbs95DRDAv9/Ek8YjI4PKuGYoZ1ZJb3B8nHvcNdwQToE6vqRgl2HsX
-        Nw0b20nrnsMI3rhHGzzkjn4JwDxkIPKKvI+ZCeke872ig7XBJlzc9+CP1seBoWUwrs0f/O
-        xmpG37jVTEXuI3uSdP9abNVIzc724nw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-323-1FkElC4iN3a_0J1apxuu6w-1; Wed, 19 Jul 2023 09:49:14 -0400
-X-MC-Unique: 1FkElC4iN3a_0J1apxuu6w-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-315a03cae87so354708f8f.0
-        for <linux-mips@vger.kernel.org>; Wed, 19 Jul 2023 06:49:13 -0700 (PDT)
+        with ESMTP id S231222AbjGSNt6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Jul 2023 09:49:58 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E166F1986
+        for <linux-mips@vger.kernel.org>; Wed, 19 Jul 2023 06:49:31 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-316f589549cso4060591f8f.1
+        for <linux-mips@vger.kernel.org>; Wed, 19 Jul 2023 06:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689774570; x=1692366570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JeaSSoZd0P4aBDcnBZ8BgOhayrU2NW5OGYbO05NkL/4=;
+        b=mSLGK2c7L5EE4FfadrFnGKrx8rHqMorl3CkK/H11fHsq3cy4XSsKtutECoQcxj7VUH
+         6217O/9tcynPgDcZCiS5kwgKPRQ9yaxcBfet9pGpjP3OtetZCluXE3f4KQeLL37dXcdq
+         Shyafc4xZzvzAf3/I3duYT0A6Lan59ePh67EPf8B6LGZv9LJEeK4tH3b6lkOaji6veEW
+         jV3wN5L8eRb0FEZEQdFL5i8bBvckl20VHoXJydGdhlh18d4M6Z7KwE4oD2NfJGaix4SY
+         m60NOgE8+OkCmcQdiCC141H+NDbenv1Kvjlt/AYNlG4in4PaDFI5cUWT/kWWjIB6GhTf
+         8q+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689774552; x=1690379352;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7gvBqRrgzjiPOFgHQxEB0Nm34S2dkYf27eWyqPPlFhY=;
-        b=kzVc6qXXOuTryw/3Zbm6MvzDSO3kVxMXHQn9VAzmgISFZbmHkmhzJmuBFnExxcbwrn
-         sGI+2C1w1hStxmtjFFMu1C6oi74aN6I4rfba/SS403g27FppZ1Uc6UokZPs8+QmkOVdN
-         LEpSV6szeuktwyOatnYVQPqNhUKidwkQeviK9oeicmnEcu06e/+pwlcFByBj4FLitjhW
-         SC/2e7x+SbWnyUui09P+uqzLAkEWA5Nd22YxugWA++FmRdGJi8K5DNoDUJ2MiaGx5r7/
-         lsO7LE9Rz8BideGKCEcHqT5E/xfJJrG6ai2K4KZEyWEQr8gRg+nW0eUEdSIgKQ6jAG5K
-         bxrQ==
-X-Gm-Message-State: ABy/qLbttESfFKVtfhFbzuowV3CKCT1c9dytbP7UBEQRHezSzzlPniuM
-        AqnHbi4Ww6pxnicP4SzM6NS/kkDEtqQ7/qsF0N9Kr2hAe5Ni6UUV7E2eeN0Gi6x1GDleQSlhnAY
-        IlBc17mNXtYI6NV7FQZQ+8Q==
-X-Received: by 2002:a5d:6a04:0:b0:314:3369:df57 with SMTP id m4-20020a5d6a04000000b003143369df57mr1948359wru.5.1689774552648;
-        Wed, 19 Jul 2023 06:49:12 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFD8G6VPVcqqGeSjptpNDnOnSs3W+CAZM63rDbbbVz9hymKgoyuOl3Kik6r5ce0mC8oQNhizg==
-X-Received: by 2002:a5d:6a04:0:b0:314:3369:df57 with SMTP id m4-20020a5d6a04000000b003143369df57mr1948300wru.5.1689774552274;
-        Wed, 19 Jul 2023 06:49:12 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id q2-20020a5d6582000000b003143bb5ecd5sm5381303wru.69.2023.07.19.06.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 06:49:11 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
+        d=1e100.net; s=20221208; t=1689774570; x=1692366570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JeaSSoZd0P4aBDcnBZ8BgOhayrU2NW5OGYbO05NkL/4=;
+        b=WuvEbTwalqJPtBUk7vdyw4kDPPMjWweF4nqjW85prgkCviN1SRfyYT4DU6vboRwz8m
+         /BqQmDsNiShwprczgiTEab3BP+m3UbuJUfsO1Irnyz6Y6iOV8leZ7fLflZIIjGAuTBMC
+         CD+Hv7pqz0spmrWGcIQR1Aj4VGf+YlfYp7DJ1J6kxBgl2JvNImUUOb713nWf27DY/Acn
+         op3E54lAAXmtY9k/D4Qyh184R2zSYoPWJzPvl+zphiuLiX6OzjPxuC4duabRtCjj8JUT
+         UK6/yeUAFcqEXWDTOSQ97RCEdsJusf9Cb9M00KPvels+jQzcRoGtLa8QQlrzWejJDZaR
+         ZOxQ==
+X-Gm-Message-State: ABy/qLbwbR0+UvgiZQnxKA5YA7yjqmFq5jBrOgEwPVgzxpbl2dskN5mX
+        y+9sYqB2BipssQJ6TzFM62ItAQ==
+X-Google-Smtp-Source: APBJJlEbRVrqi3m5ZvwiJaNOZocZP7fbMQ7EmoV04cKWj5tMJSoThE8C5X94lSqKcc5w5KB/JoRc7Q==
+X-Received: by 2002:adf:d0d1:0:b0:314:824:3777 with SMTP id z17-20020adfd0d1000000b0031408243777mr13524380wrh.48.1689774570336;
+        Wed, 19 Jul 2023 06:49:30 -0700 (PDT)
+Received: from [192.168.69.115] ([176.187.201.220])
+        by smtp.gmail.com with ESMTPSA id w17-20020adfde91000000b00315a57f1128sm5357828wrl.115.2023.07.19.06.49.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jul 2023 06:49:29 -0700 (PDT)
+Message-ID: <32595080-dd79-5cf0-46e7-b82d0df8f067@linaro.org>
+Date:   Wed, 19 Jul 2023 15:49:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v2 5/9] vgacon: remove screen_info dependency
+Content-Language: en-US
 To:     Arnd Bergmann <arnd@kernel.org>, linux-fbdev@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Helge Deller <deller@gmx.de>
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         "David S. Miller" <davem@davemloft.net>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -96,45 +99,91 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 5/9] vgacon: remove screen_info dependency
-In-Reply-To: <20230719123944.3438363-6-arnd@kernel.org>
 References: <20230719123944.3438363-1-arnd@kernel.org>
  <20230719123944.3438363-6-arnd@kernel.org>
-Date:   Wed, 19 Jul 2023 15:49:11 +0200
-Message-ID: <87fs5khuzs.fsf@minerva.mail-host-address-is-not-set>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230719123944.3438363-6-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+Hi Arnd,
 
+On 19/7/23 14:39, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
->
+> 
 > The vga console driver is fairly self-contained, and only used by
 > architectures that explicitly initialize the screen_info settings.
->
+> 
 > Chance every instance that picks the vga console by setting conswitchp
 > to call a function instead, and pass a reference to the screen_info
 > there.
->
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
+>   arch/alpha/kernel/setup.c      |  2 +-
+>   arch/arm/kernel/setup.c        |  2 +-
+>   arch/ia64/kernel/setup.c       |  2 +-
+>   arch/mips/kernel/setup.c       |  2 +-
+>   arch/x86/kernel/setup.c        |  2 +-
+>   drivers/firmware/pcdp.c        |  2 +-
+>   drivers/video/console/vgacon.c | 68 ++++++++++++++++++++--------------
+>   include/linux/console.h        |  7 ++++
+>   8 files changed, 53 insertions(+), 34 deletions(-)
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
--- 
-Best regards,
+> @@ -1074,13 +1077,13 @@ static int vgacon_resize(struct vc_data *c, unsigned int width,
+>   		 * Ho ho!  Someone (svgatextmode, eh?) may have reprogrammed
+>   		 * the video mode!  Set the new defaults then and go away.
+>   		 */
+> -		screen_info.orig_video_cols = width;
+> -		screen_info.orig_video_lines = height;
+> +		vga_si->orig_video_cols = width;
+> +		vga_si->orig_video_lines = height;
+>   		vga_default_font_height = c->vc_cell_height;
+>   		return 0;
+>   	}
+> -	if (width % 2 || width > screen_info.orig_video_cols ||
+> -	    height > (screen_info.orig_video_lines * vga_default_font_height)/
+> +	if (width % 2 || width > vga_si->orig_video_cols ||
+> +	    height > (vga_si->orig_video_lines * vga_default_font_height)/
+>   	    c->vc_cell_height)
+>   		return -EINVAL;
+>   
+> @@ -1110,8 +1113,8 @@ static void vgacon_save_screen(struct vc_data *c)
+>   		 * console initialization routines.
+>   		 */
+>   		vga_bootup_console = 1;
+> -		c->state.x = screen_info.orig_x;
+> -		c->state.y = screen_info.orig_y;
+> +		c->state.x = vga_si->orig_x;
+> +		c->state.y = vga_si->orig_y;
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Not really my area, so bare with me if this is obviously not
+possible :) If using DUMMY_CONSOLE, can we trigger a save_screen
+/ resize? If so, we'd reach here with vga_si=NULL.
+
+>   	}
+>   
+>   	/* We can't copy in more than the size of the video buffer,
+> @@ -1204,4 +1207,13 @@ const struct consw vga_con = {
+>   };
+>   EXPORT_SYMBOL(vga_con);
+>   
+> +void vgacon_register_screen(struct screen_info *si)
+> +{
+> +	if (!si || vga_si)
+> +		return;
+> +
+> +	conswitchp = &vga_con;
+> +	vga_si = si;
+> +}
 
