@@ -2,178 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD6575946E
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Jul 2023 13:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865BB75951D
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Jul 2023 14:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjGSLkJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Jul 2023 07:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S229657AbjGSMam (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Jul 2023 08:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjGSLkI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Jul 2023 07:40:08 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908F42116
-        for <linux-mips@vger.kernel.org>; Wed, 19 Jul 2023 04:39:46 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc77e76abso62907445e9.1
-        for <linux-mips@vger.kernel.org>; Wed, 19 Jul 2023 04:39:46 -0700 (PDT)
+        with ESMTP id S229535AbjGSMam (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Jul 2023 08:30:42 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0273EE0;
+        Wed, 19 Jul 2023 05:30:40 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51e590a8ab5so9379566a12.2;
+        Wed, 19 Jul 2023 05:30:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689766784; x=1692358784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6xWrGmvyahmWXOp2W9pMTWNvuWztCli0WIWaglYWzcA=;
-        b=fF2COW0XDHf/EtUsGPj3UP3etaBQZw+DItUT2xU6WMark4A2NV28kW4nWFjK6+/tHN
-         rU3okyBv0cp+PRZIs1xnIPiD/OzTYYP7p8zyXNmG3U0Kh/NGpDV32jO8fy5FU1gE9hsa
-         tdhc3Z5BMKewIk7p59VPM3aZMEdTp41RXrgeMOr9I8Bx0B9N8iafg5MOlN98IU3vFbIm
-         Sf0knfkylwbbpPrykX76hhTcNCwoCQjtAYkzPOXBzU9AoxJBHDqFVaNxyM9OUXaK10iG
-         m/108/WTXmTRAMxMaCfCK0g/uR1WfIy2quqzRRBS3lBi2I3XXiHW4aLWEYUERfHPGovP
-         ce9A==
+        d=gmail.com; s=20221208; t=1689769838; x=1690374638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xN2l+O6gJGRa84uZb1BsKBHRU7JKgcju1wz8yosyb6M=;
+        b=Dr9HMbIgFpXgZvjVl2cm/7LYBEgOpp+BumU0LigiIqOKShfyAP70ZYXEuLx2Nnmmai
+         l8N8kpsQeoORaNIgOL5nNgynGVpuFLliUPX7wEJeseDZh7tus6ms7exuFJwZP9Q7X4cV
+         qNqEtjzohE4MZjlrjmOguOOAUKA67tPWauK56261JZEYeZj+Nd8FpPQEw1hWiuiSArUa
+         R3McQ/aQ1/BCT3k6Cx4ug1DJP+zLIMr7K1lzSpkk1bN4NKR9mAIoNyZk5Aymh3xOsJIa
+         fi4iaPOJF5Cex7d9JUHltPu/Mt8pYuSuRmcKPDCvZV5WgabfCI8wxs8t0pmNVXI48Wjj
+         +gNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689766784; x=1692358784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6xWrGmvyahmWXOp2W9pMTWNvuWztCli0WIWaglYWzcA=;
-        b=div8cACuxnfLgx8KNlhdo/0JUKEdAiTLLpQL10PsC+klKtQbUy85bElowffckA6jkD
-         zDO6XlaAgC5HNTd/9YzMG0j5SfvH4QFWiYM25d9i5CzWgnoMLLQ6JdZG9ye85vPPasMD
-         C4MH9LRFUv4jFaHcXMRtQovo/BqRzBEo6yrblukF9Ig5gYMqQQPgN8dEMWMzWMEYHaGd
-         ABRg0kb/CHL2A/KkiDctetwU1bqgGW95uVwULHVoaqtxxv5Gblp1LmJqPLne2olkE45N
-         6bAcueRrBN/HvvTuNACREeYtXugbEW0g/TEX6fn33/n5LFhDeCvIBfT3TUGMGDv87Q7F
-         uvVg==
-X-Gm-Message-State: ABy/qLZzemAQByrxAfuAsIMDBFRouELpzAJnp8Y/X3QmcATF76s5nfmn
-        xAGycRkuaxJs81BZhJfNtPdT7A==
-X-Google-Smtp-Source: APBJJlFOjB3e9p51PfRvlx+FZqJg8p2IkxuTKJB/Mfx+7qa0F12H2nheFss7zG4r5BQfDeuua0/5Ow==
-X-Received: by 2002:a05:600c:2315:b0:3fb:e189:3532 with SMTP id 21-20020a05600c231500b003fbe1893532mr1688194wmo.20.1689766784311;
-        Wed, 19 Jul 2023 04:39:44 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.201.220])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05600c00c600b003fbb5142c4bsm1518012wmm.18.2023.07.19.04.39.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 04:39:44 -0700 (PDT)
-Message-ID: <ef4b3c72-1676-fc73-9eb6-5ea6539d8876@linaro.org>
-Date:   Wed, 19 Jul 2023 13:39:41 +0200
+        d=1e100.net; s=20221208; t=1689769838; x=1690374638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xN2l+O6gJGRa84uZb1BsKBHRU7JKgcju1wz8yosyb6M=;
+        b=OPd5NIEtVmkaWx2oymX9j1NQvIdlmsZSF+PiU/d14dh625hppSnFmUVYqccKG9lhng
+         R4re2IKp13mhelr+EaQDY0HiU+CW8prmmNguePiPhkN5zcV4Blbdq4QL5R3tkg9PJrC4
+         oBfHoE3EV4+gKqNsokmXIy9yCaFKhfu7F7F+ZA5Gx/YTyztcN5XuB0yhZnTZDvIkYv56
+         blUY0z3KlgOaosJYT74y00CHd4PkOgJD/MbhwhyvFwjDsvD6a27BWRQJZ0tfQkZxIPEo
+         iVCXNPW3te1lLOCnTJu4+VHWNeRw0epKORegw8ziNg6Z5PVzs+lFcHmG+UHM3V3aq6Km
+         3pwQ==
+X-Gm-Message-State: ABy/qLYGH7bukB85isbAtNLM8b6iwI4ynPoz2+yGY1coiGgdU9Xc2OJf
+        YoPT94IER1jz+NMOw7OQXRnVMPzn7lYjMgVcVG8=
+X-Google-Smtp-Source: APBJJlFqasK+/oeB2EkcK3d1RtcgXvs+4PEasJMm6GAJfFeOQ5eqhXf5jf7NKFl6Rw6YMA2a2SdaSKcdixrqKwwRrn8=
+X-Received: by 2002:a05:6402:12d9:b0:51d:dbf1:c825 with SMTP id
+ k25-20020a05640212d900b0051ddbf1c825mr2900612edx.1.1689769838275; Wed, 19 Jul
+ 2023 05:30:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH] MIPS: Loongson64: Fix more __iomem attributes
-Content-Language: en-US
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, chenhuacai@kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20230718134411.2871477-1-jiaxun.yang@flygoat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230718134411.2871477-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230719101339.18256-1-aboutphysycs@gmail.com>
+In-Reply-To: <20230719101339.18256-1-aboutphysycs@gmail.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 19 Jul 2023 20:30:21 +0800
+Message-ID: <CAJhJPsUBWC6h2ZL_wcqwkd0Krih-PxErVeGFdFdPxocL1RTNcw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: loongson1 :remove unneeded platform_set_drvdata()call
+To:     Andrei Coardos <aboutphysycs@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org, andy@kernel.org, brgl@bgdev.pl,
+        linus.walleij@linaro.org, Alexandru Ardelean <alex@shruggie.ro>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 18/7/23 15:44, Jiaxun Yang wrote:
-> There are some __iomem type casting being missed in previous patch.
-> Fix them here.
-> 
-> Fixes: 5bd3990723bd ("MIPS: Loongson64: Prefix ipi register address pointers with __iomem")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202307020639.QCZOKp8B-lkp@intel.com/
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+On Wed, Jul 19, 2023 at 6:14=E2=80=AFPM Andrei Coardos <aboutphysycs@gmail.=
+com> wrote:
+>
+> In the drivers/gpio/gpio-loongson1 the call to platform_set_drvdata was
+> removed.
+> This function call was found to be unnecesarry as the associated
+> structure is defined inside the local .c file.
+> It doesn't use any type of function either so it can be removed without
+> any complications.
+
+If there is a ls1x_gpio_remove(), platform_get_drvdata() will be called.
+Then platform_set_drvdata() will be necessary.
+>
+> Reviewed-by: Alexandru Ardelean <alex@shruggie.ro>
+> Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
 > ---
->   arch/mips/loongson64/smp.c | 168 ++++++++++++++++++-------------------
->   1 file changed, 84 insertions(+), 84 deletions(-)
+>  drivers/gpio/gpio-loongson1.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
+c
+> index 6ca3b969db4d..2a57ffa0548b 100644
+> --- a/drivers/gpio/gpio-loongson1.c
+> +++ b/drivers/gpio/gpio-loongson1.c
+> @@ -78,8 +78,6 @@ static int ls1x_gpio_probe(struct platform_device *pdev=
+)
+>         if (ret)
+>                 goto err;
+>
+> -       platform_set_drvdata(pdev, ls1x_gc);
+> -
+>         dev_info(dev, "GPIO controller registered with %d pins\n",
+>                  ls1x_gc->gc.ngpio);
+>
+> --
+> 2.34.1
+>
 
 
->   static void ipi_mailbox_buf_init(void)
->   {
-> -	ipi_mailbox_buf[0] = (void *)
-> +	ipi_mailbox_buf[0] = (void __iomem *)
->   		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + BUF);
-> -	ipi_mailbox_buf[1] = (void *)
-> +	ipi_mailbox_buf[1] = (void __iomem *)
->   		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + BUF);
-> -	ipi_mailbox_buf[2] = (void *)
-> +	ipi_mailbox_buf[2] = (void __iomem *)
->   		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + BUF);
-> -	ipi_mailbox_buf[3] = (void *)
-> +	ipi_mailbox_buf[3] = (void __iomem *)
->   		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + BUF);
-> -	ipi_mailbox_buf[4] = (void *)
-> +	ipi_mailbox_buf[4] = (void __iomem *)
->   		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + BUF);
-> -	ipi_mailbox_buf[5] = (void *)
-> +	ipi_mailbox_buf[5] = (void __iomem *)
->   		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + BUF);
-> -	ipi_mailbox_buf[6] = (void *)
-> +	ipi_mailbox_buf[6] = (void __iomem *)
->   		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + BUF);
-> -	ipi_mailbox_buf[7] = (void *)
-> +	ipi_mailbox_buf[7] = (void __iomem *)
->   		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + BUF);
-> -	ipi_mailbox_buf[8] = (void *)
-> +	ipi_mailbox_buf[8] = (void __iomem *)
->   		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + BUF);
-> -	ipi_mailbox_buf[9] = (void *)
-> +	ipi_mailbox_buf[9] = (void __iomem *)
->   		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + BUF);
-> -	ipi_mailbox_buf[10] = (void *)
-> +	ipi_mailbox_buf[10] = (void __iomem *)
->   		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + BUF);
-> -	ipi_mailbox_buf[11] = (void *)
-> +	ipi_mailbox_buf[11] = (void __iomem *)
->   		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + BUF);
-> -	ipi_mailbox_buf[12] = (void *)
-> +	ipi_mailbox_buf[12] = (void __iomem *)
->   		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + BUF);
-> -	ipi_mailbox_buf[13] = (void *)
-> +	ipi_mailbox_buf[13] = (void __iomem *)
->   		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + BUF);
-> -	ipi_mailbox_buf[14] = (void *)
-> +	ipi_mailbox_buf[14] = (void __iomem *)
->   		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + BUF);
-> -	ipi_mailbox_buf[15] = (void *)
-> +	ipi_mailbox_buf[15] = (void __iomem *)
->   		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + BUF);
->   }
+--=20
+Best regards,
 
-OK up to here,
-
-> @@ -782,7 +782,7 @@ void play_dead(void)
->   
->   	if (prid_imp == PRID_IMP_LOONGSON_64G) {
->   		play_dead_at_ckseg1 =
-> -			(void *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
-> +			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
-
-but these changes look dubious.
-
->   		goto out;
->   	}
->   
-> @@ -790,19 +790,19 @@ void play_dead(void)
->   	case PRID_REV_LOONGSON3A_R1:
->   	default:
->   		play_dead_at_ckseg1 =
-> -			(void *)CKSEG1ADDR((unsigned long)loongson3_type1_play_dead);
-> +			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type1_play_dead);
->   		break;
->   	case PRID_REV_LOONGSON3B_R1:
->   	case PRID_REV_LOONGSON3B_R2:
->   		play_dead_at_ckseg1 =
-> -			(void *)CKSEG1ADDR((unsigned long)loongson3_type2_play_dead);
-> +			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type2_play_dead);
->   		break;
->   	case PRID_REV_LOONGSON3A_R2_0:
->   	case PRID_REV_LOONGSON3A_R2_1:
->   	case PRID_REV_LOONGSON3A_R3_0:
->   	case PRID_REV_LOONGSON3A_R3_1:
->   		play_dead_at_ckseg1 =
-> -			(void *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
-> +			(void __iomem *)CKSEG1ADDR((unsigned long)loongson3_type3_play_dead);
->   		break;
->   	}
->   
-
+Keguang Zhang
