@@ -2,56 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30ACA75B754
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 21:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4240375B8A0
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 22:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjGTTCY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jul 2023 15:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S229642AbjGTUUR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jul 2023 16:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjGTTCX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 15:02:23 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054481BF7;
-        Thu, 20 Jul 2023 12:02:14 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8b318c5a7so8462445ad.3;
-        Thu, 20 Jul 2023 12:02:14 -0700 (PDT)
+        with ESMTP id S229652AbjGTUUQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 16:20:16 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F2F2726
+        for <linux-mips@vger.kernel.org>; Thu, 20 Jul 2023 13:20:14 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c6db61f7f64so1041028276.0
+        for <linux-mips@vger.kernel.org>; Thu, 20 Jul 2023 13:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689879734; x=1690484534;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0MSKcIw1ixdNRcp/f0sV+4F1n8XKG7sdC3dJK2xndKs=;
-        b=HmFZ4aH4Wab+GqCN9TB1hsoxANs59ZGyg6e/EgDXSJq0eYSI/1VDWVlSgNIChLUfV8
-         T/IU56bnENLrhgdM87GnmjNFM0RpmjvZJl2xcorFy1mGsUnDs9zdzDKZrSPzHq2hoIH0
-         vFw+TuHLIpDpLy2T1GRQp+A/ZwejC2JNC9/kx8GgLOzFDvivXFRt8pK7pg/RJqO6epII
-         jU9EDNCAY3cGtv9Kz4M3mnp24C7KZYOlNZNUgyGjPKzywths6r+RNrsvvKuGeUeTpvFE
-         KzSBguxslln865ERYszYEUEyvYxe2xDbUJMXe4XuzyfRHn+tbMW1SUTP9WASXJn7b+Pn
-         qf5w==
+        d=google.com; s=20221208; t=1689884413; x=1690489213;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1/m4T5EZ9UQZdIAs+CFQOUhGGMJn3z6NAlZtvxtssM=;
+        b=mbsHztlENnOTDgeCIXRdF8x4x9OfLSlTRQf7EJhk2yHC8ssudjPjJb663muGwwAUde
+         HXusCSecX8QAy71He4xwRicW2VAZ7RFVOVmJQZun5eygpfocaFcEhJVdz1DXPqrP14f5
+         Q9r/63tqP/iMmto5FytBtXhV7bicbpwNBGhhzc7AVroN6uvn7SvVpiEQCLnIHWcphWhi
+         L6PAVpT/JWEQDmjGRRbXmNFkgwEJImoyKV1xDjpLesAAmXECVa9yb/PUNJmSrVHElsLh
+         RUk/Cxj/0yokxjf+pISM5EmdcaPLl3odQz7EeG720kJEtO6hviZvCg7ubhY+cpI9tJBr
+         NkXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689879734; x=1690484534;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0MSKcIw1ixdNRcp/f0sV+4F1n8XKG7sdC3dJK2xndKs=;
-        b=kQXQNlxgIB6OGjSqiTLgzQ66SlvXOgSg9yeQPasHy1tRrZayJg1B67r2rTmhNCOAmJ
-         F7IDmDSz4gavhtL6MebFqP/M+sAWzmLKUSVy2g+DQhBzwMX+L4waW5WrgRwkcsGaRjN2
-         lmgppL5V1MGVzsIiBfnkaj3ci0xKdPZN7MiLjOmKwAgTMjRGsfviV7tIY4XEENMoS0Yh
-         hxTG6v7L00u+xESshFlRqDHAbMXFDBsHVuvpyVwEMYG/Nmxm6sGPl+bZMs4dflKQtKns
-         eNSmFFVH5HDZyZGd6536BENld/2tVAw+6QsZHqba17ZtIAZ8yv7E1uPtYa0O6X5+Jy0O
-         x1bQ==
-X-Gm-Message-State: ABy/qLY98PwLsoc/Y4ODRcX80gnRgU55VdT5rnQlFjk7AH/CUiWpJ3Dn
-        Bwiack4mYzgRdu+vI/tvP00=
-X-Google-Smtp-Source: APBJJlEk/mIAgGdv75eqlacWKafqLMEC8fcDRiP+uJ4q0KoW6Z/oWLHWzhtG4Xil0kxFMatYBl1SNg==
-X-Received: by 2002:a17:902:cec9:b0:1ba:fe63:6622 with SMTP id d9-20020a170902cec900b001bafe636622mr138625plg.32.1689879733690;
-        Thu, 20 Jul 2023 12:02:13 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170903230f00b001b9de4fb749sm1778146plh.20.2023.07.20.12.02.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 12:02:12 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 12:02:11 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
+        d=1e100.net; s=20221208; t=1689884413; x=1690489213;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1/m4T5EZ9UQZdIAs+CFQOUhGGMJn3z6NAlZtvxtssM=;
+        b=bTzXPqKURZ2IMosTidsxs8i0nwGcglyI3wqP8/Hd6iwORJlt7eiexhUO+/S1iMR80z
+         sbXL7inuXGpfRSB9f05eRaZERq9FqbLAJuGpcN/b7B1/Z0ZAo3W1Wbq8UQqVKQb3fAJc
+         Na/0oXDR7d4w4xuUmA04irSD3o7nrmip/2Dgtu1kPdsbaZr1ezmon5brvqTMnS9b5pgu
+         tIoPhqjRyxop6goKLyfXHHX4KagV2PpwoKWsz8Cw5z/dCbQLxcZQranY1xZoiqq1W7bq
+         u3lF3JpylpqYoW8wZVWY+AwvjvPiRiHqPHFDm0tmyGB3fsmw7ykWw+QNyJ+RgkoPrEYc
+         S9Uw==
+X-Gm-Message-State: ABy/qLbR4wrp6KFJ8hIZSAZrSkkf80TF9qdomHYYKcR6Z+jIJ9/lQY9W
+        B/bYd+d5E8ei/WHIRua6iiftHFoTJCk=
+X-Google-Smtp-Source: APBJJlHJCm6H269xOtL/2AMirqWxt3kOhxlKiB8lLLwF2CbQnv6wXW7fNhFjFSiI4U52DqkXiLsyKn98s/w=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:4d08:0:b0:c6c:6122:5b69 with SMTP id
+ a8-20020a254d08000000b00c6c61225b69mr236ybb.8.1689884413509; Thu, 20 Jul 2023
+ 13:20:13 -0700 (PDT)
+Date:   Thu, 20 Jul 2023 13:20:11 -0700
+In-Reply-To: <20230720190211.GF25699@ls.amr.corp.intel.com>
+Mime-Version: 1.0
+References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-9-seanjc@google.com>
+ <20230720080912.g56zi5hywazrhnam@yy-desk-7060> <20230720190211.GF25699@ls.amr.corp.intel.com>
+Message-ID: <ZLmW+9G6EbKLkOOz@google.com>
+Subject: Re: [RFC PATCH v11 08/29] KVM: Introduce per-page memory attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Yuan Yao <yuan.yao@linux.intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -85,193 +88,42 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Michael Roth <michael.roth@amd.com>,
         Wang <wei.w.wang@intel.com>,
         Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFC PATCH v11 08/29] KVM: Introduce per-page memory attributes
-Message-ID: <20230720190211.GF25699@ls.amr.corp.intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-9-seanjc@google.com>
- <20230720080912.g56zi5hywazrhnam@yy-desk-7060>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230720080912.g56zi5hywazrhnam@yy-desk-7060>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 04:09:12PM +0800,
-Yuan Yao <yuan.yao@linux.intel.com> wrote:
-
-> On Tue, Jul 18, 2023 at 04:44:51PM -0700, Sean Christopherson wrote:
-> > From: Chao Peng <chao.p.peng@linux.intel.com>
-> >
-> > In confidential computing usages, whether a page is private or shared is
-> > necessary information for KVM to perform operations like page fault
-> > handling, page zapping etc. There are other potential use cases for
-> > per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> > or exec-only, etc.) without having to modify memslots.
-> >
-> > Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> > userspace to operate on the per-page memory attributes.
-> >   - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
-> >     a guest memory range.
-> >   - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
-> >     memory attributes.
-> >
-> > Use an xarray to store the per-page attributes internally, with a naive,
-> > not fully optimized implementation, i.e. prioritize correctness over
-> > performance for the initial implementation.
-> >
-> > Because setting memory attributes is roughly analogous to mprotect() on
-> > memory that is mapped into the guest, zap existing mappings prior to
-> > updating the memory attributes.  Opportunistically provide an arch hook
-> > for the post-set path (needed to complete invalidation anyways) in
-> > anticipation of x86 needing the hook to update metadata related to
-> > determining whether or not a given gfn can be backed with various sizes
-> > of hugepages.
-> >
-> > It's possible that future usages may not require an invalidation, e.g.
-> > if KVM ends up supporting RWX protections and userspace grants _more_
-> > protections, but again opt for simplicity and punt optimizations to
-> > if/when they are needed.
-> >
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com
-> > Cc: Fuad Tabba <tabba@google.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > Co-developed-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst |  60 ++++++++++++
-> >  include/linux/kvm_host.h       |  14 +++
-> >  include/uapi/linux/kvm.h       |  14 +++
-> >  virt/kvm/Kconfig               |   4 +
-> >  virt/kvm/kvm_main.c            | 170 +++++++++++++++++++++++++++++++++
-> >  5 files changed, 262 insertions(+)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > index 34d4ce66e0c8..0ca8561775ac 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -6068,6 +6068,56 @@ writes to the CNTVCT_EL0 and CNTPCT_EL0 registers using the SET_ONE_REG
-> >  interface. No error will be returned, but the resulting offset will not be
-> >  applied.
-> >
-> > +4.139 KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES
-> > +-----------------------------------------
-> > +
-> > +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
-> > +:Architectures: x86
-> > +:Type: vm ioctl
-> > +:Parameters: u64 memory attributes bitmask(out)
-> > +:Returns: 0 on success, <0 on error
-> > +
-> > +Returns supported memory attributes bitmask. Supported memory attributes will
-> > +have the corresponding bits set in u64 memory attributes bitmask.
-> > +
-> > +The following memory attributes are defined::
-> > +
-> > +  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> > +
-> > +4.140 KVM_SET_MEMORY_ATTRIBUTES
-> > +-----------------------------------------
-> > +
-> > +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
-> > +:Architectures: x86
-> > +:Type: vm ioctl
-> > +:Parameters: struct kvm_memory_attributes(in/out)
-> > +:Returns: 0 on success, <0 on error
-> > +
-> > +Sets memory attributes for pages in a guest memory range. Parameters are
-> > +specified via the following structure::
-> > +
-> > +  struct kvm_memory_attributes {
-> > +	__u64 address;
-> > +	__u64 size;
-> > +	__u64 attributes;
-> > +	__u64 flags;
-> > +  };
-> > +
-> > +The user sets the per-page memory attributes to a guest memory range indicated
-> > +by address/size, and in return KVM adjusts address and size to reflect the
-> > +actual pages of the memory range have been successfully set to the attributes.
-> > +If the call returns 0, "address" is updated to the last successful address + 1
-> > +and "size" is updated to the remaining address size that has not been set
-> > +successfully. The user should check the return value as well as the size to
-> > +decide if the operation succeeded for the whole range or not. The user may want
-> > +to retry the operation with the returned address/size if the previous range was
-> > +partially successful.
-> > +
-> > +Both address and size should be page aligned and the supported attributes can be
-> > +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
-> > +
-> > +The "flags" field may be used for future extensions and should be set to 0s.
-> > +
-> >  5. The kvm_run structure
-> >  ========================
-> >
-> > @@ -8494,6 +8544,16 @@ block sizes is exposed in KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES as a
-> >  64-bit bitmap (each bit describing a block size). The default value is
-> >  0, to disable the eager page splitting.
-> >
-> > +8.41 KVM_CAP_MEMORY_ATTRIBUTES
-> > +------------------------------
-> > +
-> > +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
-> > +:Architectures: x86
-> > +:Type: vm
-> > +
-> > +This capability indicates KVM supports per-page memory attributes and ioctls
-> > +KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES/KVM_SET_MEMORY_ATTRIBUTES are available.
-> > +
-> >  9. Known KVM API problems
-> >  =========================
-> >
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index e9ca49d451f3..97db63da6227 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -264,6 +264,7 @@ struct kvm_gfn_range {
-> >  	gfn_t end;
-> >  	union {
-> >  		pte_t pte;
-> > +		unsigned long attributes;
-> >  		u64 raw;
-> >  	} arg;
-> >  	bool may_block;
-> > @@ -809,6 +810,9 @@ struct kvm {
-> >
-> >  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
-> >  	struct notifier_block pm_notifier;
-> > +#endif
-> > +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
-> > +	struct xarray mem_attr_array;
-> >  #endif
-> >  	char stats_id[KVM_STATS_NAME_SIZE];
-> >  };
-> > @@ -2301,4 +2305,14 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
-> >  /* Max number of entries allowed for each kvm dirty ring */
-> >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
-> >
-> > +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
-> > +static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
-> > +{
-> > +	return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
-> > +}
-> > +
-> > +bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
-> > +					 struct kvm_gfn_range *range);
+On Thu, Jul 20, 2023, Isaku Yamahata wrote:
+> On Thu, Jul 20, 2023 at 04:09:12PM +0800,
+> Yuan Yao <yuan.yao@linux.intel.com> wrote:
 > 
-> Used but no definition in this patch, it's defined in next patch 09.
-> How about add weak version in this patch and let ARCHs to overide it ?
+> > On Tue, Jul 18, 2023 at 04:44:51PM -0700, Sean Christopherson wrote:
+> > > @@ -2301,4 +2305,14 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
+> > >  /* Max number of entries allowed for each kvm dirty ring */
+> > >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> > >
+> > > +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+> > > +static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
+> > > +{
+> > > +	return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
+> > > +}
+> > > +
+> > > +bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+> > > +					 struct kvm_gfn_range *range);
+> > 
+> > Used but no definition in this patch, it's defined in next patch 09.
+> > How about add weak version in this patch and let ARCHs to overide it ?
+> 
+> It is guarded by CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES.
 
-It is guarded by CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Yep.  I don't love the ordering, e.g. this patch can't even be compile tested
+until later in the series, but I wanted to separate x86 usage from the generic
+support code.
