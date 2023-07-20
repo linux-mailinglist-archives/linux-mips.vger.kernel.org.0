@@ -2,21 +2,21 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9951675A6D8
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 08:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED46A75A6F1
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 08:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjGTGrx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jul 2023 02:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
+        id S230064AbjGTGwX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jul 2023 02:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjGTGrv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 02:47:51 -0400
+        with ESMTP id S229687AbjGTGwX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 02:52:23 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75F4135;
-        Wed, 19 Jul 2023 23:47:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C429E;
+        Wed, 19 Jul 2023 23:52:22 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0C93467373; Thu, 20 Jul 2023 08:47:45 +0200 (CEST)
-Date:   Thu, 20 Jul 2023 08:47:44 +0200
+        id 666CB67373; Thu, 20 Jul 2023 08:52:16 +0200 (CEST)
+Date:   Thu, 20 Jul 2023 08:52:16 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Petr Tesarik <petrtesarik@huaweicloud.com>
 Cc:     Stefano Stabellini <sstabellini@kernel.org>,
@@ -48,14 +48,14 @@ Cc:     Stefano Stabellini <sstabellini@kernel.org>,
         "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
         Roberto Sassu <roberto.sassu@huaweicloud.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>, petr@tesarici.cz
-Subject: Re: [PATCH v4 8/8] swiotlb: search the software IO TLB only if a
- device makes use of it
-Message-ID: <20230720064744.GA4395@lst.de>
-References: <cover.1689261692.git.petr.tesarik.ext@huawei.com> <a8d31d3fffa0867dce2b44b98dc2714289edfdc9.1689261692.git.petr.tesarik.ext@huawei.com>
+Subject: Re: [PATCH v4 0/8] Allow dynamic allocation of software IO TLB
+ bounce buffers
+Message-ID: <20230720065216.GB4395@lst.de>
+References: <cover.1689261692.git.petr.tesarik.ext@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a8d31d3fffa0867dce2b44b98dc2714289edfdc9.1689261692.git.petr.tesarik.ext@huawei.com>
+In-Reply-To: <cover.1689261692.git.petr.tesarik.ext@huawei.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -66,5 +66,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Any reason this can't just do a list_empty_careful on the list
-instead of adding yet another field that grows struct device?
+Just to add a highlevel comment here after I feel like I need a little
+more time to review the guts.
+
+I'm still pretty concerned about the extra list that needs to be
+consulted in is_swiotlb_buffer, but I can't really think of
+anything better.  Maybe an xarray has better cache characteristics,
+but that one requires even more allocations in the low-level dma map
+path.
+
+One thing I'd like to see for the next version is to make the
+new growing code a config option at least for now.  It is a pretty
+big change of the existing swiotlb behavior, and I want people to opt
+into it conciously.  Maybe we can drop the option again after a few
+years once everything has settled.
