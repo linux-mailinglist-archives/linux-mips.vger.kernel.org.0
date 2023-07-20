@@ -2,117 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D2175A42A
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 03:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5756775A6C5
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 08:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjGTB4I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Jul 2023 21:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S231351AbjGTGoQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jul 2023 02:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjGTB4I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Jul 2023 21:56:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106D11FF1;
-        Wed, 19 Jul 2023 18:56:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A29B96188D;
-        Thu, 20 Jul 2023 01:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C85CC433CC;
-        Thu, 20 Jul 2023 01:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689818166;
-        bh=9D9pujAKUz8k842CA8as0OrHJ41UWIIq1tXLMWMGxqw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oigbKhG88zFTqlsGf9VwOaoKSwshXbuldiU+bveGtGBLCxLg8VeR5sRYmUkUNdmcU
-         S+l/Wg6zzj2hq6A7BeAtMGqW9x4F72l6QPdcawpaYqUIqXnEFI42WESQc8HjshNbgX
-         32ZYkW2RAnFZ+lhW/tFpnwIsAouTaJb4q/RO6mtH8i3hEdwz31PutTumL4I2gUGPKS
-         F/uFtgfFvP3+QS1DPoiHAekz4eR74YVVD9JD1QZ7VDkMt6gRPsTEHyHqqRelpVE4ZA
-         1ynwW/D/0PYCuj9hGF3DZ/5ZbpO70V7yDJ/nBzfyZRdoBDcYAT8Gjo+QkPjYsGB9qI
-         PVSo+2Q+U0K6g==
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-314319c0d3eso251680f8f.0;
-        Wed, 19 Jul 2023 18:56:05 -0700 (PDT)
-X-Gm-Message-State: ABy/qLYXJg56hjsCm0Bb+yVT6VvftNhp5FBs+ePuRWX42CXqBTia7zty
-        a4Jh8+jxpGDr97M9GeYt+lUzhRXMMevVozUH5vo=
-X-Google-Smtp-Source: APBJJlGP7nNOlXbv8EnnAuXK71LQH8eBvXzJLaPtZ3prvMZlGxg0bHCtwEfb8pji9JkDAfzIcTk/ss2wOspoD0W7cgk=
-X-Received: by 2002:adf:f8d0:0:b0:313:f45f:74a1 with SMTP id
- f16-20020adff8d0000000b00313f45f74a1mr1105625wrq.51.1689818164269; Wed, 19
- Jul 2023 18:56:04 -0700 (PDT)
+        with ESMTP id S231361AbjGTGoB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 02:44:01 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A132736;
+        Wed, 19 Jul 2023 23:43:32 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 6AB1267373; Thu, 20 Jul 2023 08:37:44 +0200 (CEST)
+Date:   Thu, 20 Jul 2023 08:37:44 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Petr Tesarik <petrtesarik@huaweicloud.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Petr Tesarik <petr.tesarik.ext@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        James Seo <james@equiv.tech>,
+        James Clark <james.clark@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>, petr@tesarici.cz
+Subject: Re: [PATCH v4 1/8] swiotlb: make io_tlb_default_mem local to
+ swiotlb.c
+Message-ID: <20230720063744.GA3842@lst.de>
+References: <cover.1689261692.git.petr.tesarik.ext@huawei.com> <7f64111986f4f361a2deb4a1a1b6f588e63a851b.1689261692.git.petr.tesarik.ext@huawei.com>
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2307180025120.62448@angie.orcam.me.uk>
- <CAAhV-H4ewzWuZRe0RX+j2x2R_fROVExHuogWNaWBmFA=Tgb=Og@mail.gmail.com> <alpine.DEB.2.21.2307191621450.58367@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2307191621450.58367@angie.orcam.me.uk>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 20 Jul 2023 09:55:51 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7K2qM35GuGV+B2p=N_f30i98KazvwVNCuvvG9fYfrghw@mail.gmail.com>
-Message-ID: <CAAhV-H7K2qM35GuGV+B2p=N_f30i98KazvwVNCuvvG9fYfrghw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] MIPS: Fix build issues from the introduction of `need-compiler'
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jan-Benedict Glaw <jbglaw@lug-owl.de>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f64111986f4f361a2deb4a1a1b6f588e63a851b.1689261692.git.petr.tesarik.ext@huawei.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Maciej,
+On Thu, Jul 13, 2023 at 05:23:12PM +0200, Petr Tesarik wrote:
+> From: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> 
+> SWIOTLB implementation details should not be exposed to the rest of the
+> kernel. This will allow to make changes to the implementation without
+> modifying non-swiotlb code.
+> 
+> To avoid breaking existing users, provide helper functions for the few
+> required fields.
+> 
+> As a bonus, using a helper function to initialize struct device allows to
+> get rid of an #ifdef in driver core.
+> 
+> Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> ---
+>  arch/arm/xen/mm.c          |  2 +-
+>  arch/mips/pci/pci-octeon.c |  2 +-
+>  arch/x86/kernel/pci-dma.c  |  2 +-
+>  drivers/base/core.c        |  4 +---
+>  drivers/xen/swiotlb-xen.c  |  2 +-
+>  include/linux/swiotlb.h    | 25 +++++++++++++++++++++++-
+>  kernel/dma/swiotlb.c       | 39 +++++++++++++++++++++++++++++++++++++-
+>  7 files changed, 67 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/xen/mm.c b/arch/arm/xen/mm.c
+> index 3d826c0b5fee..0f32c14eb786 100644
+> --- a/arch/arm/xen/mm.c
+> +++ b/arch/arm/xen/mm.c
+> @@ -125,7 +125,7 @@ static int __init xen_mm_init(void)
+>  		return 0;
+>  
+>  	/* we can work with the default swiotlb */
+> -	if (!io_tlb_default_mem.nslabs) {
+> +	if (!is_swiotlb_allocated()) {
+>  		rc = swiotlb_init_late(swiotlb_size_or_default(),
+>  				       xen_swiotlb_gfp(), NULL);
+>  		if (rc < 0)
 
-On Wed, Jul 19, 2023 at 11:39=E2=80=AFPM Maciej W. Rozycki <macro@orcam.me.=
-uk> wrote:
->
-> On Tue, 18 Jul 2023, Huacai Chen wrote:
->
-> > Even if patch-2 resolves the problem, I don't think patch-3 is
-> > necessary because the original patch makes code simpler and more
-> > compact.
->
->  Please don't top-post on a public mailing list.
->
->  If you're referring to this part:
->
-> +ifdef CONFIG_CPU_LOONGSON64
-> +cflags-$(CONFIG_CPU_LOONGSON64)        +=3D -Wa,--trap
-> +cflags-$(CONFIG_CC_IS_GCC) +=3D -march=3Dloongson3a
-> +cflags-$(CONFIG_CC_IS_CLANG) +=3D -march=3Dmips64r2
-> +endif
->
-> then it can be done with a separate clean-up.  Otherwise it'll have been
-> lost in the noise.
->
->  Firstly:
->
-> cflags-$(CONFIG_CPU_LOONGSON64) +=3D -Wa,--trap
->
-> doesn't have to be wrapped in `ifdef CONFIG_CPU_LOONGSON64'.
->
->  Secondly:
->
-> cflags-$(CONFIG_CC_IS_GCC) +=3D -march=3Dloongson3a
-> cflags-$(CONFIG_CC_IS_CLANG) +=3D -march=3Dmips64r2
->
-> document compiler peculiarities.  Does Clang support, or intend to,
-> `-march=3Dloongson3a'?  If so, what version can we expect this stuff in?
-> GCC has had it since 4.6 or Y2010, which is pretty long ago.
-GCC support loongson3a/mips64r2, Clang only support mips64r2. If we use
-$(call cc-option,-march=3Dloongson3a,-march=3Dmips64r2)
-both GCC and Clang can work and we don't need to care about the compiler.
+I'd much rather move the already initialized check into
+swiotlb_init_late, which is a much cleaer interface.
 
-Huacai
+>  	/* we can work with the default swiotlb */
+> -	if (!io_tlb_default_mem.nslabs) {
+> +	if (!is_swiotlb_allocated()) {
+>  		int rc = swiotlb_init_late(swiotlb_size_or_default(),
+>  					   GFP_KERNEL, xen_swiotlb_fixup);
+>  		if (rc < 0)
 
->
->  Last but not least there are formatting anomalies there, which may have
-> to be dealt with in a separate change.
->
->   Maciej
+.. and would take care of this one as well.
+
+> +bool is_swiotlb_allocated(void)
+> +{
+> +	return !!io_tlb_default_mem.nslabs;
+
+Nit: no need for the !!, we can rely on the implicit promotion to
+bool.  But with the suggestion above the need for this helper
+should go away anyway.
