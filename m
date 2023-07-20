@@ -2,132 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB5975B227
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 17:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5B175B7E7
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 21:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjGTPPH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jul 2023 11:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S230261AbjGTTYN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jul 2023 15:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbjGTPO7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 11:14:59 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBAE2127
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jul 2023 08:14:50 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c850943cf9aso784321276.1
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jul 2023 08:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689866089; x=1690470889;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jyO/GZcznauRS+IxFjefkQ411ageTxV8Pq4vykaVGvo=;
-        b=zTnr2gXYIfqrhSL0WP50qLuqh3ZSH0gfVOnKmqwBvWYCge11/urc6Mcz48DQC5VeI6
-         s/bgjrFlzBMXd0PxaHBdxoR2ZqKrVqjnkCnhcQbbSnTvJYQ3aBe8wGkYdi1iCIBydfGh
-         kDBro1Ztm9Xs7cfFTvZ7Ey8Gxe05PCCIDn4nx9L+2nwHbFPbro9d3jap/zFGaLY9lF26
-         GO0Vu5OUt+nUmBQOwJoSD8n40MC7ZQXlXpaj59Y1nIZxZy5/TzmEdTKZZXkcpmTSKYdO
-         Y0fmzsgj8zCYsvUdMgpPWIv3Ur8RBp8NDUrrxEURomdLy8NcckIjCEtpSXTS4KS2mzFS
-         29+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689866089; x=1690470889;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jyO/GZcznauRS+IxFjefkQ411ageTxV8Pq4vykaVGvo=;
-        b=Ir0nzCFXYyy/8e8oRqFbCe48XLaTC82p3JAt9Oi+E0+vvWG3j5D7nAV2wngDCGaDmo
-         9SeMMRAkl17pbbJqESw37wBPoMlHPaA8kqyU2rLd3CX5Cq5NZDwfdNeHujFuco3OmmaE
-         kvlP2W02z3eYckQ+WRsTtBt/nJzDHfaX4Ng0MoKJkSBNQcbfjDx8/ZzmhGf22S9nbQ0t
-         bp2Xfn3Zsyd0253ng3OUnrw2t1OOn8G7iRm8p8n9GYmpTs5EP/kxWx7Ebfgv1Ustb+Jj
-         uvORo+BP/78+wV3Nsa4FqsXpCIonEGnTU7r/1EjhTzd4RthHPxH5NZ/+xciPkhxxwQEo
-         x/mA==
-X-Gm-Message-State: ABy/qLZ8d8WfPZ6GzzQ9xrRB6fluDknAqoUXUE4rgf9PKkPtCdscF2Ym
-        DN28xIVggsoTp+mpao5u9gupQjMD6q8=
-X-Google-Smtp-Source: APBJJlHgB47FmXfk0Rt+Hyu6ZgRaD/aSiXUWbAQerG5WzFKE3pY5cKaePpzhb9OPvUF/5F0XHeWF4GbW2oc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:a105:0:b0:c65:8983:ac2 with SMTP id
- z5-20020a25a105000000b00c6589830ac2mr17912ybh.5.1689866089303; Thu, 20 Jul
- 2023 08:14:49 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 08:14:47 -0700
-In-Reply-To: <83eb5c50-7287-7845-ffc3-a7c58e638ea5@intel.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-13-seanjc@google.com>
- <83eb5c50-7287-7845-ffc3-a7c58e638ea5@intel.com>
-Message-ID: <ZLlLx7wkE6iPTIcI@google.com>
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
+        with ESMTP id S229684AbjGTTYM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 15:24:12 -0400
+Received: from mailout.easymail.ca (mailout.easymail.ca [64.68.200.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1B7171D;
+        Thu, 20 Jul 2023 12:24:09 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id 479C0623ED;
+        Thu, 20 Jul 2023 18:48:50 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at emo07-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo07-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YkMMq7FPWqRc; Thu, 20 Jul 2023 18:48:49 +0000 (UTC)
+Received: from mail.gonehiking.org (unknown [38.15.45.1])
+        by mailout.easymail.ca (Postfix) with ESMTPA id C8ABC61E38;
+        Thu, 20 Jul 2023 18:48:49 +0000 (UTC)
+Received: from [192.168.1.4] (internal [192.168.1.4])
+        by mail.gonehiking.org (Postfix) with ESMTP id CC21F3EED6;
+        Thu, 20 Jul 2023 12:48:47 -0600 (MDT)
+Message-ID: <aea82980-358a-863f-d6a0-66f4ce3f87b7@gonehiking.org>
+Date:   Thu, 20 Jul 2023 12:48:47 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Reply-To: khalid@gonehiking.org
+Subject: Re: [PATCH v2 1/9] vgacon: rework Kconfig dependencies
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
         Huacai Chen <chenhuacai@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        WANG Xuerui <kernel@xen0n.name>, Wei Liu <wei.liu@kernel.org>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230719123944.3438363-1-arnd@kernel.org>
+ <20230719123944.3438363-2-arnd@kernel.org>
+From:   Khalid Aziz <khalid@gonehiking.org>
+In-Reply-To: <20230719123944.3438363-2-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 20, 2023, Xiaoyao Li wrote:
-> On 7/19/2023 7:44 AM, Sean Christopherson wrote:
-> > @@ -5134,6 +5167,16 @@ static long kvm_vm_ioctl(struct file *filp,
-> >   	case KVM_GET_STATS_FD:
-> >   		r = kvm_vm_ioctl_get_stats_fd(kvm);
-> >   		break;
-> > +	case KVM_CREATE_GUEST_MEMFD: {
-> > +		struct kvm_create_guest_memfd guest_memfd;
-> > +
-> > +		r = -EFAULT;
-> > +		if (copy_from_user(&guest_memfd, argp, sizeof(guest_memfd)))
-> > +			goto out;
-> > +
-> > +		r = kvm_gmem_create(kvm, &guest_memfd);
-> > +		break;
-> > +	}
+On 7/19/23 6:39 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Does it need a new CAP to indicate the support of guest_memfd?
-
-Yeah, I meant to add that to the TODO list and forgot (obviously).
-
-> This is patch series introduces 3 new CAPs and it seems any one of them can
-> serve as the indicator of guest_memfd.
+> The list of dependencies here is phrased as an opt-out, but this is missing
+> a lot of architectures that don't actually support VGA consoles, and some
+> of the entries are stale:
 > 
-> +#define KVM_CAP_USER_MEMORY2 230
-> +#define KVM_CAP_MEMORY_ATTRIBUTES 231
-> +#define KVM_CAP_VM_TYPES 232
+>   - powerpc used to support VGA consoles in the old arch/ppc codebase, but
+>     the merged arch/powerpc never did
+> 
+>   - arm lists footbridge, integrator and netwinder, but netwinder is actually
+>     part of footbridge, and integrator does not appear to have an actual
+>     VGA hardware, or list it in its ATAG or DT.
+> 
+>   - mips has a few platforms (malta, sibyte, and sni) that initialize
+>     screen_info, on everything else the console is selected but cannot
+>     actually work.
+> 
+>   - csky, hexgagon, loongarch, nios2, riscv and xtensa are not listed
+>     in the opt-out table and declare a screen_info to allow building
+>     vga_con, but this cannot work because the console is never selected.
+> 
+> Replace this with an opt-in table that lists only the platforms that
+> remain. This is effectively x86, plus a couple of historic workstation
+> and server machines that reused parts of the x86 system architecture.
+> 
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-The number of new caps being added is the main why I didn't just add another one.
-On the other hand, we have room for a few billion caps, so one more isn't a big
-deal.  So yeah, KVM_CAP_GUEST_MEMFD is probably the way to go.
+
+Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
+
+
+> ---
+>   drivers/video/console/Kconfig | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/video/console/Kconfig b/drivers/video/console/Kconfig
+> index 1b5a319971ed0..6af90db6d2da9 100644
+> --- a/drivers/video/console/Kconfig
+> +++ b/drivers/video/console/Kconfig
+> @@ -7,9 +7,9 @@ menu "Console display driver support"
+>   
+>   config VGA_CONSOLE
+>   	bool "VGA text console" if EXPERT || !X86
+> -	depends on !4xx && !PPC_8xx && !SPARC && !M68K && !PARISC &&  !SUPERH && \
+> -		(!ARM || ARCH_FOOTBRIDGE || ARCH_INTEGRATOR || ARCH_NETWINDER) && \
+> -		!ARM64 && !ARC && !MICROBLAZE && !OPENRISC && !S390 && !UML
+> +	depends on ALPHA || IA64 || X86 || \
+> +		(ARM && ARCH_FOOTBRIDGE) || \
+> +		(MIPS && (MIPS_MALTA || SIBYTE_BCM112X || SIBYTE_SB1250 || SIBYTE_BCM1x80 || SNI_RM))
+>   	select APERTURE_HELPERS if (DRM || FB || VFIO_PCI_CORE)
+>   	default y
+>   	help
+
