@@ -2,278 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146B275BF1F
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 08:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5DF75C18D
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 10:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjGUGxN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jul 2023 02:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S230338AbjGUI10 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jul 2023 04:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjGUGxM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 02:53:12 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCE52709;
-        Thu, 20 Jul 2023 23:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689922390; x=1721458390;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=yUQll0rK4kVTUGOeG0Yh0uOwjDQL88UV6m+/2FtQqVI=;
-  b=KoGxKi/ct4MMc63KxTjyaKmd56v96TBJVcu47C+upp1II8LqJ8YCjvKt
-   8YQwBdo4AwF0a3zUPbqQiShc2dAcIkNkI451+6do4arMKJq8XGKfk4IQa
-   bdTQ+xfMRFN9sjWHYlc7X+ahnfxijXfHDxdyxUYK9rGCpNOJrO21CT7BI
-   jdanhaITKVFw9ZrgcTkbjuOqrPx8feSk7Cr6EQel/O9Y8aM8Bh75sTM9M
-   59x9SX9eBsvUAFAi71mZYntKICK22+AGLbiG80mly0L9HZRhadrMM70EB
-   MNY+s7OMT/Oz1O+lEx9/4jWFDM/ZVFexA5/rXXwunBSHnEgONRNR9zDXn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="356939381"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="356939381"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 23:53:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="814844557"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="814844557"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jul 2023 23:53:09 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 20 Jul 2023 23:53:08 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 20 Jul 2023 23:53:08 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Thu, 20 Jul 2023 23:53:08 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.48) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Thu, 20 Jul 2023 23:53:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a0qzjW5tqHXsQXnvBpV4ekR2SPY/BCYQ7pDxaJ7kDCxX94oKuBcCTEddxFVjL1ceuRuC8I00MLgqQs7iY9MpwPnonPXA4NQPIzmsQNeUEPsfWtz4DYBR7aBnR9vp55ZCfZd6Qs2v6rYPZjMj60zrNVfiwK1Kf01x8rPw7RPSOip4ToQD7WbWwXnL1StP+/0Q6Mk9J2nPXvlYI2oTa1XpWUp0BFP8lgD9uytAq0vQvMQ+udzUe26SR+gvZ27huSMrUbkU21ph5lKGHLNZtOUhvG+U9Lr6+FiN0wC/8+oHDXuTPjqEoJm1atSjeSiKteTxlWSBBX8dRXdQRMn3xdASMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nnG3RxIBu4FDgBaLRsmAkxiC0xAWcmlPyisYnsYn2vA=;
- b=FfS90Tq0i+SpWMEQQ7yLDUJ3gg7G4FJpTbwPgHESJG7vTcMM0CpTRak8Uk/xm/8TcLC+L2VCAWqmrBgBsKjDIHQOYORl1T/9oI5SbCtsf0VBWCP2HeItwT8lbL6BBBR2WWTpqgFhavzMMa8RsA3my0lKXUKSfEv6Pb+sgrEPEzzTFZo+fR87leQ3gUDNfKYfSuAbSFyMpcP6wcPo7U2OO9P2clKjLwF3Y+TF6P2Tmb+P4dytDSu1QiU4+steA8b8r2/u/9hDro7U0Rt9MkJZRxmk1NA+le/YwvC6SI4bzB5ecZY7If1PgUvQeU5xWitMrlO++oBuG3HO8QTOFoBzmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
- MW4PR11MB8268.namprd11.prod.outlook.com (2603:10b6:303:1ef::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.33; Fri, 21 Jul 2023 06:53:05 +0000
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::1b1a:af8e:7514:6f63]) by DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::1b1a:af8e:7514:6f63%2]) with mapi id 15.20.6609.024; Fri, 21 Jul 2023
- 06:53:05 +0000
-Date:   Fri, 21 Jul 2023 14:26:11 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, <kvm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <kvm-riscv@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        "Isaku Yamahata" <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFC PATCH v11 01/29] KVM: Wrap kvm_gfn_range.pte in a
- per-action union
-Message-ID: <ZLolA2U83tP75Qdd@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-2-seanjc@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230718234512.1690985-2-seanjc@google.com>
-X-ClientProxiedBy: SI2P153CA0005.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::11) To DS7PR11MB5966.namprd11.prod.outlook.com
- (2603:10b6:8:71::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|MW4PR11MB8268:EE_
-X-MS-Office365-Filtering-Correlation-Id: c77e5cb2-7609-40a6-f648-08db89b7223d
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K7ZrPuq/t8u9S6s3ZFloJHsv1ZSMD9HWXazxoyuk7vp5WIA/108qZSaPRrsek++nr4LOEsfSgNSx6qMS3KYroAx8yMBYrs5rfc5LC4FaJfei5+bv0lQPlxa2ClmQV+H8iC8Z+7E2EXE+/Q2KxhawT70iOPiZG+VyJZEiigkPv16U71ExaxeOpKXDjEeU7XMsqUtoPk5EV5tE97m31SQ/G4qkv62VyiYkrZ+vtKw4AvwgDMWZbFG7Pry54YNC4i1NnGWpqFwAkbRtMDbvBqPcJMVzfr//wIDLk94LgWANyxFvzeeuJkyaVFrcOAaoJQgbk94QwXdJ6HJUp7Ry9MUsy/Mx6zUkz7fLLg42aR+a+JJIDbw5iL4F5lczxJEycZILBMC/ueWq9ToC78/rIyUQNYrMUDIPybJLdf+8BlvuurlAIEbvezRUpYVXQlAXPUvfebKy5oxm3ATMy9O9N7Vtv6xkCa6O9ml3nqnZ+ZQ6MK67xXtjG/z3849WqVb8/VClY83u4Dbhsw6xHuIqA5v4KJSyhp5KwH3gOWMrxO8GduMY6/V6BYaPV72nABBbUsew
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199021)(316002)(41300700001)(66476007)(4326008)(6916009)(66946007)(5660300002)(66556008)(8936002)(8676002)(83380400001)(86362001)(82960400001)(38100700002)(186003)(26005)(6486002)(6506007)(6512007)(54906003)(478600001)(6666004)(7416002)(7406005)(3450700001)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KaJlyRrhVeycil3x3jf/U+nArDb5ZDTUauKs8xWe+esL3seYWnNPUeq2SsxE?=
- =?us-ascii?Q?O28MX2kFSy+yQT/TbzQQyRo/7JFRUYD0KseWVxgbLVf+af+ctIesne6r0WUF?=
- =?us-ascii?Q?5DklqK/K6eUWWrgaO2OUlYZDFRk8eIpMCrePVwMM6mmQnxWheOR3xxnyz2OW?=
- =?us-ascii?Q?UStN5amunf7VTXPTji5lLwpoZ+PvCSB2DxY0yp7XHQCN2Rk1OdAlThR5tLjM?=
- =?us-ascii?Q?+m2ITHT1p3oKKnb80wCm85qM87qnkVj2F3YtCA2nPhfhMmK64tjC1aZJNRVy?=
- =?us-ascii?Q?xCfkbIWPAFypHMxCyxYhD8CLa3UCWP4ZdANUiK+nRiMo91LUjU8iOX1vOycb?=
- =?us-ascii?Q?VqH3mGROJ3ZYXjj4VJqNv5mlyNvjr5Zs+tG6b46WRF129jffz+tCwhNF6n7z?=
- =?us-ascii?Q?fajcV3+ZXWuCKPfqTPTmQx7BVHIgYloYe1RjVWuXGaAguiLdkt5+5rvQ9mBz?=
- =?us-ascii?Q?I6RPZ0e4Il1VGMxlzOUnuRvPho6FO3i4FR8bCFj3d+Q5qRDslU5sLrOX7tmQ?=
- =?us-ascii?Q?HsofE2ouhIZMikACNsj8xNzeznQE2+rxpv8WkZyhmehBZ4ieStuuWjdMfhco?=
- =?us-ascii?Q?ZJ5zcxNTsUVQOP6h4eUQbiTWGyXOk65IOD6H2fbJagBITNS9vVicddOGFXlf?=
- =?us-ascii?Q?qA1TgKja4a/opqxz02vrW7dqkKuc1XeCqVjb4ZTbftG0sH/Ek+GyJ3Cl7iiR?=
- =?us-ascii?Q?gWQyMFje6kpixNdiDUg06tgSmyEWY3+EkWdF+7Oc3fAnzbg6tf3oeTvoZuJl?=
- =?us-ascii?Q?dlyxy6a7wphx9PLK6JFhhLzr65bsauOFzoauJasu5mllfyy37noAPsPjapIS?=
- =?us-ascii?Q?4nxxDe5JHrEMFEcGS1DOI5X69Nm9dwEscWYANk8RmqeuSjxgeZU7CA5H/jJq?=
- =?us-ascii?Q?FwNn4OlvWSsBR1eWnXx6FW/7CagN4P1zJW0ev+16W1R0QKjKSPjs9J20yA2B?=
- =?us-ascii?Q?MSprym8bPYz7v8uhgawC3B8ABLM9gDnExpQ37kEzBi9w304ca/iSWmrG/z7b?=
- =?us-ascii?Q?XYZbjRqKavrjDzFlBooIwOq4nnxpZT54ITX+43wb9CapDpQE6ZFIhQSKfMeL?=
- =?us-ascii?Q?4qqv8JYIDimdzV2axdVeH7c77cD7sUGw+6BlK5+qDIe11MGrCMXj07zdKkVs?=
- =?us-ascii?Q?vVbR462LhhHvqpstDjK1Rw+mZPwBh8kCW+gCP9LK/JtcUji/RcHMl4YmH0aj?=
- =?us-ascii?Q?I0Ek5vvU0I6EVS5ZPQGEBIeC3ohNAZYau7r7xFYxW5EG/PI/AS3dA0g44X4h?=
- =?us-ascii?Q?aGCiAZp6mxDDo414H38hai0FRmRnl96Y9GYaixqGHxkrCNo2pbHiaiR/dPK0?=
- =?us-ascii?Q?Lg0LTxUBMBGyv8nACo/5EbdARbxNkCsyqvZBi+cBunz/rI4eCPRTFqakfqBq?=
- =?us-ascii?Q?ikdjBS7qoeW03p5Fpyxea6G5xe6zZkGEbhN5moiFfFauZD0JaBQG1kvRws26?=
- =?us-ascii?Q?zaLYNlr/bdcAD1Sp7m/Qf7XeXe7habhBXwM7iZmRAmLX+cBQeCIjiGQ6zQqn?=
- =?us-ascii?Q?u0FdlX8sqEdYw4gxjp7dZT1caDxZv+Y9AEzj/ReLZ3BCIdl3arQFDF92Qmb4?=
- =?us-ascii?Q?/LI9v+vhoWIu0ypINL7yGwA+1dKcbCYSVew6blyw?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c77e5cb2-7609-40a6-f648-08db89b7223d
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2023 06:53:05.2719
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 11A/t73+MtHjI1DmiWdfFNCyCvQA6+ZPQsGyWShXcP5qyJC+ReyKxp/Cmp/689nC/pVCfm9RN77/PO/kOkz1IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB8268
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230062AbjGUI1Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 04:27:24 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5E1F0;
+        Fri, 21 Jul 2023 01:27:22 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id CDE4D58026A;
+        Fri, 21 Jul 2023 04:27:21 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 21 Jul 2023 04:27:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1689928041; x=1689935241; bh=V8
+        kkxioRFPjR/pcGqI7bYcicee1af9QaKC3pDwPABSg=; b=b9mWPVKTa+C0qxGJVm
+        gVTKr5SnuCufxByEgtuEiTC/HjonV9yPvhgncSRQ0wUrLNE7orD78Rw7ohjT0q3C
+        c0X7wLA5W1uO4gHBmiwybGJLQQ7SrEMtBGvFZKQaT/Y0wzIbtxoIfYUgm9pO+XSJ
+        6I08Fx8oDJAOPBCXHuGFZFeWb1RYZSXq09xFAfH85OnLe5l+htjQL+F/B4Y6gUvs
+        ut/AOfdKRpwcHg/s2ox2GO/l5Ce/RBfBcnmaRO/F69sTDvSKTTvAQwHRFh24O6bw
+        V6xDq+6cg4uZot5gbimNNmCu9SHpdf5MFTDtGh/g5OFBKMn02cs7TznQk+C9/i4Y
+        dRwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1689928041; x=1689935241; bh=V8kkxioRFPjR/
+        pcGqI7bYcicee1af9QaKC3pDwPABSg=; b=unYn7VUfp/o2gT07nbqvQ5lIW9kBd
+        mBnKota720DDPc/oG1aRttW/D+crNdOAUEl9St9nonOTjtR5EHZ/ERbVU6RS/8a9
+        h60zyLUrHFHJTeNLWeadDvND/TVlwE64W4ER4jaFI7yfcqQcM9JFFXLEQa8gKTAm
+        2NneyWtfI14HUK6C7gElYEN39Z+C3ZEMkQn2ZM6gax2xS8UlImkh100FKtZaGPhv
+        lQk5OR6Mr17MQHWJ9UIPy7fklXcZo7AkC1hU9D8FRcT0DoHGZ1ht5evHlxZxLnfx
+        AEw3wiOX0qizHBpHqwTM2HVi93NRv6iA2yioBToovm3YnDAmy38mo5uCg==
+X-ME-Sender: <xms:Z0G6ZPfhyAhlj173FbFhonwA5KlUmCGO5J9kcywp3cozm27OsbAtLw>
+    <xme:Z0G6ZFM8NgJAA5o18IVcSBdDXzUfupTyVLyoGRWKf5AMnD9G8DAPvvhIosyFM_Fej
+    ixYPDY94XlYrOC-EQE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedvgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Z0G6ZIiZLjl3BUt93nzxV1cAQo4CS1KP6FaAGJXgj4g5DNvVpNZydQ>
+    <xmx:Z0G6ZA_7CvV2s3gdLefuPIP0mdWvT9_hDkmlpVhsn9Y5247aBbErLw>
+    <xmx:Z0G6ZLsjVOM0mZftdLzFVNIO9YmEUfPLUQYjwEJhvs0yikPIce9HbQ>
+    <xmx:aUG6ZDnhPzImHPxpYpY9KW7ioRMX4qP1VaFRlm_1LSESQRplTz4wfQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AB365B60089; Fri, 21 Jul 2023 04:27:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <19631e74-415e-4dcb-b79d-33dcf03d2dfc@app.fastmail.com>
+In-Reply-To: <87pm4lj1w3.fsf@mail.lhotse>
+References: <20230719123944.3438363-1-arnd@kernel.org>
+ <20230719123944.3438363-2-arnd@kernel.org> <87pm4lj1w3.fsf@mail.lhotse>
+Date:   Fri, 21 Jul 2023 10:26:30 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Arnd Bergmann" <arnd@kernel.org>, linux-fbdev@vger.kernel.org,
+        "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Borislav Petkov" <bp@alien8.de>, "Brian Cain" <bcain@quicinc.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Dave Airlie" <airlied@gmail.com>,
+        "Deepak Rawat" <drawat.floss@gmail.com>,
+        "Dexuan Cui" <decui@microsoft.com>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        guoren <guoren@kernel.org>,
+        "Haiyang Zhang" <haiyangz@microsoft.com>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "Khalid Aziz" <khalid@gonehiking.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "WANG Xuerui" <kernel@xen0n.name>, "Wei Liu" <wei.liu@kernel.org>,
+        "Will Deacon" <will@kernel.org>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 1/9] vgacon: rework Kconfig dependencies
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 04:44:44PM -0700, Sean Christopherson wrote:
+On Fri, Jul 21, 2023, at 06:59, Michael Ellerman wrote:
+> Arnd Bergmann <arnd@kernel.org> writes:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The list of dependencies here is phrased as an opt-out, but this is missing
+>> a lot of architectures that don't actually support VGA consoles, and some
+>> of the entries are stale:
+>>
+>>  - powerpc used to support VGA consoles in the old arch/ppc codebase, but
+>>    the merged arch/powerpc never did
+>
+> Not disputing this, but how did you come to that conclusion? I grepped
+> around and couldn't convince myself whether it can work on powerpc or
+> not. ie. currently it's possible to enable CONFIG_VGA_CONSOLE and
+> powerpc does have a struct screen_info defined which seems like it would
+> allow vgacon_startup() to complete.
 
-May I know why KVM now needs to register to callback .change_pte()?
-As also commented in kvm_mmu_notifier_change_pte(), .change_pte() must be
-surrounded by .invalidate_range_{start,end}().
+The VGA console needs both screen_info and vga_con to work. In arch/ppc
+we had both, but in arch/powerpc we only retained the screen_info:
 
-While kvm_mmu_notifier_invalidate_range_start() has called kvm_unmap_gfn_range()
-to zap all leaf SPTEs, and page fault path will not install new SPTEs
-successfully before kvm_mmu_notifier_invalidate_range_end(),
-kvm_set_spte_gfn() should not be able to find any shadow present leaf entries to
-update PFN.
+$ git grep vga_con v2.6.26 -- arch/ppc arch/ppc64 arch/powerpc
+v2.6.26:arch/ppc/platforms/pplus.c:     conswitchp = &vga_con;
+v2.6.26:arch/ppc/platforms/prep_setup.c:        conswitchp = &vga_con;
 
-Or could we just delete completely
-"kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);"
-from kvm_mmu_notifier_change_pte() ?
+so after arch/ppc was removed, this became impossible to use on both
+pplus and prep. These two platforms were also (as far as I can tell)
+the only ones to support vga16fb as an alternative to vgacon, but
+both platforms were removed later on.
 
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 6db9ef288ec3..55f03a68f1cd 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1721,7 +1721,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  
->  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
-> -	kvm_pfn_t pfn = pte_pfn(range->pte);
-> +	kvm_pfn_t pfn = pte_pfn(range->arg.pte);
->  
->  	if (!kvm->arch.mmu.pgt)
->  		return false;
-> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-> index e8c08988ed37..7b2ac1319d70 100644
-> --- a/arch/mips/kvm/mmu.c
-> +++ b/arch/mips/kvm/mmu.c
-> @@ -447,7 +447,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->  	gpa_t gpa = range->start << PAGE_SHIFT;
-> -	pte_t hva_pte = range->pte;
-> +	pte_t hva_pte = range->arg.pte;
->  	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
->  	pte_t old_pte;
->  
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index f2eb47925806..857f4312b0f8 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -559,7 +559,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->  	int ret;
-> -	kvm_pfn_t pfn = pte_pfn(range->pte);
-> +	kvm_pfn_t pfn = pte_pfn(range->arg.pte);
->  
->  	if (!kvm->arch.pgd)
->  		return false;
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index ec169f5c7dce..d72f2b20f430 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1588,7 +1588,7 @@ static __always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
->  	for_each_slot_rmap_range(range->slot, PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL,
->  				 range->start, range->end - 1, &iterator)
->  		ret |= handler(kvm, iterator.rmap, range->slot, iterator.gfn,
-> -			       iterator.level, range->pte);
-> +			       iterator.level, range->arg.pte);
->  
->  	return ret;
->  }
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 512163d52194..6250bd3d20c1 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1241,7 +1241,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
->  	u64 new_spte;
->  
->  	/* Huge pages aren't expected to be modified without first being zapped. */
-> -	WARN_ON(pte_huge(range->pte) || range->start + 1 != range->end);
-> +	WARN_ON(pte_huge(range->arg.pte) || range->start + 1 != range->end);
->  
->  	if (iter->level != PG_LEVEL_4K ||
->  	    !is_shadow_present_pte(iter->old_spte))
-> @@ -1255,9 +1255,9 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
->  	 */
->  	tdp_mmu_iter_set_spte(kvm, iter, 0);
->  
-> -	if (!pte_write(range->pte)) {
-> +	if (!pte_write(range->arg.pte)) {
->  		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
-> -								  pte_pfn(range->pte));
-> +								  pte_pfn(range->arg.pte));
->  
->  		tdp_mmu_iter_set_spte(kvm, iter, new_spte);
->  	}
- 
+> My only concern is that someone could be using it with Qemu?
+
+I have not yet ruled out anyone using vga16fb on qemu before
+commit 0db5b61e0dc07 ("fbdev/vga16fb: Create EGA/VGA devices
+in sysfb code"), but I can see that this has been broken for
+12 months without anyone complaining about it, since vga16fb
+no longer works with the "orig_video_isVGA == 1" setting
+in arch/powerpc (the device is not created).
+
+In the qemu sources, I see five powerpc machines that intialize
+VGA support: mac_newworld, mac_oldworld, pegasos2, prep, and spapr.
+I think we can exclude prep (which was removed from the kernel)
+and spapr (64-bit VGA_MAP_MEM() looks broken). I think the
+macs always come up in graphical mode and only use
+offb/atifb/rivafb/matroxfb but not vga16fb that would require
+running the x86 VGA BIOS initialization.
+
+I suppose it's possible to use vga16fb (not vgacon) with
+"qemu-system-ppc -M pegasos2 -vga std" if that still boots
+at all. Support for pegasos2 hardware appears to have been
+removed with commit 04debf21fa174 ("powerpc: Remove core
+support for Marvell mv64x60 hostbridges"), but it's possible
+that this did not break qemu support if that only uses
+devices under arch/powerpc/platforms/chrp/pci.c. I could
+not get it to boot, but did not try very hard.
+
+      Arnd
