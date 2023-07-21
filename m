@@ -2,65 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB3C75C51D
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 12:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2700B75C643
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 14:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjGUK57 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jul 2023 06:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S230459AbjGUMA1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jul 2023 08:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbjGUK56 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 06:57:58 -0400
+        with ESMTP id S230306AbjGUMA0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 08:00:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B7C1737
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 03:57:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6421722
+        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 04:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689937033;
+        s=mimecast20190719; t=1689940782;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JCcb9xtScqAyMOStlm7ewhQnyFA6r02pOvdu3ozJ8ms=;
-        b=CfDUw4n5j9Ub8zU/uGCccEihQ3s/RFlSzrHXicFgigg9iXRpcJsjAkzayq/qzqV7eXWNbF
-        TgYL2U0/RTkrjVJjgxihUYvvc8ehJ/QT0O8zUK7bCf7VwiS31imZHJUAZyB/kGNlg1HGkq
-        JyrMHOhm3ERua6VGu9U+jHpmsjE6Utg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4Y7rbnaDJbn/YejSF4mQVA8Z4grlfMZHjKPnDFxLZ8A=;
+        b=NLYxJ/tI375ddfrYE69u4PU4Z9h7i6tOguCLsIe+/EncQBl2Aqsf93Gj2dpLFHHmIJWLvd
+        wEHK9+sHYSWQpfB86rX4TB+P5e6nKB+99bnGoy9jC96Rwt1F2pOlKeFgF426rwViuud1tV
+        rJFa43qXP2DG3tN66TNOfIOxNbBopgE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-573-i6Kmtct9O1OliNyolhRtmw-1; Fri, 21 Jul 2023 06:57:11 -0400
-X-MC-Unique: i6Kmtct9O1OliNyolhRtmw-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-992e6840901so219249766b.0
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 03:57:11 -0700 (PDT)
+ us-mta-13-YY4tZ2DBMOChc3VyE95gUw-1; Fri, 21 Jul 2023 07:59:41 -0400
+X-MC-Unique: YY4tZ2DBMOChc3VyE95gUw-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-97542592eb9so118382166b.2
+        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 04:59:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689937031; x=1690541831;
+        d=1e100.net; s=20221208; t=1689940780; x=1690545580;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JCcb9xtScqAyMOStlm7ewhQnyFA6r02pOvdu3ozJ8ms=;
-        b=gl6nOIscH2D6Cq3MXc2MDsdrt4wY36dHNtMYkgjOfXpxAzm05s5Tq2k+sQgSX8lLpa
-         gFI+GfesZGNPAIFoWbbMveYezuzmsaML6k5Sslpw8tGWz4lsPiGW+zLIFGSRY71WLYFn
-         N3YUKpvQhFXNmhKqJVpfoM21gSfN/AuViqgbcztqoxpCJ/eKu+I3yAvdmgTL8gEkZV6C
-         mpUpv3JMjOj7Qr2RhDl3CHOYY7KLXQ7Ja7x8iwojMaLYxL2t4kTIdBNnMKdMVDxRR/qr
-         6vi1NPr/kM1N+HeRunMMixF+CtOtsll9wV+RYB0Ri3l+N+4QQU/mrfngFrTNuUn+fVwG
-         JXIg==
-X-Gm-Message-State: ABy/qLbSW/qmBPQkHAiuUDD7nkBmKQb2A5c+0pJ4fwxgJ4GoxSWWaKpZ
-        zP/L6JHjARy7Gnu4Wd3zJORp2jj5Ndams9pdED+ImRWfrA+SWoN6CABtQ+Li9uVSne/42acVKeT
-        WWOmcKOQIcAkBpiSGgUu1JQ==
-X-Received: by 2002:a17:907:d8a:b0:991:d414:d889 with SMTP id go10-20020a1709070d8a00b00991d414d889mr8230227ejc.15.1689937030825;
-        Fri, 21 Jul 2023 03:57:10 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHG8R7IreJRTfdc0Wq/Yo7PIzOhZZy/jcnGLgxDY0N1OVv0CFUqys6sH346KYqEVj6MNTbrkQ==
-X-Received: by 2002:a17:907:d8a:b0:991:d414:d889 with SMTP id go10-20020a1709070d8a00b00991d414d889mr8230204ejc.15.1689937030548;
-        Fri, 21 Jul 2023 03:57:10 -0700 (PDT)
+        bh=4Y7rbnaDJbn/YejSF4mQVA8Z4grlfMZHjKPnDFxLZ8A=;
+        b=Xvez8q8fu++Y/7NHsrpU9whHap2CSRzIS/mDxdJLZZ+U8hQTsUa3kNmK/O0BM3LcmU
+         /fY3zAKG6Qn9YDNeQsuKzfHzZqiB87qr7X883B0MGUmOjwElOSdGNi/BS6N1lZ9J9KAm
+         wecc759ZUYDgwPS0wPNtr84M18bRjekitevTr8r3d/XmMOd00W/uYe2UMd/tsY69OUtu
+         PRaQX6kTx+ct0wBSJ2Y56siHSOfb4vtd9tltyXuXvbgHDji/RgQ0o9kKmw5Lf9woTre5
+         adsubQORoFtORCE8nKl6F3/hmU18KB17Sq/pCwn9iyz6sdDMMxVFgu7VUYNeovCf8EuX
+         s2+g==
+X-Gm-Message-State: ABy/qLbuM2nohkWe/hFnqelgXoqR3SqTf8SHYCClIWxP6lbIOl9VanUt
+        m71NrcuHWYJhVk6bv1cfK8kNJaOeocYYfeQUUE91JyfiNs5dZo0EaDsFlpSqcCTGmYk5L4eMaaw
+        AKw8EKYNgImRTqJep5Gwuhw==
+X-Received: by 2002:a17:906:2da:b0:994:54af:e282 with SMTP id 26-20020a17090602da00b0099454afe282mr1360610ejk.10.1689940779997;
+        Fri, 21 Jul 2023 04:59:39 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEk/l1rT7vVGyK6B+M0/vN6OF6CipTv2G0AE0UWGqg9sgFPNWcoUSGmc+Sw2v1G9OPem3PIcQ==
+X-Received: by 2002:a17:906:2da:b0:994:54af:e282 with SMTP id 26-20020a17090602da00b0099454afe282mr1360600ejk.10.1689940779630;
+        Fri, 21 Jul 2023 04:59:39 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id f21-20020a170906049500b0099364d9f0e9sm2025435eja.102.2023.07.21.03.57.07
+        by smtp.googlemail.com with ESMTPSA id um15-20020a170906cf8f00b00992b3ea1ee3sm2078970ejb.159.2023.07.21.04.59.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jul 2023 03:57:09 -0700 (PDT)
-Message-ID: <0c033063-5d20-4522-87e2-80ad3cca3602@redhat.com>
-Date:   Fri, 21 Jul 2023 12:57:07 +0200
+        Fri, 21 Jul 2023 04:59:38 -0700 (PDT)
+Message-ID: <6118063e-5c91-acc4-129f-3bacc19f25ce@redhat.com>
+Date:   Fri, 21 Jul 2023 13:59:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [RFC PATCH v11 08/29] KVM: Introduce per-page memory attributes
+Subject: Re: [RFC PATCH v11 09/29] KVM: x86: Disallow hugepages when memory
+ attributes are mixed
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -98,9 +99,9 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-9-seanjc@google.com>
+ <20230718234512.1690985-10-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230718234512.1690985-9-seanjc@google.com>
+In-Reply-To: <20230718234512.1690985-10-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -115,44 +116,42 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 7/19/23 01:44, Sean Christopherson wrote:
-> From: Chao Peng <chao.p.peng@linux.intel.com>
-> 
-> In confidential computing usages, whether a page is private or shared is
-> necessary information for KVM to perform operations like page fault
-> handling, page zapping etc. There are other potential use cases for
-> per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> or exec-only, etc.) without having to modify memslots.
-> 
-> Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> userspace to operate on the per-page memory attributes.
->    - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
->      a guest memory range.
->    - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
->      memory attributes.
-> 
-> Use an xarray to store the per-page attributes internally, with a naive,
-> not fully optimized implementation, i.e. prioritize correctness over
-> performance for the initial implementation.
-> 
-> Because setting memory attributes is roughly analogous to mprotect() on
-> memory that is mapped into the guest, zap existing mappings prior to
-> updating the memory attributes.  Opportunistically provide an arch hook
-> for the post-set path (needed to complete invalidation anyways) in
-> anticipation of x86 needing the hook to update metadata related to
-> determining whether or not a given gfn can be backed with various sizes
-> of hugepages.
-> 
-> It's possible that future usages may not require an invalidation, e.g.
-> if KVM ends up supporting RWX protections and userspace grants _more_
-> protections, but again opt for simplicity and punt optimizations to
-> if/when they are needed.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com
-> Cc: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> +static bool range_has_attrs(struct kvm *kvm, gfn_t start, gfn_t end,
+> +			    unsigned long attrs)
+> +{
+> +	XA_STATE(xas, &kvm->mem_attr_array, start);
+> +	unsigned long index;
+> +	bool has_attrs;
+> +	void *entry;
+> +
+> +	rcu_read_lock();
+> +
+> +	if (!attrs) {
+> +		has_attrs = !xas_find(&xas, end);
+> +		goto out;
+> +	}
+> +
+> +	has_attrs = true;
+> +	for (index = start; index < end; index++) {
+> +		do {
+> +			entry = xas_next(&xas);
+> +		} while (xas_retry(&xas, entry));
+> +
+> +		if (xas.xa_index != index || xa_to_value(entry) != attrs) {
+> +			has_attrs = false;
+> +			break;
+> +		}
+> +	}
+> +
+> +out:
+> +	rcu_read_unlock();
+> +	return has_attrs;
+> +}
+> +
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Can you move this function to virt/kvm/kvm_main.c?
+
+Thanks,
+
+Paolo
 
