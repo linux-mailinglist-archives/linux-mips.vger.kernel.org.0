@@ -2,269 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A724175B984
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jul 2023 23:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE48275BD94
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 06:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjGTV2P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jul 2023 17:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S229593AbjGUE7q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jul 2023 00:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjGTV2O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jul 2023 17:28:14 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599D271D;
-        Thu, 20 Jul 2023 14:28:09 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-66872d4a141so892229b3a.1;
-        Thu, 20 Jul 2023 14:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689888489; x=1690493289;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Hy/9zTVZrlg7bbFpxkjr0lhxcNTNGSKdXmN/n9YFLY=;
-        b=nXxLfgmBt92XEDE8OP3OcE0nisAlc/Gi9Zse4iq73APm5A373sb6ySF1KTfOUa+QuX
-         ia3Xy59KQUF7gIB0hPoPjhSopV94TeiwDt/LztWRB6Qyz1jHNY1OozvVaE5RMQ9UdGw5
-         PMMWNQSNpVIxaxHNS4LWKSkQHzq5Z3SDiNLSXhdgHAc7DXvTGgH+4VKo2M8xFGbIHCXh
-         337Ve685ARtbWN8k2WWVvoDis4FS9zWIZ1LrAJA1fxWvbDhCuW9Dnu/E9PeGYaOXlPVE
-         kd4H7n4i3GLSfis0TrFmdjayzB65DGsbK8pheZGzu8z8qpliVRrp9gRaSAXgpDekRLO2
-         A4Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689888489; x=1690493289;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Hy/9zTVZrlg7bbFpxkjr0lhxcNTNGSKdXmN/n9YFLY=;
-        b=Vv5d/iuJtL0/JPAiXPEaIoONslJdTQCxvegD6HWhtsgll2z8xBF+WGEcqpDh3gEzTZ
-         AKEm91N6GG4l91AqGlj6h3+dYnFehMz0FqPZ1nk/iQxqzEyHdWrPo+ikCm90IYh0lbjN
-         gNx3fqeYVqaFiSOHqqNGyI9v6OgkaOHC56uEkCySOD1gdESXAmuwgTsAOpnfq1IkkGUd
-         RQvUbdR1qSBRQs3BCXOjy+ZgEXG8MmBFOK7J/dYFEaH8rPZe+q16tR9+M6X0Hgi9RbEg
-         4924yAtaIVEYyGJoCJcngmaKKgxecgSpgZ5YygBrPlSPQ6icj5ll8kkXWgWF0EzMP3H5
-         AO7A==
-X-Gm-Message-State: ABy/qLagie0wXsFGlrs+hsxFv8ZUM3ZloOFgRfKJgT/DYY0uNqKi3pJ9
-        7xLWNgf0Ojua9Lqb2i7A0mM=
-X-Google-Smtp-Source: APBJJlG/e53j4EpED5Jwtfn4LkeoExV6FWkBmpJOuNFRNxz/SI2h0UOe64NVRwIQoof3O2DGaGflqQ==
-X-Received: by 2002:a05:6a20:2583:b0:135:10fd:31b0 with SMTP id k3-20020a056a20258300b0013510fd31b0mr109795pzd.15.1689888488716;
-        Thu, 20 Jul 2023 14:28:08 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id n2-20020a62e502000000b006826df9e286sm1637942pff.143.2023.07.20.14.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 14:28:08 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 14:28:06 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
+        with ESMTP id S229457AbjGUE7o (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 00:59:44 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19870B3;
+        Thu, 20 Jul 2023 21:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1689915579;
+        bh=E8y/g9Khd0fFkgBzOo2hgfNC9FxKvpUwWSNkgdFASms=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Vz9fUc/RXTu27vyeQvrCGoaE8JdmFqjso1U7IKft3F4+AMIPMbJxbd6+vpUogCok2
+         jjqvREfJvYqz3QSGYRTfM9NbVcZw6ETTGk+G5ORy8Ef27KmVipGpAru/++iMcP0ZIY
+         irL63A70ZpZtpSAA842FIXFsBi3K9pkiGHMiMA9uGES1k6AQTlIav7DvOXvaXW5lr1
+         +C0AtN1LzNzfZWs6cqLKzQSLR9CakXGeTo5RmwHO24fURCoJ28UFMNlTF5RfwYFygo
+         JIBkIXyWk0zwzOR6aKsdnuJSg4XvmCPd8c6HNDSu/dKGG51lsM7dl8r9XMYvtkwX6A
+         gBrLXrGghZj8Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R6cmH4jNJz4wqW;
+        Fri, 21 Jul 2023 14:59:27 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Arnd Bergmann <arnd@kernel.org>, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        WANG Xuerui <kernel@xen0n.name>, Wei Liu <wei.liu@kernel.org>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl()
- for guest-specific backing memory
-Message-ID: <20230720212806.GG25699@ls.amr.corp.intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-13-seanjc@google.com>
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 1/9] vgacon: rework Kconfig dependencies
+In-Reply-To: <20230719123944.3438363-2-arnd@kernel.org>
+References: <20230719123944.3438363-1-arnd@kernel.org>
+ <20230719123944.3438363-2-arnd@kernel.org>
+Date:   Fri, 21 Jul 2023 14:59:24 +1000
+Message-ID: <87pm4lj1w3.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230718234512.1690985-13-seanjc@google.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 04:44:55PM -0700,
-Sean Christopherson <seanjc@google.com> wrote:
+Arnd Bergmann <arnd@kernel.org> writes:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The list of dependencies here is phrased as an opt-out, but this is missing
+> a lot of architectures that don't actually support VGA consoles, and some
+> of the entries are stale:
+>
+>  - powerpc used to support VGA consoles in the old arch/ppc codebase, but
+>    the merged arch/powerpc never did
 
-> +static int kvm_gmem_release(struct inode *inode, struct file *file)
-> +{
-> +	struct kvm_gmem *gmem = file->private_data;
-> +	struct kvm_memory_slot *slot;
-> +	struct kvm *kvm = gmem->kvm;
-> +	unsigned long index;
-> +
-> +	filemap_invalidate_lock(inode->i_mapping);
-> +
-> +	/*
-> +	 * Prevent concurrent attempts to *unbind* a memslot.  This is the last
-> +	 * reference to the file and thus no new bindings can be created, but
-> +	 * dereferencing the slot for existing bindings needs to be protected
-> +	 * against memslot updates, specifically so that unbind doesn't race
-> +	 * and free the memslot (kvm_gmem_get_file() will return NULL).
-> +	 */
-> +	mutex_lock(&kvm->slots_lock);
-> +
-> +	xa_for_each(&gmem->bindings, index, slot)
-> +		rcu_assign_pointer(slot->gmem.file, NULL);
-> +
-> +	synchronize_rcu();
-> +
-> +	/*
-> +	 * All in-flight operations are gone and new bindings can be created.
-> +	 * Zap all SPTEs pointed at by this file.  Do not free the backing
-> +	 * memory, as its lifetime is associated with the inode, not the file.
-> +	 */
-> +	kvm_gmem_invalidate_begin(gmem, 0, -1ul);
-> +	kvm_gmem_invalidate_end(gmem, 0, -1ul);
-> +
-> +	mutex_unlock(&kvm->slots_lock);
-> +
-> +	list_del(&gmem->entry);
-> +
-> +	filemap_invalidate_unlock(inode->i_mapping);
-> +
-> +	xa_destroy(&gmem->bindings);
-> +	kfree(gmem);
-> +
-> +	kvm_put_kvm(kvm);
-> +
-> +	return 0;
-> +}
+Not disputing this, but how did you come to that conclusion? I grepped
+around and couldn't convince myself whether it can work on powerpc or
+not. ie. currently it's possible to enable CONFIG_VGA_CONSOLE and
+powerpc does have a struct screen_info defined which seems like it would
+allow vgacon_startup() to complete.
 
-The lockdep complains with the filemapping lock and the kvm slot lock.
+My only concern is that someone could be using it with Qemu?
 
-
-From bc45eb084a761f93a87ba1f6d3a9949c17adeb31 Mon Sep 17 00:00:00 2001
-Message-Id: <bc45eb084a761f93a87ba1f6d3a9949c17adeb31.1689888438.git.isaku.yamahata@intel.com>
-From: Isaku Yamahata <isaku.yamahata@intel.com>
-Date: Thu, 20 Jul 2023 14:16:21 -0700
-Subject: [PATCH] KVM/gmem: Fix locking ordering in kvm_gmem_release()
-
-The lockdep complains the locking order.  Fix kvm_gmem_release()
-
-VM destruction:
-- fput()
-   ...
-   \-kvm_gmem_release()
-     \-filemap_invalidate_lock(inode->i_mapping);
-       lock(&kvm->slots_lock);
-
-slot creation:
-kvm_set_memory_region()
-   mutex_lock(&kvm->slots_lock);
-   __kvm_set_memory_region(kvm, mem);
-    \-kvm_gmem_bind()
-      \-filemap_invalidate_lock(inode->i_mapping);
-
-======================================================
-WARNING: possible circular locking dependency detected
-------------------------------------------------------
-...
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (mapping.invalidate_lock#4){+.+.}-{4:4}:
-       ...
-       down_write+0x40/0xe0
-       kvm_gmem_bind+0xd9/0x1b0 [kvm]
-       __kvm_set_memory_region.part.0+0x4fc/0x620 [kvm]
-       __kvm_set_memory_region+0x6b/0x90 [kvm]
-       kvm_vm_ioctl+0x350/0xa00 [kvm]
-       __x64_sys_ioctl+0x95/0xd0
-       do_syscall_64+0x39/0x90
-       entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
--> #0 (&kvm->slots_lock){+.+.}-{4:4}:
-       ...
-       mutex_lock_nested+0x1b/0x30
-       kvm_gmem_release+0x56/0x1b0 [kvm]
-       __fput+0x115/0x2e0
-       ____fput+0xe/0x20
-       task_work_run+0x5e/0xb0
-       do_exit+0x2dd/0x5b0
-       do_group_exit+0x3b/0xb0
-       __x64_sys_exit_group+0x18/0x20
-       do_syscall_64+0x39/0x90
-       entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(mapping.invalidate_lock#4);
-                               lock(&kvm->slots_lock);
-                               lock(mapping.invalidate_lock#4);
-  lock(&kvm->slots_lock);
-
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- virt/kvm/guest_mem.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
-index ab91e972e699..772e4631fcd9 100644
---- a/virt/kvm/guest_mem.c
-+++ b/virt/kvm/guest_mem.c
-@@ -274,8 +274,6 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
- 	struct kvm *kvm = gmem->kvm;
- 	unsigned long index;
- 
--	filemap_invalidate_lock(inode->i_mapping);
--
- 	/*
- 	 * Prevent concurrent attempts to *unbind* a memslot.  This is the last
- 	 * reference to the file and thus no new bindings can be created, but
-@@ -285,6 +283,8 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
- 	 */
- 	mutex_lock(&kvm->slots_lock);
- 
-+	filemap_invalidate_lock(inode->i_mapping);
-+
- 	xa_for_each(&gmem->bindings, index, slot)
- 		rcu_assign_pointer(slot->gmem.file, NULL);
- 
-@@ -299,12 +299,12 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
- 	kvm_gmem_issue_arch_invalidate(gmem->kvm, file_inode(file), 0, -1ul);
- 	kvm_gmem_invalidate_end(gmem, 0, -1ul);
- 
--	mutex_unlock(&kvm->slots_lock);
--
- 	list_del(&gmem->entry);
- 
- 	filemap_invalidate_unlock(inode->i_mapping);
- 
-+	mutex_unlock(&kvm->slots_lock);
-+
- 	xa_destroy(&gmem->bindings);
- 	kfree(gmem);
- 
--- 
-2.25.1
-
-
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+cheers
