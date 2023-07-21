@@ -2,68 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2700B75C643
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 14:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CBC75CAE7
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 17:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjGUMA1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jul 2023 08:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S231627AbjGUPGY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jul 2023 11:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjGUMA0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 08:00:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6421722
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 04:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689940782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Y7rbnaDJbn/YejSF4mQVA8Z4grlfMZHjKPnDFxLZ8A=;
-        b=NLYxJ/tI375ddfrYE69u4PU4Z9h7i6tOguCLsIe+/EncQBl2Aqsf93Gj2dpLFHHmIJWLvd
-        wEHK9+sHYSWQpfB86rX4TB+P5e6nKB+99bnGoy9jC96Rwt1F2pOlKeFgF426rwViuud1tV
-        rJFa43qXP2DG3tN66TNOfIOxNbBopgE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-13-YY4tZ2DBMOChc3VyE95gUw-1; Fri, 21 Jul 2023 07:59:41 -0400
-X-MC-Unique: YY4tZ2DBMOChc3VyE95gUw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-97542592eb9so118382166b.2
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 04:59:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689940780; x=1690545580;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Y7rbnaDJbn/YejSF4mQVA8Z4grlfMZHjKPnDFxLZ8A=;
-        b=Xvez8q8fu++Y/7NHsrpU9whHap2CSRzIS/mDxdJLZZ+U8hQTsUa3kNmK/O0BM3LcmU
-         /fY3zAKG6Qn9YDNeQsuKzfHzZqiB87qr7X883B0MGUmOjwElOSdGNi/BS6N1lZ9J9KAm
-         wecc759ZUYDgwPS0wPNtr84M18bRjekitevTr8r3d/XmMOd00W/uYe2UMd/tsY69OUtu
-         PRaQX6kTx+ct0wBSJ2Y56siHSOfb4vtd9tltyXuXvbgHDji/RgQ0o9kKmw5Lf9woTre5
-         adsubQORoFtORCE8nKl6F3/hmU18KB17Sq/pCwn9iyz6sdDMMxVFgu7VUYNeovCf8EuX
-         s2+g==
-X-Gm-Message-State: ABy/qLbuM2nohkWe/hFnqelgXoqR3SqTf8SHYCClIWxP6lbIOl9VanUt
-        m71NrcuHWYJhVk6bv1cfK8kNJaOeocYYfeQUUE91JyfiNs5dZo0EaDsFlpSqcCTGmYk5L4eMaaw
-        AKw8EKYNgImRTqJep5Gwuhw==
-X-Received: by 2002:a17:906:2da:b0:994:54af:e282 with SMTP id 26-20020a17090602da00b0099454afe282mr1360610ejk.10.1689940779997;
-        Fri, 21 Jul 2023 04:59:39 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEk/l1rT7vVGyK6B+M0/vN6OF6CipTv2G0AE0UWGqg9sgFPNWcoUSGmc+Sw2v1G9OPem3PIcQ==
-X-Received: by 2002:a17:906:2da:b0:994:54af:e282 with SMTP id 26-20020a17090602da00b0099454afe282mr1360600ejk.10.1689940779630;
-        Fri, 21 Jul 2023 04:59:39 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id um15-20020a170906cf8f00b00992b3ea1ee3sm2078970ejb.159.2023.07.21.04.59.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jul 2023 04:59:38 -0700 (PDT)
-Message-ID: <6118063e-5c91-acc4-129f-3bacc19f25ce@redhat.com>
-Date:   Fri, 21 Jul 2023 13:59:36 +0200
+        with ESMTP id S231608AbjGUPGO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 11:06:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC0B272D;
+        Fri, 21 Jul 2023 08:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689951969; x=1721487969;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=m75I2ERfRQTCcOTwNioBlzNNFor8J6AUk5uhhkX1LBE=;
+  b=HV1hDVUXXxHNKGHSLiWMASWpKJTbWXXhsIgybOlfnfS7NGRwiAantlbp
+   HGAwvEtCKk6nYHjCmjD1aa9K19ev5YmtZGVHAGEIXhH1ZqzJ9FuqVfZw7
+   D+ZiEciWJFCgHtTunz+5T1Lio/SHBmLhx9UUimj72t5nLpulGuJ8PHpIk
+   ty3QgV93fCeZHKspp2TuX2grSiV52ixrwsT/krgDdjo1ianUxCXMYT/C3
+   ZD4NLybRXJEUJxiYFtfGuF33s3Lk7O9saW94rSIdT9TuABI3Ei33GKrCJ
+   kFd1GmZtn1FKq/e3zlyaIwRiMC5z83oRT1gTnNW2hToAFo2SX3R6/f5KG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="430835138"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="430835138"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 08:06:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="790229682"
+X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
+   d="scan'208";a="790229682"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.6.77]) ([10.93.6.77])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 08:05:57 -0700
+Message-ID: <fdc155f5-041b-a1b1-15aa-8f970180a13a@intel.com>
+Date:   Fri, 21 Jul 2023 23:05:53 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC PATCH v11 09/29] KVM: x86: Disallow hugepages when memory
- attributes are mixed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -99,15 +83,15 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-10-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230718234512.1690985-10-seanjc@google.com>
+ <20230718234512.1690985-13-seanjc@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230718234512.1690985-13-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,43 +99,21 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/19/23 01:44, Sean Christopherson wrote:
-> +static bool range_has_attrs(struct kvm *kvm, gfn_t start, gfn_t end,
-> +			    unsigned long attrs)
-> +{
-> +	XA_STATE(xas, &kvm->mem_attr_array, start);
-> +	unsigned long index;
-> +	bool has_attrs;
-> +	void *entry;
+On 7/19/2023 7:44 AM, Sean Christopherson wrote:
+> @@ -6255,12 +6298,17 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
+>   	if (r)
+>   		goto err_async_pf;
+>   
+> +	r = kvm_gmem_init();
+> +	if (r)
+> +		goto err_gmem;
 > +
-> +	rcu_read_lock();
-> +
-> +	if (!attrs) {
-> +		has_attrs = !xas_find(&xas, end);
-> +		goto out;
-> +	}
-> +
-> +	has_attrs = true;
-> +	for (index = start; index < end; index++) {
-> +		do {
-> +			entry = xas_next(&xas);
-> +		} while (xas_retry(&xas, entry));
-> +
-> +		if (xas.xa_index != index || xa_to_value(entry) != attrs) {
-> +			has_attrs = false;
-> +			break;
-> +		}
-> +	}
-> +
-> +out:
-> +	rcu_read_unlock();
-> +	return has_attrs;
-> +}
-> +
+>   	kvm_chardev_ops.owner = module;
+>   
+>   	kvm_preempt_ops.sched_in = kvm_sched_in;
+>   	kvm_preempt_ops.sched_out = kvm_sched_out;
+>   
+>   	kvm_init_debug();
+> +	kvm_gmem_init();
 
-Can you move this function to virt/kvm/kvm_main.c?
-
-Thanks,
-
-Paolo
-
+why kvm_gmem_init() needs to be called again? by mistake?
