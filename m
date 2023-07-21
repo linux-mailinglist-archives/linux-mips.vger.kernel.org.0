@@ -2,291 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EC275C25D
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 11:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668E175C474
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 12:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjGUJEp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jul 2023 05:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S231788AbjGUKRm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jul 2023 06:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjGUJEo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 05:04:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D782D4B
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 02:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689930237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UkppB3amY8e+ZFUORFAPfGoR63QBz1mTawh0tzwUFzU=;
-        b=LQP6XBILE98E9vsC1vDQTB4+jRvd/3e8SnMSohe/gtMVLoozMI1Al33V79jIwfp1dj5ZuN
-        JzloFMiUXpT332GcmJj3Jz8J3ObnmzpccY3lKEMFMthaMNNUYTmZnH3bMxgYjsKMZzA2uy
-        xTCduHU3SD6pjlA2cN4bltSuiSwDTPE=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-296-qZzpCbUTPseSD47SK0hdpw-1; Fri, 21 Jul 2023 05:03:55 -0400
-X-MC-Unique: qZzpCbUTPseSD47SK0hdpw-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-993c24f3246so206746566b.1
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 02:03:55 -0700 (PDT)
+        with ESMTP id S231596AbjGUKRC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 06:17:02 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CC6423B;
+        Fri, 21 Jul 2023 03:16:05 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-993a37b79e2so278848066b.1;
+        Fri, 21 Jul 2023 03:16:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689934536; x=1690539336;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xtjou4bw3TzoaU4pkxO6dL/R//dx1dOT1P8B0FqrHKA=;
+        b=Tfm+30DQEJ60lYnGshB1LHllAG8vV6tZJlWJu8MaEzgnMoMC4s8xR3p8apQLvVNXrU
+         SsCdfj06a4f9s62gn1+m13FZeT8JIaTbP/QLsdb58Wl+Bx3Sk7VWJYPoYNaVX5mC3+q0
+         Rs2KjsZnmNUozrNcZGl15QnXalxAHlU6ZCHrH5lsGabvw9HEXfz1EAYPQdbs9ZtUgGmu
+         ODgtKVUF0wY54I/IMZWbmr8tof5c0D/hfoTkIzmRnUg+uw27Hm23MiuKX3PpzfRWwdpX
+         JSpcBybDwjUfvHgOaPY78806miQgOTtCRT1cm5IQNhbaumSj/5htxDsdm3D+hUCmwISK
+         gyVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689930235; x=1690535035;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UkppB3amY8e+ZFUORFAPfGoR63QBz1mTawh0tzwUFzU=;
-        b=aPLaFbIQ99uljCDFi26OQzZngU8EaCVgmkzRCYBt+QU8Y3euUTqZ/1EuAFbNWBnaNY
-         oc/9JxgspQ+Kzt4Ew+3U1LkEzitSwfW74maL3rmCcyRrCOHFHcKv6VwPKKoQillyN/PW
-         Lh8eg9RnoQSbRq2wRdwLESh92DJAjKv7NbOrGzEEkFZMUfZbDrax08uWGCAFGCAVJhie
-         mT7EbfDAbYnn+24NzV15D4dkEvXOBsS5fQL9FJVV4pEINjVcohOsxymtq6fDBK6dazls
-         VTNaVnoowvklqfXAguJrqR4pnXQDjucnr6McXFUvGTjqM2qQ0eyNX32SQhOet4otHr+U
-         3Tqw==
-X-Gm-Message-State: ABy/qLZfZWHEGxWkNbXNgPNWZnTS39HYCZ4NB1TLhikp+C6I2R8YkVG8
-        b9rqcujUme0sCB5jFljBgvGA0Fld7Qf3mx73y+3eJF8yjQYTZ/C8mF8WNrkyjnIGwADXAw29hEt
-        /fw57MZYdxdn43DzKoo9y8g==
-X-Received: by 2002:a17:907:6d8c:b0:98d:abd4:4000 with SMTP id sb12-20020a1709076d8c00b0098dabd44000mr7889164ejc.35.1689930234819;
-        Fri, 21 Jul 2023 02:03:54 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGH6YzYN7wVD16W6bBWRZvka9R57MaW1yVsDxFFu0qfog7UhF1jWQDyj4gC4NTPLd7VWeWUJA==
-X-Received: by 2002:a17:907:6d8c:b0:98d:abd4:4000 with SMTP id sb12-20020a1709076d8c00b0098dabd44000mr7889108ejc.35.1689930234273;
-        Fri, 21 Jul 2023 02:03:54 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id rv7-20020a17090710c700b00993a9a951fasm1915159ejb.11.2023.07.21.02.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jul 2023 02:03:53 -0700 (PDT)
-Message-ID: <47c5f57c-a191-1983-b4ef-6e0c59c0c446@redhat.com>
-Date:   Fri, 21 Jul 2023 11:03:51 +0200
+        d=1e100.net; s=20221208; t=1689934536; x=1690539336;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xtjou4bw3TzoaU4pkxO6dL/R//dx1dOT1P8B0FqrHKA=;
+        b=k9QLjJ8ghcpgtwdejkANrZg+avd0E2glqxl3VxmZQhSSyIH5Y+Puu/0Ht1hL8YwJ66
+         OWXzv1PGvyCjS8VXpmYSCKeOpl4YTpJDkBWcS/K88K7WAwkRmBJvSWnBZs3wQ7kZgk08
+         GwzS4BR/IVpQJnYplG+49uoeVOdns5R4R9ikuYZ4DaAVMipbBIdSejgV++Rp4ohhY6OM
+         c1ZT83Db3WM8AqthNF9X3jTCTjGGsPthZGnU27WhOAz/r+NAtJqLtYwpo8OKSmfgbADt
+         mojHhcAH3OTgY4TYj9T6hng09EeXDX1bw8NqzvVNhFmzsonQPHiglnG9EMDuCJMh7UFb
+         5LcQ==
+X-Gm-Message-State: ABy/qLbsKKFtPHisTQniv+aLWhGgIE08xhtVtZgVs540paY8w92eA8nP
+        +RRCw1y8g3bbgoovC+zsIto=
+X-Google-Smtp-Source: APBJJlFMSTNXVoDP1pttaZXsGetq1EYUvcvS8mVgRKzhexw1wKgMd76fhF1INGqDgTxi6Ne6bb3VQA==
+X-Received: by 2002:a17:906:7691:b0:991:c566:979 with SMTP id o17-20020a170906769100b00991c5660979mr1229678ejm.36.1689934535180;
+        Fri, 21 Jul 2023 03:15:35 -0700 (PDT)
+Received: from orome (p200300e41f1bd600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1b:d600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id o19-20020a17090608d300b0098d2f703408sm1960285eje.118.2023.07.21.03.15.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jul 2023 03:15:34 -0700 (PDT)
+Date:   Fri, 21 Jul 2023 12:15:32 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Liviu Dudau <liviu.dudau@arm.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-mips@vger.kernel.org, lima@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH] drm: Explicitly include correct DT includes
+Message-ID: <ZLpaYPUI5gPd4jK_@orome>
+References: <20230714174545.4056287-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC PATCH v11 06/29] KVM: Introduce KVM_SET_USER_MEMORY_REGION2
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-7-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230718234512.1690985-7-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qaVvuRtXrCn2kCOF"
+Content-Disposition: inline
+In-Reply-To: <20230714174545.4056287-1-robh@kernel.org>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/19/23 01:44, Sean Christopherson wrote:
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/x86.c       |  2 +-
->   include/linux/kvm_host.h |  4 ++--
->   include/uapi/linux/kvm.h | 13 +++++++++++++
->   virt/kvm/kvm_main.c      | 38 ++++++++++++++++++++++++++++++--------
->   4 files changed, 46 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index a6b9bea62fb8..92e77afd3ffd 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12420,7 +12420,7 @@ void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
->   	}
->   
->   	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> -		struct kvm_userspace_memory_region m;
-> +		struct kvm_userspace_memory_region2 m;
->   
->   		m.slot = id | (i << 16);
->   		m.flags = 0;
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index d2d3e083ec7f..e9ca49d451f3 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1130,9 +1130,9 @@ enum kvm_mr_change {
->   };
->   
->   int kvm_set_memory_region(struct kvm *kvm,
-> -			  const struct kvm_userspace_memory_region *mem);
-> +			  const struct kvm_userspace_memory_region2 *mem);
->   int __kvm_set_memory_region(struct kvm *kvm,
-> -			    const struct kvm_userspace_memory_region *mem);
-> +			    const struct kvm_userspace_memory_region2 *mem);
->   void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot);
->   void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen);
->   int kvm_arch_prepare_memory_region(struct kvm *kvm,
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index f089ab290978..4d4b3de8ac55 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -95,6 +95,16 @@ struct kvm_userspace_memory_region {
->   	__u64 userspace_addr; /* start of the userspace allocated memory */
->   };
->   
-> +/* for KVM_SET_USER_MEMORY_REGION2 */
-> +struct kvm_userspace_memory_region2 {
-> +	__u32 slot;
-> +	__u32 flags;
-> +	__u64 guest_phys_addr;
-> +	__u64 memory_size;
-> +	__u64 userspace_addr;
-> +	__u64 pad[16];
-> +};
-> +
->   /*
->    * The bit 0 ~ bit 15 of kvm_userspace_memory_region::flags are visible for
->    * userspace, other bits are reserved for kvm internal use which are defined
-> @@ -1192,6 +1202,7 @@ struct kvm_ppc_resize_hpt {
->   #define KVM_CAP_COUNTER_OFFSET 227
->   #define KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE 228
->   #define KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES 229
-> +#define KVM_CAP_USER_MEMORY2 230
->   
->   #ifdef KVM_CAP_IRQ_ROUTING
->   
-> @@ -1466,6 +1477,8 @@ struct kvm_vfio_spapr_tce {
->   					struct kvm_userspace_memory_region)
->   #define KVM_SET_TSS_ADDR          _IO(KVMIO,   0x47)
->   #define KVM_SET_IDENTITY_MAP_ADDR _IOW(KVMIO,  0x48, __u64)
-> +#define KVM_SET_USER_MEMORY_REGION2 _IOW(KVMIO, 0x49, \
-> +					 struct kvm_userspace_memory_region2)
->   
->   /* enable ucontrol for s390 */
->   struct kvm_s390_ucas_mapping {
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 53346bc2902a..c14adf93daec 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1549,7 +1549,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
->   	}
->   }
->   
-> -static int check_memory_region_flags(const struct kvm_userspace_memory_region *mem)
-> +static int check_memory_region_flags(const struct kvm_userspace_memory_region2 *mem)
->   {
->   	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
->   
-> @@ -1951,7 +1951,7 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
->    * Must be called holding kvm->slots_lock for write.
->    */
->   int __kvm_set_memory_region(struct kvm *kvm,
-> -			    const struct kvm_userspace_memory_region *mem)
-> +			    const struct kvm_userspace_memory_region2 *mem)
->   {
->   	struct kvm_memory_slot *old, *new;
->   	struct kvm_memslots *slots;
-> @@ -2055,7 +2055,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
->   EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
->   
->   int kvm_set_memory_region(struct kvm *kvm,
-> -			  const struct kvm_userspace_memory_region *mem)
-> +			  const struct kvm_userspace_memory_region2 *mem)
->   {
->   	int r;
->   
-> @@ -2067,7 +2067,7 @@ int kvm_set_memory_region(struct kvm *kvm,
->   EXPORT_SYMBOL_GPL(kvm_set_memory_region);
->   
->   static int kvm_vm_ioctl_set_memory_region(struct kvm *kvm,
-> -					  struct kvm_userspace_memory_region *mem)
-> +					  struct kvm_userspace_memory_region2 *mem)
->   {
->   	if ((u16)mem->slot >= KVM_USER_MEM_SLOTS)
->   		return -EINVAL;
-> @@ -4514,6 +4514,7 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->   {
->   	switch (arg) {
->   	case KVM_CAP_USER_MEMORY:
-> +	case KVM_CAP_USER_MEMORY2:
->   	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
->   	case KVM_CAP_JOIN_MEMORY_REGIONS_WORKS:
->   	case KVM_CAP_INTERNAL_ERROR_DATA:
-> @@ -4757,6 +4758,14 @@ static int kvm_vm_ioctl_get_stats_fd(struct kvm *kvm)
->   	return fd;
->   }
->   
-> +#define SANITY_CHECK_MEM_REGION_FIELD(field)					\
-> +do {										\
-> +	BUILD_BUG_ON(offsetof(struct kvm_userspace_memory_region, field) !=		\
-> +		     offsetof(struct kvm_userspace_memory_region2, field));	\
-> +	BUILD_BUG_ON(sizeof_field(struct kvm_userspace_memory_region, field) !=		\
-> +		     sizeof_field(struct kvm_userspace_memory_region2, field));	\
-> +} while (0)
-> +
->   static long kvm_vm_ioctl(struct file *filp,
->   			   unsigned int ioctl, unsigned long arg)
->   {
-> @@ -4779,15 +4788,28 @@ static long kvm_vm_ioctl(struct file *filp,
->   		r = kvm_vm_ioctl_enable_cap_generic(kvm, &cap);
->   		break;
->   	}
-> +	case KVM_SET_USER_MEMORY_REGION2:
->   	case KVM_SET_USER_MEMORY_REGION: {
-> -		struct kvm_userspace_memory_region kvm_userspace_mem;
-> +		struct kvm_userspace_memory_region2 mem;
-> +		unsigned long size;
-> +
-> +		if (ioctl == KVM_SET_USER_MEMORY_REGION)
-> +			size = sizeof(struct kvm_userspace_memory_region);
-> +		else
-> +			size = sizeof(struct kvm_userspace_memory_region2);
-> +
-> +		/* Ensure the common parts of the two structs are identical. */
-> +		SANITY_CHECK_MEM_REGION_FIELD(slot);
-> +		SANITY_CHECK_MEM_REGION_FIELD(flags);
-> +		SANITY_CHECK_MEM_REGION_FIELD(guest_phys_addr);
-> +		SANITY_CHECK_MEM_REGION_FIELD(memory_size);
-> +		SANITY_CHECK_MEM_REGION_FIELD(userspace_addr);
->   
->   		r = -EFAULT;
-> -		if (copy_from_user(&kvm_userspace_mem, argp,
-> -						sizeof(kvm_userspace_mem)))
-> +		if (copy_from_user(&mem, argp, size))
->   			goto out;
->   
-> -		r = kvm_vm_ioctl_set_memory_region(kvm, &kvm_userspace_mem);
-> +		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
->   		break;
->   	}
->   	case KVM_GET_DIRTY_LOG: {
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+--qaVvuRtXrCn2kCOF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Jul 14, 2023 at 11:45:34AM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+[Trimming the recipient list so that Google will let me send this]
+
+Test builds were fine, so I've pushed this to drm-misc now.
+
+Thierry
+
+--qaVvuRtXrCn2kCOF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmS6WsQACgkQ3SOs138+
+s6HK1A//QgDGQj/2Xez0LhGk60CphNT160FLxq+/4O2qQdzBoldz2WfYizMz+Qyv
+OCph/RC4Vp2VJEySeVU8jjojJZtqnu3iVQ9LGC/L7EFFJQOwaNlGusy3FoWAp5i1
+tAMhZUBH/QCvLjoc7kQXt+MjZGx/ccGHcmckwnjP1DVERdSUqXtq8VU1FHDxiQ2Q
+WfE9WhlNsXzJzcGXKC9qEKcn/OdrvPHgmAMJ7ypyjQ9z1x1/oEsJH6Bj0oIaiF2+
+R1Lt+KO5tvnL4ozutwZoHX4rPL9qQ9NvBwvk3DdxxaDs4R5Hhin5rkKhs6SvVbBX
+8bOTy7u1WaKQWaGEhGnnQzpaK3bp1n9L9Ooc/VtUaBx1iRZ8EsJmVfdNC8527L14
+0pH0DNOHHZDuTKd14C/W8JKsSrMtqPml41UClQC8AQ69iSfq95AbcajnFXcpamF6
+nYbTpBL+EOukFj5EJppNc0Bg3R0HdXvz9DmBx0qMt9cFAbq05D+4ke/aTKCDv0nM
+eQij9GV8h4g7wsmXWfFYqnbVk2K8G8KqsjEZakqkbUYE0i4tUs+O8g1piw1aXQis
+gX6QIVmBbi4PjPh2TWik5FCLogKMIqVDCuUfG/LJIQzypr/7QnSP6XpvyqjWiWua
+t1LWo/rbraFTe/hnaRqOUgOfKnfXRN3fZFxHW5CHGIwET0BUK9s=
+=UVD4
+-----END PGP SIGNATURE-----
+
+--qaVvuRtXrCn2kCOF--
