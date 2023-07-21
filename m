@@ -2,98 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1251E75D0DD
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 19:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7944D75D143
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jul 2023 20:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjGURuM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jul 2023 13:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S230356AbjGUSYM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jul 2023 14:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjGURuM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 13:50:12 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80590359B
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 10:50:08 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d064a458dd5so372709276.1
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jul 2023 10:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689961807; x=1690566607;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGq520d0DqyrCnCF7s5Hdb0rD6NYwtkYzvVScy9HYVY=;
-        b=lZQ3ytVABaMbgeRDyRyj2Y4aroG9rwZE4tos1KIi9+yVur8kHjUJfNDjBsWbA5klWv
-         TLcM88saeccS8fNt+F3rMDPeeLUphdScBaSRyrIwijc1R9havyOwlUNE/IQcuJNK+B8L
-         fg4nRh9mVWUewpR8WoS4y2UShReGqGQI/p2sPXI0/xi9S/4bLyRSoR+wjHm8ngFldPX/
-         svRbdc4YBfOK5kZ24vC9n3F8L7Li2/2X6A5zsHfs5DeCFBQGgpDd6R/Lv+3ONLhdKh+D
-         zucg4UeBA4sEAN2XLHlR2RolIKqE8NS9aws4SoQANyJbQckavpkDoby1VzLjItanYN4z
-         z0Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689961807; x=1690566607;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGq520d0DqyrCnCF7s5Hdb0rD6NYwtkYzvVScy9HYVY=;
-        b=WR12eu6SGzjDoT036SodL4Qfbtl1ta7BOBgoGPyWRlnuzaQWtDhD15MRGxG6mPQ+ze
-         gVgeBXWSyyIyaDBLg9VDokcxPSUNPVSlQT2oz0ND9ZnnTAAQorPWshhtpV8pPpolJ0qK
-         vlbAAmzRQwfi+J5+ALtH/4kZ2tKGnS0vJ8Vfrp9Am1alGkFswb8CGihEXV5KqNCb0M1q
-         PVEmq1EjYkrQYEOSYUev9Uf2TZFSCZKlw/R9ElCi7hv+MF/EhTSmmml2OSDDx+XXwBpA
-         PRj1odGCEdRcLtTs/ts/+Bz9DntI580hLGAqIHTYEG4/0bxjhT1vwjdI2q3D5uMvrzIO
-         u4Hg==
-X-Gm-Message-State: ABy/qLZOc9fiRWO3HhoZTyuqwmLuBPVSUh7zYvTZMYOLF9G5YBBd+eix
-        c5NbXhuct0tVW4iFTlekS1+5fEbt0gk=
-X-Google-Smtp-Source: APBJJlGQVjm5RzrpH36bdluvnqR1OmovIF/Mv2HtKZQ0PUD+Zj6xyTxIa85gQ91Vm5Bag6YHDA7hXUEb4so=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:10cd:b0:c1c:df23:44ee with SMTP id
- w13-20020a05690210cd00b00c1cdf2344eemr19769ybu.0.1689961807734; Fri, 21 Jul
- 2023 10:50:07 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 10:50:06 -0700
-In-Reply-To: <8ad7a846-64e9-a3f1-4bf1-731a994d62cb@redhat.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-13-seanjc@google.com>
- <8ad7a846-64e9-a3f1-4bf1-731a994d62cb@redhat.com>
-Message-ID: <ZLrFTq2f1NXtlJWd@google.com>
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        with ESMTP id S230326AbjGUSYL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jul 2023 14:24:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112D73A8C;
+        Fri, 21 Jul 2023 11:23:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65EDA61D7E;
+        Fri, 21 Jul 2023 18:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41432C433C9;
+        Fri, 21 Jul 2023 18:23:50 +0000 (UTC)
+Date:   Fri, 21 Jul 2023 11:23:49 -0700
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        mark.rutland@arm.com, ryan.roberts@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, linux-doc@vger.kernel.org,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
+        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
+        Jonathan.Cameron@huawei.com,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
+        Barry Song <baohua@kernel.org>
+Subject: Re: [PATCH v11 1/4] mm/tlbbatch: Introduce
+ arch_tlbbatch_should_defer()
+Message-ID: <ZLrNNcApzNLp9pdj@arm.com>
+References: <20230717131004.12662-1-yangyicong@huawei.com>
+ <20230717131004.12662-2-yangyicong@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230717131004.12662-2-yangyicong@huawei.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,26 +60,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 21, 2023, Paolo Bonzini wrote:
-> On 7/19/23 01:44, Sean Christopherson wrote:
-> > +	inode = alloc_anon_inode(mnt->mnt_sb);
-> > +	if (IS_ERR(inode))
-> > +		return PTR_ERR(inode);
-> > +
-> > +	err = security_inode_init_security_anon(inode, &qname, NULL);
-> > +	if (err)
-> > +		goto err_inode;
-> > +
+On Mon, Jul 17, 2023 at 09:10:01PM +0800, Yicong Yang wrote:
+> From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
 > 
-> I don't understand the need to have a separate filesystem.  If it is to
-> fully setup the inode before it's given a struct file, why not just export
-> anon_inode_make_secure_inode instead of security_inode_init_security_anon?
+> The entire scheme of deferred TLB flush in reclaim path rests on the
+> fact that the cost to refill TLB entries is less than flushing out
+> individual entries by sending IPI to remote CPUs. But architecture
+> can have different ways to evaluate that. Hence apart from checking
+> TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
+> architecture specific.
+> 
+> Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+> [https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> [Rebase and fix incorrect return value type]
+> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Reviewed-by: Barry Song <baohua@kernel.org>
+> Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
+> Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
 
-Ugh, this is why comments are important, I can't remember either.
-
-I suspect I implemented a dedicated filesystem to kinda sorta show that we could
-allow userspace to provide the mount point with e.g. NUMA hints[*].  But my
-preference would be to not support a userspace provided mount and instead implement
-fbind() to let userspace control NUMA and whatnot.
-
-[*] https://lore.kernel.org/all/ef48935e5e6f947f6f0c6d748232b14ef5d5ad70.1681176340.git.ackerleytng@google.com
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
