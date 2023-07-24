@@ -2,171 +2,221 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2428D75E964
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jul 2023 03:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D134975EA9D
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jul 2023 06:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbjGXBzg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Jul 2023 21:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S229628AbjGXEpw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jul 2023 00:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbjGXBzS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Jul 2023 21:55:18 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn20800.outbound.protection.outlook.com [IPv6:2a01:111:f403:700c::800])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F83EAD3C;
-        Sun, 23 Jul 2023 18:45:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K70k0SvOEVwS+YxD1fAvSgne8fUQ8ilEAChmzmxgvCfobTBiEDcKXEoV+lKygKC8pS+IFDIkVU7rDxyQxxKZVswNWYcJC0HwNW15H3ooATda0EiIfAfGMQHddDf4I6O+AYtUydrOgsVotfNBWXpf8DAajPnk+eOiyHiNygFa0L0gsqaaFbZ1SHsuOj+6jJ2l5FflJRi/Ms8LhkSjL1FPcz/QCxPBOIgmWmDumP538JE4h3k3bxRc/fZeiU02zAq8M1dFe6t80rQDB2oV2DWTEgRnkASaIuvjYtD7pHOnZEjydYvpqTRXZYtsa+uWa9uwaGWLw5N5ygTJxdpZ0VRZeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZmGqFkAFKPv1OOSnztujaaycylVXWO29pqrVZDFIWVM=;
- b=Bl/1PBOqQG5yr14xs18SxcoAqS49a2QJCUhRiuKOtPXPr6IiCupeV+MPAOe+qsyB/CdUnZMRx0fqyK5Q3kdqeSQBLJF0zhMvVTJ36Ptx/6120eWGGlgCCvlPIVovtvx78BInfA3SPD09zpcPSt60w2vj+DyRZ9qoSRRjEnZU3T/SmBsQkmpHGxTdzRMV5MCbPPXDzintNo/dIa6nVVNX7zjkh/ol3aCx1ajkAdKq4XftX0v19bDmEsmGCHEZ/wkUY1XNs+dmBXgsGkcjhZ9LFF/bABtKSw8MNArxJ5zLJKBAp5oBmgI7SAcfL/URe5NwxqyvqmsMIcEuD+35lGEXiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZmGqFkAFKPv1OOSnztujaaycylVXWO29pqrVZDFIWVM=;
- b=TeLkjDL+qhtbMDgn4eK/tq6zeCMPteJhJhbuho7xRALCmKOJS5kd7wtkrwhdrGV5RtDh3vtKlw3XI9siHfnCqMPfl6hR0pi2DFzq7lyKpIeLpd+FiRGMJW9QUYdLerwtsVpfkUNYrC5hdsauJ6WEo3RhyOTFg2pGeM7YgbTa9/ZwKsyxXqwKz0ST+p+m2KHcj8q5tiphUD16XIEEY+VXhIfSUopWkntHfRdGqhNWdBx+EffA2jrfyt/b0xTAF/F5lvmAY3BADInsccwTnkvtrD2k7eDc8jea4SMy5ztxcYTdt6L49HgGZOXY4d3Ui0BiHUbALvU+q/mnBsId1HbsdQ==
-Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:8041::8)
- by TYCP286MB2589.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:240::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.32; Mon, 24 Jul
- 2023 01:31:47 +0000
-Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
- ([fe80::f4c2:4b38:d074:f1e9]) by TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
- ([fe80::f4c2:4b38:d074:f1e9%5]) with mapi id 15.20.6609.031; Mon, 24 Jul 2023
- 01:31:47 +0000
-From:   Shiji Yang <yangshiji66@outlook.com>
-To:     linus.walleij@linaro.org
-Cc:     angelogioacchino.delregno@collabora.com, arinc.unal@arinc9.com,
-        linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, matthias.bgg@gmail.com,
-        sean.wang@kernel.org, sergio.paracuellos@gmail.com,
-        yangshiji66@outlook.com
-Subject: Re: [PATCH] pinctrl: mtmips: do not log when repeating the same pinctrl request
-Date:   Mon, 24 Jul 2023 09:31:34 +0800
-Message-ID: <TYAP286MB03159367B2B1932DD38252CDBC02A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <CACRpkdYzytbM0sN7Q-Niwq2jUgbeVPpREmwUTbja86eGROOB+w@mail.gmail.com>
-References: <CACRpkdYzytbM0sN7Q-Niwq2jUgbeVPpREmwUTbja86eGROOB+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TMN:  [ipFgohZ4bUdpKNU0nP06sPn16ykRPtEG]
-X-ClientProxiedBy: TYCP286CA0112.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:29c::7) To TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:404:8041::8)
-X-Microsoft-Original-Message-ID: <20230724013134.448-1-yangshiji66@outlook.com>
+        with ESMTP id S229456AbjGXEpv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jul 2023 00:45:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157E31B6;
+        Sun, 23 Jul 2023 21:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690173950; x=1721709950;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q9qzwcL7N7viHeki30qyeMCUuWnJ87fuGcM4hbUg7Mg=;
+  b=NtpaCJWf6JJa6XKHuLRhKK7pFYUMMQofEh2yTs7d9WA3ZIjgFpTCtoO8
+   Edq8KDCrQHBYbTHzNoEKucA3E/6cCWGpY+/cHVV3MX4ik/jHgQCEORqb7
+   wSvC3eAiwOb9mxxDhb2CFyIoMeZLOYM/+LtMn7OQ5nxM9W4wZ/sPTI1tK
+   rK2afDRyd8OL3KOXO4edKYiz4plKbrPXt9jP806iSOeAifT4wf4mrQrJT
+   P+1iFE9zVghp6PjgfNxT1AKG3HPWrObiD8mhr5u8bIAStC5OxIqIhqmVJ
+   9oPghZ7iu+7LX+G8RepHnjlob953+e312EqqjRnbgQpH2pS+GLieZdvYo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="352240346"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="352240346"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2023 21:45:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="972119310"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="972119310"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Jul 2023 21:45:40 -0700
+Date:   Mon, 24 Jul 2023 12:43:53 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [RFC PATCH v11 08/29] KVM: Introduce per-page memory attributes
+Message-ID: <ZL4BiQWihfrD0TOJ@yilunxu-OptiPlex-7050>
+References: <20230718234512.1690985-1-seanjc@google.com>
+ <20230718234512.1690985-9-seanjc@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYAP286MB0315:EE_|TYCP286MB2589:EE_
-X-MS-Office365-Filtering-Correlation-Id: ecb42ada-ccfc-4f6f-dcf2-08db8be5bf29
-X-MS-Exchange-SLBlob-MailProps: laRBL560oLS6buqkouoaL65lqUYHK3x1lBEEjJ7ORZvqLBYIUQ5aOEXVYyu1t13hx1SDdFwcDSRBBG2HPPj8V2Y/avzMhbLgztQFiGYJ/puzkzOaZ0lOAt6MFkgtCIMDrCM5SyjuEUwNM57s8fju9u15GtsEd8QwllJLNDZpBuY9AwObKtFGSZ7f8Ptyx1uaigQUw7O6L7CtyrLV8UbL2FI6Z/XvLqgOK4rKaoQDQE8pyBqiad6Scign3Yz1vFm3zW641sqKznjkshNV/fCVtAaiW0w33tc+G5x8Hoo0LQAO9ncyFsAbUy/sXLiYAxOfBY8vR6ekkw3e4fFCXAvc+Sb3fKkjTBY6srfNr1hWBivnw3LmG3tgkIQWUL6tBQp6ojk0DS91IRitU8jDdaBgTndrpC9HGFhc9PHjs6Zw6xCVR/gseOZxy23hov9AT7Ho28FM795o3NhhZLuYqqwrVNvAeiWF3/34MA8PH0c6V1TsrL3iXpBSkevt65QTLDLJBhBPunorvdRze/nhntULNTrTTYiFyNBZdNLqJvyCjM6P6ZTnK303KClz58tmWGt31d9E34ECOV7IPNg3WGy09w94u5+erKNzESZz68I0Oizk9iSUOHabA1GSQLJWrArG5gwpZYpJ9Qn0RPcl0KrAogEer5tEFON8ubJGSz+otOnvv0LDofEjdmw4J6xwhjY9f2H4FWLMqJQziAy3ps3glJKB8C24QVKXocuCIkQk8CusArRFBpfZzlI9hfF92nQEVzNe54sjwJRs9JbH6hdvEdlS/mKsAJsT
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MqpkHVcjdRjVeMYOMlkATepWs1uFTFHPcCActBw3osYfovGaKWZnrf3bxLISURBBlvId1Zttof1/LtUMyxjxuey22mWlJxvQO9vgJqrUhClMKrgaIIslJEF7drtMaGuUzslIWkMRtxOjbU9GPpxAUf5rVrUAnklv/6z4n6OHz9lx7cXz8Fums99kThn0Wf0sSPi6MNujjER0vODiIsjIwamV4C+CDOhCSLhjs3XPmRq/V2fNQ4QudXkDwnSaVovZ/M8nw3IyjbF+in8eIE2beh+X5TFLV+WjHCyq8/xgDVQE4o6jPyu5L2jzDGccn2x3m4e6e1tUugJIwiGNRjzEa6g5cuh0718g7gPcAIUzbSqJY4d+PuFahRxZdxbUm6Ena8Pa0fdZ98h6vL8PMBYHcT2KWShMoFRQ63W318czbkXUhofuWrPYpC0CAK/8m/XP1AzAXzu0ErPXBrEQ2+tYMZrC5mq0nDkL1PgmPrlsoOQe9zS0Kmg0lKqaObzsQeubMKrKNSvwlDxDFYlEo4E6D2SsJKFgnVIertOjDg5fED9nBskcwSiJzF2ElP5KM9pvmTChrY2Xk1BQ9cKUAq6cA+I78Ia8Dr4f5nofrkPaxEM=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?KzVyR3JUbEpoZHNjcW03MlB3WExGNnJnTGsrUkwzVFVXbmQ0WTFLeEQrZ2No?=
- =?utf-8?B?UFpmNzdORmd3NTdYQ0ZvNVdQeURNOHF6SmRRdDUvTzZ1MUlJU0Q2VGFoUnZ6?=
- =?utf-8?B?c0drQTgyWGJwaWtaa0h2MHZsUmRJRm05c0M3M3BHZTIyR0FSbmtZdHhsbjli?=
- =?utf-8?B?dXVKaUJnZUxGVFhVcWNCQjhKOVNpTVJEMlRHRWIvdWtTTUduOTlvU2RlcEkz?=
- =?utf-8?B?amNMSm1HRnBmY0NrN2lwc2h0MXd0WG81eUNiazJDM2JqVWVCNldSVmRVTGtj?=
- =?utf-8?B?Vzg4a2ZoWVR2ZGYwSVN1WjdkZFhrenoxeTVwSEMvMzdzb3BRZGpzVjNiZXRq?=
- =?utf-8?B?N0NKTWJXOXZJTzVRc0xMdjlFaWo5WFMwOTFmNVp2dEJwN2pPeGM0NmZEMnhP?=
- =?utf-8?B?cXpTeXVHREhYR1RDLzhnNElUM3dXSjNTTG8zODNmYytDeE5yUy9KZVJNTFRP?=
- =?utf-8?B?R1YvN2xzRzlYK21pV1M1MGU1ZmFJUHFHcG1nVlNSb3l2OFBuMG5BOVloUXBZ?=
- =?utf-8?B?cFd6bTNpa1ZlYnlxbXNzU3FjTTZKVkdpQkU2UVRlTFFqeWhCUUVMNHJpYkVX?=
- =?utf-8?B?Y3VGK1F3blFDOVBZZlhxZmhMT3lUMCs3UTNSUE5DWVZON3pVZ0MvajlpYytO?=
- =?utf-8?B?SHdRclE0bW5pejJFNGlFVjZNcXp3QStMUHVNQlV1ZjhmZzUzcmR5M28vR0FS?=
- =?utf-8?B?WFJkb0ZaWVVhNEdNSWpuR3NjY3dTL0cycHdjM3JDSVY5N0ttbnZVZGRjRldO?=
- =?utf-8?B?VElzYjREVCt2WFlGRzhRRXFyTGhyS3Z2eDVxKzNLU3VZVlIwNVJ1N0dwNEps?=
- =?utf-8?B?T3h3OTdhc0lBZDdRbGkzYnkvWkk3aThVMTdrYkNOSjNreVgyZFhWQ0lXODVC?=
- =?utf-8?B?WE9QcGtoS280K3VSazhpVi9QM2V0NzJJcStBSlJmTUdmaU9hY3ZsZm1FSWl0?=
- =?utf-8?B?ZGhNWG5TU0o4bEZrM0s4bFk4cHNZZTFmWEsvYVpEOUhuamY5MytRYys4eC9Y?=
- =?utf-8?B?b1lhTEdhQnpUVDhoQ2FqOVpHam5TN2NDMXpLUGNMS1dQUEZGNkxpeDZSbzZC?=
- =?utf-8?B?RDNJcTE2NnB4Ny9ZSVpHUjBiUEZCRDNIcm40cng2cy9JZm9qU3FOZEsxRWZR?=
- =?utf-8?B?T09ub0hOd1Q2TTRmdkYyaDQ3cWYrdlJlajNkUU1lV3lSUnhlTVl2WFFtR1BC?=
- =?utf-8?B?YmtaeUVEQmJEcFB5QlYvR1hHa2Nwd2daekIvb21PSks1ZTNKS1FhOGVxZDRC?=
- =?utf-8?B?TmtvTzY0VFNzVklZQW9pMDJtUWQ0bjVKVUk4SEF3V09GY3RFT2NzRFJBUE5Y?=
- =?utf-8?B?NmNsR2Y3ZmR3ZXZ5WlVTM0cxYm42RjgwUDJ2VFljemozdUI1ajFmaGJpMk9p?=
- =?utf-8?B?VzNNd0JYSkk3eWtTOWVBSFJETVpMeE1PTlRiaDlzYTVMbXp6dEdrdk1CTDYx?=
- =?utf-8?B?WDNTcUJWRkNKS2kzRGZSVlJZdVQvaGpXY2k2L08vODc2blZra05mQzRJNE1p?=
- =?utf-8?B?Vm0yQ0N6b2hWZUpud3ViZ2J1WWN5WHFvYWFvQlRlVGx0emtINkFCWURFa0Z5?=
- =?utf-8?B?R3JZZWtNcCtUdUlPZnJaaGRTVHg2MCttTS9KeVhZdnBnVzVZN3BjSGtNNE1s?=
- =?utf-8?Q?qqMY9We2/03yQRJMvt8VG8xGKWOHESBKJIBonWCQlE1E=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecb42ada-ccfc-4f6f-dcf2-08db8be5bf29
-X-MS-Exchange-CrossTenant-AuthSource: TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jul 2023 01:31:47.8355
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB2589
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230718234512.1690985-9-seanjc@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-Thank you for your review.
-
-On Sun, 23 Jul 2023 21:49:52 +0200 Linus Walleij wrote:
-
->On Tue, Jul 18, 2023 at 5:16 PM Shiji Yang <yangshiji66@outlook.com> wrote:
+On 2023-07-18 at 16:44:51 -0700, Sean Christopherson wrote:
+> From: Chao Peng <chao.p.peng@linux.intel.com>
+> 
+> In confidential computing usages, whether a page is private or shared is
+> necessary information for KVM to perform operations like page fault
+> handling, page zapping etc. There are other potential use cases for
+> per-page memory attributes, e.g. to make memory read-only (or no-exec,
+> or exec-only, etc.) without having to modify memslots.
+> 
+> Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
+> userspace to operate on the per-page memory attributes.
+>   - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
+>     a guest memory range.
+>   - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
+>     memory attributes.
+> 
+> Use an xarray to store the per-page attributes internally, with a naive,
+> not fully optimized implementation, i.e. prioritize correctness over
+> performance for the initial implementation.
+> 
+> Because setting memory attributes is roughly analogous to mprotect() on
+> memory that is mapped into the guest, zap existing mappings prior to
+> updating the memory attributes.  Opportunistically provide an arch hook
+> for the post-set path (needed to complete invalidation anyways) in
+> anticipation of x86 needing the hook to update metadata related to
+> determining whether or not a given gfn can be backed with various sizes
+> of hugepages.
+> 
+> It's possible that future usages may not require an invalidation, e.g.
+> if KVM ends up supporting RWX protections and userspace grants _more_
+> protections, but again opt for simplicity and punt optimizations to
+> if/when they are needed.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com
+> Cc: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst |  60 ++++++++++++
+>  include/linux/kvm_host.h       |  14 +++
+>  include/uapi/linux/kvm.h       |  14 +++
+>  virt/kvm/Kconfig               |   4 +
+>  virt/kvm/kvm_main.c            | 170 +++++++++++++++++++++++++++++++++
+>  5 files changed, 262 insertions(+)
 >
->> Sometimes when driver fails to probe a device, the kernel will retry
->> it later. However, this will result in duplicate requests for the
->> same pinctrl configuration. In this case, we should not throw error
->> logs. This patch adds extra check for the pin group function. Now the
->> pinctrl driver only prints error log when attempting to configure the
->> same group as different functions.
->>
->> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
->> ---
->>  drivers/pinctrl/mediatek/pinctrl-mtmips.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/pinctrl/mediatek/pinctrl-mtmips.c b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
->> index efd77b6c5..8f5493220 100644
->> --- a/drivers/pinctrl/mediatek/pinctrl-mtmips.c
->> +++ b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
->> @@ -125,8 +125,9 @@ static int mtmips_pmx_group_enable(struct pinctrl_dev *pctrldev,
->>
->>         /* dont allow double use */
->>         if (p->groups[group].enabled) {
->> -               dev_err(p->dev, "%s is already enabled\n",
->> -                       p->groups[group].name);
->> +               if (!p->func[func]->enabled)
->> +                       dev_err(p->dev, "%s is already enabled\n",
->> +                               p->groups[group].name);
->
->Why is the driver not backing out properly and setting this .enabled back
->to false when probing fails for some requesting driver?
->
->Or am I getting something wrong here?
->
->Yours,
->Linus Walleij
->
 
-We use pinctrl_select_state() to request the pinctrl and set the pin
-function. After searching "include/linux/pinctrl/consumer.h", I don't
-find a relevant API to reverse this operation so we can't set .enabled
-back to the false state. If I'm wrong please correct me, I don't know
-much about the pinctrl architecture.
+Only some trivial concerns below.
 
-At least I can sure pinctrl-mtmips doesn't have an implementation to
-unset func[]->enabled and groups[].enabled status.
+[...]
+ 
+> @@ -1175,6 +1176,9 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+>  	spin_lock_init(&kvm->mn_invalidate_lock);
+>  	rcuwait_init(&kvm->mn_memslots_update_rcuwait);
+>  	xa_init(&kvm->vcpu_array);
+> +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+> +	xa_init(&kvm->mem_attr_array);
+> +#endif
+>  
+>  	INIT_LIST_HEAD(&kvm->gpc_list);
+>  	spin_lock_init(&kvm->gpc_lock);
+> @@ -1346,6 +1350,9 @@ static void kvm_destroy_vm(struct kvm *kvm)
+>  		kvm_free_memslots(kvm, &kvm->__memslots[i][0]);
+>  		kvm_free_memslots(kvm, &kvm->__memslots[i][1]);
+>  	}
+> +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+> +	xa_destroy(&kvm->mem_attr_array);
+> +#endif
 
-ref:
-https://elixir.bootlin.com/linux/latest/source/include/linux/pinctrl/consumer.h
+Is it better to make the destruction in reverse order from the creation?
+To put xa_destroy(&kvm->mem_attr_array) after cleanup_srcu_struct(&kvm->srcu),
+or put xa_init(&kvm->mem_attr_array) after init_srcu_struct(&kvm->irq_srcu).
 
-Regards,
-Shiji Yang
+>  	cleanup_srcu_struct(&kvm->irq_srcu);
+>  	cleanup_srcu_struct(&kvm->srcu);
+>  	kvm_arch_free_vm(kvm);
+> @@ -2346,6 +2353,145 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
+>  }
+>  #endif /* CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT */
+
+[...]
+
+> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> +					   struct kvm_memory_attributes *attrs)
+> +{
+> +	gfn_t start, end;
+> +
+> +	/* flags is currently not used. */
+> +	if (attrs->flags)
+> +		return -EINVAL;
+> +	if (attrs->attributes & ~kvm_supported_mem_attributes(kvm))
+> +		return -EINVAL;
+> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> +		return -EINVAL;
+> +
+> +	start = attrs->address >> PAGE_SHIFT;
+> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+
+As the attrs->address/size are both garanteed to be non-zero, non-wrap
+and page aligned in prevous check. Is it OK to simplify the calculation,
+like:
+
+  end = (attrs->address + attrs->size) >> PAGE_SHIFT;
+
+> +
+> +	if (WARN_ON_ONCE(start == end))
+> +		return -EINVAL;
+
+Also, is this check possible to be hit? Maybe remove it?
+
+Thanks,
+Yilun
+
+> +
+> +	/*
+> +	 * xarray tracks data using "unsigned long", and as a result so does
+> +	 * KVM.  For simplicity, supports generic attributes only on 64-bit
+> +	 * architectures.
+> +	 */
+> +	BUILD_BUG_ON(sizeof(attrs->attributes) != sizeof(unsigned long));
+> +
+> +	return kvm_vm_set_mem_attributes(kvm, attrs->attributes, start, end);
+> +}
+> +#endif /* CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES */
