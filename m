@@ -2,265 +2,190 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B5F75FC80
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jul 2023 18:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3D175FCCE
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jul 2023 19:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjGXQsD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jul 2023 12:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S230510AbjGXRAl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jul 2023 13:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjGXQsA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jul 2023 12:48:00 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18D910CE
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 09:47:58 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-346258cf060so505ab.0
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 09:47:58 -0700 (PDT)
+        with ESMTP id S229797AbjGXRAi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jul 2023 13:00:38 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F194410F4
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 10:00:36 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b9de3e7fb1so24842855ad.1
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 10:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690217278; x=1690822078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gK3B5wZw1OFgk2DT1iEhz+umMy+9ra8FX/pBQvU+W/w=;
-        b=xY3tx3WTK4KdOY0TvcsLtqmIECu15VlVbTEUqZLznKTrcEQ3qq9MZ8A73xGTPHFhur
-         A/0lC2YaasiB2qtLY96CMo7gEkIDOmPcUEvCDuOPhXiO41+3fvy2/Skq1jEll2CJZ4lB
-         wyvmFXGj4o8we+38ahIX0hi2cof+wdyVSxg0IuxH6YMIzNwMT6/bsiJ/gjrGwSSgyJjB
-         nLN8V8tWusmsM+7/fZZ4n+x9rbksRwiIno10akUtzIy+PPeQIuE7QuixtX1MDApQ0wfG
-         +Jl9ixl11ZsGp2pA/Fh2BIytERW9S4aYDU7b7oeTBewyBL4tWEcTlqqwi4vIUmQP0co3
-         8Khw==
+        d=google.com; s=20221208; t=1690218036; x=1690822836;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RiFFb9olEr1IXMurVCQB0i8J9xB8UVFiN6yE37xYj5w=;
+        b=iUh3Wr2Es7ZayOSlRIyCXv0ISRPLliUqI/wxpz9npizX1RGnl3Zt97AZrYUR8pVjnH
+         OwuM0g2/mnG2Ws1vH1RTNrF8tqURzEVkr4hahdERkph4Nww3rEaO/unCqdjsW1luIjbU
+         y9Vd6q8CcxdQP+GEmRHglSZNO6vM+UxAwTBpxBMCbqTq0hlf3MD2sKnPBjpHoFEjKPFr
+         Tmb3ea8A/X/JO92m7TD8v5eZc4l7fpKAQniXW7MS+8KISe8P4Nbdl//npN/iD7LNKC4a
+         rVBOiRv2FN5pQA6p+V2In5eaYYH21fAVeDedlt36+Mezc1EEot9BPPcgeqHdCs8LHv6O
+         cdZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690217278; x=1690822078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gK3B5wZw1OFgk2DT1iEhz+umMy+9ra8FX/pBQvU+W/w=;
-        b=cS+hNzY4DCeUxHlAhFNGqGN5QH/08Smbe6skd0WZt3Lh+XdobC0gasqjKBEtHcCelr
-         mTSQprR1wupm8vKMhknImqt2OjnmfKSjtjYNZhUxwP5UzY20aDRwbfGWBbBHmgVgKxkN
-         fj/58oylHobqsHGpCHy8Obzu2Bu9kwnG1FlX+bGtVQl7jd4cmrwI0r7YIeftmr9zllby
-         sqpG+8HzyzOzSbv233Pl6AO8vrpFnL5G4JdbaULEIqViFg/TVA6cYohkVM0nA7S4/1ke
-         HF9IhTOoBeJDLnqv9OLIxI5opUPeBJcXIY/z/hip/79h+sezc1IpgQQCxPD3Xoo86iS1
-         XXFg==
-X-Gm-Message-State: ABy/qLaOlW8ces9f6YKcSy16CoPOhMQLSpCJ7uK9WaOFZN4OQvpUm+kq
-        izrb+xWwcbL2SUEmRgWZ5+lGHlG1NXoDtcC4fR+acg==
-X-Google-Smtp-Source: APBJJlFsPT/IwrE4lZVNtp/1e+lmtgN7VA69U7UflS8F9GMvZ0xsWoBJPqsBR24E0XAF1wZyOEEj+fEvQ3/vP7Be/nQ=
-X-Received: by 2002:a05:6e02:1a0d:b0:348:cfeb:f52 with SMTP id
- s13-20020a056e021a0d00b00348cfeb0f52mr272705ild.7.1690217278012; Mon, 24 Jul
- 2023 09:47:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230722022251.3446223-1-rananta@google.com> <20230722022251.3446223-13-rananta@google.com>
- <0841aca6-2824-6a1b-a568-119f8bd220de@redhat.com>
-In-Reply-To: <0841aca6-2824-6a1b-a568-119f8bd220de@redhat.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 24 Jul 2023 09:47:46 -0700
-Message-ID: <CAJHc60znT5ThqKE3TgTW-0Us3oNv8+KF=81TSK0PbG3tTyJLFQ@mail.gmail.com>
-Subject: Re: [PATCH v7 12/12] KVM: arm64: Use TLBI range-based intructions for unmap
-To:     Shaoqin Huang <shahuang@redhat.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
+        d=1e100.net; s=20221208; t=1690218036; x=1690822836;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RiFFb9olEr1IXMurVCQB0i8J9xB8UVFiN6yE37xYj5w=;
+        b=duY16TNewHu4jG+pyO/OP4nt6G1WKy1Gq/1F7u59DJk/cbwcFwPnLyHyP3Nwtk/qci
+         PLwXYSISRi66N96Hsyza/sQBlWd2ZprDU4R+vf4uLWLqSdodqGM4+bjA3CDFornzuugz
+         E7c6KZilVB4ObelEXzoYNztZ6XSM1iCdVE+yBJqzjUE8bTCnV608WI59f85wiGi5UycA
+         tlK7yDMEG2uDaASXC7tuXAsAUk5+ALoy+celKJ8pYj3qsCPKS56LhI9HWdnoSZZQ8EvF
+         xxRENUjB7niwcg3ODL0cP0XplLsv/aR45heLVITH0B0O6VKYWeapov47fPEGnBsg1XIB
+         Tx0Q==
+X-Gm-Message-State: ABy/qLbGDJgbe4D95jy2ji4lU1xfJ6AsAzUgSJKoL4yEQerT8xP3nlE5
+        lUyBtAf0S8c4/hEfMDUaFEsJV+3frsQ=
+X-Google-Smtp-Source: APBJJlGFNY8Nsd+UpmzZCGDOgI47OKk03bkzsFP32ko2G/RNTdNXayC/49Rk0sPPfbjIVmYJcM3mAoRuscc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2308:b0:1b8:80c9:a98e with SMTP id
+ d8-20020a170903230800b001b880c9a98emr42778plh.13.1690218036394; Mon, 24 Jul
+ 2023 10:00:36 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 10:00:34 -0700
+In-Reply-To: <110f1aa0-7fcd-1287-701a-89c2203f0ac2@amd.com>
+Mime-Version: 1.0
+References: <20230718234512.1690985-1-seanjc@google.com> <110f1aa0-7fcd-1287-701a-89c2203f0ac2@amd.com>
+Message-ID: <ZL6uMk/8UeuGj8CP@google.com>
+Subject: Re: [RFC PATCH v11 00/29] KVM: guest_memfd() and per-page attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 2:35=E2=80=AFAM Shaoqin Huang <shahuang@redhat.com>=
- wrote:
->
-> Hi Raghavendra,
->
-> On 7/22/23 10:22, Raghavendra Rao Ananta wrote:
-> > The current implementation of the stage-2 unmap walker traverses
-> > the given range and, as a part of break-before-make, performs
-> > TLB invalidations with a DSB for every PTE. A multitude of this
-> > combination could cause a performance bottleneck on some systems.
-> >
-> > Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
-> > invalidations until the entire walk is finished, and then
-> > use range-based instructions to invalidate the TLBs in one go.
-> > Condition deferred TLB invalidation on the system supporting FWB,
-> > as the optimization is entirely pointless when the unmap walker
-> > needs to perform CMOs.
-> >
-> > Rename stage2_put_pte() to stage2_unmap_put_pte() as the function
-> > now serves the stage-2 unmap walker specifically, rather than
-> > acting generic.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >   arch/arm64/kvm/hyp/pgtable.c | 67 +++++++++++++++++++++++++++++++----=
--
-> >   1 file changed, 58 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.=
-c
-> > index 5ef098af1736..cf88933a2ea0 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -831,16 +831,54 @@ static void stage2_make_pte(const struct kvm_pgta=
-ble_visit_ctx *ctx, kvm_pte_t n
-> >       smp_store_release(ctx->ptep, new);
-> >   }
-> >
-> > -static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, st=
-ruct kvm_s2_mmu *mmu,
-> > -                        struct kvm_pgtable_mm_ops *mm_ops)
-> > +struct stage2_unmap_data {
-> > +     struct kvm_pgtable *pgt;
-> > +     bool defer_tlb_flush_init;
-> > +};
-> > +
-> > +static bool __stage2_unmap_defer_tlb_flush(struct kvm_pgtable *pgt)
-> > +{
-> > +     /*
-> > +      * If FEAT_TLBIRANGE is implemented, defer the individual
-> > +      * TLB invalidations until the entire walk is finished, and
-> > +      * then use the range-based TLBI instructions to do the
-> > +      * invalidations. Condition deferred TLB invalidation on the
-> > +      * system supporting FWB, as the optimization is entirely
-> > +      * pointless when the unmap walker needs to perform CMOs.
-> > +      */
-> > +     return system_supports_tlb_range() && stage2_has_fwb(pgt);
-> > +}
-> > +
-> > +static bool stage2_unmap_defer_tlb_flush(struct stage2_unmap_data *unm=
-ap_data)
-> > +{
-> > +     bool defer_tlb_flush =3D __stage2_unmap_defer_tlb_flush(unmap_dat=
-a->pgt);
-> > +
-> > +     /*
-> > +      * Since __stage2_unmap_defer_tlb_flush() is based on alternative
-> > +      * patching and the TLBIs' operations behavior depend on this,
-> > +      * track if there's any change in the state during the unmap sequ=
-ence.
-> > +      */
-> > +     WARN_ON(unmap_data->defer_tlb_flush_init !=3D defer_tlb_flush);
-> > +     return defer_tlb_flush;
-> > +}
-> > +
-> > +static void stage2_unmap_put_pte(const struct kvm_pgtable_visit_ctx *c=
-tx,
-> > +                             struct kvm_s2_mmu *mmu,
-> > +                             struct kvm_pgtable_mm_ops *mm_ops)
-> >   {
-> > +     struct stage2_unmap_data *unmap_data =3D ctx->arg;
-> > +
-> >       /*
-> > -      * Clear the existing PTE, and perform break-before-make with
-> > -      * TLB maintenance if it was valid.
-> > +      * Clear the existing PTE, and perform break-before-make if it wa=
-s
-> > +      * valid. Depending on the system support, the TLB maintenance fo=
-r
-> > +      * the same can be deferred until the entire unmap is completed.
-> >        */
-> >       if (kvm_pte_valid(ctx->old)) {
-> >               kvm_clear_pte(ctx->ptep);
-> > -             kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ct=
-x->level);
-> > +
-> > +             if (!stage2_unmap_defer_tlb_flush(unmap_data))
-> Why not directly check (unmap_data->defer_tlb_flush_init) here?
->
-(Re-sending the reply as the previous one was formatted as HTML and
-was blocked by many lists)
+On Mon, Jul 24, 2023, Nikunj A. Dadhania wrote:
+> On 7/19/2023 5:14 AM, Sean Christopherson wrote:
+> > This is the next iteration of implementing fd-based (instead of vma-based)
+> > memory for KVM guests.  If you want the full background of why we are doing
+> > this, please go read the v10 cover letter[1].
+> > 
+> > The biggest change from v10 is to implement the backing storage in KVM
+> > itself, and expose it via a KVM ioctl() instead of a "generic" sycall.
+> > See link[2] for details on why we pivoted to a KVM-specific approach.
+> > 
+> > Key word is "biggest".  Relative to v10, there are many big changes.
+> > Highlights below (I can't remember everything that got changed at
+> > this point).
+> > 
+> > Tagged RFC as there are a lot of empty changelogs, and a lot of missing
+> > documentation.  And ideally, we'll have even more tests before merging.
+> > There are also several gaps/opens (to be discussed in tomorrow's PUCK).
+> 
+> As per our discussion on the PUCK call, here are the memory/NUMA accounting 
+> related observations that I had while working on SNP guest secure page migration:
+> 
+> * gmem allocations are currently treated as file page allocations
+>   accounted to the kernel and not to the QEMU process.
 
-No particular reason per say, but I was just going with the logic of
-determining if we need to defer the flush and the WARN_ON() parts
-separate.
-Any advantage if we directly check in stage2_unmap_put_pte() that I
-missed or is this purely for readability?
+We need to level set on terminology: these are all *stats*, not accounting.  That
+distinction matters because we have wiggle room on stats, e.g. we can probably get
+away with just about any definition of how guest_memfd memory impacts stats, so
+long as the information that is surfaced to userspace is useful and expected.
 
-> > +                     kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu,
-> > +                                     ctx->addr, ctx->level);
-> Small indent hint. The ctx->addr can align with __kvm_tlb_flush_vmid_ipa.
->
-Ah, yes. I'll adjust this if I send out a v8.
+But we absolutely need to get accounting correct, specifically the allocations
+need to be correctly accounted in memcg.  And unless I'm missing something,
+nothing in here shows anything related to memcg.
 
-Thank you.
-Raghavendra
-> Thanks,
-> Shaoqin
-> >       }
-> >
-> >       mm_ops->put_page(ctx->ptep);
-> > @@ -1070,7 +1108,8 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtab=
-le *pgt, u64 addr, u64 size,
-> >   static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ct=
-x,
-> >                              enum kvm_pgtable_walk_flags visit)
-> >   {
-> > -     struct kvm_pgtable *pgt =3D ctx->arg;
-> > +     struct stage2_unmap_data *unmap_data =3D ctx->arg;
-> > +     struct kvm_pgtable *pgt =3D unmap_data->pgt;
-> >       struct kvm_s2_mmu *mmu =3D pgt->mmu;
-> >       struct kvm_pgtable_mm_ops *mm_ops =3D ctx->mm_ops;
-> >       kvm_pte_t *childp =3D NULL;
-> > @@ -1098,7 +1137,7 @@ static int stage2_unmap_walker(const struct kvm_p=
-gtable_visit_ctx *ctx,
-> >        * block entry and rely on the remaining portions being faulted
-> >        * back lazily.
-> >        */
-> > -     stage2_put_pte(ctx, mmu, mm_ops);
-> > +     stage2_unmap_put_pte(ctx, mmu, mm_ops);
-> >
-> >       if (need_flush && mm_ops->dcache_clean_inval_poc)
-> >               mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, m=
-m_ops),
-> > @@ -1112,13 +1151,23 @@ static int stage2_unmap_walker(const struct kvm=
-_pgtable_visit_ctx *ctx,
-> >
-> >   int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 s=
-ize)
-> >   {
-> > +     int ret;
-> > +     struct stage2_unmap_data unmap_data =3D {
-> > +             .pgt =3D pgt,
-> > +             .defer_tlb_flush_init =3D __stage2_unmap_defer_tlb_flush(=
-pgt),
-> > +     };
-> >       struct kvm_pgtable_walker walker =3D {
-> >               .cb     =3D stage2_unmap_walker,
-> > -             .arg    =3D pgt,
-> > +             .arg    =3D &unmap_data,
-> >               .flags  =3D KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABL=
-E_POST,
-> >       };
-> >
-> > -     return kvm_pgtable_walk(pgt, addr, size, &walker);
-> > +     ret =3D kvm_pgtable_walk(pgt, addr, size, &walker);
-> > +     if (stage2_unmap_defer_tlb_flush(&unmap_data))
-> > +             /* Perform the deferred TLB invalidations */
-> > +             kvm_tlb_flush_vmid_range(pgt->mmu, addr, size);
-> > +
-> > +     return ret;
-> >   }
-> >
-> >   struct stage2_attr_data {
+>   Starting an SNP guest with 40G memory with memory interleave between
+>   Node2 and Node3
+> 
+>   $ numactl -i 2,3 ./bootg_snp.sh
+> 
+>     PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+>  242179 root      20   0   40.4g  99580  51676 S  78.0   0.0   0:56.58 qemu-system-x86
+> 
+>   -> Incorrect process resident memory and shared memory is reported
+
+I don't know that I would call these "incorrect".  Shared memory definitely is
+correct, because by definition guest_memfd isn't shared.  RSS is less clear cut;
+gmem memory is resident in RAM, but if we show gmem in RSS then we'll end up with
+scenarios where RSS > VIRT, which will be quite confusing for unaware users (I'm
+assuming the 40g of VIRT here comes from QEMU mapping the shared half of gmem
+memslots).
+
+>   Accounting of the memory happens in the host page fault handler path,
+>   but for private guest pages we will never hit that.
+> 
+> * NUMA allocation does use the process mempolicy for appropriate node 
+>   allocation (Node2 and Node3), but they again do not get attributed to 
+>   the QEMU process
+> 
+>   Every 1.0s: sudo numastat  -m -p qemu-system-x86 | egrep -i "qemu|PID|Node|Filepage"   gomati: Mon Jul 24 11:51:34 2023
+> 
+>   Per-node process memory usage (in MBs)
+>   PID                               Node 0          Node 1          Node 2          Node 3           Total
+>   242179 (qemu-system-x86)           21.14            1.61           39.44           39.38          101.57
+>   Per-node system memory usage (in MBs):
+>                             Node 0          Node 1          Node 2          Node 3           Total
+>   FilePages                2475.63         2395.83        23999.46        23373.22        52244.14
+> 
+> 
+> * Most of the memory accounting relies on the VMAs and as private-fd of 
+>   gmem doesn't have a VMA(and that was the design goal), user-space fails 
+>   to attribute the memory appropriately to the process.
 >
-> --
-> Shaoqin
->
+>   /proc/<qemu pid>/numa_maps
+>   7f528be00000 interleave:2-3 file=/memfd:memory-backend-memfd-shared\040(deleted) anon=1070 dirty=1070 mapped=1987 mapmax=256 active=1956 N2=582 N3=1405 kernelpagesize_kB=4
+>   7f5c90200000 interleave:2-3 file=/memfd:rom-backend-memfd-shared\040(deleted)
+>   7f5c90400000 interleave:2-3 file=/memfd:rom-backend-memfd-shared\040(deleted) dirty=32 active=0 N2=32 kernelpagesize_kB=4
+>   7f5c90800000 interleave:2-3 file=/memfd:rom-backend-memfd-shared\040(deleted) dirty=892 active=0 N2=512 N3=380 kernelpagesize_kB=4
+> 
+>   /proc/<qemu pid>/smaps
+>   7f528be00000-7f5c8be00000 rw-p 00000000 00:01 26629                      /memfd:memory-backend-memfd-shared (deleted)
+>   7f5c90200000-7f5c90220000 rw-s 00000000 00:01 44033                      /memfd:rom-backend-memfd-shared (deleted)
+>   7f5c90400000-7f5c90420000 rw-s 00000000 00:01 44032                      /memfd:rom-backend-memfd-shared (deleted)
+>   7f5c90800000-7f5c90b7c000 rw-s 00000000 00:01 1025                       /memfd:rom-backend-memfd-shared (deleted)
+
+This is all expected, and IMO correct.  There are no userspace mappings, and so
+not accounting anything is working as intended.
+
+> * QEMU based NUMA bindings will not work. Memory backend uses mbind() 
+>   to set the policy for a particular virtual memory range but gmem 
+>   private-FD does not have a virtual memory range visible in the host.
+
+Yes, adding a generic fbind() is the way to solve silve.
