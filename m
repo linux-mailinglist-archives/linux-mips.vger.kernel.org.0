@@ -2,190 +2,536 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3D175FCCE
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jul 2023 19:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE31B7600AD
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jul 2023 22:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjGXRAl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jul 2023 13:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S230192AbjGXUy7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jul 2023 16:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjGXRAi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jul 2023 13:00:38 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F194410F4
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 10:00:36 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b9de3e7fb1so24842855ad.1
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 10:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690218036; x=1690822836;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RiFFb9olEr1IXMurVCQB0i8J9xB8UVFiN6yE37xYj5w=;
-        b=iUh3Wr2Es7ZayOSlRIyCXv0ISRPLliUqI/wxpz9npizX1RGnl3Zt97AZrYUR8pVjnH
-         OwuM0g2/mnG2Ws1vH1RTNrF8tqURzEVkr4hahdERkph4Nww3rEaO/unCqdjsW1luIjbU
-         y9Vd6q8CcxdQP+GEmRHglSZNO6vM+UxAwTBpxBMCbqTq0hlf3MD2sKnPBjpHoFEjKPFr
-         Tmb3ea8A/X/JO92m7TD8v5eZc4l7fpKAQniXW7MS+8KISe8P4Nbdl//npN/iD7LNKC4a
-         rVBOiRv2FN5pQA6p+V2In5eaYYH21fAVeDedlt36+Mezc1EEot9BPPcgeqHdCs8LHv6O
-         cdZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690218036; x=1690822836;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RiFFb9olEr1IXMurVCQB0i8J9xB8UVFiN6yE37xYj5w=;
-        b=duY16TNewHu4jG+pyO/OP4nt6G1WKy1Gq/1F7u59DJk/cbwcFwPnLyHyP3Nwtk/qci
-         PLwXYSISRi66N96Hsyza/sQBlWd2ZprDU4R+vf4uLWLqSdodqGM4+bjA3CDFornzuugz
-         E7c6KZilVB4ObelEXzoYNztZ6XSM1iCdVE+yBJqzjUE8bTCnV608WI59f85wiGi5UycA
-         tlK7yDMEG2uDaASXC7tuXAsAUk5+ALoy+celKJ8pYj3qsCPKS56LhI9HWdnoSZZQ8EvF
-         xxRENUjB7niwcg3ODL0cP0XplLsv/aR45heLVITH0B0O6VKYWeapov47fPEGnBsg1XIB
-         Tx0Q==
-X-Gm-Message-State: ABy/qLbGDJgbe4D95jy2ji4lU1xfJ6AsAzUgSJKoL4yEQerT8xP3nlE5
-        lUyBtAf0S8c4/hEfMDUaFEsJV+3frsQ=
-X-Google-Smtp-Source: APBJJlGFNY8Nsd+UpmzZCGDOgI47OKk03bkzsFP32ko2G/RNTdNXayC/49Rk0sPPfbjIVmYJcM3mAoRuscc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:2308:b0:1b8:80c9:a98e with SMTP id
- d8-20020a170903230800b001b880c9a98emr42778plh.13.1690218036394; Mon, 24 Jul
- 2023 10:00:36 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 10:00:34 -0700
-In-Reply-To: <110f1aa0-7fcd-1287-701a-89c2203f0ac2@amd.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <110f1aa0-7fcd-1287-701a-89c2203f0ac2@amd.com>
-Message-ID: <ZL6uMk/8UeuGj8CP@google.com>
-Subject: Re: [RFC PATCH v11 00/29] KVM: guest_memfd() and per-page attributes
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229532AbjGXUy6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jul 2023 16:54:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B27B10FA;
+        Mon, 24 Jul 2023 13:54:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B21C261388;
+        Mon, 24 Jul 2023 20:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5CBC433C8;
+        Mon, 24 Jul 2023 20:54:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690232094;
+        bh=PqG02llCgZ9VpiulkAw9SbHjsMZyptESkJfDPu8r0sk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KEYlKVgE0KEik1UotnBrnE59qDZIx0wRSmhMIeTDYJcZwzm/i/ecXS86J0fVu62+8
+         ee8Xm0h01OX+iWmD+nrxlnyeaaaBKZEP1KPZcZ/yUYs8Fxu1z6vEeCX2Zy3zDGtslO
+         kVO3No53mMujdHB2CeJMg26IhI3UyuLCZRbcADCopxFAUVxRJ4ltIbM1sbgP62lUCV
+         Nnc/GRqvyqpfwIB/6rMqxMbhCulyRq8FqHuUCUmKIdUTnuhiudmkGfZuUrdBO26Kzd
+         2es0AVEHcYEm2Ce4u7/1vuIrzvHek+MNTkOuU310+nKmhUYTZfjHbjlNp/h4E/GR+6
+         OqRhWrQXfBNjA==
+Received: (nullmailer pid 767331 invoked by uid 1000);
+        Mon, 24 Jul 2023 20:54:50 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jacky Huang <ychuang3@nuvoton.com>,
+        Shan-Chun Hung <schung@nuvoton.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: [PATCH v2] tty: Explicitly include correct DT includes
+Date:   Mon, 24 Jul 2023 14:54:38 -0600
+Message-Id: <20230724205440.767071-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 24, 2023, Nikunj A. Dadhania wrote:
-> On 7/19/2023 5:14 AM, Sean Christopherson wrote:
-> > This is the next iteration of implementing fd-based (instead of vma-based)
-> > memory for KVM guests.  If you want the full background of why we are doing
-> > this, please go read the v10 cover letter[1].
-> > 
-> > The biggest change from v10 is to implement the backing storage in KVM
-> > itself, and expose it via a KVM ioctl() instead of a "generic" sycall.
-> > See link[2] for details on why we pivoted to a KVM-specific approach.
-> > 
-> > Key word is "biggest".  Relative to v10, there are many big changes.
-> > Highlights below (I can't remember everything that got changed at
-> > this point).
-> > 
-> > Tagged RFC as there are a lot of empty changelogs, and a lot of missing
-> > documentation.  And ideally, we'll have even more tests before merging.
-> > There are also several gaps/opens (to be discussed in tomorrow's PUCK).
-> 
-> As per our discussion on the PUCK call, here are the memory/NUMA accounting 
-> related observations that I had while working on SNP guest secure page migration:
-> 
-> * gmem allocations are currently treated as file page allocations
->   accounted to the kernel and not to the QEMU process.
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-We need to level set on terminology: these are all *stats*, not accounting.  That
-distinction matters because we have wiggle room on stats, e.g. we can probably get
-away with just about any definition of how guest_memfd memory impacts stats, so
-long as the information that is surfaced to userspace is useful and expected.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Add mpc52xx_uart
+---
+ drivers/tty/hvc/hvc_opal.c             | 2 +-
+ drivers/tty/serial/8250/8250_early.c   | 1 -
+ drivers/tty/serial/8250/8250_ingenic.c | 1 -
+ drivers/tty/serial/8250/8250_omap.c    | 1 -
+ drivers/tty/serial/amba-pl011.c        | 2 +-
+ drivers/tty/serial/apbuart.c           | 3 ---
+ drivers/tty/serial/atmel_serial.c      | 1 -
+ drivers/tty/serial/fsl_linflexuart.c   | 2 +-
+ drivers/tty/serial/fsl_lpuart.c        | 2 +-
+ drivers/tty/serial/imx.c               | 1 -
+ drivers/tty/serial/lantiq.c            | 3 ++-
+ drivers/tty/serial/liteuart.c          | 3 +--
+ drivers/tty/serial/ma35d1_serial.c     | 2 +-
+ drivers/tty/serial/mpc52xx_uart.c      | 2 +-
+ drivers/tty/serial/mps2-uart.c         | 1 -
+ drivers/tty/serial/mxs-auart.c         | 2 +-
+ drivers/tty/serial/pic32_uart.c        | 1 -
+ drivers/tty/serial/qcom_geni_serial.c  | 1 -
+ drivers/tty/serial/serial-tegra.c      | 1 -
+ drivers/tty/serial/sh-sci.c            | 1 -
+ drivers/tty/serial/sunhv.c             | 4 ++--
+ drivers/tty/serial/sunsab.c            | 3 ++-
+ drivers/tty/serial/sunsu.c             | 4 ++--
+ drivers/tty/serial/sunzilog.c          | 4 ++--
+ drivers/tty/serial/tegra-tcu.c         | 1 -
+ drivers/tty/serial/uartlite.c          | 3 ---
+ drivers/tty/serial/ucc_uart.c          | 3 ++-
+ drivers/tty/serial/vt8500_serial.c     | 2 +-
+ 28 files changed, 21 insertions(+), 36 deletions(-)
 
-But we absolutely need to get accounting correct, specifically the allocations
-need to be correctly accounted in memcg.  And unless I'm missing something,
-nothing in here shows anything related to memcg.
+diff --git a/drivers/tty/hvc/hvc_opal.c b/drivers/tty/hvc/hvc_opal.c
+index 794c7b18aa06..992e199e0ea8 100644
+--- a/drivers/tty/hvc/hvc_opal.c
++++ b/drivers/tty/hvc/hvc_opal.c
+@@ -14,7 +14,7 @@
+ #include <linux/console.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/export.h>
+ #include <linux/interrupt.h>
+ 
+diff --git a/drivers/tty/serial/8250/8250_early.c b/drivers/tty/serial/8250/8250_early.c
+index 4299a8bd83d9..9837a27739fd 100644
+--- a/drivers/tty/serial/8250/8250_early.c
++++ b/drivers/tty/serial/8250/8250_early.c
+@@ -27,7 +27,6 @@
+ #include <linux/init.h>
+ #include <linux/console.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/serial_reg.h>
+ #include <linux/serial.h>
+ #include <linux/serial_8250.h>
+diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+index 617b8ce60d6b..4c4c4da73ad0 100644
+--- a/drivers/tty/serial/8250/8250_ingenic.c
++++ b/drivers/tty/serial/8250/8250_ingenic.c
+@@ -13,7 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_fdt.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/serial_8250.h>
+ #include <linux/serial_core.h>
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index d48a82f1634e..26dd089d8e82 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -18,7 +18,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/of_gpio.h>
+ #include <linux/of_irq.h>
+ #include <linux/delay.h>
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index c5c3f4674459..a1e594b79890 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -20,6 +20,7 @@
+ #include <linux/ioport.h>
+ #include <linux/init.h>
+ #include <linux/console.h>
++#include <linux/platform_device.h>
+ #include <linux/sysrq.h>
+ #include <linux/device.h>
+ #include <linux/tty.h>
+@@ -36,7 +37,6 @@
+ #include <linux/delay.h>
+ #include <linux/types.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/sizes.h>
+ #include <linux/io.h>
+diff --git a/drivers/tty/serial/apbuart.c b/drivers/tty/serial/apbuart.c
+index 915ee4b0d594..f3defc6da3df 100644
+--- a/drivers/tty/serial/apbuart.c
++++ b/drivers/tty/serial/apbuart.c
+@@ -22,9 +22,6 @@
+ #include <linux/kthread.h>
+ #include <linux/device.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
+-#include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
+ #include <linux/serial_core.h>
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 3467a875641a..7ac477344aa3 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -21,7 +21,6 @@
+ #include <linux/tty_flip.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/dmaengine.h>
+ #include <linux/atmel_pdc.h>
+diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
+index 6fc21b6684e6..f697751c2ad5 100644
+--- a/drivers/tty/serial/fsl_linflexuart.c
++++ b/drivers/tty/serial/fsl_linflexuart.c
+@@ -11,7 +11,7 @@
+ #include <linux/irq.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
++#include <linux/platform_device.h>
+ #include <linux/serial_core.h>
+ #include <linux/slab.h>
+ #include <linux/tty_flip.h>
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 4d80fae20177..e1a8d5415718 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -18,9 +18,9 @@
+ #include <linux/irq.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/of_dma.h>
+ #include <linux/pinctrl/consumer.h>
++#include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/serial_core.h>
+ #include <linux/slab.h>
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 7341d060f85c..3ed5083a7108 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -25,7 +25,6 @@
+ #include <linux/rational.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/io.h>
+ #include <linux/dma-mapping.h>
+ 
+diff --git a/drivers/tty/serial/lantiq.c b/drivers/tty/serial/lantiq.c
+index bcaa479608d8..3adb60c683f7 100644
+--- a/drivers/tty/serial/lantiq.c
++++ b/drivers/tty/serial/lantiq.c
+@@ -17,7 +17,8 @@
+ #include <linux/ioport.h>
+ #include <linux/lantiq.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ #include <linux/serial.h>
+ #include <linux/serial_core.h>
+ #include <linux/slab.h>
+diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+index 80de3a42b67b..d881cdd2a58f 100644
+--- a/drivers/tty/serial/liteuart.c
++++ b/drivers/tty/serial/liteuart.c
+@@ -11,8 +11,7 @@
+ #include <linux/litex.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/serial.h>
+ #include <linux/serial_core.h>
+ #include <linux/slab.h>
+diff --git a/drivers/tty/serial/ma35d1_serial.c b/drivers/tty/serial/ma35d1_serial.c
+index 2604b4d9fb78..789593495a80 100644
+--- a/drivers/tty/serial/ma35d1_serial.c
++++ b/drivers/tty/serial/ma35d1_serial.c
+@@ -8,7 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/of.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/iopoll.h>
+ #include <linux/serial_core.h>
+ #include <linux/slab.h>
+diff --git a/drivers/tty/serial/mpc52xx_uart.c b/drivers/tty/serial/mpc52xx_uart.c
+index 384ca195e3d5..916507b8f31d 100644
+--- a/drivers/tty/serial/mpc52xx_uart.c
++++ b/drivers/tty/serial/mpc52xx_uart.c
+@@ -40,7 +40,7 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/clk.h>
+ 
+ #include <asm/mpc52xx.h>
+diff --git a/drivers/tty/serial/mps2-uart.c b/drivers/tty/serial/mps2-uart.c
+index 860d161fa594..5da88cbeec73 100644
+--- a/drivers/tty/serial/mps2-uart.c
++++ b/drivers/tty/serial/mps2-uart.c
+@@ -16,7 +16,6 @@
+ #include <linux/console.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+-#include <linux/of_device.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/serial_core.h>
+diff --git a/drivers/tty/serial/mxs-auart.c b/drivers/tty/serial/mxs-auart.c
+index a368f4293967..3974ca6ad86c 100644
+--- a/drivers/tty/serial/mxs-auart.c
++++ b/drivers/tty/serial/mxs-auart.c
+@@ -30,7 +30,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/dmaengine.h>
+ 
+diff --git a/drivers/tty/serial/pic32_uart.c b/drivers/tty/serial/pic32_uart.c
+index 196a4e678451..e308d5022b3f 100644
+--- a/drivers/tty/serial/pic32_uart.c
++++ b/drivers/tty/serial/pic32_uart.c
+@@ -11,7 +11,6 @@
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_gpio.h>
+ #include <linux/init.h>
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 444c74eeab7d..5607b668588b 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -11,7 +11,6 @@
+ #include <linux/irq.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/pm_opp.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
+index 1cf08b33456c..cbe641727f2a 100644
+--- a/drivers/tty/serial/serial-tegra.c
++++ b/drivers/tty/serial/serial-tegra.c
+@@ -20,7 +20,6 @@
+ #include <linux/irq.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/pagemap.h>
+ #include <linux/platform_device.h>
+ #include <linux/reset.h>
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 7c9457962a3d..115271d2f82d 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -35,7 +35,6 @@
+ #include <linux/module.h>
+ #include <linux/mm.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+diff --git a/drivers/tty/serial/sunhv.c b/drivers/tty/serial/sunhv.c
+index 7d38c33ef506..c671d674bce4 100644
+--- a/drivers/tty/serial/sunhv.c
++++ b/drivers/tty/serial/sunhv.c
+@@ -17,11 +17,11 @@
+ #include <linux/slab.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ 
+ #include <asm/hypervisor.h>
+ #include <asm/spitfire.h>
+-#include <asm/prom.h>
+ #include <asm/irq.h>
+ #include <asm/setup.h>
+ 
+diff --git a/drivers/tty/serial/sunsab.c b/drivers/tty/serial/sunsab.c
+index 48b39fdb0397..40eeaf835bba 100644
+--- a/drivers/tty/serial/sunsab.c
++++ b/drivers/tty/serial/sunsab.c
+@@ -33,7 +33,8 @@
+ #include <linux/slab.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ 
+ #include <linux/io.h>
+ #include <asm/irq.h>
+diff --git a/drivers/tty/serial/sunsu.c b/drivers/tty/serial/sunsu.c
+index fed052a0b931..58a4342ad0f9 100644
+--- a/drivers/tty/serial/sunsu.c
++++ b/drivers/tty/serial/sunsu.c
+@@ -37,11 +37,11 @@
+ #include <linux/serial_reg.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ 
+ #include <linux/io.h>
+ #include <asm/irq.h>
+-#include <asm/prom.h>
+ #include <asm/setup.h>
+ 
+ #include <linux/serial_core.h>
+diff --git a/drivers/tty/serial/sunzilog.c b/drivers/tty/serial/sunzilog.c
+index 0fbeb3dbd843..c8c71c56264c 100644
+--- a/drivers/tty/serial/sunzilog.c
++++ b/drivers/tty/serial/sunzilog.c
+@@ -33,11 +33,11 @@
+ #include <linux/serio.h>
+ #endif
+ #include <linux/init.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ 
+ #include <linux/io.h>
+ #include <asm/irq.h>
+-#include <asm/prom.h>
+ #include <asm/setup.h>
+ 
+ #include <linux/serial_core.h>
+diff --git a/drivers/tty/serial/tegra-tcu.c b/drivers/tty/serial/tegra-tcu.c
+index 23500b342da7..65069daf36ec 100644
+--- a/drivers/tty/serial/tegra-tcu.c
++++ b/drivers/tty/serial/tegra-tcu.c
+@@ -7,7 +7,6 @@
+ #include <linux/mailbox_client.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/serial.h>
+ #include <linux/serial_core.h>
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index 679574893ebe..b225a78f6175 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -20,9 +20,6 @@
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
+ #include <linux/clk.h>
+ #include <linux/pm_runtime.h>
+ 
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index 404230c1ebb2..284b293fade6 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -17,15 +17,16 @@
+  */
+ 
+ #include <linux/module.h>
++#include <linux/platform_device.h>
+ #include <linux/serial.h>
+ #include <linux/serial_core.h>
+ #include <linux/slab.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
+ #include <linux/io.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_platform.h>
+ #include <linux/dma-mapping.h>
+ 
+ #include <linux/fs_uart_pd.h>
+diff --git a/drivers/tty/serial/vt8500_serial.c b/drivers/tty/serial/vt8500_serial.c
+index cc9157df732f..32433e9b3e5f 100644
+--- a/drivers/tty/serial/vt8500_serial.c
++++ b/drivers/tty/serial/vt8500_serial.c
+@@ -14,6 +14,7 @@
+ #include <linux/irq.h>
+ #include <linux/init.h>
+ #include <linux/console.h>
++#include <linux/platform_device.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
+ #include <linux/serial_core.h>
+@@ -21,7 +22,6 @@
+ #include <linux/slab.h>
+ #include <linux/clk.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/err.h>
+ 
+ /*
+-- 
+2.40.1
 
->   Starting an SNP guest with 40G memory with memory interleave between
->   Node2 and Node3
-> 
->   $ numactl -i 2,3 ./bootg_snp.sh
-> 
->     PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
->  242179 root      20   0   40.4g  99580  51676 S  78.0   0.0   0:56.58 qemu-system-x86
-> 
->   -> Incorrect process resident memory and shared memory is reported
-
-I don't know that I would call these "incorrect".  Shared memory definitely is
-correct, because by definition guest_memfd isn't shared.  RSS is less clear cut;
-gmem memory is resident in RAM, but if we show gmem in RSS then we'll end up with
-scenarios where RSS > VIRT, which will be quite confusing for unaware users (I'm
-assuming the 40g of VIRT here comes from QEMU mapping the shared half of gmem
-memslots).
-
->   Accounting of the memory happens in the host page fault handler path,
->   but for private guest pages we will never hit that.
-> 
-> * NUMA allocation does use the process mempolicy for appropriate node 
->   allocation (Node2 and Node3), but they again do not get attributed to 
->   the QEMU process
-> 
->   Every 1.0s: sudo numastat  -m -p qemu-system-x86 | egrep -i "qemu|PID|Node|Filepage"   gomati: Mon Jul 24 11:51:34 2023
-> 
->   Per-node process memory usage (in MBs)
->   PID                               Node 0          Node 1          Node 2          Node 3           Total
->   242179 (qemu-system-x86)           21.14            1.61           39.44           39.38          101.57
->   Per-node system memory usage (in MBs):
->                             Node 0          Node 1          Node 2          Node 3           Total
->   FilePages                2475.63         2395.83        23999.46        23373.22        52244.14
-> 
-> 
-> * Most of the memory accounting relies on the VMAs and as private-fd of 
->   gmem doesn't have a VMA(and that was the design goal), user-space fails 
->   to attribute the memory appropriately to the process.
->
->   /proc/<qemu pid>/numa_maps
->   7f528be00000 interleave:2-3 file=/memfd:memory-backend-memfd-shared\040(deleted) anon=1070 dirty=1070 mapped=1987 mapmax=256 active=1956 N2=582 N3=1405 kernelpagesize_kB=4
->   7f5c90200000 interleave:2-3 file=/memfd:rom-backend-memfd-shared\040(deleted)
->   7f5c90400000 interleave:2-3 file=/memfd:rom-backend-memfd-shared\040(deleted) dirty=32 active=0 N2=32 kernelpagesize_kB=4
->   7f5c90800000 interleave:2-3 file=/memfd:rom-backend-memfd-shared\040(deleted) dirty=892 active=0 N2=512 N3=380 kernelpagesize_kB=4
-> 
->   /proc/<qemu pid>/smaps
->   7f528be00000-7f5c8be00000 rw-p 00000000 00:01 26629                      /memfd:memory-backend-memfd-shared (deleted)
->   7f5c90200000-7f5c90220000 rw-s 00000000 00:01 44033                      /memfd:rom-backend-memfd-shared (deleted)
->   7f5c90400000-7f5c90420000 rw-s 00000000 00:01 44032                      /memfd:rom-backend-memfd-shared (deleted)
->   7f5c90800000-7f5c90b7c000 rw-s 00000000 00:01 1025                       /memfd:rom-backend-memfd-shared (deleted)
-
-This is all expected, and IMO correct.  There are no userspace mappings, and so
-not accounting anything is working as intended.
-
-> * QEMU based NUMA bindings will not work. Memory backend uses mbind() 
->   to set the policy for a particular virtual memory range but gmem 
->   private-FD does not have a virtual memory range visible in the host.
-
-Yes, adding a generic fbind() is the way to solve silve.
