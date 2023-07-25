@@ -2,162 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E3C761062
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 12:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F55761095
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 12:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbjGYKPj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 06:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
+        id S233226AbjGYKYQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 06:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjGYKPh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 06:15:37 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC70810F9;
-        Tue, 25 Jul 2023 03:15:25 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-52256241c66so515598a12.1;
-        Tue, 25 Jul 2023 03:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690280124; x=1690884924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=stZvY5U9wSZTs5ds6eBy5fhaT/Xhl9PttBLPwX46gHo=;
-        b=Zd+TfiK6QjysIfwcqshz3riRH9eDjKMkLVQHalEsW7A2lCezdTeTYsuDR+b8W5TV3j
-         trncykuABFsnq/ZL/wATBQpxI4491zYNzFHyfLjWDkDizPL5yi8tU+oXV2wOqbYlXamp
-         iyvVvum4XpoXIEopgV3qp1W6kGCLfzh3LsRNJjGCxUlfLKQp7LRAeEZenadG0aJpnWdu
-         fCDR7hRde0HP4B+WIu9MLqDVm+N8e48S4Q386V4nJP56nbv2kNXGxoiABKui2fptjkZU
-         b2hatoO91JCcF9Ou+6QOWGdLPSdIICbqjXTrSaw/7/K75BzuThXlDayMuzcaHtQkCtk6
-         TlFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690280124; x=1690884924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=stZvY5U9wSZTs5ds6eBy5fhaT/Xhl9PttBLPwX46gHo=;
-        b=QfdxZKFQ1imazxfBeNHpis+IpwGM5tiWK7dUCWYIdOTO08J5lcSKoLDolyaohTrSXy
-         Idu8h5eF8QTRnrgXfAUP7I8Yz/CDxZZrqjpzam+SKC4wNz9EYxctI/r85Boz7lTJFQgw
-         GVfEyKQvhwhb08PHpZWYJKLoN5/s2LVfOJAWlR1J5ThHgaud21oECdqI5UoYdebR6moI
-         D8jjFV9IxV+vNc/5a+Dv9WYsLizmvA2B/F9AhQ8LALU1FEXQ6JQQvtDCtvkx3V6tLbd3
-         iyibiiHS0TZpGLq2FbzftcciPn5mQIZc8qIPO9m+1MrLnhmA3BkLbquMAT7wXXU8TprJ
-         +g0Q==
-X-Gm-Message-State: ABy/qLYMGL2WeexvJWFy9t2tDFd3VihJOFI6qJ0HWsjMOq46Gkzxn5iZ
-        gnr0kXHzGknuVZJKoZuO4lYUr+Q1qisTmlaAEhg=
-X-Google-Smtp-Source: APBJJlEGc8Qqtx3M3xk7xfxVMkEIUKq+V578qF8fgJcopnKeKZwBb2Kzhr090da4HCcP1DY4c4v4cpT332l5IKkyo18=
-X-Received: by 2002:a05:6402:104b:b0:521:985d:7314 with SMTP id
- e11-20020a056402104b00b00521985d7314mr2215492edu.18.1690280123484; Tue, 25
- Jul 2023 03:15:23 -0700 (PDT)
+        with ESMTP id S230462AbjGYKYP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 06:24:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE76610CB;
+        Tue, 25 Jul 2023 03:24:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690280654; x=1721816654;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z2JgSRr57QfGjyG/fWEsaikXL6iwmaxUOjUdDAVtI0A=;
+  b=RAb1leraqX5Fyk6HEvP9T703FMF8+1ubL2WTdk/W6M/nh63j8c+gyD+8
+   ldRTrTyztR8vGBwEyJBHK/SKadmUhsiA5MNJhy320hC3kWAsd4iVQvyqE
+   vocuEeelD/8dgxtS4meTWHDD6+8OFU71+q7VGTjK8GzSrh+pQMKBqj4lO
+   PtGq4nWE63jDDBOpj7/++pecb/44c/1zSJ8GzeI8AHU5vUWLycMbWy9kB
+   SQjl51FS33cwUBefU91alkr6ZhH8JkeI4sXAoyFDQGLHNnLY5QW7FBGOv
+   3DHGaDlfGuMlMytnRXm+SJkBfa1KcZtuTESmJfCmD1JZXK6uEH9O8Wasw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="347956818"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="347956818"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 03:24:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="1056753039"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="1056753039"
+Received: from mlytkin-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.57.129])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 03:24:05 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 171E4103A12; Tue, 25 Jul 2023 13:24:03 +0300 (+03)
+Date:   Tue, 25 Jul 2023 13:24:03 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Subject: Re: [RFC PATCH v11 10/29] mm: Add AS_UNMOVABLE to mark mapping as
+ completely unmovable
+Message-ID: <20230725102403.xywjqlhyqkrzjok6@box.shutemov.name>
+References: <20230718234512.1690985-1-seanjc@google.com>
+ <20230718234512.1690985-11-seanjc@google.com>
 MIME-Version: 1.0
-References: <20230707111151.461373-1-keguang.zhang@gmail.com>
- <20230707111151.461373-3-keguang.zhang@gmail.com> <ZL+MB6P2tSHvgPHw@alpha.franken.de>
-In-Reply-To: <ZL+MB6P2tSHvgPHw@alpha.franken.de>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Tue, 25 Jul 2023 18:15:07 +0800
-Message-ID: <CAJhJPsUV_f_t-faHY-4Jay9AJO848UMVhtxgFh_AuvQnurpnRw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] MIPS: loongson32: Remove regs-rtc.h
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230718234512.1690985-11-seanjc@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 4:59=E2=80=AFPM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Jul 07, 2023 at 07:11:51PM +0800, Keguang Zhang wrote:
-> > Since commit 9fb23090658a ("rtc: Remove the
-> > Loongson-1 RTC driver"), no one is using regs-rtc.h.
-> > Therefore, remove this obsolete header file.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> >  .../include/asm/mach-loongson32/loongson1.h   |  1 -
-> >  .../include/asm/mach-loongson32/regs-rtc.h    | 19 -------------------
-> >  2 files changed, 20 deletions(-)
-> >  delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-rtc.h
-> >
-> > diff --git a/arch/mips/include/asm/mach-loongson32/loongson1.h b/arch/m=
-ips/include/asm/mach-loongson32/loongson1.h
-> > index bc27fcee3176..84f45461c832 100644
-> > --- a/arch/mips/include/asm/mach-loongson32/loongson1.h
-> > +++ b/arch/mips/include/asm/mach-loongson32/loongson1.h
-> > @@ -46,6 +46,5 @@
-> >  #define LS1X_CLK_BASE                        0x1fe78030
-> >
-> >  #include <regs-mux.h>
-> > -#include <regs-rtc.h>
-> >
-> >  #endif /* __ASM_MACH_LOONGSON32_LOONGSON1_H */
-> > diff --git a/arch/mips/include/asm/mach-loongson32/regs-rtc.h b/arch/mi=
-ps/include/asm/mach-loongson32/regs-rtc.h
-> > deleted file mode 100644
-> > index a3d096be1607..000000000000
-> > --- a/arch/mips/include/asm/mach-loongson32/regs-rtc.h
-> > +++ /dev/null
-> > @@ -1,19 +0,0 @@
-> > -/* SPDX-License-Identifier: GPL-2.0-or-later */
-> > -/*
-> > - * Copyright (c) 2016 Yang Ling <gnaygnil@gmail.com>
-> > - *
-> > - * Loongson 1 RTC timer Register Definitions.
-> > - */
-> > -
-> > -#ifndef __ASM_MACH_LOONGSON32_REGS_RTC_H
-> > -#define __ASM_MACH_LOONGSON32_REGS_RTC_H
-> > -
-> > -#define LS1X_RTC_REG(x) \
-> > -             ((void __iomem *)KSEG1ADDR(LS1X_RTC_BASE + (x)))
-> > -
-> > -#define LS1X_RTC_CTRL        LS1X_RTC_REG(0x40)
-> > -
-> > -#define RTC_EXTCLK_OK        (BIT(5) | BIT(8))
-> > -#define RTC_EXTCLK_EN        BIT(8)
-> > -
-> > -#endif /* __ASM_MACH_LOONGSON32_REGS_RTC_H */
-> > --
-> > 2.39.2
->
-> I get these build error when this patch is applied:
->
-> linux/arch/mips/loongson32/common/platform.c: In function =E2=80=98ls1x_r=
-tc_set_extclk=E2=80=99:
-> /local/tbogendoerfer/korg/linux/arch/mips/loongson32/common/platform.c:27=
-0:24: error: =E2=80=98LS1X_RTC_CTRL=E2=80=99 undeclared (first use in this =
-function)
->   u32 val =3D __raw_readl(LS1X_RTC_CTRL);
->                         ^~~~~~~~~~~~~
-> linux/arch/mips/loongson32/common/platform.c:270:24: note: each undeclare=
-d identifier is reported only once for each function it appears in
-> /local/tbogendoerfer/korg/linux/arch/mips/loongson32/common/platform.c:27=
-2:14: error: =E2=80=98RTC_EXTCLK_OK=E2=80=99 undeclared (first use in this =
-function)
->   if (!(val & RTC_EXTCLK_OK))
->               ^~~~~~~~~~~~~
-> linux/arch/mips/loongson32/common/platform.c:273:22: error: =E2=80=98RTC_=
-EXTCLK_EN=E2=80=99 undeclared (first use in this function)
->    __raw_writel(val | RTC_EXTCLK_EN, LS1X_RTC_CTRL);
->
-> Thomas.
->
+On Tue, Jul 18, 2023 at 04:44:53PM -0700, Sean Christopherson wrote:
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index dbc9f86b1934..a3d2b132df52 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -1047,6 +1047,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  		if (!mapping && (folio_ref_count(folio) - 1) > folio_mapcount(folio))
+>  			goto isolate_fail_put;
+>  
+> +		/* The mapping truly isn't movable. */
+> +		if (mapping && mapping_unmovable(mapping))
+> +			goto isolate_fail_put;
+> +
 
-Sorry! I will send v2 to fix this ASAP.
+I doubt that it is safe to dereference mapping here. I believe the folio
+can be truncated from under us and the mapping freed with the inode.
 
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+The folio has to be locked to dereference mapping safely (given that the
+mapping is still tied to the folio).
 
+Vlastimil, any comments?
 
-
---=20
-Best regards,
-
-Keguang Zhang
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
