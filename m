@@ -2,200 +2,365 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EEA7608BD
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 06:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C787609EF
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 08:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjGYElw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 00:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S231918AbjGYGCA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 02:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGYElu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 00:41:50 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10719BB
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-d18566dc0c1so263837276.0
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690260106; x=1690864906;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4tFc7lI8l/TAp6N4SH/RnjHMrhDjcjpOS0NvhRjK3tI=;
-        b=syg9IyMH/gqJY1k4LT3S6JMx0fSLcgE37Cs+8KWCUO35fKCYg0MuLIIi0nsu37jtyV
-         JWnNbNndjflxoqEknhV3drMoPO1rLP5Mf2NwuEGG3uNqc6WCc3lC70F16ZnEeLC+MDXA
-         tlBtkvCExRePxNsWSrYSlIqtWo9fJaFXM7OzUrScUdzQ6XIpjZwJMknKg/XaSKKfA+Pp
-         NHjPm93xL9xpQDR+q+3gjlysNDu5FD2n2xMli6SN590GUy6WkS3ghg4fMC/PcVORHv0z
-         7pZwaHoSCWcs0DC0U/7aDMkjw3lDyZjRkGaSMnnCoKZ6Eh2nJ1AJW7AcIEll2MImoPAy
-         2Dhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690260106; x=1690864906;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4tFc7lI8l/TAp6N4SH/RnjHMrhDjcjpOS0NvhRjK3tI=;
-        b=i/U+Ft51AP7+fB7jCodkWlZQ3kKxNqcBm4y8SnEYrkPU0HqPzkvZPZ5R6Vb+a550Jl
-         eCohsihf5wI6xQyqcU8pH+aV3++e0PkGhEtbHLMOwX/hm0xxP1neHWJmaCbnwko2o/d8
-         POm8qM+K0PkuSnaXgoNHYqGtZDc4IRXoC6639SWfHn86MpHEYurxl1fGFuttwjeqpnhE
-         /0MoKqavfoRgxoT/uasvUe6pngGHBSMbkROk4U1C+wws8/LCNwgeHWV1AaZSN8JU7E7g
-         TIBzCuKrU9Us/uoW3yHjLQRUrvrhU7VP/SCO6nug7oPeZZgERGV5qupCVxIavCRYuHVt
-         yP8A==
-X-Gm-Message-State: ABy/qLbXsUazNIvf9I9giEEJycTuxDo/FEjWSSd5t9esVxMIRpw+IaC1
-        O4ROOzvVoxIzddFdqUf2v0VF4g==
-X-Google-Smtp-Source: APBJJlHQLTh3cgEYO+DVAD/fw8XSxxaq77z0mK7JibK/JjnN3wjA/kyDdlXYpJW7FLCpf9E01rW5SQ==
-X-Received: by 2002:a25:2342:0:b0:d0d:2d17:3f11 with SMTP id j63-20020a252342000000b00d0d2d173f11mr5304231ybj.17.1690260106082;
-        Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id z16-20020a25e310000000b00c71e4833957sm2656725ybd.63.2023.07.24.21.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:41:45 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 21:41:36 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH mm-unstable v7 00/31] Split ptdesc from struct page
-In-Reply-To: <20230725042051.36691-1-vishal.moola@gmail.com>
-Message-ID: <5296514f-cdd1-9526-2e83-a21e76e86e5@google.com>
-References: <20230725042051.36691-1-vishal.moola@gmail.com>
+        with ESMTP id S231853AbjGYGB5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 02:01:57 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1587AE69;
+        Mon, 24 Jul 2023 23:01:55 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 390395C0125;
+        Tue, 25 Jul 2023 02:01:55 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 25 Jul 2023 02:01:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1690264915; x=1690351315; bh=u25UZIhU9Z
+        hcvPRhhElxeTtk0KNrK1z5pbqbM0fo0/A=; b=XONI4PHD5lQk4/QiWn5NBq6Ffs
+        yIvnQH1hyYH3KMgZYFa04sKWnTROiYaKVAposDcbX16KgjRpp59u+W0TvtfkoKOz
+        RXUr1oUzEKBr1ISERtJrLYYbm2zbc+CQivmUAqdp59cr64eRVGNZ5CTnbs6qw3ne
+        m+jO+zHmxE6U22tDMIQSkcfToIIn40wwuxjNOVFU07mnrT6paKFvznOsgkySWPJk
+        GT+Uqo9aATLj0bJ9DmjmIxZxQIFKwmWVFAYUrIG9BSOPrnI8KKN3YvSpfWn+CxjQ
+        MCEXyjrwjrTjEsTngrVXXSA/ZVhEGs1nSyMjYnW4Se4UhjpwC7Q2Vo7F1CFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1690264915; x=1690351315; bh=u25UZIhU9Zhcv
+        PRhhElxeTtk0KNrK1z5pbqbM0fo0/A=; b=AeM0MhpYHj6ZmTVX0NcuhXbJiu3Xh
+        i1tg9l/0IQPuzakC/M5rQjl+Vdngwp+lb7R8Eo4LdZsBmIpPUlGT7vhk7KEven6N
+        q5Qn83R0cre7qZfpwF2hkeswTWCTyAkWlDIGo5WjP1in9p4/x0QkubjskbhI1I4E
+        +TsL4pCkahOVxtX2t6nDazFuuyqhqkPP43zirdI+QBJse7oZaSc+ka2Of3xBbu7Y
+        zVzljKpYDxJE5z9Uu1nt9B8aEYECEdead+WRUdZWt7UpadSBhrrvFkSURmEJ2NKW
+        elaGhWEZixSTYislD3XK6P0QR+Roje48ENY0XXbx8Sgr4Bk2crChJk8Sw==
+X-ME-Sender: <xms:UmW_ZCuh8OQu_JZPTOMlQmAAOC7jByDsd-dIZxZUxpBz0R1GM6iaTA>
+    <xme:UmW_ZHdd29BTTENwbO8Ia9uTwX1zQlHAipXXDDhDyTCxv3GqNIE3QGjNx4rNz8nXN
+    Z5vH-M6IMiA4xMECrI>
+X-ME-Received: <xmr:UmW_ZNwNdFZ1PkuzdTBd8K5DDjt3lZrKMx5uEE5Scm7FZAC57LZz_9f_90y9NH9mrkEMGX5OQFj4lQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrheelgddutddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdeuteekleeuudfgueethe
+    dtuddthfdtleffgefhieehfeeigedvtdeuveetiedunecuffhomhgrihhnpehkvghrnhgv
+    lhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:UmW_ZNP6kOcUZltycQ2mTcfNpmZPHE5OgEvj6C3dB5PCnafIpPEXeg>
+    <xmx:UmW_ZC8i3EpX2xVEeciq94zGGA9XnOd7EkOc3-yRq6qV4nvnUssSeg>
+    <xmx:UmW_ZFVkq2xCbZWn6VP-OcFTB3AAOutvMThGrDhyy7v0jeijM9iiLQ>
+    <xmx:U2W_ZGbWm9ee_x0Ts6ajd2F3o_xpMfmapFJWUI-lHuyGiAc12lr0iw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Jul 2023 02:01:51 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, chenhuacai@kernel.org,
+        philmd@linaro.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] MIPS: Loongson64: Fix more __iomem attributes
+Date:   Tue, 25 Jul 2023 14:01:44 +0800
+Message-Id: <20230725060144.1501195-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 24 Jul 2023, Vishal Moola (Oracle) wrote:
+There are some __iomem type casting being missed in previous patch.
+Fix them here.
 
-> The MM subsystem is trying to shrink struct page. This patchset
-> introduces a memory descriptor for page table tracking - struct ptdesc.
-> 
-> This patchset introduces ptdesc, splits ptdesc from struct page, and
-> converts many callers of page table constructor/destructors to use ptdescs.
-> 
-> Ptdesc is a foundation to further standardize page tables, and eventually
-> allow for dynamic allocation of page tables independent of struct page.
-> However, the use of pages for page table tracking is quite deeply
-> ingrained and varied across archictectures, so there is still a lot of
-> work to be done before that can happen.
+Fixes: 5bd3990723bd ("MIPS: Loongson64: Prefix ipi register address pointers with __iomem")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202307020639.QCZOKp8B-lkp@intel.com/
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+v2: Drop invalid attribute for play_dead pointers
+---
+ arch/mips/loongson64/smp.c | 160 ++++++++++++++++++-------------------
+ 1 file changed, 80 insertions(+), 80 deletions(-)
 
-Others may differ, but it remains the case that I see no point to this
-patchset, until the minimal descriptor that replaces struct page is
-working, and struct page then becomes just overhead.  Until that time,
-let architectures continue to use struct page as they do - whyever not?
+diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+index cdecd7af11a6..e015a26a40f7 100644
+--- a/arch/mips/loongson64/smp.c
++++ b/arch/mips/loongson64/smp.c
+@@ -187,181 +187,181 @@ static void csr_ipi_probe(void)
+ 
+ static void ipi_set0_regs_init(void)
+ {
+-	ipi_set0_regs[0] = (void *)
++	ipi_set0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[1] = (void *)
++	ipi_set0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[2] = (void *)
++	ipi_set0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[3] = (void *)
++	ipi_set0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + SET0);
+-	ipi_set0_regs[4] = (void *)
++	ipi_set0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[5] = (void *)
++	ipi_set0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[6] = (void *)
++	ipi_set0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[7] = (void *)
++	ipi_set0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + SET0);
+-	ipi_set0_regs[8] = (void *)
++	ipi_set0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[9] = (void *)
++	ipi_set0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[10] = (void *)
++	ipi_set0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[11] = (void *)
++	ipi_set0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + SET0);
+-	ipi_set0_regs[12] = (void *)
++	ipi_set0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + SET0);
+-	ipi_set0_regs[13] = (void *)
++	ipi_set0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + SET0);
+-	ipi_set0_regs[14] = (void *)
++	ipi_set0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + SET0);
+-	ipi_set0_regs[15] = (void *)
++	ipi_set0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + SET0);
+ }
+ 
+ static void ipi_clear0_regs_init(void)
+ {
+-	ipi_clear0_regs[0] = (void *)
++	ipi_clear0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[1] = (void *)
++	ipi_clear0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[2] = (void *)
++	ipi_clear0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[3] = (void *)
++	ipi_clear0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + CLEAR0);
+-	ipi_clear0_regs[4] = (void *)
++	ipi_clear0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[5] = (void *)
++	ipi_clear0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[6] = (void *)
++	ipi_clear0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[7] = (void *)
++	ipi_clear0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + CLEAR0);
+-	ipi_clear0_regs[8] = (void *)
++	ipi_clear0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[9] = (void *)
++	ipi_clear0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[10] = (void *)
++	ipi_clear0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[11] = (void *)
++	ipi_clear0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + CLEAR0);
+-	ipi_clear0_regs[12] = (void *)
++	ipi_clear0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + CLEAR0);
+-	ipi_clear0_regs[13] = (void *)
++	ipi_clear0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + CLEAR0);
+-	ipi_clear0_regs[14] = (void *)
++	ipi_clear0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + CLEAR0);
+-	ipi_clear0_regs[15] = (void *)
++	ipi_clear0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + CLEAR0);
+ }
+ 
+ static void ipi_status0_regs_init(void)
+ {
+-	ipi_status0_regs[0] = (void *)
++	ipi_status0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[1] = (void *)
++	ipi_status0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[2] = (void *)
++	ipi_status0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[3] = (void *)
++	ipi_status0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + STATUS0);
+-	ipi_status0_regs[4] = (void *)
++	ipi_status0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[5] = (void *)
++	ipi_status0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[6] = (void *)
++	ipi_status0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[7] = (void *)
++	ipi_status0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + STATUS0);
+-	ipi_status0_regs[8] = (void *)
++	ipi_status0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[9] = (void *)
++	ipi_status0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[10] = (void *)
++	ipi_status0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[11] = (void *)
++	ipi_status0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + STATUS0);
+-	ipi_status0_regs[12] = (void *)
++	ipi_status0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + STATUS0);
+-	ipi_status0_regs[13] = (void *)
++	ipi_status0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + STATUS0);
+-	ipi_status0_regs[14] = (void *)
++	ipi_status0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + STATUS0);
+-	ipi_status0_regs[15] = (void *)
++	ipi_status0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + STATUS0);
+ }
+ 
+ static void ipi_en0_regs_init(void)
+ {
+-	ipi_en0_regs[0] = (void *)
++	ipi_en0_regs[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[1] = (void *)
++	ipi_en0_regs[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[2] = (void *)
++	ipi_en0_regs[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[3] = (void *)
++	ipi_en0_regs[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + EN0);
+-	ipi_en0_regs[4] = (void *)
++	ipi_en0_regs[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[5] = (void *)
++	ipi_en0_regs[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[6] = (void *)
++	ipi_en0_regs[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[7] = (void *)
++	ipi_en0_regs[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + EN0);
+-	ipi_en0_regs[8] = (void *)
++	ipi_en0_regs[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[9] = (void *)
++	ipi_en0_regs[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[10] = (void *)
++	ipi_en0_regs[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[11] = (void *)
++	ipi_en0_regs[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + EN0);
+-	ipi_en0_regs[12] = (void *)
++	ipi_en0_regs[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + EN0);
+-	ipi_en0_regs[13] = (void *)
++	ipi_en0_regs[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + EN0);
+-	ipi_en0_regs[14] = (void *)
++	ipi_en0_regs[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + EN0);
+-	ipi_en0_regs[15] = (void *)
++	ipi_en0_regs[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + EN0);
+ }
+ 
+ static void ipi_mailbox_buf_init(void)
+ {
+-	ipi_mailbox_buf[0] = (void *)
++	ipi_mailbox_buf[0] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[1] = (void *)
++	ipi_mailbox_buf[1] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[2] = (void *)
++	ipi_mailbox_buf[2] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[3] = (void *)
++	ipi_mailbox_buf[3] = (void __iomem *)
+ 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + BUF);
+-	ipi_mailbox_buf[4] = (void *)
++	ipi_mailbox_buf[4] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[5] = (void *)
++	ipi_mailbox_buf[5] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[6] = (void *)
++	ipi_mailbox_buf[6] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[7] = (void *)
++	ipi_mailbox_buf[7] = (void __iomem *)
+ 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + BUF);
+-	ipi_mailbox_buf[8] = (void *)
++	ipi_mailbox_buf[8] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[9] = (void *)
++	ipi_mailbox_buf[9] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[10] = (void *)
++	ipi_mailbox_buf[10] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[11] = (void *)
++	ipi_mailbox_buf[11] = (void __iomem *)
+ 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + BUF);
+-	ipi_mailbox_buf[12] = (void *)
++	ipi_mailbox_buf[12] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + BUF);
+-	ipi_mailbox_buf[13] = (void *)
++	ipi_mailbox_buf[13] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + BUF);
+-	ipi_mailbox_buf[14] = (void *)
++	ipi_mailbox_buf[14] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + BUF);
+-	ipi_mailbox_buf[15] = (void *)
++	ipi_mailbox_buf[15] = (void __iomem *)
+ 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + BUF);
+ }
+ 
+-- 
+2.39.2
 
-Hugh
-
-> 
-> This is rebased on mm-unstable.
-> 
-> v7:
->   Drop s390 gmap ptdesc conversions - gmap is unecessary complication
->     that can be dealt with later
->   Be more thorough with ptdesc struct sanity checks and comments
->   Rebase onto mm-unstable
-> 
-> Vishal Moola (Oracle) (31):
->   mm: Add PAGE_TYPE_OP folio functions
->   pgtable: Create struct ptdesc
->   mm: add utility functions for ptdesc
->   mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
->   mm: Convert ptlock_alloc() to use ptdescs
->   mm: Convert ptlock_ptr() to use ptdescs
->   mm: Convert pmd_ptlock_init() to use ptdescs
->   mm: Convert ptlock_init() to use ptdescs
->   mm: Convert pmd_ptlock_free() to use ptdescs
->   mm: Convert ptlock_free() to use ptdescs
->   mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
->   powerpc: Convert various functions to use ptdescs
->   x86: Convert various functions to use ptdescs
->   s390: Convert various pgalloc functions to use ptdescs
->   mm: Remove page table members from struct page
->   pgalloc: Convert various functions to use ptdescs
->   arm: Convert various functions to use ptdescs
->   arm64: Convert various functions to use ptdescs
->   csky: Convert __pte_free_tlb() to use ptdescs
->   hexagon: Convert __pte_free_tlb() to use ptdescs
->   loongarch: Convert various functions to use ptdescs
->   m68k: Convert various functions to use ptdescs
->   mips: Convert various functions to use ptdescs
->   nios2: Convert __pte_free_tlb() to use ptdescs
->   openrisc: Convert __pte_free_tlb() to use ptdescs
->   riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
->   sh: Convert pte_free_tlb() to use ptdescs
->   sparc64: Convert various functions to use ptdescs
->   sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
->   um: Convert {pmd, pte}_free_tlb() to use ptdescs
->   mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
-> 
->  Documentation/mm/split_page_table_lock.rst    |  12 +-
->  .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
->  arch/arm/include/asm/tlb.h                    |  12 +-
->  arch/arm/mm/mmu.c                             |   7 +-
->  arch/arm64/include/asm/tlb.h                  |  14 +-
->  arch/arm64/mm/mmu.c                           |   7 +-
->  arch/csky/include/asm/pgalloc.h               |   4 +-
->  arch/hexagon/include/asm/pgalloc.h            |   8 +-
->  arch/loongarch/include/asm/pgalloc.h          |  27 ++--
->  arch/loongarch/mm/pgtable.c                   |   7 +-
->  arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
->  arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
->  arch/m68k/mm/motorola.c                       |   4 +-
->  arch/mips/include/asm/pgalloc.h               |  32 ++--
->  arch/mips/mm/pgtable.c                        |   8 +-
->  arch/nios2/include/asm/pgalloc.h              |   8 +-
->  arch/openrisc/include/asm/pgalloc.h           |   8 +-
->  arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
->  arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
->  arch/powerpc/mm/pgtable-frag.c                |  56 +++----
->  arch/riscv/include/asm/pgalloc.h              |   8 +-
->  arch/riscv/mm/init.c                          |  16 +-
->  arch/s390/include/asm/pgalloc.h               |   4 +-
->  arch/s390/include/asm/tlb.h                   |   4 +-
->  arch/s390/mm/pgalloc.c                        | 128 +++++++--------
->  arch/sh/include/asm/pgalloc.h                 |   9 +-
->  arch/sparc/mm/init_64.c                       |  17 +-
->  arch/sparc/mm/srmmu.c                         |   5 +-
->  arch/um/include/asm/pgalloc.h                 |  18 +--
->  arch/x86/mm/pgtable.c                         |  47 +++---
->  arch/x86/xen/mmu_pv.c                         |   2 +-
->  include/asm-generic/pgalloc.h                 |  88 +++++-----
->  include/asm-generic/tlb.h                     |  11 ++
->  include/linux/mm.h                            | 151 +++++++++++++-----
->  include/linux/mm_types.h                      |  18 ---
->  include/linux/page-flags.h                    |  30 +++-
->  include/linux/pgtable.h                       |  80 ++++++++++
->  mm/memory.c                                   |   8 +-
->  38 files changed, 585 insertions(+), 384 deletions(-)
-> 
-> -- 
-> 2.40.1
