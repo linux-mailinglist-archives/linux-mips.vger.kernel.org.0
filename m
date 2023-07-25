@@ -2,365 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C787609EF
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 08:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBB2760AEE
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 08:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjGYGCA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 02:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S231993AbjGYGvY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 02:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjGYGB5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 02:01:57 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1587AE69;
-        Mon, 24 Jul 2023 23:01:55 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 390395C0125;
-        Tue, 25 Jul 2023 02:01:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 25 Jul 2023 02:01:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1690264915; x=1690351315; bh=u25UZIhU9Z
-        hcvPRhhElxeTtk0KNrK1z5pbqbM0fo0/A=; b=XONI4PHD5lQk4/QiWn5NBq6Ffs
-        yIvnQH1hyYH3KMgZYFa04sKWnTROiYaKVAposDcbX16KgjRpp59u+W0TvtfkoKOz
-        RXUr1oUzEKBr1ISERtJrLYYbm2zbc+CQivmUAqdp59cr64eRVGNZ5CTnbs6qw3ne
-        m+jO+zHmxE6U22tDMIQSkcfToIIn40wwuxjNOVFU07mnrT6paKFvznOsgkySWPJk
-        GT+Uqo9aATLj0bJ9DmjmIxZxQIFKwmWVFAYUrIG9BSOPrnI8KKN3YvSpfWn+CxjQ
-        MCEXyjrwjrTjEsTngrVXXSA/ZVhEGs1nSyMjYnW4Se4UhjpwC7Q2Vo7F1CFA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1690264915; x=1690351315; bh=u25UZIhU9Zhcv
-        PRhhElxeTtk0KNrK1z5pbqbM0fo0/A=; b=AeM0MhpYHj6ZmTVX0NcuhXbJiu3Xh
-        i1tg9l/0IQPuzakC/M5rQjl+Vdngwp+lb7R8Eo4LdZsBmIpPUlGT7vhk7KEven6N
-        q5Qn83R0cre7qZfpwF2hkeswTWCTyAkWlDIGo5WjP1in9p4/x0QkubjskbhI1I4E
-        +TsL4pCkahOVxtX2t6nDazFuuyqhqkPP43zirdI+QBJse7oZaSc+ka2Of3xBbu7Y
-        zVzljKpYDxJE5z9Uu1nt9B8aEYECEdead+WRUdZWt7UpadSBhrrvFkSURmEJ2NKW
-        elaGhWEZixSTYislD3XK6P0QR+Roje48ENY0XXbx8Sgr4Bk2crChJk8Sw==
-X-ME-Sender: <xms:UmW_ZCuh8OQu_JZPTOMlQmAAOC7jByDsd-dIZxZUxpBz0R1GM6iaTA>
-    <xme:UmW_ZHdd29BTTENwbO8Ia9uTwX1zQlHAipXXDDhDyTCxv3GqNIE3QGjNx4rNz8nXN
-    Z5vH-M6IMiA4xMECrI>
-X-ME-Received: <xmr:UmW_ZNwNdFZ1PkuzdTBd8K5DDjt3lZrKMx5uEE5Scm7FZAC57LZz_9f_90y9NH9mrkEMGX5OQFj4lQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrheelgddutddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdeuteekleeuudfgueethe
-    dtuddthfdtleffgefhieehfeeigedvtdeuveetiedunecuffhomhgrihhnpehkvghrnhgv
-    lhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:UmW_ZNP6kOcUZltycQ2mTcfNpmZPHE5OgEvj6C3dB5PCnafIpPEXeg>
-    <xmx:UmW_ZC8i3EpX2xVEeciq94zGGA9XnOd7EkOc3-yRq6qV4nvnUssSeg>
-    <xmx:UmW_ZFVkq2xCbZWn6VP-OcFTB3AAOutvMThGrDhyy7v0jeijM9iiLQ>
-    <xmx:U2W_ZGbWm9ee_x0Ts6ajd2F3o_xpMfmapFJWUI-lHuyGiAc12lr0iw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 25 Jul 2023 02:01:51 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, chenhuacai@kernel.org,
-        philmd@linaro.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] MIPS: Loongson64: Fix more __iomem attributes
-Date:   Tue, 25 Jul 2023 14:01:44 +0800
-Message-Id: <20230725060144.1501195-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S231147AbjGYGvX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 02:51:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31BD116
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 23:51:21 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qOBsF-0008CR-QE; Tue, 25 Jul 2023 08:50:23 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qOBs7-001wAn-Vc; Tue, 25 Jul 2023 08:50:15 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qOBs7-007bOg-45; Tue, 25 Jul 2023 08:50:15 +0200
+Date:   Tue, 25 Jul 2023 08:50:14 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jacky Huang <ychuang3@nuvoton.com>,
+        Shan-Chun Hung <schung@nuvoton.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] tty: Explicitly include correct DT includes
+Message-ID: <20230725065014.kjdcos77kzepprvw@pengutronix.de>
+References: <20230724205440.767071-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="egg3m5pjvujeb37y"
+Content-Disposition: inline
+In-Reply-To: <20230724205440.767071-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There are some __iomem type casting being missed in previous patch.
-Fix them here.
 
-Fixes: 5bd3990723bd ("MIPS: Loongson64: Prefix ipi register address pointers with __iomem")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202307020639.QCZOKp8B-lkp@intel.com/
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-v2: Drop invalid attribute for play_dead pointers
----
- arch/mips/loongson64/smp.c | 160 ++++++++++++++++++-------------------
- 1 file changed, 80 insertions(+), 80 deletions(-)
+--egg3m5pjvujeb37y
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index cdecd7af11a6..e015a26a40f7 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -187,181 +187,181 @@ static void csr_ipi_probe(void)
- 
- static void ipi_set0_regs_init(void)
- {
--	ipi_set0_regs[0] = (void *)
-+	ipi_set0_regs[0] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + SET0);
--	ipi_set0_regs[1] = (void *)
-+	ipi_set0_regs[1] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + SET0);
--	ipi_set0_regs[2] = (void *)
-+	ipi_set0_regs[2] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + SET0);
--	ipi_set0_regs[3] = (void *)
-+	ipi_set0_regs[3] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + SET0);
--	ipi_set0_regs[4] = (void *)
-+	ipi_set0_regs[4] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + SET0);
--	ipi_set0_regs[5] = (void *)
-+	ipi_set0_regs[5] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + SET0);
--	ipi_set0_regs[6] = (void *)
-+	ipi_set0_regs[6] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + SET0);
--	ipi_set0_regs[7] = (void *)
-+	ipi_set0_regs[7] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + SET0);
--	ipi_set0_regs[8] = (void *)
-+	ipi_set0_regs[8] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + SET0);
--	ipi_set0_regs[9] = (void *)
-+	ipi_set0_regs[9] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + SET0);
--	ipi_set0_regs[10] = (void *)
-+	ipi_set0_regs[10] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + SET0);
--	ipi_set0_regs[11] = (void *)
-+	ipi_set0_regs[11] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + SET0);
--	ipi_set0_regs[12] = (void *)
-+	ipi_set0_regs[12] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + SET0);
--	ipi_set0_regs[13] = (void *)
-+	ipi_set0_regs[13] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + SET0);
--	ipi_set0_regs[14] = (void *)
-+	ipi_set0_regs[14] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + SET0);
--	ipi_set0_regs[15] = (void *)
-+	ipi_set0_regs[15] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + SET0);
- }
- 
- static void ipi_clear0_regs_init(void)
- {
--	ipi_clear0_regs[0] = (void *)
-+	ipi_clear0_regs[0] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + CLEAR0);
--	ipi_clear0_regs[1] = (void *)
-+	ipi_clear0_regs[1] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + CLEAR0);
--	ipi_clear0_regs[2] = (void *)
-+	ipi_clear0_regs[2] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + CLEAR0);
--	ipi_clear0_regs[3] = (void *)
-+	ipi_clear0_regs[3] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + CLEAR0);
--	ipi_clear0_regs[4] = (void *)
-+	ipi_clear0_regs[4] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + CLEAR0);
--	ipi_clear0_regs[5] = (void *)
-+	ipi_clear0_regs[5] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + CLEAR0);
--	ipi_clear0_regs[6] = (void *)
-+	ipi_clear0_regs[6] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + CLEAR0);
--	ipi_clear0_regs[7] = (void *)
-+	ipi_clear0_regs[7] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + CLEAR0);
--	ipi_clear0_regs[8] = (void *)
-+	ipi_clear0_regs[8] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + CLEAR0);
--	ipi_clear0_regs[9] = (void *)
-+	ipi_clear0_regs[9] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + CLEAR0);
--	ipi_clear0_regs[10] = (void *)
-+	ipi_clear0_regs[10] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + CLEAR0);
--	ipi_clear0_regs[11] = (void *)
-+	ipi_clear0_regs[11] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + CLEAR0);
--	ipi_clear0_regs[12] = (void *)
-+	ipi_clear0_regs[12] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + CLEAR0);
--	ipi_clear0_regs[13] = (void *)
-+	ipi_clear0_regs[13] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + CLEAR0);
--	ipi_clear0_regs[14] = (void *)
-+	ipi_clear0_regs[14] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + CLEAR0);
--	ipi_clear0_regs[15] = (void *)
-+	ipi_clear0_regs[15] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + CLEAR0);
- }
- 
- static void ipi_status0_regs_init(void)
- {
--	ipi_status0_regs[0] = (void *)
-+	ipi_status0_regs[0] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + STATUS0);
--	ipi_status0_regs[1] = (void *)
-+	ipi_status0_regs[1] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + STATUS0);
--	ipi_status0_regs[2] = (void *)
-+	ipi_status0_regs[2] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + STATUS0);
--	ipi_status0_regs[3] = (void *)
-+	ipi_status0_regs[3] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + STATUS0);
--	ipi_status0_regs[4] = (void *)
-+	ipi_status0_regs[4] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + STATUS0);
--	ipi_status0_regs[5] = (void *)
-+	ipi_status0_regs[5] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + STATUS0);
--	ipi_status0_regs[6] = (void *)
-+	ipi_status0_regs[6] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + STATUS0);
--	ipi_status0_regs[7] = (void *)
-+	ipi_status0_regs[7] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + STATUS0);
--	ipi_status0_regs[8] = (void *)
-+	ipi_status0_regs[8] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + STATUS0);
--	ipi_status0_regs[9] = (void *)
-+	ipi_status0_regs[9] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + STATUS0);
--	ipi_status0_regs[10] = (void *)
-+	ipi_status0_regs[10] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + STATUS0);
--	ipi_status0_regs[11] = (void *)
-+	ipi_status0_regs[11] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + STATUS0);
--	ipi_status0_regs[12] = (void *)
-+	ipi_status0_regs[12] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + STATUS0);
--	ipi_status0_regs[13] = (void *)
-+	ipi_status0_regs[13] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + STATUS0);
--	ipi_status0_regs[14] = (void *)
-+	ipi_status0_regs[14] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + STATUS0);
--	ipi_status0_regs[15] = (void *)
-+	ipi_status0_regs[15] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + STATUS0);
- }
- 
- static void ipi_en0_regs_init(void)
- {
--	ipi_en0_regs[0] = (void *)
-+	ipi_en0_regs[0] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + EN0);
--	ipi_en0_regs[1] = (void *)
-+	ipi_en0_regs[1] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + EN0);
--	ipi_en0_regs[2] = (void *)
-+	ipi_en0_regs[2] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + EN0);
--	ipi_en0_regs[3] = (void *)
-+	ipi_en0_regs[3] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + EN0);
--	ipi_en0_regs[4] = (void *)
-+	ipi_en0_regs[4] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + EN0);
--	ipi_en0_regs[5] = (void *)
-+	ipi_en0_regs[5] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + EN0);
--	ipi_en0_regs[6] = (void *)
-+	ipi_en0_regs[6] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + EN0);
--	ipi_en0_regs[7] = (void *)
-+	ipi_en0_regs[7] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + EN0);
--	ipi_en0_regs[8] = (void *)
-+	ipi_en0_regs[8] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + EN0);
--	ipi_en0_regs[9] = (void *)
-+	ipi_en0_regs[9] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + EN0);
--	ipi_en0_regs[10] = (void *)
-+	ipi_en0_regs[10] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + EN0);
--	ipi_en0_regs[11] = (void *)
-+	ipi_en0_regs[11] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + EN0);
--	ipi_en0_regs[12] = (void *)
-+	ipi_en0_regs[12] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + EN0);
--	ipi_en0_regs[13] = (void *)
-+	ipi_en0_regs[13] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + EN0);
--	ipi_en0_regs[14] = (void *)
-+	ipi_en0_regs[14] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + EN0);
--	ipi_en0_regs[15] = (void *)
-+	ipi_en0_regs[15] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + EN0);
- }
- 
- static void ipi_mailbox_buf_init(void)
- {
--	ipi_mailbox_buf[0] = (void *)
-+	ipi_mailbox_buf[0] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + BUF);
--	ipi_mailbox_buf[1] = (void *)
-+	ipi_mailbox_buf[1] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + BUF);
--	ipi_mailbox_buf[2] = (void *)
-+	ipi_mailbox_buf[2] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + BUF);
--	ipi_mailbox_buf[3] = (void *)
-+	ipi_mailbox_buf[3] = (void __iomem *)
- 		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + BUF);
--	ipi_mailbox_buf[4] = (void *)
-+	ipi_mailbox_buf[4] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + BUF);
--	ipi_mailbox_buf[5] = (void *)
-+	ipi_mailbox_buf[5] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + BUF);
--	ipi_mailbox_buf[6] = (void *)
-+	ipi_mailbox_buf[6] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + BUF);
--	ipi_mailbox_buf[7] = (void *)
-+	ipi_mailbox_buf[7] = (void __iomem *)
- 		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + BUF);
--	ipi_mailbox_buf[8] = (void *)
-+	ipi_mailbox_buf[8] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + BUF);
--	ipi_mailbox_buf[9] = (void *)
-+	ipi_mailbox_buf[9] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + BUF);
--	ipi_mailbox_buf[10] = (void *)
-+	ipi_mailbox_buf[10] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + BUF);
--	ipi_mailbox_buf[11] = (void *)
-+	ipi_mailbox_buf[11] = (void __iomem *)
- 		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + BUF);
--	ipi_mailbox_buf[12] = (void *)
-+	ipi_mailbox_buf[12] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + BUF);
--	ipi_mailbox_buf[13] = (void *)
-+	ipi_mailbox_buf[13] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + BUF);
--	ipi_mailbox_buf[14] = (void *)
-+	ipi_mailbox_buf[14] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + BUF);
--	ipi_mailbox_buf[15] = (void *)
-+	ipi_mailbox_buf[15] = (void __iomem *)
- 		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + BUF);
- }
- 
--- 
-2.39.2
+Hello Rob,
 
+On Mon, Jul 24, 2023 at 02:54:38PM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> # for imx
+
+Thanks for your efforts!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--egg3m5pjvujeb37y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmS/cKYACgkQj4D7WH0S
+/k5DeQf/XZ9i2MKupQ474foZd/xSXDoeGP/mzcur4EO3Bu06s1VDyknWODS3IU5p
+VGN/GNMpV8QCC4UBbhddhyqP60D9vYNBqbyw6ZsVZTH5+9Ld4Dmfi8jTYeTNiYYc
++EmM4HrAdY1GVXkdkip00c1GWdcPsHQA6JgSwV1z2cjiJU/7AeRdF6FTB7LPtxCO
+lHZ+at0pra4cRma7o2dZyjIZCa3M05OFqBIX5FAbCCptQsRYlnfTJbOuA2Fr3aTq
+mn7uHJbHPuX+r4PnWXzeq/IC4eEynkYfcINsTmQtG2H2ecI+GvJGttDpTrZstKr7
+ThQy424A1jo0R00lnwmfFmOG/Q7gKQ==
+=p7gV
+-----END PGP SIGNATURE-----
+
+--egg3m5pjvujeb37y--
