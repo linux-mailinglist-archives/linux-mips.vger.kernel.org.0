@@ -2,183 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F647620F0
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 20:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D3E7621A6
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 20:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjGYSFf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 14:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S232130AbjGYSlF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 14:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjGYSFe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 14:05:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6E31FF5
-        for <linux-mips@vger.kernel.org>; Tue, 25 Jul 2023 11:05:32 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-564fb1018bcso70061547b3.0
-        for <linux-mips@vger.kernel.org>; Tue, 25 Jul 2023 11:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690308331; x=1690913131;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIo8qHauKdQX+T8FT8wbaojm6/JdQZAwM03PT/kIykI=;
-        b=7nXQcBRpxoTRBB3DVtfi1G3SLzO+8rbX0pZK3GqB/ZiRovVnhgEY5C+Gs70dPcpJKC
-         v8EbJPLKK/PtzLxWiGJ5qeO4LJqB7HN3pWAhYbANBnQSVYoMTUMzCaeCD3zEfSqoM+r2
-         fDpLY03C1R0xadVk8zh9oHGZMZqSmWV+dliNXRuRczTowFXc/oEsFJjHeqmHR0h/7zjV
-         1SaakHlCZawqmTagIefeOP2xnfIobskVh1rmXibU4Cwg3i96EQeqcAc0By/i+P6tJXi9
-         1AMdfmti0ZHyvBS0qJY6Ig052U8rUWQC7aHvZS0sxZXtvMY234BUecIw+5qK/UmUColq
-         VbWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690308331; x=1690913131;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIo8qHauKdQX+T8FT8wbaojm6/JdQZAwM03PT/kIykI=;
-        b=isJBkWNkNOzblY5CUgoRdjAwREyzRClL45AnmNPpRmYFR8JVe9Fnop05uXYdORL3Qp
-         Xt/hltPcUsykbmC1BR259Ayx2rGTOF2bJwML/ZZN36JqfhBkQIJbyA6jRYFnhU1e5KQW
-         LOGZ5u00f/OJCnj3dJm5fOZSJ8pJtmV+gPIZZVftO0/R6cSRzQmJ39AhM1RFD9a/LEln
-         qwY/+YqH8uK+B5ECQn/jXGqv4H/ubHHt8TL13P42Y9ploayTAr614iIEFYtHXmW5bjag
-         FBOI5MlGSYnlz9LSrv3IkLUnPiSuO2inLMHJGR8dBELFkItxtvBnoNfLdvaUHh0MhUWS
-         tKzA==
-X-Gm-Message-State: ABy/qLY64BGI5HdOl0XmcdywzukuMZDtRnivud0y6jSSd71fTTI4b19W
-        upc3HAjNWyr7yjr9p8pt8nUYjGzITMk=
-X-Google-Smtp-Source: APBJJlG+f5K6Guu8BWDh2M0jvEhmql8458IaH+LCw2ABsy+ZDoDj1Vv7TcavygUx+nDEGvPQs1RCmsWjSr8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4509:0:b0:573:5797:4b9e with SMTP id
- s9-20020a814509000000b0057357974b9emr213ywa.1.1690308331572; Tue, 25 Jul 2023
- 11:05:31 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 11:05:29 -0700
-In-Reply-To: <ZLphxpSTL9Fpn1ye@yilunxu-OptiPlex-7050>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-2-seanjc@google.com>
- <ZLolA2U83tP75Qdd@yzhao56-desk.sh.intel.com> <ZLphxpSTL9Fpn1ye@yilunxu-OptiPlex-7050>
-Message-ID: <ZMAO6bhan9l6ybQM@google.com>
-Subject: Re: [RFC PATCH v11 01/29] KVM: Wrap kvm_gfn_range.pte in a per-action union
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Yan Zhao <yan.y.zhao@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+        with ESMTP id S232115AbjGYSk7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 14:40:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA252682
+        for <linux-mips@vger.kernel.org>; Tue, 25 Jul 2023 11:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690310408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ss2tzNf07FPnrLqdDtf+Er94L4qFrw/j0drlGJAUJI=;
+        b=NVswkJDubFN6sFQtBvjLxl3pJs2FaXqBPjuSfZNv9D51HvLiTJyapg5/y/eLObQceA+2sO
+        MtAmIsP7VVHoEAhyfZunqSJY9tsUWsWydqztaaLJ5x1YFq5EEXgZMCU3u6nc/sRu+zkvEA
+        SRmES+yPihlMnaEaWNrAW74T1JrKWl0=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-8oo2ft68MBSY5EtXE1nj0w-1; Tue, 25 Jul 2023 14:40:05 -0400
+X-MC-Unique: 8oo2ft68MBSY5EtXE1nj0w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 844A21C3408F;
+        Tue, 25 Jul 2023 18:40:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.242])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5BBCD4094DC1;
+        Tue, 25 Jul 2023 18:39:52 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <87fs5c3rbl.fsf@oldenburg3.str.redhat.com>
+References: <87fs5c3rbl.fsf@oldenburg3.str.redhat.com> <cover.1689092120.git.legion@kernel.org> <cover.1689074739.git.legion@kernel.org> <104971.1690300714@warthog.procyon.org.uk>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     dhowells@redhat.com, Alexey Gladkov <legion@kernel.org>,
+        James.Bottomley@HansenPartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        fenghua.yu@intel.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, hpa@zytor.com,
+        ink@jurassic.park.msu.ru, jhogan@kernel.org, kim.phillips@arm.com,
+        ldv@altlinux.org, linux-alpha@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, paulus@samba.org, peterz@infradead.org,
+        ralf@linux-mips.org, sparclinux@vger.kernel.org, stefan@agner.ch,
+        tglx@linutronix.de, tony.luck@intel.com, tycho@tycho.ws,
+        will@kernel.org, x86@kernel.org, ysato@users.sourceforge.jp,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: Add fchmodat2() - or add a more general syscall?
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-ID: <107289.1690310391.1@warthog.procyon.org.uk>
+Date:   Tue, 25 Jul 2023 19:39:51 +0100
+Message-ID: <107290.1690310391@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 21, 2023, Xu Yilun wrote:
-> On 2023-07-21 at 14:26:11 +0800, Yan Zhao wrote:
-> > On Tue, Jul 18, 2023 at 04:44:44PM -0700, Sean Christopherson wrote:
-> > 
-> > May I know why KVM now needs to register to callback .change_pte()?
+Florian Weimer <fweimer@redhat.com> wrote:
+
+> > Rather than adding a fchmodat2() syscall, should we add a
+> > "set_file_attrs()" syscall that takes a mask and allows you to set a bunch
+> > of stuff all in one go?  Basically, an interface to notify_change() in the
+> > kernel that would allow several stats to be set atomically.  This might be
+> > of particular interest to network filesystems.
 > 
-> I can see the original purpose is to "setting a pte in the shadow page
-> table directly, instead of flushing the shadow page table entry and then
-> getting vmexit to set it"[1].
-> 
-> IIUC, KVM is expected to directly make the new pte present for new
-> pages in this callback, like for COW.
+> Do you mean atomically as in compare-and-swap (update only if old values
+> match), or just a way to update multiple file attributes with a single
+> system call?
 
-Yes.
+I was thinking more in terms of the latter.  AFAIK, there aren't any network
+filesystems support a CAS interface on file attributes like that.  To be able
+to do a CAS operation, we'd need to pass in the old values as well as the new.
 
-> > As also commented in kvm_mmu_notifier_change_pte(), .change_pte() must be
-> > surrounded by .invalidate_range_{start,end}().
-> > 
-> > While kvm_mmu_notifier_invalidate_range_start() has called kvm_unmap_gfn_range()
-> > to zap all leaf SPTEs, and page fault path will not install new SPTEs
-> > successfully before kvm_mmu_notifier_invalidate_range_end(),
-> > kvm_set_spte_gfn() should not be able to find any shadow present leaf entries to
-> > update PFN.
-> 
-> I also failed to figure out how the kvm_set_spte_gfn() could pass
-> several !is_shadow_present_pte(iter.old_spte) check then write the new
-> pte.
+Another thing we could look at is doing "create_and_set_attrs()", possibly
+allowing it to take a list of xattrs also.
 
-It can't.  .change_pte() has been dead code on x86 for 10+ years at this point,
-and if my assessment from a few years back still holds true, it's dead code on
-all architectures.
+David
 
-The only reason I haven't formally proposed dropping the hook is that I don't want
-to risk the patch backfiring, i.e. I don't want to prompt someone to care enough
-to try and fix it.
-
-commit c13fda237f08a388ba8a0849785045944bf39834
-Author: Sean Christopherson <seanjc@google.com>
-Date:   Fri Apr 2 02:56:49 2021 +0200
-
-    KVM: Assert that notifier count is elevated in .change_pte()
-    
-    In KVM's .change_pte() notification callback, replace the notifier
-    sequence bump with a WARN_ON assertion that the notifier count is
-    elevated.  An elevated count provides stricter protections than bumping
-    the sequence, and the sequence is guarnateed to be bumped before the
-    count hits zero.
-    
-    When .change_pte() was added by commit 828502d30073 ("ksm: add
-    mmu_notifier set_pte_at_notify()"), bumping the sequence was necessary
-    as .change_pte() would be invoked without any surrounding notifications.
-    
-    However, since commit 6bdb913f0a70 ("mm: wrap calls to set_pte_at_notify
-    with invalidate_range_start and invalidate_range_end"), all calls to
-    .change_pte() are guaranteed to be surrounded by start() and end(), and
-    so are guaranteed to run with an elevated notifier count.
-    
-    Note, wrapping .change_pte() with .invalidate_range_{start,end}() is a
-    bug of sorts, as invalidating the secondary MMU's (KVM's) PTE defeats
-    the purpose of .change_pte().  Every arch's kvm_set_spte_hva() assumes
-    .change_pte() is called when the relevant SPTE is present in KVM's MMU,
-    as the original goal was to accelerate Kernel Samepage Merging (KSM) by
-    updating KVM's SPTEs without requiring a VM-Exit (due to invalidating
-    the SPTE).  I.e. it means that .change_pte() is effectively dead code
-    on _all_ architectures.
-    
-    x86 and MIPS are clearcut nops if the old SPTE is not-present, and that
-    is guaranteed due to the prior invalidation.  PPC simply unmaps the SPTE,
-    which again should be a nop due to the invalidation.  arm64 is a bit
-    murky, but it's also likely a nop because kvm_pgtable_stage2_map() is
-    called without a cache pointer, which means it will map an entry if and
-    only if an existing PTE was found.
-    
-    For now, take advantage of the bug to simplify future consolidation of
-    KVMs's MMU notifier code.   Doing so will not greatly complicate fixing
-    .change_pte(), assuming it's even worth fixing.  .change_pte() has been
-    broken for 8+ years and no one has complained.  Even if there are
-    KSM+KVM users that care deeply about its performance, the benefits of
-    avoiding VM-Exits via .change_pte() need to be reevaluated to justify
-    the added complexity and testing burden.  Ripping out .change_pte()
-    entirely would be a lot easier.
