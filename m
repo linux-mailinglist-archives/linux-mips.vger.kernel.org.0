@@ -2,236 +2,249 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E35760867
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 06:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E227608AF
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 06:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjGYE0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 00:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S230474AbjGYEi4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 00:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbjGYEY7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 00:24:59 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AE83A9E;
-        Mon, 24 Jul 2023 21:22:13 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-c5f98fc4237so4297297276.2;
-        Mon, 24 Jul 2023 21:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690258933; x=1690863733;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ge3Da1dLlbVImV5jdD/HZRx7aISFPvIvfEGvqleo2SA=;
-        b=pXw/al5n2PZt63hoen8XWII6rt0WFX5sgjX7qQn8gv0HWFLKnKq3bevtOzYUASugG2
-         pCxGKJOC5ggVyKCT1VDrwsaEi6MlyxwOLjAg/45BvYDi6yzh+q0BBiRQroW3z59gIlxT
-         qmaJpZ1xyAeP6+U8sI1TI5+kmnURZAb3iR8avL4fKbvg/gsoUc7EkqlV+0gnf4rSHbHI
-         2YWk0HYiOFW33a4FYfPo9WrS1QN1IRD+XWbKqzPIeVg52ry9QdQcyg/270EcS7s+RywF
-         +5wAnQbinAMNk/Lv6GIEnBeoT41AhvsJSWE+pPOymAwrKRfCNfM+KV2MhemhV91wxD/d
-         2Dxw==
+        with ESMTP id S229748AbjGYEi4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 00:38:56 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B824710D1;
+        Mon, 24 Jul 2023 21:38:54 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-63d0f62705dso5912776d6.0;
+        Mon, 24 Jul 2023 21:38:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690258933; x=1690863733;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ge3Da1dLlbVImV5jdD/HZRx7aISFPvIvfEGvqleo2SA=;
-        b=ZJgwjojMFrUkhqVdZv5s6naEd7LJxtcud+29xqko+pUIRUCHxx2WB8XNwxY5M4jBBm
-         7C3cL//Vg1v8aAiJJhKZ1gco4myuApZHjVm2D9I35/T8rmcSJpYt7/1wNSXjLg2+7qau
-         8kj8tbuGnDmh2g/LJ3h8ZtpC49dqBGXE/kw0DCzR5c3VRAPpQR4MleavnhGix6frDt+G
-         61qagQ86qHRiiMhK8upIWtrrC0pp/o76QwDfYWrN7mfwajq9CD5i1PD2t/NBsIlsFqvj
-         9XqJAFXpMbRQ/0wLY6zXLUbWzkoqZFWB25vU3bzcUSgW0GgsOOzPcagmvqv4i2YeCbKI
-         c7jg==
-X-Gm-Message-State: ABy/qLYhKGt3PY1+38YOfvAqmU0WFrUr6DTXIqBs4DfHWWGBF2bYizH8
-        maTv8RpLoR6xo+VpMtLYPuQ=
-X-Google-Smtp-Source: APBJJlGduGUsku2y340xQfxyEpNx6ubFn5qWJpFMniISafhH3MH0EHub+91fIwUA2U73/kY7XLKlHQ==
-X-Received: by 2002:a25:5087:0:b0:d0e:2e5c:2f80 with SMTP id e129-20020a255087000000b00d0e2e5c2f80mr4416565ybb.64.1690258932878;
-        Mon, 24 Jul 2023 21:22:12 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id h9-20020a25b189000000b00d0db687ef48sm1175540ybj.61.2023.07.24.21.22.11
+        d=1e100.net; s=20221208; t=1690259934; x=1690864734;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=to0ZqeoMS9cOMLpLlEax7c1/5oKN+/3gMdofXFZUUPo=;
+        b=V9buO518vlgvqy0QbRMypV1+GVKBUsoMT4zSYGH17v02DDGlvlvo0TZKidqz5jB2Ye
+         jE2BIzNWqtJkXcRmKqXMwFPuh2cKXRVN/Rj33NeiJYIYbt5hORgd0iDDuh1Yg667YxsV
+         RWNRv3nvsd1IP71QHZt2UOIPPxDM3KyR5CKW7KIAYjzudjMFHxuIhhoug8gipWXsT988
+         4FYGeITxL1GexiwUDbfOzijeU4fxedfsFfgYrMnweQ3xu3iiJ1sm4yVstF6cRffU5tJw
+         uc6hkwtaW653TQ4eq2+JFwY9/fWMp1+hZxFLpf7Yuvhq1UdlpP5Rl0UgfeJV1OkN1HRL
+         Cghg==
+X-Gm-Message-State: ABy/qLZB2qXlay0/yEDfTw/0+j9/V/wKPxarIj8XR+qvIJTJaZ0buz5T
+        X6bjH2uRKfOJUmrj/RLs6jEZQs7N/FcAB4V4
+X-Google-Smtp-Source: APBJJlGrshfAi/w84P5yGeLE4VeC2hEMZFXulQzp+++J2675VyHWA8Djqejqs4bRtxzxbnnkHR9Yjg==
+X-Received: by 2002:a0c:f404:0:b0:631:fa2e:249f with SMTP id h4-20020a0cf404000000b00631fa2e249fmr1720031qvl.61.1690259933621;
+        Mon, 24 Jul 2023 21:38:53 -0700 (PDT)
+Received: from costa-tp.bos2.lab ([2a00:a040:199:8930:2c90:cb9e:b154:73dc])
+        by smtp.gmail.com with ESMTPSA id d26-20020a0caa1a000000b0063631be090csm4104445qvb.125.2023.07.24.21.38.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:22:12 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH mm-unstable v7 31/31] mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
-Date:   Mon, 24 Jul 2023 21:20:51 -0700
-Message-Id: <20230725042051.36691-32-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230725042051.36691-1-vishal.moola@gmail.com>
-References: <20230725042051.36691-1-vishal.moola@gmail.com>
+        Mon, 24 Jul 2023 21:38:52 -0700 (PDT)
+From:   Costa Shulyupin <costa.shul@redhat.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Costa Shulyupin <costa.shul@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Wu XiangCheng <bobwxc@email.cn>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-mips@vger.kernel.org (open list:MIPS),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH] docs: move mips under arch
+Date:   Tue, 25 Jul 2023 07:38:03 +0300
+Message-ID: <20230725043835.2249678-1-costa.shul@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=true
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-These functions are no longer necessary. Remove them and cleanup
-Documentation referencing them.
+and fix all in-tree references.
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Architecture-specific documentation is being moved into Documentation/arch/
+as a way of cleaning up the top-level documentation directory and making
+the docs hierarchy more closely match the source hierarchy.
+
+Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
 ---
- Documentation/mm/split_page_table_lock.rst    | 12 +++++------
- .../zh_CN/mm/split_page_table_lock.rst        | 14 ++++++-------
- include/linux/mm.h                            | 20 -------------------
- 3 files changed, 13 insertions(+), 33 deletions(-)
+ Documentation/arch/index.rst                                  | 2 +-
+ Documentation/{ => arch}/mips/booting.rst                     | 0
+ Documentation/{ => arch}/mips/features.rst                    | 0
+ Documentation/{ => arch}/mips/index.rst                       | 0
+ Documentation/{ => arch}/mips/ingenic-tcu.rst                 | 0
+ Documentation/devicetree/bindings/timer/ingenic,tcu.yaml      | 2 +-
+ Documentation/translations/zh_CN/arch/index.rst               | 2 +-
+ Documentation/translations/zh_CN/{ => arch}/mips/booting.rst  | 4 ++--
+ Documentation/translations/zh_CN/{ => arch}/mips/features.rst | 4 ++--
+ Documentation/translations/zh_CN/{ => arch}/mips/index.rst    | 4 ++--
+ .../translations/zh_CN/{ => arch}/mips/ingenic-tcu.rst        | 4 ++--
+ MAINTAINERS                                                   | 2 +-
+ 12 files changed, 12 insertions(+), 12 deletions(-)
+ rename Documentation/{ => arch}/mips/booting.rst (100%)
+ rename Documentation/{ => arch}/mips/features.rst (100%)
+ rename Documentation/{ => arch}/mips/index.rst (100%)
+ rename Documentation/{ => arch}/mips/ingenic-tcu.rst (100%)
+ rename Documentation/translations/zh_CN/{ => arch}/mips/booting.rst (92%)
+ rename Documentation/translations/zh_CN/{ => arch}/mips/features.rst (65%)
+ rename Documentation/translations/zh_CN/{ => arch}/mips/index.rst (79%)
+ rename Documentation/translations/zh_CN/{ => arch}/mips/ingenic-tcu.rst (97%)
 
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index a834fad9de12..e4f6972eb6c0 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -58,7 +58,7 @@ Support of split page table lock by an architecture
- ===================================================
+diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
+index d39504fae12c..84b80255b851 100644
+--- a/Documentation/arch/index.rst
++++ b/Documentation/arch/index.rst
+@@ -15,7 +15,7 @@ implementation.
+    ia64/index
+    loongarch/index
+    m68k/index
+-   ../mips/index
++   mips/index
+    nios2/index
+    openrisc/index
+    parisc/index
+diff --git a/Documentation/mips/booting.rst b/Documentation/arch/mips/booting.rst
+similarity index 100%
+rename from Documentation/mips/booting.rst
+rename to Documentation/arch/mips/booting.rst
+diff --git a/Documentation/mips/features.rst b/Documentation/arch/mips/features.rst
+similarity index 100%
+rename from Documentation/mips/features.rst
+rename to Documentation/arch/mips/features.rst
+diff --git a/Documentation/mips/index.rst b/Documentation/arch/mips/index.rst
+similarity index 100%
+rename from Documentation/mips/index.rst
+rename to Documentation/arch/mips/index.rst
+diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/arch/mips/ingenic-tcu.rst
+similarity index 100%
+rename from Documentation/mips/ingenic-tcu.rst
+rename to Documentation/arch/mips/ingenic-tcu.rst
+diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+index 2d14610888a7..585b5f5217c4 100644
+--- a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
++++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+@@ -8,7 +8,7 @@ title: Ingenic SoCs Timer/Counter Unit (TCU)
  
- There's no need in special enabling of PTE split page table lock: everything
--required is done by pgtable_pte_page_ctor() and pgtable_pte_page_dtor(), which
-+required is done by pagetable_pte_ctor() and pagetable_pte_dtor(), which
- must be called on PTE table allocation / freeing.
+ description: |
+   For a description of the TCU hardware and drivers, have a look at
+-  Documentation/mips/ingenic-tcu.rst.
++  Documentation/arch/mips/ingenic-tcu.rst.
  
- Make sure the architecture doesn't use slab allocator for page table
-@@ -68,8 +68,8 @@ This field shares storage with page->ptl.
- PMD split lock only makes sense if you have more than two page table
- levels.
+ maintainers:
+   - Paul Cercueil <paul@crapouillou.net>
+diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Documentation/translations/zh_CN/arch/index.rst
+index d4c1c729dde2..e3d273d7d599 100644
+--- a/Documentation/translations/zh_CN/arch/index.rst
++++ b/Documentation/translations/zh_CN/arch/index.rst
+@@ -8,7 +8,7 @@
+ .. toctree::
+    :maxdepth: 2
  
--PMD split lock enabling requires pgtable_pmd_page_ctor() call on PMD table
--allocation and pgtable_pmd_page_dtor() on freeing.
-+PMD split lock enabling requires pagetable_pmd_ctor() call on PMD table
-+allocation and pagetable_pmd_dtor() on freeing.
+-   ../mips/index
++   mips/index
+    arm64/index
+    ../riscv/index
+    openrisc/index
+diff --git a/Documentation/translations/zh_CN/mips/booting.rst b/Documentation/translations/zh_CN/arch/mips/booting.rst
+similarity index 92%
+rename from Documentation/translations/zh_CN/mips/booting.rst
+rename to Documentation/translations/zh_CN/arch/mips/booting.rst
+index e0bbd3f20862..485b57e0ca0b 100644
+--- a/Documentation/translations/zh_CN/mips/booting.rst
++++ b/Documentation/translations/zh_CN/arch/mips/booting.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- Allocation usually happens in pmd_alloc_one(), freeing in pmd_free() and
- pmd_free_tlb(), but make sure you cover all PMD table allocation / freeing
-@@ -77,7 +77,7 @@ paths: i.e X86_PAE preallocate few PMDs on pgd_alloc().
+-.. include:: ../disclaimer-zh_CN.rst
++.. include:: ../../disclaimer-zh_CN.rst
  
- With everything in place you can set CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK.
+-:Original: Documentation/mips/booting.rst
++:Original: Documentation/arch/mips/booting.rst
  
--NOTE: pgtable_pte_page_ctor() and pgtable_pmd_page_ctor() can fail -- it must
-+NOTE: pagetable_pte_ctor() and pagetable_pmd_ctor() can fail -- it must
- be handled properly.
+ :翻译:
  
- page->ptl
-@@ -97,7 +97,7 @@ trick:
-    split lock with enabled DEBUG_SPINLOCK or DEBUG_LOCK_ALLOC, but costs
-    one more cache line for indirect access;
+diff --git a/Documentation/translations/zh_CN/mips/features.rst b/Documentation/translations/zh_CN/arch/mips/features.rst
+similarity index 65%
+rename from Documentation/translations/zh_CN/mips/features.rst
+rename to Documentation/translations/zh_CN/arch/mips/features.rst
+index b61dab06ceaf..da1b956e4a40 100644
+--- a/Documentation/translations/zh_CN/mips/features.rst
++++ b/Documentation/translations/zh_CN/arch/mips/features.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
--The spinlock_t allocated in pgtable_pte_page_ctor() for PTE table and in
--pgtable_pmd_page_ctor() for PMD table.
-+The spinlock_t allocated in pagetable_pte_ctor() for PTE table and in
-+pagetable_pmd_ctor() for PMD table.
+-.. include:: ../disclaimer-zh_CN.rst
++.. include:: ../../disclaimer-zh_CN.rst
  
- Please, never access page->ptl directly -- use appropriate helper.
-diff --git a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-index 4fb7aa666037..a2c288670a24 100644
---- a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-+++ b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-@@ -56,16 +56,16 @@ Hugetlb特定的辅助函数:
- 架构对分页表锁的支持
- ====================
+-:Original: Documentation/mips/features.rst
++:Original: Documentation/arch/mips/features.rst
  
--没有必要特别启用PTE分页表锁：所有需要的东西都由pgtable_pte_page_ctor()
--和pgtable_pte_page_dtor()完成，它们必须在PTE表分配/释放时被调用。
-+没有必要特别启用PTE分页表锁：所有需要的东西都由pagetable_pte_ctor()
-+和pagetable_pte_dtor()完成，它们必须在PTE表分配/释放时被调用。
+ :翻译:
  
- 确保架构不使用slab分配器来分配页表：slab使用page->slab_cache来分配其页
- 面。这个区域与page->ptl共享存储。
+diff --git a/Documentation/translations/zh_CN/mips/index.rst b/Documentation/translations/zh_CN/arch/mips/index.rst
+similarity index 79%
+rename from Documentation/translations/zh_CN/mips/index.rst
+rename to Documentation/translations/zh_CN/arch/mips/index.rst
+index 192c6adbb72e..2a34217119ea 100644
+--- a/Documentation/translations/zh_CN/mips/index.rst
++++ b/Documentation/translations/zh_CN/arch/mips/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- PMD分页锁只有在你有两个以上的页表级别时才有意义。
+-.. include:: ../disclaimer-zh_CN.rst
++.. include:: ../../disclaimer-zh_CN.rst
  
--启用PMD分页锁需要在PMD表分配时调用pgtable_pmd_page_ctor()，在释放时调
--用pgtable_pmd_page_dtor()。
-+启用PMD分页锁需要在PMD表分配时调用pagetable_pmd_ctor()，在释放时调
-+用pagetable_pmd_dtor()。
+-:Original: Documentation/mips/index.rst
++:Original: Documentation/arch/mips/index.rst
  
- 分配通常发生在pmd_alloc_one()中，释放发生在pmd_free()和pmd_free_tlb()
- 中，但要确保覆盖所有的PMD表分配/释放路径：即X86_PAE在pgd_alloc()中预先
-@@ -73,7 +73,7 @@ PMD分页锁只有在你有两个以上的页表级别时才有意义。
+ :翻译:
  
- 一切就绪后，你可以设置CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK。
+diff --git a/Documentation/translations/zh_CN/mips/ingenic-tcu.rst b/Documentation/translations/zh_CN/arch/mips/ingenic-tcu.rst
+similarity index 97%
+rename from Documentation/translations/zh_CN/mips/ingenic-tcu.rst
+rename to Documentation/translations/zh_CN/arch/mips/ingenic-tcu.rst
+index ddbe149c517b..3d599a36b571 100644
+--- a/Documentation/translations/zh_CN/mips/ingenic-tcu.rst
++++ b/Documentation/translations/zh_CN/arch/mips/ingenic-tcu.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
--注意：pgtable_pte_page_ctor()和pgtable_pmd_page_ctor()可能失败--必
-+注意：pagetable_pte_ctor()和pagetable_pmd_ctor()可能失败--必
- 须正确处理。
+-.. include:: ../disclaimer-zh_CN.rst
++.. include:: ../../disclaimer-zh_CN.rst
  
- page->ptl
-@@ -90,7 +90,7 @@ page->ptl用于访问分割页表锁，其中'page'是包含该表的页面struc
-    的指针并动态分配它。这允许在启用DEBUG_SPINLOCK或DEBUG_LOCK_ALLOC的
-    情况下使用分页锁，但由于间接访问而多花了一个缓存行。
+-:Original: Documentation/mips/ingenic-tcu.rst
++:Original: Documentation/arch/mips/ingenic-tcu.rst
  
--PTE表的spinlock_t分配在pgtable_pte_page_ctor()中，PMD表的spinlock_t
--分配在pgtable_pmd_page_ctor()中。
-+PTE表的spinlock_t分配在pagetable_pte_ctor()中，PMD表的spinlock_t
-+分配在pagetable_pmd_ctor()中。
+ :翻译:
  
- 请不要直接访问page->ptl - -使用适当的辅助函数。
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bd3d99d81984..e4e34ecbc2ea 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2913,11 +2913,6 @@ static inline bool pagetable_pte_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pte_page_ctor(struct page *page)
--{
--	return pagetable_pte_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -2927,11 +2922,6 @@ static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pte_page_dtor(struct page *page)
--{
--	pagetable_pte_dtor(page_ptdesc(page));
--}
--
- pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
- static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
- {
-@@ -3038,11 +3028,6 @@ static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pmd_page_ctor(struct page *page)
--{
--	return pagetable_pmd_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -3052,11 +3037,6 @@ static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pmd_page_dtor(struct page *page)
--{
--	pagetable_pmd_dtor(page_ptdesc(page));
--}
--
- /*
-  * No scalability reason to split PUD locks yet, but follow the same pattern
-  * as the PMD locks to make it easier if we decide to.  The VM should not be
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6c650179159f..d1d8a9745761 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14215,7 +14215,7 @@ W:	http://www.linux-mips.org/
+ Q:	https://patchwork.kernel.org/project/linux-mips/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+ F:	Documentation/devicetree/bindings/mips/
+-F:	Documentation/mips/
++F:	Documentation/arch/mips/
+ F:	arch/mips/
+ F:	drivers/platform/mips/
+ F:	include/dt-bindings/mips/
 -- 
-2.40.1
+2.41.0
 
