@@ -2,65 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456F1760DC0
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 11:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E40760DBD
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 11:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjGYJAA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 05:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S232402AbjGYI77 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 04:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbjGYI77 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 04:59:59 -0400
+        with ESMTP id S232257AbjGYI76 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 04:59:58 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3E599B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A8DE121;
         Tue, 25 Jul 2023 01:59:53 -0700 (PDT)
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qODtR-0008Gn-00; Tue, 25 Jul 2023 10:59:45 +0200
+        id 1qODtR-0008Gp-00; Tue, 25 Jul 2023 10:59:45 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 50418C01C7; Tue, 25 Jul 2023 10:44:46 +0200 (CEST)
-Date:   Tue, 25 Jul 2023 10:44:46 +0200
+        id 78FCEC01D0; Tue, 25 Jul 2023 10:45:49 +0200 (CEST)
+Date:   Tue, 25 Jul 2023 10:45:49 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Jan-Benedict Glaw <jbglaw@lug-owl.de>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] MIPS: Fix build issues from the introduction of
- `need-compiler'
-Message-ID: <ZL+LfqvL/tBGnUF3@alpha.franken.de>
-References: <alpine.DEB.2.21.2307180025120.62448@angie.orcam.me.uk>
+To:     xuanzhenggang001@208suo.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: prefer 'unsigned int' to bare use of 'unsigned'
+Message-ID: <ZL+LvWjuWWJPXTIG@alpha.franken.de>
+References: <20230709141701.16324-1-denghuilong@cdjrlc.com>
+ <e30eb541f2fc615b264a70af2f40a5f9@208suo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2307180025120.62448@angie.orcam.me.uk>
+In-Reply-To: <e30eb541f2fc615b264a70af2f40a5f9@208suo.com>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 03:37:13PM +0100, Maciej W. Rozycki wrote:
-> Hi,
+On Sun, Jul 09, 2023 at 10:19:50PM +0800, xuanzhenggang001@208suo.com wrote:
+> Fix the following warnings reported by checkpatch:
 > 
->  With the addition of the `need-compiler' variable the `Makefile.compiler' 
-> fragment is not included with no-build targets such as `modules_install', 
-> which in turn means $(call cc-option,), etc. are no-ops with these targets 
-> and any attempt to evaluate these function calls causes all kinds of weird 
-> behaviour to happen.
+> arch/mips/kernel/linux32.c:128: WARNING: Prefer 'unsigned int' to bare use
+> of 'unsigned'
+> arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare use
+> of 'unsigned'
+> arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare use
+> of 'unsigned'
+> arch/mips/kernel/linux32.c:129: WARNING: Prefer 'unsigned int' to bare use
+> of 'unsigned'
 > 
->  The solution is to avoid making these calls in the first place, as they 
-> are surely irrelevant where the compiler is not going to be otherwise 
-> invoked.  This small patch series fixes two places known-affected in the 
-> MIPS Makefile fragment and also included a follow-up revert of an earlier 
-> misguided attempt.  See individual change descriptions for details.
+> Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
+> ---
+>  arch/mips/kernel/linux32.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  Verified with `decstation_64_defconfig' and `fuloong2e_defconfig' using 
-> `modules_install'.  Please apply.
+> diff --git a/arch/mips/kernel/linux32.c b/arch/mips/kernel/linux32.c
+> index 6b61be486303..4bd52b38dd00 100644
+> --- a/arch/mips/kernel/linux32.c
+> +++ b/arch/mips/kernel/linux32.c
+> @@ -125,8 +125,8 @@ asmlinkage long sys32_fadvise64_64(int fd, int __pad,
+>              flags);
+>  }
+> 
+> -asmlinkage long sys32_fallocate(int fd, int mode, unsigned offset_a2,
+> -    unsigned offset_a3, unsigned len_a4, unsigned len_a5)
+> +asmlinkage long sys32_fallocate(int fd, int mode, unsigned int offset_a2,
+> +    unsigned int offset_a3, unsigned int len_a4, unsigned int len_a5)
+>  {
+>      return ksys_fallocate(fd, mode, merge_64(offset_a2, offset_a3),
+>                    merge_64(len_a4, len_a5));
 
-series applied to mips-next.
+this is white-space damaged, please resend with that corrected.
 
 Thomas.
 
