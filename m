@@ -2,249 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E227608AF
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 06:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EEA7608BD
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 06:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjGYEi4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 00:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S231757AbjGYElw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 00:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjGYEi4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 00:38:56 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B824710D1;
-        Mon, 24 Jul 2023 21:38:54 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-63d0f62705dso5912776d6.0;
-        Mon, 24 Jul 2023 21:38:54 -0700 (PDT)
+        with ESMTP id S229470AbjGYElu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 00:41:50 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10719BB
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-d18566dc0c1so263837276.0
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690260106; x=1690864906;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4tFc7lI8l/TAp6N4SH/RnjHMrhDjcjpOS0NvhRjK3tI=;
+        b=syg9IyMH/gqJY1k4LT3S6JMx0fSLcgE37Cs+8KWCUO35fKCYg0MuLIIi0nsu37jtyV
+         JWnNbNndjflxoqEknhV3drMoPO1rLP5Mf2NwuEGG3uNqc6WCc3lC70F16ZnEeLC+MDXA
+         tlBtkvCExRePxNsWSrYSlIqtWo9fJaFXM7OzUrScUdzQ6XIpjZwJMknKg/XaSKKfA+Pp
+         NHjPm93xL9xpQDR+q+3gjlysNDu5FD2n2xMli6SN590GUy6WkS3ghg4fMC/PcVORHv0z
+         7pZwaHoSCWcs0DC0U/7aDMkjw3lDyZjRkGaSMnnCoKZ6Eh2nJ1AJW7AcIEll2MImoPAy
+         2Dhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690259934; x=1690864734;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=to0ZqeoMS9cOMLpLlEax7c1/5oKN+/3gMdofXFZUUPo=;
-        b=V9buO518vlgvqy0QbRMypV1+GVKBUsoMT4zSYGH17v02DDGlvlvo0TZKidqz5jB2Ye
-         jE2BIzNWqtJkXcRmKqXMwFPuh2cKXRVN/Rj33NeiJYIYbt5hORgd0iDDuh1Yg667YxsV
-         RWNRv3nvsd1IP71QHZt2UOIPPxDM3KyR5CKW7KIAYjzudjMFHxuIhhoug8gipWXsT988
-         4FYGeITxL1GexiwUDbfOzijeU4fxedfsFfgYrMnweQ3xu3iiJ1sm4yVstF6cRffU5tJw
-         uc6hkwtaW653TQ4eq2+JFwY9/fWMp1+hZxFLpf7Yuvhq1UdlpP5Rl0UgfeJV1OkN1HRL
-         Cghg==
-X-Gm-Message-State: ABy/qLZB2qXlay0/yEDfTw/0+j9/V/wKPxarIj8XR+qvIJTJaZ0buz5T
-        X6bjH2uRKfOJUmrj/RLs6jEZQs7N/FcAB4V4
-X-Google-Smtp-Source: APBJJlGrshfAi/w84P5yGeLE4VeC2hEMZFXulQzp+++J2675VyHWA8Djqejqs4bRtxzxbnnkHR9Yjg==
-X-Received: by 2002:a0c:f404:0:b0:631:fa2e:249f with SMTP id h4-20020a0cf404000000b00631fa2e249fmr1720031qvl.61.1690259933621;
-        Mon, 24 Jul 2023 21:38:53 -0700 (PDT)
-Received: from costa-tp.bos2.lab ([2a00:a040:199:8930:2c90:cb9e:b154:73dc])
-        by smtp.gmail.com with ESMTPSA id d26-20020a0caa1a000000b0063631be090csm4104445qvb.125.2023.07.24.21.38.49
+        d=1e100.net; s=20221208; t=1690260106; x=1690864906;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4tFc7lI8l/TAp6N4SH/RnjHMrhDjcjpOS0NvhRjK3tI=;
+        b=i/U+Ft51AP7+fB7jCodkWlZQ3kKxNqcBm4y8SnEYrkPU0HqPzkvZPZ5R6Vb+a550Jl
+         eCohsihf5wI6xQyqcU8pH+aV3++e0PkGhEtbHLMOwX/hm0xxP1neHWJmaCbnwko2o/d8
+         POm8qM+K0PkuSnaXgoNHYqGtZDc4IRXoC6639SWfHn86MpHEYurxl1fGFuttwjeqpnhE
+         /0MoKqavfoRgxoT/uasvUe6pngGHBSMbkROk4U1C+wws8/LCNwgeHWV1AaZSN8JU7E7g
+         TIBzCuKrU9Us/uoW3yHjLQRUrvrhU7VP/SCO6nug7oPeZZgERGV5qupCVxIavCRYuHVt
+         yP8A==
+X-Gm-Message-State: ABy/qLbXsUazNIvf9I9giEEJycTuxDo/FEjWSSd5t9esVxMIRpw+IaC1
+        O4ROOzvVoxIzddFdqUf2v0VF4g==
+X-Google-Smtp-Source: APBJJlHQLTh3cgEYO+DVAD/fw8XSxxaq77z0mK7JibK/JjnN3wjA/kyDdlXYpJW7FLCpf9E01rW5SQ==
+X-Received: by 2002:a25:2342:0:b0:d0d:2d17:3f11 with SMTP id j63-20020a252342000000b00d0d2d173f11mr5304231ybj.17.1690260106082;
+        Mon, 24 Jul 2023 21:41:46 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id z16-20020a25e310000000b00c71e4833957sm2656725ybd.63.2023.07.24.21.41.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:38:52 -0700 (PDT)
-From:   Costa Shulyupin <costa.shul@redhat.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Costa Shulyupin <costa.shul@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Mon, 24 Jul 2023 21:41:45 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 21:41:36 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Wu XiangCheng <bobwxc@email.cn>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS)
-Subject: [PATCH] docs: move mips under arch
-Date:   Tue, 25 Jul 2023 07:38:03 +0300
-Message-ID: <20230725043835.2249678-1-costa.shul@redhat.com>
-X-Mailer: git-send-email 2.41.0
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH mm-unstable v7 00/31] Split ptdesc from struct page
+In-Reply-To: <20230725042051.36691-1-vishal.moola@gmail.com>
+Message-ID: <5296514f-cdd1-9526-2e83-a21e76e86e5@google.com>
+References: <20230725042051.36691-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=true
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-and fix all in-tree references.
+On Mon, 24 Jul 2023, Vishal Moola (Oracle) wrote:
 
-Architecture-specific documentation is being moved into Documentation/arch/
-as a way of cleaning up the top-level documentation directory and making
-the docs hierarchy more closely match the source hierarchy.
+> The MM subsystem is trying to shrink struct page. This patchset
+> introduces a memory descriptor for page table tracking - struct ptdesc.
+> 
+> This patchset introduces ptdesc, splits ptdesc from struct page, and
+> converts many callers of page table constructor/destructors to use ptdescs.
+> 
+> Ptdesc is a foundation to further standardize page tables, and eventually
+> allow for dynamic allocation of page tables independent of struct page.
+> However, the use of pages for page table tracking is quite deeply
+> ingrained and varied across archictectures, so there is still a lot of
+> work to be done before that can happen.
 
-Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
----
- Documentation/arch/index.rst                                  | 2 +-
- Documentation/{ => arch}/mips/booting.rst                     | 0
- Documentation/{ => arch}/mips/features.rst                    | 0
- Documentation/{ => arch}/mips/index.rst                       | 0
- Documentation/{ => arch}/mips/ingenic-tcu.rst                 | 0
- Documentation/devicetree/bindings/timer/ingenic,tcu.yaml      | 2 +-
- Documentation/translations/zh_CN/arch/index.rst               | 2 +-
- Documentation/translations/zh_CN/{ => arch}/mips/booting.rst  | 4 ++--
- Documentation/translations/zh_CN/{ => arch}/mips/features.rst | 4 ++--
- Documentation/translations/zh_CN/{ => arch}/mips/index.rst    | 4 ++--
- .../translations/zh_CN/{ => arch}/mips/ingenic-tcu.rst        | 4 ++--
- MAINTAINERS                                                   | 2 +-
- 12 files changed, 12 insertions(+), 12 deletions(-)
- rename Documentation/{ => arch}/mips/booting.rst (100%)
- rename Documentation/{ => arch}/mips/features.rst (100%)
- rename Documentation/{ => arch}/mips/index.rst (100%)
- rename Documentation/{ => arch}/mips/ingenic-tcu.rst (100%)
- rename Documentation/translations/zh_CN/{ => arch}/mips/booting.rst (92%)
- rename Documentation/translations/zh_CN/{ => arch}/mips/features.rst (65%)
- rename Documentation/translations/zh_CN/{ => arch}/mips/index.rst (79%)
- rename Documentation/translations/zh_CN/{ => arch}/mips/ingenic-tcu.rst (97%)
+Others may differ, but it remains the case that I see no point to this
+patchset, until the minimal descriptor that replaces struct page is
+working, and struct page then becomes just overhead.  Until that time,
+let architectures continue to use struct page as they do - whyever not?
 
-diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-index d39504fae12c..84b80255b851 100644
---- a/Documentation/arch/index.rst
-+++ b/Documentation/arch/index.rst
-@@ -15,7 +15,7 @@ implementation.
-    ia64/index
-    loongarch/index
-    m68k/index
--   ../mips/index
-+   mips/index
-    nios2/index
-    openrisc/index
-    parisc/index
-diff --git a/Documentation/mips/booting.rst b/Documentation/arch/mips/booting.rst
-similarity index 100%
-rename from Documentation/mips/booting.rst
-rename to Documentation/arch/mips/booting.rst
-diff --git a/Documentation/mips/features.rst b/Documentation/arch/mips/features.rst
-similarity index 100%
-rename from Documentation/mips/features.rst
-rename to Documentation/arch/mips/features.rst
-diff --git a/Documentation/mips/index.rst b/Documentation/arch/mips/index.rst
-similarity index 100%
-rename from Documentation/mips/index.rst
-rename to Documentation/arch/mips/index.rst
-diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/arch/mips/ingenic-tcu.rst
-similarity index 100%
-rename from Documentation/mips/ingenic-tcu.rst
-rename to Documentation/arch/mips/ingenic-tcu.rst
-diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-index 2d14610888a7..585b5f5217c4 100644
---- a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-+++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-@@ -8,7 +8,7 @@ title: Ingenic SoCs Timer/Counter Unit (TCU)
- 
- description: |
-   For a description of the TCU hardware and drivers, have a look at
--  Documentation/mips/ingenic-tcu.rst.
-+  Documentation/arch/mips/ingenic-tcu.rst.
- 
- maintainers:
-   - Paul Cercueil <paul@crapouillou.net>
-diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Documentation/translations/zh_CN/arch/index.rst
-index d4c1c729dde2..e3d273d7d599 100644
---- a/Documentation/translations/zh_CN/arch/index.rst
-+++ b/Documentation/translations/zh_CN/arch/index.rst
-@@ -8,7 +8,7 @@
- .. toctree::
-    :maxdepth: 2
- 
--   ../mips/index
-+   mips/index
-    arm64/index
-    ../riscv/index
-    openrisc/index
-diff --git a/Documentation/translations/zh_CN/mips/booting.rst b/Documentation/translations/zh_CN/arch/mips/booting.rst
-similarity index 92%
-rename from Documentation/translations/zh_CN/mips/booting.rst
-rename to Documentation/translations/zh_CN/arch/mips/booting.rst
-index e0bbd3f20862..485b57e0ca0b 100644
---- a/Documentation/translations/zh_CN/mips/booting.rst
-+++ b/Documentation/translations/zh_CN/arch/mips/booting.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
--:Original: Documentation/mips/booting.rst
-+:Original: Documentation/arch/mips/booting.rst
- 
- :翻译:
- 
-diff --git a/Documentation/translations/zh_CN/mips/features.rst b/Documentation/translations/zh_CN/arch/mips/features.rst
-similarity index 65%
-rename from Documentation/translations/zh_CN/mips/features.rst
-rename to Documentation/translations/zh_CN/arch/mips/features.rst
-index b61dab06ceaf..da1b956e4a40 100644
---- a/Documentation/translations/zh_CN/mips/features.rst
-+++ b/Documentation/translations/zh_CN/arch/mips/features.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
--:Original: Documentation/mips/features.rst
-+:Original: Documentation/arch/mips/features.rst
- 
- :翻译:
- 
-diff --git a/Documentation/translations/zh_CN/mips/index.rst b/Documentation/translations/zh_CN/arch/mips/index.rst
-similarity index 79%
-rename from Documentation/translations/zh_CN/mips/index.rst
-rename to Documentation/translations/zh_CN/arch/mips/index.rst
-index 192c6adbb72e..2a34217119ea 100644
---- a/Documentation/translations/zh_CN/mips/index.rst
-+++ b/Documentation/translations/zh_CN/arch/mips/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
--:Original: Documentation/mips/index.rst
-+:Original: Documentation/arch/mips/index.rst
- 
- :翻译:
- 
-diff --git a/Documentation/translations/zh_CN/mips/ingenic-tcu.rst b/Documentation/translations/zh_CN/arch/mips/ingenic-tcu.rst
-similarity index 97%
-rename from Documentation/translations/zh_CN/mips/ingenic-tcu.rst
-rename to Documentation/translations/zh_CN/arch/mips/ingenic-tcu.rst
-index ddbe149c517b..3d599a36b571 100644
---- a/Documentation/translations/zh_CN/mips/ingenic-tcu.rst
-+++ b/Documentation/translations/zh_CN/arch/mips/ingenic-tcu.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. include:: ../disclaimer-zh_CN.rst
-+.. include:: ../../disclaimer-zh_CN.rst
- 
--:Original: Documentation/mips/ingenic-tcu.rst
-+:Original: Documentation/arch/mips/ingenic-tcu.rst
- 
- :翻译:
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6c650179159f..d1d8a9745761 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14215,7 +14215,7 @@ W:	http://www.linux-mips.org/
- Q:	https://patchwork.kernel.org/project/linux-mips/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
- F:	Documentation/devicetree/bindings/mips/
--F:	Documentation/mips/
-+F:	Documentation/arch/mips/
- F:	arch/mips/
- F:	drivers/platform/mips/
- F:	include/dt-bindings/mips/
--- 
-2.41.0
+Hugh
 
+> 
+> This is rebased on mm-unstable.
+> 
+> v7:
+>   Drop s390 gmap ptdesc conversions - gmap is unecessary complication
+>     that can be dealt with later
+>   Be more thorough with ptdesc struct sanity checks and comments
+>   Rebase onto mm-unstable
+> 
+> Vishal Moola (Oracle) (31):
+>   mm: Add PAGE_TYPE_OP folio functions
+>   pgtable: Create struct ptdesc
+>   mm: add utility functions for ptdesc
+>   mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
+>   mm: Convert ptlock_alloc() to use ptdescs
+>   mm: Convert ptlock_ptr() to use ptdescs
+>   mm: Convert pmd_ptlock_init() to use ptdescs
+>   mm: Convert ptlock_init() to use ptdescs
+>   mm: Convert pmd_ptlock_free() to use ptdescs
+>   mm: Convert ptlock_free() to use ptdescs
+>   mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+>   powerpc: Convert various functions to use ptdescs
+>   x86: Convert various functions to use ptdescs
+>   s390: Convert various pgalloc functions to use ptdescs
+>   mm: Remove page table members from struct page
+>   pgalloc: Convert various functions to use ptdescs
+>   arm: Convert various functions to use ptdescs
+>   arm64: Convert various functions to use ptdescs
+>   csky: Convert __pte_free_tlb() to use ptdescs
+>   hexagon: Convert __pte_free_tlb() to use ptdescs
+>   loongarch: Convert various functions to use ptdescs
+>   m68k: Convert various functions to use ptdescs
+>   mips: Convert various functions to use ptdescs
+>   nios2: Convert __pte_free_tlb() to use ptdescs
+>   openrisc: Convert __pte_free_tlb() to use ptdescs
+>   riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+>   sh: Convert pte_free_tlb() to use ptdescs
+>   sparc64: Convert various functions to use ptdescs
+>   sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+>   um: Convert {pmd, pte}_free_tlb() to use ptdescs
+>   mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
+> 
+>  Documentation/mm/split_page_table_lock.rst    |  12 +-
+>  .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+>  arch/arm/include/asm/tlb.h                    |  12 +-
+>  arch/arm/mm/mmu.c                             |   7 +-
+>  arch/arm64/include/asm/tlb.h                  |  14 +-
+>  arch/arm64/mm/mmu.c                           |   7 +-
+>  arch/csky/include/asm/pgalloc.h               |   4 +-
+>  arch/hexagon/include/asm/pgalloc.h            |   8 +-
+>  arch/loongarch/include/asm/pgalloc.h          |  27 ++--
+>  arch/loongarch/mm/pgtable.c                   |   7 +-
+>  arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
+>  arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+>  arch/m68k/mm/motorola.c                       |   4 +-
+>  arch/mips/include/asm/pgalloc.h               |  32 ++--
+>  arch/mips/mm/pgtable.c                        |   8 +-
+>  arch/nios2/include/asm/pgalloc.h              |   8 +-
+>  arch/openrisc/include/asm/pgalloc.h           |   8 +-
+>  arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+>  arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
+>  arch/powerpc/mm/pgtable-frag.c                |  56 +++----
+>  arch/riscv/include/asm/pgalloc.h              |   8 +-
+>  arch/riscv/mm/init.c                          |  16 +-
+>  arch/s390/include/asm/pgalloc.h               |   4 +-
+>  arch/s390/include/asm/tlb.h                   |   4 +-
+>  arch/s390/mm/pgalloc.c                        | 128 +++++++--------
+>  arch/sh/include/asm/pgalloc.h                 |   9 +-
+>  arch/sparc/mm/init_64.c                       |  17 +-
+>  arch/sparc/mm/srmmu.c                         |   5 +-
+>  arch/um/include/asm/pgalloc.h                 |  18 +--
+>  arch/x86/mm/pgtable.c                         |  47 +++---
+>  arch/x86/xen/mmu_pv.c                         |   2 +-
+>  include/asm-generic/pgalloc.h                 |  88 +++++-----
+>  include/asm-generic/tlb.h                     |  11 ++
+>  include/linux/mm.h                            | 151 +++++++++++++-----
+>  include/linux/mm_types.h                      |  18 ---
+>  include/linux/page-flags.h                    |  30 +++-
+>  include/linux/pgtable.h                       |  80 ++++++++++
+>  mm/memory.c                                   |   8 +-
+>  38 files changed, 585 insertions(+), 384 deletions(-)
+> 
+> -- 
+> 2.40.1
