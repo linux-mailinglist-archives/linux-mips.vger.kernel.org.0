@@ -2,292 +2,189 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4239E760531
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 04:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C0376072A
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jul 2023 06:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjGYCdk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jul 2023 22:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S231350AbjGYEVN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 00:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGYCdj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jul 2023 22:33:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686AF116
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 19:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690252375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TLi69c4E4L5eZQg22PEMzi9DRqiDnwUXsa6MfQ9GlAI=;
-        b=g1hclesLfqPxLdvTaT8gMkKqCYTrQOWTrW4U9H/YdJZ04FSJshX39gViNYzjQjjvNQXTrW
-        KsQBvaqW7J2MF+xyxtvouZQezeuFEO2dGPliCZRXMXO1U9VMj5yRYnTOUwJPcdtvxbnbJg
-        MtHDYPAudbfnWsPP5DWxMdWsGk3FL6c=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-315-mRBl5WsgN8O04AUQK-RRUQ-1; Mon, 24 Jul 2023 22:32:53 -0400
-X-MC-Unique: mRBl5WsgN8O04AUQK-RRUQ-1
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-563a21d8887so388926a12.0
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jul 2023 19:32:53 -0700 (PDT)
+        with ESMTP id S229577AbjGYEVM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 00:21:12 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0B7E71;
+        Mon, 24 Jul 2023 21:21:07 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-ca3cc52ee62so5588835276.0;
+        Mon, 24 Jul 2023 21:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690258866; x=1690863666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TyJK1FcnJgXFfZtNrnEiwbnRrWFFZ4hxtDemQIw/+70=;
+        b=IWbM/8TKnsrsFnwfAtrtbT7DO2Dq3vbt1JDGjncQR1/QHrfo4QUSkIiEQN1x/WCeen
+         Wq+1xfZOSXiXa3ftlSpFueFEFpvRBK3/RSrU5gjulTAyP6CHn+1+IFvHFglXW6v8keEi
+         8OQyuFtLfuzytADBe5cFOUdQJ/Hdq1bfJlON7Nb+Mx5/ezSX5vpuq992erh0MteP8eY0
+         ca2RegvmV6aTmEkiWQSzVkeiWkjDFWU6BxECXoDX15tgD4oeetn4XjwJQHkKr/UZi4jn
+         M2rzWVhqQ0uUKv1+kbt9dezvn9EL8NwkaBEBxeHbR53ElScFeaGw8CT+ZDStPX5ya8Y8
+         SH2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690252373; x=1690857173;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TLi69c4E4L5eZQg22PEMzi9DRqiDnwUXsa6MfQ9GlAI=;
-        b=IYDP5/2q1bAGYw7Vj+Pw5I55Ev9nfgXtGF08xakzzmFMPz3ZpiP2D7uIxlZwFzQKt5
-         UpjCETbUSqwbIJisbmQX9GM10/jJICPoEH6Pmg5mqp88eQjhmuWX1BQHkBO36UNoz3Zv
-         V+ok+nS9AG//m8e79vkApBAZSaBCkD85/Jo69tpNeXIBnEmMasbHS9Rdk7S/dBOs18YU
-         6qavgcDuvniODKxlx2LMXVrD3Fc2qjtn5ZfNn+xdtjW6buloi6px9bODKC0kVoxbCHl8
-         YyEt39s8gK1PO4ZlrK3chPuvwZkEsUr7pYIQp+O8aaODUW7eJUhRoyh+TR/fd3CFHLPO
-         Cp/g==
-X-Gm-Message-State: ABy/qLYGdQJvLvK6ziwZauPaOao7YhIfD3jerscB60CTM8snSzU3zoox
-        55D1HdmT7GEpNZ+qVaQ9AlepFXDlxM9mHRFkj8IXOrhqQLtM9U3282xR0iK6ojEHXvo/Qx6Sa0u
-        eZE6dsKpVDUMxGyX1D6F/ZQ==
-X-Received: by 2002:a05:6a20:6a04:b0:134:1671:6191 with SMTP id p4-20020a056a206a0400b0013416716191mr15770057pzk.0.1690252372797;
-        Mon, 24 Jul 2023 19:32:52 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGjytb4S6qopsC3NLp/h8iyv5snZM1Dlt1GebDQMZ0uJY6y/Dhu0KlQgL9HrcCz12eAJGPfUw==
-X-Received: by 2002:a05:6a20:6a04:b0:134:1671:6191 with SMTP id p4-20020a056a206a0400b0013416716191mr15770035pzk.0.1690252372422;
-        Mon, 24 Jul 2023 19:32:52 -0700 (PDT)
-Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id h16-20020aa786d0000000b00678cb336f3csm8655609pfo.142.2023.07.24.19.32.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jul 2023 19:32:52 -0700 (PDT)
-Message-ID: <7ea9e7a0-508d-0f00-09ae-ae468f111437@redhat.com>
-Date:   Tue, 25 Jul 2023 10:32:46 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v7 12/12] KVM: arm64: Use TLBI range-based intructions for
- unmap
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
+        d=1e100.net; s=20221208; t=1690258866; x=1690863666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TyJK1FcnJgXFfZtNrnEiwbnRrWFFZ4hxtDemQIw/+70=;
+        b=JxXHwisl9uOYCmE7iHDoGgy86XeBdrMU/xZ5xC1ih7+UXLHztjzzWMjYUQIiDU9F1p
+         N6dNMMiG1k7F9FajnXyoHqvqa7AsTvHRLrgeT9lH7Fn4STyvUR8UDjRCRnIOnp4E5xyL
+         G9867Fi4229ExI8S0lyS1jctX3/azHiTvelzdXJsTr5NfosKM1HIEdK8F2HbeQM7KQSm
+         JJBcSeU/UyflVOl+2bpu/eMFMjWt3UQKWLOoOb799mKajIRwkCPDBupOTctRB0qISKvw
+         A9+kYbVDDf1xT6k3ussrW1KSgXxvl5p/V2BWK1y8OgiZSSfq1Ss5C1AG03nrS/8lplB+
+         pDBA==
+X-Gm-Message-State: ABy/qLaOxOQzF210Yvb8HOBALa2cKmvCsWQN7AgLQiV3VlxKh3rJAQmi
+        ssHMEn3d3VrapCc3WVY38pQ=
+X-Google-Smtp-Source: APBJJlGpggWKl9mhx1f6cNzYJrVg2oqym/Xg0n0t+vhY+yg/UIrQUebANCL8UUu/vWaCrzFFriLNMw==
+X-Received: by 2002:a25:844f:0:b0:cf0:b977:2794 with SMTP id r15-20020a25844f000000b00cf0b9772794mr10487441ybm.30.1690258866444;
+        Mon, 24 Jul 2023 21:21:06 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
+        by smtp.googlemail.com with ESMTPSA id h9-20020a25b189000000b00d0db687ef48sm1175540ybj.61.2023.07.24.21.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jul 2023 21:21:05 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230722022251.3446223-1-rananta@google.com>
- <20230722022251.3446223-13-rananta@google.com>
- <0841aca6-2824-6a1b-a568-119f8bd220de@redhat.com>
- <CAJHc60znT5ThqKE3TgTW-0Us3oNv8+KF=81TSK0PbG3tTyJLFQ@mail.gmail.com>
-From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <CAJHc60znT5ThqKE3TgTW-0Us3oNv8+KF=81TSK0PbG3tTyJLFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH mm-unstable v7 00/31] Split ptdesc from struct page
+Date:   Mon, 24 Jul 2023 21:20:20 -0700
+Message-Id: <20230725042051.36691-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
 
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
 
-On 7/25/23 00:47, Raghavendra Rao Ananta wrote:
-> On Mon, Jul 24, 2023 at 2:35 AM Shaoqin Huang <shahuang@redhat.com> wrote:
->>
->> Hi Raghavendra,
->>
->> On 7/22/23 10:22, Raghavendra Rao Ananta wrote:
->>> The current implementation of the stage-2 unmap walker traverses
->>> the given range and, as a part of break-before-make, performs
->>> TLB invalidations with a DSB for every PTE. A multitude of this
->>> combination could cause a performance bottleneck on some systems.
->>>
->>> Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
->>> invalidations until the entire walk is finished, and then
->>> use range-based instructions to invalidate the TLBs in one go.
->>> Condition deferred TLB invalidation on the system supporting FWB,
->>> as the optimization is entirely pointless when the unmap walker
->>> needs to perform CMOs.
->>>
->>> Rename stage2_put_pte() to stage2_unmap_put_pte() as the function
->>> now serves the stage-2 unmap walker specifically, rather than
->>> acting generic.
->>>
->>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
->>> ---
->>>    arch/arm64/kvm/hyp/pgtable.c | 67 +++++++++++++++++++++++++++++++-----
->>>    1 file changed, 58 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
->>> index 5ef098af1736..cf88933a2ea0 100644
->>> --- a/arch/arm64/kvm/hyp/pgtable.c
->>> +++ b/arch/arm64/kvm/hyp/pgtable.c
->>> @@ -831,16 +831,54 @@ static void stage2_make_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_t n
->>>        smp_store_release(ctx->ptep, new);
->>>    }
->>>
->>> -static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu,
->>> -                        struct kvm_pgtable_mm_ops *mm_ops)
->>> +struct stage2_unmap_data {
->>> +     struct kvm_pgtable *pgt;
->>> +     bool defer_tlb_flush_init;
->>> +};
->>> +
->>> +static bool __stage2_unmap_defer_tlb_flush(struct kvm_pgtable *pgt)
->>> +{
->>> +     /*
->>> +      * If FEAT_TLBIRANGE is implemented, defer the individual
->>> +      * TLB invalidations until the entire walk is finished, and
->>> +      * then use the range-based TLBI instructions to do the
->>> +      * invalidations. Condition deferred TLB invalidation on the
->>> +      * system supporting FWB, as the optimization is entirely
->>> +      * pointless when the unmap walker needs to perform CMOs.
->>> +      */
->>> +     return system_supports_tlb_range() && stage2_has_fwb(pgt);
->>> +}
->>> +
->>> +static bool stage2_unmap_defer_tlb_flush(struct stage2_unmap_data *unmap_data)
->>> +{
->>> +     bool defer_tlb_flush = __stage2_unmap_defer_tlb_flush(unmap_data->pgt);
->>> +
->>> +     /*
->>> +      * Since __stage2_unmap_defer_tlb_flush() is based on alternative
->>> +      * patching and the TLBIs' operations behavior depend on this,
->>> +      * track if there's any change in the state during the unmap sequence.
->>> +      */
->>> +     WARN_ON(unmap_data->defer_tlb_flush_init != defer_tlb_flush);
->>> +     return defer_tlb_flush;
->>> +}
->>> +
->>> +static void stage2_unmap_put_pte(const struct kvm_pgtable_visit_ctx *ctx,
->>> +                             struct kvm_s2_mmu *mmu,
->>> +                             struct kvm_pgtable_mm_ops *mm_ops)
->>>    {
->>> +     struct stage2_unmap_data *unmap_data = ctx->arg;
->>> +
->>>        /*
->>> -      * Clear the existing PTE, and perform break-before-make with
->>> -      * TLB maintenance if it was valid.
->>> +      * Clear the existing PTE, and perform break-before-make if it was
->>> +      * valid. Depending on the system support, the TLB maintenance for
->>> +      * the same can be deferred until the entire unmap is completed.
->>>         */
->>>        if (kvm_pte_valid(ctx->old)) {
->>>                kvm_clear_pte(ctx->ptep);
->>> -             kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ctx->level);
->>> +
->>> +             if (!stage2_unmap_defer_tlb_flush(unmap_data))
->> Why not directly check (unmap_data->defer_tlb_flush_init) here?
->>
-> (Re-sending the reply as the previous one was formatted as HTML and
-> was blocked by many lists)
-> 
-> No particular reason per say, but I was just going with the logic of
-> determining if we need to defer the flush and the WARN_ON() parts
-> separate.
-> Any advantage if we directly check in stage2_unmap_put_pte() that I
-> missed or is this purely for readability?
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
 
-Hi Raghavendra,
+This is rebased on mm-unstable.
 
-I just wondering if before the stage2 walk, we want to defer the tlb 
-flush, but if when walk the stage2, the stage2_unmap_defer_tlb_flush() 
-trigger the WARN_ON() and return don't defer the tlb flush, it will 
-flush the ctx->addr's tlb. But before the WARN_ON() triggered, these tlb 
-will not be flushed, since when walk stage2 done in the 
-kvm_pgtable_stage2_unmap(), the stage2_unmap_defer_tlb_flush() still 
-trigger the WARN_ON() and don't use the tlb range-based flush. Thus some 
-of the tlb are not flushed.
+v7:
+  Drop s390 gmap ptdesc conversions - gmap is unecessary complication
+    that can be dealt with later
+  Be more thorough with ptdesc struct sanity checks and comments
+  Rebase onto mm-unstable
 
-If we directly check the (unmap_data->defer_tlb_flush_init), this isn't 
-change during walking the stage2, so the WARN_ON() should only trigger 
-in kvm_pgtable_stage2_unmap()->stage2_unmap_defer_tlb_flush().
+Vishal Moola (Oracle) (31):
+  mm: Add PAGE_TYPE_OP folio functions
+  pgtable: Create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: Remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
 
-I'm not sure if it's right since I just think once we set up use the 
-TLBI range-based flush, the result of the 
-__stage2_unmap_defer_tlb_flush() shouldn't change. Otherwise there must 
-have some stale TLB entry.
-
-Thanks,
-Shaoqin
-
-> 
->>> +                     kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu,
->>> +                                     ctx->addr, ctx->level);
->> Small indent hint. The ctx->addr can align with __kvm_tlb_flush_vmid_ipa.
->>
-> Ah, yes. I'll adjust this if I send out a v8.
-> 
-> Thank you.
-> Raghavendra
->> Thanks,
->> Shaoqin
->>>        }
->>>
->>>        mm_ops->put_page(ctx->ptep);
->>> @@ -1070,7 +1108,8 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtable *pgt, u64 addr, u64 size,
->>>    static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
->>>                               enum kvm_pgtable_walk_flags visit)
->>>    {
->>> -     struct kvm_pgtable *pgt = ctx->arg;
->>> +     struct stage2_unmap_data *unmap_data = ctx->arg;
->>> +     struct kvm_pgtable *pgt = unmap_data->pgt;
->>>        struct kvm_s2_mmu *mmu = pgt->mmu;
->>>        struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
->>>        kvm_pte_t *childp = NULL;
->>> @@ -1098,7 +1137,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
->>>         * block entry and rely on the remaining portions being faulted
->>>         * back lazily.
->>>         */
->>> -     stage2_put_pte(ctx, mmu, mm_ops);
->>> +     stage2_unmap_put_pte(ctx, mmu, mm_ops);
->>>
->>>        if (need_flush && mm_ops->dcache_clean_inval_poc)
->>>                mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, mm_ops),
->>> @@ -1112,13 +1151,23 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
->>>
->>>    int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
->>>    {
->>> +     int ret;
->>> +     struct stage2_unmap_data unmap_data = {
->>> +             .pgt = pgt,
->>> +             .defer_tlb_flush_init = __stage2_unmap_defer_tlb_flush(pgt),
->>> +     };
->>>        struct kvm_pgtable_walker walker = {
->>>                .cb     = stage2_unmap_walker,
->>> -             .arg    = pgt,
->>> +             .arg    = &unmap_data,
->>>                .flags  = KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
->>>        };
->>>
->>> -     return kvm_pgtable_walk(pgt, addr, size, &walker);
->>> +     ret = kvm_pgtable_walk(pgt, addr, size, &walker);
->>> +     if (stage2_unmap_defer_tlb_flush(&unmap_data))
->>> +             /* Perform the deferred TLB invalidations */
->>> +             kvm_tlb_flush_vmid_range(pgt->mmu, addr, size);
->>> +
->>> +     return ret;
->>>    }
->>>
->>>    struct stage2_attr_data {
->>
->> --
->> Shaoqin
->>
-> 
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   7 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++--
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  32 ++--
+ arch/mips/mm/pgtable.c                        |   8 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
+ arch/powerpc/mm/pgtable-frag.c                |  56 +++----
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/pgalloc.c                        | 128 +++++++--------
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +--
+ arch/x86/mm/pgtable.c                         |  47 +++---
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  88 +++++-----
+ include/asm-generic/tlb.h                     |  11 ++
+ include/linux/mm.h                            | 151 +++++++++++++-----
+ include/linux/mm_types.h                      |  18 ---
+ include/linux/page-flags.h                    |  30 +++-
+ include/linux/pgtable.h                       |  80 ++++++++++
+ mm/memory.c                                   |   8 +-
+ 38 files changed, 585 insertions(+), 384 deletions(-)
 
 -- 
-Shaoqin
+2.40.1
 
