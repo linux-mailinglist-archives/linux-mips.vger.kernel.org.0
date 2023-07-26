@@ -2,169 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D95764066
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 22:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAE4764289
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jul 2023 01:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjGZUW1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 16:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S229506AbjGZXbq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 19:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjGZUW0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 16:22:26 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84502709
-        for <linux-mips@vger.kernel.org>; Wed, 26 Jul 2023 13:22:24 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d063bd0bae8so158600276.0
-        for <linux-mips@vger.kernel.org>; Wed, 26 Jul 2023 13:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690402944; x=1691007744;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wk8YN2z9DygnTN7wIkQ/drKhQeRLfAOWaFSkpwIJ9VA=;
-        b=eM8gatpIFAPsVcHsvCyPq5hyC8MsN3TVlS3mNniSEUN+A8XGjxiS8F6dC4aFmL513/
-         OKqKBd4JNqQZqMKS0xCiGe+t5AXNUTDm2VuHrYqk4zFosWdPFjPIB6URfw5vd93IMKdx
-         lKXXLluLhbwl+YjfsuqRPKzKU2+mG/aerZ1RHkgGlaQ2XngSQ4QWGzUzw8Bk02VhX6BY
-         iemdbo75Y0mm9KaGC6Z479jAT6buL5FMFb75fU2ROzDvErIFsnjLxci0m6st5PC1U67q
-         6FdRgc7HGPP7DF/FaK/f0cWfoJ+ZjAfbcmtP5i/qUasNowuJ11SfJCK8qdGxq6HB8Y5C
-         RWCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690402944; x=1691007744;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wk8YN2z9DygnTN7wIkQ/drKhQeRLfAOWaFSkpwIJ9VA=;
-        b=E81hJj64lhs9ikkSREb8ohHzmbXd6fZJX6dIow9xgi4Q7u33A37dTDXWXdt0Yeoqu6
-         R5kw4geCKia6GbPJDo+QXdUH/RtnZ/ePpleXq37wUCn1oH8qQZiTontktIEmj5zSuoGz
-         yp0Nt0DWqkSJPHQ6zrNzB93K3vA77hXanymyZMBIktBFFkdG7lAPfp+s18T/ct/BQZb0
-         cjwoYudOPoZ2hiWTc3Ko6H12XpRCVwE92W5wb3bgJLMCFC4ijGY2xoH7f3MN80RzZ7nz
-         2R/K69nfUVGpYe5t9tl+3QdGvhwzZBc6tAA8HnFPp/J51xvVNaKgUwFidl81f/8DK3Fq
-         Fa3g==
-X-Gm-Message-State: ABy/qLbBZLzoqHvk/SMDewGisKVacMOHLNP+SGyHjRnTM4aUtVcBpgh3
-        IFqyPZTWatG1K1j1VWitnr0zg7GzD4k=
-X-Google-Smtp-Source: APBJJlHa4e7bNU/FXY+wuV4M+6WYSA4uQsVmjVu+paqFG49PZpexPl+XQpMgzwVCSNNiruIZErv3dNdZQXc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:cf48:0:b0:d06:1a77:7d2 with SMTP id
- f69-20020a25cf48000000b00d061a7707d2mr18632ybg.13.1690402944082; Wed, 26 Jul
- 2023 13:22:24 -0700 (PDT)
-Date:   Wed, 26 Jul 2023 13:22:22 -0700
-In-Reply-To: <711f74d6-fe15-6bd4-a9b9-c4f178d95bf3@redhat.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-2-seanjc@google.com>
- <711f74d6-fe15-6bd4-a9b9-c4f178d95bf3@redhat.com>
-Message-ID: <ZMGAfvzEkVphWPdZ@google.com>
-Subject: Re: [RFC PATCH v11 01/29] KVM: Wrap kvm_gfn_range.pte in a per-action union
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229645AbjGZXbp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 19:31:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEE12704;
+        Wed, 26 Jul 2023 16:31:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 228B561CDB;
+        Wed, 26 Jul 2023 23:31:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD987C433C7;
+        Wed, 26 Jul 2023 23:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690414303;
+        bh=r7QYHW3VKvt2WtGg9gadUOAfwlfHNf+lUew4M0VWzWI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FigZcKcQPrGdBwQ9/L3i6PvgDhZ3jNe5Mw1YIWYsG0dTKG8E6LYsAy771371B2OfD
+         DdId4YZkV7bvFGCfq0m7+VBBDGditUnRGUnwfe5jBd09q7vb7vpxc8hXP1MBkRl7Ke
+         ta1gWNaSi3dsRutqCYI4bwQZn99HVRXmQUGeuP3oMa+pAtZxHdO4Viobu1cF1Bhvbk
+         ELIRKd9CPw52H7ZNeM4bGi32fpmfe2dj4c5fmRep88RMmAcwSkMv28YPU5/b1JAFWG
+         QLnYnjAXbm5Yz1t2WezhagAogiEJyGYRLUHAuV3hY17Aka1DZ4E0vs6KYRpR9hETET
+         a8Is0LCZwn/9Q==
+Received: (nullmailer pid 3811250 invoked by uid 1000);
+        Wed, 26 Jul 2023 23:31:41 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Cc:     =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] soc: bcm: Explicitly include correct DT includes
+Date:   Wed, 26 Jul 2023 17:31:29 -0600
+Message-Id: <20230726233130.3811017-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 19, 2023, Paolo Bonzini wrote:
-> On 7/19/23 01:44, Sean Christopherson wrote:
-> > +	BUILD_BUG_ON(sizeof(gfn_range.arg) != sizeof(gfn_range.arg.raw));
-> > +	BUILD_BUG_ON(sizeof(range->arg) != sizeof(range->arg.raw));
-> 
-> I think these should be static assertions near the definition of the
-> structs.  However another possibility is to remove 'raw' and just assign the
-> whole union.
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it was merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-Duh, and use a named union.  I think when I first proposed this I forgot that
-a single value would be passed between kvm_hva_range *and* kvm_gfn_range, and so
-created an anonymous union without thinking about the impliciations.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Fix typo in commit msg
+ - Add raspberrypi-power.c
+---
+ drivers/soc/bcm/bcm63xx/bcm-pmb.c       | 1 -
+ drivers/soc/bcm/bcm63xx/bcm63xx-power.c | 1 -
+ drivers/soc/bcm/raspberrypi-power.c     | 2 +-
+ 3 files changed, 1 insertion(+), 3 deletions(-)
 
-A named union is _much_ cleaner.  I'll post a complete version of the below
-snippet as a standalone non-RFC patch.
-
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 9d3ac7720da9..9125d0ab642d 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -256,11 +256,15 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
- #endif
+diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+index 9407cac47fdb..a72ba26ecf9d 100644
+--- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
++++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+@@ -8,7 +8,6 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+ #include <linux/reset/bcm63xx_pmb.h>
+diff --git a/drivers/soc/bcm/bcm63xx/bcm63xx-power.c b/drivers/soc/bcm/bcm63xx/bcm63xx-power.c
+index aa72e13d5d0e..98b0c2430dbc 100644
+--- a/drivers/soc/bcm/bcm63xx/bcm63xx-power.c
++++ b/drivers/soc/bcm/bcm63xx/bcm63xx-power.c
+@@ -14,7 +14,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
  
- #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
-+union kvm_mmu_notifier_arg {
-+       pte_t pte;
-+};
-+
- struct kvm_gfn_range {
-        struct kvm_memory_slot *slot;
-        gfn_t start;
-        gfn_t end;
--       pte_t pte;
-+       union kvm_mmu_notifier_arg arg;
-        bool may_block;
- };
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index dfbaafbe3a00..f84ef9399aee 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -526,7 +526,7 @@ typedef void (*on_unlock_fn_t)(struct kvm *kvm);
- struct kvm_hva_range {
-        unsigned long start;
-        unsigned long end;
--       pte_t pte;
-+       union kvm_mmu_notifier_arg arg;
-        hva_handler_t handler;
-        on_lock_fn_t on_lock;
-        on_unlock_fn_t on_unlock;
-@@ -547,6 +547,8 @@ static void kvm_null_fn(void)
- }
- #define IS_KVM_NULL_FN(fn) ((fn) == (void *)kvm_null_fn)
+ struct bcm63xx_power_dev {
+ 	struct generic_pm_domain genpd;
+diff --git a/drivers/soc/bcm/raspberrypi-power.c b/drivers/soc/bcm/raspberrypi-power.c
+index 58175af982a0..06196ebfe03b 100644
+--- a/drivers/soc/bcm/raspberrypi-power.c
++++ b/drivers/soc/bcm/raspberrypi-power.c
+@@ -7,7 +7,7 @@
+  */
  
-+static const union kvm_mmu_notifier_arg KVM_NO_ARG;
-+
- /* Iterate over each memslot intersecting [start, last] (inclusive) range */
- #define kvm_for_each_memslot_in_hva_range(node, slots, start, last)         \
-        for (node = interval_tree_iter_first(&slots->hva_tree, start, last); \
-@@ -591,7 +593,7 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
-                         * bother making these conditional (to avoid writes on
-                         * the second or later invocation of the handler).
-                         */
--                       gfn_range.pte = range->pte;
-+                       gfn_range.arg = range->arg;
-                        gfn_range.may_block = range->may_block;
- 
-                        /*
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+ #include <dt-bindings/power/raspberrypi-power.h>
+-- 
+2.40.1
 
