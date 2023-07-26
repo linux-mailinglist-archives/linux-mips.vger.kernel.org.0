@@ -2,162 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE86763F88
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 21:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F97764047
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 22:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjGZT2R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 15:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S229778AbjGZUKc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 16:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbjGZT2P (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 15:28:15 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990062720
-        for <linux-mips@vger.kernel.org>; Wed, 26 Jul 2023 12:28:13 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1bba7a32a40so1027015ad.0
-        for <linux-mips@vger.kernel.org>; Wed, 26 Jul 2023 12:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690399693; x=1691004493;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JT2UHI+2Np7L7QsdeetNAkLhraffv5kgEdfCjKl11Yk=;
-        b=VVF1b7RUawi3/QYYQt22u1jH5OUH1Tf8XnLnE4b/agwXthOwpe69728aWprc+cBAPp
-         m1NzpejyJPFn+J7cEl/k4Xfw7NV/DNs921DAj4mD25qN63m2UV8rxLRjeMa24TJWqXH7
-         YevHJEPTBXycw8cNMxRiQayY5davffRodPeaquNPMlG3yhTbW+l2TZNv0KoNxIAjUf1u
-         vx7QnvYOOpb+Nn9iea9EFg+zAfgVPq5/2O4eLtzlraYz5aepPr1S1PEGRUkv/ClpXjx1
-         oD0KN8QbT88DXT6sIsMyGXbNhhlwFsmmZRUM0BDYakuaZeCUCb/tpsShC/zQA5q7Janp
-         MXpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690399693; x=1691004493;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JT2UHI+2Np7L7QsdeetNAkLhraffv5kgEdfCjKl11Yk=;
-        b=fZCO40q8ZV5hY91ggM1Dw5QuLVOl5HQhXSuPsuUepu6CvKK+RX4zaU6XU0dtCFgx0j
-         q9T4tGrUZtU/SbrYOEy7tAMyJ0zFwlnGJ0pAoPDl6LFmv+KSt6A1FfauD/yNGm1OSHxS
-         OvdNEIJE7vpHgso3n7jkGvf+PjjzXGNbRMHq8/ly1fxmrOB9pfDqO6JdWy87ot84/Sq8
-         QYwLPP+Zd4yrmbmLCjZlBx9F5ICi/T5EEmGNN1O2w31eihX+DdukTeTUe/VVQGqy8hq3
-         Ev2D4RN1HkhyGhcAgQ8yTaMK8Hm4aGJt0MCr1s3QaMaPVNeTbRWoxB+RtwB+jHBwoXns
-         97PQ==
-X-Gm-Message-State: ABy/qLZ+QrgCDWav+c254CeBrRIBCABqWJ0mditr/HXwJX3ezn7VD35U
-        zUUI878buQpkkWasOnc446mI6Nnasd4=
-X-Google-Smtp-Source: APBJJlGcmwLcdH6TXOymYc9nTB5UyZup+2YRvQp3iON5gHoKZStwU7nqu5mwxNJ6DvyQEbhf1ifDNjwDMJ4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:ce8b:b0:1b8:2055:fc1f with SMTP id
- f11-20020a170902ce8b00b001b82055fc1fmr13036plg.2.1690399693010; Wed, 26 Jul
- 2023 12:28:13 -0700 (PDT)
-Date:   Wed, 26 Jul 2023 12:28:11 -0700
-In-Reply-To: <8f7ea958-7caa-a185-10d2-900024aeddf0@quicinc.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-13-seanjc@google.com>
- <8f7ea958-7caa-a185-10d2-900024aeddf0@quicinc.com>
-Message-ID: <ZMFzyy5mZVxLn4uo@google.com>
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229627AbjGZUKb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 16:10:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE9C30DD;
+        Wed, 26 Jul 2023 13:09:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5833B61CAD;
+        Wed, 26 Jul 2023 20:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6400C433C8;
+        Wed, 26 Jul 2023 20:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690402179;
+        bh=ByihIIIrHPEgn7QBviz+5vCufrDNcl/yU4L5yAeVcho=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bsIrc1vdjx8vHm65t/6585qT7Ch4/HzM2hNl2MlDFay/0rRdj3AXFPNdPQPRmtgIt
+         vkVF8QzU+wlXddT2KDPhsXddQF0rnuF7B/vN8zwDTjr30r3kdPsFzNiQSl6ZlbFHKX
+         c2Cbhy4rbUvrgLDBV/YCdaAAW/6dAWr+rYAoDt8jouPqEk+/1GySiAOUMBQ2y/eL9o
+         mCVlZEwqn9+gQNf7TfqykloCVS1qX7CqFMuJf3P522GvItjInNuSd/3y2gyNvq2rx5
+         MNkzyHkoI/2a0v/5uk6tfhMUKGJ/oEOU9z2/I/NRcFjUusjTXI7JC/5/huZw7Gzgkl
+         C90jQKGAD75ew==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2b9b6e943ebso13817621fa.1;
+        Wed, 26 Jul 2023 13:09:39 -0700 (PDT)
+X-Gm-Message-State: ABy/qLb0/OVlto75IeWAd/mlgYYBiaSETS5efSpO3NNv9qnp5u+Kydck
+        KQo6tTsvcmYSe+tzlBKdTmP+sXSDPK+jSO1xLg==
+X-Google-Smtp-Source: APBJJlEVoog0/4ge/YrLwTnu8bPhGFXj/nmL6U0D5RCzZSvpoJTVKOcH9N1dPnIvobmivRpzZI+r3KqKo0qcVTA47HY=
+X-Received: by 2002:a2e:9846:0:b0:2b8:3a1e:eebd with SMTP id
+ e6-20020a2e9846000000b002b83a1eeebdmr17905ljj.21.1690402177670; Wed, 26 Jul
+ 2023 13:09:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230714174028.4040093-1-robh@kernel.org> <CAMuHMdXdqo-OFKtHdVNu77-cuS67Cvb6NV98eYK+gtba7ir5jA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXdqo-OFKtHdVNu77-cuS67Cvb6NV98eYK+gtba7ir5jA@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 26 Jul 2023 14:09:24 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+VvQ-eZBN1ifH3TwROoAL2ZpSpaQrzHOfxnMkvwqgJ=w@mail.gmail.com>
+Message-ID: <CAL_Jsq+VvQ-eZBN1ifH3TwROoAL2ZpSpaQrzHOfxnMkvwqgJ=w@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Explicitly include correct DT includes
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 26, 2023, Elliot Berman wrote:
-> 
-> 
-> On 7/18/2023 4:44 PM, Sean Christopherson wrote:
-> > TODO
->  <snip>
-> > diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-> > index 6325d1d0e90f..15041aa7d9ae 100644
-> > --- a/include/uapi/linux/magic.h
-> > +++ b/include/uapi/linux/magic.h
-> > @@ -101,5 +101,6 @@
-> >   #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
-> >   #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
-> >   #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
-> > +#define GUEST_MEMORY_MAGIC	0x474d454d	/* "GMEM" */
-> 
-> 
-> Should this be:
-> 
-> #define GUEST_MEMORY_KVM_MAGIC
-> 
-> or KVM_GUEST_MEMORY_KVM_MAGIC?
-> 
-> BALLOON_KVM_MAGIC is KVM-specific few lines above.
+On Wed, Jul 26, 2023 at 12:15=E2=80=AFPM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Rob,
+>
+> On Fri, Jul 14, 2023 at 7:44=E2=80=AFPM Rob Herring <robh@kernel.org> wro=
+te:
+> > The DT of_device.h and of_platform.h date back to the separate
+> > of_platform_bus_type before it as merged into the regular platform bus.
+> > As part of that merge prepping Arm DT support 13 years ago, they
+> > "temporarily" include each other. They also include platform_device.h
+> > and of.h. As a result, there's a pretty much random mix of those includ=
+e
+> > files used throughout the tree. In order to detangle these headers and
+> > replace the implicit includes with struct declarations, users need to
+> > explicitly include the correct includes.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> Thanks for your patch, which is now commit 657c45b303f87d77 ("MIPS:
+> Explicitly include correct DT includes") in next-20230726.
+>
+> > --- a/arch/mips/lantiq/xway/gptu.c
+> > +++ b/arch/mips/lantiq/xway/gptu.c
+> > @@ -8,8 +8,8 @@
+> >  #include <linux/interrupt.h>
+> >  #include <linux/ioport.h>
+> >  #include <linux/init.h>
+> > -#include <linux/of_platform.h>
+> > -#include <linux/of_irq.h>
+>
+> Based on https://lore.kernel.org/all/202307270140.uClzsYnD-lkp@intel.com,
+> I guess you need to keep of_irq.h for of_irq_to_resource_table()?
 
-Ah, good point.  My preference would be either KVM_GUEST_MEMORY_MAGIC or
-KVM_GUEST_MEMFD_MAGIC.  Though hopefully we don't actually need a dedicated
-filesystem, I _think_ it's unnecessary if we don't try to support userspace
-mounts.
+Ugg, yes. Posting a fix momentarily.
 
-> ---
-> 
-> Originally, I was planning to use the generic guest memfd infrastructure to
-> support Gunyah hypervisor, however I see that's probably not going to be
-> possible now that the guest memfd implementation is KVM-specific. I think
-> this is good for both KVM and Gunyah as there will be some Gunyah specifics
-> and some KVM specifics in each of implementation, as you mentioned in the
-> previous series.
+Too many config combinations to test on some arches...
 
-Yeah, that's where my headspace is at too.  Sharing the actual uAPI, and even
-internal APIs to some extent, doesn't save all that much, e.g. wiring up an ioctl()
-is the easy part.  Whereas I strongly suspect each hypervisor use case will want
-different semantics for the uAPI.
 
-> I'll go through series over next week or so and I'll try to find how much
-> similar Gunyah guest mem fd implementation would be and we can see if it's
-> better to pull whatever that ends up being into a common implementation?
-
-That would be awesome!  
-
-> We could also agree to have completely divergent fd implementations like we
-> do for the UAPI. Thoughts?
-
-I'd like to avoid _completely_ divergent implementations, e.g. the majority of
-kvm_gmem_allocate() and __kvm_gmem_create() isn't KVM specific.  I think there
-would be value in sharing the core allocation logic, even if the other details
-are different.  Especially if we fully commit to not supporting migration or
-swap, and decide to use xarray directly to manage folios instead of bouncing
-through the filemap APIs.
-
-Thanks!
+Rob
