@@ -2,154 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC28763519
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 13:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6335D7636C9
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 14:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbjGZLgk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 07:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S232312AbjGZMwK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 08:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbjGZLgj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 07:36:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02C51FF5;
-        Wed, 26 Jul 2023 04:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690371396; x=1721907396;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SuZ1oLRGv+DogObqtc+f4FAjzMjj7hxAmbmabhNK8B0=;
-  b=YwqBcgsJcGwfBSXAHnFBe8hOQs8ODXjZM9yj8hfDNYOjWZvTDY0+h2Jc
-   Hrv5gkXkfQE6ytovplwZ9uCzhKgPqAyGvirSWrkB0j1rZ4aUvMLBgj9kj
-   LPqMig0JErSMbGNrUvktZSOm1bef5FydCzX9hGdpOxI6HrspAyfbyPZ5g
-   /bAi469mGKG0Bcus/TfMPVn8qsUL9QtN8T2Ht/rrCWA5fwLHERjcG0zoH
-   qJgSsG+KynZufzzwcVJXagVg3G5Sdqoff2+pJeYVSaLwjfNHDPpmy5MiK
-   L9MGin1+anEQIuTLEiJcfFEq5iHxLuoku5jOHH2TMHn9wdrMr23kvmGu6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="371598752"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="371598752"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 04:36:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="729807753"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="729807753"
-Received: from mbrdon-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.209.47])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 04:36:21 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 8BCEB109503; Wed, 26 Jul 2023 14:36:17 +0300 (+03)
-Date:   Wed, 26 Jul 2023 14:36:17 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>
-Subject: Re: [RFC PATCH v11 10/29] mm: Add AS_UNMOVABLE to mark mapping as
- completely unmovable
-Message-ID: <20230726113617.432nuovswn6odcmx@box>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-11-seanjc@google.com>
- <20230725102403.xywjqlhyqkrzjok6@box.shutemov.name>
- <ZL/Fa4W2Ne9EVxoh@casper.infradead.org>
+        with ESMTP id S231837AbjGZMwJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 08:52:09 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ACF2719;
+        Wed, 26 Jul 2023 05:51:42 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-78372b896d0so260791239f.2;
+        Wed, 26 Jul 2023 05:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690375901; x=1690980701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=27g7ROOYGsxjIJSe3q14Ar1yX5esmHUkSGM/lQemacc=;
+        b=gn+uiCfZlZZbT24ixY/cnqPzC9ctxD6Tj+x7ZwPUqGg7kXEIFjnRz+VxGZ5bBNKykp
+         1b9QgXxmrVTXinSzj0TZdQ+5c2oKAhSBXV7aPF4XVEO3VYDII/3ktWj66ehYc5lioKoY
+         m0/OMUwDUucWczX0OkjDNaunROwl+Uv/guzERTIpiQ/7YXEnkoKFVBLSRk6Pc3Dd/Vxz
+         o7gaMT/w8ktLo2MvDKLkW6yEPzbXFiLmvn4ZRgY/pvOvsbgMSq6Gtk7+8FEfYjYU9iFQ
+         6E2xZ4UeSs3yU1C4PNnoQJUz6nUggDUZB/2GAJZAnGNp5y/PDPoOpMYhHegXk8X9f4bM
+         G6uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690375901; x=1690980701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=27g7ROOYGsxjIJSe3q14Ar1yX5esmHUkSGM/lQemacc=;
+        b=JPIkyV6cuWhTTg5WxLCCRc3ljJiLxKqHWqDS00HlHjb7vNoxhLfrqKPUJiVAfV2ZWz
+         rbnhEg2U4M5wcslS9j2WdcWh/Bfih3seVbUbyfqFzgoKLOVPtmLicPRhG+cXaTrYeKDF
+         M7iVFqOOVahb6kCirPyW2YQI4hKcktm1oBiTPr3ol5PqYm1KKIb8vKaNZViBJrvTWDTA
+         PHSG36i8JNMBFRV1OBD5VtNdwBJXPaMEEC63Uw2JlPadA8zLDx+duDIFbjkZdF1iynSS
+         aXs5B1AL33WqtrfRD+bJ87/kHyBalVFOzkRWlirmguvCDkOKM2u2S4Tkb+O7ZUXZKSS1
+         f/OQ==
+X-Gm-Message-State: ABy/qLYIvDncF796sfBisGSqMAklpXSuNJ+YQyyynd/9/agbm6EdX+OL
+        2vuVu+qdcGM207zlK74228L+YQTYG5U=
+X-Google-Smtp-Source: APBJJlFG6H+RRZ1QmDGiWMJfKNbE4TqkcfiSJqpT+T4oZgkRslV2Q45w5mahNm8zZFbePTguhlD5pA==
+X-Received: by 2002:a6b:3112:0:b0:787:1d0a:ce81 with SMTP id j18-20020a6b3112000000b007871d0ace81mr1834300ioa.13.1690375900759;
+        Wed, 26 Jul 2023 05:51:40 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. ([38.114.108.131])
+        by smtp.gmail.com with ESMTPSA id u4-20020a02cb84000000b0042afd174c62sm4161593jap.99.2023.07.26.05.51.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jul 2023 05:51:40 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v2 0/2] MIPS: loongson32: Remove obsolete header files
+Date:   Wed, 26 Jul 2023 20:51:29 +0800
+Message-Id: <20230726125131.462257-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZL/Fa4W2Ne9EVxoh@casper.infradead.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 01:51:55PM +0100, Matthew Wilcox wrote:
-> On Tue, Jul 25, 2023 at 01:24:03PM +0300, Kirill A . Shutemov wrote:
-> > On Tue, Jul 18, 2023 at 04:44:53PM -0700, Sean Christopherson wrote:
-> > > diff --git a/mm/compaction.c b/mm/compaction.c
-> > > index dbc9f86b1934..a3d2b132df52 100644
-> > > --- a/mm/compaction.c
-> > > +++ b/mm/compaction.c
-> > > @@ -1047,6 +1047,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
-> > >  		if (!mapping && (folio_ref_count(folio) - 1) > folio_mapcount(folio))
-> > >  			goto isolate_fail_put;
-> > >  
-> > > +		/* The mapping truly isn't movable. */
-> > > +		if (mapping && mapping_unmovable(mapping))
-> > > +			goto isolate_fail_put;
-> > > +
-> > 
-> > I doubt that it is safe to dereference mapping here. I believe the folio
-> > can be truncated from under us and the mapping freed with the inode.
-> > 
-> > The folio has to be locked to dereference mapping safely (given that the
-> > mapping is still tied to the folio).
-> 
-> There's even a comment to that effect later on in the function:
-> 
->                         /*
->                          * Only pages without mappings or that have a
->                          * ->migrate_folio callback are possible to migrate
->                          * without blocking. However, we can be racing with
->                          * truncation so it's necessary to lock the page
->                          * to stabilise the mapping as truncation holds
->                          * the page lock until after the page is removed
->                          * from the page cache.
->                          */
-> 
-> (that could be reworded to make it clear how dangerous dereferencing
-> ->mapping is without the lock ... and it does need to be changed to say
-> "folio lock" instead of "page lock", so ...)
-> 
-> How does this look?
-> 
->                         /*
->                          * Only folios without mappings or that have
->                          * a ->migrate_folio callback are possible to
->                          * migrate without blocking. However, we can
->                          * be racing with truncation, which can free
->                          * the mapping.  Truncation holds the folio lock
->                          * until after the folio is removed from the page
->                          * cache so holding it ourselves is sufficient.
->                          */
-> 
+No one is using regs-clk.h and regs-rtc.h.
+Therefore, remove these obsolete header files.
 
-Looks good to me.
+Changelog
+V1 -> V2: fix the build error of "‘LS1X_RTC_CTRL’ undeclared"
 
+Keguang Zhang (2):
+  MIPS: loongson32: Remove regs-clk.h
+  MIPS: loongson32: Remove regs-rtc.h
+
+ .../include/asm/mach-loongson32/loongson1.h   |  2 -
+ .../include/asm/mach-loongson32/regs-clk.h    | 81 -------------------
+ .../include/asm/mach-loongson32/regs-rtc.h    | 19 -----
+ arch/mips/loongson32/common/platform.c        |  8 --
+ 4 files changed, 110 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-clk.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-rtc.h
+
+
+base-commit: 0859bdf1ace659e8981a82956920573c1f8203da
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.39.2
+
