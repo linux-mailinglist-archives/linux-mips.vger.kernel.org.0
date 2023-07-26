@@ -2,63 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64D67632AC
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 11:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44CA7632E6
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 11:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjGZJpz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 05:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S233318AbjGZJzX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 05:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjGZJpz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 05:45:55 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E5D397;
-        Wed, 26 Jul 2023 02:45:52 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8AxCPJP68BkdSgKAA--.25252S3;
-        Wed, 26 Jul 2023 17:45:51 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx3yNP68BkWJg7AA--.54678S3;
-        Wed, 26 Jul 2023 17:45:51 +0800 (CST)
-Message-ID: <f19c393b-8c2e-e3aa-988a-88a423b59b99@loongson.cn>
-Date:   Wed, 26 Jul 2023 17:45:51 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 0/2] irqchip/loongson-eiointc: Add simple irq routing
- method
-From:   bibo mao <maobibo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
+        with ESMTP id S233660AbjGZJyq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 05:54:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66E5C1;
+        Wed, 26 Jul 2023 02:53:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6327061A1B;
+        Wed, 26 Jul 2023 09:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D32C433C7;
+        Wed, 26 Jul 2023 09:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690365220;
+        bh=QbB5d7zwMl5soEn5ju1FprnfkLfAz4BCZwbMvd+dC/k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Bot/hueuAqXMMGlYt9Oacx12XOKW40H20DME2vmOqr1ViYmWdosri/l/COZzwFf/g
+         m05LTVWTjwe11j1Xwrh2Vv32mti389ZuZQVWxSmgUZEYwN+JnqVGI5waG6bAtB03gO
+         +PT5XuFDjmW0SPWsIVAiSzexyl5Go2SCUCB/BfiBAv3jS6gqnQKzClYaiUj+142+fG
+         BDZcwdbXJXnEOGejOrVAIw1ytVWSpoy4bosFS+WE/a7uZb59oAAgFm/cfAXJ9E1QE9
+         jLzmtBQvm8UJWtSZ212D1Wr7unpYgL6SkcN1b91Kq0VwGLB2gEKSrHAYciU4Ng7eSG
+         61QBo+ARo6q3Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qObD8-00GzW9-EJ;
+        Wed, 26 Jul 2023 10:53:38 +0100
+Date:   Wed, 26 Jul 2023 10:53:38 +0100
+Message-ID: <86h6prt2vx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     bibo mao <maobibo@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, linux-mips@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+        Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <philmd@linaro.org>
+Subject: Re: [PATCH v5 0/2] irqchip/loongson-eiointc: Add simple irq routing method
+In-Reply-To: <f19c393b-8c2e-e3aa-988a-88a423b59b99@loongson.cn>
 References: <20230719063558.3131045-1-maobibo@loongson.cn>
-Content-Language: en-US
-In-Reply-To: <20230719063558.3131045-1-maobibo@loongson.cn>
+        <f19c393b-8c2e-e3aa-988a-88a423b59b99@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx3yNP68BkWJg7AA--.54678S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrKrWfGr45AFyfAry7Ar1UArc_yoWfXwb_WF
-        y29395KrZ5XFWFvas7AFnrJF9rK398Wwn8ZFWv9r45J34UAr15JrZ2yr93JFnxKFWSvFnx
-        CrW8CryfAw12yosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
-        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-        AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
-        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-        0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_Ma
-        UUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: maobibo@loongson.cn, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, lvjianmin@loongson.cn, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, philmd@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,36 +71,51 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-slight ping :)
+On Wed, 26 Jul 2023 10:45:51 +0100,
+bibo mao <maobibo@loongson.cn> wrote:
+>=20
+> slight ping :)
 
-在 2023/7/19 14:35, Bibo Mao 写道:
-> Fix return value checking of eiointc_index where int type
-> is converted uint32_t and check smaller than 0.
-> 
-> Add simple irq route support on system with only one eiointc node,
-> rather than use anysend method.
-> 
-> ---
-> Changes in v5:
->   Modify typo issue.
-> 
-> Changes in v4:
->   Modify some spell checking problems.
->   Add Fixes tag.
-> 
-> Changes in v3:
->   Modify some spell checking problems.
-> 
-> Changes in v2:
->   Use the simple irq routing on embeded board like 2K0500 and 2K2000
-> board, since there is only one eio node.
-> 
-> ---
-> Bibo Mao (2):
->   irqchip/loongson-eiointc: Fix return value checking of eiointc_index
->   irqchip/loongson-eiointc: Simplify irq routing on some platforms
-> 
->  drivers/irqchip/irq-loongson-eiointc.c | 93 +++++++++++++++++++++++---
->  1 file changed, 82 insertions(+), 11 deletions(-)
-> 
+Given that you have sent this series 5 times in two weeks, I don't
+think anyone is in a hurry to review it again. Just give it time.
 
+Thanks,
+
+	M.
+
+>=20
+> =E5=9C=A8 2023/7/19 14:35, Bibo Mao =E5=86=99=E9=81=93:
+> > Fix return value checking of eiointc_index where int type
+> > is converted uint32_t and check smaller than 0.
+> >=20
+> > Add simple irq route support on system with only one eiointc node,
+> > rather than use anysend method.
+> >=20
+> > ---
+> > Changes in v5:
+> >   Modify typo issue.
+> >=20
+> > Changes in v4:
+> >   Modify some spell checking problems.
+> >   Add Fixes tag.
+> >=20
+> > Changes in v3:
+> >   Modify some spell checking problems.
+> >=20
+> > Changes in v2:
+> >   Use the simple irq routing on embeded board like 2K0500 and 2K2000
+> > board, since there is only one eio node.
+> >=20
+> > ---
+> > Bibo Mao (2):
+> >   irqchip/loongson-eiointc: Fix return value checking of eiointc_index
+> >   irqchip/loongson-eiointc: Simplify irq routing on some platforms
+> >=20
+> >  drivers/irqchip/irq-loongson-eiointc.c | 93 +++++++++++++++++++++++---
+> >  1 file changed, 82 insertions(+), 11 deletions(-)
+> >=20
+>=20
+>=20
+
+--=20
+Without deviation from the norm, progress is not possible.
