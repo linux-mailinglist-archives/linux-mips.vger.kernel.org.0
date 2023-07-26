@@ -2,149 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6697636CB
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 14:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E7276379B
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 15:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjGZMwM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 08:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S231357AbjGZNbI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 09:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjGZMwK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 08:52:10 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0C32707;
-        Wed, 26 Jul 2023 05:51:46 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3466725f0beso36854845ab.1;
-        Wed, 26 Jul 2023 05:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690375905; x=1690980705;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nJrF1Hh7lu0hPyCNrpWc3D5E3pFxpQWmLpBPm0aJvj4=;
-        b=VQx17tzlsvEGVL3xz4mVzvlJ7MBBdSdSQNEt6JjqX4PFiNmVGJL74ZepryuDwV1kNC
-         JJ5lnRet7VcJthW4cggwSJq9Q+NseC5efDTGS76oVsaAMF84hphdN7zryqyRWAMCTupv
-         x90mpm9BLBJYkErVPCpZodHLd0t8aoqaH8lamm5xTSv4C7lj7jBjA80XungnnCdIMSoL
-         QLJbA3pod6GLSTzZht0d9URLBKTNwACRa+o2GmC1bHbO+EjQkNQAlYSqfun8Dlo2AwYV
-         9GiJTN4s6P6z8Fv4bIkI0PX2WBWn72eHVRRLK2PbnRFYRTsa66eqgfr/sysNfPz+UMbR
-         6Epw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690375905; x=1690980705;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nJrF1Hh7lu0hPyCNrpWc3D5E3pFxpQWmLpBPm0aJvj4=;
-        b=O9eOeTBWu2judfciOafJdM78gzd7WtT5lEmW53Gf7weixaBxneUv3FW4il7IkGTpcy
-         v6qoqR3NjGiY7n+3BK7nuYDIgJAP7+WXNZ5hxLCUgc+oetkql+yPxJlmPySoSCCXxcRz
-         S8mUhjvwXEIZDey4Xr/Of0gSv1hCySvCAJ9luNt1qESW9jZRJhNvbLAYO471Ey3hEydA
-         QDm3jeDGKRfIGBOotFDXQR8IdS5zysRo3fGABgopGYKBwnfdHGBfgq4J3EaUMEE5eeDc
-         qgpwFUgjbnwXjzCdB45Ha9VGYYMV6L2Xrvb1QqO73KYPRkUTfq0XX7n1oEXu8HuT9Hh4
-         KsQw==
-X-Gm-Message-State: ABy/qLbbjJcxkA2Fh/yZQ6weEo8mLO3dUHeVRHukw2rMTN0qWMrhvL3I
-        VO2FiIIkoR3UHMBNVlzcFzCvhkFVWzY=
-X-Google-Smtp-Source: APBJJlGnwQo1WT+7PwOQCSAQRtaRWMu0VYi3YHUgBLvIZkpSlB335++4nKD569XONeODTI5DOuEcsA==
-X-Received: by 2002:a05:6e02:13c7:b0:348:8da5:879f with SMTP id v7-20020a056e0213c700b003488da5879fmr1650328ilj.27.1690375905052;
-        Wed, 26 Jul 2023 05:51:45 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. ([38.114.108.131])
-        by smtp.gmail.com with ESMTPSA id u4-20020a02cb84000000b0042afd174c62sm4161593jap.99.2023.07.26.05.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 05:51:44 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v2 2/2] MIPS: loongson32: Remove regs-rtc.h
-Date:   Wed, 26 Jul 2023 20:51:31 +0800
-Message-Id: <20230726125131.462257-3-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230726125131.462257-1-keguang.zhang@gmail.com>
-References: <20230726125131.462257-1-keguang.zhang@gmail.com>
+        with ESMTP id S232145AbjGZNbG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 09:31:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB23BC;
+        Wed, 26 Jul 2023 06:31:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 230B661A91;
+        Wed, 26 Jul 2023 13:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7971C433C7;
+        Wed, 26 Jul 2023 13:30:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690378264;
+        bh=HS5sUeLSMwNW9P5zkSBnlwFMDf5b4OM9IVMq33WbW+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iun9Va1e08ezdxo92/bg5MGdihHdrBrDXCPN2ZuWEZMFn0+OcEXanuIHv+EfWsuNU
+         L+Hxeq52/Ccp23FMh5y1r628rwDUn1FsDYgXV4giQWpOryyyH6Wz7U1/JH10rPMXbb
+         Jiny/AP6Rjp/r+N2q9Fk7zju31hIIvg2lQlqj+b+9vq+HbD2Z1tLgaskjEpsllb4Ql
+         VgHQzVKaqbMr879rRkud1caFzU2c3Fv3yxztgXx3GhJMZ90I0OKFAjGqdqfapsMwg9
+         ijZCYka6GelxzX2yem0uLWMKJaHqScGsLr30PfErtdYqG0FS1DFvWLCP1t/H0ZSwer
+         Mo5PnIaBy2w0w==
+Date:   Wed, 26 Jul 2023 15:30:51 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        James.Bottomley@HansenPartnership.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, axboe@kernel.dk,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, christian@brauner.io, dalias@libc.org,
+        davem@davemloft.net, deepa.kernel@gmail.com, deller@gmx.de,
+        fenghua.yu@intel.com, geert@linux-m68k.org, glebfm@altlinux.org,
+        gor@linux.ibm.com, hare@suse.com, hpa@zytor.com,
+        ink@jurassic.park.msu.ru, jhogan@kernel.org, kim.phillips@arm.com,
+        ldv@altlinux.org, linux-alpha@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, luto@kernel.org, mattst88@gmail.com,
+        mingo@redhat.com, monstr@monstr.eu, mpe@ellerman.id.au,
+        namhyung@kernel.org, paulus@samba.org, peterz@infradead.org,
+        ralf@linux-mips.org, sparclinux@vger.kernel.org, stefan@agner.ch,
+        tglx@linutronix.de, tony.luck@intel.com, tycho@tycho.ws,
+        will@kernel.org, x86@kernel.org, ysato@users.sourceforge.jp,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
+Subject: Re: Add fchmodat2() - or add a more general syscall?
+Message-ID: <20230726-arztbesuch-division-ee0343632e3c@brauner>
+References: <87fs5c3rbl.fsf@oldenburg3.str.redhat.com>
+ <cover.1689092120.git.legion@kernel.org>
+ <cover.1689074739.git.legion@kernel.org>
+ <104971.1690300714@warthog.procyon.org.uk>
+ <107290.1690310391@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <107290.1690310391@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Since commit 35508d242409 ("MIPS: loongson32: ls1c: Fix hang
-during startup"), no one is calling ls1x_rtc_set_extclk().
-Therefore, remove this obsolete function.
+On Tue, Jul 25, 2023 at 07:39:51PM +0100, David Howells wrote:
+> Florian Weimer <fweimer@redhat.com> wrote:
+> 
+> > > Rather than adding a fchmodat2() syscall, should we add a
+> > > "set_file_attrs()" syscall that takes a mask and allows you to set a bunch
+> > > of stuff all in one go?  Basically, an interface to notify_change() in the
 
-Since commit 9fb23090658a ("rtc: Remove the Loongson-1
-RTC driver"), no one is using regs-rtc.h.
-Therefore, remove this obsolete header file.
+That system call would likely be blocked in seccomp sandboxes completely
+as seccomp cannot filter structs. I don't consider this an argument to
+block new good functionality in general as that would mean arbitrarily
+limiting us but it is something to keep in mind. If there's additional
+benefit other than just being able to set mutliple values at once then
+yeah might be something to discuss.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-V1 -> V2: fix the build error of "‘LS1X_RTC_CTRL’ undeclared"
+> > > kernel that would allow several stats to be set atomically.  This might be
+> > > of particular interest to network filesystems.
+> > 
+> > Do you mean atomically as in compare-and-swap (update only if old values
+> > match), or just a way to update multiple file attributes with a single
+> > system call?
+> 
+> I was thinking more in terms of the latter.  AFAIK, there aren't any network
+> filesystems support a CAS interface on file attributes like that.  To be able
+> to do a CAS operation, we'd need to pass in the old values as well as the new.
+> 
+> Another thing we could look at is doing "create_and_set_attrs()", possibly
+> allowing it to take a list of xattrs also.
 
- .../include/asm/mach-loongson32/loongson1.h   |  1 -
- .../include/asm/mach-loongson32/regs-rtc.h    | 19 -------------------
- arch/mips/loongson32/common/platform.c        |  8 --------
- 3 files changed, 28 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-rtc.h
-
-diff --git a/arch/mips/include/asm/mach-loongson32/loongson1.h b/arch/mips/include/asm/mach-loongson32/loongson1.h
-index bc27fcee3176..84f45461c832 100644
---- a/arch/mips/include/asm/mach-loongson32/loongson1.h
-+++ b/arch/mips/include/asm/mach-loongson32/loongson1.h
-@@ -46,6 +46,5 @@
- #define LS1X_CLK_BASE			0x1fe78030
- 
- #include <regs-mux.h>
--#include <regs-rtc.h>
- 
- #endif /* __ASM_MACH_LOONGSON32_LOONGSON1_H */
-diff --git a/arch/mips/include/asm/mach-loongson32/regs-rtc.h b/arch/mips/include/asm/mach-loongson32/regs-rtc.h
-deleted file mode 100644
-index a3d096be1607..000000000000
---- a/arch/mips/include/asm/mach-loongson32/regs-rtc.h
-+++ /dev/null
-@@ -1,19 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (c) 2016 Yang Ling <gnaygnil@gmail.com>
-- *
-- * Loongson 1 RTC timer Register Definitions.
-- */
--
--#ifndef __ASM_MACH_LOONGSON32_REGS_RTC_H
--#define __ASM_MACH_LOONGSON32_REGS_RTC_H
--
--#define LS1X_RTC_REG(x) \
--		((void __iomem *)KSEG1ADDR(LS1X_RTC_BASE + (x)))
--
--#define LS1X_RTC_CTRL	LS1X_RTC_REG(0x40)
--
--#define RTC_EXTCLK_OK	(BIT(5) | BIT(8))
--#define RTC_EXTCLK_EN	BIT(8)
--
--#endif /* __ASM_MACH_LOONGSON32_REGS_RTC_H */
-diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-index 64d7979394e6..8075590a9f83 100644
---- a/arch/mips/loongson32/common/platform.c
-+++ b/arch/mips/loongson32/common/platform.c
-@@ -265,14 +265,6 @@ struct platform_device ls1x_ehci_pdev = {
- };
- 
- /* Real Time Clock */
--void __init ls1x_rtc_set_extclk(struct platform_device *pdev)
--{
--	u32 val = __raw_readl(LS1X_RTC_CTRL);
--
--	if (!(val & RTC_EXTCLK_OK))
--		__raw_writel(val | RTC_EXTCLK_EN, LS1X_RTC_CTRL);
--}
--
- struct platform_device ls1x_rtc_pdev = {
- 	.name		= "ls1x-rtc",
- 	.id		= -1,
--- 
-2.39.2
-
+That would likely require variable sized pointers in a struct which is
+something we really try to stay away from. I also think it's not a good
+idea to lump xattrs toegether with generic file attributes. They should
+remain a separate api imho.
