@@ -2,139 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF19763942
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 16:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780C7763BDB
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 18:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbjGZOeh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 10:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S229954AbjGZQAJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 12:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjGZOef (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 10:34:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9819A1;
-        Wed, 26 Jul 2023 07:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LsxQl+7lQmIvtLS3uUz+2Tc5wtoeEEVBoFirY9Yb6fg=; b=NgbwQpzKHdyAWsUCxnsImKimDt
-        jHF2WmVqPjDVwWh4+qnqFx9EB6EzhJPFMjClBGjD6Hvhy3cDKu8QpNdQ/vu4YdRehqVe79OoriWgn
-        rYVzFWxwc/SS+7+suUkf1PvWW2cp4TLFdh0VHNZVCP6elPEQsoL4zq+DlNr+Vsyy6zVTCVD4+BPLu
-        7MT7tbbN4QAXyKU4tauvNJ5ES+/Xow+YcL4kRLee8APN/cRVWSBVwKBSDtrmdoa20ei7j/6b/nKQ6
-        9EjL4wZbYuEHOXjGbdk1LQrEamw4aC90nEjbS99sxd1PPE9PWCMbzElXWmFd7Um+DcVnLHPQet+QT
-        TJw896fg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qOfaj-006ZNN-Ab; Wed, 26 Jul 2023 14:34:17 +0000
-Date:   Wed, 26 Jul 2023 15:34:17 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        with ESMTP id S235012AbjGZP75 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 11:59:57 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A4ADD
+        for <linux-mips@vger.kernel.org>; Wed, 26 Jul 2023 08:59:55 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bc68c4e046aso6266028276.0
+        for <linux-mips@vger.kernel.org>; Wed, 26 Jul 2023 08:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690387195; x=1690991995;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=x1RCz9AGh0t/+COzjYLcha5fkSMq/GNrC4CuEfgGTfc=;
+        b=ypSxifbz+3xr2TyQi3H8IoM4jyz7RGQWDnGcHi1NC0Po8RTEHh8icWGPEeM5z47awl
+         loHCPZy4rtZMbUI9RqdI0QLfF+ad98/C7r2wxAa7ZpGCgkUVuuHTSwwJ1OUjNqHnXY8X
+         84BBat8mly4SBV0f6KqsOvHk8cSJA6wdZ1HsQOFr2IirR9RtsavVXkabaGLdXW2RSaSS
+         UJmT6LqQAsULk7Nz99DvDaEAqSJ5Xa6WPtogY6EBxsD6vOblRb8mRKx+BIAVyZOlnkaE
+         pEMJT5wcLP195pWDDcCypB4wv+dW/iWZkWl4YuLww/x6MLh6go/yMgsbLUu6B2dDA/yw
+         w4bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690387195; x=1690991995;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x1RCz9AGh0t/+COzjYLcha5fkSMq/GNrC4CuEfgGTfc=;
+        b=Ku0IDnV+keAOyxs2thnWkqOFGdHi02XRArK6efXpI6CchqtD1iTpPUqgOUZNA9/kWE
+         HAIWKO2SGnh34f/C0ife7SW/NBYd73GyEg280xujSWMjh8UftoMJRcXD/ZjV5tKcF0Zg
+         w0caxoyskS1Kl84/7UnzUirO79J+qWsCoq3zYHSUv4T/EfGq+s61jcITIDvB+WO690LH
+         3//fXiZyFjVci3WNfg7az0WkO6bl0Mx6BOGj9O24ba2aFhJGTLKBgmSVI4dNk1F59G+p
+         t5AfqLbcx8+zgV5+QEzvKiJ8boPr1et/NA4x0U0wgB2zaZkE9kEjlS2yEgYUrLH1wYS2
+         ep2g==
+X-Gm-Message-State: ABy/qLZgM5nb6HyMuMoUUAnFdaKUqrEUqmcyo2+pbP3BPZ1fUiTb21U8
+        Mg+/tBRXcAA3j5ZjNfGPaUXusmBfOVc=
+X-Google-Smtp-Source: APBJJlE6mP/UcpH4lPNK9j4UUpMqMy7oSio4zbtJsZXhMStHU1Br/fIarHdKjyAaokfpTf45S20N2ryKLpo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:99c8:0:b0:d1c:e102:95a5 with SMTP id
+ q8-20020a2599c8000000b00d1ce10295a5mr15014ybo.7.1690387195164; Wed, 26 Jul
+ 2023 08:59:55 -0700 (PDT)
+Date:   Wed, 26 Jul 2023 08:59:53 -0700
+In-Reply-To: <ZL4BiQWihfrD0TOJ@yilunxu-OptiPlex-7050>
+Mime-Version: 1.0
+References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-9-seanjc@google.com>
+ <ZL4BiQWihfrD0TOJ@yilunxu-OptiPlex-7050>
+Message-ID: <ZMFC+V6Llv1JWLEt@google.com>
+Subject: Re: [RFC PATCH v11 08/29] KVM: Introduce per-page memory attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH mm-unstable v7 00/31] Split ptdesc from struct page
-Message-ID: <ZMEu6VcTqPj69bQ7@casper.infradead.org>
-References: <20230725042051.36691-1-vishal.moola@gmail.com>
- <5296514f-cdd1-9526-2e83-a21e76e86e5@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5296514f-cdd1-9526-2e83-a21e76e86e5@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 09:41:36PM -0700, Hugh Dickins wrote:
-> On Mon, 24 Jul 2023, Vishal Moola (Oracle) wrote:
+On Mon, Jul 24, 2023, Xu Yilun wrote:
+> On 2023-07-18 at 16:44:51 -0700, Sean Christopherson wrote:
+> > @@ -1346,6 +1350,9 @@ static void kvm_destroy_vm(struct kvm *kvm)
+> >  		kvm_free_memslots(kvm, &kvm->__memslots[i][0]);
+> >  		kvm_free_memslots(kvm, &kvm->__memslots[i][1]);
+> >  	}
+> > +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+> > +	xa_destroy(&kvm->mem_attr_array);
+> > +#endif
 > 
-> > The MM subsystem is trying to shrink struct page. This patchset
-> > introduces a memory descriptor for page table tracking - struct ptdesc.
-> > 
-> > This patchset introduces ptdesc, splits ptdesc from struct page, and
-> > converts many callers of page table constructor/destructors to use ptdescs.
-> > 
-> > Ptdesc is a foundation to further standardize page tables, and eventually
-> > allow for dynamic allocation of page tables independent of struct page.
-> > However, the use of pages for page table tracking is quite deeply
-> > ingrained and varied across archictectures, so there is still a lot of
-> > work to be done before that can happen.
+> Is it better to make the destruction in reverse order from the creation?
+
+Yeah.  It _shoudn't_ matter, but there's no reason not keep things tidy and
+consistent.
+
+> To put xa_destroy(&kvm->mem_attr_array) after cleanup_srcu_struct(&kvm->srcu),
+> or put xa_init(&kvm->mem_attr_array) after init_srcu_struct(&kvm->irq_srcu).
+
+The former, because init_srcu_struct() can fail (allocates memory), whereas
+xa_init() is a "pure" initialization routine.
+
+> >  	cleanup_srcu_struct(&kvm->irq_srcu);
+> >  	cleanup_srcu_struct(&kvm->srcu);
+> >  	kvm_arch_free_vm(kvm);
+> > @@ -2346,6 +2353,145 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
+> >  }
+> >  #endif /* CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT */
 > 
-> Others may differ, but it remains the case that I see no point to this
-> patchset, until the minimal descriptor that replaces struct page is
-> working, and struct page then becomes just overhead.  Until that time,
-> let architectures continue to use struct page as they do - whyever not?
+> [...]
+> 
+> > +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> > +					   struct kvm_memory_attributes *attrs)
+> > +{
+> > +	gfn_t start, end;
+> > +
+> > +	/* flags is currently not used. */
+> > +	if (attrs->flags)
+> > +		return -EINVAL;
+> > +	if (attrs->attributes & ~kvm_supported_mem_attributes(kvm))
+> > +		return -EINVAL;
+> > +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> > +		return -EINVAL;
+> > +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> > +		return -EINVAL;
+> > +
+> > +	start = attrs->address >> PAGE_SHIFT;
+> > +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> 
+> As the attrs->address/size are both garanteed to be non-zero, non-wrap
+> and page aligned in prevous check. Is it OK to simplify the calculation,
+> like:
+> 
+>   end = (attrs->address + attrs->size) >> PAGE_SHIFT;
 
-Because it's easier for architecture maintainers to understand what they
-should and shouldn't be using.  Look at the definition:
+Yes, that should work.
 
-+struct ptdesc {
-+	unsigned long __page_flags;
-+
-+	union {
-+		struct rcu_head pt_rcu_head;
-+		struct list_head pt_list;
-+		struct {
-+			unsigned long _pt_pad_1;
-+			pgtable_t pmd_huge_pte;
-+		};
-+	};
-+	unsigned long __page_mapping;
-+
-+	union {
-+		struct mm_struct *pt_mm;
-+		atomic_t pt_frag_refcount;
-+	};
-+
-+	union {
-+		unsigned long _pt_pad_2;
-+#if ALLOC_SPLIT_PTLOCKS
-+		spinlock_t *ptl;
-+#else
-+		spinlock_t ptl;
-+#endif
-+	};
-+	unsigned int __page_type;
-+	atomic_t _refcount;
-+#ifdef CONFIG_MEMCG
-+	unsigned long pt_memcg_data;
-+#endif
-+};
+Chao, am I missing something?  Or did we just end up with unnecessarly convoluted
+code as things evolved?
 
-It's still a 31-line struct definition, I'll grant you.  But it's far
-easier to comprehend than the definition of struct page (~140 lines).
-An architecture maintainer can look at it and see what might be available,
-and what is already used.  And hopefully we'll have less "Oh, I'll just
-use page->private".  It's really not fair to expect arch maintainers to
-learn so much about the mm.
+> > +
+> > +	if (WARN_ON_ONCE(start == end))
+> > +		return -EINVAL;
+> 
+> Also, is this check possible to be hit? Maybe remove it?
 
-It's still messier than I would like, but I don't think we can do better
-for now.  I don't understand why you're so interested in delaying doing
-this work.
+It should be impossible to, hence the WARN.  I added the check for two reasons:
+(1) to help document that end is exclusive, and (2) to guard against future bugs.
