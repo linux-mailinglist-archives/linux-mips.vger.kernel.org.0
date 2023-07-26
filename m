@@ -2,243 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E19762761
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 01:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BA87627DD
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 02:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjGYXev (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jul 2023 19:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S230187AbjGZAtP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jul 2023 20:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjGYXes (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 19:34:48 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D29E120;
-        Tue, 25 Jul 2023 16:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690328087; x=1721864087;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C5xyKe5/WjYZUNBE8/1FHjpgxl/fMdUuo5xkgVP7J8Y=;
-  b=UPQXMs0USTB8L2B/Amv3cA2QoExmySwNxseJ0NQaFbzackDHLyQs7dxs
-   bgEJqJrbcGwKYjyLeZrk3UomupTcZ8uggHZk42McBht/srznDV9354r7o
-   SoUkO/4Pf/rvLu9Al4+5pSdv3mhKYt1aqwje0W38XWIl1Q81GIhNaLtwq
-   WN47IZW6thQxhXwcBkqomNwNKjMX0S6LY5YVU506EU9ioJjUxdvqEedR0
-   I5I+8tGor0wuSQmBRKwnwK5xatq7uXSz/LoEwRsDMiCPEzkg4mclWV4Nt
-   JEUkPOi9zePhlsgjZ8R+BAvmxWR2XaDjavhcczC63NzcoPGlij87HCj0w
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="366747671"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="366747671"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 16:34:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="755945611"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="755945611"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jul 2023 16:34:40 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qORY7-0000Qn-2W;
-        Tue, 25 Jul 2023 23:34:39 +0000
-Date:   Wed, 26 Jul 2023 07:33:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH mm-unstable v7 12/31] powerpc: Convert various functions
- to use ptdescs
-Message-ID: <202307260706.qNPJSnjR-lkp@intel.com>
-References: <20230725042051.36691-13-vishal.moola@gmail.com>
+        with ESMTP id S229639AbjGZAtO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jul 2023 20:49:14 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2058.outbound.protection.outlook.com [40.92.98.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E42173B;
+        Tue, 25 Jul 2023 17:49:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=as6HyCVKXe4ZUE5tAZR5EfxB/D0uM6fuAnH52bS7hyEvsW6xs141sFh5xujfAdV6OLsZdZus28c2FhdVyMavnmDVNMZT3vJSLc0GdCH1MjplDnNCNtiG8UbnXAoiD/33JDYanFsCg+ab9M4yNloRspm/adeUBHnULySB1CRC+bIjNOH3Eu3nGFRT/Q6c2y6Gy9TTRtESot7M81AVrrt/uHzDqXXK/3gd08rjVjsTWfQI4YIYDyrygm8j1ozXiCg/8sHa3znphL6zV7bEJiGlIScQfaMgxHnSqALZLgv50tUIBsefeOc5Td7l2vKbiLPeCxfCjfGJKwEbGOTmkfTWfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g7/2DUrKz7Iwq9/8Wt5fns3e/G0Q7YvLGiP20s/SmxM=;
+ b=ZALDm8uuAd/A9NV2rIMMCPvfIPqgEJ/X53cxDqLCchLHiQNVlCqMGLC1HBDE5jOnq5UFMdUkhhfIBUBviF2h3S+9HYdlOtJy9bOV/5pZcxc4Uff4eqxD+0Fc4eSEK3eSYunluNGFofTgPwXI3gfO2HqHW8aMAG30ulN2+JruBGpRC0NS4WJrbV6e2gQW3EDX483PhcR3tigpKgefopB7uu3q9X/ADJeCmAIKswV7yIJa3cDcfGwVUfP7Pv8KVOrwD7OqA4c40+rxCLt347gjPnHH0XtEVdP5aoPLoCAHHYfIEBxDjMrLoS/7sG5b+O/2uM+0Q6adODQvctgvqUXgFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g7/2DUrKz7Iwq9/8Wt5fns3e/G0Q7YvLGiP20s/SmxM=;
+ b=Tjj+5ZPNmH3NlVKwX9UEgJA+ZNqaPEBaZQ7kFM7msasSBTTZDgI2t9Tr+hrZQ3WMRFJ2ZI7wabYiDJeV9ijncYNPBhKEyKBDbF2EfWqJVXkB0JUEEjcee9Bu+mTLGdo9YPBx5gCfJ5SnDCQiRyO5nk6vSJ2mcjyyTuxQb/Ys42o5HiTunMPEheIvy9gx+6/eos5BASCaEB0EQXZEjzcfSRpK/79mukHYDJWuDMUsLNM9bz4j2Hydtg8/ADjB2J4C+y33eg4hOEzLZbrXUYcQGXkiY6JxRTRTVpTZ0s9Ze9gNhcn9MomO5BQ/KaqH8+/8ZfNbTl8gsJk2lEDhRhWkkQ==
+Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:8041::8)
+ by TYWP286MB2495.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:236::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Wed, 26 Jul
+ 2023 00:49:08 +0000
+Received: from TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::f4c2:4b38:d074:f1e9]) by TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::f4c2:4b38:d074:f1e9%5]) with mapi id 15.20.6631.026; Wed, 26 Jul 2023
+ 00:49:08 +0000
+From:   Shiji Yang <yangshiji66@outlook.com>
+To:     linux-gpio@vger.kernel.org
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        Shiji Yang <yangshiji66@outlook.com>
+Subject: [PATCH] pinctrl: mtmips: support requesting different functions for same group
+Date:   Wed, 26 Jul 2023 08:48:40 +0800
+Message-ID: <TYAP286MB0315A9671B4BA0347E70D9E0BC00A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [XDoQORCWmggWX/cq3TVGE5sspykPz5d2]
+X-ClientProxiedBy: TYCPR01CA0125.jpnprd01.prod.outlook.com
+ (2603:1096:400:26d::7) To TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:404:8041::8)
+X-Microsoft-Original-Message-ID: <20230726004840.17286-1-yangshiji66@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230725042051.36691-13-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYAP286MB0315:EE_|TYWP286MB2495:EE_
+X-MS-Office365-Filtering-Correlation-Id: cc692db0-4a06-48d9-bc57-08db8d721eaa
+X-MS-Exchange-SLBlob-MailProps: WaIXnCbdHrMmSJLg90fG+icJLcQjnepnrPruS2jts7y5aLSRhe97cFludTtQKFn9j1xUfgx44yLeEhwmW7vfzHf2ECavxSEGx9BzjE1RTbI52kgU0xTcIbwM/xUWjs/EuCUtmLt2nHW1swlSenlcv9lh/KMAVJBWhIMFlTx6zSs3BkFMZESXwgygADqsAx08tV/XWjnDmFux2NgWsNBi+8drEWXWWnVjxA+E/+DQqFBKEy3kDZ7/ID7YPFKEgFdHUTI005iMmaK0DTL85PP8eVUD8ditxvk+WRmZuZJn7pI2RO9lC5EfBrIbEya9opXzFBJf2XmkUbEkkVGMrB2vjkN2VGnkInfuF1gy1a+kg3gNnStuMMqYKmHPsCHNsauSQn7mcV/+Pt9UOt9wSEmmHwEFrBlZdPKEeWjapCNX9/3J8uqArMXNXkgKeqsLgAB7rjhuXJH5WjT6rLtU3Gw2qLEp+SxtSegDo3y2I3+yx7Wjyx+TiI71XagKymv68UbGJGyySu+3W+Eo0Dnp59Vks4x8ow0hP9vrJJ9Azfibsps65D8e/ewpSQ7R41OR38Zx/GhlfwSpbW549G9jXdV09OajKdLg3H33l33PPQthbEZmWbHYL1P6e9Zpz5s05WFvTVveH3iW7/CTK38m7+nu7VJBsjWNyIiBAZ9JBqc7fR+gLNdWcmgvh8Et4DvP4slkyBTjWsV0sHXj0+3AQ+DkFL604px1xODu5m+RBbrEM2k9aWD8uFo0IoQzaeWGhv5Ft+rU3ixvhcQ=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8oS9h4PH7gr4WgM3nI2i/dU59HW9lAVsOHh+U1iBW5Yh8Ei/kaNA4XaXNPsM06b6yNxGnSpBX8wZ3aoXLtlUGH4fCglJqbg2SG/YLbgq9w/h8WFxRjoGIfiEUegRgo0kOmzaWm05YQm7fPOmXD9G2Qsnu+QoiwnrKCWWjrXem/+hxl9kk9Cjj4jcdEcFfcXwmpyC72eVM3f08EmahlpOEJt4XPQRWFAibzOsjCrOeCdRPvS15AGvkMgfpzjU5N8ind3LdDOQJlCjVMR01vEq6YecZUXt3Sc8i6GHJNXJMFM3HH7D/pn0MrAfs2U6Xtit1acbQ1S0qQdCv0jotkK9K7O9eFYtfqx6VQVs6GH5niM+AIlScYrJhO2KEqdbdvWx+YkFUiYp8PmbolUQh95oHK5IoooQdNX0w6+7OddPvZAQ3XTqtgUlb+LNDf5h/1/efvPDB9jYulPNjB0xzFlcsqVG6vNfIQGQn5l4ZzAjHgAnG0aniUxKw0igQSE3+7SBrxVaODfu1xfGngy3SPB+KKsFLTy9It9WW7JUZDe+OhD+z5/a9FnCQnLuNPJW9Bze4LPkZ2VmzeEWU3eZqq6OkwRBFLXcJ5xyur1n0+hkEIc=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VD9/lwHVd9tyy4CL+46eujtazpVwO7rY4iACbDT4Jhutzru6IysId0CWShLm?=
+ =?us-ascii?Q?5o7LvWgs9oxaoqgAwuVUpY2qt663Twsl2bAwqvi9i+VY5fN4y7ZF77GqvNDc?=
+ =?us-ascii?Q?QiBELldh2M5yQxd241y7b6cw93DwEOMjbqAXWdlknvMfIshKuuV3v0L17pCI?=
+ =?us-ascii?Q?uP9qfYBPrW5FyqfyvdxAeq5SdeNMiX01NIZOS8A9sduHZ47REYzMTdqzLdru?=
+ =?us-ascii?Q?ZC+bLXF3oShxw5tZelJI/ljgxY2JSJnFb3h4yd3LQ+JpJU/hjdYAovRGOGw6?=
+ =?us-ascii?Q?HpG9WrstJyqPkn9dusbkJ1LSpQjgUkn7z1adGk2cy0LKe6FZH9+p+99OIqwK?=
+ =?us-ascii?Q?U9ZmsnYekVdytaj32p7EK4eYz2E4ycpBWXq2bBBiFaKMQdzvzphTTNwQbXru?=
+ =?us-ascii?Q?0qzoj1i9rOp0LUvUFLvnyWXuJddZ1OSOP7v+Qb2ZOCvM0sOyh+2uw2u1S2lk?=
+ =?us-ascii?Q?CCtKiinDsVA6uD0O4UDfHf96ZemqkYDomVDCcUESGZhNUpbKkp9v661r8Amo?=
+ =?us-ascii?Q?ROuuVXG0IlTCtMUnbjZzsCuD/Di8PjeRHUrxqDz0EUjm//rrRnPaDYzYusQH?=
+ =?us-ascii?Q?mSfoFc/GNZZ5bZTEcwM4W+nrutJnjwzwsnaiLYt4b1+ift+psE3gKhytkDeC?=
+ =?us-ascii?Q?GzjSy8/vbBrG1e9GgyH160VDAExHPPECtBr75dtiRY9+KCEcBVfLgkRV3yQl?=
+ =?us-ascii?Q?85GSKwciT81+bibeuDHXOSfpkkRkBM3dzIAjvU2ljFwe4EUV275VlFOPw+OT?=
+ =?us-ascii?Q?Nx4J7/KgQEWsfUMp2SwMaDG2ZSq4Ad9M2Paa4SUHxNvZF2zaodfIEV1shYaR?=
+ =?us-ascii?Q?rgR5O3XDpODhx4Udr7YBgX05jbdbJhb7YhqfC/uMuaY9iA5QqbVrMxop0NGz?=
+ =?us-ascii?Q?MVqVGe2V7H4e60SVwg/ax9ZSKWk66I44FerfvRFw/H5xRsWUF6FicKUpQSlM?=
+ =?us-ascii?Q?cYvXT4ySbhhjr+huKwfMWiZChXQT6vYJIRvXf14DG0KdYi69+32igg11AZ0E?=
+ =?us-ascii?Q?QSHZ5ea+GxhO4pt01ZL8e6o/8gzDURQ7/+VxfrhvpRLPs9v/33YHKIiTbVyn?=
+ =?us-ascii?Q?39hk1DXVBfik2UmQhRk15pP1ZIKW7lZcJCZhSSIcIQnTAv/PBckdPh7s+R9/?=
+ =?us-ascii?Q?wnjBNwga6AdAUWURaqzFkOawdy7SWaR9hd1sBuAf7/qWEFOdRF5h4AnkuyGB?=
+ =?us-ascii?Q?WKe92m56MoVtZ+qfRwL0kgwgNPty8dDcfx3eHUxPcLHUayMBm5BzvBAa6LE?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc692db0-4a06-48d9-bc57-08db8d721eaa
+X-MS-Exchange-CrossTenant-AuthSource: TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2023 00:49:08.8938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB2495
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Vishal,
+Sometimes pinctrl consumers may request different functions for the
+same pin group in different situations. This patch can help to reset
+the group function flag when requesting a different function.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
+---
+ drivers/pinctrl/mediatek/pinctrl-mtmips.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on next-20230725]
-[cannot apply to powerpc/next powerpc/fixes s390/features geert-m68k/for-next geert-m68k/for-linus linus/master v6.5-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230725-122458
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230725042051.36691-13-vishal.moola%40gmail.com
-patch subject: [PATCH mm-unstable v7 12/31] powerpc: Convert various functions to use ptdescs
-config: powerpc-randconfig-r034-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260706.qNPJSnjR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260706.qNPJSnjR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307260706.qNPJSnjR-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:40:1: note: expanded from here
-      40 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:610:56: note: expanded from macro '__do_insw'
-     610 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:42:1: note: expanded from here
-      42 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:44:1: note: expanded from here
-      44 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:46:1: note: expanded from here
-      46 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:48:1: note: expanded from here
-      48 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> arch/powerpc/mm/pgtable-frag.c:125:22: error: use of undeclared identifier 'page'
-     125 |         BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-         |                             ^
-   7 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
-
-
-vim +/page +125 arch/powerpc/mm/pgtable-frag.c
-
-0203dd58d897cbd Hugh Dickins          2023-07-11  117  
-a95d133c8643cae Christophe Leroy      2018-11-29  118  void pte_fragment_free(unsigned long *table, int kernel)
-a95d133c8643cae Christophe Leroy      2018-11-29  119  {
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  120) 	struct ptdesc *ptdesc = virt_to_ptdesc(table);
-a95d133c8643cae Christophe Leroy      2018-11-29  121  
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  122) 	if (pagetable_is_reserved(ptdesc))
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  123) 		return free_reserved_ptdesc(ptdesc);
-645d5ce2f7d6cb4 Aneesh Kumar K.V      2020-07-09  124  
-a95d133c8643cae Christophe Leroy      2018-11-29 @125  	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  126) 	if (atomic_dec_and_test(&ptdesc->pt_frag_refcount)) {
-0203dd58d897cbd Hugh Dickins          2023-07-11  127  		if (kernel)
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  128) 			pagetable_free(ptdesc);
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  129) 		else if (folio_test_clear_active(ptdesc_folio(ptdesc)))
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  130) 			call_rcu(&ptdesc->pt_rcu_head, pte_free_now);
-0203dd58d897cbd Hugh Dickins          2023-07-11  131  		else
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  132) 			pte_free_now(&ptdesc->pt_rcu_head);
-0203dd58d897cbd Hugh Dickins          2023-07-11  133  	}
-a95d133c8643cae Christophe Leroy      2018-11-29  134  }
-0203dd58d897cbd Hugh Dickins          2023-07-11  135  
-
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtmips.c b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
+index efd77b6c5..e5e085915 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtmips.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
+@@ -123,11 +123,24 @@ static int mtmips_pmx_group_enable(struct pinctrl_dev *pctrldev,
+ 	int i;
+ 	int shift;
+ 
+-	/* dont allow double use */
++	/*
++	 * for the same pin group, if request a different function,
++	 * then clear the group function flag and continue, else exit.
++	 */
+ 	if (p->groups[group].enabled) {
+-		dev_err(p->dev, "%s is already enabled\n",
+-			p->groups[group].name);
+-		return 0;
++		for (i = 0; i < p->groups[group].func_count; i++) {
++			if (p->groups[group].func[i].enabled == 1) {
++				if (!strcmp(p->func[func]->name,
++					p->groups[group].func[i].name))
++					return 0;
++				p->groups[group].func[i].enabled = 0;
++				break;
++			}
++		}
++
++		/* exit if request the "gpio" function again */
++		if (i == p->groups[group].func_count && func == 0)
++			return 0;
+ 	}
+ 
+ 	p->groups[group].enabled = 1;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
