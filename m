@@ -2,239 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D52763DEB
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 19:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F0F763E33
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jul 2023 20:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjGZRsW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 13:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S229558AbjGZSPZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 26 Jul 2023 14:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGZRsV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 13:48:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE3121;
-        Wed, 26 Jul 2023 10:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690393699; x=1721929699;
-  h=date:from:to:cc:subject:message-id;
-  bh=xhavr5FZiRpQL6qhQbQYPyFLqY3Dnb4k4DgVSlgkNog=;
-  b=BIR0UE2ecvBU/MAGLg0h5YygppzWGKQahaaMvstFLDicR8cnjDx5N5nl
-   IWfWh3aeU/D5/7CBBobMcpFHP/dOMoar7FBJbPNUapLl1qGSzRL6kTP7p
-   027z7HDdWuPg1ryqkKdTkEsTKeEMb+QcwNmyUya7I1OUltdj3rlcuHBO0
-   sQcuT7+eUt3rWoQWxF/pP6ILEyOEXqaeZflEhg4SRJo5/2tBj65ov+3nn
-   dfuvv41fiFl333yWZHQyPreahfaDd01sbZrjzS3OMYntPDXVfnEw78wgE
-   YM4fdNy6dS04bRhpqpq/ivQLQvRbqGYg+67i20dj4PfkKJwa8dTsTrYn9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="434357145"
-X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
-   d="scan'208";a="434357145"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 10:48:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="816775144"
-X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
-   d="scan'208";a="816775144"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Jul 2023 10:48:17 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qOic4-00019n-2i;
-        Wed, 26 Jul 2023 17:48:01 +0000
-Date:   Thu, 27 Jul 2023 01:47:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [linux-next:master] BUILD REGRESSION
- 0ba5d07205771c50789fd9063950aa75e7f1183f
-Message-ID: <202307270140.uClzsYnD-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229437AbjGZSPY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 14:15:24 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B02E78;
+        Wed, 26 Jul 2023 11:15:24 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1bb69c0070dso139391fac.1;
+        Wed, 26 Jul 2023 11:15:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690395323; x=1691000123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PxLo+ssfIcGr82bGMB16DLkdE3iFP1HlTtobqG8HjjU=;
+        b=eLu2z0gBr3mJOhjjzDoDpgkGId/gi2rUTa6jkEoaH3BP4E+Qp6ZYw1RlD/08ntX89m
+         TklHZdrOzLzpMkwz4QwfDTGwGlfK+rHbpODZb2pCBcdpQvb/ZO3TeXcRhdRjyoG2hUru
+         +IggZU2z2wZa3AHo8kXsmsZ9Y9fT4P4RY190xr10GunQJKThLD16zFHCt++OKqwm9Zbl
+         T2CH4zTLDOWt/UlzM+F8XW8+m0DERDrHLl84VQD5i0S1F2Db86I1i/ABih4wQkyUNNiQ
+         VSTCg8cNDXARkRVeu+NuEhnmXm7wUkcgtPXNNLR/4u+a3AAuB8SMbqKqhaBODwJ9rUew
+         pKDg==
+X-Gm-Message-State: ABy/qLZ0cy42fNxRTMnivOgD5F49NtdMIIqDJK7VyzrADJJyf+ybukv8
+        nlPK+RkDL24hwqrDCTcd6upjgdfeFma5PQ==
+X-Google-Smtp-Source: APBJJlENQxxy9+hEQrtwV3ftQDOXryfK++Uc5gK5IcooB0jhaKarnClg9nIJJ0rlI/G+hi+UBbbtCA==
+X-Received: by 2002:a05:6870:8197:b0:1bb:6c17:2715 with SMTP id k23-20020a056870819700b001bb6c172715mr340020oae.2.1690395323260;
+        Wed, 26 Jul 2023 11:15:23 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id h185-20020a0ddec2000000b0057399b3bd26sm4302115ywe.33.2023.07.26.11.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jul 2023 11:15:22 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-d07c535377fso64793276.1;
+        Wed, 26 Jul 2023 11:15:22 -0700 (PDT)
+X-Received: by 2002:a25:8046:0:b0:cee:a470:89dc with SMTP id
+ a6-20020a258046000000b00ceea47089dcmr2430924ybn.52.1690395322627; Wed, 26 Jul
+ 2023 11:15:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230714174028.4040093-1-robh@kernel.org>
+In-Reply-To: <20230714174028.4040093-1-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 Jul 2023 20:15:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXdqo-OFKtHdVNu77-cuS67Cvb6NV98eYK+gtba7ir5jA@mail.gmail.com>
+Message-ID: <CAMuHMdXdqo-OFKtHdVNu77-cuS67Cvb6NV98eYK+gtba7ir5jA@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Explicitly include correct DT includes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 0ba5d07205771c50789fd9063950aa75e7f1183f  Add linux-next specific files for 20230726
+Hi Rob,
 
-Error/Warning reports:
+On Fri, Jul 14, 2023 at 7:44 PM Rob Herring <robh@kernel.org> wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-https://lore.kernel.org/oe-kbuild-all/202307181450.sfbuvMf5-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202307251531.p8ZLFTMZ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202307262218.hpvyrXrf-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202307270116.Xf7g8Lne-lkp@intel.com
+Thanks for your patch, which is now commit 657c45b303f87d77 ("MIPS:
+Explicitly include correct DT includes") in next-20230726.
 
-Error/Warning: (recently discovered and may have been fixed)
+> --- a/arch/mips/lantiq/xway/gptu.c
+> +++ b/arch/mips/lantiq/xway/gptu.c
+> @@ -8,8 +8,8 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/ioport.h>
+>  #include <linux/init.h>
+> -#include <linux/of_platform.h>
+> -#include <linux/of_irq.h>
 
-../lib/gcc/loongarch64-linux/12.3.0/plugin/include/config/loongarch/loongarch-opts.h:31:10: fatal error: loongarch-def.h: No such file or directory
-arch/mips/lantiq/xway/gptu.c:140:13: error: implicit declaration of function 'of_irq_to_resource_table' [-Werror=implicit-function-declaration]
-drivers/gpio/gpio-ge.c:103:1: error: type defaults to 'int' in declaration of 'module_platform_driver_probe' [-Werror=implicit-int]
-drivers/gpio/gpio-ge.c:103:1: warning: data definition has no type or storage class
-drivers/gpio/gpio-ge.c:103:1: warning: parameter names (without types) in function declaration
-drivers/gpio/gpio-ge.c:53:41: warning: 'struct platform_device' declared inside parameter list will not be visible outside of this definition or declaration
-drivers/gpio/gpio-ge.c:59:32: error: invalid use of undefined type 'struct platform_device'
-drivers/gpio/gpio-ge.c:97:15: error: variable 'gef_gpio_driver' has initializer but incomplete type
-drivers/gpio/gpio-ge.c:97:31: error: storage size of 'gef_gpio_driver' isn't known
-drivers/gpio/gpio-ge.c:98:10: error: 'struct platform_driver' has no member named 'driver'
-drivers/gpio/gpio-ge.c:98:19: error: extra brace group at end of initializer
-drivers/gpio/gpio-ge.c:98:19: warning: excess elements in struct initializer
-drivers/regulator/max77857-regulator.c:312:16: error: initializer element is not a compile-time constant
-drivers/regulator/max77857-regulator.c:56:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
+Based on https://lore.kernel.org/all/202307270140.uClzsYnD-lkp@intel.com,
+I guess you need to keep of_irq.h for of_irq_to_resource_table()?
 
-Error/Warning ids grouped by kconfigs:
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+>
+>  #include <lantiq_soc.h>
+>  #include "../clk.h"
 
-gcc_recent_errors
-|-- loongarch-allmodconfig
-|   `-- lib-gcc-loongarch64-linux-..-plugin-include-config-loongarch-loongarch-opts.h:fatal-error:loongarch-def.h:No-such-file-or-directory
-|-- mips-xway_defconfig
-|   `-- arch-mips-lantiq-xway-gptu.c:error:implicit-declaration-of-function-of_irq_to_resource_table
-`-- powerpc-randconfig-r036-20230726
-    |-- drivers-gpio-gpio-ge.c:error:extra-brace-group-at-end-of-initializer
-    |-- drivers-gpio-gpio-ge.c:error:invalid-use-of-undefined-type-struct-platform_device
-    |-- drivers-gpio-gpio-ge.c:error:storage-size-of-gef_gpio_driver-isn-t-known
-    |-- drivers-gpio-gpio-ge.c:error:struct-platform_driver-has-no-member-named-driver
-    |-- drivers-gpio-gpio-ge.c:error:type-defaults-to-int-in-declaration-of-module_platform_driver_probe
-    |-- drivers-gpio-gpio-ge.c:error:variable-gef_gpio_driver-has-initializer-but-incomplete-type
-    |-- drivers-gpio-gpio-ge.c:warning:data-definition-has-no-type-or-storage-class
-    |-- drivers-gpio-gpio-ge.c:warning:excess-elements-in-struct-initializer
-    |-- drivers-gpio-gpio-ge.c:warning:parameter-names-(without-types)-in-function-declaration
-    `-- drivers-gpio-gpio-ge.c:warning:struct-platform_device-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-clang_recent_errors
-|-- mips-randconfig-r034-20230726
-|   `-- clang:error:unknown-argument:msym32
-|-- mips-randconfig-r035-20230726
-|   `-- clang:error:unknown-argument:msym32
-`-- x86_64-randconfig-r011-20230726
-    |-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
-    `-- drivers-regulator-max77857-regulator.c:warning:cast-to-smaller-integer-type-enum-max77857_id-from-void
+Gr{oetje,eeting}s,
 
-elapsed time: 724m
-
-configs tested: 114
-configs skipped: 4
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230726   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                  randconfig-r032-20230726   gcc  
-arc                  randconfig-r043-20230726   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r001-20230726   clang
-arm                  randconfig-r026-20230726   gcc  
-arm                  randconfig-r046-20230726   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r025-20230726   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r034-20230726   gcc  
-hexagon              randconfig-r003-20230726   clang
-hexagon              randconfig-r006-20230726   clang
-hexagon              randconfig-r016-20230726   clang
-hexagon              randconfig-r041-20230726   clang
-hexagon              randconfig-r045-20230726   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230726   gcc  
-i386         buildonly-randconfig-r005-20230726   gcc  
-i386         buildonly-randconfig-r006-20230726   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i003-20230726   gcc  
-i386                 randconfig-i004-20230726   gcc  
-i386                 randconfig-i011-20230726   clang
-i386                 randconfig-i012-20230726   clang
-i386                 randconfig-i013-20230726   clang
-i386                 randconfig-i014-20230726   clang
-i386                 randconfig-r004-20230726   gcc  
-i386                 randconfig-r031-20230726   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r033-20230726   gcc  
-loongarch            randconfig-r036-20230726   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                        bcm63xx_defconfig   clang
-mips                     cu1000-neo_defconfig   clang
-mips                 randconfig-r013-20230726   gcc  
-mips                 randconfig-r022-20230726   gcc  
-nios2                               defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                    gamecube_defconfig   clang
-powerpc                     mpc5200_defconfig   clang
-powerpc                 xes_mpc85xx_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r015-20230726   clang
-riscv                randconfig-r042-20230726   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230726   clang
-sh                               allmodconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                   randconfig-r024-20230726   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sh                           se7721_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r023-20230726   gcc  
-sparc                randconfig-r035-20230726   gcc  
-um                               alldefconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r012-20230726   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230726   gcc  
-x86_64       buildonly-randconfig-r002-20230726   gcc  
-x86_64       buildonly-randconfig-r003-20230726   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r011-20230726   clang
-x86_64               randconfig-x001-20230726   clang
-x86_64               randconfig-x002-20230726   clang
-x86_64               randconfig-x003-20230726   clang
-x86_64               randconfig-x004-20230726   clang
-x86_64               randconfig-x005-20230726   clang
-x86_64               randconfig-x011-20230726   gcc  
-x86_64               randconfig-x012-20230726   gcc  
-x86_64               randconfig-x013-20230726   gcc  
-x86_64               randconfig-x014-20230726   gcc  
-x86_64               randconfig-x015-20230726   gcc  
-x86_64               randconfig-x016-20230726   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa               randconfig-r005-20230726   gcc  
+                        Geert
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
