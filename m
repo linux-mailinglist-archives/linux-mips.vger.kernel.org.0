@@ -2,51 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF3176435C
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jul 2023 03:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96DE76444F
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jul 2023 05:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjG0BUv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jul 2023 21:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        id S231404AbjG0D1f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jul 2023 23:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjG0BUu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 21:20:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8193CA3;
-        Wed, 26 Jul 2023 18:20:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1788461CE6;
-        Thu, 27 Jul 2023 01:20:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 228DBC433C7;
-        Thu, 27 Jul 2023 01:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690420848;
-        bh=V9RQoD3GdgkmyIdiyKx+50kQLweqOpaZwUHyRYOloZY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BdGNu3ARrlkaP+iMKnBbg9T35KACQM8jWbXvYxYUIIgBsFQPmId9Zp6Kd6o1kwJ5l
-         SKR9vFtLwl0a6D+F4keqHMC8CzRJS4OSUntkVeSzfkcFpB/nS4iUaHBr9ojIo7l0HX
-         8tAxK8BeUkhgTYDGBNlGu0sU8CT5PpgEoTkpd8ttSCKjJQcqJx5BNe+9Pa/kvrusj/
-         5TNk6fABzlqREDmOXZKDiBMF5s8OkSEx/pU5jlkymLzZoosWJsBdq2JUvq6hLu7PjL
-         1E80LPJj5fbF649KVF2ON+sY7G08/VJsy9KrrGyleHOHrY8UHyDaoFdh7AB97PLHVA
-         tANd7ik+nlraQ==
-Received: (nullmailer pid 3934187 invoked by uid 1000);
-        Thu, 27 Jul 2023 01:20:46 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: More explicit DT include clean-ups
-Date:   Wed, 26 Jul 2023 19:20:39 -0600
-Message-Id: <20230727012040.3934021-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S231334AbjG0D1c (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jul 2023 23:27:32 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F5270D;
+        Wed, 26 Jul 2023 20:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690428447; x=1721964447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zZw7shzyeqWcwUz/3pXk4wTr0ManqzTTZSighI1zgHU=;
+  b=aTYPRcRqpH42utWO6lEysW9MF2mhE0PVstZMMcn0HUI2O9AC7eTyZ8rK
+   Ky59kZRXpvy+eOy5JtvaZgAgmhJ9R0dGcj+0HxoKa8mrP+SXFTBLu/j9q
+   uGdbEUb/jQuSTobf0x6nXGl+sPotAWatAWqSqf3nZhs+MKgT/I00/vmbu
+   WbVgxD3rGhr0AkrMf0qYdwPJbJKqtucPAMGxBKXvJP6uczAD951hSf7YC
+   xVOsSUfcn8YD0jH3BUL+j2niY8c3AVoxlhR8bjL/vDPNpRy2whaq5vlv4
+   XA0GpLdRuJQaRluDS0vDpc0FB1YKFabqtcPSlCwlr+1zmfMY3086Eaa1B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="347799001"
+X-IronPort-AV: E=Sophos;i="6.01,233,1684825200"; 
+   d="scan'208";a="347799001"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 20:26:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="870179046"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Jul 2023 20:26:15 -0700
+Date:   Thu, 27 Jul 2023 11:24:22 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [RFC PATCH v11 08/29] KVM: Introduce per-page memory attributes
+Message-ID: <ZMHjZvcmzxMhTyM3@yilunxu-OptiPlex-7050>
+References: <20230718234512.1690985-1-seanjc@google.com>
+ <20230718234512.1690985-9-seanjc@google.com>
+ <ZL4BiQWihfrD0TOJ@yilunxu-OptiPlex-7050>
+ <ZMFC+V6Llv1JWLEt@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZMFC+V6Llv1JWLEt@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,72 +94,15 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A couple more clean-ups in the MIPS code.
+On 2023-07-26 at 08:59:53 -0700, Sean Christopherson wrote:
+> On Mon, Jul 24, 2023, Xu Yilun wrote:
+> > On 2023-07-18 at 16:44:51 -0700, Sean Christopherson wrote:
+> > > +	if (WARN_ON_ONCE(start == end))
+> > > +		return -EINVAL;
+> > 
+> > Also, is this check possible to be hit? Maybe remove it?
+> 
+> It should be impossible to, hence the WARN.  I added the check for two reasons:
+> (1) to help document that end is exclusive, and (2) to guard against future bugs.
 
-The DT of_device.h and of_platform.h date back to the separate
-of_platform_bus_type before it was merged into the regular platform bus.
-As part of that merge prepping Arm DT support 13 years ago, they
-"temporarily" include each other. They also include platform_device.h
-and of.h. As a result, there's a pretty much random mix of those include
-files used throughout the tree. In order to detangle these headers and
-replace the implicit includes with struct declarations, users need to
-explicitly include the correct includes.
-
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-I've now built all MIPS defconfigs in my tree which removes the implicit
-includes. So I found a few more fixes. This can be squashed into the
-previous commit if desired.
----
- arch/mips/cavium-octeon/octeon-platform.c | 2 ++
- arch/mips/cavium-octeon/octeon-usb.c      | 2 ++
- arch/mips/ralink/ill_acc.c                | 2 ++
- 3 files changed, 6 insertions(+)
-
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index ce05c0dd3acd..60da1b2091f5 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -8,8 +8,10 @@
-  */
- 
- #include <linux/etherdevice.h>
-+#include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/of_fdt.h>
-+#include <linux/platform_device.h>
- #include <linux/libfdt.h>
- 
- #include <asm/octeon/octeon.h>
-diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
-index 2add435ad038..add0f23592b3 100644
---- a/arch/mips/cavium-octeon/octeon-usb.c
-+++ b/arch/mips/cavium-octeon/octeon-usb.c
-@@ -15,7 +15,9 @@
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/of.h>
- #include <linux/of_platform.h>
-+#include <linux/platform_device.h>
- 
- /*
-  * USB Control Register
-diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
-index f395ae218470..25341b2319d0 100644
---- a/arch/mips/ralink/ill_acc.c
-+++ b/arch/mips/ralink/ill_acc.c
-@@ -5,8 +5,10 @@
-  */
- 
- #include <linux/interrupt.h>
-+#include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/of_irq.h>
-+#include <linux/platform_device.h>
- 
- #include <asm/mach-ralink/ralink_regs.h>
- 
--- 
-2.40.1
-
+Understood. I'm good to it.
