@@ -2,64 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF4976715E
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jul 2023 18:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDA77671A5
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jul 2023 18:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbjG1QCw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Jul 2023 12:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S230263AbjG1QOX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Jul 2023 12:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbjG1QCu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Jul 2023 12:02:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B772F3;
-        Fri, 28 Jul 2023 09:02:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9DB191F854;
-        Fri, 28 Jul 2023 16:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1690560167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        with ESMTP id S229752AbjG1QOS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Jul 2023 12:14:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41FF30DA
+        for <linux-mips@vger.kernel.org>; Fri, 28 Jul 2023 09:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690560812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CvY0+v4nvg0O0BVEhEc8BmZfYzpPNCFFCMaJmCODeHg=;
-        b=LuP/9ao2mrKjhPvKezWW1/W17SEYJs2q92vl0M2JCYXcddXuljTTEbIYow9womJUw6LJrg
-        qzowp5BeJWVnf+lzn5JU5UBXET439G9aZl2Cej4L8DEUkkS2Xabj9scGTntFuX4nFsk5BK
-        jGFVo1NW+KmbJNwVJQIyJlgnQrU5Tm8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1690560167;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CvY0+v4nvg0O0BVEhEc8BmZfYzpPNCFFCMaJmCODeHg=;
-        b=PJkmStLEQ4tX3u5n/JqYexTLZ62i3tFelBIXmZgBwUht8ehxcz9TNcF+IDGXx4zqKelWMj
-        1J0IPH/P9l/ZmiCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0504113276;
-        Fri, 28 Jul 2023 16:02:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vp1JAKfmw2ReUwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 28 Jul 2023 16:02:47 +0000
-Message-ID: <692b09f7-70d9-1119-7fe2-3e7396ec259d@suse.cz>
-Date:   Fri, 28 Jul 2023 18:02:46 +0200
+        bh=1Dyh7+qatvQDKM5qDRHq8YkO5TCQeLww3uN1vYmzEUU=;
+        b=EzFo3gQj5XQ/9hIaortrhTD4LYBvIArNQeuoEUMjFSmK9OVj9+r5R7l037EK/2lLnNq90Z
+        iCl5HGQAazJ5SxihMyCGgtE/1fNg8e8aP6nCISlzVK2BY7YZYcv/jQY5OtVem140TIuwGZ
+        xjSysc4LiYaO9KBdfIkJceHnTkWpOxw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-534-fmSxBUKRPjSDxCaBf58AOg-1; Fri, 28 Jul 2023 12:13:30 -0400
+X-MC-Unique: fmSxBUKRPjSDxCaBf58AOg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a355cf318so136858266b.2
+        for <linux-mips@vger.kernel.org>; Fri, 28 Jul 2023 09:13:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690560809; x=1691165609;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Dyh7+qatvQDKM5qDRHq8YkO5TCQeLww3uN1vYmzEUU=;
+        b=HnAiw26bHvzRfTL/UlaPagGu/GychDGi4UKPSRXIu4WZbnZ9O20KBRyVhnwTBkQSmI
+         C99K6/KabhfqKbtH15UECdX8ZPjpohU7sBmZHwPetVfzaArvzT/XucALq4cn4NDvrSrJ
+         eN34P2xdBwFAqN+mUc7pTg4PfXpOnRcOnjCtHqC7R4fD6vGMIRzGyHFPAZme6dLDpklO
+         rl1/8NgDS3MxPc52I/CGaaPWnEExnYvf0R3VllTRzKK8wqrEQsaVXA1V8kpK+AeXtgrB
+         dVtAXzojIqKrCkP9TrpGQqD/eOdPxsAYaSSKHFZx4qAf8MQEVP5wVygnu2isZ52Quenw
+         y3zg==
+X-Gm-Message-State: ABy/qLbv/5KmIkrNekamzVJBxLrJJqY9hK+Qs6rOrDSZ+w2UCOVGlZJN
+        LURkqh69/6TA5QyjYSaJ+Qcj0mu2bA9yVpW1ZLg9O0tMzCm0yu0a09S7T+YoDtdI9VrMFrTD1Xq
+        v7dtyIl0DiAa6H2lUTMt22Q==
+X-Received: by 2002:a17:906:5354:b0:99b:efd3:3dcc with SMTP id j20-20020a170906535400b0099befd33dccmr1357367ejo.62.1690560809632;
+        Fri, 28 Jul 2023 09:13:29 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHd2sX/AyGtIAscRR2p4pTksaGOsuCTBRQ37WpaEGChaEB1fcJtjozFJjrwhV4jFSHGD+pttg==
+X-Received: by 2002:a17:906:5354:b0:99b:efd3:3dcc with SMTP id j20-20020a170906535400b0099befd33dccmr1357325ejo.62.1690560809219;
+        Fri, 28 Jul 2023 09:13:29 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id gy26-20020a170906f25a00b00993470682e5sm2197928ejb.32.2023.07.28.09.13.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 09:13:28 -0700 (PDT)
+Message-ID: <6da710cf-2bc0-bb6e-26f1-fba14ca767db@redhat.com>
+Date:   Fri, 28 Jul 2023 18:13:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Subject: Re: [RFC PATCH v11 10/29] mm: Add AS_UNMOVABLE to mark mapping as
  completely unmovable
 Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -95,76 +102,33 @@ References: <20230718234512.1690985-1-seanjc@google.com>
  <20230718234512.1690985-11-seanjc@google.com>
  <20230725102403.xywjqlhyqkrzjok6@box.shutemov.name>
  <ZL/Fa4W2Ne9EVxoh@casper.infradead.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <ZL/Fa4W2Ne9EVxoh@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
+ <692b09f7-70d9-1119-7fe2-3e7396ec259d@suse.cz>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <692b09f7-70d9-1119-7fe2-3e7396ec259d@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/25/23 14:51, Matthew Wilcox wrote:
-> On Tue, Jul 25, 2023 at 01:24:03PM +0300, Kirill A . Shutemov wrote:
->> On Tue, Jul 18, 2023 at 04:44:53PM -0700, Sean Christopherson wrote:
->> > diff --git a/mm/compaction.c b/mm/compaction.c
->> > index dbc9f86b1934..a3d2b132df52 100644
->> > --- a/mm/compaction.c
->> > +++ b/mm/compaction.c
->> > @@ -1047,6 +1047,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->> >  		if (!mapping && (folio_ref_count(folio) - 1) > folio_mapcount(folio))
->> >  			goto isolate_fail_put;
->> >  
->> > +		/* The mapping truly isn't movable. */
->> > +		if (mapping && mapping_unmovable(mapping))
->> > +			goto isolate_fail_put;
->> > +
->> 
->> I doubt that it is safe to dereference mapping here. I believe the folio
->> can be truncated from under us and the mapping freed with the inode.
->> 
->> The folio has to be locked to dereference mapping safely (given that the
->> mapping is still tied to the folio).
+On 7/28/23 18:02, Vlastimil Babka wrote:
+>> There's even a comment to that effect later on in the function:
+> Hmm, well spotted. But it wouldn't be so great if we now had to lock every
+> inspected page (and not just dirty pages), just to check the AS_ bit.
 > 
-> There's even a comment to that effect later on in the function:
+> But I wonder if this is leftover from previous versions. Are the guest pages
+> even PageLRU currently? (and should they be, given how they can't be swapped
+> out or anything?) If not, isolate_migratepages_block will skip them anyway.
 
-Hmm, well spotted. But it wouldn't be so great if we now had to lock every
-inspected page (and not just dirty pages), just to check the AS_ bit.
+No, they're not (migration or even swap-out is not excluded for the 
+future, but for now it's left for future work.
 
-But I wonder if this is leftover from previous versions. Are the guest pages
-even PageLRU currently? (and should they be, given how they can't be swapped
-out or anything?) If not, isolate_migratepages_block will skip them anyway.
-
-> 
->                         /*
->                          * Only pages without mappings or that have a
->                          * ->migrate_folio callback are possible to migrate
->                          * without blocking. However, we can be racing with
->                          * truncation so it's necessary to lock the page
->                          * to stabilise the mapping as truncation holds
->                          * the page lock until after the page is removed
->                          * from the page cache.
->                          */
-> 
-> (that could be reworded to make it clear how dangerous dereferencing
-> ->mapping is without the lock ... and it does need to be changed to say
-> "folio lock" instead of "page lock", so ...)
-
-> How does this look?
-> 
->                         /*
->                          * Only folios without mappings or that have
->                          * a ->migrate_folio callback are possible to
->                          * migrate without blocking. However, we can
->                          * be racing with truncation, which can free
->                          * the mapping.  Truncation holds the folio lock
->                          * until after the folio is removed from the page
->                          * cache so holding it ourselves is sufficient.
->                          */
-> 
+Paolo
 
