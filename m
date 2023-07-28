@@ -2,284 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DA876730C
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jul 2023 19:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C26767371
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jul 2023 19:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbjG1ROU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Jul 2023 13:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S231135AbjG1Rd4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Jul 2023 13:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjG1ROT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Jul 2023 13:14:19 -0400
-Received: from mgamail.intel.com (unknown [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CF3B5;
-        Fri, 28 Jul 2023 10:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690564457; x=1722100457;
-  h=date:from:to:cc:subject:message-id;
-  bh=nF418KO0FrhcHWBDH52oJFW0CnzkDBRE/wBxARisCIk=;
-  b=WsE/tBNyWfBi0y4wlG6QA+PdvZc2eGVZx1B8iCEYqjyYSIsiM13drkdV
-   eoLHGmjW32VYSDaAty09ePoUwDVFbyVXrlcEgjLc8/mkTNp1gL9aPa8/L
-   RI8uz+JlW5wiiA3/1jVZ77SKZqlan6oojADGrTdOO/Bd97iIqHPgcflOn
-   cqPBFBRy0OC85Bf+mV/6FqwkHZVf9C/UTxTnweEvVYF8qvDOq4F/4rSei
-   TDl/6TA81JF3EOT6Kj8TKVgie28ycwVtmW8ls7wVZjbjwume7OlZjFjel
-   Lr1YXxvXDh6C2g14TbfGrVsv/qKpvcLp0fGtF9JliqpX19DdLMKcsF5Ja
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="358669363"
-X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="358669363"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:14:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="704635498"
-X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="704635498"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2023 10:14:15 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qPR2c-0003Pt-1K;
-        Fri, 28 Jul 2023 17:14:14 +0000
-Date:   Sat, 29 Jul 2023 01:12:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [linux-next:master] BUILD REGRESSION
- d7b3af5a77e8d8da28f435f313e069aea5bcf172
-Message-ID: <202307290139.PZruTTA2-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229457AbjG1Rdz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Jul 2023 13:33:55 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1F235B6
+        for <linux-mips@vger.kernel.org>; Fri, 28 Jul 2023 10:33:52 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-686d8c8fc65so1812876b3a.0
+        for <linux-mips@vger.kernel.org>; Fri, 28 Jul 2023 10:33:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1690565631; x=1691170431;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdB2tXtECQHYxgd5h3kOHP1qvGwkeIRIEkIOEjEDFEw=;
+        b=C6gwuAycdBuubX8rUIi8IBkInWsXAwGLFK1SyITQ2SLGxKzVfMNyTZG2OqSKanxXlI
+         nhsH2W2pUkc7wmN7kbKAhxTCoyr3fgT+DiiEXkZS1MyAM3GH58fCLidlb5j3cmy+ClU7
+         BeFmJpMBE5xCYE4+4XJT7yUeQpkblBGm8efmc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690565631; x=1691170431;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdB2tXtECQHYxgd5h3kOHP1qvGwkeIRIEkIOEjEDFEw=;
+        b=gkSeAbYA2SCJKWCfB5W55MexE9SB4J4VBswwMUnuOcVxRNNIF2mvxEpO57VDc843ZW
+         90URa8HOpBA/i4LjxptHkNhcbgq16lhx+qpd4p3vhhC07aVAxjV6ovlbQXwhjYilkdh2
+         FEZ/UHThnES4HUNJsnYAsmItFoEeTeW6Z85O7DZ8tmXjELn/M3wjLalCcJhYDWn1hCwi
+         ULXcqN+L/QkBTjKAwXo2rQTBASpL+tS3mZxQij0PP1c8cuv4H/TQeY/QKZ1WRy0rkgz/
+         DoopQBZaNePQMWf83mjLOyMjztueczmubAQ5/qZcC5F+ddI09IUpjUN6vj504BHI6pNg
+         CUfw==
+X-Gm-Message-State: ABy/qLZ0TlVTSJ3a/dmNf2JKSbaUHF8MvyMjGc/Y9ylFk2b5hkh9muig
+        3mrkM0PcZMCw2B0m0gHotGUpRw==
+X-Google-Smtp-Source: APBJJlHv1uNtdrVcOy+GGsKewLBacA99b4rXp5b+nbmLuB0HuPjUlJVcBb30OCKRfBS7IQobV0p1FA==
+X-Received: by 2002:a05:6a20:2447:b0:133:bc8:e362 with SMTP id t7-20020a056a20244700b001330bc8e362mr2233485pzc.24.1690565631563;
+        Fri, 28 Jul 2023 10:33:51 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id w28-20020a63af1c000000b0055b3af821d5sm3687673pge.25.2023.07.28.10.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jul 2023 10:33:51 -0700 (PDT)
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Philippe =?iso-8859-1?q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] soc: bcm: Explicitly include correct DT includes
+Date:   Fri, 28 Jul 2023 10:33:49 -0700
+Message-Id: <20230728173349.725306-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230726233130.3811017-1-robh@kernel.org>
+References: <20230726233130.3811017-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000f5ec4406018f7b50"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: d7b3af5a77e8d8da28f435f313e069aea5bcf172  Add linux-next specific files for 20230728
+--000000000000f5ec4406018f7b50
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Error/Warning reports:
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-https://lore.kernel.org/oe-kbuild-all/202307080722.PsQUe5E5-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202307181450.sfbuvMf5-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202307251531.p8ZLFTMZ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202307281617.OxcXz84j-lkp@intel.com
+On Wed, 26 Jul 2023 17:31:29 -0600, Rob Herring <robh@kernel.org> wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it was merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+> 
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Error/Warning: (recently discovered and may have been fixed)
+Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
+--
+Florian
 
-../lib/gcc/loongarch64-linux/12.3.0/plugin/include/config/loongarch/loongarch-opts.h:31:10: fatal error: loongarch-def.h: No such file or directory
-arch/mips/pic32/pic32mzda/config.c:22:24: error: a parameter list without types is only allowed in a function definition
-arch/mips/pic32/pic32mzda/config.c:22:8: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-arch/mips/pic32/pic32mzda/config.c:41:21: error: use of undeclared identifier 'config_lock'
-arch/mips/pic32/pic32mzda/config.c:41:2: error: call to undeclared function 'spin_lock_irqsave'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-arch/mips/pic32/pic32mzda/config.c:46:2: error: call to undeclared function 'spin_unlock_irqrestore'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-arch/powerpc/mm/init_64.c:201:15: error: no previous prototype for function '__vmemmap_populate' [-Werror,-Wmissing-prototypes]
-drivers/regulator/max77857-regulator.c:312:16: error: initializer element is not a compile-time constant
-include/asm-generic/io.h:1111:20: error: static declaration of 'ioport_map' follows non-static declaration
-include/asm-generic/io.h:1121:22: error: static declaration of 'ioport_unmap' follows non-static declaration
-include/asm-generic/io.h:636:15: error: redefinition of 'inb_p'
-include/asm-generic/io.h:644:15: error: redefinition of 'inw_p'
-include/asm-generic/io.h:652:15: error: redefinition of 'inl_p'
-include/asm-generic/io.h:660:16: error: redefinition of 'outb_p'
-include/asm-generic/io.h:668:16: error: redefinition of 'outw_p'
-include/asm-generic/io.h:676:16: error: redefinition of 'outl_p'
-include/asm-generic/io.h:689:14: error: redefinition of 'insb'
-include/asm-generic/io.h:697:14: error: redefinition of 'insw'
-include/asm-generic/io.h:705:14: error: redefinition of 'insl'
-include/asm-generic/io.h:713:15: error: redefinition of 'outsb'
-include/asm-generic/io.h:722:15: error: redefinition of 'outsw'
-include/asm-generic/io.h:731:15: error: redefinition of 'outsl'
+--000000000000f5ec4406018f7b50
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
-{standard input}: Warning: end of file not at end of a line; newline inserted
-{standard input}:1095: Error: pcrel too far
-{standard input}:1482: Warning: end of file not at end of a line; newline inserted
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- loongarch-allmodconfig
-|   `-- lib-gcc-loongarch64-linux-..-plugin-include-config-loongarch-loongarch-opts.h:fatal-error:loongarch-def.h:No-such-file-or-directory
-|-- sh-allmodconfig
-|   |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-|   |-- standard-input:Error:pcrel-too-far
-|   `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-|-- sh-randconfig-m031-20230727
-|   |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
-|   `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
-`-- sh-se7712_defconfig
-    |-- include-asm-generic-io.h:error:redefinition-of-inb_p
-    |-- include-asm-generic-io.h:error:redefinition-of-inl_p
-    |-- include-asm-generic-io.h:error:redefinition-of-insb
-    |-- include-asm-generic-io.h:error:redefinition-of-insl
-    |-- include-asm-generic-io.h:error:redefinition-of-insw
-    |-- include-asm-generic-io.h:error:redefinition-of-inw_p
-    |-- include-asm-generic-io.h:error:redefinition-of-outb_p
-    |-- include-asm-generic-io.h:error:redefinition-of-outl_p
-    |-- include-asm-generic-io.h:error:redefinition-of-outsb
-    |-- include-asm-generic-io.h:error:redefinition-of-outsl
-    |-- include-asm-generic-io.h:error:redefinition-of-outsw
-    |-- include-asm-generic-io.h:error:redefinition-of-outw_p
-    |-- include-asm-generic-io.h:error:static-declaration-of-ioport_map-follows-non-static-declaration
-    `-- include-asm-generic-io.h:error:static-declaration-of-ioport_unmap-follows-non-static-declaration
-clang_recent_errors
-|-- i386-buildonly-randconfig-r006-20230727
-|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
-|-- i386-randconfig-i006-20230727
-|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
-|-- mips-pic32mzda_defconfig
-|   |-- arch-mips-pic32-pic32mzda-config.c:error:a-parameter-list-without-types-is-only-allowed-in-a-function-definition
-|   |-- arch-mips-pic32-pic32mzda-config.c:error:call-to-undeclared-function-spin_lock_irqsave-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- arch-mips-pic32-pic32mzda-config.c:error:call-to-undeclared-function-spin_unlock_irqrestore-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- arch-mips-pic32-pic32mzda-config.c:error:type-specifier-missing-defaults-to-int-ISO-C99-and-later-do-not-support-implicit-int
-|   `-- arch-mips-pic32-pic32mzda-config.c:error:use-of-undeclared-identifier-config_lock
-|-- mips-randconfig-r023-20230727
-|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
-`-- powerpc-ppc64e_defconfig
-    `-- arch-powerpc-mm-init_64.c:error:no-previous-prototype-for-function-__vmemmap_populate-Werror-Wmissing-prototypes
-
-elapsed time: 728m
-
-configs tested: 126
-configs skipped: 6
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r016-20230727   gcc  
-arc                  randconfig-r026-20230727   gcc  
-arc                  randconfig-r043-20230728   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         at91_dt_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          pxa3xx_defconfig   gcc  
-arm                  randconfig-r022-20230727   clang
-arm                  randconfig-r046-20230728   gcc  
-arm                        shmobile_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230728   clang
-hexagon              randconfig-r045-20230728   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230727   clang
-i386         buildonly-randconfig-r005-20230727   clang
-i386         buildonly-randconfig-r006-20230727   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230727   clang
-i386                 randconfig-i002-20230727   clang
-i386                 randconfig-i003-20230727   clang
-i386                 randconfig-i004-20230727   clang
-i386                 randconfig-i005-20230727   clang
-i386                 randconfig-i006-20230727   clang
-i386                 randconfig-i011-20230727   gcc  
-i386                 randconfig-i011-20230728   clang
-i386                 randconfig-i012-20230727   gcc  
-i386                 randconfig-i012-20230728   clang
-i386                 randconfig-i013-20230727   gcc  
-i386                 randconfig-i013-20230728   clang
-i386                 randconfig-i014-20230727   gcc  
-i386                 randconfig-i014-20230728   clang
-i386                 randconfig-i015-20230727   gcc  
-i386                 randconfig-i015-20230728   clang
-i386                 randconfig-i016-20230727   gcc  
-i386                 randconfig-i016-20230728   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r003-20230727   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r001-20230727   gcc  
-microblaze           randconfig-r012-20230727   gcc  
-microblaze           randconfig-r035-20230727   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                malta_qemu_32r6_defconfig   clang
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                 randconfig-r023-20230727   clang
-mips                           rs90_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r025-20230727   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                      ppc40x_defconfig   gcc  
-powerpc                      ppc64e_defconfig   clang
-powerpc              randconfig-r006-20230727   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230728   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r033-20230727   clang
-s390                 randconfig-r044-20230728   clang
-sh                               allmodconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                   randconfig-r005-20230727   gcc  
-sh                           se7712_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r004-20230727   gcc  
-sparc                randconfig-r013-20230727   gcc  
-sparc64                          alldefconfig   gcc  
-sparc64              randconfig-r014-20230727   gcc  
-sparc64              randconfig-r015-20230727   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r002-20230727   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230727   clang
-x86_64       buildonly-randconfig-r002-20230727   clang
-x86_64       buildonly-randconfig-r003-20230727   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r034-20230727   clang
-x86_64               randconfig-x001-20230727   gcc  
-x86_64               randconfig-x002-20230727   gcc  
-x86_64               randconfig-x003-20230727   gcc  
-x86_64               randconfig-x004-20230727   gcc  
-x86_64               randconfig-x005-20230727   gcc  
-x86_64               randconfig-x006-20230727   gcc  
-x86_64               randconfig-x011-20230728   gcc  
-x86_64               randconfig-x012-20230728   gcc  
-x86_64               randconfig-x013-20230728   gcc  
-x86_64               randconfig-x014-20230728   gcc  
-x86_64               randconfig-x015-20230728   gcc  
-x86_64               randconfig-x016-20230728   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r011-20230727   gcc  
-xtensa               randconfig-r021-20230727   gcc  
-xtensa               randconfig-r024-20230727   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIISFU/L7kMXpQTkc
+fDOa6BrQmQW32vAgnWq004ex+rPQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDcyODE3MzM1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCHyQ1V7szShK6Qq35/8QscenvWI+WHjiK5
+LLhW2+/Px59Ad6XbeeJl6uCUnRVAcHHRkrrFErG6rNy9w73iGcVGUb0tq/6u/VkXTIHDgoul8Ktc
+i17VzG76tlf5clymHsW/ClAs+mTkBQZMa8PyDk2TOi2XyevUlB47TkTPBl89KLeNnmDMynkpC8ZM
+bt/vSlF62GpmVEt55/vXNG9jVjRPYJ+SkOspoldM1dGyCbanU07kAJXhwe401qceI8arKLj/G27o
+x4MjB84brfc2yXotk0/0NRRzywQmvcJbLEjhffDrf4RNF9B3eFxYK2H4rAefl9oHiq3KY/9acRP7
+zTEM
+--000000000000f5ec4406018f7b50--
