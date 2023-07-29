@@ -2,54 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D73767FD7
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 15:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89FC767FF5
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 16:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjG2N6Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jul 2023 09:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S230270AbjG2OJR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jul 2023 10:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjG2N6Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 09:58:24 -0400
+        with ESMTP id S229987AbjG2OJR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 10:09:17 -0400
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FD01707;
-        Sat, 29 Jul 2023 06:58:22 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C6A241C0004;
-        Sat, 29 Jul 2023 13:58:15 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB0198C;
+        Sat, 29 Jul 2023 07:09:15 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5672A1C0004;
+        Sat, 29 Jul 2023 14:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
-        t=1690639101;
+        t=1690639754;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cOPjuFWRIoL4Z0Eeol5gO6QE7SM7OBiqVr5rmWDNiY0=;
-        b=EBG41HMYCfHzsxX3Lu9wjhkOhuazVRfwvQjx8aikqyaWwoErHMXsViXnbGoqg8Nond5/Ie
-        HFcvgQ+1rSLKe6Noru8SdP36Q08DwtfLx+vnxlUmQwTyyJPL/qs3ONncHX5t9vasJE0DoX
-        /eUthf9xVwmkfO/rLXQZWdtFLykvy0nRUlIhEylCGqp+qNxw+t3FQG17qIEomftqzei86U
-        nf9JFAW3gXQsm8cxVOQEkEImwkkNkMtC/LEaxEvx4UslsC1bvpwcAcgGqreWQFtlGkpm8B
-        phERC66B0NTICUCuh6LsJeHI82jprLe45uKr1PAdK/4+AvNSTuhPiGZt3sxqiQ==
-Message-ID: <cef11e4e-d96e-8cc8-045c-adcf006bdcf0@arinc9.com>
-Date:   Sat, 29 Jul 2023 16:58:10 +0300
+        bh=HJHI+2B39D3Or8mTHomyEAuJmjF+7v9ZD1s100wtrNs=;
+        b=mu1xBkyaTSueDQVaSjy1rYEeqE37mKfdczlOLICOFcLo0tQesrxldCAQqqbIMb2pmY9i6E
+        zOeQVJv6/3nXuHRuTiQWnr66Ru2+EBL4gQVJURj0OkIem35WOQYi24/SGCRahCFsJvGcP6
+        Q2iFTFRN0OIRgb7Um0Wa2SoSyV9kuAS02KdtCGpCk/s1sao3+8RLibve2Z2cy98EIiR+Ez
+        juFoKYeR96euKoVIYDHyoaa8JM9z+NsTSFICki24p+8Lv+JhjbL850hPSVSNPMXYy6/v+u
+        NHqNaxIRUg8w9JFBtWfld+gjyZMoSjBSXv8GJwXnoEvgI3TKTbhlCOxk9vOxkA==
+Message-ID: <96bdb44d-3c59-b6e7-7baa-0ab80efeb720@arinc9.com>
+Date:   Sat, 29 Jul 2023 17:08:55 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: MediaTek Frame Engine Ethernet: does it need any resets?
+Subject: Re: [PATCH] mips: dts: ralink: reorder MT7621 clocks in Ethernet
+ block
 Content-Language: en-US
 To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>
-References: <2a4da319-a78a-7cb1-6f18-f59180de779f@gmail.com>
+        <angelogioacchino.delregno@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230729110449.1357-1-zajec5@gmail.com>
 From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <2a4da319-a78a-7cb1-6f18-f59180de779f@gmail.com>
+In-Reply-To: <20230729110449.1357-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: arinc.unal@arinc9.com
@@ -63,63 +65,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 29.07.2023 14:45, Rafał Miłecki wrote:
-> Hi,
+On 29.07.2023 14:04, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> I'm trying to understand MediaTek's Ethernet controller resets.
+> Use order as specified in the binding (first "ethif" then "fe").
 > 
-> I noticed there is sth fishy when checking dts files. See following
-> errors:
+> This fixes:
+> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:0: 'ethif' was expected
+>          From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:1: 'fe' was expected
+>          From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
 > 
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: 
-> ethernet@1e100000: resets: [[2, 6], [2, 23]] is too short
->          From schema: 
-> Documentation/devicetree/bindings/net/mediatek,net.yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: 
-> ethernet@1e100000: reset-names:1: 'gmac' was expected
->          From schema: 
-> Documentation/devicetree/bindings/net/mediatek,net.yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: 
-> ethernet@1e100000: reset-names: ['fe', 'eth'] is too short
->          From schema: 
-> Documentation/devicetree/bindings/net/mediatek,net.yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: 
-> ethernet@1e100000: Unevaluated properties are not allowed 
-> ('reset-names', 'resets' were unexpected)
->          From schema: 
-> Documentation/devicetree/bindings/net/mediatek,net.yaml
+> Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-Sigh, looks like this patch was applied regardless of my points here. 
-Now we're here picking up the pieces.
-
-https://lore.kernel.org/netdev/b6c7462d-99fc-a8e1-1cc2-d0a1efc7c34d@arinc9.com/
-
-> 
-> 
-> 1. Binding mediatek,net.yaml
-> It says that when present, there must be 3 resets: fe, gmac, ppe
-> 
-> 2. mt7621.dtsi
-> It specifies 2 resets: fe, eth
-> 
-> 3. mt7622.dtsi
-> It doesn't specify any resets
-> 
-> 4. mt7629.dtsi
-> It doesn't specify any resets
-> 
-> 5. drivers/net/ethernet/mediatek/
-> I don't see any reset_control_* code at all
-> 
-> 
-> Can someone help me what's the actual case with resets? Are they needed?
-> Are they used?
-
-I'm adding Sergio to CC as they've been the one working on this on 
-mt7621.dtsi.
-
-There's relevant information here.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=64b2d6ffff862c0e7278198b4229e42e1abb3bb1
+I'm not sure if I should agree with this patch. The relevant parts of 
+the schema for mediatek,mt7621-eth were added way later than the 
+existing bindings on mt7621.dtsi. Why don't we address this on the 
+schema along with a bunch of other issues the patch for 
+mediatek,mt7621-eth brought?
 
 Arınç
