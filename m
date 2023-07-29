@@ -2,116 +2,163 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B22B767ECC
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 13:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA49A767F76
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 15:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjG2Lpp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jul 2023 07:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S230170AbjG2Nnk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jul 2023 09:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjG2Lpo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 07:45:44 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669D51A4;
-        Sat, 29 Jul 2023 04:45:43 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so5226793e87.1;
-        Sat, 29 Jul 2023 04:45:43 -0700 (PDT)
+        with ESMTP id S229459AbjG2Nnj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 09:43:39 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E033ECA;
+        Sat, 29 Jul 2023 06:43:38 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-686b9920362so2219415b3a.1;
+        Sat, 29 Jul 2023 06:43:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690631141; x=1691235941;
-        h=content-transfer-encoding:subject:cc:to:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JTdjEAe71b0Sk07G41NM9kDWo3D+urjxVcYP9X65Ar0=;
-        b=qWf/cMdNQbJBbhcE+oqfUd9x9O06ioP77uX9/y0QYHkY18AqbcIp8MYq8khu4qAOKF
-         DyDxL/clZ+NDPQ63i6KetnFhZLauDHI7l4+WWSZ12H+VrtRSYNky0yrjNXDgvxgPYV4k
-         SrXvyYXBiEA0iKnU0e34S3J/o1SVHQcuOnfs/OqdJeXBc3i4mjuh48nLu23PGbEyAoJQ
-         O8/80DDOt7KrkwVbrCpU7d6ZK3NzuXoGLGeAwO453xCGdIK6vuo9km5SQfMw0D0efPwS
-         qQ2vBjvYzr+IMe2shf4hCWOtW6lTWcCuOQz7m30SR0Bw8QoWqlTMQakwUD/56uczRQaO
-         oAaw==
+        d=gmail.com; s=20221208; t=1690638218; x=1691243018;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jbtLma1T2CR1OS6BhEpG9M60IGb1m30I8WL7RFprIGQ=;
+        b=SDcMg4mCE1YxrcJ94C4lEdIP87ty02Dnnl7hxvKP2R7H/WNzkQv57cWjHwWil4gute
+         BwLbmYqkwXZrAzQH15VPJ7ZCrK4W3MJLKVRv7mP1tUUYF2Chfye2wiwqJYw/tXYZ+W5b
+         8cMzFC8dddVWbb2nr9v3jIUbSkrmzL0XPvsGAyGQWK5mziIeq/jcjWvI0vOLCB9dZVRP
+         U4Xml5x63Hmb2stMKAaFwSS5ihu1CxfCVzOwmabRcd82cbf1hlig0jxtBwIM0CrcxJHR
+         u+IukWKRDgtLUO2XBvnv2kMF0j+c7jxMatI5cRslbhRGADaauRw0VFqK/QRsGX88lb0Y
+         2P/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690631141; x=1691235941;
-        h=content-transfer-encoding:subject:cc:to:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JTdjEAe71b0Sk07G41NM9kDWo3D+urjxVcYP9X65Ar0=;
-        b=GrGZPrFJEj9L+ItV2x7LCEfpJRfljKe70dOrMm6cqMw2bGtsNQHmNZCQeikAuyeD6e
-         RdjlRa2Ic+q/zO1rdvC+wLcopAMnVyGoJiqwZn1Z8w+ij3wM2KL2uz59QlIvbDlLUG/G
-         x2qDQNyMZbtQ7k5Gm9GBxbGbunISaO/fKCp7LmNizv1nBZ2VQfjGym1KO5Z4uAc6h+KR
-         4qvqPHN6JUU8u5dbKEOz7vu2I4SVo9ogS0TkFV0hFXYmVlS5wXy5XosMP0nccV81+Uix
-         nt8vP7Pv+mF2jlsJml5y1Z27q13p7ZReAdOxxja6ePsbZfPLtkXwHBsFSUYsBAd6r0Ms
-         qTAQ==
-X-Gm-Message-State: ABy/qLbU/qHksPpbBO2okBuvsJWltigXSxssoYG29ciMJqPZf/UQCYbV
-        AbLlG9AGSCCj9xRJWoTCYcQ=
-X-Google-Smtp-Source: APBJJlG5pD/pDB2nRa75Z5e/lowSCoQHTY9YWpEMCI2NangfuzIZVkFVC3q39LjL9P6fu9vW8zTH2A==
-X-Received: by 2002:ac2:5f48:0:b0:4fb:8938:48ab with SMTP id 8-20020ac25f48000000b004fb893848abmr1798657lfz.16.1690631141361;
-        Sat, 29 Jul 2023 04:45:41 -0700 (PDT)
-Received: from [192.168.26.149] (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.googlemail.com with ESMTPSA id q25-20020ac25299000000b004fbb1f7352csm1190079lfm.72.2023.07.29.04.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jul 2023 04:45:41 -0700 (PDT)
-Message-ID: <2a4da319-a78a-7cb1-6f18-f59180de779f@gmail.com>
-Date:   Sat, 29 Jul 2023 13:45:39 +0200
+        d=1e100.net; s=20221208; t=1690638218; x=1691243018;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jbtLma1T2CR1OS6BhEpG9M60IGb1m30I8WL7RFprIGQ=;
+        b=PabvFoF1FacVvi7m8lfwAolryr+NGq4/a8ig4OmRgUHjF+fwdQJZuI8OlQOPx4Al9W
+         hIWqHkChcZfBkg27eLI6IwFJEnoXt3LAshMZXR5aalQ9YEYsTJpuTnrpTDxDktefBD8s
+         TnTCIyJ0Lu5QQsrF8MghowilFy48/P3z9j4hCijGSOr7RQXXx4biowaijGPNo6y7EGcG
+         iv7BpUdLn6Gh6iNjqPhh0LdgEM5OXJkcGoOvBHJE9rp65mFKgxwt9//OJhWXQFoQvxTa
+         Qj+xAhpR1jwcEOTx4aLKM1H4iRmnTdiyh40a9ggJYmuribfqd/lBbqjSS2gpLsNx+AFV
+         7u3g==
+X-Gm-Message-State: ABy/qLbJ3+I+gLoRwONhaJXRbmEyYkAIDdKk1O2REnBSwXo3/IZbEtpF
+        9L2Eg7/BtDOBcR8A75Pb6HLcSqc10epyPw==
+X-Google-Smtp-Source: APBJJlHOk6K173rI5KQoDx5QpI80BdhSKlXCjh4y6P8Ri7NH5wyEMXzvPGaUbUzn5eGQp8UgycI0ig==
+X-Received: by 2002:a05:6a20:7da1:b0:134:16a3:83ad with SMTP id v33-20020a056a207da100b0013416a383admr4927585pzj.57.1690638217869;
+        Sat, 29 Jul 2023 06:43:37 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. ([38.114.108.131])
+        by smtp.gmail.com with ESMTPSA id x13-20020aa793ad000000b006871bea2eeesm1257166pff.34.2023.07.29.06.43.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jul 2023 06:43:37 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH 00/17] MIPS: loongson32: Convert all platform devices to DT
+Date:   Sat, 29 Jul 2023 21:43:01 +0800
+Message-Id: <20230729134318.1694467-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>
-Subject: MediaTek Frame Engine Ethernet: does it need any resets?
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Convert all platform devices to devicetree.
+Remove all the obsolete code of platform device.
+Adapt the common code to support devicetree.
+Update Kconfig and Makefile files accordingly.
+Update and rename the defconfig.
 
-I'm trying to understand MediaTek's Ethernet controller resets.
+Keguang Zhang (17):
+  MIPS: loongson32: Get the system type from DT
+  MIPS: Modify the Loongson1 PRID_REV
+  MIPS: dts: Add basic DT support for Loongson-1 boards
+  MIPS: loongson32: Modify Loongson-1B/1C related Kconfig options
+  MIPS: loongson32: Adapt the common code to support DT
+  MIPS: loongson32: Convert platform IRQ driver to DT
+  MIPS: loongson32: Convert UART platform device to DT
+  MIPS: loongson32: Convert Ethernet platform device to DT
+  MIPS: loongson32: Convert GPIO platform device to DT
+  MIPS: loongson32: Convert GPIO LED platform device to DT
+  MIPS: loongson32: Convert USB host platform device to DT
+  MIPS: loongson32: Convert RTC platform device to DT
+  MIPS: loongson32: Convert watchdog platform device to DT
+  mips: dts: loongson1b: Add PWM timer clocksource
+  MIPS: loongson32: Remove all the obsolete code of platform device
+  MIPS: configs: Update and rename loongson1b_defconfig
+  MIPS: configs: Update and rename loongson1c_defconfig
 
-I noticed there is sth fishy when checking dts files. See following
-errors:
+ arch/mips/Kconfig                             |  62 ++--
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/loongson/Makefile          |   3 +
+ arch/mips/boot/dts/loongson/loongson1.dtsi    | 161 ++++++++++
+ arch/mips/boot/dts/loongson/loongson1b.dtsi   | 201 ++++++++++++
+ arch/mips/boot/dts/loongson/loongson1c.dtsi   | 144 +++++++++
+ arch/mips/boot/dts/loongson/lsgz_1b_dev.dts   |  88 ++++++
+ arch/mips/boot/dts/loongson/smartloong_1c.dts |  84 +++++
+ ...gson1c_defconfig => lsgz_1b_dev_defconfig} |  71 ++++-
+ ...on1b_defconfig => smartloong_1c_defconfig} |  70 ++++-
+ arch/mips/include/asm/cpu-type.h              |   3 +-
+ arch/mips/include/asm/cpu.h                   |   3 +-
+ arch/mips/include/asm/mach-loongson32/dma.h   |  21 --
+ arch/mips/include/asm/mach-loongson32/irq.h   | 107 -------
+ .../include/asm/mach-loongson32/loongson1.h   |  50 ---
+ arch/mips/include/asm/mach-loongson32/nand.h  |  26 --
+ .../include/asm/mach-loongson32/platform.h    |  26 --
+ .../include/asm/mach-loongson32/regs-mux.h    | 124 --------
+ arch/mips/kernel/cpu-probe.c                  |   6 +-
+ arch/mips/loongson32/Kconfig                  |  41 +--
+ arch/mips/loongson32/Makefile                 |  14 +-
+ arch/mips/loongson32/common/Makefile          |   6 -
+ arch/mips/loongson32/common/irq.c             | 191 ------------
+ arch/mips/loongson32/common/platform.c        | 287 ------------------
+ arch/mips/loongson32/common/prom.c            |  42 ---
+ arch/mips/loongson32/common/setup.c           |  26 --
+ arch/mips/loongson32/common/time.c            |  23 --
+ arch/mips/loongson32/init.c                   |  83 +++++
+ arch/mips/loongson32/ls1b/Makefile            |   6 -
+ arch/mips/loongson32/ls1b/board.c             |  57 ----
+ arch/mips/loongson32/ls1c/Makefile            |   6 -
+ arch/mips/loongson32/ls1c/board.c             |  23 --
+ arch/mips/loongson32/proc.c                   |  20 ++
+ 33 files changed, 941 insertions(+), 1135 deletions(-)
+ create mode 100644 arch/mips/boot/dts/loongson/loongson1.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/loongson1b.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/loongson1c.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/lsgz_1b_dev.dts
+ create mode 100644 arch/mips/boot/dts/loongson/smartloong_1c.dts
+ rename arch/mips/configs/{loongson1c_defconfig => lsgz_1b_dev_defconfig} (59%)
+ rename arch/mips/configs/{loongson1b_defconfig => smartloong_1c_defconfig} (59%)
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/dma.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/irq.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/loongson1.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/nand.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/platform.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-mux.h
+ delete mode 100644 arch/mips/loongson32/common/Makefile
+ delete mode 100644 arch/mips/loongson32/common/irq.c
+ delete mode 100644 arch/mips/loongson32/common/platform.c
+ delete mode 100644 arch/mips/loongson32/common/prom.c
+ delete mode 100644 arch/mips/loongson32/common/setup.c
+ delete mode 100644 arch/mips/loongson32/common/time.c
+ create mode 100644 arch/mips/loongson32/init.c
+ delete mode 100644 arch/mips/loongson32/ls1b/Makefile
+ delete mode 100644 arch/mips/loongson32/ls1b/board.c
+ delete mode 100644 arch/mips/loongson32/ls1c/Makefile
+ delete mode 100644 arch/mips/loongson32/ls1c/board.c
+ create mode 100644 arch/mips/loongson32/proc.c
 
-arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: resets: [[2, 6], [2, 23]] is too short
-         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
-arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: reset-names:1: 'gmac' was expected
-         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
-arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: reset-names: ['fe', 'eth'] is too short
-         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
-arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: Unevaluated properties are not allowed ('reset-names', 'resets' were unexpected)
-         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
 
+base-commit: f11a9967413281b49690d864795e7c5f8f8e4fda
+-- 
+2.39.2
 
-1. Binding mediatek,net.yaml
-It says that when present, there must be 3 resets: fe, gmac, ppe
-
-2. mt7621.dtsi
-It specifies 2 resets: fe, eth
-
-3. mt7622.dtsi
-It doesn't specify any resets
-
-4. mt7629.dtsi
-It doesn't specify any resets
-
-5. drivers/net/ethernet/mediatek/
-I don't see any reset_control_* code at all
-
-
-Can someone help me what's the actual case with resets? Are they needed?
-Are they used?
