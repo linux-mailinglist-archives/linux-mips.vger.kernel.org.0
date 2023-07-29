@@ -2,74 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79DF767E6B
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 13:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B22B767ECC
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 13:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjG2LFB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jul 2023 07:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S229503AbjG2Lpp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jul 2023 07:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjG2LFB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 07:05:01 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11623AB9;
-        Sat, 29 Jul 2023 04:04:59 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b9338e4695so43545691fa.2;
-        Sat, 29 Jul 2023 04:04:59 -0700 (PDT)
+        with ESMTP id S229472AbjG2Lpo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 07:45:44 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669D51A4;
+        Sat, 29 Jul 2023 04:45:43 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so5226793e87.1;
+        Sat, 29 Jul 2023 04:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690628698; x=1691233498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ebeM2mGR4TMnC3Hsqfbcbfw6t45XlZ3ZN9tmUhCmp/4=;
-        b=YqlKluSjEj86SSIVP8nR4TGkwdMAClWe/imOTxoQAiw9js2nPW6HHe8DDDUFoPCFz1
-         SsdArHnaFoFWm+nMuu2SdFf3+phqw6AZIDSgc+/2ICmQ0cc7Iz8E7ayYQMLbkIMaCf71
-         8z9D83CdLluWAGJqq1gV71Ra7zBOVefgt+8zSK0LItSkKykRry/euEtbve0ZSVgj+wvz
-         vNE42Jr3eNABTHEGxZRseMFPpdfMwv/9FehB0BleHXOBtO5K4htAb4jw4vtKcW51ZBMF
-         6faHRP+klBQO2pEyPV67KYxpUMHAwPgwzV3IKpDI/BXPuQDHa1HeHJ8gsVhbUrbM8ZXZ
-         3tUQ==
+        d=gmail.com; s=20221208; t=1690631141; x=1691235941;
+        h=content-transfer-encoding:subject:cc:to:from:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JTdjEAe71b0Sk07G41NM9kDWo3D+urjxVcYP9X65Ar0=;
+        b=qWf/cMdNQbJBbhcE+oqfUd9x9O06ioP77uX9/y0QYHkY18AqbcIp8MYq8khu4qAOKF
+         DyDxL/clZ+NDPQ63i6KetnFhZLauDHI7l4+WWSZ12H+VrtRSYNky0yrjNXDgvxgPYV4k
+         SrXvyYXBiEA0iKnU0e34S3J/o1SVHQcuOnfs/OqdJeXBc3i4mjuh48nLu23PGbEyAoJQ
+         O8/80DDOt7KrkwVbrCpU7d6ZK3NzuXoGLGeAwO453xCGdIK6vuo9km5SQfMw0D0efPwS
+         qQ2vBjvYzr+IMe2shf4hCWOtW6lTWcCuOQz7m30SR0Bw8QoWqlTMQakwUD/56uczRQaO
+         oAaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690628698; x=1691233498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ebeM2mGR4TMnC3Hsqfbcbfw6t45XlZ3ZN9tmUhCmp/4=;
-        b=L1m/vtmzLoMKZyJyWi0qwAIIl1JgqUhbVE0GSGtRYSrWzIi0AftCXq8vU7kkhMmtpX
-         bcVA0qkjDMqXt/IzoGAAu3d7T2HXyjWGPObbBt5FpdQoZtu5TMdwhZ9NcZRUytXaBDj1
-         vs7HANQFpnngwo97gQ662obTWyUfrX0hKUVwE2x/JbN1P2h/iiYMbumSpqrj3ykwPYov
-         QfhDu+RSw8TGWxgBfwg+siFu9NUt+23CUHnCIs5/cum2pHequKp3X3omJuev80kTUzDR
-         9QY9aCeDzFoUEQoJvWmLyd/mZhNLQ5S23uphbuq3MQ7Sk/u3dk7zyjjsGXqHE2fadRHD
-         pcFA==
-X-Gm-Message-State: ABy/qLakifXFR8nslTOTykWsgFVCKDIijVP11ftwtWuYCd08TFTbIaFY
-        GZZkpODxkWIcwcz+nJd6SOQ=
-X-Google-Smtp-Source: APBJJlHNub5uJTMcqIiLRw0Io/ZV6tQGW8ogC+GOYzkIcNXpusJt/7q9LmBqiU3iW1LpLkV8BbgQMw==
-X-Received: by 2002:a2e:2c0e:0:b0:2b8:4026:1f54 with SMTP id s14-20020a2e2c0e000000b002b840261f54mr3344659ljs.49.1690628697874;
-        Sat, 29 Jul 2023 04:04:57 -0700 (PDT)
-Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id y9-20020a2e9789000000b002b9ae051ea1sm1438688lji.113.2023.07.29.04.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jul 2023 04:04:57 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1690631141; x=1691235941;
+        h=content-transfer-encoding:subject:cc:to:from:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JTdjEAe71b0Sk07G41NM9kDWo3D+urjxVcYP9X65Ar0=;
+        b=GrGZPrFJEj9L+ItV2x7LCEfpJRfljKe70dOrMm6cqMw2bGtsNQHmNZCQeikAuyeD6e
+         RdjlRa2Ic+q/zO1rdvC+wLcopAMnVyGoJiqwZn1Z8w+ij3wM2KL2uz59QlIvbDlLUG/G
+         x2qDQNyMZbtQ7k5Gm9GBxbGbunISaO/fKCp7LmNizv1nBZ2VQfjGym1KO5Z4uAc6h+KR
+         4qvqPHN6JUU8u5dbKEOz7vu2I4SVo9ogS0TkFV0hFXYmVlS5wXy5XosMP0nccV81+Uix
+         nt8vP7Pv+mF2jlsJml5y1Z27q13p7ZReAdOxxja6ePsbZfPLtkXwHBsFSUYsBAd6r0Ms
+         qTAQ==
+X-Gm-Message-State: ABy/qLbU/qHksPpbBO2okBuvsJWltigXSxssoYG29ciMJqPZf/UQCYbV
+        AbLlG9AGSCCj9xRJWoTCYcQ=
+X-Google-Smtp-Source: APBJJlG5pD/pDB2nRa75Z5e/lowSCoQHTY9YWpEMCI2NangfuzIZVkFVC3q39LjL9P6fu9vW8zTH2A==
+X-Received: by 2002:ac2:5f48:0:b0:4fb:8938:48ab with SMTP id 8-20020ac25f48000000b004fb893848abmr1798657lfz.16.1690631141361;
+        Sat, 29 Jul 2023 04:45:41 -0700 (PDT)
+Received: from [192.168.26.149] (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.googlemail.com with ESMTPSA id q25-20020ac25299000000b004fbb1f7352csm1190079lfm.72.2023.07.29.04.45.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Jul 2023 04:45:41 -0700 (PDT)
+Message-ID: <2a4da319-a78a-7cb1-6f18-f59180de779f@gmail.com>
+Date:   Sat, 29 Jul 2023 13:45:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] mips: dts: ralink: reorder MT7621 clocks in Ethernet block
-Date:   Sat, 29 Jul 2023 13:04:49 +0200
-Message-Id: <20230729110449.1357-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>
+Subject: MediaTek Frame Engine Ethernet: does it need any resets?
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -80,39 +80,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Hi,
 
-Use order as specified in the binding (first "ethif" then "fe").
+I'm trying to understand MediaTek's Ethernet controller resets.
 
-This fixes:
-arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:0: 'ethif' was expected
-        From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
-arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:1: 'fe' was expected
-        From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+I noticed there is sth fishy when checking dts files. See following
+errors:
 
-Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- arch/mips/boot/dts/ralink/mt7621.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: resets: [[2, 6], [2, 23]] is too short
+         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: reset-names:1: 'gmac' was expected
+         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: reset-names: ['fe', 'eth'] is too short
+         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: Unevaluated properties are not allowed ('reset-names', 'resets' were unexpected)
+         From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-index 7caed0d14f11..73035d4f4cc1 100644
---- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-+++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-@@ -300,9 +300,9 @@ ethernet: ethernet@1e100000 {
- 		compatible = "mediatek,mt7621-eth";
- 		reg = <0x1e100000 0x10000>;
- 
--		clocks = <&sysc MT7621_CLK_FE>,
--			 <&sysc MT7621_CLK_ETH>;
--		clock-names = "fe", "ethif";
-+		clocks = <&sysc MT7621_CLK_ETH>,
-+			 <&sysc MT7621_CLK_FE>;
-+		clock-names = "ethif", "fe";
- 
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--- 
-2.35.3
 
+1. Binding mediatek,net.yaml
+It says that when present, there must be 3 resets: fe, gmac, ppe
+
+2. mt7621.dtsi
+It specifies 2 resets: fe, eth
+
+3. mt7622.dtsi
+It doesn't specify any resets
+
+4. mt7629.dtsi
+It doesn't specify any resets
+
+5. drivers/net/ethernet/mediatek/
+I don't see any reset_control_* code at all
+
+
+Can someone help me what's the actual case with resets? Are they needed?
+Are they used?
