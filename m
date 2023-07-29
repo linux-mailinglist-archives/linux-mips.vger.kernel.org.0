@@ -2,308 +2,379 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB627679F1
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 02:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20F9767DFB
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 12:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbjG2Aoi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Jul 2023 20:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S229715AbjG2KDY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jul 2023 06:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236818AbjG2Ao1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Jul 2023 20:44:27 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713245261
-        for <linux-mips@vger.kernel.org>; Fri, 28 Jul 2023 17:42:53 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d06d36b49f9so2534312276.1
-        for <linux-mips@vger.kernel.org>; Fri, 28 Jul 2023 17:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690591308; x=1691196108;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pFylZ7MUbxwsfgnkCbIwukJjKcbZuVflXJcOt3ffCK4=;
-        b=0b9hKMxDqRwFQQnLMcqkv8PDDG/B+EGGKIIflyXXH1ZyfSndsboeXJ+TgsSS2iwWwD
-         mZK9za+90jiszGzd793UetnAs8xekTA2T4vD5AUxgo9V3HL6L2s22bi7IHqLJj4F6nD2
-         rCVTi2QOSa1y//QAMNR9pI55a5+voH5Q75OKbx+jiIKf+60l26WlJxC/Ge3hydIgerhS
-         uit7vPqeM5/JYzJwBgmRMtGvrlUQ++fcIaRDfp4/RFoTphs+Z9MfkMGcLscWr4oktRPN
-         mWg3Y7aOpahbc8mMonn0PhHsSyXhVyZJ3jKC6IlOJRcTpdIF2gNEz1894Cw3rt+1qqE9
-         qRqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690591308; x=1691196108;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pFylZ7MUbxwsfgnkCbIwukJjKcbZuVflXJcOt3ffCK4=;
-        b=J5t7FU2IBKMir9tyGXDIDWuCRKpQTNi0QAE7HTcU15xE/sILpGx/wbdzbR50IjvWo6
-         Ufn5Anbk8/gUtYfBu/0K3+sIH5BUuKfcS/+q3lf87SYPMrC8IPG8MMMh6/5o5nSn0XVR
-         cmLS6j7X+SIpwxb0QqZxsXt7ECQLLAwTG4C9fDCBKXpCkgND9aXFbk1W1n+GJ73YBpLb
-         75mungkRnUopQysjeSL+GceqVRmKFZwsxh5viTSZtCuU7ge07mnUWF3elIDXu5uH0yl1
-         z2zaMqr2IVmOU60E7D0r8tzDUZpsRTLlVXASivEEvcXQk7lswNbq5juLraFnue+YtVCc
-         zH9Q==
-X-Gm-Message-State: ABy/qLY8kI8OD/Iywe4YZsKbwy9famyDc0ppXDbUbAAqDHkFaXLsIwOz
-        Sw/HKYkerne5fATydSr15q2lmwcShqo=
-X-Google-Smtp-Source: APBJJlGYk/HASjtwEfhn9G1Ynkqr6kkqBYHzgw8GP9sqBMBlRYNDe9UG6jZXkz7Xk/58V5PqTY9JcKEc00E=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:54f:0:b0:d16:1f54:75e1 with SMTP id
- 76-20020a25054f000000b00d161f5475e1mr19267ybf.0.1690591308572; Fri, 28 Jul
- 2023 17:41:48 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 28 Jul 2023 17:41:44 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230729004144.1054885-1-seanjc@google.com>
-Subject: [PATCH] KVM: Wrap kvm_{gfn,hva}_range.pte in a per-action union
-From:   Sean Christopherson <seanjc@google.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Yu Zhao <yuzhao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229448AbjG2KDX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 06:03:23 -0400
+X-Greylist: delayed 136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Jul 2023 03:03:21 PDT
+Received: from p3plsmtpa11-04.prod.phx3.secureserver.net (p3plsmtpa11-04.prod.phx3.secureserver.net [68.178.252.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B7C10D0
+        for <linux-mips@vger.kernel.org>; Sat, 29 Jul 2023 03:03:21 -0700 (PDT)
+Received: from localhost.localdomain ([14.16.17.17])
+        by :SMTPAUTH: with ESMTPSA
+        id PgkpqFpajiS9mPgksqoECi; Sat, 29 Jul 2023 03:01:03 -0700
+X-CMAE-Analysis: v=2.4 cv=D7SBaNdj c=1 sm=1 tr=0 ts=64c4e360
+ a=34c9DTqauJ9c0AOVdCw1kg==:117 a=34c9DTqauJ9c0AOVdCw1kg==:17 a=NEAV23lmAAAA:8
+ a=_twTT5zqAAAA:8 a=a0w_8txgfLuf3tCdzpgA:9 a=ILoXdGDbYT3DTB7Z0gVI:22
+X-SECURESERVER-ACCT: dhu@hodcarrier.org
+From:   Du Huanpeng <dhu@hodcarrier.org>
+To:     linux-mips@vger.kernel.org, u-boot@lists.denx.de
+Cc:     u74147@gmail.com, trini@konsulko.com, jiaxun.yang@flygoat.com,
+        Du Huanpeng <dhu@hodcarrier.org>
+Subject: [PATCH] MIPS: Loongson32: DeviceTree for Loongson-ls1c300
+Date:   Sat, 29 Jul 2023 18:00:48 +0800
+Message-Id: <20230729100048.1953-1-dhu@hodcarrier.org>
+X-Mailer: git-send-email 2.40.0.windows.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfIeBp2LwDbfmZ0k3TGyACU8nRkS9qGIECZ9hndyeRMbSRKDkLRrauKu14iR9hKxCZw+GOOZ//l3Tdqs0aU/ugxnhfN8Ye0+t1Su3uOXhZOACjBVtUjuG
+ mFlE/LTgTnq34ryHBu6n0RGQMjMlJ5OK1UwETWdr7RHltQFiGd5qauUbIwlsrUrEsgo/ES86XU8yfeczlxz0PeHZLy/+EYKkilFSTLqx7CRBrUjY9CfNXESL
+ OcTJIpUd+0Cqm3zQ0JLZRTb0khjtscFHqInJ/urehVulPLx5097FhggwZk3zh3sMQ8yidIUONtFInkM7PLKQAqgw78gso9CTjP6jLfwHI/oVXMFa4GuXgo/Q
+ /E8fD+5i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Wrap kvm_{gfn,hva}_range.pte in a union so that future notifier events can
-pass event specific information up and down the stack without needing to
-constantly expand and churn the APIs.  Lockless aging of SPTEs will pass
-around a bitmap, and support for memory attributes will pass around the
-new attributes for the range.
+Add DeviceTree files for Loongson-ls1c300 processor, currently only
+has below nodes.
 
-Add a "KVM_NO_ARG" placeholder to simplify handling events without an
-argument (creating a dummy union variable is midly annoying).
+- reset-controller
+- watchdog
+- serial
+- clock-controller
 
-Opportunstically drop explicit zero-initialization of the "pte" field, as
-omitting the field (now a union) has the same effect.
+tool for generate header and dts:
+[1] https://github.com/hodcarrier/ls1c300_bsp/tree/master/dts
 
-Cc: Yu Zhao <yuzhao@google.com>
-Link: https://lore.kernel.org/all/CAOUHufagkd2Jk3_HrVoFFptRXM=hX2CV8f+M-dka-hJU4bP8kw@mail.gmail.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Du Huanpeng <dhu@hodcarrier.org>
 ---
+ arch/mips/Kconfig                             |   2 +
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/loongson/Makefile          |   2 +
+ .../dts/loongson/loongson32-ls1c300b.dtsi     | 162 ++++++++++++++++++
+ arch/mips/boot/dts/loongson/ls1c300-eval.dts  |  31 ++++
+ include/dt-bindings/clock/ls1c300-clk.h       |  18 ++
+ include/dt-bindings/reset/ls1c300-reset.h     |  33 ++++
+ 7 files changed, 249 insertions(+)
+ create mode 100644 arch/mips/boot/dts/loongson/loongson32-ls1c300b.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/ls1c300-eval.dts
+ create mode 100644 include/dt-bindings/clock/ls1c300-clk.h
+ create mode 100644 include/dt-bindings/reset/ls1c300-reset.h
 
-If this looks good, my thought is to squeeze it into 6.6 so that the MGLRU
-and guest_memfd() series can build on it.  Or those series could just
-include it?
-
- arch/arm64/kvm/mmu.c       |  2 +-
- arch/mips/kvm/mmu.c        |  2 +-
- arch/riscv/kvm/mmu.c       |  2 +-
- arch/x86/kvm/mmu/mmu.c     |  2 +-
- arch/x86/kvm/mmu/tdp_mmu.c |  6 +++---
- include/linux/kvm_host.h   |  6 +++++-
- virt/kvm/kvm_main.c        | 18 +++++++++---------
- 7 files changed, 21 insertions(+), 17 deletions(-)
-
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 6db9ef288ec3..55f03a68f1cd 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -1721,7 +1721,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index fc6fba925aea..fbdd203a6fb5 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -467,6 +467,8 @@ config LANTIQ
+ config MACH_LOONGSON32
+ 	bool "Loongson 32-bit family of machines"
+ 	select SYS_SUPPORTS_ZBOOT
++	select USE_OF
++	select BUILTIN_DTB
+ 	help
+ 	  This enables support for the Loongson-1 family of machines.
  
- bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- {
--	kvm_pfn_t pfn = pte_pfn(range->pte);
-+	kvm_pfn_t pfn = pte_pfn(range->arg.pte);
+diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+index 928f38a79dff..2e040b1ba97b 100644
+--- a/arch/mips/boot/dts/Makefile
++++ b/arch/mips/boot/dts/Makefile
+@@ -6,6 +6,7 @@ subdir-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= img
+ subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
+ subdir-$(CONFIG_LANTIQ)			+= lantiq
+ subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
++subdir-$(CONFIG_MACH_LOONGSON32)	+= loongson
+ subdir-$(CONFIG_SOC_VCOREIII)		+= mscc
+ subdir-$(CONFIG_MIPS_MALTA)		+= mti
+ subdir-$(CONFIG_LEGACY_BOARD_SEAD3)	+= mti
+diff --git a/arch/mips/boot/dts/loongson/Makefile b/arch/mips/boot/dts/loongson/Makefile
+index 5c6433e441ee..f2a5ab153f77 100644
+--- a/arch/mips/boot/dts/loongson/Makefile
++++ b/arch/mips/boot/dts/loongson/Makefile
+@@ -6,4 +6,6 @@ dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64c_8core_rs780e.dtb
+ dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64g_4core_ls7a.dtb
+ dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64v_4core_virtio.dtb
  
- 	if (!kvm->arch.mmu.pgt)
- 		return false;
-diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-index e8c08988ed37..7b2ac1319d70 100644
---- a/arch/mips/kvm/mmu.c
-+++ b/arch/mips/kvm/mmu.c
-@@ -447,7 +447,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	gpa_t gpa = range->start << PAGE_SHIFT;
--	pte_t hva_pte = range->pte;
-+	pte_t hva_pte = range->arg.pte;
- 	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
- 	pte_t old_pte;
- 
-diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-index f2eb47925806..857f4312b0f8 100644
---- a/arch/riscv/kvm/mmu.c
-+++ b/arch/riscv/kvm/mmu.c
-@@ -559,7 +559,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	int ret;
--	kvm_pfn_t pfn = pte_pfn(range->pte);
-+	kvm_pfn_t pfn = pte_pfn(range->arg.pte);
- 
- 	if (!kvm->arch.pgd)
- 		return false;
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index ec169f5c7dce..d72f2b20f430 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1588,7 +1588,7 @@ static __always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
- 	for_each_slot_rmap_range(range->slot, PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL,
- 				 range->start, range->end - 1, &iterator)
- 		ret |= handler(kvm, iterator.rmap, range->slot, iterator.gfn,
--			       iterator.level, range->pte);
-+			       iterator.level, range->arg.pte);
- 
- 	return ret;
- }
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 512163d52194..6250bd3d20c1 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1241,7 +1241,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
- 	u64 new_spte;
- 
- 	/* Huge pages aren't expected to be modified without first being zapped. */
--	WARN_ON(pte_huge(range->pte) || range->start + 1 != range->end);
-+	WARN_ON(pte_huge(range->arg.pte) || range->start + 1 != range->end);
- 
- 	if (iter->level != PG_LEVEL_4K ||
- 	    !is_shadow_present_pte(iter->old_spte))
-@@ -1255,9 +1255,9 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
- 	 */
- 	tdp_mmu_iter_set_spte(kvm, iter, 0);
- 
--	if (!pte_write(range->pte)) {
-+	if (!pte_write(range->arg.pte)) {
- 		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
--								  pte_pfn(range->pte));
-+								  pte_pfn(range->arg.pte));
- 
- 		tdp_mmu_iter_set_spte(kvm, iter, new_spte);
- 	}
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 9d3ac7720da9..9125d0ab642d 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -256,11 +256,15 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
- #endif
- 
- #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
-+union kvm_mmu_notifier_arg {
-+	pte_t pte;
++dtb-$(CONFIG_MACH_LOONGSON32)	+= ls1c300-eval.dtb
++
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/boot/dts/loongson/loongson32-ls1c300b.dtsi b/arch/mips/boot/dts/loongson/loongson32-ls1c300b.dtsi
+new file mode 100644
+index 000000000000..cc894e8feeb8
+--- /dev/null
++++ b/arch/mips/boot/dts/loongson/loongson32-ls1c300b.dtsi
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <dt-bindings/clock/ls1c300-clk.h>
++#include <dt-bindings/reset/ls1c300-reset.h>
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	compatible = "loongson,ls1c300-soc";
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		cpu@0 {
++			device_type = "cpu";
++			reg = <0>;
++			compatible = "loongson,gs232", "mips,mips4Kc";
++			clocks = <&acc CLK_CPU_THROT>;
++		};
++	};
++
++	clocks {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		u-boot,dm-pre-reloc;
++
++		xtal: oscillator {
++			compatible = "fixed-clock";
++			clock-frequency = <24000000>;
++			#clock-cells = <0>;
++		};
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		ranges;
++
++		acc: clock-controller@1fe78030 {
++			compatible = "loongson,ls1c300-clk";
++			clocks = <&xtal>;
++			#clock-cells = <1>;
++			reg = <0x1fe78030 0x8>, <0x1fe7c010 0x4>;
++			u-boot,dm-pre-reloc;
++		};
++
++		uart0: serial@1fe40000 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe40000 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart1: serial@1fe44000 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe44000 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart2: serial@1fe48000 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe48000 0x100>;
++			reg-shift = <0>;
++			resets = <&shut_ctrl UART2_SHUT>;
++			reset-names = "uart2";
++			status = "disabled";
++		};
++
++		uart3: serial@1fe4c000 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c000 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart4:  serial@1fe4c400 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c400 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart5:  serial@1fe4c500 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c500 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart6:  serial@1fe4c600 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c600 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart7:  serial@1fe4c700 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c700 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart8:  serial@1fe4c800 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c800 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart9:  serial@1fe4c900 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4c900 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart10: serial@1fe4ca00 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4ca00 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		uart11: serial@1fe4cb00 {
++			compatible = "loongson,ls1c300-uart", "ns16550a";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe4cb00 0x100>;
++			reg-shift = <0>;
++			status = "disabled";
++		};
++
++		wdt: watchdog@1fe5c060 {
++			compatible = "loongson,ls1c300-wdt";
++			clocks = <&acc CLK_APB>;
++			reg = <0x1fe5c060 0x10>;
++		};
++
++		reset-controller {
++			compatible = "wdt-reboot";
++			wdt = <&wdt>;
++		};
++
++		shut_ctrl: reset-controller@1fd00420 {
++			compatible = "loongson,shut_ctrl";
++			reg = <0x1fd00420 0x4>;
++			#reset-cells = <1>;
++		};
++	};
++};
+diff --git a/arch/mips/boot/dts/loongson/ls1c300-eval.dts b/arch/mips/boot/dts/loongson/ls1c300-eval.dts
+new file mode 100644
+index 000000000000..eaf65b2d966f
+--- /dev/null
++++ b/arch/mips/boot/dts/loongson/ls1c300-eval.dts
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Du Huanpeng <dhu@hodcarrier.org>
++ */
++
++/dts-v1/;
++
++#include "loongson32-ls1c300b.dtsi"
++
++/ {
++	compatible = "lsmips,ls1c300-soc";
++	model = "ls1c300-eval";
++
++	aliases {
++		serial0 = &uart2;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x4000000>;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +};
 +
- struct kvm_gfn_range {
- 	struct kvm_memory_slot *slot;
- 	gfn_t start;
- 	gfn_t end;
--	pte_t pte;
-+	union kvm_mmu_notifier_arg arg;
- 	bool may_block;
- };
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index dfbaafbe3a00..f84ef9399aee 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -526,7 +526,7 @@ typedef void (*on_unlock_fn_t)(struct kvm *kvm);
- struct kvm_hva_range {
- 	unsigned long start;
- 	unsigned long end;
--	pte_t pte;
-+	union kvm_mmu_notifier_arg arg;
- 	hva_handler_t handler;
- 	on_lock_fn_t on_lock;
- 	on_unlock_fn_t on_unlock;
-@@ -547,6 +547,8 @@ static void kvm_null_fn(void)
- }
- #define IS_KVM_NULL_FN(fn) ((fn) == (void *)kvm_null_fn)
- 
-+static const union kvm_mmu_notifier_arg KVM_NO_ARG;
++&uart2 {
++	status = "okay";
++};
 +
- /* Iterate over each memslot intersecting [start, last] (inclusive) range */
- #define kvm_for_each_memslot_in_hva_range(node, slots, start, last)	     \
- 	for (node = interval_tree_iter_first(&slots->hva_tree, start, last); \
-@@ -591,7 +593,7 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
- 			 * bother making these conditional (to avoid writes on
- 			 * the second or later invocation of the handler).
- 			 */
--			gfn_range.pte = range->pte;
-+			gfn_range.arg = range->arg;
- 			gfn_range.may_block = range->may_block;
- 
- 			/*
-@@ -632,14 +634,14 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
- static __always_inline int kvm_handle_hva_range(struct mmu_notifier *mn,
- 						unsigned long start,
- 						unsigned long end,
--						pte_t pte,
-+						union kvm_mmu_notifier_arg arg,
- 						hva_handler_t handler)
- {
- 	struct kvm *kvm = mmu_notifier_to_kvm(mn);
- 	const struct kvm_hva_range range = {
- 		.start		= start,
- 		.end		= end,
--		.pte		= pte,
-+		.arg		= arg,
- 		.handler	= handler,
- 		.on_lock	= (void *)kvm_null_fn,
- 		.on_unlock	= (void *)kvm_null_fn,
-@@ -659,7 +661,6 @@ static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn
- 	const struct kvm_hva_range range = {
- 		.start		= start,
- 		.end		= end,
--		.pte		= __pte(0),
- 		.handler	= handler,
- 		.on_lock	= (void *)kvm_null_fn,
- 		.on_unlock	= (void *)kvm_null_fn,
-@@ -693,6 +694,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
- 					pte_t pte)
- {
- 	struct kvm *kvm = mmu_notifier_to_kvm(mn);
-+	const union kvm_mmu_notifier_arg arg = { .pte = pte };
- 
- 	trace_kvm_set_spte_hva(address);
- 
-@@ -708,7 +710,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
- 	if (!READ_ONCE(kvm->mmu_invalidate_in_progress))
- 		return;
- 
--	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_change_spte_gfn);
-+	kvm_handle_hva_range(mn, address, address + 1, arg, kvm_change_spte_gfn);
- }
- 
- void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
-@@ -747,7 +749,6 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
- 	const struct kvm_hva_range hva_range = {
- 		.start		= range->start,
- 		.end		= range->end,
--		.pte		= __pte(0),
- 		.handler	= kvm_unmap_gfn_range,
- 		.on_lock	= kvm_mmu_invalidate_begin,
- 		.on_unlock	= kvm_arch_guest_memory_reclaimed,
-@@ -812,7 +813,6 @@ static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
- 	const struct kvm_hva_range hva_range = {
- 		.start		= range->start,
- 		.end		= range->end,
--		.pte		= __pte(0),
- 		.handler	= (void *)kvm_null_fn,
- 		.on_lock	= kvm_mmu_invalidate_end,
- 		.on_unlock	= (void *)kvm_null_fn,
-@@ -845,7 +845,7 @@ static int kvm_mmu_notifier_clear_flush_young(struct mmu_notifier *mn,
- {
- 	trace_kvm_age_hva(start, end);
- 
--	return kvm_handle_hva_range(mn, start, end, __pte(0), kvm_age_gfn);
-+	return kvm_handle_hva_range(mn, start, end, KVM_NO_ARG, kvm_age_gfn);
- }
- 
- static int kvm_mmu_notifier_clear_young(struct mmu_notifier *mn,
-
-base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+diff --git a/include/dt-bindings/clock/ls1c300-clk.h b/include/dt-bindings/clock/ls1c300-clk.h
+new file mode 100644
+index 000000000000..66798f40c7d0
+--- /dev/null
++++ b/include/dt-bindings/clock/ls1c300-clk.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Du Huanpeng <dhu@hodcarrier.org>
++ */
++
++#ifndef __DT_BINDINGS_LS1C300_CLK_H__
++#define __DT_BINDINGS_LS1C300_CLK_H__
++
++#define CLK_XTAL	0
++#define CLK_PLL		1
++#define CLK_CPU		2
++#define CLK_APB         3
++#define CLK_CAMERA	4
++#define CLK_PIX		5
++#define CLK_AXIMUX	6
++#define CLK_CPU_THROT	7
++
++#endif /* __DT_BINDINGS_LS1C300_CLK_H__ */
+diff --git a/include/dt-bindings/reset/ls1c300-reset.h b/include/dt-bindings/reset/ls1c300-reset.h
+new file mode 100644
+index 000000000000..d03db712476c
+--- /dev/null
++++ b/include/dt-bindings/reset/ls1c300-reset.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++
++#ifndef	_DT_BINDINGS_RESET_LS1C300_H
++#define	_DT_BINDINGS_RESET_LS1C300_H
++
++#define ADC_SHUT	25
++#define SDIO_SHUT	24
++#define DMA2_SHUT	23
++#define DMA1_SHUT	22
++#define DMA0_SHUT	21
++#define SPI1_SHUT	20
++#define SPI0_SHUT	19
++#define I2C2_SHUT	18
++#define I2C1_SHUT	17
++#define I2C0_SHUT	16
++#define AC97_SHUT	15
++#define I2S_SHUT	14
++#define UART3_SHUT	13
++#define UART2_SHUT	12
++#define UART1_SHUT	11
++#define UART0_SHUT	10
++#define CAN1_SHUT	9
++#define CAN0_SHUT	8
++#define ECC_SHUT	7
++#define MAC_SHUT	6
++#define USBHOST_SHUT	5
++#define USBOTG_SHUT	4
++#define SDRAM_SHUT	3
++#define SRAM_SHUT	2
++#define CAM_SHUT	1
++#define LCD_SHUT	0
++
++#endif	/* _DT_BINDINGS_RESET_LS1C300_H */
 -- 
-2.41.0.487.g6d72f3e995-goog
+2.34.1
 
