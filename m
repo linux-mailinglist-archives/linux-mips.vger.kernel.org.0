@@ -2,87 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89FC767FF5
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 16:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D00B7680A0
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jul 2023 18:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjG2OJR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jul 2023 10:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S229545AbjG2Qjs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jul 2023 12:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjG2OJR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 10:09:17 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB0198C;
-        Sat, 29 Jul 2023 07:09:15 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5672A1C0004;
-        Sat, 29 Jul 2023 14:09:10 +0000 (UTC)
+        with ESMTP id S229483AbjG2Qjr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jul 2023 12:39:47 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5315CE79;
+        Sat, 29 Jul 2023 09:39:44 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9200B1BF207;
+        Sat, 29 Jul 2023 16:39:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
-        t=1690639754;
+        t=1690648783;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HJHI+2B39D3Or8mTHomyEAuJmjF+7v9ZD1s100wtrNs=;
-        b=mu1xBkyaTSueDQVaSjy1rYEeqE37mKfdczlOLICOFcLo0tQesrxldCAQqqbIMb2pmY9i6E
-        zOeQVJv6/3nXuHRuTiQWnr66Ru2+EBL4gQVJURj0OkIem35WOQYi24/SGCRahCFsJvGcP6
-        Q2iFTFRN0OIRgb7Um0Wa2SoSyV9kuAS02KdtCGpCk/s1sao3+8RLibve2Z2cy98EIiR+Ez
-        juFoKYeR96euKoVIYDHyoaa8JM9z+NsTSFICki24p+8Lv+JhjbL850hPSVSNPMXYy6/v+u
-        NHqNaxIRUg8w9JFBtWfld+gjyZMoSjBSXv8GJwXnoEvgI3TKTbhlCOxk9vOxkA==
-Message-ID: <96bdb44d-3c59-b6e7-7baa-0ab80efeb720@arinc9.com>
-Date:   Sat, 29 Jul 2023 17:08:55 +0300
+        bh=Q1vPYh+RBZ0E0Mk1ojSUtBjCV8F9zDSzqFOeRor6Gi8=;
+        b=Ca6970Xdd0mzheJuqr9TNeSO6LKpUu9ThBv1MtHWD7tc1raBHhvJ7bI8jhDK0Sqe+Fide5
+        7+g08PbWPKt+CDHhFWYXfHKSGb5/ZjFk/ujaGX312s1TLnomUi4ncg3mrnEY4HWOlSc5rm
+        J9vmrWUYbRDzSuFh5BuU2yYRELwxBfPRB2mLKZzWjfdXr1X2qI1UHaCou3sAqXwSLLyOjX
+        89f8AMiI3sHBdBnGeztvJe+WonGDh/DnOxDlKM+wELQvP5JNi493OVoCQeMIYaWsbIjhqh
+        WXKWLM/9G9cpd+SqesY1QO9TTGfursygGS977NuPwrC/6Q5huqyh6pJ+MJmAAg==
+Message-ID: <2eb012d9-0d36-54c6-6f2c-1a286d45c497@arinc9.com>
+Date:   Sat, 29 Jul 2023 19:39:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mips: dts: ralink: reorder MT7621 clocks in Ethernet
- block
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH] pinctrl: mtmips: support requesting different functions
+ for same group
+To:     Shiji Yang <yangshiji66@outlook.com>, linux-gpio@vger.kernel.org
 Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230729110449.1357-1-zajec5@gmail.com>
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
+References: <TYAP286MB0315A9671B4BA0347E70D9E0BC00A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
+Content-Language: en-US
 From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230729110449.1357-1-zajec5@gmail.com>
+In-Reply-To: <TYAP286MB0315A9671B4BA0347E70D9E0BC00A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: arinc.unal@arinc9.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 29.07.2023 14:04, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On 26.07.2023 03:48, Shiji Yang wrote:
+> Sometimes pinctrl consumers may request different functions for the
+> same pin group in different situations. This patch can help to reset
+> the group function flag when requesting a different function.
 > 
-> Use order as specified in the binding (first "ethif" then "fe").
+> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
+> ---
+>   drivers/pinctrl/mediatek/pinctrl-mtmips.c | 21 +++++++++++++++++----
+>   1 file changed, 17 insertions(+), 4 deletions(-)
 > 
-> This fixes:
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:0: 'ethif' was expected
->          From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:1: 'fe' was expected
->          From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
-> 
-> Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-mtmips.c b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
+> index efd77b6c5..e5e085915 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-mtmips.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-mtmips.c
+> @@ -123,11 +123,24 @@ static int mtmips_pmx_group_enable(struct pinctrl_dev *pctrldev,
+>   	int i;
+>   	int shift;
+>   
+> -	/* dont allow double use */
+> +	/*
+> +	 * for the same pin group, if request a different function,
+> +	 * then clear the group function flag and continue, else exit.
+> +	 */
+>   	if (p->groups[group].enabled) {
+> -		dev_err(p->dev, "%s is already enabled\n",
+> -			p->groups[group].name);
+> -		return 0;
+> +		for (i = 0; i < p->groups[group].func_count; i++) {
+> +			if (p->groups[group].func[i].enabled == 1) {
+> +				if (!strcmp(p->func[func]->name,
+> +					p->groups[group].func[i].name))
+> +					return 0;
+> +				p->groups[group].func[i].enabled = 0;
+> +				break;
+> +			}
+> +		}
+> +
+> +		/* exit if request the "gpio" function again */
+> +		if (i == p->groups[group].func_count && func == 0)
+> +			return 0;
 
-I'm not sure if I should agree with this patch. The relevant parts of 
-the schema for mediatek,mt7621-eth were added way later than the 
-existing bindings on mt7621.dtsi. Why don't we address this on the 
-schema along with a bunch of other issues the patch for 
-mediatek,mt7621-eth brought?
+Could you help me understand why? The @gpio_request_enable operation is 
+not properly implemented on this driver so this check would never be 
+true, no?
+
+Even if it was, this makes it so that if a pin group is already given a 
+function (meaning the pin group is enabled), it will never be given the 
+gpio function when requested, unless I understand it wrong.
 
 Arınç
