@@ -2,71 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8877686C9
-	for <lists+linux-mips@lfdr.de>; Sun, 30 Jul 2023 19:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19272768A28
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 04:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjG3Rgx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 30 Jul 2023 13:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S229811AbjGaCwY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 Jul 2023 22:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjG3Rgw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 30 Jul 2023 13:36:52 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB72490
-        for <linux-mips@vger.kernel.org>; Sun, 30 Jul 2023 10:36:50 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b933bbd3eeso55253731fa.1
-        for <linux-mips@vger.kernel.org>; Sun, 30 Jul 2023 10:36:50 -0700 (PDT)
+        with ESMTP id S229675AbjGaCwX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 30 Jul 2023 22:52:23 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0531FE47;
+        Sun, 30 Jul 2023 19:52:22 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-99bcd6c0282so635042666b.1;
+        Sun, 30 Jul 2023 19:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690738609; x=1691343409;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EJGgzQqutJFDlzcKppgukpynrnTTIYEegbSwRHtF+g=;
-        b=dwlur2vcNk+3lQbYsHR8idChosu1y732RAlIpWVi2Gi3ltkSqq84OlhNlAyOlhOCzn
-         XzfGKbht41Zu6/j9l1ihwpokKwxeNpKuou5cREB/l8+0W7xO3F1l1r68Lozr+jezR493
-         ndhSNksE08NDXp8aQbo+/VPYsj7cOPCMufduk7XYoPIozd2B6aC22QvWbaVaOV0H5XdF
-         NmSrLL9yk3jB6Q2D2IF+8ODl66GKmsTVXH73J2du/brT05gU/p1NjCiW1TMGlfRyZrPN
-         Dqyx6zXWTLg0YBWCxwhMl61GXUyw1vO185r5mYwmRNyTO+PTIT6iEJSs0PeKnJZwxk9s
-         NewA==
+        d=gmail.com; s=20221208; t=1690771940; x=1691376740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sLKpbSPGzXDuDP4SHea1EinIC04xetUtSoOaZK7zadI=;
+        b=TIUk1xsJFtc/l1rkYdG1pQM7UONNtqxRPkuH29DeHBA3RYK88MDM3fdhyAL3UpWqAN
+         3PePMM62m3sNz9z8xLjzpz2Fdy5mmep8Ic9ixGyw42cjUmxceDuN0thJaZqe0BSex32l
+         SOUgBP6TfjUvX6p6Yw7PWQ/zsbtDPu3pG0T2NyKntDUW69+9J8jcGeGcFkk/msujXFE5
+         bEi/IEZkFpDw54AaMMFtIrE0lIHB3jzMeqwA1zAwn8B/vgfAe15/kQ2vtw2+/dYfUJM2
+         YMNf5rVO+HynIBmPeSggR8VZqi3LJEGfE22iYvUu4vKfLmLNHvyzVdNUcRviDG5mCkOT
+         snbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690738609; x=1691343409;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8EJGgzQqutJFDlzcKppgukpynrnTTIYEegbSwRHtF+g=;
-        b=ag+ILWZHOtxxpV2r5izgjMqBI/2Z0eiPUaWrMzw8R6vsuTJDEAAE8xjzIFWIb9Z3rs
-         rYznTWQqS3K0+RGvAL3UIY5dEbKckIFu+WnHPt2/pPiBaOiHZNiKL1MEHHpvFmIjfyXh
-         4RQAsC9TQL9Uq/SHhjE0G3K1p0ZbjVqgmRqYT3XvnRZ66KIXp+ai9lpJyfDCnU1sggBn
-         qljM4r0vMYYImrcJwzabJ75gOgHk3i184X3kc/coysiTFYYWfscOFkNxBV4SwI+K5Zyu
-         FEfFx3PGhYF9gJD2YSgVYKp4WVEFuRT2w5zIZaiqcVog7HKcPMbgeTdTRsETw57XEAYL
-         obNA==
-X-Gm-Message-State: ABy/qLY+26WCvea7SNo9Jrb2SAcIh0YFnu3AlkOixEwUo9cGXjxXVSrO
-        XDNfu00yvYo1R264/Fj3YMoLHX3iNJgOhEwcAvc=
-X-Google-Smtp-Source: APBJJlFNq8w39Oiu+stRgSEVBSeXWmslJ2ZBZW0373IZUigP4IM+c/xMilssyj89v2nzXKrCRxrAII+oFkfrgogOSFw=
-X-Received: by 2002:a2e:b6c2:0:b0:2b6:df25:1ab0 with SMTP id
- m2-20020a2eb6c2000000b002b6df251ab0mr5200834ljo.34.1690738608692; Sun, 30 Jul
- 2023 10:36:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690771940; x=1691376740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sLKpbSPGzXDuDP4SHea1EinIC04xetUtSoOaZK7zadI=;
+        b=NFL7YJS219luG9SFd6B90RjJ98cn2X7YX1GkIUXOtRxsXUADT3VJi2YioFWkOBKSIi
+         pd69vGyj3RFlwxSLrH6eMscC3OYZ8UjqumxNCa9UcDB05sslaVzqUmC7KaayUI9KI1pl
+         PibJZFwqqOdrNJmCRLQKbBB1KU49311mQuQiegY821HipzBIUu9oHaidoogmP6JswRm0
+         cxPsQcDV2fMrSydWNIxdE+weyXStLzWUWQHd+hWgiroS9xc6Jta2gKCfKgWtOujUKUqF
+         vgxzMMKq/yGTdDtfve3wLRhrQyGFF4fVMAUYAW89aCefUqx/s1YgCu5AaVAukI/tcL1I
+         BrbQ==
+X-Gm-Message-State: ABy/qLYMmnwknYf6gCn5hQbQ1LSpiRNofCvhQaW7AWUno8WvNSwRhGor
+        8teExbyfiAjO0C+BRwXr+LICuPKM3ae1SoapAyc=
+X-Google-Smtp-Source: APBJJlEN2cSvwOt5awG0AZZHeBr3zDivNmi+GZamrE/u79nfCP/SKQTNWjC9vvTZ4cd+LlzKGlRBvL+eXBNs5K8DgYw=
+X-Received: by 2002:a17:907:7819:b0:99b:f392:10b1 with SMTP id
+ la25-20020a170907781900b0099bf39210b1mr6092103ejc.37.1690771940131; Sun, 30
+ Jul 2023 19:52:20 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a2e:82ca:0:b0:2b9:a622:1baf with HTTP; Sun, 30 Jul 2023
- 10:36:48 -0700 (PDT)
-Reply-To: fionahill142@gmail.com
-From:   Fiona Hill <briandickson084@gmail.com>
-Date:   Sun, 30 Jul 2023 17:36:48 +0000
-Message-ID: <CAOUDwrAO7zUk1==3qAtP=udA2zDQ_PPMuCcAxMkDpPvH1dWfGQ@mail.gmail.com>
-Subject: Hello, did you receive my email?
-To:     fionahill142@gmail.com
+References: <20230729134318.1694467-1-keguang.zhang@gmail.com>
+ <20230729134318.1694467-7-keguang.zhang@gmail.com> <551ac5ae-2ccf-0a7e-46df-e1b05e8163cc@linaro.org>
+In-Reply-To: <551ac5ae-2ccf-0a7e-46df-e1b05e8163cc@linaro.org>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Mon, 31 Jul 2023 10:52:03 +0800
+Message-ID: <CAJhJPsW+WkdA1kXBn=J2biAUn_GXH8PiBmsZ9UKSYJaWvK0Oog@mail.gmail.com>
+Subject: Re: [PATCH 06/17] MIPS: loongson32: Convert platform IRQ driver to DT
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,BODY_SINGLE_WORD,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,SCC_BODY_SINGLE_WORD,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-5L2g5aW977yM5L2g5pS25Yiw5oiR55qE6YKu5Lu25LqG5ZCX77yfDQo=
+On Sun, Jul 30, 2023 at 4:24=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 29/07/2023 15:43, Keguang Zhang wrote:
+> > This patch enables Loongson-1 irqchip driver
+> > by adding platform INTC device nodes.
+> > And drop the legacy platform IRQ driver accordingly.
+> >
+> > Based on previous patch by Jiaxun Yang.
+> >
+> > Link: https://lore.kernel.org/all/20190411121915.8040-3-jiaxun.yang@fly=
+goat.com
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> >  arch/mips/boot/dts/loongson/loongson1.dtsi  |  53 ++++++
+> >  arch/mips/boot/dts/loongson/loongson1c.dtsi |  13 ++
+>
+> DTS is always separate from the drivers.
+
+Got it. Will do.
+>
+> >  arch/mips/loongson32/common/Makefile        |   2 +-
+> >  arch/mips/loongson32/common/irq.c           | 191 --------------------
+> >  arch/mips/loongson32/init.c                 |   5 +
+> >  5 files changed, 72 insertions(+), 192 deletions(-)
+> >  delete mode 100644 arch/mips/loongson32/common/irq.c
+> >
+>
+>
+>
+> Best regards,
+> Krzysztof
+>
+
+
+--=20
+Best regards,
+
+Keguang Zhang
