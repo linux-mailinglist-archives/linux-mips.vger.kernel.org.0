@@ -2,185 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8E976A05B
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 20:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE49B76A0FB
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 21:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjGaS0Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 14:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S231449AbjGaTSH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 15:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjGaS0X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 14:26:23 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BB919AE
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 11:26:22 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-348c7075afcso12475ab.1
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 11:26:22 -0700 (PDT)
+        with ESMTP id S229671AbjGaTR4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 15:17:56 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F00184
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 12:17:55 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-267fc04ec74so3596980a91.0
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 12:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690827981; x=1691432781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6LZEdaDlAMdQP6JhmjsArIuxox1zxEtjjTY2SzD6PsU=;
-        b=5fgkkTfZTjvrkPsV2OAsWS7fGDKlkOo6NBkGxlUad6Djf9YF4mNXTcZwmQCCLJ1nBy
-         ytvPZa3KoE6pLMDaS1L4gdmZaOfNzKXtsa1fikLeZSNL0jSNWYpUTY8GHiEMpPSUIhEf
-         GKZr2wZjg6oExHWyVPblSGkoydBcnRJu278I6bHizaXll85ZaXfkAb9ISQ34veJLXVin
-         H4LgRU66ITkpG1C45xmAlPZe5ifFrojIcI163nCjGKu3BAHmTrdfA2g91PJ4XmMzNAwE
-         6qNdJbd/ZgVe0FTRRBae2q8TCC7NnJ6KmTDr6JnJgqJf5rkyLUFJCut3v7Lu9kIPHxwj
-         tGnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690827981; x=1691432781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20221208; t=1690831075; x=1691435875;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6LZEdaDlAMdQP6JhmjsArIuxox1zxEtjjTY2SzD6PsU=;
-        b=huTdnLDdQvEIJTD9scRCpGexjiuOZM033XpX2ePySy/Kq4CQHXCbZ5MZY8YZtCUpiv
-         U2LUyokAMJIAJ9Frt0Dyt1+tkG4qwOhpt3XR9K9rFTe9/iDsIKI+2sjNaISXQtfmiCoC
-         Akfag10kT7TDw81XxBM0DGlb02VIG19iSsMCDkmB9VQ6CU/lUdkackOPxikVu7/chLup
-         7W5NWrbCoZmbonJRWccDUM22zgGL7Gb0tDnkztAiwVrwINaCxd2lQUcHnfhsJZGEgvdB
-         rN8gDRq1h9nIrbYghtkJ8Zo2rZqxHW7woOzzMBmYEq7Y7U+5Eze/5coE/AnSjzw4sykK
-         ztOw==
-X-Gm-Message-State: ABy/qLY9KjX55j+1Lct6n5vQiXgRejY81x5uqw0Nj8fqNupy0V3648Pn
-        ugLQ1vFG8nBzSBHU/yUfCC3/AHu4FtDmfU+id8EF4A==
-X-Google-Smtp-Source: APBJJlHJ2q+Ibhsyd21GC77gr96XZana1MhNnQDJBDO6Init3JyGxBHBc9FYe6705xtGHxT1vNNwqYdqSlhzUk4wwtA=
-X-Received: by 2002:a05:6e02:16c5:b0:345:dcdf:206b with SMTP id
- 5-20020a056e0216c500b00345dcdf206bmr693992ilx.25.1690827981339; Mon, 31 Jul
- 2023 11:26:21 -0700 (PDT)
+        bh=AGAYQ6rkGNakus8aaZ27EffaPf8koLaE5zk7B3NOHKA=;
+        b=qrJY0Klv+4UzTgq2qYvXPy0Gu8GFrnOBl6OuqmHfe58+FxcoISbPqN83EVQR5HcLep
+         yn0KBsNNUg665ksTDv4vw8YcLtYvkvQ5t/rq+ybBRdoT0esVyMxL/8S20egk5pgZRhNU
+         FD91NiVFDrK8T71qFQPypzva3n2Qz6X4h4mN7hFkyWnNUvahmSgaANHdxlAWqvDuUpOQ
+         OHyPO/g0MrQfKZXJ08ahYpwf2zX3ZP4OAKd9XwDl2wJzsE1LSiT9ikl5GKxtKuGUtG7F
+         H/bnuGRntBakaGlF1tri8f7aM56TQRBRJjioWO0Zti6vBkYDji1nTwvMoqXXMwmHT3Am
+         Y6Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690831075; x=1691435875;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGAYQ6rkGNakus8aaZ27EffaPf8koLaE5zk7B3NOHKA=;
+        b=Sgr5j8Hz1ydlX/GWGKmEszM22IUMNl2DQ0SJ00d+yRb9tPBUV4GCZI6yyv0DTu1dxc
+         8knJhOA/Ve+MVY2VO+i5mQVFRf3thyNPFs+SVuMn/yV5nGe0ebsiPkgG3yQf5iJQlio7
+         InYp58hpFBhJtrYLsL/W/f9KXv5Q9e2GEWXQd3AF53pques2BazUDHWw1zq5hsHAHuc1
+         XKuqbUNbLt3CVhTjpL4ybbHPeLp0ZrE0UwTTkZnKn2eQDXinNx8sAJei60PCdF8+TyxY
+         D/4gyxpIcMx1t5gzkbz0VMEdDCk25u3RO0qnJCS1JsdZbZwqfeiRZncMmkIjhUplwNpK
+         YFNw==
+X-Gm-Message-State: ABy/qLY3rh175Z+QVvuG7MdfYHnZU7DbgMjelISuplQm6AitNZIawpFc
+        Mxg0O04Nqzzzwd6cQsSxpl5YBKUePMkNxT+R/rc=
+X-Google-Smtp-Source: APBJJlHUmRwgZuBFyJqq72afSFC17MG7jYOYutm75qVNi3iKrzt5R33otMmJajGFL0kyeyJXsU+5PippGX+BAAB3+2k=
+X-Received: by 2002:a17:90a:6b84:b0:268:5477:811c with SMTP id
+ w4-20020a17090a6b8400b002685477811cmr10799436pjj.23.1690831075200; Mon, 31
+ Jul 2023 12:17:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230722022251.3446223-1-rananta@google.com> <20230722022251.3446223-13-rananta@google.com>
- <87jzulqz0v.wl-maz@kernel.org>
-In-Reply-To: <87jzulqz0v.wl-maz@kernel.org>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 31 Jul 2023 11:26:09 -0700
-Message-ID: <CAJHc60zGzAqWw2iZwNEG_bWERXkz_io7ae-K_tf_kh6xcOBxLA@mail.gmail.com>
-Subject: Re: [PATCH v7 12/12] KVM: arm64: Use TLBI range-based intructions for unmap
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+Received: by 2002:a05:7301:370f:b0:d3:5d2d:c3e7 with HTTP; Mon, 31 Jul 2023
+ 12:17:54 -0700 (PDT)
+Reply-To: Dr.catherine_chan@hotmail.com
+From:   catherine chan <michaelgere001@gmail.com>
+Date:   Mon, 31 Jul 2023 21:17:54 +0200
+Message-ID: <CAHXSnz-5zvKitiwRBj-g+ezDFpSW=LtsXAQ7gdLYFahwcSqFmg@mail.gmail.com>
+Subject: Re:Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 6:12=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Sat, 22 Jul 2023 03:22:51 +0100,
-> Raghavendra Rao Ananta <rananta@google.com> wrote:
-> >
-> > The current implementation of the stage-2 unmap walker traverses
-> > the given range and, as a part of break-before-make, performs
-> > TLB invalidations with a DSB for every PTE. A multitude of this
-> > combination could cause a performance bottleneck on some systems.
-> >
-> > Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
-> > invalidations until the entire walk is finished, and then
-> > use range-based instructions to invalidate the TLBs in one go.
-> > Condition deferred TLB invalidation on the system supporting FWB,
-> > as the optimization is entirely pointless when the unmap walker
-> > needs to perform CMOs.
-> >
-> > Rename stage2_put_pte() to stage2_unmap_put_pte() as the function
-> > now serves the stage-2 unmap walker specifically, rather than
-> > acting generic.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/kvm/hyp/pgtable.c | 67 +++++++++++++++++++++++++++++++-----
-> >  1 file changed, 58 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.=
-c
-> > index 5ef098af1736..cf88933a2ea0 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -831,16 +831,54 @@ static void stage2_make_pte(const struct kvm_pgta=
-ble_visit_ctx *ctx, kvm_pte_t n
-> >       smp_store_release(ctx->ptep, new);
-> >  }
-> >
-> > -static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, st=
-ruct kvm_s2_mmu *mmu,
-> > -                        struct kvm_pgtable_mm_ops *mm_ops)
-> > +struct stage2_unmap_data {
-> > +     struct kvm_pgtable *pgt;
-> > +     bool defer_tlb_flush_init;
-> > +};
-> > +
-> > +static bool __stage2_unmap_defer_tlb_flush(struct kvm_pgtable *pgt)
-> > +{
-> > +     /*
-> > +      * If FEAT_TLBIRANGE is implemented, defer the individual
-> > +      * TLB invalidations until the entire walk is finished, and
-> > +      * then use the range-based TLBI instructions to do the
-> > +      * invalidations. Condition deferred TLB invalidation on the
-> > +      * system supporting FWB, as the optimization is entirely
-> > +      * pointless when the unmap walker needs to perform CMOs.
-> > +      */
-> > +     return system_supports_tlb_range() && stage2_has_fwb(pgt);
-> > +}
-> > +
-> > +static bool stage2_unmap_defer_tlb_flush(struct stage2_unmap_data *unm=
-ap_data)
-> > +{
-> > +     bool defer_tlb_flush =3D __stage2_unmap_defer_tlb_flush(unmap_dat=
-a->pgt);
-> > +
-> > +     /*
-> > +      * Since __stage2_unmap_defer_tlb_flush() is based on alternative
-> > +      * patching and the TLBIs' operations behavior depend on this,
-> > +      * track if there's any change in the state during the unmap sequ=
-ence.
-> > +      */
-> > +     WARN_ON(unmap_data->defer_tlb_flush_init !=3D defer_tlb_flush);
-> > +     return defer_tlb_flush;
->
-> I really don't understand what you're testing here. The ability to
-> defer TLB invalidation is a function of the system capabilities
-> (range+FWB) and a single flag that is only set on the host for pKVM.
->
-> How could that change in the middle of the life of the system? if
-> further begs the question about the need for the unmap_data data
-> structure.
->
-> It looks to me that we could simply pass the pgt pointer around and be
-> done with it. Am I missing something obvious?
->
-From one of the previous comments [1] (used in a different context),
-I'm given to understand that since these feature checks are governed
-by alternative patching, they can potentially change (at runtime?). Is
-that not the case and I have misunderstood the idea in comment [1]
-entirely? Is it solely used for optimization purposes and set only
-once?
-If that's the case, I can get rid of the WARN_ON() and unmap_data.
+-- 
+ Hello! How are you? Please forgive me if my application is not
+acceptable by your kind person, I saw your email and I want to talk to
+you directly by mail. I would appreciate it if you could send me an
+email when you receive it.
 
-- Raghavendra
-
-[1]: https://lore.kernel.org/all/ZGPPj1AXS0Uah2Ug@linux.dev/
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Waiting for your prompt response
+Greetings,
