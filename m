@@ -2,62 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9CC7691C0
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 11:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560E77691CA
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 11:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjGaJbL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 05:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S232367AbjGaJb7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 05:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjGaJa6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:30:58 -0400
-Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F7610D5
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:30:48 -0700 (PDT)
+        with ESMTP id S232223AbjGaJb1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:31:27 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7876510CE
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:31:24 -0700 (PDT)
 Received: from lenoch ([91.218.190.200])
         by cmgsmtp with ESMTPSA
-        id QPEjqwTxdPm6CQPEkqqHpc; Mon, 31 Jul 2023 11:30:46 +0200
+        id QPFJq0lIWv5uIQPFKqCtwT; Mon, 31 Jul 2023 11:31:22 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690795846; bh=AQGXBy7vpP7NRtHMfFfektc5a+kpqauMMvPT8YLPz4I=;
+        t=1690795882; bh=zyvVzoejlo3FqR7ayhT/w66XsBh9AM5Bu614Jh/8fTs=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=nsYdX1EF3tJlUGI5wpKmWWRWh9E9lS8QN+v65uI/yD9w/rGE8MiyT6HGB/diG2PhS
-         oFYBqbF2wXDwktY+7L7Xi1f0s8D90GSE5lVuFrFpSrpnW+SMJJtWuX64dS8tzgH67Q
-         8HXSYiHwG6yffMu4NRifCkq7yU3GRl4PFwqX7bly0uBoazx0EnaXKOF8GJf34CKHpp
-         IbtlX+GKj8IHMjbDywETVfv+7VhsiA9udhCyXWMyC6evoOhveYndcSqNLFoC+VfdmI
-         KEKYnJyWOnl41j512UdIvKHKcxjAtw4zT4D9EfAHHWhwyVv6YsFJB4vKpBAruYTEal
-         TfxX3a9EVtqvA==
+        b=qVZmkMMHXEoKJKy3ZPkc9LuKKsWT2vQcXN7PVkvf5cPL/7IFACAXtLWKMxroA3aYx
+         Isc7VLxh+bGx7ZeD9Vne3CYHZ/g5ZmTFu4rJLbnNvqwsUmAGxJFkN4yzg5uE4O+pym
+         EZ5HoVWZCmzS/vk9C2rm/FJrLR30r/vcugJHaIrX48kxQJxc42AHvYqVyOhFtyQnMf
+         1pR7T4QjHBXTC3VRG894iuHNlcknmJiLkGLph9dc8fbSbwU5p7NbhjHsqfhGqBBnZv
+         d5FirYPi3g0hUparDhaKGDu0YltFqUJmNpYLqcFI8S/tDTRuN4oyvTE7RLWsmsMY2q
+         mw1Sif+Wj2YtA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690795846; bh=AQGXBy7vpP7NRtHMfFfektc5a+kpqauMMvPT8YLPz4I=;
+        t=1690795882; bh=zyvVzoejlo3FqR7ayhT/w66XsBh9AM5Bu614Jh/8fTs=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=nsYdX1EF3tJlUGI5wpKmWWRWh9E9lS8QN+v65uI/yD9w/rGE8MiyT6HGB/diG2PhS
-         oFYBqbF2wXDwktY+7L7Xi1f0s8D90GSE5lVuFrFpSrpnW+SMJJtWuX64dS8tzgH67Q
-         8HXSYiHwG6yffMu4NRifCkq7yU3GRl4PFwqX7bly0uBoazx0EnaXKOF8GJf34CKHpp
-         IbtlX+GKj8IHMjbDywETVfv+7VhsiA9udhCyXWMyC6evoOhveYndcSqNLFoC+VfdmI
-         KEKYnJyWOnl41j512UdIvKHKcxjAtw4zT4D9EfAHHWhwyVv6YsFJB4vKpBAruYTEal
-         TfxX3a9EVtqvA==
-Date:   Mon, 31 Jul 2023 11:30:45 +0200
+        b=qVZmkMMHXEoKJKy3ZPkc9LuKKsWT2vQcXN7PVkvf5cPL/7IFACAXtLWKMxroA3aYx
+         Isc7VLxh+bGx7ZeD9Vne3CYHZ/g5ZmTFu4rJLbnNvqwsUmAGxJFkN4yzg5uE4O+pym
+         EZ5HoVWZCmzS/vk9C2rm/FJrLR30r/vcugJHaIrX48kxQJxc42AHvYqVyOhFtyQnMf
+         1pR7T4QjHBXTC3VRG894iuHNlcknmJiLkGLph9dc8fbSbwU5p7NbhjHsqfhGqBBnZv
+         d5FirYPi3g0hUparDhaKGDu0YltFqUJmNpYLqcFI8S/tDTRuN4oyvTE7RLWsmsMY2q
+         mw1Sif+Wj2YtA==
+Date:   Mon, 31 Jul 2023 11:31:21 +0200
 From:   Ladislav Michl <oss-lists@triops.cz>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Liang He <windhl@126.com>
 Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v5 1/7] usb: dwc3: dwc3-octeon: Convert to glue driver
-Message-ID: <ZMd/ReyiY7wS6DvN@lenoch>
+Subject: [PATCH v5 2/7] usb: dwc3: dwc3-octeon: Use _ULL bitfields defines
+Message-ID: <ZMd/aa2ncz6tJGNU@lenoch>
 References: <ZMd/HzISn0mPsNWt@lenoch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <ZMd/HzISn0mPsNWt@lenoch>
-X-CMAE-Envelope: MS4wfLRrfpUdRpgDrOtJ/kM5h/XfOB6pfYUGb9XG11zId09rqFeJHvbxLrv0UtRpW90a5XWXP+WK/MwYsQ6f8mYW9Lp6M2V5IDrdthdETEO7X1/29MEzUMFI
- 7MxMOYCCdj1L+fLtjdjXJyF5S8YyNhLU8goajRbTWiIE1FFIkG54kXcqRdbOfhqmVBdIjSehvLInO6vmeqQJ81jucX/0xSIDTyza004OyXDjGSZE30g1HKp8
- 6CHjk+phClF6Tl7SyXqSwMpcd4BZP0OOwDlHTzasiO0ztyYDdc44wBLD4Z/UFOtHxOuf0RRzVCsEyq1VDbDEPy0TpqF9MCamq4XrhxU4/h2YvnlKZmYxZpi+
- FnOleQ7a
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-CMAE-Envelope: MS4wfBpHXL+vnvCjyDA/B27KBP3vbHfIk8ksxxDfj8qyIGW78CAJhpndfUsAKED4wTUcdrRwiWCflb9Iuu7P3fl2wHiiAkTcFtjOb0PuKPASpCnRDpvpqxK1
+ s7DJqVajGM47u31jK+bkfJId0fpfI833vSeloml2PWzqHp5hQz+g6rA8YTutb50IVmce/5fCukryPji4hctByupTzDhrxnnyXf/NUpF5d4R3KEgqJG4qxGum
+ wFDZwRQEuFXo4LFiLuApqYdhbexmLMf+mizOAsfBRqHiinxTJ/D/hicWhC08ixAuN7fTyTW1MQn3krPBvzLIEg9YrNBgEUYP2kzcXofMeSuQ86h7g+5LtgfX
+ K+y1qwP6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,238 +65,219 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Ladislav Michl <ladis@linux-mips.org>
 
-DWC3 as implemented in Cavium SoC is using UCTL bridge unit
-between I/O interconnect and USB controller.
-
-Currently there is no bond with dwc3 core code, so if anything goes
-wrong in UCTL setup dwc3 is left in reset, which leads to bus error
-while trying to read any device register. Thus any failure in UCTL
-initialization ends with kernel panic.
-
-To avoid this move Octeon DWC3 glue code from arch/mips and make it
-proper glue driver which is used instead of dwc3-of-simple.
+While driver is intended to run on 64bit machines, it is compile time
+tested for 32bit targets as well. Here shift count overflow is reported
+for bits greater than 31, so use _ULL versions of BIT and GENMASK macros
+to silence these warnings.
 
 Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202307260537.MROrhVNM-lkp@intel.com/
 ---
  CHANGES:
- - v2: squashed move and glue conversion patch, fixed sparse warning
-       and formatting issue. Set private data at the end of probe.
-       Clear drvdata on remove. Added host mode only notice.
-       Collected ack for move from arch/mips.
- - v3: more descriptive commit message, dropped unrelated changes
- - v4: rename dwc3_data to dwc3_octeon, collect Thinh's ack.
- - v5: none
+ -v5: new patch
 
- arch/mips/cavium-octeon/Makefile              |   1 -
- arch/mips/cavium-octeon/octeon-platform.c     |   1 -
- drivers/usb/dwc3/Kconfig                      |  10 ++
- drivers/usb/dwc3/Makefile                     |   1 +
- .../usb/dwc3/dwc3-octeon.c                    | 105 ++++++++++--------
- drivers/usb/dwc3/dwc3-of-simple.c             |   1 -
- 6 files changed, 68 insertions(+), 51 deletions(-)
- rename arch/mips/cavium-octeon/octeon-usb.c => drivers/usb/dwc3/dwc3-octeon.c (91%)
+ drivers/usb/dwc3/dwc3-octeon.c | 78 +++++++++++++++++-----------------
+ 1 file changed, 39 insertions(+), 39 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/Makefile b/arch/mips/cavium-octeon/Makefile
-index 7c02e542959a..2a5926578841 100644
---- a/arch/mips/cavium-octeon/Makefile
-+++ b/arch/mips/cavium-octeon/Makefile
-@@ -18,4 +18,3 @@ obj-y += crypto/
- obj-$(CONFIG_MTD)		      += flash_setup.o
- obj-$(CONFIG_SMP)		      += smp.o
- obj-$(CONFIG_OCTEON_ILM)	      += oct_ilm.o
--obj-$(CONFIG_USB)		      += octeon-usb.o
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index ce05c0dd3acd..235c77ce7b18 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -450,7 +450,6 @@ static const struct of_device_id octeon_ids[] __initconst = {
- 	{ .compatible = "cavium,octeon-3860-bootbus", },
- 	{ .compatible = "cavium,mdio-mux", },
- 	{ .compatible = "gpio-leds", },
--	{ .compatible = "cavium,octeon-7130-usb-uctl", },
- 	{},
- };
- 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index be954a9abbe0..98efcbb76c88 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -168,4 +168,14 @@ config USB_DWC3_AM62
- 	  The Designware Core USB3 IP is programmed to operate in
- 	  in USB 2.0 mode only.
- 	  Say 'Y' or 'M' here if you have one such device
-+
-+config USB_DWC3_OCTEON
-+	tristate "Cavium Octeon Platforms"
-+	depends on CAVIUM_OCTEON_SOC || COMPILE_TEST
-+	default USB_DWC3
-+	help
-+	  Support Cavium Octeon platforms with DesignWare Core USB3 IP.
-+	  Only the host mode is currently supported.
-+	  Say 'Y' or 'M' here if you have one such device.
-+
- endif
-diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
-index 9f66bd82b639..fe1493d4bbe5 100644
---- a/drivers/usb/dwc3/Makefile
-+++ b/drivers/usb/dwc3/Makefile
-@@ -54,3 +54,4 @@ obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
- obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
- obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
- obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
-+obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
-diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/drivers/usb/dwc3/dwc3-octeon.c
-similarity index 91%
-rename from arch/mips/cavium-octeon/octeon-usb.c
-rename to drivers/usb/dwc3/dwc3-octeon.c
-index 2add435ad038..7134cdfc0fb6 100644
---- a/arch/mips/cavium-octeon/octeon-usb.c
+diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
+index 7134cdfc0fb6..69fe50cfa719 100644
+--- a/drivers/usb/dwc3/dwc3-octeon.c
 +++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -187,7 +187,10 @@
+@@ -24,9 +24,9 @@
+ /* BIST fast-clear mode select. A BIST run with this bit set
+  * clears all entries in USBH RAMs to 0x0.
+  */
+-# define USBDRD_UCTL_CTL_CLEAR_BIST		BIT(63)
++# define USBDRD_UCTL_CTL_CLEAR_BIST		BIT_ULL(63)
+ /* 1 = Start BIST and cleared by hardware */
+-# define USBDRD_UCTL_CTL_START_BIST		BIT(62)
++# define USBDRD_UCTL_CTL_START_BIST		BIT_ULL(62)
+ /* Reference clock select for SuperSpeed and HighSpeed PLLs:
+  *	0x0 = Both PLLs use DLMC_REF_CLK0 for reference clock
+  *	0x1 = Both PLLs use DLMC_REF_CLK1 for reference clock
+@@ -35,32 +35,32 @@
+  *	0x3 = SuperSpeed PLL uses DLMC_REF_CLK1 for reference clock &
+  *	      HighSpeed PLL uses PLL_REF_CLK for reference clck
+  */
+-# define USBDRD_UCTL_CTL_REF_CLK_SEL		GENMASK(61, 60)
++# define USBDRD_UCTL_CTL_REF_CLK_SEL		GENMASK_ULL(61, 60)
+ /* 1 = Spread-spectrum clock enable, 0 = SS clock disable */
+-# define USBDRD_UCTL_CTL_SSC_EN			BIT(59)
++# define USBDRD_UCTL_CTL_SSC_EN			BIT_ULL(59)
+ /* Spread-spectrum clock modulation range:
+  *	0x0 = -4980 ppm downspread
+  *	0x1 = -4492 ppm downspread
+  *	0x2 = -4003 ppm downspread
+  *	0x3 - 0x7 = Reserved
+  */
+-# define USBDRD_UCTL_CTL_SSC_RANGE		GENMASK(58, 56)
++# define USBDRD_UCTL_CTL_SSC_RANGE		GENMASK_ULL(58, 56)
+ /* Enable non-standard oscillator frequencies:
+  *	[55:53] = modules -1
+  *	[52:47] = 2's complement push amount, 0 = Feature disabled
+  */
+-# define USBDRD_UCTL_CTL_SSC_REF_CLK_SEL	GENMASK(55, 47)
++# define USBDRD_UCTL_CTL_SSC_REF_CLK_SEL	GENMASK_ULL(55, 47)
+ /* Reference clock multiplier for non-standard frequencies:
+  *	0x19 = 100MHz on DLMC_REF_CLK* if REF_CLK_SEL = 0x0 or 0x1
+  *	0x28 = 125MHz on DLMC_REF_CLK* if REF_CLK_SEL = 0x0 or 0x1
+  *	0x32 =  50MHz on DLMC_REF_CLK* if REF_CLK_SEL = 0x0 or 0x1
+  *	Other Values = Reserved
+  */
+-# define USBDRD_UCTL_CTL_MPLL_MULTIPLIER	GENMASK(46, 40)
++# define USBDRD_UCTL_CTL_MPLL_MULTIPLIER	GENMASK_ULL(46, 40)
+ /* Enable reference clock to prescaler for SuperSpeed functionality.
+  * Should always be set to "1"
+  */
+-# define USBDRD_UCTL_CTL_REF_SSP_EN		BIT(39)
++# define USBDRD_UCTL_CTL_REF_SSP_EN		BIT_ULL(39)
+ /* Divide the reference clock by 2 before entering the
+  * REF_CLK_FSEL divider:
+  *	If REF_CLK_SEL = 0x0 or 0x1, then only 0x0 is legal
+@@ -68,21 +68,21 @@
+  *		0x1 = DLMC_REF_CLK* is 125MHz
+  *		0x0 = DLMC_REF_CLK* is another supported frequency
+  */
+-# define USBDRD_UCTL_CTL_REF_CLK_DIV2		BIT(38)
++# define USBDRD_UCTL_CTL_REF_CLK_DIV2		BIT_ULL(38)
+ /* Select reference clock freqnuency for both PLL blocks:
+  *	0x27 = REF_CLK_SEL is 0x0 or 0x1
+  *	0x07 = REF_CLK_SEL is 0x2 or 0x3
+  */
+-# define USBDRD_UCTL_CTL_REF_CLK_FSEL		GENMASK(37, 32)
++# define USBDRD_UCTL_CTL_REF_CLK_FSEL		GENMASK_ULL(37, 32)
+ /* Controller clock enable. */
+-# define USBDRD_UCTL_CTL_H_CLK_EN		BIT(30)
++# define USBDRD_UCTL_CTL_H_CLK_EN		BIT_ULL(30)
+ /* Select bypass input to controller clock divider:
+  *	0x0 = Use divided coprocessor clock from H_CLKDIV
+  *	0x1 = Use clock from GPIO pins
+  */
+-# define USBDRD_UCTL_CTL_H_CLK_BYP_SEL		BIT(29)
++# define USBDRD_UCTL_CTL_H_CLK_BYP_SEL		BIT_ULL(29)
+ /* Reset controller clock divider. */
+-# define USBDRD_UCTL_CTL_H_CLKDIV_RST		BIT(28)
++# define USBDRD_UCTL_CTL_H_CLKDIV_RST		BIT_ULL(28)
+ /* Clock divider select:
+  *	0x0 = divide by 1
+  *	0x1 = divide by 2
+@@ -93,29 +93,29 @@
+  *	0x6 = divide by 24
+  *	0x7 = divide by 32
+  */
+-# define USBDRD_UCTL_CTL_H_CLKDIV_SEL		GENMASK(26, 24)
++# define USBDRD_UCTL_CTL_H_CLKDIV_SEL		GENMASK_ULL(26, 24)
+ /* USB3 port permanently attached: 0x0 = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_USB3_PORT_PERM_ATTACH	BIT(21)
++# define USBDRD_UCTL_CTL_USB3_PORT_PERM_ATTACH	BIT_ULL(21)
+ /* USB2 port permanently attached: 0x0 = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_USB2_PORT_PERM_ATTACH	BIT(20)
++# define USBDRD_UCTL_CTL_USB2_PORT_PERM_ATTACH	BIT_ULL(20)
+ /* Disable SuperSpeed PHY: 0x0 = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_USB3_PORT_DISABLE	BIT(18)
++# define USBDRD_UCTL_CTL_USB3_PORT_DISABLE	BIT_ULL(18)
+ /* Disable HighSpeed PHY: 0x0 = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_USB2_PORT_DISABLE	BIT(16)
++# define USBDRD_UCTL_CTL_USB2_PORT_DISABLE	BIT_ULL(16)
+ /* Enable PHY SuperSpeed block power: 0x0 = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_SS_POWER_EN		BIT(14)
++# define USBDRD_UCTL_CTL_SS_POWER_EN		BIT_ULL(14)
+ /* Enable PHY HighSpeed block power: 0x0 = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_HS_POWER_EN		BIT(12)
++# define USBDRD_UCTL_CTL_HS_POWER_EN		BIT_ULL(12)
+ /* Enable USB UCTL interface clock: 0xx = No, 0x1 = Yes */
+-# define USBDRD_UCTL_CTL_CSCLK_EN		BIT(4)
++# define USBDRD_UCTL_CTL_CSCLK_EN		BIT_ULL(4)
+ /* Controller mode: 0x0 = Host, 0x1 = Device */
+-# define USBDRD_UCTL_CTL_DRD_MODE		BIT(3)
++# define USBDRD_UCTL_CTL_DRD_MODE		BIT_ULL(3)
+ /* PHY reset */
+-# define USBDRD_UCTL_CTL_UPHY_RST		BIT(2)
++# define USBDRD_UCTL_CTL_UPHY_RST		BIT_ULL(2)
+ /* Software reset UAHC */
+-# define USBDRD_UCTL_CTL_UAHC_RST		BIT(1)
++# define USBDRD_UCTL_CTL_UAHC_RST		BIT_ULL(1)
+ /* Software resets UCTL */
+-# define USBDRD_UCTL_CTL_UCTL_RST		BIT(0)
++# define USBDRD_UCTL_CTL_UCTL_RST		BIT_ULL(0)
+ 
+ #define USBDRD_UCTL_BIST_STATUS			0x08
+ #define USBDRD_UCTL_SPARE0			0x10
+@@ -130,59 +130,59 @@
+  */
+ #define USBDRD_UCTL_HOST_CFG			0xe0
+ /* Indicates minimum value of all received BELT values */
+-# define USBDRD_UCTL_HOST_CFG_HOST_CURRENT_BELT	GENMASK(59, 48)
++# define USBDRD_UCTL_HOST_CFG_HOST_CURRENT_BELT	GENMASK_ULL(59, 48)
+ /* HS jitter adjustment */
+-# define USBDRD_UCTL_HOST_CFG_FLA		GENMASK(37, 32)
++# define USBDRD_UCTL_HOST_CFG_FLA		GENMASK_ULL(37, 32)
+ /* Bus-master enable: 0x0 = Disabled (stall DMAs), 0x1 = enabled */
+-# define USBDRD_UCTL_HOST_CFG_BME		BIT(28)
++# define USBDRD_UCTL_HOST_CFG_BME		BIT_ULL(28)
+ /* Overcurrent protection enable: 0x0 = unavailable, 0x1 = available */
+-# define USBDRD_UCTL_HOST_OCI_EN		BIT(27)
++# define USBDRD_UCTL_HOST_OCI_EN		BIT_ULL(27)
+ /* Overcurrent sene selection:
+  *	0x0 = Overcurrent indication from off-chip is active-low
+  *	0x1 = Overcurrent indication from off-chip is active-high
+  */
+-# define USBDRD_UCTL_HOST_OCI_ACTIVE_HIGH_EN	BIT(26)
++# define USBDRD_UCTL_HOST_OCI_ACTIVE_HIGH_EN	BIT_ULL(26)
+ /* Port power control enable: 0x0 = unavailable, 0x1 = available */
+-# define USBDRD_UCTL_HOST_PPC_EN		BIT(25)
++# define USBDRD_UCTL_HOST_PPC_EN		BIT_ULL(25)
+ /* Port power control sense selection:
+  *	0x0 = Port power to off-chip is active-low
+  *	0x1 = Port power to off-chip is active-high
+  */
+-# define USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN	BIT(24)
++# define USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN	BIT_ULL(24)
+ 
+ /*
+  * UCTL Shim Features Register
+  */
+ #define USBDRD_UCTL_SHIM_CFG			0xe8
+ /* Out-of-bound UAHC register access: 0 = read, 1 = write */
+-# define USBDRD_UCTL_SHIM_CFG_XS_NCB_OOB_WRN	BIT(63)
++# define USBDRD_UCTL_SHIM_CFG_XS_NCB_OOB_WRN	BIT_ULL(63)
+ /* SRCID error log for out-of-bound UAHC register access:
+  *	[59:58] = chipID
+  *	[57] = Request source: 0 = core, 1 = NCB-device
+  *	[56:51] = Core/NCB-device number, [56] always 0 for NCB devices
+  *	[50:48] = SubID
+  */
+-# define USBDRD_UCTL_SHIM_CFG_XS_NCB_OOB_OSRC	GENMASK(59, 48)
++# define USBDRD_UCTL_SHIM_CFG_XS_NCB_OOB_OSRC	GENMASK_ULL(59, 48)
+ /* Error log for bad UAHC DMA access: 0 = Read log, 1 = Write log */
+-# define USBDRD_UCTL_SHIM_CFG_XM_BAD_DMA_WRN	BIT(47)
++# define USBDRD_UCTL_SHIM_CFG_XM_BAD_DMA_WRN	BIT_ULL(47)
+ /* Encoded error type for bad UAHC DMA */
+-# define USBDRD_UCTL_SHIM_CFG_XM_BAD_DMA_TYPE	GENMASK(43, 40)
++# define USBDRD_UCTL_SHIM_CFG_XM_BAD_DMA_TYPE	GENMASK_ULL(43, 40)
+ /* Select the IOI read command used by DMA accesses */
+-# define USBDRD_UCTL_SHIM_CFG_DMA_READ_CMD	BIT(12)
++# define USBDRD_UCTL_SHIM_CFG_DMA_READ_CMD	BIT_ULL(12)
+ /* Select endian format for DMA accesses to the L2C:
+  *	0x0 = Little endian
+  *	0x1 = Big endian
+  *	0x2 = Reserved
+  *	0x3 = Reserved
+  */
+-# define USBDRD_UCTL_SHIM_CFG_DMA_ENDIAN_MODE	GENMASK(9, 8)
++# define USBDRD_UCTL_SHIM_CFG_DMA_ENDIAN_MODE	GENMASK_ULL(9, 8)
+ /* Select endian format for IOI CSR access to UAHC:
+  *	0x0 = Little endian
+  *	0x1 = Big endian
+  *	0x2 = Reserved
+  *	0x3 = Reserved
+  */
+-# define USBDRD_UCTL_SHIM_CFG_CSR_ENDIAN_MODE	GENMASK(1, 0)
++# define USBDRD_UCTL_SHIM_CFG_CSR_ENDIAN_MODE	GENMASK_ULL(1, 0)
+ 
  #define USBDRD_UCTL_ECC				0xf0
  #define USBDRD_UCTL_SPARE1			0xf8
- 
--static DEFINE_MUTEX(dwc3_octeon_clocks_mutex);
-+struct dwc3_octeon {
-+	struct device *dev;
-+	void __iomem *base;
-+};
- 
- #ifdef CONFIG_CAVIUM_OCTEON_SOC
- #include <asm/octeon/octeon.h>
-@@ -233,6 +236,11 @@ static inline uint64_t dwc3_octeon_readq(void __iomem *addr)
- static inline void dwc3_octeon_writeq(void __iomem *base, uint64_t val) { }
- 
- static inline void dwc3_octeon_config_gpio(int index, int gpio) { }
-+
-+static uint64_t octeon_get_io_clock_rate(void)
-+{
-+	return 150000000;
-+}
- #endif
- 
- static int dwc3_octeon_get_divider(void)
-@@ -494,58 +502,59 @@ static void __init dwc3_octeon_phy_reset(void __iomem *base)
- 	dwc3_octeon_writeq(uctl_ctl_reg, val);
- }
- 
--static int __init dwc3_octeon_device_init(void)
-+static int dwc3_octeon_probe(struct platform_device *pdev)
- {
--	const char compat_node_name[] = "cavium,octeon-7130-usb-uctl";
--	struct platform_device *pdev;
--	struct device_node *node;
--	struct resource *res;
--	void __iomem *base;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->of_node;
-+	struct dwc3_octeon *octeon;
-+	int err;
- 
--	/*
--	 * There should only be three universal controllers, "uctl"
--	 * in the device tree. Two USB and a SATA, which we ignore.
--	 */
--	node = NULL;
--	do {
--		node = of_find_node_by_name(node, "uctl");
--		if (!node)
--			return -ENODEV;
--
--		if (of_device_is_compatible(node, compat_node_name)) {
--			pdev = of_find_device_by_node(node);
--			if (!pdev)
--				return -ENODEV;
--
--			/*
--			 * The code below maps in the registers necessary for
--			 * setting up the clocks and reseting PHYs. We must
--			 * release the resources so the dwc3 subsystem doesn't
--			 * know the difference.
--			 */
--			base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
--			if (IS_ERR(base)) {
--				put_device(&pdev->dev);
--				return PTR_ERR(base);
--			}
-+	octeon = devm_kzalloc(dev, sizeof(*octeon), GFP_KERNEL);
-+	if (!octeon)
-+		return -ENOMEM;
- 
--			mutex_lock(&dwc3_octeon_clocks_mutex);
--			if (dwc3_octeon_clocks_start(&pdev->dev, base) == 0)
--				dev_info(&pdev->dev, "clocks initialized.\n");
--			dwc3_octeon_set_endian_mode(base);
--			dwc3_octeon_phy_reset(base);
--			mutex_unlock(&dwc3_octeon_clocks_mutex);
--			devm_iounmap(&pdev->dev, base);
--			devm_release_mem_region(&pdev->dev, res->start,
--						resource_size(res));
--			put_device(&pdev->dev);
--		}
--	} while (node != NULL);
-+	octeon->dev = dev;
-+	octeon->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(octeon->base))
-+		return PTR_ERR(octeon->base);
- 
--	return 0;
-+	err = dwc3_octeon_clocks_start(dev, octeon->base);
-+	if (err)
-+		return err;
-+
-+	dwc3_octeon_set_endian_mode(octeon->base);
-+	dwc3_octeon_phy_reset(octeon->base);
-+
-+	platform_set_drvdata(pdev, octeon);
-+
-+	return of_platform_populate(node, NULL, NULL, dev);
-+}
-+
-+static void dwc3_octeon_remove(struct platform_device *pdev)
-+{
-+	struct dwc3_octeon *octeon = platform_get_drvdata(pdev);
-+
-+	of_platform_depopulate(octeon->dev);
-+	platform_set_drvdata(pdev, NULL);
- }
--device_initcall(dwc3_octeon_device_init);
- 
-+static const struct of_device_id dwc3_octeon_of_match[] = {
-+	{ .compatible = "cavium,octeon-7130-usb-uctl" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, dwc3_octeon_of_match);
-+
-+static struct platform_driver dwc3_octeon_driver = {
-+	.probe		= dwc3_octeon_probe,
-+	.remove_new	= dwc3_octeon_remove,
-+	.driver		= {
-+		.name	= "dwc3-octeon",
-+		.of_match_table = dwc3_octeon_of_match,
-+	},
-+};
-+module_platform_driver(dwc3_octeon_driver);
-+
-+MODULE_ALIAS("platform:dwc3-octeon");
- MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
- MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("USB driver for OCTEON III SoC");
-+MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index 7e6ad8fe61a5..d1539fc9eabd 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -170,7 +170,6 @@ static const struct dev_pm_ops dwc3_of_simple_dev_pm_ops = {
- 
- static const struct of_device_id of_dwc3_simple_match[] = {
- 	{ .compatible = "rockchip,rk3399-dwc3" },
--	{ .compatible = "cavium,octeon-7130-usb-uctl" },
- 	{ .compatible = "sprd,sc9860-dwc3" },
- 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
- 	{ .compatible = "hisilicon,hi3670-dwc3" },
 -- 
 2.39.2
 
