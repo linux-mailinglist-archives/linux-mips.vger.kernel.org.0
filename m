@@ -2,144 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7D3769A4C
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 17:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F4D769B97
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 17:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjGaPFM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 11:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S232198AbjGaP7B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 11:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGaPFL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 11:05:11 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C930B10D8;
-        Mon, 31 Jul 2023 08:05:10 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6bc886d1504so2501856a34.0;
-        Mon, 31 Jul 2023 08:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690815910; x=1691420710;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u6m8JY8xlL5lafnW2mrv8zTKCgyIbG7vfy4wiqcsH9M=;
-        b=rUNj22zwZBzunn/Ajoq/i5m40v6g0aCboJZnvwEo4kIsNVkvJS6n+ZjgbTRcq0lBTG
-         Q2LbRbSblCWiuDUMnEB8QD9YGEg/47qwm1srgYQGyv0C5kPjkil57PK9O60q+t5o6xRz
-         Ias1ysIofuAubayAYm0CDiiGjRpUnsAIEgmhwTgtdpXijeFaehkt4bOiqLVorQnclk05
-         sh63gX1w4FwJlt9WhXISfyF3dF8hbphjeWjr4x4q47uu+F3cWue9re/LNjEvFxCtoDnf
-         rWgHjkLmuCTxx7lBZRAVzp6Tmx1u44URkRSXjCU5Bm5ZfgtFmHIFTL+m9hhjq3eHr8l0
-         QVuw==
+        with ESMTP id S233005AbjGaP64 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 11:58:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABB71723
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 08:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690819094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4fe6hbS0UUlu2v7dj0yh2sFuv9miEav3h35iCM+LzrA=;
+        b=aUQq25fVqVWRGJcq14zax3WJWOdERpcRUDxaubSMjuwjb4gcPLAOGJbyxtCDwkniCKlJ3A
+        34Ri8Ndk4IgrJ6ACHR9Izl47SEjcAo7ESiNsQo6KC2L9xOGNOPqpvy7Vg35yslyEbhA5Ms
+        /snhZhML6Csfbsbcb9TXSuqmd5USAgY=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-70-ef7YwAhON5y3scoHqs6TSg-1; Mon, 31 Jul 2023 11:58:12 -0400
+X-MC-Unique: ef7YwAhON5y3scoHqs6TSg-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-99bfe6a531bso158725866b.1
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 08:58:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690815910; x=1691420710;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u6m8JY8xlL5lafnW2mrv8zTKCgyIbG7vfy4wiqcsH9M=;
-        b=fSnGJ+Go6I+pteo1Zwm9Pwq/XIJrNGCbpibfAmhYKnmVyM8c5RLT6/7Lh29vxqp7yt
-         M5rGfZBCzh90EjwwPIZlT7eY2KXpSUNw9rltki3IIsr344gawShpgk6NaaI6AlEv3XQS
-         WqblW5JMVag45B2OaLfDb9AhwCHs14CI4qRiLcCr2H1HsbWdZukVM07eNsTAh+Otxhg+
-         B1UfQWl5dZ5U1oEwcCiHPErhfF4d8fQr9ryLChW2WxRAbkhLhPFvcC2KTogKECvfRjCg
-         Vtftt7asVrdd2d4r4GSxSTd2n4j9P83432pKTaSDo3YID0FXZRDNVVH6T9tSGnNEQceE
-         4jPA==
-X-Gm-Message-State: ABy/qLbsvgfQ07pkTbC8bfvuOjqdYGgJnlulUCqFchOBL/rUfSIykeeO
-        2SamLVjRUQOmeBxNhI6VnPrv5ixqPzlyU+pAZMM=
-X-Google-Smtp-Source: APBJJlHzJxErT5OwsIf3L0CIAEkHW1mfa5PTeh4zgx1s2WO25NgFeHjAtK94BgN2qYOHeThl/TN/0rbuvDCCIpD9Zfk=
-X-Received: by 2002:a05:6870:148b:b0:1b0:4fc5:2e4b with SMTP id
- k11-20020a056870148b00b001b04fc52e4bmr12603538oab.9.1690815909642; Mon, 31
- Jul 2023 08:05:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690819091; x=1691423891;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4fe6hbS0UUlu2v7dj0yh2sFuv9miEav3h35iCM+LzrA=;
+        b=bMURrqafyRi+dVhKLViLvnhJKZHluuej95UixCrudFNP8s8VDTDqR8ICAdPYtWqelh
+         L3pHAfKaWxrcdfo5bmKTNPNAB5d4uJLx+wvJPfz4zmLUJs+lmUmD8H1CNnOHJrfvuI8c
+         /K9YimfaP4/O8k3wEdvQxIgWyW4TXF06TSGrV306JFm165UsJ6e7+P6nS4K1657cbqRc
+         X99iv2UB/7qzHMJ+R8yqgmTyc1vVRVSaMW39WkVwvq9ClFBEahVt/S4m0m1xFC34srZe
+         7JRx8w/oPkfaYDU0uR2Fjx24KXWf7vGHN9xMUoyL+AEZb+IeSev0IwW7/LdKghdGRPlw
+         wyfQ==
+X-Gm-Message-State: ABy/qLY+lr0UTt+S3ROHnPSKocEUeR7gkq2IY3K83N/XztQQWWjAEpdE
+        e3l7dVLNxg8M8GRewrZMzjf1dZlSU98eYisLo/pdt1ATrolDZxpjKvfvQXEMsvgLogXT3iLgl3l
+        tF9WeAIEtrefSCdYOOLxN3g==
+X-Received: by 2002:a17:906:11:b0:993:f744:d235 with SMTP id 17-20020a170906001100b00993f744d235mr164015eja.6.1690819091657;
+        Mon, 31 Jul 2023 08:58:11 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlE4qcb0DCH0D/UYAr1wihMNcJs7WXVHvdtoT78VyrDkWJveoJUy2CwgTeDnMx93k7Ts+Uy66g==
+X-Received: by 2002:a17:906:11:b0:993:f744:d235 with SMTP id 17-20020a170906001100b00993f744d235mr163994eja.6.1690819091362;
+        Mon, 31 Jul 2023 08:58:11 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id f21-20020a170906139500b00992dcae806bsm6371003ejc.5.2023.07.31.08.58.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 08:58:10 -0700 (PDT)
+Message-ID: <eb356cf1-c661-930b-2175-427a59267d1f@redhat.com>
+Date:   Mon, 31 Jul 2023 17:58:08 +0200
 MIME-Version: 1.0
-References: <2a4da319-a78a-7cb1-6f18-f59180de779f@gmail.com>
-In-Reply-To: <2a4da319-a78a-7cb1-6f18-f59180de779f@gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 31 Jul 2023 17:04:57 +0200
-Message-ID: <CAMhs-H-ZES+O07ZbY37xVWqQ0f4YmmR5mz6BGvv43iXz+me2Mg@mail.gmail.com>
-Subject: Re: MediaTek Frame Engine Ethernet: does it need any resets?
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Network Development <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20230718234512.1690985-1-seanjc@google.com>
+ <20230718234512.1690985-7-seanjc@google.com> <ZMOJgnyzzUNIx+Tn@google.com>
+ <ZMRXVZYaJ9wojGtS@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH v11 06/29] KVM: Introduce KVM_SET_USER_MEMORY_REGION2
+In-Reply-To: <ZMRXVZYaJ9wojGtS@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rafal,
+On 7/29/23 02:03, Sean Christopherson wrote:
+> KVM would need to do multiple uaccess reads, but that's not a big
+> deal.  Am I missing something, or did past us just get too clever and
+> miss the obvious solution?
 
-On Sat, Jul 29, 2023 at 1:55=E2=80=AFPM Rafa=C5=82 Mi=C5=82ecki <zajec5@gma=
-il.com> wrote:
->
-> Hi,
->
-> I'm trying to understand MediaTek's Ethernet controller resets.
->
-> I noticed there is sth fishy when checking dts files. See following
-> errors:
->
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e10000=
-0: resets: [[2, 6], [2, 23]] is too short
->          From schema: Documentation/devicetree/bindings/net/mediatek,net.=
-yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e10000=
-0: reset-names:1: 'gmac' was expected
->          From schema: Documentation/devicetree/bindings/net/mediatek,net.=
-yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e10000=
-0: reset-names: ['fe', 'eth'] is too short
->          From schema: Documentation/devicetree/bindings/net/mediatek,net.=
-yaml
-> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e10000=
-0: Unevaluated properties are not allowed ('reset-names', 'resets' were une=
-xpected)
->          From schema: Documentation/devicetree/bindings/net/mediatek,net.=
-yaml
->
->
-> 1. Binding mediatek,net.yaml
-> It says that when present, there must be 3 resets: fe, gmac, ppe
->
-> 2. mt7621.dtsi
-> It specifies 2 resets: fe, eth
->
-> 3. mt7622.dtsi
-> It doesn't specify any resets
->
-> 4. mt7629.dtsi
-> It doesn't specify any resets
->
-> 5. drivers/net/ethernet/mediatek/
-> I don't see any reset_control_* code at all
->
->
-> Can someone help me what's the actual case with resets? Are they needed?
-> Are they used?
+You would have to introduce struct kvm_userspace_memory_region2 anyway, 
+though not a new ioctl, for two reasons:
 
-At least for mt7621 bindings have been released after the ethernet
-driver. The driver uses directly register offset for reset through the
-system controller syscon [1].
+1) the current size of the struct is part of the userspace API via the 
+KVM_SET_USER_MEMORY_REGION #define, so introducing a new struct is the 
+easiest way to preserve this
 
-Ideally reset_control APIs should be used since there is already a
-reset driver for mt7621 [2]. I don't know about the other SoCs.
+2) the struct can (at least theoretically) enter the ABI of a shared 
+library, and such mismatches are really hard to detect and resolve.  So 
+it's better to add the padding to a new struct, and keep struct 
+kvm_userspace_memory_region backwards-compatible.
 
-Hope this helps.
 
-Best regards,
-    Sergio Paracuellos
+As to whether we should introduce a new ioctl: doing so makes 
+KVM_SET_USER_MEMORY_REGION's detection of bad flags a bit more robust; 
+it's not like we cannot introduce new flags at all, of course, but 
+having out-of-bounds reads as a side effect of new flags is a bit nasty. 
+  Protecting programs from their own bugs gets into diminishing returns 
+very quickly, but introducing a new ioctl can make exploits a bit harder 
+when struct kvm_userspace_memory_region is on the stack and adjacent to 
+an attacker-controlled location.
 
-[1]: https://elixir.bootlin.com/linux/v6.5-rc3/source/drivers/net/ethernet/=
-mediatek/mtk_eth_soc.h#L495
-[2]: https://elixir.bootlin.com/linux/v6.5-rc3/source/drivers/clk/ralink/cl=
-k-mt7621.c
+Paolo
+
