@@ -2,62 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDA87691DA
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 11:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2D4769328
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 12:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbjGaJd5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 05:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S229650AbjGaKcM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 06:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjGaJd5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:33:57 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E792211A
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:33:55 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id QPHlq0muLv5uIQPHmqCucJ; Mon, 31 Jul 2023 11:33:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690796034; bh=p8BAX+z5tyX+vrhH+vr3OPQKUiBENZsKmQLHx64s87M=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=fN2Q0CYaxde7NSd/hEnjOppkcnVAt4qRVFjyg1DVS7qIGHgp59qrsc7lwswg2wdTc
-         pmELR/mwWpaYpqVsoCG+huvUeXl6y3teHhyCz1jnFyuX3DySOfK82LGlHQ+FbDZM/X
-         dprtagk4hwQ6Y2epkaIAV+lonZRyZ5SAxbSEVNbFhNLTuSxIhiDqw0A1we7x+c8/OY
-         yUQv96f114dQ5Iz/7EnrwPzZTMRm9h4E9woWvPaJEyhxlti5IK/GGrGSfR3LdUEQYO
-         7c2kzBdb5DSEXBzEV07UPuUGvfcJ/0AhMJlXewZxb+6p82ffFAPIspKjTVHNxCYHtt
-         Knl5gkUOdMW3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690796034; bh=p8BAX+z5tyX+vrhH+vr3OPQKUiBENZsKmQLHx64s87M=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=fN2Q0CYaxde7NSd/hEnjOppkcnVAt4qRVFjyg1DVS7qIGHgp59qrsc7lwswg2wdTc
-         pmELR/mwWpaYpqVsoCG+huvUeXl6y3teHhyCz1jnFyuX3DySOfK82LGlHQ+FbDZM/X
-         dprtagk4hwQ6Y2epkaIAV+lonZRyZ5SAxbSEVNbFhNLTuSxIhiDqw0A1we7x+c8/OY
-         yUQv96f114dQ5Iz/7EnrwPzZTMRm9h4E9woWvPaJEyhxlti5IK/GGrGSfR3LdUEQYO
-         7c2kzBdb5DSEXBzEV07UPuUGvfcJ/0AhMJlXewZxb+6p82ffFAPIspKjTVHNxCYHtt
-         Knl5gkUOdMW3w==
-Date:   Mon, 31 Jul 2023 11:33:53 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>
-Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v5 7/7] usb: dwc3: dwc3-octeon: Add SPDX header and copyright
-Message-ID: <ZMeAAYx6Z3hlQBNQ@lenoch>
-References: <ZMd/HzISn0mPsNWt@lenoch>
+        with ESMTP id S229537AbjGaKcM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 06:32:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C943E3;
+        Mon, 31 Jul 2023 03:32:11 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BA296606EF9;
+        Mon, 31 Jul 2023 11:32:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1690799530;
+        bh=36IlG+PKEmvnh9c4GLpbGVNrtebOjrSS95FN1qpJh8w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oFWbPiZrLQwzGhlFA32x9XCnDdUhjzSgIaMBorYZWwxTIuM4TlMqNDCsMfQqt+4dZ
+         B3SDZUiLIVggGVzC4+tKI5jbbXr7RaRhzlLemdOL/lijsYZyH7iNbDHCbIZLuvrL84
+         /Jgt2lWvTqrukpaQcdnU/i7lPed8FHNRBHsg9drh7EbUSbXH78mcfzK6vwI7YKdfgQ
+         dVpDib8k62q8opjbgYLN3GhB14/L7iKHO1RITP9cOpVnsiuRJJiqq/uOFp/u0Ihyup
+         sXCXGD33UJjsxbrNJn1VdL7dSWgEypks/jwf9g7Qkp1xzDuVJbEsInQFcnEWkcAYIm
+         DXseFgDYiSFnw==
+Message-ID: <b0daeb57-a2e0-54f9-a0c4-f4b71e253982@collabora.com>
+Date:   Mon, 31 Jul 2023 12:32:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] mips: dts: ralink: reorder MT7621 clocks in Ethernet
+ block
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230729110449.1357-1-zajec5@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230729110449.1357-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZMd/HzISn0mPsNWt@lenoch>
-X-CMAE-Envelope: MS4wfCN0FotF9j3o28CTfKr2i3BdJ+umd/S1pdcLejQsmY33tmwbYTfg1ADDfiA1w73jWZmK5ioXlT3ixhxwixfvKSl7TvarauCM5gXW/Vus86EpmfQmImtT
- HSBfBU/z00n8Q9A4+eKufZQSU/CrHr03tr/plnm/OX77M+qPSwSBa5NK4f58BeX1/AGyNqut29kvqRMYlTMZw2xdVrOZ7gfwY4g96m8ejK3oCXr4k/wXmIjX
- lY2AsJEDxykncJXtbcErAcxAE5x325r/2s1uscLz/UGIE5GUKogYJq7mIEg+WpJFDHP8XuHl9nqtYgw2Jyh7vEFpwSgaBr6N+CiFasqqiX5rDFHaOnTEw2nV
- aBimIDki
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +68,20 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ladislav Michl <ladis@linux-mips.org>
+Il 29/07/23 13:04, Rafa≈Ç Mi≈Çecki ha scritto:
+> From: Rafa≈Ç Mi≈Çecki <rafal@milecki.pl>
+> 
+> Use order as specified in the binding (first "ethif" then "fe").
+> 
+> This fixes:
+> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:0: 'ethif' was expected
+>          From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e100000: clock-names:1: 'fe' was expected
+>          From schema: Documentation/devicetree/bindings/net/mediatek,net.yaml
+> 
+> Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
+> Signed-off-by: Rafa≈Ç Mi≈Çecki <rafal@milecki.pl>
 
-Assign copyright to indicate driver rewrite is done for RACOM s.r.o.
-As David no longer works for Marvell (Cavium), I'm to blame for breakage.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
----
- CHANGES:
- - v2: None
- - v3: None
- - v4: Assign copyring to RACOM s.r.o., MÌrov· 1283, NovÈ MÏsto na MoravÏ
- - v5: None
-
- drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index d578110f7afb..6f47262a117a 100644
---- a/drivers/usb/dwc3/dwc3-octeon.c
-+++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -1,11 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * XHCI HCD glue for Cavium Octeon III SOCs.
-+ * DWC3 glue for Cavium Octeon III SOCs.
-  *
-  * Copyright (C) 2010-2017 Cavium Networks
-- *
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-+ * Copyright (C) 2023 RACOM s.r.o.
-  */
- 
- #include <linux/bitfield.h>
-@@ -537,6 +535,6 @@ static struct platform_driver dwc3_octeon_driver = {
- module_platform_driver(dwc3_octeon_driver);
- 
- MODULE_ALIAS("platform:dwc3-octeon");
--MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
-+MODULE_AUTHOR("Ladislav Michl <ladis@linux-mips.org>");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
--- 
-2.39.2
 
