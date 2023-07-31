@@ -2,145 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F4D769B97
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 17:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2278F769BCD
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 18:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbjGaP7B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 11:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S233169AbjGaQFF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 12:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbjGaP64 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 11:58:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABB71723
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 08:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690819094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4fe6hbS0UUlu2v7dj0yh2sFuv9miEav3h35iCM+LzrA=;
-        b=aUQq25fVqVWRGJcq14zax3WJWOdERpcRUDxaubSMjuwjb4gcPLAOGJbyxtCDwkniCKlJ3A
-        34Ri8Ndk4IgrJ6ACHR9Izl47SEjcAo7ESiNsQo6KC2L9xOGNOPqpvy7Vg35yslyEbhA5Ms
-        /snhZhML6Csfbsbcb9TXSuqmd5USAgY=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-70-ef7YwAhON5y3scoHqs6TSg-1; Mon, 31 Jul 2023 11:58:12 -0400
-X-MC-Unique: ef7YwAhON5y3scoHqs6TSg-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-99bfe6a531bso158725866b.1
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 08:58:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690819091; x=1691423891;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4fe6hbS0UUlu2v7dj0yh2sFuv9miEav3h35iCM+LzrA=;
-        b=bMURrqafyRi+dVhKLViLvnhJKZHluuej95UixCrudFNP8s8VDTDqR8ICAdPYtWqelh
-         L3pHAfKaWxrcdfo5bmKTNPNAB5d4uJLx+wvJPfz4zmLUJs+lmUmD8H1CNnOHJrfvuI8c
-         /K9YimfaP4/O8k3wEdvQxIgWyW4TXF06TSGrV306JFm165UsJ6e7+P6nS4K1657cbqRc
-         X99iv2UB/7qzHMJ+R8yqgmTyc1vVRVSaMW39WkVwvq9ClFBEahVt/S4m0m1xFC34srZe
-         7JRx8w/oPkfaYDU0uR2Fjx24KXWf7vGHN9xMUoyL+AEZb+IeSev0IwW7/LdKghdGRPlw
-         wyfQ==
-X-Gm-Message-State: ABy/qLY+lr0UTt+S3ROHnPSKocEUeR7gkq2IY3K83N/XztQQWWjAEpdE
-        e3l7dVLNxg8M8GRewrZMzjf1dZlSU98eYisLo/pdt1ATrolDZxpjKvfvQXEMsvgLogXT3iLgl3l
-        tF9WeAIEtrefSCdYOOLxN3g==
-X-Received: by 2002:a17:906:11:b0:993:f744:d235 with SMTP id 17-20020a170906001100b00993f744d235mr164015eja.6.1690819091657;
-        Mon, 31 Jul 2023 08:58:11 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlE4qcb0DCH0D/UYAr1wihMNcJs7WXVHvdtoT78VyrDkWJveoJUy2CwgTeDnMx93k7Ts+Uy66g==
-X-Received: by 2002:a17:906:11:b0:993:f744:d235 with SMTP id 17-20020a170906001100b00993f744d235mr163994eja.6.1690819091362;
-        Mon, 31 Jul 2023 08:58:11 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id f21-20020a170906139500b00992dcae806bsm6371003ejc.5.2023.07.31.08.58.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jul 2023 08:58:10 -0700 (PDT)
-Message-ID: <eb356cf1-c661-930b-2175-427a59267d1f@redhat.com>
-Date:   Mon, 31 Jul 2023 17:58:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Quentin Perret <qperret@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        with ESMTP id S233314AbjGaQE7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 12:04:59 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907711FDD;
+        Mon, 31 Jul 2023 09:04:34 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id E2B1868B05; Mon, 31 Jul 2023 18:04:09 +0200 (CEST)
+Date:   Mon, 31 Jul 2023 18:04:09 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Petr Tesarik <petrtesarik@huaweicloud.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
         Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-7-seanjc@google.com> <ZMOJgnyzzUNIx+Tn@google.com>
- <ZMRXVZYaJ9wojGtS@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [RFC PATCH v11 06/29] KVM: Introduce KVM_SET_USER_MEMORY_REGION2
-In-Reply-To: <ZMRXVZYaJ9wojGtS@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Petr Tesarik <petr.tesarik.ext@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        James Seo <james@equiv.tech>,
+        James Clark <james.clark@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        "open list:SLAB ALLOCATOR" <linux-mm@kvack.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>, petr@tesarici.cz
+Subject: Re: [PATCH v6 0/9] Allow dynamic allocation of software IO TLB
+ bounce buffers
+Message-ID: <20230731160409.GA8991@lst.de>
+References: <cover.1690459412.git.petr.tesarik.ext@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1690459412.git.petr.tesarik.ext@huawei.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/29/23 02:03, Sean Christopherson wrote:
-> KVM would need to do multiple uaccess reads, but that's not a big
-> deal.  Am I missing something, or did past us just get too clever and
-> miss the obvious solution?
-
-You would have to introduce struct kvm_userspace_memory_region2 anyway, 
-though not a new ioctl, for two reasons:
-
-1) the current size of the struct is part of the userspace API via the 
-KVM_SET_USER_MEMORY_REGION #define, so introducing a new struct is the 
-easiest way to preserve this
-
-2) the struct can (at least theoretically) enter the ABI of a shared 
-library, and such mismatches are really hard to detect and resolve.  So 
-it's better to add the padding to a new struct, and keep struct 
-kvm_userspace_memory_region backwards-compatible.
-
-
-As to whether we should introduce a new ioctl: doing so makes 
-KVM_SET_USER_MEMORY_REGION's detection of bad flags a bit more robust; 
-it's not like we cannot introduce new flags at all, of course, but 
-having out-of-bounds reads as a side effect of new flags is a bit nasty. 
-  Protecting programs from their own bugs gets into diminishing returns 
-very quickly, but introducing a new ioctl can make exploits a bit harder 
-when struct kvm_userspace_memory_region is on the stack and adjacent to 
-an attacker-controlled location.
-
-Paolo
-
+I was just going to apply this, but patch 1 seems to have a non-trivial
+conflict with the is_swiotlb_active removal in pci-dma.c.  Can you resend
+against the current dma-mapping for-next tree?
