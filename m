@@ -2,64 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8517691CE
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 11:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994C47691D2
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 11:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjGaJcY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 05:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S230451AbjGaJdE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 05:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbjGaJb4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:31:56 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ADE12D
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:31:49 -0700 (PDT)
+        with ESMTP id S232355AbjGaJcZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:32:25 -0400
+Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3A127
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:32:19 -0700 (PDT)
 Received: from lenoch ([91.218.190.200])
         by cmgsmtp with ESMTPSA
-        id QPFiq0lZmv5uIQPFjqCu2p; Mon, 31 Jul 2023 11:31:47 +0200
+        id QPGCqwV2zPm6CQPGEqqIHT; Mon, 31 Jul 2023 11:32:18 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690795907; bh=ejQNu4WaAC5/i3r4ni9jXUpPtWCphTBUKHGIV1oS+Es=;
+        t=1690795938; bh=nWemIEuN8F90ycMXo5G6slMMbUU2sM5EfPT8NBTPH+w=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=wWNbnff0ZGavtkCVSjvEMIo3BM47uINeewbsWB8Pmt3bt9gLKooxo7gCqifQVwyPY
-         oRdTdXxszSoaqcbLUUVmX8walu+4XvKTMXABR+L1slXEV3Kk8vLaXJrCDwst43DP8F
-         Lb2CeE6q+f1GuZEu6iTGFwWH14gtjwG0KJBI7PQFkZ/rXeaXFWgEj8MO1qiS2h0umO
-         q+9Gyu/T65z7W5J4kjevfzfuyjwvghRXn9EpjRzT5Tme38ntIG+QlxM15cwKaWAIgo
-         2HvUtLoUuvEFnXsIh8XYfv2zdCIDS5bGwkYWsp7dFpIcH2NU3rtvO0xuL2tzDYV7X2
-         ljx6EKytc0eJg==
+        b=tPJrgk8lnUJXstbdwX1HVnU9HrDu83n0Wqi/T1wobk9a7u/2berlAmLDoHvs0ETbC
+         6n996SaL93cnvSxiCKFg12tssBD/uSXgPV1aZRV0kYm3v8IAuCyuPZP/XzczKi4Hqu
+         o2YImRhZZHdhokB/gpFhV1mx1xrH9LQ0mv12q+wLGujSv+bcYdXvRWHSn36eSZoSfu
+         6aLWr5kpl1RqH1dy23MplV8JPHX/F7RSG3BupMOXW5eFzo+CGyaau+N6SAXe6SemlK
+         uZC8Sx4oknIa0UugQBEcmMDQ2f3M/egP//axTSU6vumyTo04QBWw0dHaWnRzBYWUeK
+         MPx8pCXB4awMA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690795907; bh=ejQNu4WaAC5/i3r4ni9jXUpPtWCphTBUKHGIV1oS+Es=;
+        t=1690795938; bh=nWemIEuN8F90ycMXo5G6slMMbUU2sM5EfPT8NBTPH+w=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=wWNbnff0ZGavtkCVSjvEMIo3BM47uINeewbsWB8Pmt3bt9gLKooxo7gCqifQVwyPY
-         oRdTdXxszSoaqcbLUUVmX8walu+4XvKTMXABR+L1slXEV3Kk8vLaXJrCDwst43DP8F
-         Lb2CeE6q+f1GuZEu6iTGFwWH14gtjwG0KJBI7PQFkZ/rXeaXFWgEj8MO1qiS2h0umO
-         q+9Gyu/T65z7W5J4kjevfzfuyjwvghRXn9EpjRzT5Tme38ntIG+QlxM15cwKaWAIgo
-         2HvUtLoUuvEFnXsIh8XYfv2zdCIDS5bGwkYWsp7dFpIcH2NU3rtvO0xuL2tzDYV7X2
-         ljx6EKytc0eJg==
-Date:   Mon, 31 Jul 2023 11:31:46 +0200
+        b=tPJrgk8lnUJXstbdwX1HVnU9HrDu83n0Wqi/T1wobk9a7u/2berlAmLDoHvs0ETbC
+         6n996SaL93cnvSxiCKFg12tssBD/uSXgPV1aZRV0kYm3v8IAuCyuPZP/XzczKi4Hqu
+         o2YImRhZZHdhokB/gpFhV1mx1xrH9LQ0mv12q+wLGujSv+bcYdXvRWHSn36eSZoSfu
+         6aLWr5kpl1RqH1dy23MplV8JPHX/F7RSG3BupMOXW5eFzo+CGyaau+N6SAXe6SemlK
+         uZC8Sx4oknIa0UugQBEcmMDQ2f3M/egP//axTSU6vumyTo04QBWw0dHaWnRzBYWUeK
+         MPx8pCXB4awMA==
+Date:   Mon, 31 Jul 2023 11:32:16 +0200
 From:   Ladislav Michl <oss-lists@triops.cz>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Liang He <windhl@126.com>
 Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v5 3/7] usb: dwc3: dwc3-octeon: Pass dwc3_octeon to setup
- functions
-Message-ID: <ZMd/gt58laSlqAAT@lenoch>
+Subject: [PATCH v5 4/7] usb: dwc3: dwc3-octeon: Avoid half-initialized
+ controller state
+Message-ID: <ZMd/oMRx8ze22/kK@lenoch>
 References: <ZMd/HzISn0mPsNWt@lenoch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <ZMd/HzISn0mPsNWt@lenoch>
-X-CMAE-Envelope: MS4wfKaZp2d7YTiWz14zlRtMEtkytLrK9QOyIOtBr0V4GGUwshynwMrNafveOkks+uRpldnAszgys7NkRl687c7P06JNeywwAZgJRBylFLXcwGas9lelgBO7
- H+7qQc9WPTTx2PBLFYbWXi0lj4RNsG7ueNFsautf4w/L6TSQx6NJHkeU1kpmy5IADlJom3dCB+2GrDsXAh4TFRJ7HCpWnq+7pinSSilW6TzhYjAlq2gE6rQr
- 7z3yzizKTdqhINkLVqxPjCWgMLy+P3sazUSTPEZdYE/W0VZ5xP4kM84SGuq3TMBDeTXFJBRIBZ7sXsZcWXGC+sMACn/AXy0rVO+glsuGpGQ4/jnzWEswZf8n
- bW+MmpVE
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-CMAE-Envelope: MS4wfJvX+DbKj70iVO55h/ufyqck4oKCkcAtuowsxZyJcQ+RO55f2pB5igYfDhqg5RhMSr8ReDu9kD6h4C6wSQSR7b+rufVFVr7TzBPy1+I2dM3S40sS2xKY
+ PyayaoR333GNTqDljQfUn6G7Yn5v6nv2wJdNX4Ig9/tROAfl4bQNknGEAxXzBItvh+0LQSj1csVXlxsla3J3SK0LJa1Fk9c74wmEpnQmQDvTx7SgP2H63yAg
+ 31FQe0EB4pfAdiUGOS9NHSVBA6qCe8oFTPtqEyHhXt54rxyYXF3gjU+jfywaLPIA2zieLKxHdwFm4r0ebi8va/1e1Y1cVx7M2kNL+1PU4Gm5Z1u8hoRS8e5Y
+ n+roVJO+
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,92 +66,157 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Ladislav Michl <ladis@linux-mips.org>
 
-Pass dwc3_octeon instead of just the base. It fits with the
-function names and it requires less change in the future if
-access to dwc3_octeon is needed.
+Power gpio configuration is done from the middle of
+dwc3_octeon_clocks_start leaving hardware in half-initialized
+state if it fails. As that indicates dwc3_octeon_clocks_start
+does more than just initialize the clocks rename it appropriately
+and verify power gpio configuration in advance at the beginning
+of device probe.
 
 Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 ---
  CHANGES:
  - v4: new patch
- - v5: Philippe's review tag
+ - v5: use uintptr_t instead of u64 to retype base address to make 32bit
+       compilers happy.
 
- drivers/usb/dwc3/dwc3-octeon.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+ drivers/usb/dwc3/dwc3-octeon.c | 90 ++++++++++++++++------------------
+ 1 file changed, 43 insertions(+), 47 deletions(-)
 
 diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index 69fe50cfa719..24e75881b5cf 100644
+index 24e75881b5cf..0dc45dda134c 100644
 --- a/drivers/usb/dwc3/dwc3-octeon.c
 +++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -300,12 +300,13 @@ static int dwc3_octeon_config_power(struct device *dev, void __iomem *base)
- 	return 0;
+@@ -192,6 +192,8 @@ struct dwc3_octeon {
+ 	void __iomem *base;
+ };
+ 
++#define DWC3_GPIO_POWER_NONE	(-1)
++
+ #ifdef CONFIG_CAVIUM_OCTEON_SOC
+ #include <asm/octeon/octeon.h>
+ static inline uint64_t dwc3_octeon_readq(void __iomem *addr)
+@@ -258,55 +260,15 @@ static int dwc3_octeon_get_divider(void)
+ 	return div;
  }
  
--static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
-+static int dwc3_octeon_clocks_start(struct dwc3_octeon *octeon)
+-static int dwc3_octeon_config_power(struct device *dev, void __iomem *base)
+-{
+-	uint32_t gpio_pwr[3];
+-	int gpio, len, power_active_low;
+-	struct device_node *node = dev->of_node;
+-	u64 val;
+-	void __iomem *uctl_host_cfg_reg = base + USBDRD_UCTL_HOST_CFG;
+-
+-	if (of_find_property(node, "power", &len) != NULL) {
+-		if (len == 12) {
+-			of_property_read_u32_array(node, "power", gpio_pwr, 3);
+-			power_active_low = gpio_pwr[2] & 0x01;
+-			gpio = gpio_pwr[1];
+-		} else if (len == 8) {
+-			of_property_read_u32_array(node, "power", gpio_pwr, 2);
+-			power_active_low = 0;
+-			gpio = gpio_pwr[1];
+-		} else {
+-			dev_err(dev, "invalid power configuration\n");
+-			return -EINVAL;
+-		}
+-		dwc3_octeon_config_gpio(((u64)base >> 24) & 1, gpio);
+-
+-		/* Enable XHCI power control and set if active high or low. */
+-		val = dwc3_octeon_readq(uctl_host_cfg_reg);
+-		val |= USBDRD_UCTL_HOST_PPC_EN;
+-		if (power_active_low)
+-			val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
+-		else
+-			val |= USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
+-		dwc3_octeon_writeq(uctl_host_cfg_reg, val);
+-	} else {
+-		/* Disable XHCI power control and set if active high. */
+-		val = dwc3_octeon_readq(uctl_host_cfg_reg);
+-		val &= ~USBDRD_UCTL_HOST_PPC_EN;
+-		val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
+-		dwc3_octeon_writeq(uctl_host_cfg_reg, val);
+-		dev_info(dev, "power control disabled\n");
+-	}
+-	return 0;
+-}
+-
+-static int dwc3_octeon_clocks_start(struct dwc3_octeon *octeon)
++static int dwc3_octeon_setup(struct dwc3_octeon *octeon,
++			     int power_gpio, int power_active_low)
  {
  	int i, div, mpll_mul, ref_clk_fsel, ref_clk_sel = 2;
  	u32 clock_rate;
  	u64 val;
--	void __iomem *uctl_ctl_reg = base + USBDRD_UCTL_CTL;
-+	struct device *dev = octeon->dev;
-+	void __iomem *uctl_ctl_reg = octeon->base + USBDRD_UCTL_CTL;
+ 	struct device *dev = octeon->dev;
+ 	void __iomem *uctl_ctl_reg = octeon->base + USBDRD_UCTL_CTL;
++	void __iomem *uctl_host_cfg_reg = octeon->base + USBDRD_UCTL_HOST_CFG;
  
  	if (dev->of_node) {
  		const char *ss_clock_type;
-@@ -452,8 +453,8 @@ static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
- 	/* Step 8b: Wait 10 controller-clock cycles. */
+@@ -454,8 +416,21 @@ static int dwc3_octeon_clocks_start(struct dwc3_octeon *octeon)
  	udelay(10);
  
--	/* Steo 8c: Setup power-power control. */
--	if (dwc3_octeon_config_power(dev, base))
-+	/* Step 8c: Setup power control. */
-+	if (dwc3_octeon_config_power(dev, octeon->base))
- 		return -EINVAL;
+ 	/* Step 8c: Setup power control. */
+-	if (dwc3_octeon_config_power(dev, octeon->base))
+-		return -EINVAL;
++	val = dwc3_octeon_readq(uctl_host_cfg_reg);
++	val |= USBDRD_UCTL_HOST_PPC_EN;
++	if (power_gpio == DWC3_GPIO_POWER_NONE) {
++		val &= ~USBDRD_UCTL_HOST_PPC_EN;
++	} else {
++		val |= USBDRD_UCTL_HOST_PPC_EN;
++		dwc3_octeon_config_gpio(((__force uintptr_t)octeon->base >> 24) & 1,
++					power_gpio);
++		dev_dbg(dev, "power control is using gpio%d\n", power_gpio);
++	}
++	if (power_active_low)
++		val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
++	else
++		val |= USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
++	dwc3_octeon_writeq(uctl_host_cfg_reg, val);
  
  	/* Step 8d: Deassert UAHC reset signal. */
-@@ -477,10 +478,10 @@ static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
- 	return 0;
- }
- 
--static void __init dwc3_octeon_set_endian_mode(void __iomem *base)
-+static void dwc3_octeon_set_endian_mode(struct dwc3_octeon *octeon)
- {
- 	u64 val;
--	void __iomem *uctl_shim_cfg_reg = base + USBDRD_UCTL_SHIM_CFG;
-+	void __iomem *uctl_shim_cfg_reg = octeon->base + USBDRD_UCTL_SHIM_CFG;
- 
- 	val = dwc3_octeon_readq(uctl_shim_cfg_reg);
- 	val &= ~USBDRD_UCTL_SHIM_CFG_DMA_ENDIAN_MODE;
-@@ -492,10 +493,10 @@ static void __init dwc3_octeon_set_endian_mode(void __iomem *base)
- 	dwc3_octeon_writeq(uctl_shim_cfg_reg, val);
- }
- 
--static void __init dwc3_octeon_phy_reset(void __iomem *base)
-+static void dwc3_octeon_phy_reset(struct dwc3_octeon *octeon)
- {
- 	u64 val;
--	void __iomem *uctl_ctl_reg = base + USBDRD_UCTL_CTL;
-+	void __iomem *uctl_ctl_reg = octeon->base + USBDRD_UCTL_CTL;
- 
  	val = dwc3_octeon_readq(uctl_ctl_reg);
- 	val &= ~USBDRD_UCTL_CTL_UPHY_RST;
-@@ -518,12 +519,12 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
+@@ -508,7 +483,28 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *node = dev->of_node;
+ 	struct dwc3_octeon *octeon;
+-	int err;
++	int power_active_low, power_gpio;
++	int err, len;
++
++	power_gpio = DWC3_GPIO_POWER_NONE;
++	power_active_low = 0;
++	if (of_find_property(node, "power", &len)) {
++		u32 gpio_pwr[3];
++
++		switch (len) {
++		case 8:
++			of_property_read_u32_array(node, "power", gpio_pwr, 2);
++			break;
++		case 12:
++			of_property_read_u32_array(node, "power", gpio_pwr, 3);
++			power_active_low = gpio_pwr[2] & 0x01;
++			break;
++		default:
++			dev_err(dev, "invalid power configuration\n");
++			return -EINVAL;
++		}
++		power_gpio = gpio_pwr[1];
++	}
+ 
+ 	octeon = devm_kzalloc(dev, sizeof(*octeon), GFP_KERNEL);
+ 	if (!octeon)
+@@ -519,7 +515,7 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
  	if (IS_ERR(octeon->base))
  		return PTR_ERR(octeon->base);
  
--	err = dwc3_octeon_clocks_start(dev, octeon->base);
-+	err = dwc3_octeon_clocks_start(octeon);
+-	err = dwc3_octeon_clocks_start(octeon);
++	err = dwc3_octeon_setup(octeon, power_gpio, power_active_low);
  	if (err)
  		return err;
- 
--	dwc3_octeon_set_endian_mode(octeon->base);
--	dwc3_octeon_phy_reset(octeon->base);
-+	dwc3_octeon_set_endian_mode(octeon);
-+	dwc3_octeon_phy_reset(octeon);
- 
- 	platform_set_drvdata(pdev, octeon);
  
 -- 
 2.39.2
