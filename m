@@ -2,125 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E651768A57
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 05:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE14B768C6C
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 08:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjGaDcZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 30 Jul 2023 23:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S229960AbjGaG43 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 02:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGaDcY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 30 Jul 2023 23:32:24 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AFB189;
-        Sun, 30 Jul 2023 20:32:22 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-522294c0d5bso5280543a12.2;
-        Sun, 30 Jul 2023 20:32:22 -0700 (PDT)
+        with ESMTP id S229505AbjGaG42 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 02:56:28 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6545D134
+        for <linux-mips@vger.kernel.org>; Sun, 30 Jul 2023 23:56:26 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-52256241c66so8661184a12.1
+        for <linux-mips@vger.kernel.org>; Sun, 30 Jul 2023 23:56:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690774341; x=1691379141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qN7NEm8kJ8Lg4BhAheGJ8bEapl5h32Ub6hisYq5saj8=;
-        b=k9s2U5iYbLF9Q9em+E7+oVYuLwHwh3AmH0cKkLWUSo//TF6EVRN7cYz8ULkqwIHMMk
-         2CZmiqKbXZdWLOfpPO08TQ9+2tk18cMltEYrFNkSgZnkTcKp4PyKW/B4v0kMcpWneP5N
-         Mqmhly+u+N0AwwTNFZ1m7twxiA//DzwdgpWW+muKx9MIvhyBMvJae3Fq49sBSmb2RegU
-         2wXS0hr2HgCBk634Mo1NZMBuuiooiAAMxy/dQ3kTEiVuPEXcaxHetmpQWWJXYm5XzLXy
-         Q6cMKkNYieJGmWS2axFFpPhhzIOHtc2IXrVxfiV5FiAfLUA2VzRCQrd5ZyZVtI2pUtzk
-         x+Ow==
+        d=linaro.org; s=google; t=1690786585; x=1691391385;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B+CfR0bQL2f6+lX0xcgogwy4lwpWoaSnfppJn89aXWk=;
+        b=GUWEp9EcVvFYEpYWiL5hR0u5tRun0bBc6gdFUvEBr2ca3dLBFSo6wwuoZiXMZyYcGD
+         toPpNRTJmFbjOdjqrqdN9KUbye/dlF3PdTH+hVVWddJ3NQm+3YemGfRml6CO3sQZz0AJ
+         k40y+yRttCxEEBZfU6nPOUUuRJb1y3VSgGEDu3AEyi/ON0hOWEvwOpeBRdXfZP1dY5hN
+         iIfhwvprSpoM5NNiKDagcfVcEz/9BE6EQQqPaByg1RwYmcjw+R3zzMI0VuCQhPL+y3w1
+         di6R+PU9hprzInMd9hTptP6RBthie/K7BbO0a2lbPIAlHveUdJqQN2yfVh77ZhR7hJi7
+         hqcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690774341; x=1691379141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qN7NEm8kJ8Lg4BhAheGJ8bEapl5h32Ub6hisYq5saj8=;
-        b=C3zP5+9HDLnzyEfxG5xJzpxsJz3QQdJiz5zQYH0tMnxYgZjN/mYth+S/tDf/wpmkBL
-         I9uAzYRQmS96xaRNAdamox3R0UGOBtOAOmSLbdjLY0zYaPFSKS5zAvaPoxs/qX8ZFwlw
-         4AF00wFeD/mATwAyfHl9JT1jX57hiaRJJlbd07KoG0pRmiLa+Z1sSvTG1stgc0lYL0A9
-         G8rn+cw0PUEgZI+veZ39BCFGtybShhVT5Gta+H9oJKp1q+MzzQV2ith4pFlYiF4tDh7+
-         FM9Lz197LLZSo2ZpeXBz9lSTcxSikzsfA6085gOj91ySexmjRyx9tkPNTM/yDtjclUTS
-         8LtQ==
-X-Gm-Message-State: ABy/qLaXITlSMXCbMcY7BI0fjtrj5YZzZKVhMBf3J49dH2ede2F5Z69M
-        tEDjnFT/NIMMYLp4bM4ljWRkBCA4voaeltv/1Bg=
-X-Google-Smtp-Source: APBJJlFRYHJwJWavld9Z7LIKd9SdNykbKrJzbQCOcMnNmAKp4Gf7qQUrpy7gt3vIZKJIxZzoya+XNXJtdLXJ2EyeBsc=
-X-Received: by 2002:a17:906:768d:b0:993:ce9d:6fc1 with SMTP id
- o13-20020a170906768d00b00993ce9d6fc1mr5398653ejm.3.1690774341113; Sun, 30 Jul
- 2023 20:32:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690786585; x=1691391385;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+CfR0bQL2f6+lX0xcgogwy4lwpWoaSnfppJn89aXWk=;
+        b=RR8L6U93cN7/f2iFy99H32iLqp052y6U7xAmcI8yLEPp0dc+IB8j95oZJZ3s+zK3PB
+         An6z1AoXeQsRt299k5P6JCL9w7yeIoWcj3BJwyojQK1f9I3ETtpRh4cHKRNRXc/YInR9
+         /gaOQOS2co9UIuDVQiUVwtMprCCsJJCNAQ1KC2fMZwbAq+coTnjENNwBLGErlsA06Sz5
+         FIdpmn+IbvTxY6ccBjwTurCQarSD78jFYKtkrhJFVnnAZD5HBnrKMzFXaUHtdatcarRH
+         j9ClOtCoVkLjUzT1IhUx56zfBpklhL9hIC74qpRWpgWXsJF3lWiyZXMOEx/BaxKaAvJm
+         abkA==
+X-Gm-Message-State: ABy/qLbMUeXvTK7yTbiYUCkgyn8bjSt1XkNpnbzHf7iQTp+OPaZXtlcf
+        bbX3Kp2OKVsP+txqBu1zeC1otQ==
+X-Google-Smtp-Source: APBJJlGCJK+vLRByTvuO6krg5VsOL4GRQzkfn6Akp0lQsgEeTOlxYlC1pqxpSpG6aT11G5ROzBnjWg==
+X-Received: by 2002:aa7:c84b:0:b0:51d:95ac:22ed with SMTP id g11-20020aa7c84b000000b0051d95ac22edmr9574982edt.1.1690786584828;
+        Sun, 30 Jul 2023 23:56:24 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.183])
+        by smtp.gmail.com with ESMTPSA id u24-20020a056402065800b0051bfc85afaasm5011296edx.86.2023.07.30.23.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jul 2023 23:56:24 -0700 (PDT)
+Message-ID: <bdd0b66a-2741-9140-ea1d-14caf938da38@linaro.org>
+Date:   Mon, 31 Jul 2023 08:56:22 +0200
 MIME-Version: 1.0
-References: <20230729134318.1694467-1-keguang.zhang@gmail.com>
- <20230729134318.1694467-8-keguang.zhang@gmail.com> <2ee2336c-d54f-6fb7-0142-8d0e08cce25b@linaro.org>
- <CAJhJPsXbW-JkzPTH+fHW3PD9J9+s0_F3Fbs3sb44tC12iTCk-Q@mail.gmail.com>
-In-Reply-To: <CAJhJPsXbW-JkzPTH+fHW3PD9J9+s0_F3Fbs3sb44tC12iTCk-Q@mail.gmail.com>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 31 Jul 2023 11:32:04 +0800
-Message-ID: <CAJhJPsXT+T7z4Av6tsQX00CAh8p6r-2ypggY+_iDufZhxToAWQ@mail.gmail.com>
-Subject: Re: [PATCH 07/17] MIPS: loongson32: Convert UART platform device to DT
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH 07/17] MIPS: loongson32: Convert UART platform device to
+ DT
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>
 Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230729134318.1694467-1-keguang.zhang@gmail.com>
+ <20230729134318.1694467-8-keguang.zhang@gmail.com>
+ <2ee2336c-d54f-6fb7-0142-8d0e08cce25b@linaro.org>
+ <CAJhJPsXbW-JkzPTH+fHW3PD9J9+s0_F3Fbs3sb44tC12iTCk-Q@mail.gmail.com>
+ <CAJhJPsXT+T7z4Av6tsQX00CAh8p6r-2ypggY+_iDufZhxToAWQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJhJPsXT+T7z4Av6tsQX00CAh8p6r-2ypggY+_iDufZhxToAWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 11:04=E2=80=AFAM Keguang Zhang <keguang.zhang@gmail=
-.com> wrote:
->
-> On Sun, Jul 30, 2023 at 4:26=E2=80=AFPM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 29/07/2023 15:43, Keguang Zhang wrote:
-> > > Add UART device nodes for Loongson-1 boards,
-> > > and drop the legacy platform devices and data accordingly.
-> > >
-> > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > > ---
-> > >  arch/mips/boot/dts/loongson/loongson1.dtsi    | 54 +++++++++++++++++=
-++
-> >
-> > Same problem - DTS is always separate. It seems you made this mistake
-> > everywhere, so entire patchset needs to be fixed. Keep all DTS - your
-> > base board and extending it - at the end of the patchset and squash it.
-> > There is little point to add new DTS in steps (e.g. first add incomplet=
-e
-> > broken DTS and then immediately fix it... no, instead just add correct
-> > and complete DTS).
-> >
-> Sorry. I thought it would be easier to review for split patches.
-> Thanks for the explanation.
-> Will send v2 with one complete DTS.
+On 31/07/2023 05:32, Keguang Zhang wrote:
+> On Mon, Jul 31, 2023 at 11:04 AM Keguang Zhang <keguang.zhang@gmail.com> wrote:
+>>
+>> On Sun, Jul 30, 2023 at 4:26 PM Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> On 29/07/2023 15:43, Keguang Zhang wrote:
+>>>> Add UART device nodes for Loongson-1 boards,
+>>>> and drop the legacy platform devices and data accordingly.
+>>>>
+>>>> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+>>>> ---
+>>>>  arch/mips/boot/dts/loongson/loongson1.dtsi    | 54 +++++++++++++++++++
+>>>
+>>> Same problem - DTS is always separate. It seems you made this mistake
+>>> everywhere, so entire patchset needs to be fixed. Keep all DTS - your
+>>> base board and extending it - at the end of the patchset and squash it.
+>>> There is little point to add new DTS in steps (e.g. first add incomplete
+>>> broken DTS and then immediately fix it... no, instead just add correct
+>>> and complete DTS).
+>>>
+>> Sorry. I thought it would be easier to review for split patches.
+>> Thanks for the explanation.
+>> Will send v2 with one complete DTS.
+> 
+> Hello Thomas,
+> May I ask your opinion about the way to delete the obsolete platform devices?
+> Should I delete them in one patch? Or in separated patches?
 
-Hello Thomas,
-May I ask your opinion about the way to delete the obsolete platform device=
-s?
-Should I delete them in one patch? Or in separated patches?
-Thanks!
+subsystem patches are split per subsystem. arch-code can be either
+together or also split per type of driver. Removal of code is
+incremental. Just add extending it, but your patch was not extending
+DTS, but adding new one.
 
-> >
-> > Best regards,
-> > Krzysztof
-> >
->
->
-> --
-> Best regards,
->
-> Keguang Zhang
-
-
-
---=20
 Best regards,
+Krzysztof
 
-Keguang Zhang
