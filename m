@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA06769F5A
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 19:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F59E769F82
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 19:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbjGaRVo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 13:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S229646AbjGaRbI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 13:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbjGaRV1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 13:21:27 -0400
+        with ESMTP id S229803AbjGaRbH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 13:31:07 -0400
 Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5944129
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 10:21:20 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-3490b737f9aso6385ab.0
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 10:21:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C29133
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 10:31:05 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-3492e05be7cso7695ab.0
+        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 10:31:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690824079; x=1691428879;
+        d=google.com; s=20221208; t=1690824664; x=1691429464;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x1yc8T49I2SK2WZwiTxo7poffYgxmNdrGJbub/r4Zew=;
-        b=3sVZ6Pvu0MXolTiQ3qzM8kGAaMnBBEr6wdfZ02tKrrgnWJIvo3F3TkblR8+mCeqLz7
-         1qXflSuEUvBPQ5UPzgIjQfEu4vFikLzhtIHvIPBXHMzl0AM/kqpA5ISl2NMmQYhDROP+
-         9e8klrqjKR1eutqvlrh4m6oRlLgNeD45MZr0hKazL8rfmsz5VFIrEaoD9EbMPVM48OeE
-         qCplx75r36D9baB9hAs1IgOBsL9TNbtYYnYvs0rvOqAoqW6tw1XlEV1PEwetGi2gpp4a
-         kbIlhN/ej8BKcLn9QF4bsJVwJkRXrgYR7F2khR014azoZLG2kmXOWrtv2RUvhNa4ZpL3
-         3Pgg==
+        bh=Q03jsirrcpz9THZTEToDjGsCufQsuiDSytShuzuhytQ=;
+        b=sORGvbtJhHxz53qrI/C6oraxYpTnjnsD8fulzoT4dhIBDQX2BnR3JuUM9pXznh0fVK
+         0Q++QS9YBd6xZyRFZ45krv0aqCEokBCpd/ksYBupaCA6A92A58scXFedQYlh0k/k4C5r
+         zId0p3PvqEPnRt5OU/Hwn5/TEFX9vZSKdXDZpHTqROf6CdWFvh35L9PfPXiugBLjPSJg
+         4xk332WGEOIjrUYIWqdFinZaga1dIOvxx0x/8JSRVskIc3FfZSLuGYh/O8Eto/p3IxhW
+         UYrRZcZL2C+X0esJUx4cUe1XLN8KMhWEmZW1V/Lb6UhZ7IMDvhGKObCAe9xtsJhQgGWN
+         hRLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690824079; x=1691428879;
+        d=1e100.net; s=20221208; t=1690824664; x=1691429464;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x1yc8T49I2SK2WZwiTxo7poffYgxmNdrGJbub/r4Zew=;
-        b=IMq9QCsWzZRlVmT/sLdmnDn31pNwSKTPqm/3wwFygMLaNK8Pyqq5KNtYOLZaOD8yGd
-         gokv1B/psCF0QHHbTbAXI4gm1qDC66J1Iv5OYj9pUwgTJQjFSwOy11upWYW0kq7fRL0M
-         5B0ZRd1YJuvRaopRIzMUZUuo2TBGQTioqAoX7gb7b0FCDMpjonlIrdnw0nbuGqFXZXE/
-         JI/p6DYjTf4sHl+IUwrVqRAaXnAvvGFVoaSnvsV6ezwfw0kSbg9tMDfU+IKCwHYs2OB8
-         kDGFKybp9/UntbT+C+nIXBjkzE3OGKXD1+zvgcGJtBpDTfMGHoGYfmqQLu0oxrLgMfyM
-         sICQ==
-X-Gm-Message-State: ABy/qLbOG2+0RqEHIPSC3guWcIWaXVfePeT++nUou/ONYsRsLal7ZuH6
-        j1/QiwiiPN4xMiFVYbPjdXzL63ewg0wJjZH6QxZ1iA==
-X-Google-Smtp-Source: APBJJlF2POzs0JiDlLB6/5fj5bT2PEm625iQ8R7ZMp4vjPEFJvEfQgAYflOknaXzwi3RrOdMIJI9UZP+pXJQibDjrAE=
-X-Received: by 2002:a05:6e02:144d:b0:346:48bd:da43 with SMTP id
- p13-20020a056e02144d00b0034648bdda43mr600950ilo.4.1690824079368; Mon, 31 Jul
- 2023 10:21:19 -0700 (PDT)
+        bh=Q03jsirrcpz9THZTEToDjGsCufQsuiDSytShuzuhytQ=;
+        b=al8OxUoGZKWVeT2UctrOu2yq7haLRtgBf8JeryGnoqYYaHPu0gN8yYnHA7SwrnaChX
+         SkzoA70whEwyDBBlUH2OKmZGeC4VNJZ+LCp8xCFewTE8wOvLm1IS9VE38a0CfrPmv6pN
+         iJ0EwH0DwGosJ7xBlNXnGN6TLUrQX8mCvV0BsgX8CQ+fZXw0VRMvnmQy4ah/J3VZmBIy
+         ueSgSJkb201phSLA7ud3ywTsFNELuSVAZPdcE6C7PYo2lHZ7vZLVdEl8HVein6So+D9K
+         l1MlIvxKI3s9Ec5Yzwc5y6mNoJDLr4simIntpV6iem3mNWVIWue5Je4KUmNjZd8Zr4L4
+         XQnA==
+X-Gm-Message-State: ABy/qLZdVuJMV9IqkbicRHgFRZ8ebgNhkWWbzbkmhlKm2Y5CJ5V/F1If
+        HSoRQ3Vx/5XM5KN2Ng4HcjZy8mA7J4SLsB8ltWOyFg==
+X-Google-Smtp-Source: APBJJlHmjmYpt26t014ApaGi4Ojnes96IDMRRl/L7/toNT1PsolsYi/piLtNCaMzdPalSPaMz0fip/Zr0n5KeG8QyVE=
+X-Received: by 2002:a05:6e02:1a09:b0:349:290:74e3 with SMTP id
+ s9-20020a056e021a0900b00349029074e3mr505815ild.23.1690824664464; Mon, 31 Jul
+ 2023 10:31:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230722022251.3446223-1-rananta@google.com> <20230722022251.3446223-2-rananta@google.com>
- <87v8e5r6s6.wl-maz@kernel.org>
-In-Reply-To: <87v8e5r6s6.wl-maz@kernel.org>
+References: <20230722022251.3446223-1-rananta@google.com> <20230722022251.3446223-6-rananta@google.com>
+ <87sf99r5gz.wl-maz@kernel.org>
+In-Reply-To: <87sf99r5gz.wl-maz@kernel.org>
 From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 31 Jul 2023 10:21:08 -0700
-Message-ID: <CAJHc60wtc2Usei3hKj1ykVRvBZFFCBOHMi9HCxnNvGK2dPFApA@mail.gmail.com>
-Subject: Re: [PATCH v7 01/12] KVM: Rename kvm_arch_flush_remote_tlb() to kvm_arch_flush_remote_tlbs()
+Date:   Mon, 31 Jul 2023 10:30:53 -0700
+Message-ID: <CAJHc60xiGyV69a68UBabnzRK0NNycWWQ1kt=ZjJGmC2qzmadAg@mail.gmail.com>
+Subject: Re: [PATCH v7 05/12] KVM: Move kvm_arch_flush_remote_tlbs_memslot()
+ to common code
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     Oliver Upton <oliver.upton@linux.dev>,
         James Morse <james.morse@arm.com>,
@@ -72,7 +73,6 @@ Cc:     Oliver Upton <oliver.upton@linux.dev>,
         linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
         Shaoqin Huang <shahuang@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -87,60 +87,73 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 3:24=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
+On Thu, Jul 27, 2023 at 3:53=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
 :
 >
-> On Sat, 22 Jul 2023 03:22:40 +0100,
+> On Sat, 22 Jul 2023 03:22:44 +0100,
 > Raghavendra Rao Ananta <rananta@google.com> wrote:
 > >
 > > From: David Matlack <dmatlack@google.com>
 > >
-> > Rename kvm_arch_flush_remote_tlb() and the associated macro
-> > __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB to kvm_arch_flush_remote_tlbs() and
-> > __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS respectively.
-> >
-> > Making the name plural matches kvm_flush_remote_tlbs() and makes it mor=
+> > Move kvm_arch_flush_remote_tlbs_memslot() to common code and drop
+> > "arch_" from the name. kvm_arch_flush_remote_tlbs_memslot() is just a
+> > range-based TLB invalidation where the range is defined by the memslot.
+> > Now that kvm_flush_remote_tlbs_range() can be called from common code w=
 e
-> > clear that this function can affect more than one remote TLB.
+> > can just use that and drop a bunch of duplicate code from the arch
+> > directories.
 > >
-> > No functional change intended.
+> > Note this adds a lockdep assertion for slots_lock being held when
+> > calling kvm_flush_remote_tlbs_memslot(), which was previously only
+> > asserted on x86. MIPS has calls to kvm_flush_remote_tlbs_memslot(),
+> > but they all hold the slots_lock, so the lockdep assertion continues to
+> > hold true.
+> >
+> > Also drop the CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT ifdef gating
+> > kvm_flush_remote_tlbs_memslot(), since it is no longer necessary.
 > >
 > > Signed-off-by: David Matlack <dmatlack@google.com>
 > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
 > > Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > > ---
-> >  arch/mips/include/asm/kvm_host.h | 4 ++--
-> >  arch/mips/kvm/mips.c             | 2 +-
-> >  arch/x86/include/asm/kvm_host.h  | 4 ++--
-> >  include/linux/kvm_host.h         | 4 ++--
-> >  virt/kvm/kvm_main.c              | 2 +-
-> >  5 files changed, 8 insertions(+), 8 deletions(-)
+> >  arch/arm64/kvm/arm.c     |  6 ------
+> >  arch/mips/kvm/mips.c     | 10 ++--------
+> >  arch/riscv/kvm/mmu.c     |  6 ------
+> >  arch/x86/kvm/mmu/mmu.c   | 16 +---------------
+> >  arch/x86/kvm/x86.c       |  2 +-
+> >  include/linux/kvm_host.h |  7 +++----
+> >  virt/kvm/kvm_main.c      | 18 ++++++++++++++++--
+> >  7 files changed, 23 insertions(+), 42 deletions(-)
 > >
-> > diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/k=
-vm_host.h
-> > index 04cedf9f8811..9b0ad8f3bf32 100644
-> > --- a/arch/mips/include/asm/kvm_host.h
-> > +++ b/arch/mips/include/asm/kvm_host.h
-> > @@ -896,7 +896,7 @@ static inline void kvm_arch_sched_in(struct kvm_vcp=
-u *vcpu, int cpu) {}
-> >  static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
-> >  static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>
+> [...]
+>
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 804470fccac7..58213cc4b9b9 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -379,6 +379,20 @@ void kvm_flush_remote_tlbs_range(struct kvm *kvm, =
+gfn_t gfn, u64 pages)
+> >       kvm_flush_remote_tlbs(kvm);
+> >  }
 > >
-> > -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
-> > -int kvm_arch_flush_remote_tlb(struct kvm *kvm);
-> > +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-> > +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> > +void kvm_flush_remote_tlbs_memslot(struct kvm *kvm,
+> > +                                const struct kvm_memory_slot *memslot)
+> > +{
+> > +     /*
+> > +      * All current use cases for flushing the TLBs for a specific mem=
+slot
+> > +      * related to dirty logging, and many do the TLB flush out of mmu=
+_lock.
 >
-> How about making this prototype global? I don't see a point in having
-> it per-architecture, specially as you are adding arm64 to that mix in
-> the following patch.
+> I appreciate this is a copy paste of an existing comment, but I can't
+> parse it. My command of the English language is notoriously
+> approximate, but it feels that something is missing in the first
+> sentence, such as a verb.
 >
-We can make it global, but I'm not sure what was the intention of the
-original author. My guess is that he was following the same style that
-we have for some of the other kvm_arch_*() functions
-(kvm_arch_free_vm() for example)?
+No, you are right. The sentence is broken, probably a missing "are" at
+the end of the first line. I'll fix it.
 
 - Raghavendra
 >         M.
