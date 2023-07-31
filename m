@@ -2,165 +2,302 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2F17691C1
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9CC7691C0
 	for <lists+linux-mips@lfdr.de>; Mon, 31 Jul 2023 11:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjGaJbN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jul 2023 05:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S231297AbjGaJbL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jul 2023 05:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbjGaJa7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:30:59 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417ED10D8
-        for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:30:49 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-52227884855so6799866a12.1
+        with ESMTP id S232263AbjGaJa6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jul 2023 05:30:58 -0400
+Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F7610D5
         for <linux-mips@vger.kernel.org>; Mon, 31 Jul 2023 02:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690795847; x=1691400647;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ziEHdMiDKlKGEA4myzpOfHCTiCmmAiAT9VETtxXexS8=;
-        b=guIUa9TpRYBjI0stX0rR0q2KYRVdgo42Rwix6s3W6cxhGOSx6PVyCTdA5g/AS2h33d
-         qccXGdTTxsaL3dKPpzdUGCwz9sOnNjZP2QZ+IRlflzPGUckJBW/eFq4DipVJqbUG5NQ/
-         5teoOLbLNLvidR0nDX0dInMVzU60IzUEZpiCJ78DCgLwH4VDVpyvS+PFDJmp2H2Cqsaq
-         ckd8/Aqk96/l2tM08ubMYTGsra64KF4plRKJW4CV/d6dRMYvZWy3I0q2vTBh3JUMjdY2
-         e0xEUNA9wJufu3+8SkFanLOhloqOVlBS3eZCjfmk+1nbmTk3VOjLRNz4/M5kaTwNZDzq
-         GaNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690795847; x=1691400647;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ziEHdMiDKlKGEA4myzpOfHCTiCmmAiAT9VETtxXexS8=;
-        b=iDx2yfT4Qx6L5gbQHSe/QjqdPITBB1rgen3zyLx7kEOBVuPAQaEtUC0rpHKdzi7rXf
-         qgvowyOTesC3q/Pz+UbYKqdmqdQe3GcTf35paiUsFPuB+Du+xTUw4EUAeCodKBJTWShe
-         2L0AKH7m+RxvPpJ44GYQ+RIdpmPvR8bIeffeaa3n5w2Oy7ihOL98auXt2Xx/HdFrfThI
-         55t5I+fMiDDgn4rm2WK3yA6bucjWfjcL9AKiwn2bPI6h1PUo1Jz31ai+qNhldQOfrjtM
-         oyuIEZeAJ+tRnCwNv2vdQsBFm7jgE+gA4kx/CZoWjKXTIpvS51Isz1x7qT44VftyHcfy
-         dWmw==
-X-Gm-Message-State: ABy/qLa8v6fcbk5eo7LrIDFD5HD8zir6B65ofBwW5QlhXIVMQhX2e+vQ
-        cpHJsNTakAMmI/0kSv8ecube8g==
-X-Google-Smtp-Source: APBJJlH9uJ20HU/xu6w4BzlZ8VKOTZ9pA8N8iNM1wVNpNPl9nuSdUi/k4VZmc0YpyQk9a9eYCl1pHA==
-X-Received: by 2002:aa7:c554:0:b0:522:40dd:74f3 with SMTP id s20-20020aa7c554000000b0052240dd74f3mr9248786edr.39.1690795847077;
-        Mon, 31 Jul 2023 02:30:47 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id q20-20020aa7da94000000b005228c045515sm5165439eds.14.2023.07.31.02.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 02:30:46 -0700 (PDT)
-Date:   Mon, 31 Jul 2023 09:30:43 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFC PATCH v11 06/29] KVM: Introduce KVM_SET_USER_MEMORY_REGION2
-Message-ID: <ZMd/Q4fytFhinDDj@google.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-7-seanjc@google.com>
- <ZMOJgnyzzUNIx+Tn@google.com>
- <ZMRXVZYaJ9wojGtS@google.com>
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id QPEjqwTxdPm6CQPEkqqHpc; Mon, 31 Jul 2023 11:30:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1690795846; bh=AQGXBy7vpP7NRtHMfFfektc5a+kpqauMMvPT8YLPz4I=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=nsYdX1EF3tJlUGI5wpKmWWRWh9E9lS8QN+v65uI/yD9w/rGE8MiyT6HGB/diG2PhS
+         oFYBqbF2wXDwktY+7L7Xi1f0s8D90GSE5lVuFrFpSrpnW+SMJJtWuX64dS8tzgH67Q
+         8HXSYiHwG6yffMu4NRifCkq7yU3GRl4PFwqX7bly0uBoazx0EnaXKOF8GJf34CKHpp
+         IbtlX+GKj8IHMjbDywETVfv+7VhsiA9udhCyXWMyC6evoOhveYndcSqNLFoC+VfdmI
+         KEKYnJyWOnl41j512UdIvKHKcxjAtw4zT4D9EfAHHWhwyVv6YsFJB4vKpBAruYTEal
+         TfxX3a9EVtqvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1690795846; bh=AQGXBy7vpP7NRtHMfFfektc5a+kpqauMMvPT8YLPz4I=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=nsYdX1EF3tJlUGI5wpKmWWRWh9E9lS8QN+v65uI/yD9w/rGE8MiyT6HGB/diG2PhS
+         oFYBqbF2wXDwktY+7L7Xi1f0s8D90GSE5lVuFrFpSrpnW+SMJJtWuX64dS8tzgH67Q
+         8HXSYiHwG6yffMu4NRifCkq7yU3GRl4PFwqX7bly0uBoazx0EnaXKOF8GJf34CKHpp
+         IbtlX+GKj8IHMjbDywETVfv+7VhsiA9udhCyXWMyC6evoOhveYndcSqNLFoC+VfdmI
+         KEKYnJyWOnl41j512UdIvKHKcxjAtw4zT4D9EfAHHWhwyVv6YsFJB4vKpBAruYTEal
+         TfxX3a9EVtqvA==
+Date:   Mon, 31 Jul 2023 11:30:45 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liang He <windhl@126.com>
+Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v5 1/7] usb: dwc3: dwc3-octeon: Convert to glue driver
+Message-ID: <ZMd/ReyiY7wS6DvN@lenoch>
+References: <ZMd/HzISn0mPsNWt@lenoch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZMRXVZYaJ9wojGtS@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZMd/HzISn0mPsNWt@lenoch>
+X-CMAE-Envelope: MS4wfLRrfpUdRpgDrOtJ/kM5h/XfOB6pfYUGb9XG11zId09rqFeJHvbxLrv0UtRpW90a5XWXP+WK/MwYsQ6f8mYW9Lp6M2V5IDrdthdETEO7X1/29MEzUMFI
+ 7MxMOYCCdj1L+fLtjdjXJyF5S8YyNhLU8goajRbTWiIE1FFIkG54kXcqRdbOfhqmVBdIjSehvLInO6vmeqQJ81jucX/0xSIDTyza004OyXDjGSZE30g1HKp8
+ 6CHjk+phClF6Tl7SyXqSwMpcd4BZP0OOwDlHTzasiO0ztyYDdc44wBLD4Z/UFOtHxOuf0RRzVCsEyq1VDbDEPy0TpqF9MCamq4XrhxU4/h2YvnlKZmYxZpi+
+ FnOleQ7a
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Friday 28 Jul 2023 at 17:03:33 (-0700), Sean Christopherson wrote:
-> On Fri, Jul 28, 2023, Quentin Perret wrote:
-> > On Tuesday 18 Jul 2023 at 16:44:49 (-0700), Sean Christopherson wrote:
-> > > --- a/include/uapi/linux/kvm.h
-> > > +++ b/include/uapi/linux/kvm.h
-> > > @@ -95,6 +95,16 @@ struct kvm_userspace_memory_region {
-> > >  	__u64 userspace_addr; /* start of the userspace allocated memory */
-> > >  };
-> > >  
-> > > +/* for KVM_SET_USER_MEMORY_REGION2 */
-> > > +struct kvm_userspace_memory_region2 {
-> > > +	__u32 slot;
-> > > +	__u32 flags;
-> > > +	__u64 guest_phys_addr;
-> > > +	__u64 memory_size;
-> > > +	__u64 userspace_addr;
-> > > +	__u64 pad[16];
-> > 
-> > Should we replace that pad[16] with:
-> > 
-> > 	__u64 size;
-> > 
-> > where 'size' is the size of the structure as seen by userspace? This is
-> > used in other UAPIs (see struct sched_attr for example) and is a bit
-> > more robust for future extensions (e.g. an 'old' kernel can correctly
-> > reject a newer version of the struct with additional fields it doesn't
-> > know about if that makes sense, etc).
-> 
-> "flags" serves that purpose, i.e. allows userspace to opt-in to having KVM actually
-> consume what is currently just padding.
+From: Ladislav Michl <ladis@linux-mips.org>
 
-Sure, I've just grown to dislike static padding of that type -- it ends
-up being either a waste a space, or is too small, while the 'superior'
-alternative (having a 'size' member) doesn't cost much and avoids those
-problems.
+DWC3 as implemented in Cavium SoC is using UCTL bridge unit
+between I/O interconnect and USB controller.
 
-But no strong opinion really, this struct really shouldn't grow much,
-so I'm sure that'll be fine in practice.
+Currently there is no bond with dwc3 core code, so if anything goes
+wrong in UCTL setup dwc3 is left in reset, which leads to bus error
+while trying to read any device register. Thus any failure in UCTL
+initialization ends with kernel panic.
 
-> The padding is there mainly to simplify kernel/KVM code, e.g. the number of bytes
-> that KVM needs to copy in is static.
-> 
-> But now that I think more on this, I don't know why we didn't just unconditionally
-> bump the size of kvm_userspace_memory_region.  We tried to play games with unions
-> and overlays, but that was a mess[*].
-> 
-> KVM would need to do multiple uaccess reads, but that's not a big deal.  Am I
-> missing something, or did past us just get too clever and miss the obvious solution?
-> 
-> [*] https://lkml.kernel.org/r/Y7xrtf9FCuYRYm1q%40google.com
+To avoid this move Octeon DWC3 glue code from arch/mips and make it
+proper glue driver which is used instead of dwc3-of-simple.
 
-Right, so the first uaccess would get_user() the flags, based on that
-we'd figure out the size of the struct, copy_from_user() what we need,
-and then sanity check the flags are the same from both reads, or
-something along those lines?
+Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ CHANGES:
+ - v2: squashed move and glue conversion patch, fixed sparse warning
+       and formatting issue. Set private data at the end of probe.
+       Clear drvdata on remove. Added host mode only notice.
+       Collected ack for move from arch/mips.
+ - v3: more descriptive commit message, dropped unrelated changes
+ - v4: rename dwc3_data to dwc3_octeon, collect Thinh's ack.
+ - v5: none
 
-That doesn't sound too complicated to me, and as long as every extension
-to the struct does come with a new flag I can't immediately see what
-would go wrong.
+ arch/mips/cavium-octeon/Makefile              |   1 -
+ arch/mips/cavium-octeon/octeon-platform.c     |   1 -
+ drivers/usb/dwc3/Kconfig                      |  10 ++
+ drivers/usb/dwc3/Makefile                     |   1 +
+ .../usb/dwc3/dwc3-octeon.c                    | 105 ++++++++++--------
+ drivers/usb/dwc3/dwc3-of-simple.c             |   1 -
+ 6 files changed, 68 insertions(+), 51 deletions(-)
+ rename arch/mips/cavium-octeon/octeon-usb.c => drivers/usb/dwc3/dwc3-octeon.c (91%)
+
+diff --git a/arch/mips/cavium-octeon/Makefile b/arch/mips/cavium-octeon/Makefile
+index 7c02e542959a..2a5926578841 100644
+--- a/arch/mips/cavium-octeon/Makefile
++++ b/arch/mips/cavium-octeon/Makefile
+@@ -18,4 +18,3 @@ obj-y += crypto/
+ obj-$(CONFIG_MTD)		      += flash_setup.o
+ obj-$(CONFIG_SMP)		      += smp.o
+ obj-$(CONFIG_OCTEON_ILM)	      += oct_ilm.o
+-obj-$(CONFIG_USB)		      += octeon-usb.o
+diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
+index ce05c0dd3acd..235c77ce7b18 100644
+--- a/arch/mips/cavium-octeon/octeon-platform.c
++++ b/arch/mips/cavium-octeon/octeon-platform.c
+@@ -450,7 +450,6 @@ static const struct of_device_id octeon_ids[] __initconst = {
+ 	{ .compatible = "cavium,octeon-3860-bootbus", },
+ 	{ .compatible = "cavium,mdio-mux", },
+ 	{ .compatible = "gpio-leds", },
+-	{ .compatible = "cavium,octeon-7130-usb-uctl", },
+ 	{},
+ };
+ 
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index be954a9abbe0..98efcbb76c88 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -168,4 +168,14 @@ config USB_DWC3_AM62
+ 	  The Designware Core USB3 IP is programmed to operate in
+ 	  in USB 2.0 mode only.
+ 	  Say 'Y' or 'M' here if you have one such device
++
++config USB_DWC3_OCTEON
++	tristate "Cavium Octeon Platforms"
++	depends on CAVIUM_OCTEON_SOC || COMPILE_TEST
++	default USB_DWC3
++	help
++	  Support Cavium Octeon platforms with DesignWare Core USB3 IP.
++	  Only the host mode is currently supported.
++	  Say 'Y' or 'M' here if you have one such device.
++
+ endif
+diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+index 9f66bd82b639..fe1493d4bbe5 100644
+--- a/drivers/usb/dwc3/Makefile
++++ b/drivers/usb/dwc3/Makefile
+@@ -54,3 +54,4 @@ obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
+ obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
+ obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
+ obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
++obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
+diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/drivers/usb/dwc3/dwc3-octeon.c
+similarity index 91%
+rename from arch/mips/cavium-octeon/octeon-usb.c
+rename to drivers/usb/dwc3/dwc3-octeon.c
+index 2add435ad038..7134cdfc0fb6 100644
+--- a/arch/mips/cavium-octeon/octeon-usb.c
++++ b/drivers/usb/dwc3/dwc3-octeon.c
+@@ -187,7 +187,10 @@
+ #define USBDRD_UCTL_ECC				0xf0
+ #define USBDRD_UCTL_SPARE1			0xf8
+ 
+-static DEFINE_MUTEX(dwc3_octeon_clocks_mutex);
++struct dwc3_octeon {
++	struct device *dev;
++	void __iomem *base;
++};
+ 
+ #ifdef CONFIG_CAVIUM_OCTEON_SOC
+ #include <asm/octeon/octeon.h>
+@@ -233,6 +236,11 @@ static inline uint64_t dwc3_octeon_readq(void __iomem *addr)
+ static inline void dwc3_octeon_writeq(void __iomem *base, uint64_t val) { }
+ 
+ static inline void dwc3_octeon_config_gpio(int index, int gpio) { }
++
++static uint64_t octeon_get_io_clock_rate(void)
++{
++	return 150000000;
++}
+ #endif
+ 
+ static int dwc3_octeon_get_divider(void)
+@@ -494,58 +502,59 @@ static void __init dwc3_octeon_phy_reset(void __iomem *base)
+ 	dwc3_octeon_writeq(uctl_ctl_reg, val);
+ }
+ 
+-static int __init dwc3_octeon_device_init(void)
++static int dwc3_octeon_probe(struct platform_device *pdev)
+ {
+-	const char compat_node_name[] = "cavium,octeon-7130-usb-uctl";
+-	struct platform_device *pdev;
+-	struct device_node *node;
+-	struct resource *res;
+-	void __iomem *base;
++	struct device *dev = &pdev->dev;
++	struct device_node *node = dev->of_node;
++	struct dwc3_octeon *octeon;
++	int err;
+ 
+-	/*
+-	 * There should only be three universal controllers, "uctl"
+-	 * in the device tree. Two USB and a SATA, which we ignore.
+-	 */
+-	node = NULL;
+-	do {
+-		node = of_find_node_by_name(node, "uctl");
+-		if (!node)
+-			return -ENODEV;
+-
+-		if (of_device_is_compatible(node, compat_node_name)) {
+-			pdev = of_find_device_by_node(node);
+-			if (!pdev)
+-				return -ENODEV;
+-
+-			/*
+-			 * The code below maps in the registers necessary for
+-			 * setting up the clocks and reseting PHYs. We must
+-			 * release the resources so the dwc3 subsystem doesn't
+-			 * know the difference.
+-			 */
+-			base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+-			if (IS_ERR(base)) {
+-				put_device(&pdev->dev);
+-				return PTR_ERR(base);
+-			}
++	octeon = devm_kzalloc(dev, sizeof(*octeon), GFP_KERNEL);
++	if (!octeon)
++		return -ENOMEM;
+ 
+-			mutex_lock(&dwc3_octeon_clocks_mutex);
+-			if (dwc3_octeon_clocks_start(&pdev->dev, base) == 0)
+-				dev_info(&pdev->dev, "clocks initialized.\n");
+-			dwc3_octeon_set_endian_mode(base);
+-			dwc3_octeon_phy_reset(base);
+-			mutex_unlock(&dwc3_octeon_clocks_mutex);
+-			devm_iounmap(&pdev->dev, base);
+-			devm_release_mem_region(&pdev->dev, res->start,
+-						resource_size(res));
+-			put_device(&pdev->dev);
+-		}
+-	} while (node != NULL);
++	octeon->dev = dev;
++	octeon->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(octeon->base))
++		return PTR_ERR(octeon->base);
+ 
+-	return 0;
++	err = dwc3_octeon_clocks_start(dev, octeon->base);
++	if (err)
++		return err;
++
++	dwc3_octeon_set_endian_mode(octeon->base);
++	dwc3_octeon_phy_reset(octeon->base);
++
++	platform_set_drvdata(pdev, octeon);
++
++	return of_platform_populate(node, NULL, NULL, dev);
++}
++
++static void dwc3_octeon_remove(struct platform_device *pdev)
++{
++	struct dwc3_octeon *octeon = platform_get_drvdata(pdev);
++
++	of_platform_depopulate(octeon->dev);
++	platform_set_drvdata(pdev, NULL);
+ }
+-device_initcall(dwc3_octeon_device_init);
+ 
++static const struct of_device_id dwc3_octeon_of_match[] = {
++	{ .compatible = "cavium,octeon-7130-usb-uctl" },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, dwc3_octeon_of_match);
++
++static struct platform_driver dwc3_octeon_driver = {
++	.probe		= dwc3_octeon_probe,
++	.remove_new	= dwc3_octeon_remove,
++	.driver		= {
++		.name	= "dwc3-octeon",
++		.of_match_table = dwc3_octeon_of_match,
++	},
++};
++module_platform_driver(dwc3_octeon_driver);
++
++MODULE_ALIAS("platform:dwc3-octeon");
+ MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
+ MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("USB driver for OCTEON III SoC");
++MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
+diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+index 7e6ad8fe61a5..d1539fc9eabd 100644
+--- a/drivers/usb/dwc3/dwc3-of-simple.c
++++ b/drivers/usb/dwc3/dwc3-of-simple.c
+@@ -170,7 +170,6 @@ static const struct dev_pm_ops dwc3_of_simple_dev_pm_ops = {
+ 
+ static const struct of_device_id of_dwc3_simple_match[] = {
+ 	{ .compatible = "rockchip,rk3399-dwc3" },
+-	{ .compatible = "cavium,octeon-7130-usb-uctl" },
+ 	{ .compatible = "sprd,sc9860-dwc3" },
+ 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
+ 	{ .compatible = "hisilicon,hi3670-dwc3" },
+-- 
+2.39.2
+
