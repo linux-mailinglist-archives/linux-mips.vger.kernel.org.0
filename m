@@ -2,117 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7101F76A917
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Aug 2023 08:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B94F76A937
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Aug 2023 08:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjHAGaQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Aug 2023 02:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S231583AbjHAGeY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Aug 2023 02:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjHAGaP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Aug 2023 02:30:15 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051FC1BF2;
-        Mon, 31 Jul 2023 23:29:57 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4RFPy51q9Nz9v7YW;
-        Tue,  1 Aug 2023 14:16:29 +0800 (CST)
-Received: from [10.81.220.249] (unknown [10.81.220.249])
-        by APP1 (Coremail) with SMTP id LxC2BwC3abkdpshkKRcYAA--.13561S2;
-        Tue, 01 Aug 2023 07:29:03 +0100 (CET)
-Message-ID: <4c2f96bc-f6c0-4a04-e4fa-6ab1b5e56bd6@huaweicloud.com>
-Date:   Tue, 1 Aug 2023 08:28:42 +0200
+        with ESMTP id S230408AbjHAGeT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Aug 2023 02:34:19 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E053F1736;
+        Mon, 31 Jul 2023 23:33:58 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-5633b7e5f90so3974527eaf.1;
+        Mon, 31 Jul 2023 23:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690871638; x=1691476438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LKCc2rKXf8V4+XCXWPe8OLQkPwapI0w4aGB/FpbSmi4=;
+        b=qiemk3mohhg+xAOpbLyh75xBQ0XBf+pyKp8+mn3/iwJr7lb/d6K4Jmd2CT/3NhGxpJ
+         0ig6IJLsSCSM2hjvFqaaE7KRNu/sRSEGscDbk64GseP1uJjscnZNEwJ8nR7gqCrvYNzp
+         IJTtYU/ZnEDQMWEDnHb5vDTYldERmJUQC0kziFDooKMObuBg0P0TIUTM1AHWA2tQ65ME
+         YATRzqFKFQHCn7POVF9LZMKIfw1mQYVFRJkNHd6tszZ01Hd5lECAcuXlfjvrNPCa2dt4
+         kEjF0YibGo2edUsW373dRNmgFcE5zHwPlEAazqLFOaVbpk2oNq5o4AJ1JVxN4OetErIH
+         VcfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690871638; x=1691476438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LKCc2rKXf8V4+XCXWPe8OLQkPwapI0w4aGB/FpbSmi4=;
+        b=KNWy9yEwjMkl48BdJWOA6oeMeg35HEFfWZTenZ9lJQzCSLkQoa4Z705PIKQKceATf1
+         6021OSrZYbJeG7ojqaiC/B86A2pCU2LSWiElQWe5pea8nTndwoxqHyOSe2ith1rlSnG7
+         cRhcJEGyUI5hd7GuRolRP4bpw8pVbkY1bL3LJeqAnviJzYHMHKAPl/Mf/1Hf05jC8ZPV
+         im2rM5yeAhRrBedS3OZSL+iKfOquVdgO9MLMSuTzpzHORMOw6kcad/tqM3a5D6bu9Utn
+         j74X3cUHGbsziBQaloAVdhiPKwd8GEvkhria3aeQ6E22NlVxIukXWBJitYRH+6ShwZvf
+         /J8g==
+X-Gm-Message-State: ABy/qLZkiNk/veMCzfza9W6CxdloGxpnBeuVJvSxf1JZu1kGD4ubUPwl
+        9rqmwOppEPLNI8NxPQiHUr4HepugymrhdGXhVyQ=
+X-Google-Smtp-Source: APBJJlE7oK2nlXq2a2uZW19q6boXQ0GoIFtAt0DViwCQHqSjaq44TkYovJHXpkKu7Yr24VlvKFZwqsDS2UMCA9m0Fsc=
+X-Received: by 2002:a4a:9c03:0:b0:565:bbc0:2e36 with SMTP id
+ y3-20020a4a9c03000000b00565bbc02e36mr10919110ooj.3.1690871637923; Mon, 31 Jul
+ 2023 23:33:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/9] Allow dynamic allocation of software IO TLB bounce
- buffers
-Content-Language: en-US
-To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+References: <20230729110449.1357-1-zajec5@gmail.com>
+In-Reply-To: <20230729110449.1357-1-zajec5@gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 1 Aug 2023 08:33:45 +0200
+Message-ID: <CAMhs-H9RpyCTcrRjtALg_aqGR7cmrz_ufQdVYm=WSEgUObpxKA@mail.gmail.com>
+Subject: Re: [PATCH] mips: dts: ralink: reorder MT7621 clocks in Ethernet block
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Petr Tesarik <petr.tesarik.ext@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        James Seo <james@equiv.tech>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
-        "open list:SLAB ALLOCATOR" <linux-mm@kvack.org>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>
-References: <cover.1690459412.git.petr.tesarik.ext@huawei.com>
- <20230731160409.GA8991@lst.de> <20230731214618.6e7cde05@meshulam.tesarici.cz>
-From:   Petr Tesarik <petrtesarik@huaweicloud.com>
-In-Reply-To: <20230731214618.6e7cde05@meshulam.tesarici.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwC3abkdpshkKRcYAA--.13561S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYc7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
-        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
-        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
-        I402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI
-        42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWI
-        evJa73UjIFyTuYvjfUoL0eDUUUU
-X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/31/2023 9:46 PM, Petr Tesařík wrote:
-> V Mon, 31 Jul 2023 18:04:09 +0200
-> Christoph Hellwig <hch@lst.de> napsáno:
-> 
->> I was just going to apply this, but patch 1 seems to have a non-trivial
->> conflict with the is_swiotlb_active removal in pci-dma.c.  Can you resend
->> against the current dma-mapping for-next tree?
-> 
-> Sure thing, will re-send tomorrow morning.
+On Sat, Jul 29, 2023 at 1:04=E2=80=AFPM Rafa=C5=82 Mi=C5=82ecki <zajec5@gma=
+il.com> wrote:
+>
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>
+> Use order as specified in the binding (first "ethif" then "fe").
+>
+> This fixes:
+> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e10000=
+0: clock-names:0: 'ethif' was expected
+>         From schema: Documentation/devicetree/bindings/net/mediatek,net.y=
+aml
+> arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: ethernet@1e10000=
+0: clock-names:1: 'fe' was expected
+>         From schema: Documentation/devicetree/bindings/net/mediatek,net.y=
+aml
+>
+> Fixes: 7a6ee0bbab25 ("mips: dts: ralink: add MT7621 SoC")
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> ---
+>  arch/mips/boot/dts/ralink/mt7621.dtsi | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
 
-After commit f9a38ea5172a ("x86: always initialize xen-swiotlb when
-xen-pcifront is enabling") removed that call to swiotlb_init_late(),
-there is nothing to patch, and the hunk can be dropped.
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-I have just sent v7.
-
-Petr T
-
+Thanks,
+    Sergio Paracuellos
