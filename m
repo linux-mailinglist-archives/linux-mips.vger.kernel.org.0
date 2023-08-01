@@ -2,71 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5BC76B44C
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Aug 2023 14:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8648C76B60C
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Aug 2023 15:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbjHAMEE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Aug 2023 08:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S233441AbjHANlT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Aug 2023 09:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbjHAMDp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Aug 2023 08:03:45 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C913D1734;
-        Tue,  1 Aug 2023 05:03:37 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b9b50be31aso84202331fa.3;
-        Tue, 01 Aug 2023 05:03:37 -0700 (PDT)
+        with ESMTP id S232201AbjHANlP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Aug 2023 09:41:15 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051041BF6
+        for <linux-mips@vger.kernel.org>; Tue,  1 Aug 2023 06:41:13 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3177163aa97so5852269f8f.0
+        for <linux-mips@vger.kernel.org>; Tue, 01 Aug 2023 06:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690891416; x=1691496216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8zpSRj+GD1K9ivzCsboyfWepvG0nnxsJI4neiOMEOJA=;
-        b=J9YXI/qQWmc5foKYmcXr/mlM5rzoT7ewawJlMCCWUj6LqVxodgC86yvhX9LVcLzrId
-         ZMkIdl0WnR24MEWt1s91jJUWB2YFfz+xv/6wJ3QScW6rg/hiNPf+6xxw2h8RpPg2W120
-         eLvpxuzfmRCQOR4uZj8OJAQyPe6pgJzwUQGN84YvXJiXkPBdPKsEITrwhkeEfuw9jGMO
-         Cxy6RyLHU8T6grY7VKpp0XfSrhJxws3xim3yVFVyrpSRjcXTD+zBxKVE2QxoGmyvi68V
-         q9Hj0nPh3vM3KnxiFNfgc+Cs1AWHntrw4iN1SvF4Bmb1ZzgEr7Pg1Op51Tf76WTE9XFj
-         ItAg==
+        d=linaro.org; s=google; t=1690897271; x=1691502071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1Jd6Bu2fWUccPQE4w3JM+VwAuK7pWORe1Hxf+ypNt9Y=;
+        b=Pm/W+3kn424ixYZQkKpzz4HcBDVHD776tjF+go9N11RWZ1VGoMssigfPmzEDNUG0M4
+         2ZoeIaILhyG9m3h/Pu0as0C+2uudxl0kv1oQiYj5xPX8ek+fK99/C91cXBgnGgSyjGaE
+         7wESfZdHDYT4h7e1ex7+D0AUh6JoiwkfWfe2iHJHnpA1elcXE8tyRtgENKerUnBF+S9W
+         bcQvJGB7G6qoKLEwcab/dU07sjAr8defNulFxJgoxoCHxXRuwfp9Yw3DNR7Yv3+XPdlh
+         JNPo/AaHA2pMj8Np3UHo3bfRQ5x9GwLMpTOWUniECTm1n9yR4T+/8C6iVurWJjd4nT1S
+         SYqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690891416; x=1691496216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8zpSRj+GD1K9ivzCsboyfWepvG0nnxsJI4neiOMEOJA=;
-        b=Td0FvCqi2R8GJFCXfLdGRu31QBJsp0yunf3dXrjT1CU7uROhbNDCwObB1sdnfYN19+
-         2ZjpvyZP5jFgEIpQskg5YiyogoIl6GNtrAS1gFT7GUPWdb5kxjfsDGh6b3mDpXHqC2/e
-         8bzYun2Stb0Q8IfBVctO1dMJ1DpnFiaTYnzxEqYB4tT1g2Hyy2GABSeNXEaVW+RUhuXM
-         MnFoaj18A00GxEYHAeYqJBSLziYNOFkjyd2vn5OWr41DkZ/Aw+0UfQkBIfEcIdEyMT/y
-         +c9cv+g3+shcBj9LHcZZ2hE9zWVSf5EL4qRb2dsUfsmcF4ebPR4o6mgDWe2PTmROo7kC
-         vOaQ==
-X-Gm-Message-State: ABy/qLYfURSRWGI5ZNNGuCRWb2I6SQ2Dmffp2ainxGR44kOzzLSkOJkn
-        lD3SS3+yPOY/Gfhhm3vrFFc=
-X-Google-Smtp-Source: APBJJlHjM5sGeXJ8scrk4aBLFhYKc236hH6cKgiTcqCKxDSEfv4vNXCF+LRTsngmIqRpheMWNP66IQ==
-X-Received: by 2002:a2e:8812:0:b0:2b9:3cb3:2592 with SMTP id x18-20020a2e8812000000b002b93cb32592mr2327537ljh.10.1690891415898;
-        Tue, 01 Aug 2023 05:03:35 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id y16-20020a2e7d10000000b002b9899d0f0bsm2590417ljc.83.2023.08.01.05.03.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Aug 2023 05:03:35 -0700 (PDT)
-Date:   Tue, 1 Aug 2023 15:03:31 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 4/8] pinctrl: ingenic: relax return value check for IRQ get
-Message-ID: <92e97e068e0f058d081886f0352715d1f22d43a1.1690890774.git.mazziesaccount@gmail.com>
-References: <cover.1690890774.git.mazziesaccount@gmail.com>
+        d=1e100.net; s=20221208; t=1690897271; x=1691502071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Jd6Bu2fWUccPQE4w3JM+VwAuK7pWORe1Hxf+ypNt9Y=;
+        b=TYzl8HUsGnz2Bxh2RL2B5huAt0wYvzKm4kxi2L2r4GJscsU48Fhpq6sqbo2q3X5ihU
+         jXGrOmkPSAKOaqvxDpDmRtQvNIjHgX//M4kkl1mjlc7krF0Em2ZlVTqkz7DoSCFpkuhm
+         lE1ihlcdnc9fO+xyrXZ8ftHpWANUA2TJcv/alhYIOCIthKp6zI20YxKxlwWaScrCnJ62
+         yjKLtEWz9wtvVxkBnAzq3mJaV2wivBcUoaEpAyKahTBh6SWZFCbHByTs8G4mWVQCIS6i
+         VCKcsol73Hhec1Pw5yBLNdNTE3yQ9utTAF9xYnkq8adiyDOQGpvBgmFNxmKZhM/8HWxM
+         VTTQ==
+X-Gm-Message-State: ABy/qLbjae6Fb216k8N5l1miZnq10IJkUEk9NY9gtrlmw42JlAyv1FCi
+        xtA77mp/Jp0wqyOEbYSoFbk4oCMvq1AFN5NZMlk=
+X-Google-Smtp-Source: APBJJlFM8wilWNsoiEnhkTnEDB5dH225GL5eR8sPOPtZVcuq7wWHD6crz8yvDRvBjnciU/NQaqu9yA==
+X-Received: by 2002:a5d:53c7:0:b0:317:7c31:f3a7 with SMTP id a7-20020a5d53c7000000b003177c31f3a7mr2292099wrw.17.1690897271271;
+        Tue, 01 Aug 2023 06:41:11 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.174.59])
+        by smtp.gmail.com with ESMTPSA id e5-20020a5d5005000000b00311d8c2561bsm16046836wrt.60.2023.08.01.06.41.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Aug 2023 06:41:10 -0700 (PDT)
+Message-ID: <2ddc5aed-3b20-ac56-5a04-98a0fe5ae092@linaro.org>
+Date:   Tue, 1 Aug 2023 15:41:08 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Fcap+cDW0Rqwoy47"
-Content-Disposition: inline
-In-Reply-To: <cover.1690890774.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v5 2/7] usb: dwc3: dwc3-octeon: Use _ULL bitfields defines
+Content-Language: en-US
+To:     Ladislav Michl <oss-lists@triops.cz>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liang He <windhl@126.com>
+Cc:     linux-mips@vger.kernel.org, linux-usb@vger.kernel.org
+References: <ZMd/HzISn0mPsNWt@lenoch> <ZMd/aa2ncz6tJGNU@lenoch>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <ZMd/aa2ncz6tJGNU@lenoch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,79 +77,23 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 31/7/23 11:31, Ladislav Michl wrote:
+> From: Ladislav Michl <ladis@linux-mips.org>
+> 
+> While driver is intended to run on 64bit machines, it is compile time
+> tested for 32bit targets as well. Here shift count overflow is reported
+> for bits greater than 31, so use _ULL versions of BIT and GENMASK macros
+> to silence these warnings.
+> 
+> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202307260537.MROrhVNM-lkp@intel.com/
+> ---
+>   CHANGES:
+>   -v5: new patch
+> 
+>   drivers/usb/dwc3/dwc3-octeon.c | 78 +++++++++++++++++-----------------
+>   1 file changed, 39 insertions(+), 39 deletions(-)
 
---Fcap+cDW0Rqwoy47
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-fwnode_irq_get[_byname]() were changed to not return 0 anymore.
-
-Drop check for return value 0.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
----
-Revision history:
- - No changes
-
-Please note, I took Linus' reply to v4 cover-letter as ack && added the
-tag. Please let me know if this was not Ok.
-
-The patch changing the fwnode_irq_get() got merged during 5.4:
-https://lore.kernel.org/all/fb7241d3-d1d1-1c37-919b-488d6d007484@gmail.com/
-This is a clean-up as agreed.
----
- drivers/pinctrl/pinctrl-ingenic.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-in=
-genic.c
-index 2f220a47b749..86e71ad703a5 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -4201,8 +4201,6 @@ static int __init ingenic_gpio_probe(struct ingenic_p=
-inctrl *jzpc,
- 	err =3D fwnode_irq_get(fwnode, 0);
- 	if (err < 0)
- 		return err;
--	if (!err)
--		return -EINVAL;
- 	jzgc->irq =3D err;
-=20
- 	girq =3D &jzgc->gc.irq;
---=20
-2.40.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---Fcap+cDW0Rqwoy47
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmTI9JMACgkQeFA3/03a
-ocVLWAf+NGRt7nw3/XhPANula40iJJFiuw8jhq/Wh2q7d5+R8FyuXJ4k0MxYnNai
-Gz7hXWymh+tE5m6X2AiVaGen80URaPifkWsCCoQQvtN3EOt0b/uACthvyx3CkvoJ
-/6suG7+iZvQcxZTbHeJKvxh9IwsyLIKKyD2YVWA3EekFn4GAm9TtCGI3eITfejKN
-qJvpQpreePQoxqOEr0oGj8ZxqF4M1OQV5xyAVxG/iP5r4x7syoVt3II0qkkL2JEJ
-QYDGxtlgy5WGQyACRlBdvRInq6sb4ELRD/zuRD0bAAB2S03yqY0PJzLWN3kQtrMR
-AEowC+zNv1M1/MfC47NKj/vsbSrIgA==
-=DHaf
------END PGP SIGNATURE-----
-
---Fcap+cDW0Rqwoy47--
