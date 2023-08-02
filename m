@@ -2,63 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9650C76CBA1
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Aug 2023 13:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C6076CBCA
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Aug 2023 13:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbjHBLUT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Aug 2023 07:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S231171AbjHBLbV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Aug 2023 07:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbjHBLUS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Aug 2023 07:20:18 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C85926AB;
-        Wed,  2 Aug 2023 04:20:13 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52256241c66so1799428a12.1;
-        Wed, 02 Aug 2023 04:20:13 -0700 (PDT)
+        with ESMTP id S229958AbjHBLbT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Aug 2023 07:31:19 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF72C211E;
+        Wed,  2 Aug 2023 04:31:17 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fe10f0f4d1so11199893e87.0;
+        Wed, 02 Aug 2023 04:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690975212; x=1691580012;
+        d=gmail.com; s=20221208; t=1690975876; x=1691580676;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CnEXpk+uavKCy6LqIh//ZzJwXbKzuP6vRHynD8MgaI8=;
-        b=ZkXilBGjuMGcVHuZg3MDpRb9eeg0yKQ4y898/Sz43E0qz6xxRsx1FCHGimC2TKEZbK
-         HINBtCJanyQqinARTgZMH94DxFqdcrgRaxOKI/D17n5W8QTt8h6oknJDSuUEHn4vEJUP
-         YtB8BzLE0FXGcHTYgte9h5q5JQOC7i+Ej7GthACsSx0yn4vaNYXyTQokj1N0u2UjGhE6
-         rJ3V6XE8lZZB2UOEp72YUfzMeHW04I5rSMtom9oO44Z7srKkgPTn1u/z79pVOFsiVhF7
-         H7Iebngwl66y2lGUGTIRPLMUSGHDrrs4+isqVMD8cQxjES/26NMRGtNUZg20DNVraHNX
-         w+QQ==
+        bh=FjAosaNxAoi2BWTYkDtymKlr5h9XTvGfmHv3GlC/6i0=;
+        b=hfm8YK6JR2hNijQyEEkA99WB9yYHPJgqpVsbI9C/WM14PxBeB4R+QnPaQYPxVYm8nR
+         J3Qw+ZvSeeAsUgs7GGs/24vCciz5Yl74mFV7JAT4e/KWrxTGom1xG7pdUFK+/D563if5
+         aAkwFVpNVs+r+irwLPjPQPGvIDrj/gjZB8Nip9xmOoM983f345i6XtketbIQjW2jS4Jl
+         eacfHcWhKdDTyCZp4DklhalslHVJJVzQEPmGQ1Zf1VVQIgrtbWEnA/A9ZWHw8Cri6NbZ
+         5sa/hGzRccS7fKOxlFvntIIApaQW8ICTWXpsrIa4NK09mnti/avvUtleGKxj/nOj0rHX
+         yzRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690975212; x=1691580012;
+        d=1e100.net; s=20221208; t=1690975876; x=1691580676;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CnEXpk+uavKCy6LqIh//ZzJwXbKzuP6vRHynD8MgaI8=;
-        b=PaQqPz0SRzK7RdszzxE3VgrZWz35JDnTkjZPa3AK7XDholK7dRcmX7a0EYXtde4pW6
-         p06BFdeDJzw/N/jgLwqseLV1Dtl3fp9bAZvue8nvqiBB51N+A5yfFEHn9NeRg0AQS8c9
-         JFRYK3en6lhbD5hvwFxbkbYMkFI7eLsjNQ3hJYXkc0jB0bCTvGyEfKEX6jESuEyQkmnW
-         sFl0A2pB38npc/UicSUeXxG1P8wcSOTUTG7VsEc3SwNfyPpOIGlsD345kWNtAJyXFMNP
-         6v0l0AN97go7xGGZZbnV1e6t5v7rxlCWvTNgaah8P+7kvGWHMGW0jlD0hS729rgxcBdJ
-         Ew2Q==
-X-Gm-Message-State: ABy/qLaPZUxgPFX0+YdeGvJz619vC8kIXLFCMyBp+1+FUUPmP0ddKMRc
-        BtS7en47lMuc+XsBwe9I9bzcHhiRMuql3LJwc14=
-X-Google-Smtp-Source: APBJJlFSsp67HgEQpWH+8V1RpSXNuBjDR/KlCBu1NaqaL0RKfMGwrp09DB9sR9LnuEAcJxgd/2qE7X98lDjJlmwMCiM=
-X-Received: by 2002:aa7:cfda:0:b0:51e:421e:d209 with SMTP id
- r26-20020aa7cfda000000b0051e421ed209mr6459806edy.13.1690975211534; Wed, 02
- Aug 2023 04:20:11 -0700 (PDT)
+        bh=FjAosaNxAoi2BWTYkDtymKlr5h9XTvGfmHv3GlC/6i0=;
+        b=WdGYxPbo/vNi5jyXglEAeyN5cZOoH8uu6tUzLfnQe/NtBHjUyxuQI48/8/CS/0U8+m
+         1i0uO3ElIHHeJAFOEdlJj0oa0nLFXGjn5p5L3g4offcVFyxBEM+8f9ELWUGbTWzmpIyI
+         JUUTUGe039PdkeAefThqMDM3qhMdaGOOm89Yn5XjrmQWEsv5E/l6oaUW2S+CZhhmlu6C
+         3HBJ8lJ3mRBQXbybKUK0TsQiLg8o2fxREqkHbwZyqaYWO+71bybzyhuDFWYm1gYhSwqr
+         iQVxk/VEjpdboshAU4ekOBx/BGzDHbsQMgS90vasJXstUuBiA2EYNJFiGmQ/cdlcJVen
+         zzIQ==
+X-Gm-Message-State: ABy/qLbn/+LizbjYlWxIV+oU1s8xIhtB1b3A6edxlTTyPbYAyhpFDTY3
+        Z3LMmxcuvGnXQG2uEy8cY3DPkEtCyP+1N8Mma7g=
+X-Google-Smtp-Source: APBJJlHoe9Tvo8oe+ytXHVsZIr8zXSQ+BLbhyvQG26Poi2319pJ97wo81XynGNh6KJ18wDUKTZXZgCM/zjcXI0xyBqs=
+X-Received: by 2002:ac2:4da1:0:b0:4fe:8c4:44f4 with SMTP id
+ h1-20020ac24da1000000b004fe08c444f4mr4442153lfe.62.1690975875725; Wed, 02 Aug
+ 2023 04:31:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230729134318.1694467-1-keguang.zhang@gmail.com>
  <20230729134318.1694467-9-keguang.zhang@gmail.com> <4qk22kycanwwbx6e7w4uuf7y5re7y4voi5vdurq3usa27py2zk@zms25h4hg2da>
- <CAJhJPsV9E5=GtsjiP8c3A6=4=Vh7cB1g=TaaJnVOjCf=VFiLUA@mail.gmail.com> <sxuwhp3jc7e5tma5sj5xfkbs43ax2p7oucgy5aoh66pnyr6x2m@logqlgthsy66>
-In-Reply-To: <sxuwhp3jc7e5tma5sj5xfkbs43ax2p7oucgy5aoh66pnyr6x2m@logqlgthsy66>
+ <CAJhJPsV9E5=GtsjiP8c3A6=4=Vh7cB1g=TaaJnVOjCf=VFiLUA@mail.gmail.com> <ZMowbm9n1PuQhPLt@rc20>
+In-Reply-To: <ZMowbm9n1PuQhPLt@rc20>
 From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Wed, 2 Aug 2023 19:19:55 +0800
-Message-ID: <CAJhJPsUVUZfMtwMniaAeA5wLm9TjCsiYJpU2=ZXY8J+4WT1Gzw@mail.gmail.com>
+Date:   Wed, 2 Aug 2023 19:30:59 +0800
+Message-ID: <CAJhJPsVL8M0nO0rxQF+Jzf5Nt6q6wED9jEfws07wYs94WLS9bw@mail.gmail.com>
 Subject: Re: [PATCH 08/17] MIPS: loongson32: Convert Ethernet platform device
  to DT
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     Du Huanpeng <dhu@hodcarrier.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -75,8 +75,8 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 2, 2023 at 5:44=E2=80=AFPM Serge Semin <fancer.lancer@gmail.com=
-> wrote:
+On Wed, Aug 2, 2023 at 6:31=E2=80=AFPM Du Huanpeng <dhu@hodcarrier.org> wro=
+te:
 >
 > On Wed, Aug 02, 2023 at 11:10:10AM +0800, Keguang Zhang wrote:
 > > On Wed, Aug 2, 2023 at 2:21=E2=80=AFAM Serge Semin <fancer.lancer@gmail=
@@ -95,42 +95,28 @@ On Wed, Aug 2, 2023 at 5:44=E2=80=AFPM Serge Semin <fancer.lancer@gmail.com=
 > > > defined as a syscon-node and then utilized in the Loongson-1 GMAC
 > > > low-level driver.
 > > >
->
 > > Thanks for your reminder.
 > > I planned to add the pinctrl driver later.
 > > Now I'm working on it.
->
-> I have been having a patch moving the Loongson32 MAC driver to the
-> STMMAC driver directory for quite a while in my tree. You can use it
-> in your series (completely, as a reference or template, whatever). The
-> only thing you'll need to do is to add the pinctrl-based version of
-> the ls1b_eth_mux_init()/ls1c_eth_mux_init() methods in there and
-> test/debug it of course.
->
-> Note 1. It seems to me that it would work better if you defined the
-> plat_stmmacenet_data.fix_mac_speed() callback instead of
-> plat_stmmacenet_data.init() for LS1B which supports MII and RGMII aka
-> 100Mbps and 1000Mbps speeds.
->
-Thanks!
-I will look into it.
-However, I think ls1x_eth_mux_init() belongs to the scope of pinctrl or sys=
-con.
-IMHO it is not worth implementing a glue driver for Loongson1.
+> hi, I wrote a tool(work-in-progress) for generating pinctrl driver,
+> do you want to try, and avoid duplicate work.
 
-> Note 2. The patch I've sent was only built-tested. I don't have any
-> Loongson hardware.
+A tool for generating pinctrl driver?
+Could you share it?
+Perhaps you could submit your driver when it is done.
+Thanks!
+
+> and could you merge my ls1c300 devicetree for u-boot, because
+> u-boot wants to keep the devicetree sync with the linux kernel.
+> some nodes needed and working are not exist in your devicetree.
 >
-> Note 3. After the suggested patch is applied you can also completely
-> move the include/linux/stmmac.h header file to the STMMAC-driver
-> directory as a following up cleanup update (it should be renamed to
-> stmmac_platform.h since stmmac.h is already available in there).
-> It can be done since there won't any users of that file outside the
-> STMMAC-driver directory. So there is no point in keeping it in the
-> common headers directory anymore.
+> [1] https://github.com/hodcarrier/u-boot/blob/upstream/loongson-ls1c300b/=
+v4/arch/mips/dts/loongson32-ls1c300b.dtsi
 >
-> -Serge(y)
->
+I 've noticed your eariier commit for U-Boot.
+We can discuss it in more detail.
+> ---
+> Du Huanpeng
 > >
 > > > -Serge(y)
 > > >
