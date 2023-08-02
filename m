@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1227676D309
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Aug 2023 17:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D4376D325
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Aug 2023 17:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235276AbjHBPzq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Aug 2023 11:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S235224AbjHBP6c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Aug 2023 11:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235418AbjHBPza (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Aug 2023 11:55:30 -0400
+        with ESMTP id S235340AbjHBP6b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Aug 2023 11:58:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4296D199F;
-        Wed,  2 Aug 2023 08:55:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B454BA;
+        Wed,  2 Aug 2023 08:58:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE1B961857;
-        Wed,  2 Aug 2023 15:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371B5C433C8;
-        Wed,  2 Aug 2023 15:55:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D10E61A35;
+        Wed,  2 Aug 2023 15:58:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C42C433C7;
+        Wed,  2 Aug 2023 15:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690991713;
-        bh=vmS3y3vEprt4Ee9EVdT/KBotedRLV0L1wK1C8giiJQ0=;
+        s=k20201202; t=1690991908;
+        bh=Efu/dr3jOn1VaTX57cLLSWiNYnjtaqySwrOSZDjUPqQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WeiXGksNCeqBY0D4Z/8Ow3J9XqjC9OJyQu+88uQz8TQaiKoIgPzO9Yl9TRNFTlF3D
-         N39NOOXy/Mz33yVrblUjCuLOvbkllNtHrbplC8Lqq3XEZb+5b6hwCMns6zjmiGDiR5
-         WyKju8MvL8RFMV0pD03r+FySvZn1XdniQk0Eq3w2KYJ+neD3VaPmcPNIxN2Y2gg+sv
-         DUsm6xoKz5G2XuJa48wmKk8Acu4wfo23otwQde0jhhtejTCMbDPpc0JiEX4uvF0xoL
-         oztN3yS/UAXRXhwX7BD0euPVgBUKmEnA+m7EZc5otPguhtVvE1+tJsa8wHuWBmvo03
-         IzWfXQNHWVpaQ==
+        b=ZBXCXaWsYZ6ZlQct9rxxSKisWvEYggis2ghmHQxOrF9tMav+Gdntp6izvzlrlpDy/
+         3rfy+IZKA07S0dDz4QSel+uFToUD58bYVI+A/Hsp9mE5NOGx+VIQ+nIiJL7YJedIQf
+         GyhChNxbwFGapOZVy+M3mY32pow7Jaw/vMovuLQziwJ+1d9IPY/p9f5yksZ1kTieId
+         NRWMw5FWyj+QAGevBlLdsE1hGaG1j6PIhQSlw8roYCbk/AoJYlZUcvcQllbw2Q8vAQ
+         9/jtQ2BpLI+ns2GEXvOQjqPkIwRtIFzPw9xIVYduJxEiSe/cOqo26To4TQ9K9txDeL
+         gf6EGg97hnJ9A==
 Received: from [104.132.1.99] (helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1qREBq-001PtL-B3;
-        Wed, 02 Aug 2023 16:55:10 +0100
-Date:   Wed, 02 Aug 2023 16:55:05 +0100
-Message-ID: <877cqdqw12.wl-maz@kernel.org>
+        id 1qREF0-001Pz2-E9;
+        Wed, 02 Aug 2023 16:58:26 +0100
+Date:   Wed, 02 Aug 2023 16:58:21 +0100
+Message-ID: <875y5xqvvm.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
         James Morse <james.morse@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Zenghui Yu <yuzenghui@huawei.com>,
         Anup Patel <anup@brainfault.org>,
@@ -58,20 +58,23 @@ Cc:     Raghavendra Rao Ananta <rananta@google.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v7 02/12] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
-In-Reply-To: <ZMgsjx8dwKd4xBGe@google.com>
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Shaoqin Huang <shahuang@redhat.com>
+Subject: Re: [PATCH v7 06/12] arm64: tlb: Refactor the core flush algorithm of __flush_tlb_range
+In-Reply-To: <CAJHc60zqOeWXf3kh5hKL6DL3g4znmHaH-TqC0QDcBrWPsHAEXQ@mail.gmail.com>
 References: <20230722022251.3446223-1-rananta@google.com>
-        <20230722022251.3446223-3-rananta@google.com>
-        <87tttpr6qy.wl-maz@kernel.org>
-        <ZMgsjx8dwKd4xBGe@google.com>
+        <20230722022251.3446223-7-rananta@google.com>
+        <87r0otr579.wl-maz@kernel.org>
+        <CAJHc60zqOeWXf3kh5hKL6DL3g4znmHaH-TqC0QDcBrWPsHAEXQ@mail.gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-SA-Exim-Connect-IP: 104.132.1.99
-X-SA-Exim-Rcpt-To: seanjc@google.com, rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, chenhuacai@kernel.org, yuzenghui@huawei.com, anup@brainfault.org, atishp@atishpatra.org, jingzhangos@google.com, reijiw@google.com, coltonlewis@google.com, dmatlack@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Rcpt-To: rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, seanjc@google.com, chenhuacai@kernel.org, yuzenghui@huawei.com, anup@brainfault.org, atishp@atishpatra.org, jingzhangos@google.com, reijiw@google.com, coltonlewis@google.com, dmatlack@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, catalin.marinas@arm.com, gshan@redhat.com, shahuang@redhat.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -84,35 +87,67 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 31 Jul 2023 22:50:07 +0100,
-Sean Christopherson <seanjc@google.com> wrote:
-> 
-> On Thu, Jul 27, 2023, Marc Zyngier wrote:
-> > On Sat, 22 Jul 2023 03:22:41 +0100,
+On Mon, 31 Jul 2023 18:36:47 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
+>=20
+> On Thu, Jul 27, 2023 at 3:58=E2=80=AFAM Marc Zyngier <maz@kernel.org> wro=
+te:
+> >
+> > On Sat, 22 Jul 2023 03:22:45 +0100,
 > > Raghavendra Rao Ananta <rananta@google.com> wrote:
-> > > 
-> > > Stop depending on CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL and opt to
-> > > standardize on kvm_arch_flush_remote_tlbs() since it avoids
-> > > duplicating the generic TLB stats across architectures that implement
-> > > their own remote TLB flush.
-> > > 
-> > > This adds an extra function call to the ARM64 kvm_flush_remote_tlbs()
-> > > path, but that is a small cost in comparison to flushing remote TLBs.
-> > 
-> > Well, there is no such thing as a "remote TLB" anyway. We either have
-> > a non-shareable or inner-shareable invalidation. The notion of remote
-> > would imply that we track who potentially has a TLB, which we
-> > obviously don't.
-> 
-> Maybe kvm_arch_flush_vm_tlbs()?  The "remote" part is misleading even on x86 when
-> running on Hyper-V, as the flush may be done via a single hypercall and by kicking
-> "remote" vCPUs.
+> > >
+> > > Currently, the core TLB flush functionality of __flush_tlb_range()
+> > > hardcodes vae1is (and variants) for the flush operation. In the
+> > > upcoming patches, the KVM code reuses this core algorithm with
+> > > ipas2e1is for range based TLB invalidations based on the IPA.
+> > > Hence, extract the core flush functionality of __flush_tlb_range()
+> > > into its own macro that accepts an 'op' argument to pass any
+> > > TLBI operation, such that other callers (KVM) can benefit.
+> > >
+> > > No functional changes intended.
+> > >
+> > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > > Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> > > ---
+> > >  arch/arm64/include/asm/tlbflush.h | 109 +++++++++++++++-------------=
+--
+> > >  1 file changed, 56 insertions(+), 53 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/a=
+sm/tlbflush.h
+> > > index 412a3b9a3c25..f7fafba25add 100644
+> > > --- a/arch/arm64/include/asm/tlbflush.h
+> > > +++ b/arch/arm64/include/asm/tlbflush.h
+> > > @@ -278,14 +278,62 @@ static inline void flush_tlb_page(struct vm_are=
+a_struct *vma,
+> > >   */
+> > >  #define MAX_TLBI_OPS PTRS_PER_PTE
+> > >
+> > > +/* When the CPU does not support TLB range operations, flush the TLB
+> > > + * entries one by one at the granularity of 'stride'. If the TLB
+> > > + * range ops are supported, then:
+> >
+> > Comment format (the original was correct).
+> >
+> Isn't the format the same as original? Or are you referring to the
+> fact that it needs to be placed inside the macro definition?
 
-Yup, this would be much better.
+No, I'm referring to the multiline comment that starts with:
+
+	/*  When the CPU does not support TLB range operations...
+
+instead of the required:
+
+	/*
+	 * When the CPU does not support TLB range operations
+
+which was correct before the coment was moved.
 
 Thanks,
 
 	M.
 
--- 
+--=20
 Without deviation from the norm, progress is not possible.
