@@ -2,448 +2,223 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067B277026F
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Aug 2023 16:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F7577030A
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Aug 2023 16:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjHDOBY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Aug 2023 10:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S231730AbjHDO3L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Aug 2023 10:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjHDOBR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Aug 2023 10:01:17 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A1B1987
-        for <linux-mips@vger.kernel.org>; Fri,  4 Aug 2023 07:01:14 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1bbc64f9a91so18283555ad.0
-        for <linux-mips@vger.kernel.org>; Fri, 04 Aug 2023 07:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691157674; x=1691762474;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f39QpJHkK3FDjMGNWGLjQE1kQtnElDb2bSgZWnyAPYg=;
-        b=X3lAEI693n80r5mFKYlfIDlyQhhjUlZsA9aQBj3n6FhGBaDvncTyaIKlIxeHmxb3oW
-         aYXtgWmejUHWn1RqoAkoQcSdejArts+GCCmu7wZj9L4TMrrIP56KM4TiETSJip99sg0k
-         3LxhNBgv4/ZyabndXgou0bVDwJapRc3DbP9kk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691157674; x=1691762474;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f39QpJHkK3FDjMGNWGLjQE1kQtnElDb2bSgZWnyAPYg=;
-        b=AVj3ES8wbg+hkE6bzRbZdxqjbHlCwnYuOD/NIZlo9nCa2efGkTD01GXOjS9kHLgNET
-         d6F5B//8R0IIlXc1L0ndt9X0s6pLzz+vr17YrZTcZjgV/GiiRzKbcJXxfsydC1x29M3g
-         7gTq1fF7H4/0X9SCgzG36oOVFlKsz7DFHwqvHT8qDj8dIX6h/WtdsqGDduMtBWGwcppr
-         t3f9ytNqkEWZ+SEBEA/qGLHA2bWHF7wyLliJwZwle6R+KJeOGoPrVyrRkPDGSmEJJAIw
-         o5SNru0HAzwGixw7qkzae6TJca0Xs3IqMfuuOD+DdQZhT7o464M/TLLUl6rh7CK+vfx2
-         5mnQ==
-X-Gm-Message-State: AOJu0YwV9A8QqGqma9ZpEGbQs290XbAel5+8adN7VrqcpuOUGApotxTo
-        4wu/nIuVSnj/hncWRb1J1C/owg==
-X-Google-Smtp-Source: AGHT+IGrXd7+iITtMMIn93r4d13fw+4XYjuOGnrnGUGukulhVCs9cx5ZvQkwGNKWi2WQx1c8GbE50Q==
-X-Received: by 2002:a17:902:d5cb:b0:1b8:33d4:77f8 with SMTP id g11-20020a170902d5cb00b001b833d477f8mr1954462plh.23.1691157673658;
-        Fri, 04 Aug 2023 07:01:13 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:7e35:e6d0:7bbf:64])
-        by smtp.gmail.com with ESMTPSA id g5-20020a170902c38500b001b89536974bsm1792291plg.202.2023.08.04.07.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 07:01:12 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>, Michal Hocko <mhocko@suse.com>,
+        with ESMTP id S231722AbjHDO3H (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Aug 2023 10:29:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA3449C6
+        for <linux-mips@vger.kernel.org>; Fri,  4 Aug 2023 07:29:05 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qRvm6-0004IB-Ta; Fri, 04 Aug 2023 16:27:30 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qRvlq-0015pr-7N; Fri, 04 Aug 2023 16:27:14 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qRvlp-00AP9T-ET; Fri, 04 Aug 2023 16:27:13 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Walle <michael@walle.cc>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Russell King <linux@armlinux.org.uk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Subject: [PATCH v4 1/2] nmi_backtrace: Allow excluding an arbitrary CPU
-Date:   Fri,  4 Aug 2023 07:00:42 -0700
-Message-ID: <20230804065935.v4.1.Ia35521b91fc781368945161d7b28538f9996c182@changeid>
-X-Mailer: git-send-email 2.41.0.585.gd2178a4bd4-goog
+        Anjelique Melendez <quic_amelende@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev
+Subject: [PATCH v2 0/2] pwm: Manage owner assignment implicitly for drivers
+Date:   Fri,  4 Aug 2023 16:27:05 +0200
+Message-Id: <20230804142707.412137-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3888; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=WJTkGffvizVTFrYhxlEwf33iXK2vZsfEyb81l68zhLY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkzQq2XhI0XPWVJKyF8jw9e0hP8cj3HpRdpwKrd oYg1lISRdWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZM0KtgAKCRCPgPtYfRL+ TlmxCACDstGNt8tomXEi1DwnNXDEZlZ/KVZke1AiXVnPIS/ZhVJ94U5aOYapSgAJmHQnzwqgK6z fFWv33dvGgXeSNfMfc82iKjHC0i9u6CpVTKzbkS7CkjLhfefThMzfQsEY6GCcrMBu/Hi+5qaaif ZRymzwLw6Gc4g1La1KPC1OIUlenMjcfHXUKhPwvyeIbrhx8wfU40+IFtYHvBhQqi9/e0I3woRF5 t77a20hH5LhbiKKLjmZ4ZMWDDvSLhjnPg8HbbOUIIqRM1op7uN5Uog1iEYusHzAGP9NsS1utfon xzuuuXTkvCvNrk46p97AVUuT3gZdhE7Ekvy+UO0zlQA3SpbS
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The APIs that allow backtracing across CPUs have always had a way to
-exclude the current CPU. This convenience means callers didn't need to
-find a place to allocate a CPU mask just to handle the common case.
+Hello,
 
-Let's extend the API to take a CPU ID to exclude instead of just a
-boolean. This isn't any more complex for the API to handle and allows
-the hardlockup detector to exclude a different CPU (the one it already
-did a trace for) without needing to find space for a CPU mask.
+(implicit) v1 of this series can be found at
+https://lore.kernel.org/linux-pwm/20230803140633.138165-1-u.kleine-koenig@pengutronix.de .
 
-Arguably, this new API also encourages safer behavior. Specifically if
-the caller wants to avoid tracing the current CPU (maybe because they
-already traced the current CPU) this makes it more obvious to the
-caller that they need to make sure that the current CPU ID can't
-change.
+Changes since then only affect documentation that I missed to adapt before.
+Thanks to Laurent for catching that
 
-Acked-by: Michal Hocko <mhocko@suse.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+Best regards
+Uwe
 
-Changes in v4:
-- Renamed trigger_allbutself_cpu_backtrace() for when trigger is unsupported.
+Uwe Kleine-König (2):
+  pwm: Manage owner assignment implicitly for drivers
+  pwm: crc: Allow compilation as module and with COMPILE_TEST
 
-Changes in v3:
-- ("nmi_backtrace: Allow excluding an arbitrary CPU") new for v3.
+ drivers/gpio/gpio-mvebu.c             |  1 -
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c |  1 -
+ drivers/leds/rgb/leds-qcom-lpg.c      |  1 -
+ drivers/pwm/Kconfig                   |  4 ++--
+ drivers/pwm/core.c                    | 24 ++++++++++++++----------
+ drivers/pwm/pwm-ab8500.c              |  1 -
+ drivers/pwm/pwm-apple.c               |  1 -
+ drivers/pwm/pwm-atmel-hlcdc.c         |  1 -
+ drivers/pwm/pwm-atmel-tcb.c           |  1 -
+ drivers/pwm/pwm-atmel.c               |  1 -
+ drivers/pwm/pwm-bcm-iproc.c           |  1 -
+ drivers/pwm/pwm-bcm-kona.c            |  1 -
+ drivers/pwm/pwm-bcm2835.c             |  1 -
+ drivers/pwm/pwm-berlin.c              |  1 -
+ drivers/pwm/pwm-brcmstb.c             |  1 -
+ drivers/pwm/pwm-clk.c                 |  1 -
+ drivers/pwm/pwm-clps711x.c            |  1 -
+ drivers/pwm/pwm-crc.c                 |  5 ++++-
+ drivers/pwm/pwm-cros-ec.c             |  1 -
+ drivers/pwm/pwm-dwc.c                 |  1 -
+ drivers/pwm/pwm-ep93xx.c              |  1 -
+ drivers/pwm/pwm-fsl-ftm.c             |  1 -
+ drivers/pwm/pwm-hibvt.c               |  1 -
+ drivers/pwm/pwm-img.c                 |  1 -
+ drivers/pwm/pwm-imx-tpm.c             |  1 -
+ drivers/pwm/pwm-imx1.c                |  1 -
+ drivers/pwm/pwm-imx27.c               |  1 -
+ drivers/pwm/pwm-intel-lgm.c           |  1 -
+ drivers/pwm/pwm-iqs620a.c             |  1 -
+ drivers/pwm/pwm-jz4740.c              |  1 -
+ drivers/pwm/pwm-keembay.c             |  1 -
+ drivers/pwm/pwm-lp3943.c              |  1 -
+ drivers/pwm/pwm-lpc18xx-sct.c         |  1 -
+ drivers/pwm/pwm-lpc32xx.c             |  1 -
+ drivers/pwm/pwm-lpss.c                |  1 -
+ drivers/pwm/pwm-mediatek.c            |  1 -
+ drivers/pwm/pwm-meson.c               |  1 -
+ drivers/pwm/pwm-microchip-core.c      |  1 -
+ drivers/pwm/pwm-mtk-disp.c            |  1 -
+ drivers/pwm/pwm-mxs.c                 |  1 -
+ drivers/pwm/pwm-ntxec.c               |  1 -
+ drivers/pwm/pwm-omap-dmtimer.c        |  1 -
+ drivers/pwm/pwm-pca9685.c             |  1 -
+ drivers/pwm/pwm-pxa.c                 |  1 -
+ drivers/pwm/pwm-raspberrypi-poe.c     |  1 -
+ drivers/pwm/pwm-rcar.c                |  1 -
+ drivers/pwm/pwm-renesas-tpu.c         |  1 -
+ drivers/pwm/pwm-rockchip.c            |  1 -
+ drivers/pwm/pwm-rz-mtu3.c             |  1 -
+ drivers/pwm/pwm-samsung.c             |  1 -
+ drivers/pwm/pwm-sifive.c              |  1 -
+ drivers/pwm/pwm-sl28cpld.c            |  1 -
+ drivers/pwm/pwm-spear.c               |  1 -
+ drivers/pwm/pwm-sprd.c                |  1 -
+ drivers/pwm/pwm-sti.c                 |  1 -
+ drivers/pwm/pwm-stm32-lp.c            |  1 -
+ drivers/pwm/pwm-stm32.c               |  1 -
+ drivers/pwm/pwm-stmpe.c               |  1 -
+ drivers/pwm/pwm-sun4i.c               |  1 -
+ drivers/pwm/pwm-sunplus.c             |  1 -
+ drivers/pwm/pwm-tegra.c               |  1 -
+ drivers/pwm/pwm-tiecap.c              |  1 -
+ drivers/pwm/pwm-tiehrpwm.c            |  1 -
+ drivers/pwm/pwm-twl-led.c             |  2 --
+ drivers/pwm/pwm-twl.c                 |  2 --
+ drivers/pwm/pwm-visconti.c            |  1 -
+ drivers/pwm/pwm-vt8500.c              |  1 -
+ drivers/pwm/pwm-xilinx.c              |  1 -
+ drivers/staging/greybus/pwm.c         |  1 -
+ include/linux/pwm.h                   | 10 ++++++----
+ 70 files changed, 26 insertions(+), 85 deletions(-)
 
- arch/arm/include/asm/irq.h       |  2 +-
- arch/arm/kernel/smp.c            |  4 ++--
- arch/loongarch/include/asm/irq.h |  2 +-
- arch/loongarch/kernel/process.c  |  4 ++--
- arch/mips/include/asm/irq.h      |  2 +-
- arch/mips/kernel/process.c       |  4 ++--
- arch/powerpc/include/asm/irq.h   |  2 +-
- arch/powerpc/kernel/stacktrace.c |  4 ++--
- arch/powerpc/kernel/watchdog.c   |  4 ++--
- arch/sparc/include/asm/irq_64.h  |  2 +-
- arch/sparc/kernel/process_64.c   |  6 +++---
- arch/x86/include/asm/irq.h       |  2 +-
- arch/x86/kernel/apic/hw_nmi.c    |  4 ++--
- include/linux/nmi.h              | 14 +++++++-------
- kernel/watchdog.c                |  2 +-
- lib/nmi_backtrace.c              |  6 +++---
- 16 files changed, 32 insertions(+), 32 deletions(-)
 
-diff --git a/arch/arm/include/asm/irq.h b/arch/arm/include/asm/irq.h
-index 18605f1b3580..26c1d2ced4ce 100644
---- a/arch/arm/include/asm/irq.h
-+++ b/arch/arm/include/asm/irq.h
-@@ -32,7 +32,7 @@ void handle_IRQ(unsigned int, struct pt_regs *);
- #include <linux/cpumask.h>
- 
- extern void arch_trigger_cpumask_backtrace(const cpumask_t *mask,
--					   bool exclude_self);
-+					   int exclude_cpu);
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
- #endif
- 
-diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-index 6756203e45f3..3431c0553f45 100644
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -846,7 +846,7 @@ static void raise_nmi(cpumask_t *mask)
- 	__ipi_send_mask(ipi_desc[IPI_CPU_BACKTRACE], mask);
- }
- 
--void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-+void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- {
--	nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_nmi);
-+	nmi_trigger_cpumask_backtrace(mask, exclude_cpu, raise_nmi);
- }
-diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-index a115e8999c69..218b4da0ea90 100644
---- a/arch/loongarch/include/asm/irq.h
-+++ b/arch/loongarch/include/asm/irq.h
-@@ -40,7 +40,7 @@ void spurious_interrupt(void);
- #define NR_IRQS_LEGACY 16
- 
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
--void arch_trigger_cpumask_backtrace(const struct cpumask *mask, bool exclude_self);
-+void arch_trigger_cpumask_backtrace(const struct cpumask *mask, int exclude_cpu);
- 
- #define MAX_IO_PICS 2
- #define NR_IRQS	(64 + (256 * MAX_IO_PICS))
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 2e04eb07abb6..778e8d09953e 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -345,9 +345,9 @@ static void raise_backtrace(cpumask_t *mask)
- 	}
- }
- 
--void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-+void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- {
--	nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_backtrace);
-+	nmi_trigger_cpumask_backtrace(mask, exclude_cpu, raise_backtrace);
- }
- 
- #ifdef CONFIG_64BIT
-diff --git a/arch/mips/include/asm/irq.h b/arch/mips/include/asm/irq.h
-index 75abfa834ab7..3a848e7e69f7 100644
---- a/arch/mips/include/asm/irq.h
-+++ b/arch/mips/include/asm/irq.h
-@@ -77,7 +77,7 @@ extern int cp0_fdc_irq;
- extern int get_c0_fdc_int(void);
- 
- void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
--				    bool exclude_self);
-+				    int exclude_cpu);
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
- 
- #endif /* _ASM_IRQ_H */
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index a3225912c862..5387ed0a5186 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -750,9 +750,9 @@ static void raise_backtrace(cpumask_t *mask)
- 	}
- }
- 
--void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-+void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- {
--	nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_backtrace);
-+	nmi_trigger_cpumask_backtrace(mask, exclude_cpu, raise_backtrace);
- }
- 
- int mips_get_process_fp_mode(struct task_struct *task)
-diff --git a/arch/powerpc/include/asm/irq.h b/arch/powerpc/include/asm/irq.h
-index f257cacb49a9..ba1a5974e714 100644
---- a/arch/powerpc/include/asm/irq.h
-+++ b/arch/powerpc/include/asm/irq.h
-@@ -55,7 +55,7 @@ int irq_choose_cpu(const struct cpumask *mask);
- 
- #if defined(CONFIG_PPC_BOOK3S_64) && defined(CONFIG_NMI_IPI)
- extern void arch_trigger_cpumask_backtrace(const cpumask_t *mask,
--					   bool exclude_self);
-+					   int exclude_cpu);
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
- #endif
- 
-diff --git a/arch/powerpc/kernel/stacktrace.c b/arch/powerpc/kernel/stacktrace.c
-index 5de8597eaab8..b15f15dcacb5 100644
---- a/arch/powerpc/kernel/stacktrace.c
-+++ b/arch/powerpc/kernel/stacktrace.c
-@@ -221,8 +221,8 @@ static void raise_backtrace_ipi(cpumask_t *mask)
- 	}
- }
- 
--void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-+void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- {
--	nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_backtrace_ipi);
-+	nmi_trigger_cpumask_backtrace(mask, exclude_cpu, raise_backtrace_ipi);
- }
- #endif /* defined(CONFIG_PPC_BOOK3S_64) && defined(CONFIG_NMI_IPI) */
-diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
-index edb2dd1f53eb..8c464a5d8246 100644
---- a/arch/powerpc/kernel/watchdog.c
-+++ b/arch/powerpc/kernel/watchdog.c
-@@ -245,7 +245,7 @@ static void watchdog_smp_panic(int cpu)
- 			__cpumask_clear_cpu(c, &wd_smp_cpus_ipi);
- 		}
- 	} else {
--		trigger_allbutself_cpu_backtrace();
-+		trigger_allbutcpu_cpu_backtrace(cpu);
- 		cpumask_clear(&wd_smp_cpus_ipi);
- 	}
- 
-@@ -416,7 +416,7 @@ DEFINE_INTERRUPT_HANDLER_NMI(soft_nmi_interrupt)
- 		xchg(&__wd_nmi_output, 1); // see wd_lockup_ipi
- 
- 		if (sysctl_hardlockup_all_cpu_backtrace)
--			trigger_allbutself_cpu_backtrace();
-+			trigger_allbutcpu_cpu_backtrace(cpu);
- 
- 		if (hardlockup_panic)
- 			nmi_panic(regs, "Hard LOCKUP");
-diff --git a/arch/sparc/include/asm/irq_64.h b/arch/sparc/include/asm/irq_64.h
-index b436029f1ced..8c4c0c87f998 100644
---- a/arch/sparc/include/asm/irq_64.h
-+++ b/arch/sparc/include/asm/irq_64.h
-@@ -87,7 +87,7 @@ static inline unsigned long get_softint(void)
- }
- 
- void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
--				    bool exclude_self);
-+				    int exclude_cpu);
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
- 
- extern void *hardirq_stack[NR_CPUS];
-diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
-index b51d8fb0ecdc..1ea3f37fa985 100644
---- a/arch/sparc/kernel/process_64.c
-+++ b/arch/sparc/kernel/process_64.c
-@@ -236,7 +236,7 @@ static void __global_reg_poll(struct global_reg_snapshot *gp)
- 	}
- }
- 
--void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-+void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- {
- 	struct thread_info *tp = current_thread_info();
- 	struct pt_regs *regs = get_irq_regs();
-@@ -252,7 +252,7 @@ void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
- 
- 	memset(global_cpu_snapshot, 0, sizeof(global_cpu_snapshot));
- 
--	if (cpumask_test_cpu(this_cpu, mask) && !exclude_self)
-+	if (cpumask_test_cpu(this_cpu, mask) && this_cpu != exclude_cpu)
- 		__global_reg_self(tp, regs, this_cpu);
- 
- 	smp_fetch_global_regs();
-@@ -260,7 +260,7 @@ void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
- 	for_each_cpu(cpu, mask) {
- 		struct global_reg_snapshot *gp;
- 
--		if (exclude_self && cpu == this_cpu)
-+		if (cpu == exclude_cpu)
- 			continue;
- 
- 		gp = &global_cpu_snapshot[cpu].reg;
-diff --git a/arch/x86/include/asm/irq.h b/arch/x86/include/asm/irq.h
-index 29e083b92813..836c170d3087 100644
---- a/arch/x86/include/asm/irq.h
-+++ b/arch/x86/include/asm/irq.h
-@@ -42,7 +42,7 @@ extern void init_ISA_irqs(void);
- 
- #ifdef CONFIG_X86_LOCAL_APIC
- void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
--				    bool exclude_self);
-+				    int exclude_cpu);
- 
- #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
- #endif
-diff --git a/arch/x86/kernel/apic/hw_nmi.c b/arch/x86/kernel/apic/hw_nmi.c
-index 34a992e275ef..d6e01f924299 100644
---- a/arch/x86/kernel/apic/hw_nmi.c
-+++ b/arch/x86/kernel/apic/hw_nmi.c
-@@ -34,9 +34,9 @@ static void nmi_raise_cpu_backtrace(cpumask_t *mask)
- 	apic->send_IPI_mask(mask, NMI_VECTOR);
- }
- 
--void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
-+void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- {
--	nmi_trigger_cpumask_backtrace(mask, exclude_self,
-+	nmi_trigger_cpumask_backtrace(mask, exclude_cpu,
- 				      nmi_raise_cpu_backtrace);
- }
- 
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index e3e6a64b98e0..7cf7801856a1 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -157,31 +157,31 @@ static inline void touch_nmi_watchdog(void)
- #ifdef arch_trigger_cpumask_backtrace
- static inline bool trigger_all_cpu_backtrace(void)
- {
--	arch_trigger_cpumask_backtrace(cpu_online_mask, false);
-+	arch_trigger_cpumask_backtrace(cpu_online_mask, -1);
- 	return true;
- }
- 
--static inline bool trigger_allbutself_cpu_backtrace(void)
-+static inline bool trigger_allbutcpu_cpu_backtrace(int exclude_cpu)
- {
--	arch_trigger_cpumask_backtrace(cpu_online_mask, true);
-+	arch_trigger_cpumask_backtrace(cpu_online_mask, exclude_cpu);
- 	return true;
- }
- 
- static inline bool trigger_cpumask_backtrace(struct cpumask *mask)
- {
--	arch_trigger_cpumask_backtrace(mask, false);
-+	arch_trigger_cpumask_backtrace(mask, -1);
- 	return true;
- }
- 
- static inline bool trigger_single_cpu_backtrace(int cpu)
- {
--	arch_trigger_cpumask_backtrace(cpumask_of(cpu), false);
-+	arch_trigger_cpumask_backtrace(cpumask_of(cpu), -1);
- 	return true;
- }
- 
- /* generic implementation */
- void nmi_trigger_cpumask_backtrace(const cpumask_t *mask,
--				   bool exclude_self,
-+				   int exclude_cpu,
- 				   void (*raise)(cpumask_t *mask));
- bool nmi_cpu_backtrace(struct pt_regs *regs);
- 
-@@ -190,7 +190,7 @@ static inline bool trigger_all_cpu_backtrace(void)
- {
- 	return false;
- }
--static inline bool trigger_allbutself_cpu_backtrace(void)
-+static inline bool trigger_allbutcpu_cpu_backtrace(void)
- {
- 	return false;
- }
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index be38276a365f..085d7a78f62f 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -523,7 +523,7 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
- 			dump_stack();
- 
- 		if (softlockup_all_cpu_backtrace) {
--			trigger_allbutself_cpu_backtrace();
-+			trigger_allbutcpu_cpu_backtrace(smp_processor_id());
- 			clear_bit_unlock(0, &soft_lockup_nmi_warn);
- 		}
- 
-diff --git a/lib/nmi_backtrace.c b/lib/nmi_backtrace.c
-index 5274bbb026d7..33c154264bfe 100644
---- a/lib/nmi_backtrace.c
-+++ b/lib/nmi_backtrace.c
-@@ -34,7 +34,7 @@ static unsigned long backtrace_flag;
-  * they are passed being updated as a side effect of this call.
-  */
- void nmi_trigger_cpumask_backtrace(const cpumask_t *mask,
--				   bool exclude_self,
-+				   int exclude_cpu,
- 				   void (*raise)(cpumask_t *mask))
- {
- 	int i, this_cpu = get_cpu();
-@@ -49,8 +49,8 @@ void nmi_trigger_cpumask_backtrace(const cpumask_t *mask,
- 	}
- 
- 	cpumask_copy(to_cpumask(backtrace_mask), mask);
--	if (exclude_self)
--		cpumask_clear_cpu(this_cpu, to_cpumask(backtrace_mask));
-+	if (exclude_cpu != -1)
-+		cpumask_clear_cpu(exclude_cpu, to_cpumask(backtrace_mask));
- 
- 	/*
- 	 * Don't try to send an NMI to this cpu; it may work on some
+base-commit: 3ccb179aa40d931eb00ef8910d7b812a95659563
 -- 
-2.41.0.585.gd2178a4bd4-goog
+2.40.1
 
