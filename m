@@ -2,132 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735E8771224
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Aug 2023 22:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293E17712DA
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Aug 2023 00:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjHEUgP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Aug 2023 16:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
+        id S229521AbjHEWUg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Aug 2023 18:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjHEUgP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Aug 2023 16:36:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1A0127;
-        Sat,  5 Aug 2023 13:36:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABC1460EF3;
-        Sat,  5 Aug 2023 20:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8402EC433C7;
-        Sat,  5 Aug 2023 20:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691267773;
-        bh=HV9N1662vFNg45/injmUeZzoXqqRaYKc6xS67ObhrCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T8b37KpHrfdrHcPTjbp9eehNf/qy/zQ094uspwpe3knxbV/SAwFyOO+iL6poGeRt5
-         mmN2THgQL8TANiBbUZTIqmUiv0S7zyq3SAoSc1CzwM7lN991SYLqic8rCimc7bWwRI
-         Vu7ZXvkbMfRfxqG+wpJINgbL+2KpSYU+uMd2Pk44r5RPsQzRq94XsuoRFZfLcF3djQ
-         F5MggUSz0nkmmAejuORlF5VcmTYFbpwgyjqW04dzJAO9QAMzfqz5myArTvUzYEHRfd
-         0AdEI801aM4xbN8FAEhz4+QIYaCxO1e4lYxIngw3YRdHEiuSSaRBpD/K+KyiSmsD0z
-         8QDHViYep2Zwg==
-Date:   Sat, 5 Aug 2023 22:36:10 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Michael Walle <michael@walle.cc>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anjelique Melendez <quic_amelende@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] pwm: Manage owner assignment implicitly for
- drivers
-Message-ID: <20230805203610.jl7eea2lasmg2as2@intel.intel>
-References: <20230804142707.412137-1-u.kleine-koenig@pengutronix.de>
- <20230804142707.412137-2-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S229478AbjHEWUf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Aug 2023 18:20:35 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CC09268A
+        for <linux-mips@vger.kernel.org>; Sat,  5 Aug 2023 15:20:33 -0700 (PDT)
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+        id 1qSPdQ-0002gx-00; Sun, 06 Aug 2023 00:20:32 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 5A25BC01A8; Sun,  6 Aug 2023 00:20:22 +0200 (CEST)
+Date:   Sun, 6 Aug 2023 00:20:22 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     debian-mips <debian-mips@lists.debian.org>, dsa@debian.org
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: Getting Bullseye/Bookworm kernel running on Loongson 3A boards
+Message-ID: <ZM7LJvwqR4lLbiR5@alpha.franken.de>
+References: <ZL1SZw8VrAf3qdxy@aurel32.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230804142707.412137-2-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <ZL1SZw8VrAf3qdxy@aurel32.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,25 +38,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Uwe,
-
-On Fri, Aug 04, 2023 at 04:27:06PM +0200, Uwe Kleine-König wrote:
-> Instead of requiring each driver to care for assigning the owner member
-> of struct pwm_ops, handle that implicitly using a macro. Note that the
-> owner member has to be moved to struct pwm_chip, as the ops structure
-> usually lives in read-only memory and so cannot be modified.
+On Sun, Jul 23, 2023 at 06:16:39PM +0200, Aurelien Jarno wrote:
+> Dear MIPS porters,
 > 
-> The upside is that new lowlevel drivers cannot forget the assignment and
-> save one line each. The pwm-crc driver didn't assign .owner, that's not
-> a problem in practise though as the driver cannot be compiled as a
-
-/practise/practice/
-
-> module.
+> DSA would like to upgrade the remaining mips*el buildds to bullseye (and
+> later to bookworm), however we have trouble running the Bullseye or
+> Bookworm kernel on the LS3A-RS780-1w ones.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Both Bullseye and Bookworm kernels boot fine up to the userland, but the
+> network card does not work. It *seems* to an interrupt issue as the
+> corresponding counter in /proc/interrupts does not change, and in
+> addition the kernel logs show the following warnings:
+> 
+> [    5.077846] pcieport 0000:00:02.0: of_irq_parse_pci: failed with rc=-22
+> [    5.084744] pcieport 0000:00:03.0: of_irq_parse_pci: failed with rc=-22
+> [    5.170772] ahci 0000:00:11.0: of_irq_parse_pci: failed with rc=-22
+> [    7.376554] pci 0000:00:07.0: of_irq_parse_pci: failed with rc=-22
+> [    7.444769] ata_generic 0000:00:14.1: of_irq_parse_pci: failed with rc=-22
+> [    7.495993] ehci-pci 0000:00:12.2: of_irq_parse_pci: failed with rc=-22
+> [    7.624868] ehci-pci 0000:00:13.2: of_irq_parse_pci: failed with rc=-22
+> [    7.753230] ohci-pci 0000:00:12.0: of_irq_parse_pci: failed with rc=-22
+> [    7.886362] ohci-pci 0000:00:12.1: of_irq_parse_pci: failed with rc=-22
+> [    8.018045] ohci-pci 0000:00:13.0: of_irq_parse_pci: failed with rc=-22
+> [    8.150168] ohci-pci 0000:00:13.1: of_irq_parse_pci: failed with rc=-22
+> [    8.294391] ohci-pci 0000:00:14.5: of_irq_parse_pci: failed with rc=-22
+> [   18.398222] snd_hda_intel 0000:00:14.2: of_irq_parse_pci: failed with rc=-22
+> [   18.547932] pci 0000:00:01.0: of_irq_parse_pci: failed with rc=-22
+> 
+> Any idea how to solve this issue? I have attached a full 6.1 kernel boot
+> log for reference.
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+asking on linux-mips@vger.kernel.org might get more feedback on the issue...
+From the quick look at kernel code and device tree of the board IMHO
+the DTS is missing interrupt mapping entries for the PCI bus.
 
-Thanks,
-Andi
+Could someone from Loongson have a look at the issue ?
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
