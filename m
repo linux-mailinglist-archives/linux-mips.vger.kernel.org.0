@@ -2,108 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55723772B17
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Aug 2023 18:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966ED772FEE
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Aug 2023 21:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjHGQg6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Aug 2023 12:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S229915AbjHGTyY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Aug 2023 15:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjHGQgz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Aug 2023 12:36:55 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D310510EC;
-        Mon,  7 Aug 2023 09:36:37 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so5572559a12.2;
-        Mon, 07 Aug 2023 09:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691426196; x=1692030996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PZNcpOl8CEiyqW/ZOb/0XcvAH0YrJ+P7c3vLK34uSAU=;
-        b=p+tvWBWwjHGrwcist+ERw9YfHaq9zpl05ImB2qAvYkl732NZFX8xD9wURvjqtCVJ1j
-         f5qbn/zlJNV6GNzz6n8+mAMJaBmpwk6+UVEKF6KWKUWEFm/F9u8VY8GQrgo2LxfeBZvN
-         Q25ySkdvCjrYg1Bcz4X891+wn78TNlj5vCAcuaen/d9ZcFRwWOOdiM/IHn+hB+Sp5QbU
-         7KEoIxqB/oC0PKxqJkad8mWMRJdrUlFbGS3ml6DKgWCGfEOr7lCPVn0QEw8jmqV+iO3y
-         DCv0CWe6Fi+dWUg+QwUzhxPuhEjT/J6XbuR1v14rXzF9ymm5RSsS8aqzuc3ChKdKQDuo
-         ZzhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691426196; x=1692030996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PZNcpOl8CEiyqW/ZOb/0XcvAH0YrJ+P7c3vLK34uSAU=;
-        b=JjAjKbDeZO893tIgkR9/2K2GVtOchnw880mvLGo+xwXPDxxf2LEwiaXpoR9qxuD2Zp
-         IfUaW60xxVUyxpQilWu0aGQePqiM2NjBkZu579qZgXzU6PSRf5cR9BNu1X5iwtybmziU
-         DQFef0t4pr0UMYju30CLOsW30f06/eOUYjuEJrNy9FEkZdJkW6+sDunfF5R+Af9bYWCn
-         duBRUI8h+f03/YL1qWLNOfnx4cUxZ/WD1wJD6Izwh91fWmjAdg3y2PFjuXaj5YAHv9c3
-         epncSJ5rs/mRaQj59QDGLvbRHtka8AHVEZi5RbXczEnlFsYlv5kIo6msYhSYf1j9lK92
-         e1Yw==
-X-Gm-Message-State: AOJu0YxS0W68qAaSvksOxFLngM6Xb8HCC4+c3Bj61IKZnKWu9MFApcMt
-        UU2XUW7U1YvOTUcwt48tNZqNCkSekrmZQ4IXKAM=
-X-Google-Smtp-Source: AGHT+IG6xEN7hWZW963ar6a6y/IZv7TEMEGaFqOpr/N9QzXhbQky+esm5rTRkDEeHyn3BVgzlYOqaXCi0RXhkI/5nGE=
-X-Received: by 2002:aa7:c7d9:0:b0:522:2711:863 with SMTP id
- o25-20020aa7c7d9000000b0052227110863mr9220038eds.1.1691426196109; Mon, 07 Aug
- 2023 09:36:36 -0700 (PDT)
+        with ESMTP id S229925AbjHGTyW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Aug 2023 15:54:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E029010FF
+        for <linux-mips@vger.kernel.org>; Mon,  7 Aug 2023 12:54:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68CF262186
+        for <linux-mips@vger.kernel.org>; Mon,  7 Aug 2023 19:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB06C433C7;
+        Mon,  7 Aug 2023 19:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691438059;
+        bh=tEbnU09vPVyTnjYTEByjdm9ue6dsfCiNeNTAbZgnfDk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=s6yMBKDj6TChjpPAPdjqPI7Gd0bKNEE9JS0/iM2SgMgn4guDb/EJsyG9xRT0GkHpC
+         MLO/k6WFXGFlW7PdRWGXfY5b6SWVm0ut+Wmw28lv/CHBSRHc2IZnKfWFRBa6tqL/KI
+         iWRysJziuE1tfcEFlkZdZa/Lact4HWRgkMO4RWJweRv5WRv310xlclO3CxNimpAwNZ
+         lOGkpSUe+SBIgK53uhxBA9V/JnPGMQgCQtGda4KnGklcdyNsmuMbjZKGFAessEugp0
+         5dJFzxlgoI7znv2RbOr0OBOYlD9NFY6Dm77c0yyhdt0Czv8x/2GD8MSpUh5JDIBwUU
+         hS6PNI26UN4/A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20230712-asoc-jz-maple-v1-1-3f745adf96e5@kernel.org>
+References: <20230712-asoc-jz-maple-v1-1-3f745adf96e5@kernel.org>
+Subject: Re: [PATCH] ASoC: jz4740: Update to use maple tree register cache
+Message-Id: <169143805855.302632.5921951627576966633.b4-ty@kernel.org>
+Date:   Mon, 07 Aug 2023 20:54:18 +0100
 MIME-Version: 1.0
-References: <20230731084458.28096-1-ubizjak@gmail.com> <4d4dd1e8-042a-561a-4ffc-529638cb0780@csgroup.eu>
-In-Reply-To: <4d4dd1e8-042a-561a-4ffc-529638cb0780@csgroup.eu>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Mon, 7 Aug 2023 18:36:24 +0200
-Message-ID: <CAFULd4YByT++kV21nZGE+ME9B2KQtQYNRz6Ar2awoLws-JznUw@mail.gmail.com>
-Subject: Re: [PATCH] locking/arch: Rewrite local_add_unless as static inline function
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 6:13=E2=80=AFPM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 31/07/2023 =C3=A0 10:42, Uros Bizjak a =C3=A9crit :
-> > Rewrite local_add_unless as a static inline function with boolean
-> > return value, similar to arch_atomic_add_unless arch fallbacks.
-> >
-> > The function is currently unused.
->
-> Is it worth keeping the function if it is not used ?
+On Wed, 12 Jul 2023 12:14:21 +0100, Mark Brown wrote:
+> The maple tree register cache is based on a much more modern data structure
+> than the rbtree cache and makes optimisation choices which are probably
+> more appropriate for modern systems than those made by the rbtree cache. In
+> v6.5 it has also acquired the ability to generate multi-register writes in
+> sync operations, bringing performance up to parity with the rbtree cache
+> there.
+> 
+> [...]
 
-We already have plenty of these kinds of unused locking functions in
-arch/*/include/asm/atomic.h, so I thought we could leave this one as
-well.
+Applied to
 
-Uros.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: jz4740: Update to use maple tree register cache
+      commit: 1ec6dffdedae4cbbd6e33b1d9be0e5a3dbb31804
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
