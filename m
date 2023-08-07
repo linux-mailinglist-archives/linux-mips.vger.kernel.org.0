@@ -2,58 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653CC771B05
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Aug 2023 09:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456A9771B91
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Aug 2023 09:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjHGHDt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Aug 2023 03:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229792AbjHGHfp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Aug 2023 03:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjHGHDs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Aug 2023 03:03:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E9010D4;
-        Mon,  7 Aug 2023 00:03:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6CB1C2189B;
-        Mon,  7 Aug 2023 07:03:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1691391824; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qBVvdfQ+7uAuAbXARcqoglYVEWjC2ubdJ2O+ToyhcnU=;
-        b=SpNvqN9W8w6c37IfcNk3eNCCy+0l0bY2sLCvSbaXXbOq+nOiCcs5cLMdA3n9BIlH9vi8jv
-        8ByLlL96TK8WiF7qhIOzvIwWLjdpbTOwSIgsMSMdc2Zhix/B3WxC9HUozdEXzDUtH3HOia
-        ikj4S2h/luSXV1azSnZY+DCjxmABQiQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 43F6D13910;
-        Mon,  7 Aug 2023 07:03:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2asJEFCX0GQwWAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 07 Aug 2023 07:03:44 +0000
-Date:   Mon, 7 Aug 2023 09:03:43 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Doug Anderson <dianders@chromium.org>
+        with ESMTP id S229725AbjHGHfo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Aug 2023 03:35:44 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8108F10D4
+        for <linux-mips@vger.kernel.org>; Mon,  7 Aug 2023 00:35:40 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-4873cd125acso163148e0c.0
+        for <linux-mips@vger.kernel.org>; Mon, 07 Aug 2023 00:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1691393739; x=1691998539;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oVDqCkVf2XQJK4O1h6mLmsszxeVizs+vrchmcAeH1mM=;
+        b=GgZc4HVbVwBDtKoa8hzpHopMi8083b3Mz9ORzFnG0n+Pm7hf19v0EsjuiZnteADzK9
+         WVWsARUSgVcKqWXhJOGFSMBSgu3FFxGgoi8u9arCf2twrbwyJYuSgeuR4dyTSMjajF0v
+         I8n7QluuJu6VAySsM5yLOwBZ9Gf6kyjHCK/fE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691393739; x=1691998539;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oVDqCkVf2XQJK4O1h6mLmsszxeVizs+vrchmcAeH1mM=;
+        b=PJUiSH1S1Ydry1vbK2v3XEZxWJDDH0HpqLJ7jsYA2LJkp61lWxc0W+i+ugDjIi2db6
+         6hjdOlLNMWrWtFzuJWhFDQUO31iA/TzptNbKZqE0skJSp3EPvTexO23VY8ttyf2sgEDC
+         6IzILiguUrG0PElWFGbZW2ui40WFK0egEMk+oF0FfEt6EmgY9xcCClTFZv/q4ixlqAeO
+         N7fvAJVHXJ8LyBG1XA7d/096aicPgLKmFjiCGRQD05dc2cHfq4QtvYSwv8YwG5A2M49Y
+         0N5ql/Ncx/EOBE9uEACx7eYGCdRv5Sog3EAnLFJ15YT77g4VnGPJhdIRE4u6HwQLiLVw
+         NLcQ==
+X-Gm-Message-State: AOJu0YxX1cfZPxHYBBiN7K0Bp1Z0NAql8psOh15dtzF8HBKW00vffiFg
+        M5dzuYE4l7ARMqPQhyL2e/ndjd2ttbl0WwrGhLoLoQ==
+X-Google-Smtp-Source: AGHT+IH6RRAXW8L9icGAFpz10EPAQT37UfLDWhYNXFPOSg/fZtT1eceWby7rBEWIJ0DFUgS7mF/xa7sdfTT+OUG3tjs=
+X-Received: by 2002:a1f:c8c2:0:b0:486:42c1:5f57 with SMTP id
+ y185-20020a1fc8c2000000b0048642c15f57mr2773409vkf.5.1691393739460; Mon, 07
+ Aug 2023 00:35:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230804065935.v4.1.Ia35521b91fc781368945161d7b28538f9996c182@changeid>
+In-Reply-To: <20230804065935.v4.1.Ia35521b91fc781368945161d7b28538f9996c182@changeid>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 7 Aug 2023 15:35:28 +0800
+Message-ID: <CAGXv+5HtYi_9mWr+m-oufYiRTzXaGRFBtqSeqbwgE2a=bYNPug@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] nmi_backtrace: Allow excluding an arbitrary CPU
+To:     Douglas Anderson <dianders@chromium.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Borislav Petkov <bp@alien8.de>,
+        Petr Mladek <pmladek@suse.com>, Michal Hocko <mhocko@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         "Darrick J. Wong" <djwong@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "David S. Miller" <davem@davemloft.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
         Gaosheng Cui <cuigaosheng1@huawei.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Ingo Molnar <mingo@redhat.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>,
@@ -68,9 +77,10 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
         Pingfan Liu <kernelfans@gmail.com>,
         Qing Zhang <zhangqing@loongson.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Russell King <linux@armlinux.org.uk>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -83,76 +93,133 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
         x86@kernel.org
-Subject: Re: [PATCH v3 1/2] nmi_backtrace: Allow excluding an arbitrary CPU
-Message-ID: <ZNCXT+nRHnTKJX0y@dhcp22.suse.cz>
-References: <20230803160649.v3.1.Ia35521b91fc781368945161d7b28538f9996c182@changeid>
- <ZMytyEoCARgP9VR8@dhcp22.suse.cz>
- <CAD=FV=UQ18JG-sMBJHrhXByCWYSgOpCq8tL=3R8pT8CnFEa=pA@mail.gmail.com>
- <ZM0S9gKBBiu83kFq@dhcp22.suse.cz>
- <CAD=FV=XhksUsBKjkD08YxdmxvvbgoZH-va7WnPptkYA6EOpPsg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=XhksUsBKjkD08YxdmxvvbgoZH-va7WnPptkYA6EOpPsg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri 04-08-23 09:06:07, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Aug 4, 2023 at 8:02 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > > > It would have been slightly safer to modify arch_trigger_cpumask_backtrace
-> > > > by switching arguments so that some leftovers are captured easier.
-> > >
-> > > I'm not sure I understand. Oh, you're saying make the prototype of
-> > > arch_trigger_cpumask_backtrace() incompatible so that if someone is
-> > > directly calling it then it'll be a compile-time error?
-> >
-> > exactly. bool to int promotion would be too easy to miss while the
-> > pointer to int would complain loudly.
-> >
-> > > I guess the
-> > > hope is that nobody is calling that directly and they're calling
-> > > through the trigger_...() functions.
-> >
-> > Hope is one thing, being preventive another.
-> >
-> > > For now I'm going to leave this alone.
-> >
-> > If you are going to send another version then please consider this. Not
-> > a hard requirement but better.
-> 
-> If I do send another version, do you have any suggestions for how to
-> change this to make it incompatible?
+On Fri, Aug 4, 2023 at 10:01=E2=80=AFPM Douglas Anderson <dianders@chromium=
+.org> wrote:
+>
+> The APIs that allow backtracing across CPUs have always had a way to
+> exclude the current CPU. This convenience means callers didn't need to
+> find a place to allocate a CPU mask just to handle the common case.
+>
+> Let's extend the API to take a CPU ID to exclude instead of just a
+> boolean. This isn't any more complex for the API to handle and allows
+> the hardlockup detector to exclude a different CPU (the one it already
+> did a trace for) without needing to find space for a CPU mask.
+>
+> Arguably, this new API also encourages safer behavior. Specifically if
+> the caller wants to avoid tracing the current CPU (maybe because they
+> already traced the current CPU) this makes it more obvious to the
+> caller that they need to make sure that the current CPU ID can't
+> change.
+>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+> Changes in v4:
+> - Renamed trigger_allbutself_cpu_backtrace() for when trigger is unsuppor=
+ted.
+>
+> Changes in v3:
+> - ("nmi_backtrace: Allow excluding an arbitrary CPU") new for v3.
+>
+>  arch/arm/include/asm/irq.h       |  2 +-
+>  arch/arm/kernel/smp.c            |  4 ++--
+>  arch/loongarch/include/asm/irq.h |  2 +-
+>  arch/loongarch/kernel/process.c  |  4 ++--
+>  arch/mips/include/asm/irq.h      |  2 +-
+>  arch/mips/kernel/process.c       |  4 ++--
+>  arch/powerpc/include/asm/irq.h   |  2 +-
+>  arch/powerpc/kernel/stacktrace.c |  4 ++--
+>  arch/powerpc/kernel/watchdog.c   |  4 ++--
+>  arch/sparc/include/asm/irq_64.h  |  2 +-
+>  arch/sparc/kernel/process_64.c   |  6 +++---
+>  arch/x86/include/asm/irq.h       |  2 +-
+>  arch/x86/kernel/apic/hw_nmi.c    |  4 ++--
+>  include/linux/nmi.h              | 14 +++++++-------
+>  kernel/watchdog.c                |  2 +-
+>  lib/nmi_backtrace.c              |  6 +++---
+>  16 files changed, 32 insertions(+), 32 deletions(-)
+>
 
-I would swap parameters as this seems simplest.
+[...]
 
-> I guess swapping the order of the
-> parameters would be best? I considered doing that for v4 but I felt
-> like long term the current order of the parameters was better.
+> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+> index e3e6a64b98e0..7cf7801856a1 100644
+> --- a/include/linux/nmi.h
+> +++ b/include/linux/nmi.h
+> @@ -157,31 +157,31 @@ static inline void touch_nmi_watchdog(void)
+>  #ifdef arch_trigger_cpumask_backtrace
+>  static inline bool trigger_all_cpu_backtrace(void)
+>  {
+> -       arch_trigger_cpumask_backtrace(cpu_online_mask, false);
+> +       arch_trigger_cpumask_backtrace(cpu_online_mask, -1);
+>         return true;
+>  }
+>
+> -static inline bool trigger_allbutself_cpu_backtrace(void)
+> +static inline bool trigger_allbutcpu_cpu_backtrace(int exclude_cpu)
+>  {
+> -       arch_trigger_cpumask_backtrace(cpu_online_mask, true);
+> +       arch_trigger_cpumask_backtrace(cpu_online_mask, exclude_cpu);
+>         return true;
+>  }
+>
+>  static inline bool trigger_cpumask_backtrace(struct cpumask *mask)
+>  {
+> -       arch_trigger_cpumask_backtrace(mask, false);
+> +       arch_trigger_cpumask_backtrace(mask, -1);
+>         return true;
+>  }
+>
+>  static inline bool trigger_single_cpu_backtrace(int cpu)
+>  {
+> -       arch_trigger_cpumask_backtrace(cpumask_of(cpu), false);
+> +       arch_trigger_cpumask_backtrace(cpumask_of(cpu), -1);
+>         return true;
+>  }
+>
+>  /* generic implementation */
+>  void nmi_trigger_cpumask_backtrace(const cpumask_t *mask,
+> -                                  bool exclude_self,
+> +                                  int exclude_cpu,
+>                                    void (*raise)(cpumask_t *mask));
+>  bool nmi_cpu_backtrace(struct pt_regs *regs);
+>
+> @@ -190,7 +190,7 @@ static inline bool trigger_all_cpu_backtrace(void)
+>  {
+>         return false;
+>  }
+> -static inline bool trigger_allbutself_cpu_backtrace(void)
+> +static inline bool trigger_allbutcpu_cpu_backtrace(void)
+                                                      ^
+The parameter here is still wrong. It should be "int exclude_cpu".
 
-Yes the current ordering is better but having it other way around is not
-really horrendous either.
+This patch in Andrew's queue is causing build errors on next-20230807 on ar=
+m64:
 
-> I also
-> considered a rename, but that different problems. ;-) If I rename both
-> the #define and the function then if someone has an out-of-tree patch
-> adding arch_trigger_cpumask_backtrace() for another architecture, like
-> say arm64, then there would be no compile-time failure indicating that
-> the out-of-tree patch needs updating. I could rename the functions but
-> _not_ the #define, I guess?
+kernel/watchdog.c: In function =E2=80=98watchdog_timer_fn=E2=80=99:
+kernel/watchdog.c:521:25: error: too many arguments to function
+=E2=80=98trigger_allbutcpu_cpu_backtrace=E2=80=99
+  521 |
+trigger_allbutcpu_cpu_backtrace(smp_processor_id());
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from kernel/watchdog.c:17:
+./include/linux/nmi.h:193:20: note: declared here
+  193 | static inline bool trigger_allbutcpu_cpu_backtrace(void)
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[3]: *** [scripts/Makefile.build:243: kernel/watchdog.o] Error 1
 
-I think that swapping would be simplest as the type mismatch should
-catch also pending out-of-tree potential implementations.
 
--- 
-Michal Hocko
-SUSE Labs
+ChenYu
