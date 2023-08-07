@@ -2,56 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335307734CC
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 01:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0A27734DC
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 01:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjHGXSL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Aug 2023 19:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S229984AbjHGXUV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Aug 2023 19:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjHGXRy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Aug 2023 19:17:54 -0400
+        with ESMTP id S229901AbjHGXUT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Aug 2023 19:20:19 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB77121
-        for <linux-mips@vger.kernel.org>; Mon,  7 Aug 2023 16:17:51 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-585fb08172bso58801547b3.2
-        for <linux-mips@vger.kernel.org>; Mon, 07 Aug 2023 16:17:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34618121
+        for <linux-mips@vger.kernel.org>; Mon,  7 Aug 2023 16:20:17 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5868992ddd4so58933737b3.0
+        for <linux-mips@vger.kernel.org>; Mon, 07 Aug 2023 16:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691450271; x=1692055071;
+        d=google.com; s=20221208; t=1691450416; x=1692055216;
         h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=O6ADKvrj6NKuTG8K0De5TN5TBG7YUj/XYIH2D8dp568=;
-        b=rHwQlDZDzym7DX7JPTeHFjVedtFRUtAMiKX2VU1EjC3DDPS+GKehZ420ny5GaoR1ql
-         DJZSgsfTVJl3vHuTgVdsaoMbYWxHvGzjOU0b7lDeewUWBnmHCx4rEyCV+u7mMO4LYlh5
-         X/eCH8/74nhTzgvQgUg3W7ew8mnRsIapj5OejxlfXYe7B7oIEIOpl62BZW0oI322fnfO
-         0Voq/X8G0TvKlJzbTSRNfra4zE+z5UETF5mjVUp3srNKrf5MdQ1+J9GDHb9R/7Klrk79
-         sQ7ciz1qdHaVGW7a/1FblT/tag2WVBkp7Xupx92Rz9XtAvp0t79KGYAXs3GugjDd4DWz
-         Be4g==
+        bh=1Ut/hDJ+qFMS0sDMssVLi/Qh1tossNoTViyk+Sv5I6I=;
+        b=OnbGVA8IPnrsdTREsUm581mRdehgXJT0uL+ALPcn3gfxErJrXCtKmSomsOKaQATGMh
+         f0VvgjqMIW5HLukSt/TZqta9FHSpbW8xuPg/WJY9Y8dBtzBXk68FxKvGTf0SBMt/xuPE
+         yb72/yaLEWHxd2i86q/oL/iyLDDk998ORMSoUHaZduqRHpQmcSBeRXdyojnyjv3Pm4Gp
+         0hyU2N4jgt9pJV3/SHK5m7Gafo6teeA6CAaXNJJ1Z5NngK3Yas1VVpJwsDY8b342oTWb
+         +N+E2aHGEdoYFXjyTrvdzsHzrQ8RpCJH9Ba/1//rKN61ZJdF3SLJ42ybI7Ydk3RiGWfT
+         qyWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691450271; x=1692055071;
+        d=1e100.net; s=20221208; t=1691450416; x=1692055216;
         h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O6ADKvrj6NKuTG8K0De5TN5TBG7YUj/XYIH2D8dp568=;
-        b=lI3qR1sRvFaMZgQZx/36FtVYoLZDMRf+JH1CkZjhS345Bs9Y12PFu80Ci6gKk3vWIB
-         eCeGopmw7zudxwhZQ+tFJC0ZEVDcb/G0mC1nJg5neGyo9KDIcLJYRYvuXkmc4daUqeuQ
-         aRdpmPTOkWCCjW17r4NJgNplTUMURa8O4S1Qrf6HQJkQXcpu7UPyDY4VBEgruySstHrI
-         n7NA8zCI00WNKJFxNPwuK9gVmo94ZXnU31O5JKeuSKXIc6MNyMVPh78GFMApI4Iy/bUT
-         9rNDlPrlZIYwy54L/7JiquySmIplC2jjoiWIKqK0kxLSyGsAWmmKg5b1WmN35g3ahiOl
-         Vrbw==
-X-Gm-Message-State: AOJu0Ywt33MwcfiuuoxCa1EemiB77a0tWKrZhadKMei0CTUqBb+fQMR4
-        6YLM6m1cWSkfM8PpOeRMbnJZnCiJTONYBRnAuw==
-X-Google-Smtp-Source: AGHT+IGSgl+5gSINX//lCEXF+ifa5KuvDte/Vqkh35HGceplFQQ8fBj/FZjwVUabZs4KoYQYU07HEfGWMf/BZUZt+g==
+        bh=1Ut/hDJ+qFMS0sDMssVLi/Qh1tossNoTViyk+Sv5I6I=;
+        b=h1M1ZgcbyLhx0Sr1MUYA4OTAlgD86tww7pXaQdTuFHyEvvMh2IIc1JrtMDmMXBkcbl
+         laInEs4YhahX9QedH4cIBmqi+q2zYuZga9zuxE8Ad7UQg40XAgbz+c1lfXsgXgh7i4q9
+         WYHiuaQWF72aqgeM2r7mlQhJg1NHCKgoSW6hnVh76N/oGYJbbkzYvjXjNbZrXmsw1kjy
+         BfP6NmvL3oo9nUrv26EN3l67Do/yFALRIbaA/teQuf7FGsNZ7QdwMR2j3VMFxX6lcenz
+         XN4x3N7ZZhnOFB6oVQ8fq1Wm9OYROQiMd+PDKlppwbm7kOtYzIgpL2Pdn6Y3ieizwL9h
+         tf+w==
+X-Gm-Message-State: AOJu0Ywoa2/0+cDvA7qycqP7v2/GK4FUZ75FsDPTjlmK7Jo2CZAzdweR
+        of+IlxDmSNa403iQKWFJMdsVvw9uZTbI8/x6HA==
+X-Google-Smtp-Source: AGHT+IGdVk9oJYWbSpXuFj0KYecexGvmGzQrsUIUE7DdG+7VjOx16xy0jF3toasrtnWqbigopnLRYvJP03sO+CW+ag==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a25:ce50:0:b0:d4f:d7a5:ba3b with SMTP
- id x77-20020a25ce50000000b00d4fd7a5ba3bmr34924ybe.8.1691450270921; Mon, 07
- Aug 2023 16:17:50 -0700 (PDT)
-Date:   Mon, 07 Aug 2023 23:17:49 +0000
-In-Reply-To: <20230718234512.1690985-28-seanjc@google.com> (message from Sean
- Christopherson on Tue, 18 Jul 2023 16:45:10 -0700)
+ (user=ackerleytng job=sendgmr) by 2002:a81:af45:0:b0:581:7b58:5e70 with SMTP
+ id x5-20020a81af45000000b005817b585e70mr85942ywj.5.1691450416406; Mon, 07 Aug
+ 2023 16:20:16 -0700 (PDT)
+Date:   Mon, 07 Aug 2023 23:20:15 +0000
+In-Reply-To: <20230718234512.1690985-29-seanjc@google.com> (message from Sean
+ Christopherson on Tue, 18 Jul 2023 16:45:11 -0700)
 Mime-Version: 1.0
-Message-ID: <diqzr0oe30iq.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [RFC PATCH v11 27/29] KVM: selftests: Expand set_memory_region_test
- to validate guest_memfd()
+Message-ID: <diqzo7ji30eo.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v11 28/29] KVM: selftests: Add basic selftest for guest_memfd()
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
@@ -84,78 +83,58 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Sean Christopherson <seanjc@google.com> writes:
 
-> From: Chao Peng <chao.p.peng@linux.intel.com>
+> Add a selftest to verify the basic functionality of guest_memfd():
 >
-> Expand set_memory_region_test to exercise various positive and negative
-> testcases for private memory.
+> + file descriptor created with the guest_memfd() ioctl does not allow
+>   read/write/mmap operations
+> + file size and block size as returned from fstat are as expected
+> + fallocate on the fd checks that offset/length on
+>   fallocate(FALLOC_FL_PUNCH_HOLE) should be page aligned
 >
->  - Non-guest_memfd() file descriptor for private memory
->  - guest_memfd() from different VM
->  - Overlapping bindings
->  - Unaligned bindings
->
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> [sean: trim the testcases to remove duplicate coverage]
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     | 10 ++
->  .../selftests/kvm/set_memory_region_test.c    | 99 +++++++++++++++++++
->  2 files changed, 109 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 334df27a6f43..39b38c75b99c 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -789,6 +789,16 @@ static inline struct kvm_vm *vm_create_barebones(void)
->  	return ____vm_create(VM_SHAPE_DEFAULT);
->  }
->  
 
 > <snip>
 
 > +
-> +static void test_add_private_memory_region(void)
+> +static void test_fallocate(int fd, size_t page_size, size_t total_size)
 > +{
-> +	struct kvm_vm *vm, *vm2;
-> +	int memfd, i;
+> +	int ret;
 > +
-> +	pr_info("Testing ADD of KVM_MEM_PRIVATE memory regions\n");
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE, 0, total_size);
+> +	TEST_ASSERT(!ret, "fallocate with aligned offset and size should succeed");
 > +
-> +	vm = vm_create_barebones_protected_vm();
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
+> +			page_size - 1, page_size);
+> +	TEST_ASSERT(ret, "fallocate with unaligned offset should fail");
 > +
-> +	test_invalid_guest_memfd(vm, vm->kvm_fd, 0, "KVM fd should fail");
-> +	test_invalid_guest_memfd(vm, vm->fd, 0, "VM's fd should fail");
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE, total_size, page_size);
+> +	TEST_ASSERT(ret, "fallocate beginning at total_size should fail");
 > +
-> +	memfd = kvm_memfd_alloc(MEM_REGION_SIZE, false);
-> +	test_invalid_guest_memfd(vm, vm->fd, 0, "Regular memfd() should fail");
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE, total_size + page_size, page_size);
+> +	TEST_ASSERT(ret, "fallocate beginning at total_size should fail");
 
 This should be
 
-test_invalid_guest_memfd(vm, memfd, 0, "Regular memfd() should fail");
+TEST_ASSERT(ret, "fallocate beginning after total_size should fail");
 
-> +	close(memfd);
 > +
-> +	vm2 = vm_create_barebones_protected_vm();
-> +	memfd = vm_create_guest_memfd(vm2, MEM_REGION_SIZE, 0);
-> +	test_invalid_guest_memfd(vm, memfd, 0, "Other VM's guest_memfd() should fail");
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
+> +			total_size, page_size);
+> +	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) at total_size should succeed");
 > +
-> +	vm_set_user_memory_region2(vm2, MEM_REGION_SLOT, KVM_MEM_PRIVATE,
-> +				   MEM_REGION_GPA, MEM_REGION_SIZE, 0, memfd, 0);
-> +	close(memfd);
-> +	kvm_vm_free(vm2);
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
+> +			total_size + page_size, page_size);
+> +	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) after total_size should succeed");
 > +
-> +	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE, 0);
-> +	for (i = 1; i < PAGE_SIZE; i++)
-> +		test_invalid_guest_memfd(vm, memfd, i, "Unaligned offset should fail");
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
+> +			page_size, page_size - 1);
+> +	TEST_ASSERT(ret, "fallocate with unaligned size should fail");
 > +
-> +	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_PRIVATE,
-> +				   MEM_REGION_GPA, MEM_REGION_SIZE, 0, memfd, 0);
-> +	close(memfd);
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
+> +			page_size, page_size);
+> +	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) with aligned offset and size should succeed");
 > +
-> +	kvm_vm_free(vm);
+> +	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE, page_size, page_size);
+> +	TEST_ASSERT(!ret, "fallocate to restore punched hole should succeed");
 > +}
-> +
 
 > <snip>
