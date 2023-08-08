@@ -2,141 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18DA774280
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 19:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDEE774949
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 21:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbjHHRqO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Aug 2023 13:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S232297AbjHHTvC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Aug 2023 15:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbjHHRpc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 13:45:32 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937DA25EDB
-        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:20:40 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-3493d0f785dso151335ab.1
-        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 09:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691511605; x=1692116405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U4qeJyFw/gGtNGwwL76+JxYJVDiytKHvIxhzv45xt00=;
-        b=FpfAKc3XyP1qtbWBZ1r5mjM0gGcK3mBqFnQDJg0z7xglITdvPvyPFO68jQ0PYtEUYV
-         rpNDUVZsipF7n+fTt95dGPnaD80TOiS9mDENUKcX5WGNdhDAs8DDDxN/NVyVQA8z0W5P
-         25Tt2lotrmP+TltcpTJg7iP1p/XE1wX+ZjijZoVt+3tKY7bWxnQCNP5LL5wrjU0b2GnI
-         aVqQqHH8Ca7ngxoTSYzFdMaiz/kEiqSAcaMrBMBDLXzcSuPFg8+njtH5c8+y240S5y9+
-         6uPltBfXOJFc9jALMNDRbM20jjU7jRwikkRkGmhO/qF4WtwZoWK1pjQTtuAfpe/Mq/Sf
-         Sg5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691511605; x=1692116405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U4qeJyFw/gGtNGwwL76+JxYJVDiytKHvIxhzv45xt00=;
-        b=OaW44/AtBTUcVLRNd6okX6ZdOGjP9gfgewjOqziy7O7AeuYWImYeRqRNJtBuamEoox
-         Qr1rvtm6E7xoPGOc/kfmrOqZg6wcjxhvqojp4LpL9pOtQPFyW6UewOx56E/C8v5gEAg2
-         1qSb9iLwF6r8mQ3KMNvQN+mUe4KSEn1gZ9U13c7NArESTrI1qCHL9JmLfihBrpBk3OoO
-         yzSDlcZGxklRIKGxVhgKXpXjwSPaFUO2EVjVq+4gKtfr7UGKVu7PIuV6UwpAPZXaTxkh
-         WCfbYflz1EYeF5FvtzR06WYu2anC7fZBXIjMCzoFlwYRWIg0ERZehFoPXXbQFiEfbuC7
-         9FwA==
-X-Gm-Message-State: AOJu0Ywe9bOtIvcwSWEv03jyeJdcJ+L+TDzNRuJEJNnbQ+1xDVSdQ0AZ
-        +3E2aqHCMjAD0Z/0WZOXeWiNpZu/zdqPe91oxp+EIw==
-X-Google-Smtp-Source: AGHT+IE0t1UQBz7Q+Wd5oVDkD3MWrd9+fYCOI5tNf8F86oCLp/yKAd0cOFrr+Qrz9mpkQuy5myhBpG2/Eo43uNjBaY0=
-X-Received: by 2002:a05:6e02:156e:b0:33b:4a8c:2147 with SMTP id
- k14-20020a056e02156e00b0033b4a8c2147mr897399ilu.8.1691511605457; Tue, 08 Aug
- 2023 09:20:05 -0700 (PDT)
+        with ESMTP id S233163AbjHHTup (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 15:50:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BEF53F23
+        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:56:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qTGAZ-0007if-FO; Tue, 08 Aug 2023 08:26:15 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qTGAY-001v5N-3j; Tue, 08 Aug 2023 08:26:14 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qTGAX-00BKsD-04; Tue, 08 Aug 2023 08:26:13 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        linux-mips@vger.kernel.org, linux-pwm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] pwm: jz4740: Consistently name driver data "jz"
+Date:   Tue,  8 Aug 2023 08:26:08 +0200
+Message-Id: <20230808062608.897710-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230722022251.3446223-1-rananta@google.com> <20230722022251.3446223-3-rananta@google.com>
- <87tttpr6qy.wl-maz@kernel.org> <ZMgsjx8dwKd4xBGe@google.com>
- <877cqdqw12.wl-maz@kernel.org> <CAJHc60xAUVt5fbhEkOqeC-VF8SWVOt3si=1yxVVAUW=+Hu_wNg@mail.gmail.com>
- <CAJHc60zN-dc2E-fS7fuXgkrfGD9bqW6tMy2GRZxbHOeZv0ZOBw@mail.gmail.com> <ZNJaPxTtPRCv0HOl@google.com>
-In-Reply-To: <ZNJaPxTtPRCv0HOl@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 8 Aug 2023 09:19:53 -0700
-Message-ID: <CAJHc60yiGnVc=ysdOaNemWaDpTBSk02mRLenK3sN2XtN_Cp98g@mail.gmail.com>
-Subject: Re: [PATCH v7 02/12] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4302; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=CgCI6Nwvk9+sysDh3jA/wC6GMwE7Q3uqtKVdUn6NQqE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBk0d//BGdKQSIjqbmTKx1EqIjjeJIj/3pWze3B+ 0Q5sqqYYquJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZNHf/wAKCRCPgPtYfRL+ TgvmCACesHKB5NI1pvKf4rTN1vuMShRlk4XkvVlj0uVqmIn5HMncpkaLM8YpEeJT06OlyOVfyEe lkXj+MkSpkBFBbDfxEo++qM/zWvhf908sn0IRbWvGYhenBu29DIIGdPVJxwSNhu+lK/OJZtwlDE DlDcEgy0zpU46tmj8zqVlmxYXhkVoPYwZCgGIybgO+XXPEtklgG9MZigsDg4q9G/YVK3F/EZUe7 6MuaCt0j/OHU7nuK2mBfN4Qa7ZdtF9AVik+bPyokqVpUbvYe8rW6kbxXiKuch35mOvmdGn7UQ0J vaFQdor8d3m4wTmt6WAC9IIZmNawMmGoHQLuJoVFbc+YY+a0
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 8, 2023 at 8:07=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Fri, Aug 04, 2023, Raghavendra Rao Ananta wrote:
-> > On Wed, Aug 2, 2023 at 4:28=E2=80=AFPM Raghavendra Rao Ananta
-> > <rananta@google.com> wrote:
-> > >
-> > > Sure, I'll change it to kvm_arch_flush_vm_tlbs() in v8.
-> > >
-> > While working on the renaming, I realized that since this function is
-> > called from kvm_main.c's kvm_flush_remote_tlbs(). Do we want to rename
-> > this and the other kvm_flush_*() functions that the series introduces
-> > to match their kvm_arch_flush_*() counterparts?
->
-> Hmm, if we're going to rename one arch hook, then yes, I think it makes s=
-ense to
-> rename all the common APIs and arch hooks to match.
->
-> However, x86 is rife with the "remote_tlbs" nomenclature, and renaming th=
-e common
-> APIs will just push the inconsistencies into x86.  While I 100% agree tha=
-t the
-> current naming is flawed, I am not willing to end up with x86 being parti=
-ally
-> converted.
->
-> I think I'm ok renaming all of x86's many hooks?  But I'd definitely want=
- input
-> from more x86 folks, and the size and scope of this series would explode.=
-  Unless
-> Marc objects and/or has a better idea, the least awful option is probably=
- to ignore
-> the poor "remote_tlbs" naming and tackle it in a separate series.
->
-Sure, I think it's better to do it in a separate series as well. I'm
-happy to carry out the task after this one gets merged. But, let's
-wait for Marc and others' opinion on the matter.
+Most but not all pointers to driver data are already called "jz":
 
-Thank you.
-Raghavendra
-> Sorry for not noticiing this earlier, I didn't realize just how much x86 =
-uses
-> remote_tlbs.
->
-> > (spiraling more into this, we also have the 'remote_tlb_flush_requests'=
- and
-> > 'remote_tlb_flush' stats)
->
-> Regardless of what we decide for the APIs, definitely leave the stats alo=
-ne.  The
-> names are ABI.  We could preserve the names and changes the struct fields=
-, but that
-> would be a net negative IMO.
+	$ git grep 'struct jz4740_pwm_chip \*' v6.5-rc1 -- drivers/pwm/pwm-jz4740.c
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip *chip)
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:static bool jz4740_pwm_can_use_chn(struct jz4740_pwm_chip *jz,
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:      struct jz4740_pwm_chip *jz = to_jz4740(chip);
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:      struct jz4740_pwm_chip *jz = to_jz4740(chip);
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:      struct jz4740_pwm_chip *jz = to_jz4740(chip);
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:      struct jz4740_pwm_chip *jz4740 = to_jz4740(pwm->chip);
+	v6.5-rc1:drivers/pwm/pwm-jz4740.c:      struct jz4740_pwm_chip *jz4740;
+
+Adapt the two variables called "jz4740" to use the same name for
+consistency.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/pwm/pwm-jz4740.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+index ef1293f2a897..6b2124266273 100644
+--- a/drivers/pwm/pwm-jz4740.c
++++ b/drivers/pwm/pwm-jz4740.c
+@@ -121,7 +121,7 @@ static void jz4740_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
+ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 			    const struct pwm_state *state)
+ {
+-	struct jz4740_pwm_chip *jz4740 = to_jz4740(pwm->chip);
++	struct jz4740_pwm_chip *jz = to_jz4740(pwm->chip);
+ 	unsigned long long tmp = 0xffffull * NSEC_PER_SEC;
+ 	struct clk *clk = pwm_get_chip_data(pwm);
+ 	unsigned long period, duty;
+@@ -173,16 +173,16 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	}
+ 
+ 	/* Reset counter to 0 */
+-	regmap_write(jz4740->map, TCU_REG_TCNTc(pwm->hwpwm), 0);
++	regmap_write(jz->map, TCU_REG_TCNTc(pwm->hwpwm), 0);
+ 
+ 	/* Set duty */
+-	regmap_write(jz4740->map, TCU_REG_TDHRc(pwm->hwpwm), duty);
++	regmap_write(jz->map, TCU_REG_TDHRc(pwm->hwpwm), duty);
+ 
+ 	/* Set period */
+-	regmap_write(jz4740->map, TCU_REG_TDFRc(pwm->hwpwm), period);
++	regmap_write(jz->map, TCU_REG_TDFRc(pwm->hwpwm), period);
+ 
+ 	/* Set abrupt shutdown */
+-	regmap_set_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
++	regmap_set_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm),
+ 			TCU_TCSR_PWM_SD);
+ 
+ 	/*
+@@ -199,10 +199,10 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	 * state instead of its inactive state.
+ 	 */
+ 	if ((state->polarity == PWM_POLARITY_NORMAL) ^ state->enabled)
+-		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
++		regmap_update_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm),
+ 				   TCU_TCSR_PWM_INITL_HIGH, 0);
+ 	else
+-		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
++		regmap_update_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm),
+ 				   TCU_TCSR_PWM_INITL_HIGH,
+ 				   TCU_TCSR_PWM_INITL_HIGH);
+ 
+@@ -222,28 +222,28 @@ static const struct pwm_ops jz4740_pwm_ops = {
+ static int jz4740_pwm_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct jz4740_pwm_chip *jz4740;
++	struct jz4740_pwm_chip *jz;
+ 	const struct soc_info *info;
+ 
+ 	info = device_get_match_data(dev);
+ 	if (!info)
+ 		return -EINVAL;
+ 
+-	jz4740 = devm_kzalloc(dev, sizeof(*jz4740), GFP_KERNEL);
+-	if (!jz4740)
++	jz = devm_kzalloc(dev, sizeof(*jz), GFP_KERNEL);
++	if (!jz)
+ 		return -ENOMEM;
+ 
+-	jz4740->map = device_node_to_regmap(dev->parent->of_node);
+-	if (IS_ERR(jz4740->map)) {
+-		dev_err(dev, "regmap not found: %ld\n", PTR_ERR(jz4740->map));
+-		return PTR_ERR(jz4740->map);
++	jz->map = device_node_to_regmap(dev->parent->of_node);
++	if (IS_ERR(jz->map)) {
++		dev_err(dev, "regmap not found: %ld\n", PTR_ERR(jz->map));
++		return PTR_ERR(jz->map);
+ 	}
+ 
+-	jz4740->chip.dev = dev;
+-	jz4740->chip.ops = &jz4740_pwm_ops;
+-	jz4740->chip.npwm = info->num_pwms;
++	jz->chip.dev = dev;
++	jz->chip.ops = &jz4740_pwm_ops;
++	jz->chip.npwm = info->num_pwms;
+ 
+-	return devm_pwmchip_add(dev, &jz4740->chip);
++	return devm_pwmchip_add(dev, &jz->chip);
+ }
+ 
+ static const struct soc_info jz4740_soc_info = {
+
+base-commit: 3ccb179aa40d931eb00ef8910d7b812a95659563
+-- 
+2.40.1
+
