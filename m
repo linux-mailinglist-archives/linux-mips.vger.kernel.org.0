@@ -2,89 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3A7773F0F
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 18:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A5F7742CA
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 19:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjHHQm3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Aug 2023 12:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S235048AbjHHRud (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Aug 2023 13:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjHHQlM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 12:41:12 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FB3415CA5
-        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 08:54:52 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 6560C9200C3; Tue,  8 Aug 2023 13:07:47 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 585269200BF;
-        Tue,  8 Aug 2023 12:07:47 +0100 (BST)
-Date:   Tue, 8 Aug 2023 12:07:47 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Serge Semin <fancer.lancer@gmail.com>
-Subject: Re: soft and hard float n32 and n64 binaries getting illegal
- instructions on Cobalt Qube2
-In-Reply-To: <alpine.DEB.2.21.2308081027580.38537@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2308081153240.38537@angie.orcam.me.uk>
-References: <733b4eec-6297-e72e-0803-a32a25d83072@gmail.com> <alpine.DEB.2.21.2308051412570.38537@angie.orcam.me.uk> <3afb0b00-e4f2-15a7-c68f-8b2475dc9f77@gmail.com> <alpine.DEB.2.21.2308081027580.38537@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S232338AbjHHRuD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 13:50:03 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38C893E2
+        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:22:13 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c5ffb6cda23so6223258276.0
+        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 09:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691511702; x=1692116502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bDrh8BIjjcioiUiDgVZRZWHMdXQTz7RggcR/+kw0NLg=;
+        b=ekeIMF7bDLZPtzrGR7JcJpTKatkoza3RsSoO3Px5eRjlYTueHrX79bu431YI/iv8Lg
+         zxJr8+ZcE9P+luOijrip46SaGEEXLAy8e7otvL+3luYu5PyGAP7/TtIyX++58cRWXUYw
+         pH7ANA/iMBhP0/SIWwBYuX5sZjFM4N2qteedpFnZRH33ZoMyl6eau++2AH+yv2KWxIJC
+         MnJoIyzwAccxf4hS4akMw01Fui6WsqrGJQXbVtNJ6/Y/nGdciH0Q7FbNsIu3UPVjx9NX
+         CGrGJuF2kqQ44JTKEa+HEOAvbAiQv+YoKOy9NoL2EPB4n5yaVrDZOYym81XIwtw8PpFF
+         TNVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691511702; x=1692116502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bDrh8BIjjcioiUiDgVZRZWHMdXQTz7RggcR/+kw0NLg=;
+        b=ChMdy96FfdgMZO+UXkVwaxRhwpafYECKcVrsIjvDoV4iiUci4fnL0HaJ5fsYoQkuy0
+         kwq4qrMae62Lk1MS0cOFA5R82oi2lWXAuRh86KqIyvr+vXoOYltnlbRzRYISrP95kS+W
+         RnWUanCtOzMH/M40cuBFpqQX1GbavzBF4MWeoiH9+IrbDji8k7BMvjELQvfjgsUR3sIQ
+         39mJEuuzns1AgFWA2KCVWyXHV2Ja4Avt/2GnSLJN0Qj0ZWJQEySyD/d9MA5J7I3kVhlo
+         PcA7rs2BjLIhn1jAFBqZu0d0IDQ3pXLokY/2LnFhTbBoBBCN9P0bflZDPd9Bacy4LCg7
+         dptA==
+X-Gm-Message-State: AOJu0YxWsgONxVo8qBU1/vtzJZqjwA4VTZJSCUqA9vcXwozF1AwVs1HY
+        sOsby0uj7JrzrzcNKgI8O114xmFMn9ga4olEYUwRrk7pY8dWyJX2sno=
+X-Google-Smtp-Source: AGHT+IGgk2Gn5ioNH0AcFXHWCRiyva9Nx2L/8mMA/ydZKbkG7fAbv8oXVgFtjI3hbchGPrQFMMIeNjTdPD0hamE70pA=
+X-Received: by 2002:a25:8f84:0:b0:d3a:e626:af3a with SMTP id
+ u4-20020a258f84000000b00d3ae626af3amr9952727ybl.24.1691500372554; Tue, 08 Aug
+ 2023 06:12:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230808-virt-to-phys-mips-v1-1-af6fcd45ed31@linaro.org>
+In-Reply-To: <20230808-virt-to-phys-mips-v1-1-af6fcd45ed31@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Aug 2023 15:12:40 +0200
+Message-ID: <CACRpkdYisteBTk9DOeCZiCeH5hJW87O-m+zsWAU7uwg7ud=ZYw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Drop virt_to_phys define to self
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 8 Aug 2023, Maciej W. Rozycki wrote:
+On Tue, Aug 8, 2023 at 11:29=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
 
-> > Looks like GDB is not too happy with the core file I obtained, see below. Is
-> > this a known issue with gdb-12.1? gdb-11.x was not faring any better
-> > unfortunately. The core dump is attached (hope it makes it to the mailing
-> > list).
-> 
->  Sigh.  Back in 2017 I fixed numerous issues with MIPS core file handling 
-> in GDB, which was then well-tested, and I haven't looked at it since.  So 
-> it must be a regression, either in GDB or in the producer (Linux kernel).
-> 
->  I can reproduce it and I'll see if I can debug this.  I may ask you for 
-> the corresponding binary and shared libraries at one point.
-> 
->  NB I note that the core file is ELF32 and does not have the EF_MIPS_ABI2 
-> flag set in its file header, so it looks like an o32 core file to me.  
-> Since your subject mentions n32/n64, can you please check what kind of 
-> binary your `iperf3' is (e.g. `file iperf3', `readelf -h iperf3', etc.)?
+> The function virt_to_phys was defined to virt_to_phys and then
+> implemented right below.
+>
+> I can't understand why, just drop it and let the actual function
+> slot in.
+>
+> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  arch/mips/include/asm/io.h | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index affd21e9c20b..18ed44843541 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -111,7 +111,6 @@ extern phys_addr_t __virt_to_phys(volatile const void=
+ *x);
+>  #define __virt_to_phys(x)      __virt_to_phys_nodebug(x)
+>  #endif
+>
+> -#define virt_to_phys virt_to_phys
+>  static inline phys_addr_t virt_to_phys(const volatile void *x)
+>  {
+>         return __virt_to_phys(x);
 
- I tweaked the core file and set the EF_MIPS_ABI2 flag by hand.  This has 
-let GDB proceed:
+Just have to CC Arnd on this because I never feel I understand this
+properly.
 
-[...]
-warning: File "/usr/lib/debug/.build-id" has no build-id, file skipped
-Core was generated by `iperf3 -c 192.168.254.3'.
-Program terminated with signal SIGILL, Illegal instruction.
-#0  0x77eb3190 in ?? (
-[...]
+Normally you would do this so as to override the default virt_to_phys()
+from include/asm-generic/io.h, but we do not seem to be using it here?
 
-but this is a partial core file only and I have no corresponding binaries, 
-so I can't tell more at this stage, i.e. what code there is at 0x77eb3190 
-(the PC address is suspiciously high in the 32-bit address space BTW, is 
-that a PIE run with address space randomisation?).
+Further right below we are implementing phys_to_virt() with no
+corresponding define, so in any case this needs to go or that one
+needs a define.
 
- Of course GDB shouldn't have hit an internal error with a broken core 
-file anyway, it should complain and handle the situation gracefully.  But 
-in any case it's an issue with the Linux kernel producing a core file in 
-the wrong format.
+That said they seem like a good candidate to replace with the
+generic variant because the content is the same sans some debug
+hacks that I doubt are still needed.
 
- Is this the most recent Linux kernel version you have obtained this with?  
-There used to be a bug (regression) in Linux with n32 core files, but I 
-fixed it also in 2017, with commit 547da673173d ("MIPS: Fix an n32 core 
-file generation regset support regression").  So if it has stopped working 
-again, then it's a new regression.  Would you be able to bisect it?
-
-  Maciej
+Yours,
+Linus Walleij
