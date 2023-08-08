@@ -2,154 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A7277488D
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 21:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424BF7747C4
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 21:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236505AbjHHTfa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Aug 2023 15:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S233988AbjHHTTM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Aug 2023 15:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbjHHTfO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 15:35:14 -0400
-X-Greylist: delayed 5100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Aug 2023 11:50:05 PDT
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D846319ACE
-        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 11:50:05 -0700 (PDT)
-Received: from [192.168.1.166] ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id TIjQqMCSNv5uITIjQqVwRf; Tue, 08 Aug 2023 11:10:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1691485825; bh=pxBPGY/8saHyrmYDg9GzSr24b1NP0Ka+vfDcTpfzL/w=;
-        h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
-        b=nExGr5hNsACSHIq/486b8ATCtVQfhkSRN4G+gqu26YlAlxIaGquG83tZntAgKW0zG
-         u6bnhtT00h3LJuNm90aDmh5+gAZ7j8qGgWb7T5jeQBmWEk826K7vE5XpFiLH4SJOMT
-         ZdAgy24BcsBIbGds9riyGSHwOcmh392muArlMSU5RE1gxujwAB+SWbD+rGISFBOfMA
-         g7xP0ameQdKKdwuUPxhJ9Bk27CvQ8cRWHjyD6PO3df9BkhsnyeRgFNWPi/giSNo7eb
-         bovYLWhatRST7jQvZLuACVb7htYa6Lmpkn2zfv4xeX18mvCO7MQMhqH5SrbBqS4uyB
-         +zPe44VmXSs/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1691485825; bh=pxBPGY/8saHyrmYDg9GzSr24b1NP0Ka+vfDcTpfzL/w=;
-        h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
-        b=nExGr5hNsACSHIq/486b8ATCtVQfhkSRN4G+gqu26YlAlxIaGquG83tZntAgKW0zG
-         u6bnhtT00h3LJuNm90aDmh5+gAZ7j8qGgWb7T5jeQBmWEk826K7vE5XpFiLH4SJOMT
-         ZdAgy24BcsBIbGds9riyGSHwOcmh392muArlMSU5RE1gxujwAB+SWbD+rGISFBOfMA
-         g7xP0ameQdKKdwuUPxhJ9Bk27CvQ8cRWHjyD6PO3df9BkhsnyeRgFNWPi/giSNo7eb
-         bovYLWhatRST7jQvZLuACVb7htYa6Lmpkn2zfv4xeX18mvCO7MQMhqH5SrbBqS4uyB
-         +zPe44VmXSs/A==
-Message-ID: <567bd0e0e28a4cac4ce13bb314dcf04739598fbc.camel@triops.cz>
-Subject: Re: next: mips: cavium_octeon_defconfig: gcc-8 -
- dwc3-octeon.c:502:8: include/linux/compiler_types.h:397:38: error: call to
- '__compiletime_assert_335' declared with attribute error: FIELD_PREP: value
- too large for the field _compiletime_assert
-From:   Ladislav Michl <ladis@triops.cz>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        lkft-triage@lists.linaro.org
-Cc:     Thinh.Nguyen@synopsys.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Tue, 08 Aug 2023 11:10:23 +0200
-In-Reply-To: <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
-References: <CA+G9fYspyEdT9wmVpL04J-p0CwqA+_v_L4H+ihY9VYqpCMmQ1Q@mail.gmail.com>
-         <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
-Organization: Triops, s.r.o.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        with ESMTP id S235372AbjHHTSt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 15:18:49 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF2015CAE
+        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:41:59 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9aa1d3029so94410111fa.2
+        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 09:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691512915; x=1692117715;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k0zLEburh9ZFfE548pNOj7q2UOj2GGR4k/WQno4jj70=;
+        b=kn7CRcOb1CEwPjPNb+vVGa27/xG8Sd+MTOM5rFyo+Z0wsIRfWpH2jiXqbGh0gH/s5t
+         QcY4gyJ860wIJneeJU3dmofZp98ztc2a/Hnn3kuhgIwbJWdp1O/O83T7mnQTgk4Iw3rF
+         nrulWZgZrtReNDBlFFv95DKaUvv77mF1IqjUg28u9EcmmG5993nfjLbeF6u2cV5BROrR
+         M/q1mslAd+tDDAxXtWZLeKo4ztFoxAjahDfPDXD03U6An2YEBO71665NsNZCJKTPB41W
+         GdDuESXTCrfMMbYoQTLcHNZrsuE8tpd7E1tNrdS9aijB1ykGgU51jB+nEJp0MsvaYnpf
+         lMJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691512915; x=1692117715;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0zLEburh9ZFfE548pNOj7q2UOj2GGR4k/WQno4jj70=;
+        b=ProMX4XDzFKkywmj+fhOVVuUBoL6lm9K8wzxFo2qRYyNuC8PeGL82r1QpegQ7v0ofe
+         SwO7bGQ1Ss4Ipitlp8rrr7uTWGxSV01VrJ5OoVuHprruHgkanOll9VR4c5/nMkHJJard
+         lYJBiuHw2GevZwrwsY2oc1SZaCIpis1J62xpGXE8dxOLtALQv/o36sSmOQY8nRh1dUK7
+         YMSzt+ctjzKnd+mQjOjhQyTS8ItpGxLKvuE1rZ2qaIrprg6bmmAH4oZjbZlVPLx7SqSJ
+         0XNUuCFoi9rWiCLnpLWbc8nE1y11M0TZ6y6FAygl3lnMZmLSTk0+bcge+kQo0viS5cOJ
+         sGFA==
+X-Gm-Message-State: AOJu0YzPMxzLAGsR0lSR45meqBczThlvm5Q/jcPUZawfAGGcHkERh4b6
+        xh7GlTh4Ytl0x1BYd115w37vK+RRyBEmEHnnnbA=
+X-Google-Smtp-Source: AGHT+IENaoLogdmwEquxviK7pRALZnOeydEhILSaohDlqrXatiaCu5M9MfM3jQOl2xSE+z2HLZbssA==
+X-Received: by 2002:a05:600c:2213:b0:3fe:2b76:3d7 with SMTP id z19-20020a05600c221300b003fe2b7603d7mr9376833wml.10.1691487533357;
+        Tue, 08 Aug 2023 02:38:53 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.177.253])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05600c218d00b003fe2bea77ccsm13219267wme.5.2023.08.08.02.38.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Aug 2023 02:38:53 -0700 (PDT)
+Message-ID: <60ac32e8-5fea-84d4-ff3f-f09e6f8ad499@linaro.org>
+Date:   Tue, 8 Aug 2023 11:38:49 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfP3DisK3KstSzX1Mm3zYKOfoLr30Fb25YJH2esbk2sMTpCEIeraaJY+by4IOCZUiqWJRtJFmW6dOEzTD9+gozpUvY8zkGCwz+srrQejHjrCQDEJwSHy6
- 2pW4+0Y2XhJELiSPet442CJ4kW43nKpINuE8xCa7Q3L/cOFyAfe6LIAopIO1Pjky2f6oBSxU3ufb/62bjMyqIH8Vg4aXAC5KnwILVzagZm9cxIOC9QnV0ixH
- 6TwbVqZZFxUjMfBQrM2S6MOjhoZVjjKSdyo8fCwmnCpt/eSqKgBS05OWW/ffwSv+DspC4k7jepbmFjh5kDQ60GINPsFVzzeoS0FCU2m45wYeFwhFmkgRPh6M
- +lo+1pdaY3ao2G24RHl8qGWNjD+7dow2M8JIgiy6pf58QmKtJlekiRMYTpVFHgD/vWHSVhqt7ke1mBuua7LEXwsOeWs6FOIsbSutYpgXyK07gEQ2b0y5AJdS
- fNLmZ+Nupmpi5LvDG0Wb8ieIMJE1AnZz2egaHNskaILV6Q57txRoPqwyQtY=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH 2/3] mips: replace #include <asm/export.h> with #include
+ <linux/export.h>
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230807153243.996262-1-masahiroy@kernel.org>
+ <20230807153243.996262-2-masahiroy@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230807153243.996262-2-masahiroy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 2023-08-08 at 09:45 +0200, Ladislav Michl wrote:
-> Hi Naresh,
->=20
-> On Tue, 2023-08-08 at 12:41 +0530, Naresh Kamboju wrote:
-> > [My two cents]
+On 7/8/23 17:32, Masahiro Yamada wrote:
+> Commit ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost")
+> deprecated <asm/export.h>, which is now a wrapper of <linux/export.h>.
+> 
+> Replace #include <asm/export.h> with #include <linux/export.h>.
+> 
+> After all the <asm/export.h> lines are converted, <asm/export.h> and
+> <asm-generic/export.h> will be removed.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>   arch/mips/cavium-octeon/octeon-memcpy.S | 2 +-
+>   arch/mips/kernel/mcount.S               | 2 +-
+>   arch/mips/kernel/r2300_fpu.S            | 2 +-
+>   arch/mips/kernel/r4k_fpu.S              | 2 +-
+>   arch/mips/lib/csum_partial.S            | 2 +-
+>   arch/mips/lib/memcpy.S                  | 2 +-
+>   arch/mips/lib/memset.S                  | 2 +-
+>   arch/mips/lib/strncpy_user.S            | 2 +-
+>   arch/mips/lib/strnlen_user.S            | 2 +-
+>   arch/mips/mm/page-funcs.S               | 2 +-
+>   arch/mips/mm/tlb-funcs.S                | 2 +-
+>   11 files changed, 11 insertions(+), 11 deletions(-)
 
-seems this is going to be far more expensive ;-)
-
-> > While building Linux next-20230808 mips cavium_octeon_defconfig
-> > with gcc-8 failed with below warnings and errors.
-> >=20
-> > Build log:
-> > ----------
-> >=20
-> > In function 'dwc3_octeon_setup.isra.4',
-> > =C2=A0=C2=A0=C2=A0 inlined from 'dwc3_octeon_probe' at drivers/usb/dwc3=
-/dwc3-
-> > octeon.c:502:8:
-> > include/linux/compiler_types.h:397:38: error: call to
-> > '__compiletime_assert_335' declared with attribute error:
-> > FIELD_PREP:
-> > value too large for the field
-> > =C2=A0 _compiletime_assert(condition, msg, __compiletime_assert_,
-> > __COUNTER__)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 ^
-> > include/linux/compiler_types.h:378:4: note: in definition of macro
-> > '__compiletime_assert'
-> > =C2=A0=C2=A0=C2=A0 prefix ## suffix();=C2=A0=C2=A0=C2=A0 \
-> > =C2=A0=C2=A0=C2=A0 ^~~~~~
->=20
-> Not sure what is really going on there. Code compiles even using
-> 32bit toochains without warnings and such an assignments are used in
-> other kernel drivers. See for example drivers/cxl/core/hdm.c:534
-> which is using the same types. Also=20
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c in
-> rvu_exact_prepare_table_entry...
-
-So using gcc-8.2.1 20181130 I see the same error. However
-drivers/cxl/core/hdm.c still compiler cleanly.
-
-Now USBDRD_UCTL_CTL_H_CLKDIV_SEL is defined as GENMASK_ULL(26, 24).
-Making is GENMASK_ULL(27, 24) makes error go away. Also making clk_div
-array in dwc3_octeon_get_divider one element shorter makes error go
-away.
-
-To me it seems gcc-8 figures out the result of dwc3_octeon_get_divider
-can be greater than 7 and produces error. Cannot happen in the real
-world. Should we make gcc-8 stand corrected?
-
-> Anyway, let me setup gcc-8 toolchain :)
->=20
-> > =C2=A0 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >=20
-> > Links:
-> > -----
-> > =C2=A0-
-> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023080=
-8/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
-> > =C2=A0-
-> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023080=
-8/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/history/
-> >=20
-> > Steps to reproduce:
-> > ------------
-> > =C2=A0 tuxmake --runtime podman --target-arch mips --toolchain gcc-8
-> > --kconfig cavium_octeon_defconfig
-> > =C2=A0=C2=A0 -
-> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHy=
-qfQUiaYYhrl/tuxmake_reproducer.sh
-> >=20
-> > --
-> > Linaro LKFT
-> > https://lkft.linaro.org
->=20
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
