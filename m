@@ -2,154 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15799773B52
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 17:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34507742D9
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 19:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjHHPsv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Aug 2023 11:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S235057AbjHHRvR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Aug 2023 13:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjHHPr1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 11:47:27 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB2D10C0;
-        Tue,  8 Aug 2023 08:41:32 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id F125A3200906;
-        Tue,  8 Aug 2023 09:46:05 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 08 Aug 2023 09:46:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1691502365; x=1691588765; bh=QCX/lpfXwJ5z0pSWhPcBrqLzzwFNbbABXjK
-        ojnNk55A=; b=iDzl4ABAxMRM9X/i6koq5ZbUzWXbe9LzbrZAIxzX+cb6szPrCcQ
-        THyakH0okjmXwZAL7f9WOa3F6XbffGdSy3qdvZxJplREiPRmpCkj3BLlCeYEHSCP
-        Bj/KNmQNLXWcGMLlD0YGuGaaM0rw0bNvfh4G5XBN07rZrD3+xO4rYgaWnvZC93uA
-        65tbwHRL9Ef2AsCWWChos13pW9a4OFLZRVYbdtVgspv/2tvlSUaXrucuEDuGWrUR
-        gJZckq3LePJdWDZoE+oO3fvqigBxNt9I5E7ID/PjdQ2sJVYm+wyzXwUGFJtcX9SN
-        k8WU0LXJnUBacFFywxNOi67mewEHMUBTfyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1691502365; x=1691588765; bh=QCX/lpfXwJ5z0pSWhPcBrqLzzwFNbbABXjK
-        ojnNk55A=; b=m+0uuOPj8DzZFQauay0myP3ngR+pxV68xX3itgWvbpw0uI7V5fC
-        HDeEk7v3dtDZzbKchxhT5j3fFtiw4bl4QVuM6p/p28GaEMy6Yg0KinVVLUn15Tic
-        cZ+UBJ2zIxFjVpG3w//acLwNDEQxb/Vv7+PlhjSpQTv9lPcqwKnfPtXDZgaKp71D
-        QjlPhp9BrnzlINKuisfQ4R7ORzXRfFH+mpEmsmVqhht3zW/f+wbKAIxh544er92k
-        9QUnNdVQu+bEHGkKU01h3j4GYGTblgDnC+VnQf98B0/JuERLqdJf7dr8K1EDZGm2
-        aKjsq36wVxB4rOe+PwtSfCB6a4+urkHoK6A==
-X-ME-Sender: <xms:G0fSZCdWAFkJZrFe2FTFPv3hpC8M5SlrEYjdTDyqJi2XYgy7-4FXpw>
-    <xme:G0fSZMPUdbhRVRKklMvcSS5C8ht5I_wdt40kiw3viLPtin-pRLxvNh2hD9rlSghLn
-    sKgXoh4vazVX9upJOg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledvgdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
-    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:G0fSZDghd5wQbVZ8EdKhEfd-jHfxsmr1j9wGiZ174Ohs8LAoWDt8VA>
-    <xmx:G0fSZP_gFBuSKNoV9BlTrCBqoRTNcC6is7IiyN7CKJnKy8qyO3g8BA>
-    <xmx:G0fSZOuqYBPQedoW5Ouh9pVTyYN8FPXXMnxuj_pfeMFgOOfAJ0jqxA>
-    <xmx:HUfSZAJLDRrcSoLfW8aqhOdectWfFwB346rzaGubRotAzDaZltuUAw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 430EDB6008D; Tue,  8 Aug 2023 09:46:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <d025d95e-b12e-4502-b3fe-dc03d5ec831d@app.fastmail.com>
-In-Reply-To: <CACRpkdYisteBTk9DOeCZiCeH5hJW87O-m+zsWAU7uwg7ud=ZYw@mail.gmail.com>
-References: <20230808-virt-to-phys-mips-v1-1-af6fcd45ed31@linaro.org>
- <CACRpkdYisteBTk9DOeCZiCeH5hJW87O-m+zsWAU7uwg7ud=ZYw@mail.gmail.com>
-Date:   Tue, 08 Aug 2023 15:45:41 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Baoquan He" <bhe@redhat.com>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Drop virt_to_phys define to self
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234984AbjHHRuq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 13:50:46 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAEE9EC3
+        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:22:41 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5768a7e3adbso332317b3.0
+        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 09:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691511738; x=1692116538;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=y6sSetytOmUwyBC8vzBUgi7mxtEE0jfVhWzzVyZzcSg=;
+        b=JhoheN3H6C/80HqucaJ0VlvAmt9SpiVKCn+6gqg+521jRNgLgUd6vvjAd/mmB+4HTm
+         iJEzuy6fVLSUMpRvA3GldiaXm4kC2Up5Sg+vKmmfe2gROHOUh2K7vrgxp48AJAxDPoMt
+         WWb341ivTLs5rcdHjyCXWR5CHOohfE1zE8uDii6kNjBRtB2Dx4iJAHvWhLp328XrA95i
+         AJRXqc4urH2HMH1BeNl36x71lAzybbwZ3AHT8DXXfVMnja5SlzuxwCSSXxxpVvWG+UK/
+         sMnQScfLqFvk77gmZBuzVK5QlSjMDvuQHIdIs1ZZnGpEwErLzT3A7gbHVyTdlybhx12f
+         DIQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691511738; x=1692116538;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y6sSetytOmUwyBC8vzBUgi7mxtEE0jfVhWzzVyZzcSg=;
+        b=lJ+SS37E242fk7BnqUWS8AgXGei1aLnRUPxE65yQNoqTw+Ja9Y5Hoc8pltpRczbodI
+         UkpKcPuXHtayeWQhBwBtKSY/kq8lEMNEGAcI92rP1h7FC6y93zBVfLVJuTQFVjBPo8ws
+         ZrYa4Cd4RJn790EVOdMVsHJ/QsJ8sau5nnRxGLN2x/KMmitRj7VJBK8qIJIUNMDIiU+Q
+         9TGlQCuXFQMeHwlDnzRNF94fP4Si2RNw2gBRcAbYwUYaP3o0xr8qTLiKo51aoCwLDq3i
+         KxVaCl7F2/yFhYEm5zXj5OjDX2561FjfWp1xpGQmsUz7o76J99UgLZyubLzQScbHImHo
+         q3yA==
+X-Gm-Message-State: AOJu0YxojbYG/o0wDwZrdD8cTenj93J2CKrgXB/JSe7KgxYDTCCMrmT5
+        asU9x0XmUL/YMrKOCxmYAJV4WY0XDiEmDA2C1hBZ/T3rk6R/9nL7pKs=
+X-Google-Smtp-Source: AGHT+IHtywQ8e8sdcBJ4nEsVchvTc5SRUSLKPPN/CcX+znemohbI6SJix20yoRk10mpcbIo22CBF5AHYdgr0wG7ZGcU=
+X-Received: by 2002:a05:6102:11f8:b0:43f:3426:9e35 with SMTP id
+ e24-20020a05610211f800b0043f34269e35mr3147137vsg.12.1691478715881; Tue, 08
+ Aug 2023 00:11:55 -0700 (PDT)
+MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Aug 2023 12:41:44 +0530
+Message-ID: <CA+G9fYspyEdT9wmVpL04J-p0CwqA+_v_L4H+ihY9VYqpCMmQ1Q@mail.gmail.com>
+Subject: next: mips: cavium_octeon_defconfig: gcc-8 - dwc3-octeon.c:502:8:
+ include/linux/compiler_types.h:397:38: error: call to '__compiletime_assert_335'
+ declared with attribute error: FIELD_PREP: value too large for the field _compiletime_assert
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        lkft-triage@lists.linaro.org
+Cc:     Ladislav Michl <ladis@linux-mips.org>, Thinh.Nguyen@synopsys.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 8, 2023, at 15:12, Linus Walleij wrote:
-> On Tue, Aug 8, 2023 at 11:29=E2=80=AFAM Linus Walleij <linus.walleij@l=
-inaro.org> wrote:
->
->> The function virt_to_phys was defined to virt_to_phys and then
->> implemented right below.
->>
->> I can't understand why, just drop it and let the actual function
->> slot in.
->>
->> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
->> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
->> ---
->>  arch/mips/include/asm/io.h | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
->> index affd21e9c20b..18ed44843541 100644
->> --- a/arch/mips/include/asm/io.h
->> +++ b/arch/mips/include/asm/io.h
->> @@ -111,7 +111,6 @@ extern phys_addr_t __virt_to_phys(volatile const =
-void *x);
->>  #define __virt_to_phys(x)      __virt_to_phys_nodebug(x)
->>  #endif
->>
->> -#define virt_to_phys virt_to_phys
->>  static inline phys_addr_t virt_to_phys(const volatile void *x)
->>  {
->>         return __virt_to_phys(x);
->
-> Just have to CC Arnd on this because I never feel I understand this
-> properly.
->
-> Normally you would do this so as to override the default virt_to_phys()
-> from include/asm-generic/io.h, but we do not seem to be using it here?
+[My two cents]
 
-Correct. In linux-next, we have converted arch/sh to use
-include/asm-generic/io.h, so arch/mips is now the last one
-to not use it.=20
+While building Linux next-20230808 mips cavium_octeon_defconfig with gcc-8
+failed with below warnings and errors.
 
-I see that Jiaxun Yang posted a patch for this in May and it looked
-like it should finally work [1], but there seems to still be something
-missing.
+Build log:
+----------
 
-> Further right below we are implementing phys_to_virt() with no
-> corresponding define, so in any case this needs to go or that one
-> needs a define.
->
-> That said they seem like a good candidate to replace with the
-> generic variant because the content is the same sans some debug
-> hacks that I doubt are still needed.
+In function 'dwc3_octeon_setup.isra.4',
+    inlined from 'dwc3_octeon_probe' at drivers/usb/dwc3/dwc3-octeon.c:502:8:
+include/linux/compiler_types.h:397:38: error: call to
+'__compiletime_assert_335' declared with attribute error: FIELD_PREP:
+value too large for the field
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                      ^
+include/linux/compiler_types.h:378:4: note: in definition of macro
+'__compiletime_assert'
+    prefix ## suffix();    \
+    ^~~~~~
 
-I think the ARCH_HAS_DEBUG_VIRTUAL option is useful in
-general, I'd rather move that into the common code if
-we were to unify it.
+  Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-For the moment, I'd suggest we leave the #define in place
-here in order to finish the patch that starts using the
-asm-generic header, and then we can look into using more
-of the generic code.
+Links:
+-----
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/history/
 
-       Arnd
+Steps to reproduce:
+------------
+  tuxmake --runtime podman --target-arch mips --toolchain gcc-8
+--kconfig cavium_octeon_defconfig
+   - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHyqfQUiaYYhrl/tuxmake_reproducer.sh
 
-[1] https://lore.kernel.org/linux-mips/20230519195135.79600-1-jiaxun.yan=
-g@flygoat.com/
+--
+Linaro LKFT
+https://lkft.linaro.org
