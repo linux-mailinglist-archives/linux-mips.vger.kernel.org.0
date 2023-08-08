@@ -2,107 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA587740A6
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 19:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24FD774305
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Aug 2023 19:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjHHRHb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Aug 2023 13:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S229980AbjHHRzY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Aug 2023 13:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbjHHRGr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 13:06:47 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D4D5FDEB
-        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:02:51 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-99bdf08860dso365466b.0
-        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 09:02:50 -0700 (PDT)
+        with ESMTP id S230282AbjHHRy5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Aug 2023 13:54:57 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58F4A5D5
+        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 09:24:44 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b9a2033978so90881931fa.0
+        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 09:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691510529; x=1692115329;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=anuYTtEViMW4nrjJPfmB+dcKnLZHUPG9Gjj/JVLBORE=;
-        b=ZXV2bFrtlrw2PSvWdUmzKxGBlGeRDaWFHMVkcYCiqcaG6MMBygq9eDTSJIzIZwmkES
-         KZ3HINTbjl47otnVGpKI4T8ciLBqVb3WV4gDe2i3GuefiFAom2Ze7UKTEdozoD7aXct5
-         3q/LUrVnhc7HcYxlP4Km6ltr4AHdW4j06zN5bAhSjjK/TPPxc/QMJwE+w1Ocveu2p/zv
-         SHLVmfWtFfYrozYikELxc2au6E1e8tAqBx0KY5ioEtsMtVFqtn/sSfxdCiUUlokiNAdO
-         NRHDGB+c4ukYzyXOUMlbcdyEcGEGRoLpy+s3Y5Ui8GMZzcPTNiYpwroHX7qoUw+umlaG
-         RQLw==
+        d=linaro.org; s=google; t=1691511873; x=1692116673;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0wSCMvsrvGtP/SRB0drN+VU/GnJ3+psGhnVmypWifVc=;
+        b=jWIPe1z62Bpw1snQfCKhF7FMzBI1Gds3hrcmTSP98SQrTiO+xh7eEw7hmbDzqtt1Ux
+         lbkd46oDeCL0YoAtdbPhrr4xlwxBHF5Gqe6BitgDN7z6TOCn7NIOJqOMeqYBm87BdUaC
+         3rXHRPpLc9WOiT/zwpeC4THmuaiaviWd5HVvp1f9TP2OkUGUBYqK1jmOGNgXqDoKBtn3
+         XJufebBTEE9Pr5zbHysP/2b4vPfHui7h48VtpmWB/aZKtrT6dLWbgA3XqPyULK1BvhZr
+         iiy1A6bZH0QC//ykm9f5X3qaZ6hIM59bSUafbK/l3SjiUpoL/+Lc7IO3M92ahLF0LrQ/
+         1npg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691510529; x=1692115329;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=anuYTtEViMW4nrjJPfmB+dcKnLZHUPG9Gjj/JVLBORE=;
-        b=F3l8P7LpYEqyS3SmENM4jBuhkr2bqKmwyVHtHlWdOWhcUOQ7gL5cVY+XmVzq1qodSa
-         ayl1GIH5iDaTy9rR6wSTFImvjAn+I6DVti82wm20UtFha+XEy/k4DWjnxTAe910BsEzV
-         8aYZS0E5LaRwQ6P6qMXt9Npa1qjzfUpd78jFsz4YO6SEa2oz2VsOLlrY4b+PbfYCNDrP
-         8czjq19BZcMVt6TEAyfCxxeX+YOFLs03dL1JgKCk7sm0RJCB0jy1W6aQo3Cb/L8Z+fJV
-         akxRVl9fQvPNZugbTTWBjyrmy0YES/M+Ee20q0Pa9mh0CU2yN5wM37AXCp5+ONDKGEu5
-         OJWQ==
-X-Gm-Message-State: AOJu0YxoqapGeOr+f+SqqjWNecpUEAPnsB3i3DWSuDZAZUcv43z+pp/F
-        v0DqpOaAzs9/hy5DFh3gxBQ5TpxkFW4AiW/pbQ4=
-X-Google-Smtp-Source: AGHT+IExib52NOOu+oE06KDhOXHVNqwrDLcdqVkpVygSHkJ9Hrps2AVdFNXnNOa2I25iZ3v1cJAjCQ==
-X-Received: by 2002:ac2:4e04:0:b0:4fb:8aca:6bb4 with SMTP id e4-20020ac24e04000000b004fb8aca6bb4mr2837425lfr.20.1691486994246;
-        Tue, 08 Aug 2023 02:29:54 -0700 (PDT)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id r20-20020ac24d14000000b004f9c44b3e6dsm1809545lfi.127.2023.08.08.02.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 02:29:53 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 08 Aug 2023 11:29:53 +0200
-Subject: [PATCH] MIPS: Drop virt_to_phys define to self
+        d=1e100.net; s=20221208; t=1691511873; x=1692116673;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0wSCMvsrvGtP/SRB0drN+VU/GnJ3+psGhnVmypWifVc=;
+        b=RncWY2EiFvy3Gd0ujqXRSLqTkCY9ftY6wAXyUGo0y5XRCQhd4SwJLTiGWlCdlzaGVh
+         5TP6tSODn+2wwjHVKmdUGjyzo+LEAxVJhgUaVhYcuIrXyyMetVab/QR3wfLLX98jh8IP
+         V000NEiBV/SUnkm4fbyCfJH3VuHTfkiSlZIFhP93GP5Zh3VQutSEZBhzl80lCBYMncDy
+         Ol1Z6tR1jNAGU4G7Qmv5XxlpVFBoWZy0IWsJwDG6RTMX5mnwIQp3/qIzYCxORrpqQe/n
+         b6UuaZqnjlNeWFvoABvxHGkSsR8BjXifqCnSq8Jz2/1Rhk1k+sUj2R6VtVXE1VV4/cUg
+         oBew==
+X-Gm-Message-State: AOJu0Yy6lYwky3y0GosY9ZyDsE8J/Q08n1Vk/YWDrVuwUmLzo/8P7+E/
+        /gQzK6PGw+eoRy4Jfw+nmosH+cK3TkvITjoIvyY=
+X-Google-Smtp-Source: AGHT+IEt+Kf3mPdgxinq+Mt4SlVaTOKw94gaghcqyMPjmABWGoq+4o6zGEM2ZElSHkgdewFxWTvliA==
+X-Received: by 2002:adf:ff8c:0:b0:317:df3e:13d with SMTP id j12-20020adfff8c000000b00317df3e013dmr5441304wrr.38.1691487443405;
+        Tue, 08 Aug 2023 02:37:23 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.177.253])
+        by smtp.gmail.com with ESMTPSA id o10-20020a5d474a000000b003141a3c4353sm13073883wrs.30.2023.08.08.02.37.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Aug 2023 02:37:23 -0700 (PDT)
+Message-ID: <cbc22d2f-726d-86fc-1f34-c529cd91fdbe@linaro.org>
+Date:   Tue, 8 Aug 2023 11:37:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230808-virt-to-phys-mips-v1-1-af6fcd45ed31@linaro.org>
-X-B4-Tracking: v=1; b=H4sIABAL0mQC/x3MQQ5AMBBA0avIrE1SJZSriEXD0Fmg6UhDGnfXW
- L7F/wmEApPAUCQIFFn4PDKqsoDZ2WMj5CUbtNK1Mspg5HDhdaJ3j+DOXlDrlhrVW9PYDnLnA61
- 8/89xet8PyclIPWMAAAA=
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH 1/3] mips: remove unneeded #include <asm/export.h>
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230807153243.996262-1-masahiroy@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230807153243.996262-1-masahiroy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The function virt_to_phys was defined to virt_to_phys and then
-implemented right below.
+On 7/8/23 17:32, Masahiro Yamada wrote:
+> There is no EXPORT_SYMBOL line there, hence #include <asm/export.h>
+> is unneeded.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>   arch/mips/kernel/octeon_switch.S | 1 -
+>   arch/mips/kernel/r2300_switch.S  | 1 -
+>   2 files changed, 2 deletions(-)
 
-I can't understand why, just drop it and let the actual function
-slot in.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/mips/include/asm/io.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index affd21e9c20b..18ed44843541 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -111,7 +111,6 @@ extern phys_addr_t __virt_to_phys(volatile const void *x);
- #define __virt_to_phys(x)	__virt_to_phys_nodebug(x)
- #endif
- 
--#define virt_to_phys virt_to_phys
- static inline phys_addr_t virt_to_phys(const volatile void *x)
- {
- 	return __virt_to_phys(x);
-
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230808-virt-to-phys-mips-226e409a84a7
-
-Best regards,
--- 
-Linus Walleij <linus.walleij@linaro.org>
 
