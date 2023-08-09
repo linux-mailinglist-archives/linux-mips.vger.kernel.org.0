@@ -2,150 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2FD7752E3
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Aug 2023 08:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C5C77565F
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Aug 2023 11:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjHIGaF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Aug 2023 02:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
+        id S229719AbjHIJaQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Aug 2023 05:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjHIGaE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Aug 2023 02:30:04 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65C01BFA
-        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 23:30:03 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-447823dd96fso1869813137.1
-        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 23:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691562603; x=1692167403;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=neTmf5P15paOxXzupKMu3RNPlvtFTYN497G//b83UsM=;
-        b=lY1NEIiEUr4uPw84kWrKXa/qzm7f/NO2muz0k589XUGjYkGfxqvFoKk4rxJTaZRDV8
-         13qp6kkCThe9RUGFqj4slajifw/qTLwA0kapIZDvMNJR7uT5FHwNUCP4k6t057FW0NJD
-         kOx4nwLne8cf+DmHK8yM90DugOvtgFlUliXFWFXfXfIDrFJQAwOh0WuPYswL4P8SSEp/
-         LF+MAmwVewrUHyQn/gaCoW4aq9vB83qnaHx2rWstAgNKSTtGTR3MJhABy0dV87qgc7XK
-         /GXZqmiBGa1IeUg+OujjHCzNVRR9oM2wsaD8LbNS3pQRwrDei4zELH6iPQhzVSmsEOxZ
-         vq1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691562603; x=1692167403;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=neTmf5P15paOxXzupKMu3RNPlvtFTYN497G//b83UsM=;
-        b=jUIxd0FGxuUGfb/vg1PvqwfN2Rvmm1585TAXq/Ee9QwI1JvnSVk74BXNLwTncj/yYD
-         rzJF3UwpWUxO0s3HPVtbpSb5HHIPlo/DFWWDlXduf6Cin7ZOlu+wMkwEcmwFLu7lxr6A
-         pwhFnylYR/JVVWKO4X6ik5SgXqvhZhHPkzrIKCTnDuGbRVFYhcVw6qewpILUhxh0Lqci
-         Va4Y2G8OVuMF5wz7nRQoX3S8KJS1jS4jCqUXBprEGF/p7DY/qcj5KzUauMAbZ5tVkGzO
-         +0WVJYA9GrJqQ6xXN2WI38W2ql/YmE7fJjh9InDmpO+AQMss9AnX6i5ots6g1e7bEgku
-         6wUw==
-X-Gm-Message-State: AOJu0YxovU5cVzmHC2dVOU/Lt7t9hERjnpjmONooaplUI7Cy6UrMYj0T
-        FVNZEb/h4dfAt4Kl129pkzq+zXnMOJcqrdN/IKTSOg==
-X-Google-Smtp-Source: AGHT+IFjZhbcKr3eNydvf6ZMRnd1wQ4W6yXaoahpWXSff3ZmV4KNZ/0/E3kghBQjZDI3KisgUGjuTzJbCuRETv/9jYA=
-X-Received: by 2002:a67:fbd1:0:b0:447:9a22:2a6 with SMTP id
- o17-20020a67fbd1000000b004479a2202a6mr1319385vsr.26.1691562602807; Tue, 08
- Aug 2023 23:30:02 -0700 (PDT)
+        with ESMTP id S229450AbjHIJaP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Aug 2023 05:30:15 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0732210F6;
+        Wed,  9 Aug 2023 02:30:12 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxyOijXNNklrYTAA--.7213S3;
+        Wed, 09 Aug 2023 17:30:11 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF8yhXNNk7hJRAA--.32120S3;
+        Wed, 09 Aug 2023 17:30:10 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Remove noreturn attribute for die()
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+References: <1690887599-11442-1-git-send-email-yangtiezhu@loongson.cn>
+ <alpine.DEB.2.21.2308081544180.38537@angie.orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <13aaa917-e55d-f529-8b3f-cab285402808@loongson.cn>
+Date:   Wed, 9 Aug 2023 17:30:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <CA+G9fYspyEdT9wmVpL04J-p0CwqA+_v_L4H+ihY9VYqpCMmQ1Q@mail.gmail.com>
- <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
-In-Reply-To: <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 9 Aug 2023 11:59:50 +0530
-Message-ID: <CA+G9fYuO1-q_agmNqRaGVq5Af4+EpCx3UVG7gCx0Gu=O2Kd-vg@mail.gmail.com>
-Subject: Re: next: mips: cavium_octeon_defconfig: gcc-8 - dwc3-octeon.c:502:8:
- include/linux/compiler_types.h:397:38: error: call to '__compiletime_assert_335'
- declared with attribute error: FIELD_PREP: value too large for the field _compiletime_assert
-To:     Ladislav Michl <ladis@triops.cz>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        lkft-triage@lists.linaro.org, Thinh.Nguyen@synopsys.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2308081544180.38537@angie.orcam.me.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8CxF8yhXNNk7hJRAA--.32120S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZFyUGr1xJr47Gry8JryxJFc_yoW8Ww4kpa
+        yrKFWSyws09FnIvr4qvr4rXa4YkrWftw45tryfurZYyw1Yvw4kAFZagw1SqF4rJr1I934q
+        gF4vq3W3AFZ7AacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zw
+        Z7UUUUU==
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 8 Aug 2023 at 13:15, Ladislav Michl <ladis@triops.cz> wrote:
+
+
+On 08/08/2023 10:54 PM, Maciej W. Rozycki wrote:
+> On Tue, 1 Aug 2023, Tiezhu Yang wrote:
 >
-> Hi Naresh,
+>> If notify_die() returns NOTIFY_STOP, there is no need to call
+>> make_task_dead(), we can remove noreturn attribute for die(),
+>> this is similar with arm64, riscv and csky.
 >
-> On Tue, 2023-08-08 at 12:41 +0530, Naresh Kamboju wrote:
-> > [My two cents]
-> >
-> > While building Linux next-20230808 mips cavium_octeon_defconfig with
-> > gcc-8
-> > failed with below warnings and errors.
-> >
-> > Build log:
-> > ----------
-> >
-> > In function 'dwc3_octeon_setup.isra.4',
-> >     inlined from 'dwc3_octeon_probe' at drivers/usb/dwc3/dwc3-
-> > octeon.c:502:8:
-> > include/linux/compiler_types.h:397:38: error: call to
-> > '__compiletime_assert_335' declared with attribute error: FIELD_PREP:
-> > value too large for the field
-> >   _compiletime_assert(condition, msg, __compiletime_assert_,
-> > __COUNTER__)
-> >                                       ^
-> > include/linux/compiler_types.h:378:4: note: in definition of macro
-> > '__compiletime_assert'
-> >     prefix ## suffix();    \
-> >     ^~~~~~
+>  So you want to keep a task alive that has caused a kernel oops in the
+> process context in this case, right?  What purpose would it be for and
+> what condition causes `notify_die' to return NOTIFY_STOP?  IOW why is
+> there no need to call `make_task_dead' in this case?
 >
-> Not sure what is really going on there. Code compiles even using 32bit
-> toochains without warnings and such an assignments are used in other
-> kernel drivers. See for example drivers/cxl/core/hdm.c:534 which is
-> using the same types. Also
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c in
-> rvu_exact_prepare_table_entry...
+>   Maciej
 >
-> Anyway, let me setup gcc-8 toolchain :)
 
-For your reference,
-These are steps to setup toolchain and build with single command,
+I did some research, hope it is useful.
 
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake to your home directory at ~/.local/bin:
-# pip3 install -U --user tuxmake
-#
-# Or install a deb/rpm depending on the running distribution
-# See https://tuxmake.org/install-deb/ or
-# https://tuxmake.org/install-rpm/
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig cavium_octeon_defconfig
+There is a related description in Documentation/input/notifier.rst:
 
+   For each kind of event but the last, the callback may return
+   NOTIFY_STOP in order to "eat" the event: the notify loop is
+   stopped and the keyboard event is dropped.
 
-tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHyqfQUiaYYhrl/config
+In commit 748f2edb5271 ("x86 NMI: better support for debuggers"), it said:
 
+   If the notify is handled with a NOTIFY_STOP return, the
+   system is given a new lease on life.
 
-Steps to reproduce:
-------------
-  tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig cavium_octeon_defconfig
+In commit 004429956b48 ("handle recursive calls to bust_spinlocks()"),
+it said:
 
+   However, at least on i386 die() has been capable of returning
+   (and on other architectures this should really be that way, too)
+   when notify_die() returns NOTIFY_STOP.
 
-   - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHyqfQUiaYYhrl/tuxmake_reproducer.sh
+In commit 22f5991c85de ("x86-64: honor notify_die() returning NOTIFY_STOP"),
+it said:
 
+   This requires making die() return a value, making its callers honor
+   this (and be prepared that it may return)
 
-- Naresh
+In commit 620de2f5dc69 ("[IA64] honor notify_die() returning NOTIFY_STOP"),
+it said:
+
+   This requires making die() and die_if_kernel() return a value,
+   and their callers to honor this (and be prepared that it returns).
+
+Thanks,
+Tiezhu
+
