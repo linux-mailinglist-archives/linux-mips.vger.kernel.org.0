@@ -2,65 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FA27751CF
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Aug 2023 06:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1B17751D9
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Aug 2023 06:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjHIELQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Aug 2023 00:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S229590AbjHIERR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Aug 2023 00:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjHIELP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Aug 2023 00:11:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69619AF
-        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 21:10:29 -0700 (PDT)
+        with ESMTP id S229560AbjHIERQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Aug 2023 00:17:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCC51BC3
+        for <linux-mips@vger.kernel.org>; Tue,  8 Aug 2023 21:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691554228;
+        s=mimecast20190719; t=1691554589;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tiZt5qkV373iiZscCJbcFROPFCou/fOb43yGS5e3+0c=;
-        b=OkBpJ4hjb4XeaPhRFCc9NGg1ldWTUzHvjxvWCDdKLNaRinp2X73RgxzCBcGpAtUOl5HLh7
-        cEsQDo9nZ271hbPwuSkPUgAqEHTVHgn5UjZepE4mTHaZcrYVG/jTINy9RKu8pI8Evb2j+v
-        xQw+/fnr7bIOCatNhho+6EGg7/nMNvY=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Jc2RrwZUDP/ZLfqGAQFdphKEXcWYocBgrdrh4msM7SQ=;
+        b=K9eNG+CYTd5SuigFYgwGKVHV8Uwl061ui1TGhszVDnfmDlOqDK+BOII1662i4UA7LfakG8
+        C/sPoW6ud7PzyDhEcvwjKwrHBo+nc8/VbvnsDWuGmBCnPoDcrJ5urZJwEBB+eIiAkkQtjp
+        HGa7tG5W+4dUoUbIdpd5OTDGR0f+nKI=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-622-usLcuqGNMuup8QzbfdAEAw-1; Wed, 09 Aug 2023 00:10:27 -0400
-X-MC-Unique: usLcuqGNMuup8QzbfdAEAw-1
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-686baf1a407so467222b3a.1
-        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 21:10:26 -0700 (PDT)
+ us-mta-633-xd0xbGgjNzm0_jMHmwBWhQ-1; Wed, 09 Aug 2023 00:16:27 -0400
+X-MC-Unique: xd0xbGgjNzm0_jMHmwBWhQ-1
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-5635233876bso4530347a12.0
+        for <linux-mips@vger.kernel.org>; Tue, 08 Aug 2023 21:16:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691554223; x=1692159023;
+        d=1e100.net; s=20221208; t=1691554283; x=1692159083;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tiZt5qkV373iiZscCJbcFROPFCou/fOb43yGS5e3+0c=;
-        b=f7fl95vsc4+qcmxjfh5iqCh674HlZ7EVBD3FB1cmm27zGW2wQoJdozFV4rkW0HoaGa
-         BBVWMhAVcaMDpGMiGbWXY+vaQ+iGv47HpF7zTUgxTpyi74eL6WgU8a16b9K9Zl70GxSZ
-         1rF7bzKQkLVLPGehom2S14pjbrjyzJY97Xj/oQHsMvZLCncGUB9B8PAiDMeGRcppiyOe
-         QvsfPl1FywXKRE4rQcpMax26fGvkIeMll1pYGG/SGvvwNDjNXVuFaSs4LVWS/y5Z6+Dd
-         OsIKTrsNhV2pJbJdbNt5ifz709DFLPvu3hl9PQ2EWIiZQCS/eKMf2PTVdaduOaw/fF6A
-         26pg==
-X-Gm-Message-State: AOJu0YzzSAXjCVey78k1MF9ZqlNbw5/Qge0dzZoHbTNm1o2wRzanuNDr
-        KsqiYEoYV+XjGLG4w25c7O96x4NQ75ZcLUJ7AQ6I4lvl64vDjbFxKQsjXhhggINbXjlKeUmTtcD
-        mpXcGTnthAzWiNz1bpcMJ2Q==
-X-Received: by 2002:a05:6a00:1487:b0:666:eaaf:a2af with SMTP id v7-20020a056a00148700b00666eaafa2afmr2263665pfu.14.1691554222956;
-        Tue, 08 Aug 2023 21:10:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE4mKNqTgX+EsfCEP/MYW99W9JIOB5kHuLZbEs18DPRnq1dfDRhMLd6YmPemv3TlybaLWWmcQ==
-X-Received: by 2002:a05:6a00:1487:b0:666:eaaf:a2af with SMTP id v7-20020a056a00148700b00666eaafa2afmr2263648pfu.14.1691554222702;
-        Tue, 08 Aug 2023 21:10:22 -0700 (PDT)
+        bh=Jc2RrwZUDP/ZLfqGAQFdphKEXcWYocBgrdrh4msM7SQ=;
+        b=JaYWn4XfzBl10iLxi3bLD6Gl8jNGM+9fsssdBj52iiAH8oV591tkJ6+PYiC0yz3Rec
+         KC96xvmItS5BOtoKmWJ/0IsRBNongubd8gXv11L8DPaSk2DXS0QAl4DukKIC9IxL0O+7
+         78P414gOeg9jgP2fdhRRAFUsJssCWpXSXeOZqSBRV3rYst75iQuNGve/dD/5EZ0IoJxU
+         22qthxSA1ZP7l+dvwLHnreEpzV99i/A65eyJ2CysZluUfNEoJ1kbl9wtcZuteiEW3k7p
+         2JpUjIEiq7GcQDS5z/ivvIqYnz4EJ3BG+XuX3xEnDQUnP2WxNFb1RCAjprkFXep5jM2L
+         EBZg==
+X-Gm-Message-State: AOJu0YylBMWu9epGXDZcJWabk5P8L1Ro1xn0Z03Nz6hzHghZk+QeYkSz
+        4ulTlcC9qw3FhGvgrO8Djo60tsoR5l71sOF5GsVv85mmpM2sk4hrTtDvNXW3emPVfD7ZQdzhXdE
+        u3UqUMA2BGAbtvBJ+EdGzuA==
+X-Received: by 2002:a05:6a21:328b:b0:121:ca90:df01 with SMTP id yt11-20020a056a21328b00b00121ca90df01mr1394017pzb.40.1691554282922;
+        Tue, 08 Aug 2023 21:11:22 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFuTcKraAGNvme4rsh9nauIBvvaQvIf9BEXJr92oZnpUAljzMU4HrA4zieEd0juLoJJfRohRg==
+X-Received: by 2002:a05:6a21:328b:b0:121:ca90:df01 with SMTP id yt11-20020a056a21328b00b00121ca90df01mr1394005pzb.40.1691554282647;
+        Tue, 08 Aug 2023 21:11:22 -0700 (PDT)
 Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id p26-20020a62ab1a000000b006871fdde2c7sm8840727pff.110.2023.08.08.21.10.14
+        by smtp.gmail.com with ESMTPSA id y9-20020a17090322c900b001b2069072ccsm9850474plg.18.2023.08.08.21.11.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 21:10:22 -0700 (PDT)
-Message-ID: <b91d1869-3a1d-d9eb-27b0-0aac94cca8e0@redhat.com>
-Date:   Wed, 9 Aug 2023 14:10:12 +1000
+        Tue, 08 Aug 2023 21:11:22 -0700 (PDT)
+Message-ID: <79b8548e-715a-85ee-aad6-cb0b97753df6@redhat.com>
+Date:   Wed, 9 Aug 2023 14:11:09 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v8 03/14] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+Subject: Re: [PATCH v8 04/14] KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
 Content-Language: en-US
 To:     Raghavendra Rao Ananta <rananta@google.com>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -83,9 +83,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, Shaoqin Huang <shahuang@redhat.com>
 References: <20230808231330.3855936-1-rananta@google.com>
- <20230808231330.3855936-4-rananta@google.com>
+ <20230808231330.3855936-5-rananta@google.com>
 From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230808231330.3855936-4-rananta@google.com>
+In-Reply-To: <20230808231330.3855936-5-rananta@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -101,75 +101,57 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 On 8/9/23 09:13, Raghavendra Rao Ananta wrote:
-> Stop depending on CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL and opt to
-> standardize on kvm_arch_flush_remote_tlbs() since it avoids
-> duplicating the generic TLB stats across architectures that implement
-> their own remote TLB flush.
+> kvm_arch_flush_remote_tlbs() or CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+> are two mechanisms to solve the same problem, allowing
+> architecture-specific code to provide a non-IPI implementation of
+> remote TLB flushing.
 > 
-> This adds an extra function call to the ARM64 kvm_flush_remote_tlbs()
-> path, but that is a small cost in comparison to flushing remote TLBs.
-> 
-> In addition, instead of just incrementing remote_tlb_flush_requests
-> stat, the generic interface would also increment the
-> remote_tlb_flush stat.
+> Dropping CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL allows KVM to standardize
+> all architectures on kvm_arch_flush_remote_tlbs() instead of
+> maintaining two mechanisms.
 > 
 > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > ---
->   arch/arm64/include/asm/kvm_host.h | 2 ++
->   arch/arm64/kvm/Kconfig            | 1 -
->   arch/arm64/kvm/mmu.c              | 6 +++---
->   3 files changed, 5 insertions(+), 4 deletions(-)
+>   virt/kvm/Kconfig    | 3 ---
+>   virt/kvm/kvm_main.c | 2 --
+>   2 files changed, 5 deletions(-)
 > 
 
 Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 8b6096753740c..20f2ba149c70c 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -1111,6 +1111,8 @@ int __init kvm_set_ipa_limit(void);
->   #define __KVM_HAVE_ARCH_VM_ALLOC
->   struct kvm *kvm_arch_alloc_vm(void);
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index b74916de5183a..484d0873061ca 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -62,9 +62,6 @@ config HAVE_KVM_CPU_RELAX_INTERCEPT
+>   config KVM_VFIO
+>          bool
 >   
-> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-> +
->   static inline bool kvm_vm_is_protected(struct kvm *kvm)
->   {
->   	return false;
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index f531da6b362e9..6b730fcfee379 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -25,7 +25,6 @@ menuconfig KVM
->   	select MMU_NOTIFIER
->   	select PREEMPT_NOTIFIERS
->   	select HAVE_KVM_CPU_RELAX_INTERCEPT
-> -	select HAVE_KVM_ARCH_TLB_FLUSH_ALL
->   	select KVM_MMIO
->   	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->   	select KVM_XFER_TO_GUEST_WORK
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 6db9ef288ec38..0ac721fa27f18 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -161,15 +161,15 @@ static bool memslot_is_logging(struct kvm_memory_slot *memslot)
+> -config HAVE_KVM_ARCH_TLB_FLUSH_ALL
+> -       bool
+> -
+>   config HAVE_KVM_INVALID_WAKEUPS
+>          bool
+>   
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 70e5479797ac3..d6b0507861550 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -345,7 +345,6 @@ bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req)
 >   }
+>   EXPORT_SYMBOL_GPL(kvm_make_all_cpus_request);
 >   
->   /**
-> - * kvm_flush_remote_tlbs() - flush all VM TLB entries for v7/8
-> + * kvm_arch_flush_remote_tlbs() - flush all VM TLB entries for v7/8
->    * @kvm:	pointer to kvm structure.
->    *
->    * Interface to HYP function to flush all VM TLB entries
->    */
-> -void kvm_flush_remote_tlbs(struct kvm *kvm)
-> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+> -#ifndef CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+>   void kvm_flush_remote_tlbs(struct kvm *kvm)
 >   {
-> -	++kvm->stat.generic.remote_tlb_flush_requests;
->   	kvm_call_hyp(__kvm_tlb_flush_vmid, &kvm->arch.mmu);
-> +	return 0;
+>   	++kvm->stat.generic.remote_tlb_flush_requests;
+> @@ -366,7 +365,6 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+>   		++kvm->stat.generic.remote_tlb_flush;
 >   }
+>   EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
+> -#endif
 >   
->   static bool kvm_is_device_pfn(unsigned long pfn)
+>   static void kvm_flush_shadow_all(struct kvm *kvm)
+>   {
 
