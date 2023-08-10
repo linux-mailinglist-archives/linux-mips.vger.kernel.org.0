@@ -2,102 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4ED777602
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Aug 2023 12:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EEC777848
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Aug 2023 14:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235017AbjHJKjO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Aug 2023 06:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        id S235177AbjHJM1C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Aug 2023 08:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbjHJKjM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Aug 2023 06:39:12 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4197E1BD9
-        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 03:39:11 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5230df1ce4fso926156a12.1
-        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 03:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691663950; x=1692268750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UVkz966lVYyCDepVDZixPFVRMmINlccfjfN4fA3av38=;
-        b=rcBWBchpudmlABde9Rt0jgbwvZt3JLlNKnutj7SpHxmJb+2+blf8UeEmRvnoxluzW5
-         1gv0+uFgkYSX35giBFSt9niVpWRGpyGZdkai1ta1th3BOkF5gQ2GIZUaH/mYg0SR0snU
-         x1pZ8KoqOKd0D7HN+ijqszlHiiJGiiY6XQp2NGiWnjhaPXa4JTYLbJT2A3VIKGXCOQlm
-         sf6425ASRzlmlV/URjhquYM3Y3zDd1PxHBCfewhZH/6j5iTH18r2hSMG2FxDCIWTPXXM
-         IrlIBhztFlBkJMejHnraCLp2zpGL9fYMyf/knI35LDBH/LvzEvfPG4ehkKekvAex96AF
-         /Krg==
+        with ESMTP id S235430AbjHJM1B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Aug 2023 08:27:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672B1270E
+        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 05:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691670379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnvMtwrO+HlpCnGD+Ie1TBrDV8keaKNA7WfaJ+XMfts=;
+        b=PThITPCV91zKh135syv7wW8rJbf8dZOP8YA3duXGMz/cGQH8wLsvzIULnY53qbPxfYXAQ4
+        VbCReSC32+VDIcQWUIeF+V0aIFbQriTeuTyVDPVt+ABPz+SA91wJ2dQRZahBwukOb1lYe5
+        HdWHv+GMM4J9VHpzP/dIjUtP0t90SRU=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-111-7Cy5wH_4PW6kFIaY5OEHCQ-1; Thu, 10 Aug 2023 08:26:18 -0400
+X-MC-Unique: 7Cy5wH_4PW6kFIaY5OEHCQ-1
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-6871900d991so189271b3a.1
+        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 05:26:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691663950; x=1692268750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UVkz966lVYyCDepVDZixPFVRMmINlccfjfN4fA3av38=;
-        b=M3c5Cq80E0MJRtZJSLfXMcDl/KFSKQ51dd18twuN++uuY6hk80UbQKrb7FGyRSitBr
-         QBlYS17l1c2vt9k6a2JfQpz7JPIz1LJlVdy13FdXwRWYeCxJcgqigpeHDjOfiKtBWEhp
-         5fp7CVCSFDIngO44dRrTMBQTiCHtthI0MpviJJysJD2f+irUL3PTEk2NjaJoL8F+WsNM
-         dzV9F5wDxD5T4ciVeeDL97Lj16OXlpNe71lyLjHH32FavhpyOa4q4BnxDNPFOt+zkk1R
-         RuoLgpsAl3ysMWajN9GTAFi5FLBgGonBKwhJWgDfodNMU5yqQwUYn+8Rvy71+GbdCb1L
-         +ETw==
-X-Gm-Message-State: AOJu0Yy5TpCK/gFzhFEisKRWBIQNvnctvGItnFYnhiU+AvC7cBAw/hOp
-        V9kVl/tCMRejy85AyjZ6OpvZUg==
-X-Google-Smtp-Source: AGHT+IEjQzcGZgIz+Rb4K1zibn9OcjCTVtMdKc90JKBBfHAV2Gn4v8OlNYGNSmZP7MYiUBNsXJF8oA==
-X-Received: by 2002:a05:6402:6c9:b0:51e:3558:5eb6 with SMTP id n9-20020a05640206c900b0051e35585eb6mr1856385edy.3.1691663949849;
-        Thu, 10 Aug 2023 03:39:09 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170906868b00b0099bca8b9a31sm742180ejx.100.2023.08.10.03.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 03:39:09 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/4] rtc: rs5c372: fix Wvoid-pointer-to-enum-cast warning
-Date:   Thu, 10 Aug 2023 12:39:02 +0200
-Message-Id: <20230810103902.151145-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230810103902.151145-1-krzysztof.kozlowski@linaro.org>
-References: <20230810103902.151145-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20221208; t=1691670377; x=1692275177;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mnvMtwrO+HlpCnGD+Ie1TBrDV8keaKNA7WfaJ+XMfts=;
+        b=QNsw1hfBwJ7KjPAdzcY8W+kisTlvtpQPeAkwGu1qMzuE1qzc7iYWsdy54lBFreNrTk
+         D6/c9F5ygVAsuS1PzDulP4epAViPCYOtqHDdyGXv/Fy6E9CkGvwuKa0J4uaoigkoFPs+
+         TqCEgOlRXcSoJtb2lTavKkB3mVfHnM0yKrVXoW1SdcXDgva8HiyMRkuY038hjbATFU46
+         PK9UngnFvNXuQScjU//Zef5WlgBZudlpn62LrTJzk2EN6FsPnDpVj2bStpk/4HAiCGrn
+         /FvDYKy4mYH5Iobcrp02iJwp3MNnPBMUZIUbJuWJjd/r9Tc1mP0E6/QX+w5COuHcBJki
+         fg8A==
+X-Gm-Message-State: AOJu0YxvEsxXYYSey9tuu15kX1CfAMtR01ULPsWOEOFGJZovJnd/QRQB
+        m0Wax7ayqs1mB0yoNQ6Wna3javu5gzdMa6l5xDP7Yjpi5Nl/8uIHHFJQDDGjAcDmcurf89k9P05
+        Duoxu0+X6+zIcpKpULKTxVQ==
+X-Received: by 2002:a05:6a00:d96:b0:687:874c:7ce0 with SMTP id bf22-20020a056a000d9600b00687874c7ce0mr2463247pfb.1.1691670377123;
+        Thu, 10 Aug 2023 05:26:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFbuLOrMlEpRqBni5bZEXHe0+/YLy2srme8Tcb0EpGLk+ZLZKJl+h1qsrD5Yo9JHMcHNLUrCg==
+X-Received: by 2002:a05:6a00:d96:b0:687:874c:7ce0 with SMTP id bf22-20020a056a000d9600b00687874c7ce0mr2463218pfb.1.1691670376757;
+        Thu, 10 Aug 2023 05:26:16 -0700 (PDT)
+Received: from [10.72.112.92] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id s11-20020aa78d4b000000b006878f50d071sm1393686pfe.203.2023.08.10.05.26.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Aug 2023 05:26:16 -0700 (PDT)
+Message-ID: <30e45ef3-309a-63de-e085-be1645c1be79@redhat.com>
+Date:   Thu, 10 Aug 2023 20:26:09 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 02/14] KVM: Declare kvm_arch_flush_remote_tlbs()
+ globally
+Content-Language: en-US
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Gavin Shan <gshan@redhat.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230808231330.3855936-1-rananta@google.com>
+ <20230808231330.3855936-3-rananta@google.com>
+ <c33b0518-6e64-7acf-efa8-f404fce1ccac@redhat.com>
+ <CAJHc60yCJANBQOizaoSPhEJH9e8a9C6n68x4qdVkOhVZiiWqkw@mail.gmail.com>
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <CAJHc60yCJANBQOizaoSPhEJH9e8a9C6n68x4qdVkOhVZiiWqkw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-'type' is an enum, thus cast of pointer on 64-bit compile test with W=1
-causes:
 
-  rtc-rs5c372.c:829:19: error: cast to smaller integer type 'enum rtc_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/rtc/rtc-rs5c372.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 8/10/23 00:38, Raghavendra Rao Ananta wrote:
+> Hi Gavin,
+> 
+> On Tue, Aug 8, 2023 at 9:00 PM Gavin Shan <gshan@redhat.com> wrote:
+>>
+>>
+>> On 8/9/23 09:13, Raghavendra Rao Ananta wrote:
+>>> There's no reason for the architectures to declare
+>>> kvm_arch_flush_remote_tlbs() in their own headers. Hence to
+>>> avoid this duplication, make the declaration global, leaving
+>>> the architectures to define only __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+>>> as needed.
+>>>
+>>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+>>> ---
+>>>    arch/mips/include/asm/kvm_host.h | 1 -
+>>>    include/linux/kvm_host.h         | 2 ++
+>>>    2 files changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+>>> index 9b0ad8f3bf327..54a85f1d4f2c8 100644
+>>> --- a/arch/mips/include/asm/kvm_host.h
+>>> +++ b/arch/mips/include/asm/kvm_host.h
+>>> @@ -897,6 +897,5 @@ static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>>>    static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>>>
+>>>    #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+>>> -int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+>>>
+>>>    #endif /* __MIPS_KVM_HOST_H__ */
+>>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>>> index e3f968b38ae97..ade5d4500c2ce 100644
+>>> --- a/include/linux/kvm_host.h
+>>> +++ b/include/linux/kvm_host.h
+>>> @@ -1484,6 +1484,8 @@ static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>>>    {
+>>>        return -ENOTSUPP;
+>>>    }
+>>> +#else
+>>> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+>>>    #endif
+>>>
+>>>    #ifdef __KVM_HAVE_ARCH_NONCOHERENT_DMA
+>>
+>> Is the declaration inconsistent to that in arch/x86/include/asm/kvm_host.h?
+>> In order to keep them consistent, I guess we need move kvm_arch_flush_remote_tlbs()
+>> from x86's header file to arch/x86/kvm/mmu/mmu.c and 'inline' needs to be dropped.
+>>
+> Unsure of the original intentions, I didn't want to disturb any
+> existing arrangements. If more people agree to this refactoring, I'm
+> happy to move.
 
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index a5a6c8772ecd..6df3d25345ac 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -826,8 +826,7 @@ static int rs5c372_probe(struct i2c_client *client)
- 	rs5c372->client = client;
- 	i2c_set_clientdata(client, rs5c372);
- 	if (client->dev.of_node) {
--		rs5c372->type = (enum rtc_type)
--			of_device_get_match_data(&client->dev);
-+		rs5c372->type = (uintptr_t)of_device_get_match_data(&client->dev);
- 	} else {
- 		const struct i2c_device_id *id = i2c_match_id(rs5c372_id, client);
- 		rs5c372->type = id->driver_data;
+This is amazing to me. This change can be compiled without any error 
+even if the declaration inconsistent between the kvm_host.h and x86's 
+header file.
+
+I'm curious which option make it possible?
+
+Thanks,
+Shaoqin
+
+> 
+> Thank you.
+> Raghavendra
+>> Thanks,
+>> Gavin
+>>
+> 
+
 -- 
-2.34.1
+Shaoqin
 
