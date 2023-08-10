@@ -2,61 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E58F77838D
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Aug 2023 00:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF747783AE
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Aug 2023 00:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjHJWUR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Aug 2023 18:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S229992AbjHJWeP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Aug 2023 18:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjHJWUQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Aug 2023 18:20:16 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34662719
-        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 15:20:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56942442eb0so17973607b3.1
-        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 15:20:15 -0700 (PDT)
+        with ESMTP id S232288AbjHJWeO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Aug 2023 18:34:14 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1CB2D40
+        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 15:34:12 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-407db3e9669so51291cf.1
+        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 15:34:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691706015; x=1692310815;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tmBFxKohqxWGeEzlaaidWaFnJW/Oy/RvfXuIqafrWOM=;
-        b=6JTyZrfrPMxEB4xAyKq26rEGx6dnOtJemt5mF01prNKQ3cUVfJruc7Fe7RGiRWwnTQ
-         JNdckI2vLoo+gqpkJ4Y/rCI2rOTa5hAiAak/2PN2K2x99UdsCwMzOR99izlBg4yxVppk
-         dQK8g/hJNDIeks6PwAz/oyY3lHetOC4GBoRbRmdSsLay+vWH0iHE9YncdP80LYWTblDI
-         iYMvC5FUjVcDsM/OLHEHwIfhMK0QewWcYKuW2IlqTPX5Otlz706FwBUZ5hXu21vGQIT4
-         uYlRsQgCaSIAFf7MMqxoS33uW0RGdAOE21lmj0iEkCe384OiQkcbcQF5CJ0cTVjotCgp
-         pMJw==
+        d=google.com; s=20221208; t=1691706851; x=1692311651;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iczog4wlh1DjFLdMSzEvmMOPilWHUZVQiRjWpcVknB4=;
+        b=epAa0LKnKl5u66Y9RbFdhV8Lv5Y/bmCosxzVw0hc7/eKhboiaA24S7kWFOsvT3d/6v
+         R5IFwTcqvp9Hl6i35RRRje6JKgkiqfcZXUhHwrDZqwjImCaIXKPw6fnTz3qawFl9qWaN
+         y1BRsMkYdM/Vkm71K//EAIh0oMZ2T+tki5MWNLYHdhoMwDETGGk0C72DSKPpcNtdVI/n
+         6LbzVP/Y6nqhT0KZCcZ0oV8L7F4BxrgoCsvYOMX2D/8fZYXweyhURULxqXDrb/hulRuS
+         zA+fdeTbAiZsAJP20VaE+kk7PO04ERwsCiYM4LqdhVp0INromfUBIr5ctl+cNBTnxFca
+         OXBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691706015; x=1692310815;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tmBFxKohqxWGeEzlaaidWaFnJW/Oy/RvfXuIqafrWOM=;
-        b=KwQKGImYQnp4CUO5ZtY2PtpFFEEmnL4W2xj7BByjaKijyWR8r0wk7lC2fc8tbSqKyT
-         0FGNeqSKY2IrCdSNEk5DZjchM3eyepCBmBe2FYpbye8G7h8HwQhNVRI9OIosn6peoFyC
-         53eOYpgHyZu5MWIscCURn/85lNlSijVGziGx1zk11z7yxWsDLNwZT+eB8W9AqyrrNM8f
-         8jAw92w+JxjvcSSiGe2JEjioVytE4cb5OSlOAm1wqhOgjdgenmswH78CNAnFM4VlJeo2
-         ZMMuZI8xJ42X1L/P5BRTjy8s1u0XPMV6tJY0vm4kdBUt7HzIpo5mQl0pnyG9BGBmK1CH
-         bY0g==
-X-Gm-Message-State: AOJu0YwOrBuIrwIzS9Vf0Al7zqrhMteSGFzQF5gElh4ZD+YZG8Y8IDva
-        KwXVsrdVGXrFI3DnjN49ZpgtLM99VCI=
-X-Google-Smtp-Source: AGHT+IFA+Eoa7k6dQo7jnaWMJsrKFJ33ryvAj3Q3LxXldo+rT6OtEr7lMPaA/JwDbq8aHQpRj3zalPzAYew=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:709:b0:57a:118a:f31 with SMTP id
- bs9-20020a05690c070900b0057a118a0f31mr4149ywb.7.1691706015047; Thu, 10 Aug
- 2023 15:20:15 -0700 (PDT)
-Date:   Thu, 10 Aug 2023 15:20:13 -0700
-In-Reply-To: <CAJHc60x=bhXS3PahuRPwRVdqN4LeX-PBdjdEeCEomhf2YAJ1mw@mail.gmail.com>
-Mime-Version: 1.0
+        d=1e100.net; s=20221208; t=1691706851; x=1692311651;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iczog4wlh1DjFLdMSzEvmMOPilWHUZVQiRjWpcVknB4=;
+        b=iAAXyg28rFo9G+HJML8QLxeWIaDu1ea6cZhklV15b/wPIJ183LqEjfoyez250VCx5V
+         nZJc07lBDeEu2wTsPmLpUwCLRKnbgMABfuB5rJj87PwdlboQngvHIZEGAuFdPD+thFEN
+         DujVNZDqPAhg6gc2IsmWsAx1ZK9ZUFwOz8iQAGgcYlkq43DtQvbx3T7WUF4B09zcLfkS
+         RTXW3hFsqdQHMkZ07VOOFd5tdkeQI9jWUVUKJInsnjRKdaw0moP4jkt6DEWxzT8lF9n3
+         0ufnL3bMrqqhXR5fk7wIPDZGpxNUcvGaBDuiW063Gp4ckl25yz+YXUUDCIQgrF4uaZXi
+         hQZw==
+X-Gm-Message-State: AOJu0Yxx9Vtna1XOJDwu1gAlnX+DemcnAjQKAQD6zz7+IoYzqwXcApi5
+        33nP+KEgR8d0W/74rUXxqLj/lOzxuwEJXDcDz/QDXA==
+X-Google-Smtp-Source: AGHT+IHAtNxlpUZmQoXEcDxVa2yk3p3K+PVD72RQhW5Mh60EHaBNEWbQ+TxSW7uZIaokAfbLajpQhvWaiqGPsEZ9Nws=
+X-Received: by 2002:ac8:7d55:0:b0:3ef:3361:75d5 with SMTP id
+ h21-20020ac87d55000000b003ef336175d5mr45398qtb.11.1691706851560; Thu, 10 Aug
+ 2023 15:34:11 -0700 (PDT)
+MIME-Version: 1.0
 References: <20230808231330.3855936-1-rananta@google.com> <20230808231330.3855936-3-rananta@google.com>
  <c33b0518-6e64-7acf-efa8-f404fce1ccac@redhat.com> <CAJHc60yCJANBQOizaoSPhEJH9e8a9C6n68x4qdVkOhVZiiWqkw@mail.gmail.com>
  <30e45ef3-309a-63de-e085-be1645c1be79@redhat.com> <CAJHc60x=bhXS3PahuRPwRVdqN4LeX-PBdjdEeCEomhf2YAJ1mw@mail.gmail.com>
-Message-ID: <ZNVfsxdYKu9Nt+j+@google.com>
+ <ZNVfsxdYKu9Nt+j+@google.com>
+In-Reply-To: <ZNVfsxdYKu9Nt+j+@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu, 10 Aug 2023 15:34:00 -0700
+Message-ID: <CAJHc60w0By2Q+PCsfwReGXsN5zf5k1ww3Ov4m9Eb-pFH-UKBDg@mail.gmail.com>
 Subject: Re: [PATCH v8 02/14] KVM: Declare kvm_arch_flush_remote_tlbs() globally
-From:   Sean Christopherson <seanjc@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
+To:     Sean Christopherson <seanjc@google.com>
 Cc:     Shaoqin Huang <shahuang@redhat.com>, Gavin Shan <gshan@redhat.com>,
         Oliver Upton <oliver.upton@linux.dev>,
         Marc Zyngier <maz@kernel.org>,
@@ -76,91 +76,107 @@ Cc:     Shaoqin Huang <shahuang@redhat.com>, Gavin Shan <gshan@redhat.com>,
         linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 10, 2023, Raghavendra Rao Ananta wrote:
-> On Thu, Aug 10, 2023 at 5:26=E2=80=AFAM Shaoqin Huang <shahuang@redhat.co=
-m> wrote:
-> > On 8/10/23 00:38, Raghavendra Rao Ananta wrote:
-> > >>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > >>> index e3f968b38ae97..ade5d4500c2ce 100644
-> > >>> --- a/include/linux/kvm_host.h
-> > >>> +++ b/include/linux/kvm_host.h
-> > >>> @@ -1484,6 +1484,8 @@ static inline int kvm_arch_flush_remote_tlbs(=
-struct kvm *kvm)
-> > >>>    {
-> > >>>        return -ENOTSUPP;
-> > >>>    }
-> > >>> +#else
-> > >>> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
-> > >>>    #endif
-> > >>>
-> > >>>    #ifdef __KVM_HAVE_ARCH_NONCOHERENT_DMA
-> > >>
-> > >> Is the declaration inconsistent to that in arch/x86/include/asm/kvm_=
-host.h?
-> > >> In order to keep them consistent, I guess we need move kvm_arch_flus=
-h_remote_tlbs()
-> > >> from x86's header file to arch/x86/kvm/mmu/mmu.c and 'inline' needs =
-to be dropped.
-> > >>
-> > > Unsure of the original intentions, I didn't want to disturb any
-> > > existing arrangements. If more people agree to this refactoring, I'm
-> > > happy to move.
+On Thu, Aug 10, 2023 at 3:20=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Thu, Aug 10, 2023, Raghavendra Rao Ananta wrote:
+> > On Thu, Aug 10, 2023 at 5:26=E2=80=AFAM Shaoqin Huang <shahuang@redhat.=
+com> wrote:
+> > > On 8/10/23 00:38, Raghavendra Rao Ananta wrote:
+> > > >>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > >>> index e3f968b38ae97..ade5d4500c2ce 100644
+> > > >>> --- a/include/linux/kvm_host.h
+> > > >>> +++ b/include/linux/kvm_host.h
+> > > >>> @@ -1484,6 +1484,8 @@ static inline int kvm_arch_flush_remote_tlb=
+s(struct kvm *kvm)
+> > > >>>    {
+> > > >>>        return -ENOTSUPP;
+> > > >>>    }
+> > > >>> +#else
+> > > >>> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> > > >>>    #endif
+> > > >>>
+> > > >>>    #ifdef __KVM_HAVE_ARCH_NONCOHERENT_DMA
+> > > >>
+> > > >> Is the declaration inconsistent to that in arch/x86/include/asm/kv=
+m_host.h?
+> > > >> In order to keep them consistent, I guess we need move kvm_arch_fl=
+ush_remote_tlbs()
+> > > >> from x86's header file to arch/x86/kvm/mmu/mmu.c and 'inline' need=
+s to be dropped.
+> > > >>
+> > > > Unsure of the original intentions, I didn't want to disturb any
+> > > > existing arrangements. If more people agree to this refactoring, I'=
+m
+> > > > happy to move.
+> > >
+> > > This is amazing to me. This change can be compiled without any error
+> > > even if the declaration inconsistent between the kvm_host.h and x86's
+> > > header file.
+> > >
+> > > I'm curious which option make it possible?
+> > >
+> > After doing some experiments, I think it works because of the order in
+> > which the inline-definition and the declaration are laid out. If the
+> > 'inline' part of the function comes first and then the declaration, we
+> > don't see any error. However if the positions were reversed, we would
+> > see an error. (I'm not sure what the technical reason for this is).
 > >
-> > This is amazing to me. This change can be compiled without any error
-> > even if the declaration inconsistent between the kvm_host.h and x86's
-> > header file.
-> >
-> > I'm curious which option make it possible?
-> >
-> After doing some experiments, I think it works because of the order in
-> which the inline-definition and the declaration are laid out. If the
-> 'inline' part of the function comes first and then the declaration, we
-> don't see any error. However if the positions were reversed, we would
-> see an error. (I'm not sure what the technical reason for this is).
->=20
-> Just to be safe, I can move the definition to arch/x86/kvm/mmu/mmu.c
-> as a non-inline function.
+> > Just to be safe, I can move the definition to arch/x86/kvm/mmu/mmu.c
+> > as a non-inline function.
+>
+> No need, asm/kvm_host.h _must_ be included before the declaration, otherw=
+ise the
+> declaration wouldn't be made because __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS wo=
+uldn't
+> be defined.  I.e. we won't run into issues where the non-static declarati=
+on comes
+> before the static inline definition.
+>
+> C99 explicitly covers this case:
+>
+>   6.2.2 Linkages of identifiers
+>
+>   ...
+>
+>   If the declaration of a file scope identifier for an object or a functi=
+on contains the storage-
+>   class specifier static, the identifier has internal linkage.
+>
+>   For an identifier declared with the storage-class specifier extern in a=
+ scope in which a
+>   prior declaration of that identifier is visible if the prior declaratio=
+n specifies internal or
+>   external linkage, the linkage of the identifier at the later declaratio=
+n is the same as the
+>   linkage specified at the prior declaration. If no prior declaration is =
+visible, or if the prior
+>   declaration specifies no linkage, then the identifier has external link=
+age.
+>
+> In short, because the "static inline" declared internal linkage first, it=
+ wins.
+Thanks for sharing this! I can keep the 'static inline' definition as
+is then. However, since a later patch (patch-05/14) defines
+kvm_arch_flush_remote_tlbs_range() in arch/x86/kvm/mmu/mmu.c, do you
+think we can move this definition to the .c file as well for
+consistency?
 
-No need, asm/kvm_host.h _must_ be included before the declaration, otherwis=
-e the
-declaration wouldn't be made because __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS woul=
-dn't
-be defined.  I.e. we won't run into issues where the non-static declaration=
- comes
-before the static inline definition.
+Thank you.
+Raghavendra
 
-C99 explicitly covers this case:
 
-  6.2.2 Linkages of identifiers
-
-  ...
-
-  If the declaration of a file scope identifier for an object or a function=
- contains the storage-
-  class specifier static, the identifier has internal linkage.
-
-  For an identifier declared with the storage-class specifier extern in a s=
-cope in which a
-  prior declaration of that identifier is visible if the prior declaration =
-specifies internal or
-  external linkage, the linkage of the identifier at the later declaration =
-is the same as the
-  linkage specified at the prior declaration. If no prior declaration is vi=
-sible, or if the prior
-  declaration specifies no linkage, then the identifier has external linkag=
-e.
-
-In short, because the "static inline" declared internal linkage first, it w=
-ins.
+Raghavendra
