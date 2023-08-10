@@ -2,72 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F46977738C
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Aug 2023 11:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30C77773A0
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Aug 2023 11:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjHJJAG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Aug 2023 05:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S232131AbjHJJEU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Aug 2023 05:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjHJJAF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Aug 2023 05:00:05 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B872E211F
-        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 02:00:04 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fe2ba3e260so5661125e9.2
-        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 02:00:04 -0700 (PDT)
+        with ESMTP id S231610AbjHJJEU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Aug 2023 05:04:20 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDA22107
+        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 02:04:19 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fe4b95c371so3535865e9.1
+        for <linux-mips@vger.kernel.org>; Thu, 10 Aug 2023 02:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691658003; x=1692262803;
+        d=linaro.org; s=google; t=1691658258; x=1692263058;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=apCyx7BnprLlNUtpxgI6ODrkhYEMJ4RAFB4yHFVMfI8=;
-        b=cVdtENVBqkmVo7mhcn41Hs7v9W+1r6WC7SKAUkK0sQjOBgAlM5naVYjUnDsgRMHb3t
-         pRcnknchJZPisfwVakNwZMq/8AM6/k/Dh4BZ11VqCChCGyd0qsE6QGuHdqSABiT0LWXi
-         tic1V7TPvGGCaY60KFWEIV92flCtDx12JgAhDkzXhKpcqmgYg35/3tamRu2vHH0MRunb
-         EV6vaPBzZHfS6Iaja7ODtkfaTKVSivYRruBPKRBPUfZdOkWPSGaRNMD1Rs+znZpXY7MT
-         GynzjIzfF8pIJsWOJV6AzdIORG3VO/0W5VHnXAHRebmHY9ERkBjST2ODEtUcsM+tf+KL
-         HoCA==
+        bh=tRRGt270hpgqI4zE1zgSatf0+H4Bh/F+VZZfxHZMxJQ=;
+        b=oAEb/UVBkppyVSOHobReOPQ5YTJ38GSYmmwnXKvWBacyY35eiBK3BbweF9r2wySUml
+         MEcisqaWbMu75RD/yi2+TApQnL2dFNUOP3LxnRpHcOKij/GZo0w0ruS8u+2sRfizq7K0
+         RXpbZa5ou88CCBGxGOuZX1JLIdZicfZdY/CT8cY9pTtnS0KjgGk4/lotdDB2sxhQlLsF
+         KS8SGcoWUwYCt9WiECBncj/W3XO/pC9wzUYaNE5W9koIsUJNRDyCxnF+WlJ36Zyyu8gs
+         E3wn44pqQEnSVjV3WUZmbwDcfSycWhFbxh8XhXu2aO73sGromowt+6Napedljzo4dNil
+         4yog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691658003; x=1692262803;
+        d=1e100.net; s=20221208; t=1691658258; x=1692263058;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=apCyx7BnprLlNUtpxgI6ODrkhYEMJ4RAFB4yHFVMfI8=;
-        b=C2IQEyv9rwRcLxkgPWA36uAyAFMgvQG5jA7eQyhPPkeNZITQH1qtMn8Vvn5DUQ8Ep+
-         qAm6Ag0VI/S8fROPzSXMeQSn1w0g+zZ/zcJUwvvg0gMTE/Y0NYve8vzPhvkYmbpqlLGG
-         V/4wlPX8kg+vd/R81Nq9aksFVP8cE3ZoFd2tLnlq6YVQ+EutIlPuAJqRieOLTTcPH1bf
-         aB+64CWX0jxpe/zUPvbhGnw4ZG2YZXEZvL0RMtHo489Y0p5hCxsvcQYcufsGi/p7cCBT
-         pefi2eRRBC+qlJyKpPYqKFUBeb+B6FGJjs7nVxZ+X2hYppqJDmVGHr0ORDjJtBhLzdrx
-         6/DQ==
-X-Gm-Message-State: AOJu0Yw2DxuUmZAgbclnyjzGtCwf6LdCME10HQBiDjxOA/GoNns4Wbcm
-        h4cZpk2EDMtBbOIBfO7+trGkrg==
-X-Google-Smtp-Source: AGHT+IG6duMflYRBl5CQeCt/dV9xwJXDPQRP/d6NWugTgoVZOj3U5miGLp2jSFREeeNioqcKY7SORg==
-X-Received: by 2002:a1c:7518:0:b0:3fe:687a:abad with SMTP id o24-20020a1c7518000000b003fe687aabadmr1323005wmc.20.1691658003225;
-        Thu, 10 Aug 2023 02:00:03 -0700 (PDT)
+        bh=tRRGt270hpgqI4zE1zgSatf0+H4Bh/F+VZZfxHZMxJQ=;
+        b=PxKvkxAyH5aUGLTC8G06R8pvf7RyZSdwpq7ute4yDAOH/LtlwlW0LD5g1wqNOzDz8o
+         fRKjLTiNKirP5f6rP3o0YmiR4GMT9zjYf5CjPDbLrL5PyNQFUQQ0rBA3ZRu+IdUl8DyQ
+         D8Dxac66kG/vd2/ojRyPYw65xg7at/zdLw9L+6q/W0CaNH7lBEPohZ1i03DAE53k4laf
+         X/3oSCh6TKiGFebOS8xwAJgRYpNl9TmPuGOPUX+sZBv9A4cVths5xH1Uqsz82VDOhlvT
+         UmzDTjmRC2p79XNVNQKzhkYpo+sG8DPeTFUUwxcnepEFws5lPXXMezi8VMncAmFxjkD6
+         S6SQ==
+X-Gm-Message-State: AOJu0YyVZViaEviu3ALDeQQ/11wHM3iVDR5pY1wDRuXTozeZbBVGXcji
+        WIbKvq5yNvZIFD2I3aokmlyuQg==
+X-Google-Smtp-Source: AGHT+IEiyf6YzfxC02ypY0/hlAu3sZVgflth6mGPBaBQxUAqtG6jM0o50UoMEa2Wxjr8BGf/HBWSdg==
+X-Received: by 2002:a05:600c:4fc8:b0:3fe:2120:eb7c with SMTP id o8-20020a05600c4fc800b003fe2120eb7cmr1225438wmq.0.1691658258110;
+        Thu, 10 Aug 2023 02:04:18 -0700 (PDT)
 Received: from [192.168.69.115] ([176.176.158.65])
-        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003fbb0c01d4bsm1466098wmi.16.2023.08.10.02.00.01
+        by smtp.gmail.com with ESMTPSA id m22-20020a7bcb96000000b003fe2696ccfcsm1464479wmi.23.2023.08.10.02.04.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 02:00:02 -0700 (PDT)
-Message-ID: <ef8cff61-d61e-120d-fd69-8612c64b4139@linaro.org>
-Date:   Thu, 10 Aug 2023 11:00:00 +0200
+        Thu, 10 Aug 2023 02:04:17 -0700 (PDT)
+Message-ID: <a645ce3e-dd24-8c06-5898-76f78828b608@linaro.org>
+Date:   Thu, 10 Aug 2023 11:04:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH] usb: dwc3: dwc3-octeon: Verify clock divider
+Subject: Re: [PATCH v8 04/14] KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
 Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        lkft-triage@lists.linaro.org
-Cc:     Thinh.Nguyen@synopsys.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <ZNIM7tlBNdHFzXZG@lenoch>
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Shaoqin Huang <shahuang@redhat.com>
+References: <20230808231330.3855936-1-rananta@google.com>
+ <20230808231330.3855936-5-rananta@google.com>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <ZNIM7tlBNdHFzXZG@lenoch>
+In-Reply-To: <20230808231330.3855936-5-rananta@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,24 +92,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/8/23 11:37, Ladislav Michl wrote:
-> From: Ladislav Michl <ladis@linux-mips.org>
+On 9/8/23 01:13, Raghavendra Rao Ananta wrote:
+> kvm_arch_flush_remote_tlbs() or CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+> are two mechanisms to solve the same problem, allowing
+> architecture-specific code to provide a non-IPI implementation of
+> remote TLB flushing.
 > 
-> Although valid USB clock divider will be calculated for all valid
-> Octeon core frequencies, make code formally correct limiting
-> divider not to be greater that 7 so it fits into H_CLKDIV_SEL
-> field.
+> Dropping CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL allows KVM to standardize
+> all architectures on kvm_arch_flush_remote_tlbs() instead of
+> maintaining two mechanisms.
 > 
-> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > ---
->   Greg, if you want to resent whole serie, just drop me a note.
->   Otherwise, this patch is meant to be applied on to of it.
->   Thank you.
-> 
->   drivers/usb/dwc3/dwc3-octeon.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
+>   virt/kvm/Kconfig    | 3 ---
+>   virt/kvm/kvm_main.c | 2 --
+>   2 files changed, 5 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
