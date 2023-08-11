@@ -2,171 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48DE779661
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Aug 2023 19:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F030C77970F
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Aug 2023 20:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbjHKRoR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Aug 2023 13:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S236554AbjHKSZo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Aug 2023 14:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236897AbjHKRoP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Aug 2023 13:44:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E65115
-        for <linux-mips@vger.kernel.org>; Fri, 11 Aug 2023 10:44:14 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d6412374defso1998091276.0
-        for <linux-mips@vger.kernel.org>; Fri, 11 Aug 2023 10:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691775853; x=1692380653;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y5tf/etP9591sBoXXP0u0lhmE2sGhQYCIj4rXej+PgY=;
-        b=z4avZMYBxF/USDP2G14KA+P8N8yreov1u2JOHwfc1TVZdl6Iz+YTKH19wDx7mUMq9M
-         o4u6qon1QiMk8DVxh93qeN2Mz6fZGsUFtzOg33bB4Mo7KFsOypRjJRdzz9Y8WFCiY85q
-         br+fPgBO/on1YU5soxnymBtm9OPZyICHaFKZfYSg9Ropko2mo0wKLVwIok1lVrWFw51i
-         jjhtl/HK+nEz+jNhJe7imTF+VBA6+NGFZjFm7+hHqXCkfP3+rYY1oaYSypJ0v6009kFT
-         lq7bEwknPOhWjDhET6YMFrJ/3n1YTZ5hf1bP/IHZB/5/XDyHPzuDGnqfF1kEhe1cc6AD
-         1nfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691775853; x=1692380653;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y5tf/etP9591sBoXXP0u0lhmE2sGhQYCIj4rXej+PgY=;
-        b=HFUx9LQO5FulM6B0NAX+dUdOEj3WOXnSpDQzFiBOFkdMDR75SSkmXXge2TPlU/ijsq
-         /Szq78yOiu5CWsR8usb3l8mZDHvzcVRfblZbc/C+exd6xKUYDFVFTP7FbeDTtYyK3a16
-         NXs9YsBfbAnXMZLnOP1vY6R//6KAcByIrfKTP43ZfpRwC2ysgW+jCX3XH9DdpBIdJGeq
-         zZDqbpMM8mUeJH2UYM6ggfqdIxbXEA39zNXQJ3hFlhMA7XchUFhG6uDd4GWIh778C/bp
-         vdQwXiSK+rO55DxBTjQd+F2L6Wd/KIo2W4ZXnGfSghTNMSNsqwOUhl5rCk/CWLYZrvhw
-         Rcvg==
-X-Gm-Message-State: AOJu0YyIdyiK1A7BIUhj4jR5AJq+CkVPf9e+zN4HSBOcxF4vDYeAKtn3
-        jhbLRLg6nE7IyCxtEQ5Ibl4iMP7Qebs=
-X-Google-Smtp-Source: AGHT+IFlh+eXwF8rMcD2luIRCX1nl8Idt0F+6stO6hsWWfidj415wHUgqoJc8kVAwNGB8y2mQW1tGjk2lPA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:7443:0:b0:d20:7752:e384 with SMTP id
- p64-20020a257443000000b00d207752e384mr41859ybc.3.1691775853469; Fri, 11 Aug
- 2023 10:44:13 -0700 (PDT)
-Date:   Fri, 11 Aug 2023 10:44:11 -0700
-In-Reply-To: <CAGtprH9YE50RtqhW-U+wK0Vv6aKfqqtOPn8q4s8or=UZwPXZoA@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-13-seanjc@google.com> <diqzv8dq3116.fsf@ackerleytng-ctop.c.googlers.com>
- <ZNKv9ul2I7A4V7IF@google.com> <CAGtprH9YE50RtqhW-U+wK0Vv6aKfqqtOPn8q4s8or=UZwPXZoA@mail.gmail.com>
-Message-ID: <ZNZza/emWldkJC6X@google.com>
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     Ackerley Tng <ackerleytng@google.com>, pbonzini@redhat.com,
-        maz@kernel.org, oliver.upton@linux.dev, chenhuacai@kernel.org,
-        mpe@ellerman.id.au, anup@brainfault.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, willy@infradead.org,
-        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chao.p.peng@linux.intel.com,
-        tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com,
-        mail@maciej.szmigiero.name, vbabka@suse.cz, david@redhat.com,
-        qperret@google.com, michael.roth@amd.com, wei.w.wang@intel.com,
-        liam.merwick@oracle.com, isaku.yamahata@gmail.com,
-        kirill.shutemov@linux.intel.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S233840AbjHKSZn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Aug 2023 14:25:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A679F30DC;
+        Fri, 11 Aug 2023 11:25:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7AD660ED;
+        Fri, 11 Aug 2023 18:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53BC4C433C8;
+        Fri, 11 Aug 2023 18:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691778341;
+        bh=J5jMJWNe5mxefsfwYpjk94ucCqvKpHDhJ2RLFLWPzvE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Gz052yUM1XxLU/RgjOg34wukKcdr6mu92lg4kRvftL4t+JLmQb8r1u1actRxxcApf
+         PjHlYbsUsWZ+bKIaVoc7rK52krQ4OWPLnEH93QFvpXRAbigb2wSUKLi45TU/nHEb+C
+         Jwl9WfjJwBcQjOTRkBTLUH9d7syGI0QxxJS6cM+B4sNpqdMSIJVnJTbcdGoGTSTSlZ
+         PeS+VwcMkTke4e6X7PE/F46DP+6t406NKl/ODdSSnHdrM9/eHvIbao7c9+sM5I0D9t
+         oKICESQTk0FrGQu3zXtHyOu/DayhYLn0OVumhMRyOLFfjSFrRZmIStkSQKluPFVJ8K
+         zZHStULYsZlMQ==
+Message-ID: <2cb4c584-fb4a-5781-f74d-902416749ed4@kernel.org>
+Date:   Fri, 11 Aug 2023 11:25:37 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 16/17] [RFC] arch: turn -Wmissing-prototypes off
+ conditionally
+Content-Language: en-US
+To:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Xin Li <xin3.li@intel.com>, Nhat Pham <nphamcs@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Marc_Aur=c3=a8le_La_France?= <tsi@tuyoix.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20230810141947.1236730-1-arnd@kernel.org>
+ <20230810141947.1236730-17-arnd@kernel.org>
+ <CAJF2gTRdbXOEBNPN14y_ZUwBJ15qBG929BDspk0sqPo2sn=L-Q@mail.gmail.com>
+From:   Vineet Gupta <vgupta@kernel.org>
+In-Reply-To: <CAJF2gTRdbXOEBNPN14y_ZUwBJ15qBG929BDspk0sqPo2sn=L-Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 10, 2023, Vishal Annapurve wrote:
-> On Tue, Aug 8, 2023 at 2:13=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
-> > ...
->=20
-> > > + When binding a memslot to the file, if a kvm pointer exists, it mus=
-t
-> > >   be the same kvm as the one in this binding
-> > > + When the binding to the last memslot is removed from a file, NULL t=
-he
-> > >   kvm pointer.
-> >
-> > Nullifying the KVM pointer isn't sufficient, because without additional=
- actions
-> > userspace could extract data from a VM by deleting its memslots and the=
-n binding
-> > the guest_memfd to an attacker controlled VM.  Or more likely with TDX =
-and SNP,
-> > induce badness by coercing KVM into mapping memory into a guest with th=
-e wrong
-> > ASID/HKID.
-> >
->=20
-> TDX/SNP have mechanisms i.e. PAMT/RMP tables to ensure that the same
-> memory is not assigned to two different VMs.
 
-One of the main reasons we pivoted away from using a flag in "struct page" =
-to
-indicate that a page was private was so that KVM could enforce 1:1 VM:page =
-ownership
-*without* relying on hardware.
+On 8/10/23 19:33, Guo Ren wrote:
+> Thx, Arnd, I will clean them up for the csky part.
 
-And FWIW, the PAMT provides no protection in this specific case because KVM=
- does
-TDH.MEM.PAGE.REMOVE when zapping S-EPT entries, and that marks the page cle=
-ar in
-the PAMT.  The danger there is that physical memory is still encrypted with=
- the
-guest's HKID, and so mapping the memory into a different VM, which might no=
-t be
-a TDX guest!, could lead to corruption and/or poison #MCs.
+Likewise, I'll clean up ARC errors this weekend !
+It seems most of therm are in the category you mentioned. Non static but 
+only used by asm code.
 
-The HKID issues wouldn't be a problem if v15 is merged as-is, because zappi=
-ng
-S-EPT entries also fully purges and reclaims the page, but as we discussed =
-in
-one of the many threads, reclaiming physical memory should be tied to the i=
-node,
-i.e. to memory truly being freed, and not to S-EPTs being zapped.  And ther=
-e is
-a very good reason for wanting to do that, as it allows KVM to do the expen=
-sive
-cache flush + clear outside of mmu_lock.
-
-> Deleting memslots should also clear out the contents of the memory as the=
- EPT
-> tables will be zapped in the process
-
-No, deleting a memslot should not clear memory.  As I said in my previous r=
-esponse,
-the fact that zapping S-EPT entries is destructive is a limitiation of TDX,=
- not a
-feature we want to apply to other VM types.  And that's not even a fundamen=
-tal
-property of TDX, e.g. TDX could remove the limitation, at the cost of consu=
-ming
-quite a bit more memory, by tracking the exact owner by HKID in the PAMT an=
-d
-decoupling S-EPT entries from page ownership.
-
-Or in theory, KVM could workaround the limitation by only doing TDH.MEM.RAN=
-GE.BLOCK
-when zapping S-EPTs.  Hmm, that might actually be worth looking at.
-
-> and the host will reclaim the memory.
-
-There are no guarantees that the host will reclaim the memory.  E.g. QEMU w=
-ill
-delete and re-create memslots for "regular" VMs when emulating option ROMs.=
-  Even
-if that use case is nonsensical for confidential VMs (and it probably is no=
-nsensical),
-I don't want to define KVM's ABI based on what we *think* userspace will do=
-.
+Thx,
+-Vineet
