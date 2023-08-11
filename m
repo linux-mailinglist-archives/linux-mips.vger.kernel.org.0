@@ -2,299 +2,282 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27164778DE5
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Aug 2023 13:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1D7778E1C
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Aug 2023 13:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjHKLju (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Aug 2023 07:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S230172AbjHKLqZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Aug 2023 07:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbjHKLju (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Aug 2023 07:39:50 -0400
-Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6052706
-        for <linux-mips@vger.kernel.org>; Fri, 11 Aug 2023 04:39:46 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id UQUZqsWOTPm6CUQUaqHcFO; Fri, 11 Aug 2023 13:39:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1691753984; bh=iisKLuRYwG5jF0wfR+KUYvtqsNRa1Q/VtKp4V9EDHz4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=NyC9b1EdJ16Rwqk2UsBUJ3WbXazTyAj7ngpgKV3LizK27wjJf5W2R644USBRUTMf+
-         QeAaDpmP5ipJegwMc3UtMe45U7wTpNZflntf1Yunt9vENv0mNSonG/M23ghrUNlLD/
-         VQtGTbBNC11oee8pahq2Jaidhlcpihajf8gDTaMcAZeXT9/Zsr4KVOBIfAnEsRCw8f
-         CQpkw+qY2/zmpEi+w+rX0bZrBgxL3TsWyyBOjvmlaxZQuQxW+GEUOAmRPMFXwkb8mF
-         hCbD83RMjQhSiIwi5o2zbGYo9QuQQjK75yJcAqqn13I7Rb86GQACP2xTppd7IW7nRE
-         O78en8abqK1ZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1691753984; bh=iisKLuRYwG5jF0wfR+KUYvtqsNRa1Q/VtKp4V9EDHz4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=NyC9b1EdJ16Rwqk2UsBUJ3WbXazTyAj7ngpgKV3LizK27wjJf5W2R644USBRUTMf+
-         QeAaDpmP5ipJegwMc3UtMe45U7wTpNZflntf1Yunt9vENv0mNSonG/M23ghrUNlLD/
-         VQtGTbBNC11oee8pahq2Jaidhlcpihajf8gDTaMcAZeXT9/Zsr4KVOBIfAnEsRCw8f
-         CQpkw+qY2/zmpEi+w+rX0bZrBgxL3TsWyyBOjvmlaxZQuQxW+GEUOAmRPMFXwkb8mF
-         hCbD83RMjQhSiIwi5o2zbGYo9QuQQjK75yJcAqqn13I7Rb86GQACP2xTppd7IW7nRE
-         O78en8abqK1ZA==
-Date:   Fri, 11 Aug 2023 13:39:42 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Robert Richter <rric@kernel.org>, linux-mmc@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: (Octeon) MMC performance degradation due to too many requests
-Message-ID: <ZNYd/mNGROq22MPH@lenoch>
-References: <ZM+IlctTTQLs7Qg9@lenoch>
- <CACRpkdZmd-nb21Cx-jp-CDRjW4VQRV=c4MekHxS3h2p3HsDwZQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdZmd-nb21Cx-jp-CDRjW4VQRV=c4MekHxS3h2p3HsDwZQ@mail.gmail.com>
-X-CMAE-Envelope: MS4wfJbRPQSTR/mFiCBUjgc/yhHObOB6YJhwSOxr4N0OVb/J5TsxJlGZgLUL4P1lBd1+EjMwn1Cr3W9owK5XS6Vwn8/ymWhpP3sLrZrq6xKdS2BJ93onSbIh
- rFsxr9jbaZ5qjAB7H+NKo0SMJTaTfHUE1EAewpcUKNpZhjvB3YUsk+zlXUliEPlQkeZAWkCssXJs4lEmqOnXOdpvX7SIX4aaF63o4PoEgWNSIo0I1lCry2Pd
- PdapejNrS/nxUREL58WBGEfWSsbB1PE1SFIs00NagZo=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229523AbjHKLqY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Aug 2023 07:46:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6DAFA;
+        Fri, 11 Aug 2023 04:46:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BDC060F7C;
+        Fri, 11 Aug 2023 11:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 534FAC433C8;
+        Fri, 11 Aug 2023 11:46:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691754382;
+        bh=nTH5cx3CuThfdvc7Jgj5ef5MX658KJ12EMD425UvHt8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RSZKGBIx7O0baF8FzU08zN6BbDk6YyZwPVmCxL+wjL15fNlHQseYA8HmJH72lP12y
+         L1VPhNDRuN8cju6D7WcvZrrs2yopjaY/gqk1C9uZ0qoLMw7dtt9XUdHVZHU/5DuYEt
+         9PpEToYZArnWOveIXWIhJsahLeRgA2VLED/duRTAiE2ZDjg4F1yYPjbLkguvSDOXDN
+         SXDGoKe/3gocO00Jmfwu0ZfcPWS0s1JG0Yo5P3D5zD4WnVI8ZK6DBstB+1nyl1Z/7q
+         qeRlOiJgBkdHqgkKFwAvbvUnCL+Th8xrzp5JppTBfmWHrtrlPQFHqm5wB3F/N6df2o
+         JTHnY8hoHU4FQ==
+Date:   Fri, 11 Aug 2023 20:46:11 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/17] kprobes: unify kprobes_exceptions_nofify()
+ prototypes
+Message-Id: <20230811204611.8498b64177e809580e9e4034@kernel.org>
+In-Reply-To: <20230810141947.1236730-15-arnd@kernel.org>
+References: <20230810141947.1236730-1-arnd@kernel.org>
+        <20230810141947.1236730-15-arnd@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Linus,
+On Thu, 10 Aug 2023 16:19:32 +0200
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-On Sun, Aug 06, 2023 at 10:44:21PM +0200, Linus Walleij wrote:
-[snip]
-> So you are talking about something along the lines of:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> commit bd9b902798ab14d19ca116b10bde581ddff8f905
-> Author: Linus Walleij <linus.walleij@linaro.org>
-> Date:   Mon Jan 29 00:44:53 2018 +0100
+> Most architectures that support kprobes declare this function in their
+> own asm/kprobes.h header and provide an override, but some are missing
+> the prototype, which causes a warning for the __weak stub implementation:
 > 
->     mmc: sdhci: Implement an SDHCI-specific bounce buffer
+> kernel/kprobes.c:1865:12: error: no previous prototype for 'kprobe_exceptions_notify' [-Werror=missing-prototypes]
+>  1865 | int __weak kprobe_exceptions_notify(struct notifier_block *self,
 > 
-> ?
+> Move the prototype into linux/kprobes.h so it is visible to all
+> the definitions.
+
+Good catch! and it seems x86 has no implementation, so this is more resonable.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you,
+
 > 
-> Yeah I guess that if this is needed by more than one driver it
-> should be made into a library, or say a piece of code turned on by
-> a config option that the dependent drivers select.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arc/include/asm/kprobes.h     | 3 ---
+>  arch/arm/include/asm/kprobes.h     | 2 --
+>  arch/arm64/include/asm/kprobes.h   | 2 --
+>  arch/ia64/include/asm/kprobes.h    | 2 --
+>  arch/mips/include/asm/kprobes.h    | 2 --
+>  arch/powerpc/include/asm/kprobes.h | 2 --
+>  arch/s390/include/asm/kprobes.h    | 2 --
+>  arch/sh/include/asm/kprobes.h      | 2 --
+>  arch/sparc/include/asm/kprobes.h   | 2 --
+>  arch/x86/include/asm/kprobes.h     | 2 --
+>  include/linux/kprobes.h            | 4 ++++
+>  11 files changed, 4 insertions(+), 21 deletions(-)
 > 
-> Interested in the job? :D
+> diff --git a/arch/arc/include/asm/kprobes.h b/arch/arc/include/asm/kprobes.h
+> index de1566e32cb89..68e8301c0df2c 100644
+> --- a/arch/arc/include/asm/kprobes.h
+> +++ b/arch/arc/include/asm/kprobes.h
+> @@ -32,9 +32,6 @@ struct kprobe;
+>  
+>  void arch_remove_kprobe(struct kprobe *p);
+>  
+> -int kprobe_exceptions_notify(struct notifier_block *self,
+> -			     unsigned long val, void *data);
+> -
+>  struct prev_kprobe {
+>  	struct kprobe *kp;
+>  	unsigned long status;
+> diff --git a/arch/arm/include/asm/kprobes.h b/arch/arm/include/asm/kprobes.h
+> index e26a278d301ab..5b8dbf1b0be49 100644
+> --- a/arch/arm/include/asm/kprobes.h
+> +++ b/arch/arm/include/asm/kprobes.h
+> @@ -40,8 +40,6 @@ struct kprobe_ctlblk {
+>  
+>  void arch_remove_kprobe(struct kprobe *);
+>  int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
+> -int kprobe_exceptions_notify(struct notifier_block *self,
+> -			     unsigned long val, void *data);
+>  
+>  /* optinsn template addresses */
+>  extern __visible kprobe_opcode_t optprobe_template_entry[];
+> diff --git a/arch/arm64/include/asm/kprobes.h b/arch/arm64/include/asm/kprobes.h
+> index 05cd82eeca136..be7a3680dadff 100644
+> --- a/arch/arm64/include/asm/kprobes.h
+> +++ b/arch/arm64/include/asm/kprobes.h
+> @@ -37,8 +37,6 @@ struct kprobe_ctlblk {
+>  
+>  void arch_remove_kprobe(struct kprobe *);
+>  int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
+> -int kprobe_exceptions_notify(struct notifier_block *self,
+> -			     unsigned long val, void *data);
+>  void __kretprobe_trampoline(void);
+>  void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
+>  
+> diff --git a/arch/ia64/include/asm/kprobes.h b/arch/ia64/include/asm/kprobes.h
+> index 9e956768946cc..56004f97df6d2 100644
+> --- a/arch/ia64/include/asm/kprobes.h
+> +++ b/arch/ia64/include/asm/kprobes.h
+> @@ -107,8 +107,6 @@ struct arch_specific_insn {
+>  };
+>  
+>  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+> -extern int kprobe_exceptions_notify(struct notifier_block *self,
+> -				    unsigned long val, void *data);
+>  
+>  extern void arch_remove_kprobe(struct kprobe *p);
+>  
+> diff --git a/arch/mips/include/asm/kprobes.h b/arch/mips/include/asm/kprobes.h
+> index 68b1e5d458cfb..bc27d99c94363 100644
+> --- a/arch/mips/include/asm/kprobes.h
+> +++ b/arch/mips/include/asm/kprobes.h
+> @@ -71,8 +71,6 @@ struct kprobe_ctlblk {
+>  	struct prev_kprobe prev_kprobe;
+>  };
+>  
+> -extern int kprobe_exceptions_notify(struct notifier_block *self,
+> -				    unsigned long val, void *data);
+>  
+>  #endif /* CONFIG_KPROBES */
+>  #endif /* _ASM_KPROBES_H */
+> diff --git a/arch/powerpc/include/asm/kprobes.h b/arch/powerpc/include/asm/kprobes.h
+> index c8e4b4fd4e330..4525a9c68260d 100644
+> --- a/arch/powerpc/include/asm/kprobes.h
+> +++ b/arch/powerpc/include/asm/kprobes.h
+> @@ -84,8 +84,6 @@ struct arch_optimized_insn {
+>  	kprobe_opcode_t *insn;
+>  };
+>  
+> -extern int kprobe_exceptions_notify(struct notifier_block *self,
+> -					unsigned long val, void *data);
+>  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+>  extern int kprobe_handler(struct pt_regs *regs);
+>  extern int kprobe_post_handler(struct pt_regs *regs);
+> diff --git a/arch/s390/include/asm/kprobes.h b/arch/s390/include/asm/kprobes.h
+> index 83f732ca3af4d..3f87125dd9b0d 100644
+> --- a/arch/s390/include/asm/kprobes.h
+> +++ b/arch/s390/include/asm/kprobes.h
+> @@ -72,8 +72,6 @@ struct kprobe_ctlblk {
+>  void arch_remove_kprobe(struct kprobe *p);
+>  
+>  int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+> -int kprobe_exceptions_notify(struct notifier_block *self,
+> -	unsigned long val, void *data);
+>  
+>  #define flush_insn_slot(p)	do { } while (0)
+>  
+> diff --git a/arch/sh/include/asm/kprobes.h b/arch/sh/include/asm/kprobes.h
+> index eeba83e0a7d29..65d4c3316a5bd 100644
+> --- a/arch/sh/include/asm/kprobes.h
+> +++ b/arch/sh/include/asm/kprobes.h
+> @@ -46,8 +46,6 @@ struct kprobe_ctlblk {
+>  };
+>  
+>  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+> -extern int kprobe_exceptions_notify(struct notifier_block *self,
+> -				    unsigned long val, void *data);
+>  extern int kprobe_handle_illslot(unsigned long pc);
+>  #else
+>  
+> diff --git a/arch/sparc/include/asm/kprobes.h b/arch/sparc/include/asm/kprobes.h
+> index 06c2bc767ef75..aec742cd898f2 100644
+> --- a/arch/sparc/include/asm/kprobes.h
+> +++ b/arch/sparc/include/asm/kprobes.h
+> @@ -47,8 +47,6 @@ struct kprobe_ctlblk {
+>  	struct prev_kprobe prev_kprobe;
+>  };
+>  
+> -int kprobe_exceptions_notify(struct notifier_block *self,
+> -			     unsigned long val, void *data);
+>  int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+>  asmlinkage void __kprobes kprobe_trap(unsigned long trap_level,
+>  				      struct pt_regs *regs);
+> diff --git a/arch/x86/include/asm/kprobes.h b/arch/x86/include/asm/kprobes.h
+> index a2e9317aad495..5939694dfb28d 100644
+> --- a/arch/x86/include/asm/kprobes.h
+> +++ b/arch/x86/include/asm/kprobes.h
+> @@ -113,8 +113,6 @@ struct kprobe_ctlblk {
+>  };
+>  
+>  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+> -extern int kprobe_exceptions_notify(struct notifier_block *self,
+> -				    unsigned long val, void *data);
+>  extern int kprobe_int3_handler(struct pt_regs *regs);
+>  
+>  #else
+> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+> index 85a64cb95d755..987911cdc90a2 100644
+> --- a/include/linux/kprobes.h
+> +++ b/include/linux/kprobes.h
+> @@ -450,6 +450,10 @@ int kprobe_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+>  
+>  int arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long *value,
+>  			    char *type, char *sym);
+> +
+> +int kprobe_exceptions_notify(struct notifier_block *self,
+> +			     unsigned long val, void *data);
+> +
+>  #else /* !CONFIG_KPROBES: */
+>  
+>  static inline int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
+> -- 
+> 2.39.2
+> 
 
-Just for the reference, implementation based on your above mentioned patch
-which restores 4.9 vendor kernel performance can be found below.
 
-It still needs some love, generalization and so on, but as I have already
-started work on fixing Octeon's USB and ethernet, this is far beyond my
-time limit.
-
-I hope to return to this in the near future and convert it into proper
-patch series.
-
-Btw, we really need to invent some other name than 'bounce buffer'...
-
----
- drivers/mmc/host/cavium.c | 124 +++++++++++++++++++++++++++++++++++++-
- drivers/mmc/host/cavium.h |   4 ++
- 2 files changed, 127 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/cavium.c b/drivers/mmc/host/cavium.c
-index cd8f2233ea34..75e2fab58268 100644
---- a/drivers/mmc/host/cavium.c
-+++ b/drivers/mmc/host/cavium.c
-@@ -370,6 +370,32 @@ static int get_dma_dir(struct mmc_data *data)
- 	return (data->flags & MMC_DATA_WRITE) ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
- }
- 
-+static int finish_dma_bounce(struct cvm_mmc_host *host, struct mmc_data *data)
-+{
-+	data->bytes_xfered = data->blocks * data->blksz;
-+	data->error = 0;
-+
-+	dma_sync_single_for_cpu(host->dev, host->bounce_addr,
-+				host->bounce_buffer_size,
-+				mmc_get_dma_dir(data));
-+
-+	/* On reads, copy the bounced data into the sglist */
-+	if (mmc_get_dma_dir(data) == DMA_FROM_DEVICE) {
-+		unsigned int length = data->bytes_xfered;
-+
-+		if (length > host->bounce_buffer_size) {
-+			pr_err("bounce buffer is %u bytes but DMA claims to have transferred %u bytes\n",
-+			       host->bounce_buffer_size,
-+			       data->bytes_xfered);
-+			/* Cap it down and continue */
-+			length = host->bounce_buffer_size;
-+		}
-+		sg_copy_from_buffer(data->sg, data->sg_len, host->bounce_buffer,
-+				    length);
-+	}
-+	return 1;
-+}
-+
- static int finish_dma_single(struct cvm_mmc_host *host, struct mmc_data *data)
- {
- 	data->bytes_xfered = data->blocks * data->blksz;
-@@ -400,7 +426,9 @@ static int finish_dma_sg(struct cvm_mmc_host *host, struct mmc_data *data)
- 
- static int finish_dma(struct cvm_mmc_host *host, struct mmc_data *data)
- {
--	if (host->use_sg && data->sg_len > 1)
-+	if (host->bounce_buffer)
-+		return finish_dma_bounce(host, data);
-+	else if (host->use_sg && data->sg_len > 1)
- 		return finish_dma_sg(host, data);
- 	else
- 		return finish_dma_single(host, data);
-@@ -509,6 +537,45 @@ irqreturn_t cvm_mmc_interrupt(int irq, void *dev_id)
- 	return IRQ_RETVAL(emm_int != 0);
- }
- 
-+static u64 prepare_dma_bounce(struct cvm_mmc_host *host, struct mmc_data *data)
-+{
-+	u64 dma_cfg, addr;
-+	int rw = 0;
-+	unsigned int length = data->blksz * data->blocks;
-+
-+	if (length > host->bounce_buffer_size) {
-+		pr_err("asked for transfer of %u bytes exceeds bounce buffer %u bytes\n",
-+		       length, host->bounce_buffer_size);
-+		return 0;
-+	}
-+	if (mmc_get_dma_dir(data) == DMA_TO_DEVICE) {
-+		/* Copy the data to the bounce buffer */
-+		sg_copy_to_buffer(data->sg, data->sg_len,
-+				  host->bounce_buffer, length);
-+		rw = 1;
-+	}
-+	/* Switch ownership to the DMA */
-+	dma_sync_single_for_device(host->dev, host->bounce_addr,
-+				   host->bounce_buffer_size,
-+				   mmc_get_dma_dir(data));
-+
-+	dma_cfg = FIELD_PREP(MIO_EMM_DMA_CFG_EN, 1) |
-+		  FIELD_PREP(MIO_EMM_DMA_CFG_RW, rw);
-+#ifdef __LITTLE_ENDIAN
-+	dma_cfg |= FIELD_PREP(MIO_EMM_DMA_CFG_ENDIAN, 1);
-+#endif
-+	dma_cfg |= FIELD_PREP(MIO_EMM_DMA_CFG_SIZE, length / 8 - 1);
-+
-+	addr = host->bounce_addr;
-+	if (!host->big_dma_addr)
-+		dma_cfg |= FIELD_PREP(MIO_EMM_DMA_CFG_ADR, addr);
-+	writeq(dma_cfg, host->dma_base + MIO_EMM_DMA_CFG(host));
-+
-+	if (host->big_dma_addr)
-+		writeq(addr, host->dma_base + MIO_EMM_DMA_ADR(host));
-+	return addr;
-+}
-+
- /*
-  * Program DMA_CFG and if needed DMA_ADR.
-  * Returns 0 on error, DMA address otherwise.
-@@ -616,6 +683,8 @@ static u64 prepare_dma_sg(struct cvm_mmc_host *host, struct mmc_data *data)
- 
- static u64 prepare_dma(struct cvm_mmc_host *host, struct mmc_data *data)
- {
-+	if (host->bounce_buffer)
-+		return prepare_dma_bounce(host, data);
- 	if (host->use_sg && data->sg_len > 1)
- 		return prepare_dma_sg(host, data);
- 	else
-@@ -1006,6 +1075,53 @@ static int cvm_mmc_of_parse(struct device *dev, struct cvm_mmc_slot *slot)
- 	return id;
- }
- 
-+static void cvm_allocate_bounce_buffer(struct mmc_host *mmc, struct cvm_mmc_host *host)
-+{
-+	unsigned int max_blocks;
-+	unsigned int size;
-+
-+	/*
-+	 * Cap the bounce buffer at 64KB. Using a bigger bounce buffer
-+	 * has diminishing returns, this is probably because SD/MMC
-+	 * cards are usually optimized to handle this size of requests.
-+	 */
-+	size = SZ_64K;
-+	/*
-+	 * Adjust downwards to maximum request size if this is less
-+	 * than our segment size, else hammer down the maximum
-+	 * request size to the maximum buffer size.
-+	 */
-+	if (mmc->max_req_size < size)
-+		size = mmc->max_req_size;
-+	max_blocks = size / 512;
-+
-+	/*
-+	 * When we just support one segment, we can get significant
-+	 * speedups by the help of a bounce buffer to group scattered
-+	 * reads/writes together.
-+	 */
-+	host->bounce_buffer = devm_kmalloc(mmc->parent, size, GFP_KERNEL);
-+	if (!host->bounce_buffer) {
-+		pr_err("failed to allocate %u bytes for bounce buffer, falling back to single segments\n",
-+		       size);
-+		return;
-+	}
-+
-+	host->bounce_addr = dma_map_single(mmc->parent, host->bounce_buffer,
-+					   size, DMA_BIDIRECTIONAL);
-+	if (dma_mapping_error(mmc->parent, host->bounce_addr))
-+		return;
-+	host->bounce_buffer_size = size;
-+
-+	/* Lie about this since we're bouncing */
-+	mmc->max_segs = max_blocks;
-+	mmc->max_seg_size = size;
-+	mmc->max_req_size = size;
-+
-+	pr_info("bounce up to %u segments into one, max segment size %u bytes\n",
-+		max_blocks, size);
-+}
-+
- int cvm_mmc_of_slot_probe(struct device *dev, struct cvm_mmc_host *host)
- {
- 	struct cvm_mmc_slot *slot;
-@@ -1050,6 +1166,10 @@ int cvm_mmc_of_slot_probe(struct device *dev, struct cvm_mmc_host *host)
- 	/* DMA block count field is 15 bits */
- 	mmc->max_blk_count = 32767;
- 
-+	/* This may alter mmc->*_blk_* parameters */
-+	if (mmc->max_segs == 1)
-+		cvm_allocate_bounce_buffer(mmc, host);
-+
- 	slot->clock = mmc->f_min;
- 	slot->bus_id = id;
- 	slot->cached_rca = 1;
-@@ -1064,6 +1184,7 @@ int cvm_mmc_of_slot_probe(struct device *dev, struct cvm_mmc_host *host)
- 	if (ret) {
- 		dev_err(dev, "mmc_add_host() returned %d\n", ret);
- 		slot->host->slot[id] = NULL;
-+		kfree(host->bounce_buffer);
- 		goto error;
- 	}
- 	return 0;
-@@ -1078,5 +1199,6 @@ int cvm_mmc_of_slot_remove(struct cvm_mmc_slot *slot)
- 	mmc_remove_host(slot->mmc);
- 	slot->host->slot[slot->bus_id] = NULL;
- 	mmc_free_host(slot->mmc);
-+	kfree(slot->host->bounce_buffer);
- 	return 0;
- }
-diff --git a/drivers/mmc/host/cavium.h b/drivers/mmc/host/cavium.h
-index f3eea5eaa678..4fcddb76768d 100644
---- a/drivers/mmc/host/cavium.h
-+++ b/drivers/mmc/host/cavium.h
-@@ -64,6 +64,10 @@ struct cvm_mmc_host {
- 	struct clk *clk;
- 	int sys_freq;
- 
-+	char *bounce_buffer;	/* For packing DMA reads/writes */
-+	dma_addr_t bounce_addr;
-+	unsigned int bounce_buffer_size;
-+
- 	struct mmc_request *current_req;
- 	struct sg_mapping_iter smi;
- 	bool dma_active;
 -- 
-2.39.2
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
