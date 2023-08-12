@@ -2,110 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1877277A0BD
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Aug 2023 17:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BAB77A0D0
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Aug 2023 17:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjHLPMc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Aug 2023 11:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S232749AbjHLPcD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Aug 2023 11:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjHLPMa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Aug 2023 11:12:30 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E834E171B;
-        Sat, 12 Aug 2023 08:12:32 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-686f38692b3so2756662b3a.2;
-        Sat, 12 Aug 2023 08:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691853152; x=1692457952;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rLKDp3T6ffay96ib2FA9KVmMuF8tytRGA1tsnDfcuNs=;
-        b=jcGsstu8S3vEwBz5ePUklEY5prrQ2W3LObE9qaprsVYWf0Ur3o3lzEcNCVWFLiljp6
-         atOLRLplDheA5GNNeQvYpZq6mAXQELTvDjfzHbbqJweBQZiajFGMtWFStUeqiTTz6YFs
-         LyUGh0TIWdHapWZd97lMHdkAD66AoNQxyzA8pAkVh0psC/+gEy1aXtPvte99ManFdF/z
-         dhBxV7FXeLYUMNhUAYx0R2bS4HZ4jA0PdNasgOCTkQCVpa6bq0a2HfxTneQb0bOfl3IK
-         csDoL98bJkLqCgQhpu3WjnD9fRpCB21LmCNok8LOdBRRsh99dSvalYQQjI4eFQwD1K8Z
-         HsHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691853152; x=1692457952;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rLKDp3T6ffay96ib2FA9KVmMuF8tytRGA1tsnDfcuNs=;
-        b=KaZMEz/I/wDyIXIly4v57WnvtUxVyIwlaYP2Gl+60g1V6RAjZyzY/asE7IOzfRzSx4
-         xRnBTs/JhxjuOOlGn0KrQbB4bEJ+6A0/5jq84f/jFi6WDDvJYVEp0PItZqE/19Zm3gSq
-         ANJ2yVEy3p6XEXMjISlMTVsGw9M2SY3prgxYIYgGKULHKrMa7nBJa8KvV3mzk9SpSC+i
-         Ya0jWg9ncvsy636YiZyVPZXx2Aeq4mtGAgdS0P2MrdF/SHPMl9aXZvBrAKe8G+To/K4C
-         hwlI+ARb96fixSL6qG/LrXj7hfDmhJLvsWUkE4bOdWvLS2Aorn+u+EsRPB3tyohkvFWO
-         H7Aw==
-X-Gm-Message-State: AOJu0YxzyvugMeOalyejKRViJhMCCyxmSO/vcEcnBq3DLUR/wOV4ToQx
-        faxXixoSWIvoOcZns9FSWZrYeTFS1R49HXkh
-X-Google-Smtp-Source: AGHT+IHY9afC8zBSv4tsGszq25Eb9wETHJeaXyDIT/2sfKfCfDnWL80tgUYa1XpBgikYc+gDeetNWw==
-X-Received: by 2002:a17:903:32cd:b0:1bc:2d43:c747 with SMTP id i13-20020a17090332cd00b001bc2d43c747mr6830712plr.38.1691853152056;
-        Sat, 12 Aug 2023 08:12:32 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. ([38.114.108.131])
-        by smtp.gmail.com with ESMTPSA id 17-20020a17090a195100b0026b41363887sm1040927pjh.27.2023.08.12.08.12.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Aug 2023 08:12:31 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH 5/5] MAINTAINERS: Add entry for Loongson-1 DWMAC
-Date:   Sat, 12 Aug 2023 23:11:35 +0800
-Message-Id: <20230812151135.1028780-6-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230812151135.1028780-1-keguang.zhang@gmail.com>
-References: <20230812151135.1028780-1-keguang.zhang@gmail.com>
+        with ESMTP id S229547AbjHLPcC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Aug 2023 11:32:02 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30CB9E54
+        for <linux-mips@vger.kernel.org>; Sat, 12 Aug 2023 08:32:03 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 3A3EA92009D; Sat, 12 Aug 2023 17:32:01 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 331FF92009C;
+        Sat, 12 Aug 2023 16:32:01 +0100 (BST)
+Date:   Sat, 12 Aug 2023 16:32:01 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     down in the bunny hole <downinthebunnyhole@gmail.com>
+cc:     linux-mips@vger.kernel.org
+Subject: Re: 90s MIPS eval
+In-Reply-To: <CAAZ8i82Q7qvdw6uDBKMJ=G-DtUaqmDBqpR-0Cyt8xCjsm4aKmQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2308120121020.8596@angie.orcam.me.uk>
+References: <CAAZ8i82Q7qvdw6uDBKMJ=G-DtUaqmDBqpR-0Cyt8xCjsm4aKmQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Update MAINTAINERS to add Loongson-1 DWMAC entry.
+On Wed, 2 Aug 2023, down in the bunny hole wrote:
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+> some of these boards are broken, but I think/hope I can fix their
+> hardware problems
+> - clean up, remove dust
+> - remove sand that have accumulated from having exposed to the elements
+> - replace capacitors
+> - replace LDOs
+> - rebuild damaged tracks due to battery acid leaking
+> - reprogram empty UV-PROM due to long exposition to the sunlight
+> without any protective label
+> - ...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 02a3192195af..3f47f2a43b41 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14309,9 +14309,11 @@ MIPS/LOONGSON1 ARCHITECTURE
- M:	Keguang Zhang <keguang.zhang@gmail.com>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
- F:	arch/mips/include/asm/mach-loongson32/
- F:	arch/mips/loongson32/
- F:	drivers/*/*loongson1*
-+F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
- 
- MIPS/LOONGSON2EF ARCHITECTURE
- M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
--- 
-2.39.2
+ Good luck with bringing these pieces back to life.  Do you have any 
+specific previous experience that tells you to replace LDOs?
 
+> The real problem is that I have no documentation and no source of the 
+> firmware.
+> 
+> Do you happen to know someone who worked with those boards? and can
+> share their UserManual, doc and firmware source?
+
+ I already gave you pointers to documentation on the MIPS/NetBSD mailing 
+list.  I believe that's about what used to exist in public, but I think 
+it's fairly good, down to board schematics, isn't it?
+
+ As to firmware sources for Atlas here's the most recent YAMON release: 
+<https://web.archive.org/web/20140703055905if_/http://www.imgtec.com/tools/mips-tools/downloads/yamon/yamon-src-02.22.tar.gz>.  
+
+ I suggest that you try the binary image first with one of your boards: 
+<https://web.archive.org/web/20140703055848if_/http://www.imgtec.com/tools/mips-tools/downloads/yamon/yamon-bin-02.22.zip> 
+just to make sure you've got your process right, especially as rebuilding 
+the sources with contemporary tools can be tricky (as can be building old 
+tools); note that Atlas wasn't an actively supported board at that point 
+anymore, but relevant code wasn't removed from YAMON either, so it may or 
+may not work with your hardware depending on the constellation of bugs 
+implemented.
+
+ A version of PMON for the Algorithmics boards seems to be available here: 
+<https://web.archive.org/web/20010615095509if_/http://www.algor-uk.com:80/ftp/pub/software/pmon/pmonsrc-current.tar.gz>. 
+I don't know how to use it.  Also sadly none of the Linux source images 
+with board-specific modifications in the directory nearby seem to have 
+been archived, sigh.  I find it regrettable that this stuff has never been 
+upstreamed or we could still have it.  Those were very fine boards.
+
+ I suggest that you do further archive.org archaeology yourself, I just 
+did the parts you may not have been able to figure out without prior 
+knowledge.
+
+> The MIPS Atlas comes with Philips SAA9730, a ~20 old bit combined
+> multimedia and peripheral controller used in thin clients, Internet
+> access terminals, and diskless workstations, that implements
+>   - the VGA interface and Video RAM
+>   - two USB interfaces
+>   - PS/2 Keyboard and PS2 Mouse interface
+>   - I2C interface to serial EEPROM
+>   - Serial Debug RS232 Interface
+>   - Ethernet interface
+> 
+> As far as I can see from feedback in Linux, this chip was/is known to
+> be weird, but I don't find details: has anyone ever worked on it? If
+> so, are there any "notes" about its weird behavior?
+
+ I suggest you check out old Linux kernel sources from before code for 
+Atlas has been removed.  I'm fairly sure there used to be what you are 
+after recorded there, and in any case it's your best bet.  I may be the 
+only person still around who touched that stuff.
+
+> I'm tempted to support it, but it might not be worth it and so I might
+> opt to bypass it altogether.
+
+ Hope this helps, and good luck with your endeavours.  Let us know if you 
+make any progress and feel free to come back with questions.
+
+  Maciej
