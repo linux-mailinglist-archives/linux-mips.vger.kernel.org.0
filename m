@@ -2,115 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36A977A6E8
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Aug 2023 16:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6032E77A75F
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Aug 2023 17:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjHMO0v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 13 Aug 2023 10:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        id S229736AbjHMPY6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 13 Aug 2023 11:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjHMO0v (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Aug 2023 10:26:51 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A37D1707;
-        Sun, 13 Aug 2023 07:26:52 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fe0d5f719dso5707100e87.2;
-        Sun, 13 Aug 2023 07:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691936811; x=1692541611;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nERYgavMyu53FpkZKPSvlBcif90SGUTbA9ZcD7rfnds=;
-        b=KjW+M7pPBmLwPD8jjeoBohrQx9fcB6EJfpXSGIVG28P+hqFxd2D9L1DveW/HcH21r4
-         3mIp3lA7+/ptCKJkgtM9utH4IQYfkOU8M6nrvmAmbPSMHDIKSJRBrolRD3/V8sE9AXfn
-         1c2juWWlmVgagpw3yN8fv+XjSO+vQ5/bSGkE4OT1J7b5NkqyKcJNyM1X+Kn0LTFHmimX
-         s70VYbAUIFm1RWCZPOpl270YK0FNTaNCtkhjj6nC7uww0x1ZBm8xM8E7vwRl6JjihpAx
-         uvGj92Ae2xM0aZ989H/aKO9mIO+yi6ran5Dvu7iyc5+Fkh51UVQ8cnGAv6aJ6VUP0+xl
-         yKwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691936811; x=1692541611;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nERYgavMyu53FpkZKPSvlBcif90SGUTbA9ZcD7rfnds=;
-        b=hzGQz6DwFsevtmVaBwVxCNqz4+9yzpySvoaNwLEl7PGCJCPm0DaswAWXtAr3P2hmjs
-         +Wkg2hkPcFvQShogQVMeGGY9+wyjlhqKY4vS9lnSIyXrIrLJdnWGFDr2fS7iw0fQNgNe
-         +HpbGofLsQ7BhFSFtbsteTm8a+qfJgpluN0ypwG7iIpBH8sRwStJprKJ1wyKiEh/Yes0
-         EqVdlVDH7F4GB3pYNc/V2Xc+KJG+0bpQ3E/zr8RfHnwwNth1Alp3ZPkGAsOPEPW5KvEG
-         4jqoRI1C9wBJ5bDq5N83wXBWAqd9t0JhlzTESLY2E3K6E5mi2jpe5zAtFQsMToVtqLnA
-         s4Rg==
-X-Gm-Message-State: AOJu0Yw1Z/jen82seHlsfuDyXYENuqRKKxOYFpZJaRIEc6zzwujovgZd
-        K2ermhB7Cw+BkrMkmY/tuMM=
-X-Google-Smtp-Source: AGHT+IFE/4CHmeW1skmIqlUuH2txEv+dkkqkzOf3NxwkjM6snWr55prx7caz+p5YHxt0Aw0Chp3P+A==
-X-Received: by 2002:ac2:5e32:0:b0:4fb:81f2:422b with SMTP id o18-20020ac25e32000000b004fb81f2422bmr3921887lfg.54.1691936810543;
-        Sun, 13 Aug 2023 07:26:50 -0700 (PDT)
-Received: from mobilestation ([109.194.233.135])
-        by smtp.gmail.com with ESMTPSA id ep29-20020a056512485d00b004fb73bea65esm1555579lfb.25.2023.08.13.07.26.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Aug 2023 07:26:49 -0700 (PDT)
-Date:   Sun, 13 Aug 2023 17:26:47 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S229578AbjHMPY5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Aug 2023 11:24:57 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF97E0;
+        Sun, 13 Aug 2023 08:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=D6GK4r3g2pMNaj1/iMHxZq3AeQCZgFzlhT3OyuIGXJg=; b=uRaBb/AjtZ/XDK/WInjRB3JU3o
+        6m1Wl7WsYf6RGEtONjYbrd/7QyYu6c5BD4/xibXyQvgO7IhbBfjPnsfsQZcS6PI3yCfuYtqEjCSDc
+        ila7+dAYUp4jG02OEh/FfPskHSsqoYuKlBRhuu983PnIRovYNRIDZ+tSL4tRFKt2iPc8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qVCxZ-003yRr-Jv; Sun, 13 Aug 2023 17:24:53 +0200
+Date:   Sun, 13 Aug 2023 17:24:53 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        wangjianli <wangjianli@cdjrlc.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] irqchip: mips-gic: mark gic_irq_domain_free() static
-Message-ID: <3airu2djxchrycegbfb6ijp6cjlxldybo6vzl7ncfwesuitm3e@uilhuqoa6okq>
-References: <20230810123404.1222332-1-arnd@kernel.org>
- <20230810123404.1222332-2-arnd@kernel.org>
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>
+Subject: Re: [PATCH 0/5] Move Loongson1 MAC arch-code to the driver dir
+Message-ID: <2ed268fd-113a-4da0-8f33-04d618053dca@lunn.ch>
+References: <20230812151135.1028780-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230810123404.1222332-2-arnd@kernel.org>
+In-Reply-To: <20230812151135.1028780-1-keguang.zhang@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 02:33:55PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Sat, Aug 12, 2023 at 11:11:30PM +0800, Keguang Zhang wrote:
+> From: Kelvin Zhang <kelvin.zhang@amlogic.com>
 > 
-> This function is only used locally and should be static to avoid a warning:
-> 
-> drivers/irqchip/irq-mips-gic.c:560:6: error: no previous prototype for 'gic_irq_domain_free' [-Werror=missing-prototypes]
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/irqchip/irq-mips-gic.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-> index 6d5ecc10a8703..76253e864f230 100644
-> --- a/drivers/irqchip/irq-mips-gic.c
-> +++ b/drivers/irqchip/irq-mips-gic.c
-> @@ -557,7 +557,7 @@ static int gic_irq_domain_alloc(struct irq_domain *d, unsigned int virq,
->  	return gic_irq_domain_map(d, virq, hwirq);
->  }
->  
+> In order to convert Loongson1 MAC platform devices to the devicetree
+> nodes, Loongson1 MAC arch-code should be moved to the driver dir.
+>     
+> In other words, this patchset is a preparation for converting
+> Loongson1 platform devices to devicetree.
 
-> -void gic_irq_domain_free(struct irq_domain *d, unsigned int virq,
-> +static void gic_irq_domain_free(struct irq_domain *d, unsigned int virq,
->  			 unsigned int nr_irqs)
+It is a long time since i converted an ARM system from platform data
+to DT. But what we tended to do was to allow both for a period of
+time.
 
-Right. Thanks! Note the descendant line should be aligned to the
-function open parenthesis to preserve the coding style well
-utilized in the driver. With that fixed feel free to add:
+Does a system using platform data still work after this change? The
+first patch seems to delete a lot of code, not just move it around.
 
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Can you restructure this patchset to add the glue layer and DT binding
+in parallel with platform data. Then have a patchset which convert all
+in tree machines to using DT. And then a patchset, submitted in maybe
+6 months time, to remove support for platform data.
 
--Serge(y)
-
->  {
->  }
-> -- 
-> 2.39.2
-> 
+	Andrew
