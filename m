@@ -2,38 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032E77A75F
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Aug 2023 17:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6D577AA87
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Aug 2023 20:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjHMPY6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 13 Aug 2023 11:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S229931AbjHMSYU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 13 Aug 2023 14:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjHMPY5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Aug 2023 11:24:57 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF97E0;
-        Sun, 13 Aug 2023 08:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=D6GK4r3g2pMNaj1/iMHxZq3AeQCZgFzlhT3OyuIGXJg=; b=uRaBb/AjtZ/XDK/WInjRB3JU3o
-        6m1Wl7WsYf6RGEtONjYbrd/7QyYu6c5BD4/xibXyQvgO7IhbBfjPnsfsQZcS6PI3yCfuYtqEjCSDc
-        ila7+dAYUp4jG02OEh/FfPskHSsqoYuKlBRhuu983PnIRovYNRIDZ+tSL4tRFKt2iPc8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qVCxZ-003yRr-Jv; Sun, 13 Aug 2023 17:24:53 +0200
-Date:   Sun, 13 Aug 2023 17:24:53 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        with ESMTP id S229451AbjHMSYT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Aug 2023 14:24:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD5610CE;
+        Sun, 13 Aug 2023 11:24:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72E7961344;
+        Sun, 13 Aug 2023 18:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E21AC433C8;
+        Sun, 13 Aug 2023 18:24:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691951060;
+        bh=wafaiX+7NIalhVrFxtCoQeOwe8RD/H1orkbikL1Pz98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=npS1YE7Q63hnAa/vcBYVkRgcf2caax4v8+OxC4AOKufDFadnJ7yClFzj1rNFOn82H
+         KmkqST7Lc+v8MWgSjN+xlFlq2mFnN+gSl+tAUb10ktGxazkWeUjupPPjKIVmyGDlDu
+         iZCBjfSLtN7YTj4raJVLYN8tpYU16wLSl+2wM4r8yayMrbWTuz3yDBE/09JC2ueNss
+         zD7icQTCVsHy+8F5dPTKT4u7ebE9InzobG6rkhTpRRiPR0ALrZLcIr/hYrQ97X8BpY
+         52Yrhk2efj/lh8WYFE0qLo0uslgLVgGfqknNuiE4pkcJNowEkFMT2hSxNn6x6Y5ebK
+         g+4I/nCpqRq+g==
+Date:   Sun, 13 Aug 2023 20:24:15 +0200
+From:   Simon Horman <horms@kernel.org>
 To:     Keguang Zhang <keguang.zhang@gmail.com>
 Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
@@ -41,43 +48,142 @@ Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>
-Subject: Re: [PATCH 0/5] Move Loongson1 MAC arch-code to the driver dir
-Message-ID: <2ed268fd-113a-4da0-8f33-04d618053dca@lunn.ch>
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH 4/5] net: stmmac: Add glue layer for Loongson-1 SoC
+Message-ID: <ZNkfz1yKD90XmTFL@vergenet.net>
 References: <20230812151135.1028780-1-keguang.zhang@gmail.com>
+ <20230812151135.1028780-5-keguang.zhang@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230812151135.1028780-1-keguang.zhang@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230812151135.1028780-5-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Aug 12, 2023 at 11:11:30PM +0800, Keguang Zhang wrote:
-> From: Kelvin Zhang <kelvin.zhang@amlogic.com>
+On Sat, Aug 12, 2023 at 11:11:34PM +0800, Keguang Zhang wrote:
+> This glue driver is created based on the arch-code
+> implemented earlier with the platform-specific settings.
 > 
-> In order to convert Loongson1 MAC platform devices to the devicetree
-> nodes, Loongson1 MAC arch-code should be moved to the driver dir.
->     
-> In other words, this patchset is a preparation for converting
-> Loongson1 platform devices to devicetree.
+> Use syscon for SYSCON register access.
+> 
+> Partialy based on the previous work by Serge Semin.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 
-It is a long time since i converted an ARM system from platform data
-to DT. But what we tended to do was to allow both for a period of
-time.
+...
 
-Does a system using platform data still work after this change? The
-first patch seems to delete a lot of code, not just move it around.
+Hi Keguang Zhang,
 
-Can you restructure this patchset to add the glue layer and DT binding
-in parallel with platform data. Then have a patchset which convert all
-in tree machines to using DT. And then a patchset, submitted in maybe
-6 months time, to remove support for platform data.
+some minor feedback from my side.
 
-	Andrew
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+
+...
+
+> +const struct reg_field ls1b_dwmac_syscon_regfields[] = {
+> +	[GMAC1_USE_UART1]	= REG_FIELD(LS1X_SYSCON0, 4, 4),
+> +	[GMAC1_USE_UART0]	= REG_FIELD(LS1X_SYSCON0, 3, 3),
+> +	[GMAC1_SHUT]		= REG_FIELD(LS1X_SYSCON1, 13, 13),
+> +	[GMAC0_SHUT]		= REG_FIELD(LS1X_SYSCON1, 12, 12),
+> +	[GMAC1_USE_TXCLK]	= REG_FIELD(LS1X_SYSCON1, 3, 3),
+> +	[GMAC0_USE_TXCLK]	= REG_FIELD(LS1X_SYSCON1, 2, 2),
+> +	[GMAC1_USE_PWM23]	= REG_FIELD(LS1X_SYSCON1, 1, 1),
+> +	[GMAC0_USE_PWM01]	= REG_FIELD(LS1X_SYSCON1, 0, 0)
+> +};
+
+nit: Perhaps ls1b_dwmac_syscon_regfields should be static.
+
+> +
+> +const struct reg_field ls1c_dwmac_syscon_regfields[] = {
+> +	[GMAC_SHUT]		= REG_FIELD(LS1X_SYSCON0, 6, 6),
+> +	[PHY_INTF_SELI]		= REG_FIELD(LS1X_SYSCON1, 28, 30)
+> +};
+
+Likewise, perhaps ls1c_dwmac_syscon_regfields should be static.
+
+...
+
+> +static const struct of_device_id ls1x_dwmac_syscon_match[] = {
+> +	{ .compatible = "loongson,ls1b-syscon", .data = &ls1b_dwmac_syscon },
+> +	{ .compatible = "loongson,ls1c-syscon", .data = &ls1c_dwmac_syscon },
+> +	{ }
+> +};o
+
+I am seeing a warning about ls1x_dwmac_syscon_match being unused.
+I think this is due to CONFIG_OF being unset.
+
+> +
+> +static int ls1x_dwmac_probe(struct platform_device *pdev)
+> +{
+> +	struct plat_stmmacenet_data *plat_dat;
+> +	struct stmmac_resources stmmac_res;
+> +	struct device_node *syscon_np;
+> +	const struct of_device_id *match;
+> +	struct regmap *regmap;
+> +	struct ls1x_dwmac *dwmac;
+> +	const struct ls1x_dwmac_syscon *syscon;
+> +	size_t size;
+> +	int ret;
+> +
+> +	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Probe syscon */
+> +	syscon_np = of_parse_phandle(pdev->dev.of_node, "syscon", 0);
+> +	if (!syscon_np)
+> +		return -ENODEV;
+> +
+> +	match = of_match_node(ls1x_dwmac_syscon_match, syscon_np);
+> +	if (!match) {
+> +		of_node_put(syscon_np);
+> +		return -EINVAL;
+> +	}
+> +	syscon = (const struct ls1x_dwmac_syscon *)match->data;
+> +
+> +	regmap = syscon_node_to_regmap(syscon_np);
+> +	of_node_put(syscon_np);
+> +	if (IS_ERR(regmap)) {
+> +		ret = PTR_ERR(regmap);
+> +		dev_err(&pdev->dev, "Unable to map syscon: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	size = syscon->nr_reg_fields * sizeof(struct regmap_field *);
+> +	dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac) + size, GFP_KERNEL);
+> +	if (!dwmac)
+> +		return -ENOMEM;
+> +
+> +	plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+> +	if (IS_ERR(plat_dat)) {
+> +		dev_err(&pdev->dev, "dt configuration failed\n");
+> +		return PTR_ERR(plat_dat);
+> +	}
+> +
+> +	plat_dat->bsp_priv = dwmac;
+> +	plat_dat->init = ls1x_dwmac_init;
+> +	dwmac->dev = &pdev->dev;
+> +	dwmac->plat_dat = plat_dat;
+> +	dwmac->syscon = syscon;
+> +	dwmac->regmap = regmap;
+> +
+> +	ret = stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
+> +	if (ret)
+> +		goto err_remove_config_dt;
+> +
+> +	return 0;
+> +
+> +err_remove_config_dt:
+> +	if (pdev->dev.of_node)
+> +		stmmac_remove_config_dt(pdev, plat_dat);
+> +
+> +	return ret;
+> +}
+
+...
