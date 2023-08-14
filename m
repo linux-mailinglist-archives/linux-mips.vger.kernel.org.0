@@ -2,64 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4B977B186
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 08:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435B677B2C3
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 09:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjHNGYr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Aug 2023 02:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        id S234227AbjHNHlg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Aug 2023 03:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233203AbjHNGYa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 02:24:30 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49865E63;
-        Sun, 13 Aug 2023 23:24:28 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8CxtPCayNlkSPsXAA--.50258S3;
-        Mon, 14 Aug 2023 14:24:26 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbSOVyNlklH9ZAA--.40559S3;
-        Mon, 14 Aug 2023 14:24:22 +0800 (CST)
-Subject: Re: [PATCH v2 1/3] MIPS: Remove noreturn attribute for die()
-To:     kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <1691985181-28363-2-git-send-email-yangtiezhu@loongson.cn>
- <202308141322.sZl3fv7u-lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <77eb2d4e-29ce-e98a-a6b7-952eb71b6ffe@loongson.cn>
-Date:   Mon, 14 Aug 2023 14:24:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        with ESMTP id S234315AbjHNHl3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 03:41:29 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDFE10C0
+        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 00:41:27 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe2fb9b4d7so36302305e9.1
+        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 00:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691998886; x=1692603686;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zitqku576TZpQnQPr3Oh2ohHuEFbeZPBBxEvo1sZc+Q=;
+        b=c2ibWsrtxlpOl2l93H8I7dwO30O1xssdh4p/RrE2q8N2J8sUQOiLfPy4jrHUDNecWQ
+         B9Xl7UbuevI0/fpeC3Cqz4JjJBdAc1fM3Sx+NRxxOWZwKyMRK3wSy1FRjBCN1vRcCJ3V
+         iNaGpXWAcpuPTu7ilq8+T4iAp1Du1dTft6ZdWvtZ4YteQjS4RMAl8rEkUzkK3U48fPQ3
+         Ta+6PDHsz/O7Bxk8FyAYZKsv9wLW0hBYeG+zmWBSRbPB9cFQZwP3sWc7W4O0II/GdFDH
+         XLs0zYerpdo1H3GjEXSiYzl+d1vN7CnfVNDwP6MnTibEClBZjnwlup1Vh8wpi7JEvqyE
+         zjQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691998886; x=1692603686;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zitqku576TZpQnQPr3Oh2ohHuEFbeZPBBxEvo1sZc+Q=;
+        b=XkR9IoJma8RD8QnbAqvphVprgN8vRaxIG9PW3uSXH7k/WQjbiZHvt3bXHzMpcQUkNO
+         jGtrkVe3w8b+y5aNls7utWPbpcP745C1nrTJ9FasYBap+8ZS1e9ZhLjIq8UsQLT9jIWb
+         th5cYq1fGS8ueQkjJVtlmDswSb2wXMVjEW/Naxspfcy0T7QVzA1qnDG9hgS044DsXvaq
+         G/tUThK6Y/MhWH8QOHRyjqfb82KT3w6I28y8lESc7uP5rtQYpgPqCJwSXEA6kwlvlpmx
+         CHJktCo6kygM7vZrfjBDktQLBM5IcygHmq58wwpVODieuLLjBEgUStxMXaL0ORT+69V+
+         LWJg==
+X-Gm-Message-State: AOJu0Ywduw6JOaBYL7FbOnPBnVmK9PBmM2wjTmUGYuyoYnZqmuE5apxw
+        KnZc9SHAfodQD/RCo79hvm82ng==
+X-Google-Smtp-Source: AGHT+IFYfAjXxtZPBAO6xzW1e3FH1h7mkoQ3yNtVsbL8sLdvSW5eTgH/X76mW18QMBp5iOQDIcXGqw==
+X-Received: by 2002:adf:ee87:0:b0:317:5e0d:c249 with SMTP id b7-20020adfee87000000b003175e0dc249mr6776837wro.35.1691998885785;
+        Mon, 14 Aug 2023 00:41:25 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0? ([2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0])
+        by smtp.gmail.com with ESMTPSA id k3-20020a5d6283000000b00317643a93f4sm13507243wru.96.2023.08.14.00.41.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 00:41:25 -0700 (PDT)
+Message-ID: <81500a13-0fed-e9d4-7f51-552b888a98e1@linaro.org>
+Date:   Mon, 14 Aug 2023 09:41:21 +0200
 MIME-Version: 1.0
-In-Reply-To: <202308141322.sZl3fv7u-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxbSOVyNlklH9ZAA--.40559S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CF45Aw4UCryDAF13KF48AFc_yoW8Cr4Dpa
-        yrWan8Kr4rWr1xGayxK3y7ZF42gan5Ary3Wr1DXr18Za90vFWkGw4Igr4UXry3Kr1DKa4r
-        Xr9Fvrs8K34qy3XCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDU
-        UUU
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 1/2] pwm: Manage owner assignment implicitly for
+ drivers
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Michael Walle <michael@walle.cc>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev
+References: <20230804142707.412137-1-u.kleine-koenig@pengutronix.de>
+ <20230804142707.412137-2-u.kleine-koenig@pengutronix.de>
+Organization: Linaro Developer Services
+In-Reply-To: <20230804142707.412137-2-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,46 +156,107 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 04/08/2023 16:27, Uwe Kleine-König wrote:
+> Instead of requiring each driver to care for assigning the owner member
+> of struct pwm_ops, handle that implicitly using a macro. Note that the
+> owner member has to be moved to struct pwm_chip, as the ops structure
+> usually lives in read-only memory and so cannot be modified.
+> 
+> The upside is that new lowlevel drivers cannot forget the assignment and
+> save one line each. The pwm-crc driver didn't assign .owner, that's not
+> a problem in practise though as the driver cannot be compiled as a
+> module.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>   drivers/gpio/gpio-mvebu.c             |  1 -
+>   drivers/gpu/drm/bridge/ti-sn65dsi86.c |  1 -
+>   drivers/leds/rgb/leds-qcom-lpg.c      |  1 -
+>   drivers/pwm/core.c                    | 24 ++++++++++++++----------
+>   drivers/pwm/pwm-ab8500.c              |  1 -
+>   drivers/pwm/pwm-apple.c               |  1 -
+>   drivers/pwm/pwm-atmel-hlcdc.c         |  1 -
+>   drivers/pwm/pwm-atmel-tcb.c           |  1 -
+>   drivers/pwm/pwm-atmel.c               |  1 -
+>   drivers/pwm/pwm-bcm-iproc.c           |  1 -
+>   drivers/pwm/pwm-bcm-kona.c            |  1 -
+>   drivers/pwm/pwm-bcm2835.c             |  1 -
+>   drivers/pwm/pwm-berlin.c              |  1 -
+>   drivers/pwm/pwm-brcmstb.c             |  1 -
+>   drivers/pwm/pwm-clk.c                 |  1 -
+>   drivers/pwm/pwm-clps711x.c            |  1 -
+>   drivers/pwm/pwm-cros-ec.c             |  1 -
+>   drivers/pwm/pwm-dwc.c                 |  1 -
+>   drivers/pwm/pwm-ep93xx.c              |  1 -
+>   drivers/pwm/pwm-fsl-ftm.c             |  1 -
+>   drivers/pwm/pwm-hibvt.c               |  1 -
+>   drivers/pwm/pwm-img.c                 |  1 -
+>   drivers/pwm/pwm-imx-tpm.c             |  1 -
+>   drivers/pwm/pwm-imx1.c                |  1 -
+>   drivers/pwm/pwm-imx27.c               |  1 -
+>   drivers/pwm/pwm-intel-lgm.c           |  1 -
+>   drivers/pwm/pwm-iqs620a.c             |  1 -
+>   drivers/pwm/pwm-jz4740.c              |  1 -
+>   drivers/pwm/pwm-keembay.c             |  1 -
+>   drivers/pwm/pwm-lp3943.c              |  1 -
+>   drivers/pwm/pwm-lpc18xx-sct.c         |  1 -
+>   drivers/pwm/pwm-lpc32xx.c             |  1 -
+>   drivers/pwm/pwm-lpss.c                |  1 -
+>   drivers/pwm/pwm-mediatek.c            |  1 -
+>   drivers/pwm/pwm-meson.c               |  1 -
 
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org> # pwm-meson
 
-On 08/14/2023 01:24 PM, kernel test robot wrote:
-> Hi Tiezhu,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.5-rc6 next-20230809]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Tiezhu-Yang/MIPS-Remove-noreturn-attribute-for-die/20230814-115513
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/1691985181-28363-2-git-send-email-yangtiezhu%40loongson.cn
-> patch subject: [PATCH v2 1/3] MIPS: Remove noreturn attribute for die()
-> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230814/202308141322.sZl3fv7u-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 12.3.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230814/202308141322.sZl3fv7u-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308141322.sZl3fv7u-lkp@intel.com/
->
+>   drivers/pwm/pwm-microchip-core.c      |  1 -
+>   drivers/pwm/pwm-mtk-disp.c            |  1 -
+>   drivers/pwm/pwm-mxs.c                 |  1 -
+>   drivers/pwm/pwm-ntxec.c               |  1 -
+>   drivers/pwm/pwm-omap-dmtimer.c        |  1 -
+>   drivers/pwm/pwm-pca9685.c             |  1 -
+>   drivers/pwm/pwm-pxa.c                 |  1 -
+>   drivers/pwm/pwm-raspberrypi-poe.c     |  1 -
+>   drivers/pwm/pwm-rcar.c                |  1 -
+>   drivers/pwm/pwm-renesas-tpu.c         |  1 -
+>   drivers/pwm/pwm-rockchip.c            |  1 -
+>   drivers/pwm/pwm-rz-mtu3.c             |  1 -
+>   drivers/pwm/pwm-samsung.c             |  1 -
+>   drivers/pwm/pwm-sifive.c              |  1 -
+>   drivers/pwm/pwm-sl28cpld.c            |  1 -
+>   drivers/pwm/pwm-spear.c               |  1 -
+>   drivers/pwm/pwm-sprd.c                |  1 -
+>   drivers/pwm/pwm-sti.c                 |  1 -
+>   drivers/pwm/pwm-stm32-lp.c            |  1 -
+>   drivers/pwm/pwm-stm32.c               |  1 -
+>   drivers/pwm/pwm-stmpe.c               |  1 -
+>   drivers/pwm/pwm-sun4i.c               |  1 -
+>   drivers/pwm/pwm-sunplus.c             |  1 -
+>   drivers/pwm/pwm-tegra.c               |  1 -
+>   drivers/pwm/pwm-tiecap.c              |  1 -
+>   drivers/pwm/pwm-tiehrpwm.c            |  1 -
+>   drivers/pwm/pwm-twl-led.c             |  2 --
+>   drivers/pwm/pwm-twl.c                 |  2 --
+>   drivers/pwm/pwm-visconti.c            |  1 -
+>   drivers/pwm/pwm-vt8500.c              |  1 -
+>   drivers/pwm/pwm-xilinx.c              |  1 -
+>   drivers/staging/greybus/pwm.c         |  1 -
+>   include/linux/pwm.h                   | 10 ++++++----
+>   68 files changed, 20 insertions(+), 82 deletions(-)
+> 
 
-...
+<snip>
 
->    arch/mips/kernel/traps.c: In function 'die':
->>> arch/mips/kernel/traps.c:426:1: warning: 'noreturn' function does return
->      426 | }
->          | ^
+> diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
+> index 25519cddc2a9..5bea53243ed2 100644
+> --- a/drivers/pwm/pwm-meson.c
+> +++ b/drivers/pwm/pwm-meson.c
+> @@ -335,7 +335,6 @@ static const struct pwm_ops meson_pwm_ops = {
+>   	.free = meson_pwm_free,
+>   	.apply = meson_pwm_apply,
+>   	.get_state = meson_pwm_get_state,
+> -	.owner = THIS_MODULE,
+>   };
+>   
+>   static const char * const pwm_meson8b_parent_names[] = {
 
-Thanks for your report, the follow up patch #2 of this patch series
-can silence the above warning.
-
-[PATCH v2 2/3] MIPS: Modify the declaration for die()
-https://lore.kernel.org/all/1691985181-28363-3-git-send-email-yangtiezhu@loongson.cn/
-
-Thanks,
-Tiezhu
+<snip>
 
