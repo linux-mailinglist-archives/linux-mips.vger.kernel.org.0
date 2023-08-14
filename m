@@ -2,78 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C358177B712
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 12:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D1E77BD6F
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 17:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbjHNKvZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Aug 2023 06:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S230331AbjHNPvB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Aug 2023 11:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjHNKuw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 06:50:52 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F71A18F;
-        Mon, 14 Aug 2023 03:50:51 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fe11652b64so6404529e87.0;
-        Mon, 14 Aug 2023 03:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692010249; x=1692615049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jdzw0rHpRr91l8BAcXFT84UEK+jpp9hS9qWwexkoFFI=;
-        b=NmPp/20s/8vM+ZwsIYdJOdGC62ty7spi+o//yCDIw7eV+WtVltjdUNm1GGqB7HtOw6
-         maAiEFD8FuFnIHynzdsuaEixLZGznc6mwRG2bHcr4HU58eU5E6PfhXXRq0lIqqh8Cp6D
-         0l9gIIt6ojU9awjNQC/hmZWGGdkplUZTmOPItR4pDYPb4cqz7da0AgrnOV/LF/orhjut
-         YkE8m3149AoSPwqL3Cssu27ELbAmE6sUxq1+660NRw2KQWaSbJkoJymj06j7zrTWEHnq
-         KJnIyVMeLR4Pv5EUzuNDQmhbr00j3jbLhB7neqC88XmVaD1y9glSQprWUZC+6GWleoq2
-         TafQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692010249; x=1692615049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jdzw0rHpRr91l8BAcXFT84UEK+jpp9hS9qWwexkoFFI=;
-        b=MSoNGlGcIudhEtndDd+vzLZhIP256uDJHRGqaq6jStqbgbIgpgGBtYR/baZXw0ZtF5
-         1HdwePuJySFLjA+97T0Ui7rzNEb4zrGBKKhr8VUmtml7eyAWE2E42nyipq9/AjeYgg6R
-         r+STLA+5PfmDRb/CWVnK4wH0wniA3ZOoSX1Fhr6tMUqV59p+3KBqaxD92WTEGSx1BeZa
-         DvPp4F/1i0si9IK5yWpg3SSUyRJvtKSYn0E6u4sKWcU8prB/nPFW6PYamhoVvbGMrr95
-         vR4NkLzaGGr0l/VjduE5Y8PxaCL0h4tJ9qZw1MZ+7j3WnnCJAkB35xBIqEE5hK40buOs
-         LgLA==
-X-Gm-Message-State: AOJu0YwbUXqaRJiOVc2l0w+FObqRfs1QbTNWlNvdBh8L2K3vsWRPH3rJ
-        q4JTeyU1TIBCVkmBkgkIDGM4Gsknkuz02WGazNs=
-X-Google-Smtp-Source: AGHT+IH+lmfKPWRI9A8rGnFGRYYJU7cvFv8MbgRMB14ww/vT51xVFwFoqjwMMqEahd51AXKqIih0ZuZ1P98cjYlt25U=
-X-Received: by 2002:a05:6512:3b0f:b0:4fb:cab9:ddf with SMTP id
- f15-20020a0565123b0f00b004fbcab90ddfmr7501155lfv.57.1692010249295; Mon, 14
- Aug 2023 03:50:49 -0700 (PDT)
+        with ESMTP id S230330AbjHNPun (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 11:50:43 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786CA3
+        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 08:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=FYep
+        wEYtDzQvBpaqNq01ju5b6nuQwAUfmhoLQUMczxo=; b=hW+W0wmzjGTNGIoKy/ap
+        lEHAoznAyAfVL7icFHh183O6QhmQ/RFFz1bBxMIFqN4sVGcow6I1ev2ZyDM2yY5a
+        F0+vrfaAjzKbzTMTKdFnmxIFmX/mX5oTizcVu7pBpP3CXXNzXZBPkfpbSm8fZD3p
+        47yT+S4QJ0m1XyEsNDwmnV2MIbyGCMdsu+wttTFMTjG3HwB1o4JmmWtii6wfbTh9
+        WiiGlmpGudcaDNcJ1BVQCga1C1QXrrtJ+p18X1Sk5WWD8G29cY2FHbz9oITK8IW4
+        1Ias5CaMQ6Dm+VoLFhG49pbAADA+vtcd8Wj/FXZxUFPGFr3SfY0eknRzKvcJU8F/
+        Lg==
+Received: (qmail 95061 invoked from network); 14 Aug 2023 17:50:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2023 17:50:30 +0200
+X-UD-Smtp-Session: l3s3148p1@9OabBeQC6KAgAwDPXxIFAOXxDpD4UZq0
+Date:   Mon, 14 Aug 2023 17:50:30 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Jochen Friedrich <jochen@scram.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Stefan Roese <sr@denx.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-actions@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] I2C: Explicitly include correct DT includes
+Message-ID: <ZNpNRlLSdjR7Zfv0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh@kernel.org>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Jochen Friedrich <jochen@scram.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Stefan Roese <sr@denx.de>, Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>, Peter Rosin <peda@axentia.se>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-actions@lists.infradead.org, linux-tegra@vger.kernel.org
+References: <20230714174619.4057577-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20230812151135.1028780-1-keguang.zhang@gmail.com>
- <20230812151135.1028780-5-keguang.zhang@gmail.com> <ZNkfz1yKD90XmTFL@vergenet.net>
-In-Reply-To: <ZNkfz1yKD90XmTFL@vergenet.net>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 14 Aug 2023 18:50:32 +0800
-Message-ID: <CAJhJPsXOUOB_0kWcKC0Sy8F9qPbkU+NfVFRz-Hkk8eS-YuUS7w@mail.gmail.com>
-Subject: Re: [PATCH 4/5] net: stmmac: Add glue layer for Loongson-1 SoC
-To:     Simon Horman <horms@kernel.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="17Pm2F6dlWUYnS2d"
+Content-Disposition: inline
+In-Reply-To: <20230714174619.4057577-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,142 +170,45 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 2:24=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
-te:
->
-> On Sat, Aug 12, 2023 at 11:11:34PM +0800, Keguang Zhang wrote:
-> > This glue driver is created based on the arch-code
-> > implemented earlier with the platform-specific settings.
-> >
-> > Use syscon for SYSCON register access.
-> >
-> > Partialy based on the previous work by Serge Semin.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
->
-> ...
->
-> Hi Keguang Zhang,
->
-> some minor feedback from my side.
->
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c b/dr=
-ivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
->
-> ...
->
-> > +const struct reg_field ls1b_dwmac_syscon_regfields[] =3D {
-> > +     [GMAC1_USE_UART1]       =3D REG_FIELD(LS1X_SYSCON0, 4, 4),
-> > +     [GMAC1_USE_UART0]       =3D REG_FIELD(LS1X_SYSCON0, 3, 3),
-> > +     [GMAC1_SHUT]            =3D REG_FIELD(LS1X_SYSCON1, 13, 13),
-> > +     [GMAC0_SHUT]            =3D REG_FIELD(LS1X_SYSCON1, 12, 12),
-> > +     [GMAC1_USE_TXCLK]       =3D REG_FIELD(LS1X_SYSCON1, 3, 3),
-> > +     [GMAC0_USE_TXCLK]       =3D REG_FIELD(LS1X_SYSCON1, 2, 2),
-> > +     [GMAC1_USE_PWM23]       =3D REG_FIELD(LS1X_SYSCON1, 1, 1),
-> > +     [GMAC0_USE_PWM01]       =3D REG_FIELD(LS1X_SYSCON1, 0, 0)
-> > +};
->
-> nit: Perhaps ls1b_dwmac_syscon_regfields should be static.
->
-> > +
-> > +const struct reg_field ls1c_dwmac_syscon_regfields[] =3D {
-> > +     [GMAC_SHUT]             =3D REG_FIELD(LS1X_SYSCON0, 6, 6),
-> > +     [PHY_INTF_SELI]         =3D REG_FIELD(LS1X_SYSCON1, 28, 30)
-> > +};
->
-> Likewise, perhaps ls1c_dwmac_syscon_regfields should be static.
->
-Will do.
-Thanks!
-> ...
->
-> > +static const struct of_device_id ls1x_dwmac_syscon_match[] =3D {
-> > +     { .compatible =3D "loongson,ls1b-syscon", .data =3D &ls1b_dwmac_s=
-yscon },
-> > +     { .compatible =3D "loongson,ls1c-syscon", .data =3D &ls1c_dwmac_s=
-yscon },
-> > +     { }
-> > +};o
->
-> I am seeing a warning about ls1x_dwmac_syscon_match being unused.
-> I think this is due to CONFIG_OF being unset.
 
-Will fix these warnings.
->
-> > +
-> > +static int ls1x_dwmac_probe(struct platform_device *pdev)
-> > +{
-> > +     struct plat_stmmacenet_data *plat_dat;
-> > +     struct stmmac_resources stmmac_res;
-> > +     struct device_node *syscon_np;
-> > +     const struct of_device_id *match;
-> > +     struct regmap *regmap;
-> > +     struct ls1x_dwmac *dwmac;
-> > +     const struct ls1x_dwmac_syscon *syscon;
-> > +     size_t size;
-> > +     int ret;
-> > +
-> > +     ret =3D stmmac_get_platform_resources(pdev, &stmmac_res);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Probe syscon */
-> > +     syscon_np =3D of_parse_phandle(pdev->dev.of_node, "syscon", 0);
-> > +     if (!syscon_np)
-> > +             return -ENODEV;
-> > +
-> > +     match =3D of_match_node(ls1x_dwmac_syscon_match, syscon_np);
-> > +     if (!match) {
-> > +             of_node_put(syscon_np);
-> > +             return -EINVAL;
-> > +     }
-> > +     syscon =3D (const struct ls1x_dwmac_syscon *)match->data;
-> > +
-> > +     regmap =3D syscon_node_to_regmap(syscon_np);
-> > +     of_node_put(syscon_np);
-> > +     if (IS_ERR(regmap)) {
-> > +             ret =3D PTR_ERR(regmap);
-> > +             dev_err(&pdev->dev, "Unable to map syscon: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     size =3D syscon->nr_reg_fields * sizeof(struct regmap_field *);
-> > +     dwmac =3D devm_kzalloc(&pdev->dev, sizeof(*dwmac) + size, GFP_KER=
-NEL);
-> > +     if (!dwmac)
-> > +             return -ENOMEM;
-> > +
-> > +     plat_dat =3D stmmac_probe_config_dt(pdev, stmmac_res.mac);
-> > +     if (IS_ERR(plat_dat)) {
-> > +             dev_err(&pdev->dev, "dt configuration failed\n");
-> > +             return PTR_ERR(plat_dat);
-> > +     }
-> > +
-> > +     plat_dat->bsp_priv =3D dwmac;
-> > +     plat_dat->init =3D ls1x_dwmac_init;
-> > +     dwmac->dev =3D &pdev->dev;
-> > +     dwmac->plat_dat =3D plat_dat;
-> > +     dwmac->syscon =3D syscon;
-> > +     dwmac->regmap =3D regmap;
-> > +
-> > +     ret =3D stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
-> > +     if (ret)
-> > +             goto err_remove_config_dt;
-> > +
-> > +     return 0;
-> > +
-> > +err_remove_config_dt:
-> > +     if (pdev->dev.of_node)
-> > +             stmmac_remove_config_dt(pdev, plat_dat);
-> > +
-> > +     return ret;
-> > +}
->
-> ...
+--17Pm2F6dlWUYnS2d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jul 14, 2023 at 11:46:16AM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Applied to for-next, thanks!
 
 
+--17Pm2F6dlWUYnS2d
+Content-Type: application/pgp-signature; name="signature.asc"
 
---=20
-Best regards,
+-----BEGIN PGP SIGNATURE-----
 
-Keguang Zhang
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaTUIACgkQFA3kzBSg
+KbZaIg//XMJpFp3VA+SvgguI2F+p7s5pQ1LhS3BPR9cxnpeb9QOe8vkSLthUd35o
+9ImYsH82xfRxJL0/+gJ0axhPMMdC1Sf8wudKBxibLmYvlZnFyVXjzXPSjEbpuwjR
+JjrM8toQVug/vn3nAiHwd3PMG/rtWFhfv/sGSb7IscOaQOtJ52qdGzJWFlU81blQ
+4SXETUaeM+l3O10jJBpcL+WI/J5Gog31ORqi14hh4AMOO/GkEZrMBO1smByiPiGU
+oOWPfXyBDmT6O9e3MTtn5TCtrDHdcWI/JHnpl1pyiEjBFV6GmjcA+Ra36+L7RwCc
+1kIDHKc3OOLluAkbuZF+28s/SqDEXoued+TUfDTYtyR1PgqCDEM/W0G3pcfV49uM
+41m2pavMgKoYY6FnGaaS5/qghLvKAzqn9X+JqpH0TzvTaS3rIZl6izdrCvauL1Cg
+b+/wb9BUtfV3EgCUV0ruuvvlIgjGaBu9WW7vMPhmkfRMVjFTVgI+NTEIGfpDc8+i
+OVluYvBPotiiUP/SYw6Gy8jqgZmVByWr5RsGu3b/1x8Sqq9ia8Jh66UaUUUhLSRW
+MUoxnGxJb7gQTYQSv3q1ZDJJhHAhsTT1HMN5q7n3ueAXL1Ef3HmZ4Q/87YU5jJbn
+nNHpy13KwdwzqPw2iKii9Ab8GWvWjN8siNfPM2GCJvEH2/TfoyY=
+=PhdP
+-----END PGP SIGNATURE-----
+
+--17Pm2F6dlWUYnS2d--
