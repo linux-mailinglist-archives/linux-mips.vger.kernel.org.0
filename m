@@ -2,116 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A107C77C094
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 21:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55D777C128
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 22:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjHNTRO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Aug 2023 15:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S232294AbjHNT7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Aug 2023 15:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbjHNTRA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 15:17:00 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21368110
-        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 12:16:56 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fe8a1591c7so32045555e9.3
-        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 12:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692040614; x=1692645414;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zk52dSLQXvnZfsG9cL2HfOVudu1/6ehfGHh58zQ7WKc=;
-        b=WzK+v8D9fBfcGt2l2zHWaJQVsWPb5h+54DMm28xTsegwHgkSeTRz6GpZZld8gZNFpJ
-         bz8bhG4r0P0kbyyt1Fv8mToIOohdCD1qPxpbVI511WA25ZcOK9h/TxiW31/KtTy4vVl9
-         jLNSz794VBldh4CAUXtaEdaxYKUHhvnKln5SABRePzS1MRgFJu3LG8ZpC1ZICvQvuwBq
-         DBOkMklhjN06SmZh2LWKaeULJ3lOpcWPxqgMZVSkUAlcSsNI+coIPF/Ncwm5C7BrGv7g
-         YMhU5Dj4rv1Igg0cy4fQTn4vsPV2G8IuuOF+oPqmtI/3iYjckh5aLzXGnBjHt2CH8FJp
-         kw2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692040614; x=1692645414;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zk52dSLQXvnZfsG9cL2HfOVudu1/6ehfGHh58zQ7WKc=;
-        b=aCfBBWxUZBx8+shfjLnff+AZiuMPwpC7Lo86hDv9GjlMW5iARVAFEXQXW2P20GLFS/
-         wAH46T/LnkNh/o9lmNixA81nFfv5uXVqEJ6cOph9JTaTdO+Uhn+40a0DKGCu9pRKENog
-         +3/s4zvmPoqqyJi36KUz87fo5IEoCl0Q0cu26xSglHtjGcSCIkVdm/ILFsJPaG5eNCyk
-         CsjU814b3qohA+myu416Ij/VANLRbEcw2Z1Lcx0u1A/80H8cQeeepqItpsSIwcC9GdoN
-         0zOS1Bsc/L8gAZW1Ib1us5AkoLKkuoBLbXrjB9LHsT80HKO3cFTnmPaoazkrgNAQGvCv
-         burg==
-X-Gm-Message-State: AOJu0YzOz75+mx2Ez6owEpkx/c+d2oXjrHNfqOS2bhR4RdnezwL6ieAf
-        IG1GhN0D+7xX6Vfhx3Ns8w3Tag==
-X-Google-Smtp-Source: AGHT+IHjDcPCnZSFZ3J95HmdbzIaL2PJhovvSQpmTT7VnaTH2iV8HA5WTvsuus5E6GYRLw8+/p7wFQ==
-X-Received: by 2002:a7b:ca52:0:b0:3fe:2e0d:b715 with SMTP id m18-20020a7bca52000000b003fe2e0db715mr8105986wml.18.1692040614620;
-        Mon, 14 Aug 2023 12:16:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05600c025400b003fa98908014sm18330895wmj.8.2023.08.14.12.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 12:16:54 -0700 (PDT)
-Message-ID: <a24a0b8a-ee97-e440-c67a-df315027075c@linaro.org>
-Date:   Mon, 14 Aug 2023 21:16:52 +0200
+        with ESMTP id S232395AbjHNT7d (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 15:59:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A545D10E5
+        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 12:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:Subject:From:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=aTF19kglWG/MU4R+nI9l6Vm0zHIQgtzfTiybOjPngaE=; b=qX0SeuccG/D1b4Tx7WNBsNwNie
+        4mXhESWAypVhEeQvuNVb2OWrKj1sshxHMgAmpvEy2PBiL4sKp4ATNFtQmI2e4j8JunqdeLVEwa1GA
+        SHzbnvTYcm2Zd13hW5mz8+RCfP9Xa5EnZe1+ffsSjGLOrt9D4nmjNNc+MvO3TcUX0/2jbUBFwrIUI
+        aB6vu7HJwBPRIkiXj56Ld+kZXvAuO6DZ6y508szBxqvmPKhLWwIZS1cnFxupjFUGX15yntiNFHO+E
+        7jHNVuoEfpmqmESHTQi6kry3yxaR2gienImI4No5B67WCaWutg2U0OlUzBCOLOqvF8B7ma0QzNIjk
+        lKfzAV9A==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qVdir-000G0L-0m;
+        Mon, 14 Aug 2023 19:59:29 +0000
+Message-ID: <3484e4ea-1743-8d66-0e7b-4f1576e3a32e@infradead.org>
+Date:   Mon, 14 Aug 2023 12:59:28 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 5/5] MAINTAINERS: Add entry for Loongson-1 DWMAC
 Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20230812151135.1028780-1-keguang.zhang@gmail.com>
- <20230812151135.1028780-6-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230812151135.1028780-6-keguang.zhang@gmail.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: build error with DECSTATION and FB_MAXINE
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/08/2023 17:11, Keguang Zhang wrote:
-> Update MAINTAINERS to add Loongson-1 DWMAC entry.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->  MAINTAINERS | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 02a3192195af..3f47f2a43b41 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14309,9 +14309,11 @@ MIPS/LOONGSON1 ARCHITECTURE
->  M:	Keguang Zhang <keguang.zhang@gmail.com>
->  L:	linux-mips@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
->  F:	arch/mips/include/asm/mach-loongson32/
->  F:	arch/mips/loongson32/
->  F:	drivers/*/*loongson1*
-> +F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+Hi,
 
-Since you do not add dedicated entry, just squash each part with commit
-adding this file.
+When
+# CONFIG_32BIT is not set
+CONFIG_64BIT=y
+CONFIG_MACH_DECSTATION=y
+# CONFIG_CPU_R3000 is not set
+CONFIG_CPU_R4X00=y
+CONFIG_FB_MAXINE=y
 
-Best regards,
-Krzysztof
+the build fails due to the use of the KSEG1ADDR() macro, which is only
+defined for 32BIT:
 
+In file included from ../drivers/video/fbdev/maxinefb.c:34:
+../drivers/video/fbdev/maxinefb.c: In function 'maxinefb_ims332_write_register':
+../include/video/maxinefb.h:16:41: error: implicit declaration of function 'KSEG1ADDR'; did you mean 'CKSEG1ADDR'? [-Werror=implicit-function-declaration]
+   16 | #define MAXINEFB_IMS332_ADDRESS         KSEG1ADDR(0x1c140000)
+      |                                         ^~~~~~~~~
+../drivers/video/fbdev/maxinefb.c:66:49: note: in expansion of macro 'MAXINEFB_IMS332_ADDRESS'
+   66 |         register unsigned char *regs = (char *) MAXINEFB_IMS332_ADDRESS;
+      |                                                 ^~~~~~~~~~~~~~~~~~~~~~~
+../drivers/video/fbdev/maxinefb.c:66:40: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+   66 |         register unsigned char *regs = (char *) MAXINEFB_IMS332_ADDRESS;
+      |                                        ^
+../drivers/video/fbdev/maxinefb.c: In function 'maxinefb_ims332_read_register':
+../drivers/video/fbdev/maxinefb.c:76:40: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+   76 |         register unsigned char *regs = (char *) MAXINEFB_IMS332_ADDRESS;
+      |    
+
+
+Any suggestions or patches for this?
+thanks.
+
+-- 
+~Randy
