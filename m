@@ -2,213 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D1E77BD6F
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 17:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5D677BDD3
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 18:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjHNPvB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Aug 2023 11:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S231848AbjHNQVh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 14 Aug 2023 12:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjHNPun (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 11:50:43 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786CA3
-        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 08:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=date:from:to:cc:subject:message-id
-        :references:mime-version:content-type:in-reply-to; s=k1; bh=FYep
-        wEYtDzQvBpaqNq01ju5b6nuQwAUfmhoLQUMczxo=; b=hW+W0wmzjGTNGIoKy/ap
-        lEHAoznAyAfVL7icFHh183O6QhmQ/RFFz1bBxMIFqN4sVGcow6I1ev2ZyDM2yY5a
-        F0+vrfaAjzKbzTMTKdFnmxIFmX/mX5oTizcVu7pBpP3CXXNzXZBPkfpbSm8fZD3p
-        47yT+S4QJ0m1XyEsNDwmnV2MIbyGCMdsu+wttTFMTjG3HwB1o4JmmWtii6wfbTh9
-        WiiGlmpGudcaDNcJ1BVQCga1C1QXrrtJ+p18X1Sk5WWD8G29cY2FHbz9oITK8IW4
-        1Ias5CaMQ6Dm+VoLFhG49pbAADA+vtcd8Wj/FXZxUFPGFr3SfY0eknRzKvcJU8F/
-        Lg==
-Received: (qmail 95061 invoked from network); 14 Aug 2023 17:50:30 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2023 17:50:30 +0200
-X-UD-Smtp-Session: l3s3148p1@9OabBeQC6KAgAwDPXxIFAOXxDpD4UZq0
-Date:   Mon, 14 Aug 2023 17:50:30 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Jochen Friedrich <jochen@scram.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Roese <sr@denx.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-actions@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] I2C: Explicitly include correct DT includes
-Message-ID: <ZNpNRlLSdjR7Zfv0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Jochen Friedrich <jochen@scram.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Stefan Roese <sr@denx.de>, Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>, Peter Rosin <peda@axentia.se>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-actions@lists.infradead.org, linux-tegra@vger.kernel.org
-References: <20230714174619.4057577-1-robh@kernel.org>
+        with ESMTP id S230396AbjHNQVO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 12:21:14 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8556EF1;
+        Mon, 14 Aug 2023 09:21:13 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5899ed05210so47216097b3.3;
+        Mon, 14 Aug 2023 09:21:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692030072; x=1692634872;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3LQvPgG2h1/fLfnTL/EIPEHhur13Ow7MR7eEqaGIBCU=;
+        b=BcM161IaZP8yd1CaIbtvBSkxW+TPDrPTs46TxOWnWOJ3iE/Tvxaw+AwkI2VUMT1lkt
+         DRnFw82wDxrUz3kmncvnj/4XbqIC7fuM5//L/24fb0Hn6/n/FuBB0ecwYw4ywCAyL50a
+         kfKStLvIFn9vZ08bJUNXLwLC67Vj9wLVwl200czXCP2bYwmH7IQnGlOBIcnm45B45K3g
+         BNPkcEW0cIf6xrtXDnGY0OKE6ClxJaQEiFsvUyU6hjoDBhpmgvjeoH1gvmf4xKS3y7pc
+         DiyjAPgJqLZ+AqXwr26XhNBledxtN+GqB6trdlsDYMHOmottGDczC8Ro6bZ5tgD7sgBm
+         +32g==
+X-Gm-Message-State: AOJu0YwAqLwfo6YFYRytX4pNCN1OabM7WHtnmZICBaooUSkCoTQQez6c
+        j/IUwieJabsL216LvSs21rtssTXc042Ayg==
+X-Google-Smtp-Source: AGHT+IEf6L/iS4ShmH/QjRXmuRIkIRuzWe1qcS9HzdpxBcSEUj2dYpsYjDG4kteu1T+H/RSdVXV5aQ==
+X-Received: by 2002:a0d:d684:0:b0:583:d32f:ed61 with SMTP id y126-20020a0dd684000000b00583d32fed61mr11057131ywd.27.1692030072394;
+        Mon, 14 Aug 2023 09:21:12 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id h125-20020a0df783000000b005869cf151ebsm2831363ywf.144.2023.08.14.09.21.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 09:21:12 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-d62bdd1a97dso4592481276.3;
+        Mon, 14 Aug 2023 09:21:12 -0700 (PDT)
+X-Received: by 2002:a25:ae98:0:b0:d0f:926b:c734 with SMTP id
+ b24-20020a25ae98000000b00d0f926bc734mr10259367ybj.61.1692030071857; Mon, 14
+ Aug 2023 09:21:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="17Pm2F6dlWUYnS2d"
-Content-Disposition: inline
-In-Reply-To: <20230714174619.4057577-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAHk-=wi4Yau-3Bsv2rXYmtXMTLaj3=Wyf4cdM6d89czFvkVsRQ@mail.gmail.com>
+ <20230724122626.1701631-1-geert@linux-m68k.org> <88f83d73-781d-bdc-126-aa629cb368c@linux-m68k.org>
+ <202307281551.D894AA39@keescook>
+In-Reply-To: <202307281551.D894AA39@keescook>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Aug 2023 18:20:59 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXRiacSxqDzYmakWAQB99kYvY0Bi9zALP9ZnC9Xs_xO5g@mail.gmail.com>
+Message-ID: <CAMuHMdXRiacSxqDzYmakWAQB99kYvY0Bi9zALP9ZnC9Xs_xO5g@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.5-rc3
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Kees,
 
---17Pm2F6dlWUYnS2d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, Jul 29, 2023 at 12:57 AM Kees Cook <keescook@chromium.org> wrote:
+> On Mon, Jul 24, 2023 at 02:43:02PM +0200, Geert Uytterhoeven wrote:
+> > On Mon, 24 Jul 2023, Geert Uytterhoeven wrote:
+> > > JFYI, when comparing v6.5-rc3[1] to v6.5-rc2[3], the summaries are:
+> > >  - build errors: +5/-0
+> >
+> >   + /kisskb/src/include/linux/fortify-string.h: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]:  => 583:25, 493:25
+> >
+> > mips-gcc13/mips-allmodconfig
+> >
+> > Full context:
+> >
+> >     In function 'fortify_memset_chk',
+> >       inlined from 'memset_io' at /kisskb/src/arch/mips/include/asm/io.h:486:2,
+> >       inlined from 'build_auth_frame' at /kisskb/src/drivers/net/wireless/legacy/ray_cs.c:2697:2:
+> >     /kisskb/src/include/linux/fortify-string.h:493:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+> >       493 |                         __write_overflow_field(p_size_field, size);
+> >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     In function 'fortify_memcpy_chk',
+> >       inlined from 'memcpy_toio' at /kisskb/src/arch/mips/include/asm/io.h:494:2,
+> >       inlined from 'translate_frame' at /kisskb/src/drivers/net/wireless/legacy/ray_cs.c:955:3,
+> >       inlined from 'ray_hw_xmit.constprop' at /kisskb/src/drivers/net/wireless/legacy/ray_cs.c:912:12:
+> >     /kisskb/src/include/linux/fortify-string.h:583:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+> >       583 |                         __write_overflow_field(p_size_field, size);
+> >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > Single-element flexible array abuse in drivers/net/wireless/legacy/rayctl.h:tx_msg.var
+>
+> ^^^^
+> is this line from you or is there a tool outputting this? Because, yes,
 
-On Fri, Jul 14, 2023 at 11:46:16AM -0600, Rob Herring wrote:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it as merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+It is a line from me.
 
-Applied to for-next, thanks!
+(should I take it as a compliment that I start sounding like a tool? ;-)
 
+> very true:
+>
+> struct tx_msg {
+>     struct tib_structure tib;
+>     struct phy_header phy;
+>     struct mac_header mac;
+>     UCHAR  var[1];
+> };
+>
+> I'll send a patch.
 
---17Pm2F6dlWUYnS2d
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks, I noticed you took care while I was enjoying summer holidays ;-)
 
------BEGIN PGP SIGNATURE-----
+Gr{oetje,eeting}s,
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaTUIACgkQFA3kzBSg
-KbZaIg//XMJpFp3VA+SvgguI2F+p7s5pQ1LhS3BPR9cxnpeb9QOe8vkSLthUd35o
-9ImYsH82xfRxJL0/+gJ0axhPMMdC1Sf8wudKBxibLmYvlZnFyVXjzXPSjEbpuwjR
-JjrM8toQVug/vn3nAiHwd3PMG/rtWFhfv/sGSb7IscOaQOtJ52qdGzJWFlU81blQ
-4SXETUaeM+l3O10jJBpcL+WI/J5Gog31ORqi14hh4AMOO/GkEZrMBO1smByiPiGU
-oOWPfXyBDmT6O9e3MTtn5TCtrDHdcWI/JHnpl1pyiEjBFV6GmjcA+Ra36+L7RwCc
-1kIDHKc3OOLluAkbuZF+28s/SqDEXoued+TUfDTYtyR1PgqCDEM/W0G3pcfV49uM
-41m2pavMgKoYY6FnGaaS5/qghLvKAzqn9X+JqpH0TzvTaS3rIZl6izdrCvauL1Cg
-b+/wb9BUtfV3EgCUV0ruuvvlIgjGaBu9WW7vMPhmkfRMVjFTVgI+NTEIGfpDc8+i
-OVluYvBPotiiUP/SYw6Gy8jqgZmVByWr5RsGu3b/1x8Sqq9ia8Jh66UaUUUhLSRW
-MUoxnGxJb7gQTYQSv3q1ZDJJhHAhsTT1HMN5q7n3ueAXL1Ef3HmZ4Q/87YU5jJbn
-nNHpy13KwdwzqPw2iKii9Ab8GWvWjN8siNfPM2GCJvEH2/TfoyY=
-=PhdP
------END PGP SIGNATURE-----
+                        Geert
 
---17Pm2F6dlWUYnS2d--
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
