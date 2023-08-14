@@ -2,76 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CC277AF9F
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 04:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4671777AFD4
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Aug 2023 05:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjHNCkA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 13 Aug 2023 22:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S231730AbjHNDCw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 13 Aug 2023 23:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbjHNCjh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Aug 2023 22:39:37 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0E2E5C;
-        Sun, 13 Aug 2023 19:39:36 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52557cc5e7bso1236109a12.0;
-        Sun, 13 Aug 2023 19:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691980774; x=1692585574;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o88IqoMul1NmqneJL1pozmAF/JAULtWS//3BlTdUYhw=;
-        b=dx21bchEmSOgW5N3EaIdXyNZMMaPjqDFkAXC3jm7P2oIhejYkgnucnK+3RgO24hLQ6
-         G7DVRadbYUeOpFMCJ47uxtwJkQ//MtaOsVYMbvzzfle/qUjYZR3gplWY8sQQ7yWAmEJ3
-         n7AOwH6jvNVAgMtL2sMSSP/v4XGz8CfG3BJk5l2GoFeSMBWppWbJ8P/HNfIvbYyI17DA
-         uNMTHQhWtBATZTt2o+3pdoCdxK/rb+0290MS5BQ2OwFwWV/i7MxIikxt3CzvGvSndqU4
-         QKbkknYwg1XFltEBOLovboZsqdsZRI/9aLaqAlwInWg3sAnZX7INWlMGdu4zEDnyc93v
-         3v+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691980774; x=1692585574;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o88IqoMul1NmqneJL1pozmAF/JAULtWS//3BlTdUYhw=;
-        b=gd1lC6b58iIX5xSeuZhOZvqNe7x3DUrm5Sk0lkUVePdASrOEEoo50keVgOexl5zysV
-         Tgr3FNPjGBBYGpxzu6HRVA4dEnLwWJYeTp4wnVf8J09Ijm0c2MiAFaeN7PED33adGUKp
-         2iuU9ObnDcxAZfYpwcvbLbxHSrmBr/aL3KmfRkqaYZuUBeMxH3X9gv7Gpo0AQw2/s9wv
-         D50bdOVrw2JwjVBCymgvgvdBuyHTdMe17+E4MPm1AeE30XAkKbz8KvLLcPOi7RBQ4rG0
-         Xc5b+jc1oFFS4JDzKXQGjPSulUAkJ+9neIC0AfY5aeuKL94jVMAaxqY4PQ3Lj8bSE1e0
-         WyLg==
-X-Gm-Message-State: AOJu0YwFNxxofwZ8Ij0ZIpYW1nDxC1qTHQoQQcOtN16uVWsuAMidJfBO
-        9Jhii2/OTjUe2V3yXLLjTXo8XZRYE2cza0PcwMc=
-X-Google-Smtp-Source: AGHT+IH5OtWDXARgolJQKyqZo0mDfZ3BN8MY79h7fU3Mkky5lG/CWHlqGHigQFgUTdawJ08wpQoU2tcutsoFIOTpQyU=
-X-Received: by 2002:aa7:d84e:0:b0:523:c6fa:871d with SMTP id
- f14-20020aa7d84e000000b00523c6fa871dmr7701653eds.19.1691980774374; Sun, 13
- Aug 2023 19:39:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230812151135.1028780-1-keguang.zhang@gmail.com> <2ed268fd-113a-4da0-8f33-04d618053dca@lunn.ch>
-In-Reply-To: <2ed268fd-113a-4da0-8f33-04d618053dca@lunn.ch>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 14 Aug 2023 10:39:18 +0800
-Message-ID: <CAJhJPsWPnsPkp95G2wRfAdw6u7v9SfgqgMUUH3s+2Us2ue4F9g@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Move Loongson1 MAC arch-code to the driver dir
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S232741AbjHNDBy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Aug 2023 23:01:54 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE1EC10D7;
+        Sun, 13 Aug 2023 20:01:33 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxV_EMmdlk2t0XAA--.49753S3;
+        Mon, 14 Aug 2023 11:01:32 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxjiMKmdlkNkNZAA--.48747S3;
+        Mon, 14 Aug 2023 11:01:31 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Remove noreturn attribute for die()
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+References: <1690887599-11442-1-git-send-email-yangtiezhu@loongson.cn>
+ <alpine.DEB.2.21.2308081544180.38537@angie.orcam.me.uk>
+ <13aaa917-e55d-f529-8b3f-cab285402808@loongson.cn>
+ <alpine.DEB.2.21.2308132148500.8596@angie.orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <17bc8aca-6590-02ac-cb03-95d4b5af1d40@loongson.cn>
+Date:   Mon, 14 Aug 2023 11:01:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <alpine.DEB.2.21.2308132148500.8596@angie.orcam.me.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8AxjiMKmdlkNkNZAA--.48747S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tr1rZFy7JrWDWw13Ary5trc_yoW8CrWkpa
+        48Ca9YkanrJa4IkFs2yw4xJa42kF1rGry5Jr95K3ykur15Xr9IyFWxtw4F9Fn2grsagw4q
+        qw4jqa4jqa4DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
+        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
+        AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
+        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+        67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+        0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_Ma
+        UUUUU
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,38 +66,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Aug 13, 2023 at 11:24=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote=
-:
->
-> On Sat, Aug 12, 2023 at 11:11:30PM +0800, Keguang Zhang wrote:
-> > From: Kelvin Zhang <kelvin.zhang@amlogic.com>
-> >
-> > In order to convert Loongson1 MAC platform devices to the devicetree
-> > nodes, Loongson1 MAC arch-code should be moved to the driver dir.
-> >
-> > In other words, this patchset is a preparation for converting
-> > Loongson1 platform devices to devicetree.
->
-> It is a long time since i converted an ARM system from platform data
-> to DT. But what we tended to do was to allow both for a period of
-> time.
->
-> Does a system using platform data still work after this change? The
-> first patch seems to delete a lot of code, not just move it around.
->
-> Can you restructure this patchset to add the glue layer and DT binding
-> in parallel with platform data. Then have a patchset which convert all
-> in tree machines to using DT. And then a patchset, submitted in maybe
-> 6 months time, to remove support for platform data.
->
-Sure, I will keep the platform data from the next version.
-Thanks!
-
->         Andrew
 
 
+On 08/14/2023 05:30 AM, Maciej W. Rozycki wrote:
+> On Wed, 9 Aug 2023, Tiezhu Yang wrote:
+>
+>>>  So you want to keep a task alive that has caused a kernel oops in the
+>>> process context in this case, right?  What purpose would it be for and
+>>> what condition causes `notify_die' to return NOTIFY_STOP?  IOW why is
+>>> there no need to call `make_task_dead' in this case?
+>>
+>> I did some research, hope it is useful.
 
---=20
-Best regards,
+...
 
-Keguang Zhang
+>>
+>>   This requires making die() and die_if_kernel() return a value,
+>>   and their callers to honor this (and be prepared that it returns).
+>
+>  Thanks, that indeed helps, though indirectly.  I think the most relevant,
+> though still terse explanation comes from commit 20c0d2d44029 ("[PATCH]
+> i386: pass proper trap numbers to die chain handlers"), which I believe is
+> the earliest of similar changes.  The patch was originally submitted here:
+> <https://lore.kernel.org/r/43DDF02E.76F0.0078.0@novell.com/> and hardly
+> any discussion emerged, but I think the key statement is:
+>
+> "[...] honor the return value from the handler chain invocation in die()
+> as, through a debugger, the fault may have been fixed."
+>
+> Now it makes sense to me: even if ignoring the event will make the system
+> unstable, by allowing access through a debugger it has been compromised
+> already anyway.
+>
+>  So I think your change will be good if you update the change description
+> to include the justification quoted above rather than just: "the others do
+> it too, so it must be good" (though you can of course mention that your
+> change also makes our port consistent with other ones).  I suggest linking
+> to the original i386 submission too for future reference.
+
+Thank you very much.
+
+>
+>  Also I note that you combine three independent changes into one, so
+> please split it into individual patches as per our requirements.
+>
+
+Will do it in v2.
+
+Thanks,
+Tiezhu
+
