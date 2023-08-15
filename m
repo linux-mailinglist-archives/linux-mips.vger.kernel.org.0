@@ -2,104 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A3C77CA56
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Aug 2023 11:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2AD77D0AE
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Aug 2023 19:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236015AbjHOJXm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Aug 2023 05:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S238643AbjHORL2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Aug 2023 13:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236155AbjHOJWX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Aug 2023 05:22:23 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83B9F198D;
-        Tue, 15 Aug 2023 02:21:46 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxXOqpQ9tk+bQYAA--.23671S3;
-        Tue, 15 Aug 2023 17:21:45 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxxsyYQ9tkLw1bAA--.4228S3;
-        Tue, 15 Aug 2023 17:21:45 +0800 (CST)
-Message-ID: <88f22101-f15b-f8f3-23b7-e7514031e367@loongson.cn>
-Date:   Tue, 15 Aug 2023 17:21:28 +0800
+        with ESMTP id S238679AbjHORLR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Aug 2023 13:11:17 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A1CE52
+        for <linux-mips@vger.kernel.org>; Tue, 15 Aug 2023 10:11:15 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-40a47e8e38dso12831cf.1
+        for <linux-mips@vger.kernel.org>; Tue, 15 Aug 2023 10:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692119475; x=1692724275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VjU1cPGHPErz26GfxK/V2Y6QQnaVBfBoHVJffwhAgeg=;
+        b=OkID7iHXzv+hD+tKR8T6YOXxoIXliF3W34NUBxDaFcmljCtGa4UoyiTKJr8D/Tqe60
+         twt1hBEnODfYIcEtDbVnm54kA0lIiilXkx9/J9jQrHX5X/XhOJQ7UdJ3uclpwKIqOirD
+         Nz+BaBpxqO9GVtg0Nf9FtqfKgA5MSX6L6ZpkqwrGirkV/80R7EjnEy3vAejyJrvzENi/
+         tBF0sSeWY68NphfTowZ3duiS82ZwwGD9DYGMlv24ihtwu4rin3c/EbsSxVYNJXnuceR1
+         sl4g7UKfuObykb/yzYDT2NhA5VP8HNK+onSuMDL7WMvns54M1ica33zsia1c0sn9ISDX
+         ebGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692119475; x=1692724275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VjU1cPGHPErz26GfxK/V2Y6QQnaVBfBoHVJffwhAgeg=;
+        b=cA1tCk3FlASRwDfBQSwas953S7HRhlxw6hewi/cgdzbkbE0AClTUrUATFfB5HWHpsM
+         0l4d+TXwovkEs8MYXdrenuRn1LzLVF5RQKIxLs6TzHZHyaxC8do5g1h2Sn3YF+TtE1KM
+         SzAzkoozuEFEivpruDtzxWi+JDk0N0o2sAKrCP9Jhat8eXRjP4Y9Q1tNhWlt5Nsi8CZl
+         w/lBDUrkMKpxneye7cywbtCOkBY7j4daKvzYgqVB6KSggWReJ2c+vQ4zLKWZgeR8jzJ1
+         MXYvUdv2/S8f5PIez7F0a4uv4mrNBwwq/CMx8RW9i/Ytw6IJRAteJdERHVIWLMaLcZEB
+         Y4aQ==
+X-Gm-Message-State: AOJu0YwiftlbOQzszIhZEmtDyc0xWGiwnYHdZXGWVoP6QuJW7ewx3WuI
+        rLTDU4OQem1R24ZLdDQYjykAjxPnSXpTrhddHRFYng==
+X-Google-Smtp-Source: AGHT+IHxC6i5qwpObe1eDOWi/Od0g4GRgAk9jzOZ3XKeiC1SDm7VVZDyGLVzpXyK6cSH8wHoFhS6cxSCFQC9A0v0DV0=
+X-Received: by 2002:a05:622a:198f:b0:40f:c60d:1c79 with SMTP id
+ u15-20020a05622a198f00b0040fc60d1c79mr3382qtc.28.1692119474862; Tue, 15 Aug
+ 2023 10:11:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] Mips: loongson3_defconfig: Enable ast drm driver by
- default
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230803091637.971924-1-suijingfeng@loongson.cn>
- <ZNs3ZwYH5N/uumJP@alpha.franken.de>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <ZNs3ZwYH5N/uumJP@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxxsyYQ9tkLw1bAA--.4228S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrurWUCr1xKr1UArW7AFy8Xrc_yoWkWwc_tF
-        9Fka48Cr4FyrWIg397X395CrWY9a4UA3WfAFnrXryfXw1Fyr43Xw1kAr98G3W5W34DKFZ3
-        Z3y8AF97CF1SqosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbakYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
-        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-        AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
-        14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-        4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnI
-        WIevJa73UjIFyTuYvjxU7_MaUUUUU
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230811045127.3308641-1-rananta@google.com> <ZNq15SZ+53umvOfx@google.com>
+ <CAJHc60wMueazp3Wm=b6-tnFPAyX0zeYuVQe9uPEJrpAm0azw2A@mail.gmail.com> <ZNrMTmppUfQhdsyY@google.com>
+In-Reply-To: <ZNrMTmppUfQhdsyY@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 15 Aug 2023 10:11:02 -0700
+Message-ID: <CAJHc60yp7X9Za=CJnJWqAbPuKznp91fYtnBOuQQCGtiXyQBqWw@mail.gmail.com>
+Subject: Re: [PATCH v9 00/14] KVM: arm64: Add support for FEAT_TLBIRANGE
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On 2023/8/15 16:29, Thomas Bogendoerfer wrote:
-> On Thu, Aug 03, 2023 at 05:16:37PM +0800, Sui Jingfeng wrote:
->> ASpeed GPU is typically found on the Loongson server platform, as a
->> peripheral device driver, it generally should be compiled as a module.
->>
->> Tested on loongson 3B4000 server[1].
->>
->> [1] https://github.com/loongson-gfx/loongson_boards/tree/main/ls3b4000x2_server
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   arch/mips/configs/loongson3_defconfig | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
->> index 3087e64e6ebe..a9fadea72da5 100644
->> --- a/arch/mips/configs/loongson3_defconfig
->> +++ b/arch/mips/configs/loongson3_defconfig
->> @@ -283,6 +283,7 @@ CONFIG_DRM_AMDGPU_USERPTR=y
->>   CONFIG_DRM_AMD_ACP=y
->>   CONFIG_DRM_AMD_DC=y
->>   CONFIG_DRM_AMD_DC_SI=y
->> +CONFIG_DRM_AST=m
->>   CONFIG_DRM_RADEON=m
->>   CONFIG_DRM_QXL=y
->>   CONFIG_DRM_VIRTIO_GPU=y
->> -- 
->> 2.34.1
->>
-> applied to mips-next.
+On Mon, Aug 14, 2023 at 5:52=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
 >
-> Thomas.
-Thanks a lot.
+> On Mon, Aug 14, 2023, Raghavendra Rao Ananta wrote:
+> > On Mon, Aug 14, 2023 at 4:16=E2=80=AFPM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > >
+> > > On Fri, Aug 11, 2023, Raghavendra Rao Ananta wrote:
+> > > > The series is based off of upstream v6.5-rc1.
+> > >
+> > > Lies!  :-)
+> > >
+> > > This is based off one of the kvmarm.git topic branches (I didn't both=
+er to figure
+> > > out which one), not v6.5-rc1.
+> > >
+> > Sorry, what am I missing here? My git log is as follows:
+>
+> Hmm, not sure what's going on.  Maybe I misinterpreted why `git am` was f=
+ailing?
+> I assumed it was because there were objects in kvmarm that I didn't have =
+locally,
+> and fetching kvmarm allowed am to complete, though with 3-way merges, whi=
+ch IIUC
+> shouldn't have been necessary if I was using the exact same base.  Or may=
+be I
+> messed up and didn't actually reset to 6.5-rc1.
+>
+> > $ git log --oneline upstream_tlbi_range_v9
+> > 5025857507abe (upstream_tlbi_range_v9) KVM: arm64: Use TLBI
+> > range-based instructions for unmap
+> > 5c0291b99a8fc KVM: arm64: Invalidate the table entries upon a range
+> > 8c46b54d4aaec KVM: arm64: Flush only the memslot after write-protect
+> > 231abaeb7ffc2 KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+> > 5ec291b863309 KVM: arm64: Define kvm_tlb_flush_vmid_range()
+> > 5bcd7a085c34e KVM: arm64: Implement  __kvm_tlb_flush_vmid_range()
+> > ea08f9dff7e5b arm64: tlb: Implement __flush_s2_tlb_range_op()
+> > b3178687947c9 arm64: tlb: Refactor the core flush algorithm of __flush_=
+tlb_range
+> > a4850fa988eef KVM: Move kvm_arch_flush_remote_tlbs_memslot() to common =
+code
+> > 306dc4e6afd37 KVM: Allow range-based TLB invalidation from common code
+> > d02785a0a1e01 KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+> > 136fa2d254537 KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+> > e35c68a75170d KVM: Declare kvm_arch_flush_remote_tlbs() globally
+> > 5d592777b9bba KVM: Rename kvm_arch_flush_remote_tlb() to
+> > kvm_arch_flush_remote_tlbs()
+> > 06c2afb862f9d (tag: v6.5-rc1, tag: linux/v6.5-rc1) Linux 6.5-rc1
+> > c192ac7357683 MAINTAINERS 2: Electric Boogaloo
+> > f71f64210d698 Merge tag 'dma-mapping-6.5-2023-07-09' of
+> > git://git.infradead.org/users/hch/dma-mapping
+> > ...
+> >
+> > Isn't the commit, 06c2afb862f9d (06c2afb862f9d (tag: v6.5-rc1, tag:
+> > linux/v6.5-rc1) Linux 6.5-rc1) the 'base' commit?
+>
+> Ya, should be.
+>
+> Either way, even if this is PEBKAC on my end, using --base would be nice,=
+ e.g.
+> then you can definitely say it's my fault ;-)
+>
+I'll consider this, and thanks for the confirmation.
 
+- Raghavendra
+> > > Please try to incorporate git format-patch's "--base" option into you=
+r workflow,
+> > > e.g. I do "git format-patch --base=3DHEAD~$nr" where $nr is the numbe=
+r of patches
+> > > I am posting.
+> > >
+> > > It's not foolproof, e.g. my approach doesn't help if I have a local p=
+atch that
+> > > I'm not posting, but 99% of the time it Just Works and eliminates any=
+ ambuitity.
+> > >
+> > > You can also do "--base=3Dauto", but that only does the right thing i=
+f your series
+> > > has its upstream branch set to the base/tree that you want your patch=
+es applied
+> > > to (I use the upstream branch for a completely different purpose for =
+my dev branches).
