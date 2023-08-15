@@ -2,158 +2,302 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C665F77D0B7
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Aug 2023 19:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF88677D223
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Aug 2023 20:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238687AbjHORQX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Aug 2023 13:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S239267AbjHOSn6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Aug 2023 14:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238681AbjHORP4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Aug 2023 13:15:56 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3789319B4
-        for <linux-mips@vger.kernel.org>; Tue, 15 Aug 2023 10:15:55 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-589ebdea23fso46050137b3.0
-        for <linux-mips@vger.kernel.org>; Tue, 15 Aug 2023 10:15:55 -0700 (PDT)
+        with ESMTP id S239238AbjHOSno (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Aug 2023 14:43:44 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36871733
+        for <linux-mips@vger.kernel.org>; Tue, 15 Aug 2023 11:43:41 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1bdfb00b851so13786215ad.1
+        for <linux-mips@vger.kernel.org>; Tue, 15 Aug 2023 11:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692119754; x=1692724554;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+        d=google.com; s=20221208; t=1692125021; x=1692729821;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h4pRofXYscuxJwlZlec+kz5JByk1VStjcQk6pNX8VCg=;
-        b=0ULGW8lrz4LAfQvUr6zW2RUHxg7wnB8mbW6D5bd2rDtC7t6jWPtR/lVCZvnMtK039v
-         Gg8JyKieoo8YzZWKJSwsneurYfUwDhsBEjHR8BDDFIcMNXvxQFl1SY6+8po7yWKtX3gK
-         0M47n08PCbwSAAAHpnB5NZUa5PJ3jqM0sFJYHYCV1+uFsvROyNCULug2lOezvw4KSxiC
-         SwvzuqKN0keYa4/1ydFK2xGN83du5F8hP7y28i8MbkevBr7RMbIjQF8iEl3lxI4AS4rj
-         O6jyhFmalRm5sDGo51MDmx9Yc7ibOQgbEesKJpyN5wkexREqBNWTi2YgoIds/heBTaQl
-         JrNg==
+        bh=JSvYsD6+1EOsLwMbZUcg1SbKGoI2rKHIFLeuHZgRRx8=;
+        b=3GbaBNZWweXPbCUfjNMBCMIO1/9pik3Ou7FeHEWzr8nKjSkzvqGcURow0A8T+s1N/W
+         RVe6VK7Cczc0hkFYSPIsM+jZix/6+Avk/pXQMvDNFYcZzDKKROk6r/GnFpEmHHYj2KFW
+         h93ooZKanquSe6AJs+58Zz6N7PTRsHyBuSQ388gemOe4SoUihxzHiPkARWazsr3ZZAz0
+         OcYltDEsS3pdqe1uhroxEJVJrBI209UjBYz0S7Ir9y59ufYp5G/tA7HIMpi+zHCVIaVP
+         g8K5m646ssrl0DCyD/aPBQgyLNjNw/h6F2pb8fxpumb9nBAkrhKWZXYmHJ6A2HGZPyrg
+         dUMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692119754; x=1692724554;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+        d=1e100.net; s=20221208; t=1692125021; x=1692729821;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=h4pRofXYscuxJwlZlec+kz5JByk1VStjcQk6pNX8VCg=;
-        b=T47QiesIyGgp9rVi5f7WFUeumbg/Bek72xV80kNeA5shQlweAgqZgFzuxxIoEpmosb
-         xT7IZL3O8DbJKOADnbe+lTU7zUWeobIdkDNn5k8W3XB5XXtUVFJa2Yvf2wZBtiHsurgZ
-         VpapkJhlfiqWclrCzPFm7SIyXeJf6GdRc2qGMoVo73ofIfcHFqMFLxkGT14FqVwOTFQN
-         DzDarhqTmermw+KvuAOqBFoGd5LyTEF1MeIelFB6l5EVU8/lG8iFrhW6tmCO0y0dFqT7
-         vVj3VOq6Olme+OqcXw/vwi/a0L68R6GDH28MXkgZkftt7zuJOs+UfoHQ5eFSo3/HuzSc
-         4WGQ==
-X-Gm-Message-State: AOJu0YxIU99N1u8UN7PplP1NMBsfwg5hs8uV4Ka+1akttB8psc2w08n8
-        CcrBAs7gh59VPkAhVQswoiTf4pLlhUY=
-X-Google-Smtp-Source: AGHT+IEdTpAtlbhdDz4CSAmHfwiSyntmeRr/8GY1hRZWQcWfFLbFbn/FO7WCsNQ5MIITNcxj8ryCZ17c50c=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:890e:0:b0:d08:95:76d with SMTP id
- e14-20020a25890e000000b00d080095076dmr40567ybl.6.1692119754466; Tue, 15 Aug
- 2023 10:15:54 -0700 (PDT)
-Date:   Tue, 15 Aug 2023 17:15:53 +0000
-In-Reply-To: <CAJHc60yp7X9Za=CJnJWqAbPuKznp91fYtnBOuQQCGtiXyQBqWw@mail.gmail.com>
+        bh=JSvYsD6+1EOsLwMbZUcg1SbKGoI2rKHIFLeuHZgRRx8=;
+        b=ZNpcBAFDWoa3Qsz+WtlNWKH4bm772wO9BjGyaV/QLF01CJXYks3rNyhQ2U3in98WE6
+         LbMwzEnERVFBfCwHUp/JEqw5KDGdIZ6+v01vJQxNtkBIGuspm1BpfmcVApKHBkiQ+N+6
+         25jFOlE9MDv1ClezVAfZC/Yc8/limXavU1wzM3SlRYleBXbrOUuMrsHLVQykIvTrOPio
+         hBckKedrf6nkEpY43gkmrPHgRlFX87t7l7sYttrv/ISc7rDfDfC/y7rPfKoHk1vg44u4
+         4VsFgduf8NtWidOP3cWNU973qCLysCnL2gwY1CQ4Oc6Yx4ZoVRoVO2e3DFUajIYrzV/o
+         vTWg==
+X-Gm-Message-State: AOJu0YwCeXkfrc34OipmaobI9Yv4iHEVFz7ubi8PGC2CC3CnZesrgREX
+        MBSAXeDuI15q9acvcVLdnOwQuaJNTMw3t+X6AQ==
+X-Google-Smtp-Source: AGHT+IFNCwiTqbLEpaHtcY7JBuMDew3z5ESL3Ou2Kgu6Eu67p23Z+gfY19LxZRmFi4kbANuVSsG1veuDWoQmibZMwA==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a17:903:645:b0:1b7:d4d2:c385 with SMTP
+ id kh5-20020a170903064500b001b7d4d2c385mr4788682plb.1.1692125021245; Tue, 15
+ Aug 2023 11:43:41 -0700 (PDT)
+Date:   Tue, 15 Aug 2023 18:43:39 +0000
+In-Reply-To: <ZNKv9ul2I7A4V7IF@google.com> (message from Sean Christopherson
+ on Tue, 8 Aug 2023 14:13:26 -0700)
 Mime-Version: 1.0
-References: <20230811045127.3308641-1-rananta@google.com> <ZNq15SZ+53umvOfx@google.com>
- <CAJHc60wMueazp3Wm=b6-tnFPAyX0zeYuVQe9uPEJrpAm0azw2A@mail.gmail.com>
- <ZNrMTmppUfQhdsyY@google.com> <CAJHc60yp7X9Za=CJnJWqAbPuKznp91fYtnBOuQQCGtiXyQBqWw@mail.gmail.com>
-Message-ID: <ZNuyyQsFCmDc7Gmb@google.com>
-Subject: Re: [PATCH v9 00/14] KVM: arm64: Add support for FEAT_TLBIRANGE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Fuad Tabba <tabba@google.com>,
+Message-ID: <diqzh6p02lk4.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, willy@infradead.org,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, kvm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chao.p.peng@linux.intel.com,
+        tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com,
+        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 15, 2023, Raghavendra Rao Ananta wrote:
-> On Mon, Aug 14, 2023 at 5:52=E2=80=AFPM Sean Christopherson <seanjc@googl=
-e.com> wrote:
-> >
-> > On Mon, Aug 14, 2023, Raghavendra Rao Ananta wrote:
-> > > On Mon, Aug 14, 2023 at 4:16=E2=80=AFPM Sean Christopherson <seanjc@g=
-oogle.com> wrote:
-> > > >
-> > > > On Fri, Aug 11, 2023, Raghavendra Rao Ananta wrote:
-> > > > > The series is based off of upstream v6.5-rc1.
-> > > >
-> > > > Lies!  :-)
-> > > >
-> > > > This is based off one of the kvmarm.git topic branches (I didn't bo=
-ther to figure
-> > > > out which one), not v6.5-rc1.
-> > > >
-> > > Sorry, what am I missing here? My git log is as follows:
-> >
-> > Hmm, not sure what's going on.  Maybe I misinterpreted why `git am` was=
- failing?
-> > I assumed it was because there were objects in kvmarm that I didn't hav=
-e locally,
-> > and fetching kvmarm allowed am to complete, though with 3-way merges, w=
-hich IIUC
-> > shouldn't have been necessary if I was using the exact same base.  Or m=
-aybe I
-> > messed up and didn't actually reset to 6.5-rc1.
-> >
-> > > $ git log --oneline upstream_tlbi_range_v9
-> > > 5025857507abe (upstream_tlbi_range_v9) KVM: arm64: Use TLBI
-> > > range-based instructions for unmap
-> > > 5c0291b99a8fc KVM: arm64: Invalidate the table entries upon a range
-> > > 8c46b54d4aaec KVM: arm64: Flush only the memslot after write-protect
-> > > 231abaeb7ffc2 KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range(=
-)
-> > > 5ec291b863309 KVM: arm64: Define kvm_tlb_flush_vmid_range()
-> > > 5bcd7a085c34e KVM: arm64: Implement  __kvm_tlb_flush_vmid_range()
-> > > ea08f9dff7e5b arm64: tlb: Implement __flush_s2_tlb_range_op()
-> > > b3178687947c9 arm64: tlb: Refactor the core flush algorithm of __flus=
-h_tlb_range
-> > > a4850fa988eef KVM: Move kvm_arch_flush_remote_tlbs_memslot() to commo=
-n code
-> > > 306dc4e6afd37 KVM: Allow range-based TLB invalidation from common cod=
-e
-> > > d02785a0a1e01 KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
-> > > 136fa2d254537 KVM: arm64: Use kvm_arch_flush_remote_tlbs()
-> > > e35c68a75170d KVM: Declare kvm_arch_flush_remote_tlbs() globally
-> > > 5d592777b9bba KVM: Rename kvm_arch_flush_remote_tlb() to
-> > > kvm_arch_flush_remote_tlbs()
-> > > 06c2afb862f9d (tag: v6.5-rc1, tag: linux/v6.5-rc1) Linux 6.5-rc1
-> > > c192ac7357683 MAINTAINERS 2: Electric Boogaloo
-> > > f71f64210d698 Merge tag 'dma-mapping-6.5-2023-07-09' of
-> > > git://git.infradead.org/users/hch/dma-mapping
-> > > ...
-> > >
-> > > Isn't the commit, 06c2afb862f9d (06c2afb862f9d (tag: v6.5-rc1, tag:
-> > > linux/v6.5-rc1) Linux 6.5-rc1) the 'base' commit?
-> >
-> > Ya, should be.
-> >
-> > Either way, even if this is PEBKAC on my end, using --base would be nic=
-e, e.g.
-> > then you can definitely say it's my fault ;-)
-> >
-> I'll consider this, and thanks for the confirmation.
+Sean Christopherson <seanjc@google.com> writes:
 
-Confirmed PEBKAC, I reset to v6.5-rc2, not rc1.  My apologies, and thanks f=
-or being
-gentle.
+> On Mon, Aug 07, 2023, Ackerley Tng wrote:
+>> I=E2=80=99d like to propose an alternative to the refcounting approach b=
+etween
+>> the gmem file and associated kvm, where we think of KVM=E2=80=99s memslo=
+ts as
+>> users of the gmem file.
+>>
+>> Instead of having the gmem file pin the VM (i.e. take a refcount on
+>> kvm), we could let memslot take a refcount on the gmem file when the
+>> memslots are configured.
+>>
+>> Here=E2=80=99s a POC patch that flips the refcounting (and modified self=
+tests in
+>> the next commit):
+>> https://github.com/googleprodkernel/linux-cc/commit/7f487b029b89b9f3e9b0=
+94a721bc0772f3c8c797
+>>
+>> One side effect of having the gmem file pin the VM is that now the gmem
+>> file becomes sort of a false handle on the VM:
+>>
+>> + Closing the file destroys the file pointers in the VM and invalidates
+>>   the pointers
+>
+> Yeah, this is less than ideal.  But, it's also how things operate today. =
+ KVM
+> doesn't hold references to VMAs or files, e.g. if userspace munmap()s mem=
+ory,
+> any and all SPTEs pointing at the memory are zapped.  The only difference=
+ with
+> gmem is that KVM needs to explicitly invalidate file pointers, instead of=
+ that
+> happening behind the scenes (no more VMAs to find).  Again, I agree the r=
+esulting
+> code is more complex than I would prefer, but from a userspace perspectiv=
+e I
+> don't see this as problematic.
+>
+>> + Keeping the file open keeps the VM around in the kernel even though
+>>   the VM fd may already be closed.
+>
+> That is perfectly ok.  There is plenty of prior art, as well as plenty of=
+ ways
+> for userspace to shoot itself in the foot.  E.g. open a stats fd for a vC=
+PU and
+> the VM and all its vCPUs will be kept alive.  And conceptually it's sound=
+,
+> anything created in the scope of a VM _should_ pin the VM.
+>
+
+Thanks for explaining!
+
+>> I feel that memslots form a natural way of managing usage of the gmem
+>> file. When a memslot is created, it is using the file; hence we take a
+>> refcount on the gmem file, and as memslots are removed, we drop
+>> refcounts on the gmem file.
+>
+> Yes and no.  It's definitely more natural *if* the goal is to allow guest=
+_memfd
+> memory to exist without being attached to a VM.  But I'm not at all convi=
+nced
+> that we want to allow that, or that it has desirable properties.  With TD=
+X and
+> SNP in particuarly, I'm pretty sure that allowing memory to outlive the V=
+M is
+> very underisable (more below).
+>
+
+This is a little confusing, with the file/inode split in gmem where the
+physical memory/data is attached to the inode and the file represents
+the VM's view of that memory, won't the memory outlive the VM?
+
+This [1] POC was built based on that premise, that the gmem inode can be
+linked to another file and handed off to another VM, to facilitate
+intra-host migration, where the point is to save the work of rebuilding
+the VM's memory in the destination VM.
+
+With this, the bindings don't outlive the VM, but the data/memory
+does. I think this split design you proposed is really nice.
+
+>> The KVM pointer is shared among all the bindings in gmem=E2=80=99s xarra=
+y, and we can
+>> enforce that a gmem file is used only with one VM:
+>>
+>> + When binding a memslot to the file, if a kvm pointer exists, it must
+>>   be the same kvm as the one in this binding
+>> + When the binding to the last memslot is removed from a file, NULL the
+>>   kvm pointer.
+>
+> Nullifying the KVM pointer isn't sufficient, because without additional a=
+ctions
+> userspace could extract data from a VM by deleting its memslots and then =
+binding
+> the guest_memfd to an attacker controlled VM.  Or more likely with TDX an=
+d SNP,
+> induce badness by coercing KVM into mapping memory into a guest with the =
+wrong
+> ASID/HKID.
+>
+> I can think of three ways to handle that:
+>
+>   (a) prevent a different VM from *ever* binding to the gmem instance
+>   (b) free/zero physical pages when unbinding
+>   (c) free/zero when binding to a different VM
+>
+> Option (a) is easy, but that pretty much defeats the purpose of decopulin=
+g
+> guest_memfd from a VM.
+>
+> Option (b) isn't hard to implement, but it screws up the lifecycle of the=
+ memory,
+> e.g. would require memory when a memslot is deleted.  That isn't necessar=
+ily a
+> deal-breaker, but it runs counter to how KVM memlots currently operate.  =
+Memslots
+> are basically just weird page tables, e.g. deleting a memslot doesn't hav=
+e any
+> impact on the underlying data in memory.  TDX throws a wrench in this as =
+removing
+> a page from the Secure EPT is effectively destructive to the data (can't =
+be mapped
+> back in to the VM without zeroing the data), but IMO that's an oddity wit=
+h TDX and
+> not necessarily something we want to carry over to other VM types.
+>
+> There would also be performance implications (probably a non-issue in pra=
+ctice),
+> and weirdness if/when we get to sharing, linking and/or mmap()ing gmem.  =
+E.g. what
+> should happen if the last memslot (binding) is deleted, but there outstan=
+ding userspace
+> mappings?
+>
+> Option (c) is better from a lifecycle perspective, but it adds its own fl=
+avor of
+> complexity, e.g. the performant way to reclaim TDX memory requires the TD=
+MR
+> (effectively the VM pointer), and so a deferred relcaim doesn't really wo=
+rk for
+> TDX.  And I'm pretty sure it *can't* work for SNP, because RMP entries mu=
+st not
+> outlive the VM; KVM can't reuse an ASID if there are pages assigned to th=
+at ASID
+> in the RMP, i.e. until all memory belonging to the VM has been fully free=
+d.
+>
+
+If we are on the same page that the memory should outlive the VM but not
+the bindings, then associating the gmem inode to a new VM should be a
+feature and not a bug.
+
+What do we want to defend against here?
+
+(a) Malicious host VMM
+
+For a malicious host VMM to read guest memory (with TDX and SNP), it can
+create a new VM with the same HKID/ASID as the victim VM, rebind the
+gmem inode to a VM crafted with an image that dumps the memory.
+
+I believe it is not possible for userspace to arbitrarily select a
+matching HKID unless userspace uses the intra-host migration ioctls, but if=
+ the
+migration ioctl is used, then EPTs are migrated and the memory dumper VM
+can't successfully run a different image from the victim VM. If the
+dumper VM needs to run the same image as the victim VM, then it would be
+a successful migration rather than an attack. (Perhaps we need to clean
+up some #MCs here but that can be a separate patch)
+
+(b) Malicious host kernel
+
+A malicious host kernel can allow a malicious host VMM to re-use a HKID
+for the dumper VM, but this isn't something a better gmem design can
+defend against.
+
+(c) Attacks using gmem for software-protected VMs
+
+Attacks using gmem for software-protected VMs are possible since there
+is no real encryption with HKID/ASID (yet?). The selftest for [1]
+actually uses this lack of encryption to test that the destination VM
+can read the source VM's memory after the migration. In the POC [1], as
+long as both destination VM knows where in the inode's memory to read,
+it can read what it wants to. This is a problem for software-protected
+VMs, but I feel that it is also a separate issue from gmem's design.
+
+>> Could binding gmem files not on creation, but at memslot configuration
+>> time be sufficient and simpler?
+>
+> After working through the flows, I think binding on-demand would simplify=
+ the
+> refcounting (stating the obvious), but complicate the lifecycle of the me=
+mory as
+> well as the contract between KVM and userspace,
+
+If we are on the same page that the memory should outlive the VM but not
+the bindings, does it still complicate the lifecycle of the memory and
+the userspace/KVM contract? Could it just be a different contract?
+
+> and would break the separation of
+> concerns between the inode (physical memory / data) and file (VM's view /=
+ mappings).
+
+Binding on-demand is orthogonal to the separation of concerns between
+inode and file, because it can be built regardless of whether we do the
+gmem file/inode split.
+
++ This flip-the-refcounting POC is built with the file/inode split and
++ In [2] (the delayed binding approach to solve intra-host migration), I
+  also tried flipping the refcounting, and that without the gmem
+  file/inode split. (Refcounting in [2] is buggy because the file can't
+  take a refcount on KVM, but it would work without taking that refcount)
+
+[1] https://lore.kernel.org/lkml/cover.1691446946.git.ackerleytng@google.co=
+m/T/
+[2] https://github.com/googleprodkernel/linux-cc/commit/dd5ac5e53f14a1ef991=
+5c9c1e4cc1006a40b49df
