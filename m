@@ -2,57 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BB777C3DF
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Aug 2023 01:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40D977C46C
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Aug 2023 02:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbjHNXRU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Aug 2023 19:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S232398AbjHOAab (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Aug 2023 20:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbjHNXQ5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 19:16:57 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE9B1720
-        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 16:16:56 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-589cd098d24so44906867b3.0
-        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 16:16:56 -0700 (PDT)
+        with ESMTP id S232628AbjHOAaR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Aug 2023 20:30:17 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF5F198A
+        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 17:30:12 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-40c72caec5cso85131cf.0
+        for <linux-mips@vger.kernel.org>; Mon, 14 Aug 2023 17:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692055015; x=1692659815;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XJ2VqA/vSflBac203Z0ZgYzciS8CSN/YrZrCQZvgAqE=;
-        b=OxYYoyUAQaeaCm0MRnDlT6YpDWZ0eDciFaHbssoRAoYyzjd2o0WDI1UOBCOxL+kMJc
-         5YD0NK8r1uDf6e0Jatvt+d6P+BWzIhvUYoQQhLjByYnja3UBlbXrGoFe9hBNCSmd3Por
-         77GbZptlqN3qID9Yi7OuuYNKro+YD6l9Q6jj3+sUYzoK08H9wS69cXzUBziAMKx3xld/
-         w96wxOhnL73JzIXq2lGp1mV73XNcE7Ps2NUvuAohRziILKeBly43Y5qUc7dLaviqameq
-         hE+kTcQyTkgYI/ntVGdkCqeR0EWDhGYDk0kgtw+nvGshr7JSpUCtOXj/qFAa5uoFZbVm
-         YkSw==
+        d=google.com; s=20221208; t=1692059411; x=1692664211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HNJoaJWeIvUddw5R6SlhDX5IJGHqkE8DYyIqOAmI/Gc=;
+        b=dTFmXzF41H/n0mK5Jfs/y8u8AIBRo6B27+rwi8uJSpQ/wDiNzZvL4lLXxVNTiAFnkY
+         suX0m2QNqLhILSSE09Qp0EukFkzTu5fkVeX9h2uqxOukcSvGAGoFfI/tN7OJN6Tmf4hp
+         2mQFyYwAgzeVf26n6t7iWvkYuXuBdnimEIsWJq+Q0pT1f5LSRaCImOR8BywZSjIJIdOq
+         cAmcg3NOXGzR2UQrLQh9p0Dfa+ukixiNWjSnvTSaiF7HQoZ6Tumr7UhEepy6riEpq6V6
+         Q96VUWIOScaDoDQ5SHJBhUhM3mvGwEwsUjr+/ALmvdKPAVvLMf2FUm7Gsdz4zcVfLTzN
+         vJQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692055015; x=1692659815;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XJ2VqA/vSflBac203Z0ZgYzciS8CSN/YrZrCQZvgAqE=;
-        b=fplYV9pSWrC5kf6q3NYYeJHWJ3EFw848nvu+dDV1eWWASxqUZ5IHp91GWFOgSyZ9js
-         JDboJwP+PaOwMUV1afoAesTqAXUvFZlHHt0+jmLao+UJehAd5Pzk2udhj5MEe56iBxXx
-         PqsmDSEjENQ2E0ORoGoxL1Wv7H3Y/tIJx9bHqPE+Z5gcvTl9O9bHxZo4jwsWknQpArez
-         0KvtHLkE1mqTrYN45zYdNSq6/hTAToE/hzZrHD/slRjs7Fs08pZEIh5/zQBrlKsqRhxK
-         EYJ4foXLE1hU175llipihVUhxOehyWpepPgZHGfW74wie0+sGN3EtgfP4v69MtJygInA
-         g2Mg==
-X-Gm-Message-State: AOJu0Yz6/SQVLKhYIxXRyd/1Jce3UmytZA3daguCnKzhjc0ZRui1h9+B
-        0zJpaKoM72XdYkbQDghmnBVZ8tnkBi0=
-X-Google-Smtp-Source: AGHT+IGO0AL45xRymm0BjDJln3deMA/9LFqjImi7JInSUnl69k7Qer+RG4sudzofLCbCQa+Rdgz1TuaGB1A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:709:b0:57a:118a:f31 with SMTP id
- bs9-20020a05690c070900b0057a118a0f31mr180335ywb.7.1692055015309; Mon, 14 Aug
- 2023 16:16:55 -0700 (PDT)
-Date:   Mon, 14 Aug 2023 16:16:53 -0700
-In-Reply-To: <20230811045127.3308641-1-rananta@google.com>
-Mime-Version: 1.0
-References: <20230811045127.3308641-1-rananta@google.com>
-Message-ID: <ZNq15SZ+53umvOfx@google.com>
+        d=1e100.net; s=20221208; t=1692059411; x=1692664211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HNJoaJWeIvUddw5R6SlhDX5IJGHqkE8DYyIqOAmI/Gc=;
+        b=W+Pf4w9zebuQo2a2G72djnOaR2+ml8iyEdaie3YgU/093sW1P7VLYKEL+2ny+qiXIL
+         kfQqz4alx74SfAcAXwe8MWCaQK0w78EHPPEQxtWxigPtFUFn5fhqy5bAcCMq9J49Qj5Y
+         5Ofpdvi58558B5VwfjGbCDz1jVvEtP6UtudMmLoD7wu7G9D2+n5jFRYRkIEzvqJeadqr
+         VM5uGhQrn40bLxr8Yj+jPIBReg21iuz7lMM83epJNMY6RTuy5wHgSjOWhHY/ainiQXen
+         loLE/gjQes3JQZkOgoPxNn2vqdBCOAKwjE2Mn0tZyTfTVp3gi7m0hlly1PP/nfnDst01
+         t5/w==
+X-Gm-Message-State: AOJu0YzTfZJznKF7x0PDK6IxXw4EW72LO4t5C9Rsx4hRzsu5Qi9iyyEc
+        yQRk01GDSzMl7WuFS/gz23c67YpVY9R6Bti+HhyCGA==
+X-Google-Smtp-Source: AGHT+IH5y5MbCy4rjhKShz2AECkzIJQAfVMplY8s8RsyVo2A8Q6lT4pFb0RwiAA0GgJLzfktk2kf1TttUxP9ICKRKm4=
+X-Received: by 2002:ac8:5b51:0:b0:40f:d3db:f328 with SMTP id
+ n17-20020ac85b51000000b0040fd3dbf328mr724022qtw.2.1692059411605; Mon, 14 Aug
+ 2023 17:30:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230811045127.3308641-1-rananta@google.com> <ZNq15SZ+53umvOfx@google.com>
+In-Reply-To: <ZNq15SZ+53umvOfx@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 14 Aug 2023 17:29:59 -0700
+Message-ID: <CAJHc60wMueazp3Wm=b6-tnFPAyX0zeYuVQe9uPEJrpAm0azw2A@mail.gmail.com>
 Subject: Re: [PATCH v9 00/14] KVM: arm64: Add support for FEAT_TLBIRANGE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
+To:     Sean Christopherson <seanjc@google.com>
 Cc:     Oliver Upton <oliver.upton@linux.dev>,
         Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
@@ -71,10 +72,12 @@ Cc:     Oliver Upton <oliver.upton@linux.dev>,
         linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,21 +85,64 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 11, 2023, Raghavendra Rao Ananta wrote:
-> The series is based off of upstream v6.5-rc1.
+On Mon, Aug 14, 2023 at 4:16=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, Aug 11, 2023, Raghavendra Rao Ananta wrote:
+> > The series is based off of upstream v6.5-rc1.
+>
+> Lies!  :-)
+>
+> This is based off one of the kvmarm.git topic branches (I didn't bother t=
+o figure
+> out which one), not v6.5-rc1.
+>
+Sorry, what am I missing here? My git log is as follows:
 
-Lies!  :-)
+$ git log --oneline upstream_tlbi_range_v9
+5025857507abe (upstream_tlbi_range_v9) KVM: arm64: Use TLBI
+range-based instructions for unmap
+5c0291b99a8fc KVM: arm64: Invalidate the table entries upon a range
+8c46b54d4aaec KVM: arm64: Flush only the memslot after write-protect
+231abaeb7ffc2 KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+5ec291b863309 KVM: arm64: Define kvm_tlb_flush_vmid_range()
+5bcd7a085c34e KVM: arm64: Implement  __kvm_tlb_flush_vmid_range()
+ea08f9dff7e5b arm64: tlb: Implement __flush_s2_tlb_range_op()
+b3178687947c9 arm64: tlb: Refactor the core flush algorithm of __flush_tlb_=
+range
+a4850fa988eef KVM: Move kvm_arch_flush_remote_tlbs_memslot() to common code
+306dc4e6afd37 KVM: Allow range-based TLB invalidation from common code
+d02785a0a1e01 KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+136fa2d254537 KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+e35c68a75170d KVM: Declare kvm_arch_flush_remote_tlbs() globally
+5d592777b9bba KVM: Rename kvm_arch_flush_remote_tlb() to
+kvm_arch_flush_remote_tlbs()
+06c2afb862f9d (tag: v6.5-rc1, tag: linux/v6.5-rc1) Linux 6.5-rc1
+c192ac7357683 MAINTAINERS 2: Electric Boogaloo
+f71f64210d698 Merge tag 'dma-mapping-6.5-2023-07-09' of
+git://git.infradead.org/users/hch/dma-mapping
+...
 
-This is based off one of the kvmarm.git topic branches (I didn't bother to figure
-out which one), not v6.5-rc1.
+Isn't the commit, 06c2afb862f9d (06c2afb862f9d (tag: v6.5-rc1, tag:
+linux/v6.5-rc1) Linux 6.5-rc1) the 'base' commit?
 
-Please try to incorporate git format-patch's "--base" option into your workflow,
-e.g. I do "git format-patch --base=HEAD~$nr" where $nr is the number of patches
-I am posting.
+Thank you.
+Raghavendra
 
-It's not foolproof, e.g. my approach doesn't help if I have a local patch that
-I'm not posting, but 99% of the time it Just Works and eliminates any ambuitity.
-
-You can also do "--base=auto", but that only does the right thing if your series
-has its upstream branch set to the base/tree that you want your patches applied
-to (I use the upstream branch for a completely different purpose for my dev branches).
+> Please try to incorporate git format-patch's "--base" option into your wo=
+rkflow,
+> e.g. I do "git format-patch --base=3DHEAD~$nr" where $nr is the number of=
+ patches
+> I am posting.
+>
+> It's not foolproof, e.g. my approach doesn't help if I have a local patch=
+ that
+> I'm not posting, but 99% of the time it Just Works and eliminates any amb=
+uitity.
+>
+> You can also do "--base=3Dauto", but that only does the right thing if yo=
+ur series
+> has its upstream branch set to the base/tree that you want your patches a=
+pplied
+> to (I use the upstream branch for a completely different purpose for my d=
+ev branches).
