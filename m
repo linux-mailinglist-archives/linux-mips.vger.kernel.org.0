@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C98C77ECF5
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 00:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B21477ED4E
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 00:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346839AbjHPWQN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Aug 2023 18:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
+        id S1346914AbjHPWlk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Aug 2023 18:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346932AbjHPWQD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 18:16:03 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA19273B
-        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 15:15:28 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-40a47e8e38dso54571cf.1
-        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 15:15:28 -0700 (PDT)
+        with ESMTP id S1346945AbjHPWlY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 18:41:24 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5151B2
+        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 15:41:23 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-48a61ac2b26so577877e0c.2
+        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 15:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692224081; x=1692828881;
+        d=google.com; s=20221208; t=1692225682; x=1692830482;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fEeQ0BrGSycrd2HYJ/F64FkxcfNt1wG/F0GbqsiDMHc=;
-        b=70ju2hKyUmKrm92QJdAPekeP5swEqHhWV+pqo3RFs5MKieF7pQIRafojB9i/a/v4Nr
-         32vxbvFyIAqIC4N+k9/Y5OJngJdWTdbN3JXV2zbvldBeSLjjm1v86NdJXNywh9FIGmM1
-         gGKv7IGp1kpAebh03fNNSdRCXUePVG25m6zjS5N9gDlMN+ljp+ZGk1wbw5a73DxUMwSc
-         xQvlXGOjBegGHoozG5sNO9ItpgNORYlG8c6khwpUFoE0ExkXNI3k8CNRRrmJUSTg1xOZ
-         TEt0OtEcpA9RRnh5yPiBnp2h4fRcA0Q8rh4bfYwGz57T/IqEF2s2XAbm7PUkZXDXT5Ui
-         /Ebg==
+        bh=mmIqxa6frC+gPR1n1W6gSgs3JOKzmDAS0GTXjwaiYmA=;
+        b=5Bs6sM4GRaoJLPQgY5xE+w4MsxnsgboK1Dh+YN60e0m/ucJzK4S8elgXG7atMdSjzx
+         oOezkrK7ViKu51PnZH/Z3xLWwNhNcx1e5EDYw6y14A5B29UuZzphtgdpHJMYA53uFNWJ
+         wwm/zz7P4OGidZfvmJ85fTEkb7klogJgqe0Sw85jgcD6/MxmUeY93gD2VDN2QtKEZzNQ
+         53CvG28kl5EOZ6s7R/Sn/nIaFP1fuAY/dVuNby+9CaOyrXWT1XU8oVaaINkYd6XQLmZz
+         FYC7dqMkHjzlfE3lmH/wJMGzPYM9HmKMjrlHWR096C+v32UrwmMH7+lVcGCCC3/9QwJt
+         /6hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692224081; x=1692828881;
+        d=1e100.net; s=20221208; t=1692225682; x=1692830482;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fEeQ0BrGSycrd2HYJ/F64FkxcfNt1wG/F0GbqsiDMHc=;
-        b=X7QY6zmvedHmLHQM8vRkp80RsDm3tOs2b1fNbS+OSszTZPeBkW0r7CAxn2UroSPNBL
-         QNr5Rgimhw48qcA4SXLFSaZWfz+UV0pEmzAr9vfujH4xsXmTiflHTwiIVrzxW/HA387d
-         /yPh1M/Bu9AFuCHcyPxfw9ltrsRUuc0+lSxcm9Y7ZMzG2iUfrZ+8MNTXwtLh9YM+Xare
-         1wztSJYyvKBjZ+jGBCvtuwBFDISnV3MZboAUwR48s2Sjim96ck93xvDRzLCfLsnEUnAL
-         S+UTW0cXuxpcDm1ViOAUht6o4SqNc3HSx+uOJhHoObgRVfeL34L8gYRBI0mU+Aa5vohC
-         mjlQ==
-X-Gm-Message-State: AOJu0YxjgnVpFH8I9rwdLjER2mbEKCYu44Yyq1wHgClUzmKi9snY5zBG
-        hX4z5ueu+rZ6UgdqbY9+cB5n7GLpG0hImbXyaE5z+A==
-X-Google-Smtp-Source: AGHT+IEjhZ4cZOnjuNqtHWoNW/DytduS8DsjFgsLhaLs5ni7Dg5U6HX1s7FEfydYlPDtscBplZAGdPp0Bu0fCNlbDAg=
-X-Received: by 2002:a05:622a:1a18:b0:3f9:56c:1129 with SMTP id
- f24-20020a05622a1a1800b003f9056c1129mr44310qtb.5.1692224081176; Wed, 16 Aug
- 2023 15:14:41 -0700 (PDT)
+        bh=mmIqxa6frC+gPR1n1W6gSgs3JOKzmDAS0GTXjwaiYmA=;
+        b=abm+dAfuVBYN9sBlERR0MTcTbBqBybv8LmtsJCiM9LqrRPljs6omaiU52Dt/KOC9sX
+         Q/OXa/nhC15ZK8CAKlUA5BnCXy+i0By7VrH25ENTb3dWi966gApZJZ7xzT7oEDX4+yew
+         QB0KF2G0BWG/DVL4o0q4skAVimRBl11wpV2HD2EBMe6Xz7TfxuZMvoLkYzYOAY3XoPn0
+         bDn0L/jueJGzK+UauaDtim815+mAHKZAgfXthWkz5i1pKPgc4BJyh6VQOYMUoE5IDG1l
+         Y31GSrw6bM5GXd3FonqU9u35Nv4uhMW5ge0oAgroi9mKBYkQ6BOp8oba7QHJYx43gugl
+         Gh5A==
+X-Gm-Message-State: AOJu0YzghsoQ2MiMm/2ILwWwLmddpUbm/tF0sZKk62VW43TwsU7GTuQ6
+        c86HZ4dbzJzthQ7AU1aSRt4FIdX2Ryl0/BrKcWlSR1Zi5R6DReAoafo=
+X-Google-Smtp-Source: AGHT+IG1+IPfo+RX82+EOF4EsXRn+LG2oKvxL3tLdVcgq7pTP/+tdR7tm3COfErbYJ2EsxeSvKy8qQ9gkLN6OhX6Xoo=
+X-Received: by 2002:a1f:c189:0:b0:48a:68d0:28fc with SMTP id
+ r131-20020a1fc189000000b0048a68d028fcmr3232564vkf.4.1692225682132; Wed, 16
+ Aug 2023 15:41:22 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org>
 In-Reply-To: <20230816-mips-vdso-cond-export-__vdso_gettimeofday-v1-1-fe725254c782@kernel.org>
-From:   Fangrui Song <maskray@google.com>
-Date:   Wed, 16 Aug 2023 15:14:30 -0700
-Message-ID: <CAFP8O3LN9j-qHcEmHE0mM-8F9rpMDZMe2wE5ybABPVV_UXtx9Q@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 16 Aug 2023 15:41:11 -0700
+Message-ID: <CAKwvOdmq2Yvf3g83xQdV9_X2NEHVNORb7xBMn2ivZ0jriBPv6w@mail.gmail.com>
 Subject: Re: [PATCH] MIPS: VDSO: Conditionally export __vdso_gettimeofday()
 To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
@@ -61,7 +61,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,6 +86,10 @@ so_gettimeofday' failed: symbol not defined
 > Closes: https://lore.kernel.org/oe-kbuild-all/202308170532.zxFFv25c-lkp@i=
 ntel.com/
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
 >  arch/mips/vdso/vdso.lds.S | 2 ++
 >  1 file changed, 2 insertions(+)
@@ -116,11 +120,7 @@ ntel.com/
 >
 >
 
-LGTM as a maintainer of lld/ELF who has fixed some user-space packages
-(https://github.com/gentoo/gentoo/pull/29097#issuecomment-1383304538).
-
-Reviewed-by: Fangrui Song <maskray@google.com>
-
 
 --=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+Thanks,
+~Nick Desaulniers
