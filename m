@@ -2,116 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C08677DB50
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Aug 2023 09:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA7777E00B
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Aug 2023 13:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242478AbjHPHlv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 16 Aug 2023 03:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S233602AbjHPLNo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Aug 2023 07:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242506AbjHPHld (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 03:41:33 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8A92684;
-        Wed, 16 Aug 2023 00:41:31 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-645181e1eaeso23771586d6.1;
-        Wed, 16 Aug 2023 00:41:31 -0700 (PDT)
+        with ESMTP id S244102AbjHPLNh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 07:13:37 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3E0E40;
+        Wed, 16 Aug 2023 04:13:36 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-68706b39c4cso4621589b3a.2;
+        Wed, 16 Aug 2023 04:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692184415; x=1692789215;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eSBjZcOTJy2eXVm/XkSIxwA5C0+XmtEjUZslwEUGHl0=;
+        b=KJ8rCY80WwxTbXcyh+gjS1GYyly+ntK9J2ynh3Qo7r6hatiwykn1YYxBq+htFiIYJo
+         t+YP9HTO+NlsfGLHVpYlVvHlMQzkfGZC2Jgqdid51TzG83A4npah8Q8x3Ve79yrvDGif
+         nDW8s4DKhO+zaenTAV3lefrJaBh/nwZrbxD9URJYUHGrxSBl2ilFWhdVNfqJ4eODkHx7
+         +zsIJZotay5aMpe92WZxDem8BN1ed7JTfaet+7ileJnrWfLpk28yK/1f1NZYwf8lBpHN
+         Og4pmzsJfjnNXQ1dWYLfVmJQPNh9OXJtI53GcCiV951sk1z7jbO/9gRuODrpLkvXqJfM
+         hjYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692171690; x=1692776490;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HkTNstwI73s4YFo3/SQhtE6/OXSa9yBSjbdY7mJiIyI=;
-        b=ZWCc9ScPiCC2xQyiN64sCepltSBLSmwB2j6GdgGlYkZ/L5skdvQ8mlv6OxJjZRkOIl
-         LQEmjzqQV4iG4/N1fR2gI60Xm5B7khwigOAvKcAZjKk5qPLoMdK6uVUl6A4coaAZ2vug
-         teo0vPrNe3qIp0vX2FA5mvVAsUJigWldcBojXeEyDg+Ok4+beC2zkqWNaG6TsDdhNL16
-         o9KjKA4Eefb5/6BnOR6rbV7Eha2ups0Yz/1WFK4UuJUhvOBgufPCJiJ24/M1O4rHfoXl
-         dbKbfeD3Cg4TSpUBJ/m7OflrTD4efP6XMic4kWKdcui+so21hGebk9BXPSdg5g0tgeky
-         xGuA==
-X-Gm-Message-State: AOJu0Ywl03oNue8j2JOGoehXptd714RTa2adC8zXvVvb+lg5tvi2h4wO
-        DNJwWubeAZ8X2knwP5L3B/ackTrzVMXtgQ==
-X-Google-Smtp-Source: AGHT+IHsLPuRqSkelDdJbL57KS+jFzD5VBtQSK0+r7VuMrg8naBsJnbZ0+fipciPzWuvba87SGrfBw==
-X-Received: by 2002:a0c:f2c4:0:b0:628:74d6:ba89 with SMTP id c4-20020a0cf2c4000000b0062874d6ba89mr1000338qvm.60.1692171690515;
-        Wed, 16 Aug 2023 00:41:30 -0700 (PDT)
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com. [209.85.222.169])
-        by smtp.gmail.com with ESMTPSA id o20-20020a0ccb14000000b0063c6c7f4b92sm4698938qvk.1.2023.08.16.00.41.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 00:41:28 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-76cb0d2fc9cso423004885a.2;
-        Wed, 16 Aug 2023 00:41:28 -0700 (PDT)
-X-Received: by 2002:a05:620a:3711:b0:76c:5715:b4a3 with SMTP id
- de17-20020a05620a371100b0076c5715b4a3mr1484328qkb.13.1692171688197; Wed, 16
- Aug 2023 00:41:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230816055010.31534-1-rdunlap@infradead.org>
-In-Reply-To: <20230816055010.31534-1-rdunlap@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Aug 2023 09:41:15 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWF0LseSGK6=aodXaoK9D16mxok4DDRs=gKoGox8k6zjg@mail.gmail.com>
-Message-ID: <CAMuHMdWF0LseSGK6=aodXaoK9D16mxok4DDRs=gKoGox8k6zjg@mail.gmail.com>
-Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        d=1e100.net; s=20221208; t=1692184415; x=1692789215;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eSBjZcOTJy2eXVm/XkSIxwA5C0+XmtEjUZslwEUGHl0=;
+        b=EjITisODL4KWuMR+1nVeawF9LoT1L2OZb2IVsEWJJBuMcZIcPGcRkIcLsxpzr9MEGr
+         tbayT0jrI9AhoPDFl5wZHDr5NINtA5MEoTrGHbtCVdyutu88ZkNx7xPRinTOasHRd31j
+         i465HKPFah80SlhXHNKYRCwUP4dLJ2Dd42VM/uOU6ipoX4XfMqTK1Zf+vA14lTTP6ObQ
+         aaCrpxZe2MgFLHoGJOhIqWIcf4OgmbCHurc3wPCXZztKHP63027sY3LPrKp4+R1swH32
+         kgIqKgUqbQTGUMMAB1s2NbJqd93ips3mJ7OjOgayN2TK9L6c/bwEL1TTul7cbNeSv1OJ
+         Uy3Q==
+X-Gm-Message-State: AOJu0YwGgs9+gos7jmOwSjZSwIGSVzpUfFNkmESTxYAcw5trX4TY7H1v
+        crEtmWwn2dWy3cs7Sdxt+6v7ZCw7AwN5GWqK
+X-Google-Smtp-Source: AGHT+IFWUErPVlP5682GLOgiwU48XugxogYfBtezH+idqJVmmax9mtxgiaR+BUBEuqNn6mi1UjRNJw==
+X-Received: by 2002:a05:6a00:399f:b0:686:2ad5:d11c with SMTP id fi31-20020a056a00399f00b006862ad5d11cmr1498244pfb.33.1692184414911;
+        Wed, 16 Aug 2023 04:13:34 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. ([38.114.108.131])
+        by smtp.gmail.com with ESMTPSA id r8-20020a638f48000000b00563e1ef0491sm11750627pgn.8.2023.08.16.04.13.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 04:13:34 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v2 0/4] Move Loongson1 MAC arch-code to the driver dir
+Date:   Wed, 16 Aug 2023 19:13:06 +0800
+Message-Id: <20230816111310.1656224-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Randy,
+In order to convert Loongson1 MAC platform devices to the devicetree
+nodes, Loongson1 MAC arch-code should be moved to the driver dir.
+Add dt-binding document and update MAINTAINERS file accordingly. 
+    
+In other words, this patchset is a preparation for converting
+Loongson1 platform devices to devicetree.
 
-On Wed, Aug 16, 2023 at 7:50 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> There is only one Kconfig user of CONFIG_EMBEDDED and it can be
-> switched to EXPERT or "if !ARCH_MULTIPLATFORM" (suggested by Arnd).
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Changelog
+V1 -> V2: Leave the Ethernet platform data for now
+          Make the syscon compatibles more specific
+          Fix "clock-names" and "interrupt-names" property
+          Rename the syscon property to "loongson,dwmac-syscon"
+          Drop "phy-handle" and "phy-mode" requirement
+          Revert adding loongson,ls1b-dwmac/loongson,ls1c-dwmac
+          to snps,dwmac.yaml
+          Fix the build errors due to CONFIG_OF being unset
+          Change struct reg_field definitions to const
+          Rename the syscon property to "loongson,dwmac-syscon"
+          Add MII PHY mode for LS1C
+          Improve the commit message
 
-Makes perfect sense to me.
+Keguang Zhang (4):
+  dt-bindings: mfd: syscon: Add compatibles for Loongson-1 syscon
+  dt-bindings: net: Add Loongson-1 DWMAC glue layer
+  net: stmmac: Add glue layer for Loongson-1 SoC
+  MAINTAINERS: Update MIPS/LOONGSON1 entry
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+ .../devicetree/bindings/mfd/syscon.yaml       |   2 +
+ .../bindings/net/loongson,ls1x-dwmac.yaml     |  98 +++++++
+ MAINTAINERS                                   |   2 +
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 273 ++++++++++++++++++
+ 6 files changed, 387 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1x-dwmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
+base-commit: ef66bf8aeb91fd331cf8f5dca8f9d7bca9ab2849
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
