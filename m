@@ -2,78 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B495177EFBF
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 06:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A273B77EFE4
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 06:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347979AbjHQELA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Aug 2023 00:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
+        id S1348019AbjHQEie (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Aug 2023 00:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347974AbjHQEKc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 00:10:32 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31702D58
-        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 21:10:31 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a7aedc57ffso5623448b6e.2
-        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 21:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692245431; x=1692850231;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gb4qAVlMN/V48c3tDnit9Qdh+68rSKImmu7s/ky4OWc=;
-        b=QZVr/KEqicRI/6SEayyUCINnGyTCaHQNpUidP/rTVfZpzY4WuOMnHGcHVPKXN4Avtd
-         v2Heqe2gzJDKdah5q8+CrUXrM0gbgquO1BMb3sXLowyrDdQb9bNyqDLhualr7G4ZOsjc
-         6dUMsjpMSnM3V0bOiyUgHeHbgMhaGR1qwXpEmWCTeVOu5foSWdJkBMiICSSlknsgKzjT
-         i11BLhBsjTOusIbMPFfUUNx099LKBDik3WnhGcmkMQAQmXKOjBWOmvzPmwLBcnW2Z4pK
-         qSIRe1U1PMqbITVS5d7PRt3HFk6Ih8+6SeqgL9N+S7PfD0F8hRDBVXMKeDOVoJMboMd2
-         Seug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692245431; x=1692850231;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gb4qAVlMN/V48c3tDnit9Qdh+68rSKImmu7s/ky4OWc=;
-        b=LBPBprYQ++yR/jDHT8hCby8IZmmgiDeYQpu5J35Ty1qHOm2HIDfbqGXsOSMf/e7K8J
-         94s6YOKUXx4QSjKYUHmK9/MVNPUdP/7B0nh6MN01+GiiVrXQgtYggrkYCHimX3E7Z3j5
-         2gw8oflI9K/bXL8eVrCMnS09fTdFDg03vmAKnVkorUkLGy59AC7pKFmKxkOcqSDc25Pt
-         0yXUB6tMJ6N/kTBEbGonMJrVoEzBETfbTVOUjSKuJfasZKQq2yCl3CNY+BhxjAV0qyam
-         7iGPjlCQ1tTHvT4t+UabVo7kifoPcpmDr77fGXSisCmTCQu/HtgmQtKiqtmQe0MuKgF+
-         yzkQ==
-X-Gm-Message-State: AOJu0Yx35Ng5i1EN+AyGQACF34qmyHLMl6PPVRx11Y91Y0djZTuW3GBS
-        BuqoHPB1RCJNRR4SkDNxp53A/EH5+NcSMx8cZQ4=
-X-Google-Smtp-Source: AGHT+IE+EUtZMOEKAqBMqqYWqu/RGZn+LQHYrEoeh4RZ4kAZ5+7Cge6AatfGuElbDFAwVCFeG3d4+yjCF93CGJg6ub4=
-X-Received: by 2002:a05:6808:211d:b0:3a7:500a:a481 with SMTP id
- r29-20020a056808211d00b003a7500aa481mr5048636oiw.3.1692245430889; Wed, 16 Aug
- 2023 21:10:30 -0700 (PDT)
+        with ESMTP id S1348018AbjHQEi1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 00:38:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997D010E6;
+        Wed, 16 Aug 2023 21:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1692247099;
+        bh=TTioG2ECpny8c1gUsV9lSzzBSbOyxoHgJmKmcWGJJb4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=XBb7K0DGSY/aWma20FuWJJsaYj/I7WnxTgc1QHrKacwxzHabn8IDVtxnh+u1kir6R
+         0/dCSv6v4j6K+H0n0qfcFvbzDwuMx48my6HmK54JUowGxZTDeBv/LzC/fGdkjM0jbL
+         uhrythOSDp6fSsw5OTIIfIEFFsUSHSrvxpvNZyVXzcV91YnrQwqGxwE4iXdMVpv7PD
+         KJDmjPNi29obujTq193LiorByY4yu6Webks9bDdTMqdbgikcZ6YUA9A+9yqAiDvppy
+         K31/Jqh8vTUknZvmhTxSZipw5CVFpctxK0wQ1Ogxo+krqzabVOtQDHKwv50O+7cmGR
+         NxwruEUcx/hdw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRC1B2MJWz4wZn;
+        Thu, 17 Aug 2023 14:38:06 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        Vineet Gupta <vgupta@kernel.org>,
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
+In-Reply-To: <20230816055010.31534-1-rdunlap@infradead.org>
+References: <20230816055010.31534-1-rdunlap@infradead.org>
+Date:   Thu, 17 Aug 2023 14:38:05 +1000
+Message-ID: <875y5e707m.fsf@mail.lhotse>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:d099:b0:133:91d:bed5 with HTTP; Wed, 16 Aug 2023
- 21:10:30 -0700 (PDT)
-Reply-To: privateemail01112@gmail.com
-From:   KEIN BRIGGS <privateemailjsuee@gmail.com>
-Date:   Wed, 16 Aug 2023 21:10:30 -0700
-Message-ID: <CAGgyiOpF7Zv46NvVHY4rvTo1qBA_8ijKgS9y7fMp4AZEZxHXwQ@mail.gmail.com>
-Subject: Your attention please!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Your attention please!
+Randy Dunlap <rdunlap@infradead.org> writes:
+> There is only one Kconfig user of CONFIG_EMBEDDED and it can be
+> switched to EXPERT or "if !ARCH_MULTIPLATFORM" (suggested by Arnd).
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+...
+>  arch/powerpc/configs/40x/klondike_defconfig          |    2 +-
+>  arch/powerpc/configs/44x/fsp2_defconfig              |    2 +-
+>  arch/powerpc/configs/52xx/tqm5200_defconfig          |    2 +-
+>  arch/powerpc/configs/mgcoge_defconfig                |    2 +-
+>  arch/powerpc/configs/microwatt_defconfig             |    2 +-
+>  arch/powerpc/configs/ps3_defconfig                   |    2 +-
+  
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-My efforts to reaching you many times always not through.
+...
 
-Please may you kindly let me know if you are still using this email
-address as my previous messages to you were not responded to.
+> diff -- a/init/Kconfig b/init/Kconfig
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1790,14 +1790,6 @@ config DEBUG_RSEQ
+>  
+>  	  If unsure, say N.
+>  
+> -config EMBEDDED
+> -	bool "Embedded system"
+> -	select EXPERT
 
-I await hearing from you once more if my previous messages were not received.
-Reach me via my email: privateemail01112@gmail.com
+This is a crucial detail that could be mentioned in the change log. ie.
+that all defconfigs that currently have EMBEDDED=y are currently
+selecting EXPERT already.
 
-My regards,
-Kein Briggs.
+cheers
