@@ -2,156 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F96577ED8D
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 01:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5723A77EF46
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 05:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347071AbjHPXBx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Aug 2023 19:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S1347722AbjHQDAZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Aug 2023 23:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244027AbjHPXBW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 19:01:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0250413E;
-        Wed, 16 Aug 2023 16:01:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8983B65891;
-        Wed, 16 Aug 2023 23:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F34DC433CC;
-        Wed, 16 Aug 2023 23:01:18 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jXokpT8H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1692226871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fJ+exFyMwxf+Sp/aWFmN/k274aR2STKWbu8odcAPWm8=;
-        b=jXokpT8HHm9bHv6hIJ3T3CMHWSwvmBYeqbPj7fjD4Ezxvigmdm/fXPxtKXDXtXiveMyEy2
-        K2zo2MO6Jx19/zc76sU6x7FN12g49ex3CRn9eKlZgLZMkYTlRh8PLwi9EYMp443CajZ7FT
-        H+k/S7W81nftL8bDVz+/B0+KLWJPGLw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 598949e3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 16 Aug 2023 23:01:10 +0000 (UTC)
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-79414715edeso1459494241.0;
-        Wed, 16 Aug 2023 16:01:09 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yxcwh35R/0Ner5l4oPPLmekSzhwnYWcQU82HFTrav4OM8vLDKZT
-        2JSmLNPtBDrGKjIokzc8ouVW9HG/85iwCCht4Jg=
-X-Google-Smtp-Source: AGHT+IFdKTop/dTzxxplY5bDLsdLZZ0m1tGPXQJd6rkmBy2Wm4exC645Mb9rMUW6TK7Pnh6+pZhH7oflLvX5KYDSdqc=
-X-Received: by 2002:a67:e211:0:b0:443:c87f:ebb1 with SMTP id
- g17-20020a67e211000000b00443c87febb1mr2517297vsa.29.1692226866965; Wed, 16
- Aug 2023 16:01:06 -0700 (PDT)
+        with ESMTP id S1347732AbjHQC7y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 22:59:54 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BA1198C;
+        Wed, 16 Aug 2023 19:59:53 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-4103fdba0fbso24473571cf.3;
+        Wed, 16 Aug 2023 19:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692241192; x=1692845992;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VqIUTEi6b5maOYfEISJN/XLCGUsT7sZm6MvKkdhtPPQ=;
+        b=WHSqp/OjipS4malg5Jhuw8Q9iUeu1/JOmbXWqXYvnZgGD0kM17N6tQvxwUsCI5NLru
+         Uc5eVbilZvj+vU/FDtUEKtVANL/igEVVU9fMzmN+KBhf+xt59WNKpal6tsNf+z9+Y7TV
+         yD5Im18r3kHMjvZZUNXeLn1YO9dO18rMwOHA24MSxJx1EZE51SgTXLAarM8kC0zelVrK
+         5SidfXYcfJz7Lp9YUVglFIezKC2ivHG+RE4hB+Sk1DDJsqYqmafTDGDirXACn06WXuBz
+         DmK8i+/ZjA5wROpsni5u9JVtRraWCxRDSDmuyfbzUbITI31KPak3SF5rZt2bcrO0fYUd
+         z78Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692241192; x=1692845992;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VqIUTEi6b5maOYfEISJN/XLCGUsT7sZm6MvKkdhtPPQ=;
+        b=jnt//KyImeMxegv8yxg02QybV/0wgmGApzrAnGbNAhF8347eUuwPoG3fqhwigbTTm3
+         z/47o1FunnSpWXRuE4LUOTQf73m6eNcrGjxKaP5vdso23tGJCVTLgJj2CfFXYOk4n3jR
+         qRCY/p4Z+h38iUKLCkFS2+Pp7EC3FUavaNRGx17FLsXDFHkELpQIqVTxon7Hn/XWIJwz
+         uD4z4AdTK+Tm1735Po/HKFCmI2n/sSt/Dlql+JaM554GTtFXWfUFojVrvGOeth5p6rou
+         KgExB5nNcZdZEpMTOmC26dazbVT7lwX2RJa3Op3BNexoQWgnbIdXhWCcU5x2w78jUhw9
+         z5JA==
+X-Gm-Message-State: AOJu0YwF6+xj7uYVM+7ShVwm99ixEbq85dXWGuST93zpMVfeH8jmHeoo
+        acQkwQAPb67kJDtq7+AWV4ZXF/Nfht0=
+X-Google-Smtp-Source: AGHT+IFBzAZ0MiGiVZDZXUmHBUCgDd7pIXBv+9jFVMKW5hvqzp/dG7vKept76xYLnf/geME77zPN6A==
+X-Received: by 2002:a0c:e047:0:b0:636:afa1:345d with SMTP id y7-20020a0ce047000000b00636afa1345dmr3324091qvk.17.1692241191804;
+        Wed, 16 Aug 2023 19:59:51 -0700 (PDT)
+Received: from localhost.localdomain (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
+        by smtp.gmail.com with ESMTPSA id c16-20020a0cf2d0000000b0063d0159e1f6sm5260184qvm.109.2023.08.16.19.59.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 19:59:51 -0700 (PDT)
+From:   Trevor Woerner <twoerner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 0/4] general defconfig cleanups
+Date:   Wed, 16 Aug 2023 22:59:35 -0400
+Message-ID: <20230817025942.3209-1-twoerner@gmail.com>
+X-Mailer: git-send-email 2.41.0.327.gaa9166bcc0ba
 MIME-Version: 1.0
-References: <20230816055010.31534-1-rdunlap@infradead.org>
-In-Reply-To: <20230816055010.31534-1-rdunlap@infradead.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 17 Aug 2023 00:58:18 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pxC_e6Ftj1MJ4H2skhhKfNubd=7OwcH9xepCxjkDxpkg@mail.gmail.com>
-Message-ID: <CAHmME9pxC_e6Ftj1MJ4H2skhhKfNubd=7OwcH9xepCxjkDxpkg@mail.gmail.com>
-Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, wireguard@lists.zx2c4.com,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 7:50=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> There is only one Kconfig user of CONFIG_EMBEDDED and it can be
-> switched to EXPERT or "if !ARCH_MULTIPLATFORM" (suggested by Arnd).
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: wireguard@lists.zx2c4.com
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: Brian Cain <bcain@quicinc.com>
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: Greg Ungerer <gerg@linux-m68k.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: linux-openrisc@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> diff -- a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/te=
-sting/selftests/wireguard/qemu/kernel.config
-> --- a/tools/testing/selftests/wireguard/qemu/kernel.config
-> +++ b/tools/testing/selftests/wireguard/qemu/kernel.config
-> @@ -41,7 +41,6 @@ CONFIG_KALLSYMS=3Dy
->  CONFIG_BUG=3Dy
->  CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=3Dy
->  CONFIG_JUMP_LABEL=3Dy
-> -CONFIG_EMBEDDED=3Dn
->  CONFIG_BASE_FULL=3Dy
->  CONFIG_FUTEX=3Dy
->  CONFIG_SHMEM=3Dy
+Drop config options from defconfigs whose code has been removed.
 
-Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+v2:
+Generate arch-specific patches. In v1 I organized the patches by
+CONFIG_ option which caused some of the patches to cross architectural
+lines. This requires cross-arch consensus before they can be applied.
+Therefore organize the changes by architecture so each one can apply them
+independently (or not).
+
+Trevor Woerner (4):
+  arch/arm/configs/*_defconfig cleanup
+  arch/loongarch/configs/*_defconfig cleanup
+  arch/mips/configs/*_defconfig cleanup
+  arch/powerpc/configs/*_defconfig cleanup
+
+ arch/arm/configs/keystone_defconfig        | 1 -
+ arch/arm/configs/multi_v7_defconfig        | 1 -
+ arch/arm/configs/omap2plus_defconfig       | 8 --------
+ arch/loongarch/configs/loongson3_defconfig | 2 --
+ arch/mips/configs/ip22_defconfig           | 1 -
+ arch/mips/configs/malta_defconfig          | 1 -
+ arch/mips/configs/malta_kvm_defconfig      | 1 -
+ arch/mips/configs/maltaup_xpa_defconfig    | 1 -
+ arch/mips/configs/rm200_defconfig          | 1 -
+ arch/powerpc/configs/ppc6xx_defconfig      | 1 -
+ 10 files changed, 18 deletions(-)
+
+-- 
+2.41.0.327.gaa9166bcc0ba
+
