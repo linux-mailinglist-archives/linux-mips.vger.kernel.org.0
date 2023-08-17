@@ -2,130 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3816E77EF69
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 05:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B495177EFBF
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 06:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241204AbjHQDPj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Aug 2023 23:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
+        id S1347979AbjHQELA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Aug 2023 00:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347825AbjHQDPc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Aug 2023 23:15:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BBB1724;
-        Wed, 16 Aug 2023 20:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=P/kFyzCr/eSDaJkbY0OlCILEe1j9xWTLXn/yJLAYIu4=; b=A9+ZOyBLxgvkefgcCG3G+GbFOc
-        t3Q4LPTtkkpyh0LBpbAFdc+3lhG3pcvB3Tuy2cTe9/M//iW+Sx1QS7+tpwHS9HCucIDpD/RDGCGIr
-        FphyIapebkE7eEjeEnFtOi+9dwumQAvsQRYGjE0GEiZ5WBo53AxtXkFjlluHJQQSFYe1ZQ0mwCfpK
-        6X/okD9sKE4Z8iWegd56l1SCJXl6wUSJ5Uk04klLzVcTy3SNTh8mgr2aL00kPfkoj1Td2N2/Azxck
-        21ORjXTS2+GmCUfbeyQtLCC4mizooGziW6L1eBdD4Ta+hfKURTJGkPtTMCT5Ht16ny8Gi1C8JbRXm
-        mdreectQ==;
-Received: from [2601:1c2:980:9ec0::1a0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qWTTi-000tOI-Mm; Thu, 17 Aug 2023 03:15:18 +0000
-Message-ID: <86e329b1-c8d7-47bf-8be8-3326daf74eb5@infradead.org>
-Date:   Wed, 16 Aug 2023 20:15:09 -0700
+        with ESMTP id S1347974AbjHQEKc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 00:10:32 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31702D58
+        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 21:10:31 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a7aedc57ffso5623448b6e.2
+        for <linux-mips@vger.kernel.org>; Wed, 16 Aug 2023 21:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692245431; x=1692850231;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gb4qAVlMN/V48c3tDnit9Qdh+68rSKImmu7s/ky4OWc=;
+        b=QZVr/KEqicRI/6SEayyUCINnGyTCaHQNpUidP/rTVfZpzY4WuOMnHGcHVPKXN4Avtd
+         v2Heqe2gzJDKdah5q8+CrUXrM0gbgquO1BMb3sXLowyrDdQb9bNyqDLhualr7G4ZOsjc
+         6dUMsjpMSnM3V0bOiyUgHeHbgMhaGR1qwXpEmWCTeVOu5foSWdJkBMiICSSlknsgKzjT
+         i11BLhBsjTOusIbMPFfUUNx099LKBDik3WnhGcmkMQAQmXKOjBWOmvzPmwLBcnW2Z4pK
+         qSIRe1U1PMqbITVS5d7PRt3HFk6Ih8+6SeqgL9N+S7PfD0F8hRDBVXMKeDOVoJMboMd2
+         Seug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692245431; x=1692850231;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gb4qAVlMN/V48c3tDnit9Qdh+68rSKImmu7s/ky4OWc=;
+        b=LBPBprYQ++yR/jDHT8hCby8IZmmgiDeYQpu5J35Ty1qHOm2HIDfbqGXsOSMf/e7K8J
+         94s6YOKUXx4QSjKYUHmK9/MVNPUdP/7B0nh6MN01+GiiVrXQgtYggrkYCHimX3E7Z3j5
+         2gw8oflI9K/bXL8eVrCMnS09fTdFDg03vmAKnVkorUkLGy59AC7pKFmKxkOcqSDc25Pt
+         0yXUB6tMJ6N/kTBEbGonMJrVoEzBETfbTVOUjSKuJfasZKQq2yCl3CNY+BhxjAV0qyam
+         7iGPjlCQ1tTHvT4t+UabVo7kifoPcpmDr77fGXSisCmTCQu/HtgmQtKiqtmQe0MuKgF+
+         yzkQ==
+X-Gm-Message-State: AOJu0Yx35Ng5i1EN+AyGQACF34qmyHLMl6PPVRx11Y91Y0djZTuW3GBS
+        BuqoHPB1RCJNRR4SkDNxp53A/EH5+NcSMx8cZQ4=
+X-Google-Smtp-Source: AGHT+IE+EUtZMOEKAqBMqqYWqu/RGZn+LQHYrEoeh4RZ4kAZ5+7Cge6AatfGuElbDFAwVCFeG3d4+yjCF93CGJg6ub4=
+X-Received: by 2002:a05:6808:211d:b0:3a7:500a:a481 with SMTP id
+ r29-20020a056808211d00b003a7500aa481mr5048636oiw.3.1692245430889; Wed, 16 Aug
+ 2023 21:10:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
-To:     20230816055010.31534-1-rdunlap@infradead.org
-Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <38e1a01b-1e8b-7c66-bafc-fc5861f08da9@gmail.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <38e1a01b-1e8b-7c66-bafc-fc5861f08da9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:d099:b0:133:91d:bed5 with HTTP; Wed, 16 Aug 2023
+ 21:10:30 -0700 (PDT)
+Reply-To: privateemail01112@gmail.com
+From:   KEIN BRIGGS <privateemailjsuee@gmail.com>
+Date:   Wed, 16 Aug 2023 21:10:30 -0700
+Message-ID: <CAGgyiOpF7Zv46NvVHY4rvTo1qBA_8ijKgS9y7fMp4AZEZxHXwQ@mail.gmail.com>
+Subject: Your attention please!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jesse,
+Your attention please!
 
-On 8/16/23 15:45, Jesse Taube wrote:
-> Hi, Randy
-> 
->> diff -- a/init/Kconfig b/init/Kconfig
->> --- a/init/Kconfig
->> +++ b/init/Kconfig
->> @@ -1790,14 +1790,6 @@ config DEBUG_RSEQ
->>
->>        If unsure, say N.
->>
->> -config EMBEDDED
->> -    bool "Embedded system"
->> -    select EXPERT
->> -    help
->> -      This option should be enabled if compiling the kernel for
->> -      an embedded system so certain expert options are available
->> -      for configuration.
-> 
-> Wouldn't removing this break many out of tree configs?
+My efforts to reaching you many times always not through.
 
-I'm not familiar with out-of-tree configs.
-Do you have some examples of some that use CONFIG_EMBEDDED?
-(not distros)
+Please may you kindly let me know if you are still using this email
+address as my previous messages to you were not responded to.
 
-> Should there be a warning here to update change it instead of removal?
+I await hearing from you once more if my previous messages were not received.
+Reach me via my email: privateemail01112@gmail.com
 
-kconfig doesn't have a warning mechanism AFAIK.
-Do you have an idea of how this would work?
-
-We could make a smaller change to init/Kconfig, like so:
-
- config EMBEDDED
--	bool "Embedded system"
-+	bool "Embedded system (DEPRECATED)"
- 	select EXPERT
- 	help
--	  This option should be enabled if compiling the kernel for
--	  an embedded system so certain expert options are available
--	  for configuration.
-+	  This option is being removed after Linux 6.6.
-+	  Use EXPERT instead of EMBEDDED.
-
-but there is no way to produce a warning message. I.e., even with this
-change, the message will probably be overlooked.
-
----
-~Randy
-
+My regards,
+Kein Briggs.
