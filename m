@@ -2,77 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFF777F24D
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 10:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7903C77F344
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 11:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348971AbjHQIkD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Aug 2023 04:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S1349589AbjHQJ3j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Aug 2023 05:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348918AbjHQIjj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 04:39:39 -0400
+        with ESMTP id S1349640AbjHQJ3b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 05:29:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2236210EC;
-        Thu, 17 Aug 2023 01:39:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB1F2712;
+        Thu, 17 Aug 2023 02:29:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6F56634BD;
-        Thu, 17 Aug 2023 08:39:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03339C433C8;
-        Thu, 17 Aug 2023 08:39:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 286A666205;
+        Thu, 17 Aug 2023 09:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAD2C433C7;
+        Thu, 17 Aug 2023 09:29:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692261577;
-        bh=gMp6O7RtrZswN4fQDVTuF4+KfrQJM+cudroXxhAsVfs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZgoJR7uYCUZlDATqxGYVSz+0U1lPgeLMrIlBdxGBWDF1/i35EtI8booG6hSrz+ykh
-         YmbA4whrCn8muyr0h6HW+jwWE3g4GSRi+YWbfXznaw2pHKrqcYrUi7dy/1vUOUljIe
-         NXaJmLBvdRpsIy6GYcHuZgUmV50vh76LEapsSfkHdLzfAZbbJJOhIGMbsksQuMQVLA
-         1eikKjIJeteWDD1tS/88xT1H/klaBjuQvK34eZq66GTjWFp6Zz7VWBtw+Pdi8czJNg
-         EGVZQenILaUDBVgiaRwgthKKI3Bt/mF39TYq1qS2O9yupSu5TNtpxknKcO76xYpz3h
-         TJYcs43ZT4E6A==
-Received: from 82-132-234-11.dab.02.net ([82.132.234.11] helo=wait-a-minute.misterjones.org)
+        s=k20201202; t=1692264568;
+        bh=P4Sp+VqUPcqI98k0LUu6HacGUKj+uHSgw7K7aWCb3k0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Q+zYTe9UDF16wP55sTzt+DzGXrWWyu3oY8QF11Gft1JI/tmxvtFEXbtzd0EuHXfBL
+         5MC7tmMiCNFj6YaWcEiak6GLPjmrNiCI/TnQqG01d/+uqGGOYC6tNi+X7ILYxEue0n
+         pfX4YT3XQPt6aNdLhs3RYger0xbLcWjoyfYkZCvsSyUKaSnLjTXZ9rPHiujhdNpxzl
+         2hoAdivaRbwMKK6PyWvXHHNiRjpHf2y+Pec6dwRJlKimbIuUBRLCxCDYAg6m/1P1b2
+         5v4E9wojAJCLauOhLoS73p8UZOnO38263A6U6MVFTXvciUaFbBkdRFG4tzAJgrp/Hr
+         odQW5fyOYiEww==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1qWYXW-005coN-B9;
-        Thu, 17 Aug 2023 09:39:34 +0100
-Date:   Thu, 17 Aug 2023 09:39:31 +0100
-Message-ID: <87a5uqoyf0.wl-maz@kernel.org>
+        id 1qWZJl-005dbe-IC;
+        Thu, 17 Aug 2023 10:29:25 +0100
 From:   Marc Zyngier <maz@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
+To:     Oliver Upton <oliver.upton@linux.dev>,
         James Morse <james.morse@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
+        Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Reiji Watanabe <reijiw@google.com>, kvmarm@lists.linux.dev,
         Jing Zhang <jingzhangos@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
+        kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+        Anup Patel <anup@brainfault.org>,
         Colton Lewis <coltonlewis@google.com>,
+        Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         David Matlack <dmatlack@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Gavin Shan <gshan@redhat.com>,
-        Shaoqin Huang <shahuang@redhat.com>
-Subject: Re: [PATCH v9 05/14] KVM: Allow range-based TLB invalidation from common code
-In-Reply-To: <ZNv8cCzI9fMWkGWT@google.com>
+        Sean Christopherson <seanjc@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-riscv@lists.infradead.org,
+        Atish Patra <atishp@atishpatra.org>
+Subject: Re: [PATCH v9 00/14] KVM: arm64: Add support for FEAT_TLBIRANGE
+Date:   Thu, 17 Aug 2023 10:29:21 +0100
+Message-Id: <169226452281.2753740.2247650864841184971.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230811045127.3308641-1-rananta@google.com>
 References: <20230811045127.3308641-1-rananta@google.com>
-        <20230811045127.3308641-6-rananta@google.com>
-        <ZNv8cCzI9fMWkGWT@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 82.132.234.11
-X-SA-Exim-Rcpt-To: seanjc@google.com, rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, chenhuacai@kernel.org, yuzenghui@huawei.com, anup@brainfault.org, atishp@atishpatra.org, jingzhangos@google.com, reijiw@google.com, coltonlewis@google.com, dmatlack@google.com, tabba@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, gshan@redhat.com, shahuang@redhat.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, rananta@google.com, pbonzini@redhat.com, reijiw@google.com, kvmarm@lists.linux.dev, jingzhangos@google.com, kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org, anup@brainfault.org, coltonlewis@google.com, tabba@google.com, kvm@vger.kernel.org, chenhuacai@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, dmatlack@google.com, seanjc@google.com, yuzenghui@huawei.com, linux-riscv@lists.infradead.org, atishp@atishpatra.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -84,52 +79,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 15 Aug 2023 23:30:08 +0100,
-Sean Christopherson <seanjc@google.com> wrote:
+On Fri, 11 Aug 2023 04:51:13 +0000, Raghavendra Rao Ananta wrote:
+> In certain code paths, KVM/ARM currently invalidates the entire VM's
+> page-tables instead of just invalidating a necessary range. For example,
+> when collapsing a table PTE to a block PTE, instead of iterating over
+> each PTE and flushing them, KVM uses 'vmalls12e1is' TLBI operation to
+> flush all the entries. This is inefficient since the guest would have
+> to refill the TLBs again, even for the addresses that aren't covered
+> by the table entry. The performance impact would scale poorly if many
+> addresses in the VM is going through this remapping.
 > 
-> On Fri, Aug 11, 2023, Raghavendra Rao Ananta wrote:
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index ec169f5c7dce2..00f7bda9202f2 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -278,16 +278,14 @@ static inline bool kvm_available_flush_remote_tlbs_range(void)
-> >  	return kvm_x86_ops.flush_remote_tlbs_range;
-> >  }
-> >  
-> > -void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
-> > -				 gfn_t nr_pages)
-> > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, u64 nr_pages)
-> >  {
-> >  	int ret = -EOPNOTSUPP;
-> >  
-> >  	if (kvm_x86_ops.flush_remote_tlbs_range)
-> > -		ret = static_call(kvm_x86_flush_remote_tlbs_range)(kvm, start_gfn,
-> > -								   nr_pages);
-> > -	if (ret)
-> > -		kvm_flush_remote_tlbs(kvm);
-> > +		ret = static_call(kvm_x86_flush_remote_tlbs_range)(kvm, gfn, nr_pages);
-> > +
-> > +	return ret;
-> 
-> Please write this as
-> 
-> 	if (kvm_x86_ops.flush_remote_tlbs_range)
-> 		return static_call(kvm_x86_flush_remote_tlbs_range)(kvm, gfn, nr_pages);
-> 
-> 	return -EOPNOTSUPP;
-> 
-> or alternatively
-> 
-> 	if (!kvm_x86_ops.flush_remote_tlbs_range)
-> 		return -EOPNOTSUPP;
-> 
-> 	return static_call(kvm_x86_flush_remote_tlbs_range)(kvm, gfn, nr_pages);
-> 
-> Hmm, I'll throw my official vote for the second version.
+> [...]
 
-I've applied the second version locally.
+Applied to next, thanks!
+
+[01/14] KVM: Rename kvm_arch_flush_remote_tlb() to kvm_arch_flush_remote_tlbs()
+        commit: a1342c8027288e345cc5fd16c6800f9d4eb788ed
+[02/14] KVM: Declare kvm_arch_flush_remote_tlbs() globally
+        commit: cfb0c08e80120928dda1e951718be135abd49bae
+[03/14] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
+        commit: 32121c813818a87ba7565b3afce93a9cc3610a22
+[04/14] KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
+        commit: eddd21481011008792f4e647a5244f6e15970abc
+[05/14] KVM: Allow range-based TLB invalidation from common code
+        commit: d4788996051e3c07fadc6d9b214073fcf78810a8
+[06/14] KVM: Move kvm_arch_flush_remote_tlbs_memslot() to common code
+        commit: 619b5072443c05cf18c31b2c0320cdb42396d411
+[07/14] arm64: tlb: Refactor the core flush algorithm of __flush_tlb_range
+        commit: 360839027a6e4c022e8cbaa373dd747185f1e0a5
+[08/14] arm64: tlb: Implement __flush_s2_tlb_range_op()
+        commit: 4d73a9c13aaa78b149ac04b02f0ee7973f233bfa
+[09/14] KVM: arm64: Implement __kvm_tlb_flush_vmid_range()
+        commit: 6354d15052ec88273c24beae4c99e31c3d3889b6
+[10/14] KVM: arm64: Define kvm_tlb_flush_vmid_range()
+        commit: 117940aa6e5f8308f1529e1313660980f1dae771
+[11/14] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+        commit: c42b6f0b1cde4dd19e6b5dd052e67b87cc331b01
+[12/14] KVM: arm64: Flush only the memslot after write-protect
+        commit: 3756b6f2bb3a242fef0867b39a23607f5aeca138
+[13/14] KVM: arm64: Invalidate the table entries upon a range
+        commit: defc8cc7abf0fcee8d73e440ee02827348d060e0
+[14/14] KVM: arm64: Use TLBI range-based instructions for unmap
+        commit: 7657ea920c54218f123ddc1b572821695b669c13
+
+Cheers,
 
 	M.
-
 -- 
 Without deviation from the norm, progress is not possible.
+
+
