@@ -2,130 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7903C77F344
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 11:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7E277F566
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 13:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349589AbjHQJ3j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Aug 2023 05:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S1350358AbjHQLiP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Aug 2023 07:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349640AbjHQJ3b (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 05:29:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB1F2712;
-        Thu, 17 Aug 2023 02:29:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 286A666205;
-        Thu, 17 Aug 2023 09:29:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAD2C433C7;
-        Thu, 17 Aug 2023 09:29:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692264568;
-        bh=P4Sp+VqUPcqI98k0LUu6HacGUKj+uHSgw7K7aWCb3k0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q+zYTe9UDF16wP55sTzt+DzGXrWWyu3oY8QF11Gft1JI/tmxvtFEXbtzd0EuHXfBL
-         5MC7tmMiCNFj6YaWcEiak6GLPjmrNiCI/TnQqG01d/+uqGGOYC6tNi+X7ILYxEue0n
-         pfX4YT3XQPt6aNdLhs3RYger0xbLcWjoyfYkZCvsSyUKaSnLjTXZ9rPHiujhdNpxzl
-         2hoAdivaRbwMKK6PyWvXHHNiRjpHf2y+Pec6dwRJlKimbIuUBRLCxCDYAg6m/1P1b2
-         5v4E9wojAJCLauOhLoS73p8UZOnO38263A6U6MVFTXvciUaFbBkdRFG4tzAJgrp/Hr
-         odQW5fyOYiEww==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1qWZJl-005dbe-IC;
-        Thu, 17 Aug 2023 10:29:25 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Reiji Watanabe <reijiw@google.com>, kvmarm@lists.linux.dev,
-        Jing Zhang <jingzhangos@google.com>,
-        kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        Anup Patel <anup@brainfault.org>,
-        Colton Lewis <coltonlewis@google.com>,
-        Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        David Matlack <dmatlack@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-riscv@lists.infradead.org,
-        Atish Patra <atishp@atishpatra.org>
-Subject: Re: [PATCH v9 00/14] KVM: arm64: Add support for FEAT_TLBIRANGE
-Date:   Thu, 17 Aug 2023 10:29:21 +0100
-Message-Id: <169226452281.2753740.2247650864841184971.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230811045127.3308641-1-rananta@google.com>
-References: <20230811045127.3308641-1-rananta@google.com>
+        with ESMTP id S1350318AbjHQLh4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 07:37:56 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CD6F7;
+        Thu, 17 Aug 2023 04:37:55 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-407ff54164dso46076651cf.2;
+        Thu, 17 Aug 2023 04:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692272274; x=1692877074;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w31IQ5YkuY2ltFjG4ujyeSdaSaelLhYfdYtgX94Kf4E=;
+        b=EHVGSdB8PoUrtTCoQFXL+MK+2xc+VAtPK4qKUYQwyzjM5DBPYrCKcPmzfgsVCpr4Cw
+         Ebfe/1EtiuLdE0T/m99L0FuBCVRELNfBzDg+8n9tvhQCFZcqXLXhLlRZADiUn2n7I9wi
+         WcyDAEnxKkc9AZGWAbHlBZhXrJlees9LEUFrOcTDcnWMHX8haQk3ATXoTp1E8lyFoyUd
+         qwCEQreDh3Zyda1l8U2rFHCgUKoqVICpGSmUM+324uwRYvlnh+aZh8YKDdQb44WVTcle
+         DDjNZQUIPKuVWpEK1CsvwtxQnouYWI485BC9zeteA/+abMq9yb1K/HOKACy1ztRQVn/+
+         ilSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692272274; x=1692877074;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w31IQ5YkuY2ltFjG4ujyeSdaSaelLhYfdYtgX94Kf4E=;
+        b=apOmzX/6xhlQoDyfJo97K0Ad6gr8xVvCDvg0lrWkUXqEx7ARgRwDBQYuNUFt4o5MnF
+         kWN7MwO2Ho4fkGaKlcHViJ00TTkKlwln7RSB2rMh5mMrJZi5AdsrsjKZpnEz13ZLr/+M
+         R6oGwG7uIghxQ9gZT8I2qtw8U1wroaDC2TzOXFvU16FSF+ZyZrM41PoHQgBcKcm4x+pS
+         ULOjSu632JezC7Vs6U6IfBdKr8GKtwR9mOy7MBW2YF8Dkc6kvDaMyNk2AbLLlVzg0YpB
+         eHnO9MGx/d/RaI6DNFzPoLQEXRU2WsC0Ezd+G07UsjjNaE7xa+V92uA5CzHx5OekQK5p
+         ggBg==
+X-Gm-Message-State: AOJu0YxG2of90y8k9CPt2EXknALsXwgvHVRZZEOFTVVy97YT+celKb+I
+        SjrqB3iBMWFt0MqasI32+yc=
+X-Google-Smtp-Source: AGHT+IFI3+CHPpKULX2tpEaGS8l+bPl1rOS8rSkMfyrr656mErrSbDd1H1POnL349Ph/iwf4YakojA==
+X-Received: by 2002:a05:622a:182:b0:40e:6f1:3d38 with SMTP id s2-20020a05622a018200b0040e06f13d38mr6443538qtw.8.1692272274313;
+        Thu, 17 Aug 2023 04:37:54 -0700 (PDT)
+Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
+        by smtp.gmail.com with ESMTPSA id ay24-20020a05622a229800b00403cc36f318sm5161369qtb.6.2023.08.17.04.37.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 04:37:53 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 07:37:51 -0400
+From:   Trevor Woerner <twoerner@gmail.com>
+To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 3/4] arch/mips/configs/*_defconfig cleanup
+Message-ID: <20230817113751.GA25020@localhost>
+References: <20230817025942.3209-1-twoerner@gmail.com>
+ <20230817025942.3209-4-twoerner@gmail.com>
+ <f7230276-decf-2248-52b2-c2de4a13647c@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, rananta@google.com, pbonzini@redhat.com, reijiw@google.com, kvmarm@lists.linux.dev, jingzhangos@google.com, kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org, anup@brainfault.org, coltonlewis@google.com, tabba@google.com, kvm@vger.kernel.org, chenhuacai@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, dmatlack@google.com, seanjc@google.com, yuzenghui@huawei.com, linux-riscv@lists.infradead.org, atishp@atishpatra.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f7230276-decf-2248-52b2-c2de4a13647c@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 11 Aug 2023 04:51:13 +0000, Raghavendra Rao Ananta wrote:
-> In certain code paths, KVM/ARM currently invalidates the entire VM's
-> page-tables instead of just invalidating a necessary range. For example,
-> when collapsing a table PTE to a block PTE, instead of iterating over
-> each PTE and flushing them, KVM uses 'vmalls12e1is' TLBI operation to
-> flush all the entries. This is inefficient since the guest would have
-> to refill the TLBs again, even for the addresses that aren't covered
-> by the table entry. The performance impact would scale poorly if many
-> addresses in the VM is going through this remapping.
+On Thu 2023-08-17 @ 09:33:13 AM, Philippe Mathieu-Daudé wrote:
+> Hi Trevor,
 > 
-> [...]
+> On 17/8/23 04:59, Trevor Woerner wrote:
+> > Drop CONFIG_IP_NF_TARGET_CLUSTERIP from any remaining mips defconfigs as it
+> > was removed in commit 57f8e00d8a82 ("usb: 71 musb: Drop old unused am35x
+> > glue layer").
+> 
+> How 57f8e00d8a82 is related? Do you mean commit 9db5d918e2c0
+> ("netfilter: ip_tables: remove clusterip target")?
 
-Applied to next, thanks!
+Yes thank you. I'll send a v3.
 
-[01/14] KVM: Rename kvm_arch_flush_remote_tlb() to kvm_arch_flush_remote_tlbs()
-        commit: a1342c8027288e345cc5fd16c6800f9d4eb788ed
-[02/14] KVM: Declare kvm_arch_flush_remote_tlbs() globally
-        commit: cfb0c08e80120928dda1e951718be135abd49bae
-[03/14] KVM: arm64: Use kvm_arch_flush_remote_tlbs()
-        commit: 32121c813818a87ba7565b3afce93a9cc3610a22
-[04/14] KVM: Remove CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
-        commit: eddd21481011008792f4e647a5244f6e15970abc
-[05/14] KVM: Allow range-based TLB invalidation from common code
-        commit: d4788996051e3c07fadc6d9b214073fcf78810a8
-[06/14] KVM: Move kvm_arch_flush_remote_tlbs_memslot() to common code
-        commit: 619b5072443c05cf18c31b2c0320cdb42396d411
-[07/14] arm64: tlb: Refactor the core flush algorithm of __flush_tlb_range
-        commit: 360839027a6e4c022e8cbaa373dd747185f1e0a5
-[08/14] arm64: tlb: Implement __flush_s2_tlb_range_op()
-        commit: 4d73a9c13aaa78b149ac04b02f0ee7973f233bfa
-[09/14] KVM: arm64: Implement __kvm_tlb_flush_vmid_range()
-        commit: 6354d15052ec88273c24beae4c99e31c3d3889b6
-[10/14] KVM: arm64: Define kvm_tlb_flush_vmid_range()
-        commit: 117940aa6e5f8308f1529e1313660980f1dae771
-[11/14] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
-        commit: c42b6f0b1cde4dd19e6b5dd052e67b87cc331b01
-[12/14] KVM: arm64: Flush only the memslot after write-protect
-        commit: 3756b6f2bb3a242fef0867b39a23607f5aeca138
-[13/14] KVM: arm64: Invalidate the table entries upon a range
-        commit: defc8cc7abf0fcee8d73e440ee02827348d060e0
-[14/14] KVM: arm64: Use TLBI range-based instructions for unmap
-        commit: 7657ea920c54218f123ddc1b572821695b669c13
-
-Cheers,
-
-	M.
--- 
-Without deviation from the norm, progress is not possible.
-
-
+> 
+> > Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+> > ---
+> >   arch/mips/configs/ip22_defconfig        | 1 -
+> >   arch/mips/configs/malta_defconfig       | 1 -
+> >   arch/mips/configs/malta_kvm_defconfig   | 1 -
+> >   arch/mips/configs/maltaup_xpa_defconfig | 1 -
+> >   arch/mips/configs/rm200_defconfig       | 1 -
+> >   5 files changed, 5 deletions(-)
+> > 
+> > diff --git a/arch/mips/configs/ip22_defconfig b/arch/mips/configs/ip22_defconfig
+> > index 44821f497261..dc49b09d492b 100644
+> > --- a/arch/mips/configs/ip22_defconfig
+> > +++ b/arch/mips/configs/ip22_defconfig
+> > @@ -127,7 +127,6 @@ CONFIG_IP_NF_MATCH_TTL=m
+> >   CONFIG_IP_NF_FILTER=m
+> >   CONFIG_IP_NF_TARGET_REJECT=m
+> >   CONFIG_IP_NF_MANGLE=m
+> > -CONFIG_IP_NF_TARGET_CLUSTERIP=m
+> >   CONFIG_IP_NF_TARGET_ECN=m
+> >   CONFIG_IP_NF_TARGET_TTL=m
+> >   CONFIG_IP_NF_RAW=m
+> 
