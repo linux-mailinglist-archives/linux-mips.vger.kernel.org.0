@@ -2,93 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4977377FB10
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Aug 2023 17:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FB2780283
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Aug 2023 02:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353279AbjHQPoO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Aug 2023 11:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58946 "EHLO
+        id S1356592AbjHRAJr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Aug 2023 20:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353326AbjHQPoD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 11:44:03 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B93530F0
-        for <linux-mips@vger.kernel.org>; Thu, 17 Aug 2023 08:44:00 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ff9121fd29so3166771e87.3
-        for <linux-mips@vger.kernel.org>; Thu, 17 Aug 2023 08:44:00 -0700 (PDT)
+        with ESMTP id S1356628AbjHRAJ3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Aug 2023 20:09:29 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D733A92
+        for <linux-mips@vger.kernel.org>; Thu, 17 Aug 2023 17:09:04 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d72e09f1263so447068276.1
+        for <linux-mips@vger.kernel.org>; Thu, 17 Aug 2023 17:09:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692287038; x=1692891838;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lp1IuZHqWfKCAVZooutFxjvYW2JldAzLdhi3fANGf+o=;
-        b=Y7OkJ5kzfBR9aS1o3hbSjWBbpDhDfQvuOJAbLWMeHIdCvYVqIqsch4xPQi6nhKj1sW
-         MyG2VLyh2d/VhqbZsXyum3ahPYS8bZD/3vhehfn8OxUL5vrX+3/9cMxCnE5qiSsgyDR/
-         fShe46mhdY+NApZpcWsPqTIffnvlvkPtOI+jgn4rIt384WQhvhdi97ih/Ilt5JjDZtjs
-         doYEk6M74dQhbXRqKo5cHgm5Sxala+iBlG/zi0HHIrvQSCxfxkgmFC1tMXvlzNgJkmoZ
-         rUDnjo4tsPM/cqSjpRMFtA5WxE0YyMxathg7q3nRUgdWs7XXqmVaU3lpDCCDHWNMmo6U
-         MjbA==
+        d=google.com; s=20221208; t=1692317333; x=1692922133;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mE3f+VMf8SgNE6cCbkcfMUP8Hiy9b4N5xYpI+7a+l+E=;
+        b=2oU9BIaw0ILeiNHyHsZk7TDIJto4bfSl6FpDcbZRzJHFWDHvsw1Tpz4Q9Z++SpwVVm
+         JmUyxEgAq2LjZzc+OkhyeF0ADm+bu03vFWElhLKmVcXuodsBknHK0n2IWaJQr+FjH/Z4
+         ly63wavRjg8vLggYRlwWHybAT9gNxWq5j3pZ0p0w2xXzXTZlhASOY+NoRS2/AtMtjhTQ
+         nTZWu9PlR/5rleTIvIDNYwbMF6iZSL/aHkUyyZqrHDOanbSxez20kKr5PC6Ct3iYGtdC
+         ypG1bXEpsnYr9lf8V1DpKfNV0BYeA2in/OciIOL0bd/uD0xPHtdS27L3UXNyt2X2G1Wi
+         /49g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692287038; x=1692891838;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lp1IuZHqWfKCAVZooutFxjvYW2JldAzLdhi3fANGf+o=;
-        b=ehUQLjrz2ZPstwh4T6r70FezSvrYY5JrTxJ2mdvRsY3vfvxdxB4FZZ+TMuz/60zuuf
-         PINHUrJidywEdA2DQG0a1bjfyHZXTo1YoFN8Gg+UVEBLRbWTSQTzyutJn046WOAwCn7H
-         UjX8MQ6oOYBJI7HprxK5A88FrMRZZtjZ+Ds0J27GuUXRZ4Ooa7GepMb8nvRzo7DEyVaA
-         j+Fogk7IjULu6nmbgOZpZAEcr4khwcaNsmwYbUhTQLiCMJkcQvqfqGsyuNE1TBogoKr3
-         QKL+bYocbL/oXcQyqfIrcG5p/yNq7KuwWjvXU39rgySn4nYdE34Yfk/NTTDW/NsEXXNy
-         Ni5A==
-X-Gm-Message-State: AOJu0YxSrMidcu0az9DhbFqkt+2CIlaN7t8j++bZGrJIwCZme9jRr+aW
-        4d63OKD6qZ86RJncItAdE/LYsg==
-X-Google-Smtp-Source: AGHT+IGo/MkOhuQ87pyBbC2n512LcvZgd8ip292GYtt+yin2/JuZNeICWXDi7cMjkYGQ4p2MIAoVng==
-X-Received: by 2002:a2e:241a:0:b0:2b9:df53:4c2a with SMTP id k26-20020a2e241a000000b002b9df534c2amr4656731ljk.20.1692287038600;
-        Thu, 17 Aug 2023 08:43:58 -0700 (PDT)
-Received: from [192.168.69.115] (mek33-h02-176-184-23-56.dsl.sta.abo.bbox.fr. [176.184.23.56])
-        by smtp.gmail.com with ESMTPSA id lj5-20020a170906f9c500b0098d2d219649sm10418014ejb.174.2023.08.17.08.43.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 08:43:57 -0700 (PDT)
-Message-ID: <c608d62f-e3fe-1ead-b0a7-f935fea80702@linaro.org>
-Date:   Thu, 17 Aug 2023 17:43:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.14.0
-Subject: Re: [PATCH v3 3/4] arch/mips/configs/*_defconfig cleanup
-Content-Language: en-US
-To:     Trevor Woerner <twoerner@gmail.com>, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20230817115017.35663-1-twoerner@gmail.com>
- <20230817115017.35663-4-twoerner@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230817115017.35663-4-twoerner@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1692317333; x=1692922133;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mE3f+VMf8SgNE6cCbkcfMUP8Hiy9b4N5xYpI+7a+l+E=;
+        b=Uz7g+1ag87R7ab1so9qx0gaBjGEO3tOX4mXCboMf/XxaE9dBk87/5ldlmEQadsZNpe
+         wR1mMIupM9t7WkPmmw14gqocsnU3WwtCuLoEeuLlWbQXNw9zDqC2jPZHaLmvU9UmscqF
+         /XQ2qH6Y0Xccl4VkYZMnXgFPNILpmk4H+Dtyxu1ayWncdtHAo+0YZo4B64WBwZVBYPm2
+         xE/ZhvJDNMHYzyuKHCK5/SHqIQ/gRCRTEau6IVVWR3YpeCfZrM69jk2jhV0z0zx221b5
+         xS08UdiOymkWBM9UtbbhRH2/keYA0Z5vK1+1kl8HZ4hZgloa0P0xWZJmu1EQrXE3u/SG
+         QMMw==
+X-Gm-Message-State: AOJu0Yz3e5ZXpn273rHV6Xt3k+L7UYiEsbvkczP0NZXZ1kfnEzJjOl9v
+        8P/PYF95eP04u9KUh3bc5kyAvWn1X/Q=
+X-Google-Smtp-Source: AGHT+IGvQyAfQmNzh/hNJU4kHU1VAazzXRBOVugeRSHej1YWD5+faOfCNQeeq5lvAq2y2Br8ZKMaZLXhQjo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:4113:0:b0:d4b:99ce:5e51 with SMTP id
+ o19-20020a254113000000b00d4b99ce5e51mr13582yba.6.1692317333678; Thu, 17 Aug
+ 2023 17:08:53 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 17:08:36 -0700
+In-Reply-To: <20230729004144.1054885-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230729004144.1054885-1-seanjc@google.com>
+X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
+Message-ID: <169229683179.1234886.15097906251075154792.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: Wrap kvm_{gfn,hva}_range.pte in a per-action union
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Yu Zhao <yuzhao@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/8/23 13:50, Trevor Woerner wrote:
-> Drop CONFIG_IP_NF_TARGET_CLUSTERIP from any remaining mips defconfigs as it
-> was removed in commit 9db5d918e2c0 ("netfilter: ip_tables: remove clusterip
-> target").
+On Fri, 28 Jul 2023 17:41:44 -0700, Sean Christopherson wrote:
+> Wrap kvm_{gfn,hva}_range.pte in a union so that future notifier events can
+> pass event specific information up and down the stack without needing to
+> constantly expand and churn the APIs.  Lockless aging of SPTEs will pass
+> around a bitmap, and support for memory attributes will pass around the
+> new attributes for the range.
 > 
-> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> ---
->   arch/mips/configs/ip22_defconfig        | 1 -
->   arch/mips/configs/malta_defconfig       | 1 -
->   arch/mips/configs/malta_kvm_defconfig   | 1 -
->   arch/mips/configs/maltaup_xpa_defconfig | 1 -
->   arch/mips/configs/rm200_defconfig       | 1 -
->   5 files changed, 5 deletions(-)
+> Add a "KVM_NO_ARG" placeholder to simplify handling events without an
+> argument (creating a dummy union variable is midly annoying).
+> 
+> [...]
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Applied to kvm-x86 generic, with KVM_MMU_NOTIFIER_NO_ARG as suggested by Oliver.
 
+[1/1] KVM: Wrap kvm_{gfn,hva}_range.pte in a per-action union
+      https://github.com/kvm-x86/linux/commit/3e1efe2b67d3
+
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
