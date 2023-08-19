@@ -2,185 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25E978172F
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Aug 2023 05:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E572F78187C
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Aug 2023 10:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjHSDef (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Aug 2023 23:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S230153AbjHSIgc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Aug 2023 04:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjHSDe1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Aug 2023 23:34:27 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBAF2D69;
-        Fri, 18 Aug 2023 20:34:25 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-268bc714ce0so1905692a91.0;
-        Fri, 18 Aug 2023 20:34:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692416065; x=1693020865;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vOjVxX/Eg0iGmCqhVv5cIZBql9TtO2CXYAj6O50hbSE=;
-        b=IqtJwsF0pUQX7izyHeTreyTJTJhKy5hiG0L5LG7pklRm5ruz2z314lR30cJBIft8IF
-         lHOgWqUBHxsrHRZ/n+H1wKK9DAmo6l6M6vOqnptgdlcjmAJVnPdA6vRI0gXUbNjLjw2O
-         HaCa2GQWI2H3P/PJF/kO6bmYeR/Nyn9f2ZprmcA/D0k+kc6aE9gt4/58CgSA7F801jjd
-         XX+T7G5Lv1/7anA6wENrFajkkBfdYnNLgzsdEjOaJ3u6npvNqyydM0GqNQ4HtJ58/8Bk
-         W4eV1DvzXq38mo16H9W9Oyvm8s/Iciep4KukBQTEpuiauG6fJdSHO4J2dBeLWJsNSNRu
-         GvHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692416065; x=1693020865;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vOjVxX/Eg0iGmCqhVv5cIZBql9TtO2CXYAj6O50hbSE=;
-        b=g1KtxvE6k2ycR/PXbMvrAE4SsFGN9yqylUPD6nf64K+NRp8T4HYEvaD2twXGbYGj8O
-         BUllvDA3DBVugaxikS+mUlYfnUmo5NtGGtrHqkL5j57c3A39hFDuP/+Am5k5Dco71VRx
-         K6laEUsdpU3LQzdzeVmU3hvTjHyuo58+15y31GjAo2dqddUKEqoN8y1B+wbjStUj6lJ3
-         BAdwTYtspfvAZsn8hbmcL6mnGSBqRyqtK3cTuhVOyP1jTXpPa4X1gylTNZ0qz14SMv4n
-         5d+3tnurMLTa0aPxa7IH7ueXAcIuREscGNe3sdE35deIA3Gv9wRW4dX2P40p9aFZ/atW
-         TL+A==
-X-Gm-Message-State: AOJu0YxclvNdQYlOy2KjW11+TXPsAeiQok/KBoWR8PxoGaIfUvknmWUP
-        k23RYh3dHraJBipmUHAPOc5K1qei/PluQekxJ5M=
-X-Google-Smtp-Source: AGHT+IFpp0VHvCZv9YQH2C6BH14eA1+BcCpaZ1w5QpKfP5/3cQ/4jDAUwPVhdHrKttxLAuvWHcInuMfoJccdrJLxiGs=
-X-Received: by 2002:a17:90a:64ca:b0:25d:d224:9fb9 with SMTP id
- i10-20020a17090a64ca00b0025dd2249fb9mr1389535pjm.24.1692416065235; Fri, 18
- Aug 2023 20:34:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <38e1a01b-1e8b-7c66-bafc-fc5861f08da9@gmail.com>
- <86e329b1-c8d7-47bf-8be8-3326daf74eb5@infradead.org> <78a802c5-3f0d-e199-d974-e586c00180eb@infradead.org>
-In-Reply-To: <78a802c5-3f0d-e199-d974-e586c00180eb@infradead.org>
-From:   Jesse T <mr.bossman075@gmail.com>
-Date:   Fri, 18 Aug 2023 23:33:49 -0400
-Message-ID: <CAJFTR8T-Fdu_aKapP+Lb6pLYo_ykXwXw6rFZNGR5=WKU1QwUPQ@mail.gmail.com>
-Subject: Re: [PATCH] treewide: drop CONFIG_EMBEDDED
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-openrisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230029AbjHSIgb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Aug 2023 04:36:31 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 071527A8DB;
+        Sat, 19 Aug 2023 01:36:26 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxFvEJf+BkNhsaAA--.53270S3;
+        Sat, 19 Aug 2023 16:36:25 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_c4Hf+BkLDpeAA--.33957S2;
+        Sat, 19 Aug 2023 16:36:24 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v4 0/4] Modify die() for MIPS
+Date:   Sat, 19 Aug 2023 16:36:19 +0800
+Message-Id: <1692434183-2054-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Cx_c4Hf+BkLDpeAA--.33957S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtF43XrWfJrWUtr1ftr4kXwc_yoW3ZFcEgF
+        y8tryxG34xZFykZFyUurs7AFW3tFWj9r1Sq3Z3GrsIkFnxtr1kJFWqv39Yvr18XayFvrs5
+        CF98CFWfArZIkosvyTuYvTs0mTUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUb7kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+        xVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2ID7UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 7:44=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> Hi Jesse,
->
-> I replied to your comment a few days ago, but for some reason
-> your email to me contains:
-> Reply-To: 20230816055010.31534-1-rdunlap@infradead.org
-> so it wasn't sent directly to you.
+v4:
+  -- Add BUG() at the end of nmi_exception_handler()
+  -- Return earlier in die() if notify_die() returns NOTIFY_STOP
+  -- Update the patch titles and commit messages
 
-Sorry about that I messed up the email headers...
->
-> My former reply is below.
->
-> On 8/16/23 20:15, Randy Dunlap wrote:
-> > Hi Jesse,
-> >
-> > On 8/16/23 15:45, Jesse Taube wrote:
-> >> Hi, Randy
-> >>
-> >>> diff -- a/init/Kconfig b/init/Kconfig
-> >>> --- a/init/Kconfig
-> >>> +++ b/init/Kconfig
-> >>> @@ -1790,14 +1790,6 @@ config DEBUG_RSEQ
-> >>>
-> >>>         If unsure, say N.
-> >>>
-> >>> -config EMBEDDED
-> >>> -    bool "Embedded system"
-> >>> -    select EXPERT
-> >>> -    help
-> >>> -      This option should be enabled if compiling the kernel for
-> >>> -      an embedded system so certain expert options are available
-> >>> -      for configuration.
-> >>
-> >> Wouldn't removing this break many out of tree configs?
-> >
-> > I'm not familiar with out-of-tree configs.
-> > Do you have some examples of some that use CONFIG_EMBEDDED?
-> > (not distros)
+v3:
+  -- Make each patch can be built without errors and warnings.
 
-Buildroot has a few.
-It won't immediately break Buildroot and Yocto as they have a set version,
-but it could be confusing for anyone updating the kernel.
+v2: 
+  -- Update the commit message to give more detailed info, split into
+     three individual patches, suggested by Maciej, thank you.
 
-> >
-> >> Should there be a warning here to update change it instead of removal?
-> >
-> > kconfig doesn't have a warning mechanism AFAIK.
-> > Do you have an idea of how this would work?
+Tiezhu Yang (4):
+  MIPS: Add BUG() at the end of nmi_exception_handler()
+  MIPS: Do not kill the task in die() if notify_die() returns
+    NOTIFY_STOP
+  MIPS: Return earlier in die() if notify_die() returns NOTIFY_STOP
+  MIPS: Add identifier names to arguments of die() declaration
 
-No, unfortunately. As you said without a warning it would be overlooked so
-a change would not be necessary.
+ arch/mips/include/asm/ptrace.h |  2 +-
+ arch/mips/kernel/traps.c       | 15 +++++++++------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-A possible solution is to check in a header file with:
+-- 
+2.1.0
 
-#ifdef CONFIG_EMBEDDED
-#warning "CONFIG_EMBEDDED has changed to CONFIG_EXPERT"
-#endif
-
-Does anyone else have an opinion on this?
-Since kconfig doesn't have a warning mechanism the patch seems fine as is.
-
-Thanks,
-Jesse Taube
-> >
-> > We could make a smaller change to init/Kconfig, like so:
-> >
-> >  config EMBEDDED
-> > -     bool "Embedded system"
-> > +     bool "Embedded system (DEPRECATED)"
-> >       select EXPERT
-> >       help
-> > -       This option should be enabled if compiling the kernel for
-> > -       an embedded system so certain expert options are available
-> > -       for configuration.
-> > +       This option is being removed after Linux 6.6.
-> > +       Use EXPERT instead of EMBEDDED.
-> >
-> > but there is no way to produce a warning message. I.e., even with this
-> > change, the message will probably be overlooked.
-> >
-> > ---
-> > ~Randy
->
-> --
-> ~Randy
