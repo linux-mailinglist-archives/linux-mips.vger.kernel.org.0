@@ -2,673 +2,392 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FBD782B71
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Aug 2023 16:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826AF782F69
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Aug 2023 19:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbjHUORQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Aug 2023 10:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        id S235419AbjHURaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Aug 2023 13:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbjHUORP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Aug 2023 10:17:15 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7AA120;
-        Mon, 21 Aug 2023 07:16:50 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe8c16c1b4so5067689e87.2;
-        Mon, 21 Aug 2023 07:16:50 -0700 (PDT)
+        with ESMTP id S234999AbjHURaM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Aug 2023 13:30:12 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3A4102
+        for <linux-mips@vger.kernel.org>; Mon, 21 Aug 2023 10:30:09 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1bf0b05bbbeso55038505ad.0
+        for <linux-mips@vger.kernel.org>; Mon, 21 Aug 2023 10:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692627405; x=1693232205;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JbpWODR3LtiShowphX2ULZHICRme1y6RMpiu8CTToVI=;
-        b=o1CM7el37qS7W9HITdRFkbKJdlkrwyBmjOgveRai6tf5TP6aMWh14Yy+T/srJhEUUx
-         vjXDsfXIj31xjp4TpVZ/gjL+WEfKosA/J59iV8n3UTY/l/ttaGFcJqM9jKVi7+uNs1Hn
-         kDrTr3A+135PKyFR0zi5UXsyVSmGWGgb4bPG1FtO4iH/1qT6bfS7qfuuQoeB1JC95tub
-         eM68xH3TaDxSH8g06g6RdV1jwgAbOraEf7u5eJaaGS6V/EV7Sui6WvzpikQpNV147EnJ
-         bIro52p8It9KPAia66cWJEBD1jyqJy0pV4jY+d1eR+fYVQzJ86EEPuTNjzmV1XAel9vL
-         zyWw==
+        d=google.com; s=20221208; t=1692639009; x=1693243809;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PxPb6xmjGnrDhupKfwNZ6FElkwCeLY+o5DimQNV4hqs=;
+        b=EeilR+Ekgkx+cSM5iMGGI6Y6JUlPzIKJDzTMUqkf7lLLOnc6FpewNmU25aBx4uml07
+         kpJ/Y2FJC3CTbM1zhPEns2ri5EF0FucsNsARO2qiyP1aSTS0C5sBildhbwq/ouHiNd0i
+         qimLz+UE3zMmYJlBAqicri/5Fr6eTbJDWgtrq6dGUFxvLf98ghheK+KjfPI1ki9rbrDx
+         OwUj//jjlLo2noDnvWoDubwgN3vUsxvZ3ojvOIltLuZiZqNVPxwjvpAuB6SyalToGMao
+         EwF+zqvM7lCbm29FshYcImlpUndLxfSZBxyjQ8MgJRIV/NshYNyfOiLuklOGwcxVfF2o
+         7bcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692627405; x=1693232205;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JbpWODR3LtiShowphX2ULZHICRme1y6RMpiu8CTToVI=;
-        b=C9lNSEcQCei6KRlTYghZMpGJUl1AcD3eEnjL3wpUR7PLGNzdvCu542qqn7xxt9Y0bV
-         LBVz6LmJ1EpcJTK52VqcuGmqE8+2MOa3JmeeRjk9aDv+WAueL0Uu7OA8/hSCWW43cVXe
-         PTf4f0f/Q4mwau1ZLL6QR7z3gjm0wKyhioWoPXhnn18MOlACpVYQf4eOuS0sMm0Tbfnw
-         2iunCcUR/DJuLsctyCMay6fRURQ1mu9XKZ2YVZrPILQVR3y7K8IHYda7Ml+gH9wjuaXM
-         kcuiqDR66iNdxdiAaPMvAmIuO2F1oYaDNshyglDcdOBkCohEK5JlrnEunZeMgFnnrQff
-         742A==
-X-Gm-Message-State: AOJu0YzNfAQRHwzOmCpVC9D69rq+ELaKYMXKyj5/y/+NHCyver5K71nK
-        XLenMcCIlfz2SEDy64O87mU=
-X-Google-Smtp-Source: AGHT+IHV82xzxcR9Bca+s3lwGL2Vqx2HzqgScTy/ejp8OOJXwM2BVQzJkmteX6P6c3yQFlM17Oy5sA==
-X-Received: by 2002:a05:6512:2803:b0:500:8725:1351 with SMTP id cf3-20020a056512280300b0050087251351mr460774lfb.47.1692627403626;
-        Mon, 21 Aug 2023 07:16:43 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac259c2000000b004fe432108absm822807lfn.182.2023.08.21.07.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Aug 2023 07:16:42 -0700 (PDT)
-Date:   Mon, 21 Aug 2023 17:16:39 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH 4/5] net: stmmac: Add glue layer for Loongson-1 SoC
-Message-ID: <yvv5dmnibepmdkgxazne2g7zha66hiw6bv7zvqnkk7mkbsifsk@jgz2k2uzsia2>
-References: <20230812151135.1028780-1-keguang.zhang@gmail.com>
- <20230812151135.1028780-5-keguang.zhang@gmail.com>
- <spt2blizwad4tdp4cjf7bzffd3mr6456nlz4c4vgjrblx34gqj@bkwhyeqph4do>
- <CAJhJPsXHuMBAHqsg5rSVf5Ow_Rsgy2Zp-PNrLXWTeVSY3N08Aw@mail.gmail.com>
- <l6dr3cvnldmljhafmu5wdal7yr4mkr4mmplt3nivjhejohmlro@blfa2ntsq6uv>
- <CAJhJPsV4+WozxVb1=xQ6SGm5SVuKyk94Ns0nRz+kwB6Xh4C_WQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJhJPsV4+WozxVb1=xQ6SGm5SVuKyk94Ns0nRz+kwB6Xh4C_WQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1692639009; x=1693243809;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PxPb6xmjGnrDhupKfwNZ6FElkwCeLY+o5DimQNV4hqs=;
+        b=E5pPxSittvA5cFvE18XS1gMUxToPGWViLKV/1MIfzoWHH0hkb3Dffty+09PlsW4iX6
+         DsycrzWDi7UnQhq38GoY0tRUI94Vy8oAGrjHukoFkJ5arAV9M/S8QfQl76gpr9uxNsHL
+         X3eCyyYapCrCJawJ5oVC/u1cE92FwUUFI6xOdfELeORqD2Q0ToWvF6ApYjYGWWImSQNs
+         7dth1lZQx9ayk7wW+1tj8j/T28P6Y+OdMYsj/66DDdMjGV+qjZp+rdP8xqK4OjpI+8m+
+         dQmYtD8h/He2O285RG6DcMLQS6pGA2AyVjNlT+K6ywxohisajlBuORjEFGOqXfCToQGf
+         jlzQ==
+X-Gm-Message-State: AOJu0Yxu306krODnaQSuQ/GtNz6aUNS4kF1xHUlZIISRsHelaocEBd39
+        Esu21dVXiq89UT4tSxKBAWeknPXSZ8IxoKfRng==
+X-Google-Smtp-Source: AGHT+IGoB8kJFRFmo//ezk9L60YAhs5f0Yw/TjMFB9a7nGOG7yPY7ezvdJVQyEjAsqVqDpDGeq6SzFD6orSBmlYJBQ==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a17:903:22cd:b0:1b8:9533:65b0 with
+ SMTP id y13-20020a17090322cd00b001b8953365b0mr3304261plg.5.1692639009082;
+ Mon, 21 Aug 2023 10:30:09 -0700 (PDT)
+Date:   Mon, 21 Aug 2023 17:30:07 +0000
+In-Reply-To: <ZNvaJ3igvcvTZ/8k@google.com> (message from Sean Christopherson
+ on Tue, 15 Aug 2023 13:03:51 -0700)
+Mime-Version: 1.0
+Message-ID: <diqzzg2ktiao.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, willy@infradead.org,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chao.p.peng@linux.intel.com,
+        tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com,
+        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 09:24:17PM +0800, Keguang Zhang wrote:
-> On Sat, Aug 19, 2023 at 12:19 AM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > On Fri, Aug 18, 2023 at 08:37:27PM +0800, Keguang Zhang wrote:
-> > > On Wed, Aug 16, 2023 at 9:30 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> > > >
-> > > > On Sat, Aug 12, 2023 at 11:11:34PM +0800, Keguang Zhang wrote:
-> > > > > This glue driver is created based on the arch-code
-> > > > > implemented earlier with the platform-specific settings.
-> > > > >
-> > > > > Use syscon for SYSCON register access.
-> > > > >
-> > > > > Partialy based on the previous work by Serge Semin.
-> > > > >
-> > > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > > > > ---
-> > > > >  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
-> > > > >  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
-> > > > >  .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 257 ++++++++++++++++++
-> > > > >  3 files changed, 269 insertions(+)
-> > > > >  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
-> > > > >
-> > > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> > > > > index 06c6871f8788..a2b9e289aa36 100644
-> > > > > --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> > > > > +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> > > > > @@ -239,6 +239,17 @@ config DWMAC_INTEL_PLAT
-> > > > >         the stmmac device driver. This driver is used for the Intel Keem Bay
-> > > > >         SoC.
-> > > > >
-> > > > > +config DWMAC_LOONGSON1
-> > > > > +     tristate "Loongson1 GMAC support"
-> > > > > +     default MACH_LOONGSON32
-> > > > > +     depends on OF && (MACH_LOONGSON32 || COMPILE_TEST)
-> > > > > +     help
-> > > > > +       Support for ethernet controller on Loongson1 SoC.
-> > > > > +
-> > > > > +       This selects Loongson1 SoC glue layer support for the stmmac
-> > > > > +       device driver. This driver is used for Loongson1-based boards
-> > > > > +       like Loongson LS1B/LS1C.
-> > > > > +
-> > > > >  config DWMAC_TEGRA
-> > > > >       tristate "NVIDIA Tegra MGBE support"
-> > > > >       depends on ARCH_TEGRA || COMPILE_TEST
-> > > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> > > > > index 5b57aee19267..80e598bd4255 100644
-> > > > > --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
-> > > > > +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> > > > > @@ -29,6 +29,7 @@ obj-$(CONFIG_DWMAC_SUNXI)   += dwmac-sunxi.o
-> > > > >  obj-$(CONFIG_DWMAC_SUN8I)    += dwmac-sun8i.o
-> > > > >  obj-$(CONFIG_DWMAC_DWC_QOS_ETH)      += dwmac-dwc-qos-eth.o
-> > > > >  obj-$(CONFIG_DWMAC_INTEL_PLAT)       += dwmac-intel-plat.o
-> > > > > +obj-$(CONFIG_DWMAC_LOONGSON1)        += dwmac-loongson1.o
-> > > > >  obj-$(CONFIG_DWMAC_GENERIC)  += dwmac-generic.o
-> > > > >  obj-$(CONFIG_DWMAC_IMX8)     += dwmac-imx.o
-> > > > >  obj-$(CONFIG_DWMAC_TEGRA)    += dwmac-tegra.o
-> > > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..368d6cd2cb78
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
-> > > > > @@ -0,0 +1,257 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > > > +/*
-> > > > > + * Loongson-1 DWMAC glue layer
-> > > > > + *
-> > > > > + * Copyright (C) 2011-2023 Keguang Zhang <keguang.zhang@gmail.com>
-> > > > > + */
-> > > > > +
-> > > > > +#include <linux/mfd/syscon.h>
-> > > > > +#include <linux/module.h>
-> > > > > +#include <linux/phy.h>
-> > > > > +#include <linux/platform_device.h>
-> > > > > +#include <linux/regmap.h>
-> > > > > +
-> > > > > +#include "stmmac.h"
-> > > > > +#include "stmmac_platform.h"
-> > > > > +
-> > > > > +/* Loongson-1 SYSCON Registers */
-> > > > > +#define LS1X_SYSCON0         (0x0)
-> > > > > +#define LS1X_SYSCON1         (0x4)
-> > > > > +
-> > > > > +struct ls1x_dwmac_syscon {
-> > > > > +     const struct reg_field *reg_fields;
-> > > > > +     unsigned int nr_reg_fields;
-> > > > > +     int (*syscon_init)(struct plat_stmmacenet_data *plat);
-> > > > > +};
-> > > > > +
-> > > > > +struct ls1x_dwmac {
-> > > > > +     struct device *dev;
-> > > > > +     struct plat_stmmacenet_data *plat_dat;
-> > > > > +     const struct ls1x_dwmac_syscon *syscon;
-> > > > > +     struct regmap *regmap;
-> > > > > +     struct regmap_field *regmap_fields[];
-> > > > > +};
-> > > > > +
-> > > > > +enum ls1b_dwmac_syscon_regfield {
-> > > > > +     GMAC1_USE_UART1,
-> > > > > +     GMAC1_USE_UART0,
-> > > > > +     GMAC1_SHUT,
-> > > > > +     GMAC0_SHUT,
-> > > > > +     GMAC1_USE_TXCLK,
-> > > > > +     GMAC0_USE_TXCLK,
-> > > > > +     GMAC1_USE_PWM23,
-> > > > > +     GMAC0_USE_PWM01,
-> > > > > +};
-> > > > > +
-> > > > > +enum ls1c_dwmac_syscon_regfield {
-> > > > > +     GMAC_SHUT,
-> > > > > +     PHY_INTF_SELI,
-> > > > > +};
-> > > > > +
-> > > > > +const struct reg_field ls1b_dwmac_syscon_regfields[] = {
-> > > > > +     [GMAC1_USE_UART1]       = REG_FIELD(LS1X_SYSCON0, 4, 4),
-> > > > > +     [GMAC1_USE_UART0]       = REG_FIELD(LS1X_SYSCON0, 3, 3),
-> > > > > +     [GMAC1_SHUT]            = REG_FIELD(LS1X_SYSCON1, 13, 13),
-> > > > > +     [GMAC0_SHUT]            = REG_FIELD(LS1X_SYSCON1, 12, 12),
-> > > > > +     [GMAC1_USE_TXCLK]       = REG_FIELD(LS1X_SYSCON1, 3, 3),
-> > > > > +     [GMAC0_USE_TXCLK]       = REG_FIELD(LS1X_SYSCON1, 2, 2),
-> > > > > +     [GMAC1_USE_PWM23]       = REG_FIELD(LS1X_SYSCON1, 1, 1),
-> > > > > +     [GMAC0_USE_PWM01]       = REG_FIELD(LS1X_SYSCON1, 0, 0)
-> > > > > +};
-> > > > > +
-> > > > > +const struct reg_field ls1c_dwmac_syscon_regfields[] = {
-> > > > > +     [GMAC_SHUT]             = REG_FIELD(LS1X_SYSCON0, 6, 6),
-> > > > > +     [PHY_INTF_SELI]         = REG_FIELD(LS1X_SYSCON1, 28, 30)
-> > > > > +};
-> > > >
-> > > > Emm, using regmap fields looks so over-complicated in this case seeing
-> > > > you only need to set/clear several bits in the syscon. What about
-> > > > defining macros with the particular flag as it's already done in the
-> > > > "asm/mach-loongson32/regs-mux.h" file and using regmap_update_bits()?
-> > > >
-> >
-> > > To use regmap_update_bits(), I have to store and pass reg_offset and
-> > > mask, which is similar to the definition of regmap fields.
-> >
-> > Em, not really. And what offset are you talking about? Anyway you
-> > don't need one. Moreover you'll be able to reduce the number of IOs:
-> >
-> > +#define GMAC1_USE_UART1                 BIT(4)
-> > +#define GMAC1_USE_UART0                 BIT(3)
-> > ...
-> > +#define GMAC1_SHUT                      BIT(13)
-> > ...
-> > +#define GMAC1_USE_TXCLK                 BIT(3)
-> > +#define GMAC1_USE_PWM23                 BIT(1)
-> >
-> > +static int ls1b_dwmac_syscon_init(struct plat_stmmacenet_data *plat)
-> > +{
-> > +       struct ls1x_dwmac *dwmac = plat->bsp_priv;
-> > +       struct regmap *syscon = dwmac->regmap;
-> > +
-> > +       if (plat->bus_id) {
-> > +               regmap_update_bits(syscon, LS1X_SYSCON0,
-> > +                                  GMAC1_USE_UART1 | GMAC1_USE_UART0,
-> > +                                  GMAC1_USE_UART1 | GMAC1_USE_UART0);
-> > +
-> > +               switch (plat->phy_interface) {
-> > +               case PHY_INTERFACE_MODE_RGMII:
-> > +                       regmap_update_bits(syscon, LS1X_SYSCON1,
-> > +                                          GMAC1_USE_TXCLK | GMAC1_USE_TXCLK, 0);
-> > +                       break;
-> > +               case PHY_INTERFACE_MODE_MII:
-> > +                       regmap_update_bits(syscon, LS1X_SYSCON1,
-> > +                                          GMAC1_USE_TXCLK | GMAC1_USE_TXCLK
-> > +                                          GMAC1_USE_TXCLK | GMAC1_USE_TXCLK);
-> > +                       break;
-> > +               default:
-> > +                       dev_err(dwmac->dev, "Unsupported PHY mode %u\n",
-> > +                               plat->phy_interface);
-> > +                       return -EOPNOTSUPP;
-> > +               }
-> > +
-> > +               regmap_field_write(syscon, LS1X_SYSCON1, GMAC1_SHUT, 0);
-> > +       } //...
-> > +
-> > +       return 0;
-> > +}
-> >
-> > This doesn't look in anyway less readable then your implementation
-> > but in fact simpler.
-> >
-> > > In addition, the regmap fields are very clear and leave the trouble to
-> > > the internal implementation.
-> >
-> > In this case it brings much more troubles and no clarity. You need to create
-> > an additional mainly redundant abstraction, waste memory for it,
-> > define additional const arrays. Using it won't improve the code
-> > readability seeing you need to set/clear a few flags only. So all of
-> > the troubles for nothing. See the code above. It's simple and clear.
-> > Just several regmap_update_bits()..
-> >
-> OK. I will use regmap instead of regmap fields.
-> 
-> > BTW why have you chosen to define syscon instead of creating a pinctrl
-> > driver? What if Loongson1 is embedded into a platform with, for
-> > instance, UART0 and UART1 utilized instead of the GMAC1?
-> >
+Sean Christopherson <seanjc@google.com> writes:
 
-> As you can see, the two registers contains miscellaneous settings.
-> Besides ‘USE’ bits, there are ‘RESET‘ bits, 'EN' bits, 'SHUT' bits, ...
-> So they are not pinctrl registers.
+> On Tue, Aug 15, 2023, Ackerley Tng wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>>
+>> >> I feel that memslots form a natural way of managing usage of the gmem
+>> >> file. When a memslot is created, it is using the file; hence we take =
+a
+>> >> refcount on the gmem file, and as memslots are removed, we drop
+>> >> refcounts on the gmem file.
+>> >
+>> > Yes and no.  It's definitely more natural *if* the goal is to allow gu=
+est_memfd
+>> > memory to exist without being attached to a VM.  But I'm not at all co=
+nvinced
+>> > that we want to allow that, or that it has desirable properties.  With=
+ TDX and
+>> > SNP in particuarly, I'm pretty sure that allowing memory to outlive th=
+e VM is
+>> > very underisable (more below).
+>> >
+>>
+>> This is a little confusing, with the file/inode split in gmem where the
+>> physical memory/data is attached to the inode and the file represents
+>> the VM's view of that memory, won't the memory outlive the VM?
+>
+> Doh, I overloaded the term "VM".  By "VM" I meant the virtual machine as =
+a "thing"
+> the rest of the world sees and interacts with, not the original "struct k=
+vm" object.
+>
+> Because yes, you're absolutely correct that the memory will outlive "stru=
+ct kvm",
+> but it won't outlive the virtual machine, and specifically won't outlive =
+the
+> ASID (SNP) / HKID (TDX) to which it's bound.
+>
 
-You could have defined a device node which would export "reset",
-"power" and "pinctrl" functionality, like it's normally done for the
-RCU devices (Reset and Clock unit devices).
+Yup we agree on this now :) The memory should not outlive the the ASID
+(SNP) / HKID (TDX) to which it's bound.
 
-> Actually, there is a dedicated pin controller which controls the
-> multiplexing of pads.
+>> This [1] POC was built based on that premise, that the gmem inode can be
+>> linked to another file and handed off to another VM, to facilitate
+>> intra-host migration, where the point is to save the work of rebuilding
+>> the VM's memory in the destination VM.
+>>
+>> With this, the bindings don't outlive the VM, but the data/memory
+>> does. I think this split design you proposed is really nice.
+>>
+>> >> The KVM pointer is shared among all the bindings in gmem=E2=80=99s xa=
+rray, and we can
+>> >> enforce that a gmem file is used only with one VM:
+>> >>
+>> >> + When binding a memslot to the file, if a kvm pointer exists, it mus=
+t
+>> >>   be the same kvm as the one in this binding
+>> >> + When the binding to the last memslot is removed from a file, NULL t=
+he
+>> >>   kvm pointer.
+>> >
+>> > Nullifying the KVM pointer isn't sufficient, because without additiona=
+l actions
+>> > userspace could extract data from a VM by deleting its memslots and th=
+en binding
+>> > the guest_memfd to an attacker controlled VM.  Or more likely with TDX=
+ and SNP,
+>> > induce badness by coercing KVM into mapping memory into a guest with t=
+he wrong
+>> > ASID/HKID.
+>> >
+>> > I can think of three ways to handle that:
+>> >
+>> >   (a) prevent a different VM from *ever* binding to the gmem instance
+>> >   (b) free/zero physical pages when unbinding
+>> >   (c) free/zero when binding to a different VM
+>> >
+>> > Option (a) is easy, but that pretty much defeats the purpose of decopu=
+ling
+>> > guest_memfd from a VM.
+>> >
+>> > Option (b) isn't hard to implement, but it screws up the lifecycle of =
+the memory,
+>> > e.g. would require memory when a memslot is deleted.  That isn't neces=
+sarily a
+>> > deal-breaker, but it runs counter to how KVM memlots currently operate=
+.  Memslots
+>> > are basically just weird page tables, e.g. deleting a memslot doesn't =
+have any
+>> > impact on the underlying data in memory.  TDX throws a wrench in this =
+as removing
+>> > a page from the Secure EPT is effectively destructive to the data (can=
+'t be mapped
+>> > back in to the VM without zeroing the data), but IMO that's an oddity =
+with TDX and
+>> > not necessarily something we want to carry over to other VM types.
+>> >
+>> > There would also be performance implications (probably a non-issue in =
+practice),
+>> > and weirdness if/when we get to sharing, linking and/or mmap()ing gmem=
+.  E.g. what
+>> > should happen if the last memslot (binding) is deleted, but there outs=
+tanding userspace
+>> > mappings?
+>> >
+>> > Option (c) is better from a lifecycle perspective, but it adds its own=
+ flavor of
+>> > complexity, e.g. the performant way to reclaim TDX memory requires the=
+ TDMR
+>> > (effectively the VM pointer), and so a deferred relcaim doesn't really=
+ work for
+>> > TDX.  And I'm pretty sure it *can't* work for SNP, because RMP entries=
+ must not
+>> > outlive the VM; KVM can't reuse an ASID if there are pages assigned to=
+ that ASID
+>> > in the RMP, i.e. until all memory belonging to the VM has been fully f=
+reed.
+>> >
+>>
+>> If we are on the same page that the memory should outlive the VM but not
+>> the bindings, then associating the gmem inode to a new VM should be a
+>> feature and not a bug.
+>>
+>> What do we want to defend against here?
+>>
+>> (a) Malicious host VMM
+>>
+>> For a malicious host VMM to read guest memory (with TDX and SNP), it can
+>> create a new VM with the same HKID/ASID as the victim VM, rebind the
+>> gmem inode to a VM crafted with an image that dumps the memory.
+>>
+>> I believe it is not possible for userspace to arbitrarily select a
+>> matching HKID unless userspace uses the intra-host migration ioctls, but=
+ if the
+>> migration ioctl is used, then EPTs are migrated and the memory dumper VM
+>> can't successfully run a different image from the victim VM. If the
+>> dumper VM needs to run the same image as the victim VM, then it would be
+>> a successful migration rather than an attack. (Perhaps we need to clean
+>> up some #MCs here but that can be a separate patch).
+>
+> From a guest security perspective, throw TDX and SNP out the window.  As =
+far as
+> the design of guest_memfd is concerned, I truly do not care what security=
+ properties
+> they provide, I only care about whether or not KVM's support for TDX and =
+SNP is
+> clean, robust, and functionally correct.
+>
+> Note, I'm not saying I don't care about TDX/SNP.  What I'm saying is that=
+ I don't
+> want to design something that is beneficial only to what is currently a v=
+ery
+> niche class of VMs that require specific flavors of hardware.
+>
+>> (b) Malicious host kernel
+>>
+>> A malicious host kernel can allow a malicious host VMM to re-use a HKID
+>> for the dumper VM, but this isn't something a better gmem design can
+>> defend against.
+>
+> Yep, completely out-of-scope.
+>
+>> (c) Attacks using gmem for software-protected VMs
+>>
+>> Attacks using gmem for software-protected VMs are possible since there
+>> is no real encryption with HKID/ASID (yet?). The selftest for [1]
+>> actually uses this lack of encryption to test that the destination VM
+>> can read the source VM's memory after the migration. In the POC [1], as
+>> long as both destination VM knows where in the inode's memory to read,
+>> it can read what it wants to.
+>
+> Encryption is not required to protect guest memory from less privileged s=
+oftware.
+> The selftests don't rely on lack of encryption, they rely on KVM incorpor=
+ating
+> host userspace into the TCB.
+>
+> Just because this RFC doesn't remove the VMM from the TCB for SW-protecte=
+d VMS,
+> doesn't mean we _can't_ remove the VMM from the TCB.  pKVM has already sh=
+own that
+> such an implementation is possible.  We didn't tackle pKVM-like support i=
+n the
+> initial implementation because it's non-trivial, doesn't yet have a concr=
+ete use
+> case to fund/drive development, and would have significantly delayed supp=
+ort for
+> the use cases people do actually care about.
+>
+> There are certainly benefits from memory being encrypted, but it's neithe=
+r a
+> requirement nor a panacea, as proven by the never ending stream of specul=
+ative
+> execution attacks.
+>
+>> This is a problem for software-protected VMs, but I feel that it is also=
+ a
+>> separate issue from gmem's design.
+>
+> No, I don't want guest_memfd to be just be a vehicle for SNP/TDX VMs.  Ha=
+ving line
+> of sight to removing host userspace from the TCB is absolutely a must hav=
+e for me,
+> and having line of sight to improving KVM's security posture for "regular=
+" VMs is
+> even more of a must have.  If guest_memfd doesn't provide us a very direc=
+t path to
+> (eventually) achieving those goals, then IMO it's a failure.
+>
+> Which leads me to:
+>
+> (d) Buggy components
+>
+> Today, for all intents and purposes, guest memory *must* be mapped writab=
+le in
+> the VMM, which means it is all too easy for a benign-but-buggy host compo=
+nent to
+> corrupt guest memory.  There are ways to mitigate potential problems, e.g=
+. by
+> developing userspace to adhere to the principle of least privilege inasmu=
+ch as
+> possible, but such mitigations would be far less robust than what can be =
+achieved
+> via guest_memfd, and practically speaking I don't see us (Google, but als=
+o KVM in
+> general) making progress on deprivileging userspace without forcing the i=
+ssue.
+>
 
-Do you mean that there is another controller in the Loongson1 SoC
-which controls the pads multiplexing?
+Thanks for adding this point! I should clarify that when I asked about
+what we want to defend against, I meant that in response to the point
+that nulling the KVM pointer is insufficient. IIUC (d) explains what the
+whole of gmem is meant to defend against.
 
-If so what is the purpose of the GMAC1_USE_UART1, GMAC1_USE_UART0 and
-GMAC1_USE_TXCLK, GMAC1_USE_PWM23 flags in MUX controller then? Is it
-just another pinctl space with additional reset/power controls or what?
+I agree with you that nulling the KVM pointer is insufficient to keep
+host userspace out of the TCB. Among the three options (a) preventing a
+different VM (HKID/ASID) from binding to the gmem instance, or zeroing
+the memory either (b) on unbinding, or (c) on binding to another VM
+(HKID/ASID),
 
-> 
-> > >
-> > > > > +
-> > > >
-> > > > > +static int ls1b_dwmac_syscon_init(struct plat_stmmacenet_data *plat)
-> > > > > +{
-> > > >
-> > > > As I already told you this part is better to be called from the
-> > > > plat_stmmacenet_data.fix_mac_speed() because PHY interface mode can
-> > > > differ from one interface open cycle to another as per the phylink
-> > > > design.
-> > > >
-> > > I have considered .fix_mac_speed(), which will be called every time
-> > > the link is up, and passes the current speed.
-> > > However, the PHY interface mode is determined by the hardware design -
-> > > the schematic.
-> > > In other words, once the schematic is done, the PHY interface mode is fixed.
-> > > Therefore, PHY interface mode should be configured one time at the
-> > > initialization.
-> > > And the plat_stmmacenet_data.init() is the proper place to do this.
-> >
-> > Ok. If no actual clock change is needed then indeed init() will be the
-> > proper place.
-> >
-> > >
-> > > > > +     struct ls1x_dwmac *dwmac = plat->bsp_priv;
-> > > > > +     struct regmap_field **regmap_fields = dwmac->regmap_fields;
-> > > > > +
-> > > >
-> > > > > +     if (plat->bus_id) {
-> > > >
-> > > > Using bus_id doesn't look correct to determine the CSRs responsible
-> > > > for the interface mode selection because it's calculated based on the
-> > > > DT ethernet-alias which doesn't guarantee to have a particular device
-> > > > assigned with the alias. Alias node can be absent after all. What
-> > > > could be better in this case is for instance to use the regs physical
-> > > > address. Any better idea?
-> > > >
-> >
-> > > The purpose of alias is to bind the a particular device with a
-> > > particular alias even some aliases are absent.
-> > > Because of_alias_get_id() gets the alias id.
-> > > For example, LS1B has two GMAC controllers, gmac0 and gmac1.
-> > > I have tried the Ethernet with only one alias as follows.
-> > >        aliases {
-> > >                ethernet1 = &gmac1;
-> > >        };
-> > > In this case, plat->bus_id is still 1.
-> > > And both gmac0 and gmac1 work.
-> >
-> > If no alias specified? If both aliases a non zero? If the IDs are
-> > confused? If any of these is true you are in trouble. Your code
-> > shouldn't rely on the aliases in this case. You need to come up with a
-> > way to certainly distinguish one MAC from another. A physical base
-> > address is one possible option.
-> >
+(a) sounds like adding a check issued to TDX/SNP upon binding and this
+    check would just return OK for software-protected VMs (line of sight
+    to removing host userspace from TCB).
 
-> I see.
-> But It seems unusual to determine device IDs by physical base address.
-> What about adding a new property? such as loongson,dwmac-id
+Or, we could go further for software-protected VMs and add tracking in
+the inode to prevent the same inode from being bound to different
+"HKID/ASID"s, perhaps like this:
 
-IMO It's better to have a DT-property-independent way for it. If I
-were you I would have utilized the reg-space
-physical-base-address-based approach since you need to have it
-specified anyway and it determines the particular MAC for sure.
-Thus your driver won't be dependent in the device tree in that aspect.
++ On first binding, store the KVM pointer in the inode - not file (but
+  not hold a refcount)
++ On rebinding, check that the KVM matches the pointer in the inode
++ On intra-host migration, update the KVM pointer in the inode to allow
+  binding to the new struct kvm
 
-Some DW *MAC drivers pass additional number to the syscon phandle node
-in the syscon-property to identify the MAC on the board, like
-dwmac-socfpga.c or dwmac-sti.c. If you get to implement a similar way
-then you'll need to have the DT-bindings properly describing that. But
-IMO my approach seems less clumsy and simpler.
+I think you meant associating the file with a struct kvm at creation
+time as an implementation for (a), but technically since the inode is
+the representation of memory, tracking of struct kvm should be with the
+inode instead of the file.
 
-> 
-> > Note the /alias node is an informational node. It doesn't describe
-> > devices. Just recent Krzysztof comment in a similar situation:
-> > https://lore.kernel.org/netdev/20230814112539.70453-1-sriranjani.p@samsung.com/T/#m3972e40bd2fa323a3bdb2fbf07bde47ba6752439
-> >
-> > Aliases are normally used by OS to for instance fix the device
-> > enumeration (see SPI, I2C, I3C, MTD, MMC, RTC, TTY/Serial, Watchdog,
-> > MDIO-GPIO, etc) - pre-define the device ID from the kernel or OS point
-> > of view. In your case the IDs can't be changed. GMAC0 must be assigned
-> > with ID0 and GMAC1 must be assigned with non-zero. Doing otherwise
-> > will be break the interfaces functionality which isn't acceptable.
-> >
-> > >
-> > > > > +             regmap_field_write(regmap_fields[GMAC1_USE_UART1], 1);
-> > > > > +             regmap_field_write(regmap_fields[GMAC1_USE_UART0], 1);
-> > > > > +
-> > > > > +             switch (plat->phy_interface) {
-> > > > > +             case PHY_INTERFACE_MODE_RGMII:
-> > > > > +                     regmap_field_write(regmap_fields[GMAC1_USE_TXCLK], 0);
-> > > > > +                     regmap_field_write(regmap_fields[GMAC1_USE_PWM23], 0);
-> > > > > +                     break;
-> > > > > +             case PHY_INTERFACE_MODE_MII:
-> > > > > +                     regmap_field_write(regmap_fields[GMAC1_USE_TXCLK], 1);
-> > > > > +                     regmap_field_write(regmap_fields[GMAC1_USE_PWM23], 1);
-> > > > > +                     break;
-> > > > > +             default:
-> > > > > +                     dev_err(dwmac->dev, "Unsupported PHY mode %u\n",
-> > > > > +                             plat->phy_interface);
-> > > > > +                     return -EOPNOTSUPP;
-> > > > > +             }
-> > > > > +
-> > > > > +             regmap_field_write(regmap_fields[GMAC1_SHUT], 0);
-> > > > > +     } else {
-> > > > > +             switch (plat->phy_interface) {
-> > > > > +             case PHY_INTERFACE_MODE_RGMII:
-> > > > > +                     regmap_field_write(regmap_fields[GMAC0_USE_TXCLK], 0);
-> > > > > +                     regmap_field_write(regmap_fields[GMAC0_USE_PWM01], 0);
-> > > > > +                     break;
-> > > > > +             case PHY_INTERFACE_MODE_MII:
-> > > > > +                     regmap_field_write(regmap_fields[GMAC0_USE_TXCLK], 1);
-> > > > > +                     regmap_field_write(regmap_fields[GMAC0_USE_PWM01], 1);
-> > > > > +                     break;
-> > > > > +             default:
-> > > > > +                     dev_err(dwmac->dev, "Unsupported PHY mode %u\n",
-> > > > > +                             plat->phy_interface);
-> > > > > +                     return -EOPNOTSUPP;
-> > > > > +             }
-> > > > > +
-> > > > > +             regmap_field_write(regmap_fields[GMAC0_SHUT], 0);
-> > > > > +     }
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int ls1c_dwmac_syscon_init(struct plat_stmmacenet_data *plat)
-> > > > > +{
-> > > > > +     struct ls1x_dwmac *dwmac = plat->bsp_priv;
-> > > > > +     struct regmap_field **regmap_fields = dwmac->regmap_fields;
-> > > > > +
-> > > > > +     if (plat->phy_interface == PHY_INTERFACE_MODE_RMII) {
-> > > > > +             regmap_field_write(regmap_fields[PHY_INTF_SELI], 0x4);
-> > > > > +     } else {
-> > > > > +             dev_err(dwmac->dev, "Unsupported PHY-mode %u\n",
-> > > > > +                     plat->phy_interface);
-> > > > > +             return -EOPNOTSUPP;
-> > > > > +     }
-> > > > > +
-> > > > > +     regmap_field_write(regmap_fields[GMAC_SHUT], 0);
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static const struct ls1x_dwmac_syscon ls1b_dwmac_syscon = {
-> > > > > +     .reg_fields = ls1b_dwmac_syscon_regfields,
-> > > > > +     .nr_reg_fields = ARRAY_SIZE(ls1b_dwmac_syscon_regfields),
-> > > > > +     .syscon_init = ls1b_dwmac_syscon_init,
-> > > > > +};
-> > > > > +
-> > > > > +static const struct ls1x_dwmac_syscon ls1c_dwmac_syscon = {
-> > > > > +     .reg_fields = ls1c_dwmac_syscon_regfields,
-> > > > > +     .nr_reg_fields = ARRAY_SIZE(ls1c_dwmac_syscon_regfields),
-> > > > > +     .syscon_init = ls1c_dwmac_syscon_init,
-> > > > > +};
-> > > > > +
-> > > > > +static int ls1x_dwmac_init(struct platform_device *pdev, void *priv)
-> > > > > +{
-> > > > > +     struct ls1x_dwmac *dwmac = priv;
-> > > > > +     int ret;
-> > > > > +
-> > > >
-> > > > > +     ret = devm_regmap_field_bulk_alloc(dwmac->dev, dwmac->regmap,
-> > > > > +                                        dwmac->regmap_fields,
-> > > > > +                                        dwmac->syscon->reg_fields,
-> > > > > +                                        dwmac->syscon->nr_reg_fields);
-> > > >
-> > > > Please see my first comment about this.
-> > > >
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     if (dwmac->syscon->syscon_init) {
-> > > > > +             ret = dwmac->syscon->syscon_init(dwmac->plat_dat);
-> > > > > +             if (ret)
-> > > > > +                     return ret;
-> > > > > +     }
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static const struct of_device_id ls1x_dwmac_syscon_match[] = {
-> > > > > +     { .compatible = "loongson,ls1b-syscon", .data = &ls1b_dwmac_syscon },
-> > > > > +     { .compatible = "loongson,ls1c-syscon", .data = &ls1c_dwmac_syscon },
-> > > > > +     { }
-> > > > > +};
-> > > > > +
-> > > > > +static int ls1x_dwmac_probe(struct platform_device *pdev)
-> > > > > +{
-> > > > > +     struct plat_stmmacenet_data *plat_dat;
-> > > > > +     struct stmmac_resources stmmac_res;
-> > > > > +     struct device_node *syscon_np;
-> > > > > +     const struct of_device_id *match;
-> > > > > +     struct regmap *regmap;
-> > > > > +     struct ls1x_dwmac *dwmac;
-> > > > > +     const struct ls1x_dwmac_syscon *syscon;
-> > > > > +     size_t size;
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     ret = stmmac_get_platform_resources(pdev, &stmmac_res);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > >
-> > > > > +     /* Probe syscon */
-> > > > > +     syscon_np = of_parse_phandle(pdev->dev.of_node, "syscon", 0);
-> > > >
-> > > > it's vendor-specific property so it is supposed to have a
-> > > > vendor-specific prefix and possibly ls1-specific name.
-> > > >
-> > > This has been fixed in v2.
-> > > Could you please review v2?
-> > > Thanks!
-> > >
-> > > > > +     if (!syscon_np)
-> > > > > +             return -ENODEV;
-> > > > > +
-> > > > > +     match = of_match_node(ls1x_dwmac_syscon_match, syscon_np);
-> > > > > +     if (!match) {
-> > > > > +             of_node_put(syscon_np);
-> > > > > +             return -EINVAL;
-> > > > > +     }
-> > > > > +     syscon = (const struct ls1x_dwmac_syscon *)match->data;
-> 
+(b) You're right that this messes up the lifecycle of the memory and
+    wouldn't work with intra-host migration.
 
-> Please note that of_match_node() is used for syscon matching.
+(c) sounds like doing the clearing on a check similar to that of (a)
 
-I noticed it in the first place. Please see my next comment.
+If we track struct kvm with the inode, then I think (a), (b) and (c) can
+be independent of the refcounting method. What do you think?
 
-> 
-> > > > > +
-> > > > > +     regmap = syscon_node_to_regmap(syscon_np);
-> > > > > +     of_node_put(syscon_np);
-> > > > > +     if (IS_ERR(regmap)) {
-> > > > > +             ret = PTR_ERR(regmap);
-> > > > > +             dev_err(&pdev->dev, "Unable to map syscon: %d\n", ret);
-> > > > > +             return ret;
-> > > > > +     }
-> > > >
-> > > > or you can use syscon_regmap_lookup_by_phandle(). Using
-> > > > of_match_node() doesn't seem necessary since it's unlikely to have
-> > > > moee than one system controller available on the LS1b or LS1c chips.
-> > > >
-> >
-> > > I planned to use syscon_regmap_lookup_by_phandle().
-> > > Thus the compatible
-> > > "loongson,ls1b-dwmac-syscon"/"loongson,ls1c-dwmac-syscon" would become
-> > > useless.
-> > > I'm not sure about this.
-> >
-> > The compatible strings should be left despite of the
-> > syscon_regmap_lookup_by_phandle() usage. But again "dwmac" suffix is
-> > redundant. Based on the CSRs definition in regs-mux.h, selecting
-> > (G)MAC pins mode is only a small part of the Loongson1 SoC system
-> > controllers functionality.
-> > "loongson,ls1b-syscon"/"loongson,ls1c-syscon" looks more appropriate.
-> >
-> That's what I did in PATCH 2/5.
-> I've just explained this to Krzysztof.
-> And will change back to "loongson,ls1b-syscon"/"loongson,ls1c-syscon"
-> in next version.
-> 
+>> >> Could binding gmem files not on creation, but at memslot configuratio=
+n
+>> >> time be sufficient and simpler?
+>> >
+>> > After working through the flows, I think binding on-demand would simpl=
+ify the
+>> > refcounting (stating the obvious), but complicate the lifecycle of the=
+ memory as
+>> > well as the contract between KVM and userspace,
+>>
+>> If we are on the same page that the memory should outlive the VM but not
+>> the bindings, does it still complicate the lifecycle of the memory and
+>> the userspace/KVM contract? Could it just be a different contract?
+>
+> Not entirely sure I understand what you're asking.  Does this question go=
+ away
+> with my clarification about struct kvm vs. virtual machine?
+>
 
-> In addition, syscon_regmap_lookup_by_phandle() returns regmap pointer directly.
-> Then, there wil be no way to do syscon matching without its device_node.
-> How will I know whether the syscon is loongson,ls1b-syscon or
-> loongson,ls1c-syscon?
+Yes, this question goes away. Thanks!
 
-Do you have both of these syscons available in the same SoC? I don't
-think so. Thus you don't need such validation since the LS1C SoC dts
-file will have the "loongson,ls1c-syscon" syscon node defined only and
-the LS1B SoC dts file - "loongson,ls1b-syscon" only.
-
--Serge(y)
-
-> 
-> Thanks for your review!
-> 
-> 
-> 
-> 
-> 
-> > -Serge(y)
-> >
-> > >
-> > > > > +
-> > > > > +     size = syscon->nr_reg_fields * sizeof(struct regmap_field *);
-> > > > > +     dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac) + size, GFP_KERNEL);
-> > > > > +     if (!dwmac)
-> > > > > +             return -ENOMEM;
-> > > > > +
-> > > > > +     plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-> > > > > +     if (IS_ERR(plat_dat)) {
-> > > > > +             dev_err(&pdev->dev, "dt configuration failed\n");
-> > > > > +             return PTR_ERR(plat_dat);
-> > > > > +     }
-> > > > > +
-> > > > > +     plat_dat->bsp_priv = dwmac;
-> > > > > +     plat_dat->init = ls1x_dwmac_init;
-> > > > > +     dwmac->dev = &pdev->dev;
-> > > > > +     dwmac->plat_dat = plat_dat;
-> > > > > +     dwmac->syscon = syscon;
-> > > > > +     dwmac->regmap = regmap;
-> > > > > +
-> > > > > +     ret = stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
-> > > > > +     if (ret)
-> > > > > +             goto err_remove_config_dt;
-> > > > > +
-> > > > > +     return 0;
-> > > > > +
-> > > > > +err_remove_config_dt:
-> > > >
-> > > > > +     if (pdev->dev.of_node)
-> > > >
-> > > > Is this conditional statement necessary here?
-> > > >
-> > > You're right.
-> > > Will remove this condition in next version.
-> > > Thanks!
-> > >
-> > > > -Serge
-> > > >
-> > > > > +             stmmac_remove_config_dt(pdev, plat_dat);
-> > > > > +
-> > > > > +     return ret;
-> > > > > +}
-> > > > > +
-> > > > > +static const struct of_device_id ls1x_dwmac_match[] = {
-> > > > > +     { .compatible = "loongson,ls1b-dwmac" },
-> > > > > +     { .compatible = "loongson,ls1c-dwmac" },
-> > > > > +     { }
-> > > > > +};
-> > > > > +MODULE_DEVICE_TABLE(of, ls1x_dwmac_match);
-> > > > > +
-> > > > > +static struct platform_driver ls1x_dwmac_driver = {
-> > > > > +     .probe = ls1x_dwmac_probe,
-> > > > > +     .remove_new = stmmac_pltfr_remove,
-> > > > > +     .driver = {
-> > > > > +             .name = "loongson1-dwmac",
-> > > > > +             .of_match_table = ls1x_dwmac_match,
-> > > > > +     },
-> > > > > +};
-> > > > > +module_platform_driver(ls1x_dwmac_driver);
-> > > > > +
-> > > > > +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-> > > > > +MODULE_DESCRIPTION("Loongson1 DWMAC glue layer");
-> > > > > +MODULE_LICENSE("GPL");
-> > > > > --
-> > > > > 2.39.2
-> > > > >
-> > >
-> > >
-> > >
-> > > --
-> > > Best regards,
-> > >
-> > > Keguang Zhang
-> 
-> 
-> 
-> --
-> Best regards,
-> 
-> Keguang Zhang
+>> > and would break the separation of
+>> > concerns between the inode (physical memory / data) and file (VM's vie=
+w / mappings).
+>>
+>> Binding on-demand is orthogonal to the separation of concerns between
+>> inode and file, because it can be built regardless of whether we do the
+>> gmem file/inode split.
+>>
+>> + This flip-the-refcounting POC is built with the file/inode split and
+>> + In [2] (the delayed binding approach to solve intra-host migration), I
+>>   also tried flipping the refcounting, and that without the gmem
+>>   file/inode split. (Refcounting in [2] is buggy because the file can't
+>>   take a refcount on KVM, but it would work without taking that refcount=
+)
+>>
+>> [1] https://lore.kernel.org/lkml/cover.1691446946.git.ackerleytng@google=
+.com/T/
+>> [2] https://github.com/googleprodkernel/linux-cc/commit/dd5ac5e53f14a1ef=
+9915c9c1e4cc1006a40b49df
