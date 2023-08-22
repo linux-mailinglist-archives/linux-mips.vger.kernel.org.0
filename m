@@ -2,271 +2,258 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37848783970
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Aug 2023 07:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E93D0783A07
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Aug 2023 08:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbjHVFoi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Aug 2023 01:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S233044AbjHVGeG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Aug 2023 02:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbjHVFoi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Aug 2023 01:44:38 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7174D7
-        for <linux-mips@vger.kernel.org>; Mon, 21 Aug 2023 22:44:35 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-523b066d7ceso4906043a12.2
-        for <linux-mips@vger.kernel.org>; Mon, 21 Aug 2023 22:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692683074; x=1693287874;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+Pz65IM6yK+nsY8GMYtZPvYOmwUF6F4yt+xPaiBO+hQ=;
-        b=j0ze+Q9Xmul9BQ10lkn/30oKMU0MyDZKtP7kQkGfEnhhujbMxX7Ip2T/3BVh19T2IU
-         pCzUdFVH3moQIcnmtDZdQeXuNpJmo5Kv+3i+BHQboEBpqFdd2/JYifyyhZHCpBSdXk9S
-         6nZnfj0hOiXu74eY9Ly0NZyI3gOK4bnrWsik1o27xn7A9wUmRbW+wY4DigX2ZdZiVHwy
-         h5QrSneVtgDKfqyZYSwUlyAKD5mVaMTHoproyvuT+UUjLWtElgjfZs+1qIe99hNqCnQf
-         fLhPUGBIrZ1QY2KGIjkZd+Sq6sUJwTa/J7iiEgVwbQBl+Mb+LpeMziVfNTDXF4Op9lf4
-         +JDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692683074; x=1693287874;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Pz65IM6yK+nsY8GMYtZPvYOmwUF6F4yt+xPaiBO+hQ=;
-        b=NdOj84NU9sZWM9y8TtLvjevbCo/fSzPMUD+K5EMRo6/vWIpxziaiZT1/mJ+zFgehSB
-         35RNc80Ivb06eR53HYxZsOzVMLwZRbk4lP1yAoRxftWPJoUQDWoQXvcMhkELBhRhtQ29
-         OyEeetAeFzfZtu4+2UhDJshXC6JYP60rt254iwQb2icIrjM9AICgagyqfbiczMzFSZS8
-         Crl0Db1VyjN2rF8aEokcK4mFhHs14bhZgsngmw3FmJN4ma+AdjDym6i1/j2N4Lu3ftyN
-         pYrTZVnyIVdVT7JmytKQ6r5FR+2E7JqnEMHTfPHAcQS7ZsS6EOOjr1Vi3G18eS2XT+fj
-         wjrg==
-X-Gm-Message-State: AOJu0YzLoT6wKi8fYO9U+Z8mE4mkYDl/FN7RdusK4yKPrazYmawjCuDa
-        Dam7+jswVe5yS/OK+OLgD5x5Yg==
-X-Google-Smtp-Source: AGHT+IFsW2EHW1wtQRSB+/XNA/5uXxvwe55YXZkjJn3VtfUvXo1Lrm3RDMPjqSfYk1A6u+bSg2Uevw==
-X-Received: by 2002:a17:906:3089:b0:9a1:c216:c89c with SMTP id 9-20020a170906308900b009a1c216c89cmr26722ejv.66.1692683074320;
-        Mon, 21 Aug 2023 22:44:34 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id bv17-20020a170906b1d100b00992e265495csm7557220ejb.212.2023.08.21.22.44.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Aug 2023 22:44:33 -0700 (PDT)
-Message-ID: <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org>
-Date:   Tue, 22 Aug 2023 07:44:32 +0200
+        with ESMTP id S233049AbjHVGeE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Aug 2023 02:34:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45E1E47;
+        Mon, 21 Aug 2023 23:33:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 01FC422C44;
+        Tue, 22 Aug 2023 06:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1692685983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0LefrGrfWIlUUodSIRfdXfGvUMxOpn3Da/x1z7+TACM=;
+        b=dcW/Td18f6Fki4csXaJVH2kX+joGxDMOht06LwZTOfNsgqpMfncIfcqoPyYT4pr6k4mnSU
+        M0TGSwt1po685EhpFFg+MsGQqwUnObFIRiO2wfy913FH+/Lel6/Fb2dOKqsq92KJa+2uD1
+        Bu3YIapaL9IWtKzXxWr75rikpNrC41E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1692685983;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0LefrGrfWIlUUodSIRfdXfGvUMxOpn3Da/x1z7+TACM=;
+        b=rG0JjH04TqT5CksLvToAlLn8tIAFYWH057rgn75zDtNS/jv7ATjOlZlbjVPfguARFEVAuk
+        XrENx1kzxGQ4t0Cg==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4B5DF2C143;
+        Tue, 22 Aug 2023 06:32:58 +0000 (UTC)
+Date:   Tue, 22 Aug 2023 08:32:57 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>, linux@armlinux.org.uk,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        geert@linux-m68k.org, tsbogend@alpha.franken.de,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, peterz@infradead.org,
+        linus.walleij@linaro.org, hpa@zytor.com, kernel@xen0n.name,
+        ardb@kernel.org, tsi@tuyoix.net, agordeev@linux.ibm.com,
+        paulmck@kernel.org, bhe@redhat.com, masahiroy@kernel.org,
+        konrad.wilk@oracle.com, sebastian.reichel@collabora.com,
+        samitolvanen@google.com, ojeda@kernel.org,
+        juerg.haefliger@canonical.com, borntraeger@linux.ibm.com,
+        frederic@kernel.org, arnd@arndb.de, mhiramat@kernel.org,
+        aou@eecs.berkeley.edu, keescook@chromium.org, gor@linux.ibm.com,
+        anshuman.khandual@arm.com, hca@linux.ibm.com, xin3.li@intel.com,
+        npiggin@gmail.com, rmk+kernel@armlinux.org.uk,
+        paul.walmsley@sifive.com, boris.ostrovsky@oracle.com,
+        ziy@nvidia.com, hbathini@linux.ibm.com, gregkh@linuxfoundation.org,
+        kirill.shutemov@linux.intel.com, ndesaulniers@google.com,
+        sourabhjain@linux.ibm.com, palmer@dabbelt.com, svens@linux.ibm.com,
+        tj@kernel.org, akpm@linux-foundation.org, rppt@kernel.org
+Subject: Re: [PATCH v6 02/14] x86/kexec: refactor for kernel/Kconfig.kexec
+Message-ID: <20230822063257.GI8826@kitsune.suse.cz>
+References: <20230712161545.87870-1-eric.devolder@oracle.com>
+ <20230712161545.87870-3-eric.devolder@oracle.com>
+ <d8ddd4bd-fbc9-dbe9-f5c3-daf8d89aa46d@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
- Fix warnings about liointc-2.0
-To:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, diasyzhang@tencent.com,
-        linux-kernel@vger.kernel.org
-References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d8ddd4bd-fbc9-dbe9-f5c3-daf8d89aa46d@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21/08/2023 08:13, Binbin Zhou wrote:
-> Since commit f4dee5d8e1fa ("dt-bindings: interrupt-controller: Add
-> Loongson-2K1000 LIOINTC"), the loongson liointc supports configuring
-> routes for 64-bit interrupt sources.
+Hello,
+
+On Thu, Jul 13, 2023 at 07:13:57PM +0800, Leizhen (ThunderTown) wrote:
 > 
-> For liointc-2.0, we need to define two liointc nodes in dts, one for
-> "0-31" interrupt sources and the other for "32-63" interrupt sources.
-> This applies to mips Loongson-2K1000.
 > 
-> Unfortunately, there are some warnings about "loongson,liointc-2.0":
-> 1. "interrupt-names" should be "required", the driver gets the parent
-> interrupts through it.
+> On 2023/7/13 0:15, Eric DeVolder wrote:
+> > The kexec and crash kernel options are provided in the common
+> > kernel/Kconfig.kexec. Utilize the common options and provide
+> > the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
+> > equivalent set of KEXEC and CRASH options.
+> > 
+> > Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> > ---
+> >  arch/x86/Kconfig | 92 ++++++++++--------------------------------------
+> >  1 file changed, 19 insertions(+), 73 deletions(-)
+> > 
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 7422db409770..9767a343f7c2 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -2040,88 +2040,34 @@ config EFI_RUNTIME_MAP
+> >  
+> >  source "kernel/Kconfig.hz"
+> >  
+> > -config KEXEC
+> > -	bool "kexec system call"
+> > -	select KEXEC_CORE
+> > -	help
+> > -	  kexec is a system call that implements the ability to shutdown your
+> > -	  current kernel, and to start another kernel.  It is like a reboot
+> > -	  but it is independent of the system firmware.   And like a reboot
+> > -	  you can start any kernel with it, not just Linux.
+> > -
+> > -	  The name comes from the similarity to the exec system call.
+> > -
+> > -	  It is an ongoing process to be certain the hardware in a machine
+> > -	  is properly shutdown, so do not be surprised if this code does not
+> > -	  initially work for you.  As of this writing the exact hardware
+> > -	  interface is strongly in flux, so no good recommendation can be
+> > -	  made.
+> > -
+> > -config KEXEC_FILE
+> > -	bool "kexec file based system call"
+> > -	select KEXEC_CORE
+> > -	select HAVE_IMA_KEXEC if IMA
+> > -	depends on X86_64
+> > -	depends on CRYPTO=y
+> > -	depends on CRYPTO_SHA256=y
+> > -	help
+> > -	  This is new version of kexec system call. This system call is
+> > -	  file based and takes file descriptors as system call argument
+> > -	  for kernel and initramfs as opposed to list of segments as
+> > -	  accepted by previous system call.
+> > +config ARCH_SUPPORTS_KEXEC
+> > +	def_bool y
+> 
+> In v5, Joel Fernandes seems to suggest you change it to the following form:
 
-No, why? Parent? This does not make sense.
+It's unfortunate that the suggestion did not make it to the mailinglist.
+
+> In arch/Kconfig:
+> +config ARCH_SUPPORTS_KEXEC
+> +	bool
+> 
+> In arch/x86/Kconfig:
+> config X86
+> 	... ...
+> +	select ARCH_SUPPORTS_KEXEC
+> 
+> In arch/arm64/Kconfig:
+> config ARM64
+> 	... ...
+> +	select ARCH_SUPPORTS_KEXEC if PM_SLEEP_SMP
+
+Which might work for this case
 
 > 
-> 2. Since not all CPUs are multicore, e.g. Loongson-2K0500 is a
-> single-core CPU, there is no core1-related registers. So "reg" and
-> "reg-names" should be set to "minItems 2".
+> etc..
 > 
-> 3. Routing interrupts from "int0" is a common solution in practice, but
-> theoretically there is no such requirement, as long as conflicts are
-> avoided. So "interrupt-names" should be defined by "pattern".
-
-Why? What the pattern has to do with anything in routing or not routing
-something?
-
+> You can refer to ARCH_HAS_DEBUG_VIRTUAL.
 > 
-> This fixes dtbs_check warning:
+> >  
+> > -config ARCH_HAS_KEXEC_PURGATORY
+> > -	def_bool KEXEC_FILE
+> > +config ARCH_SUPPORTS_KEXEC_FILE
+> > +	def_bool X86_64 && CRYPTO && CRYPTO_SHA256
+> >  
+> > -config KEXEC_SIG
+> > -	bool "Verify kernel signature during kexec_file_load() syscall"
+> > +config ARCH_SELECTS_KEXEC_FILE
+> > +	def_bool y
+> >  	depends on KEXEC_FILE
+> > -	help
+> > +	select HAVE_IMA_KEXEC if IMA
+
+but not this case, at least not this trivially.
+
+Than for consistency it looks better to keep as is.
+
+Thanks
+
+Michal
+
+> >  
+> > -	  This option makes the kexec_file_load() syscall check for a valid
+> > -	  signature of the kernel image.  The image can still be loaded without
+> > -	  a valid signature unless you also enable KEXEC_SIG_FORCE, though if
+> > -	  there's a signature that we can check, then it must be valid.
+> > +config ARCH_HAS_KEXEC_PURGATORY
+> > +	def_bool KEXEC_FILE
+> >  
+> > -	  In addition to this option, you need to enable signature
+> > -	  verification for the corresponding kernel image type being
+> > -	  loaded in order for this to work.
+> > +config ARCH_SUPPORTS_KEXEC_SIG
+> > +	def_bool y
+> >  
+> > -config KEXEC_SIG_FORCE
+> > -	bool "Require a valid signature in kexec_file_load() syscall"
+> > -	depends on KEXEC_SIG
+> > -	help
+> > -	  This option makes kernel signature verification mandatory for
+> > -	  the kexec_file_load() syscall.
+> > +config ARCH_SUPPORTS_KEXEC_SIG_FORCE
+> > +	def_bool y
+> >  
+> > -config KEXEC_BZIMAGE_VERIFY_SIG
+> > -	bool "Enable bzImage signature verification support"
+> > -	depends on KEXEC_SIG
+> > -	depends on SIGNED_PE_FILE_VERIFICATION
+> > -	select SYSTEM_TRUSTED_KEYRING
+> > -	help
+> > -	  Enable bzImage signature verification support.
+> > +config ARCH_SUPPORTS_KEXEC_BZIMAGE_VERIFY_SIG
+> > +	def_bool y
+> >  
+> > -config CRASH_DUMP
+> > -	bool "kernel crash dumps"
+> > -	depends on X86_64 || (X86_32 && HIGHMEM)
+> > -	help
+> > -	  Generate crash dump after being started by kexec.
+> > -	  This should be normally only set in special crash dump kernels
+> > -	  which are loaded in the main kernel with kexec-tools into
+> > -	  a specially reserved region and then later executed after
+> > -	  a crash by kdump/kexec. The crash dump kernel must be compiled
+> > -	  to a memory address not used by the main kernel or BIOS using
+> > -	  PHYSICAL_START, or it must be built as a relocatable image
+> > -	  (CONFIG_RELOCATABLE=y).
+> > -	  For more details see Documentation/admin-guide/kdump/kdump.rst
+> > +config ARCH_SUPPORTS_KEXEC_JUMP
+> > +	def_bool y
+> >  
+> > -config KEXEC_JUMP
+> > -	bool "kexec jump"
+> > -	depends on KEXEC && HIBERNATION
+> > -	help
+> > -	  Jump between original kernel and kexeced kernel and invoke
+> > -	  code in physical address mode via KEXEC
+> > +config ARCH_SUPPORTS_CRASH_DUMP
+> > +	def_bool X86_64 || (X86_32 && HIGHMEM)
+> >  
+> >  config PHYSICAL_START
+> >  	hex "Physical address where the kernel is loaded" if (EXPERT || CRASH_DUMP)
+> > 
 > 
-> DTC_CHK arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb
-> arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb: interrupt-controller@1fe11440: interrupt-names:0: 'int0' was expected
->       From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb: interrupt-controller@1fe11440: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
->       From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> 
-> Fixes: f4dee5d8e1fa ("dt-bindings: interrupt-controller: Add Loongson-2K1000 LIOINTC")
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
-> V2:
-> 1. Update commit message;
-> 2. "interruprt-names" should be "required", the driver gets the parent
-> interrupts through it;
-> 3. Add more descriptions to explain the rationale for multiple nodes;
-> 4. Rewrite if-else statements.
-> 
-> Link to V1:
-> https://lore.kernel.org/all/20230815084713.1627520-1-zhoubinbin@loongson.cn/
-> 
->  .../loongson,liointc.yaml                     | 74 +++++++++----------
->  1 file changed, 37 insertions(+), 37 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> index 00b570c82903..f695d3a75ddf 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> @@ -11,11 +11,11 @@ maintainers:
->  
->  description: |
->    This interrupt controller is found in the Loongson-3 family of chips and
-> -  Loongson-2K1000 chip, as the primary package interrupt controller which
-> +  Loongson-2K series chips, as the primary package interrupt controller which
->    can route local I/O interrupt to interrupt lines of cores.
-> -
-> -allOf:
-> -  - $ref: /schemas/interrupt-controller.yaml#
-> +  In particular, the Loongson-2K1000/2K0500 has 64 interrupt sources that we
-> +  need to describe with two dts nodes. One for interrupt sources "0-31" and
-> +  the other for interrupt sources "32-63".
->  
->  properties:
->    compatible:
-> @@ -24,15 +24,9 @@ properties:
->        - loongson,liointc-1.0a
->        - loongson,liointc-2.0
->  
-> -  reg:
-> -    minItems: 1
-> -    maxItems: 3
-> +  reg: true
-
-No. Constraints must be here.
-
->  
-> -  reg-names:
-> -    items:
-> -      - const: main
-> -      - const: isr0
-> -      - const: isr1
-> +  reg-names: true
-
-No, keep at least min/maxItems here.
-
->  
->    interrupt-controller: true
->  
-> @@ -45,11 +39,9 @@ properties:
->    interrupt-names:
->      description: List of names for the parent interrupts.
->      items:
-> -      - const: int0
-> -      - const: int1
-> -      - const: int2
-> -      - const: int3
-> +      pattern: int[0-3]
->      minItems: 1
-> +    maxItems: 4
-
-I don't see reason behind it.
-
->  
->    '#interrupt-cells':
->      const: 2
-> @@ -69,32 +61,41 @@ required:
->    - compatible
->    - reg
->    - interrupts
-> +  - interrupt-names
-
-Why? You are doing multiple things at once, without proper explanation.
-
->    - interrupt-controller
->    - '#interrupt-cells'
->    - loongson,parent_int_map
->  
-> -
->  unevaluatedProperties: false
->  
-> -if:
-> -  properties:
-> -    compatible:
-> -      contains:
-> -        enum:
-> -          - loongson,liointc-2.0
-> -
-> -then:
-> -  properties:
-> -    reg:
-> -      minItems: 3
-> -
-> -  required:
-> -    - reg-names
-> -
-> -else:
-> -  properties:
-> -    reg:
-> -      maxItems: 1
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - loongson,liointc-2.0
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +          items:
-> +            - description: Interrupt routing registers.
-> +            - description: Low/high 32-bit interrupt status routed to core0.
-> +            - description: Low/high 32-bit interrupt status routed to core1.
-> +        reg-names:
-> +          minItems: 2
-> +          items:
-> +            - const: main
-> +            - const: isr0
-> +            - const: isr1
-
-Srsly, why this is moved here from the top? It does not make sense.
-
-> +      required:
-> +        - reg-names
-> +    else:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-
-so reg-names can be "pink-pony"?
-
-Best regards,
-Krzysztof
-
+> -- 
+> Regards,
+>   Zhen Lei
