@@ -2,103 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F5478620F
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Aug 2023 23:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA74786422
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Aug 2023 01:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbjHWVQ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Aug 2023 17:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S238850AbjHWXye (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Aug 2023 19:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbjHWVQr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Aug 2023 17:16:47 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005191718
-        for <linux-mips@vger.kernel.org>; Wed, 23 Aug 2023 14:16:34 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d650a22abd7so5996339276.3
-        for <linux-mips@vger.kernel.org>; Wed, 23 Aug 2023 14:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692825394; x=1693430194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iEpTjrnLVqxen66G7Uvz7Jyy/E11cVlVrjCW6/VyKj8=;
-        b=ZDmv2BjJU3fBSftYGcNM3tb+ILU/d9+cLODcLN7bJx5jE0GqvFKrPnlSYGlL0k9kWu
-         m0bch7za38IJ+CLWsWjflpljG/O8F9HEsNE/VWjVNStBDOBq3iJDnH2eTLO/dJEAtALA
-         zbXY+4ZWcbcUYtwqB7UctSATyz1sDYmgfZ/uZj88iB4dhaAHsNB4lm1XJShf+lSlTUF4
-         q1mw8cBg/PsTLqlxfYRQ9OdT1JyBSqfrgsLuehUHu9V36ypWdR+RMX9JIQmW7yxqcnfx
-         Bu1+6uVlgAFqvayOjaJa8cEpXa7Hm+cDiofeMeKPmewLASFqzTHTuUzB1cC9zTcv8uzK
-         +bQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692825394; x=1693430194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iEpTjrnLVqxen66G7Uvz7Jyy/E11cVlVrjCW6/VyKj8=;
-        b=VynEJQo2kYPnnYX+wkgGiGMYkXqVPx/lz1s4ODYuwvMOO1K0GFhONrSrwCtWSv35h8
-         J6tzzdfgmGSkOOdUztD6pv82xm0g8qMQh+Yo7MQc9v6F6h6C8XH1lHmHYNQojOByeXPy
-         uoLtwRNXRNHqtmtf+yxtBJdigOrZb66a+ct+nXvfLnOlDWmblTmY2sJnKzr4zIc9ckA4
-         NFBC5OW1DsLgXzPadYyM7N0Mgf7CqfsHSL5QiiewUwlpp62jzhKykAPuY/8hDNydUstK
-         CcXv7FJCyGE/O7lMVRiNpYIzwOne4TCIs4KcxjT5DHH+oPt6C1z597AzFibP1lwBJkrS
-         JSzA==
-X-Gm-Message-State: AOJu0YzGnGjgqm0DuogYZI9EptLzLOd765xlgKZoekTzT/LOtvi/36+r
-        KtjDz9wyS1u+1n2xLZT7u8IUBeLDEXVmMz/1T07VMQ==
-X-Google-Smtp-Source: AGHT+IGU5hlAbzjKR6dHf8nG7wjH+gLTIhLdkOAR0BQZYCAzmvxO+0vsobrLpwu8+6G8uJRZXAov+P50unjaO9+ZE7g=
-X-Received: by 2002:a25:c08f:0:b0:d09:f39b:cecf with SMTP id
- c137-20020a25c08f000000b00d09f39bcecfmr12862557ybf.9.1692825393910; Wed, 23
- Aug 2023 14:16:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230823183749.2609013-1-robh@kernel.org>
-In-Reply-To: <20230823183749.2609013-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 23 Aug 2023 23:16:22 +0200
-Message-ID: <CACRpkdbuB-NotnMXc9vZj-byjk7spCSkZ+Dx=R_eOqoSV5CdTA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop remaining unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Corey Minyard <minyard@acm.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S238844AbjHWXyF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Aug 2023 19:54:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7968510E3;
+        Wed, 23 Aug 2023 16:54:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5F6A60F1B;
+        Wed, 23 Aug 2023 23:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AC4C433C7;
+        Wed, 23 Aug 2023 23:53:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692834842;
+        bh=0QqeR1Lq7+F+rfZm2YiAD6B8qn3qmIFq6Njtx7qgkQU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J3z97XbgN0Boa6lUTELS56Hxyl1Vjj9RYLruRdnwKVLH0QvdOxo3g1tF83Jer2l+X
+         IrQapRFHeZj8SQp1PXkTWO+ByFRN+i4zwZHBPtWdp04jdeikPrd7qNMvjt24Pgrd0O
+         iWrgx2T8pvC6mTQx/mO3Drve3DGX89hpPwSmACXHOEhMp+KmY1iTEysRVKeiHznI/Y
+         GTbGvbOs50mTVh2p/fwOmwqQa5AP1nSUnOeUySq9TsDFKF0tf3u9bpYA6OJGpfe+ev
+         A3gCD6DIhIUEJb0w0uRnKd3o0xXtihcTnsjcZ0FF2mzsXnxvK6SZQgaeTGQHnkLGgN
+         zqi9GJDUuHsMw==
+Date:   Thu, 24 Aug 2023 08:53:55 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Francis Laniel <flaniel@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        M ark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        alsa-devel@alsa-project.org, linux-scsi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 1/1] tracing/kprobes: Return ENAMESVRLSYMS when
+ func matches several symbols
+Message-Id: <20230824085355.4fdd6215f71b0fa5f443d76d@kernel.org>
+In-Reply-To: <20230823161410.103489-2-flaniel@linux.microsoft.com>
+References: <20230823161410.103489-1-flaniel@linux.microsoft.com>
+        <20230823161410.103489-2-flaniel@linux.microsoft.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,15 +70,219 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 8:38=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
+Hi Francis,
 
-> Cleanup bindings dropping the last remaining unneeded quotes. With this,
-> the check for this can be enabled in yamllint.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Wed, 23 Aug 2023 18:14:10 +0200
+Francis Laniel <flaniel@linux.microsoft.com> wrote:
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Previously to this commit, if func matches several symbols, a PMU kprobe would
+> be installed for the first matching address.
+> This could lead to some misunderstanding when some BPF code was never called
+> because it was attached to a function which was indeed not call, because the
+> effectively called one has no kprobes.
+> 
+> So, this commit introduces ENAMESVRLSYMS which is returned when func matches
+> several symbols.
 
-Yours,
-Linus Walleij
+The trace_kprobe part looks good to me.
+But sorry, I mislead you. I meant using an existing error code as a metaphor.
+EINVAL is used everywhere, so choose another error code, e.g. EADDRNOTAVAIL.
+
+Also, can you add this check in __trace_kprobe_create()?
+I think right before below code, at that point, 'symbol' has the symbol name.
+
+        trace_probe_log_set_index(0);
+        if (event) {
+                ret = traceprobe_parse_event_name(&event, &group, gbuf,
+                                                  event - argv[0]);
+                if (ret)
+                        goto parse_error;
+        }
+
+
+Thank you,
+
+> This way, user needs to use addr to remove the ambiguity.
+> 
+> Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> Link: https://lore.kernel.org/lkml/20230819101105.b0c104ae4494a7d1f2eea742@kernel.org/
+> ---
+>  arch/alpha/include/uapi/asm/errno.h        |  2 ++
+>  arch/mips/include/uapi/asm/errno.h         |  2 ++
+>  arch/parisc/include/uapi/asm/errno.h       |  2 ++
+>  arch/sparc/include/uapi/asm/errno.h        |  2 ++
+>  include/uapi/asm-generic/errno.h           |  2 ++
+>  kernel/trace/trace_kprobe.c                | 26 ++++++++++++++++++++++
+>  tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
+>  tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
+>  tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
+>  tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
+>  tools/include/uapi/asm-generic/errno.h     |  2 ++
+>  11 files changed, 46 insertions(+)
+> 
+> diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha/include/uapi/asm/errno.h
+> index 3d265f6babaf..3d9686d915f9 100644
+> --- a/arch/alpha/include/uapi/asm/errno.h
+> +++ b/arch/alpha/include/uapi/asm/errno.h
+> @@ -125,4 +125,6 @@
+> 
+>  #define EHWPOISON	139	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	140	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/include/uapi/asm/errno.h
+> index 2fb714e2d6d8..1fd64ee7b629 100644
+> --- a/arch/mips/include/uapi/asm/errno.h
+> +++ b/arch/mips/include/uapi/asm/errno.h
+> @@ -124,6 +124,8 @@
+> 
+>  #define EHWPOISON	168	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	169	/* Name correspond to several symbols */
+> +
+>  #define EDQUOT		1133	/* Quota exceeded */
+> 
+> 
+> diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/parisc/include/uapi/asm/errno.h
+> index 87245c584784..c7845ceece26 100644
+> --- a/arch/parisc/include/uapi/asm/errno.h
+> +++ b/arch/parisc/include/uapi/asm/errno.h
+> @@ -124,4 +124,6 @@
+> 
+>  #define EHWPOISON	257	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	258	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc/include/uapi/asm/errno.h
+> index 81a732b902ee..1ed065943bab 100644
+> --- a/arch/sparc/include/uapi/asm/errno.h
+> +++ b/arch/sparc/include/uapi/asm/errno.h
+> @@ -115,4 +115,6 @@
+> 
+>  #define EHWPOISON	135	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	136	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/errno.h
+> index cf9c51ac49f9..3d5d5740c8da 100644
+> --- a/include/uapi/asm-generic/errno.h
+> +++ b/include/uapi/asm-generic/errno.h
+> @@ -120,4 +120,6 @@
+> 
+>  #define EHWPOISON	133	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	134	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 23dba01831f7..53b66db1ff53 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1699,6 +1699,16 @@ static int unregister_kprobe_event(struct trace_kprobe *tk)
+>  }
+> 
+>  #ifdef CONFIG_PERF_EVENTS
+> +
+> +static int count_symbols(void *data, unsigned long unused)
+> +{
+> +	unsigned int *count = data;
+> +
+> +	(*count)++;
+> +
+> +	return 0;
+> +}
+> +
+>  /* create a trace_kprobe, but don't add it to global lists */
+>  struct trace_event_call *
+>  create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
+> @@ -1709,6 +1719,22 @@ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
+>  	int ret;
+>  	char *event;
+> 
+> +	/*
+> +	 * If user specifies func, we check that the function name does not
+> +	 * correspond to several symbols.
+> +	 * If this is the case, we return with error code ENAMESVRLSYMS to
+> +	 * indicate the user he/she should use addr and offs rather than func to
+> +	 * remove the ambiguity.
+> +	 */
+> +	if (func) {
+> +		unsigned int count;
+> +
+> +		count = 0;
+> +		kallsyms_on_each_match_symbol(count_symbols, func, &count);
+> +		if (count > 1)
+> +			return ERR_PTR(-ENAMESVRLSYMS);
+> +	}
+> +
+>  	/*
+>  	 * local trace_kprobes are not added to dyn_event, so they are never
+>  	 * searched in find_trace_kprobe(). Therefore, there is no concern of
+> diff --git a/tools/arch/alpha/include/uapi/asm/errno.h b/tools/arch/alpha/include/uapi/asm/errno.h
+> index 3d265f6babaf..3d9686d915f9 100644
+> --- a/tools/arch/alpha/include/uapi/asm/errno.h
+> +++ b/tools/arch/alpha/include/uapi/asm/errno.h
+> @@ -125,4 +125,6 @@
+> 
+>  #define EHWPOISON	139	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	140	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/tools/arch/mips/include/uapi/asm/errno.h b/tools/arch/mips/include/uapi/asm/errno.h
+> index 2fb714e2d6d8..1fd64ee7b629 100644
+> --- a/tools/arch/mips/include/uapi/asm/errno.h
+> +++ b/tools/arch/mips/include/uapi/asm/errno.h
+> @@ -124,6 +124,8 @@
+> 
+>  #define EHWPOISON	168	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	169	/* Name correspond to several symbols */
+> +
+>  #define EDQUOT		1133	/* Quota exceeded */
+> 
+> 
+> diff --git a/tools/arch/parisc/include/uapi/asm/errno.h b/tools/arch/parisc/include/uapi/asm/errno.h
+> index 87245c584784..c7845ceece26 100644
+> --- a/tools/arch/parisc/include/uapi/asm/errno.h
+> +++ b/tools/arch/parisc/include/uapi/asm/errno.h
+> @@ -124,4 +124,6 @@
+> 
+>  #define EHWPOISON	257	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	258	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/tools/arch/sparc/include/uapi/asm/errno.h b/tools/arch/sparc/include/uapi/asm/errno.h
+> index 81a732b902ee..1ed065943bab 100644
+> --- a/tools/arch/sparc/include/uapi/asm/errno.h
+> +++ b/tools/arch/sparc/include/uapi/asm/errno.h
+> @@ -115,4 +115,6 @@
+> 
+>  #define EHWPOISON	135	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	136	/* Name correspond to several symbols */
+> +
+>  #endif
+> diff --git a/tools/include/uapi/asm-generic/errno.h b/tools/include/uapi/asm-generic/errno.h
+> index cf9c51ac49f9..3d5d5740c8da 100644
+> --- a/tools/include/uapi/asm-generic/errno.h
+> +++ b/tools/include/uapi/asm-generic/errno.h
+> @@ -120,4 +120,6 @@
+> 
+>  #define EHWPOISON	133	/* Memory page has hardware error */
+> 
+> +#define ENAMESVRLSYMS	134	/* Name correspond to several symbols */
+> +
+>  #endif
+> --
+> 2.34.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
