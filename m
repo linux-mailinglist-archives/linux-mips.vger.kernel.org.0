@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E2F785166
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Aug 2023 09:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF151785796
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Aug 2023 14:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbjHWHWq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Aug 2023 03:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S234651AbjHWMKU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Aug 2023 08:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjHWHWq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Aug 2023 03:22:46 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14DF9128;
-        Wed, 23 Aug 2023 00:22:44 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qYiCO-00071b-00; Wed, 23 Aug 2023 09:22:40 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E31D4C0234; Wed, 23 Aug 2023 09:22:24 +0200 (CEST)
-Date:   Wed, 23 Aug 2023 09:22:24 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Trevor Woerner <twoerner@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 3/4] arch/mips/configs/*_defconfig cleanup
-Message-ID: <ZOWzsAHxuHQLGsEa@alpha.franken.de>
+        with ESMTP id S234674AbjHWMKU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Aug 2023 08:10:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BBC10FB;
+        Wed, 23 Aug 2023 05:09:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RW4dw5RM5z4x5q;
+        Wed, 23 Aug 2023 22:04:52 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     linux-kernel@vger.kernel.org, Trevor Woerner <twoerner@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <20230817115017.35663-1-twoerner@gmail.com>
 References: <20230817115017.35663-1-twoerner@gmail.com>
- <20230817115017.35663-4-twoerner@gmail.com>
+Subject: Re: (subset) [PATCH v3 0/4] general defconfig cleanups
+Message-Id: <169279175571.797584.3366844958085026479.b4-ty@ellerman.id.au>
+Date:   Wed, 23 Aug 2023 21:55:55 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230817115017.35663-4-twoerner@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -41,24 +41,25 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 07:50:13AM -0400, Trevor Woerner wrote:
-> Drop CONFIG_IP_NF_TARGET_CLUSTERIP from any remaining mips defconfigs as it
-> was removed in commit 9db5d918e2c0 ("netfilter: ip_tables: remove clusterip
-> target").
+On Thu, 17 Aug 2023 07:50:10 -0400, Trevor Woerner wrote:
+> Drop config options from defconfigs whose code has been removed.
 > 
-> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> ---
->  arch/mips/configs/ip22_defconfig        | 1 -
->  arch/mips/configs/malta_defconfig       | 1 -
->  arch/mips/configs/malta_kvm_defconfig   | 1 -
->  arch/mips/configs/maltaup_xpa_defconfig | 1 -
->  arch/mips/configs/rm200_defconfig       | 1 -
->  5 files changed, 5 deletions(-)
+> v3:
+> While reorganizing the patches, I put the wrong commit message with the
+> CONFIG_IP_NF_TARGET_CLUSTERIP option.
+> 
+> v2:
+> Generate arch-specific patches. In v1 I organized the patches by
+> CONFIG_ option which caused some of the patches to cross architectural
+> lines. This requires cross-arch consensus before they can be applied.
+> Therefore organize the changes by architecture so each one can apply them
+> independently (or not).
+> 
+> [...]
 
-applied to mips-next.
+Patch 4 applied to powerpc/next.
 
-Thomas.
+[4/4] arch/powerpc/configs/*_defconfig cleanup
+      https://git.kernel.org/powerpc/c/455d3d38ef9d5f69c504d1af5fa2359563ea4148
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+cheers
