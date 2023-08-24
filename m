@@ -2,116 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9199786F95
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Aug 2023 14:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE4678708B
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Aug 2023 15:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbjHXMvP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Aug 2023 08:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S241371AbjHXNlM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Aug 2023 09:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241127AbjHXMvD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Aug 2023 08:51:03 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789B6CD0;
-        Thu, 24 Aug 2023 05:51:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bc83a96067so42213835ad.0;
-        Thu, 24 Aug 2023 05:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692881460; x=1693486260;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kDfo1abF1Y082BBrZFHZQzYLHOisTvdpROer1sOJEwU=;
-        b=jd0VZmQajINAqsLXp9n23+2+1KPtGpIthpO0CZAlRVylZIpMh4ujG6YwTiR3tZBuwk
-         RLpZgr1je0bYfJGFMGeS3aUNK+A/+CjktG8ViaA/JEbd7xQDBlKJSbUbZ+ttsgBriprX
-         nrHRe4lZdRnyJubEaCzDLsjxoDVNA+/gQobHjRYXZtdH+1YxRJTEm9m/jlrHruz0czn3
-         RLF7YhqwVdTOoB9PnJdU8HA/YABsQgrxZH4z/wEil53cgrxD/DbNSRtQfgm0J0c3kLHf
-         Ox4RfN2SmJNKgLNatsA1wL79fyyHLgZaVepVaVkbELcYg4CPfzp4xNAGoZ2Dx9qEk0MM
-         GlWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692881460; x=1693486260;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kDfo1abF1Y082BBrZFHZQzYLHOisTvdpROer1sOJEwU=;
-        b=YoWHPFI6cvu9DXUr9SLhACJgxA7besC8W0KdGb7h4FgfR9xeDYighwzKsKfnR44jLE
-         RzkFbzSmUJl0CUg6euqy8nnmoSUSRlefZU72/21pC6Vv3enAOFLqEWyy/rXBt6ZGjRGj
-         IHslagduGF7MK1/c+o/T3KPOLq/QSRRM+7/2GHZWhK2uEPlAItheI7HRJT0om9W4T5ot
-         beFA8DJZ/G9+YcYP1HoUIzMuxZMHdXA+9vSIYaHsfoi+VwE45t8Qil3r9+xp49aMcZWK
-         JwjbvGUQ0zvYhYqC4u3VaV6yWN2oMKZQI/g7hQFYnEBC8eSm79SvOsqryNcyYuF8VMt2
-         5ZfA==
-X-Gm-Message-State: AOJu0YzgpfVcPXe28nanu7a0bbuJr4D/vZYHBwAupcB+shry9CyRyLkF
-        VZu6wqeDXi9PLYu3BArL4rqEVGEGgsS9jRDl
-X-Google-Smtp-Source: AGHT+IH1QQxInN2YyhJi1/gXe8Z0jHb1Wi+ficwRqovF5m3ZZocGRw+bUK+J91HtdzoFxOXNDj5+4g==
-X-Received: by 2002:a17:902:8c85:b0:1bf:13a7:d3ef with SMTP id t5-20020a1709028c8500b001bf13a7d3efmr11086285plo.66.1692881460511;
-        Thu, 24 Aug 2023 05:51:00 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.lan ([103.184.129.7])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902c11300b001afd821c057sm12837295pli.58.2023.08.24.05.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 05:51:00 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        with ESMTP id S241399AbjHXNkr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Aug 2023 09:40:47 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBAC12C;
+        Thu, 24 Aug 2023 06:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692884445; x=1724420445;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dhWVbX36GNW+hyT2stuqHURTJcwkPHy+42LeWoUySlo=;
+  b=E3/uOuuAx6fR7Fet8QOJSQtjpphCeTSgNiE4dN6Sd3qNCh798NwGPfZx
+   Ydh71tl9rGrV/WBI994u4W4dRWZF7jXx7uS00uiC9F5aITM/Tt+gVCLKT
+   6xUUzF9eLfpR5NBYTjiuobI8Xr/TzYubh+VNztSmuWAeZ8cY1DUGpFR9i
+   QsS6+YZdXdRQeNQbgQyfcrua9qwcY7x5bDgU5MzLBw+0EolCojO8rIAQv
+   f972I1gPaMjPo+uLBayz+WKGdNt/OkRb/ueD38L88WZUD+fdWLFWc2sCU
+   w4a38YZZ1jpJLirtX78Xp9MXtRxUgAY/aTunkEdDy0VgA7+iYQZ3j72d5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="440792161"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="440792161"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 06:28:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="802539664"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="802539664"
+Received: from abedekar-mobl1.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.251.213.29])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 06:28:51 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v3 4/4] MAINTAINERS: Update MIPS/LOONGSON1 entry
-Date:   Thu, 24 Aug 2023 20:50:12 +0800
-Message-Id: <20230824125012.1040288-5-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230824125012.1040288-1-keguang.zhang@gmail.com>
-References: <20230824125012.1040288-1-keguang.zhang@gmail.com>
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 02/14] MIPS: TXx9: Do PCI error checks on own line
+Date:   Thu, 24 Aug 2023 16:28:20 +0300
+Message-Id: <20230824132832.78705-3-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230824132832.78705-1-ilpo.jarvinen@linux.intel.com>
+References: <20230824132832.78705-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add two new F: entries for Loongson1 Ethernet driver
-and dt-binding document.
-Add a new F: entry for the rest Loongson-1 dt-binding documents.
+Instead of if conditions with line splits, use the usual error handling
+pattern with a separate variable to improve readability.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+The second check can use reverse logic which reduces indentation level.
+
+No functional changes intended.
+
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-V2 -> V3: Update the entries and the commit message
-V1 -> V2: Improve the commit message
+ arch/mips/txx9/generic/pci.c | 43 +++++++++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 20 deletions(-)
 
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 250c43c675cb..f462f3d19e4a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14341,9 +14341,12 @@ MIPS/LOONGSON1 ARCHITECTURE
- M:	Keguang Zhang <keguang.zhang@gmail.com>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
-+F:	Documentation/devicetree/bindings/net/loongson,ls1[bc]-*.yaml
- F:	arch/mips/include/asm/mach-loongson32/
- F:	arch/mips/loongson32/
- F:	drivers/*/*loongson1*
-+F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+diff --git a/arch/mips/txx9/generic/pci.c b/arch/mips/txx9/generic/pci.c
+index e98845543b77..5ae30b78d38d 100644
+--- a/arch/mips/txx9/generic/pci.c
++++ b/arch/mips/txx9/generic/pci.c
+@@ -51,6 +51,7 @@ int __init txx9_pci66_check(struct pci_controller *hose, int top_bus,
+ 	unsigned short vid;
+ 	int cap66 = -1;
+ 	u16 stat;
++	int ret;
  
- MIPS/LOONGSON2EF ARCHITECTURE
- M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+ 	/* It seems SLC90E66 needs some time after PCI reset... */
+ 	mdelay(80);
+@@ -60,9 +61,9 @@ int __init txx9_pci66_check(struct pci_controller *hose, int top_bus,
+ 	for (pci_devfn = 0; pci_devfn < 0xff; pci_devfn++) {
+ 		if (PCI_FUNC(pci_devfn))
+ 			continue;
+-		if (early_read_config_word(hose, top_bus, current_bus,
+-					   pci_devfn, PCI_VENDOR_ID, &vid) !=
+-		    PCIBIOS_SUCCESSFUL)
++		ret = early_read_config_word(hose, top_bus, current_bus,
++					     pci_devfn, PCI_VENDOR_ID, &vid);
++		if (ret != PCIBIOS_SUCCESSFUL)
+ 			continue;
+ 		if (vid == 0xffff)
+ 			continue;
+@@ -343,26 +344,28 @@ static void tc35815_fixup(struct pci_dev *dev)
+ 
+ static void final_fixup(struct pci_dev *dev)
+ {
++	unsigned long timeout;
+ 	unsigned char bist;
++	int ret;
+ 
+ 	/* Do build-in self test */
+-	if (pci_read_config_byte(dev, PCI_BIST, &bist) == PCIBIOS_SUCCESSFUL &&
+-	    (bist & PCI_BIST_CAPABLE)) {
+-		unsigned long timeout;
+-		pci_set_power_state(dev, PCI_D0);
+-		pr_info("PCI: %s BIST...", pci_name(dev));
+-		pci_write_config_byte(dev, PCI_BIST, PCI_BIST_START);
+-		timeout = jiffies + HZ * 2;	/* timeout after 2 sec */
+-		do {
+-			pci_read_config_byte(dev, PCI_BIST, &bist);
+-			if (time_after(jiffies, timeout))
+-				break;
+-		} while (bist & PCI_BIST_START);
+-		if (bist & (PCI_BIST_CODE_MASK | PCI_BIST_START))
+-			pr_cont("failed. (0x%x)\n", bist);
+-		else
+-			pr_cont("OK.\n");
+-	}
++	ret = pci_read_config_byte(dev, PCI_BIST, &bist);
++	if ((ret != PCIBIOS_SUCCESSFUL) || !(bist & PCI_BIST_CAPABLE))
++		return;
++
++	pci_set_power_state(dev, PCI_D0);
++	pr_info("PCI: %s BIST...", pci_name(dev));
++	pci_write_config_byte(dev, PCI_BIST, PCI_BIST_START);
++	timeout = jiffies + HZ * 2;	/* timeout after 2 sec */
++	do {
++		pci_read_config_byte(dev, PCI_BIST, &bist);
++		if (time_after(jiffies, timeout))
++			break;
++	} while (bist & PCI_BIST_START);
++	if (bist & (PCI_BIST_CODE_MASK | PCI_BIST_START))
++		pr_cont("failed. (0x%x)\n", bist);
++	else
++		pr_cont("OK.\n");
+ }
+ 
+ #ifdef CONFIG_TOSHIBA_FPCIB0
 -- 
-2.39.2
+2.30.2
 
