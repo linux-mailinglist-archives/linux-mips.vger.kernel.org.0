@@ -2,34 +2,26 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA51786996
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Aug 2023 10:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63840786CC7
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Aug 2023 12:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjHXIIW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Aug 2023 04:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S240859AbjHXK3C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Aug 2023 06:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjHXIHx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Aug 2023 04:07:53 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF911BCD;
-        Thu, 24 Aug 2023 01:07:18 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A58C56000A;
-        Thu, 24 Aug 2023 08:06:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1692864415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5iy90UPBEpYr9Ks6Pdn0quIrhraOkWjQhbq0wpTYDBM=;
-        b=XizArq1AmE8u1PlEKB4g8NjhXu0zjN5QFi79zW24HbCXBErrvogWggSj9arbq+KhrFKB+O
-        uNFRNoDum6eiw6b1FusyrSJGtFu52oxgQ2aZxvU94bbYQ6VeF6C6+aaiIjsvth2eXnzCxv
-        fG9eW8n1Z7MjHVpGZKNTWsEMTPK6e/12/dzQCGsxQ9uVm1S5ddD2cTGo7DkevkDqa3KU8H
-        w1ZbBKh6080wCbuer4WK7KK05Jg/bzrwy8FVePWax3FVuMu3JvmQ+yeRvZQEooNr0+hv60
-        bNmbWEfq0tXu55UOuMr9+VZp+jY7MAOxARwAMNEhCJ6ymjR+mtZvO+UxG0Uu9Q==
-Date:   Thu, 24 Aug 2023 10:06:48 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
+        with ESMTP id S239591AbjHXK23 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Aug 2023 06:28:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5C851991;
+        Thu, 24 Aug 2023 03:28:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 612BD1042;
+        Thu, 24 Aug 2023 03:29:06 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFDD63F740;
+        Thu, 24 Aug 2023 03:28:19 -0700 (PDT)
+Date:   Thu, 24 Aug 2023 11:28:16 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     Rob Herring <robh@kernel.org>
 Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -51,6 +43,7 @@ Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
@@ -72,34 +65,31 @@ Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         alsa-devel@alsa-project.org, linux-scsi@vger.kernel.org,
         linux-watchdog@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: Drop remaining unneeded quotes
-Message-ID: <20230824100648.5b6e8b70@xps-13>
-In-Reply-To: <20230823183749.2609013-1-robh@kernel.org>
+Message-ID: <20230824102816.q3qoub6vzen5uomj@bogus>
 References: <20230823183749.2609013-1-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230823183749.2609013-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
-
-robh@kernel.org wrote on Wed, 23 Aug 2023 13:28:47 -0500:
-
+On Wed, Aug 23, 2023 at 01:28:47PM -0500, Rob Herring wrote:
 > Cleanup bindings dropping the last remaining unneeded quotes. With this,
 > the check for this can be enabled in yamllint.
->=20
+> 
 > Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/arm/arm,vexpress-juno.yaml   |  2 +-
 
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com> # for mtd
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-Thanks,
-Miqu=C3=A8l
+-- 
+Regards,
+Sudeep
