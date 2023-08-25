@@ -2,117 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4FD787D27
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Aug 2023 03:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2792788034
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Aug 2023 08:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbjHYBbF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Aug 2023 21:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S242193AbjHYGrm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Aug 2023 02:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjHYBbA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Aug 2023 21:31:00 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BABC1707;
-        Thu, 24 Aug 2023 18:30:58 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68a4bcf8a97so371279b3a.1;
-        Thu, 24 Aug 2023 18:30:58 -0700 (PDT)
+        with ESMTP id S242278AbjHYGrR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Aug 2023 02:47:17 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2291FCB
+        for <linux-mips@vger.kernel.org>; Thu, 24 Aug 2023 23:47:14 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99cdb0fd093so65197966b.1
+        for <linux-mips@vger.kernel.org>; Thu, 24 Aug 2023 23:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692927057; x=1693531857;
+        d=linaro.org; s=google; t=1692946033; x=1693550833;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7ELdHtTL5wYh7Mk37fDEn5rWUjAm0EdSJQg/6HWPPQ=;
-        b=Tmlz4s2OgK58rZBzZOqQBOTKsewJsSbr0lEcw148TWgipwzPC4h3leu6DHGlT2r85/
-         Uip0aLw7OTRJ61MyT/fB+2M0fG4g6LWvilyhBIrARSkzuGacd0puWelGLD8sQFEorTQR
-         iWM9dveRRwtXAAMgsQ1/wPN9YLRbtznx8UH3GB/Gc6Kl2jKJWnRhPY+VLZrWbWEKV9yS
-         nafEaqYDFpVR5/DPJmFBDt9xOQCxtCGGHTqymDFSbzyjxleu1nAu7M/vlGloF4CFWAV1
-         1Mn9tQCCGOF3Z8ZylRnT1zAlhIOy4YB5/0u2bxeQjx03+CoamjdoA+ECCtWPkVPf8KF0
-         7rAQ==
+        bh=d+h7Z3AHszYQ/48y7ylXF0wY2H5ct/DzNLRlfXyrhJo=;
+        b=IJsglntmLI9Vcjx/NFhD+fRHY4miOVIc4MHlInq15VR4GK0HxPBdrkLk4IPlvZQqTk
+         JoDUhhScZ25C5KID7YKJTxGblhQBdyajFPxwijwjkevEDw9znRc/X+X/gp1al4j+XKzU
+         ICJSpFzfKqam1JF2gWmTe3dLetXgN3Kj6X37554seFk/vZgwNDL278trkeM28xVkuEX2
+         FO3BK4ph3W5jFHVzaEhO0fGFimL3kvu4+Qk2duVZw163RoBfac9yB0db4TZIcMqTpZKl
+         WeD7MR0lGUt5aB1Jn5I0uogamYlJW5IX88qYzwd5eb1EXSh1Vzchr7s6zKDGBYKgQGQc
+         3MEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692927057; x=1693531857;
+        d=1e100.net; s=20221208; t=1692946033; x=1693550833;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7ELdHtTL5wYh7Mk37fDEn5rWUjAm0EdSJQg/6HWPPQ=;
-        b=fM6GEZbv05t42z2NV4sGBa9/2lUb7io90jGSiDUW8YhiDysvXswGIFawZ9ZP0kTMcE
-         gCLiKMevD5iXdtA5LuXFBolfAIJ/roaOo8b52DkkE2kuaPDy3jCmskFd48YlfA210aPB
-         yx7XYOotFIoJkAkGbI+tgj7xVxUN+LwKcnYuzUzEOVK+Xyb6vsfQ0AqWBre2JukZnzAi
-         utyi/1jjs1rDNSrJ1NzVHeGM/OabHxipQMvz2zRCQNU0uu+9rhFK3Tdv6Zd2DWhBJKTM
-         /fLViFtJu/M/BZAxnoUIClMrSDaoDTBE3kHIUYSfgdKNXBYmbwM0k2n10DhoNknjjYcm
-         x34Q==
-X-Gm-Message-State: AOJu0YzfjOT/Rp8EsVPasCS3PmWILcds+i4rAwQs02vHZor4rpX1rymb
-        qczmV1p/UcaV7R/DqaSVORo=
-X-Google-Smtp-Source: AGHT+IGkdO3IAVMt9b8NA6cgzJYFAF5G39z8+OmHSySwOLhyKezYRWYjT2VqAbDb9GTS6Db8Rjs5TA==
-X-Received: by 2002:a05:6a00:1a13:b0:68a:49bc:9be3 with SMTP id g19-20020a056a001a1300b0068a49bc9be3mr14483212pfv.29.1692927057420;
-        Thu, 24 Aug 2023 18:30:57 -0700 (PDT)
-Received: from ?IPV6:2001:df0:0:200c:cd10:2fec:7ce0:fe0a? ([2001:df0:0:200c:cd10:2fec:7ce0:fe0a])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa78553000000b00682af93093dsm367550pfn.45.2023.08.24.18.30.34
+        bh=d+h7Z3AHszYQ/48y7ylXF0wY2H5ct/DzNLRlfXyrhJo=;
+        b=j7ZBYaKGhUI12njCeozXYSnZSmjVYdnZCCR6NbWCLFUEmJLkwtXEF/IgfFtUIC92t1
+         Ky9A+qdgRChBpbaepM0xY1yxZizR+lU+PN9ZMp7HJsBQReQ1veOKCEMQw2zOMrT4nLVr
+         4VL/nfnhJWWJnullJQDfAHyAnsKQk24oPtJzCRspvbmEMMkV9NIEvd/DaypNLKMkYpzE
+         ssxeUZBFh6C+Ik4TrFSNJiujA+hkb4vQds9BM2Ol2lZ44DVTEERXouEZQc6mzlCd8D3r
+         g1M6bTtT4axbEAF6nJBPZPverswLTctEsyUDOfA1WjiFcpcDRXum4zJxElE1nfYnN7GC
+         pMwQ==
+X-Gm-Message-State: AOJu0YzDA0x+1z1UTlZMJFCPdcqebRyvfdd+RTDlQD809vIPLM1FEn0t
+        yZHoQokVxC97umcSLGHZfoXtQcp6x0yj7PP44CU=
+X-Google-Smtp-Source: AGHT+IEGZqZgmKNIkyaAo6WLS12bV7qKfdm+d5pIB+2qw4pocaa+Qtl9RMNtvDxlYOPUTHKyZtUXUA==
+X-Received: by 2002:a17:907:aa1:b0:99c:75f7:19c1 with SMTP id bz1-20020a1709070aa100b0099c75f719c1mr12244709ejc.39.1692946033029;
+        Thu, 24 Aug 2023 23:47:13 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id ha19-20020a170906a89300b00992b7ff3993sm602489ejb.126.2023.08.24.23.47.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 18:30:57 -0700 (PDT)
-Message-ID: <3956e2a4-c545-1212-e95f-3cf61a60d6a4@gmail.com>
-Date:   Fri, 25 Aug 2023 13:30:32 +1200
+        Thu, 24 Aug 2023 23:47:12 -0700 (PDT)
+Message-ID: <b8b414cf-c425-f322-51e6-c825e58ae6ed@linaro.org>
+Date:   Fri, 25 Aug 2023 08:47:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: (subset) [PATCH 00/17] -Wmissing-prototype warning fixes
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v3 4/4] MAINTAINERS: Update MIPS/LOONGSON1 entry
 Content-Language: en-US
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kbuild@vger.kernel.org
-References: <20230810141947.1236730-1-arnd@kernel.org>
- <169292577153.789945.11297239773543112051.b4-ty@oracle.com>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-In-Reply-To: <169292577153.789945.11297239773543112051.b4-ty@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+References: <20230824125012.1040288-1-keguang.zhang@gmail.com>
+ <20230824125012.1040288-5-keguang.zhang@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230824125012.1040288-5-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,43 +87,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Martin, Arnd,
+On 24/08/2023 14:50, Keguang Zhang wrote:
+> Add two new F: entries for Loongson1 Ethernet driver
+> and dt-binding document.
+> Add a new F: entry for the rest Loongson-1 dt-binding documents.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V2 -> V3: Update the entries and the commit message
+> V1 -> V2: Improve the commit message
+> 
+>  MAINTAINERS | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 250c43c675cb..f462f3d19e4a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14341,9 +14341,12 @@ MIPS/LOONGSON1 ARCHITECTURE
+>  M:	Keguang Zhang <keguang.zhang@gmail.com>
+>  L:	linux-mips@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
+> +F:	Documentation/devicetree/bindings/net/loongson,ls1[bc]-*.yaml
 
-On 25/08/23 13:12, Martin K. Petersen wrote:
-> On Thu, 10 Aug 2023 16:19:18 +0200, Arnd Bergmann wrote:
->
->> Most of the patches I sent so far for the -Wmissing-prototype warnings
->> have made it into linux-next now. There are a few that I'm resending
->> now as nobody has picked them up, and then a number of fixes that I
->> found while test-building across all architectures rather than just the
->> ones I usually test.
->>
->> The first 15 patches in this series should be uncontroversial, so
->> I expect that either a subsystem maintainer or Andrew Morton can
->> apply these directly.
->>
->> [...]
-> Applied to 6.6/scsi-queue, thanks!
->
-> [07/17] scsi: qlogicpti: mark qlogicpti_info() static
->          https://git.kernel.org/mkp/scsi/c/71cc486335c4
-> [11/17] scsi: gvp11: remove unused gvp11_setup() function
->          https://git.kernel.org/mkp/scsi/c/bfaa4a0ce1bb
+This should be just one pattern */loongson,* or even just N: loongson,
+if you want to cover any future versions as well (not only ls1).
 
-I somehow missed that one ...
+Best regards,
+Krzysztof
 
-The gvp11_setup() function was probably a relic from the times before 
-module parameters.
-
-Since gvp11_xfer_mask appears to be required for some Amiga systems to 
-set the DMA mask, I'd best send a patch to add such a module parameter ...
-
-Do you know any details around the use of DMA masks for Amiga WD33C93 
-drivers, Geert?
-
-Cheers,
-
-     Michael
-
-
->
