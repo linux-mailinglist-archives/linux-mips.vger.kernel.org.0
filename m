@@ -2,99 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C4D78803B
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Aug 2023 08:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F4F78810D
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Aug 2023 09:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242304AbjHYGsr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Aug 2023 02:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S243168AbjHYHjs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 25 Aug 2023 03:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242465AbjHYGs2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Aug 2023 02:48:28 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B231FF0
-        for <linux-mips@vger.kernel.org>; Thu, 24 Aug 2023 23:48:20 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52a0856b4fdso839059a12.1
-        for <linux-mips@vger.kernel.org>; Thu, 24 Aug 2023 23:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692946098; x=1693550898;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G8i2MFIt9PPqdiA+U5wmi4xH4F0pC3lElXMemaJZn+M=;
-        b=nYrg8AojLgKfBTJR0zhZr48566By9omWhYw+Kq3sOrzLq7icKWhoJcL/6LFJZdho5P
-         sTIgp1gksE0/7K8CBOD0yspGPqVaowW/RZCzLgpOe8mKEzaPf4XDHW58TXJ9mq+lAbo3
-         itRxQz1VmH49t0gl+8z+5Km2lSeX4EDLdu5wLqhVVxnjleSC8k5mXrrP27RJI+wSmuzk
-         AGVugAE5E4PpVyz6cV/MNJTi2T2p8UGumpZpbfcW0kl+tFlVJBr/jpZxh3xksHfQ/cLf
-         YoNTbblSaYtDwJ7R7r9npyNWgJylAEeY7YnGlX7KNktnehBuPMqOMTwTD9+k3N8tVY/Y
-         PaVg==
+        with ESMTP id S243279AbjHYHjo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Aug 2023 03:39:44 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA19D1FCA;
+        Fri, 25 Aug 2023 00:39:42 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5921a962adfso7750207b3.1;
+        Fri, 25 Aug 2023 00:39:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692946098; x=1693550898;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8i2MFIt9PPqdiA+U5wmi4xH4F0pC3lElXMemaJZn+M=;
-        b=aafz8m9UfY38Byt1vcZBYxmfXryXh9GQOI4t7NdHvKieNWPemHJLwBpsoDMTnvcOy7
-         6Oexb8+g7UR6HEownDWiqGR45gVlmyhvilvvj52baHZQxH0y7vRXgHas3lJfOaLpSWg2
-         2XybIJI+g3f6YKIczDH8hjN1qfFcjPET02vK0Yx5VqoLnshEUc4bFwP8JdNA0Rj3Bp+h
-         NjLrq07/nEPp6bomvPuBIJAhYtnAZbPvlbFczB9ZG3OhsyoB05RlRGb5GJtKqNzGjg4i
-         rL1AVD8/zntPdOS/ryrOZDOFwPZqBtWutdKUJQOW6CQdH/yC31/NAxCjZlbDQ2YuM4Oq
-         DZ4A==
-X-Gm-Message-State: AOJu0Yy7+vg8DIYXNjdHF3OC68noq5x5BlVrbo4/y1pln6270JDHMdau
-        sDRJBYxXiNkL5ykm66ogibjQLg==
-X-Google-Smtp-Source: AGHT+IG1z3CKEe9GDWj6KdXNBIZTtTn0My78Dw9qopv5OUPpIdAbGaSU1cOUD33d11NlsXOVgQFmIQ==
-X-Received: by 2002:aa7:d996:0:b0:522:d6f4:c0eb with SMTP id u22-20020aa7d996000000b00522d6f4c0ebmr11753745eds.40.1692946098347;
-        Thu, 24 Aug 2023 23:48:18 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id n25-20020a05640206d900b0052a1c0c859asm663682edy.59.2023.08.24.23.48.17
+        d=1e100.net; s=20221208; t=1692949182; x=1693553982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E5r8bhhlGnXrx708tsGw6Ag8gm7AVkEO6BeDk4HD7tk=;
+        b=WLwKyxXquJm5Xn2E5suH9Ccdce9jLlK+GauaIf0md59SIWvBfCcZk4dC06SZ0nwQ5K
+         o8mlkO6FrAPPZ3xikK2nHElJNrNcLfVrv2YPtiaWl+//7MkAIb0Vy9SjeVnmpHyCYH4W
+         I5mObQzFhw+m1eUuyVIrzuU9uKe9VfJqoq2WCZPHWNbvYfU/7BBGvgSdw3Aj94FOHzun
+         daBwzKmfiYOEG8N743Xq7gSnARMMxTcLLRtVzpgdK587Rrb1jXfjpcGRqZ29++t0F+TH
+         kPYRW1w9pwZo8+0r6gIkcz/69x/2ENZa+/qIVHSblZZT+i08RU5Os3RvT9tGC4TBTm90
+         tNnA==
+X-Gm-Message-State: AOJu0YzJmfhWcq6vO1UlWpwHrSuIxQLbZeRqaa3IxlV4wtuvVLN03mWl
+        TT2srflCsiYRdKyAssRS2LZd8SWeNqosAGzC
+X-Google-Smtp-Source: AGHT+IG5X+1N+9gN7m2P63rFzRbifScZ6dVPHHJG1DUCTreGK5Pu6Rcf3MDfyMu9eFYv5GgCMrEEDw==
+X-Received: by 2002:a0d:cd45:0:b0:561:206a:ee52 with SMTP id p66-20020a0dcd45000000b00561206aee52mr20431530ywd.24.1692949181853;
+        Fri, 25 Aug 2023 00:39:41 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id l132-20020a0de28a000000b0058e430889d5sm379613ywe.10.2023.08.25.00.39.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 23:48:17 -0700 (PDT)
-Message-ID: <f8a1391d-3716-04e5-7e36-fe670c75df4c@linaro.org>
-Date:   Fri, 25 Aug 2023 08:48:16 +0200
+        Fri, 25 Aug 2023 00:39:40 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5924093a9b2so7680237b3.2;
+        Fri, 25 Aug 2023 00:39:40 -0700 (PDT)
+X-Received: by 2002:a25:34cd:0:b0:d0b:5b6:4629 with SMTP id
+ b196-20020a2534cd000000b00d0b05b64629mr19382891yba.46.1692949180028; Fri, 25
+ Aug 2023 00:39:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/4] dt-bindings: mfd: syscon: Add compatibles for
- Loongson-1 syscon
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+References: <20230810141947.1236730-1-arnd@kernel.org> <169292577153.789945.11297239773543112051.b4-ty@oracle.com>
+ <3956e2a4-c545-1212-e95f-3cf61a60d6a4@gmail.com>
+In-Reply-To: <3956e2a4-c545-1212-e95f-3cf61a60d6a4@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 25 Aug 2023 09:39:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWC2S330_Vb_NTHTDC=BakBsw4ouP-eFJv0erV1-jmvTQ@mail.gmail.com>
+Message-ID: <CAMuHMdWC2S330_Vb_NTHTDC=BakBsw4ouP-eFJv0erV1-jmvTQ@mail.gmail.com>
+Subject: Re: (subset) [PATCH 00/17] -Wmissing-prototype warning fixes
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20230824125012.1040288-1-keguang.zhang@gmail.com>
- <20230824125012.1040288-2-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230824125012.1040288-2-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 24/08/2023 14:50, Keguang Zhang wrote:
-> Add Loongson LS1B and LS1C compatibles for system controller.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+Hi Michael,
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, Aug 25, 2023 at 3:31 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> On 25/08/23 13:12, Martin K. Petersen wrote:
+> > [11/17] scsi: gvp11: remove unused gvp11_setup() function
+> >          https://git.kernel.org/mkp/scsi/c/bfaa4a0ce1bb
+>
+> I somehow missed that one ...
+>
+> The gvp11_setup() function was probably a relic from the times before
+> module parameters.
+>
+> Since gvp11_xfer_mask appears to be required for some Amiga systems to
+> set the DMA mask, I'd best send a patch to add such a module parameter ...
+>
+> Do you know any details around the use of DMA masks for Amiga WD33C93
+> drivers, Geert?
 
-Best regards,
-Krzysztof
+Doh, it's been a while, and I never had an affected system.
+Probably it's needed on A2000 with an accelerator card and GVP II SCSI,
+to prevent DMA to RAM banks that do not support fast DMA cycles.
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
