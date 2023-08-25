@@ -2,145 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F4F78810D
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Aug 2023 09:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9C0788723
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Aug 2023 14:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243168AbjHYHjs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 25 Aug 2023 03:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        id S243303AbjHYMY7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Aug 2023 08:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243279AbjHYHjo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Aug 2023 03:39:44 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA19D1FCA;
-        Fri, 25 Aug 2023 00:39:42 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5921a962adfso7750207b3.1;
-        Fri, 25 Aug 2023 00:39:42 -0700 (PDT)
+        with ESMTP id S244879AbjHYMY4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Aug 2023 08:24:56 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A906D213F;
+        Fri, 25 Aug 2023 05:24:19 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-500a8b2b73eso836226e87.0;
+        Fri, 25 Aug 2023 05:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692966198; x=1693570998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5WBrrXndAbZbJ6p/Nar438q9WSE55oh82llBeggBy/I=;
+        b=nQKj+pQZTHkdy7VgNuuNZ5VbLAFDgDEuEL3vnqILoN1t679DgqEme3Vjbkd3n4VMq5
+         lUQ1mXtgPXbQwWwAfHxIGLBbTN6rM0h93vmPfaiw1xq1IVAqLPirjHNld5FYOXvtD9ou
+         Q8Iuz1IQ27Uj07Apu2NkZd5L1xSKHRqToOADnED2h6AJZHkGTsMuMIvMu1Ip6GeRPayL
+         ok5Yb0XVnQTfHyC1Ukz9n4evX6asCr3ROV5IqKo9rj7z9BZpq7FB1Voq3Im8mUgHt47H
+         jCsD+10MXWzx5mSDLkvoXc/ZB+0M1Z3MV80CgIG0fNdwClxYWpHLjSXUUF5QyMrl955v
+         fw0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692949182; x=1693553982;
+        d=1e100.net; s=20221208; t=1692966198; x=1693570998;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E5r8bhhlGnXrx708tsGw6Ag8gm7AVkEO6BeDk4HD7tk=;
-        b=WLwKyxXquJm5Xn2E5suH9Ccdce9jLlK+GauaIf0md59SIWvBfCcZk4dC06SZ0nwQ5K
-         o8mlkO6FrAPPZ3xikK2nHElJNrNcLfVrv2YPtiaWl+//7MkAIb0Vy9SjeVnmpHyCYH4W
-         I5mObQzFhw+m1eUuyVIrzuU9uKe9VfJqoq2WCZPHWNbvYfU/7BBGvgSdw3Aj94FOHzun
-         daBwzKmfiYOEG8N743Xq7gSnARMMxTcLLRtVzpgdK587Rrb1jXfjpcGRqZ29++t0F+TH
-         kPYRW1w9pwZo8+0r6gIkcz/69x/2ENZa+/qIVHSblZZT+i08RU5Os3RvT9tGC4TBTm90
-         tNnA==
-X-Gm-Message-State: AOJu0YzJmfhWcq6vO1UlWpwHrSuIxQLbZeRqaa3IxlV4wtuvVLN03mWl
-        TT2srflCsiYRdKyAssRS2LZd8SWeNqosAGzC
-X-Google-Smtp-Source: AGHT+IG5X+1N+9gN7m2P63rFzRbifScZ6dVPHHJG1DUCTreGK5Pu6Rcf3MDfyMu9eFYv5GgCMrEEDw==
-X-Received: by 2002:a0d:cd45:0:b0:561:206a:ee52 with SMTP id p66-20020a0dcd45000000b00561206aee52mr20431530ywd.24.1692949181853;
-        Fri, 25 Aug 2023 00:39:41 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id l132-20020a0de28a000000b0058e430889d5sm379613ywe.10.2023.08.25.00.39.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Aug 2023 00:39:40 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5924093a9b2so7680237b3.2;
-        Fri, 25 Aug 2023 00:39:40 -0700 (PDT)
-X-Received: by 2002:a25:34cd:0:b0:d0b:5b6:4629 with SMTP id
- b196-20020a2534cd000000b00d0b05b64629mr19382891yba.46.1692949180028; Fri, 25
- Aug 2023 00:39:40 -0700 (PDT)
+        bh=5WBrrXndAbZbJ6p/Nar438q9WSE55oh82llBeggBy/I=;
+        b=cMfJI5dIGeqDfysiPnlBKVK0DPqLyGrZbbRz9Z4K227PecEGRPSqsOawIWRFhu+O1X
+         m0xZjpxeaDYNCQouGVq68h13EXDUoE3nGVbnpe8G7IyEtww7f/i4B2EG/7DvFpaw6Jj6
+         p6XqrPeYG26OVB6iYKH2rYtl540BcSQJrvbw0UUMGD4zWQ9urMAHVDbt6osIBCg8LuKE
+         pP+rJUVQd4pll0HRjs8+8SfcbBwdA1/hTPsvypJTRbI7staYgNWZ0xInX2A3KNyVUNp0
+         GGuuBtPug1hhXYq/HqKhcnLZD12N7csEZ6+0JhL7JcYsImjEi4Awpq4ez6A52PWdhHBW
+         49pA==
+X-Gm-Message-State: AOJu0YxT+5Dlc3Xq3EOLLSaQKIcCf4b6s0ALJQnk0BvCGXPVVbi/n7tk
+        zkAMmpo7p5sLgNooXmg2CUBHDg2nyGC6iaHyGRQ=
+X-Google-Smtp-Source: AGHT+IGeYIhpQZQwYWBlFn9c0G+s1a43UuUYm0kyyGIY5iX6yP6g9N7SODjnUUyYfFNtPqSfJYqUJqDnDZHKZW5hPxc=
+X-Received: by 2002:a05:6512:689:b0:4fd:d64f:c0a6 with SMTP id
+ t9-20020a056512068900b004fdd64fc0a6mr16089445lfe.48.1692966198141; Fri, 25
+ Aug 2023 05:23:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230810141947.1236730-1-arnd@kernel.org> <169292577153.789945.11297239773543112051.b4-ty@oracle.com>
- <3956e2a4-c545-1212-e95f-3cf61a60d6a4@gmail.com>
-In-Reply-To: <3956e2a4-c545-1212-e95f-3cf61a60d6a4@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 25 Aug 2023 09:39:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWC2S330_Vb_NTHTDC=BakBsw4ouP-eFJv0erV1-jmvTQ@mail.gmail.com>
-Message-ID: <CAMuHMdWC2S330_Vb_NTHTDC=BakBsw4ouP-eFJv0erV1-jmvTQ@mail.gmail.com>
-Subject: Re: (subset) [PATCH 00/17] -Wmissing-prototype warning fixes
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
+References: <20230824125012.1040288-1-keguang.zhang@gmail.com>
+ <20230824125012.1040288-5-keguang.zhang@gmail.com> <b8b414cf-c425-f322-51e6-c825e58ae6ed@linaro.org>
+In-Reply-To: <b8b414cf-c425-f322-51e6-c825e58ae6ed@linaro.org>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Fri, 25 Aug 2023 20:22:41 +0800
+Message-ID: <CAJhJPsV_OTY540D4_jryN57qEgK59fXJa03N5HZi=_qQWw78sQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] MAINTAINERS: Update MIPS/LOONGSON1 entry
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kbuild@vger.kernel.org
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Michael,
-
-On Fri, Aug 25, 2023 at 3:31 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> On 25/08/23 13:12, Martin K. Petersen wrote:
-> > [11/17] scsi: gvp11: remove unused gvp11_setup() function
-> >          https://git.kernel.org/mkp/scsi/c/bfaa4a0ce1bb
+On Fri, Aug 25, 2023 at 2:47=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> I somehow missed that one ...
+> On 24/08/2023 14:50, Keguang Zhang wrote:
+> > Add two new F: entries for Loongson1 Ethernet driver
+> > and dt-binding document.
+> > Add a new F: entry for the rest Loongson-1 dt-binding documents.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> > V2 -> V3: Update the entries and the commit message
+> > V1 -> V2: Improve the commit message
+> >
+> >  MAINTAINERS | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 250c43c675cb..f462f3d19e4a 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -14341,9 +14341,12 @@ MIPS/LOONGSON1 ARCHITECTURE
+> >  M:   Keguang Zhang <keguang.zhang@gmail.com>
+> >  L:   linux-mips@vger.kernel.org
+> >  S:   Maintained
+> > +F:   Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
+> > +F:   Documentation/devicetree/bindings/net/loongson,ls1[bc]-*.yaml
 >
-> The gvp11_setup() function was probably a relic from the times before
-> module parameters.
+> This should be just one pattern */loongson,* or even just N: loongson,
+> if you want to cover any future versions as well (not only ls1).
 >
-> Since gvp11_xfer_mask appears to be required for some Amiga systems to
-> set the DMA mask, I'd best send a patch to add such a module parameter ...
+Got it.
+Will change to "net/loongson,ls1*.yaml" in next version.
+Thanks!
+
+> Best regards,
+> Krzysztof
 >
-> Do you know any details around the use of DMA masks for Amiga WD33C93
-> drivers, Geert?
 
-Doh, it's been a while, and I never had an affected system.
-Probably it's needed on A2000 with an accelerator card and GVP II SCSI,
-to prevent DMA to RAM banks that do not support fast DMA cycles.
 
-Gr{oetje,eeting}s,
+--=20
+Best regards,
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Keguang Zhang
