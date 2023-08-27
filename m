@@ -2,144 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135C9789BF3
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Aug 2023 09:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6536789F88
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Aug 2023 15:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjH0H4p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Aug 2023 03:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S231164AbjH0Nh4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Aug 2023 09:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjH0H4N (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Aug 2023 03:56:13 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7317B100
-        for <linux-mips@vger.kernel.org>; Sun, 27 Aug 2023 00:56:10 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-50078eba7afso3534360e87.0
-        for <linux-mips@vger.kernel.org>; Sun, 27 Aug 2023 00:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693122969; x=1693727769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WtCfEv+4MKM7AB9nOhBJNz/fOo34fqcluKuKRBYbD48=;
-        b=qD7V+/1eeqflk5HBX6g3KX3146dEBk/Xkv8nuSU+gc3hnO6r9ofzuLGMPcc8Dn7C2e
-         GKlBdiZ2qE5uIrVHiTtm9JGCOOrTPB6mU9ujnBbMsXK1WVwupwtgLBNFxtBZiqvjaQyD
-         PdZrJzydTmbJlB+zh+djrY96msG3m1kA998NMjMmH+ugM569oMQCwSK03EFEx49Lhxtd
-         lVEVI6GG1tCWtccwwbwmN0/6vKwbixgoMys0rMT+EZp16KSvz5VxiTH1rr+FZDIDcOzR
-         PyyjxQ6Hp4+5N7egiFOWCMcHc9jbnIlMDtyzPyssB7v6CNdwRVdT6/nTEbCEDyAb5Dy7
-         +rCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693122969; x=1693727769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WtCfEv+4MKM7AB9nOhBJNz/fOo34fqcluKuKRBYbD48=;
-        b=ezHf5uENXHPUNdifDRIHOXNup3JCa+8mdNCWKHhrkIHDCiGRLDAW9klSTK/om2JGTy
-         wQwI6fNj4voJYJHiLCNHh3yhv3STU+b0mAX7VApl8VVXMk0TWj5boLdGkEaocaLAK4Zl
-         n0pM8UF+TRNWQsBgwZkR6hexe7thRnGwOurkx+ftm0Heg1xQTK8NSvmAI5x/niSMrkIY
-         lGnslemw4k8dQNwXJslyUPMogap7IEts78wSZH3VX6Z3B2r+IBCr0sUJZsxkMo6MgqUw
-         iyfHYM07NcJ6C8ATBn7oWNG2huTsFhd9w+Rp7ilJn1NzG5Vey4r2AxdXGVN0mhLc0zaR
-         vaIg==
-X-Gm-Message-State: AOJu0YzIb6PmFmZU8pUn565UrYgeMAnqypByPEw9bvIdWZYUVLUyrVOd
-        UqNvNfviAydDJXR+BasiCQo+aA==
-X-Google-Smtp-Source: AGHT+IH+qv/LoraiYPu/y8KAOtXrIZc0aV8VyRf3SodaZ97qiCkEX4ZtlRNINc81TgAvCPpw8+aRAw==
-X-Received: by 2002:a05:6512:3e08:b0:500:b872:7899 with SMTP id i8-20020a0565123e0800b00500b8727899mr351076lfv.62.1693122968433;
-        Sun, 27 Aug 2023 00:56:08 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.225])
-        by smtp.gmail.com with ESMTPSA id rn14-20020a170906d92e00b00992afee724bsm3136783ejb.76.2023.08.27.00.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Aug 2023 00:56:07 -0700 (PDT)
-Message-ID: <c32130ab-27dc-e991-10fd-db0fba25cc97@linaro.org>
-Date:   Sun, 27 Aug 2023 09:56:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: net: Add Loongson-1 Ethernet
- Controller
-Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        with ESMTP id S231166AbjH0Nha (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Aug 2023 09:37:30 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E4BCC;
+        Sun, 27 Aug 2023 06:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693143447; x=1724679447;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iD9HRyD0KJRVLCjxnACjZ/+u4DqubwXyNxaFZpoZ8zI=;
+  b=c27/cJZJDQl+k+IGt76FryBkDULuYjUHMmlAgYRrYwpnyMpc8gqHtdKz
+   1MSK4LXK+wqCGQhceJJY4mhVpclHGWnEX4TmwGDGllscORCvMlUDm5jQ5
+   6YxFpq5sFmokZ5wl8cC1FFkcG1Fq8Z8mgSL5qP52gJTxQNM6uXwe670FU
+   T+joyKRuj+2pslVACtr1kXDLacuxHpHo7H2BlQs3tvWrQraGq0qzpTsJG
+   WFjQPtVxe+bB1RMqm8ADitUFKjmYWDEiz7IEYi29hdpB4yzIgqJF6svyl
+   wUtlisqDh524GgUP0qgOLCqEhExILqvC1SvHHvvjf+0Yuyb9HN/iNUIbv
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="354470995"
+X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
+   d="scan'208";a="354470995"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 06:37:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="1068752102"
+X-IronPort-AV: E=Sophos;i="6.02,205,1688454000"; 
+   d="scan'208";a="1068752102"
+Received: from dplotkin-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.249.41.231])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2023 06:37:24 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20230824125012.1040288-1-keguang.zhang@gmail.com>
- <20230824125012.1040288-3-keguang.zhang@gmail.com>
- <dwe4oyunc2uitullflhryg7kmgeklj5wlx6ztrg5hahl64tkuz@koe4tijgj3bp>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dwe4oyunc2uitullflhryg7kmgeklj5wlx6ztrg5hahl64tkuz@koe4tijgj3bp>
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 2/8] MIPS: TXx9: Do PCI error checks on own line
+Date:   Sun, 27 Aug 2023 16:36:59 +0300
+Message-Id: <20230827133705.12991-3-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230827133705.12991-1-ilpo.jarvinen@linux.intel.com>
+References: <20230827133705.12991-1-ilpo.jarvinen@linux.intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 26/08/2023 23:04, Serge Semin wrote:
->> +  clock-names:
->> +    items:
->> +      - const: stmmaceth
-> 
->   clock-names:
->     const: stmmaceth
-> ?
+Instead of if conditions with line splits, use the usual error handling
+pattern with a separate variable to improve readability.
 
-The existing syntax is correct. This is a string array.
+The second check can use reverse logic which reduces indentation level.
 
-> 
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
-> 
->> +  interrupt-names:
->> +    items:
->> +      - const: macirq
-> 
->   interrupt-names:
->     const: macirq
-> ?
+No functional changes intended.
 
-As well.
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+---
+ arch/mips/txx9/generic/pci.c | 43 +++++++++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 20 deletions(-)
 
-> 
->> +
->> +  loongson,ls1-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      Phandle to the syscon containing some extra configurations
->> +      including PHY interface mode.
->> +
-> 
->> +  phy-mode:
->> +    items:
->> +      - enum:
->> +          - mii
->> +          - rmii
-> 
->   phy-mode:
->     enum: ...
-> ?
-
-Here indeed, this is a string, not a list, so items are wrong.
-
-
-
-Best regards,
-Krzysztof
+diff --git a/arch/mips/txx9/generic/pci.c b/arch/mips/txx9/generic/pci.c
+index e98845543b77..5ae30b78d38d 100644
+--- a/arch/mips/txx9/generic/pci.c
++++ b/arch/mips/txx9/generic/pci.c
+@@ -51,6 +51,7 @@ int __init txx9_pci66_check(struct pci_controller *hose, int top_bus,
+ 	unsigned short vid;
+ 	int cap66 = -1;
+ 	u16 stat;
++	int ret;
+ 
+ 	/* It seems SLC90E66 needs some time after PCI reset... */
+ 	mdelay(80);
+@@ -60,9 +61,9 @@ int __init txx9_pci66_check(struct pci_controller *hose, int top_bus,
+ 	for (pci_devfn = 0; pci_devfn < 0xff; pci_devfn++) {
+ 		if (PCI_FUNC(pci_devfn))
+ 			continue;
+-		if (early_read_config_word(hose, top_bus, current_bus,
+-					   pci_devfn, PCI_VENDOR_ID, &vid) !=
+-		    PCIBIOS_SUCCESSFUL)
++		ret = early_read_config_word(hose, top_bus, current_bus,
++					     pci_devfn, PCI_VENDOR_ID, &vid);
++		if (ret != PCIBIOS_SUCCESSFUL)
+ 			continue;
+ 		if (vid == 0xffff)
+ 			continue;
+@@ -343,26 +344,28 @@ static void tc35815_fixup(struct pci_dev *dev)
+ 
+ static void final_fixup(struct pci_dev *dev)
+ {
++	unsigned long timeout;
+ 	unsigned char bist;
++	int ret;
+ 
+ 	/* Do build-in self test */
+-	if (pci_read_config_byte(dev, PCI_BIST, &bist) == PCIBIOS_SUCCESSFUL &&
+-	    (bist & PCI_BIST_CAPABLE)) {
+-		unsigned long timeout;
+-		pci_set_power_state(dev, PCI_D0);
+-		pr_info("PCI: %s BIST...", pci_name(dev));
+-		pci_write_config_byte(dev, PCI_BIST, PCI_BIST_START);
+-		timeout = jiffies + HZ * 2;	/* timeout after 2 sec */
+-		do {
+-			pci_read_config_byte(dev, PCI_BIST, &bist);
+-			if (time_after(jiffies, timeout))
+-				break;
+-		} while (bist & PCI_BIST_START);
+-		if (bist & (PCI_BIST_CODE_MASK | PCI_BIST_START))
+-			pr_cont("failed. (0x%x)\n", bist);
+-		else
+-			pr_cont("OK.\n");
+-	}
++	ret = pci_read_config_byte(dev, PCI_BIST, &bist);
++	if ((ret != PCIBIOS_SUCCESSFUL) || !(bist & PCI_BIST_CAPABLE))
++		return;
++
++	pci_set_power_state(dev, PCI_D0);
++	pr_info("PCI: %s BIST...", pci_name(dev));
++	pci_write_config_byte(dev, PCI_BIST, PCI_BIST_START);
++	timeout = jiffies + HZ * 2;	/* timeout after 2 sec */
++	do {
++		pci_read_config_byte(dev, PCI_BIST, &bist);
++		if (time_after(jiffies, timeout))
++			break;
++	} while (bist & PCI_BIST_START);
++	if (bist & (PCI_BIST_CODE_MASK | PCI_BIST_START))
++		pr_cont("failed. (0x%x)\n", bist);
++	else
++		pr_cont("OK.\n");
+ }
+ 
+ #ifdef CONFIG_TOSHIBA_FPCIB0
+-- 
+2.30.2
 
