@@ -2,132 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C225278A5FB
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Aug 2023 08:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C7378A655
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Aug 2023 09:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjH1GnV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 28 Aug 2023 02:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S229663AbjH1HP5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Aug 2023 03:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjH1Gm4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Aug 2023 02:42:56 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B22C4;
-        Sun, 27 Aug 2023 23:42:54 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-58ca499456dso35642847b3.1;
-        Sun, 27 Aug 2023 23:42:54 -0700 (PDT)
+        with ESMTP id S229545AbjH1HP0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Aug 2023 03:15:26 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8B1113
+        for <linux-mips@vger.kernel.org>; Mon, 28 Aug 2023 00:15:21 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-977e0fbd742so358152566b.2
+        for <linux-mips@vger.kernel.org>; Mon, 28 Aug 2023 00:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693206919; x=1693811719;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJAzGXxVLZwUhvU/AbwqXIQG//zHq0gh5RxbohWoMzQ=;
+        b=IAPS6RTDr+Uuos2iktTsV6YF4O0gf9AMecbKe0U1yvoJY+4RpFvnUKOeILUOzN9fZd
+         bJwoaK97ve5ZzSZVaBaosV3ZEswi2I9AVBNzAdGbc3p4cMqN2ZhK6MRvgNcLVtJ+hSzD
+         gE0vT4GkyZ/7FB6ZcoO8vnoE476dx1WQdvTuJHZ+Anz57RiGI1lPkcd0FSNGH2Hg5Qd+
+         FQhS/I9Oww6456S5v4C1Kme9W3UZOusUXKv2KHtboGIp0y9t7w5lysWwhnIvnopFWWds
+         WztDvXU+2dsWMOyjMom12SUquq71oEeatqwgRfmeOGtqnf1uUnIBdsrONQY58Aq5bDsb
+         VRDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693204973; x=1693809773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1ZAs6BPn0UEnVbrYLaaDeF3O9l7Iturm7FWJFQ5jda0=;
-        b=VAz5SDZnSv/j4h6SjG4uBv8sOT0HChvsC1/jJgIQymXVjMucFLcusx1WPA5CWMaW4O
-         MaqjxMuTCIiFvFr5nIgrOxTqh2L/nVlazbCQgK6V+u6eTrU21RWq+nCzAx6EOz8QRJh2
-         oxG7ltFhQ6dZ4mRdnecCxhGpVB9FUF4jIy6Xnr09PO5FHfs0gYqM0qFVFwUYRSAC2Mex
-         OXIux5OM34WtFn1QAcGXvpYYjHluYItgsqQhUvJ7HcA/Ljnj00FinMQxGV3EXDWLGSon
-         HdEwXybrMl/OIVwdC3zrujq8ACFZZPs7Ag97MtpZSuB84rDn8exZHRVce+TdfHrZRizE
-         tpkA==
-X-Gm-Message-State: AOJu0YxMvHtIySreGZUxGNS0Aj6gbLZeGwc5gaBPrbkL3/02tJMdbBOk
-        J8zV0oAqwt18awLH3ZLcnkePgv2u0PTbxA==
-X-Google-Smtp-Source: AGHT+IEmYuCZ2oQNMpW7RRwA17Ofyq/MfcmWHEuG57kibh5t95/QQvu+3sCttxs8+iZ3o97wiO+7kA==
-X-Received: by 2002:a25:42cc:0:b0:d77:94d6:aa6f with SMTP id p195-20020a2542cc000000b00d7794d6aa6fmr14827618yba.15.1693204973092;
-        Sun, 27 Aug 2023 23:42:53 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id 184-20020a2504c1000000b00c64533e4e20sm1554144ybe.33.2023.08.27.23.42.51
+        d=1e100.net; s=20221208; t=1693206919; x=1693811719;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HJAzGXxVLZwUhvU/AbwqXIQG//zHq0gh5RxbohWoMzQ=;
+        b=ewXD/pRKqIsDPUaGHjFDCuMzfHhgJ9YM5O4NzS1/m8hRla04l6kZyF+5hWvkxR+aWM
+         alHFaGRG/WKDiNssvw57wwom1vgjt26k64FPJ/3NhM1RPHpmBRPC0nktUfnYb3ok+WL3
+         FkdmkCsfLkO+XApLkxEEyRhi/pdTGFUarnLbzHVAoaUroNeXgm8wD/FsG3BGudUMSoV0
+         U2IHw3PHLyhS/i6UHfsYiB4EWfz7G+Lh3my36XzFWn3v4xF09qAib6wLSuuAHqWxCfYb
+         sOshOEyRgMvYcmToziv2DAsyg2L2fE/re2gs8OI82uDpa8N7S2D7Z2wBm+iIDhvIBRhU
+         F2eg==
+X-Gm-Message-State: AOJu0YxeBhdYuMb3/LY6zxsZVkF5OW3jmfDhC+0IX2KkS6ihe0X2aJWc
+        rR6MFikT/BLeyGzzI+RJI36Y/w==
+X-Google-Smtp-Source: AGHT+IGKvH+GBgAKQHWDhZZV09OE+zv1MgYwJxJsoDg2/XCIHmz1dXnuC31AHBwhEWMoUKUR5gkSfQ==
+X-Received: by 2002:a17:906:5d:b0:9a5:846d:d823 with SMTP id 29-20020a170906005d00b009a5846dd823mr6109942ejg.45.1693206919659;
+        Mon, 28 Aug 2023 00:15:19 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.225])
+        by smtp.gmail.com with ESMTPSA id fx13-20020a170906b74d00b00982be08a9besm4376385ejb.172.2023.08.28.00.15.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Aug 2023 23:42:51 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-d780bca9275so2580309276.1;
-        Sun, 27 Aug 2023 23:42:51 -0700 (PDT)
-X-Received: by 2002:a25:8502:0:b0:d7a:e348:1e47 with SMTP id
- w2-20020a258502000000b00d7ae3481e47mr3956815ybk.36.1693204971245; Sun, 27 Aug
- 2023 23:42:51 -0700 (PDT)
+        Mon, 28 Aug 2023 00:15:19 -0700 (PDT)
+Message-ID: <d6f796aa-c468-037c-3f53-d0c4306c8890@linaro.org>
+Date:   Mon, 28 Aug 2023 09:15:17 +0200
 MIME-Version: 1.0
-References: <20230810141947.1236730-1-arnd@kernel.org> <169292577153.789945.11297239773543112051.b4-ty@oracle.com>
- <3956e2a4-c545-1212-e95f-3cf61a60d6a4@gmail.com> <CAMuHMdWC2S330_Vb_NTHTDC=BakBsw4ouP-eFJv0erV1-jmvTQ@mail.gmail.com>
- <130b3b57-edb0-184d-5b5f-69b013715773@gmail.com>
-In-Reply-To: <130b3b57-edb0-184d-5b5f-69b013715773@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Aug 2023 08:42:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUkZmkBSksvaGcDCKz2tsgkwyWgDa+WwCJm2UxFMCj1jw@mail.gmail.com>
-Message-ID: <CAMuHMdUkZmkBSksvaGcDCKz2tsgkwyWgDa+WwCJm2UxFMCj1jw@mail.gmail.com>
-Subject: Re: (subset) [PATCH 00/17] -Wmissing-prototype warning fixes
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: net: Add Loongson-1 Ethernet
+ Controller
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+References: <20230824125012.1040288-1-keguang.zhang@gmail.com>
+ <20230824125012.1040288-3-keguang.zhang@gmail.com>
+ <dwe4oyunc2uitullflhryg7kmgeklj5wlx6ztrg5hahl64tkuz@koe4tijgj3bp>
+ <c32130ab-27dc-e991-10fd-db0fba25cc97@linaro.org>
+ <q7o7wqodz5epyjdj7vlryaseugr2fjhef2cgsh65trw3r2jorm@5z5a5tyuyq4d>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <q7o7wqodz5epyjdj7vlryaseugr2fjhef2cgsh65trw3r2jorm@5z5a5tyuyq4d>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Aug 26, 2023 at 12:44 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> (Incidentally - did you ever publish the m68k full history tree anywhere
-> in git?)
+On 27/08/2023 23:01, Serge Semin wrote:
+> Hi Krzysztof
+> 
+> On Sun, Aug 27, 2023 at 09:56:06AM +0200, Krzysztof Kozlowski wrote:
+>> On 26/08/2023 23:04, Serge Semin wrote:
+>>>> +  clock-names:
+>>>> +    items:
+>>>> +      - const: stmmaceth
+>>>
+>>>   clock-names:
+>>>     const: stmmaceth
+>>> ?
+>>
+> 
+>> The existing syntax is correct. This is a string array.
+> 
+> Could you please clarify whether it's a requirement (always specify
+> items: property for an array) or just an acceptable option (another
+> one is suggested in my comment)? I am asking because:
+> 1. In this case the "clock-names" array is supposed to have only one
+> item. Directly setting "const: stmmaceth" with no items: property
+> shall simplify it.
+> 2. There are single-entry "clock-names" property in the DT-bindings
+> defined as I suggested.
+> 3. There is a "compatible" property which is also a string array but
+> it can be defined as I suggested (omitting the items property).
+> 
+> so based on all of that using the "items:"-based constraint here seems
+> redundant. Am I wrong to think like that? If so in what aspect?
 
-You mean the gitified version of the Linux/m68k CVS tree Ralf created
-for me because my machine wasn't powerful enough?
-No, and I should look into doing that...
+Syntax is correct in both cases. However the single list compatible
+*cannot grow*, while single list clock might, when developer notices
+that the binding was incomplete. People add binding matching drivers,
+not the hardware, thus having incomplete list of clocks is happening all
+the time.
 
-Gr{oetje,eeting}s,
+Best regards,
+Krzysztof
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
