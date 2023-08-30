@@ -2,94 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EF978DDE7
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 20:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B8478DDFF
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 20:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343723AbjH3Sz6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Aug 2023 14:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S1344027AbjH3S4c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Aug 2023 14:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245441AbjH3PQZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 11:16:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D141A4;
-        Wed, 30 Aug 2023 08:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693408582; x=1724944582;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kuhHM9Pb2S9UA4HVLvALcSSOlQFsYNKCJA5urnK1yJE=;
-  b=UD8Pz/HW6JEgt3jfst5cGqUwsolyeM3zHBuRKLVpMHbbrSNMcE+aBj3W
-   3Fa+Zzh/aIBXDqbryWR92GLddKLUc9ssOiqe4tOpiyBS1bPto3qSqCdPw
-   bwPB0G0ymDT5MYS+qPQD7fzcKLUObuMb8innymM/cAcT3Qab8x4/+eFiA
-   JfF+T2bjINQkH9xmWwWmJiDUW/novaUDcovM7mC5f5vVh/XrKHH0zVmQ2
-   7l+EVAXcIhQzX368CPDakO74+T5pTCMMSaiTEr0r7dcsbM7fXtwzgr1hK
-   Vgvts1Ns/bVeOesVs76vX7V2YIBHuFXUL4tRRN1sD2RleY8DFSDjZJ3wI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="439614385"
-X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="439614385"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 08:12:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="804574149"
-X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="804574149"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.25.116]) ([10.93.25.116])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 08:12:21 -0700
-Message-ID: <30ffe039-c9e2-b996-500d-5e11bf6ea789@linux.intel.com>
-Date:   Wed, 30 Aug 2023 23:12:19 +0800
+        with ESMTP id S245518AbjH3P0B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 11:26:01 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2641A3;
+        Wed, 30 Aug 2023 08:25:58 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C83925C01DE;
+        Wed, 30 Aug 2023 11:25:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 30 Aug 2023 11:25:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1693409157; x=1693495557; bh=AaFcDVgrhZ295pye0qEwFTd49T4Nssp4TTQ
+        GsEh1xIc=; b=aDsmhzs6QI4sIrgvfiBfztY/g8BZG8Hp9jhxVOjy4aRg5cidKQo
+        u2cE+BGI/pQewviu5KmHsocF+w2KNNpSwsIjU6eKxAd2UXmMepLpqfU+Ijk8mPZF
+        Uquho0cHv3PBhHW14rZ/sFpxD81V0L4srnLi8GX4rTJGmuUnJNAnb4L5nl2tufeW
+        CvXeOEdIRpf1EcBC3L0b/m0DxOtv08TQBBXS8LKHxVzJ4wETNgqPhALxgoYTpz/2
+        RtaR81bSu3K4cZobFly2O774Ckq3w/GuwYSTrZpvPx2avELD5Awnvi9Qa2Mj3m3g
+        lZzbSKImOZIz0ziO04o/I1/41uGRDZK8FYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1693409157; x=1693495557; bh=AaFcDVgrhZ295pye0qEwFTd49T4Nssp4TTQ
+        GsEh1xIc=; b=dwU5GwuAtASSnsI3rhPslf55tZD4oLGZvdDGCCqvtxcHaUQfC+k
+        bg3yqCFF4kRd20LC7eR9mjtzMSCh2n3otZqKVm2i7DAIvh4THvN2xycKCJsKJs5f
+        zn6z5CZFjPwtI2qiIYf6xCLodyZkvVJSQSsM5yKtxGDAjXNBhGsVz27rQNSjcvDA
+        g+C3T81IcnQ38H2rFjX7d8J99cMCEfJJMc3MUSiJIWeg3KUOCRPBHIbcNpb5FhjA
+        YV7cx93dkAiYPLMQKMMks8asSrLR9vrOLMx5CJQAxVWNZjwrgUaOgguD0gGN9VqV
+        u4Y9ZGR5Ni9EOWKTsCmDBJNFceg1YtFD3Ig==
+X-ME-Sender: <xms:gl_vZDdcOgSNIg4It0AptkReM0-Zb5bMcOLe2zUFSbOVPcnmkm3A0A>
+    <xme:gl_vZJPJXDjGH2rBxgJcHb8n_O2529xr-vqKr356rwpniGYahrJpwboITjg4_xMdz
+    dMHwM1bMDZTcFjk6fA>
+X-ME-Received: <xmr:gl_vZMg9gKHB6UHAQRVWt8-GqUgSqtzjoAsRQcUmhz7FpRyIluQbBV6SRXXaQCv5E16L>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedgledtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhephfehveeggeevieehgfdtveeigffgteehieehffetleetffeh
+    hfeuteffudehfeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:g1_vZE9qX6T9airAv7FZo4C16WSxh6a9ejT_LormviSnKMHlFunn6g>
+    <xmx:g1_vZPsBO3W0zimscDcE9iH_ffd2LU7h4uYse_A0-HEIq1wWuMpRWg>
+    <xmx:g1_vZDH2MexKJ8ZStTa_5Bos4yKlUbHEcaomtR72h3CoYRqYTDL6FA>
+    <xmx:hV_vZPGTWwpYRaKQPHaoh-n5Yu0rYQxPI4GHqSVQXmck_JY0S-GVmQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Aug 2023 11:25:50 -0400 (EDT)
+Message-ID: <c7898abf-34ca-d0b4-fd0c-935100dcd3f2@flygoat.com>
+Date:   Wed, 30 Aug 2023 23:25:48 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
+Content-Language: en-GB
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-13-seanjc@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230718234512.1690985-13-seanjc@google.com>
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, diasyzhang@tencent.com,
+        linux-kernel@vger.kernel.org
+References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
+ <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org>
+ <CAMpQs4JhfuB4=s9VFc+xmw_+8h5u2EwPdM_0x2vO_=SYabAAxw@mail.gmail.com>
+ <6ba31912-6738-6156-d5f4-3c8d3a3ca7bc@linaro.org>
+ <CAMpQs4+GiExt9uMmV1pf8gg8rFwWxbLkx9mdW7hY9xxXDOza3Q@mail.gmail.com>
+ <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org>
+ <a084e6e9-46b0-42ef-b500-69c114ae11b2@flygoat.com>
+ <86wmxcejav.wl-maz@kernel.org>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
+ Fix warnings about liointc-2.0
+In-Reply-To: <86wmxcejav.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,175 +108,26 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 7/19/2023 7:44 AM, Sean Christopherson wrote:
-
+在 2023/8/30 21:44, Marc Zyngier 写道:
 [...]
-> +
-> +static struct folio *kvm_gmem_get_folio(struct file *file, pgoff_t index)
-> +{
-> +	struct folio *folio;
-> +
-> +	/* TODO: Support huge pages. */
-> +	folio = filemap_grab_folio(file->f_mapping, index);
-> +	if (!folio)
-Should use  if ((IS_ERR(folio)) instead.
+>> What's the best way, in your opinion, to overhaul this property? As we don't
+>> really care backward compatibility of DTBs on those systems we can
+>> just redesign it.
+> You may not care about backward compatibility, but I do. We don't
+> break existing systems, full stop.
+Ah it won't break any existing system. Sorry for not giving enough insight
+into the platform in previous reply. As for Loongson64 all DTBs are built
+into kernel binary. So as long as binding are changed together with all DTS
+in tree we won't break any system.
+> As for the offending property, it has no place here either. DT is not
+> the place where you put "performance knobs".
+Hmm, I can see various bindings with vendor prefix exposing device
+configurations. If we seen this interrupt routing as a device configuration
+I don't think it's against devicetree design philosophy.
 
-> +		return NULL;
-> +
-> +	/*
-> +	 * Use the up-to-date flag to track whether or not the memory has been
-> +	 * zeroed before being handed off to the guest.  There is no backing
-> +	 * storage for the memory, so the folio will remain up-to-date until
-> +	 * it's removed.
-> +	 *
-> +	 * TODO: Skip clearing pages when trusted firmware will do it when
-> +	 * assigning memory to the guest.
-> +	 */
-> +	if (!folio_test_uptodate(folio)) {
-> +		unsigned long nr_pages = folio_nr_pages(folio);
-> +		unsigned long i;
-> +
-> +		for (i = 0; i < nr_pages; i++)
-> +			clear_highpage(folio_page(folio, i));
-> +
-> +		folio_mark_uptodate(folio);
-> +	}
-> +
-> +	/*
-> +	 * Ignore accessed, referenced, and dirty flags.  The memory is
-> +	 * unevictable and there is no storage to write back to.
-> +	 */
-> +	return folio;
-> +}
-[...]
-> +
-> +static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
-> +{
-> +	struct address_space *mapping = inode->i_mapping;
-> +	pgoff_t start, index, end;
-> +	int r;
-> +
-> +	/* Dedicated guest is immutable by default. */
-> +	if (offset + len > i_size_read(inode))
-> +		return -EINVAL;
-> +
-> +	filemap_invalidate_lock_shared(mapping);
-> +
-> +	start = offset >> PAGE_SHIFT;
-> +	end = (offset + len) >> PAGE_SHIFT;
-> +
-> +	r = 0;
-> +	for (index = start; index < end; ) {
-> +		struct folio *folio;
-> +
-> +		if (signal_pending(current)) {
-> +			r = -EINTR;
-> +			break;
-> +		}
-> +
-> +		folio = kvm_gmem_get_folio(inode, index);
-> +		if (!folio) {
-> +			r = -ENOMEM;
-> +			break;
-> +		}
-> +
-> +		index = folio_next_index(folio);
-> +
-> +		folio_unlock(folio);
-> +		folio_put(folio);
-May be a dumb question, why we get the folio and then put it immediately?
-Will it make the folio be released back to the page allocator?
-
-> +
-> +		/* 64-bit only, wrapping the index should be impossible. */
-> +		if (WARN_ON_ONCE(!index))
-> +			break;
-> +
-> +		cond_resched();
-> +	}
-> +
-> +	filemap_invalidate_unlock_shared(mapping);
-> +
-> +	return r;
-> +}
-> +
-[...]
-> +
-> +int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
-> +		  unsigned int fd, loff_t offset)
-> +{
-> +	loff_t size = slot->npages << PAGE_SHIFT;
-> +	unsigned long start, end, flags;
-> +	struct kvm_gmem *gmem;
-> +	struct inode *inode;
-> +	struct file *file;
-> +
-> +	BUILD_BUG_ON(sizeof(gfn_t) != sizeof(slot->gmem.pgoff));
-> +
-> +	file = fget(fd);
-> +	if (!file)
-> +		return -EINVAL;
-> +
-> +	if (file->f_op != &kvm_gmem_fops)
-> +		goto err;
-> +
-> +	gmem = file->private_data;
-> +	if (gmem->kvm != kvm)
-> +		goto err;
-> +
-> +	inode = file_inode(file);
-> +	flags = (unsigned long)inode->i_private;
-> +
-> +	/*
-> +	 * For simplicity, require the offset into the file and the size of the
-> +	 * memslot to be aligned to the largest possible page size used to back
-> +	 * the file (same as the size of the file itself).
-> +	 */
-> +	if (!kvm_gmem_is_valid_size(offset, flags) ||
-> +	    !kvm_gmem_is_valid_size(size, flags))
-> +		goto err;
-> +
-> +	if (offset + size > i_size_read(inode))
-> +		goto err;
-> +
-> +	filemap_invalidate_lock(inode->i_mapping);
-> +
-> +	start = offset >> PAGE_SHIFT;
-> +	end = start + slot->npages;
-> +
-> +	if (!xa_empty(&gmem->bindings) &&
-> +	    xa_find(&gmem->bindings, &start, end - 1, XA_PRESENT)) {
-> +		filemap_invalidate_unlock(inode->i_mapping);
-> +		goto err;
-> +	}
-> +
-> +	/*
-> +	 * No synchronize_rcu() needed, any in-flight readers are guaranteed to
-> +	 * be see either a NULL file or this new file, no need for them to go
-> +	 * away.
-> +	 */
-> +	rcu_assign_pointer(slot->gmem.file, file);
-> +	slot->gmem.pgoff = start;
-> +
-> +	xa_store_range(&gmem->bindings, start, end - 1, slot, GFP_KERNEL);
-> +	filemap_invalidate_unlock(inode->i_mapping);
-> +
-> +	/*
-> +	 * Drop the reference to the file, even on success.  The file pins KVM,
-> +	 * not the other way 'round.  Active bindings are invalidated if the
-an extra ',  or maybe around?
-
-
-> +	 * file is closed before memslots are destroyed.
-> +	 */
-> +	fput(file);
-> +	return 0;
-> +
-> +err:
-> +	fput(file);
-> +	return -EINVAL;
-> +}
-> +
-[...]
-> []
+Thanks
+- Jiaxun
+>
+> 	M.
+>
 
