@@ -2,158 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614E578D2A6
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 06:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DA678D2D3
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 06:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241923AbjH3EAA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Aug 2023 00:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        id S236514AbjH3Emc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Aug 2023 00:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241941AbjH3D7f (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 29 Aug 2023 23:59:35 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ECDEA;
-        Tue, 29 Aug 2023 20:59:32 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id DBB025C018F;
-        Tue, 29 Aug 2023 23:59:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 29 Aug 2023 23:59:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1693367969; x=1693454369; bh=B7v0oKwXlhirKI8pFGlX+Cq5iQeRFkHRzlG
-        lNb+nzfw=; b=2sADCFHW5sbgkFcJ0EdRYBEKUTK9VJaJe8hb6N904J9biqCdGaE
-        EoqOTGYBYNs3HuvCYbFoD6SFg3DgAB6+WLf5uQnmg99nhRCSIkx9ppFW8vccXwTM
-        SRkBxIYf2K0wTMnEizkh0J+KiP0P72c/A4DONtdrURWCb9FthfhwtnqnTNSHibHI
-        H5iGxbnOpaTSyH5jTfMheC+rI6Vajre5fOCDJg3CsGD2p5s5ZvgSnwDkZDXj/+ka
-        WDBdsFjgpZM3xwel/ZFeIaSM8+agec6cSBL4A0bAwS1q0wwCXabCQ0Flss2e+UK0
-        pTgGzWJS/wSvdtkRod9SAsfHkUB/9zSB2MQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1693367969; x=1693454369; bh=B7v0oKwXlhirKI8pFGlX+Cq5iQeRFkHRzlG
-        lNb+nzfw=; b=wmapuD0lAvq1BXqvqduR9c5acm+NKGsAeGoEVDr0iCAAEhmraH0
-        pdrkUc7+1xa93AaDLhmMJCxi3BYA9AIOgHK1rXQKk1E+6gfHxQoJvyal38jU+WQo
-        Is8W+5q+Z3Ir8SWPeIf+0MlqIlIWJYTs/uWb1EGZh4D/GS74pjGnR9ZMkpEkovBX
-        yTqkRSDMvhuMW8s5zBZipl0Hyz/PzsZClK3yxk7/Ubz9lcPzjxqhn+9Wz/Q39Nj1
-        q+7PGiqXN/C6dK1pKw5hjuXo2BU9yI4Qrzj0PHBnGMHCgJ47jWTlhwz/LZ2kv+2z
-        45kG56Z62vpkfH5rlCbX0SkqXYZIeCafvAw==
-X-ME-Sender: <xms:n77uZGKZjaSjbJtyTO3VrmGkLFGsSvz6uV_MMM0UaRiyVDL859IXFw>
-    <xme:n77uZOJ2ZvI7aLlM_VkskAPaMFNubaQpEWv_RMQQR2KtuMe2xl49nn8jTSFUsCw2k
-    uPFD-J-GAh2HmaGUzE>
-X-ME-Received: <xmr:n77uZGsCKNBImJzesDkANPzsLZvRfVC9l9aQTj3gYVkXwH70r4sfpuR8CWrt1xfIhmJ->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefjedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepgeekgfevffegueefvdfftddtgedvhfduieevgeekgeeifffh
-    tedtjedvfeelgfelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:n77uZLaVvNz2Yb9sxo2cJVRXX7ypArRitZFX45v-OYGjW5Z8dqFx8A>
-    <xmx:n77uZNYG2X44Ojk8ra1mdGrcXfNr_-mfJrJspEO_sSq3LlUzz9H2xA>
-    <xmx:n77uZHDJumBG00mbPA-jaUdEKMauy7TYOMz_9CMoHT2ztbqN7oxE5g>
-    <xmx:ob7uZDwkXBp1_rEeue20-vGHOWnCPoJbcLE0g0Pu4CvVQ4gVNZejfg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Aug 2023 23:59:23 -0400 (EDT)
-Message-ID: <a084e6e9-46b0-42ef-b500-69c114ae11b2@flygoat.com>
-Date:   Wed, 30 Aug 2023 11:59:20 +0800
+        with ESMTP id S240449AbjH3EmX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 00:42:23 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CE9CC5;
+        Tue, 29 Aug 2023 21:42:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-991c786369cso664547066b.1;
+        Tue, 29 Aug 2023 21:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693370540; x=1693975340; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cA0a9dpApYSsfV7l4pjTSJUMNx25R+jfRtyr2czmNLE=;
+        b=XGAuaXmdRTU8ZdspPhn7WjgmJFo/B2NhPIvHNKDkve4IyyDxGu9nHtiEe7Xy0EDbw9
+         QexE7c8EhHQPiEaw+FuWmZR3BRFivOyXw4R/KO/oCF8aC+y0hITpdI/D6GGx9slUXObU
+         fQxbz1kctcGT/Kaec8x2WJDA1yzNCpfjFCXvHH2asQ5Nn2f/4LMf4t6dGPPIA82lasfW
+         5kOSg19EZAl7C7cyJpKaJjL4xnk+6oVx23Hoep2BVAIhZZ0GORmoP2DR6vxqEXcrNZ0+
+         xL1EmPVFtRZ9NvgdCbAvHO2tfwNMOHCJsZ0R7JFHp0RDihBenqaUDu7f/sE6uTK1rKa+
+         fzcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693370540; x=1693975340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cA0a9dpApYSsfV7l4pjTSJUMNx25R+jfRtyr2czmNLE=;
+        b=kaShyZIWErD5pPBFGRHBF8WH5Xp4v8Zcp8E2c4u6+fnEPWwfAaCyw8doAPr8sV+OB0
+         SXf3kPd4ObDmCQvrN8WbZUBdJSaFm3ojJX1raXOPrey6D8NnXdmuaqE/cvGYaWADo9PG
+         Gto3CEsLLw1bEpjPUJSC6SHyMV98m2ZofTLLM6lCew0TcvFsgGgsUVO+LcJDXECwOxXO
+         F2JcHILGpU+1oEok6eT1uvBPuSyXl4/MiObb+AHcV1bNDtQ1qROtUujd1DEJzGews2Wy
+         i7C9M1dcHNP+YxdZzBiHH2gjHodrz+3NIER50gWnSfKvJl10zl2ZY7EgVO3xuZDj1R+d
+         kNUA==
+X-Gm-Message-State: AOJu0Yz9e8EjqJRXea/EvF+v6XAxWEIt2ozdAxWj7fDdUABa+HDm8lz4
+        Pdv0ZNjzYcH53/u8/enEOUslY4B+djvOA72RYUE=
+X-Google-Smtp-Source: AGHT+IEtSaQQaV5/NtNPlE2Y5LJnluj2AkdjlDbwmA1JV4Lm3xXhYXQPJf+aJcbdthULHbCD7YCMARYQLqJQIsO4MkI=
+X-Received: by 2002:a17:907:2717:b0:9a1:f10d:9746 with SMTP id
+ w23-20020a170907271700b009a1f10d9746mr653011ejk.20.1693370539610; Tue, 29 Aug
+ 2023 21:42:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, diasyzhang@tencent.com,
-        linux-kernel@vger.kernel.org
-References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
- <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org>
- <CAMpQs4JhfuB4=s9VFc+xmw_+8h5u2EwPdM_0x2vO_=SYabAAxw@mail.gmail.com>
- <6ba31912-6738-6156-d5f4-3c8d3a3ca7bc@linaro.org>
- <CAMpQs4+GiExt9uMmV1pf8gg8rFwWxbLkx9mdW7hY9xxXDOza3Q@mail.gmail.com>
- <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Language: , en-GB
-Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
- Fix warnings about liointc-2.0
-In-Reply-To: <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230828134725.103442-1-keguang.zhang@gmail.com> <ZO4NCXnhauFQgvfJ@alpha.franken.de>
+In-Reply-To: <ZO4NCXnhauFQgvfJ@alpha.franken.de>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 30 Aug 2023 12:41:43 +0800
+Message-ID: <CAJhJPsVTm5hLa2tDW_c=nmYi4BA-8eTpedO1Xr0uZ2go5NQA7A@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: loongson32: Remove dma.h and nand.h
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-在 2023/8/25 20:56, Krzysztof Kozlowski 写道:
-[...]
-> How did you sneak this property? The version - v2 - which was reviewed
-> by Rob:
-> https://lore.kernel.org/all/20190905144316.12527-7-jiaxun.yang@flygoat.com/
-> did not have it.
+On Tue, Aug 29, 2023 at 11:21=E2=80=AFPM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
 >
-> Now v3 suddenly appears with Rob's review and this property:
-> https://lore.kernel.org/all/20200112081416.722218-4-jiaxun.yang@flygoat.com/
+> On Mon, Aug 28, 2023 at 09:47:25PM +0800, Keguang Zhang wrote:
+> > Since commit 7b3415f581c7 ("MIPS: Loongson32: Remove
+> > unused platform devices"), struct plat_ls1x_dma and plat_ls1x_nand
+> > are unused. Then, dma.h and nand.h are useless.
+> > Therefore, remove these useless header files.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> > V1 -> V2: Remove include of dma.h and nand.h
+> >           Update the commit message
 >
-> Please help me understand this property appeared there and how did you
-> get it reviewed?
-Hi all,
-
-It has been some years since this series was merged.
-My vague memory tells me there was some off-list discussion made in IRC with
-linux-arch folks and IRQ folks to come up with this binding design.
-
-In this case I guess I forgot to drop Rob's R-b tag when updating this patch
-between reversions. I  apologize for any inconvenience this may have caused.
-
+> this still doesn't compile, when applied to mips-next. Can you
+> please check, that it compiles before sending ? Thank you.
 >
->>                                                  <0xffffffff>, /* int1 */
->>                                                  <0x00000000>, /* int2 */
->>                                                  <0x00000000>; /* int3 */
-> So now you will keep bringing more hacks for a hacky property. No, this
-> cannot go on.
+Sorry! I will make sure that there will be no more build errors in the
+next version.
 
-What's the best way, in your opinion, to overhaul this property? As we don't
-really care backward compatibility of DTBs on those systems we can just 
-redesign it.
-
-A little bit background about this property, LIOINTC can route a 
-interrupt to any of
-4 upstream core interrupt pins. Downstream interrupt devicies should not 
-care about
-which pin the interrupt go but we want to leave a knob in devicetree for 
-performance
-tuning. So we designed such property that use masks corresponding to 
-each upsteam
-interrupt pins to tell where should a interrupt go.
-
-Thnaks
-- Jiaxun
-
+> Thomas.
 >
-> Best regards,
-> Krzysztof
->
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
+
+
+--=20
+Best regards,
+
+Keguang Zhang
