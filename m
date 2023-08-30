@@ -2,88 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E416178DDF3
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 20:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00DE78E25C
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 00:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245250AbjH3S4D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Aug 2023 14:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S244374AbjH3WeZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Aug 2023 18:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344207AbjH3S2Y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 14:28:24 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025D6198;
-        Wed, 30 Aug 2023 11:28:22 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 70DC23200942;
-        Wed, 30 Aug 2023 14:28:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 30 Aug 2023 14:28:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1693420099; x=1693506499; bh=UaWYMjZoz/qbv6HU3P8JXTg44k1buzeqH5W
-        8mgla10I=; b=EYBx63EvFZjpL4B27TvMy7dGqT0pwxAoSEQMIg8pIUrC14oW5Qe
-        NQQkav+XRQAccBSjDYtL6wGLdshSlcg1rzwDN10arpEUSJWVjaH6IgApWfE4wz2k
-        NJrHO5LIciwfDdoPDOe6ZjYQxyAx+9Qp/yhg90D1Mu/zDRHBh+usGjHa8kak61BH
-        +wRtghRwUfwcK5/g4dAMCzoN5W7fRgb6/Fc0s9E42Y4N6bQRYuO/UkeirPUMSiZp
-        yZ2IN3lwvHgVsMMyVUZL8ujlFJZVEXlmSYvbJK3v4JmwYHq8eQAgRitNdVAr72K/
-        83+G2VVVKYJBkgGYIUdzl6PFgre20wJhuxw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1693420099; x=1693506499; bh=UaWYMjZoz/qbv6HU3P8JXTg44k1buzeqH5W
-        8mgla10I=; b=cIqp7OcqR9mAO5om8208dHU0wNnEriPSq/ag/Nx4a6D5SqamN6H
-        u5pPrVI3kn3E2aS0lJco43LEkbh81xEEzrwAjk1UPuFe/Q1Gu0D3lR1Jd20Zu1Mb
-        gdjd18scjP00w/1McZqpwobB31v+bdGi+n1BVFMzoHn//F67+rVg9YaYsXDC1vi1
-        b49vnbHA72x2FuM7RHMCZpxiG9NycXuTOEiki0emG1ppfM0lGJf6JXWoJSRt9xrv
-        eX/aAvXfHx1aQbS9TyPhFAOhk0jRQP0Bm66uUGmD/P3FdC5dkgxYpXaV/oKOBN+Y
-        D5N/biYochIaLDXNgUc6e45rtgmFJlOkXGw==
-X-ME-Sender: <xms:Q4rvZK2ThFYHPgkFHwMbRXTHhzc9BTSa4gJ-nUYJ3WT4ARHSKKo7Ow>
-    <xme:Q4rvZNFqkmTEzG-Ob_osEiA9AJZEUzGn706jadaI56xRdlcznCo_ma30Qe8cTgy0k
-    hpvjo59WMifcCalYw>
-X-ME-Received: <xmr:Q4rvZC6ZWwz8ycvKHrjZIRY_fvfASIWEQhJtur8MfQMSbEhJTZGtQUNU1tA4XNKq3-25_37qCXAoXRz4hdJgC16NoG29j2lvng7c_Kd01KM8qKXuwDphTbog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enogfuohhrthgvugftvggtihhpvdculdegtddmnecujfgurhephffvvefufffkofgjfhhr
-    ggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggrnhcuoeiiihdrhigrnhesshgvnh
-    htrdgtohhmqeenucggtffrrghtthgvrhhnpeeggeehudfgudduvdelheehteegledtteei
-    veeuhfffveekhfevueefieeijeegvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
-X-ME-Proxy: <xmx:Q4rvZL346u1_UfBpWjzl87Rw7CyGhd0RDxasHMhGKfpImbsnOq-Y-w>
-    <xmx:Q4rvZNF6BdmO2rFxg6wRJ3qYNy7hEOIJFJn_U7Iwm5oQNp66gJ9Q9Q>
-    <xmx:Q4rvZE-tP0tveb64gnIifFzwKegTZyfdHQXCopNAlJ9sqJO-3y7aKw>
-    <xmx:Q4rvZMDCU_EPWqv6N6ufuNZGBXo8iVzJpOXRWJL1cpdCW6UGiOWS3A>
-Feedback-ID: iccd040f4:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Aug 2023 14:28:19 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>
-Subject: [PATCH 3/3] mips: use nth_page() in place of direct struct page manipulation.
-Date:   Wed, 30 Aug 2023 14:27:53 -0400
-Message-Id: <20230830182753.55367-4-zi.yan@sent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230830182753.55367-1-zi.yan@sent.com>
-References: <20230830182753.55367-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        with ESMTP id S237283AbjH3WeY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 18:34:24 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610FBA1
+        for <linux-mips@vger.kernel.org>; Wed, 30 Aug 2023 15:34:01 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-401ceda85cdso1773875e9.1
+        for <linux-mips@vger.kernel.org>; Wed, 30 Aug 2023 15:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693434837; x=1694039637; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XFgqEWtVuYdRSUZpjBvrGjrECLnZnCx4HSWx8oAmcF4=;
+        b=IRIDPSXxw+Lb0lty00OO3SLNM2W7XtLpuS1YYxLU++xh0stLYaQshOsW4DFUyv2BsQ
+         ZEsjq8VZnGUhnkvNfoVq4HtERfP6ExJk88c8i48H/C/iRgXAkwRxO4+5zntPTNLuKWCP
+         jnem7R+aFoIuRnUp960rYyVh05F01xdgknwiNNax7VcTb59AVkFgDqnToxU77N4gkG0K
+         ze+K7QufJwOR/OKs9p/Ht1rHjdfQ/JI/Cg681BHRayV/lFtt747qnGqfcMv7Ck4CwWO7
+         zKXYlk5bEDbJjQ4Wv4LnyrbTrIS8rA8Fgp2ru7+8FH6XfsT4d5A4b8q+M1edkVuDy/q1
+         /Ilg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693434837; x=1694039637;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XFgqEWtVuYdRSUZpjBvrGjrECLnZnCx4HSWx8oAmcF4=;
+        b=PKSNzB7pEHHCLAhMwAhoqoBCnrButhvtvTo/L74viIKN2zliW+2L3/5e65WsCDqUIk
+         ZkeDMqXYZrkjr2U9Cw8OL9Whw4gWRuu4dVmcI6vzeGi+Y2axs5EjpjT3cpdpzLwjt41o
+         L8peXiBqLZCSO/qFmoKhBw79gCiO1CgvJAnNcOqaQH/TnuGwfKi2/iUg8BJM6xmqwmUt
+         8ayJ45fqofJCzXKvEVkVrDojqCDzLyqNFVl1DnnTM6bjTHB/5hXDM2HGVUkNxLIMZh+r
+         EUn5vZePPx/OjQ180Lv/SCqYpCroL+I77XgdZfwBEo8uFqf1dJ2bTtYuDoMzUUyCXcCP
+         r4wg==
+X-Gm-Message-State: AOJu0Yzf32yie8kXXZWhYo7QU86Yh8cM0EFqlW8u+L6dLWAdyVT3Pz8W
+        RxOGdSla+dHm8JGPgDKR3HXyQEhqaq6AK7708oRPwGmB
+X-Google-Smtp-Source: AGHT+IG21XBSa1NpHpt7D+LPwmJ7vTfz0uF1Uy6n+9CUCNidaI4H0QF7ZDd2THIXqsoHVG3zSka6Mw==
+X-Received: by 2002:a1c:7704:0:b0:401:daf2:2735 with SMTP id t4-20020a1c7704000000b00401daf22735mr2467982wmi.31.1693429884760;
+        Wed, 30 Aug 2023 14:11:24 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.142.89])
+        by smtp.gmail.com with ESMTPSA id w12-20020a5d4b4c000000b0031416362e23sm17719142wrs.3.2023.08.30.14.11.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 14:11:24 -0700 (PDT)
+Message-ID: <34466e53-9cab-4094-7a9e-ae1f65385194@linaro.org>
+Date:   Wed, 30 Aug 2023 23:11:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.14.0
+Subject: Re: [PATCH v3] MIPS: loongson32: Remove dma.h and nand.h
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20230830133505.505597-1-keguang.zhang@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230830133505.505597-1-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,33 +74,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+On 30/8/23 15:35, Keguang Zhang wrote:
+> Since commit 7b3415f581c7 ("MIPS: Loongson32: Remove
+> unused platform devices"), struct plat_ls1x_dma and plat_ls1x_nand
+> are unused. Then, dma.h and nand.h are useless.
+> Therefore, remove these useless header files.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> ---
+> V2 -> V3: Fix the build error
+>            Add Reviewed-by tag from Philippe Mathieu-Daudé
+> V1 -> V2: Remove include of dma.h and nand.h
+>            Update the commit message
+> ---
+>   arch/mips/include/asm/mach-loongson32/dma.h   | 21 ---------------
+>   arch/mips/include/asm/mach-loongson32/nand.h  | 26 -------------------
+>   .../include/asm/mach-loongson32/platform.h    |  3 ---
+>   arch/mips/loongson32/common/platform.c        |  2 --
+>   arch/mips/loongson32/ls1b/board.c             |  2 --
+>   5 files changed, 54 deletions(-)
+>   delete mode 100644 arch/mips/include/asm/mach-loongson32/dma.h
+>   delete mode 100644 arch/mips/include/asm/mach-loongson32/nand.h
 
-__flush_dcache_pages() is called during hugetlb migration via
-migrate_pages() -> migrate_hugetlbs() -> unmap_and_move_huge_page()
--> move_to_new_folio() -> flush_dcache_folio(). And with hugetlb and
-without sparsemem vmemmap, struct page is not guaranteed to be contiguous
-beyond a section. Use nth_page() instead.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- arch/mips/mm/cache.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/arch/mips/include/asm/mach-loongson32/platform.h b/arch/mips/include/asm/mach-loongson32/platform.h
+> index 2cdcfb5f6012..f74292b13bc3 100644
+> --- a/arch/mips/include/asm/mach-loongson32/platform.h
+> +++ b/arch/mips/include/asm/mach-loongson32/platform.h
+> @@ -8,9 +8,6 @@
+>   
+>   #include <linux/platform_device.h>
+>   
+> -#include <dma.h>
+> -#include <nand.h>
 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 02042100e267..7f830634dbe7 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -117,7 +117,7 @@ void __flush_dcache_pages(struct page *page, unsigned i=
-nt nr)
- 	 * get faulted into the tlb (and thus flushed) anyways.
- 	 */
- 	for (i =3D 0; i < nr; i++) {
--		addr =3D (unsigned long)kmap_local_page(page + i);
-+		addr =3D (unsigned long)kmap_local_page(nth_page(page, i));
- 		flush_data_cache_page(addr);
- 		kunmap_local((void *)addr);
- 	}
---=20
-2.40.1
+Doh I missed that one in v2 :/
 
+Thanks, R-b stands.
