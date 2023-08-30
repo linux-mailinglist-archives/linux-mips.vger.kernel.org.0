@@ -2,128 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BA478DDFE
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 20:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A4078DDFA
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Aug 2023 20:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344018AbjH3S43 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Aug 2023 14:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S244686AbjH3S4W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Aug 2023 14:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245545AbjH3PbS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 11:31:18 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D60FB;
-        Wed, 30 Aug 2023 08:31:15 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6A0BF5C00D4;
-        Wed, 30 Aug 2023 11:31:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 30 Aug 2023 11:31:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1693409475; x=1693495875; bh=Q9MVoYIonRyskRfBCIP9y88rEy7hbWTJP9D
-        lDE+1Rek=; b=TFmdkdxDJCh6QTuwU3AGuzXumkMQLdaMGMTXZeMFQ9IJuH2+F61
-        1R6ExZnDwuJiA1eo5bcYmSqlUyuUeoL5lC+ioCfUoVhn6gh8Gfbs5eWCwYP78cZE
-        1qYiJjkUGK/u7CfbVTw2PKCo/tDuGTUeHp2RbU05cJnl+rob3rNkoPSxW72qwvvG
-        2CyBbisd4y8c4xSu4g66cB8t5UIw0U4VSizlH+21WI/QXOl7dn2PPZp6XKCT2QuH
-        Lmm7AHsgwWUqm77rLgXcMkuj7RipbSg2xsr3TTp1hijDnoQTkDPOBt+BKeJc8XEV
-        iaKvtPG8ijD0diOkC12baF7K6TIkWlGo6dQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1693409475; x=1693495875; bh=Q9MVoYIonRyskRfBCIP9y88rEy7hbWTJP9D
-        lDE+1Rek=; b=XDcjE7uz8kS7bQYQhlN8VpeCymR09Xs6qfFDE74Ru+FWXsan+ES
-        p5Z3+kB4Xp+vgmWW68wdwDkHIiLZow3wNbr6dGOOP4ISjtlQ88yDsaf916YwYjSr
-        ZE17fBp/h6bx57e/eWZ1co1hJ4SDFT+Pb+wJdMv5NIzdgvTzBTOisqQ7rHXLmo5Q
-        e0UFUiNGubH3z6ogzMKd/ecTblIZC8gVbSmg0vAkBa1qCdITn1xqalcTUb0e8a+C
-        0luTc1x4KuKNSOqRoUK+c39g/jPtNDQetoNrvL5vk03nZCs36bPqHXVU8c5cnjQ3
-        it0vkrIpXSXd/VgIeEwJBW6Q1CYVwCc31ag==
-X-ME-Sender: <xms:wmDvZH_TC-KVSfxtykkyEc2-g85qjUg7wfM731Eg3csCfXbVzmmn6w>
-    <xme:wmDvZDtDF0LGeGMH9-HrHiXT1tiT3GHUNnLGxs72PbHbwLQFrGL0wHtJvpbUfC0JW
-    202RJaGZDy0j7k0HfI>
-X-ME-Received: <xmr:wmDvZFD6EiZ1zh49iOvuFmx7X_RM0od-iLwDSREW_uEEvdfKsTv64fPYEynSIPt6cJsz>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepudfhkeevvddtueekfeefgfetlefgueegueeltddtieejgeei
-    heevgfehgfdvfeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:wmDvZDfgm6ms3MhGnJL8V4W5wwEQT8kblLRdegrkdKvym_dK1istKw>
-    <xmx:wmDvZMOlx-PrcPBbNwKAoO_AIN49dIYUMnIckfJIJwYUfhIPoU4o3g>
-    <xmx:wmDvZFlimcU7bZzDX6ygYUJH1PmLmFOctTYjth6aLZCLPtlGWgc6Nw>
-    <xmx:w2DvZDlOME3JwXCFUc3VbCUN8nzunuyLJB2lVv3FOhUch0Bv0GaA8w>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Aug 2023 11:31:08 -0400 (EDT)
-Message-ID: <a3e934eb-7517-f313-46d9-fd5335ce305e@flygoat.com>
-Date:   Wed, 30 Aug 2023 23:31:07 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
- Fix warnings about liointc-2.0
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, diasyzhang@tencent.com,
-        linux-kernel@vger.kernel.org
-References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
- <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org>
- <CAMpQs4JhfuB4=s9VFc+xmw_+8h5u2EwPdM_0x2vO_=SYabAAxw@mail.gmail.com>
- <6ba31912-6738-6156-d5f4-3c8d3a3ca7bc@linaro.org>
- <CAMpQs4+GiExt9uMmV1pf8gg8rFwWxbLkx9mdW7hY9xxXDOza3Q@mail.gmail.com>
- <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org>
- <a084e6e9-46b0-42ef-b500-69c114ae11b2@flygoat.com>
- <3412e871-ae2b-bed0-88fb-2272f9db3af0@linaro.org>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <3412e871-ae2b-bed0-88fb-2272f9db3af0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1343758AbjH3Qo4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 12:44:56 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CDE19A
+        for <linux-mips@vger.kernel.org>; Wed, 30 Aug 2023 09:44:53 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-592210fe8easo81785747b3.3
+        for <linux-mips@vger.kernel.org>; Wed, 30 Aug 2023 09:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693413893; x=1694018693; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Q7U5WETyc0Qx792+SyKBjLV43d3DHT0ObMpMrFVoeXw=;
+        b=Vrqu6jdVSxGa28aE1migk5YVHh9PHn+K3BQigSsynTqZy+1FdBGBQl1nQH4In9WVRs
+         KF+yQOaHMyhG/7vylvJ5xFxpXhxbdaWq++yLYUP/fN2VQ82tBRyWoQyVgRPj/MMHCpZe
+         jO+0V9PUab495XMFnTawLOr1RRUfzotX6k9V6ER1+dm9TYtelUtxG92oglhZ+G48OHTA
+         bw77cd5ga08rV8S2iervR+8tUMuXpINKvMhop7uskl+N/C/qylZpwCA4vMTQyd1AjsSG
+         0geLp1xw/hWTZsN/r98ZAoO7y0K3ubKpSdpRpvOm2LmVQAtpWFwGs0HAi3r6ak9bzn/q
+         y+rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693413893; x=1694018693;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7U5WETyc0Qx792+SyKBjLV43d3DHT0ObMpMrFVoeXw=;
+        b=S15g3GiArJf8ZgZlQchl7bAxROHSknjN9EpYSV7Sf9M0N0pDtlf2LdbcdcPIbawmXt
+         LTqAyDtqF1+UfgzT9i+xn+3NPPEn2r1BcJFw7y/ZalJ/p1Ra/LZ7oSdLiKITP7NXTo2s
+         WCzwhFcOZ/LaQfkNdDLMlOjVS0aV0o4XNweg+mxNlcwAhV1bE4zDGq4y0xuYcfX7vlGc
+         jvmQs/XdcFz6wZgIj2y0vkYxfcHI79WFfwP5EQCS4xn58aK1gh1iFXaSlqVnjG4tCqxK
+         IGxjyAleVL3mVbwMZp78f65tTgEBmFsOpAsJ+CuA6RDJOadyxa8wEx4z9FkhQavWk9/2
+         Ee2Q==
+X-Gm-Message-State: AOJu0YyP8tZaKjiWR9IXZmkWiDu2lvdyV5nPaNliLy0sNX2mAqTaJ0sD
+        Cmv8BZxG/Z8jf1SCEg1hIkIbKVMkbCzEqsRwZg==
+X-Google-Smtp-Source: AGHT+IHtp9pD/5ci3MqPyr+0sXpcwrOb70482adH4y9FFBhT1onMN4Y2Yo7VfYMaFeFIQUgnoauWykiqo7sAzbNhxQ==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a81:eb0b:0:b0:57a:793:7fb0 with SMTP
+ id n11-20020a81eb0b000000b0057a07937fb0mr78438ywm.3.1693413893177; Wed, 30
+ Aug 2023 09:44:53 -0700 (PDT)
+Date:   Wed, 30 Aug 2023 16:44:51 +0000
+In-Reply-To: <30ffe039-c9e2-b996-500d-5e11bf6ea789@linux.intel.com> (message
+ from Binbin Wu on Wed, 30 Aug 2023 23:12:19 +0800)
+Mime-Version: 1.0
+Message-ID: <diqz5y4wfpj0.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     seanjc@google.com, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
+        oliver.upton@linux.dev, chenhuacai@kernel.org, mpe@ellerman.id.au,
+        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, willy@infradead.org,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, chao.p.peng@linux.intel.com, tabba@google.com,
+        jarkko@kernel.org, yu.c.zhang@linux.intel.com,
+        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Binbin Wu <binbin.wu@linux.intel.com> writes:
 
-
-在 2023/8/30 22:35, Krzysztof Kozlowski 写道:
->> What's the best way, in your opinion, to overhaul this property? As we don't
->> really care backward compatibility of DTBs on those systems we can just
->> redesign it.
-> Deprecate the property in the bindings, allow driver to work with or
-> without it and finally drop it entirely from DTS.
-
-I'd love to have such configuration flexibility so I'd be sad to see it go.
-+ Huacai and Binbin, what's your opinion?
-
-If dropping such functionality in kernel is a must go, we can hardcode
-to route all downstream interrupt to the first pin that passed to DT.
-
-Thanks
-- Jiaxun
-> Best regards,
-> Krzysztof
+>> <snip>
+>>
+>> +static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
+>> +{
+>> +	struct address_space *mapping = inode->i_mapping;
+>> +	pgoff_t start, index, end;
+>> +	int r;
+>> +
+>> +	/* Dedicated guest is immutable by default. */
+>> +	if (offset + len > i_size_read(inode))
+>> +		return -EINVAL;
+>> +
+>> +	filemap_invalidate_lock_shared(mapping);
+>> +
+>> +	start = offset >> PAGE_SHIFT;
+>> +	end = (offset + len) >> PAGE_SHIFT;
+>> +
+>> +	r = 0;
+>> +	for (index = start; index < end; ) {
+>> +		struct folio *folio;
+>> +
+>> +		if (signal_pending(current)) {
+>> +			r = -EINTR;
+>> +			break;
+>> +		}
+>> +
+>> +		folio = kvm_gmem_get_folio(inode, index);
+>> +		if (!folio) {
+>> +			r = -ENOMEM;
+>> +			break;
+>> +		}
+>> +
+>> +		index = folio_next_index(folio);
+>> +
+>> +		folio_unlock(folio);
+>> +		folio_put(folio);
+> May be a dumb question, why we get the folio and then put it immediately?
+> Will it make the folio be released back to the page allocator?
 >
 
+I was wondering this too, but it is correct.
+
+In filemap_grab_folio(), the refcount is incremented in three places:
+
++ When the folio is created in filemap_alloc_folio(), it is given a
+  refcount of 1 in
+
+    filemap_alloc_folio() -> folio_alloc() -> __folio_alloc_node() ->
+    __folio_alloc() -> __alloc_pages() -> get_page_from_freelist() ->
+    prep_new_page() -> post_alloc_hook() -> set_page_refcounted()
+
++ Then, in filemap_add_folio(), the refcount is incremented twice:
+
+    + The first is from the filemap (1 refcount per page if this is a
+      hugepage):
+
+        filemap_add_folio() -> __filemap_add_folio() -> folio_ref_add()
+
+    + The second is a refcount from the lru list
+
+        filemap_add_folio() -> folio_add_lru() -> folio_get() ->
+        folio_ref_inc()
+
+In the other path, if the folio exists in the page cache (filemap), the
+refcount is also incremented through
+
+    filemap_grab_folio() -> __filemap_get_folio() -> filemap_get_entry()
+    -> folio_try_get_rcu()
+
+I believe all the branches in kvm_gmem_get_folio() are taking a refcount
+on the folio while the kernel does some work on the folio like clearing
+the folio in clear_highpage() or getting the next index, and then when
+done, the kernel does folio_put().
+
+This pattern is also used in shmem and hugetlb. :)
+
+I'm not sure whose refcount the folio_put() in kvm_gmem_allocate() is
+dropping though:
+
++ The refcount for the filemap depends on whether this is a hugepage or
+  not, but folio_put() strictly drops a refcount of 1.
++ The refcount for the lru list is just 1, but doesn't the page still
+  remain in the lru list?
+
+>> +
+>> +		/* 64-bit only, wrapping the index should be impossible. */
+>> +		if (WARN_ON_ONCE(!index))
+>> +			break;
+>> +
+>> +		cond_resched();
+>> +	}
+>> +
+>> +	filemap_invalidate_unlock_shared(mapping);
+>> +
+>> +	return r;
+>> +}
+>> +
+>>
+>> <snip>
