@@ -2,76 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423CF78E716
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 09:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DEE78E883
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 10:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237694AbjHaHRw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 31 Aug 2023 03:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S236639AbjHaIlW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Aug 2023 04:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbjHaHRw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 03:17:52 -0400
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Aug 2023 00:17:46 PDT
-Received: from out-251.mta0.migadu.com (out-251.mta0.migadu.com [91.218.175.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0039E1A4;
-        Thu, 31 Aug 2023 00:17:45 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1693466264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DFazo8t+x34pBbM7FhZAQZ14ar3Xb4GsuBZugiC8qbg=;
-        b=TmoDr3ge1UyYX8ugRY7XZkb1xippW67sMxQbI3dFiX3Dbs/J/HBs2sO7VWfWEzPmxOfLQe
-        irrOtXTt8xSQ97Xkijkm0FIC9OgQEr/Td6ezNmKG3h7hR9QGia9r5MoB5IEtbw4+D4m6uq
-        CfCbsYqz98UwThxz+SvZ0LkR7PL5hUE=
-Mime-Version: 1.0
-Subject: Re: [PATCH 2/3] use nth_page() in place of direct struct page
- manipulation.
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20230830182753.55367-3-zi.yan@sent.com>
-Date:   Thu, 31 Aug 2023 15:17:15 +0800
-Cc:     Linux-MM <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
+        with ESMTP id S237768AbjHaIlS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 04:41:18 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D226DE7B
+        for <linux-mips@vger.kernel.org>; Thu, 31 Aug 2023 01:40:52 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52683b68c2fso653323a12.0
+        for <linux-mips@vger.kernel.org>; Thu, 31 Aug 2023 01:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693471248; x=1694076048; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4oj9ZHh9uIvpj0ERp23NgRxjtB8A/WDYvtNWK07v2zI=;
+        b=GN31XdmsfylTAo9cekW7yHl9SPIoQSERRZqVvKX9ghQGtgDJrGlRz72VEqdZXW6KCD
+         TtnuLvFmoP0XGAFsX5cT+TMz3drzgOAeUgx/c3pmaz+WMY3R3+RQ7CpfUIZ32cFL4icK
+         6ScXCJ29qa51V0/1izVjKUZ3ek3oikYN4S+v/x6/ZiyOuv8WDTVaP38jZAO5wHr5eRzN
+         AQKMpLrCvgPkLdGkbg7OUjFop5/cYIffoh2Vc7O4BWPEEhU4rmYqMCgdtsWWNQUAleSq
+         9ZSDAv3krMlnkFB4+5zA3usrBssuvJNCiTgJ9U7v6f/tTE7Wv9uj9TVZGAkaLlBBAO+w
+         h9sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693471248; x=1694076048;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4oj9ZHh9uIvpj0ERp23NgRxjtB8A/WDYvtNWK07v2zI=;
+        b=LJVf9ZKZLGP0uSFfe9aSJ7LpgmPfUG0CvqBfqssGVQmUn5Zem+rESoL84lIJeOvz7N
+         Yi/s8o/WS4knkRUILfdiGiWvBBUj+rJa4bPneivDbsIYatY0gsk9cAHach27c71BEVP2
+         YN0B5F0nJbL7vgf2y5k1WtHxVuz8MCsuAmo9rZ66YcTogEKC7UL4yCdAFANMJ8wHZGQj
+         tYrJzOBJYZtaH1G201Shf2a5l8AOyQkbeSPJAPZSvELC+U6XVXW/+6hSNDB8TzuaR/XJ
+         JA3YcvaD3F2cwqLksJmCP1nmr5KcJTKIQ1DSZvYY/jFLtHMxCDE1jgBn0rFXb5UCjhlF
+         klVg==
+X-Gm-Message-State: AOJu0YwEgi4uuDMkwSMzyqt/YE8svmB8OcnXxfcH3UHjt50QqhLPCfLd
+        R482rSNmZ4i7whYO1TjMAHf1pg==
+X-Google-Smtp-Source: AGHT+IEC5YtV2U2cEklN+/jylIkWH4T7gor9vRqdxcg0xCCXWtlM2PpTXI6h2lSgtqlfrGIVvathzQ==
+X-Received: by 2002:a05:6402:646:b0:526:9c4:bc06 with SMTP id u6-20020a056402064600b0052609c4bc06mr3431058edx.18.1693471248160;
+        Thu, 31 Aug 2023 01:40:48 -0700 (PDT)
+Received: from [192.168.69.115] ([176.187.199.245])
+        by smtp.gmail.com with ESMTPSA id l22-20020a056402345600b0052c11951f4asm522481edc.82.2023.08.31.01.40.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Aug 2023 01:40:47 -0700 (PDT)
+Message-ID: <1cc2c8f8-1f9b-1d47-05d4-9bcad9a246cd@linaro.org>
+Date:   Thu, 31 Aug 2023 10:40:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.14.0
+Subject: Re: [PATCH v4 4/4] MAINTAINERS: Update MIPS/LOONGSON1 entry
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+References: <20230830134241.506464-1-keguang.zhang@gmail.com>
+ <20230830134241.506464-5-keguang.zhang@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230830134241.506464-5-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <50EF53C6-0CE2-4256-B8AB-AE9BF290419D@linux.dev>
-References: <20230830182753.55367-1-zi.yan@sent.com>
- <20230830182753.55367-3-zi.yan@sent.com>
-To:     Zi Yan <ziy@nvidia.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi,
 
-
-> On Aug 31, 2023, at 02:27, Zi Yan <zi.yan@sent.com> wrote:
+On 30/8/23 15:42, Keguang Zhang wrote:
+> Add two new F: entries for Loongson1 Ethernet driver
+> and dt-binding document.
+> Add a new F: entry for the rest Loongson-1 dt-binding documents.
 > 
-> From: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V3 -> V4: Update the dt-binding document entry of Loongson1 Ethernet
+> V2 -> V3: Update the entries and the commit message
+> V1 -> V2: Improve the commit message
 > 
-> When dealing with hugetlb pages, struct page is not guaranteed to be
-> contiguous on SPARSEMEM without VMEMMAP. Use nth_page() to handle it
-> properly.
+>   MAINTAINERS | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> Signed-off-by: Zi Yan <ziy@nvidia.com <mailto:ziy@nvidia.com>>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ff1f273b4f36..2519d06b5aab 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14344,9 +14344,12 @@ MIPS/LOONGSON1 ARCHITECTURE
+>   M:	Keguang Zhang <keguang.zhang@gmail.com>
+>   L:	linux-mips@vger.kernel.org
+>   S:	Maintained
+> +F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
+> +F:	Documentation/devicetree/bindings/net/loongson,ls1*.yaml
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Why not simply squash in patch 2
 
-It's better to add a Fixes tag to the commit 38c1ddbde6.
+>   F:	arch/mips/include/asm/mach-loongson32/
+>   F:	arch/mips/loongson32/
+>   F:	drivers/*/*loongson1*
+> +F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
 
-Thanks.
+and 3 of this series?
+
+>   MIPS/LOONGSON2EF ARCHITECTURE
+>   M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
 
