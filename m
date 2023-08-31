@@ -2,127 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DEE78E883
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 10:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0659D78EA4A
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 12:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbjHaIlW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 31 Aug 2023 04:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S240063AbjHaKiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Aug 2023 06:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237768AbjHaIlS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 04:41:18 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D226DE7B
-        for <linux-mips@vger.kernel.org>; Thu, 31 Aug 2023 01:40:52 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-52683b68c2fso653323a12.0
-        for <linux-mips@vger.kernel.org>; Thu, 31 Aug 2023 01:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693471248; x=1694076048; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4oj9ZHh9uIvpj0ERp23NgRxjtB8A/WDYvtNWK07v2zI=;
-        b=GN31XdmsfylTAo9cekW7yHl9SPIoQSERRZqVvKX9ghQGtgDJrGlRz72VEqdZXW6KCD
-         TtnuLvFmoP0XGAFsX5cT+TMz3drzgOAeUgx/c3pmaz+WMY3R3+RQ7CpfUIZ32cFL4icK
-         6ScXCJ29qa51V0/1izVjKUZ3ek3oikYN4S+v/x6/ZiyOuv8WDTVaP38jZAO5wHr5eRzN
-         AQKMpLrCvgPkLdGkbg7OUjFop5/cYIffoh2Vc7O4BWPEEhU4rmYqMCgdtsWWNQUAleSq
-         9ZSDAv3krMlnkFB4+5zA3usrBssuvJNCiTgJ9U7v6f/tTE7Wv9uj9TVZGAkaLlBBAO+w
-         h9sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693471248; x=1694076048;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oj9ZHh9uIvpj0ERp23NgRxjtB8A/WDYvtNWK07v2zI=;
-        b=LJVf9ZKZLGP0uSFfe9aSJ7LpgmPfUG0CvqBfqssGVQmUn5Zem+rESoL84lIJeOvz7N
-         Yi/s8o/WS4knkRUILfdiGiWvBBUj+rJa4bPneivDbsIYatY0gsk9cAHach27c71BEVP2
-         YN0B5F0nJbL7vgf2y5k1WtHxVuz8MCsuAmo9rZ66YcTogEKC7UL4yCdAFANMJ8wHZGQj
-         tYrJzOBJYZtaH1G201Shf2a5l8AOyQkbeSPJAPZSvELC+U6XVXW/+6hSNDB8TzuaR/XJ
-         JA3YcvaD3F2cwqLksJmCP1nmr5KcJTKIQ1DSZvYY/jFLtHMxCDE1jgBn0rFXb5UCjhlF
-         klVg==
-X-Gm-Message-State: AOJu0YwEgi4uuDMkwSMzyqt/YE8svmB8OcnXxfcH3UHjt50QqhLPCfLd
-        R482rSNmZ4i7whYO1TjMAHf1pg==
-X-Google-Smtp-Source: AGHT+IEC5YtV2U2cEklN+/jylIkWH4T7gor9vRqdxcg0xCCXWtlM2PpTXI6h2lSgtqlfrGIVvathzQ==
-X-Received: by 2002:a05:6402:646:b0:526:9c4:bc06 with SMTP id u6-20020a056402064600b0052609c4bc06mr3431058edx.18.1693471248160;
-        Thu, 31 Aug 2023 01:40:48 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.199.245])
-        by smtp.gmail.com with ESMTPSA id l22-20020a056402345600b0052c11951f4asm522481edc.82.2023.08.31.01.40.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Aug 2023 01:40:47 -0700 (PDT)
-Message-ID: <1cc2c8f8-1f9b-1d47-05d4-9bcad9a246cd@linaro.org>
-Date:   Thu, 31 Aug 2023 10:40:45 +0200
+        with ESMTP id S230024AbjHaKiQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 06:38:16 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCC2CF3;
+        Thu, 31 Aug 2023 03:38:14 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B5ACA5C0107;
+        Thu, 31 Aug 2023 06:38:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 31 Aug 2023 06:38:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1693478293; x=1693564693; bh=8JacaVERr2uJM4kt6LTrKdmQj865/Wvx6Qs
+        UC8eM2qE=; b=GD3qw1MPXzsE4buinsCdFMABRuIrDWRq3SB3OihSjGmkAAw19F9
+        taptJqf4lp7xQCVwv0Fh+50aV9Wr9VpgDBCgwwLkEg7f1AoBSWHar4h9rAuKIuN2
+        YjfEmrkOPYZkFJPhHO7yBkTKZx73uSiXFQ0MkgUUb24NIyRmyNeWNoWY/NdbePl6
+        sjVLUwwbR50/WuLDmgkO7aDSHdr3Wp7/jDI8lxFA/eLDYxnmVieentQZxpgk1F8N
+        +6oIGE9N0ORm86y/hKnuesa0ipJxSzhH1rdZyPXjzYtIZL6+VzCPWuQ90Y5mpT3m
+        jBveD8g0cNM7q1BdnaR4sjxZ4Obo6F2fMtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1693478293; x=1693564693; bh=8JacaVERr2uJM4kt6LTrKdmQj865/Wvx6Qs
+        UC8eM2qE=; b=lUz+HdC6kZCC2RBuMax6ORBmjAYYUoeS0sI2v9rq0UgS+Qr6jT0
+        9TE2wfR16YA56og/hWSp6hgINH52xN9zRIsUoUGr7NPHzBGlDfD6FHh8Bi1qymsa
+        yShVYThMytupuIpTx9A0Bvd0nNZLf32QQtytgEpAAJwpYeZLGWoJaTrHVrLAtTaB
+        nPvf0JCy9BMLs1gJIyGYJH/DEjJ23jd1Ic8kRuKODgiC5FosDAg9cuqZd7hJ2SZL
+        1lxIvHTSuSKAKT9oNcb3RCKifDRY2NiXiTSxdsxNfAq0jZkcdKLSDVOSSB9uUbsg
+        msnJH62V/Qr6WvPTYQ/Ym7zqj/Q1zJ3cLrw==
+X-ME-Sender: <xms:k23wZCsMZ4B3ONckN5DyZbYXBk7HochwZgDZXT-y_0df1xWCWAju2g>
+    <xme:k23wZHfsaAqXGmOpi4OkkVNX9ag3OAY7Z68Fowlqn2PmP8S28JMCZCJ14LViU_jIe
+    4S6YlHm8sDe9KQQS4Y>
+X-ME-Received: <xmr:k23wZNzwM9qABzttcMfNgWDI0yipdBB_ixKuLiJTx1zSP9I_QAVGaaAS_z8-9UxN3n4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudegtddgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhephfehveeggeevieehgfdtveeigffgteehieehffetleetffeh
+    hfeuteffudehfeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:k23wZNOhNqqNVWGsSxgJVsYSpXRMQHxwfGqJ2upN30RIRt9rBKgqVQ>
+    <xmx:k23wZC89bvMioTgHp4x_rK6GM7Q3gOveXtAI-DI2nvTVFbnQhXVytw>
+    <xmx:k23wZFXjIltYN6ZkOk3bHWzVXbq2eBalcHsEtpsL8H6LnjGJi2MjyA>
+    <xmx:lW3wZGZJxp8GnBOgcXBw6dLpOuuQLUJGAChl1toqwTrYEiekgazMqw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 31 Aug 2023 06:38:09 -0400 (EDT)
+Message-ID: <500758f7-f749-469b-1419-0c08b01c9eab@flygoat.com>
+Date:   Thu, 31 Aug 2023 18:38:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.14.0
-Subject: Re: [PATCH v4 4/4] MAINTAINERS: Update MIPS/LOONGSON1 entry
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Content-Language: en-GB
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20230830134241.506464-1-keguang.zhang@gmail.com>
- <20230830134241.506464-5-keguang.zhang@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230830134241.506464-5-keguang.zhang@gmail.com>
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <1692434183-2054-1-git-send-email-yangtiezhu@loongson.cn>
+ <ZOxkt/6EkQIy+Jkt@alpha.franken.de> <ZO4Mdr9/XUkXDK9j@alpha.franken.de>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v4 0/4] Modify die() for MIPS
+In-Reply-To: <ZO4Mdr9/XUkXDK9j@alpha.franken.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
-On 30/8/23 15:42, Keguang Zhang wrote:
-> Add two new F: entries for Loongson1 Ethernet driver
-> and dt-binding document.
-> Add a new F: entry for the rest Loongson-1 dt-binding documents.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V3 -> V4: Update the dt-binding document entry of Loongson1 Ethernet
-> V2 -> V3: Update the entries and the commit message
-> V1 -> V2: Improve the commit message
-> 
->   MAINTAINERS | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ff1f273b4f36..2519d06b5aab 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14344,9 +14344,12 @@ MIPS/LOONGSON1 ARCHITECTURE
->   M:	Keguang Zhang <keguang.zhang@gmail.com>
->   L:	linux-mips@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
-> +F:	Documentation/devicetree/bindings/net/loongson,ls1*.yaml
 
-Why not simply squash in patch 2
+在 2023/8/29 23:19, Thomas Bogendoerfer 写道:
+> On Mon, Aug 28, 2023 at 11:11:19AM +0200, Thomas Bogendoerfer wrote:
+>> On Sat, Aug 19, 2023 at 04:36:19PM +0800, Tiezhu Yang wrote:
+>>> v4:
+>>>    -- Add BUG() at the end of nmi_exception_handler()
+>>>    -- Return earlier in die() if notify_die() returns NOTIFY_STOP
+>>>    -- Update the patch titles and commit messages
+>>>
+>>> v3:
+>>>    -- Make each patch can be built without errors and warnings.
+>>>
+>>> v2:
+>>>    -- Update the commit message to give more detailed info, split into
+>>>       three individual patches, suggested by Maciej, thank you.
+>>>
+>>> Tiezhu Yang (4):
+>>>    MIPS: Add BUG() at the end of nmi_exception_handler()
+>>>    MIPS: Do not kill the task in die() if notify_die() returns
+>>>      NOTIFY_STOP
+>>>    MIPS: Return earlier in die() if notify_die() returns NOTIFY_STOP
+>>>    MIPS: Add identifier names to arguments of die() declaration
+>>>
+>>>   arch/mips/include/asm/ptrace.h |  2 +-
+>>>   arch/mips/kernel/traps.c       | 15 +++++++++------
+>>>   2 files changed, 10 insertions(+), 7 deletions(-)
+>> series applied to mips-next.
+> I've dropped the series again after feedback from Maciej, that this
+> still needs more changes.
+Was the feedback made off-list?
 
->   F:	arch/mips/include/asm/mach-loongson32/
->   F:	arch/mips/loongson32/
->   F:	drivers/*/*loongson1*
-> +F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+I think it's important to make submitter aware of the problem before
+action being taken.
 
-and 3 of this series?
+ From my perspective Teizhu was working hard to address review comments
+all the way so it looks unfair to neglect his work without transparent 
+communication.
 
->   MIPS/LOONGSON2EF ARCHITECTURE
->   M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
-
+Thanks
+- Jiaxun
+> Thomas.
