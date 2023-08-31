@@ -2,132 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A81678EB46
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 13:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F0C78EC7F
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 13:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjHaLCI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 31 Aug 2023 07:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S239065AbjHaLw2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Aug 2023 07:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbjHaLCI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 07:02:08 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F08CFA;
-        Thu, 31 Aug 2023 04:02:05 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9a1de3417acso404897166b.0;
-        Thu, 31 Aug 2023 04:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693479724; x=1694084524; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oTXl8mKJCoSXKQpNwtK+OO0amUPSdiia5crdcPt8muI=;
-        b=E+oqK58T2xDwEFt28ap15LWJt4vmTlg+bnDCandK7A7O8dNb1mv5LaTHniKEOeccoO
-         SHM0+lHqPtLGBxU9/4Fy6r15+TReFKndNTY5qERIYKG+Af3FfXcO1rAtJoQruF4SihUn
-         lfOe+v/F/AsbofieYDEHOCxV71GT9C6JM+ZFE25hoWsaihelCnrOOZ7I7+R3gijJ9Y/d
-         L4RbR4KTDtRZ/P7Hv9luhmCkTwWVPIvU9SoAMC87QRjJ10rTByvXTDVUIuTJSOkl3tkJ
-         2FOTGOS1O+5Uv7vGKMGM6KSQgqV/lKKkk4YfHP1UOA+z+JzL+Q501lmTUFIDtrUo8oKO
-         HhtQ==
+        with ESMTP id S1346143AbjHaLw1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 07:52:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424A0CFE
+        for <linux-mips@vger.kernel.org>; Thu, 31 Aug 2023 04:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1693482701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HA1rOAetNRxuhUM9NoRUcE5ZYks/FWqTpfdzdFJKn8s=;
+        b=e3oiv28esg0fVlMQsFL/LY47WrZml6T4RtOxMOIBuFiYKF24byNr4mLxjDdVZSxH9n96KY
+        B9NUaYp88aupifdllJm2vUlF+CXFeaGvM8CgK5MkMi+UPAewQk7GorFawVdskASf2kWhfd
+        WwkTImRVMy/10B+yp20zcWOw4VJr5To=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-32-YtUxRYJbMPqJDHcpe7QgtQ-1; Thu, 31 Aug 2023 07:51:40 -0400
+X-MC-Unique: YtUxRYJbMPqJDHcpe7QgtQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9a1c758ef63so5921266b.1
+        for <linux-mips@vger.kernel.org>; Thu, 31 Aug 2023 04:51:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693479724; x=1694084524;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oTXl8mKJCoSXKQpNwtK+OO0amUPSdiia5crdcPt8muI=;
-        b=QjJomj4LvMGns58nrlekzKu8bEV3eCfc6luFpLzoVlPwuS/CzQojY33hhlpr6JC7zR
-         KQwq0798MNmkG4p7WyF6+lVPy4LP+ve5INCQc0gYvCZaUljAsdpwQ7eGxOL8qcjJ2cPv
-         L5U+H8txcibNqFCzQAor5kYuQDXQHEDqkoMAJGZ7cUSSBmPbRPMVxnhD5EmOOdyzucjY
-         f4S97m7F20WVSnq7aP6JcRDzM/6KqMx4yDhDzlYc/aFtj9xt8OjHncB/Y9PhSAwahK+b
-         FCNgLEjxCL5AI+mwvh8DN1MeDaank/XgvDpK2dynQTXtrjQpeLNcd3d7FIpFdEd7EWnz
-         52Tw==
-X-Gm-Message-State: AOJu0Yy9poTVX7d5jWWldKrZh7D3TtOlA4QugbJpks+4BLov33VRTu3i
-        DGbSxqoU3km5WA40rQAJDe8z+1SJqY+4hYfunwd0inVK/3rGgA==
-X-Google-Smtp-Source: AGHT+IFq6TiAayoEpOcVY3q+kTFxUlMOEDYcxgXQPawqzmVsOEzqNB3KNO4GhQ+DoCSP8vjisiE6mD7ms+6bcSzzPmM=
-X-Received: by 2002:a17:906:7311:b0:9a5:b66a:436d with SMTP id
- di17-20020a170906731100b009a5b66a436dmr2847772ejc.14.1693479723591; Thu, 31
- Aug 2023 04:02:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230830134241.506464-1-keguang.zhang@gmail.com>
- <20230830134241.506464-5-keguang.zhang@gmail.com> <1cc2c8f8-1f9b-1d47-05d4-9bcad9a246cd@linaro.org>
-In-Reply-To: <1cc2c8f8-1f9b-1d47-05d4-9bcad9a246cd@linaro.org>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Thu, 31 Aug 2023 19:01:27 +0800
-Message-ID: <CAJhJPsVj1836-DoKTokxMd664FPX70vtSv96x4DfHzBFRZ_9Tg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] MAINTAINERS: Update MIPS/LOONGSON1 entry
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1693482698; x=1694087498;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HA1rOAetNRxuhUM9NoRUcE5ZYks/FWqTpfdzdFJKn8s=;
+        b=OurE1YwB8zm1K5qjLmqJ5u2RnUX6GnhprQPrheJY7WXEkkkhxLjwSlwkALJf7EOTE6
+         qgNrg/yFvj86+767syrvEqo3cMybWtIEDiZW5FoOMQS+xUTk1nj34gq1fj9IsXoeKtuQ
+         htYFuBVfKUHdxt2IQQZWEN5IgjhRsStE+g+Ja6oty4hq1R+KCxUeQVrOJaYhX6ZrHOAY
+         de1u68R6AHiqHZtIYdcI+yKDogWNuci+Dg8A5A3WdNETl1hkbxk7DMPQqz0nIAHgQVCZ
+         +xyebrCnWJGjKbZa3Ez2j0cYIPj4CKfad1W2skuEk6WN7riy1A4pN57STTDbd62Rses7
+         Q/ug==
+X-Gm-Message-State: AOJu0YxLz46g87HuvROFdcQbVkn2Tp/b2J/YIgDNOhO0Hvwz1b0Cgevk
+        /STgFGePSk6Nwn5hGEDp1Bef3YvKQkhXm1ntDb7mfLgXUmjgekaRz1Co2l7Q0Lqs635xzqzUF5l
+        0sEMkJMfyzz5gnWJQ2voANg==
+X-Received: by 2002:a17:906:19:b0:9a1:f96c:4bb9 with SMTP id 25-20020a170906001900b009a1f96c4bb9mr3536669eja.6.1693482698717;
+        Thu, 31 Aug 2023 04:51:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFGfqbMiAZnbTzey2RXfsU5qEewFCbDRPo/4/Oy55iKUmW3AuIcCEVbKwGjLs907T3p3M11hA==
+X-Received: by 2002:a17:906:19:b0:9a1:f96c:4bb9 with SMTP id 25-20020a170906001900b009a1f96c4bb9mr3536650eja.6.1693482698359;
+        Thu, 31 Aug 2023 04:51:38 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-255-219.dyn.eolo.it. [146.241.255.219])
+        by smtp.gmail.com with ESMTPSA id yy10-20020a170906dc0a00b0099364d9f0e2sm681691ejb.98.2023.08.31.04.51.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Aug 2023 04:51:37 -0700 (PDT)
+Message-ID: <b32f292d26aec59ae68749bbd3107d51cf3c2f1f.camel@redhat.com>
+Subject: Re: [PATCH v4 0/4] Move Loongson1 MAC arch-code to the driver dir
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Jose Abreu <joabreu@synopsys.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Date:   Thu, 31 Aug 2023 13:51:36 +0200
+In-Reply-To: <20230830134241.506464-1-keguang.zhang@gmail.com>
+References: <20230830134241.506464-1-keguang.zhang@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 31, 2023 at 4:40=E2=80=AFPM Philippe Mathieu-Daud=C3=A9
-<philmd@linaro.org> wrote:
->
-> Hi,
->
-> On 30/8/23 15:42, Keguang Zhang wrote:
-> > Add two new F: entries for Loongson1 Ethernet driver
-> > and dt-binding document.
-> > Add a new F: entry for the rest Loongson-1 dt-binding documents.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > V3 -> V4: Update the dt-binding document entry of Loongson1 Ethernet
-> > V2 -> V3: Update the entries and the commit message
-> > V1 -> V2: Improve the commit message
-> >
-> >   MAINTAINERS | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ff1f273b4f36..2519d06b5aab 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -14344,9 +14344,12 @@ MIPS/LOONGSON1 ARCHITECTURE
-> >   M:  Keguang Zhang <keguang.zhang@gmail.com>
-> >   L:  linux-mips@vger.kernel.org
-> >   S:  Maintained
-> > +F:   Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
-> > +F:   Documentation/devicetree/bindings/net/loongson,ls1*.yaml
->
-> Why not simply squash in patch 2
->
-> >   F:  arch/mips/include/asm/mach-loongson32/
-> >   F:  arch/mips/loongson32/
-> >   F:  drivers/*/*loongson1*
-> > +F:   drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
->
-> and 3 of this series?
+On Wed, 2023-08-30 at 21:42 +0800, Keguang Zhang wrote:
+> In order to convert Loongson1 MAC platform devices to the devicetree
+> nodes, Loongson1 MAC arch-code should be moved to the driver dir.
+> Add dt-binding document and update MAINTAINERS file accordingly.=20
+>    =20
+> In other words, this patchset is a preparation for converting
+> Loongson1 platform devices to devicetree.
+>=20
+> Changelog
+> V3 -> V4: Add Acked-by tag from Krzysztof Kozlowski
+>           Add "|" to description part
+>           Amend "phy-mode" property
+>           Drop ls1x_dwmac_syscon definition and its instances
+>           Drop three redundant fields from the ls1x_dwmac structure
+>           Drop the ls1x_dwmac_init() method.
+>           Update the dt-binding document entry of Loongson1 Ethernet
+>           Some minor improvements
+> V2 -> V3: Split the DT-schema file into loongson,ls1b-gmac.yaml
+>           and loongson,ls1c-emac.yaml (suggested by Serge Semin)
+>           Change the compatibles to loongson,ls1b-gmac and loongson,ls1c-=
+emac
+>           Rename loongson,dwmac-syscon to loongson,ls1-syscon
+>           Amend the title
+>           Add description
+>           Add Reviewed-by tag from Krzysztof Kozlowski
+>           Change compatibles back to loongson,ls1b-syscon
+>           and loongson,ls1c-syscon
+>           Determine the device ID by physical
+>           base address(suggested by Serge Semin)
+>           Use regmap instead of regmap fields
+>           Use syscon_regmap_lookup_by_phandle()
+>           Some minor fixes
+>           Update the entries of MAINTAINERS
+> V1 -> V2: Leave the Ethernet platform data for now
+>           Make the syscon compatibles more specific
+>           Fix "clock-names" and "interrupt-names" property
+>           Rename the syscon property to "loongson,dwmac-syscon"
+>           Drop "phy-handle" and "phy-mode" requirement
+>           Revert adding loongson,ls1b-dwmac/loongson,ls1c-dwmac
+>           to snps,dwmac.yaml
+>           Fix the build errors due to CONFIG_OF being unset
+>           Change struct reg_field definitions to const
+>           Rename the syscon property to "loongson,dwmac-syscon"
+>           Add MII PHY mode for LS1C
+>           Improve the commit message
+>=20
+> Keguang Zhang (4):
+>   dt-bindings: mfd: syscon: Add compatibles for Loongson-1 syscon
+>   dt-bindings: net: Add Loongson-1 Ethernet Controller
+>   net: stmmac: Add glue layer for Loongson-1 SoC
+>   MAINTAINERS: Update MIPS/LOONGSON1 entry
+>=20
+>  .../devicetree/bindings/mfd/syscon.yaml       |   2 +
+>  .../bindings/net/loongson,ls1b-gmac.yaml      | 114 +++++++++
+>  .../bindings/net/loongson,ls1c-emac.yaml      | 113 +++++++++
+>  MAINTAINERS                                   |   3 +
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
+>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>  .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 219 ++++++++++++++++++
+>  7 files changed, 463 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1b-g=
+mac.yaml
+>  create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1c-e=
+mac.yaml
+>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+>=20
+>=20
+> base-commit: 56585460cc2ec44fc5d66924f0a116f57080f0dc
 
-Do you mean squashing patch 2 and patch 4 into one patch?
->
-> >   MIPS/LOONGSON2EF ARCHITECTURE
-> >   M:  Jiaxun Yang <jiaxun.yang@flygoat.com>
->
+I guess the whole series should go through the networking tree, but
+please note that net-next is currently closed:
 
+---
+## Form letter - net-next-closed
 
---=20
-Best regards,
+The merge window for v6.6 has begun and therefore net-next is closed
+for new drivers, features, code refactoring and optimizations.
+We are currently accepting bug fixes only.
 
-Keguang Zhang
+Please repost when net-next reopens after Sept 11th.
+
+RFC patches sent for review only are obviously welcome at any time.
+
+See:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#develop=
+ment-cycle
+
