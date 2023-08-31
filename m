@@ -2,76 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D1978E488
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 03:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2A078E5C6
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Aug 2023 07:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343809AbjHaBrp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Aug 2023 21:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S231223AbjHaFe2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Aug 2023 01:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236116AbjHaBro (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Aug 2023 21:47:44 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A146CC5;
-        Wed, 30 Aug 2023 18:47:42 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-79a2216a22fso180180241.0;
-        Wed, 30 Aug 2023 18:47:42 -0700 (PDT)
+        with ESMTP id S242227AbjHaFe1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 01:34:27 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B74EA;
+        Wed, 30 Aug 2023 22:34:23 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-565e54cb93aso312003a12.3;
+        Wed, 30 Aug 2023 22:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693446461; x=1694051261; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1693460063; x=1694064863; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FCKBENiq4GEwRaH031J4XimFDimD7/kiZ0SVXcm53oY=;
-        b=RjOgwhMXsutkCae+YcieM10bH0wR3klFm5czKsgMDVhVo7Vi2MAaWV00CR1pVsMVVj
-         RiOKyoU6xLsGZaDpVOY0VCv2USFTJwU6OIX/Ab8JE8l5unmKZtrA1PC7j6V4mwL+y++h
-         VD4tI0VTbLSqVxLM/DbXMQQS5IuNFs3USepyjco9H7Z7UQWbw12FqPoNo5eHykWWNcF6
-         h+DLsIq0VI8MvIu+pPebhj/NV8UdqmFFbcTpYU7txF4bVeTVNqzyLeEB3lCqA/ck+pVD
-         rEnQe+kAVk0zfrvU+7K7ksPjQQwA6gNiVvgTCEK2sJbd4DUEVXxAo4zSXnbumurC+cwL
-         ERgw==
+        bh=3Jp1GatRvSx1j5dMXHLzSPK88pnwTUhV9wWIcAF5NJs=;
+        b=BSq81ss4oikaIzKkdNUgQkdOO6pEdYkvnhk+pmuEaCARv7QQuxtc13UqPjFL5sVe/w
+         4JwrCQqKfYffMqKxWWSvna4fk60W6/vq4xApj3TBXh1XjEKfkLvaBXo8f/LF849y3M9o
+         4l++O50vFVYazCieD4jARdnjQgqg8Q7liS8STaBgbJ2Zhh3f5QwQGeRZIirLK4BE/RHU
+         72mvkKYIJ4lP+Om+cbNpYzBT5rtGwDtUFt5x2DN1XmQT3Vcn+/DSdLGxKsPzWJSUhqmC
+         tp5ViLcm/w7OuRb54vjPtwvuN7KB5F9F01Hgyci84kiNznab6b0rfP2IjjrAcSbbB/w2
+         RiJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693446461; x=1694051261;
+        d=1e100.net; s=20221208; t=1693460063; x=1694064863;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FCKBENiq4GEwRaH031J4XimFDimD7/kiZ0SVXcm53oY=;
-        b=Sw5oZNI801143MRuXnN2IXcgopxHPYbnuDKkg/ozSZ6hib9GyqSTVdEgCzVGSt77UC
-         m/8sFRd53Z0dsSM1bAsWlgdICO6YRCKyju+5Pjp6FyKl8sUqY50dfCt2OFacVP8ipale
-         07rIh3uRme2vmY4LBss3vd4m4Gaiixux0YDe4hWX+9h/lI9g2Kddyt+Gz7LZNMkJnYdG
-         CbTrPPKAl04cdwn/sH00PaiUZGhnFFLnNisb8hPOASS2ySO/lPgrOvNekC7GzOZ8g8VT
-         CmDJxfIyZ1HSsQZWAv2vP1lSlWt017qT1ouKzZ4X/9wsYKC2LW1dp9vcr9F3LC2ae3Cw
-         fcCQ==
-X-Gm-Message-State: AOJu0YyxmhvHbnUMHLIM6UXHxahdYGpNsLCpN7HkKymotaLE56ipMw/k
-        WDz+fGMgY+CjOP2BrXLTeIy/DSExgAYm5kQ7ZJvEdj+Wzx3LiA==
-X-Google-Smtp-Source: AGHT+IEgXvCdGkwoSUW87TOoIjX391zkXhYoxSkzUI6iH78aXeQAHYdqdYdmh5DFCvd5a1z6Ri1JRAnPFkIpFJSV9fY=
-X-Received: by 2002:a67:fb19:0:b0:44e:a9b6:5298 with SMTP id
- d25-20020a67fb19000000b0044ea9b65298mr3904828vsr.24.1693446461534; Wed, 30
- Aug 2023 18:47:41 -0700 (PDT)
+        bh=3Jp1GatRvSx1j5dMXHLzSPK88pnwTUhV9wWIcAF5NJs=;
+        b=dzMZrmoG3dXIWRLRNd3xb+QgWqeSpwdy21XMOrvg7As1wTzhQnNi7vYq0C3qyaRrFV
+         psIs4CzNqS8jMuCaERFkZ8qs2yhBeZ+ZlBBx0X0hy8PPw/fhXwCGyp8gHGfBcrCLpL1u
+         v9xxnSpSruHuEtd/hdvyHfrH3xt0ss82r+c+cgYeVasSiPzl2BGXtp5gHHVERXIrDD9r
+         QbLdpldp0brFgqbuGw7TjsSQAHUXkNPCfEbVuSpGqYXkYsmWcUzD0InFFGd1jhTT6Epf
+         u0XBVDBSAl7Kp/A8ty9L61hjhQbLlm4p6ocOSrCCy0HRxyLLu9IxJ+f7kAAUpOa7FPEu
+         LRGA==
+X-Gm-Message-State: AOJu0YwJo15+Vp0H91STvp4nfyL7vBK0PLJAKLABeC+ErmjRy+nBsykG
+        mGQFUS7CbJ+1AFksHwBlPNEe+21rbUnm398kbNVDqiWB3GhBmQ==
+X-Google-Smtp-Source: AGHT+IF5wB3svjQf9nWw60DSNQ0IWUqWE6f7PiNfpAcagID37P3DVcd8CpPKm/KleKdno9fUA3gs2cMg82M34w4E25o=
+X-Received: by 2002:a05:6a20:3956:b0:14e:62cd:1370 with SMTP id
+ r22-20020a056a20395600b0014e62cd1370mr5066919pzg.14.1693460063192; Wed, 30
+ Aug 2023 22:34:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
- <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org> <CAMpQs4JhfuB4=s9VFc+xmw_+8h5u2EwPdM_0x2vO_=SYabAAxw@mail.gmail.com>
- <6ba31912-6738-6156-d5f4-3c8d3a3ca7bc@linaro.org> <CAMpQs4+GiExt9uMmV1pf8gg8rFwWxbLkx9mdW7hY9xxXDOza3Q@mail.gmail.com>
- <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org> <a084e6e9-46b0-42ef-b500-69c114ae11b2@flygoat.com>
- <3412e871-ae2b-bed0-88fb-2272f9db3af0@linaro.org> <a3e934eb-7517-f313-46d9-fd5335ce305e@flygoat.com>
-In-Reply-To: <a3e934eb-7517-f313-46d9-fd5335ce305e@flygoat.com>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Thu, 31 Aug 2023 09:47:29 +0800
-Message-ID: <CAMpQs4L0DYxoqQbpi7WeNMBf9g+58L2=D6BXrKbSUqJQEEKZLQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
- Fix warnings about liointc-2.0
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+References: <1692434183-2054-1-git-send-email-yangtiezhu@loongson.cn>
+ <ZOxkt/6EkQIy+Jkt@alpha.franken.de> <ZO4Mdr9/XUkXDK9j@alpha.franken.de>
+ <CAAhV-H4XDRGkFaqyOnTyDQo8M=nEUYf4B8kSiEWQpq6QB-yz5g@mail.gmail.com> <alpine.DEB.2.21.2308301619300.43104@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2308301619300.43104@angie.orcam.me.uk>
+From:   YunQiang Su <wzssyqa@gmail.com>
+Date:   Thu, 31 Aug 2023 13:34:11 +0800
+Message-ID: <CAKcpw6X2wenGkROshareJjdT05xDTvgiJQDxvH03nTicD9X29Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Modify die() for MIPS
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, diasyzhang@tencent.com,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,40 +73,138 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-cc Jianmin Lv.
+Maciej W. Rozycki <macro@orcam.me.uk> =E4=BA=8E2023=E5=B9=B48=E6=9C=8831=E6=
+=97=A5=E5=91=A8=E5=9B=9B 02:56=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, 30 Aug 2023, Huacai Chen wrote:
+>
+> > > > series applied to mips-next.
+> > >
+> > > I've dropped the series again after feedback from Maciej, that this
+> > > still needs more changes.
+> > I feel a little surprised. This series has appeared for more than ten
+> > days and received some R-b, and we haven't seen any objections from
+> > Maciej. If there are really some bugs that need to be fixed, I think
+> > the normal operation is making additional patches...
+>
+>  You haven't received any ack from me either, and I stopped reviewing the
+> series as it was taking too much of my time and mental effort and yet
+> changes were going in the wrong direction.  Silence never means an ack.
+>
 
-Hi all:
+In my opinion, the position of `reviewer` normally means more
+obligation instead of
+power.
+The world is always changing, I don't think that the world needs to
+wait for anybody.
 
-Jianmin knows Loongson interrupt controllers well, he may have other
-suggestions.
+In the open source community, if a person has some position, if
+they/he/she has little
+time to play that position well, he should do something, for example, seek =
+help
+or transfer the position to somebody who can work well.
 
-Thanks.
-Binbin
+>  It's up to the submitter to get things right and not to expect from the
+> reviewer to get issues pointed at by finger one by one, effectively
+> demanding someone else's effort to get their own objectives complete even
+> with the most obvious things.
+>
+>  And then for a hypothetical case only that the submitter is not able to
+> verify.  For such cases the usual approach is to do nothing until an
+> actual real case is found.
+>
 
-On Wed, Aug 30, 2023 at 11:31=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.c=
-om> wrote:
+I think that it depends. If the patch can solve a part of this problem, and
+won't leave some problem hard to solve in the future or serious
+security problems.
+I think that it is worth considering.
+
+Yes, I agree with a sentence from you "Nobody's perfect", and the same goes=
+ for
+software, even Linux kernel.
+
+PS: I never read the code of this thread, it is just common sense, I guess.
+
+>  Very simple such a change that one can verify to an acceptable degree
+> that it is correct by just proofreading might be accepted anyway, but it
+> cannot be guaranteed.
 >
+>  The missed NMI case only proved the submitter didn't do their homework
+> and didn't track down all the call sites as expected with such a change,
+> and instead relied on reviewer's vigilance.
 >
+>  As to the changes, specifically:
 >
-> =E5=9C=A8 2023/8/30 22:35, Krzysztof Kozlowski =E5=86=99=E9=81=93:
-> >> What's the best way, in your opinion, to overhaul this property? As we=
- don't
-> >> really care backward compatibility of DTBs on those systems we can jus=
-t
-> >> redesign it.
-> > Deprecate the property in the bindings, allow driver to work with or
-> > without it and finally drop it entirely from DTS.
+> - 1/4 is bogus, the kernel must not BUG on user activities.  Most simply
+>   die() should be told by the NMI caller that it must not return in this
+>   case and then it should ignore the NOTIFY_STOP condition.
 >
-> I'd love to have such configuration flexibility so I'd be sad to see it g=
-o.
-> + Huacai and Binbin, what's your opinion?
+>   I realise we may not be able to just return from the NMI handler to the
+>   location at CP0.ErrorEPC and continue, because owing to the privileged
+>   ISA design we won't be able to make such an NMI handler reentrant, let
+>   alone SMP-safe.  But it should have been given in the change descriptio=
+n
+>   as rationale for not handling the NOTIFY_STOP condition for the NMI.
 >
-> If dropping such functionality in kernel is a must go, we can hardcode
-> to route all downstream interrupt to the first pin that passed to DT.
+>   I leave it as an exercise to the reader to figure out why a returning
+>   NMI handler cannot be made reentrant.
 >
-> Thanks
-> - Jiaxun
-> > Best regards,
-> > Krzysztof
-> >
+> - 2/4 should be a one-liner to handle the NOTIFY_STOP condition just as
+>   with the x86 port, which I already (!) communicated, and which was (!!!=
+)
+>   ignored.  There is no need to rewrite the rest of die() and make it mor=
+e
+>   complex too just because it can be done.
 >
+> - 3/4 is not needed if 2/4 was done properly.  And as it stands it should
+>   have been folded into 2/4, because fixes to an own pending submission
+>   mustn't be made with a separate patch: the original change has to be
+>   corrected instead.
+>
+> - 4/4 is OK (and I believe the only one that actually got a Reviewed-by:
+>   tag).
+>
+> Most of these issues would have been avoided if the submitter made
+> themselves familiar with Documentation/process/submitting-patches.rst and
+> followed the rules specified there.
+>
+>  Otherwise this takes valuable reviewer resources that would best be used
+> elsewhere and it puts submitters of quality changes at a disadvantage,
+> which is not fair.
+>
+>  It is not our policy to accept known-broken changes and then fix them up
+> afterwards.  Changes are expected to be technically sound to the best of
+> everyone's involved knowledge and it's up to the submitter to prove that
+> it is the case and that a change is worth including.  You would have
+> learnt it from the document referred.  Nobody's perfect and issues may
+> slip through, but we need to make every effort so as to avoid it.
+>
+>  Mind that we're doing reviews as volunteers entirely in our free time we
+> might instead want to spend with friends or in another enjoyable way.  It
+> is not my day job to review random MIPS/Linux patches posted to a mailing
+> list.  Even composing this reply took a considerable amount of time and
+> effort, which would best be spent elsewhere, because I am talking obvious
+> things here and repeating Documentation/process/submitting-patches.rst
+> stuff.
+>
+
+I have noticed that in the note of this series of patches:
+     v3:
+        -- Make each patch can be built without errors and warnings.
+
+I think that how to split the patches is a trade off, not a principle.
+For me, the reasons to split patches are:
+   1. Make the problem obviously.
+   2. Show the problem one by one, and it is easy to understand.
+   3. Make life easier for distributors.
+   4. And maybe more
+
+While if a splitting conflicts with these purposes, it will be another stor=
+y.
+
+>   Maciej
+
+
+
+--=20
+YunQiang Su
