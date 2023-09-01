@@ -2,99 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27EF7903DC
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Sep 2023 00:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E13790439
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Sep 2023 01:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbjIAWzM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Sep 2023 18:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S1351222AbjIAXnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Sep 2023 19:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351118AbjIAWzF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Sep 2023 18:55:05 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DA9173B;
-        Fri,  1 Sep 2023 14:09:20 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-34e1ddc38c6so546665ab.3;
-        Fri, 01 Sep 2023 14:09:20 -0700 (PDT)
+        with ESMTP id S1349079AbjIAXnk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Sep 2023 19:43:40 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7011999
+        for <linux-mips@vger.kernel.org>; Fri,  1 Sep 2023 16:43:01 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68c3b9f85b7so1896070b3a.2
+        for <linux-mips@vger.kernel.org>; Fri, 01 Sep 2023 16:43:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693602560; x=1694207360; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D+B2LETBRYo235Gzl9s8FV6KtOjZrwPltfhhztkFxvM=;
-        b=NdLhcKzK5TtyE3yGXf0uYCWGBJ51CtYAMTp8fyqyotxbiuLDrBmuqCufUBh/9Kay/+
-         cs/82bnQla4NayTzVgjGTveV31nubv694UuuwYm74Iw6O+IBVYPcGi2xjA2TDp9r0zB6
-         +cDT4w57KljBPiXT1CUYuaaEVnqyZk3Qnih0I7okeb1fLD43Qtj5jdrSUFq0oAlFzKe0
-         PzT35Vjrvj7odIXOltxfWBE4Zbd3dVKPXlYFOl1cWrwAxd0DfatfNvMvKzeeKkcVI/Zs
-         9Nk+FsZuaa5Dh2kj8xGJjgiBwJIsq2Tftn6uXncDE8Kump651qCwuzoTw6sv4gLrQ05J
-         vk5g==
+        d=chromium.org; s=google; t=1693611745; x=1694216545; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9XoCDC9hhqnTfSWxv39xNaYsVGjr9sqIdwDF3cygwY=;
+        b=EJFbu+Co2SmIXC4xt4ddhfP62SSmhPMlIudfU5pVn/dB3BTGMpkCF86aKayMRh45n+
+         RnfwXDmW/DkUBkT7smLfMB2BeYK1cR49YCybRwO4cKdgIN5ub3K0qeF5ZCuuY6ELz9zR
+         +E9rLa1Wl5evrqncQBmsnzm9qxhgQoJRDkIpw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693602560; x=1694207360;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+B2LETBRYo235Gzl9s8FV6KtOjZrwPltfhhztkFxvM=;
-        b=XDMd1A4czk5dxvZI82tosueJhx3Mgu/t6UuTCmt7Kbw2ouv8nzJBZWE/awL1+g4TtT
-         Nlmvl6tot/uZ6I1najO95x/ZluFbPRZSyiuDAHIQAFgZgxBE7XwdS2i3Tkd7sd2JkRU2
-         CeJaxWjHBUh3HZOzq2nkNzLtck4J5SxTsnl/RYG6rjv9mPJLsPBmHn1mvy9lUp0Qkejx
-         xCqopxG0gIpuTkNHW5YGI0lICG+pt/d2kaAocAAc1GDtaCG6hJFu+aB1xWFkR85n+xNV
-         xNs4AByVWFura15wNCh2pjTWQ4srLdAfv9KFhcjHfMgT9QDcVyAQBhOWCTcVLDy0Vn0k
-         1DYw==
-X-Gm-Message-State: AOJu0Yzxz6KnufEnRJnFLCim44M6YaZNQvD4NECnU3nhbw3ocldk/79j
-        eumFA56m8Nv2rgJibhqv/PM=
-X-Google-Smtp-Source: AGHT+IFbTKv1w6p0/+A5JTx82UybC+0oJ7K12y3+bx6yQvYDtzUEGH7puVOtPVweviTp68q8AP2PlQ==
-X-Received: by 2002:a05:6e02:1062:b0:34c:cf1f:2a27 with SMTP id q2-20020a056e02106200b0034ccf1f2a27mr4042401ilj.0.1693602559809;
-        Fri, 01 Sep 2023 14:09:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f11-20020a056638118b00b0042bb2448847sm1257257jas.53.2023.09.01.14.09.18
+        d=1e100.net; s=20221208; t=1693611745; x=1694216545;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B9XoCDC9hhqnTfSWxv39xNaYsVGjr9sqIdwDF3cygwY=;
+        b=WsBaT+j4sHZVJbscshlzv2r5D3d7QF+cC09kfVCQEW4h8vNE1sXx/SpTe2zD+g/80O
+         UDNpEz26w/TQhJxEEVg1SLASvhtieKH2OvKZD63E11G0ZkzAaQtjV92Zig+V/uvL3vYu
+         YCIUFQaM7u8Fb16sCqpMFQlVx9hRCvf8z7BhYO6dYMAHy2S8ivwKQnHAnj1WOMMmBEHh
+         BeAqjoFZgyY9Qp+GygJZ7FR3YE3PACndyN75txzcvyzkqOZ4LO0plGsLAB/bhfDXec9e
+         MWI/ngZuvRzXT/R1CZBAvCn4WCC3/qmh6I+NAqNPYnnP+Yw9wu0AwNtaK+xeVKvBlZSh
+         9FyQ==
+X-Gm-Message-State: AOJu0YzMeQdfY2Wp4FyuqRETTlQQJ7pKfsFDuxYRifmHuYuHnvZi80Mu
+        VLZONvvFfZa5hgF0bD2TdA63wg==
+X-Google-Smtp-Source: AGHT+IF3gOcPwfPrD/s0fytOUG/vRSOI4D+jnCuIcvxglrqeHeLMaTT6rOOv/A4qBfa/r+8zKOWj4g==
+X-Received: by 2002:a05:6a00:1916:b0:68b:fb93:5b4e with SMTP id y22-20020a056a00191600b0068bfb935b4emr4542619pfi.26.1693611745505;
+        Fri, 01 Sep 2023 16:42:25 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:8d94:1fc5:803c:41cc])
+        by smtp.gmail.com with ESMTPSA id o9-20020a639a09000000b0056c3a4a3ca5sm3326390pge.36.2023.09.01.16.42.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 14:09:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 1 Sep 2023 14:09:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nikolay Borisov <nik.borisov@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>, semenzato@google.com
-Subject: Re: [patch 17/17] x86/fpu: Move FPU initialization into
- arch_cpu_finalize_init()
-Message-ID: <e0399977-5978-42cd-82cb-67b81f285498@roeck-us.net>
-References: <20230613223827.532680283@linutronix.de>
- <20230613224545.902376621@linutronix.de>
- <ba1b11e5-b3f0-457b-8920-d57d470626c3@roeck-us.net>
- <6a09294e-2c07-585b-336b-20d07e7e08ba@suse.com>
+        Fri, 01 Sep 2023 16:42:24 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Bokun.Zhang@amd.com, Hawking.Zhang@amd.com, James.Zhu@amd.com,
+        Sascha Hauer <s.hauer@pengutronix.de>, Victor.Zhao@amd.com,
+        Xinhui.Pan@amd.com, YiPeng.Chai@amd.com, abrodkin@synopsys.com,
+        airlied@gmail.com, alexander.deucher@amd.com,
+        alim.akhtar@samsung.com, amd-gfx@lists.freedesktop.org,
+        angelogioacchino.delregno@collabora.com,
+        anitha.chrisanthus@intel.com, biju.das.jz@bp.renesas.com,
+        bskeggs@redhat.com, christian.koenig@amd.com,
+        chunkuang.hu@kernel.org, daniel@ffwll.ch, edmund.j.dea@intel.com,
+        festevam@gmail.com, geert+renesas@glider.be, inki.dae@samsung.com,
+        jonathanh@nvidia.com, kernel@pengutronix.de, kherbst@redhat.com,
+        kieran.bingham+renesas@ideasonboard.com,
+        krzysztof.kozlowski@linaro.org, kyungmin.park@samsung.com,
+        l.stach@pengutronix.de, laurent.pinchart@ideasonboard.com,
+        laurentiu.palcu@oss.nxp.com, le.ma@amd.com, lijo.lazar@amd.com,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux@armlinux.org.uk, liviu.dudau@arm.com, lyude@redhat.com,
+        maarten.lankhorst@linux.intel.com, mario.limonciello@amd.com,
+        matthias.bgg@gmail.com, mdaenzer@redhat.com, mperttunen@nvidia.com,
+        nouveau@lists.freedesktop.org, orsonzhai@gmail.com,
+        p.zabel@pengutronix.de, patrik.r.jakobsson@gmail.com,
+        paul@crapouillou.net, rfoss@kernel.org, robh@kernel.org,
+        sam@ravnborg.org, shawnguo@kernel.org, shiwu.zhang@amd.com,
+        srinivasan.shanmugam@amd.com, steven.price@arm.com,
+        sw0312.kim@samsung.com, thierry.reding@gmail.com,
+        tzimmermann@suse.de, zhang.lyra@gmail.com
+Subject: [RFT PATCH 00/15] drm: non-drm-misc drivers call drm_atomic_helper_shutdown() at the right times
+Date:   Fri,  1 Sep 2023 16:41:11 -0700
+Message-ID: <20230901234202.566951-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6a09294e-2c07-585b-336b-20d07e7e08ba@suse.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,47 +94,139 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 01, 2023 at 09:02:19PM +0300, Nikolay Borisov wrote:
-> 
-> 
-> On 1.09.23 г. 20:30 ч., Guenter Roeck wrote:
-> > Hi,
-> > 
-> > On Wed, Jun 14, 2023 at 01:39:46AM +0200, Thomas Gleixner wrote:
-> > > Initializing the FPU during the early boot process is a pointless
-> > > exercise. Early boot is convoluted and fragile enough.
-> > > 
-> > > Nothing requires that the FPU is set up early. It has to be initialized
-> > > before fork_init() because the task_struct size depends on the FPU register
-> > > buffer size.
-> > > 
-> > > Move the initialization to arch_cpu_finalize_init() which is the perfect
-> > > place to do so.
-> > > 
-> > > No functional change.
-> > > 
-> > > This allows to remove quite some of the custom early command line parsing,
-> > > but that's subject to the next installment.
-> > > 
-> > > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> > 
-> > The backport of this patch into chromeos-5.10 and chromeos-5.15 via stable
-> > relase merges is causing various Chromebooks (not all of them) to crash
-> > early during boot. Subsequent fixes have not addressed the problem for us,
-> > so we already reverted the patch from chromeos-5.15 and will revert it
-> > from chromeos-5.10 as well.
-> > 
-> > I don't know if this is a Chromebook specific problem, or if it affects
-> > mainline, so this is just a heads-up in case others experience similar
-> > problems.
-> 
-> 
-> Another thing - if you choose to revert the arch_finalize patch then bear in
-> mind that the GDS' 'force' option is rendered inoperable as the FPU can't be
-> disabled due to the way things are sequenced.
 
-I understand, but that is still better than not being able to boot
-in the first place.
+NOTE: in order to avoid email sending limits on the cover letter, I've
+split this patch series in two. Patches that target drm-misc and ones
+that don't. The cover letter of the two is identical other than this note.
 
-Thanks,
-Guenter
+This patch series came about after a _long_ discussion between me and
+Maxime Ripard in response to a different patch I sent out [1]. As part
+of that discussion, we realized that it would be good if DRM drivers
+consistently called drm_atomic_helper_shutdown() properly at shutdown
+and driver remove time as it's documented that they should do. The
+eventual goal of this would be to enable removing some hacky code from
+panel drivers where they had to hook into shutdown themselves because
+the DRM driver wasn't calling them.
+
+It turns out that quite a lot of drivers seemed to be missing
+drm_atomic_helper_shutdown() in one or both places that it was
+supposed to be. This patch series attempts to fix all the drivers that
+I was able to identify.
+
+NOTE: fixing this wasn't exactly cookie cutter. Each driver has its
+own unique way of setting itself up and tearing itself down. Some
+drivers also use the component model, which adds extra fun. I've made
+my best guess at solving this and I've run a bunch of compile tests
+(specifically, allmodconfig for amd64, arm64, and powerpc). That being
+said, these code changes are not totally trivial and I've done zero
+real testing on them. Making these patches was also a little mind
+numbing and I'm certain my eyes glazed over at several points when
+writing them. What I'm trying to say is to please double-check that I
+didn't do anything too silly, like cast your driver's drvdata to the
+wrong type. Even better, test these patches!
+
+I've organized this series like this:
+1. One patch for all simple cases of just needing a call at shutdown
+   time for drivers that go through drm-misc.
+2. A separate patch for "drm/vc4", even though it goes through
+   drm-misc, since I wanted to leave an extra note for that one.
+3. Patches for drivers that just needed a call at shutdown time for
+   drivers that _don't_ go through drm-misc.
+4. Patches for the few drivers that had the call at shutdown time but
+   lacked it at remove time.
+5. One patch for all simple cases of needing a call at shutdown and
+   remove (or unbind) time for drivers that go through drm-misc.
+6. A separate patch for "drm/hisilicon/kirin", even though it goes
+   through drm-misc, since I wanted to leave an extra note for that
+   one.
+7. Patches for drivers that needed a call at shutdown and remove (or
+   unbind) time for drivers that _don't_ go through drm-misc.
+
+I've labeled this patch series as RFT (request for testing) to help
+call attention to the fact that I didn't personally test any of these
+patches.
+
+If you're a maintainer of one of these drivers and you think that the
+patch for your driver looks fabulous, you've tested it, and you'd like
+to land it right away then please do. For non-drm-misc drivers there
+are no dependencies here. Some of the drm-misc drivers depend on the
+first patch, AKA ("drm/atomic-helper: drm_atomic_helper_shutdown(NULL)
+should be a noop"). I've tried to call this out but it also should be
+obvious once you know to look for it.
+
+I'd like to call out a few drivers that I _didn't_ fix in this series
+and why. If any of these drivers should be fixed then please yell.
+- DRM driers backed by usb_driver (like gud, gm12u320, udl): I didn't
+  add the call to drm_atomic_helper_shutdown() at shutdown time
+  because there's no ".shutdown" callback for them USB drivers. Given
+  that USB is hotpluggable, I'm assuming that they are robust against
+  this and the special shutdown callback isn't needed.
+- ofdrm and simpledrm: These didn't have drm_atomic_helper_shutdown()
+  in either shutdown or remove, but I didn't add it. I think that's OK
+  since they're sorta special and not really directly controlling
+  hardware power sequencing.
+- virtio, vkms, vmwgfx, xen: I believe these are all virtual (thus
+  they wouldn't directly drive a panel) and adding the shutdown
+  didn't look straightforward, so I skipped them.
+
+I've let each patch in the series get CCed straight from
+get_maintainer. That means not everyone will have received every patch
+but everyone should be on the cover letter. I know some people dislike
+this but when touching this many drivers there's not much
+choice. dri-devel and lkml have been CCed and lore/lei exist, so
+hopefully that's enough for folks. I'm happy to add people to the
+whole series for future posts.
+
+[1] https://lore.kernel.org/lkml/20230804140605.RFC.4.I930069a32baab6faf46d6b234f89613b5cec0f14@changeid
+
+
+Douglas Anderson (15):
+  drm/armada: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/imx/dcss: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/ingenic: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/kmb: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/mediatek: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/nouveau: Call drm_atomic_helper_shutdown() or equiv at shutdown
+    time
+  drm/tegra: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/arcpgu: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/amdgpu: Call drm_atomic_helper_shutdown() at shutdown time
+  drm/sprd: Call drm_atomic_helper_shutdown() at remove time
+  drm/exynos: Call drm_atomic_helper_shutdown() at shutdown/unbind time
+  drm/gma500: Call drm_helper_force_disable_all() at shutdown/remove
+    time
+  drm/imx/ipuv3: Call drm_atomic_helper_shutdown() at shutdown/unbind
+    time
+  drm/radeon: Call drm_helper_force_disable_all() at shutdown/remove
+    time
+  drm/renesas/shmobile: Call drm_helper_force_disable_all() at
+    shutdown/remove time
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h           |  1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    | 10 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  2 +
+ drivers/gpu/drm/armada/armada_drv.c           |  8 +++
+ drivers/gpu/drm/exynos/exynos_drm_drv.c       | 11 ++++
+ drivers/gpu/drm/gma500/psb_drv.c              |  8 +++
+ drivers/gpu/drm/imx/dcss/dcss-drv.c           |  8 +++
+ drivers/gpu/drm/imx/dcss/dcss-kms.c           |  7 ++
+ drivers/gpu/drm/imx/dcss/dcss-kms.h           |  1 +
+ drivers/gpu/drm/imx/ipuv3/imx-drm-core.c      | 11 ++++
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     | 66 ++++++++++++-------
+ drivers/gpu/drm/kmb/kmb_drv.c                 |  6 ++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  9 +++
+ drivers/gpu/drm/nouveau/nouveau_display.c     |  9 +++
+ drivers/gpu/drm/nouveau/nouveau_display.h     |  1 +
+ drivers/gpu/drm/nouveau/nouveau_drm.c         | 13 ++++
+ drivers/gpu/drm/nouveau/nouveau_drv.h         |  1 +
+ drivers/gpu/drm/nouveau/nouveau_platform.c    |  6 ++
+ drivers/gpu/drm/radeon/radeon_drv.c           |  7 +-
+ .../gpu/drm/renesas/shmobile/shmob_drm_drv.c  | 10 +++
+ drivers/gpu/drm/sprd/sprd_drm.c               |  4 +-
+ drivers/gpu/drm/tegra/drm.c                   |  6 ++
+ drivers/gpu/drm/tiny/arcpgu.c                 |  6 ++
+ 23 files changed, 187 insertions(+), 24 deletions(-)
+
+-- 
+2.42.0.283.g2d96d420d3-goog
+
