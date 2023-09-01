@@ -2,75 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B71478F77E
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Sep 2023 05:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E9F78F862
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Sep 2023 08:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348236AbjIADqA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 31 Aug 2023 23:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        id S1344259AbjIAGKW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Sep 2023 02:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjIADp6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Aug 2023 23:45:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FE8CF;
-        Thu, 31 Aug 2023 20:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693539955; x=1725075955;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dQBtg8NKz/pLl187/eYnyafMQC+Yh2bQyqEr25y1Bps=;
-  b=YohkZfL/VAzFFK4DnQgPAOhLhLKGcEGkSsltUkZoqX6ps4L1oo/n/OlH
-   MfU1vWVDkc0DzwD3vOh3SlOYlvK/2rP0qrvyilkweAPDQoy+b+0mv6FgB
-   UVIZsqaYLSL1NdxJKKacODvufJN3BAQWTSKAmNJApvdsD4wgqwa+GRQ1n
-   Rg0iCPE6y/XwoO6pykO0wSVTZ8tmHr+LM0f4Iz8sJ4PiGOe22oqAFaYZR
-   QkQhUiDLoKkz+5m2TWByGmqko6ngu+2JYHyosMjHmRvgxuElgoo7bDGoU
-   7srBZZJchfebDtsUE0PMpRYTUonR/OBSN65g3XjwOV8ZjqFb7QW/I9rrf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="356441896"
-X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
-   d="scan'208";a="356441896"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 20:45:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="742962743"
-X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
-   d="scan'208";a="742962743"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.2.44]) ([10.93.2.44])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 20:45:45 -0700
-Message-ID: <f7aaf097-6f83-0ee9-e16d-713d392b2299@linux.intel.com>
-Date:   Fri, 1 Sep 2023 11:45:43 +0800
+        with ESMTP id S229600AbjIAGKV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Sep 2023 02:10:21 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2042.outbound.protection.outlook.com [40.107.9.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1D810D2;
+        Thu, 31 Aug 2023 23:10:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RsutbdhqAqPXvBKHme9Kzc1C3lAP9fFwqDfgF0Rx2RQFr2hYe8j8qnz96Cp69ay653gKRWN2ywqdafpABWy6kOeg0m9mLQtNem8wUC/f+VW2vRFloTMamlU8H7+mGx8dNLoJXG08u1oMlS1/4h4eC1zgcvb7wM2iT2Zfb7EBdsypeZKIs1giZN8m8X6CW0fHKMKY9tAYLmCYLSdfdiujt5GgMNyv6oXZ/iuDU2O4UNye1ocrbboErYfik5EWmBjU84Sr+gv+W2I8wo/Wp1lczl4dLcKhHwfZT6YcId9M6V72/7IKWy9qIwUlEWnGWFh8faL5OPqHxky/TztpFBAnYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gGAOTg9XkM2qqXMs0Yvs704UqiZscQjve96eCpENyOg=;
+ b=bNiP/Zs4ZjBnaKWEFUcsja45dnVWhRCFjXunCva0pXKKLHM+hQpmdjjDI1BzgYfmIc43RQp5r7cCU63Yi7X/UiF50kQiZOoO5tMmSf4N9m08vYEKDgaFYGezjwT/OgR4XlTNID8ugTA9KiPRPf9atJ1LQhSYUJARAbZlUeyW4UoQmQKWEZpXiJnDriPlnxWVW+lEQEA23OPxjkPk/ryOYnDyIn8FxTXQFFtLXp8MXB1o2njr/lveU5UOjW9iIVuIVPSWZd/LIzWG5/Hp8KX3BimXV00wFwJPTat8s3jEo7nKYX5zvsEEmfMtp2xdbej3YT8VQmMy/BQ8iwEo4EJCSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gGAOTg9XkM2qqXMs0Yvs704UqiZscQjve96eCpENyOg=;
+ b=FER85wb4BZBVf+jKS7hdk1csU1ZmR2tHL14FS0fJnWXyZZ3UI/bbxajmmi3+Cydm+2UpoeS0qzmrQPiL9QZkNrAiHhqDPrfn6EozJmkrKKpE2gSHcfH9/sFnSzDpU8Efepu3Cnmvo1EJwp6Hvnj251iizQ0ChCOkgtLLidGSoK1ORHPZfK8QHTPWf4dRPN4dXanwLBXpvWCGyjoMxi51o6Ptj2LfrF6KKQkdBKfXRQ/2neuJe00g+ZkaRgObXM5bCqDRmZkL+Q1cqtv5Ng2ZxqmL9GIDJYWOF6eqkuOITo3KEYzMckJULij4CIXOVEe5YiKAA2gC15CfCJL5BPccsw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB1542.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:b::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.25; Fri, 1 Sep 2023 06:10:08 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2820:d3a6:1cdf:c60e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2820:d3a6:1cdf:c60e%7]) with mapi id 15.20.6745.023; Fri, 1 Sep 2023
+ 06:10:08 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Yuan Tan <tanyuan@tinylab.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>
+CC:     "linux@weissschuh.net" <linux@weissschuh.net>,
+        "w@1wt.eu" <w@1wt.eu>, "falcon@tinylab.org" <falcon@tinylab.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2 3/3] kconfig: add dependencies of POWER_RESET for
+ PowerMac
+Thread-Topic: [PATCH v2 3/3] kconfig: add dependencies of POWER_RESET for
+ PowerMac
+Thread-Index: AQHZ3H4dkvaFC4VYs0uyiJcAQaQm/LAFfOsA
+Date:   Fri, 1 Sep 2023 06:10:08 +0000
+Message-ID: <420a82eb-f6ed-7daf-6ca9-f14de7078b0d@csgroup.eu>
+References: <cover.1693535514.git.tanyuan@tinylab.org>
+ <60cbfd566777a6d6e3664d7f29fa91424716c873.1693535514.git.tanyuan@tinylab.org>
+In-Reply-To: <60cbfd566777a6d6e3664d7f29fa91424716c873.1693535514.git.tanyuan@tinylab.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB1542:EE_
+x-ms-office365-filtering-correlation-id: 3f45349a-83db-4bf6-86ee-08dbaab217c9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q/8opar7l7UkP56nNUbGn3hfvdf6lxHF+FHqIugHFBa9ChbAzV9pLbLey5V3UAcZwqvDYV3Qw0srqLeFrvnmXuYmknxV2clJgbk2ufnVNAmkslNcVBAIDJnY/rvOJ3uRtq0TjUTNd+CoYEUtrxCU9W6o6mG3LCc4mFGEJ5ZM1Ogm4zr3AMVOpXGxE11es0zXNV/WlorWufGfer0gzqcJVQN8CunOdWUiMe6U9+5mnvQw4SNFMEy8MMc+q5A7tGiKHw2fY65R3DigPpo5huv1TYPZzgzEBajqWljUIJ/57Gc98Uu4gPdcFgdW3yeLyQAipF2ZhqN5FB5Yl7sHZesscOr01PpiwYsqYjhfrSStIFZ+ipGy220PcnsHevtomlKq0zp6/8aPZTydE9FyF9RnmBDv85ceVkkCmuxNgKT1/T9HqoUrzwliaIiZslAvwsQCgoeX7NLzz0zkInBxzz85f4/hImagIPzuLLcBqw20VaPLtLXwe/9KQ8ufS7uAHIB/MR0h1LTgBW2KFNnDS0EZAm5KLFLY1CtFNGuIfL4hGTtXsTdWdBG+8VNuTLzJvKLUiqZSZmk2aivuRWn015l5QiowdM+d4H67ZzCJ+goJajyBxXC22RAk+YI0JR4nnlPEEEW8Mf5QKchDuEqzu72cKWs7IGa7Q6FkoEWle/rzPzrNEgf7bmiz2MlnVVymsKBe
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(396003)(366004)(376002)(346002)(136003)(1800799009)(186009)(451199024)(4744005)(7416002)(2906002)(316002)(41300700001)(5660300002)(44832011)(8676002)(4326008)(8936002)(36756003)(31696002)(86362001)(31686004)(71200400001)(122000001)(478600001)(2616005)(26005)(6506007)(6486002)(6512007)(76116006)(66946007)(38070700005)(38100700002)(66556008)(91956017)(110136005)(66446008)(64756008)(54906003)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z1diaXpYODROQ01rVk1ZQXprazVtTzVyTkVFUHQ1V2NmOTlkbFpKZ3lUQlBD?=
+ =?utf-8?B?MDBlRG9LMDNObUc5cjB4VFdzcHdnczRhbW03ZlFwYWtvRkkrMEtpQnE4RUdr?=
+ =?utf-8?B?TjJMZzNqWmQyb09NTjU5dktWQ21xQ2hoTzJiN21NVEF5QllSNkFJd3QxOUVF?=
+ =?utf-8?B?R2MwSko0cmpyZ3FsYmFXVkt1WUpXR2VqeEREeHhqeVlTSUFPeWFtWGIrNTJ4?=
+ =?utf-8?B?eEMvNVZMbUhWdDZVNEdVMytHMG1lNUpYQzZVWThMUUZuSWQvdU9DVVBCVmRN?=
+ =?utf-8?B?TVhXOXBQelI5ajZkSGZnQy9NUTFkRnZubzUxTXZOL2xqc0tUSmV6R1drSGp1?=
+ =?utf-8?B?ZWpxL1l4RVZ3bzFQREdRREtQbWNpTUxLQSs4ZWJIL0t5RDgrbjh6SzR5MUhS?=
+ =?utf-8?B?ZHRiOURNVVhIaVZrbHpNVWtIdWpmeDNJeUFjQXlhVUNIR3dpaTdvTkEyVlRu?=
+ =?utf-8?B?K2R3VWVUdUNnYmYxZEJkL09JVUd2Q3FZOTJEekg5elNVbkd1eGhPK1oxZVkx?=
+ =?utf-8?B?aFNScnJ4dzY5M2MraC8zSGwxNFdEUlpndEZhMTM3aENadWp2dTBKMHg4U09k?=
+ =?utf-8?B?Sno4WlhZVlJwZFpHMmpTckFEUzBibGVHbmxCYzN5ZURYakhMS1N1a3pFTTZX?=
+ =?utf-8?B?bmY4eGE5ZE90NUo5bHI0RkhaeHZUTHZXTm5uRC9aVnZCRW8vUWYvVjVzYWdk?=
+ =?utf-8?B?c0N1M1NGeGlKUDloaVNXVXBOWnMwbUlQSHh6TkQwblJaTmg5MGJUUEcxNU1U?=
+ =?utf-8?B?ajVKV0xKdmV6T2RQbzUxakpQT0FjU21DYU5mSnk3TzBjOW84YXpheXRuVGlK?=
+ =?utf-8?B?RlFabXN4UEpCTU5wZUROYVlsVjRSS2lyNllFcTJFSVVSd05KbHRlU1NMQjZU?=
+ =?utf-8?B?TUYrNmUwK3hJK3JhbHVnUSs5dnFrRVFlL3FnUXhkdkswRTYxbkhvM2lyVDNY?=
+ =?utf-8?B?SHRLckM0eCtkY2pHcUJxZzNaMWJ3UndpeFF3NVk3QjhGR2JWUUJ0TUIyWkFk?=
+ =?utf-8?B?OElKd3VZTnV3WXpmcUppb25LRW1nWFRnZTI3QjlwYjc1MFVXd0hlcmxlemht?=
+ =?utf-8?B?QTRJRUV1UE41VTErK3pyTm1vOGhUQUdJR0V5bkJlb2ZmT2drcHViOHZBVzJT?=
+ =?utf-8?B?Y1N6dUJJWDYzTHkwaXhBVitGWEUvOEptd3A5RWE4RU15VFY0Sm1qVWxNODZM?=
+ =?utf-8?B?aFFhdVk0eE1aWFU0dWw4emdOTlRZc1UxbC9JOFgwL3IxTm5QMTd1QzdNVllJ?=
+ =?utf-8?B?aUpUY2E2S1dZSVhFbzJhM2o2S1BHTG1FbnZscWJvSnZHcnNBLzR2NTk0QmJp?=
+ =?utf-8?B?MVNXVkY3NVY4RXAxNmdSS2E2VVNFYnR3RHMzWkpYQzVLWGxFZXRTYjJyQlVN?=
+ =?utf-8?B?QTV3YU1td0wyemY4dWJPVG52aW9xenZ6TThGWE5wMDRrYzVnRmI3Z1dmZU9X?=
+ =?utf-8?B?dnNxTms0OHBJeW5WMHVEcitybG5sQ2M0TlBSVUw1UU56NnFTZnJManRYVGht?=
+ =?utf-8?B?RXdSaGptaGxhSXVPejFLZEZLeUR2V1RLN094eFdpNXcwN284cmRlR1dEV2hz?=
+ =?utf-8?B?QmRFaEJpRFpkajdsYXdCWGlGTTJuZ00vZmJ1ZFdkTTRSOU5VUVRVVWY2UXg3?=
+ =?utf-8?B?TmY4aHJJL0g1Z1RGenNSUzNvYUhFSXp5cm1XTU1ZVmt2elQwOGJMZkZUdzRE?=
+ =?utf-8?B?SFVaMkRtUkU1V2RDT2hIdjJLc0dNa0pMVmNyMldnb0lYT21WVnZJZC9JdzE1?=
+ =?utf-8?B?UzEzUm9OK1FBc2c1d3lqM0czQ21NOTlvczl3d3pTajdzaDFYcklZVFUwWUta?=
+ =?utf-8?B?L0JlZ0ZQc1hMRXJ3NGxkTDBPTVNVc3NpRXVxSlp0d1R4VXM5aWJvY2xNUjBO?=
+ =?utf-8?B?Ujlqb0tHM2JLcDZpVDJ0clYzQjBRcDFZS0pQUjE2SVVxcFBtL05sajhDMExN?=
+ =?utf-8?B?bjJvN3NhL0pYSFFlQkJEdTlvT0RmcTc0bEdOT2FHRXFNTDEycWFEYVFHcytl?=
+ =?utf-8?B?TGVVRzMyZXpSYVQ1Q1ZRYURtbmZEMWlGUUJ5K2IrU21EcVVtbVVLR1c0Mzhn?=
+ =?utf-8?B?bFJ2UGpZc3h6ZXYwMm5KUEtpczhPOUlDd3hTT2dIY1o2QlVwa2VUemhCTnpl?=
+ =?utf-8?B?TzE3Vk1YUThrWlZpVkJoanFYd3NDY1h4eWZxUWVIbUtoNEpZclVWWm5nZ0pw?=
+ =?utf-8?B?QkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <795045BEA484DF4797968B1F2CE0A07A@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     seanjc@google.com, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
-        oliver.upton@linux.dev, chenhuacai@kernel.org, mpe@ellerman.id.au,
-        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, willy@infradead.org,
-        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, chao.p.peng@linux.intel.com, tabba@google.com,
-        jarkko@kernel.org, yu.c.zhang@linux.intel.com,
-        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        david@redhat.com, qperret@google.com, michael.roth@amd.com,
-        wei.w.wang@intel.com, liam.merwick@oracle.com,
-        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
-References: <diqz5y4wfpj0.fsf@ackerleytng-ctop.c.googlers.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <diqz5y4wfpj0.fsf@ackerleytng-ctop.c.googlers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f45349a-83db-4bf6-86ee-08dbaab217c9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2023 06:10:08.2551
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Wgo+H8q/k8sd0sksrjcj7IwcyEopY0znFeQ2/h+hFWiXxPZD20tU42KxCoz5yOE8GgwlP1wKsW2rTfqRayPOyTeqc+wyYA0B+PPRGpClPns=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1542
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,115 +139,20 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 8/31/2023 12:44 AM, Ackerley Tng wrote:
-> Binbin Wu <binbin.wu@linux.intel.com> writes:
->
->>> <snip>
->>>
->>> +static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
->>> +{
->>> +	struct address_space *mapping = inode->i_mapping;
->>> +	pgoff_t start, index, end;
->>> +	int r;
->>> +
->>> +	/* Dedicated guest is immutable by default. */
->>> +	if (offset + len > i_size_read(inode))
->>> +		return -EINVAL;
->>> +
->>> +	filemap_invalidate_lock_shared(mapping);
->>> +
->>> +	start = offset >> PAGE_SHIFT;
->>> +	end = (offset + len) >> PAGE_SHIFT;
->>> +
->>> +	r = 0;
->>> +	for (index = start; index < end; ) {
->>> +		struct folio *folio;
->>> +
->>> +		if (signal_pending(current)) {
->>> +			r = -EINTR;
->>> +			break;
->>> +		}
->>> +
->>> +		folio = kvm_gmem_get_folio(inode, index);
->>> +		if (!folio) {
->>> +			r = -ENOMEM;
->>> +			break;
->>> +		}
->>> +
->>> +		index = folio_next_index(folio);
->>> +
->>> +		folio_unlock(folio);
->>> +		folio_put(folio);
->> May be a dumb question, why we get the folio and then put it immediately?
->> Will it make the folio be released back to the page allocator?
->>
-> I was wondering this too, but it is correct.
->
-> In filemap_grab_folio(), the refcount is incremented in three places:
->
-> + When the folio is created in filemap_alloc_folio(), it is given a
->    refcount of 1 in
->
->      filemap_alloc_folio() -> folio_alloc() -> __folio_alloc_node() ->
->      __folio_alloc() -> __alloc_pages() -> get_page_from_freelist() ->
->      prep_new_page() -> post_alloc_hook() -> set_page_refcounted()
->
-> + Then, in filemap_add_folio(), the refcount is incremented twice:
->
->      + The first is from the filemap (1 refcount per page if this is a
->        hugepage):
->
->          filemap_add_folio() -> __filemap_add_folio() -> folio_ref_add()
->
->      + The second is a refcount from the lru list
->
->          filemap_add_folio() -> folio_add_lru() -> folio_get() ->
->          folio_ref_inc()
->
-> In the other path, if the folio exists in the page cache (filemap), the
-> refcount is also incremented through
->
->      filemap_grab_folio() -> __filemap_get_folio() -> filemap_get_entry()
->      -> folio_try_get_rcu()
->
-> I believe all the branches in kvm_gmem_get_folio() are taking a refcount
-> on the folio while the kernel does some work on the folio like clearing
-> the folio in clear_highpage() or getting the next index, and then when
-> done, the kernel does folio_put().
->
-> This pattern is also used in shmem and hugetlb. :)
-
-Thanks for your explanation. It helps a lot.
-
->
-> I'm not sure whose refcount the folio_put() in kvm_gmem_allocate() is
-> dropping though:
->
-> + The refcount for the filemap depends on whether this is a hugepage or
->    not, but folio_put() strictly drops a refcount of 1.
-> + The refcount for the lru list is just 1, but doesn't the page still
->    remain in the lru list?
-
-I guess the refcount drop here is the one get on the fresh allocation.
-Now the filemap has grabbed the folio, so the lifecycle of the folio now 
-is decided by the filemap/inode?
-
->
->>> +
->>> +		/* 64-bit only, wrapping the index should be impossible. */
->>> +		if (WARN_ON_ONCE(!index))
->>> +			break;
->>> +
->>> +		cond_resched();
->>> +	}
->>> +
->>> +	filemap_invalidate_unlock_shared(mapping);
->>> +
->>> +	return r;
->>> +}
->>> +
->>>
->>> <snip>
-
+DQoNCkxlIDAxLzA5LzIwMjMgw6AgMDQ6NDMsIFl1YW4gVGFuIGEgw6ljcml0wqA6DQo+IFBvd2Vy
+TWFjJ3MgcG93ZXIgb2ZmIGRlcGVuZHMgb24gQURCX0NVREEgdG8gd29yay4gRW5hYmxlIGl0IHdo
+ZW4NCj4gUE9XRVJfUkVTRVQgaXMgc2V0IGZvciBjb252ZW5pZW5jZS4NCj4gDQo+IFN1Z2dlc3Rl
+ZC1ieTogWmhhbmdqaW4gV3UgPGZhbGNvbkB0aW55bGFiLm9yZz4NCj4gU2lnbmVkLW9mZi1ieTog
+WXVhbiBUYW4gPHRhbnl1YW5AdGlueWxhYi5vcmc+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9w
+bGF0Zm9ybXMvcG93ZXJtYWMvS2NvbmZpZyB8IDEgKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
+c2VydGlvbigrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93
+ZXJtYWMvS2NvbmZpZyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJtYWMvS2NvbmZpZw0K
+PiBpbmRleCAxMzA3MDdlYzlmOTkuLjllNjMzZDdlODM2NyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9w
+b3dlcnBjL3BsYXRmb3Jtcy9wb3dlcm1hYy9LY29uZmlnDQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9w
+bGF0Zm9ybXMvcG93ZXJtYWMvS2NvbmZpZw0KPiBAQCAtMiw2ICsyLDcgQEANCj4gICBjb25maWcg
+UFBDX1BNQUMNCj4gICAJYm9vbCAiQXBwbGUgUG93ZXJNYWMgYmFzZWQgbWFjaGluZXMiDQo+ICAg
+CWRlcGVuZHMgb24gUFBDX0JPT0szUyAmJiBDUFVfQklHX0VORElBTg0KPiArCXNlbGVjdCBBREJf
+Q1VEQSBpZiBQT1dFUl9SRVNFVA0KDQpBREJfQ1VEQSBkZXBlbmRzIG9uICFQUENfUE1BQzY0Lg0K
+DQpXaGF0IHdpbGwgaGFwcGVuIGlmIFBQQ19QTUFDNjQgaXMgc2VsZWN0ZWQgPw0KDQo+ICAgCXNl
+bGVjdCBNUElDDQo+ICAgCXNlbGVjdCBGT1JDRV9QQ0kNCj4gICAJc2VsZWN0IFBQQ19JTkRJUkVD
+VF9QQ0kgaWYgUFBDMzINCg==
