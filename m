@@ -2,65 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC0479043A
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Sep 2023 01:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D76790598
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Sep 2023 08:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351279AbjIAXnw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Sep 2023 19:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S1351658AbjIBGdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 Sep 2023 02:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351284AbjIAXnu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Sep 2023 19:43:50 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A39F10FD
-        for <linux-mips@vger.kernel.org>; Fri,  1 Sep 2023 16:43:10 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-68a4bcf8a97so1906398b3a.1
-        for <linux-mips@vger.kernel.org>; Fri, 01 Sep 2023 16:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1693611752; x=1694216552; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1xwlQKSbvtJNXAzlNyEq/ahWjOdZU7CV+KOcQ65YIkM=;
-        b=aVlD5jjy/Qg218fKCYzNuYtJ33Gd8uiHcIPcyMsfpuzzK4rMBUaOWCF59uET3HCAUW
-         ezPyXWAnvq6OdkvwHAcdZI7xkg1xTi4tNvsoSAjgH8Wb23NjT3MV0CJMGZwvF/QiTusQ
-         SZDhlv9Dvtaq5qt5UNy2r24waWPqRX9HIt8a0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693611752; x=1694216552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1xwlQKSbvtJNXAzlNyEq/ahWjOdZU7CV+KOcQ65YIkM=;
-        b=PiyorlhhkFAkOmkSwisauJq1vD22fPVkPy+DgaytuyEOVpYqIeWOoRvAo7EHYqc/k0
-         G/rTIfzBZFVAwZjSfoudPwgHmBun5dmUlaCQFAMJ7JM7mxDiOJKRHFQykDUAjp1dvG+S
-         raH96WtL/7i3R7iTZIbfRpgHN0ZTUcbywQFAKc/S42z26Kz2fmbrgXWQZwaUSnF3irY0
-         34c8fJp3s2V4EibKg/zVStOvcus7XC3rvqI2iAnkUthuw7bqHsW8/zf/wNEHOi7q6Tat
-         zbgu7O8GYAlx2zmGKu+FwQzhBhqQxaiCnWYoyIUMYzdIgl+KXa3KCshrLE/WAByJ82aG
-         w8PA==
-X-Gm-Message-State: AOJu0Yxjj40jIuB/Nsonhpd0iLh9IUka78hYzk/M0a1GcHZ84UsQTB2a
-        byOEXwx7yXXM6VCU+DppPPSrWQ==
-X-Google-Smtp-Source: AGHT+IGfL6uqts2F3xQJXwlYG+LNTYjXpiNnutEBct9PU2CYaFs2opMUSGjfnS0VF4YFDV8NxqnnXA==
-X-Received: by 2002:a05:6a00:2d99:b0:68c:431e:6490 with SMTP id fb25-20020a056a002d9900b0068c431e6490mr4989342pfb.1.1693611751966;
-        Fri, 01 Sep 2023 16:42:31 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:8d94:1fc5:803c:41cc])
-        by smtp.gmail.com with ESMTPSA id o9-20020a639a09000000b0056c3a4a3ca5sm3326390pge.36.2023.09.01.16.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 16:42:31 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>, airlied@gmail.com,
-        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, paul@crapouillou.net
-Subject: [RFT PATCH 03/15] drm/ingenic: Call drm_atomic_helper_shutdown() at shutdown time
-Date:   Fri,  1 Sep 2023 16:41:14 -0700
-Message-ID: <20230901164111.RFT.3.Iea742f06d8bec41598aa40378fc625fbd7e8a3d6@changeid>
-X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
-In-Reply-To: <20230901234202.566951-1-dianders@chromium.org>
-References: <20230901234202.566951-1-dianders@chromium.org>
+        with ESMTP id S231330AbjIBGdX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 Sep 2023 02:33:23 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F125D10FB;
+        Fri,  1 Sep 2023 23:33:17 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.66])
+        by gateway (Coremail) with SMTP id _____8CxRugq1_JktvgdAA--.7874S3;
+        Sat, 02 Sep 2023 14:33:14 +0800 (CST)
+Received: from [10.20.42.66] (unknown [10.20.42.66])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXSMp1_Jkrn9pAA--.39724S3;
+        Sat, 02 Sep 2023 14:33:13 +0800 (CST)
+Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
+ Fix warnings about liointc-2.0
+To:     Binbin Zhou <zhoubb.aaron@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, diasyzhang@tencent.com,
+        linux-kernel@vger.kernel.org
+References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
+ <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org>
+ <CAMpQs4JhfuB4=s9VFc+xmw_+8h5u2EwPdM_0x2vO_=SYabAAxw@mail.gmail.com>
+ <6ba31912-6738-6156-d5f4-3c8d3a3ca7bc@linaro.org>
+ <CAMpQs4+GiExt9uMmV1pf8gg8rFwWxbLkx9mdW7hY9xxXDOza3Q@mail.gmail.com>
+ <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org>
+ <a084e6e9-46b0-42ef-b500-69c114ae11b2@flygoat.com>
+ <3412e871-ae2b-bed0-88fb-2272f9db3af0@linaro.org>
+ <a3e934eb-7517-f313-46d9-fd5335ce305e@flygoat.com>
+ <CAMpQs4L0DYxoqQbpi7WeNMBf9g+58L2=D6BXrKbSUqJQEEKZLQ@mail.gmail.com>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <3ed7bddd-2c86-90e0-a8bf-0b322bb92bd9@loongson.cn>
+Date:   Sat, 2 Sep 2023 14:32:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <CAMpQs4L0DYxoqQbpi7WeNMBf9g+58L2=D6BXrKbSUqJQEEKZLQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8BxXSMp1_Jkrn9pAA--.39724S3
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Aw1rXFykuw13JFWkWFyrZrc_yoW8Xw1rpr
+        WrGas0kr4DZF4vv3WxX3yFkas0qr93ArZrKrn8G34DZan8CFyjqFs8Kr1rZrn8uw4xuw42
+        qFWvk3W8G3yrCFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2-VyUU
+        UUU
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,262 +86,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Based on grepping through the source code this driver appears to be
-missing a call to drm_atomic_helper_shutdown() at system shutdown
-time. Among other things, this means that if a panel is in use that it
-won't be cleanly powered off at system shutdown time.
+Each IRQ source of liointc may be routed to different IRQ source of 
+cpuintc, for implementing this, bit mapping between liointc and cpuintc 
+is required, and the mapping information is used for liointc IRQ routing 
+register setting. It seems that interrupt-map can not pass the mapping 
+to driver in current driver/of code,  so the mapping is used in a 
+non-standard way(of cause, underscore style may be changed in dts and 
+driver).
 
-The fact that we should call drm_atomic_helper_shutdown() in the case
-of OS shutdown/restart comes straight out of the kernel doc "driver
-instance overview" in drm_drv.c.
+IMO, hardcode routing completely in driver is not flexible and not 
+recommended, and if possible, keep current map unchanged please.
 
-Since this driver uses the component model and shutdown happens at the
-base driver, we communicate whether we have to call
-drm_atomic_helper_shutdown() by seeing if drvdata is non-NULL.
+Jianmin
 
-Suggested-by: Maxime Ripard <mripard@kernel.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-This commit is only compile-time tested.
+Thanks.
 
-NOTE: this patch touches a lot more than other similar patches since
-the bind() function is long and we want to make sure that we unset the
-drvdata if bind() fails.
-
-While making this patch, I noticed that the bind() function of this
-driver is using "devm" and thus assumes it doesn't need to do much
-explicit error handling. That's actually a bug. As per kernel docs [1]
-"the lifetime of the aggregate driver does not align with any of the
-underlying struct device instances. Therefore devm cannot be used and
-all resources acquired or allocated in this callback must be
-explicitly released in the unbind callback". Fixing that is outside
-the scope of this commit.
-
-[1] https://docs.kernel.org/driver-api/component.html
-
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 66 +++++++++++++++--------
- 1 file changed, 44 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 8dbd4847d3a6..51995a0cd568 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -1130,7 +1130,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 
- 	ret = drmm_mode_config_init(drm);
- 	if (ret)
--		return ret;
-+		goto err_drvdata;
- 
- 	drm->mode_config.min_width = 0;
- 	drm->mode_config.min_height = 0;
-@@ -1142,7 +1142,8 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(base)) {
- 		dev_err(dev, "Failed to get memory resource\n");
--		return PTR_ERR(base);
-+		ret = PTR_ERR(base);
-+		goto err_drvdata;
- 	}
- 
- 	regmap_config = ingenic_drm_regmap_config;
-@@ -1151,33 +1152,40 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 					  &regmap_config);
- 	if (IS_ERR(priv->map)) {
- 		dev_err(dev, "Failed to create regmap\n");
--		return PTR_ERR(priv->map);
-+		ret = PTR_ERR(priv->map);
-+		goto err_drvdata;
- 	}
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto err_drvdata;
-+	}
- 
- 	if (soc_info->needs_dev_clk) {
- 		priv->lcd_clk = devm_clk_get(dev, "lcd");
- 		if (IS_ERR(priv->lcd_clk)) {
- 			dev_err(dev, "Failed to get lcd clock\n");
--			return PTR_ERR(priv->lcd_clk);
-+			ret = PTR_ERR(priv->lcd_clk);
-+			goto err_drvdata;
- 		}
- 	}
- 
- 	priv->pix_clk = devm_clk_get(dev, "lcd_pclk");
- 	if (IS_ERR(priv->pix_clk)) {
- 		dev_err(dev, "Failed to get pixel clock\n");
--		return PTR_ERR(priv->pix_clk);
-+		ret = PTR_ERR(priv->pix_clk);
-+		goto err_drvdata;
- 	}
- 
- 	priv->dma_hwdescs = dmam_alloc_coherent(dev,
- 						sizeof(*priv->dma_hwdescs),
- 						&priv->dma_hwdescs_phys,
- 						GFP_KERNEL);
--	if (!priv->dma_hwdescs)
--		return -ENOMEM;
-+	if (!priv->dma_hwdescs) {
-+		ret = -ENOMEM;
-+		goto err_drvdata;
-+	}
- 
- 	/* Configure DMA hwdesc for foreground0 plane */
- 	ingenic_drm_configure_hwdesc_plane(priv, 0);
-@@ -1199,7 +1207,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 				       NULL, DRM_PLANE_TYPE_PRIMARY, NULL);
- 	if (ret) {
- 		dev_err(dev, "Failed to register plane: %i\n", ret);
--		return ret;
-+		goto err_drvdata;
- 	}
- 
- 	if (soc_info->map_noncoherent)
-@@ -1211,7 +1219,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 					NULL, &ingenic_drm_crtc_funcs, NULL);
- 	if (ret) {
- 		dev_err(dev, "Failed to init CRTC: %i\n", ret);
--		return ret;
-+		goto err_drvdata;
- 	}
- 
- 	drm_crtc_enable_color_mgmt(&priv->crtc, 0, false,
-@@ -1230,7 +1238,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 		if (ret) {
- 			dev_err(dev, "Failed to register overlay plane: %i\n",
- 				ret);
--			return ret;
-+			goto err_drvdata;
- 		}
- 
- 		if (soc_info->map_noncoherent)
-@@ -1241,17 +1249,18 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 			if (ret) {
- 				if (ret != -EPROBE_DEFER)
- 					dev_err(dev, "Failed to bind components: %i\n", ret);
--				return ret;
-+				goto err_drvdata;
- 			}
- 
- 			ret = devm_add_action_or_reset(dev, ingenic_drm_unbind_all, priv);
- 			if (ret)
--				return ret;
-+				goto err_drvdata;
- 
- 			priv->ipu_plane = drm_plane_from_index(drm, 2);
- 			if (!priv->ipu_plane) {
- 				dev_err(dev, "Failed to retrieve IPU plane\n");
--				return -EINVAL;
-+				ret = -EINVAL;
-+				goto err_drvdata;
- 			}
- 		}
- 	}
-@@ -1263,7 +1272,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 				break; /* we're done */
- 			if (ret != -EPROBE_DEFER)
- 				dev_err(dev, "Failed to get bridge handle\n");
--			return ret;
-+			goto err_drvdata;
- 		}
- 
- 		if (panel)
-@@ -1275,7 +1284,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 		if (IS_ERR(ib)) {
- 			ret = PTR_ERR(ib);
- 			dev_err(dev, "Failed to init encoder: %d\n", ret);
--			return ret;
-+			goto err_drvdata;
- 		}
- 
- 		encoder = &ib->encoder;
-@@ -1290,13 +1299,14 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
- 		if (ret) {
- 			dev_err(dev, "Unable to attach bridge\n");
--			return ret;
-+			goto err_drvdata;
- 		}
- 
- 		connector = drm_bridge_connector_init(drm, encoder);
- 		if (IS_ERR(connector)) {
- 			dev_err(dev, "Unable to init connector\n");
--			return PTR_ERR(connector);
-+			ret = PTR_ERR(connector);
-+			goto err_drvdata;
- 		}
- 
- 		drm_connector_attach_encoder(connector, encoder);
-@@ -1313,13 +1323,13 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 	ret = devm_request_irq(dev, irq, ingenic_drm_irq_handler, 0, drm->driver->name, drm);
- 	if (ret) {
- 		dev_err(dev, "Unable to install IRQ handler\n");
--		return ret;
-+		goto err_drvdata;
- 	}
- 
- 	ret = drm_vblank_init(drm, 1);
- 	if (ret) {
- 		dev_err(dev, "Failed calling drm_vblank_init()\n");
--		return ret;
-+		goto err_drvdata;
- 	}
- 
- 	drm_mode_config_reset(drm);
-@@ -1327,7 +1337,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 	ret = clk_prepare_enable(priv->pix_clk);
- 	if (ret) {
- 		dev_err(dev, "Unable to start pixel clock\n");
--		return ret;
-+		goto err_drvdata;
- 	}
- 
- 	if (priv->lcd_clk) {
-@@ -1402,6 +1412,8 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 		clk_disable_unprepare(priv->lcd_clk);
- err_pixclk_disable:
- 	clk_disable_unprepare(priv->pix_clk);
-+err_drvdata:
-+	platform_set_drvdata(pdev, NULL);
- 	return ret;
- }
- 
-@@ -1422,6 +1434,7 @@ static void ingenic_drm_unbind(struct device *dev)
- 
- 	drm_dev_unregister(&priv->drm);
- 	drm_atomic_helper_shutdown(&priv->drm);
-+	dev_set_drvdata(dev, NULL);
- }
- 
- static const struct component_master_ops ingenic_master_ops = {
-@@ -1461,6 +1474,14 @@ static int ingenic_drm_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static void ingenic_drm_shutdown(struct platform_device *pdev)
-+{
-+	struct ingenic_drm *priv = platform_get_drvdata(pdev);
-+
-+	if (priv)
-+		drm_atomic_helper_shutdown(&priv->drm);
-+}
-+
- static int ingenic_drm_suspend(struct device *dev)
- {
- 	struct ingenic_drm *priv = dev_get_drvdata(dev);
-@@ -1612,6 +1633,7 @@ static struct platform_driver ingenic_drm_driver = {
- 	},
- 	.probe = ingenic_drm_probe,
- 	.remove = ingenic_drm_remove,
-+	.shutdown = ingenic_drm_shutdown,
- };
- 
- static int ingenic_drm_init(void)
--- 
-2.42.0.283.g2d96d420d3-goog
+On 2023/8/31 上午9:47, Binbin Zhou wrote:
+> cc Jianmin Lv.
+>
+> Hi all:
+>
+> Jianmin knows Loongson interrupt controllers well, he may have other
+> suggestions.
+>
+> Thanks.
+> Binbin
+>
+> On Wed, Aug 30, 2023 at 11:31 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>>
+>>
+>> 在 2023/8/30 22:35, Krzysztof Kozlowski 写道:
+>>>> What's the best way, in your opinion, to overhaul this property? As we don't
+>>>> really care backward compatibility of DTBs on those systems we can just
+>>>> redesign it.
+>>> Deprecate the property in the bindings, allow driver to work with or
+>>> without it and finally drop it entirely from DTS.
+>> I'd love to have such configuration flexibility so I'd be sad to see it go.
+>> + Huacai and Binbin, what's your opinion?
+>>
+>> If dropping such functionality in kernel is a must go, we can hardcode
+>> to route all downstream interrupt to the first pin that passed to DT.
+>>
+>> Thanks
+>> - Jiaxun
+>>> Best regards,
+>>> Krzysztof
+>>>
 
