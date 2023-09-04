@@ -2,39 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E234791C13
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Sep 2023 19:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8EB791D7A
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Sep 2023 21:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjIDRke (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Sep 2023 13:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
+        id S240285AbjIDTIy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Sep 2023 15:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjIDRke (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Sep 2023 13:40:34 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC4CAF;
-        Mon,  4 Sep 2023 10:40:26 -0700 (PDT)
-X-QQ-mid: bizesmtpipv601t1693849204tj3l
-Received: from [IPV6:2001:da8:c000:3005:b045:d ( [255.215.175.9])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 05 Sep 2023 01:40:02 +0800 (CST)
-X-QQ-SSF: 00200000000000907000000A0000000
-X-QQ-FEAT: DQ0OCu3gog332B5EbRVImgzcowyQN9LD7dD52UAWS8C7Inf9cu8kOhxm7cdHS
-        WXKoJqe+YyRmEKKYZw4GYzjLNTv98IPNpEEtuxgXBVdcV744/Js4rYxrhcT1XOOwTR8mDkr
-        nxs0jzm7vT9hk6iBsfEH8SnIcpKqlIY0ysKUFlO/O5QGfdUcL8Eyjm2COKmJsDFJsd/QO70
-        9HgobAmEohizPYZQ3AeIEjdJqDuwAXOQJh58rcTCI2oZyJu19olr6xFZfJJBKUQN4/hONS+
-        gl3gvsrDaPX7wDWcHs2O7I7cQvoaZFGlziCE8rQ4cXeTxIrHcGKzVSsAtBrW+2gW8vnBevS
-        d6+Z5SONIIPWgb4diE=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11219486753922426849
-Message-ID: <8464A5F00EFC8C59+502c989a-3814-4686-8c6f-0a8f814e1c39@tinylab.org>
-Date:   Tue, 5 Sep 2023 01:40:02 +0800
+        with ESMTP id S234366AbjIDTIy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Sep 2023 15:08:54 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2603418D
+        for <linux-mips@vger.kernel.org>; Mon,  4 Sep 2023 12:08:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-529fb04a234so2303698a12.3
+        for <linux-mips@vger.kernel.org>; Mon, 04 Sep 2023 12:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693854528; x=1694459328; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d0CIESG2SuiZV7cHhLHCsdILQZtP8suwtO95xIEc+T0=;
+        b=aeJBnmY2IGaUM+BPEGqk6yiQFw3rxMCIYWu/m0CRZhkiWB93DFKCxTicQFYAq24NOm
+         sEXyRLF4SpVq9gZFtg84FeqAQPbMVlbAcdtbqOgx141sigSr0yjVkL8arkwFjFjdKqqB
+         XH/P/rpQxGGVWqfzBBR/jYZejOZ3kua5bEt0h8wuI9lRxv5XZe4oSEwBQmY6VXo4m2r9
+         xj1DgQ6V6WE0zEovsAQpzghURg3bBSjzNFcmWvHno4nouj/MWhUsfIy7eTnHDgpAbslw
+         ttZoIfxBMXjO5c5/fZX8NSIX85qio0BcRjy8FDYNTJB3dXH/3kIUM2UC0AnNYjnBUf01
+         WvwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693854528; x=1694459328;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d0CIESG2SuiZV7cHhLHCsdILQZtP8suwtO95xIEc+T0=;
+        b=MMzTu+aOH5AcKe7RuwcuFoL9dXq2MLl+6ySLlJNnbW+FnfZftSQ9NHyhe4LftE0Wxc
+         CpNqHmYIW0x4qy9gAZsh9nN8U32ZC0OFItlgLSalO4Hhvd55ZQLeNBoJW7llNAzHF06U
+         rscnwTXy+GTEsDYNG10HuTgJ5JUMUCXCD5YxdiTyf3iPxLrtyV4425uoOL8i7SCg5Yo7
+         psr4+/4tysV3RJmtAzIFURLUmKUzvPCH/FD7tiozpSR7HZGgTaV8vpFeIt8Qu5X7rotX
+         PiA4rSCEJBnZOz6JIcaGt0uDUy4DLcUwSR+VpOQnrI4hwt4ag4bpmvTnF3fL0hVfWWN9
+         K0Fw==
+X-Gm-Message-State: AOJu0Yx6/p69mSPYmSABvQVip/ftCXr02r9LkNdIYhKAuwAxrj7cNkY9
+        Zcaywa2csDs42iiU0ODguNLhDA==
+X-Google-Smtp-Source: AGHT+IH0wh3Lx48yFyOqTEgnOEZkTX4ZndMzuwd1BqySt5vm/255sDxk6mqMYYjnwmcqT5deG8ldDw==
+X-Received: by 2002:aa7:d64a:0:b0:527:3a95:3fa4 with SMTP id v10-20020aa7d64a000000b005273a953fa4mr7912602edr.20.1693854528590;
+        Mon, 04 Sep 2023 12:08:48 -0700 (PDT)
+Received: from [192.168.69.115] ([176.187.209.227])
+        by smtp.gmail.com with ESMTPSA id j16-20020aa7ca50000000b0052a3ad836basm6153607edt.41.2023.09.04.12.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Sep 2023 12:08:47 -0700 (PDT)
+Message-ID: <2841ec8c-f07b-307e-de03-6e8a4dd88775@linaro.org>
+Date:   Mon, 4 Sep 2023 21:08:45 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.0
 Subject: Re: [PATCH v2 1/3] kconfig: add dependencies of POWER_RESET for mips
  malta
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+Content-Language: en-US
+To:     Yuan Tan <tanyuan@tinylab.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
@@ -52,103 +76,105 @@ References: <cover.1693535514.git.tanyuan@tinylab.org>
  <55C9BDEDAB4E0B76+838dbd4f-425d-4f2e-94ee-f2bc3092ae13@tinylab.org>
  <c001c34b-e20c-f32e-f247-722d34a8db3d@linaro.org>
  <54da2376-dc65-0a96-55df-7a5acfbb9bff@csgroup.eu>
-Content-Language: en-GB
-From:   Yuan Tan <tanyuan@tinylab.org>
-In-Reply-To: <54da2376-dc65-0a96-55df-7a5acfbb9bff@csgroup.eu>
+ <8464A5F00EFC8C59+502c989a-3814-4686-8c6f-0a8f814e1c39@tinylab.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <8464A5F00EFC8C59+502c989a-3814-4686-8c6f-0a8f814e1c39@tinylab.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpipv:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        RCVD_ILLEGAL_IP,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-On 9/4/2023 6:58 PM, Christophe Leroy wrote:
->
-> Le 04/09/2023 à 12:51, Philippe Mathieu-Daudé a écrit :
->> On 4/9/23 11:24, Yuan Tan wrote:
->>> Hi,
->>>
->>> On 9/4/2023 3:40 PM, Philippe Mathieu-Daudé wrote:
+On 4/9/23 19:40, Yuan Tan wrote:
+> 
+> On 9/4/2023 6:58 PM, Christophe Leroy wrote:
+>>
+>> Le 04/09/2023 à 12:51, Philippe Mathieu-Daudé a écrit :
+>>> On 4/9/23 11:24, Yuan Tan wrote:
 >>>> Hi,
 >>>>
->>>> On 1/9/23 04:42, Yuan Tan wrote:
->>>>> MIPS Malta's power off depends on PCI, PCI_QUIRKS, and
->>>>> POWER_RESET_PIIX4_POWEROFF to work. Enable them when POWER_RESET is set
->>>>> for convenience.
+>>>> On 9/4/2023 3:40 PM, Philippe Mathieu-Daudé wrote:
+>>>>> Hi,
 >>>>>
->>>>> Suggested-by: Zhangjin Wu <falcon@tinylab.org>
->>>>> Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
->>>>> ---
->>>>>    arch/mips/Kconfig | 3 +++
->>>>>    1 file changed, 3 insertions(+)
+>>>>> On 1/9/23 04:42, Yuan Tan wrote:
+>>>>>> MIPS Malta's power off depends on PCI, PCI_QUIRKS, and
+>>>>>> POWER_RESET_PIIX4_POWEROFF to work. Enable them when POWER_RESET 
+>>>>>> is set
+>>>>>> for convenience.
+>>>>>>
+>>>>>> Suggested-by: Zhangjin Wu <falcon@tinylab.org>
+>>>>>> Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
+>>>>>> ---
+>>>>>>    arch/mips/Kconfig | 3 +++
+>>>>>>    1 file changed, 3 insertions(+)
+>>>>>>
+>>>>>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>>>>>> index bc8421859006..13bacbd05125 100644
+>>>>>> --- a/arch/mips/Kconfig
+>>>>>> +++ b/arch/mips/Kconfig
+>>>>>> @@ -547,6 +547,9 @@ config MIPS_MALTA
+>>>>>>        select MIPS_L1_CACHE_SHIFT_6
+>>>>>>        select MIPS_MSC
+>>>>>>        select PCI_GT64XXX_PCI0
+>>>>>> +    select PCI if POWER_RESET
+>>>>>> +    select PCI_QUIRKS if POWER_RESET
+>>>>>> +    select POWER_RESET_PIIX4_POWEROFF if POWER_RESET
+>>>>>>        select SMP_UP if SMP
+>>>>>>        select SWAP_IO_SPACE
+>>>>>>        select SYS_HAS_CPU_MIPS32_R1
+>>>>> Shouldn't we also update the _defconfig files?
 >>>>>
->>>>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->>>>> index bc8421859006..13bacbd05125 100644
->>>>> --- a/arch/mips/Kconfig
->>>>> +++ b/arch/mips/Kconfig
->>>>> @@ -547,6 +547,9 @@ config MIPS_MALTA
->>>>>        select MIPS_L1_CACHE_SHIFT_6
->>>>>        select MIPS_MSC
->>>>>        select PCI_GT64XXX_PCI0
->>>>> +    select PCI if POWER_RESET
->>>>> +    select PCI_QUIRKS if POWER_RESET
->>>>> +    select POWER_RESET_PIIX4_POWEROFF if POWER_RESET
->>>>>        select SMP_UP if SMP
->>>>>        select SWAP_IO_SPACE
->>>>>        select SYS_HAS_CPU_MIPS32_R1
->>>> Shouldn't we also update the _defconfig files?
+>>>> Sorry, in my last email, I forgot to reply to all. So I am now
+>>>> resending this email.
 >>>>
->>> Sorry, in my last email, I forgot to reply to all. So I am now
->>> resending this email.
+>>>> In malta_defconfig, PCI and POWER_RESET_PIIX4_POWEROFF have already
+>>>> been set and PCI_QUIRKS is also selected by FSL_PCI [=n].
+>>>>
+>>>> So shutdown and reboot with malta_defconfig is working and there is no
+>>>> need to update the malta_defconfig 🙂
+>>> Since the dependency is now enforced by Kconfig, the defconfig can
+>>> be simplified:
 >>>
->>> In malta_defconfig, PCI and POWER_RESET_PIIX4_POWEROFF have already
->>> been set and PCI_QUIRKS is also selected by FSL_PCI [=n].
+>>> --- a/arch/mips/configs/malta_defconfig
+>>> +++ b/arch/mips/configs/malta_defconfig
+>>> @@ -306,3 +306,2 @@ CONFIG_SERIAL_8250_CONSOLE=y
+>>>    CONFIG_POWER_RESET=y
+>>> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
+>>>    CONFIG_POWER_RESET_SYSCON=y
 >>>
->>> So shutdown and reboot with malta_defconfig is working and there is no
->>> need to update the malta_defconfig 🙂
->> Since the dependency is now enforced by Kconfig, the defconfig can
->> be simplified:
+>>> But maybe we don't care, I don't know.
+>> I understand from what you say that you update malta_defconfig manually ?
 >>
->> --- a/arch/mips/configs/malta_defconfig
->> +++ b/arch/mips/configs/malta_defconfig
->> @@ -306,3 +306,2 @@ CONFIG_SERIAL_8250_CONSOLE=y
->>    CONFIG_POWER_RESET=y
->> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
->>    CONFIG_POWER_RESET_SYSCON=y
+>> defconfigs shouldn't be updated manually.
 >>
->> But maybe we don't care, I don't know.
-> I understand from what you say that you update malta_defconfig manually ?
->
-> defconfigs shouldn't be updated manually.
->
-> Once you have the new .config you should use "make savedefconfig" then
-> replace your file by the newly generated defconfig file.
->
-> Christophe
+>> Once you have the new .config you should use "make savedefconfig" then
+>> replace your file by the newly generated defconfig file.
+>>
+>> Christophe
+> 
+> To do so, I just unset CONFIG_POWER_RESET and set it again in 
+> menuconfig, then "make savedefconfig". The POWER_RESET part is simplified.
+> 
+>   CONFIG_POWER_RESET=y
+> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
+> -CONFIG_POWER_RESET_SYSCON=y
+> 
+>   However, I found that there's other changes in this new 
+> malta_defconfig, for example
+> 
+> CONFIG_NLS_KOI8_U=m CONFIG_CRYPTO_CRYPTD=m -CONFIG_CRYPTO_LRW=m 
+> -CONFIG_CRYPTO_PCBC=m -CONFIG_CRYPTO_HMAC=y -CONFIG_CRYPTO_XCBC=m 
+> -CONFIG_CRYPTO_MD4=m -CONFIG_CRYPTO_SHA512=m -CONFIG_CRYPTO_WP512=m 
+> -CONFIG_CRYPTO_ANUBIS=m CONFIG_CRYPTO_BLOWFISH=m CONFIG_CRYPTO_CAMELLIA=m
+> 
+> Should I import all these changes in a commit? Or only POWER_RESET part.
 
-To do so, I just unset CONFIG_POWER_RESET and set it again in 
-menuconfig, then "make savedefconfig". The POWER_RESET part is simplified.
-
-  CONFIG_POWER_RESET=y
--CONFIG_POWER_RESET_PIIX4_POWEROFF=y
--CONFIG_POWER_RESET_SYSCON=y
-
-  However, I found that there's other changes in this new 
-malta_defconfig, for example
-
-CONFIG_NLS_KOI8_U=m CONFIG_CRYPTO_CRYPTD=m -CONFIG_CRYPTO_LRW=m 
--CONFIG_CRYPTO_PCBC=m -CONFIG_CRYPTO_HMAC=y -CONFIG_CRYPTO_XCBC=m 
--CONFIG_CRYPTO_MD4=m -CONFIG_CRYPTO_SHA512=m -CONFIG_CRYPTO_WP512=m 
--CONFIG_CRYPTO_ANUBIS=m CONFIG_CRYPTO_BLOWFISH=m CONFIG_CRYPTO_CAMELLIA=m
-
-Should I import all these changes in a commit? Or only POWER_RESET part.
+I'd first update the defconfigs with mainline (as a cleanup)
+then apply your series on top, re-running 'make savedefconfig'
+you should get only the changes relevant to your work.
 
