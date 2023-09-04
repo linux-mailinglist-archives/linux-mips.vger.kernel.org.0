@@ -2,179 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8EB791D7A
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Sep 2023 21:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B425B792823
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Sep 2023 18:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240285AbjIDTIy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Sep 2023 15:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+        id S1344495AbjIEQVo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Sep 2023 12:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbjIDTIy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Sep 2023 15:08:54 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2603418D
-        for <linux-mips@vger.kernel.org>; Mon,  4 Sep 2023 12:08:50 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-529fb04a234so2303698a12.3
-        for <linux-mips@vger.kernel.org>; Mon, 04 Sep 2023 12:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693854528; x=1694459328; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d0CIESG2SuiZV7cHhLHCsdILQZtP8suwtO95xIEc+T0=;
-        b=aeJBnmY2IGaUM+BPEGqk6yiQFw3rxMCIYWu/m0CRZhkiWB93DFKCxTicQFYAq24NOm
-         sEXyRLF4SpVq9gZFtg84FeqAQPbMVlbAcdtbqOgx141sigSr0yjVkL8arkwFjFjdKqqB
-         XH/P/rpQxGGVWqfzBBR/jYZejOZ3kua5bEt0h8wuI9lRxv5XZe4oSEwBQmY6VXo4m2r9
-         xj1DgQ6V6WE0zEovsAQpzghURg3bBSjzNFcmWvHno4nouj/MWhUsfIy7eTnHDgpAbslw
-         ttZoIfxBMXjO5c5/fZX8NSIX85qio0BcRjy8FDYNTJB3dXH/3kIUM2UC0AnNYjnBUf01
-         WvwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693854528; x=1694459328;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d0CIESG2SuiZV7cHhLHCsdILQZtP8suwtO95xIEc+T0=;
-        b=MMzTu+aOH5AcKe7RuwcuFoL9dXq2MLl+6ySLlJNnbW+FnfZftSQ9NHyhe4LftE0Wxc
-         CpNqHmYIW0x4qy9gAZsh9nN8U32ZC0OFItlgLSalO4Hhvd55ZQLeNBoJW7llNAzHF06U
-         rscnwTXy+GTEsDYNG10HuTgJ5JUMUCXCD5YxdiTyf3iPxLrtyV4425uoOL8i7SCg5Yo7
-         psr4+/4tysV3RJmtAzIFURLUmKUzvPCH/FD7tiozpSR7HZGgTaV8vpFeIt8Qu5X7rotX
-         PiA4rSCEJBnZOz6JIcaGt0uDUy4DLcUwSR+VpOQnrI4hwt4ag4bpmvTnF3fL0hVfWWN9
-         K0Fw==
-X-Gm-Message-State: AOJu0Yx6/p69mSPYmSABvQVip/ftCXr02r9LkNdIYhKAuwAxrj7cNkY9
-        Zcaywa2csDs42iiU0ODguNLhDA==
-X-Google-Smtp-Source: AGHT+IH0wh3Lx48yFyOqTEgnOEZkTX4ZndMzuwd1BqySt5vm/255sDxk6mqMYYjnwmcqT5deG8ldDw==
-X-Received: by 2002:aa7:d64a:0:b0:527:3a95:3fa4 with SMTP id v10-20020aa7d64a000000b005273a953fa4mr7912602edr.20.1693854528590;
-        Mon, 04 Sep 2023 12:08:48 -0700 (PDT)
-Received: from [192.168.69.115] ([176.187.209.227])
-        by smtp.gmail.com with ESMTPSA id j16-20020aa7ca50000000b0052a3ad836basm6153607edt.41.2023.09.04.12.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Sep 2023 12:08:47 -0700 (PDT)
-Message-ID: <2841ec8c-f07b-307e-de03-6e8a4dd88775@linaro.org>
-Date:   Mon, 4 Sep 2023 21:08:45 +0200
+        with ESMTP id S1354057AbjIEJdS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Sep 2023 05:33:18 -0400
+X-Greylist: delayed 4139 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:33:15 PDT
+Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821CE1A7
+        for <linux-mips@vger.kernel.org>; Tue,  5 Sep 2023 02:33:15 -0700 (PDT)
+Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
+        id DFB9682A5E; Mon,  4 Sep 2023 09:41:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
+        s=mail; t=1693813333;
+        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
+        h=Date:From:To:Subject:From;
+        b=Bml7khOT74+glrskfqEGm3skm6bxVSZpPmMvDOVTrJPDlHr6hYpaZv3J5oMCM8zoL
+         Am/ySUYZG5VKj1FI5OfqBtLIgGINUsThjevjCCUmSh4Ya5tcfdC47tlqkFUe1Du4GH
+         GGFXSPnX5jVGJqOG4SG0ZPzOJn3RkJR3eehxA4o4ykLOEUtzVh4Ld2OAW2Li9S0Ape
+         VXuV4qgXFBnlGBHkK4mc52hw8DPcekoWoHkjJFZI4gQEsZvYbaJz2SUt2Q1ey4KRmf
+         DRTKHjd+6pMtm7V9WQ1Sm9vHdknNrNimpk6Ng9itL9UM0VY+Lxr5T7jNV0fMM25ULv
+         0isuubJh0z0ng==
+Received: by mail.equinoxrise.pl for <linux-mips@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
+Message-ID: <20230904084500-0.1.7.r0s.0.lleqqqjijq@equinoxrise.pl>
+Date:   Mon,  4 Sep 2023 07:40:34 GMT
+From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.equinoxrise.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.0
-Subject: Re: [PATCH v2 1/3] kconfig: add dependencies of POWER_RESET for mips
- malta
-Content-Language: en-US
-To:     Yuan Tan <tanyuan@tinylab.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>
-Cc:     "linux@weissschuh.net" <linux@weissschuh.net>,
-        "w@1wt.eu" <w@1wt.eu>, "falcon@tinylab.org" <falcon@tinylab.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <cover.1693535514.git.tanyuan@tinylab.org>
- <1c17f017d6c837ef887d08bd2f85102df3fbc17c.1693535514.git.tanyuan@tinylab.org>
- <915a9e2d-36ea-4a74-7b1b-9688f215b6f1@linaro.org>
- <55C9BDEDAB4E0B76+838dbd4f-425d-4f2e-94ee-f2bc3092ae13@tinylab.org>
- <c001c34b-e20c-f32e-f247-722d34a8db3d@linaro.org>
- <54da2376-dc65-0a96-55df-7a5acfbb9bff@csgroup.eu>
- <8464A5F00EFC8C59+502c989a-3814-4686-8c6f-0a8f814e1c39@tinylab.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <8464A5F00EFC8C59+502c989a-3814-4686-8c6f-0a8f814e1c39@tinylab.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/9/23 19:40, Yuan Tan wrote:
-> 
-> On 9/4/2023 6:58 PM, Christophe Leroy wrote:
->>
->> Le 04/09/2023 à 12:51, Philippe Mathieu-Daudé a écrit :
->>> On 4/9/23 11:24, Yuan Tan wrote:
->>>> Hi,
->>>>
->>>> On 9/4/2023 3:40 PM, Philippe Mathieu-Daudé wrote:
->>>>> Hi,
->>>>>
->>>>> On 1/9/23 04:42, Yuan Tan wrote:
->>>>>> MIPS Malta's power off depends on PCI, PCI_QUIRKS, and
->>>>>> POWER_RESET_PIIX4_POWEROFF to work. Enable them when POWER_RESET 
->>>>>> is set
->>>>>> for convenience.
->>>>>>
->>>>>> Suggested-by: Zhangjin Wu <falcon@tinylab.org>
->>>>>> Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
->>>>>> ---
->>>>>>    arch/mips/Kconfig | 3 +++
->>>>>>    1 file changed, 3 insertions(+)
->>>>>>
->>>>>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->>>>>> index bc8421859006..13bacbd05125 100644
->>>>>> --- a/arch/mips/Kconfig
->>>>>> +++ b/arch/mips/Kconfig
->>>>>> @@ -547,6 +547,9 @@ config MIPS_MALTA
->>>>>>        select MIPS_L1_CACHE_SHIFT_6
->>>>>>        select MIPS_MSC
->>>>>>        select PCI_GT64XXX_PCI0
->>>>>> +    select PCI if POWER_RESET
->>>>>> +    select PCI_QUIRKS if POWER_RESET
->>>>>> +    select POWER_RESET_PIIX4_POWEROFF if POWER_RESET
->>>>>>        select SMP_UP if SMP
->>>>>>        select SWAP_IO_SPACE
->>>>>>        select SYS_HAS_CPU_MIPS32_R1
->>>>> Shouldn't we also update the _defconfig files?
->>>>>
->>>> Sorry, in my last email, I forgot to reply to all. So I am now
->>>> resending this email.
->>>>
->>>> In malta_defconfig, PCI and POWER_RESET_PIIX4_POWEROFF have already
->>>> been set and PCI_QUIRKS is also selected by FSL_PCI [=n].
->>>>
->>>> So shutdown and reboot with malta_defconfig is working and there is no
->>>> need to update the malta_defconfig 🙂
->>> Since the dependency is now enforced by Kconfig, the defconfig can
->>> be simplified:
->>>
->>> --- a/arch/mips/configs/malta_defconfig
->>> +++ b/arch/mips/configs/malta_defconfig
->>> @@ -306,3 +306,2 @@ CONFIG_SERIAL_8250_CONSOLE=y
->>>    CONFIG_POWER_RESET=y
->>> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
->>>    CONFIG_POWER_RESET_SYSCON=y
->>>
->>> But maybe we don't care, I don't know.
->> I understand from what you say that you update malta_defconfig manually ?
->>
->> defconfigs shouldn't be updated manually.
->>
->> Once you have the new .config you should use "make savedefconfig" then
->> replace your file by the newly generated defconfig file.
->>
->> Christophe
-> 
-> To do so, I just unset CONFIG_POWER_RESET and set it again in 
-> menuconfig, then "make savedefconfig". The POWER_RESET part is simplified.
-> 
->   CONFIG_POWER_RESET=y
-> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
-> -CONFIG_POWER_RESET_SYSCON=y
-> 
->   However, I found that there's other changes in this new 
-> malta_defconfig, for example
-> 
-> CONFIG_NLS_KOI8_U=m CONFIG_CRYPTO_CRYPTD=m -CONFIG_CRYPTO_LRW=m 
-> -CONFIG_CRYPTO_PCBC=m -CONFIG_CRYPTO_HMAC=y -CONFIG_CRYPTO_XCBC=m 
-> -CONFIG_CRYPTO_MD4=m -CONFIG_CRYPTO_SHA512=m -CONFIG_CRYPTO_WP512=m 
-> -CONFIG_CRYPTO_ANUBIS=m CONFIG_CRYPTO_BLOWFISH=m CONFIG_CRYPTO_CAMELLIA=m
-> 
-> Should I import all these changes in a commit? Or only POWER_RESET part.
+Dzie=C5=84 dobry!
 
-I'd first update the defconfigs with mainline (as a cleanup)
-then apply your series on top, re-running 'make savedefconfig'
-you should get only the changes relevant to your work.
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
+
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
+
+
+Pozdrawiam
+Mateusz Talaga
