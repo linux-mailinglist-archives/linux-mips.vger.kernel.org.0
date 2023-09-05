@@ -2,156 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5630A792788
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Sep 2023 18:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E306792FC6
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Sep 2023 22:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbjIEQVq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Sep 2023 12:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S242657AbjIEURX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Sep 2023 16:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354574AbjIEMoO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Sep 2023 08:44:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FE01AD;
-        Tue,  5 Sep 2023 05:44:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D1BC51FDB0;
-        Tue,  5 Sep 2023 12:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1693917849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FkN9fHLyAfRcHsilGUbRusJjN/has0O6CzUMKzXJasI=;
-        b=keVYfmc48mpS4Nt09vnh12VZJSCRjao6bLq8+mD13pxU9x71zSHfdmFp8Kfx0sIOXsaSP1
-        QLaKzvB23hHyKAMtuhTve0e7QYNrA8bdsPZW4JDoFRxpWeBAZBhQKf86/lYvhAs1FAC7Sa
-        J4Fk+xaeTOI5b+kunmcl9yd9y6d2wU4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1693917849;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FkN9fHLyAfRcHsilGUbRusJjN/has0O6CzUMKzXJasI=;
-        b=vIhIJzxZZmb5DcNB3OjOlwl7lrOhkEIHzE4KHaujlzT60ABsQijnddOVu6k4DIbcF4Ojdb
-        PcktSvBRfw9cC5Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C3ED13911;
-        Tue,  5 Sep 2023 12:44:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9K0AHZki92SuHQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 05 Sep 2023 12:44:09 +0000
-Message-ID: <5265f1eb-e1a6-c91e-9bc2-75089d594a0e@suse.de>
-Date:   Tue, 5 Sep 2023 14:44:08 +0200
+        with ESMTP id S241983AbjIEURW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Sep 2023 16:17:22 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F1DCF1
+        for <linux-mips@vger.kernel.org>; Tue,  5 Sep 2023 13:16:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4c0so503749a12.0
+        for <linux-mips@vger.kernel.org>; Tue, 05 Sep 2023 13:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693944982; x=1694549782; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FOMURYJK1jPXbcrQ6jgRnAGfsBHD/Md4WVv2cMc23FQ=;
+        b=AHTTgaTBiY4tRo8ExH4eQ3DXDosgrK4ZSdVrk8kEAKmjyOAifLo6r786QWd2nuuZDn
+         6JIxgk569ZRDePGC+3cNZuIQzg7Z02e5RA67AijcsL9RSxrEVwgM+nOVMSzCuYYFUs2U
+         KHZlU6QGoEle+z9cP9oD8Ze+dM9NDfB7/PVdo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693944982; x=1694549782;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FOMURYJK1jPXbcrQ6jgRnAGfsBHD/Md4WVv2cMc23FQ=;
+        b=KF6Wbev3rQPLqQ950Yf2K+ijmsM459bMwT3zSLFi3OlqJjt53pxD4srKb4O/xeVrXN
+         MNwoWQzrKsCVhIvz1X22uaMHvyPipAGj1PArETvEWf/b3I3z6djdLLxjaaYmmUOE/gN7
+         ri2m00HyL4dNiiEOIok2Q/3rw2+MOhBZYfob/sBMFL0SIboj1VaHjtrwxfbaT/FZ3fes
+         I3sUJRZQv+UimcaJP4Oxen7fn0jf7oy0W4ZH7xcjWHJFnhH8UJ3cYnUqv17PVaAq98yb
+         t2gbxqyE9M75rXfWVr+4/OocBXcneQvxiWPIcAcfS5wYunSL0XzphAgIcSPMl5l2B1DU
+         ePKw==
+X-Gm-Message-State: AOJu0Yyf//ZqZlY0OUFKf6XAmNNhF3J2OivujcXSM6m8/1H2GC5YE5Zl
+        Ak60DJB+OQX1l9T8tfVh2UquVtF66j3PTt78P1I4MuQi
+X-Google-Smtp-Source: AGHT+IF3kW/0oNUU/SI0muW9yp52X1q5DJArW5HB1yQzhDUdMsMSKN5t/WNuv6kLW8IOz9pOlKxNvw==
+X-Received: by 2002:aa7:dcd2:0:b0:522:3149:159b with SMTP id w18-20020aa7dcd2000000b005223149159bmr911537edu.2.1693944981988;
+        Tue, 05 Sep 2023 13:16:21 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id v22-20020aa7d9d6000000b0052568bf9411sm7394261eds.68.2023.09.05.13.16.21
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Sep 2023 13:16:21 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so4418a12.0
+        for <linux-mips@vger.kernel.org>; Tue, 05 Sep 2023 13:16:21 -0700 (PDT)
+X-Received: by 2002:a50:d0c1:0:b0:523:bdc9:48a9 with SMTP id
+ g1-20020a50d0c1000000b00523bdc948a9mr54207edf.0.1693944980934; Tue, 05 Sep
+ 2023 13:16:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 0/4] ppc, fbdev: Clean up fbdev mmap helper
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, arnd@arndb.de, deller@gmx.de
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org
-References: <20230901142659.31787-1-tzimmermann@suse.de>
- <874jk9ibf7.fsf@mail.lhotse>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <874jk9ibf7.fsf@mail.lhotse>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------8cnkOZ3clMojcrflCUVqPiyi"
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230901234202.566951-1-dianders@chromium.org>
+ <20230901164111.RFT.3.Iea742f06d8bec41598aa40378fc625fbd7e8a3d6@changeid> <288af70dafc5e73d0fdfac71a33449385d4d6bd3.camel@crapouillou.net>
+In-Reply-To: <288af70dafc5e73d0fdfac71a33449385d4d6bd3.camel@crapouillou.net>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 5 Sep 2023 13:16:08 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VuJe7ACFw3pt1z=EAh14_Z4iTOc5VKJt24CGwZYjRpeQ@mail.gmail.com>
+Message-ID: <CAD=FV=VuJe7ACFw3pt1z=EAh14_Z4iTOc5VKJt24CGwZYjRpeQ@mail.gmail.com>
+Subject: Re: [RFT PATCH 03/15] drm/ingenic: Call drm_atomic_helper_shutdown()
+ at shutdown time
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     dri-devel@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>, airlied@gmail.com,
+        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------8cnkOZ3clMojcrflCUVqPiyi
-Content-Type: multipart/mixed; boundary="------------vggYL9Fu9Mr0081TqvPYGkw1";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
- christophe.leroy@csgroup.eu, arnd@arndb.de, deller@gmx.de
-Cc: linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org
-Message-ID: <5265f1eb-e1a6-c91e-9bc2-75089d594a0e@suse.de>
-Subject: Re: [PATCH 0/4] ppc, fbdev: Clean up fbdev mmap helper
-References: <20230901142659.31787-1-tzimmermann@suse.de>
- <874jk9ibf7.fsf@mail.lhotse>
-In-Reply-To: <874jk9ibf7.fsf@mail.lhotse>
+Paul,
 
---------------vggYL9Fu9Mr0081TqvPYGkw1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Mon, Sep 4, 2023 at 2:15=E2=80=AFAM Paul Cercueil <paul@crapouillou.net>=
+ wrote:
+>
+> Hi Douglas,
+>
+> Le vendredi 01 septembre 2023 =C3=A0 16:41 -0700, Douglas Anderson a =C3=
+=A9crit :
+> > Based on grepping through the source code this driver appears to be
+> > missing a call to drm_atomic_helper_shutdown() at system shutdown
+> > time. Among other things, this means that if a panel is in use that
+> > it
+> > won't be cleanly powered off at system shutdown time.
+> >
+> > The fact that we should call drm_atomic_helper_shutdown() in the case
+> > of OS shutdown/restart comes straight out of the kernel doc "driver
+> > instance overview" in drm_drv.c.
+> >
+> > Since this driver uses the component model and shutdown happens at
+> > the
+> > base driver, we communicate whether we have to call
+> > drm_atomic_helper_shutdown() by seeing if drvdata is non-NULL.
+> >
+> > Suggested-by: Maxime Ripard <mripard@kernel.org>
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>
+> LGTM.
+> Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-SGkNCg0KQW0gMDUuMDkuMjMgdW0gMDQ6NDcgc2NocmllYiBNaWNoYWVsIEVsbGVybWFuOg0K
-PiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JpdGVzOg0KPj4g
-UmVmYWN0b3IgZmJfcGdwcm90ZWN0KCkgaW4gUG93ZXJQQyB0byB3b3JrIHdpdGhvdXQgc3Ry
-dWN0IGZpbGUuIFRoZW4NCj4+IGNsZWFuIHVwIGFuZCByZW5hbWUgZmJfcGdwcm90ZWN0KCku
-IFRoaXMgY2hhbmdlIGhhcyBiZWVuIGRpc2N1c3NlZCBhdA0KPj4gWzFdIGluIHRoZSBjb250
-ZXh0IG9mIHJlZmFjdG9yaW5nIGZiZGV2J3MgbW1hcCBjb2RlLg0KPj4NCj4+IFRoZSBmaXJz
-dCB0aHJlZSBwYXRjaGVzIGFkYXB0IFBvd2VyUEMncyBpbnRlcm5hbCBpbnRlcmZhY2VzIHRv
-DQo+PiBwcm92aWRlIGEgcGh5c19tZW1fYWNjZXNzX3Byb3QoKSB0aGF0IHdvcmtzIHdpdGhv
-dXQgc3RydWN0IGZpbGUuIE5laXRoZXINCj4+IHRoZSBhcmNoaXRlY3R1cmUgY29kZSBvciBm
-YmRldiBoZWxwZXJzIG5lZWQgdGhlIHBhcmFtZXRlci4NCj4+DQo+PiBQYXRjaCA0IHJlcGxh
-Y2VzIGZiZGV2J3MgZmJfcGdwcm90ZWN0KCkgd2l0aCBmYl9wZ3Byb3RfZGV2aWNlKCkgb24N
-Cj4+IGFsbCBhcmNoaXRlY3R1cmVzLiBUaGUgbmV3IGhlbHBlciB3aXRoIGl0cyBzdHJlYW0t
-bGluZWQgaW50ZXJmYWNlDQo+PiBlbmFibGVzIG1vcmUgcmVmYWN0b3Jpbmcgd2l0aGluIGZi
-ZGV2J3MgbW1hcCBpbXBsZW1lbnRhdGlvbi4NCj4gDQo+IFRoZSBjb250ZW50IG9mIHRoaXMg
-c2VyaWVzIGlzIE9LLCBidXQgdGhlIHdheSBpdCdzIHN0cnVjdHVyZWQgbWFrZXMgaXQgYQ0K
-PiByZWFsIGhlYWRhY2hlIHRvIG1lcmdlLCBiZWNhdXNlIGl0J3MgbW9zdGx5IHBvd2VycGMg
-Y2hhbmdlcyBhbmQgdGhlbiBhDQo+IGRlcGVuZGFudCBjcm9zcyBhcmNoaXRlY3R1cmUgcGF0
-Y2ggYXQgdGhlIGVuZC4NCj4gDQo+IEl0IHdvdWxkIGJlIHNpbXBsZXIgaWYgcGF0Y2ggNCB3
-YXMgZmlyc3QgYW5kIGp1c3QgcGFzc2VkIGZpbGU9TlVMTCB0bw0KPiB0aGUgcG93ZXJwYyBo
-ZWxwZXIsIHdpdGggYW4gZXhwbGFuYXRpb24gdGhhdCBpdCdzIHVudXNlZCBhbmQgd2lsbCBi
-ZQ0KPiBkcm9wcGVkIGluIGEgZnV0dXJlIGNsZWFudXAuDQo+IA0KPiBXZSBjb3VsZCB0aGVu
-IHB1dCB0aGUgZmlyc3QgcGF0Y2ggKHByZXZpb3VzbHkgcGF0Y2ggNCkgaW4gYSB0b3BpYyBi
-cmFuY2gNCj4gdGhhdCBpcyBzaGFyZWQgYmV0d2VlbiB0aGUgcG93ZXJwYyB0cmVlIGFuZCB0
-aGUgZmJkZXYgdHJlZSwgYW5kIHRoZW4gdGhlDQo+IHBvd2VycGMgY2hhbmdlcyBjb3VsZCBi
-ZSBzdGFnZWQgb24gdG9wIG9mIHRoYXQgdGhyb3VnaCB0aGUgcG93ZXJwYyB0cmVlLg0KDQpP
-aywgdGhhbmtzIGZvciByZXZpZXdpbmcuIFRoZSBmYmRldiBwYXRjaCB3b3VsZCBnbyB0aHJv
-dWdoIHRoZSBkcm0tbWlzYyANCnRyZWUgYXMgYmFzZSBmb3IgZnVydGhlciByZWZhY3Rvcmlu
-Zy4NCg0KSSdsbCB1cGRhdGUgdGhlIHBhdGNoc2V0IGFjY29yZGluZ2x5Lg0KDQpCZXN0IHJl
-Z2FyZHMNClRob21hcw0KDQo+IA0KPiBjaGVlcnMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFu
-bg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
-R2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2Vy
-bWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJv
-dWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
+Thanks for the Ack! Would you expect this patch to land through
+"drm-misc", or do you expect it to go through some other tree?
+Running:
 
---------------vggYL9Fu9Mr0081TqvPYGkw1--
+./scripts/get_maintainer.pl --scm -f drivers/gpu/drm/ingenic/ingenic-drm-dr=
+v.c
 
---------------8cnkOZ3clMojcrflCUVqPiyi
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+...does not show that this driver normally goes through drm-misc, but
+it also doesn't show that it goes through any other tree so maybe it's
+just an artifact of the way it's tagged in the MAINTAINERS file? If
+it's fine for this to go through drm-misc, I'll probably land it (with
+your Ack and Maxime's Review) sooner rather than later just to make
+this patch series less unwieldy.
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmT3IpgFAwAAAAAACgkQlh/E3EQov+Ar
-2BAAx4GyhqkGBaJfv3puNbbvuB7PEZosJZ/vqe3G59Ue+8wRBHUTSKhDolnDRYRTbKQgZ1SQOrZG
-s6+W76rPXD1Ut4CVvr8k7nTHykj6zZleDub7NrWbfct6eQCj162khf2dJa4gR75GQ2xD+SDj3i4W
-1LGY55I1ufx+7SulJur+5EUbmRBHxru6iU5MYxADPt5aUUbwMNWCr6sobziieqr0IP/20SfispBk
-dUdtMdCkU3Lw2ZK2n9UVUVxmO7XSgRU2UFJEGr3/0BIMhnHMuxkiXPYn/JJlddIgbC24PsKp/gAW
-mcWBqdQnCLya6eb0TYII9VyeJGHISNWx01SprtAnuvp7yuKOwizJEVWC6XclHcSA89RgaRCm0Yx5
-+WPhWrlzgI1Bw9ZwpEP/xRtDXUTFRYBipih65g7Aijb3FiSg3kNTAbE6A4m5agaj28L1ctOaUpz4
-ntRjkcG3o7CyqSKp6sZh6+pvzf7HR1sdFiQuDgG8ySlNND/EJVdu4QS/17JYC0Eo8rdtduUTDhqv
-13/YT17csTxF5EGvFMKS+FXFDansioQxoUsA+Dr+nhakhID6DXmmICnbQSa2f+/4rG1MKN2qxzKe
-3dNq15p4ARLrfNQ6GJsXLOTw+OtJHK4TPzPcP3NaK9UK+HQC3YGExb3Fge10A1SQK1ZJAwfpWaae
-D/g=
-=iHVQ
------END PGP SIGNATURE-----
+> > ---
+> > This commit is only compile-time tested.
+> >
+> > NOTE: this patch touches a lot more than other similar patches since
+> > the bind() function is long and we want to make sure that we unset
+> > the
+> > drvdata if bind() fails.
+> >
+> > While making this patch, I noticed that the bind() function of this
+> > driver is using "devm" and thus assumes it doesn't need to do much
+> > explicit error handling. That's actually a bug. As per kernel docs
+> > [1]
+> > "the lifetime of the aggregate driver does not align with any of the
+> > underlying struct device instances. Therefore devm cannot be used and
+> > all resources acquired or allocated in this callback must be
+> > explicitly released in the unbind callback". Fixing that is outside
+> > the scope of this commit.
+> >
+> > [1] https://docs.kernel.org/driver-api/component.html
+> >
+>
+> Noted, thanks.
 
---------------8cnkOZ3clMojcrflCUVqPiyi--
+FWIW, I think that at least a few other DRM drivers handle this by
+doing some of their resource allocation / acquiring in the probe()
+function and then only doing things in the bind() that absolutely need
+to be in the bind. ;-)
+
+
+-Doug
