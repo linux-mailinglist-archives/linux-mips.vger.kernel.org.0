@@ -2,118 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF43794219
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Sep 2023 19:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A963079422A
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Sep 2023 19:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjIFRjc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Sep 2023 13:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S233479AbjIFRqu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Sep 2023 13:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242065AbjIFRjb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Sep 2023 13:39:31 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2075.outbound.protection.outlook.com [40.107.100.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4786199F;
-        Wed,  6 Sep 2023 10:39:27 -0700 (PDT)
+        with ESMTP id S233030AbjIFRqu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Sep 2023 13:46:50 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2067.outbound.protection.outlook.com [40.107.223.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E56BD;
+        Wed,  6 Sep 2023 10:46:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B4cD4JcWQuwRShCcPmTx510gt27Nuzvbn0VY2KFqeoC64eXdqw9b/NZJsujq/8zdCMWFtjEPYqxBC+gIvhnol1olUsWjbMf4LAwHJ7T6Nop4m0+LhaLQhYU4BCw2Myv1Ilo0s4KWbOuIgJzic6BhdlI4cTEiyJIX2Lrk2ABTzT2horHz6s5vaJvAgjmF7detg769srvXL038mSYo6wy+b3IiRmdrxaIiDSp0zGH3wv6hWfihn+Z871fwMXngjwSwppmv/UU1xFYaWBIjo7dsncECLXYanx5LnSApWc2DkOpdE3iTX9xXrajopdeCgeMF352PmseSek0pz5XZWyKo2g==
+ b=TsIY5aYx6I5vbQMsqveQHnYhhKVdyepytrdHMOmWHmhR26SFNZPl4l7RSlVGExdx4bJ95ZX74Gjw2AQJwg69C23e6mLlsCxT7ud90KG9yf6U2CrCN8tw4M+sN0r6lHlWMuE0ntGcNmRIeMhy5/cGZ7tHkP9qzQw0Xxfj+dg3qWw3YWLfCy0BrUe4NFmKoQb7F9tKnMTqG1ZPUWEC5oSRnTRQVDfGoqO9yut3SxITt24mGXZ+HOL2OK77AUk/LxLOdKpS/A8MLTMH2QRqSUGO7xou0UB2b1BFaoE1s4JGtsXtQGu7FGX7YOhp8uxKsqMOQilGVNVwZFZLXGK9+ga8zg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VsLJ8JDS8kp9CuCdBBbBhLWt9wIkia4b0Ciu25aUqi8=;
- b=AeIrBWJThxLWEsRGHdCX4F6w1qHTt9vb7b5BaRe1H6TXPlEl1K7+GDG9AcyM+1hR0W1aWxgEVQncSjKp6HRdaW5efh/FWjGHTOZExTO9Z3gIG2+BmwXUy80oDga4kQmYSFVVNCndNIhgr3STjq5bIuAqUJMFNfv21JoexLLU2h5zDclDOWwrwT7fo9zkRDFeqIaA3x1zRDZwS0jKUaTvhUiJYSJ9vwJ78zljnGtinUC7ikGWmrCfec6aXZ4Nl/b9K+i62GrZrLr3vkmQKPchxOa7+8ycvD6qpL8fl3FisISUpjJMK1Q88kZtxTJEiSReKsjgdiBop3JfGGRtdhk5pA==
+ bh=Ezs3NtbA83xZyejgN+FDpevcuPOqvPEOXIrxBZjSMyM=;
+ b=f6jrIIOn7+8iwA/rkYUwLHALefWeCUlhhdSLPZ55piwW2pfUQc6+vG8pLRSTqXb/bEhKHIuieKZ7mM/CQQTeFT/Szo5wDR4IK5rL6whUug7PcXBN6AVeG537ZgbOCgjU94EJekaax1eBT2En3E5pEXWrkAlv6wvmSPBYXPyTy8dPh4jXbrcz9Bky4Rb3vz3gSsA+CR8hdtEUBpX5bSz8NkoJ3JME33NezDogJoArP31J+t/4Le3cc1luzIUF93PWhxQ/59kvXkrErmZDxxnjHPA6wwYOkqOpOUqubNfUpAc7Nf7V9k+6i0254UWEymzBZ50l5NKlgJ/+TpX/AhyJ8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VsLJ8JDS8kp9CuCdBBbBhLWt9wIkia4b0Ciu25aUqi8=;
- b=cFJeTb/x78bJYkipC8ds+SVlAsR5n83KQ4GgR8e417dUqVkVTNOawfsoaGHrvcMADWAqQAD2cWJTBmpQaEUtAUAHJPlinUK8bJvXafpukgZjHv9oBUBddllFsfcgEguy1JICzANi5VBadKnhfKC0Vfd9yrKeAJoACOLQljSs+22wOdd+3q5ol3/g8kACWnmiMPOgWqngHzc148qWExP00MpC3WolpqEdHW/6zZptF7ydFGJS2vUI8YapidOTBx8fZIt6SpTEhrVk+41aqUZJcoR/NS3NuinxDFdeEHkDCJECS3yEW+C8mT0um+Faa+eBZ/pxnObCqIsfJKUZi+Gg1A==
+ bh=Ezs3NtbA83xZyejgN+FDpevcuPOqvPEOXIrxBZjSMyM=;
+ b=ipcMWV54ugcEzNaYl+gW8mkkERxcWIfVij0SnYzM35mP+ksOCamgTbpDr0eb7ERycVc4NJi3jDpMoSxCPKPpjOgg362LjgY5KSRqJ2nqhDGy1rAYfZDKCSFtJEwyurl7VZFs/5vP6EVbBikB5IT7nE0Oap7aZkyAOhGS3sV6TyFJ+8Hv8rbKUTkjuNedv2lJ4+i/3pwCA12RsxtAmp2z1fQn1UYWaWXrCINKp0sU4/MqD1icK7f/pPXRNPAOXmurOqpLXOGlai8Fyqx0aFeehdW/+aNTagCCrSDSyCfi1gw+Yr2ReGqBOPYf3GQOqAdYFdYSQq8/1u5wAAQj/YLGcA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- PH8PR12MB7325.namprd12.prod.outlook.com (2603:10b6:510:217::19) with
+ IA1PR12MB8333.namprd12.prod.outlook.com (2603:10b6:208:3fe::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Wed, 6 Sep
- 2023 17:39:25 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.33; Wed, 6 Sep
+ 2023 17:46:43 +0000
 Received: from DS7PR12MB5744.namprd12.prod.outlook.com
  ([fe80::4b09:197c:609a:1013]) by DS7PR12MB5744.namprd12.prod.outlook.com
  ([fe80::4b09:197c:609a:1013%6]) with mapi id 15.20.6745.020; Wed, 6 Sep 2023
- 17:39:25 +0000
+ 17:46:43 +0000
 From:   Zi Yan <ziy@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <muchun.song@linux.dev>,
         "\"Mike Rapoport (IBM)\"" <rppt@kernel.org>,
         stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>
 Subject: Re: [PATCH v2 3/5] mm/memory_hotplug: use nth_page() in place of
  direct struct page manipulation.
-Date:   Wed, 06 Sep 2023 13:39:23 -0400
+Date:   Wed, 06 Sep 2023 13:46:41 -0400
 X-Mailer: MailMate (1.14r5978)
-Message-ID: <C9420CC4-0EEF-4B7D-8B60-3434079137A2@nvidia.com>
-In-Reply-To: <6dfbc043-c969-f78d-1e56-5434026246ea@redhat.com>
+Message-ID: <0B2678F2-9072-4C82-B233-11D74246FA8B@nvidia.com>
+In-Reply-To: <20230906150309.114360-4-zi.yan@sent.com>
 References: <20230906150309.114360-1-zi.yan@sent.com>
  <20230906150309.114360-4-zi.yan@sent.com>
- <6dfbc043-c969-f78d-1e56-5434026246ea@redhat.com>
 Content-Type: multipart/signed;
- boundary="=_MailMate_E4CFAC3C-2139-4160-8BBD-3BE0BA237AC8_=";
+ boundary="=_MailMate_747CE04C-1464-4207-BE8E-40EE01453762_=";
  micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BLAPR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:208:32b::12) To DS7PR12MB5744.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAP220CA0001.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:208:32c::6) To DS7PR12MB5744.namprd12.prod.outlook.com
  (2603:10b6:8:73::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|PH8PR12MB7325:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab1741ef-5f73-4192-19f2-08dbaf0036ac
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|IA1PR12MB8333:EE_
+X-MS-Office365-Filtering-Correlation-Id: f16af328-08ca-4d67-f414-08dbaf013bb9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Dh2g41Dqb3Qm7BGpV1jdd3JP4mBEKasRC1CLNOiCdtEAb2k9jq6UhFJ7Sqgm6QUX2t/nbx6hxybRMxKao/9CJqNutLAWu5Dh1nlQqmqylyA9+PiRw89YG12hfDNu9ySQ+cqa16yeQgcSdUCm5OPXhoHa6MM8eydNQEYJtJ6TYedD8AEANiCMN0cgcjRz9aQZEK30EhpA04FKvIJgvT0LZ0B7Vsnrl9awlRJjqqOgtwCCaIajXKEbhONuq3An9k2kSKFG5inoh0rR8h6ZTRt3HVFQ6g4rvvs/mB6dzYvUTpvycijgFtsiZ9BYAVCyOM34AAZgpm2iSRGSRVHtkkMFpjauBPmBniVM8pszZ5xqfgloNCyQGBBZnlDc4/dA5qUjztyuYehDoAUnNa87LlnKUO+5r7OgcUwUtwH5UBBLdeNoa5z8w0JPC4MNmZvkijX4iRLB5UumVoIhZRkbSUgXBAz9NiV7cnv1VSczf42/TaVy/HcrFwD/4o5hK7BR1+Laq/G2vfDAB+m/GrfZ5psa1asB4QZIrj/VaSZsg3EsIVGyYClFX7kVHTSgU7E7TiEvGYIu1t+bzo4tIB50UypLoT2teiPIE/c3UrmKVHZ0R17njFRdmZx685u1u8ONXkc/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(376002)(136003)(39860400002)(346002)(186009)(1800799009)(451199024)(6512007)(2616005)(83380400001)(26005)(6486002)(4326008)(6506007)(53546011)(5660300002)(8936002)(8676002)(38100700002)(478600001)(33656002)(235185007)(54906003)(66899024)(7416002)(86362001)(41300700001)(36756003)(2906002)(66946007)(66476007)(66556008)(316002)(6916009)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: BqMKxbACYymENn8An87GYT4G0i3ajzf297HtpRv5lO0Phq2hxLwWOjO906G2q67TwnYWe798arbi0plTjGNVVliKpum57IIU2D7SNi3OzyoeH52YIUtT8rQpKiBa5g+5gqkUMjHyiPPFj0dh5QQ3VGD+t/eCwhhiCNXW51NYQuOmMMK9qvgWEsPqfaxSdpobNqdWe3Twg/RRjXvggxHi9G9pVjzuComF0HCqpzEPMwi4+UaHjs5CZDfC6lCSvbiL17e9ExqewGmF3UDWvV964z9muNqXLyehxY3NEBYcFiHTlmB/v1PZYsklvN0SXVCHlrbPlFS+n9bSw043c1nabrxZzLCIcrr7uJIRA1YmnE0fHN+fFRDfrWtWT+3F389CTUkKZYbeu6WSs1QPk/W8shQiafXu4riQKz4huCvDNUvFk+dwjKjSJLDJBAGMLMSq/qFFz6MT8BooOVz6Ds2a/EgsLWIJYQOA+FcIjTnIudffNvejBDhA6/UYorLM6wI5SBT7GnN6Gz96eNPeGtYn31mP3bpKne1upRDjLN19+BumMoAzc+yVa7UCs5Wv0hMW21zozGPY/3srDgLsTLRK1OiY7urNG1DWPAL/nTJawKKSM6Dtc5VWcI2Tp1smC1S+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(136003)(346002)(39860400002)(376002)(1800799009)(451199024)(186009)(8936002)(5660300002)(66556008)(2906002)(54906003)(36756003)(66476007)(66946007)(316002)(4326008)(8676002)(66899024)(235185007)(7416002)(41300700001)(6506007)(6486002)(53546011)(6512007)(26005)(38100700002)(478600001)(2616005)(83380400001)(33656002)(86362001)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fbcGY6H8LC0cXrjznPLSi0dAYRkImpxMV16eiRElZuFyfIJVXlAR17YEYHdO?=
- =?us-ascii?Q?hJMUKm41MxUAf/1zxybXsJzogG7oaz/PS2MzsH7o8zwLa1znKtKXdRFRb+ND?=
- =?us-ascii?Q?qDZ+zLX40pvveQOI4gSjhktrZ393twR4mS/qEROGAJ957QlWjtCzU9Pxof5B?=
- =?us-ascii?Q?ZxlPWck0+6v4hF909z9gFLiOysrFvLyHQOQsyPsofMItomRskw9978v6QeWR?=
- =?us-ascii?Q?kTUNYVjtJCLoGSb5XgoNBA4SGIJhbocekVJgC5qAi8YvnI3+Xdar6w1Ox7bd?=
- =?us-ascii?Q?jSmfaxzHtLWzeNJXVP0JitDDkbegMpqpmyKJQCvmdXA1snZ1rDlWZ9MPvfTY?=
- =?us-ascii?Q?ZDdYj4xQ1RvKRRDIm7NdbF44UTghWa70Sflh/hMML+o3nfhMu6Jv6I0gUlrA?=
- =?us-ascii?Q?ERCBcXHQYuSWAZpYhzeMy1bRF1bYQzDfRCbc8Rr7AfmvFQW+yY3mG+KWnhHP?=
- =?us-ascii?Q?dzULFtQB5clsTjNzVIJo3z309wD1End2RVnQgvhn5jDrGxQbDHrdiZ6AWu+k?=
- =?us-ascii?Q?Iu6GGWUTuAgr7rcByWW5zRtUwjpTJNWveUiAhQSUg7TVoY+IDFzOP+v5L/hH?=
- =?us-ascii?Q?eoc1nPDPXYB74++SffzpAgEt9UrytUYAUJGvlralaBs9louJxeOur3QHM1OY?=
- =?us-ascii?Q?4ovSWNy5fgBIQfrkU/0WJCy9/9w/kJDUGp/NMRVZ+S/pHASYpNVyyta/j1mu?=
- =?us-ascii?Q?wjuUthsAYc7Uqs4Gql8HDa/ypqzGKFiRVAF6cWsRWneJMtKWRGlertfKcZUW?=
- =?us-ascii?Q?+2wqyHWv22emlSLsd5kbnCkp06sn0nOFITnPn3QAMDAcWtReL8unmYt4dcFv?=
- =?us-ascii?Q?RBYfBQQEeGMKHPI4Idrntm62yiaKiMNXJwCxAMhvLvwkUa8QR6y4xmN5zeG4?=
- =?us-ascii?Q?6bDOGLWkGEELMW1OMduaucMRzam1Ah/HvphRX+jxYGlvWSCLIK4o8WD6+SAY?=
- =?us-ascii?Q?1WHCEgdFmWAlp2j5QW0e94UTcCwQBZD9dJq6SVfkHgFNlsVQkRMDgzGYS2sU?=
- =?us-ascii?Q?3qo+e0H/TX3g22QEt4pxwT2iVXppN7/CdU11FS8D8RiwpUeTGd1+V9M5Qoib?=
- =?us-ascii?Q?+7z4E4n1SDpos2fa1EF+JcBnoFfSakoKKg2H12j5AOEHFivAWW+2TktuX/kV?=
- =?us-ascii?Q?qwKZaO4JL94KW3pwHC43hKmdsaHw6ODsDt/R9j6BoEgsmOA011BI0xdp4AEX?=
- =?us-ascii?Q?CL3Dbcdj5wdm0ZioAIKhEBmK3Ehrb56feY4bvcWtrBlitc4mQNNsIxplfgwt?=
- =?us-ascii?Q?ffyhTUsqnIVl22OtKHUjnEGowVPt1pEqI3fCDE41NvMH/xeDf8TvZGjdYQIF?=
- =?us-ascii?Q?l7m0NOd+bC4RLli/8ohm+YJI1mkpmukVWms8wbhyMajb+NJh15qm8eGcFKk6?=
- =?us-ascii?Q?PaphQe/RiM1focCn/Lx/B9qLbuz8KSkYMARKci3szyNxQfkQ0ZxMeV93DDax?=
- =?us-ascii?Q?PJXHD9KKfZ253PmWroBH3JmqQOXNtJQ/8CMndgAqgCmr2ueBKYvI3Nbj7l7k?=
- =?us-ascii?Q?J35eYj+xQWbOK2uw7CQom0zTUE4jzoniKUNYy42C1hQtX9oa85ySc7j0kT3y?=
- =?us-ascii?Q?SG/p0N8mM1Xi25PNAlA=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wcvaJugLNgM2hqAtdwF90e0SuLyU+Oxz6X2PPkKw/QYqaNmUGFSf8Xz6lsoB?=
+ =?us-ascii?Q?+KhW7IFyEEPFgfutHQGqMws2cVvRzzkbfH0xlFsZLAjWEeg4cR3ckWXhPUpP?=
+ =?us-ascii?Q?ufWCL+u70atlljIavFcXPIKDOrhAv2PBVwhxPVqFJ0kHbU8zrWiBQ78NCEeN?=
+ =?us-ascii?Q?LBppX+HXp31UAdrA7CF5sZfJcjVKb6BoDEchVFRLc9NQTyRlG070Q8vPoQ8f?=
+ =?us-ascii?Q?OVakXrjlt3g5s77h2qu7Jm8LeVYRazwHYkgcSCLi2sfJt8eXkJOqalWJu1k4?=
+ =?us-ascii?Q?5G8yVLGLAAGOd5hy4JrwCwjFuKosIKgrDEsafungqhMe0RkwbofeJuRg2j/s?=
+ =?us-ascii?Q?HCa49ABrAUn9qOySzQi3oUSxgHJnLbMx+9fLvn/5dL8Nme0p3mxC6vq/71fS?=
+ =?us-ascii?Q?S2SwMyI3roOE0IYbyEcPxRpaGzlZGwqfgw4fDCJ2bO3CoyOI5qbpRFsXydDw?=
+ =?us-ascii?Q?fgXCmAg+xBp/VRjtNXm7Llo4hIgKTpBMe+tlaltA5F+4MHfLqjRGgteJi7gn?=
+ =?us-ascii?Q?1OlufUPmPxhs+d17aZp9ZrrEFhtWU75urzJely+Hc2wl7w89y1Q5fEuWa9Nq?=
+ =?us-ascii?Q?VBoyk8jySL+z+wVfa0UgtaWlSKAU/Mrpu3SX2LEUt5V9/Dd+osyrH6JPKBcB?=
+ =?us-ascii?Q?doWnZOa8fE3d5jlOnmsM/o4WPSCdIhUxrimobe+n/HXB2BWa6b51b5a8xMUM?=
+ =?us-ascii?Q?SkUAa8pW86VC5z+BjepSddEc4MJxk6wv9HzU5MdbM1JksMshKf6TJmrodDzT?=
+ =?us-ascii?Q?IxNut/f9xzAwfLpYe/VX2zyKQ/jge7c04Vw5KtS6k9++lGMJZl2vtu9Ix8x0?=
+ =?us-ascii?Q?Fh7ElNx+Yo5guPvZBpbRZq19X6JpiR/nczxqLdePg9LC12Z8OfFST9c70pT0?=
+ =?us-ascii?Q?k0y/AIEuP4zYJ4GDgPWUuHRHNur5vusv93fyfBxy78L9eGY0cvTDkwBvDDuq?=
+ =?us-ascii?Q?1eCIh9tdcnvnl5Nt/p3gIq3He1dldvNjXs4QaUHQzD8z5przRrYaIcvww7Mv?=
+ =?us-ascii?Q?OgjDe1KdN3A1CLsCL735siDurtlJZtYv7fbEp9mZMMN3YCvaRSlIgiPwprKU?=
+ =?us-ascii?Q?f1z9c1qhlCVnoeifHp2wvF3xR2ZxHVkm+sR6GaQuMQ3Lyhb3VNU4fdPTrFsu?=
+ =?us-ascii?Q?VPOats27I2v2jDqagG49+VsKIJFpOWAgsouLkt5zH95QxT04zZrm5eNCiOZO?=
+ =?us-ascii?Q?OvmwVhOfGVcgEFeWhqAQ5tQWyzVld/NcYCts2WzQY3Nb1oLkaxkc0uWzuKyb?=
+ =?us-ascii?Q?in7hpVzYX3XjFz59QwHmb2Fdx+WfMoy0OnlkU0IBOJMUyxSOspnFjJ1Wp4Xc?=
+ =?us-ascii?Q?XKQ8VM84Wr5ns0cl4AnZ+r1jsmVjVfYV7nalO9L37NrGiNyiMsZGoVHIGgDQ?=
+ =?us-ascii?Q?KM99506H6K15tDKD9SDAwA7uyRKsBNKZ7Ri/9ZJ3KI5FQcK/xMEvcYkCKAwr?=
+ =?us-ascii?Q?3CEnTq3vWpTageL1s5sPL7zQSdFlEFvqZObyT6Go9Cc4xe6NOl/lm1zdhalR?=
+ =?us-ascii?Q?UG4et37r2mfwzqkJOLmTmUb77H3tfJbftYZ6nGobuLDrEZoVe3ZiLdmOoqdW?=
+ =?us-ascii?Q?CFXAHCthWuztVXifR02URnBdyQceNRUsbes+yVbp?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab1741ef-5f73-4192-19f2-08dbaf0036ac
+X-MS-Exchange-CrossTenant-Network-Message-Id: f16af328-08ca-4d67-f414-08dbaf013bb9
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 17:39:25.6620
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 17:46:43.6310
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KY/Ui6YhwdkJSKeb/toxNBK4//d1ZhFiS1p4TicCG7+HJOJS7YEyrgxwag56QZN6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7325
+X-MS-Exchange-CrossTenant-UserPrincipalName: fufoNRBthIlNQ1b2NUov0GCHn08eaHmwSgs5QUyJ8dBidPZvYIzlHAdwAAbSRCpw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8333
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -124,87 +123,114 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=_MailMate_E4CFAC3C-2139-4160-8BBD-3BE0BA237AC8_=
+--=_MailMate_747CE04C-1464-4207-BE8E-40EE01453762_=
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-On 6 Sep 2023, at 13:17, David Hildenbrand wrote:
+On 6 Sep 2023, at 11:03, Zi Yan wrote:
 
-> On 06.09.23 17:03, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
+> From: Zi Yan <ziy@nvidia.com>
 >
-> Subject talks about "nth_page()" but that's not what this patch does.
->
->>
->> When dealing with hugetlb pages, manipulating struct page pointers
->> directly can get to wrong struct page, since struct page is not guaran=
-teed
->> to be contiguous on SPARSEMEM without VMEMMAP. Use nth_page() to handl=
-e
->> it properly.
->
-> ^ dito
->
->>
->> Fixes: eeb0efd071d8 ("mm,memory_hotplug: fix scan_movable_pages() for =
-gigantic hugepages")
->> Cc: <stable@vger.kernel.org>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
->> ---
->>   mm/memory_hotplug.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
->> index 1b03f4ec6fd2..3b301c4023ff 100644
->> --- a/mm/memory_hotplug.c
->> +++ b/mm/memory_hotplug.c
->> @@ -1689,7 +1689,7 @@ static int scan_movable_pages(unsigned long star=
-t, unsigned long end,
->>   		 */
->>   		if (HPageMigratable(head))
->>   			goto found;
->> -		skip =3D compound_nr(head) - (page - head);
->> +		skip =3D compound_nr(head) - (pfn - page_to_pfn(head));
->>   		pfn +=3D skip - 1;
->>   	}
->>   	return -ENOENT;
->
-> I suspect systems without VMEMMAP also don't usually support gigantic p=
-ages AND hotunplug :)
->
-> With the subject+description fixed
->
-> Acked-by: David Hildenbrand <david@redhat.com>
+> When dealing with hugetlb pages, manipulating struct page pointers
+> directly can get to wrong struct page, since struct page is not guarant=
+eed
+> to be contiguous on SPARSEMEM without VMEMMAP. Use nth_page() to handle=
 
-Sure. Thanks.
+> it properly.
+>
+> Fixes: eeb0efd071d8 ("mm,memory_hotplug: fix scan_movable_pages() for g=
+igantic hugepages")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  mm/memory_hotplug.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 1b03f4ec6fd2..3b301c4023ff 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1689,7 +1689,7 @@ static int scan_movable_pages(unsigned long start=
+, unsigned long end,
+>  		 */
+>  		if (HPageMigratable(head))
+>  			goto found;
+> -		skip =3D compound_nr(head) - (page - head);
+> +		skip =3D compound_nr(head) - (pfn - page_to_pfn(head));
+>  		pfn +=3D skip - 1;
+>  	}
+>  	return -ENOENT;
+> -- =
+
+> 2.40.1
+
+Fixed the subject and commit message:
+
+From: Zi Yan <ziy@nvidia.com>
+Date: Wed, 6 Sep 2023 10:51:21 -0400
+Subject: [PATCH v2 3/5] mm/memory_hotplug: use pfn calculation in place o=
+f direct struct page manipulation.
+
+When dealing with hugetlb pages, manipulating struct page pointers
+directly can get to wrong struct page, since struct page is not guarantee=
+d
+to be contiguous on SPARSEMEM without VMEMMAP. Use pfn calculation to
+handle it properly.
+
+Fixes: eeb0efd071d8 ("mm,memory_hotplug: fix scan_movable_pages() for gig=
+antic hugepages")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+---
+ mm/memory_hotplug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 1b03f4ec6fd2..3b301c4023ff 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1689,7 +1689,7 @@ static int scan_movable_pages(unsigned long start, =
+unsigned long end,
+                 */
+                if (HPageMigratable(head))
+                        goto found;
+-               skip =3D compound_nr(head) - (page - head);
++               skip =3D compound_nr(head) - (pfn - page_to_pfn(head));
+                pfn +=3D skip - 1;
+        }
+        return -ENOENT;
+--
+2.40.1
 
 
 --
 Best Regards,
 Yan, Zi
 
---=_MailMate_E4CFAC3C-2139-4160-8BBD-3BE0BA237AC8_=
+--=_MailMate_747CE04C-1464-4207-BE8E-40EE01453762_=
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename=signature.asc
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmT4uUsPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUdQcP/16W4/zA91pnNA5SwwygTsznkZhDhePLU0zV
-o/HQImbjUNdpCdSeK42ijkuWcqyyz7o07q0beQxmgbiolup8eFTa3nWlf8fwvW3c
-biLgEJ7Xj1BI9JXAJgAVJxjkdDjURfopXS7X3g6SObvie/ogF0Ist5hmoyazLUPU
-8EoPXRE3yKoVwSwlR9wZi3HdcsXVj9IXm4ertwLF/nmQljaMN1dtpLLymh4sSGZj
-Oo0jMA8YkD6BDKxEHoHsJsA2978A7H1ADtwDhVabyVuqAl0R7i38/VkyFw9Zl74D
-NGRzA6TuLIJbSogdtTxHD7F2KQQ4RUmAlUUXtIjeQYQ6uYaDdwzl7hasTkSr7cOq
-b70Fi/2u7Axh8vLxArzCy0iy36i9VrITDCC26rfLhwEAnA0tACh0pwDa3zdT/SoN
-wfYq4dDtCiDDQD3e/tfb9mlFhyL0wNesBx7LqRAe7TcS0a1VWuZwS07Ps1uEsPOw
-5+0xTj5JIvsAyEqYwNTv2s4IHw3X6Ofd033Az7odj0VcL6CWDvaOwKhH5szF37Fs
-7zmrsb5Pf4ThkMAE5L71/btM7JOn5OXTDZN28XCbrtYFXK06+txPaM7FfrIvdU19
-ztJ4v4qjiuOYzGqOzMQrUOGUDXJbTZnBycMC0ywZ6eYv0YOwbjZRv+rJlMbud3z9
-UJgAI1u/
-=EmGG
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmT4uwEPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUvfQP/Rm+QRZzWyU48cnq6fBWYZcGY0a5rQPOUJIr
+plXKffv6x0jVwk4IWsnNiRaHObmn7PADVWOBqlU4mX+W7z/CGo6niaMNCJYgUXyV
+cygfRJ8eOjOpAM+8K908EfX1nm9oPqnQCwjNkKY+XLZb1/0njCU8rDwY0Wy/pUEU
+FIyX3nxxTvWWi+7h+Ew1AHT5mX+QNVC0rfTiUzfAjKH4BXxJUNe14Y1xss5H2VcO
+4RK1z1vLStD+hL6nDuBz7Ocahzcv55177a/Ewe8Ds/pcEpnP2xDBwpGqgDkX20Gy
+nfp0hLtWr54uki+Kma/4Ij5dLNISsofrjJ2UUmGGBYmrypttDlIlECuknuE2skEz
+1ubcQ9kq0rRCEbOZRuQU91Qt7fGo8/PgnVhVrVo0S179W16VSHIwZMTJqQBbwuQv
+ojP8zkv2JlIeRaQzsaZX/k8Jaaczu/n0fy//JSVLVqP8DCoEdCv4x4J4Rv6mzaFA
+4A8nhIaECb1kg1xpqwJMLhniNgfa7Q+SoIsTIN6S+zVoJTUy8YSNXLtrf7mDMa7U
+C0rmq5ECH98m41o8IPuHbepZbjfF6Icux+wXHsVB2U9CwlNVww2FjD287I8etTTz
+YkyX+7CoRttz/uQ/3nblpr0+1OQJS7jI5FXBRIdCnSLgcQ5Udm1akmjVZNPYgl3e
+oXusm6K2
+=jBK5
 -----END PGP SIGNATURE-----
 
---=_MailMate_E4CFAC3C-2139-4160-8BBD-3BE0BA237AC8_=--
+--=_MailMate_747CE04C-1464-4207-BE8E-40EE01453762_=--
