@@ -2,84 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D9E793323
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Sep 2023 03:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F2F7936AC
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Sep 2023 10:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236696AbjIFBE2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Sep 2023 21:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S232719AbjIFIBE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Sep 2023 04:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjIFBE2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Sep 2023 21:04:28 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F881A3;
-        Tue,  5 Sep 2023 18:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=I4LuFZe0C31aTkwoiiTrzV8Te/Obu7XjlrKLi4Ak64g=; b=Wa6w8sBYTj/+zNLxaid2hLPmaU
-        q8NGEBn3Fjcw+bOozeC9/i2qNg6RDeswb7HeCoyucusjv8rmjRiAvqLS+SXBLUJ8sjaXV3JIY8AwD
-        mHg8oMxSig2ImQP/4sqFqQYPuajGVe4Z2CuEdnGcmHy7qicTpvodCHgsCr1grieLJLH5CW+K7S6pa
-        Dn8Zac3CN6RzHChIv+PRL/g9vksKstsMA01nqtobynH3MkKWw+KbJMbzwJWWJFFs6S5zWvRDTeA76
-        xmYNgDkaP+oXKridmjxTYEssBS2CkzZiSf8Ks+xaE4UOtd+vKFsr6aUEUFPHhmvGCJtLZWlDc1IlJ
-        LU7U4ZOQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qdgxv-006zS6-1a;
-        Wed, 06 Sep 2023 01:04:19 +0000
-Message-ID: <d8e0dd0f-ce37-2dbf-8ac3-a1e26a18cf45@infradead.org>
-Date:   Tue, 5 Sep 2023 18:04:18 -0700
+        with ESMTP id S230070AbjIFIBD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Sep 2023 04:01:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B32CDB;
+        Wed,  6 Sep 2023 01:01:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9201222407;
+        Wed,  6 Sep 2023 08:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1693987258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Th6i3Ci6XMV5czHwHHRQpy4WXZpYK1vSc4mKPzvASOU=;
+        b=Pb4lNhvGotAuMduqcxpX1veGfBW2fSsxbs9Pu7MCDvZuKYqbhIBY10E+hTUliKOLBUS8xT
+        IScFwkZq92rxWtvku6iqGuFuVgR5lDAVbkoOihu7XH0KTBnfaYqyy4A7lldnkADZSSK6sy
+        waSNnkdND+zVot6yoT1DyeMpgGyp2zc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1693987258;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Th6i3Ci6XMV5czHwHHRQpy4WXZpYK1vSc4mKPzvASOU=;
+        b=8aX8Ngai6ZtyQlD2914oRoaCD9456/pp3O+p6YtiEHc05I1uh8Iu/T2mBUnSMDxI5k/fIo
+        p/VLTw2WkzUAHvBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8ACD11346C;
+        Wed,  6 Sep 2023 08:00:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2QG0ILkx+GRiVwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 06 Sep 2023 08:00:57 +0000
+Message-ID: <bcefb739-b45c-8349-8010-ac137ab61c29@suse.cz>
+Date:   Wed, 6 Sep 2023 10:00:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH] MIPS: Alchemy: only build mmc support helpers if au1xmmc
- is enabled
+Subject: Re: [PATCH gmem FIXUP] mm, compaction: make testing
+ mapping_unmovable() safe
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     ackerleytng@google.com, akpm@linux-foundation.org,
+        anup@brainfault.org, aou@eecs.berkeley.edu,
+        chao.p.peng@linux.intel.com, chenhuacai@kernel.org,
+        david@redhat.com, isaku.yamahata@gmail.com, jarkko@kernel.org,
+        jmorris@namei.org, kirill.shutemov@linux.intel.com,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        kvmarm@lists.linux.dev, liam.merwick@oracle.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org,
+        linux-security-module@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mail@maciej.szmigiero.name,
+        maz@kernel.org, michael.roth@amd.com, mpe@ellerman.id.au,
+        oliver.upton@linux.dev, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, paul@paul-moore.com, pbonzini@redhat.com,
+        qperret@google.com, serge@hallyn.com, tabba@google.com,
+        vannapurve@google.com, wei.w.wang@intel.com, willy@infradead.org,
+        yu.c.zhang@linux.intel.com
+References: <20230901082025.20548-2-vbabka@suse.cz>
+ <ZPfAL0D95AwXD9tg@google.com>
 Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, tsbogend@alpha.franken.de,
-        manuel.lauss@gmail.com
-Cc:     arnd@arndb.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20230905070656.196274-1-hch@lst.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230905070656.196274-1-hch@lst.de>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ZPfAL0D95AwXD9tg@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 9/5/23 00:06, Christoph Hellwig wrote:
-> While commit d4a5c59a955b ("mmc: au1xmmc: force non-modular build and
-> remove symbol_get usage") to be built in, it can still build a kernel
-> without MMC support and thuse no mmc_detect_change symbol at all.
+On 9/6/23 01:56, Sean Christopherson wrote:
+> On Fri, Sep 01, 2023, Vlastimil Babka wrote:
+>> As Kirill pointed out, mapping can be removed under us due to
+>> truncation. Test it under folio lock as already done for the async
+>> compaction / dirty folio case. To prevent locking every folio with
+>> mapping to do the test, do it only for unevictable folios, as we can
+>> expect the unmovable mapping folios are also unevictable - it is the
+>> case for guest memfd folios.
 > 
-> Add ifdefs to build the mmc support code in the alchemy arch code
-> conditional on mmc support.
-> 
-> Fixes: d4a5c59a955b ("mmc: au1xmmc: force non-modular build and remove symbol_get usage")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/mips/alchemy/devboards/db1000.c | 4 ++++
->  arch/mips/alchemy/devboards/db1200.c | 6 ++++++
->  arch/mips/alchemy/devboards/db1300.c | 4 ++++
->  3 files changed, 14 insertions(+)
-> 
+> Rather than expect/assume that unmovable mappings are always unevictable, how about
+> requiring that?  E.g. either through a VM_WARN_ON in mapping_set_unmovable(), or by
+> simply having that helper forcefully set AS_UNEVICTABLE as well.
 
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
--- 
-~Randy
+Yeah I guess we could make the helper do that, with a comment, as gmem is
+the only user right now. And if in the future somebody has case where it
+makes sense to have unmovable without unevictable, we can discuss what to do
+about it then.
