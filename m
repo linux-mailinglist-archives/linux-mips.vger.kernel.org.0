@@ -2,139 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F547944DA
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Sep 2023 22:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE8A7945FF
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Sep 2023 00:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233703AbjIFU5H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Sep 2023 16:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S244984AbjIFWLS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Sep 2023 18:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236060AbjIFU5H (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Sep 2023 16:57:07 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A99C1133;
-        Wed,  6 Sep 2023 13:57:02 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qdza7-0000HF-00; Wed, 06 Sep 2023 22:56:59 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3569DC020D; Wed,  6 Sep 2023 22:54:44 +0200 (CEST)
-Date:   Wed, 6 Sep 2023 22:54:44 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.6
-Message-ID: <ZPjnFLtq9OK+UxZ2@alpha.franken.de>
+        with ESMTP id S244989AbjIFWLR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Sep 2023 18:11:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068F219B9
+        for <linux-mips@vger.kernel.org>; Wed,  6 Sep 2023 15:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694038227;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2sW5n0U9nqfDRjI4qbYKErrgizSRaxysFjpyGkvRHBg=;
+        b=Pg99Aw0dhrjssfj+plRZ73iAzmz80+t6FzoooYMo5YOjDFkLKZv62XF4FxljMbibakqOrb
+        gWlugmjp43pbB5CdnXYoQls8seJQWvdY++J14P9i7h5PP0X9VcuRGlwMkKJAy4kV+FVodZ
+        XQCAdiOokbHqs1rtsWQOjmjv9FyPDWo=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-zX2AtPyQPIC3S4SzI3ytSw-1; Wed, 06 Sep 2023 18:10:25 -0400
+X-MC-Unique: zX2AtPyQPIC3S4SzI3ytSw-1
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-7a4f58bd3d4so96117241.2
+        for <linux-mips@vger.kernel.org>; Wed, 06 Sep 2023 15:10:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694038225; x=1694643025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2sW5n0U9nqfDRjI4qbYKErrgizSRaxysFjpyGkvRHBg=;
+        b=Cge4EAnbqUQWg1tj+1Hwnp5gJvVE6NFTkF9Bbqv1t4w94Po/G/bBLugo8QKS6gYI2I
+         AYE6HZR/khFd+lCMSs5DEs0eT0UjqAqLL+G6KSKxKVZjKZTV2T/MJ84+//U93r5+i+iY
+         6uroXVBMm8Ki1hyqrOrFYYnUpafAnGV8o4aJBJjU9XRUIAb6Y8J2OWHB7MPjWwMjXRYM
+         LonL/eiRy4xq7rVjaie9sqzaJmRR6oQfmOtVvfurREbkwaf/lEAM4Jua29bUZTeG2oxN
+         VsWZpDpELHm2iFlcIYCCXci3RaBpXSN48L5PxyVIudM30wX618f4PSi+fYQc+TQ+K8Xl
+         ZU+g==
+X-Gm-Message-State: AOJu0YyqDaOdVqWQJY5lW9bY4qj2hDYOScOfNAX/e5rjYMG/P5HaVfRz
+        CJnw2rPxmse7+ZBcY3t+cyP1fO9PhAPDGI5//PfCXgUc8nIQJdkLAKBkcJJamLhnrkVUfSsaNAi
+        /pE86yGnzFFAOMBc8vw9muoTpR7+jbKzPPNpmpQ==
+X-Received: by 2002:a67:ee4d:0:b0:444:17aa:df60 with SMTP id g13-20020a67ee4d000000b0044417aadf60mr4110660vsp.13.1694038225082;
+        Wed, 06 Sep 2023 15:10:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHp5n1WB8R1og/NcZaTM8SckALAeHpMUrTVBDu8TXyXcr3qI/pIRPsrfv30I89brgsoG52emGtevyCvY1jn784=
+X-Received: by 2002:a67:ee4d:0:b0:444:17aa:df60 with SMTP id
+ g13-20020a67ee4d000000b0044417aadf60mr4110646vsp.13.1694038224758; Wed, 06
+ Sep 2023 15:10:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-14-seanjc@google.com>
+ <84a908ae-04c7-51c7-c9a8-119e1933a189@redhat.com> <ZLq8ylTsFQ1s4BAZ@google.com>
+In-Reply-To: <ZLq8ylTsFQ1s4BAZ@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Thu, 7 Sep 2023 00:10:13 +0200
+Message-ID: <CABgObfYLuRx5oAfOKM1fNuyRw5BNhe127sbRYhmpoT9MsjMYQQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v11 13/29] KVM: Add transparent hugepage support for
+ dedicated guest memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 6eaae198076080886b9e7d57f4ae06fa782f90ef:
+On Fri, Jul 21, 2023 at 7:13=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+> On Fri, Jul 21, 2023, Paolo Bonzini wrote:
+> > On 7/19/23 01:44, Sean Christopherson wrote:
+> > > @@ -413,6 +454,9 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_c=
+reate_guest_memfd *args)
+> > >     u64 flags =3D args->flags;
+> > >     u64 valid_flags =3D 0;
+> > > +   if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE))
+> > > +           valid_flags |=3D KVM_GUEST_MEMFD_ALLOW_HUGEPAGE;
+> > > +
+> >
+> > I think it should be always allowed.  The outcome would just be "never =
+have
+> > a hugepage" if thp is not enabled in the kernel.
+>
+> I don't have a strong preference.  My thinking was that userspace would p=
+robably
+> rather have an explicit error, as opposed to silently running with a misc=
+onfigured
+> setup.
 
-  Linux 6.5-rc3 (2023-07-23 15:24:10 -0700)
+Considering that is how madvise(MADV_HUGEPAGE) behaves, your patch is
+good. I disagree but consistency is better.
 
-are available in the Git repository at:
+Paolo
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.6
-
-for you to fetch changes up to e7513eccb7d7f82e28f4730210b42da71edaa6a6:
-
-  MIPS: TXx9: Do PCI error checks on own line (2023-08-28 09:59:06 +0200)
-
-----------------------------------------------------------------
-just cleanups and fixes
-
-----------------------------------------------------------------
-Ilpo Järvinen (1):
-      MIPS: TXx9: Do PCI error checks on own line
-
-Jiaxun Yang (1):
-      MIPS: Loongson64: Fix more __iomem attributes
-
-Keguang Zhang (2):
-      MIPS: loongson32: Remove regs-clk.h
-      MIPS: loongson32: Remove regs-rtc.h
-
-Maciej W. Rozycki (3):
-      MIPS: Fix CONFIG_CPU_DADDI_WORKAROUNDS `modules_install' regression
-      MIPS: Only fiddle with CHECKFLAGS if `need-compiler'
-      Revert MIPS: Loongson: Fix build error when make modules_install
-
-Masahiro Yamada (3):
-      mips: remove unneeded #include <asm/export.h>
-      mips: replace #include <asm/export.h> with #include <linux/export.h>
-      mips: remove <asm/export.h>
-
-Nathan Chancellor (1):
-      MIPS: VDSO: Conditionally export __vdso_gettimeofday()
-
-Rob Herring (3):
-      MIPS: Explicitly include correct DT includes
-      MIPS: Fixup explicit DT include clean-up
-      MIPS: More explicit DT include clean-ups
-
-Sui Jingfeng (1):
-      Mips: loongson3_defconfig: Enable ast drm driver by default
-
-Trevor Woerner (1):
-      arch/mips/configs/*_defconfig cleanup
-
- arch/mips/Makefile                                |  16 ++-
- arch/mips/bmips/setup.c                           |   1 -
- arch/mips/cavium-octeon/flash_setup.c             |   3 +-
- arch/mips/cavium-octeon/octeon-memcpy.S           |   2 +-
- arch/mips/cavium-octeon/octeon-platform.c         |   2 +
- arch/mips/cavium-octeon/octeon-usb.c              |   2 +
- arch/mips/configs/ip22_defconfig                  |   1 -
- arch/mips/configs/loongson3_defconfig             |   1 +
- arch/mips/configs/malta_defconfig                 |   1 -
- arch/mips/configs/malta_kvm_defconfig             |   1 -
- arch/mips/configs/maltaup_xpa_defconfig           |   1 -
- arch/mips/configs/rm200_defconfig                 |   1 -
- arch/mips/include/asm/Kbuild                      |   1 -
- arch/mips/include/asm/mach-loongson32/loongson1.h |   2 -
- arch/mips/include/asm/mach-loongson32/regs-clk.h  |  81 -----------
- arch/mips/include/asm/mach-loongson32/regs-rtc.h  |  19 ---
- arch/mips/kernel/mcount.S                         |   2 +-
- arch/mips/kernel/octeon_switch.S                  |   1 -
- arch/mips/kernel/r2300_fpu.S                      |   2 +-
- arch/mips/kernel/r2300_switch.S                   |   1 -
- arch/mips/kernel/r4k_fpu.S                        |   2 +-
- arch/mips/lantiq/irq.c                            |   2 +-
- arch/mips/lantiq/xway/dcdc.c                      |   3 +-
- arch/mips/lantiq/xway/gptu.c                      |   3 +-
- arch/mips/lantiq/xway/sysctrl.c                   |   1 -
- arch/mips/lantiq/xway/vmmc.c                      |   3 +-
- arch/mips/lib/csum_partial.S                      |   2 +-
- arch/mips/lib/memcpy.S                            |   2 +-
- arch/mips/lib/memset.S                            |   2 +-
- arch/mips/lib/strncpy_user.S                      |   2 +-
- arch/mips/lib/strnlen_user.S                      |   2 +-
- arch/mips/loongson32/common/platform.c            |   8 --
- arch/mips/loongson64/smp.c                        | 160 +++++++++++-----------
- arch/mips/mm/page-funcs.S                         |   2 +-
- arch/mips/mm/tlb-funcs.S                          |   2 +-
- arch/mips/pci/pci-lantiq.c                        |   4 +-
- arch/mips/pci/pci-rt2880.c                        |   5 +-
- arch/mips/pic32/pic32mzda/config.c                |   2 +-
- arch/mips/ralink/ill_acc.c                        |   2 +
- arch/mips/ralink/irq.c                            |   2 +-
- arch/mips/ralink/of.c                             |   2 +-
- arch/mips/ralink/prom.c                           |   2 -
- arch/mips/txx9/generic/pci.c                      |  43 +++---
- arch/mips/vdso/vdso.lds.S                         |   2 +
- 44 files changed, 149 insertions(+), 252 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-clk.h
- delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-rtc.h
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
