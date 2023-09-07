@@ -2,170 +2,248 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8AB797910
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Sep 2023 19:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B61E797CD2
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Sep 2023 21:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbjIGRBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Sep 2023 13:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S232297AbjIGTfB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Sep 2023 15:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241011AbjIGRAz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Sep 2023 13:00:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B1B1FD4;
-        Thu,  7 Sep 2023 10:00:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S229977AbjIGTfB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Sep 2023 15:35:01 -0400
+X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Sep 2023 12:34:55 PDT
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF37E47;
+        Thu,  7 Sep 2023 12:34:55 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 718DC1F894;
-        Thu,  7 Sep 2023 06:49:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1694069356; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tmj3YHu3EiPuUc2HxOOZqAmbdUq5Gwk17anV60bvF+8=;
-        b=yU5vier603aXq694itOfrhcjO0QSHPRLF/lueeHBJRSFUC3ta/5WKm18iCH7aRInx50Y+P
-        dlMhxITKyHPvX7XYfZO1ZbjPB2vCg0rpYfZ3c3LfWzbuYpPHxgIL6/rmdCV96ZMwIYptlc
-        2oKsah8Sk+Q1z216oGZcPV1/w+fHjzI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1694069356;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tmj3YHu3EiPuUc2HxOOZqAmbdUq5Gwk17anV60bvF+8=;
-        b=iW1d0smaEK2EyWUqniHZl4q0Puf5OimB6EzUPBXkH3k0urRlYwtK2wxMIBgTEFdPvs65/2
-        9I7N9s+LaZpvbcCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2DBCA1358B;
-        Thu,  7 Sep 2023 06:49:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DNAbCmxy+WTFegAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 07 Sep 2023 06:49:16 +0000
-Message-ID: <fc126f04-64f1-3403-2e12-54c723c68855@suse.de>
-Date:   Thu, 7 Sep 2023 08:49:15 +0200
+        by bee.tesarici.cz (Postfix) with ESMTPSA id EA87A18CBB2;
+        Thu,  7 Sep 2023 13:12:24 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1694085145; bh=fbplRXoTU4SArEuqSCeWcBdBKDzKAfUk7UIh+zzJ294=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UeWu1Ze8yhdkAQSYLwMwA5Evs8is8jd9+WRDve9QstEAJCVJk4EyPrZUvt2GlulJO
+         Acv8RNSZT4NRo56VbHVjN1Qces1eN30pA/Z8XXCRCYRiG42VIaxfqRB+JiaUWDiSNI
+         7vNLYKFtmaNGH7exnrZYJl77SUb4GDfp5VfGRbajxxQjYFEMgAhMtBIGZd04dwv9py
+         LsW5QNMFeGMU27vzeZa8jYcSznJj+rq7+myvFYGpQ5xn1ltALy9BQiZ0pdCtmt5J0/
+         dC6nWffmW3QcD4g/Ya4kxdbnZOi4vIJaCWhouPtZgmgytg1/Um76VBACnHThhWcUwa
+         sohl8kzvr6NyA==
+Date:   Thu, 7 Sep 2023 13:12:23 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Petr Tesarik <petr.tesarik.ext@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        James Seo <james@equiv.tech>,
+        James Clark <james.clark@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "moderated list:XEN HYPERVISOR ARM" <xen-devel@lists.xenproject.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:XEN SWIOTLB SUBSYSTEM" <iommu@lists.linux.dev>,
+        "open list:SLAB ALLOCATOR" <linux-mm@kvack.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Subject: Re: [PATCH v7 9/9] swiotlb: search the software IO TLB only if the
+ device makes use of it
+Message-ID: <20230907131223.587c1a88@meshulam.tesarici.cz>
+In-Reply-To: <87il8wr348.fsf@meer.lwn.net>
+References: <cover.1690871004.git.petr.tesarik.ext@huawei.com>
+        <adea71bd1fa8660d4c3157a562431ad8127016d4.1690871004.git.petr.tesarik.ext@huawei.com>
+        <87a5uz3ob8.fsf@meer.lwn.net>
+        <87il8wr348.fsf@meer.lwn.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2 2/5] fbdev: Replace fb_pgprotect() with
- fb_pgprot_device()
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Helge Deller <deller@gmx.de>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <20230906144801.25297-1-tzimmermann@suse.de>
- <20230906144801.25297-3-tzimmermann@suse.de>
- <8865aa0a-ec40-41ca-a77e-9172cec49f07@app.fastmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <8865aa0a-ec40-41ca-a77e-9172cec49f07@app.fastmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------TEh4cvhQbs1k527ukntUhmr1"
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------TEh4cvhQbs1k527ukntUhmr1
-Content-Type: multipart/mixed; boundary="------------LMUVyb40kina8IJoOFeFeOP2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@arndb.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Helge Deller <deller@gmx.de>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Linux-Arch <linux-arch@vger.kernel.org>
-Message-ID: <fc126f04-64f1-3403-2e12-54c723c68855@suse.de>
-Subject: Re: [PATCH v2 2/5] fbdev: Replace fb_pgprotect() with
- fb_pgprot_device()
-References: <20230906144801.25297-1-tzimmermann@suse.de>
- <20230906144801.25297-3-tzimmermann@suse.de>
- <8865aa0a-ec40-41ca-a77e-9172cec49f07@app.fastmail.com>
-In-Reply-To: <8865aa0a-ec40-41ca-a77e-9172cec49f07@app.fastmail.com>
+Hi all,
 
---------------LMUVyb40kina8IJoOFeFeOP2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+sorry for my late reply; I've been away from my work setup for a
+month...
 
-SGkgQXJuZA0KDQpBbSAwNi4wOS4yMyB1bSAyMTo1MyBzY2hyaWViIEFybmQgQmVyZ21hbm46
-DQo+IE9uIFdlZCwgU2VwIDYsIDIwMjMsIGF0IDEwOjM1LCBUaG9tYXMgWmltbWVybWFubiB3
-cm90ZToNCj4+IFJlbmFtZSB0aGUgZmJkZXYgbW1hcCBoZWxwZXIgZmJfcGdwcm90ZWN0KCkg
-dG8gZmJfcGdwcm90X2RldmljZSgpLg0KPj4gVGhlIGhlbHBlciBzZXRzIFZNQSBwYWdlLWFj
-Y2VzcyBmbGFncyBmb3IgZnJhbWVidWZmZXJzIGluIGRldmljZSBJL08NCj4+IG1lbW9yeS4g
-VGhlIG5ldyBuYW1lIGZvbGxvd3MgcGdwcm90X2RldmljZSgpLCB3aGljaCBkb2VzIHRoZSBz
-YW1lIGZvcg0KPj4gYXJiaXRyYXJ5IGRldmljZXMuDQo+Pg0KPj4gQWxzbyBjbGVhbiB1cCB0
-aGUgaGVscGVyJ3MgcGFyYW1ldGVycyBhbmQgcmV0dXJuIHZhbHVlLiBJbnN0ZWFkIG9mDQo+
-PiB0aGUgVk1BIGluc3RhbmNlLCBwYXNzIHRoZSBpbmRpdmlkaWFsIHBhcmFtZXRlcnMgc2Vw
-YXJhdGVseTogZXhpc3RpbmcNCj4+IHBhZ2UtYWNjZXNzIGZsYWdzLCB0aGUgVk1BcyBzdGFy
-dCBhbmQgZW5kIGFkZHJlc3NlcyBhbmQgdGhlIG9mZnNldA0KPj4gaW4gdGhlIHVuZGVybHlp
-bmcgZGV2aWNlIG1lbW9yeSByc3AgZmlsZS4gUmV0dXJuIHRoZSBuZXcgcGFnZS1hY2Nlc3MN
-Cj4+IGZsYWdzLiBUaGVzZSBjaGFuZ2VzIGFsaWduIGZiX3BncHJvdF9kZXZpY2UoKSBjbG9z
-ZXIgd2l0aCBwZ3Byb3RfZGV2aWNlLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBa
-aW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiANCj4gVGhpcyBtYWtlcyBzZW5z
-ZSBhcyBhIGNsZWFudXAsIGJ1dCBJJ20gbm90IHN1cmUgdGhlIG5ldyBuYW1pbmcgaXMgaGVs
-cGZ1bC4NCj4gDQo+IFRoZSAncGdwcm90X2RldmljZScgcGVybWlzc2lvbnMgYXJlIGJhc2Vk
-IG9uIEFybSdzIG1lbW9yeSBhdHRyaWJ1dGVzLA0KPiB3aGljaCBoYXZlIHNsaWdodGx5IGRp
-ZmZlcmVudCBiZWhhdmlvciBmb3IgImRldmljZSIsICJ1bmNhY2hlZCIgYW5kDQo+ICJ3cml0
-ZWNvbWJpbmUiIG1hcHBpbmdzLiBJIHRoaW5rIHNpbXBseSBjYWxsaW5nIHRoaXMgb25lIHBn
-cHJvdF9mYigpDQo+IG9yIGZiX3BncHJvdCgpIHdvdWxkIGJlIGxlc3MgY29uZnVzaW5nLCBz
-aW5jZSBkZXBlbmRpbmcgb24gdGhlIGFyY2hpdGVjdHVyZQ0KPiBpdCBhcHBlYXJzIHRvIGdp
-dmUgZWl0aGVyIHVuY2FjaGVkIG9yIHdyaXRlY29tYmluZSBtYXBwaW5ncyBidXQgbm90DQo+
-ICJkZXZpY2UiIG9uIHRoZSBhcmNoaXRlY3R1cmVzIHdoZXJlIHRoaXMgaXMgZGlmZmVyZW50
-Lg0KDQpJIHNlZS4gVGhhbmtzIGZvciB0aGUgaW5mby4gSSBsaWtlIHBncHJvdF9mYigpIG1h
-eWJlIA0KcGdwcm90X2ZyYW1lYnVmZmVyKCkuIEknbGwgdXBkYXRlIHRoZSBwYXRjaHNldC4N
-Cg0KT25lIHRoaW5nIEkndmUgYmVlbiB3b25kZXJpbmcgaXMgd2hldGhlciBJIHNob3VsZCBh
-dHRlbXB0IHRvIGludGVncmF0ZSANCnRoZSBoZWxwZXJzIGluIDxhc20vZmIuaD4gaW4gdGhl
-IHJlZ3VsYXIgYXNtIGhlYWRlcnMuIFNvIHRoZSBwZ3Byb3QgY29kZSANCndvdWxkIGdvIGlu
-dG8gcGd0YWJsZS5oLCB0aGUgSS9PIGZ1bmN0aW9ucyB3b3VsZCBnbyBpbnRvIGlvLmguIFRo
-ZSBJL08gDQpmdW5jdGlvbnMgY291bGQgdGhlbiBiZSBjYWxsZWQgcmVhZGJfZmIoKSwgd3Jp
-dGVsX2ZiKCksIG1lbWNweV90b2ZiKCkgDQphbmQgc28gb24uIFdvdWxkIHlvdSBwcmVmZXIg
-dGhhdCBvciByYXRoZXIgbm90Pw0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAg
-ICAgICAgQXJuZA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIg
-RGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5r
-ZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2
-LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIg
-MzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+On Wed, 30 Aug 2023 08:55:51 -0600
+Jonathan Corbet <corbet@lwn.net> wrote:
 
---------------LMUVyb40kina8IJoOFeFeOP2--
+> So it seems this code got merged without this question ever being
+> answered.  Sorry if it's a dumb one, but I don't think this
+> functionality works as advertised...
 
---------------TEh4cvhQbs1k527ukntUhmr1
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Yes, I believe the check was originally in is_swiotlb_buffer(), but it
+got lost during one of the numerous rebases of this patch set. Let me
+send a follow-up patch after making sure it actually works.
 
------BEGIN PGP SIGNATURE-----
+Petr T
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmT5cmsFAwAAAAAACgkQlh/E3EQov+AQ
-9hAAnu8YqJbF8kuGEVKqu7BhEZrJ9Yg8lVBP8+c6r7PW6z5NYHSXwtGmySIopyd4c4C6RiUDOq0f
-gI96wa8Ze85a2vVyPMg0vAJxt94DgCURK37L+tMo/jgRP5uTUuRNwSEYURjpsMT4Zbjc1jNgz5b4
-CP7SZuXBRIj8JAP/SPbpHoo+j8m3PNLcpEZjlk+H81zy7s4kLFftw3bBaB6Lu8TBfYCFKIwuGmjJ
-p55XdNWIbj8q8S6Hhh5DN2lFf6qz7p1DRysLVL8q0dtoyXifftoxU8C7baO0/IM2do6tbNucY+9U
-WJRa+UkMasd314eJ4H+F9oSbKG2hrRJAv98eg1Wbf/+VRylJCYa5HsdHHWCGAoBtxUuK1HqarqvF
-Rrqw/Zt1qsEKHNzlzzq9Qlm15+9n5z6FnbXJgUzkApr20orOHu2DLf9FkUNGDOmykOQfNfWC+I0k
-x5dEx6KxgKUhekd4Q8kiaT/EeqMOV+F31TvezVRo9VuM9uRH2WqtH3LS+9T+NzNQx/+aG9WdrcVM
-cWPvt+RifTXdXPhpZA6pKAOe049mKxkdC6iQp0A9L1YB4QP6iNYgR7wqVvQunMCfoQPJcIo9n4aL
-MmcPjtLmozw7BV3fBCeMuWrk41msZ7qbrAyvOrDuMjQtnYMp6cEeLZOcUHk96uZze9DH8vxZat0Q
-FY4=
-=9dZp
------END PGP SIGNATURE-----
+> Thanks,
+> 
+> jon
+> 
+> Jonathan Corbet <corbet@lwn.net> writes:
+> 
+> > Petr Tesarik <petrtesarik@huaweicloud.com> writes:
+> >  
+> >> From: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> >>
+> >> Skip searching the software IO TLB if a device has never used it,
+> >> making sure these devices are not affected by the introduction of
+> >> multiple IO TLB memory pools.
+> >>
+> >> Additional memory barrier is required to ensure that the new value
+> >> of the flag is visible to other CPUs after mapping a new bounce
+> >> buffer. For efficiency, the flag check should be inlined, and then
+> >> the memory barrier must be moved to is_swiotlb_buffer(). However,
+> >> it can replace the existing barrier in swiotlb_find_pool(),
+> >> because all callers use is_swiotlb_buffer() first to verify that
+> >> the buffer address belongs to the software IO TLB.
+> >>
+> >> Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> >> ---  
+> >
+> > Excuse me if this is a silly question, but I'm not able to figure
+> > it out on my own...
+> >  
+> >>  include/linux/device.h  |  2 ++
+> >>  include/linux/swiotlb.h |  7 ++++++-
+> >>  kernel/dma/swiotlb.c    | 14 ++++++--------
+> >>  3 files changed, 14 insertions(+), 9 deletions(-)
+> >>
+> >> diff --git a/include/linux/device.h b/include/linux/device.h
+> >> index 5fd89c9d005c..6fc808d22bfd 100644
+> >> --- a/include/linux/device.h
+> >> +++ b/include/linux/device.h
+> >> @@ -628,6 +628,7 @@ struct device_physical_location {
+> >>   * @dma_io_tlb_mem: Software IO TLB allocator.  Not for driver
+> >> use.
+> >>   * @dma_io_tlb_pools:	List of transient swiotlb memory
+> >> pools.
+> >>   * @dma_io_tlb_lock:	Protects changes to the list of
+> >> active pools.
+> >> + * @dma_uses_io_tlb: %true if device has used the software IO TLB.
+> >>   * @archdata:	For arch-specific additions.
+> >>   * @of_node:	Associated device tree node.
+> >>   * @fwnode:	Associated device node supplied by platform
+> >> firmware. @@ -737,6 +738,7 @@ struct device {
+> >>  #ifdef CONFIG_SWIOTLB_DYNAMIC
+> >>  	struct list_head dma_io_tlb_pools;
+> >>  	spinlock_t dma_io_tlb_lock;
+> >> +	bool dma_uses_io_tlb;  
+> >
+> > You add this new member here, fine...
+> >  
+> >>  #endif
+> >>  	/* arch specific additions */
+> >>  	struct dev_archdata	archdata;
+> >> diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+> >> index 8371c92a0271..b4536626f8ff 100644
+> >> --- a/include/linux/swiotlb.h
+> >> +++ b/include/linux/swiotlb.h
+> >> @@ -172,8 +172,13 @@ static inline bool is_swiotlb_buffer(struct
+> >> device *dev, phys_addr_t paddr) if (!mem)
+> >>  		return false;
+> >>  
+> >> -	if (IS_ENABLED(CONFIG_SWIOTLB_DYNAMIC))
+> >> +	if (IS_ENABLED(CONFIG_SWIOTLB_DYNAMIC)) {
+> >> +		/* Pairs with smp_wmb() in swiotlb_find_slots()
+> >> and
+> >> +		 * swiotlb_dyn_alloc(), which modify the RCU
+> >> lists.
+> >> +		 */
+> >> +		smp_rmb();
+> >>  		return swiotlb_find_pool(dev, paddr);
+> >> +	}
+> >>  	return paddr >= mem->defpool.start && paddr <
+> >> mem->defpool.end; }
+> >>  
+> >> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> >> index adf80dec42d7..d7eac84f975b 100644
+> >> --- a/kernel/dma/swiotlb.c
+> >> +++ b/kernel/dma/swiotlb.c
+> >> @@ -730,7 +730,7 @@ static void swiotlb_dyn_alloc(struct
+> >> work_struct *work) 
+> >>  	add_mem_pool(mem, pool);
+> >>  
+> >> -	/* Pairs with smp_rmb() in swiotlb_find_pool(). */
+> >> +	/* Pairs with smp_rmb() in is_swiotlb_buffer(). */
+> >>  	smp_wmb();
+> >>  }
+> >>  
+> >> @@ -764,11 +764,6 @@ struct io_tlb_pool *swiotlb_find_pool(struct
+> >> device *dev, phys_addr_t paddr) struct io_tlb_mem *mem =
+> >> dev->dma_io_tlb_mem; struct io_tlb_pool *pool;
+> >>  
+> >> -	/* Pairs with smp_wmb() in swiotlb_find_slots() and
+> >> -	 * swiotlb_dyn_alloc(), which modify the RCU lists.
+> >> -	 */
+> >> -	smp_rmb();
+> >> -
+> >>  	rcu_read_lock();
+> >>  	list_for_each_entry_rcu(pool, &mem->pools, node) {
+> >>  		if (paddr >= pool->start && paddr < pool->end)
+> >> @@ -813,6 +808,7 @@ void swiotlb_dev_init(struct device *dev)
+> >>  #ifdef CONFIG_SWIOTLB_DYNAMIC
+> >>  	INIT_LIST_HEAD(&dev->dma_io_tlb_pools);
+> >>  	spin_lock_init(&dev->dma_io_tlb_lock);
+> >> +	dev->dma_uses_io_tlb = false;  
+> >
+> > ...here you initialize it, fine...
+> >  
+> >>  #endif
+> >>  }
+> >>  
+> >> @@ -1157,9 +1153,11 @@ static int swiotlb_find_slots(struct device
+> >> *dev, phys_addr_t orig_addr, list_add_rcu(&pool->node,
+> >> &dev->dma_io_tlb_pools);
+> >> spin_unlock_irqrestore(&dev->dma_io_tlb_lock, flags); 
+> >> -	/* Pairs with smp_rmb() in swiotlb_find_pool(). */
+> >> -	smp_wmb();
+> >>  found:
+> >> +	dev->dma_uses_io_tlb = true;
+> >> +	/* Pairs with smp_rmb() in is_swiotlb_buffer() */
+> >> +	smp_wmb();
+> >> +  
+> >
+> > ...and here you set it if swiotlb is used.
+> >
+> > But, as far as I can tell, you don't actually *use* this field
+> > anywhere. What am I missing?
+> >
+> > Thanks,
+> >
+> > jon  
 
---------------TEh4cvhQbs1k527ukntUhmr1--
