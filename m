@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D915979A281
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Sep 2023 06:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FB479A29A
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Sep 2023 06:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233703AbjIKEbu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Sep 2023 00:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S233605AbjIKEtG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Sep 2023 00:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233450AbjIKEbr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 00:31:47 -0400
+        with ESMTP id S231764AbjIKEtF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 00:49:05 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7531B9;
-        Sun, 10 Sep 2023 21:31:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4DDE8C43395;
-        Mon, 11 Sep 2023 04:31:40 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B00F1B8;
+        Sun, 10 Sep 2023 21:49:00 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 593E7C43395;
+        Mon, 11 Sep 2023 04:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694406700;
-        bh=pbAerbSrA6wtl03zwwLTf0Gh4fXZYxeyY96kgyZ05tI=;
+        s=k20201202; t=1694407740;
+        bh=4lLgVJb3LOG8DBSrlEzmuFBXuW0+M3lIby4bathQEJQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QIti3GvauOwy1aj9y3J9zF2jiDuygqmg43kCqbd3Kb3iSGIl+HvKtQm8IasA3LZiA
-         vsoi333PTEwbjLgLuxGTK9Ofia/GO6zyz5Xem8A62jAXUwzwW0wOpTREiXh0+V6QmC
-         zQ8q2/BqnZu3wZnsEWPxhLVrUwxNUHNYRXo7WS/Mc8P3GXG4ti/oPpVx/u9zDtQk0M
-         nHTf+l5re0BnfXig+WBfRsimMgWur9LEyd13k3og7giF6esJxMfrFbyR6ocBf8ltzL
-         /JivbD2fQyGr1NlX3mICqhzpPbEEXJJDhcwraJZP+bIXBtvPO/WVo+DgJ0fjy7CuJJ
-         OOQ4GoF5EI1BQ==
+        b=C6/eNd9fiXyxGRt5Q8ahEQOhSgCzOfaDjiTl1H8jdUB7+nyLMvI8Z8jnvHGjBdQ49
+         pDudL3FXplQYq7jTK8HLgIy9ITXlxnbVaDIU/4PMDDSn6qJkGjrWtox5bdK/GK3F5p
+         C4G4DS2Wf1CiQbnf16oHi2/OLxkMc9s/eBeQrSQGCwpUsCE1in9Is3GDGfvYRWlM/7
+         2tlXMXWIRD3zJvcrlFXk8QeGnir5Z0kGUyv09GiSS8f+5ARo1lX8qkv1qJbHYp6gz6
+         YuEAVFmOzlKTCXnu+2B+mWUy9DGN2PXOf9rTw2PXn8k2N7iypmSeDiYERSZBfuV9XL
+         EZljecptFgb1A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2FA91E21EC2;
-        Mon, 11 Sep 2023 04:31:40 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D213E21EC1;
+        Mon, 11 Sep 2023 04:49:00 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH] pwm: Explicitly include correct DT includes
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <169440670019.22573.2422972280084635660.git-patchwork-notify@kernel.org>
-Date:   Mon, 11 Sep 2023 04:31:40 +0000
+Message-Id: <169440774024.22573.12945048122079663648.git-patchwork-notify@kernel.org>
+Date:   Mon, 11 Sep 2023 04:49:00 +0000
 References: <20230714174852.4062251-1-robh@kernel.org>
 In-Reply-To: <20230714174852.4062251-1-robh@kernel.org>
 To:     Rob Herring <robh@kernel.org>
@@ -73,7 +73,7 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello:
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
+This patch was applied to chrome-platform/linux.git (for-next)
 by Thierry Reding <thierry.reding@gmail.com>:
 
 On Fri, 14 Jul 2023 11:48:50 -0600 you wrote:
