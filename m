@@ -2,136 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B2A79BFCE
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Sep 2023 02:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C825579B64C
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Sep 2023 02:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358437AbjIKWKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Sep 2023 18:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S242335AbjIKWKY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Sep 2023 18:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbjIKKsQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 06:48:16 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCE0F2
-        for <linux-mips@vger.kernel.org>; Mon, 11 Sep 2023 03:48:11 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2bcd7a207f7so67572651fa.3
-        for <linux-mips@vger.kernel.org>; Mon, 11 Sep 2023 03:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694429289; x=1695034089; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j0NJnWblCqOTP51XSAQK8tnzGeOeFatQIb5bjkiY0jA=;
-        b=v+MMXu9/Q1EbdaSF3eYLtAp3lF94CqGqA3sve3d/m1Fd/mygRY+QeGZN3sgYRRagnZ
-         K0e9BPcvxCOPoD22avX4y5W5KithIUurrMk9RwSrMndiVj2WSWMPfgvfeaIIaSbRvmdp
-         UdY7Vmx0jKbDo3+4Qyn+KlzgA128jSSpnfXCDksBuUhg2qNT6SHQ1bz/2vgWQYnBStTa
-         Nk651GUm6xGq0Z99Lbz3Wtun6+vt/Sd1Y7tcqf0sikLI6/UKs4AdWXAFLkJVtDFzZr3Z
-         ekM+gkToHm3Z/GJ8Q75rDI/oRAM68QWJu5bowbMVjEmshCHnhql/fO1/ix/lkFOU5sqD
-         51+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694429289; x=1695034089;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j0NJnWblCqOTP51XSAQK8tnzGeOeFatQIb5bjkiY0jA=;
-        b=Mj9yUfdArtzWwJPGl47ppbB7/L866HbiaBBpH2XydqF5ywbUhZNwpDSCvXisPXp5OY
-         qwsqqovB8PxDcrU1rKLcGgY5OneQPsY+39ZCKytAFFjlkZZ6/ZmrsgIAVe+yjck4yZxN
-         FyRZwoLiLdofxZxi8dN0gSeE6MkW7UkkfdUj4SfuHEHFaoj+G24vLtMjiCP/le41EmPf
-         AQH2pteef9T+b+vmfQJFW9H4r/5Z83ldsYISjw3AX6p5tdAuCJG2ngNhOQz0xd5VPlH9
-         omL5giqdPyPBxTKf2ba3pbu4zazabhbzW9bt07O7cMNQ1hC2gdhDn9nL6Z+AsGxbOasE
-         zyHQ==
-X-Gm-Message-State: AOJu0YwsvC9RKiS8Ft/vDCgrK/4+OJfwGAPe2meTkjjuc8Pp2vriXNjb
-        8aqM6q/c2X14bKqsIzGUcm4kqA==
-X-Google-Smtp-Source: AGHT+IF1kWFgjhTcfyqVhPg4mnrxV5lAVUVkKc0L/x88oGcAPqEy+maF7vc3htIrGNZH5i4r3ZmbAQ==
-X-Received: by 2002:a2e:9a86:0:b0:2b9:d28c:9c2d with SMTP id p6-20020a2e9a86000000b002b9d28c9c2dmr7295461lji.23.1694429289253;
-        Mon, 11 Sep 2023 03:48:09 -0700 (PDT)
-Received: from [192.168.69.115] (tfy62-h01-176-171-221-76.dsl.sta.abo.bbox.fr. [176.171.221.76])
-        by smtp.gmail.com with ESMTPSA id rp26-20020a170906d97a00b00988be3c1d87sm5122443ejb.116.2023.09.11.03.48.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 03:48:08 -0700 (PDT)
-Message-ID: <c94138d2-1bfa-2815-a766-b7904e35a86f@linaro.org>
-Date:   Mon, 11 Sep 2023 12:48:05 +0200
+        with ESMTP id S237698AbjIKNKo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 09:10:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80E0E5;
+        Mon, 11 Sep 2023 06:10:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7F4371F38D;
+        Mon, 11 Sep 2023 13:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1694437838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ASbyR99UMd/GpgOphqagCa5xz32ee14KtoXTx/EckP4=;
+        b=avGBHvPPQjOqqnxwk3IMg3tHBklSOmTgAjIAQSXLxes6rAwFfIH5I9/uOVNorKNJZX0/ip
+        oHY9gWPgPTISWjJZeu8z2tIz7rZwILBO6YKJ2qn5cwaiwh0A1db0p/tjxerQALD/1LzYuq
+        dDSCnMYHHSKUmskMVRHQnO9lNj/hhnU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1694437838;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ASbyR99UMd/GpgOphqagCa5xz32ee14KtoXTx/EckP4=;
+        b=CUXZP9mjsSzuyAShgY03xkAoSrCLTTPiZcpRkO9s6Qu6lHZH0uN5fwZt5DhP1WSVHLMZwn
+        c3qIeir8UQ2tRCCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 377E213780;
+        Mon, 11 Sep 2023 13:10:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NlWuDM4R/2SCIwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 11 Sep 2023 13:10:38 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        arnd@arndb.de, deller@gmx.de
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 0/5] ppc, fbdev: Clean up fbdev mmap helper
+Date:   Mon, 11 Sep 2023 15:08:30 +0200
+Message-ID: <20230911131033.27745-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.0
-Subject: Re: [PATCH v4 3/4] net: stmmac: Add glue layer for Loongson-1 SoC
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20230830134241.506464-1-keguang.zhang@gmail.com>
- <20230830134241.506464-4-keguang.zhang@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230830134241.506464-4-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 30/8/23 15:42, Keguang Zhang wrote:
-> This glue driver is created based on the arch-code
-> implemented earlier with the platform-specific settings.
-> 
-> Use syscon for SYSCON register access.
-> 
-> Partially based on the previous work by Serge Semin.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V3 -> V4: Drop ls1x_dwmac_syscon definition and its instances
->            Drop three redundant fields from the ls1x_dwmac structure
->            Drop the ls1x_dwmac_init() method.
->            Some minor improvements
-> V2 -> V3: Determine the device ID by physical
->            base address(suggested by Serge Semin)
->            Use regmap instead of regmap fields
->            Use syscon_regmap_lookup_by_phandle()
->            Some minor fixes
-> V1 -> V2: Fix the build errors due to CONFIG_OF being unset
->            Change struct reg_field definitions to const
->            Rename the syscon property to "loongson,dwmac-syscon"
->            Add MII PHY mode for LS1C
-> 
->   drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
->   drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
->   .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 219 ++++++++++++++++++
->   3 files changed, 231 insertions(+)
->   create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+Clean up and rename fb_pgprotect() to work without struct file. Then
+refactor the implementation for PowerPC. This change has been discussed
+at [1] in the context of refactoring fbdev's mmap code.
 
-Squash:
+The first two patches update fbdev and replace fbdev's fb_pgprotect()
+with pgprot_framebuffer() on all architectures. The new helper's stream-
+lined interface enables more refactoring within fbdev's mmap
+implementation.
 
--- >8 --
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ff1f273b4f36..2519d06b5aab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14344,9 +14344,12 @@ MIPS/LOONGSON1 ARCHITECTURE
-  M:	Keguang Zhang <keguang.zhang@gmail.com>
-  L:	linux-mips@vger.kernel.org
-  S:	Maintained
-  F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
-  F:	Documentation/devicetree/bindings/net/loongson,ls1*.yaml
-  F:	arch/mips/include/asm/mach-loongson32/
-  F:	arch/mips/loongson32/
-  F:	drivers/*/*loongson1*
-+F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
----
+Patches 3 to 5 adapt PowerPC's internal interfaces to provide
+phys_mem_access_prot() that works without struct file. Neither the
+architecture code or fbdev helpers need the parameter.
+
+v3:
+	* rename fb_pgrotect() to pgprot_framebuffer() (Arnd)
+v2:
+	* reorder patches to simplify merging (Michael)
+
+[1] https://lore.kernel.org/linuxppc-dev/5501ba80-bdb0-6344-16b0-0466a950f82c@suse.com/
+
+Thomas Zimmermann (5):
+  fbdev: Avoid file argument in fb_pgprotect()
+  fbdev: Replace fb_pgprotect() with fb_pgprot_device()
+  arch/powerpc: Remove trailing whitespaces
+  arch/powerpc: Remove file parameter from phys_mem_access_prot code
+  arch/powerpc: Call internal __phys_mem_access_prot() in fbdev code
+
+ arch/ia64/include/asm/fb.h                | 15 +++++++--------
+ arch/m68k/include/asm/fb.h                | 19 ++++++++++---------
+ arch/mips/include/asm/fb.h                | 11 +++++------
+ arch/powerpc/include/asm/book3s/pgtable.h | 10 ++++++++--
+ arch/powerpc/include/asm/fb.h             | 13 +++++--------
+ arch/powerpc/include/asm/machdep.h        | 13 ++++++-------
+ arch/powerpc/include/asm/nohash/pgtable.h | 10 ++++++++--
+ arch/powerpc/include/asm/pci.h            |  4 +---
+ arch/powerpc/kernel/pci-common.c          |  3 +--
+ arch/powerpc/mm/mem.c                     |  8 ++++----
+ arch/sparc/include/asm/fb.h               | 15 +++++++++------
+ arch/x86/include/asm/fb.h                 | 10 ++++++----
+ arch/x86/video/fbdev.c                    | 15 ++++++++-------
+ drivers/video/fbdev/core/fb_chrdev.c      |  3 ++-
+ include/asm-generic/fb.h                  | 12 ++++++------
+ 15 files changed, 86 insertions(+), 75 deletions(-)
+
+-- 
+2.42.0
+
