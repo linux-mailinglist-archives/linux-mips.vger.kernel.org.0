@@ -2,393 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C754D79B015
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Sep 2023 01:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548A779B862
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Sep 2023 02:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358419AbjIKWKp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Sep 2023 18:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S1358444AbjIKWKy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Sep 2023 18:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243867AbjIKSDj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 14:03:39 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860B9106;
-        Mon, 11 Sep 2023 11:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694455413; x=1725991413;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=x1tjhQxmdQdx5EsHOtgg9rRyw85WQlvkAklT8BA7Zes=;
-  b=KRaMhSm4niB7tq/e2sNS8xHGUbfZooDPWMTN2gimame55xImhF8ZV0Kf
-   IvHM7DMVG+nJEaNgOXbOq7hKSXgd0y5jW/dCcTYKEOa2pEOZVxNf5rSuu
-   YPf95DEIgeQyB8P4ErgfA+yAA4B4owQuifM0ipACunwazajLkJxiz4J1X
-   O5LjSjQogS6Jpnxzu5vdRGUBHHBxGjow5Te7qTDMEEHMdbm0MxozbeVeU
-   fmagzLsL4rqv8Q6FL+ku8iLvy0tHaYVaGFDlBisAHKCWshNW3yBRxRo7T
-   u5YkykopNEAcHDI6iBzhZ6gCSgLHhChgnIitpuqZuFbh9x57PbShpVhm8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="368417020"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="368417020"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 11:03:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="808905983"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="808905983"
-Received: from sohilmeh.sc.intel.com ([172.25.103.65])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Sep 2023 11:03:30 -0700
-From:   Sohil Mehta <sohil.mehta@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Cc:     Sohil Mehta <sohil.mehta@intel.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sergei Trofimovich <slyich@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rohan McLure <rmclure@linux.ibm.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Deepak Gupta <debug@rivosinc.com>, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH 2/2] arch: Reserve map_shadow_stack() syscall number for all architectures
-Date:   Mon, 11 Sep 2023 18:02:10 +0000
-Message-Id: <20230911180210.1060504-3-sohil.mehta@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230911180210.1060504-1-sohil.mehta@intel.com>
-References: <20230911180210.1060504-1-sohil.mehta@intel.com>
+        with ESMTP id S236504AbjIKKrX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 06:47:23 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C74E9
+        for <linux-mips@vger.kernel.org>; Mon, 11 Sep 2023 03:47:19 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9a63b2793ecso542042466b.2
+        for <linux-mips@vger.kernel.org>; Mon, 11 Sep 2023 03:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694429237; x=1695034037; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wZtKfEYhqkPEDT7kYfKYKbjw5LAGLLC/AvM8pJEf11E=;
+        b=xMOvJXilFyyddQuAECxFjaERWGdJHTWK6+fXZdjb2zp5PY05hk1qDFnpyQcfVExsMZ
+         nwHnNIoFCl0YQhw4ZdZuQodkthi3vXGu50c1axLZmOWBEKbtzOE0FRDNINP+mdOL8FNl
+         rw1f4UUV7caMl7WsK7x2DoL8FKIDx60FvJNd7vt+eboIF33WyU2OdxhZ31MtYOHa+u97
+         lmOGwY3tyYvQmdeSBjX1gWIN+eaknKkYCwonfx0FXFQFxI6cGS/00xkBh0fLbDEde6F+
+         kgcywLooTxy3XVXc3wcQYOCN45Rop8PW+Y9xeAWPt2iZakUymtDB2JBWPWtoAMluLN+V
+         xb6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694429237; x=1695034037;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZtKfEYhqkPEDT7kYfKYKbjw5LAGLLC/AvM8pJEf11E=;
+        b=Cqt1Rh+nMS19OdY9hTxKMRQ35bnbZfmbUMqvB5q6WQ41gSOJRoCmV1V+7ujUWFXAYx
+         EthkaYYjfzRcSEyg6si6L2gIfX6kj3IKHeHOGmEkaLndc+qBjRpPx5nkrIlljzPAwDhy
+         W7nukbysJJnP6kcXGZrb5eCgmRHYiMdI9MWbVaO4R4v6ig3Lb6QUd+iLspX32Zhi3W68
+         O5xAthfPvZillCbF9ezSCF8NNHJRUBxjjyFoot6VMbgYvPkJ9zvoYRQJpUdFgDNCoqCr
+         1iIAyGPVxfPa/9AhzXiVZDJbKYGcXbr0isYz57uFLF5SqGDcAXpEy4cXuJNGrF4agy3u
+         MHeA==
+X-Gm-Message-State: AOJu0YxREwg7MU5SvGEEUNQjY7aEmjJFOGR+NTDvGqyCO4Wvh1+volVg
+        E92yROUxaJPkl8fXZm1vw/T1xQ==
+X-Google-Smtp-Source: AGHT+IEhCVG0bDd8mw7oaQ/AnTyRP9aiXmQy/pIVwW3hSWYCQgiB8WukqJX3T6/6fJbc20K2QFegwQ==
+X-Received: by 2002:a17:906:5db4:b0:9aa:e13:426a with SMTP id n20-20020a1709065db400b009aa0e13426amr4779637ejv.73.1694429237522;
+        Mon, 11 Sep 2023 03:47:17 -0700 (PDT)
+Received: from [192.168.69.115] (tfy62-h01-176-171-221-76.dsl.sta.abo.bbox.fr. [176.171.221.76])
+        by smtp.gmail.com with ESMTPSA id a7-20020a1709062b0700b009a1dbf55665sm5164198ejg.161.2023.09.11.03.47.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Sep 2023 03:47:16 -0700 (PDT)
+Message-ID: <5afdb9b9-e335-a774-fccb-d64382e02d07@linaro.org>
+Date:   Mon, 11 Sep 2023 12:47:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.0
+Subject: Re: [PATCH v4 2/4] dt-bindings: net: Add Loongson-1 Ethernet
+ Controller
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230830134241.506464-1-keguang.zhang@gmail.com>
+ <20230830134241.506464-3-keguang.zhang@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230830134241.506464-3-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Support for map_shadow_stack() was recently added but it is an x86
-only system call for now. There is a possibility that other
-architectures (namely, arm64 and Risc-V) that are implementing support
-for shadow stacks, might need to add support for it.
+On 30/8/23 15:42, Keguang Zhang wrote:
+> Add devicetree binding document for Loongson-1 Ethernet controller.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> V3 -> V4: Add "|" to description part
+>            Amend "phy-mode" property
+> V2 -> V3: Split the DT-schema file into loongson,ls1b-gmac.yaml
+>            and loongson,ls1c-emac.yaml (suggested by Serge Semin)
+>            Change the compatibles to loongson,ls1b-gmac and loongson,ls1c-emac
+>            Rename loongson,dwmac-syscon to loongson,ls1-syscon
+>            Amend the title
+>            Add description
+>            Add Reviewed-by tag from Krzysztof Kozlowski(Sorry! I'm not sure)
+> V1 -> V2: Fix "clock-names" and "interrupt-names" property
+>            Rename the syscon property to "loongson,dwmac-syscon"
+>            Drop "phy-handle" and "phy-mode" requirement
+>            Revert adding loongson,ls1b-dwmac/loongson,ls1c-dwmac
+>            to snps,dwmac.yaml
+> 
+>   .../bindings/net/loongson,ls1b-gmac.yaml      | 114 ++++++++++++++++++
+>   .../bindings/net/loongson,ls1c-emac.yaml      | 113 +++++++++++++++++
+>   2 files changed, 227 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1b-gmac.yaml
+>   create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1c-emac.yaml
 
-Independent of that, reserving arch-specific syscall numbers in the
-syscall tables of all architectures is good practice and would help
-avoid future conflicts.
+Squash:
 
-Note, map_shadow_stack() was assigned #453 since #452 was taken by
-fchmodat2().
-
-Link:https://lore.kernel.org/lkml/20230830234752.19858-1-dave.hansen@linux.intel.com/
-
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+-- >8 --
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ff1f273b4f36..2519d06b5aab 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14344,9 +14344,12 @@ MIPS/LOONGSON1 ARCHITECTURE
+  M:	Keguang Zhang <keguang.zhang@gmail.com>
+  L:	linux-mips@vger.kernel.org
+  S:	Maintained
++F:	Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
++F:	Documentation/devicetree/bindings/net/loongson,ls1*.yaml
+  F:	arch/mips/include/asm/mach-loongson32/
+  F:	arch/mips/loongson32/
+  F:	drivers/*/*loongson1*
 ---
- arch/alpha/kernel/syscalls/syscall.tbl              | 1 +
- arch/arm/tools/syscall.tbl                          | 1 +
- arch/arm64/include/asm/unistd.h                     | 2 +-
- arch/arm64/include/asm/unistd32.h                   | 2 ++
- arch/ia64/kernel/syscalls/syscall.tbl               | 1 +
- arch/m68k/kernel/syscalls/syscall.tbl               | 1 +
- arch/microblaze/kernel/syscalls/syscall.tbl         | 1 +
- arch/mips/kernel/syscalls/syscall_n32.tbl           | 1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl           | 1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl           | 1 +
- arch/parisc/kernel/syscalls/syscall.tbl             | 1 +
- arch/powerpc/kernel/syscalls/syscall.tbl            | 1 +
- arch/s390/kernel/syscalls/syscall.tbl               | 1 +
- arch/sh/kernel/syscalls/syscall.tbl                 | 1 +
- arch/sparc/kernel/syscalls/syscall.tbl              | 1 +
- arch/x86/entry/syscalls/syscall_32.tbl              | 1 +
- arch/xtensa/kernel/syscalls/syscall.tbl             | 1 +
- include/uapi/asm-generic/unistd.h                   | 5 ++++-
- tools/include/uapi/asm-generic/unistd.h             | 5 ++++-
- tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 1 +
- tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 1 +
- tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 1 +
- tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 1 +
- 23 files changed, 30 insertions(+), 3 deletions(-)
-
-diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-index ad37569d0507..6e8479c96e65 100644
---- a/arch/alpha/kernel/syscalls/syscall.tbl
-+++ b/arch/alpha/kernel/syscalls/syscall.tbl
-@@ -492,3 +492,4 @@
- 560	common	set_mempolicy_home_node		sys_ni_syscall
- 561	common	cachestat			sys_cachestat
- 562	common	fchmodat2			sys_fchmodat2
-+563	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index c572d6c3dee0..6d494dfbf5e4 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -466,3 +466,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index bd77253b62e0..6a28fb91b85d 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -39,7 +39,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
- 
--#define __NR_compat_syscalls		453
-+#define __NR_compat_syscalls		454
- #endif
- 
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 78b68311ec81..a201d842ec82 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -911,6 +911,8 @@ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
- __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
-+#define __NR_map_shadow_stack 453
-+__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
- 
- /*
-  * Please add new compat syscalls above this comment and update
-diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-index 83d8609aec03..be02ce9d376f 100644
---- a/arch/ia64/kernel/syscalls/syscall.tbl
-+++ b/arch/ia64/kernel/syscalls/syscall.tbl
-@@ -373,3 +373,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-index 259ceb125367..bee2d2f7f82c 100644
---- a/arch/m68k/kernel/syscalls/syscall.tbl
-+++ b/arch/m68k/kernel/syscalls/syscall.tbl
-@@ -452,3 +452,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-index a3798c2637fd..09eda7ed91b0 100644
---- a/arch/microblaze/kernel/syscalls/syscall.tbl
-+++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-@@ -458,3 +458,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index 152034b8e0a0..3c02cc3886ca 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -391,3 +391,4 @@
- 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	n32	cachestat			sys_cachestat
- 452	n32	fchmodat2			sys_fchmodat2
-+453	n32	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-index cb5e757f6621..aa9ed6a7cb48 100644
---- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-@@ -367,3 +367,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	n64	cachestat			sys_cachestat
- 452	n64	fchmodat2			sys_fchmodat2
-+453	n64	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index 1a646813afdc..756f6feb21c2 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -440,3 +440,4 @@
- 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	o32	cachestat			sys_cachestat
- 452	o32	fchmodat2			sys_fchmodat2
-+453	o32	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index e97c175b56f9..c80eedbe0170 100644
---- a/arch/parisc/kernel/syscalls/syscall.tbl
-+++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -451,3 +451,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index 20e50586e8a2..2767b8a42636 100644
---- a/arch/powerpc/kernel/syscalls/syscall.tbl
-+++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -539,3 +539,4 @@
- 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index 0122cc156952..22249c07e556 100644
---- a/arch/s390/kernel/syscalls/syscall.tbl
-+++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -455,3 +455,4 @@
- 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451  common	cachestat		sys_cachestat			sys_cachestat
- 452  common	fchmodat2		sys_fchmodat2			sys_fchmodat2
-+453  common	map_shadow_stack	sys_map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-index e90d585c4d3e..5ccfe6fbb6b1 100644
---- a/arch/sh/kernel/syscalls/syscall.tbl
-+++ b/arch/sh/kernel/syscalls/syscall.tbl
-@@ -455,3 +455,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index 4ed06c71c43f..b2d664edebdd 100644
---- a/arch/sparc/kernel/syscalls/syscall.tbl
-+++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -498,3 +498,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 2d0b1bd866ea..743a7ef5a4b9 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -457,3 +457,4 @@
- 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	i386	cachestat		sys_cachestat
- 452	i386	fchmodat2		sys_fchmodat2
-+453	i386	map_shadow_stack	sys_map_shadow_stack
-diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-index fc1a4f3c81d9..94e6bcc2bec7 100644
---- a/arch/xtensa/kernel/syscalls/syscall.tbl
-+++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-@@ -423,3 +423,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index abe087c53b4b..203ae30d7761 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -823,8 +823,11 @@ __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
- 
-+#define __NR_map_shadow_stack 453
-+__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
-+
- #undef __NR_syscalls
--#define __NR_syscalls 453
-+#define __NR_syscalls 454
- 
- /*
-  * 32 bit systems traditionally used different
-diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
-index abe087c53b4b..203ae30d7761 100644
---- a/tools/include/uapi/asm-generic/unistd.h
-+++ b/tools/include/uapi/asm-generic/unistd.h
-@@ -823,8 +823,11 @@ __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
- 
-+#define __NR_map_shadow_stack 453
-+__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
-+
- #undef __NR_syscalls
--#define __NR_syscalls 453
-+#define __NR_syscalls 454
- 
- /*
-  * 32 bit systems traditionally used different
-diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-index cb5e757f6621..aa9ed6a7cb48 100644
---- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-+++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
-@@ -367,3 +367,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	n64	cachestat			sys_cachestat
- 452	n64	fchmodat2			sys_fchmodat2
-+453	n64	map_shadow_stack		sys_map_shadow_stack
-diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-index 20e50586e8a2..2767b8a42636 100644
---- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-+++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-@@ -539,3 +539,4 @@
- 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	map_shadow_stack		sys_map_shadow_stack
-diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-index 0122cc156952..22249c07e556 100644
---- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-+++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-@@ -455,3 +455,4 @@
- 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451  common	cachestat		sys_cachestat			sys_cachestat
- 452  common	fchmodat2		sys_fchmodat2			sys_fchmodat2
-+453  common	map_shadow_stack	sys_map_shadow_stack		sys_map_shadow_stack
-diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-index a5db10ddf540..6a5819362530 100644
---- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -374,6 +374,7 @@
- 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451	common	cachestat		sys_cachestat
- 452	common  fchmodat2		sys_fchmodat2
-+453	common	map_shadow_stack	sys_map_shadow_stack
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
--- 
-2.34.1
-
