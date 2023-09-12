@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CF679C30F
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Sep 2023 04:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B0579C3EC
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Sep 2023 05:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238245AbjILCgq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Sep 2023 22:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S242626AbjILDRv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Sep 2023 23:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238920AbjILCgJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 22:36:09 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3C54C09C;
-        Mon, 11 Sep 2023 19:00:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9ad749473baso120914066b.1;
-        Mon, 11 Sep 2023 19:00:56 -0700 (PDT)
+        with ESMTP id S242551AbjILDRg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Sep 2023 23:17:36 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56B01A1E83;
+        Mon, 11 Sep 2023 19:02:07 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4cbso6394352a12.1;
+        Mon, 11 Sep 2023 19:02:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694484055; x=1695088855; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694484126; x=1695088926; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vgo1zR5ba8zxnSxQKk3+QRf81DN07ltnGADrPc7d11k=;
-        b=gMogo4AhY+IghgAKv/dqSO6NzcmTrniqh9royi/TSzoiZJo28irlySLutp612E9tuK
-         BBMwoLLnAS0zJvPtmy+c5WtUIIqgpTng079oW2K2+Bq524K4weTw2Oy2WKFOBtUIfbg4
-         72GzayrUwnEJwfuqfDVodee9CDmbopyV8cLkOL8/ea8q8UfPnontCMgU3mzHRx6du0ja
-         n5W63rz6OVjkCnxM3ywxTfiB3snu24pH5UbcJYv5CFbWukHm8HDKEv76QopydePgaLAd
-         /eFaboKksX76TH9V0bN07wY8mVrmuDxyurBIKyddyRtDLgfTKp7v6hJtwoMk2HHCf7hj
-         EWXQ==
+        bh=epewbgX/K4Am+Kd8gRoNoUs4L1M4qxFvFXC2iZuyWec=;
+        b=dHAqaRrtTgSxfnCA+aftkMLs2aTMarlKe461hzIuaPro3M9PHJK5eiqebv6anfuTVV
+         OwYt886F68mFRxh66kBDv5QFDrjTWlrh5AeY27FoFws31Zsb+yWYo5ZBP4gtIWPxu7hm
+         KcCdMcRSypHiVWTH3KcrGIcC8cwI4xP+pwXTSQ+hUpCAWV1bvqYSHXSrswy33GN16LfU
+         rZZDoKWZiqI9AOg0ghgc2Q+aHFMfIUxkRensdNfo12/se6asyONPl/RRQ00XrPleZtWo
+         O8NOfalBHiFu7kSRq5HLgSSw5nAJF7xq6Vl6J/srPFVGuHT/FPIPYLb4wzsQgkZaa+2j
+         344g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694484055; x=1695088855;
+        d=1e100.net; s=20230601; t=1694484126; x=1695088926;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vgo1zR5ba8zxnSxQKk3+QRf81DN07ltnGADrPc7d11k=;
-        b=qi8Nb8Pf8nWo+6BskQ0pGGo1TmxZsGNktOlZSjEL4EjqQFJxLTpT/lDudhJnaVU2p1
-         vJkb1mctUd90YNNbWpkppHl/fYddCPX3RH06hr4NosPPj/+zdFz9OVcLAMHr99ChMN2L
-         vuFCE9WODvvKrNtnvfm5j+mKzlRmwEhHExT5xkPJrGvprmKtr0mew54lgWzNYwOAvk6L
-         uHVGxr6aQ0/jlarH+zhzBYc5qUiWFfUmLp59YLEZ1d4oHNtPF4unsQHgo29ReqG2DO8a
-         ZrrVXbjH2a6VFNm3HGEf1EBGWkYrXBUGwa0rMH9FyY1pKZg1cIJP9Omm6VIfMlu3Dtr9
-         kKrQ==
-X-Gm-Message-State: AOJu0Yw3M4o8YIer2IcgPLiNxDvxc8xOehGhNHbyULE3amljpu3QMwRN
-        3+s+Q14KYsz+R5L22YjAogJP53D6ABGHFc/Yg5pfHiQTw6q8pQ==
-X-Google-Smtp-Source: AGHT+IGTFIR7+g6knPDfTeSAsGcvMkyK3tt/QZfxXD9gUYL7oSAg/sMWRQ3DYkmBemN57BvxqE1TJYvz0w+zW730aB4=
-X-Received: by 2002:a17:906:769a:b0:9a5:d095:a8e3 with SMTP id
- o26-20020a170906769a00b009a5d095a8e3mr8810319ejm.13.1694484055049; Mon, 11
- Sep 2023 19:00:55 -0700 (PDT)
+        bh=epewbgX/K4Am+Kd8gRoNoUs4L1M4qxFvFXC2iZuyWec=;
+        b=duWFJH5/lVjLnjHof+3IAC4GeM6lY6GazBl3EOgbYHRi5tyPU7BissTzsFlG1wUSE7
+         5tZg7cy9PeKhQ4dAaSbyynvH/nf2zkuNDexDUH4/3dbaZFOj8xnse3v3G2BVi03E5lnU
+         RV2grPp4Gfzlnz0i0SyxeJuxqmCh+2/ToIS8pi6eWJs3hQ6y74NhYfTX0slSTtX5QKyC
+         8bqksHjqgbqOtz4dWvSxuVi+uku6z7YRa/KmBhpdJVsDtHK3uSK/IM4S5jMYmElYSIUC
+         G/NogBPH49wKRTIzc5zak74AO7p9cYnt+eZXMq/89QkWntOymcnhnsKA+9j3X1J4U0cC
+         pD9g==
+X-Gm-Message-State: AOJu0YxlXFeixC2801z0s3SHL9znoNtfLvQcMn6QHb6ckI6s25FS4L1N
+        Kguze6v0+xUdXcmNLT2zO7JItmJc2bG8cV3jmkw=
+X-Google-Smtp-Source: AGHT+IFcEC5FSLG0o3s5Gs7rQBUMqOFyC1Wk1Hg7h/6eVgO6bM2HrtCt2SGgE00CKQap/7WAzhPco5bNsePPtv/4CVs=
+X-Received: by 2002:aa7:d9c8:0:b0:525:6666:3551 with SMTP id
+ v8-20020aa7d9c8000000b0052566663551mr8738406eds.27.1694484126041; Mon, 11 Sep
+ 2023 19:02:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230830134241.506464-1-keguang.zhang@gmail.com>
- <20230830134241.506464-3-keguang.zhang@gmail.com> <5afdb9b9-e335-a774-fccb-d64382e02d07@linaro.org>
-In-Reply-To: <5afdb9b9-e335-a774-fccb-d64382e02d07@linaro.org>
+ <20230830134241.506464-4-keguang.zhang@gmail.com> <c94138d2-1bfa-2815-a766-b7904e35a86f@linaro.org>
+In-Reply-To: <c94138d2-1bfa-2815-a766-b7904e35a86f@linaro.org>
 From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Tue, 12 Sep 2023 10:00:18 +0800
-Message-ID: <CAJhJPsU9THio5efse2f+WB6oGPCvHcb8U4DvSdZ2fQ0SvvXAig@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: net: Add Loongson-1 Ethernet Controller
+Date:   Tue, 12 Sep 2023 10:01:29 +0800
+Message-ID: <CAJhJPsV6BomVsZRYHNwvVzWJCWzssfcHzWBwGdYZ5Csh2oaoow@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] net: stmmac: Add glue layer for Loongson-1 SoC
 To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
 Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -68,48 +68,47 @@ Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 6:47=E2=80=AFPM Philippe Mathieu-Daud=C3=A9
+On Mon, Sep 11, 2023 at 6:48=E2=80=AFPM Philippe Mathieu-Daud=C3=A9
 <philmd@linaro.org> wrote:
 >
 > On 30/8/23 15:42, Keguang Zhang wrote:
-> > Add devicetree binding document for Loongson-1 Ethernet controller.
+> > This glue driver is created based on the arch-code
+> > implemented earlier with the platform-specific settings.
+> >
+> > Use syscon for SYSCON register access.
+> >
+> > Partially based on the previous work by Serge Semin.
 > >
 > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > > ---
-> > V3 -> V4: Add "|" to description part
-> >            Amend "phy-mode" property
-> > V2 -> V3: Split the DT-schema file into loongson,ls1b-gmac.yaml
-> >            and loongson,ls1c-emac.yaml (suggested by Serge Semin)
-> >            Change the compatibles to loongson,ls1b-gmac and loongson,ls=
-1c-emac
-> >            Rename loongson,dwmac-syscon to loongson,ls1-syscon
-> >            Amend the title
-> >            Add description
-> >            Add Reviewed-by tag from Krzysztof Kozlowski(Sorry! I'm not =
-sure)
-> > V1 -> V2: Fix "clock-names" and "interrupt-names" property
+> > V3 -> V4: Drop ls1x_dwmac_syscon definition and its instances
+> >            Drop three redundant fields from the ls1x_dwmac structure
+> >            Drop the ls1x_dwmac_init() method.
+> >            Some minor improvements
+> > V2 -> V3: Determine the device ID by physical
+> >            base address(suggested by Serge Semin)
+> >            Use regmap instead of regmap fields
+> >            Use syscon_regmap_lookup_by_phandle()
+> >            Some minor fixes
+> > V1 -> V2: Fix the build errors due to CONFIG_OF being unset
+> >            Change struct reg_field definitions to const
 > >            Rename the syscon property to "loongson,dwmac-syscon"
-> >            Drop "phy-handle" and "phy-mode" requirement
-> >            Revert adding loongson,ls1b-dwmac/loongson,ls1c-dwmac
-> >            to snps,dwmac.yaml
+> >            Add MII PHY mode for LS1C
 > >
-> >   .../bindings/net/loongson,ls1b-gmac.yaml      | 114 +++++++++++++++++=
+> >   drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
+> >   drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+> >   .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 219 +++++++++++++++++=
 +
-> >   .../bindings/net/loongson,ls1c-emac.yaml      | 113 +++++++++++++++++
-> >   2 files changed, 227 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1=
-b-gmac.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1=
-c-emac.yaml
+> >   3 files changed, 231 insertions(+)
+> >   create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-loongson=
+1.c
 >
 > Squash:
 >
@@ -122,11 +121,12 @@ c-emac.yaml
 >   M:    Keguang Zhang <keguang.zhang@gmail.com>
 >   L:    linux-mips@vger.kernel.org
 >   S:    Maintained
-> +F:     Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
-> +F:     Documentation/devicetree/bindings/net/loongson,ls1*.yaml
+>   F:    Documentation/devicetree/bindings/*/loongson,ls1x-*.yaml
+>   F:    Documentation/devicetree/bindings/net/loongson,ls1*.yaml
 >   F:    arch/mips/include/asm/mach-loongson32/
 >   F:    arch/mips/loongson32/
 >   F:    drivers/*/*loongson1*
+> +F:     drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
 > ---
 
 Will do.
