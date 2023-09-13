@@ -2,58 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420AE79E73A
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Sep 2023 13:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A34079E770
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Sep 2023 14:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240530AbjIMLud (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Sep 2023 07:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S236688AbjIMMB6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Sep 2023 08:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240552AbjIMLua (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 07:50:30 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8B219B9
-        for <linux-mips@vger.kernel.org>; Wed, 13 Sep 2023 04:50:25 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-403012f27e1so48089345e9.1
-        for <linux-mips@vger.kernel.org>; Wed, 13 Sep 2023 04:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1694605823; x=1695210623; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qakrc9HB1O5Iu/mhnl/aqGs6dWn+CSwn3hlAKhsYM7Q=;
-        b=K59dYPUIHZTckXjn/bieXANY+l9Grc0I7HeuaZku2GSM0xmOT8f6oYUEL+r8A6Audd
-         K64NQ5MSwHAEul4mNOjFFizn7isndvft5Yvjs6zvyP/88+zeF0dKiGOv00E/ikMfQZz2
-         sN9+grflFK8efEyxB98FD1NdNtAYJXREV0hWSBpiGmUUqbAyBUV2dxHJS9SI0PuWF2Ub
-         hc9nyEwu4PnsWLwAfUxhp+xCQhUzgGlNnpT6vQqfOutJrw6eK0xFuAm4i8cPk4OrN4BE
-         IocjF1H4qhRmDT70bfVHh3bEGn4sMAdQzii3oS91UoPKhvBB+IXXjwg/ozV21AYwFBPk
-         HU7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694605823; x=1695210623;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qakrc9HB1O5Iu/mhnl/aqGs6dWn+CSwn3hlAKhsYM7Q=;
-        b=IAQ80MUZB4jHbHrbDIp7XWn6B/85cxcdOoE/2gdBJ3ejrKBSqQx4XSsbrRgWOrn/IT
-         or3/lQJ8+gDG3pWJemSxHNl22n2HtHDWSG8pSAb5xZV9BTWIozuplNR8PRYGKCRnF1VG
-         tDu2RveyS6MEx6PnpBQ/cAr3nIer0lAhB5/jvlnAcEEl1mSQnkBE84l/oDZSQsPzBWvs
-         Oi76glALZZMZf2UDnC3nIVuMv2JsNcRBsWZKviFXtOjs0s51KwEJ3UTOFxUzIcuiZAyX
-         CUxYaYTPTTED3HQW1x71fr/SwTMiCGtXPZth28vTw5mRtNMNcyo/x/i0USx2YfQEWZv1
-         hVXg==
-X-Gm-Message-State: AOJu0YzRbmMOCYA1EXhMATTBdSitYt3IuetlWjutKZKzPhBocyR+IZ4y
-        4IOVa4T+nGB/QvZNoBhto9oBQw==
-X-Google-Smtp-Source: AGHT+IHSaGvQEu7p/aPUxTrIpzTkMdMiNylYl6uXXTnV4TP4nHCU3quUTmCv138dyfMb7wv/N8jbvw==
-X-Received: by 2002:a5d:56ca:0:b0:311:1dba:ca65 with SMTP id m10-20020a5d56ca000000b003111dbaca65mr1878093wrw.51.1694605823533;
-        Wed, 13 Sep 2023 04:50:23 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:3b50:bca5:a754:7463])
-        by smtp.gmail.com with ESMTPSA id j14-20020adfd20e000000b0031fc4c31d77sm1932689wrh.88.2023.09.13.04.50.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 04:50:23 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S234848AbjIMMB5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 08:01:57 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7C819B0;
+        Wed, 13 Sep 2023 05:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1694606510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GWLRygrELKKqAaeytnPuS49YfDZXBa1fKuVzJNWsNlU=;
+        b=1QIV1/PoaT+FV+H/sxFzRq6rhuLVR+DSOCBfMOd1OZfn+hsdGTHEPg1/oMtHongC2CnBpe
+        EqeScdSNy0Xo8ZVuo3CeW8HKKTh2RXsJePltFJv4w2/9KR4xsE92deDseOAqXQUVjOYO0+
+        W19vDjwiP4eU4cPbUw31kE7+153Bi84=
+Message-ID: <a3c8b1eaba0e7aae190cb5f2ffd8a360fab0251c.camel@crapouillou.net>
+Subject: Re: [PATCH 2/5] mtd: rawnand: ingenic: use gpiod_set_active_high()
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andy@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
         Harvey Hunt <harveyhuntnexus@gmail.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -66,76 +43,65 @@ Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 5/5] gpiolib: remove gpiod_toggle_active_low()
-Date:   Wed, 13 Sep 2023 13:50:01 +0200
-Message-Id: <20230913115001.23183-6-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230913115001.23183-1-brgl@bgdev.pl>
+Date:   Wed, 13 Sep 2023 14:01:47 +0200
+In-Reply-To: <20230913115001.23183-3-brgl@bgdev.pl>
 References: <20230913115001.23183-1-brgl@bgdev.pl>
+         <20230913115001.23183-3-brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi,
 
-With all users now having switched to gpiod_set_active_[low|high](), we
-can now remove gpiod_toggle_active_low().
+Le mercredi 13 septembre 2023 =C3=A0 13:49 +0200, Bartosz Golaszewski a
+=C3=A9crit=C2=A0:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>=20
+> Use the new, less cumbersome interface for setting the GPIO as
+> active-high that doesn't require first checking the current state.
+>=20
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/gpio/gpiolib.c        | 11 -----------
- include/linux/gpio/consumer.h |  7 -------
- 2 files changed, 18 deletions(-)
+Works for me.
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 131965814a7c..14b84bad93ea 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -2714,17 +2714,6 @@ int gpiod_is_active_low(const struct gpio_desc *desc)
- }
- EXPORT_SYMBOL_GPL(gpiod_is_active_low);
- 
--/**
-- * gpiod_toggle_active_low - toggle whether a GPIO is active-low or not
-- * @desc: the gpio descriptor to change
-- */
--void gpiod_toggle_active_low(struct gpio_desc *desc)
--{
--	VALIDATE_DESC_VOID(desc);
--	change_bit(FLAG_ACTIVE_LOW, &desc->flags);
--}
--EXPORT_SYMBOL_GPL(gpiod_toggle_active_low);
--
- /**
-  * gpiod_set_active_low() - set the GPIO as active-low
-  * @desc: the GPIO descriptor to set the active-low setting for
-diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
-index ddbf0d8e4a75..395e1a67c4c8 100644
---- a/include/linux/gpio/consumer.h
-+++ b/include/linux/gpio/consumer.h
-@@ -159,7 +159,6 @@ int gpiod_set_raw_array_value_cansleep(unsigned int array_size,
- 
- int gpiod_set_config(struct gpio_desc *desc, unsigned long config);
- int gpiod_set_debounce(struct gpio_desc *desc, unsigned int debounce);
--void gpiod_toggle_active_low(struct gpio_desc *desc);
- void gpiod_set_active_low(struct gpio_desc *desc);
- void gpiod_set_active_high(struct gpio_desc *desc);
- 
-@@ -495,12 +494,6 @@ static inline int gpiod_set_debounce(struct gpio_desc *desc, unsigned int deboun
- 	return -ENOSYS;
- }
- 
--static inline void gpiod_toggle_active_low(struct gpio_desc *desc)
--{
--	/* GPIO can never have been requested */
--	WARN_ON(desc);
--}
--
- static inline void gpiod_set_active_low(struct gpio_desc *desc
- {
- 	/* GPIO can never have been requested */
--- 
-2.39.2
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> ---
+> =C2=A0drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 5 ++---
+> =C2=A01 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> index 6748226b8bd1..c055133c45fe 100644
+> --- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> @@ -388,9 +388,8 @@ static int ingenic_nand_init_chip(struct
+> platform_device *pdev,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * here for older DTs so =
+we can re-use the generic
+> nand_gpio_waitrdy()
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * helper, and be consist=
+ent with what other drivers do.
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (of_machine_is_compatible("=
+qi,lb60") &&
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 gpiod_is_ac=
+tive_low(nand->busy_gpio))
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0gpiod_toggle_active_low(nand->busy_gpio);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (of_machine_is_compatible("=
+qi,lb60"))
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0gpiod_set_active_high(nand->busy_gpio);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0nand->wp_gpio =3D devm_gp=
+iod_get_optional(dev, "wp",
+> GPIOD_OUT_LOW);
+> =C2=A0
 
