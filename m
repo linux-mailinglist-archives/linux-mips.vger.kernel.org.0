@@ -2,122 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8B479EC7E
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Sep 2023 17:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A729C79ED43
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Sep 2023 17:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbjIMPVJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Sep 2023 11:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S229727AbjIMPhv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Sep 2023 11:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbjIMPUu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 11:20:50 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D697219B1;
-        Wed, 13 Sep 2023 08:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694618446; x=1726154446;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1LTANdPAE8m2PHoe4hG/3j6oI5p3jyUM3ew3Mdwah6w=;
-  b=jiYKS/gOLBjZh23IsE6wEHnQmcKATipXhTd+3wRmxvqyGFBBn4GsgfQl
-   dXZx9q2Hz9XyuxYc6jEoI6dJ5tFkqLWRXPsEU9+q0l6SHKYf0S1W0f0Qu
-   T6vtLXFITVSVAjiaPucsmqgx3y3whZeoGj9qWafHytLZqhqzsCrrkcVmt
-   ZWcLTEU5ynnmstugP0ONTGA3bVW/4Sf3XVOIEoWnSjhpzAuXPRWPN9hmG
-   0CA0HNcunfYU7VyzwdMGdYs9n66EXnTTFeh9Ui3nHNDC2x04+pDo+5qAg
-   HVSxkHaF/ORVkW4vwLYwvFmfRgXeVtdfEYjpO7Nvookd4Gwjwwf9qQsks
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="363723884"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="363723884"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 08:20:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="814249794"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="814249794"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2023 08:20:11 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qgRez-0000E4-0J;
-        Wed, 13 Sep 2023 15:20:09 +0000
-Date:   Wed, 13 Sep 2023 23:19:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        with ESMTP id S229714AbjIMPhs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 11:37:48 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58CC1;
+        Wed, 13 Sep 2023 08:37:43 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CFCDFFF805;
+        Wed, 13 Sep 2023 15:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1694619461;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VDuZH+uvutfHgzRCfxDkmOKfULSH31Y70SqnVTdAeGk=;
+        b=iTv6IPZ5VJ6ivejmv38YJcRCQo4Bk742r5mSjfamtnlAULg3m5HGMB8U+owY39f6WMVb0b
+        1pS4JKckO5+cvma/c7QPR8yQ8z30gBdbSVHME8MYCQR+cO+G1853ASCKJqjO69AoIc5qfn
+        ZUFUu5xx9Sup0UTmjl6Pnm1h4DmSklI5ymlYQbBLpOOEQ4WjR3LT++w3kfOfeNJ60KM1UA
+        Q8V25gbjIOj8MziacdZ0D2/yl3Se9FFa/x6/lTR7mBlaCjz6ZdCWpKBySBo/A4lk4+e8AR
+        r0A6QTwhz/lts1oACqie3EZBrFgebCCFCkbODHPc/UgsOUSA/zKFmqo+rbZF0w==
+Date:   Wed, 13 Sep 2023 17:37:38 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andy@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
         Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Daniel Scally <djrscally@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 1/5] gpiolib: provide gpiod_set_active_[low/high]()
-Message-ID: <202309132304.Uw3cYH9C-lkp@intel.com>
-References: <20230913115001.23183-2-brgl@bgdev.pl>
+Subject: Re: [PATCH 2/5] mtd: rawnand: ingenic: use gpiod_set_active_high()
+Message-ID: <20230913173724.60ed3b8d@xps-13>
+In-Reply-To: <a3c8b1eaba0e7aae190cb5f2ffd8a360fab0251c.camel@crapouillou.net>
+References: <20230913115001.23183-1-brgl@bgdev.pl>
+        <20230913115001.23183-3-brgl@bgdev.pl>
+        <a3c8b1eaba0e7aae190cb5f2ffd8a360fab0251c.camel@crapouillou.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913115001.23183-2-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Bartosz,
 
-kernel test robot noticed the following build errors:
+paul@crapouillou.net wrote on Wed, 13 Sep 2023 14:01:47 +0200:
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on mtd/nand/next linus/master ulf-hansson-mmc-mirror/next v6.6-rc1 next-20230913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Hi,
+>=20
+> Le mercredi 13 septembre 2023 =C3=A0 13:49 +0200, Bartosz Golaszewski a
+> =C3=A9crit=C2=A0:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >=20
+> > Use the new, less cumbersome interface for setting the GPIO as
+> > active-high that doesn't require first checking the current state.
+> >=20
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org> =20
+>=20
+> Works for me.
+>=20
+> Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpiolib-provide-gpiod_set_active_-low-high/20230913-195053
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230913115001.23183-2-brgl%40bgdev.pl
-patch subject: [PATCH 1/5] gpiolib: provide gpiod_set_active_[low/high]()
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20230913/202309132304.Uw3cYH9C-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309132304.Uw3cYH9C-lkp@intel.com/reproduce)
+For me as well, the new API looks much better.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309132304.Uw3cYH9C-lkp@intel.com/
+I saw Hans is fine with you merging the platform/x86 patch. I am also
+fine if all maintainers agree on that. In this case:
 
-All errors (new ones prefixed by >>):
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-   In file included from include/linux/nvmem-provider.h:15,
-                    from include/linux/rtc.h:18,
-                    from include/linux/efi.h:20,
-                    from block/partitions/efi.h:19,
-                    from block/partitions/msdos.c:32:
->> include/linux/gpio/consumer.h:505:1: error: expected ';', ',' or ')' before '{' token
-     505 | {
-         | ^
+However, if you finally need to produce an immutable tag, let me know
+and I will take the patch through our tree.
 
-
-vim +505 include/linux/gpio/consumer.h
-
-   503	
-   504	static inline void gpiod_set_active_low(struct gpio_desc *desc
- > 505	{
-   506		/* GPIO can never have been requested */
-   507		WARN_ON(desc);
-   508	}
-   509	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Miqu=C3=A8l
