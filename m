@@ -2,106 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2B379E19D
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Sep 2023 10:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E8D79E725
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Sep 2023 13:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238750AbjIMIKm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 13 Sep 2023 04:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S240518AbjIMLuY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Sep 2023 07:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238777AbjIMIKF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 04:10:05 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6424719B4;
-        Wed, 13 Sep 2023 01:09:24 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-59bbdb435bfso6342307b3.3;
-        Wed, 13 Sep 2023 01:09:24 -0700 (PDT)
+        with ESMTP id S240456AbjIMLuX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 07:50:23 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF2919AD
+        for <linux-mips@vger.kernel.org>; Wed, 13 Sep 2023 04:50:19 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31ae6bf91a9so6779396f8f.2
+        for <linux-mips@vger.kernel.org>; Wed, 13 Sep 2023 04:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1694605818; x=1695210618; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wE2ORVq287JLkcnuWpgymLTUjppVm5JnqXblhoOF+yE=;
+        b=0OOsdDHBRtrLCVZElwuZ1wNqoib2sJOpZLkK56+PrfcUd3OBHx3EGYOp8VemCfHxcz
+         dKy1GmsVheKR+fs2u7NWbawiLo+QVOS6awLxDoxsyFjZkKSFsCBCZUIG6bGO+39RtqRu
+         Leyy7DgAfveKRcsG82LB0WUgz3SsHtrolpN0zR/VM5/bG61OCo9jSXWKHJJaXiJqElNh
+         7A2zDr8i4aMFDD/ETCuI86ZLswFQqki1Jjaj5qdF8sxbSWPMcmJv1MdQtDfA+3KAYejU
+         C7bH2zGLfVz2N8wg3+bVxHwh8qn/GclO0sPWHD6KI0ylQLA4xWzBBRm5jnuQLyQ7PCk7
+         z4qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694592563; x=1695197363;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uCz1YqPLlml0me4QSAkCQsY8FV1Cudx91zoZbXBVMOA=;
-        b=BeElRkB1CATd6mKPq8RoLrRadz6xAOfpPbZUjhJx+t+OvoODubPyT7xtzMrwXDquuY
-         EqM72LdAfemAyocjOLzauU4WeD8Spk644nCSFWeNKHEiW7FVf9qtjOBaqF7usX/H4WI3
-         tmzY/jGNLEiQUYUALASJTJLMyplXy/5Ge5xVaAw4KBnFT5m3bHgqq/GjDDqE/vbKzNNn
-         5GLnEvJwr0xHD1ppdAUB8qf4XVrLc3D0si/ZDyW6FPUEhVzTT3I8fphWghju6iilZPCx
-         2r+tgYB+ejvBNyWyRzJ3ZVAeRbQ1pFnW9dpA3Gu9qRqMFIeCN4Zt0BnzHARSaStb6fvn
-         Gzsg==
-X-Gm-Message-State: AOJu0YxG8mRZKy37YSJj0nLTpWUyDTO6VVKoS5hsMkge7rShJbwbq35i
-        ZarEv/7cEPaLP/8Aeztlt6hFPj+JFd8YgA==
-X-Google-Smtp-Source: AGHT+IFO+rvt4ojVBQ2tebVg0XDEybdj1FyTPO36buG4UjXjdMhv6eYEqWKAgfV6plEnsus/Iyw4yg==
-X-Received: by 2002:a81:6c04:0:b0:594:e4d1:bd7e with SMTP id h4-20020a816c04000000b00594e4d1bd7emr1644354ywc.5.1694592563414;
-        Wed, 13 Sep 2023 01:09:23 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id x83-20020a0dd556000000b0058c4e33b2d6sm3002279ywd.90.2023.09.13.01.09.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 01:09:22 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-d7d50ba994eso5677604276.1;
-        Wed, 13 Sep 2023 01:09:22 -0700 (PDT)
-X-Received: by 2002:a25:9844:0:b0:d81:4e98:4f5c with SMTP id
- k4-20020a259844000000b00d814e984f5cmr1178332ybo.47.1694592562230; Wed, 13 Sep
- 2023 01:09:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694605818; x=1695210618;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wE2ORVq287JLkcnuWpgymLTUjppVm5JnqXblhoOF+yE=;
+        b=UdsPL40IvdYOx4RRPhdoiSTtQf7nd5LRBjz7Rqs75TAlg6fqp7k/KlRkc1ZRcdaZAn
+         p+pYQ4ymzDy8VDGLbnxUvNuDF6Ft5xgUc7g3kF+hylf40lWGNTsg3yyf7gToqw3QLrka
+         +jVJVNESFmorM078JCqSczPvWkKCQkgwst3BfUawHREuWOp1XlN3slHwMOncgxm9Ag62
+         m/p1nY6ID0qjjHLDRbPaqsc3mCE7p0M5P/1LMYbRh8xJ7aMD5afVmfKcM26JQmlAm3y3
+         DDqskMfoyaiG+4CWdtPoIot3lhHNFl6pTHm9ayvO35AUsbuUIyMSCUGZuXxzHnb3CbWT
+         n8CA==
+X-Gm-Message-State: AOJu0Yy6ASxfNr4NAWUVWFRfK74tHcdT0hGFheFsk1QfPYzc6YMWVwSw
+        oUe80mhwAyyl+Mq1L/gQQc9SQQ==
+X-Google-Smtp-Source: AGHT+IFXSSuEq9wtyazcQ7l1hh+jAkGlzZwC0/98tI2tsHjMXKI3a8JB3xTIjBmtqjgeTD74oF6Sxg==
+X-Received: by 2002:adf:fe47:0:b0:31a:b3aa:d19b with SMTP id m7-20020adffe47000000b0031ab3aad19bmr1937928wrs.23.1694605817854;
+        Wed, 13 Sep 2023 04:50:17 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:3b50:bca5:a754:7463])
+        by smtp.gmail.com with ESMTPSA id j14-20020adfd20e000000b0031fc4c31d77sm1932689wrh.88.2023.09.13.04.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Sep 2023 04:50:17 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH 0/5] gpio: remove gpiod_toggle_active_low()
+Date:   Wed, 13 Sep 2023 13:49:56 +0200
+Message-Id: <20230913115001.23183-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230912135050.17155-1-tzimmermann@suse.de> <20230912135050.17155-3-tzimmermann@suse.de>
-In-Reply-To: <20230912135050.17155-3-tzimmermann@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Sep 2023 10:09:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU66MLdWM9Qjk-2qmHUZA6F8L-W1iAoc73-HvSB1n-drg@mail.gmail.com>
-Message-ID: <CAMuHMdU66MLdWM9Qjk-2qmHUZA6F8L-W1iAoc73-HvSB1n-drg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] fbdev: Replace fb_pgprotect() with pgprot_framebuffer()
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        arnd@arndb.de, deller@gmx.de, linuxppc-dev@lists.ozlabs.org,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On Tue, Sep 12, 2023 at 5:32 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Rename the fbdev mmap helper fb_pgprotect() to pgprot_framebuffer(
-> The helper sets VMA page-access flags for framebuffers in device I/O
-> memory.
->
-> Also clean up the helper's parameters and return value. Instead of
-> the VMA instance, pass the individial parameters separately: existing
-> page-access flags, the VMAs start and end addresses and the offset
-> in the underlying device memory rsp file. Return the new page-access
-> flags. These changes align pgprot_framebuffer() with other pgprot_()
-> functions.
->
-> v4:
->         * fix commit message (Christophe)
-> v3:
->         * rename fb_pgprotect() to pgprot_framebuffer() (Arnd)
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+The semantics of gpiod_toggle_active_low() are just bad and in almost
+all cases require users to check the current state anyway. Let's replace
+it with something clearer and more useful.
 
-Thanks for your patch!
+For getting this upstream: I'm thinking that I should apply patch 1/5,
+provide other subsystems with an immutable tag and then we can apply
+patch 5/5 for the next release once first four are in master.
 
->  arch/m68k/include/asm/fb.h           | 19 ++++++++++---------
+Bartosz Golaszewski (5):
+  gpiolib: provide gpiod_set_active_[low/high]()
+  mtd: rawnand: ingenic: use gpiod_set_active_high()
+  mmc: slot-gpio: use gpiod_set_active_[low|high]()
+  platform/x86: int3472/discrete: use gpiod_set_active_low()
+  gpiolib: remove gpiod_toggle_active_low()
 
-Looks like you forgot to apply my
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-given on v1.
+ drivers/gpio/gpiolib.c                        | 21 ++++++++++++++-----
+ drivers/mmc/core/slot-gpio.c                  | 11 +++++-----
+ .../mtd/nand/raw/ingenic/ingenic_nand_drv.c   |  5 ++---
+ .../x86/intel/int3472/clk_and_regulator.c     |  2 +-
+ drivers/platform/x86/intel/int3472/led.c      |  2 +-
+ include/linux/gpio/consumer.h                 | 11 ++++++++--
+ 6 files changed, 34 insertions(+), 18 deletions(-)
 
-I didn't notice before, as I never received v2 and v3 due to the
-gmail/vger email issues.
+-- 
+2.39.2
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
