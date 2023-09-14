@@ -2,119 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BD679FCB8
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 09:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6304679FD35
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 09:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjINHFE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Sep 2023 03:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
+        id S232090AbjINH2d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Sep 2023 03:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjINHFD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 03:05:03 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45640BB;
-        Thu, 14 Sep 2023 00:04:59 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3aa14d8641cso372872b6e.3;
-        Thu, 14 Sep 2023 00:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694675098; x=1695279898; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kzTdfD0LggvX1uBlCTC2vRtoepMYQzC2yBdB+oN7NDw=;
-        b=pUI10C79RkUXxD/yVaIHXn6IPHQ7bA22lRHxYbPsUjafKbkR9ezty6ly8T+4Z1mdmJ
-         Gc/kGq40vYZjsuTmDkkcSnIydBO7mT33onwziAdbOjnLMjOIl6anQowwRBph26xEULNs
-         nFLz11rXgUDn0IS9f9Ua/n/VLFi5rjhBeRMfkUQ9UrAiSGMq3KyMaylpq9XaDK5y82Ll
-         h4QTC1lZ8Oq6lNEJu5yg3N0PDGH9NhJIIyZdnW4mTSu6XtykSbblS5uZiS4DhDtA+VdN
-         Hsia23aHJxectydeLWFBoICbIUTaO5HZhiTFEne8yHi/pBP4MgM5Te90LL3KJeBl5wHB
-         w9UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694675098; x=1695279898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kzTdfD0LggvX1uBlCTC2vRtoepMYQzC2yBdB+oN7NDw=;
-        b=J9r8vFwkY7USU2M/wjQRqcCbd2+w7Vd+Hw5hVfzaCALz4jDa2s6mwsJBZxUtJeadnF
-         K+AxuN46FLHgfKdArIQOWhCX8z4XdYPPHcdZqEbSNWYPEeKxMBuGGg2L+ozzplI9+W6a
-         puEub6Xc1tXF+Odgbi4wmSUU80kuB0b7vHX0Ywjk6v0KaRBx+ItiasxhIDPr2TQihVSc
-         fOyvk5c3oxgFKXlSoODDVG6+zUGK6nhEHidezXQRyt0kizZtfZJQIkn81/2Bwud14jZX
-         UqGGCPZA8bSKiQbUVkkzeQ9SamZWrZLDu9wfECTOy8v8ZZddTy138Rpj/lch61vPCDhG
-         rb9g==
-X-Gm-Message-State: AOJu0Yw+7Sp13inJSHZ7zB2XFVZWr21Sjt5Xci/v3Qi/+UM7RQ3Eiypq
-        pCMXU8Q/rejNkDc3WL3G36ze80YFJ+ADwjpvUG4=
-X-Google-Smtp-Source: AGHT+IEzUZhYY4nwIJ6Dlm9qukCO/53xQ9HZuRBayIOhSRBl2gZChNyMJPFJoM0Y2E3e3o3puld+m0KaJ40spNNiqwQ=
-X-Received: by 2002:a05:6870:2397:b0:1c5:56f:ac08 with SMTP id
- e23-20020a056870239700b001c5056fac08mr5612105oap.12.1694675098534; Thu, 14
- Sep 2023 00:04:58 -0700 (PDT)
+        with ESMTP id S230120AbjINH2c (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 03:28:32 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65888F3;
+        Thu, 14 Sep 2023 00:28:27 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1694676492t0544ov9
+Received: from [192.168.70.112] ( [125.75.40.56])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 14 Sep 2023 15:28:09 +0800 (CST)
+X-QQ-SSF: 00200000000000907000000A0000000
+X-QQ-FEAT: 3M0okmaRx3jQ9noJY66yaYJvkJXFnbgsdEZI1asK0MlB7FwsNXfv04+JHxl9F
+        qs0x4AFc0pXcGQX2RaRC9LGWOjQVSd+u1WcU1GzlPWguyVZVaKtagorRMSFcrbcx1rjJmEQ
+        38OzNXD4kXw1FAjkRhdjoJprmXw+v+HAY6BeQJOiP9rGf9crweakAwxw+on3mlIjPsuvZ/W
+        IBq564arAmfC5Ch4sIrlfFbeRUBR1E7ZYFAulX7JmcdVvtvx00oEtDO+caDA5+0k04AbZMs
+        t3F+UQEdG/20aJ91U2Vi+cm8w1wEzkwSAR6NOM2pgiBybRUBXVyURu9Yo/brhEbr4CKmYv9
+        AjizP0Jl5Jk8KAbl2Ikly7GRHIc/+SZXrlei+Yr
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1315330674948568726
+Message-ID: <CC0BEFC206BD350A+3248d7e5-8b0d-4d7e-a008-49ddaf8351ff@tinylab.org>
+Date:   Thu, 14 Sep 2023 15:28:10 +0800
 MIME-Version: 1.0
-References: <20230913115001.23183-1-brgl@bgdev.pl> <20230913115001.23183-3-brgl@bgdev.pl>
- <CAHp75Ve8aK4Pfid1JYWH86mKy-Zb-G2QDPrJYmRzPCYOsn1TqQ@mail.gmail.com>
- <CACRpkdYtYDJa6fo6RnizHNzUsyazBQxEaNMznaij8rBF4ie+ew@mail.gmail.com>
- <20230913222338.07d1625b@xps-13> <CAHp75Vd2a06rnGCEiJW0reN00amso0RyvgLT516nZiYLYZ-xcQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vd2a06rnGCEiJW0reN00amso0RyvgLT516nZiYLYZ-xcQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Sep 2023 10:04:22 +0300
-Message-ID: <CAHp75Vdn9a8a-E=RuByNL8B93cNHuusVrqE-RnH4f3+WgxJ22Q@mail.gmail.com>
-Subject: Re: [PATCH 2/5] mtd: rawnand: ingenic: use gpiod_set_active_high()
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] kconfig: add dependencies of POWER_RESET for mips
+ malta
+Content-Language: en-GB
+To:     =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
+        tglx@linutronix.de, mingo@redhat.com, tsbogend@alpha.franken.de,
+        hdegoede@redhat.com
+Cc:     linux@weissschuh.net, w@1wt.eu, falcon@tinylab.org,
+        linux-mips@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <cover.1693535514.git.tanyuan@tinylab.org>
+ <1c17f017d6c837ef887d08bd2f85102df3fbc17c.1693535514.git.tanyuan@tinylab.org>
+ <915a9e2d-36ea-4a74-7b1b-9688f215b6f1@linaro.org>
+ <55C9BDEDAB4E0B76+838dbd4f-425d-4f2e-94ee-f2bc3092ae13@tinylab.org>
+ <c001c34b-e20c-f32e-f247-722d34a8db3d@linaro.org>
+From:   Yuan Tan <tanyuan@tinylab.org>
+In-Reply-To: <c001c34b-e20c-f32e-f247-722d34a8db3d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 10:02=E2=80=AFAM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Sep 13, 2023 at 11:23=E2=80=AFPM Miquel Raynal
-> <miquel.raynal@bootlin.com> wrote:
-> > linus.walleij@linaro.org wrote on Wed, 13 Sep 2023 22:12:40 +0200:
-> > > On Wed, Sep 13, 2023 at 10:05=E2=80=AFPM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Wed, Sep 13, 2023 at 2:50=E2=80=AFPM Bartosz Golaszewski <brgl@b=
-gdev.pl> wrote:
->
-> ...
->
-> > > > Why not moving this quirk to gpiolib-of.c?
-> > >
-> > > That's a better idea here I think, it's clearly a quirk for a
-> > > buggy device tree.
-> >
-> > Agreed, it's just for backward compatibility purposes in a single
-> > driver. I believe it should stay here.
->
-> I believe Linus was for moving.
->
-> gpiolib-of.c contains a lot of quirks, including this one. Calling
 
-To be clear:
-"including one for the same issue"
+On 9/4/2023 6:51 PM, Philippe Mathieu-Daudé wrote:
+> On 4/9/23 11:24, Yuan Tan wrote:
+>> Hi,
+>>
+>> On 9/4/2023 3:40 PM, Philippe Mathieu-Daudé wrote:
+>>> Hi,
+>>>
+>>> On 1/9/23 04:42, Yuan Tan wrote:
+>>>> MIPS Malta's power off depends on PCI, PCI_QUIRKS, and
+>>>> POWER_RESET_PIIX4_POWEROFF to work. Enable them when POWER_RESET is 
+>>>> set
+>>>> for convenience.
+>>>>
+>>>> Suggested-by: Zhangjin Wu <falcon@tinylab.org>
+>>>> Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
+>>>> ---
+>>>>   arch/mips/Kconfig | 3 +++
+>>>>   1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>>>> index bc8421859006..13bacbd05125 100644
+>>>> --- a/arch/mips/Kconfig
+>>>> +++ b/arch/mips/Kconfig
+>>>> @@ -547,6 +547,9 @@ config MIPS_MALTA
+>>>>       select MIPS_L1_CACHE_SHIFT_6
+>>>>       select MIPS_MSC
+>>>>       select PCI_GT64XXX_PCI0
+>>>> +    select PCI if POWER_RESET
+>>>> +    select PCI_QUIRKS if POWER_RESET
+>>>> +    select POWER_RESET_PIIX4_POWEROFF if POWER_RESET
+>>>>       select SMP_UP if SMP
+>>>>       select SWAP_IO_SPACE
+>>>>       select SYS_HAS_CPU_MIPS32_R1
+>>>
+>>> Shouldn't we also update the _defconfig files?
+>>>
+>> Sorry, in my last email, I forgot to reply to all. So I am now 
+>> resending this email.
+>>
+>> In malta_defconfig, PCI and POWER_RESET_PIIX4_POWEROFF have already 
+>> been set and PCI_QUIRKS is also selected by FSL_PCI [=n].
+>>
+>> So shutdown and reboot with malta_defconfig is working and there is 
+>> no need to update the malta_defconfig 🙂
+>
+> Since the dependency is now enforced by Kconfig, the defconfig can
+> be simplified:
+>
+> --- a/arch/mips/configs/malta_defconfig
+> +++ b/arch/mips/configs/malta_defconfig
+> @@ -306,3 +306,2 @@ CONFIG_SERIAL_8250_CONSOLE=y
+>  CONFIG_POWER_RESET=y
+> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
+>  CONFIG_POWER_RESET_SYSCON=y
+>
+> But maybe we don't care, I don't know.
+After testing, I found that "savedefconfig" will automatically generate 
+the simplified configuration.
 
-> these new (or old) APIs for overriding polarity in many cases
-> shouldn't be needed if there were no issues with DT or something like tha=
-t.
+As I have to use "savedefconfig" on the latest branch of the three 
+architectures, in v3, I will send a separate patch for each architecture.
 
-To be clear:
-The less we call these APIs from drivers the better. Ideally these
-APIs shouldn't have existed.
+Thanks to your advice.
 
---=20
-With Best Regards,
-Andy Shevchenko
+
