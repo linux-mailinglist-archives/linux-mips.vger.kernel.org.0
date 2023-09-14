@@ -2,100 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F381E79FE8C
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 10:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D23579FEA7
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 10:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236496AbjINIiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Sep 2023 04:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S236515AbjINIny (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Sep 2023 04:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236482AbjINIiQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 04:38:16 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEE71FC7
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 01:38:12 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d8032efa2bfso1032433276.1
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 01:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694680692; x=1695285492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tw+IM7T28OUZCuFvNNtZ4r0LwLPv3E7VBk0HU9CwOkM=;
-        b=cFbmBs6YE5ogcBr0pGE7Gr0BSYHeT+XWSylTxMfjtJdE5FEGK3W88Zt3vwgrVtjA23
-         WyOh1nU7GnQkovCxpbEd5kJJsRZmdYt/Vjw77qjDkACMgL2rS7mGJEZfX9fsDCLUYx0W
-         TR/wdb5/OUQZSU2rPDIvSe+eFlNwkg0lkjI6dmAOsgfV4XSVROuGrT8TPcxSRbz7bvgZ
-         0x0xzD4rXoR3ZWc7fmtMQAoo42pHNDHrkvdqJDAHonx5GB22MRx5orbPECcaa3rHGqaP
-         VMhZlJTtWecczZov6hNSEVBKvW+HeK2tDRrMWSXopyLkIGodQ0blgAxMfErBny+8/ULs
-         5bCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694680692; x=1695285492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tw+IM7T28OUZCuFvNNtZ4r0LwLPv3E7VBk0HU9CwOkM=;
-        b=CH0baAeSbUHTRXdZcP82yCFh9egnAdTBjA3/C284hzmbupH8vB58bjnvj/8FscuObM
-         qrbX5o1zr12BqP/HDQdL7HWC4F93E+y6RHJNTmsQZbWXt5BXR+SnI+a6WBo7DhQ/stjQ
-         MBEv4xeUS8sJ7OlN2oGuXeoVNvYU5UJ0/q5pozexAYx/UNDCQ/Jfy8n0r+9lItb2bL8U
-         OIxCGaukzaoCr5s9CXrjDJoVom9qN2PH+/hvJ1mQPL6WdVKOyaHyrsROL/ojciP7jxZB
-         go4RgQDGM/5z/6z3Y9ggjf+fjjhCAaKP3Gehg0eZtQ8fNsJHr8aB+OdlkvnwaFI35KJP
-         vFbg==
-X-Gm-Message-State: AOJu0YxYfmNxwctVVBSH9A/lHNW1N7rOHm0evLMA0Rul99dNmvWedp/O
-        8rPtuzWGR++ELhwABBxY2LlZA3RcRmgznz5XVXX/fw==
-X-Google-Smtp-Source: AGHT+IFyY43h1oRCVKhhChEd117O1PDuUi9sFE50e09WDnGshfwxm7/vGR5ngRDde3sVsJopmuH3eR/c9W658nqJCQo=
-X-Received: by 2002:a25:7714:0:b0:d07:b677:3349 with SMTP id
- s20-20020a257714000000b00d07b6773349mr806404ybc.25.1694680691812; Thu, 14 Sep
- 2023 01:38:11 -0700 (PDT)
+        with ESMTP id S236560AbjINIns (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 04:43:48 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E2C1FDC;
+        Thu, 14 Sep 2023 01:43:43 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1694681001t8iqu5hy
+Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 14 Sep 2023 16:43:19 +0800 (CST)
+X-QQ-SSF: 01200000000000907000000A0000000
+X-QQ-FEAT: ILHsT53NKPhLiNYdg+snuvAFgd9JaqpqWaM7ZIdOCi0ym8WsfHzl5jY6irFd0
+        RRvUFHm/99csf0fZOfTiYc1wJWhql4mMqCqGIK1bv2rm1WEDtv+oFe4rhH7Q0Bk3pqaWefy
+        8KuvLjgp2lBFVwovwzMYaij17uWqtCvKS1dQ/oPH27wwTEnHJuDBuQssDyIBauRzR56KD9l
+        EqyKe0B4ahV4u/CFPAFM2JRx6FZpmLTJ5GOgtuuaC1uq52PYZ+4IGnojNTr2d/dgp96JZ65
+        NAoaB2zJTo6/cS82eBV9Lt/jwSntlH14gvtujnXftu3MGENJeuheRYAfS18BFr0H2Y55Epi
+        WqKAUYzSHA5N/GoplAZLbmPi7IDLUfcyBcFf+/M9q62mx3SSEA=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18177791329312529309
+From:   Yuan Tan <tanyuan@tinylab.org>
+To:     tsbogend@alpha.franken.de, 42.hyeyoo@gmail.com, philmd@linaro.org
+Cc:     linux-mips@vger.kernel.org, christophe.leroy@csgroup.eu,
+        linux-kernel@vger.kernel.org, falcon@tinylab.org, w@1wt.eu,
+        linux@weissschuh.net, tanyuan@tinylab.org
+Subject: [PATCH v3 0/3] Add dependencies of POWER_RESET for MIPS Malta
+Date:   Thu, 14 Sep 2023 16:43:17 +0800
+Message-Id: <cover.1694680448.git.tanyuan@tinylab.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230913115001.23183-1-brgl@bgdev.pl> <20230913115001.23183-4-brgl@bgdev.pl>
- <CACRpkdax-CrB42LeQ1bs3E7VqMncsgEwMs7b_v7J6R5AE+BjAg@mail.gmail.com>
- <CAMRc=Mdt0wbjzbwBLK5m--VLV2WE5JybgrNYWXtbinPu_c=psw@mail.gmail.com> <CACRpkdYVGR0Wj9zS9cuS3qa_tNZHE1t95wQ-4MXAEL6s_4jdFQ@mail.gmail.com>
-In-Reply-To: <CACRpkdYVGR0Wj9zS9cuS3qa_tNZHE1t95wQ-4MXAEL6s_4jdFQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 14 Sep 2023 10:38:00 +0200
-Message-ID: <CACRpkdaar4UsYcnMmjMPd5NnhaJq-LMSW0gQfBnjS3_u0_UkYQ@mail.gmail.com>
-Subject: Re: [PATCH 3/5] mmc: slot-gpio: use gpiod_set_active_[low|high]()
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 10:31=E2=80=AFAM Linus Walleij <linus.walleij@linar=
-o.org> wrote:
-> On Wed, Sep 13, 2023 at 2:39=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
-l> wrote:
+These patches are to add dependencies of POWER_RESET for MIPS Malta.
 
-> > Alternatively we could reimplement the toggle semantics locally in a
-> > helper function in order to get rid of it from GPIOLIB.
->
-> I don't know about that, the flag is inside gpio_desc so we cannot
-> access it (struct is private to gpiolib...)
+As I have to use "savedefconfig" on the latest branch of different
+architectures, I am sending separate patches for each architecture in v3.
 
-Actually I think the way the toggle call came about was for this one
-MMC usecase.
+To simplify the enablement of the poweroff support, selecting the
+required options for CONFIG_POWER_RESET=y may make many people happy
+especially when they are using a customized config (maybe tinyconfig
+based) for a target qemu board. Without normal poweroff support from the
+kernel side, qemu will simply hang[1] there after a 'poweroff' command,
+which is a very bad experience for the automatical tests.
 
-Then other subsystems have used it without asking the GPIO
-maintainers or without implementing the more proper accessors
-or patching drivers/gpio/gpiolib-of.c because why not, probably
-thinking something like "hey weird that it is just toggle I guess they
-are not so smart, but it works, ship it".
+However, CONFIG_POWER_RESET is ineffective if there are no
+dependencies that enable certain devices in Kconfig.
 
-Yours,
-Linus Walleij
+Currently, based on tinyconfig, it is very hard to find the exact
+poweroff related option[2]. Some architectures' poweroff works well without
+any dependence, the others' poweroff options are hidden deeply, which
+make things hard.
+
+After multiple verifications, these options have been identified as the
+minimum dependencies required for poweroff to function normally.
+Additionally, 'make savedefconfig' simplifies the defconfig
+automatically.
+
+Zhangjin and I invested a significant amount of time in searching for
+the current options on these devices. We hope that this set of patches
+will save time for others. If community like it, we will consider adding
+dependencies for POWER_RESET on other devices.
+
+We hope every device's CONFIG_POWER_RESET will have proper dependencies. :)
+
+---
+[1]: https://lore.kernel.org/lkml/511b2f6009fb830b3f32b4be3dca99596c684fa3.1689759351.git.falcon@tinylab.org/
+[2]: https://lore.kernel.org/all/983843582e52e83fba79ad45cea6c79e1f62ec6c.1690489039.git.falcon@tinylab.org/
+
+v1: https://lore.kernel.org/all/20230831201727.3177853-1-tanyuan@tinylab.org/
+v2: https://lore.kernel.org/all/cover.1693535514.git.tanyuan@tinylab.org/
+
+---
+Changes in v2:
+- Fix the mistake of using spaces instead of tabs in kconfig.
+
+Changes in v3:
+- Enable POWER_RESET and simplify the deconfig.
+- Select ADB_CUDA in PPC_PMAC32 only.
+
+Yuan Tan (3):
+  MIPS: Cleanup malta_defconfig
+  Kconfig: add dependencies of POWER_RESET for mips malta
+  MIPS: Simplify malta_defconfig
+
+ arch/mips/Kconfig                 |  3 +++
+ arch/mips/configs/malta_defconfig | 39 ++++++-------------------------
+ 2 files changed, 10 insertions(+), 32 deletions(-)
+
+
+base-commit: e7513eccb7d7f82e28f4730210b42da71edaa6a6
+-- 
+2.34.1
+
