@@ -2,203 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4933379F8A0
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 05:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FD479FCA9
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 09:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbjINDHe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Sep 2023 23:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        id S233607AbjINHDI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Sep 2023 03:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234231AbjINDH2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 23:07:28 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7351BD3;
-        Wed, 13 Sep 2023 20:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694660844; x=1726196844;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hQLGmdNELjYMZnPnnmaVF9DnSi0UkgWqzZbEZVq1o/k=;
-  b=FI9x9MO5qnIqKzGBysp95vNBROi36Q7/V4jPiHVcgspt8vmNYz8klgfq
-   3CZCTuGPniIWfha733s4sET13N09B2ekEYh+sY4awVSxC94jcck6ZUU0o
-   S9d4kORNFCh6bcMBDei7xLcde4JADeQgnnUsS1e54AGIKaa5vuTDHEt2L
-   3fH2BsYqqbttb3R7bJSv8KXbXXfYf/tQJhhzyhvMCrYlRxmskLtX0y4qo
-   H0sIU19QQE5d6TU2NQQZ6aZzan5ZAO9tvN5SuMqZDk5oEKjKMEXbyuE5u
-   bfYod9APQN2sBs4JcveKa0dTedprBke5YUFwLSIwO4LJ+YFABiOKtdTuL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="382644882"
-X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="382644882"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 20:07:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="747565104"
-X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="747565104"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.84]) ([10.238.8.84])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 20:07:14 -0700
-Message-ID: <54d3e6bf-d374-caa5-0920-bb2fe3b7595c@linux.intel.com>
-Date:   Thu, 14 Sep 2023 11:07:12 +0800
+        with ESMTP id S231876AbjINHDH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 03:03:07 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922A2CF3;
+        Thu, 14 Sep 2023 00:03:03 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6c09f1f9df2so382064a34.2;
+        Thu, 14 Sep 2023 00:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694674983; x=1695279783; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30YvJco7VTNawIeVj2mQFLvYk/DMezr2VBhiarmaxjs=;
+        b=n8EGzOKderE5rofXQQ7J3iHup1q3R1LWtDz7EFdCrAFCt5K6Y68/amQBqoHkkYwyaZ
+         UDhYjcUzbXGi6yZ5E5ZKGpBo0calaLrnWev3pICQrstobaF675/tEAMYrtTNhLXjvQwP
+         3Fp7O9JtCriPo4sWSNDQGH1rbRHt+gXGGMdPcthgVt4jZNlp8EphcaSF6Juu4WDpRq3P
+         NM2WJXj13sbFn82dWA5teUJ5QVYOykNOMxik8TAcfo3WkXrENIJt3riK7ggfoJ2735hY
+         gQzMSy1sCc5BBwNVRdKVr+ihEhY1Rr/i/wtEEWw/yGbe1SSAHuoT7MIupcPnhSvYSpN3
+         tJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694674983; x=1695279783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=30YvJco7VTNawIeVj2mQFLvYk/DMezr2VBhiarmaxjs=;
+        b=naXAClTRTMcgMPHQeHEceHb2WA9ubY/bchOxFuolkPpSYHw+XtpiAZouTFbid8RiG0
+         v/uOxdLK6PYpRYXgKpMLSQ52J8sLpuo+6n08NzNsA903hfi/oBwoa1fGh3GyGifpv6wj
+         9xnOFdkyQcnzV/R8Mog8dU32MEHgJN6cVI44We/0ztqnzX0NKfPv7iD1dQ9NSLszyekw
+         gR2GBuEOVKmj9lNkdo9Buc0mtccOyW8ZmfcwKYTUOeDHEo6ZCHRbBoaBGS8brPj45dA1
+         phqItLeJds3xBppk5bMv30KwchdubwcqZRS0TvWaZuDj7f6vKqlwaM8FRANDqpnbsxMf
+         xQcQ==
+X-Gm-Message-State: AOJu0Ywq6ZO1pAYIrspfnfpHaQOODKeWx7lpvBahTylJTS0XaQlkmlQ/
+        p80JpIBEjC0ZCMHCwUGqg8B6uDRRHdMZ5jLKVgg=
+X-Google-Smtp-Source: AGHT+IFwN7KC0MP+yRN7HXC+8WIaA9T071jv684OsNuFmbXU0T8YGXPQiTees4sH/CN6Q5P9OE3eUQ43ejp33Zd91jw=
+X-Received: by 2002:a05:6871:5ca:b0:1d5:a85a:13b6 with SMTP id
+ v10-20020a05687105ca00b001d5a85a13b6mr5395171oan.45.1694674982809; Thu, 14
+ Sep 2023 00:03:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [RFC PATCH v12 02/33] KVM: Use gfn instead of hva for
- mmu_notifier_retry
-To:     Sean Christopherson <seanjc@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230914015531.1419405-1-seanjc@google.com>
- <20230914015531.1419405-3-seanjc@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230914015531.1419405-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230913115001.23183-1-brgl@bgdev.pl> <20230913115001.23183-3-brgl@bgdev.pl>
+ <CAHp75Ve8aK4Pfid1JYWH86mKy-Zb-G2QDPrJYmRzPCYOsn1TqQ@mail.gmail.com>
+ <CACRpkdYtYDJa6fo6RnizHNzUsyazBQxEaNMznaij8rBF4ie+ew@mail.gmail.com> <20230913222338.07d1625b@xps-13>
+In-Reply-To: <20230913222338.07d1625b@xps-13>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Sep 2023 10:02:26 +0300
+Message-ID: <CAHp75Vd2a06rnGCEiJW0reN00amso0RyvgLT516nZiYLYZ-xcQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] mtd: rawnand: ingenic: use gpiod_set_active_high()
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, Sep 13, 2023 at 11:23=E2=80=AFPM Miquel Raynal
+<miquel.raynal@bootlin.com> wrote:
+> linus.walleij@linaro.org wrote on Wed, 13 Sep 2023 22:12:40 +0200:
+> > On Wed, Sep 13, 2023 at 10:05=E2=80=AFPM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Wed, Sep 13, 2023 at 2:50=E2=80=AFPM Bartosz Golaszewski <brgl@bgd=
+ev.pl> wrote:
 
+...
 
-On 9/14/2023 9:55 AM, Sean Christopherson wrote:
-> From: Chao Peng <chao.p.peng@linux.intel.com>
+> > > Why not moving this quirk to gpiolib-of.c?
+> >
+> > That's a better idea here I think, it's clearly a quirk for a
+> > buggy device tree.
 >
-> Currently in mmu_notifier invalidate path, hva range is recorded and
-> then checked against by mmu_notifier_retry_hva() in the page fault
-> handling path. However, for the to be introduced private memory, a page
-> fault may not have a hva associated, checking gfn(gpa) makes more sense.
->
-> For existing hva based shared memory, gfn is expected to also work. The
-> only downside is when aliasing multiple gfns to a single hva, the
-> current algorithm of checking multiple ranges could result in a much
-> larger range being rejected. Such aliasing should be uncommon, so the
-> impact is expected small.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Tested-by: Fuad Tabba <tabba@google.com>
-> [sean: convert vmx_set_apic_access_page_addr() to gfn-based API]
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/mmu/mmu.c   | 10 ++++++----
->   arch/x86/kvm/vmx/vmx.c   | 11 +++++------
->   include/linux/kvm_host.h | 33 +++++++++++++++++++++------------
->   virt/kvm/kvm_main.c      | 40 +++++++++++++++++++++++++++++++---------
->   4 files changed, 63 insertions(+), 31 deletions(-)
->
-[...]
->   
-> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
-> -			      unsigned long end)
-> +void kvm_mmu_invalidate_begin(struct kvm *kvm)
->   {
-> +	lockdep_assert_held_write(&kvm->mmu_lock);
->   	/*
->   	 * The count increase must become visible at unlock time as no
->   	 * spte can be established without taking the mmu_lock and
->   	 * count is also read inside the mmu_lock critical section.
->   	 */
->   	kvm->mmu_invalidate_in_progress++;
-> +
-> +	if (likely(kvm->mmu_invalidate_in_progress == 1))
-> +		kvm->mmu_invalidate_range_start = INVALID_GPA;
-> +}
-> +
-> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
-> +{
-> +	lockdep_assert_held_write(&kvm->mmu_lock);
-> +
-> +	WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
-> +
->   	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
->   		kvm->mmu_invalidate_range_start = start;
->   		kvm->mmu_invalidate_range_end = end;
-> @@ -771,6 +781,12 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
->   	}
->   }
->   
-> +static bool kvm_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
-> +{
-> +	kvm_mmu_invalidate_range_add(kvm, range->start, range->end);
-> +	return kvm_unmap_gfn_range(kvm, range);
-> +}
-> +
->   static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->   					const struct mmu_notifier_range *range)
->   {
-> @@ -778,7 +794,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->   	const struct kvm_mmu_notifier_range hva_range = {
->   		.start		= range->start,
->   		.end		= range->end,
-> -		.handler	= kvm_unmap_gfn_range,
-> +		.handler	= kvm_mmu_unmap_gfn_range,
->   		.on_lock	= kvm_mmu_invalidate_begin,
->   		.on_unlock	= kvm_arch_guest_memory_reclaimed,
->   		.flush_on_ret	= true,
-> @@ -817,8 +833,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->   	return 0;
->   }
->   
-> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
-> -			    unsigned long end)
-> +void kvm_mmu_invalidate_end(struct kvm *kvm)
->   {
->   	/*
->   	 * This sequence increase will notify the kvm page fault that
-> @@ -833,6 +848,13 @@ void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
->   	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
->   	 */
->   	kvm->mmu_invalidate_in_progress--;
-> +
-> +	/*
-> +	 * Assert that at least one range must be added between start() and
-> +	 * end().  Not adding a range isn't fatal, but it is a KVM bug.
-> +	 */
-> +	WARN_ON_ONCE(kvm->mmu_invalidate_in_progress &&
-> +		     kvm->mmu_invalidate_range_start == INVALID_GPA);
-Should the check happen before the decrease of 
-kvm->mmu_invalidate_in_progress?
-Otherwise, KVM calls kvm_mmu_invalidate_begin(), then 
-kvm_mmu_invalidate_end()
-the check will not take effect.
+> Agreed, it's just for backward compatibility purposes in a single
+> driver. I believe it should stay here.
 
->   }
->   
->   static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
+I believe Linus was for moving.
 
+gpiolib-of.c contains a lot of quirks, including this one. Calling
+these new (or old) APIs for overriding polarity in many cases
+shouldn't be needed if were no issues with DT or something like that.
+
+--=20
+With Best Regards,
+Andy Shevchenko
