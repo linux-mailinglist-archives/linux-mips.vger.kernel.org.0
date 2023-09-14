@@ -2,189 +2,203 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8798079F85D
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 04:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4933379F8A0
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 05:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbjINCrC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Sep 2023 22:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S234152AbjINDHe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Sep 2023 23:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjINCrB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 22:47:01 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2049.outbound.protection.outlook.com [40.107.96.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1122110C3;
-        Wed, 13 Sep 2023 19:46:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UVgAbuuYbw0R9yh1TuWKlREZ5wCLaLr8hIT4kKXPaGLYS8NHHsgopfYxpqtVNYDwPWrvVZyy9AHu7kJmlxqxsmmT6bLErHxqClcxm5QzPIC8pbHKpThmpRSP4+MwAM9xpZdNQbeGFzPPwrUdArpLw/YLbHoCVzxXOy+VtA0xOQE2c5FjkJ0HT3brndXkWyrgepNO/ytPyxBcsFRlwBb8IpCQhsRinGJ4X3Ex8dTcG1LtfftDHLQQoeXqSPhZmP9d26X6G3iHT2QJDSq8u5nKlgPxVsxseQ+YQMV5viU92HUspYOBYnuJFcusDBjze9PFlmav/n6HiSoraPeXuLAIDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oiuXeFuTR+vS0ipB3ihW9ecZ8MD+nVXVhK9+eaMCIeA=;
- b=b70Lh2p1dARY7mnvhZw2vUuwvySvsPujt4STUgG7wqVcqyakWLC3JulHjQwRIisYUZv0savuLW3i/qZdifCLsoCLIphJXFZW2xsP07/MMeE5YpcDpQoQrsVbrtro6MjQlaAYkAeNEI0QsRslSMIf96CtOn6iw2uUqOjPSOrxjnPxoEfu69OyvQHvRey7eLkyrKEthh90zp8OXD6KbVy/qYvCvPBReaEbYRrszS6bpevsEX8wxCgsblUlNOfelG7hB26gMu+cY4dwVCKRvpnYaZFhmOkhWiADIKWFZGiLrw4AVF2Hr0rSoWmK8VScmvbyubA+6uuYS0msdtmbO4YAXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oiuXeFuTR+vS0ipB3ihW9ecZ8MD+nVXVhK9+eaMCIeA=;
- b=Yq4oh3tAoOtl8Ujl5U4iodT+fJoDw6F2GeRIC2/jdAAlNNm/L7WGesLVMlbPu2+vDtr1awnfZDomfKrw3uGDEQBF1uirrr0Wgsy8eompM7AaRAxMrqKxSQ9ysd0iwMVVe7EV5+p6R2PGZKna+xltwof35Mg8DBQNKxAQGBT8nUkGHZOvK0He14kbDg9VAM+pOEClc6jZIPKrVhds0FVLTtWhJfOVhc0yXOymczOIOqU5066ZsMTGlsp9H9A3a2fa2d9hK3zPe4G31z8aF7oPwJ3nXT0QLq+bUPNtUbNcGztvhyd3Dw0qVcvJj3Be5UcPSj92QLWdMRuhjavFrnCfGw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- SJ2PR12MB8718.namprd12.prod.outlook.com (2603:10b6:a03:540::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6768.30; Thu, 14 Sep 2023 02:46:54 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::4b09:197c:609a:1013]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::4b09:197c:609a:1013%7]) with mapi id 15.20.6745.020; Thu, 14 Sep 2023
- 02:46:54 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "\"Matthew Wilcox (Oracle)\"" <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        "\"Mike Rapoport (IBM)\"" <rppt@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] mips: use nth_page() in place of direct struct
- page manipulation.
-Date:   Wed, 13 Sep 2023 22:46:50 -0400
-X-Mailer: MailMate (1.14r5984)
-Message-ID: <F0E56181-587E-4F72-92AA-22031921EC46@nvidia.com>
-In-Reply-To: <20230913201248.452081-6-zi.yan@sent.com>
-References: <20230913201248.452081-1-zi.yan@sent.com>
- <20230913201248.452081-6-zi.yan@sent.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_F8976C30-D161-45AE-AC3B-7E25CF53FD9F_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: YQZPR01CA0002.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:85::16) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+        with ESMTP id S234231AbjINDH2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Sep 2023 23:07:28 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7351BD3;
+        Wed, 13 Sep 2023 20:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694660844; x=1726196844;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hQLGmdNELjYMZnPnnmaVF9DnSi0UkgWqzZbEZVq1o/k=;
+  b=FI9x9MO5qnIqKzGBysp95vNBROi36Q7/V4jPiHVcgspt8vmNYz8klgfq
+   3CZCTuGPniIWfha733s4sET13N09B2ekEYh+sY4awVSxC94jcck6ZUU0o
+   S9d4kORNFCh6bcMBDei7xLcde4JADeQgnnUsS1e54AGIKaa5vuTDHEt2L
+   3fH2BsYqqbttb3R7bJSv8KXbXXfYf/tQJhhzyhvMCrYlRxmskLtX0y4qo
+   H0sIU19QQE5d6TU2NQQZ6aZzan5ZAO9tvN5SuMqZDk5oEKjKMEXbyuE5u
+   bfYod9APQN2sBs4JcveKa0dTedprBke5YUFwLSIwO4LJ+YFABiOKtdTuL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="382644882"
+X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
+   d="scan'208";a="382644882"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 20:07:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="747565104"
+X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
+   d="scan'208";a="747565104"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.84]) ([10.238.8.84])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 20:07:14 -0700
+Message-ID: <54d3e6bf-d374-caa5-0920-bb2fe3b7595c@linux.intel.com>
+Date:   Thu, 14 Sep 2023 11:07:12 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|SJ2PR12MB8718:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31c48ad0-1ff7-4c2e-a684-08dbb4ccdb2d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +NsWpmMSsqN7qFya5zKpSJ/Lrcm5tCM7KNq/PoqHmIxvWnJiKPun3NdfnvECgvXXms5TdsbuemtUvWeo1zcNspgNck+qmnPrm0+AXdO7dzISb2K7I4enX3VRdxIhSFh5YrQqs8/pZdu/6kyt+Lb88gjLkLySz2gmbFZucun3lIZLL7rQpUC5PML42DY9S/2XRPEnGHiCv20spDmUI+e62+lGNdYuffOY1HNBNTy89OmuvP5hBZFK2qkhtUfbn4kydMbM+jSzaoQjHpA7xKOf5lUtSYOxP7Mm5BvlhTeewt8i9eT5HDtFz65t3apYek8o0wso3B/fqtE/lv4sM+p46KhELBZG+5O9zzaXxwgsQhQiQ/ljKXQGMVtGXnbxHqW6jOfd6Oftuq0ttp6wM9roRSOGF2Mb2Lt889lSKHShOYvPUSPLiiWXo6hsxrylQD/PhItDYz0uqaEly89iBi8EQ9qL8FZVvplRe+K0ISd1RboQ0p8H+cgu1jdp+VZR4j67iC7nQJiXe55eqpODfqvRDQjeoEW59D9FxsSZOVDIWY4/1gbjM7HvmpQ9CptIjdaIBZ9oAHdu+9dB562Y0OdjyrFTp04qIrEKkpaQr6B3SSkHhvVP+bYmg3zh1tgZ6P5B
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199024)(186009)(1800799009)(6666004)(6506007)(53546011)(8676002)(6486002)(36756003)(26005)(33656002)(38100700002)(86362001)(83380400001)(235185007)(2906002)(66556008)(6512007)(478600001)(66946007)(5660300002)(8936002)(4326008)(66476007)(316002)(2616005)(41300700001)(54906003)(7416002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XOW8u2aAwhfNjyKf38zMFiBTr5cRVs0bZJ0zSzEC66UtPDndvB3K+sqyEUZa?=
- =?us-ascii?Q?nOC9tsqyTncdQ9ofXNv/xd25Zcy4cDgFgc8bIw3SC7QGS5K41pzgYmoop4XM?=
- =?us-ascii?Q?IZ5RbVbOQARn4atPowmfXhQ14D+/TTdNGOjmtkYe41HHCQbZjX+nrcYTDHkD?=
- =?us-ascii?Q?BQKJr6rLFLKefb6uRbrAyJU6KdRv/DdMk3fdT64X4YCcj51LPMmV8TOE5bjU?=
- =?us-ascii?Q?jidFPav/rDvJVjZ+0JTkKccDUPwR6SoZkucLMi4uQ8QCznjDQYo5/uqtV9Ll?=
- =?us-ascii?Q?fz5wGWWC3D7DoO59Ojtt1kxyw89m00JFvz7e8YN5i/ypoFcSWN+NQCS4a155?=
- =?us-ascii?Q?RswMRxNaKrldPRlOgyKVcGheFl9wP0+OLjIEWadT5i8kfCExIVhVp4vYmbkN?=
- =?us-ascii?Q?l4yGi5GfRPEzymn/IB/bqbGcEOIQpardGuV3W3PCIzzTozD/clcFHmluemE2?=
- =?us-ascii?Q?SVR2EMPyep8ekH1d0H4UAuY+zfX6bRBMvMIcdijn8d56NGutxOT8urlxTIKK?=
- =?us-ascii?Q?pQgn1m2yWtASFeaT9MEuW6v8P3j8rQCyckPkDQBlciPkAnQga5kCs12ZIuRv?=
- =?us-ascii?Q?W3pwBR1qt8252ZcXZQ03QV1nlWYEDwJbAz7oiP6+t7ka21VVSf/bs3YqAcx/?=
- =?us-ascii?Q?wJGqmNdTYf1hrQUPzz6fxUOpuWkYuw5b3F2DMGCeppBEoBiLgk7XMVG8HNZI?=
- =?us-ascii?Q?ocx1i7Mjge3CWWVPQiF0M/yEJOmhcau3KROXWyDcHjhKmk876OTY36GAOkKz?=
- =?us-ascii?Q?jxfmnsZVTVSvpg4RnfnzAEq8AKUEQbtbOJMWsbJQnU9ZmKmO1yVRhEMRGfOe?=
- =?us-ascii?Q?04W7T/Bkj9BkwLPWZ2IT617kZNpSgYqt4Ht5k9/734Vr5aET9xhi0pFgVBAL?=
- =?us-ascii?Q?mQjYZOcYb0BtE4tr+JPmlhrQ/XlfFoTvIB3H+YyuRL4nIENW5a/GLOblYX9s?=
- =?us-ascii?Q?uazJ/XBuoG7ldCGKAsXks5EnWvbPJ/rw0NqFs4zVMMWlM4vsTHj0xj7qRQkb?=
- =?us-ascii?Q?RcgQ6XenCa1F1ML3I3C8z6xcOy32F3+MinGEhWRkTq3VjLewX1PzcM9amF/O?=
- =?us-ascii?Q?Udr+DiuZeJBz3onFP9i2f/SU3zy8kC2u3m7vC0Yy79t/+d/Jjc5MJ/0Vukkx?=
- =?us-ascii?Q?BwjBJiDtvFemWthizUnXL174dq81P+tu68MqVKVKCYnqx1Ph+5l99UAFaFv0?=
- =?us-ascii?Q?rNsoMzKCprIt5OYAPd5fEuY6/2OS++H8LJ4Do8QsJUv6hMzt/dTkg7c2E44e?=
- =?us-ascii?Q?It8vyaOesyRskB4vtoofLC84Za3UvWt970mQyt8LnZVktuqt4GtBl+VGWD8y?=
- =?us-ascii?Q?cbl3/BYZ8eRLjIuV15GzOiK3KIyYHDIs0iqADhH80RAcUO27XXtMI0qG3V1i?=
- =?us-ascii?Q?lXvVhVbIm+pVaZSzhxwji/oU06a5GbCduYcv0vqvDrBvq2OFPk7H+L44Ovxl?=
- =?us-ascii?Q?gz2CV7BAM3wcUxY8sBOyz17rfK3fSop9tmIR1rjMGhbpacI/RzcQRJodt8tb?=
- =?us-ascii?Q?JZ5fDKRH5NH/R/vpH1YboNPgld6LYkvkzIufQ2u0VptILmrSUL0av2fCzz0I?=
- =?us-ascii?Q?rOZBphV1dmrvYy0i5ydElzDzj1ITcODLKWGOEuhz?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31c48ad0-1ff7-4c2e-a684-08dbb4ccdb2d
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2023 02:46:54.7543
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G2TvaYBEPwr6Lm+x2ycO9MIE0bUSo4BmLBls+9+zHHHjTDRQxv3HgdkQ0XOUL0gh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8718
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [RFC PATCH v12 02/33] KVM: Use gfn instead of hva for
+ mmu_notifier_retry
+To:     Sean Christopherson <seanjc@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20230914015531.1419405-1-seanjc@google.com>
+ <20230914015531.1419405-3-seanjc@google.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230914015531.1419405-3-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=_MailMate_F8976C30-D161-45AE-AC3B-7E25CF53FD9F_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
-On 13 Sep 2023, at 16:12, Zi Yan wrote:
 
-> From: Zi Yan <ziy@nvidia.com>
+On 9/14/2023 9:55 AM, Sean Christopherson wrote:
+> From: Chao Peng <chao.p.peng@linux.intel.com>
 >
-> __flush_dcache_pages() is called during hugetlb migration via
-> migrate_pages() -> migrate_hugetlbs() -> unmap_and_move_huge_page()
-> -> move_to_new_folio() -> flush_dcache_folio(). And with hugetlb and
-> without sparsemem vmemmap, struct page is not guaranteed to be contiguo=
-us
-> beyond a section. Use nth_page() instead.
+> Currently in mmu_notifier invalidate path, hva range is recorded and
+> then checked against by mmu_notifier_retry_hva() in the page fault
+> handling path. However, for the to be introduced private memory, a page
+> fault may not have a hva associated, checking gfn(gpa) makes more sense.
 >
-> Fixes: 15fa3e8e3269 ("mips: implement the new page table range API")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> For existing hva based shared memory, gfn is expected to also work. The
+> only downside is when aliasing multiple gfns to a single hva, the
+> current algorithm of checking multiple ranges could result in a much
+> larger range being rejected. Such aliasing should be uncommon, so the
+> impact is expected small.
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Tested-by: Fuad Tabba <tabba@google.com>
+> [sean: convert vmx_set_apic_access_page_addr() to gfn-based API]
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/mips/mm/cache.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   arch/x86/kvm/mmu/mmu.c   | 10 ++++++----
+>   arch/x86/kvm/vmx/vmx.c   | 11 +++++------
+>   include/linux/kvm_host.h | 33 +++++++++++++++++++++------------
+>   virt/kvm/kvm_main.c      | 40 +++++++++++++++++++++++++++++++---------
+>   4 files changed, 63 insertions(+), 31 deletions(-)
 >
-> diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-> index 02042100e267..7f830634dbe7 100644
-> --- a/arch/mips/mm/cache.c
-> +++ b/arch/mips/mm/cache.c
-> @@ -117,7 +117,7 @@ void __flush_dcache_pages(struct page *page, unsign=
-ed int nr)
->  	 * get faulted into the tlb (and thus flushed) anyways.
->  	 */
->  	for (i =3D 0; i < nr; i++) {
-> -		addr =3D (unsigned long)kmap_local_page(page + i);
-> +		addr =3D (unsigned long)kmap_local_page(nth_page(page, i));
->  		flush_data_cache_page(addr);
->  		kunmap_local((void *)addr);
->  	}
-> -- =
+[...]
+>   
+> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> -			      unsigned long end)
+> +void kvm_mmu_invalidate_begin(struct kvm *kvm)
+>   {
+> +	lockdep_assert_held_write(&kvm->mmu_lock);
+>   	/*
+>   	 * The count increase must become visible at unlock time as no
+>   	 * spte can be established without taking the mmu_lock and
+>   	 * count is also read inside the mmu_lock critical section.
+>   	 */
+>   	kvm->mmu_invalidate_in_progress++;
+> +
+> +	if (likely(kvm->mmu_invalidate_in_progress == 1))
+> +		kvm->mmu_invalidate_range_start = INVALID_GPA;
+> +}
+> +
+> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
+> +{
+> +	lockdep_assert_held_write(&kvm->mmu_lock);
+> +
+> +	WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
+> +
+>   	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+>   		kvm->mmu_invalidate_range_start = start;
+>   		kvm->mmu_invalidate_range_end = end;
+> @@ -771,6 +781,12 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+>   	}
+>   }
+>   
+> +static bool kvm_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> +{
+> +	kvm_mmu_invalidate_range_add(kvm, range->start, range->end);
+> +	return kvm_unmap_gfn_range(kvm, range);
+> +}
+> +
+>   static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>   					const struct mmu_notifier_range *range)
+>   {
+> @@ -778,7 +794,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>   	const struct kvm_mmu_notifier_range hva_range = {
+>   		.start		= range->start,
+>   		.end		= range->end,
+> -		.handler	= kvm_unmap_gfn_range,
+> +		.handler	= kvm_mmu_unmap_gfn_range,
+>   		.on_lock	= kvm_mmu_invalidate_begin,
+>   		.on_unlock	= kvm_arch_guest_memory_reclaimed,
+>   		.flush_on_ret	= true,
+> @@ -817,8 +833,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>   	return 0;
+>   }
+>   
+> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
+> -			    unsigned long end)
+> +void kvm_mmu_invalidate_end(struct kvm *kvm)
+>   {
+>   	/*
+>   	 * This sequence increase will notify the kvm page fault that
+> @@ -833,6 +848,13 @@ void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
+>   	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
+>   	 */
+>   	kvm->mmu_invalidate_in_progress--;
+> +
+> +	/*
+> +	 * Assert that at least one range must be added between start() and
+> +	 * end().  Not adding a range isn't fatal, but it is a KVM bug.
+> +	 */
+> +	WARN_ON_ONCE(kvm->mmu_invalidate_in_progress &&
+> +		     kvm->mmu_invalidate_range_start == INVALID_GPA);
+Should the check happen before the decrease of 
+kvm->mmu_invalidate_in_progress?
+Otherwise, KVM calls kvm_mmu_invalidate_begin(), then 
+kvm_mmu_invalidate_end()
+the check will not take effect.
 
-> 2.40.1
+>   }
+>   
+>   static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
 
-Without the fix, a wrong address might be used for data cache page flush.=
-
-No bug is reported. The fix comes from code inspection.
-
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_F8976C30-D161-45AE-AC3B-7E25CF53FD9F_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmUCdBsPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUzGMQAJd1Q3KNwBMqvmm3vGIN/FxECqe3HXjJkv+q
-RAQ9DAphpGKBvzx320t1NHRK87iiLw4gXliSAOiBXyo1oK2rBp/EQaWexd3uJkRs
-tNHZyk9qJetZ/Wo+NjRhVuZKPst6AwjZkD0JsMKbr6IsPTSnJs/7gyG+QFNEb+Aj
-87zsVgNPDvAPQ5UtP0Dngm/QmiACMQqbySh3Simo/px9AuC8nMVae0aAoaf5HnK1
-mN6TJ1ADjmt1m6WxCIck/x7b+OWAihIJKnuYd30mdKdpCX1l5QvTfQIx0S6eUCLp
-gXEWsSJmBhPruiP9vTxE75yOFaOyESbhcAoUJlPj9/V/bAYDgMkz6VG3Vh3ZASuW
-hR4ynLcP/CgYR7+hz5gxvoURHeuFoa0d3s9Ztvq7ky2n0MO0xTfTMgFf9azSFjdM
-r6PskMlS7ZHJfEgr+mDeZcrRUWGwD0ZMIloujYuSZWsfHjRrsrOMpTBdu5bbcBD6
-MdAWUaCh1GFDzYooGDzIErhtg+M69aCjgYPo7v1eNJtEqvPBQ8DjEi+Ws1LeRR9t
-WRh6waktdMQ079oCShpI9BrWX25O5RNqCMgMr4RbNg3cJfDAKvBa+qxufccZl5Wd
-YlIZpNiXz0pF9f42qntVAvK/aWy9YzqTCE+e+07NDImO6AKTkqARrjE2XoN42q09
-4gKRw9x/
-=rg58
------END PGP SIGNATURE-----
-
---=_MailMate_F8976C30-D161-45AE-AC3B-7E25CF53FD9F_=--
