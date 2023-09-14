@@ -2,151 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634BB7A03C2
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 14:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5BE7A068C
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 15:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237943AbjINM1K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Sep 2023 08:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S239302AbjINNzj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Sep 2023 09:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237745AbjINM1J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 08:27:09 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BF31FC9;
-        Thu, 14 Sep 2023 05:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1694694421;
-        bh=IKd/xoLaYMNT3G43ojUHtX33LcBflkrUDAX5TgQ89VQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rYiR5HRfpS/tMJ5vZ04WGHK5tqlEmN3zl7YBnuBIj4iDXvSjRcMk3Bm1xQR4G2xqA
-         ch/6vWdPHmOC2BUMMk4XX30GKkFETwPb6UKi6HR3vSS9M+ZGF48pqFYfp4X0b6Xnoc
-         3IT8Xs1CRfVJWHkXJOg3XffMJXWhIzBrBfe0rLT/1FOwmVJNKXhzU+07wARKckah+G
-         1nYEufulJtii1DdLYzWI+dlftci66s6CJLfGerDALqoTxKf5zQo5DIOqkNkz913pHl
-         hiwkYuo8iIaiLSkIq8iYXaa9BldBulkzz3WoyK+kyoqd71CY/sNwj3K8X+Pby7L5LJ
-         Ni+zJOD6zygLg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rmc544Ldlz4wxN;
-        Thu, 14 Sep 2023 22:26:48 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-Cc:     "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "schwab@linux-m68k.org" <schwab@linux-m68k.org>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "glaubitz@physik.fu-berlin.de" <glaubitz@physik.fu-berlin.de>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ink@jurassic.park.msu.ru" <ink@jurassic.park.msu.ru>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "ysato@users.sourceforge.jp" <ysato@users.sourceforge.jp>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "rmclure@linux.ibm.com" <rmclure@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "slyich@gmail.com" <slyich@gmail.com>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "chris@zankel.net" <chris@zankel.net>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "mattst88@gmail.com" <mattst88@gmail.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "richard.henderson@linaro.org" <richard.henderson@linaro.org>,
-        "irogers@google.com" <irogers@google.com>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: Re: [PATCH 2/2] arch: Reserve map_shadow_stack() syscall number for
- all architectures
-In-Reply-To: <8b7106881fa227a64b4e951c6b9240a7126ac4a2.camel@intel.com>
-References: <20230911180210.1060504-1-sohil.mehta@intel.com>
- <20230911180210.1060504-3-sohil.mehta@intel.com>
- <8b7106881fa227a64b4e951c6b9240a7126ac4a2.camel@intel.com>
-Date:   Thu, 14 Sep 2023 22:26:47 +1000
-Message-ID: <871qf17xfc.fsf@mail.lhotse>
+        with ESMTP id S239107AbjINNzj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 09:55:39 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DDF1AE
+        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 06:55:35 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d8020510203so1017014276.2
+        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 06:55:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694699734; x=1695304534; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7lVufp3CfPA+avJJEdJfW22ymBTvw516wdd+VxBZzds=;
+        b=MIiS1UXMCeZq9OXUmc5JQ35svwQH6LCpc//dmoLiOkyQ356Hn4fNiznXImhIVS3jTH
+         1vS0L0z+phTlsvTAc7JLV/l1J87HZJCBlpkvDPYRohJ+maxfu6qp1dqem1PChEzinrSk
+         Ume16Tv7HA284yr6vjURu21GEBOLz8Gp1KeJLvq7gvrKJTuPmnAh62f+cUVa3mBEX18k
+         B+BAvBf9pIGG9R3N6kpxIKlzMZ42aCDhrlT86o62NtaHucbYvss24O8gk0XclM1Jljyg
+         UcUqrZ2w/Eyv8tTOZgJqAjc9Dy13vETpSrTrK0pIEzbfGKRMfxTNq9HUYftjWZ7U4ciB
+         epbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694699734; x=1695304534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7lVufp3CfPA+avJJEdJfW22ymBTvw516wdd+VxBZzds=;
+        b=HI9WBdGEgo107k6bwwkcny7ya30Nv08FrEc4+9s5Dd+hTSCxneEve69RMfA13wN5SG
+         7+krgUHEYb969rm5Lez443xus5i0bqHX/71r5ZkiM3PUJOYjTlR6iv8OlFpein8tcbOb
+         kqv9Rc4QPVpr3xeF27tfFhOHQPMNgk7gQDdh0WYKZLhFdAg3n+phRjr7piOU2w+ZfJpV
+         EjX6v7DN4JZhIlhDcVy+uGZtXUoYZF5tAXSIw6em8n6SiCm56Jvc3CyhdIK0pAzOjpzL
+         sf8ZiARu7rVIsMIeBBRNQMKogdEEn2DOPKtQ6TnJLIEoYTgnDJVg2y3ssBPPM6pZ9dsD
+         Yw7w==
+X-Gm-Message-State: AOJu0YzW/Gp/pIZIPZu+8hfm2xwO4dUwWTgxAG5s2JuWvrMAa0+QCPU+
+        SnFTfofKYF1Qu5U7knn7BR/rI+s+W5zHTC1ejGkRXw==
+X-Google-Smtp-Source: AGHT+IHmzARiZmGAsVvUQi6lwHQOEn26bk87VErr5TXYZTtaPzwucwTkpNwUE9Hz/2T2a3UepOFa7PTmuZyP0PLHJ8A=
+X-Received: by 2002:a25:d683:0:b0:d81:9ba3:43bc with SMTP id
+ n125-20020a25d683000000b00d819ba343bcmr1489848ybg.12.1694699734333; Thu, 14
+ Sep 2023 06:55:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20230913115001.23183-1-brgl@bgdev.pl> <20230913115001.23183-3-brgl@bgdev.pl>
+ <CAHp75Ve8aK4Pfid1JYWH86mKy-Zb-G2QDPrJYmRzPCYOsn1TqQ@mail.gmail.com>
+ <CACRpkdYtYDJa6fo6RnizHNzUsyazBQxEaNMznaij8rBF4ie+ew@mail.gmail.com>
+ <20230913222338.07d1625b@xps-13> <CAHp75Vd2a06rnGCEiJW0reN00amso0RyvgLT516nZiYLYZ-xcQ@mail.gmail.com>
+ <4de724a1630eda74f4f304dc224dc981eb3b0875.camel@crapouillou.net> <CAMRc=MfnPdr66OPSkkjjpZY2VY7wN4WO2uBPbpyExFH0F6e=1Q@mail.gmail.com>
+In-Reply-To: <CAMRc=MfnPdr66OPSkkjjpZY2VY7wN4WO2uBPbpyExFH0F6e=1Q@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 14 Sep 2023 15:55:22 +0200
+Message-ID: <CACRpkdah0+HjQ3Co=eHitK8srbWgT7e956+oeH-K+yjYs9=iuw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] mtd: rawnand: ingenic: use gpiod_set_active_high()
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-"Edgecombe, Rick P" <rick.p.edgecombe@intel.com> writes:
-> On Mon, 2023-09-11 at 18:02 +0000, Sohil Mehta wrote:
->> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl
->> b/arch/powerpc/kernel/syscalls/syscall.tbl
->> index 20e50586e8a2..2767b8a42636 100644
->> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
->> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
->> @@ -539,3 +539,4 @@
->> =C2=A0450=C2=A0=C2=A0=C2=A0=C2=A0nospu=C2=A0=C2=A0=C2=A0set_mempolicy_ho=
-me_node=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sys_set_mempol=
-icy_hom
->> e_node
->> =C2=A0451=C2=A0=C2=A0=C2=A0=C2=A0common=C2=A0=C2=A0cachestat=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sys_cachestat
->> =C2=A0452=C2=A0=C2=A0=C2=A0=C2=A0common=C2=A0=C2=A0fchmodat2=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sys_fchmodat2
->> +453=C2=A0=C2=A0=C2=A0=C2=A0common=C2=A0=C2=A0map_shadow_stack=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0sys_map_shadow_stack
+On Thu, Sep 14, 2023 at 11:30=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+> On Thu, Sep 14, 2023 at 10:30=E2=80=AFAM Paul Cercueil <paul@crapouillou.=
+net> wrote:
+
+> > > I believe Linus was for moving.
+
+Yes.
+
+> > Which Linus? Because the one who's also the gpio maintainer just wrote
+> > above that it was better to keep it in the driver.
+
+What. No. I expressed myself unclearly:
+
+> > Why not moving this quirk to gpiolib-of.c?
 >
-> I noticed in powerpc, the not implemented syscalls are manually mapped
-> to sys_ni_syscall. It also has some special extra sys_ni_syscall()
-> implementation bits to handle both ARCH_HAS_SYSCALL_WRAPPER and
-> !ARCH_HAS_SYSCALL_WRAPPER. So wondering if it might need special
-> treatment. Did you see those parts?
+> That's a better idea here I think, it's clearly a quirk for a
+> buggy device tree.
 
-I don't think it needs any special treatment. It's processed by the same
-script as other arches (scripts/syscalltbl.sh). So if there's no compat
-or native entry it will default to sys_ni_syscall.
+"That's a better idea here I think"
 
-I think it's just habit/historical that we always spell out sys_ni_syscall.
+means
 
-cheers
+"That's a better idea [IN THIS CASE] I think"
+
+i.e. in this case it is a better idea to move it into gpiolib-of.c
+
+> I'm also under the impression that Linus meant moving it to gpiolib-of.c.=
+ Let's
+>
+> Linus: Could you clarify?
+
+Yes.
+
+I invented that thing so I'm a fan of it.
+
+Yours,
+Linus Walleij
