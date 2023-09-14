@@ -2,159 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9AC7A0720
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 16:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5217A0C51
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Sep 2023 20:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbjINOUE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Sep 2023 10:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S240693AbjINSQB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Sep 2023 14:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239843AbjINOUD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 10:20:03 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE256D7
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 07:19:59 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d818fb959f4so984549276.1
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 07:19:59 -0700 (PDT)
+        with ESMTP id S240408AbjINSP7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 14:15:59 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1789E1FFC
+        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 11:15:55 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59b56dab74bso17824797b3.2
+        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 11:15:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694701199; x=1695305999; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1694715354; x=1695320154; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OinN3M2z4I/Qg8aCda0iI1MRdyz332KlEPPYu5muKwI=;
-        b=xr88NZ3hWTH3lnvGOdBo9NgKqtBG+RfRf+Ma5OOyyYFnq+jFzL65M+V4WoaB9eRMHm
-         971zh2UCBLYdP76uV+Mq30FSgo6lprEyIAHWM6SBOSR9aKHFIc5lP5hALT7lI7DW6hc3
-         2tZv6v0YmnnxQkLA7ALzjmjCaSIA/hUFh0usopy9109tuTlYRCtAakmcXQ/bUatDDHbU
-         h5CBK2/vAkKySfz1KsqCjlBwoLMQf8sHXlk0K2SGK3ckc7R6E0h0vvWF8riWY0TWrINA
-         Zq48Rcr1pRGc9ZQz2lqK1ZZMhdG35Thg67A8WQXciGYHbeYiyMYi5tFD6yK2xNXXqIYv
-         i2IQ==
+        bh=NotwC0wYPH9Bmm+eHoPAvBDfUZeidJiPlRdc5f2ZPWA=;
+        b=NiAr56sdcK38yNIsL8nbI6rBhlNZ//YUCwu/RMCdQp5Wund7ix5lUJL6iK4liygvl7
+         sFJCULWW61tZh2SDrMO6WhiabWdecOpjZYGSofS2TWfCq0dkqFe9g+sPoh3N7zM87Z2R
+         lqouog4/0l04xMCDwrywPpPNF1KsC7pOw2ccdqI8SiXseN3giwylafA2E/8vjloK2+eB
+         09Uxja4dzy5NCBquLKv4HozpxlTu/MpSLgH6Hna6tPAExkWhMIjiYTlwDf8mvUcgprlt
+         pxgnRuBxlEOEnNnEa5e/ukZKYC7EwKnR/vbP1Lwqy0gHV3utuDx5BqCnlnXA0PQmfaf3
+         bvYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694701199; x=1695305999;
+        d=1e100.net; s=20230601; t=1694715354; x=1695320154;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OinN3M2z4I/Qg8aCda0iI1MRdyz332KlEPPYu5muKwI=;
-        b=ShK9fFs5SjA3l2MmVneyyzBu5vUmMt6387QGUWO87peCAHTeMuVM9XXf2YYg4KOiVx
-         DGxazHeRHU6DL0rljMxnbr44hgrfxnIFntcZ8f1JxDBld4qnyvyXyCzohuYO1NOuPxa7
-         vrRfstGNlOyKEicyJtUyXXzvAEQEFmX5TWTpFOMGlR+gI5ljHWUbz8pGns/6pu/IpSdD
-         P5/N8FwflAluB59GhLuXy9K//r80pAnEgLBrDbUJG4gGiOz/qV3qInWIxRvlKmJ40YIY
-         wNkoRf/vRi+K10syfmqRF6/dyUjv5MivhIFDoIftHKKW7yeNr9SjgR3ox1GXAOpvmZ5Z
-         KA6g==
-X-Gm-Message-State: AOJu0Yzn57PssYHXbtBsvCIBbBLvHxAwA4qbjrPa46IbnzuRetr+ZAEB
-        R9CCUYCfmRcdKv2ILk1lkXYjR7slLJ0=
-X-Google-Smtp-Source: AGHT+IEn69IOl2rxglDVCjXW4KTdScyqCw6tLi48MQpyb+nW1MjRKbjq1lfqPgEextp+IedkDxkiKrdOCXU=
+        bh=NotwC0wYPH9Bmm+eHoPAvBDfUZeidJiPlRdc5f2ZPWA=;
+        b=XDW5hoOlI4tKO/2px1/LZzyjZeuHHBglKdnQ7ia6ZHqly+48vhnaeCjW8oe3yg8aei
+         KPXIRwm8/+Qwdt3B6ZxrP/MNcnKltdiIBf1IC1vClHn1jhICr9KXF161P/hVSz7DreoN
+         fZqVbdddpWA2JBDiOjxkcHDir9tXujAofY+eNDyvmyAnFlVsCMGyyqpos71aJOBrdyMA
+         gGyPUlsj7sR9X/6jR4izxmd+gZM3+xJIRXRUiXRo0M+dlAPlw719njZHiSXbnbNhfirZ
+         ZM0brpzqavh2lWiYeI35/VndZoQ0eOXfbXZYh5uES+JJT2c+qs5Xvo7A7/HUYwmRo4x5
+         YCBw==
+X-Gm-Message-State: AOJu0Yz9nXfwV/UJPmVZyazDh6nMfVidSiqa6ICO2ce5lTL6LwoIYUZJ
+        EraAi51Mm3hhJHclJNX5ewvcQVVVn1E=
+X-Google-Smtp-Source: AGHT+IGPJqA/+ZACxXOUgdzWN4hGcwV50i6jcfcPa2GrWEQEeACHClOtxAN3Jr9h2WjxVFoJdPIyBK0jy04=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:e6c4:0:b0:d78:f45:d7bd with SMTP id
- d187-20020a25e6c4000000b00d780f45d7bdmr129688ybh.4.1694701199053; Thu, 14 Sep
- 2023 07:19:59 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 07:19:57 -0700
-In-Reply-To: <54d3e6bf-d374-caa5-0920-bb2fe3b7595c@linux.intel.com>
+ (user=seanjc job=sendgmr) by 2002:a05:690c:3187:b0:59b:e81f:62b3 with SMTP id
+ fd7-20020a05690c318700b0059be81f62b3mr91025ywb.10.1694715354294; Thu, 14 Sep
+ 2023 11:15:54 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 11:15:52 -0700
+In-Reply-To: <diqzttsiu67n.fsf@ackerleytng-ctop.c.googlers.com>
 Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-3-seanjc@google.com>
- <54d3e6bf-d374-caa5-0920-bb2fe3b7595c@linux.intel.com>
-Message-ID: <ZQMWjbt/SzKvag2K@google.com>
-Subject: Re: [RFC PATCH v12 02/33] KVM: Use gfn instead of hva for mmu_notifier_retry
+References: <ZOO782YGRY0YMuPu@google.com> <diqzttsiu67n.fsf@ackerleytng-ctop.c.googlers.com>
+Message-ID: <ZQNN2AyDJ8dF0/6D@google.com>
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
 From:   Sean Christopherson <seanjc@google.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, willy@infradead.org,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, kvm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+        linux-kernel@vger.kernel.org, chao.p.peng@linux.intel.com,
+        tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com,
+        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
 Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 14, 2023, Binbin Wu wrote:
+On Mon, Aug 28, 2023, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> >> If we track struct kvm with the inode, then I think (a), (b) and (c) can
+> >> be independent of the refcounting method. What do you think?
+> >
+> > No go.  Because again, the inode (physical memory) is coupled to the virtual machine
+> > as a thing, not to a "struct kvm".  Or more concretely, the inode is coupled to an
+> > ASID or an HKID, and there can be multiple "struct kvm" objects associated with a
+> > single ASID.  And at some point in the future, I suspect we'll have multiple KVM
+> > objects per HKID too.
+> >
+> > The current SEV use case is for the migration helper, where two KVM objects share
+> > a single ASID (the "real" VM and the helper).  I suspect TDX will end up with
+> > similar behavior where helper "VMs" can use the HKID of the "real" VM.  For KVM,
+> > that means multiple struct kvm objects being associated with a single HKID.
+> >
+> > To prevent use-after-free, KVM "just" needs to ensure the helper instances can't
+> > outlive the real instance, i.e. can't use the HKID/ASID after the owning virtual
+> > machine has been destroyed.
+> >
+> > To put it differently, "struct kvm" is a KVM software construct that _usually_,
+> > but not always, is associated 1:1 with a virtual machine.
+> >
+> > And FWIW, stashing the pointer without holding a reference would not be a complete
+> > solution, because it couldn't guard against KVM reusing a pointer.  E.g. if a
+> > struct kvm was unbound and then freed, KVM could reuse the same memory for a new
+> > struct kvm, with a different ASID/HKID, and get a false negative on the rebinding
+> > check.
 > 
-> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
-> > +void kvm_mmu_invalidate_end(struct kvm *kvm)
-> >   {
-> >   	/*
-> >   	 * This sequence increase will notify the kvm page fault that
-> > @@ -833,6 +848,13 @@ void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
-> >   	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
-> >   	 */
-> >   	kvm->mmu_invalidate_in_progress--;
-> > +
-> > +	/*
-> > +	 * Assert that at least one range must be added between start() and
-> > +	 * end().  Not adding a range isn't fatal, but it is a KVM bug.
-> > +	 */
-> > +	WARN_ON_ONCE(kvm->mmu_invalidate_in_progress &&
-> > +		     kvm->mmu_invalidate_range_start == INVALID_GPA);
-> Should the check happen before the decrease of kvm->mmu_invalidate_in_progress?
-> Otherwise, KVM calls kvm_mmu_invalidate_begin(), then kvm_mmu_invalidate_end()
-> the check will not take effect.
+> I agree that inode (physical memory) is coupled to the virtual machine
+> as a more generic concept.
+> 
+> I was hoping that in the absence of CC hardware providing a HKID/ASID,
+> the struct kvm pointer could act as a representation of the "virtual
+> machine". You're definitely right that KVM could reuse a pointer and so
+> that idea doesn't stand.
+> 
+> I thought about generating UUIDs to represent "virtual machines" in the
+> absence of CC hardware, and this UUID could be transferred during
+> intra-host migration, but this still doesn't take host userspace out of
+> the TCB. A malicious host VMM could just use the migration ioctl to copy
+> the UUID to a malicious dumper VM, which would then pass checks with a
+> gmem file linked to the malicious dumper VM. This is fine for HKID/ASIDs
+> because the memory is encrypted; with UUIDs there's no memory
+> encryption.
 
-Indeed.  I'm pretty sure I added this code, not sure what I was thinking.  There's
-no reason to check mmu_invalidate_in_progress, it's not like KVM allows
-mmu_invalidate_in_progress to go negative.  The comment is also a bit funky.  I'll
-post a fixup patch to make it look like this (assuming I'm not forgetting a subtle
-reason for guarding the check with the in-progress flag):
+I don't understand what problem you're trying to solve.  I don't see a need to
+provide a single concrete representation/definition of a "virtual machine".  E.g.
+there's no need for a formal definition to securely perform intrahost migration,
+KVM just needs to ensure that the migration doesn't compromise guest security,
+functionality, etc.
 
-	/*
-	 * Assert that at least one range was added between start() and end().
-	 * Not adding a range isn't fatal, but it is a KVM bug.
-	 */
-	WARN_ON_ONCE(kvm->mmu_invalidate_range_start == INVALID_GPA);
+That gets a lot more complex if the target KVM instance (module, not "struct kvm")
+is a different KVM, e.g. when migrating to a different host.  Then there needs to
+be a way to attest that the target is trusted and whatnot, but that still doesn't
+require there to be a formal definition of a "virtual machine".
 
-Regarding kvm->mmu_invalidate_in_progress, this would be a good opportunity to
-move the BUG_ON() into the common end(), e.g. as is, an end() without a start()
-from something other than the generic mmu_notifier would go unnoticed.  And I
-_think_ we can replace the BUG_ON() with a KVM_BUG_ON() without putting the
-kernel at risk.  E.g.
+> Circling back to the original topic, was associating the file with
+> struct kvm at gmem file creation time meant to constrain the use of the
+> gmem file to one struct kvm, or one virtual machine, or something else?
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index dd948276e5d6..54480655bcce 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -870,6 +870,7 @@ void kvm_mmu_invalidate_end(struct kvm *kvm)
-         * in conjunction with the smp_rmb in mmu_invalidate_retry().
-         */
-        kvm->mmu_invalidate_in_progress--;
-+       KVM_BUG_ON(kvm->mmu_invalidate_in_progress < 0, kvm);
- 
-        /*
-         * Assert that at least one range was added between start() and end().
-@@ -905,8 +906,6 @@ static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
-         */
-        if (wake)
-                rcuwait_wake_up(&kvm->mn_memslots_update_rcuwait);
--
--       BUG_ON(kvm->mmu_invalidate_in_progress < 0);
- }
- 
- static int kvm_mmu_notifier_clear_flush_young(struct mmu_notifier *mn,
+It's meant to keep things as simple as possible (relatively speaking).  A 1:1
+association between a KVM instance and a gmem instance means we don't have to
+worry about the edge cases and oddities I pointed out earlier in this thread.
 
+> Follow up questions:
+> 
+> 1. Since the physical memory's representation is the inode and should be
+>    coupled to the virtual machine (as a concept, not struct kvm), should
+>    the binding/coupling be with the file, or the inode?
+
+Both.  The @kvm instance is bound to a file, because the file is that @kvm's view
+of the underlying memory, e.g. effectively provides the translation of guest
+addresses to host memory.  The @kvm instance is indirectly bound to the inode
+because the file is bound to the inode.
+
+> 2. Should struct kvm still be bound to the file/inode at gmem file
+>    creation time, since
+
+Yes.
+
+>    + struct kvm isn't a good representation of a "virtual machine"
+
+I don't see how this is relevant, because as above, I don't see why we need a
+canonical represenation of a virtual machine.
+
+>    + we currently don't have anything that really represents a "virtual
+>      machine" without hardware support
+
+HKIDs and ASIDs don't provide a "virtual machine" representation either.  E.g. if
+a TDX guest is live migrated to a different host, it will likely have a different
+HKID, and definitely have a different encryption key, but it's still the same
+virtual machine.
+
+> I'd also like to bring up another userspace use case that Google has:
+> re-use of gmem files for rebooting guests when the KVM instance is
+> destroyed and rebuilt.
+>
+> When rebooting a VM there are some steps relating to gmem that are
+> performance-sensitive:
+
+If we (Google) really cared about performance, then we shouldn't destroy and recreate
+the VM in the first place.  E.g. the cost of zapping, freeing, re-allocating and
+re-populating SPTEs is far from trivial.  Pulling RESET shouldn't change what
+memory that is assigned to a VM, and reseting stats is downright bizarre IMO.
+
+In other words, I think Google's approach of destroying the VM to emulate a reboot
+is asinine.  I'm not totally against extending KVM's uAPI to play nice with such
+an approach, but I'm not exactly sympathetic either.
+
+> a.      Zeroing pages from the old VM when we close a gmem file/inode
+> b. Deallocating pages from the old VM when we close a gmem file/inode
+> c.   Allocating pages for the new VM from the new gmem file/inode
+> d.      Zeroing pages on page allocation
+> 
+> We want to reuse the gmem file to save re-allocating pages (b. and c.),
+> and one of the two page zeroing allocations (a. or d.).
+> 
+> Binding the gmem file to a struct kvm on creation time means the gmem
+> file can't be reused with another VM on reboot.
+
+Not without KVM's assistance, which userspace will need for TDX and SNP VMs no
+matter what, e.g. to ensure the new and old KVM instance get the same HKID/ASID.
+And we've already mapped out the more complex case of intrahost migration, so I
+don't expect this to be at all challenging to implement.
+
+> Also, host userspace is forced to close the gmem file to allow the old VM to
+> be freed.
+
+Yes, but that can happen after the "new" VM has instantiated its file/view of
+guest memory.
+
+> For other places where files pin KVM, like the stats fd pinning vCPUs, I
+> guess that matters less since there isn't much of a penalty to close and
+> re-open the stats fd.
