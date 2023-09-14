@@ -2,263 +2,186 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F31A7A10F9
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 00:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025837A118E
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 01:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjINW3l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Sep 2023 18:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S230192AbjINXTm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Sep 2023 19:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjINW3k (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 18:29:40 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733F02100
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 15:29:36 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2bcb89b4767so22736781fa.3
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 15:29:36 -0700 (PDT)
+        with ESMTP id S229725AbjINXTm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Sep 2023 19:19:42 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04A52709
+        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 16:19:37 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d81646fcf3eso1889283276.0
+        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 16:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694730574; x=1695335374; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=obV8+bcnRi/J9RquhfwwRZFHOsJK4qK3A3iNjPmPcnM=;
-        b=YvaBYcxF/PkyZu+bUBiQzVzsajhoC8VvjaJ8USplXmykjl28gmS4QzN/wS+KJZ+Ny6
-         44rWeEzb5SfMc3e8wqF8QSFAl9v0b6BEDOO1h2LpY4btJlJ3IAp1rbp0tQ//pi8QgrXW
-         akgXifq0ug4WxIC5A4j9bORNkjJg5sxhW3me8=
+        d=google.com; s=20230601; t=1694733577; x=1695338377; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dPufiPQCtPzWz5WHSfvhHWIcWm8zH/JZg221REQo40=;
+        b=BE71Wxnxf9TXA4uEG1U0seh2vfYltm/8zcCFo5uV0eHujhfmKpQ6viEb+NNBb6Dwhc
+         P8bs3PYzSbe3D4fPu4d+k7pb0gvCNTZ/skyj5fMz59hs2XZDM9Iu8EIT2QGUj8CwD2hF
+         VhP+MTv0bFqBaHPQ1155wjxTqW899a7knVyzkqvEyTb10+GMcMamfhqMH+ycTMc3nHO3
+         6TpxZWCJ3/7kuA/983/tRwmmq72d/RwcxFAXY8BXaGPZVMoy3HoUsXsh/WP+ZEUko9kB
+         uumFQJq+gwCpW4SLi2GtEJ/RodOlKnZ/i0sCV5zSDbqp6z708wVn/Y3sxijCTb3ibSzT
+         MMzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694730574; x=1695335374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=obV8+bcnRi/J9RquhfwwRZFHOsJK4qK3A3iNjPmPcnM=;
-        b=eTuwc+9eZwbh2MrqFkhHpp/4cHsg6opmBpS7HMTXTAFRlSlwuRR9ZYYAmdmWoodbAL
-         XzC9lQ0rbu76dySnSf/3GMljXePm+9InFBrTzFPxHk1GUbyKMDBzZC4WEIcu2p9x+edz
-         cjHgIGxmfQ+PWTgUkgQo0fvmtXDDUQRDMFpg3tuqfqtjclsXwk46SJAbT/O0xxC5M7Jn
-         UM9aL4OIrFoYMOBWfSZyFoCxnGLWe8aYT3T8376x88WEchvseidAlQhUOXRK+N9HLSCN
-         5mYcAYP7AnVsZ7LIr7Q/yrcXelt7H1eo9nsg2fxn5z0HHE7Wif4RJEBCXR5cvXznEcSn
-         np6g==
-X-Gm-Message-State: AOJu0Ywi2x4c4kAqJzY66Pl2evTU0zKCPWGfQyIAOGG+a3acLsBOdMlC
-        I6nA9fJDkTqmnYD9tWLu3kcGd8rmRW7dBbfps52EQg==
-X-Google-Smtp-Source: AGHT+IHzp0caI2lX4wn2K9mTjp3Tan3QZ9HpvMtsZaE6kBesuShFCDHf6CEA/+3RJp9C4GV4LnYSlA==
-X-Received: by 2002:a2e:99cf:0:b0:2b1:ed29:7c47 with SMTP id l15-20020a2e99cf000000b002b1ed297c47mr108531ljj.8.1694730574289;
-        Thu, 14 Sep 2023 15:29:34 -0700 (PDT)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
-        by smtp.gmail.com with ESMTPSA id vr6-20020a170907a50600b009adce1c97ccsm98341ejc.53.2023.09.14.15.29.33
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Sep 2023 15:29:33 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4005f0a6c2bso11615e9.1
-        for <linux-mips@vger.kernel.org>; Thu, 14 Sep 2023 15:29:33 -0700 (PDT)
-X-Received: by 2002:a1c:4b02:0:b0:3fe:e9ea:9653 with SMTP id
- y2-20020a1c4b02000000b003fee9ea9653mr55567wma.4.1694730573066; Thu, 14 Sep
- 2023 15:29:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230901234202.566951-1-dianders@chromium.org>
- <20230901164111.RFT.3.Iea742f06d8bec41598aa40378fc625fbd7e8a3d6@changeid>
- <288af70dafc5e73d0fdfac71a33449385d4d6bd3.camel@crapouillou.net>
- <CAD=FV=VuJe7ACFw3pt1z=EAh14_Z4iTOc5VKJt24CGwZYjRpeQ@mail.gmail.com>
- <3prgpsxxnf3hzeqcpjs5r37nfojbkuwk4ezizrwfrcthm666k6@t2q2qcpnfkiu>
- <CAD=FV=VSTP2g1RttMu_9+AGQbMK87MzQO+tw1cZBEJ3g-jAmYg@mail.gmail.com> <vkdjbjda23fwofsbt23wtjgiya3uhelby7evwtvteqkpwb4dr4@ybla63hqndic>
-In-Reply-To: <vkdjbjda23fwofsbt23wtjgiya3uhelby7evwtvteqkpwb4dr4@ybla63hqndic>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 14 Sep 2023 15:29:16 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VWF8tP2aykNW7+4tkqQExdoja71OqtiDFGZs+c7Gjttw@mail.gmail.com>
-Message-ID: <CAD=FV=VWF8tP2aykNW7+4tkqQExdoja71OqtiDFGZs+c7Gjttw@mail.gmail.com>
-Subject: Re: [RFT PATCH 03/15] drm/ingenic: Call drm_atomic_helper_shutdown()
- at shutdown time
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        dri-devel@lists.freedesktop.org, airlied@gmail.com,
-        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
+        d=1e100.net; s=20230601; t=1694733577; x=1695338377;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dPufiPQCtPzWz5WHSfvhHWIcWm8zH/JZg221REQo40=;
+        b=UtQCrCEC4aPiCoo4rBRE/VsqHWb+NmEzk2ci/p3AQbqrYl2tjbV3haW/i0g9NCKUUu
+         iS9NI6BABwF9Yrgy0iZbrBZTbI0loL6/SC+hzZlBvARcjIoIq7z9ZEHMVvjDLPJkqh1H
+         4scZnsxE00TtqnxrfaQ2adryiqqC31S5ywwiJdqr8Lozpe12NFeTLmOyII34fou3PQAN
+         Fw8lKuqaS0K6mba4B8YE43SubqMLwWaUW9LxlQthIbE9xmUYomLDmjvsGua0sECisHfi
+         2Pm/ppS9dulsgYj3F2aP3nIpjTUpO+3ahK/NQZrtS60b4BiCp0q+BWdqm9CuknnqjyGG
+         SvGA==
+X-Gm-Message-State: AOJu0YyR0u4FbYSMzZVduPEmMo04mRzY4ao72upZM4fnGCmjjFb83jYH
+        u8msaH5TXJh9sWX0JlyqQYEt8egbhgfFNWeN3Q==
+X-Google-Smtp-Source: AGHT+IGXEzZPfzBJslkSHoMTui4zDBSgnXtUGummxt07D80J/zY1rCAlKy2IgGo0zSECxNr/ULgwmLbLuPQoPz0S1A==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:aa83:0:b0:d77:984e:c770 with SMTP
+ id t3-20020a25aa83000000b00d77984ec770mr158034ybi.5.1694733576882; Thu, 14
+ Sep 2023 16:19:36 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 23:19:34 +0000
+In-Reply-To: <ZQNN2AyDJ8dF0/6D@google.com>
+Mime-Version: 1.0
+References: <ZOO782YGRY0YMuPu@google.com> <diqzttsiu67n.fsf@ackerleytng-ctop.c.googlers.com>
+ <ZQNN2AyDJ8dF0/6D@google.com>
+Message-ID: <diqzv8ccjqbd.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, willy@infradead.org,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chao.p.peng@linux.intel.com,
+        tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com,
+        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Sean Christopherson <seanjc@google.com> writes:
 
-On Thu, Sep 14, 2023 at 1:14=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
-wrote:
+> On Mon, Aug 28, 2023, Ackerley Tng wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>> >> If we track struct kvm with the inode, then I think (a), (b) and (c) can
+>> >> be independent of the refcounting method. What do you think?
+>> >
+>> > No go.  Because again, the inode (physical memory) is coupled to the virtual machine
+>> > as a thing, not to a "struct kvm".  Or more concretely, the inode is coupled to an
+>> > ASID or an HKID, and there can be multiple "struct kvm" objects associated with a
+>> > single ASID.  And at some point in the future, I suspect we'll have multiple KVM
+>> > objects per HKID too.
+>> >
+>> > The current SEV use case is for the migration helper, where two KVM objects share
+>> > a single ASID (the "real" VM and the helper).  I suspect TDX will end up with
+>> > similar behavior where helper "VMs" can use the HKID of the "real" VM.  For KVM,
+>> > that means multiple struct kvm objects being associated with a single HKID.
+>> >
+>> > To prevent use-after-free, KVM "just" needs to ensure the helper instances can't
+>> > outlive the real instance, i.e. can't use the HKID/ASID after the owning virtual
+>> > machine has been destroyed.
+>> >
+>> > To put it differently, "struct kvm" is a KVM software construct that _usually_,
+>> > but not always, is associated 1:1 with a virtual machine.
+>> >
+>> > And FWIW, stashing the pointer without holding a reference would not be a complete
+>> > solution, because it couldn't guard against KVM reusing a pointer.  E.g. if a
+>> > struct kvm was unbound and then freed, KVM could reuse the same memory for a new
+>> > struct kvm, with a different ASID/HKID, and get a false negative on the rebinding
+>> > check.
+>> 
+>> I agree that inode (physical memory) is coupled to the virtual machine
+>> as a more generic concept.
+>> 
+>> I was hoping that in the absence of CC hardware providing a HKID/ASID,
+>> the struct kvm pointer could act as a representation of the "virtual
+>> machine". You're definitely right that KVM could reuse a pointer and so
+>> that idea doesn't stand.
+>> 
+>> I thought about generating UUIDs to represent "virtual machines" in the
+>> absence of CC hardware, and this UUID could be transferred during
+>> intra-host migration, but this still doesn't take host userspace out of
+>> the TCB. A malicious host VMM could just use the migration ioctl to copy
+>> the UUID to a malicious dumper VM, which would then pass checks with a
+>> gmem file linked to the malicious dumper VM. This is fine for HKID/ASIDs
+>> because the memory is encrypted; with UUIDs there's no memory
+>> encryption.
 >
-> > > So it doesn't have any relationship with the unbind/remove timing, an=
-d
-> > > for all we know it can be there indefinitely, while the application
-> > > continues to interact with the driver.
-> >
-> > I spent some time thinking about similar issues recently and, assuming
-> > my understanding is correct, I'd at least partially disagree.
-> >
-> > Specifically, I _think_ the only thing that's truly required to remain
-> > valid until userspace closes the last open "fd" is the memory for the
-> > "struct drm_device" itself, right? My understanding is that this is
-> > similar to how "struct device" works. The memory backing a "struct
-> > device" has to live until the last client releases a reference to it
-> > even if everything else about a device has gone away. So if it was all
-> > working perfectly then if the Linux driver backing the "struct
-> > drm_device" goes away then we'd release resources and NULL out a bunch
-> > of stuff in the "struct drm_device" but still keep the actual "struct
-> > drm_device" around since userspace still has a reference. Pretty much
-> > all userspace calls would fail, but at least they wouldn't crash. Is
-> > that roughly the gist?
+> I don't understand what problem you're trying to solve.  I don't see a need to
+> provide a single concrete representation/definition of a "virtual machine".  E.g.
+> there's no need for a formal definition to securely perform intrahost migration,
+> KVM just needs to ensure that the migration doesn't compromise guest security,
+> functionality, etc.
 >
-> Yes, but also, no.
+> That gets a lot more complex if the target KVM instance (module, not "struct kvm")
+> is a different KVM, e.g. when migrating to a different host.  Then there needs to
+> be a way to attest that the target is trusted and whatnot, but that still doesn't
+> require there to be a formal definition of a "virtual machine".
 >
-> In the spirit, you're right. However, there's three things interfering
-> here:
+>> Circling back to the original topic, was associating the file with
+>> struct kvm at gmem file creation time meant to constrain the use of the
+>> gmem file to one struct kvm, or one virtual machine, or something else?
 >
->   - You don't always have a match between device and KMS entity. Display
->     pipelines are usually multiple devices working together, and while
->     you probably have a 1:1 relationship with bridges and panels (and to
->     some extent encoders/connectors), the planes and framebuffers for
->     example are a mess :) So, if the device backing the planes is to be
->     removed, what are you removing exactly? All of the planes and
->     framebuffers? Do you free the buffers allocated by the userspace
->     (that it might still use?)?
+> It's meant to keep things as simple as possible (relatively speaking).  A 1:1
+> association between a KVM instance and a gmem instance means we don't have to
+> worry about the edge cases and oddities I pointed out earlier in this thread.
 >
->   - In addition to that, KMS doesn't deal with individual entities being
->     hotplugged so neither the subsystem nor the application expect to
->     have a connector being removed.
->
->   - ioctl's aren't filtered once the device is starting to get removed
->     on most drivers.
->
-> So due to 1 and 2, we can't really partially remove components unless
-> the application is aware of it, and it doesn't expect to. And most
-> drivers still allow (probably unwillingly though) the application to
-> call ioctls once the DRM device has lost at least one of its backing
-> devices.
 
-We "can't", but we "can", right? Userspace can freely unbind a driver.
-Unless you want to dig into if the community would allow a driver to
-block "unbind" then we have to, at the very least, not crash the
-kernel when userspace does this. Ideally we'd have something more
-elegant than just "don't crash the kernel", but at least we shouldn't
-crash.
+I looked through this thread again and re-read the edge cases and
+oddities that was pointed out earlier (last paragraph at [1]) and I
+think I understand better, and I have just one last clarification.
 
+It was previously mentioned that binding on creation time simplifies the
+lifecycle of memory:
 
-> > Assuming that's correct, then _most_ of the resource acquiring /
-> > memory allocation can still happen in the device probe() routine and
-> > can still use devm as long as we do something to ensure that any
-> > resources released are no longer pointed to by anything in the "struct
-> > drm_device".
-> >
-> > To make it concrete, I think we want this (feel free to correct). For
-> > simplicity, I'm assuming a driver that _doesn't_ use the component
-> > framework:
-> >
-> > a) Linux driver probe() happens. The "struct drm_device" is allocated
-> > in probe() by devm_drm_dev_alloc(). This takes a reference to the
-> > "struct drm_device". The device also acquires resources / allocates
-> > memory.
->
-> You need to differentiate resources and allocations there. Resources can
-> be expected to go away at the same time than the device, so using devm
-> is fine. Allocations are largely disconnected from the device lifetime,
-> and using devm leads to UAF.
+"(a) prevent a different VM from *ever* binding to the gmem instance" [1]
 
-Right. I think my original point was looking at "ingenic-drm-drv.c".
-Much of the "devm" stuff there is resources and those specific things
-could be moved to probe() instead of bind(), right?
+Does this actually mean
 
-For allocations, I think you'd have to look at each allocation. If the
-allocation needed to live as long as the "struct drm_device" then devm
-is clearly the wrong choice. ...but not every allocation needs to live
-that long. Also, even if in the "simple" case allocations need to live
-as long as a "struct drm_device", it's possible that there are some
-cases where there's only an indirect reference to the memory. In that
-case, you could NULL out the indirect reference and then free it.
-Obviously someone would need to take care here.
+"prevent a different struct kvm from *ever* binding to this gmem file"
 
+?
 
-> > b) Userspace acquires a reference to the "struct drm_device". Refcount
-> > is now 2 (one from userspace, one from the Linux driver).
-> >
-> > c) The Linux driver unbinds, presumably because userspace requested
-> > it. From earlier I think we decided that we can't (by design) block
-> > unbind. Once unbind happens then we shouldn't try to keep operating
-> > the device
->
-> That part is correct, because the resources aren't there anymore.
->
-> > the driver should stop running.
->
-> But for the reasons above, the driver needs to still operate (in a
-> degraded mode).
+If so, then binding on creation
 
-So I think here is where the disconnect is from our viewpoints. IMO
-when a Linux driver is unbound then it makes no sense to try to
-operate the device in "a degraded mode". When a Linux driver is
-unbound then it should be releasing all of the resources from the
-device (iomaps, IRQs, regulators, GPIOs, etc). That's just what
-unbinding a driver is supposed to do.
++ Makes the gmem *file* (and just not the bindings xarray) the binding
+  between struct kvm and the file.
++ Simplifies the KVM-userspace contract to "this gmem file can only be
+  used with this struct kvm"
 
-I understand what you're saying above about display pipelines being
-multiple Linux drivers working together and that it doesn't make lots
-of sense to just unbind a random Linux device driver in the middle of
-things. ...and I don't really have a simple/great answer for how to do
-something super elegant if userspace tries to just randomly unbind one
-of the many drivers in an active display pipeline.
+Binding on creation doesn't offer any way to block the contents of the
+inode from being used with another "virtual machine" though, since we
+can have more than one gmem file pointing to the same inode, and the
+other gmem file is associated with another struct kvm. (And a strut kvm
+isn't associated 1:1 with a virtual machine [2])
 
+The point about an inode needing to be coupled to a virtual machine as a
+thing [2] led me to try to find a single concrete representation of a
+"virtual machine".
 
-> > As part of the unbind, the remove() is called and also "devm"
-> > resources are deallocated. If any of the things freed are pointed to
-> > by the "struct drm_device" then the code needs to NULL them out at
-> > this time.
->
-> Right, we also need to make sure we don't access any of the resources
-> that got freed. This is typically done by protecting all the accesses
-> with drm_dev_enter/drm_dev_exit.
->
-> > Also we should make sure that any callback functions that userspace
-> > could cause to be invoked return errors.
->
-> That would prevent any new ioctl from occuring after the device has been
-> removed, but that doesn't fix the race condition if it's removed while
-> there's a commit happening. This is further complicated by the fact that
-> commits can be queued (so you would have multiple submitted already) or
-> made asynchronous.
+Is locking inode contents to a "virtual machine" outside the scope of
+gmem? If so, then it is fine to bind on creation time, use a VM ioctl
+over a system ioctl, and the method of refcounting in gmem v12 is okay.
 
-I guess I would have expected that the remove() callback in the device
-would prevent new commits from starting and then block waiting until
-any in-progress commits were finished? ...kinda like how drivers call
-del_timer_sync() in their remove functions...
+[1] https://lore.kernel.org/lkml/ZNKv9ul2I7A4V7IF@google.com/
+[2] https://lore.kernel.org/lkml/ZOO782YGRY0YMuPu@google.com/
 
-
-> > Our code could go away at any point here since userspace could "rmmod"
-> > our module.
->
-> Yeah, we probably have a bug there. Boris also reported something like
-> that recently where if you add an action with drmm_add_action, and then
-> remove the module, the function would have been free'd by the time it
-> executes.
-
-I'm fairly certain that you can prevent a module from being unloaded
-by just grabbing a refcount to it. However, I'm not sure that's the
-right solution. If we're trying to run driver code after a driver has
-been unbound then, IMO, that's the bug.
-
-
-> > However, it's not a panacea for everything. Specifically once
-> > the Linux driver unbind finishes then the device isn't functional
-> > anymore.
->
-> What's wrong with it then?
-
-I'm mostly just saying don't just search-and-replace "devm" with
-"drmm" in your driver and call it done. You need to think carefully
-about which things are which lifetime.
-
----
-
-Ironically, while digging into this I'm tempted to take back my
-original request. Despite the kernel docs I pointed at [1], it
-actually looks like it might be fine to use "devm" within a
-component's bind() function. In try_to_bring_up_aggregate_device() it
-seems like the code is opening up a nested "devres" group specifically
-to allow this to work. A little bit of testing that I did with this
-shows that, indeed, the nesting seems to be working. Am I missing
-something here?
-
-[1] https://docs.kernel.org/driver-api/component.html
+> <snip>
