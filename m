@@ -2,218 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CFE7A1A4C
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 11:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD1F7A1B71
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 11:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbjIOJVj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Sep 2023 05:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S233880AbjIOJ5J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Sep 2023 05:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233507AbjIOJVd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Sep 2023 05:21:33 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98521FE8
-        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 02:21:21 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2bfbd7d49e7so30481801fa.1
-        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 02:21:21 -0700 (PDT)
+        with ESMTP id S233892AbjIOJ5I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Sep 2023 05:57:08 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6F735B8;
+        Fri, 15 Sep 2023 02:55:49 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2bfc14e6d03so23533191fa.1;
+        Fri, 15 Sep 2023 02:55:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694769680; x=1695374480; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CP3f1sHM5Nj5iu5CRIA2O8JEDQIcldDJUxmizaosav4=;
-        b=METGsl2OYLmWau3/hjxKQ/nTyQIpV0fRVgG926+BSQdKiMLEDNEmQW48g4p9bpQzga
-         8viEzWUK4hBS4FohAGXx/Cdm6uzyCoJNd56T1odXCwHDLTtROn9y8dA92lRvZpMwW/A+
-         U7DVwd7tpX0gbxLYuYuVdvlq0OM7LV7oTVMH3KQoJGs1OuBuHmJcrAAFfP015r7TLc26
-         NQJ6fnDXPC1Vu+oAsd8p6V4aNPFipcO6a+6NG6GN1mEHEVv8AagzqzVTqeNgu6iq3j6s
-         eGRL1x92WhVpC7ypMsU40jfdTEGDbC7w8SC2JpD3FBnmNrxWNYjqcCaPwwYlSnXQ1jeE
-         jtQg==
+        d=gmail.com; s=20230601; t=1694771744; x=1695376544; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R7zkJukNUYSEGarsHRiRBGtJZPGffpcT+jlk9LRKGkg=;
+        b=QdDGbNqwhEhBBx55vCpuZUUqgRtMPj0DEuYY06Q1cc2zPr1YJA8e4Hdw9vHiLzjRI5
+         6ViwJGJ74DKMuM2tFeqwF48JJA9fsDikXiOxF3XE33md+61WcupXWq25Ysx2BCvLwpvR
+         H7R4W03PaD+uGD7io/NIGKFUw4rY7wpbtMZ+kOOvmEUbGr26ofcNwlm9BfdT2Riueb1v
+         FNUmGe8F5HO7IBFQwkyuablKbdqexwmwk1+S3/iixuIC2s5UNP3MuUnbUD3G/lbb+DZ7
+         AYXyiNFu0DrUL3k4lhr/5T8XhuIJtBLUYyspBVoNsLWDc1722jOwJH1QPEy82x5zmRJg
+         WQ5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694769680; x=1695374480;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CP3f1sHM5Nj5iu5CRIA2O8JEDQIcldDJUxmizaosav4=;
-        b=YSbZSsOrL0725j2q3saciXInJBERuPJWzv9I6MHtaZaAVNq5vhvTxhl7NTVYGjBqzf
-         u4MGKkKpQQRdeslsB2q5acYuW4orfzdEhwbsHM/ftexDOoqWpx2BFlzCrUDhCmMfW3N1
-         /nJl6gPCdy9GHeHyTtY8QuYUD18u8CSGKYysqQpP5npn2rxQr8BSpkIlOAHIha48V9l/
-         Am5Pmv+2FE0d2d+6lXEAdVESDVGPGJeqcM++pycKFkV1W4hvxDRbh1lsuJRlVVSdavtV
-         Jz6PqwrexL4vU/x3y/oXhy2FL2fpNHLexA6x+k73aZkFqSf2qSTe/PB/bP69pQyjBHVo
-         2rFQ==
-X-Gm-Message-State: AOJu0YwKcqt08sEnuDM8S6RXBsZN1nh+8g8eXb5FeGRjerT7bxxb/2LH
-        eCTQdW/QLmHhxOi9JgWdByKI6w==
-X-Google-Smtp-Source: AGHT+IHPlaacG/gOBVJctrl1sdlsMKaUAGjfwl65ptqYhYWAn3prdG0qyTiCr8K2Oo6HMHyZs5IEqQ==
-X-Received: by 2002:a2e:8887:0:b0:2b6:dc55:c3c7 with SMTP id k7-20020a2e8887000000b002b6dc55c3c7mr1141914lji.20.1694769679779;
-        Fri, 15 Sep 2023 02:21:19 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id p8-20020a2e7408000000b002b9ec22d9fasm639376ljc.29.2023.09.15.02.21.18
+        d=1e100.net; s=20230601; t=1694771744; x=1695376544;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R7zkJukNUYSEGarsHRiRBGtJZPGffpcT+jlk9LRKGkg=;
+        b=jcc3msjCUTFScJoSXvAGYBE09pZKtDtZoz0ucEKzC6TC50TH4HkOfK4HSZVrFMNglw
+         51+X4cn1ANFnn4x2BmSMRwVMUJ3fzuNmQaABdnF3H6cVjgb1kuL5B93d9aj40fd1y0D8
+         GYsjpCymzfc4lVALzji5oJXs+XxEAfUb/K2evL7ouwIzmJ6bKGwZJddej0Xx2gc1IkUp
+         WW0+N3LQCNa18dy9whCMQddFcpvCACI5GaBH/9kmeNjJPFfTHRA740rD+ikf2sh1lfn/
+         /ys+vuAlyQWsLOjlM9lPyzAIboBX7RGa+M0UNpZQg+c5OWLB+KYlc/l7UYVJqQRWxhHC
+         qynQ==
+X-Gm-Message-State: AOJu0Yzt4QdoJlyuJDer9JinfYIZ03Gd2e2zzWAk6eDjj3gxoLWVjdrc
+        fX2L/QCFEX+fltMlrsk0ZDeUxj/nMFd9tQ==
+X-Google-Smtp-Source: AGHT+IHZLNXpdRzn2IhV8455COBFdw8gXQ4ZUbGrFWe4r4mMAp2BwvIbfoiDIKVm4dVnely/apypdg==
+X-Received: by 2002:a2e:3019:0:b0:2bd:a67:e8c with SMTP id w25-20020a2e3019000000b002bd0a670e8cmr494625ljw.3.1694771743907;
+        Fri, 15 Sep 2023 02:55:43 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id a20-20020a2eb174000000b002b9a1e9ba68sm654548ljm.136.2023.09.15.02.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 02:21:19 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-Subject: [PATCH v2 05/17] pmdomain: bcm: Move Kconfig options to the pmdomain subsystem
-Date:   Fri, 15 Sep 2023 11:19:51 +0200
-Message-Id: <20230915092003.658361-6-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230915092003.658361-1-ulf.hansson@linaro.org>
-References: <20230915092003.658361-1-ulf.hansson@linaro.org>
+        Fri, 15 Sep 2023 02:55:43 -0700 (PDT)
+Date:   Fri, 15 Sep 2023 12:55:41 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v5 0/3] Move Loongson1 MAC arch-code to the driver dir
+Message-ID: <ueevvju7i42wik6fevdmvbtypm4su77guyo4zizhrfreexken7@nrcovxfnyuvq>
+References: <20230914114435.481900-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914114435.481900-1-keguang.zhang@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The Kconfig options belongs closer to the corresponding implementations,
-hence let's move them from the soc subsystem to the pmdomain subsystem.
+Hi Keguang
 
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Ray Jui <rjui@broadcom.com>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: <linux-mips@vger.kernel.org>
-Cc: <linux-rpi-kernel@lists.infradead.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/pmdomain/Kconfig     |  1 +
- drivers/pmdomain/bcm/Kconfig | 46 ++++++++++++++++++++++++++++++++++++
- drivers/soc/bcm/Kconfig      | 42 --------------------------------
- 3 files changed, 47 insertions(+), 42 deletions(-)
- create mode 100644 drivers/pmdomain/bcm/Kconfig
+On Thu, Sep 14, 2023 at 07:44:32PM +0800, Keguang Zhang wrote:
+> In order to convert Loongson1 MAC platform devices to the devicetree
+> nodes, Loongson1 MAC arch-code should be moved to the driver dir.
+> Add dt-binding document and update MAINTAINERS file accordingly. 
+>     
+> In other words, this patchset is a preparation for converting
+> Loongson1 platform devices to devicetree.
 
-diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
-index 482d9e970e14..ddc05d6af100 100644
---- a/drivers/pmdomain/Kconfig
-+++ b/drivers/pmdomain/Kconfig
-@@ -4,5 +4,6 @@ menu "PM Domains"
- source "drivers/pmdomain/actions/Kconfig"
- source "drivers/pmdomain/amlogic/Kconfig"
- source "drivers/pmdomain/apple/Kconfig"
-+source "drivers/pmdomain/bcm/Kconfig"
- 
- endmenu
-diff --git a/drivers/pmdomain/bcm/Kconfig b/drivers/pmdomain/bcm/Kconfig
-new file mode 100644
-index 000000000000..9311e90b7707
---- /dev/null
-+++ b/drivers/pmdomain/bcm/Kconfig
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "Broadcom PM Domains"
-+
-+config BCM2835_POWER
-+	bool "BCM2835 power domain driver"
-+	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
-+	default y if ARCH_BCM2835
-+	select PM_GENERIC_DOMAINS if PM
-+	select RESET_CONTROLLER
-+	help
-+	  This enables support for the BCM2835 power domains and reset
-+	  controller.  Any usage of power domains by the Raspberry Pi
-+	  firmware means that Linux usage of the same power domain
-+	  must be accessed using the RASPBERRYPI_POWER driver
-+
-+config RASPBERRYPI_POWER
-+	bool "Raspberry Pi power domain driver"
-+	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
-+	depends on RASPBERRYPI_FIRMWARE=y
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the RPi power domains which can be enabled
-+	  or disabled via the RPi firmware.
-+
-+config BCM_PMB
-+	bool "Broadcom PMB (Power Management Bus) driver"
-+	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
-+	default ARCH_BCMBCA
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the Broadcom's PMB (Power Management Bus) that
-+	  is used for disabling and enabling SoC devices.
-+
-+if SOC_BCM63XX
-+
-+config BCM63XX_POWER
-+	bool "BCM63xx power domain driver"
-+	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the BCM63xx power domains controller on
-+	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
-+
-+endif # SOC_BCM63XX
-+
-+endmenu
-diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
-index f96906795fa6..406617aa3056 100644
---- a/drivers/soc/bcm/Kconfig
-+++ b/drivers/soc/bcm/Kconfig
-@@ -1,27 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- menu "Broadcom SoC drivers"
- 
--config BCM2835_POWER
--	bool "BCM2835 power domain driver"
--	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
--	default y if ARCH_BCM2835
--	select PM_GENERIC_DOMAINS if PM
--	select RESET_CONTROLLER
--	help
--	  This enables support for the BCM2835 power domains and reset
--	  controller.  Any usage of power domains by the Raspberry Pi
--	  firmware means that Linux usage of the same power domain
--	  must be accessed using the RASPBERRYPI_POWER driver
--
--config RASPBERRYPI_POWER
--	bool "Raspberry Pi power domain driver"
--	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
--	depends on RASPBERRYPI_FIRMWARE=y
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the RPi power domains which can be enabled
--	  or disabled via the RPi firmware.
--
- config SOC_BCM63XX
- 	bool "Broadcom 63xx SoC drivers"
- 	depends on BMIPS_GENERIC || COMPILE_TEST
-@@ -42,27 +21,6 @@ config SOC_BRCMSTB
- 
- 	  If unsure, say N.
- 
--config BCM_PMB
--	bool "Broadcom PMB (Power Management Bus) driver"
--	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
--	default ARCH_BCMBCA
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the Broadcom's PMB (Power Management Bus) that
--	  is used for disabling and enabling SoC devices.
--
--if SOC_BCM63XX
--
--config BCM63XX_POWER
--	bool "BCM63xx power domain driver"
--	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
--	select PM_GENERIC_DOMAINS if PM
--	help
--	  This enables support for the BCM63xx power domains controller on
--	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
--
--endif # SOC_BCM63XX
--
- source "drivers/soc/bcm/brcmstb/Kconfig"
- 
- endmenu
--- 
-2.34.1
+No more comments from my side. Thank you for the patches and
+especially for the patience in the review process.
 
+For the entire series:
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+* I'll also send individual Rb tags to each patch so b4 would be able
+* to take it into account.
+
+-Serge(y)
+
+> 
+> Changelog
+> V4 -> V5: Replace stmmac_probe_config_dt() with devm_stmmac_probe_config_dt()
+>           Replace stmmac_pltfr_probe() with devm_stmmac_pltfr_probe()
+>           Squash patch 4 into patch 2 and 3
+> V3 -> V4: Add Acked-by tag from Krzysztof Kozlowski
+>           Add "|" to description part
+>           Amend "phy-mode" property
+>           Drop ls1x_dwmac_syscon definition and its instances
+>           Drop three redundant fields from the ls1x_dwmac structure
+>           Drop the ls1x_dwmac_init() method.
+>           Update the dt-binding document entry of Loongson1 Ethernet
+>           Some minor improvements
+> V2 -> V3: Split the DT-schema file into loongson,ls1b-gmac.yaml
+>           and loongson,ls1c-emac.yaml (suggested by Serge Semin)
+>           Change the compatibles to loongson,ls1b-gmac and loongson,ls1c-emac
+>           Rename loongson,dwmac-syscon to loongson,ls1-syscon
+>           Amend the title
+>           Add description
+>           Add Reviewed-by tag from Krzysztof Kozlowski
+>           Change compatibles back to loongson,ls1b-syscon
+>           and loongson,ls1c-syscon
+>           Determine the device ID by physical
+>           base address(suggested by Serge Semin)
+>           Use regmap instead of regmap fields
+>           Use syscon_regmap_lookup_by_phandle()
+>           Some minor fixes
+>           Update the entries of MAINTAINERS
+> V1 -> V2: Leave the Ethernet platform data for now
+>           Make the syscon compatibles more specific
+>           Fix "clock-names" and "interrupt-names" property
+>           Rename the syscon property to "loongson,dwmac-syscon"
+>           Drop "phy-handle" and "phy-mode" requirement
+>           Revert adding loongson,ls1b-dwmac/loongson,ls1c-dwmac
+>           to snps,dwmac.yaml
+>           Fix the build errors due to CONFIG_OF being unset
+>           Change struct reg_field definitions to const
+>           Rename the syscon property to "loongson,dwmac-syscon"
+>           Add MII PHY mode for LS1C
+>           Improve the commit message
+> 
+> Keguang Zhang (3):
+>   dt-bindings: mfd: syscon: Add compatibles for Loongson-1 syscon
+>   dt-bindings: net: Add Loongson-1 Ethernet Controller
+>   net: stmmac: Add glue layer for Loongson-1 SoC
+> 
+>  .../devicetree/bindings/mfd/syscon.yaml       |   2 +
+>  .../bindings/net/loongson,ls1b-gmac.yaml      | 114 ++++++++++
+>  .../bindings/net/loongson,ls1c-emac.yaml      | 113 ++++++++++
+>  MAINTAINERS                                   |   2 +
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
+>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>  .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 209 ++++++++++++++++++
+>  7 files changed, 452 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1b-gmac.yaml
+>  create mode 100644 Documentation/devicetree/bindings/net/loongson,ls1c-emac.yaml
+>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+> 
+> 
+> base-commit: 98897dc735cf6635f0966f76eb0108354168fb15
+> -- 
+> 2.39.2
+> 
+> 
