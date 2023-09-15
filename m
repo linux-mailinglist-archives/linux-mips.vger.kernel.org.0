@@ -2,126 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACAB7A20B2
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 16:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5A17A20D4
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 16:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbjIOOT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Sep 2023 10:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S235710AbjIOO01 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Sep 2023 10:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235277AbjIOOT6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Sep 2023 10:19:58 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75E71FCE;
-        Fri, 15 Sep 2023 07:19:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b9338e4695so33779291fa.2;
-        Fri, 15 Sep 2023 07:19:53 -0700 (PDT)
+        with ESMTP id S235723AbjIOO0Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Sep 2023 10:26:25 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7AC1FD6
+        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 07:26:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59c0dd156e5so8652427b3.3
+        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 07:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694787592; x=1695392392; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9p1y/dHKWZ4mldBm4B4C2rsKuH8pDG1nwww6AtIwFhc=;
-        b=S55yFmX9FkgupeoDzmLQsFhYECFXPAPyXlVzrqvOBCbkrinGZZ2WUVj2MrtRWKICEs
-         qdLYdYb6iO3bktSn9ocUfX6yM7zTD8ODoOfzk3+ALd9IuACWpUBVTzZxGmmmWR3l11A0
-         20XNEUNwKMKCpJceqsh0ChI/xV+4Zgx4j0PyvdskAsm/81uGrz5etlwKPP1Np9rRrCZ4
-         Fc/hRyc41U+oAD1r4CfkAMWjkd8Xl0xIXszEZilSjV3AMAtTgz/8OSXrx/mXdbhmiVRB
-         KE5ICLV1qqJVg9hKRC071h0SWuvC5Sx+F1wfr8CmQZfUthOz9IGJNvadjAyxbFR3tIzF
-         eFQQ==
+        d=google.com; s=20230601; t=1694787978; x=1695392778; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3wwM0IxTv36mTuzbjanMwII1EwyeoxiFmog5O5ddM4=;
+        b=fq/Z51Vl+wsdyQeFFTigKSJR/xZ5ekxgC0VPW+sxlOZjsXFQYVeCN1l4NLXvaxsfPX
+         lBZW4eUXMZ5ZpCEcIK9CTAo/kYuG0IuVEK/nJYBUDODEvqV8S2yQXSb8opZue6gk+gR7
+         7TKaLmemzjsULzHlVAfxEzORHOEbfrBfrZv0y+UHE3yuSV0QWuuO7/TStU6B1Gu5eE1U
+         793YcHzKnwESwHWSIud2iQfG4jbTVZniCyUdD/aFjkGGzcGwzZ/Q/A8ymOekRe7cZMXx
+         R2AVrzJjxkBpflOkQj5nyQ7CSVTLosaDnlUtjdyPCGxHfPnIvrJ0XxWa1lidx7r5AMDt
+         dP1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694787592; x=1695392392;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9p1y/dHKWZ4mldBm4B4C2rsKuH8pDG1nwww6AtIwFhc=;
-        b=ZLcHW7B7cgBMWiwC4sQLJf9GF+9FFTPjVCNMmsE8NiKRi68qsgGf7S8gsJSTjD2S3V
-         eIsE9sTLJOtekmAJHkYnYYM04yvtUoDPFUwdCJklOmg3bnUdL3SIEUoVwokiwBxdnhIS
-         THUkgGTO4pKoWkZhX2wTYbmjtSRJRM5GJZzCCZCSkeZqxug9yD/o7fKwlfyMbHIWUdUp
-         YOsSJ+mZGOUpAbTQ/P+3QrohumpXVetvinnGGC084ewsnTIe8tLcQ4od/G/3d6PivxsC
-         KjysS4KzUPzGyssk7jvjRdgugi9I9eihh/Y/uHaYIpZrPIp74chgGJuxdBb7mtP/9zfI
-         TbEQ==
-X-Gm-Message-State: AOJu0YwILZxV3t9+kGDcOAbMxIYynSJAGpUuMX+SfqZpvWeLVlCiYNcB
-        ZIOrkV4sIREE5cE+g8dNXUE=
-X-Google-Smtp-Source: AGHT+IHmpAzcVMy9/mTX5cEnVsuC3NbKv+46JVCvmYw71ilIB49LnenXkrLGAxFC5kVwaYrjAoW6Xg==
-X-Received: by 2002:a05:651c:cc:b0:2b6:e2c1:6cda with SMTP id 12-20020a05651c00cc00b002b6e2c16cdamr1625717ljr.46.1694787591541;
-        Fri, 15 Sep 2023 07:19:51 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id x18-20020a2e9c92000000b002b6cb25e3f1sm696566lji.108.2023.09.15.07.19.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 07:19:51 -0700 (PDT)
-Date:   Fri, 15 Sep 2023 17:19:48 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     Keguang Zhang <keguang.zhang@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v5 0/3] Move Loongson1 MAC arch-code to the driver dir
-Message-ID: <bwwxpczznbfaqpzuzvtgbkmluk6wfxfp25coy6t7mjq3axjnvs@5pvgxumiyjkd>
-References: <20230914114435.481900-1-keguang.zhang@gmail.com>
- <ueevvju7i42wik6fevdmvbtypm4su77guyo4zizhrfreexken7@nrcovxfnyuvq>
- <f69ac27a-943c-3966-385a-e12ecd71d33a@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f69ac27a-943c-3966-385a-e12ecd71d33a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20230601; t=1694787978; x=1695392778;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3wwM0IxTv36mTuzbjanMwII1EwyeoxiFmog5O5ddM4=;
+        b=hZOI1LncaO+VHWWaq3t0CZTpp4IS5ib6x7JjXTunKNjmZUji45yijr5nqcYo4IaX+/
+         DSjN89YpWnPfBozI57Q1pWwQZCPt7I5whX1+Hpzopo2njo4vjgGyLIGJxBeZggAdEKuj
+         bDvFyPAKombEwkzkE+km5aDB/3JxA3cyKR3JdxOOWJNlxRoV5FiALwM/6upEPYQRBVS+
+         vcfmUBk2STceT1hbUua79+zwiZo1wfXBQjDc/zGYVglt6KsNyQYRhb3EGPJf9aQ6iVvi
+         pSl+3aMlPAofXc4IAzUo/MzuLPo0C32UxxgpDcwRT1F/+jj1uknn729FJk/x9MKJAT+6
+         V3Mw==
+X-Gm-Message-State: AOJu0YwtQsVm666Y68nA6HtmFoz9Is8uBMcJM1j792ljl2a2wX2J8mIv
+        dx+2j/41HBbaBnV7EXCjfqVL0OHrBZE=
+X-Google-Smtp-Source: AGHT+IEtd+ZFiwjGOxGj1IwoYm6uY+zMlhHeo3LWWwltDCF+cgsfqNfOOXS7Bflkew1pSHX6ZJTGM/96YR0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:bc8:0:b0:d80:eb4:9ca with SMTP id
+ 191-20020a250bc8000000b00d800eb409camr37310ybl.0.1694787978719; Fri, 15 Sep
+ 2023 07:26:18 -0700 (PDT)
+Date:   Fri, 15 Sep 2023 07:26:16 -0700
+In-Reply-To: <ZQPuMK6D/7UzDH+D@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-19-seanjc@google.com>
+ <ZQPuMK6D/7UzDH+D@yzhao56-desk.sh.intel.com>
+Message-ID: <ZQRpiOd1DNDDJQ3r@google.com>
+Subject: Re: [RFC PATCH v12 18/33] KVM: x86/mmu: Handle page fault for private memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 03:23:44PM +0200, Philippe Mathieu-Daudé wrote:
-> On 15/9/23 11:55, Serge Semin wrote:
-> > Hi Keguang
-> > 
-> > On Thu, Sep 14, 2023 at 07:44:32PM +0800, Keguang Zhang wrote:
-> > > In order to convert Loongson1 MAC platform devices to the devicetree
-> > > nodes, Loongson1 MAC arch-code should be moved to the driver dir.
-> > > Add dt-binding document and update MAINTAINERS file accordingly.
-> > > In other words, this patchset is a preparation for converting
-> > > Loongson1 platform devices to devicetree.
-> > 
-> > No more comments from my side. Thank you for the patches and
-> > especially for the patience in the review process.
-> > 
-> > For the entire series:
-> > Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-> > 
-> > * I'll also send individual Rb tags to each patch so b4 would be able
-> > * to take it into account.
+On Fri, Sep 15, 2023, Yan Zhao wrote:
+> On Wed, Sep 13, 2023 at 06:55:16PM -0700, Sean Christopherson wrote:
+> ....
+> > +static void kvm_mmu_prepare_memory_fault_exit(struct kvm_vcpu *vcpu,
+> > +					      struct kvm_page_fault *fault)
+> > +{
+> > +	kvm_prepare_memory_fault_exit(vcpu, fault->gfn << PAGE_SHIFT,
+> > +				      PAGE_SIZE, fault->write, fault->exec,
+> > +				      fault->is_private);
+> > +}
+> > +
+> > +static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> > +				   struct kvm_page_fault *fault)
+> > +{
+> > +	int max_order, r;
+> > +
+> > +	if (!kvm_slot_can_be_private(fault->slot)) {
+> > +		kvm_mmu_prepare_memory_fault_exit(vcpu, fault);
+> > +		return -EFAULT;
+> > +	}
+> > +
+> > +	r = kvm_gmem_get_pfn(vcpu->kvm, fault->slot, fault->gfn, &fault->pfn,
+> > +			     &max_order);
+> > +	if (r) {
+> > +		kvm_mmu_prepare_memory_fault_exit(vcpu, fault);
+> > +		return r;
+> > +	}
+> > +
+> > +	fault->max_level = min(kvm_max_level_for_order(max_order),
+> > +			       fault->max_level);
+> > +	fault->map_writable = !(fault->slot->flags & KVM_MEM_READONLY);
+> > +
+> > +	return RET_PF_CONTINUE;
+> > +}
+> > +
+> >  static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >  {
+> >  	struct kvm_memory_slot *slot = fault->slot;
+> > @@ -4293,6 +4356,14 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  			return RET_PF_EMULATE;
+> >  	}
+> >  
+> > +	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
+> In patch 21,
+> fault->is_private is set as:
+> 	".is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT)",
+> then, the inequality here means memory attribute has been updated after
+> last check.
+> So, why an exit to user space for converting is required instead of a mere retry?
 > 
+> Or, is it because how .is_private is assigned in patch 21 is subjected to change
+> in future? 
 
-> Maintainers using b4 should use the '-t' option, then you don't need
-> to do that:
-> 
->  -t, --apply-cover-trailers
-> 
->  By default, b4 will not apply any code review trailers sent to
->  the cover letter (but will let you know when it finds those).
->  This lets you automatically apply these trailers to all commits
->  in the series. This will become the default in a future version
->  of b4.
-> 
-> https://b4.docs.kernel.org/en/latest/maintainer/am-shazam.html#common-flags
+This.  Retrying on SNP or TDX would hang the guest.  I suppose we could special
+case VMs where .is_private is derived from the memory attributes, but the
+SW_PROTECTED_VM type is primary a development vehicle at this point.  I'd like to
+have it mimic SNP/TDX as much as possible; performance is a secondary concern.
 
-Oh, got it. Can't believe I didn't figure out to take a closer look at
-the help-page. Thanks for pointing it out to me.
-
--Serge(y)
+E.g. userspace needs to be prepared for "spurious" exits due to races on SNP and
+TDX, which this can theoretically exercise.  Though the window is quite small so
+I doubt that'll actually happen in practice; which of course also makes it less
+important to retry instead of exiting.
