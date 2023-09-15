@@ -2,165 +2,249 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5A17A20D4
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 16:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796A17A23A0
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Sep 2023 18:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbjIOO01 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Sep 2023 10:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
+        id S234541AbjIOQbW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Sep 2023 12:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbjIOO0Z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Sep 2023 10:26:25 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7AC1FD6
-        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 07:26:19 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59c0dd156e5so8652427b3.3
-        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 07:26:19 -0700 (PDT)
+        with ESMTP id S234954AbjIOQbK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Sep 2023 12:31:10 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5804E69
+        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 09:31:01 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-5733aa10291so1375002eaf.3
+        for <linux-mips@vger.kernel.org>; Fri, 15 Sep 2023 09:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694787978; x=1695392778; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3wwM0IxTv36mTuzbjanMwII1EwyeoxiFmog5O5ddM4=;
-        b=fq/Z51Vl+wsdyQeFFTigKSJR/xZ5ekxgC0VPW+sxlOZjsXFQYVeCN1l4NLXvaxsfPX
-         lBZW4eUXMZ5ZpCEcIK9CTAo/kYuG0IuVEK/nJYBUDODEvqV8S2yQXSb8opZue6gk+gR7
-         7TKaLmemzjsULzHlVAfxEzORHOEbfrBfrZv0y+UHE3yuSV0QWuuO7/TStU6B1Gu5eE1U
-         793YcHzKnwESwHWSIud2iQfG4jbTVZniCyUdD/aFjkGGzcGwzZ/Q/A8ymOekRe7cZMXx
-         R2AVrzJjxkBpflOkQj5nyQ7CSVTLosaDnlUtjdyPCGxHfPnIvrJ0XxWa1lidx7r5AMDt
-         dP1Q==
+        d=broadcom.com; s=google; t=1694795461; x=1695400261; darn=vger.kernel.org;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ycx3iKrJpo41pAoXJDNpWwtPffjsv3C54dK2+9dDXHo=;
+        b=f1XKpaVe3fbKKBWf9QqkNi7wF+ezcKxrzpAtxISJ1QKfIBfbL3+3tgEnmI7TlShv9q
+         7tUCa3AMlhMRkhsAI/1D56p0JY+NVYqpAChdjrbPncNVHltV7geHQi3+WvXo9OCNo73d
+         nq5Wm7STY94w2DvReZWEeRJUT8NYkc1oIJdMM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694787978; x=1695392778;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3wwM0IxTv36mTuzbjanMwII1EwyeoxiFmog5O5ddM4=;
-        b=hZOI1LncaO+VHWWaq3t0CZTpp4IS5ib6x7JjXTunKNjmZUji45yijr5nqcYo4IaX+/
-         DSjN89YpWnPfBozI57Q1pWwQZCPt7I5whX1+Hpzopo2njo4vjgGyLIGJxBeZggAdEKuj
-         bDvFyPAKombEwkzkE+km5aDB/3JxA3cyKR3JdxOOWJNlxRoV5FiALwM/6upEPYQRBVS+
-         vcfmUBk2STceT1hbUua79+zwiZo1wfXBQjDc/zGYVglt6KsNyQYRhb3EGPJf9aQ6iVvi
-         pSl+3aMlPAofXc4IAzUo/MzuLPo0C32UxxgpDcwRT1F/+jj1uknn729FJk/x9MKJAT+6
-         V3Mw==
-X-Gm-Message-State: AOJu0YwtQsVm666Y68nA6HtmFoz9Is8uBMcJM1j792ljl2a2wX2J8mIv
-        dx+2j/41HBbaBnV7EXCjfqVL0OHrBZE=
-X-Google-Smtp-Source: AGHT+IEtd+ZFiwjGOxGj1IwoYm6uY+zMlhHeo3LWWwltDCF+cgsfqNfOOXS7Bflkew1pSHX6ZJTGM/96YR0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:bc8:0:b0:d80:eb4:9ca with SMTP id
- 191-20020a250bc8000000b00d800eb409camr37310ybl.0.1694787978719; Fri, 15 Sep
- 2023 07:26:18 -0700 (PDT)
-Date:   Fri, 15 Sep 2023 07:26:16 -0700
-In-Reply-To: <ZQPuMK6D/7UzDH+D@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-19-seanjc@google.com>
- <ZQPuMK6D/7UzDH+D@yzhao56-desk.sh.intel.com>
-Message-ID: <ZQRpiOd1DNDDJQ3r@google.com>
-Subject: Re: [RFC PATCH v12 18/33] KVM: x86/mmu: Handle page fault for private memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20230601; t=1694795461; x=1695400261;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ycx3iKrJpo41pAoXJDNpWwtPffjsv3C54dK2+9dDXHo=;
+        b=wA764KkC5NdwXG7G9FdqCqJl5890S+oVvc4NJJp/0bB2Zg2N9N6KM+LIdlOhUnkkjn
+         4Cbc+HqO8Ucv5T8aglRBowlbNfRMqY5kBpnSpWIcRNN4eqwnJ1LbJUGtXx0DYHdvzlVr
+         kuceRM5p3VI7ww8Gv/rorWnN3TjWl1obbW5Di6nVEqcSEb3aiobqtN/BAZ0oOOkDWLOQ
+         ln32Fazh6DgZdqtQZ30gm4hXiz2U0c0CZKqkLEvCx1DleTpWKa7E6Duuq4mqAjXL4j8y
+         1IpoOk9KmfGLSWncmn69FontUXrSH+Dosm/h2gLUEjg995fjucMYiTgBIQKELt45C6sF
+         T2TA==
+X-Gm-Message-State: AOJu0YxTwbdxGO76OdAfSDFtBqprmU5idfLJ6XntR8zpZQC0tTqazoGt
+        myY6vNvetHp1tWFZkyacy769/g==
+X-Google-Smtp-Source: AGHT+IH9f3ADCI/59RSTEiUOC9HhCU2jhg8ihwpIk9gmIuGtau7zFuA8Rg58crVle/qE5I9DWWauhw==
+X-Received: by 2002:a05:6358:7249:b0:134:f28f:aa47 with SMTP id i9-20020a056358724900b00134f28faa47mr2905530rwa.23.1694795461046;
+        Fri, 15 Sep 2023 09:31:01 -0700 (PDT)
+Received: from [10.67.51.148] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y9-20020a0cd989000000b0063d2a70dff5sm1387579qvj.72.2023.09.15.09.30.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Sep 2023 09:31:00 -0700 (PDT)
+Message-ID: <71ab660c-bee3-038f-665c-cda04f18cf6d@broadcom.com>
+Date:   Fri, 15 Sep 2023 09:30:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 05/17] pmdomain: bcm: Move Kconfig options to the
+ pmdomain subsystem
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+References: <20230915092003.658361-1-ulf.hansson@linaro.org>
+ <20230915092003.658361-6-ulf.hansson@linaro.org>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230915092003.658361-6-ulf.hansson@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000007171b90605685109"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 15, 2023, Yan Zhao wrote:
-> On Wed, Sep 13, 2023 at 06:55:16PM -0700, Sean Christopherson wrote:
-> ....
-> > +static void kvm_mmu_prepare_memory_fault_exit(struct kvm_vcpu *vcpu,
-> > +					      struct kvm_page_fault *fault)
-> > +{
-> > +	kvm_prepare_memory_fault_exit(vcpu, fault->gfn << PAGE_SHIFT,
-> > +				      PAGE_SIZE, fault->write, fault->exec,
-> > +				      fault->is_private);
-> > +}
-> > +
-> > +static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> > +				   struct kvm_page_fault *fault)
-> > +{
-> > +	int max_order, r;
-> > +
-> > +	if (!kvm_slot_can_be_private(fault->slot)) {
-> > +		kvm_mmu_prepare_memory_fault_exit(vcpu, fault);
-> > +		return -EFAULT;
-> > +	}
-> > +
-> > +	r = kvm_gmem_get_pfn(vcpu->kvm, fault->slot, fault->gfn, &fault->pfn,
-> > +			     &max_order);
-> > +	if (r) {
-> > +		kvm_mmu_prepare_memory_fault_exit(vcpu, fault);
-> > +		return r;
-> > +	}
-> > +
-> > +	fault->max_level = min(kvm_max_level_for_order(max_order),
-> > +			       fault->max_level);
-> > +	fault->map_writable = !(fault->slot->flags & KVM_MEM_READONLY);
-> > +
-> > +	return RET_PF_CONTINUE;
-> > +}
-> > +
-> >  static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> >  {
-> >  	struct kvm_memory_slot *slot = fault->slot;
-> > @@ -4293,6 +4356,14 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  			return RET_PF_EMULATE;
-> >  	}
-> >  
-> > +	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-> In patch 21,
-> fault->is_private is set as:
-> 	".is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT)",
-> then, the inequality here means memory attribute has been updated after
-> last check.
-> So, why an exit to user space for converting is required instead of a mere retry?
+--0000000000007171b90605685109
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 9/15/23 02:19, Ulf Hansson wrote:
+> The Kconfig options belongs closer to the corresponding implementations,
+> hence let's move them from the soc subsystem to the pmdomain subsystem.
 > 
-> Or, is it because how .is_private is assigned in patch 21 is subjected to change
-> in future? 
+> Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: <linux-mips@vger.kernel.org>
+> Cc: <linux-rpi-kernel@lists.infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>   drivers/pmdomain/Kconfig     |  1 +
+>   drivers/pmdomain/bcm/Kconfig | 46 ++++++++++++++++++++++++++++++++++++
+>   drivers/soc/bcm/Kconfig      | 42 --------------------------------
+>   3 files changed, 47 insertions(+), 42 deletions(-)
+>   create mode 100644 drivers/pmdomain/bcm/Kconfig
+> 
+> diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+> index 482d9e970e14..ddc05d6af100 100644
+> --- a/drivers/pmdomain/Kconfig
+> +++ b/drivers/pmdomain/Kconfig
+> @@ -4,5 +4,6 @@ menu "PM Domains"
+>   source "drivers/pmdomain/actions/Kconfig"
+>   source "drivers/pmdomain/amlogic/Kconfig"
+>   source "drivers/pmdomain/apple/Kconfig"
+> +source "drivers/pmdomain/bcm/Kconfig"
+>   
+>   endmenu
+> diff --git a/drivers/pmdomain/bcm/Kconfig b/drivers/pmdomain/bcm/Kconfig
+> new file mode 100644
+> index 000000000000..9311e90b7707
+> --- /dev/null
+> +++ b/drivers/pmdomain/bcm/Kconfig
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +menu "Broadcom PM Domains"
+> +
+> +config BCM2835_POWER
+> +	bool "BCM2835 power domain driver"
+> +	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+> +	default y if ARCH_BCM2835
+> +	select PM_GENERIC_DOMAINS if PM
+> +	select RESET_CONTROLLER
+> +	help
+> +	  This enables support for the BCM2835 power domains and reset
+> +	  controller.  Any usage of power domains by the Raspberry Pi
+> +	  firmware means that Linux usage of the same power domain
+> +	  must be accessed using the RASPBERRYPI_POWER driver
+> +
+> +config RASPBERRYPI_POWER
+> +	bool "Raspberry Pi power domain driver"
+> +	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+> +	depends on RASPBERRYPI_FIRMWARE=y
+> +	select PM_GENERIC_DOMAINS if PM
+> +	help
+> +	  This enables support for the RPi power domains which can be enabled
+> +	  or disabled via the RPi firmware.
+> +
+> +config BCM_PMB
+> +	bool "Broadcom PMB (Power Management Bus) driver"
+> +	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+> +	default ARCH_BCMBCA
+> +	select PM_GENERIC_DOMAINS if PM
+> +	help
+> +	  This enables support for the Broadcom's PMB (Power Management Bus) that
+> +	  is used for disabling and enabling SoC devices.
+> +
+> +if SOC_BCM63XX
+> +
+> +config BCM63XX_POWER
+> +	bool "BCM63xx power domain driver"
+> +	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
+> +	select PM_GENERIC_DOMAINS if PM
+> +	help
+> +	  This enables support for the BCM63xx power domains controller on
+> +	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
+> +
+> +endif # SOC_BCM63XX
 
-This.  Retrying on SNP or TDX would hang the guest.  I suppose we could special
-case VMs where .is_private is derived from the memory attributes, but the
-SW_PROTECTED_VM type is primary a development vehicle at this point.  I'd like to
-have it mimic SNP/TDX as much as possible; performance is a secondary concern.
+That is confusing, SOC_BCM63XX remains defined in 
+drivers/soc/bcm/Kconfig, but we now made BCM63XX_POWER's visibility 
+conditional upon a Kconfig symbol defined elsewhere, I would just drop 
+the "if" condition completely.
+-- 
+Florian
 
-E.g. userspace needs to be prepared for "spurious" exits due to races on SNP and
-TDX, which this can theoretically exercise.  Though the window is quite small so
-I doubt that'll actually happen in practice; which of course also makes it less
-important to retry instead of exiting.
+
+--0000000000007171b90605685109
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIHMjXR1Mb7tkrghY
+ifSmy9W60ovmR8CAnz8OdMRHYVlDMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDkxNTE2MzEwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDyWA17HJtEb5UqEon5RPKcLAmXcpGwUXDK
+Y7AMPYwTdFy9U4bZjFNIYNQrViUKd4+JM8tWMcOA82I0bC6/TwQonm5keBC17RA54r86lXSdmGG0
+vOZSMVH5KflygqfyTwn0Zj+Zp2U8aUZkq21GZ8tLokxUzXsqDEPYp9qvctXCsBN5Rnse8lZPRWZ6
+i4e9FvqONeyebeeyQEByHAUdDrgu/x0Y3ne+rgGZP5F+fPXGkTnvpp3vuByjs38BHyhNRJsSebhy
+uTOa4yVtKqTgRznhOYLVUElWzX9qZEq7PlOkeyasI2FywC6+8W6D+NYh7rBcgexdY05AKAL0wUoL
+BATO
+--0000000000007171b90605685109--
