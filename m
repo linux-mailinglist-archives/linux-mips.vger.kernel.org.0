@@ -2,91 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FE17A318B
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Sep 2023 19:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616877A3532
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Sep 2023 12:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjIPRCK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Sep 2023 13:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S236194AbjIQKiW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Sep 2023 06:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbjIPRCJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 16 Sep 2023 13:02:09 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00760CE6;
-        Sat, 16 Sep 2023 10:02:04 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB398C433C8;
-        Sat, 16 Sep 2023 17:02:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694883724;
-        bh=HvS5bB5OYjWUqM9WsgsfrAazLkEGCqqOSG8Usa9O9tI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GeqO40LkxE2/wEN8eaFeXwn/KUgM4oiYAfrVbyKNXOU+CaN33XllWjjPwePmhy1Lh
-         ug3eNx0jEhwTTdpfyBp4S8roiDYuw9vxf8ETAeWLThPOu7vOU2dsZ7PzUhIaLONZqV
-         0t5HhAcrGPpmnZsYHf6Dd3ecf8QOqjdLOxkYrk0/eai0HKkp0qwqCpLQ5sie99KZn/
-         f0h8Fuv8FbFfal6DrGpHo2QRf6dAvhWWoCs+/8XY4aHacOsDDeOZml0nv/3lg369i8
-         +6oEYL5LYCy+stNH0RYI09XWN0oEvp3n3SxL0gtJ19c5CI+pEJhTnjL9CFbShAtfG7
-         MWn1IB9HDBO0A==
-Date:   Sat, 16 Sep 2023 19:02:00 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] vlynq: remove bus support
-Message-ID: <ZQXfiK5+eYOW6zyS@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>, linux-kernel@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, linux-mips@vger.kernel.org
-References: <20230916091125.3221-1-wsa@kernel.org>
- <CAOiHx=kLQzTTzuGM0tyuv=e9J3Oi7EbWWYFRK5mEfqNrVj05NQ@mail.gmail.com>
- <3395161f-2543-46f0-83d9-b918800305e1@gmail.com>
+        with ESMTP id S236949AbjIQKiT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Sep 2023 06:38:19 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16646189;
+        Sun, 17 Sep 2023 03:38:12 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2DAAF60008;
+        Sun, 17 Sep 2023 10:38:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
+        t=1694947091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=b9jlP+QMwX9cNjlMgnqdJZg9rK01wAc9gTFIwnzsuzg=;
+        b=nHTzyZ2EcVd9psF16qt1mZ8cCRB6QinrWTD+DAM75wicxUhCkBBMPSgTP/6EPNRnm3SmGS
+        7BsoC8FlvsQ5yNFBmLQvLap/v9r+JSMR4PGgUTSHLuYugQeoUuVDrZw1DfnIWdEI1M1ama
+        dkV5HQ3bKD/oJkyKI0bkMhic6GydiLVrh7b/ygrOtAUGyfOyCWQJKPZGo5O89Bo8/SoNDw
+        BWhIQP8Yx2f124OEBk+LWTObUlMRCWfh4/y4EPx5HYnOy9521x/YwVEeAuFqOMHtMDH+oC
+        DAkoGBZZyBPHhnPrvPbK0NTaEtsMVfxUqAjWt/xmISha1ASfUqlyTqmTjrWl5g==
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] mips: dts: ralink: mt7621: define each reset as an item
+Date:   Sun, 17 Sep 2023 13:37:53 +0300
+Message-Id: <20230917103753.52644-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/PSHHcS+ZZTB4Yjq"
-Content-Disposition: inline
-In-Reply-To: <3395161f-2543-46f0-83d9-b918800305e1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: arinc.unal@arinc9.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Each item of the resets property should define a reset. Split the item with
+two resets on the ethernet node into two separate items.
 
---/PSHHcS+ZZTB4Yjq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sort the items of the clocks property to the same line as a trivial change.
 
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
+ arch/mips/boot/dts/ralink/mt7621.dtsi | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> Agreed, TI AR7 is nearly 25 years old now, we should be able to remove that.
-> Wolfram, do you feel like doing that or would you rather have me do it, say
-> next week?
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index 7caed0d14f11..35a10258f235 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -300,14 +300,13 @@ ethernet: ethernet@1e100000 {
+ 		compatible = "mediatek,mt7621-eth";
+ 		reg = <0x1e100000 0x10000>;
+ 
+-		clocks = <&sysc MT7621_CLK_FE>,
+-			 <&sysc MT7621_CLK_ETH>;
++		clocks = <&sysc MT7621_CLK_FE>, <&sysc MT7621_CLK_ETH>;
+ 		clock-names = "fe", "ethif";
+ 
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		resets = <&sysc MT7621_RST_FE &sysc MT7621_RST_ETH>;
++		resets = <&sysc MT7621_RST_FE>, <&sysc MT7621_RST_ETH>;
+ 		reset-names = "fe", "eth";
+ 
+ 		interrupt-parent = <&gic>;
+-- 
+2.39.2
 
-I will try it, thanks for the heads up everyone!
-
-
---/PSHHcS+ZZTB4Yjq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUF34QACgkQFA3kzBSg
-KbbZgRAAqWHxrGst5mAJsc80C8GWtnQpl6k+A9hBFcpdRIEMNTsPHoFUoTE+IBKI
-j2lIOxQD930fVC6h+ozKVKC0sYZB+gEMAUwRINr6FJeE0y3gkxhvIGBbP7KJPTe/
-KfjDqnZ7f8z5cYtp6M2FTqT+LzmQEELJnvUre9muUkk5cCDp+xCD1AScAESlgw6T
-vJAA/hneaFouc7Bh3oyzy+8uu0Uhg3YBRn9hY8fx+DfWL/fcMNr463LW87ph6UVh
-xsa8ZR9tNqswhS9mXLL6mUSQ2LaI9FGkn0hyF1bsD9BvTEqXBZzyp80lIOjIuLAT
-EqXIB6yPQstWvNTjsNek/OLL0M9NVV1tfI2Ud6fvDHMYIgKQI+XkBLmglIigb4P9
-wM7jybkWn1AJT5kxJEjCV+oWRsbMnlSRTZ0KoWIfTg6BiKybgTiZRqZcNQQ6hOwh
-CS6q8qUpk/LnWur6wbFBoa2aD69RRDmn5mrIOsCv4N1JF9bwghSZTcViN8qm403+
-KjZzX5VCrE5QcBQh9Y/OVTL+B3gZYcEQwGzINUrBx1Xmkru+Vz1UK+3qsY3kgMCd
-2EYRmZ1iBlnOsUb+ljWhs6XV64X5cMORwgZvqZ7lrRQx8Ym4PAekqWaDD9hxLHw3
-cnQ2iWh6/zhL7DC41Q5Saz9IQbHSIWph+Zebj75HUl2SCOot3vI=
-=XjWk
------END PGP SIGNATURE-----
-
---/PSHHcS+ZZTB4Yjq--
