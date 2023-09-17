@@ -2,136 +2,206 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEBA7A35B2
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Sep 2023 15:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532E97A368E
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Sep 2023 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbjIQNfV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Sep 2023 09:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S231812AbjIQQ3o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Sep 2023 12:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbjIQNfC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Sep 2023 09:35:02 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027DE131
-        for <linux-mips@vger.kernel.org>; Sun, 17 Sep 2023 06:34:56 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9936b3d0286so482520566b.0
-        for <linux-mips@vger.kernel.org>; Sun, 17 Sep 2023 06:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694957694; x=1695562494; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eWOIwMaeelG56oTd3igAqYlGt4sv3Gxn9NfbjC0dhrM=;
-        b=M3xEsxGGjdSkLxr3X2EF7ErI1uoF0Di5NB84GGs4psFbywtxK3zWEi1gF8jO6rpdFo
-         Tl256yh/7KIx7K4fo8gppuROm0wlDhQA7wt+1QtXRZP6s9tPVS12kQ0svDozlz7lZHwE
-         vx7TbsLRf/VwXa1EN9JiBOcIh3d4FglrU+JTogEAqCGBLN8/Cfh0yqYCbRWlr8QuTicZ
-         BR3U8u6mb0gmusPKt+kC6bDDEPR02tT4GHOHK01CisxsW2fy7kRoHSAIOqtxuCFJtaiQ
-         YFLMLmOgBCus1JFb8VeNmKwjVW6tFUlumymR/803+NaS3Gt1y3H5lXgcxZzd6RXjH4B6
-         9W7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694957694; x=1695562494;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWOIwMaeelG56oTd3igAqYlGt4sv3Gxn9NfbjC0dhrM=;
-        b=PUhB8heq979G3B0r0S1OGOzST0uDoFMV75v6YgPeu26yAQ/ckqJ4CchNGMlxGTaNqV
-         WhCe3BNHuvuS1TqziGNHi4luGxpTSJPzKd0rAV88gP8Lm6qQ7TXPCUdn7Xggx3peatQu
-         nJdaUJ04QGFrs3lw3ccs6EIkUdVxFK1OG4XZn8N8JmZ0XwPsTBdfwPwmDXw6UrEAhbZ8
-         6U5C/i/ERd3eP4NRSqhzbrEdJR4o7yKndjjnG5gXUSN3zlKJ2fTFxiMoAzo3dwscBEmX
-         x0x0iJNFFkPSq2UydJQEs2T+WLezQqJJITQRlra4kD7sJfseA39wkb6J8bMDVHyYGaNI
-         zVCw==
-X-Gm-Message-State: AOJu0YzBT42U1pKigLgBkI7CTMzui3EQZx1gXzeGcX3HemNnjMt/g9nl
-        o9goulQYCWJ6Zcp06Sc2CZJOVSFy+BC8KO4Xok0=
-X-Google-Smtp-Source: AGHT+IFq1DuC8gVGOM1KafgMnOTrYOWZ1O+GOqJSVrbBxJ0CpnfT0kqwQclDZm45Cul5QAxfbC+i1A==
-X-Received: by 2002:a17:907:7856:b0:9a1:edfd:73b2 with SMTP id lb22-20020a170907785600b009a1edfd73b2mr5448628ejc.2.1694957694496;
-        Sun, 17 Sep 2023 06:34:54 -0700 (PDT)
-Received: from [192.168.69.115] (ric62-h01-176-170-218-28.dsl.sta.abo.bbox.fr. [176.170.218.28])
-        by smtp.gmail.com with ESMTPSA id z15-20020a17090655cf00b00997d7aa59fasm5090745ejp.14.2023.09.17.06.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Sep 2023 06:34:54 -0700 (PDT)
-Message-ID: <72722f5d-0d11-e25f-e33e-1d898e422919@linaro.org>
-Date:   Sun, 17 Sep 2023 15:34:51 +0200
+        with ESMTP id S231688AbjIQQ3n (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Sep 2023 12:29:43 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6B891;
+        Sun, 17 Sep 2023 09:29:36 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D80A2FF805;
+        Sun, 17 Sep 2023 16:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
+        t=1694968174;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=34Ndrewp5sbJMJ2jOunLl5qw82bqk9h/3cG8G8ygPsc=;
+        b=aISGUYh72XAMzn5uT1GbJpZ68jajpUa/1xb1LmMeXvwMILRv3eTZEFnqi4FSgOIqqXh+jG
+        FRKQhYMGF2n75GjvnFLisdZnUT1xcqZ0S5ZIPB93Z9G+IxEZH6AuQUyce4EsXnDBnHWpoV
+        cT0b6Wg/HYU5h+L5XeOL/TTtZxQwiltZXrqNNSV/XQFfdz+XsmUiTr5+XBVKYS7qrZ6gr+
+        EkJLKgNOrbVQ13DpVzHvBtFcBn0lPfui80GCBmxinB5ufJEJGMzFnX+JQROFz/GY+yjwH6
+        hiX1PpYoaceNfsprFN9FgXg8X2WFpacj6kPZbX6frJn6c3qemTJWaHAe8cCPuw==
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/2] dt-bindings: pinctrl: mtmips: add deprecated ralink,rt2880-pinmux
+Date:   Sun, 17 Sep 2023 19:28:36 +0300
+Message-Id: <20230917162837.277405-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH v4 2/2] Kconfig: add dependencies of POWER_RESET for mips
- malta
-To:     Yuan Tan <tanyuan@tinylab.org>
-Cc:     tsbogend@alpha.franken.de, 42.hyeyoo@gmail.com,
-        linux-mips@vger.kernel.org, christophe.leroy@csgroup.eu,
-        linux-kernel@vger.kernel.org, falcon@tinylab.org, w@1wt.eu,
-        linux@weissschuh.net
-References: <cover.1694865711.git.tanyuan@tinylab.org>
- <413b332868bac086c32b7486a7cb9c6fc81c15c0.1694865711.git.tanyuan@tinylab.org>
-Content-Language: en-US
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <413b332868bac086c32b7486a7cb9c6fc81c15c0.1694865711.git.tanyuan@tinylab.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-GND-Sasl: arinc.unal@arinc9.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16/9/23 14:07, Yuan Tan wrote:
-> MIPS Malta's power off depends on PCI, PCI_QUIRKS, and
-> POWER_RESET_PIIX4_POWEROFF to work. Enable them when POWER_RESET is set
-> for convenience.
-> Then regenerate malta_defconfig with 'make savedefconfig'.
-> 
-> Suggested-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+The "ralink,rt2880-pinmux" compatible string applies to all MediaTek MTMIPS
+SoC pin controllers. Add it as a deprecated compatible string.
 
-I haven't suggested that, just reviewed your patches, so:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
+ .../devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml | 5 ++++-
+ .../devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml | 5 ++++-
+ .../devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml | 5 ++++-
+ .../devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml   | 5 ++++-
+ .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml   | 5 ++++-
+ .../devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml   | 5 ++++-
+ .../devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml   | 5 ++++-
+ .../devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml   | 5 ++++-
+ 8 files changed, 32 insertions(+), 8 deletions(-)
 
-> Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-(I don't remember Christophe suggesting this either)
-
-> Suggested-by: Zhangjin Wu <falcon@tinylab.org>
-> Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
-> ---
->   arch/mips/Kconfig                 | 3 +++
->   arch/mips/configs/malta_defconfig | 2 --
->   2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index fc6fba925aea..b63a93e39f23 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -547,6 +547,9 @@ config MIPS_MALTA
->   	select MIPS_L1_CACHE_SHIFT_6
->   	select MIPS_MSC
->   	select PCI_GT64XXX_PCI0
-> +	select PCI if POWER_RESET
-> +	select PCI_QUIRKS if POWER_RESET
-> +	select POWER_RESET_PIIX4_POWEROFF if POWER_RESET
->   	select SMP_UP if SMP
->   	select SWAP_IO_SPACE
->   	select SYS_HAS_CPU_MIPS32_R1
-> diff --git a/arch/mips/configs/malta_defconfig b/arch/mips/configs/malta_defconfig
-> index 7ae07d57b79a..99049e993192 100644
-> --- a/arch/mips/configs/malta_defconfig
-> +++ b/arch/mips/configs/malta_defconfig
-> @@ -192,7 +192,6 @@ CONFIG_CFG80211=m
->   CONFIG_MAC80211=m
->   CONFIG_MAC80211_MESH=y
->   CONFIG_RFKILL=m
-> -CONFIG_PCI=y
->   CONFIG_DEVTMPFS=y
->   CONFIG_CONNECTOR=m
->   CONFIG_MTD=y
-> @@ -284,7 +283,6 @@ CONFIG_MOUSE_PS2_ELANTECH=y
->   CONFIG_SERIAL_8250=y
->   CONFIG_SERIAL_8250_CONSOLE=y
->   CONFIG_POWER_RESET=y
-> -CONFIG_POWER_RESET_PIIX4_POWEROFF=y
->   CONFIG_POWER_RESET_SYSCON=y
->   # CONFIG_HWMON is not set
->   CONFIG_FB=y
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+index 591bc0664ec6..221adcef6e14 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,mt7620-pinctrl
++    oneOf:
++      - const: ralink,mt7620-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
+index e568b9c13727..5e29332c794b 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,mt7621-pinctrl
++    oneOf:
++      - const: ralink,mt7621-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
+index 31849dd5940b..fef7728a5220 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,mt76x8-pinctrl
++    oneOf:
++      - const: ralink,mt76x8-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+index 43b33dbf115b..71bc961b856e 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,rt2880-pinctrl
++    oneOf:
++      - const: ralink,rt2880-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+index 95a904273009..bde19a00af80 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,rt305x-pinctrl
++    oneOf:
++      - const: ralink,rt305x-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
+index c9bc6cfd834c..f87038cadfc8 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,rt3352-pinctrl
++    oneOf:
++      - const: ralink,rt3352-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
+index 8d14e525b25e..3a13a69f7752 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,rt3883-pinctrl
++    oneOf:
++      - const: ralink,rt3883-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
+index f248202ce866..1231f442afbc 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
+@@ -17,7 +17,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: ralink,rt5350-pinctrl
++    oneOf:
++      - const: ralink,rt5350-pinctrl
++      - const: ralink,rt2880-pinmux
++        deprecated: true
+ 
+ patternProperties:
+   '-pins$':
+-- 
+2.39.2
 
