@@ -2,155 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAA17A3F1D
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 03:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBB07A414D
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 08:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234983AbjIRBOq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Sep 2023 21:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S229632AbjIRGdh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 02:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbjIRBOb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Sep 2023 21:14:31 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA21124;
-        Sun, 17 Sep 2023 18:14:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694999666; x=1726535666;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oa/nrZXu3pJ1XHmH6ZVv7iF/X9/VnJhZeXvizU+honc=;
-  b=XNC0i8/3WoZYSa3FV5A0gKvhuxa/IPj6toJJwkiWG5xWauzfcgmillHd
-   X1ID5rQsktH3AoFEjIpUzJzUjSO4JggJkinLN2dOIwBl2YHlJfu+N8bbx
-   55QV2kE+rqlGdOG6ADule1ZUqf+aO/cNWe8cyjazcIXa9LMpqhz5w+BaG
-   yJO9Edd15z9Axywn0IGnjIWQYSIcFw2rqUGPIv4oInTryWh57qXb1TZT5
-   f3izvD5TPQtR+rqm4X3FrxCi6gQSRG9mC1luYXdMk0c1WwJI7e1FT1Ocv
-   KfHhQrz1ecSPE7uYAFsq5VUp1uXsndcCVeENPqS16VB0SVV2rq7UXoLtr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="383364151"
-X-IronPort-AV: E=Sophos;i="6.02,155,1688454000"; 
-   d="scan'208";a="383364151"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2023 18:14:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="835840579"
-X-IronPort-AV: E=Sophos;i="6.02,155,1688454000"; 
-   d="scan'208";a="835840579"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.84]) ([10.238.8.84])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2023 18:14:15 -0700
-Message-ID: <9925e01b-7fa9-95e4-dc21-1d760ef9cde4@linux.intel.com>
-Date:   Mon, 18 Sep 2023 09:14:13 +0800
+        with ESMTP id S239901AbjIRGdZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 02:33:25 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDC71B9;
+        Sun, 17 Sep 2023 23:31:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VsH48PF_1695018713;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VsH48PF_1695018713)
+          by smtp.aliyun-inc.com;
+          Mon, 18 Sep 2023 14:31:54 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     will@kernel.org, aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, tsbogend@alpha.franken.de,
+        dave.hansen@linux.intel.com, luto@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, arnd@arndb.de, willy@infradead.org,
+        baolin.wang@linux.alibaba.com, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] mm: add statistics for PUD level pagetable
+Date:   Mon, 18 Sep 2023 14:31:42 +0800
+Message-Id: <876c71c03a7e69c17722a690e3225a4f7b172fb2.1695017383.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [RFC PATCH v12 10/33] KVM: Set the stage for handling only shared
- mappings in mmu_notifier events
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230914015531.1419405-1-seanjc@google.com>
- <20230914015531.1419405-11-seanjc@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230914015531.1419405-11-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Recently, we found that cross-die access to pagetable pages on ARM64
+machines can cause performance fluctuations in our business. Currently,
+there are no PMU events available to track this situation on our ARM64
+machines, so an accurate pagetable accounting can help to analyze this
+issue, but now the PUD level pagetable accounting is missed.
 
+So introducing pagetable_pud_ctor/dtor() to help to get an accurate
+PUD pagetable accounting, as well as converting the architectures with
+using generic PUD pagatable allocation to add corresponding PUD pagetable
+accounting. Moreover this patch will also mark the PUD level pagetable
+with PG_table flag, which will help to do sanity validation in unpoison_memory().
 
-On 9/14/2023 9:55 AM, Sean Christopherson wrote:
-> Add flags to "struct kvm_gfn_range" to let notifier events target only
-> shared and only private mappings, and write up the existing mmu_notifier
-> events to be shared-only (private memory is never associated with a
-> userspace virtual address, i.e. can't be reached via mmu_notifiers).
->
-> Add two flags so that KVM can handle the three possibilities (shared,
-> private, and shared+private) without needing something like a tri-state
-> enum.
+On my testing machine, I can see more pagetables statistics after the patch
+with page-types tool:
 
-How to understand the word "stage" in short log?
+Before patch:
+        flags           page-count      MB  symbolic-flags                     long-symbolic-flags
+0x0000000004000000           27326      106  __________________________g_________________       pgtable
+After patch:
+0x0000000004000000           27541      107  __________________________g_________________       pgtable
 
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ arch/arm64/include/asm/tlb.h         |  5 ++++-
+ arch/loongarch/include/asm/pgalloc.h |  1 +
+ arch/mips/include/asm/pgalloc.h      |  1 +
+ arch/x86/mm/pgtable.c                |  3 +++
+ include/asm-generic/pgalloc.h        |  7 ++++++-
+ include/linux/mm.h                   | 16 ++++++++++++++++
+ 6 files changed, 31 insertions(+), 2 deletions(-)
 
->
-> Link: https://lore.kernel.org/all/ZJX0hk+KpQP0KUyB@google.com
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   include/linux/kvm_host.h | 2 ++
->   virt/kvm/kvm_main.c      | 7 +++++++
->   2 files changed, 9 insertions(+)
->
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index d8c6ce6c8211..b5373cee2b08 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -263,6 +263,8 @@ struct kvm_gfn_range {
->   	gfn_t start;
->   	gfn_t end;
->   	union kvm_mmu_notifier_arg arg;
-> +	bool only_private;
-> +	bool only_shared;
->   	bool may_block;
->   };
->   bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 174de2789657..a41f8658dfe0 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -635,6 +635,13 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
->   			 * the second or later invocation of the handler).
->   			 */
->   			gfn_range.arg = range->arg;
-> +
-> +			/*
-> +			 * HVA-based notifications aren't relevant to private
-> +			 * mappings as they don't have a userspace mapping.
-> +			 */
-> +			gfn_range.only_private = false;
-> +			gfn_range.only_shared = true;
->   			gfn_range.may_block = range->may_block;
->   
->   			/*
+diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+index 2c29239d05c3..846c563689a8 100644
+--- a/arch/arm64/include/asm/tlb.h
++++ b/arch/arm64/include/asm/tlb.h
+@@ -96,7 +96,10 @@ static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,
+ static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pudp,
+ 				  unsigned long addr)
+ {
+-	tlb_remove_ptdesc(tlb, virt_to_ptdesc(pudp));
++	struct ptdesc *ptdesc = virt_to_ptdesc(pudp);
++
++	pagetable_pud_dtor(ptdesc);
++	tlb_remove_ptdesc(tlb, ptdesc);
+ }
+ #endif
+ 
+diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
+index 79470f0b4f1d..4e2d6b7ca2ee 100644
+--- a/arch/loongarch/include/asm/pgalloc.h
++++ b/arch/loongarch/include/asm/pgalloc.h
+@@ -84,6 +84,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ 
+ 	if (!ptdesc)
+ 		return NULL;
++	pagetable_pud_ctor(ptdesc);
+ 	pud = ptdesc_address(ptdesc);
+ 
+ 	pud_init(pud);
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index 40e40a7eb94a..f4440edcd8fe 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -95,6 +95,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ 
+ 	if (!ptdesc)
+ 		return NULL;
++	pagetable_pud_ctor(ptdesc);
+ 	pud = ptdesc_address(ptdesc);
+ 
+ 	pud_init(pud);
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 9deadf517f14..0cbc1b8e8e3d 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -76,6 +76,9 @@ void ___pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd)
+ #if CONFIG_PGTABLE_LEVELS > 3
+ void ___pud_free_tlb(struct mmu_gather *tlb, pud_t *pud)
+ {
++	struct ptdesc *ptdesc = virt_to_ptdesc(pud);
++
++	pagetable_pud_dtor(ptdesc);
+ 	paravirt_release_pud(__pa(pud) >> PAGE_SHIFT);
+ 	paravirt_tlb_remove_table(tlb, virt_to_page(pud));
+ }
+diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
+index c75d4a753849..879e5f8aa5e9 100644
+--- a/include/asm-generic/pgalloc.h
++++ b/include/asm-generic/pgalloc.h
+@@ -169,6 +169,8 @@ static inline pud_t *__pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+ 	ptdesc = pagetable_alloc(gfp, 0);
+ 	if (!ptdesc)
+ 		return NULL;
++
++	pagetable_pud_ctor(ptdesc);
+ 	return ptdesc_address(ptdesc);
+ }
+ 
+@@ -190,8 +192,11 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+ 
+ static inline void __pud_free(struct mm_struct *mm, pud_t *pud)
+ {
++	struct ptdesc *ptdesc = virt_to_ptdesc(pud);
++
+ 	BUG_ON((unsigned long)pud & (PAGE_SIZE-1));
+-	pagetable_free(virt_to_ptdesc(pud));
++	pagetable_pud_dtor(ptdesc);
++	pagetable_free(ptdesc);
+ }
+ 
+ #ifndef __HAVE_ARCH_PUD_FREE
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 12335de50140..2232bfebb88a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3049,6 +3049,22 @@ static inline spinlock_t *pud_lock(struct mm_struct *mm, pud_t *pud)
+ 	return ptl;
+ }
+ 
++static inline void pagetable_pud_ctor(struct ptdesc *ptdesc)
++{
++	struct folio *folio = ptdesc_folio(ptdesc);
++
++	__folio_set_pgtable(folio);
++	lruvec_stat_add_folio(folio, NR_PAGETABLE);
++}
++
++static inline void pagetable_pud_dtor(struct ptdesc *ptdesc)
++{
++	struct folio *folio = ptdesc_folio(ptdesc);
++
++	__folio_clear_pgtable(folio);
++	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
++}
++
+ extern void __init pagecache_init(void);
+ extern void free_initmem(void);
+ 
+-- 
+2.39.3
 
