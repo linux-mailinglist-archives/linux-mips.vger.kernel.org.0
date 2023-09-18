@@ -2,63 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CE07A4C74
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 17:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115FD7A4B73
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 17:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjIRPeP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Sep 2023 11:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S231171AbjIRPQu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 11:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjIRPdm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 11:33:42 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7A71BF8;
-        Mon, 18 Sep 2023 08:31:30 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38IDW6fj029216;
-        Mon, 18 Sep 2023 13:39:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=MSStuaxrt3lPU0HToni05ntjf8mTFhyARXhcilaZ3Qc=;
- b=H+pxQ1+Ho7+UtVHW+L+9U4TuBLIXLcxbX+V8fMPXWPDnrPxLop3kj0Ug8XoR2+7cKQxH
- SkSawKO1zJz6g6f71w4b0EoO4uNyXLTmMybbt1oSFzLZL/Qo2VuDiZUVaRy8O0lKe4Ie
- CE4N/VgGVZ0sdqRvJ4nmUpzypFxx5VVNSV2ae3lFRT0BCZftapG4ledUVupfc4IyjW/o
- Mkw6CToee56m1uHFs9Ymm8uXoghcEP3ll/zGtQDUN6osRFCSgNxDiEfxlDJVUrw+EM6X
- qVY8aKeJ+eCYRb+5QaUpCGr2Ui6Q9h6hURBdTbM65CcsEn9BOGcShugNqh9g5Wj0ArRc Ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t6qcnreuh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Sep 2023 13:39:06 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38IDNBeL019026;
-        Mon, 18 Sep 2023 13:39:05 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t6qcnretu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Sep 2023 13:39:05 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38IDXOwx016436;
-        Mon, 18 Sep 2023 13:39:04 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5sd1jkpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Sep 2023 13:39:04 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38IDd1K314025382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Sep 2023 13:39:01 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DC312004B;
-        Mon, 18 Sep 2023 13:39:01 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCB1C20040;
-        Mon, 18 Sep 2023 13:39:00 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 18 Sep 2023 13:39:00 +0000 (GMT)
-Date:   Mon, 18 Sep 2023 15:38:49 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+        with ESMTP id S230307AbjIRPQt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 11:16:49 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CB7106
+        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 08:16:40 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-41214998fc2so27335341cf.0
+        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 08:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1695050199; x=1695654999; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Ucvab0+WYvq4UufE5S4SV2ca9jdWUsP9GGHLs6BCgo=;
+        b=Yt+fVUsRMeORje6bqjAG46AN7VUYwHvk4anPaOKB66pzIfsa7eGN7PwwGYazw/Ml4G
+         zSJDa2fRaak6DQ/2yDdUGrk/jJfT7gqXnEfglMmlEHHM6QHOhKUoHu/JuJtoUPkSf3gZ
+         bXzhhINWlQwAEpfO2I/jpm/Yf0X6kgykhzvZVtEHdtQLop7zWQYyXg8e55+4hoUS+Nv1
+         3Nvt1SloiwIIA2fREypyrGT1qo+Nk5fCWKtTBNewRRc9j09t+3B9QhG2h24hoHSTtPec
+         Vbd8eRyFh+MJ5I+I7Yz+QIpc+iC1aOF6XmzN1DLY5zUvsy6kn9Wy7C3j3qUq5WVFEl/r
+         Ls3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695050199; x=1695654999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Ucvab0+WYvq4UufE5S4SV2ca9jdWUsP9GGHLs6BCgo=;
+        b=sLYZBL1dth+ctGd4NIAnWfreuwehRymJENkwDmpHVFlzZ8UvkA8skC0Xelyb0nuWsb
+         mmGGm6k4BpazhJRDuyMLg5TeEnDjP38E+/rxyfRZxkOeGGuqgpfLyomCa5d/FRMDT+g9
+         AzI0ZoYZaqtEoW/GZORFguNx1UR/C9Ss8OM1c+n1udGgLOxTkzr+xT10kUwCIEDnT09O
+         ++7Q7UTsY0dt/sHac1WUGYalUbLYjd15uPOhk3eNgO1Iy3HbmNQ8hwjmK1zDH8I7O32i
+         9ZLQtwp3t6uM/ih0wNRbgMCkoGQBPfN+gwSfsTCeB6TldIjAPe+4XTKZ9pTQfdlvwwjJ
+         Rxmw==
+X-Gm-Message-State: AOJu0YwfQxACozM76rImNfs08HXyej28NkCpbs+3LrszgQZB5v2AsAZA
+        jQKEpQ2BlCGVBcifYg2owGNRxg==
+X-Google-Smtp-Source: AGHT+IE1nILLKPaFxe5im/MfVjUE0HuRytyibnYnzCmrjBnu/bqUhqldLHu9krEWO371lIWoHdHJrg==
+X-Received: by 2002:ac8:5ac9:0:b0:403:ef0a:ac69 with SMTP id d9-20020ac85ac9000000b00403ef0aac69mr11892621qtd.62.1695050199490;
+        Mon, 18 Sep 2023 08:16:39 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-26-201.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.26.201])
+        by smtp.gmail.com with ESMTPSA id z22-20020ac87116000000b004108f6788a6sm3081779qto.41.2023.09.18.08.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 08:16:38 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qiFzJ-0005Nh-7L;
+        Mon, 18 Sep 2023 12:16:37 -0300
+Date:   Mon, 18 Sep 2023 12:16:37 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -74,6 +69,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
@@ -94,67 +90,41 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Anish Ghulati <aghulati@google.com>,
         Venkatesh Srinivas <venkateshs@chromium.org>,
         Andrew Thornton <andrewth@google.com>
-Subject: Re: [PATCH 18/26] KVM: s390: Stop adding virt/kvm to the arch
- include path
-Message-ID: <20230918153849.0363e8f9@p-imbrenda>
-In-Reply-To: <20230916003118.2540661-19-seanjc@google.com>
+Subject: Re: [PATCH 01/26] vfio: Wrap KVM helpers with CONFIG_KVM instead of
+ CONFIG_HAVE_KVM
+Message-ID: <20230918151637.GF13795@ziepe.ca>
 References: <20230916003118.2540661-1-seanjc@google.com>
-        <20230916003118.2540661-19-seanjc@google.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ <20230916003118.2540661-2-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fPGL0P6aBZRPKpHoi9BsueIs0DR2UDLH
-X-Proofpoint-GUID: IufBZyFpbUqfPMs_X5VI6hKT9V7tJleH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-18_06,2023-09-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 clxscore=1011 lowpriorityscore=0 impostorscore=0
- phishscore=0 malwarescore=0 priorityscore=1501 spamscore=0 mlxscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309180114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230916003118.2540661-2-seanjc@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 15 Sep 2023 17:31:10 -0700
-Sean Christopherson <seanjc@google.com> wrote:
-
-> Don't add virt/kvm to KVM s390's include path, the headers in virt/kvm are
-> intended to be used only by other code in virt/kvm, i.e. are "private" to
-> the core KVM code.  It's not clear that s390 *ever* included a header from
-> virt/kvm, i.e. odds are good the "-Ivirt/kvm" was copied from a x86's
-> Makefile when s390 support was first added.
+On Fri, Sep 15, 2023 at 05:30:53PM -0700, Sean Christopherson wrote:
+> Wrap the helpers for getting references to KVM instances with a check on
+> CONFIG_KVM being enabled, not on CONFIG_HAVE_KVM being defined.  PPC does
+> NOT select HAVE_KVM, despite obviously supporting KVM, and guarding code
+> to get references to KVM based on whether or not the architecture supports
+> KVM is nonsensical.
 > 
-> The only headers in virt/kvm at the time were the x86 specific ioapic.h,
-> and iodev.h, neither of which shows up as an #include in the diff for the
-> commit range 37817f2982d0f..e976a2b997fc4.
+> Drop the guard around linux/kvm_host.h entirely, conditionally including a
+> generic headers is completely unnecessary.
 > 
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/s390/kvm/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index 02217fb4ae10..f17249ab2a72 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -5,7 +5,7 @@
->  
->  include $(srctree)/virt/kvm/Makefile.kvm
->  
-> -ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
-> +ccflags-y := -Iarch/s390/kvm
->  
->  kvm-y += kvm-s390.o intercept.o interrupt.o priv.o sigp.o
->  kvm-y += diag.o gaccess.o guestdbg.o vsie.o pv.o
+>  drivers/vfio/vfio.h      | 2 +-
+>  drivers/vfio/vfio_main.c | 4 +---
+>  2 files changed, 2 insertions(+), 4 deletions(-)
 
-Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+Jason
