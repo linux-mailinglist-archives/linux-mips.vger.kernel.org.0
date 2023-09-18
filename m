@@ -2,187 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBB07A414D
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 08:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C257A419E
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 08:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjIRGdh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Sep 2023 02:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S239315AbjIRG5N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 02:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239901AbjIRGdZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 02:33:25 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDC71B9;
-        Sun, 17 Sep 2023 23:31:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VsH48PF_1695018713;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VsH48PF_1695018713)
-          by smtp.aliyun-inc.com;
-          Mon, 18 Sep 2023 14:31:54 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     will@kernel.org, aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, tsbogend@alpha.franken.de,
-        dave.hansen@linux.intel.com, luto@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, arnd@arndb.de, willy@infradead.org,
-        baolin.wang@linux.alibaba.com, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] mm: add statistics for PUD level pagetable
-Date:   Mon, 18 Sep 2023 14:31:42 +0800
-Message-Id: <876c71c03a7e69c17722a690e3225a4f7b172fb2.1695017383.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
+        with ESMTP id S240048AbjIRG5K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 02:57:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3A5E6
+        for <linux-mips@vger.kernel.org>; Sun, 17 Sep 2023 23:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695020176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h2mcwAczqQrH8FC4T+/52u6VelTTkFaOGAGOTHdcUPg=;
+        b=N2SHxQheYCAyYoDTubgHuQAo6cWzg53c12ssjO+5szHBD7K65iNY4El/SeaUBS9lWqrv0k
+        PTjCdpFshiIVvQUAHQc/LP+cam10FGYSdKG+CZ9I51T3Hmh0ip/Q/ZkfXCXDvLpMsPxfHr
+        XFokbYp5RNv8w2vFVSTM/Snl6bYnY0E=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-262-V68NoDMHPzGYVBrTcRiceA-1; Mon, 18 Sep 2023 02:56:13 -0400
+X-MC-Unique: V68NoDMHPzGYVBrTcRiceA-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3172a94b274so2811235f8f.0
+        for <linux-mips@vger.kernel.org>; Sun, 17 Sep 2023 23:56:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695020172; x=1695624972;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h2mcwAczqQrH8FC4T+/52u6VelTTkFaOGAGOTHdcUPg=;
+        b=ITajvp09SdPtfC/CEEc2FN8eiN0cPXS9eaIO4evXQXdHpVOqSF6W4FHJxpb4S/gVhv
+         yWxs3Ov5xpch4gPCxdCqIzCdtlJHvvhGVgps5PYKqJqrAFxWETO199L449/AfWsTN/Li
+         tA4a3/Zp/JKyRI3RFBVeJtha+R3MnDeWNFLSqLr3jW9HtIERI/cYCoRccnB5C3ZLvtfl
+         GZS2u88UmWn1MIOC0C76Ia2T/I3k0OgMSrc8XPWC7LfRel8jkYxVmS6VvTffdjfddmmK
+         jMGuSUzsqbkeTDjpn8Li8IrfYzxHhAxrXF+smKrLW7NEdKN3pN90/Ewge+op6bNx2DnW
+         cYzw==
+X-Gm-Message-State: AOJu0YxDewKiI3uCa7rE1K6pHXPzxjwOmk+Zx+FKPd2uVeLhKlsqpb2f
+        YXNrqDB6Ee/s0uSFFnWWRfe/HzmdYgQzC+7KzrdYkLBh9RJfEaxI4lqCF/Kc56QH5junZBf7uG0
+        LEr8EHwn5u9kgyWH3OZfT1A==
+X-Received: by 2002:a5d:4c4a:0:b0:31f:8999:c409 with SMTP id n10-20020a5d4c4a000000b0031f8999c409mr6947593wrt.66.1695020172210;
+        Sun, 17 Sep 2023 23:56:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG6F/Z9q4tB58E26+mCTcb2TpjD2EEslfwOYb0HqPPBuG0zLaR6K3OsqOUHedxMDM3AqkpDEA==
+X-Received: by 2002:a5d:4c4a:0:b0:31f:8999:c409 with SMTP id n10-20020a5d4c4a000000b0031f8999c409mr6947581wrt.66.1695020171900;
+        Sun, 17 Sep 2023 23:56:11 -0700 (PDT)
+Received: from [10.33.192.205] (nat-pool-str-t.redhat.com. [149.14.88.106])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05600001c300b003143b14848dsm11523936wrx.102.2023.09.17.23.56.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Sep 2023 23:56:11 -0700 (PDT)
+Message-ID: <a6a77718-219f-30f6-b8de-acd7aadf3b0c@redhat.com>
+Date:   Mon, 18 Sep 2023 08:56:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 18/26] KVM: s390: Stop adding virt/kvm to the arch include
+ path
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Anish Ghulati <aghulati@google.com>,
+        Venkatesh Srinivas <venkateshs@chromium.org>,
+        Andrew Thornton <andrewth@google.com>
+References: <20230916003118.2540661-1-seanjc@google.com>
+ <20230916003118.2540661-19-seanjc@google.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <20230916003118.2540661-19-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Recently, we found that cross-die access to pagetable pages on ARM64
-machines can cause performance fluctuations in our business. Currently,
-there are no PMU events available to track this situation on our ARM64
-machines, so an accurate pagetable accounting can help to analyze this
-issue, but now the PUD level pagetable accounting is missed.
+On 16/09/2023 02.31, Sean Christopherson wrote:
+> Don't add virt/kvm to KVM s390's include path, the headers in virt/kvm are
+> intended to be used only by other code in virt/kvm, i.e. are "private" to
+> the core KVM code.  It's not clear that s390 *ever* included a header from
+> virt/kvm, i.e. odds are good the "-Ivirt/kvm" was copied from a x86's
+> Makefile when s390 support was first added.
+> 
+> The only headers in virt/kvm at the time were the x86 specific ioapic.h,
+> and iodev.h, neither of which shows up as an #include in the diff for the
+> commit range 37817f2982d0f..e976a2b997fc4.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/s390/kvm/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
+> index 02217fb4ae10..f17249ab2a72 100644
+> --- a/arch/s390/kvm/Makefile
+> +++ b/arch/s390/kvm/Makefile
+> @@ -5,7 +5,7 @@
+>   
+>   include $(srctree)/virt/kvm/Makefile.kvm
+>   
+> -ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
+> +ccflags-y := -Iarch/s390/kvm
+>   
+>   kvm-y += kvm-s390.o intercept.o interrupt.o priv.o sigp.o
+>   kvm-y += diag.o gaccess.o guestdbg.o vsie.o pv.o
 
-So introducing pagetable_pud_ctor/dtor() to help to get an accurate
-PUD pagetable accounting, as well as converting the architectures with
-using generic PUD pagatable allocation to add corresponding PUD pagetable
-accounting. Moreover this patch will also mark the PUD level pagetable
-with PG_table flag, which will help to do sanity validation in unpoison_memory().
-
-On my testing machine, I can see more pagetables statistics after the patch
-with page-types tool:
-
-Before patch:
-        flags           page-count      MB  symbolic-flags                     long-symbolic-flags
-0x0000000004000000           27326      106  __________________________g_________________       pgtable
-After patch:
-0x0000000004000000           27541      107  __________________________g_________________       pgtable
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
- arch/arm64/include/asm/tlb.h         |  5 ++++-
- arch/loongarch/include/asm/pgalloc.h |  1 +
- arch/mips/include/asm/pgalloc.h      |  1 +
- arch/x86/mm/pgtable.c                |  3 +++
- include/asm-generic/pgalloc.h        |  7 ++++++-
- include/linux/mm.h                   | 16 ++++++++++++++++
- 6 files changed, 31 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
-index 2c29239d05c3..846c563689a8 100644
---- a/arch/arm64/include/asm/tlb.h
-+++ b/arch/arm64/include/asm/tlb.h
-@@ -96,7 +96,10 @@ static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,
- static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pudp,
- 				  unsigned long addr)
- {
--	tlb_remove_ptdesc(tlb, virt_to_ptdesc(pudp));
-+	struct ptdesc *ptdesc = virt_to_ptdesc(pudp);
-+
-+	pagetable_pud_dtor(ptdesc);
-+	tlb_remove_ptdesc(tlb, ptdesc);
- }
- #endif
- 
-diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
-index 79470f0b4f1d..4e2d6b7ca2ee 100644
---- a/arch/loongarch/include/asm/pgalloc.h
-+++ b/arch/loongarch/include/asm/pgalloc.h
-@@ -84,6 +84,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
- 
- 	if (!ptdesc)
- 		return NULL;
-+	pagetable_pud_ctor(ptdesc);
- 	pud = ptdesc_address(ptdesc);
- 
- 	pud_init(pud);
-diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
-index 40e40a7eb94a..f4440edcd8fe 100644
---- a/arch/mips/include/asm/pgalloc.h
-+++ b/arch/mips/include/asm/pgalloc.h
-@@ -95,6 +95,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
- 
- 	if (!ptdesc)
- 		return NULL;
-+	pagetable_pud_ctor(ptdesc);
- 	pud = ptdesc_address(ptdesc);
- 
- 	pud_init(pud);
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index 9deadf517f14..0cbc1b8e8e3d 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -76,6 +76,9 @@ void ___pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd)
- #if CONFIG_PGTABLE_LEVELS > 3
- void ___pud_free_tlb(struct mmu_gather *tlb, pud_t *pud)
- {
-+	struct ptdesc *ptdesc = virt_to_ptdesc(pud);
-+
-+	pagetable_pud_dtor(ptdesc);
- 	paravirt_release_pud(__pa(pud) >> PAGE_SHIFT);
- 	paravirt_tlb_remove_table(tlb, virt_to_page(pud));
- }
-diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-index c75d4a753849..879e5f8aa5e9 100644
---- a/include/asm-generic/pgalloc.h
-+++ b/include/asm-generic/pgalloc.h
-@@ -169,6 +169,8 @@ static inline pud_t *__pud_alloc_one(struct mm_struct *mm, unsigned long addr)
- 	ptdesc = pagetable_alloc(gfp, 0);
- 	if (!ptdesc)
- 		return NULL;
-+
-+	pagetable_pud_ctor(ptdesc);
- 	return ptdesc_address(ptdesc);
- }
- 
-@@ -190,8 +192,11 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
- 
- static inline void __pud_free(struct mm_struct *mm, pud_t *pud)
- {
-+	struct ptdesc *ptdesc = virt_to_ptdesc(pud);
-+
- 	BUG_ON((unsigned long)pud & (PAGE_SIZE-1));
--	pagetable_free(virt_to_ptdesc(pud));
-+	pagetable_pud_dtor(ptdesc);
-+	pagetable_free(ptdesc);
- }
- 
- #ifndef __HAVE_ARCH_PUD_FREE
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 12335de50140..2232bfebb88a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3049,6 +3049,22 @@ static inline spinlock_t *pud_lock(struct mm_struct *mm, pud_t *pud)
- 	return ptl;
- }
- 
-+static inline void pagetable_pud_ctor(struct ptdesc *ptdesc)
-+{
-+	struct folio *folio = ptdesc_folio(ptdesc);
-+
-+	__folio_set_pgtable(folio);
-+	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+}
-+
-+static inline void pagetable_pud_dtor(struct ptdesc *ptdesc)
-+{
-+	struct folio *folio = ptdesc_folio(ptdesc);
-+
-+	__folio_clear_pgtable(folio);
-+	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
-+}
-+
- extern void __init pagecache_init(void);
- extern void free_initmem(void);
- 
--- 
-2.39.3
+Reviewed-by: Thomas Huth <thuth@redhat.com>
 
