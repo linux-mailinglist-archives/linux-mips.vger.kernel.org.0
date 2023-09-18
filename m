@@ -2,53 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221557A5665
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 02:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6200D7A56A7
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 02:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjISAA4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Sep 2023 20:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S230246AbjISAkk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 20:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjISAA4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 20:00:56 -0400
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E81599
-        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 17:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail2; t=1695081647; x=1695340847;
-        bh=Lli3Yj6tPCTPu+N9cNfbF8RCVOR8MAz0xLiJXkVxWMI=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=hlGTyd596DF2dmgY1RxK0nQKhn95J6GICdAnV17WrFbnFOG+MUmgHjlK7mvMUvSEW
-         Ny4WgaiMDNZDqse07BwO8txDjO1zp+XCxYLRYfUVTs73ENUZWdUW3K0uwPYGnlgd/G
-         BO/jK2xmW9w8NhmGRL9T08JW7TZ5A05Hcx9idS+msnB0qobVQ7g2S387X/W2cCyH+s
-         +cfQQ5WzCJy/YxylDrE93+mUvvi8MVrAFAbcB+EdRp/WqkuaiR2cNd0V5FTmvVb5+f
-         If3BANatKOYi35sl2kqXvBNdhpWK8CBBDctN/+jKC4EWv2dLWh3Nt1kHLo9r03mTki
-         KBwkIvgnmCEaw==
-Date:   Tue, 19 Sep 2023 00:00:34 +0000
-To:     segher@kernel.crashing.org
-From:   Peter Lafreniere <peter@n8pjl.ca>
-Cc:     anton.ivanov@cambridgegreys.com, geert@linux-m68k.org,
-        ink@jurassic.park.msu.ru, jack@suse.cz, johannes@sipsolutions.net,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, peter@n8pjl.ca,
-        reiserfs-devel@vger.kernel.org, richard.henderson@linaro.org,
-        richard@nod.at, tsbogend@alpha.franken.de
+        with ESMTP id S229671AbjISAkk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 20:40:40 -0400
+X-Greylist: delayed 2892 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Sep 2023 17:40:33 PDT
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B19B9107;
+        Mon, 18 Sep 2023 17:40:33 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 38INfC75019228;
+        Mon, 18 Sep 2023 18:41:12 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 38INf80d019225;
+        Mon, 18 Sep 2023 18:41:08 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Mon, 18 Sep 2023 18:41:08 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Peter Lafreniere <peter@n8pjl.ca>
+Cc:     reiserfs-devel@vger.kernel.org, tsbogend@alpha.franken.de,
+        jack@suse.cz, linux-sh@vger.kernel.org, ink@jurassic.park.msu.ru,
+        richard@nod.at, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-m68k@vger.kernel.org, geert@linux-m68k.org,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        johannes@sipsolutions.net, richard.henderson@linaro.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        anton.ivanov@cambridgegreys.com
 Subject: Re: [PATCH 0/7] arch/*: config: Remove ReiserFS from defconfig
-Message-ID: <20230919000026.7409-1-peter@n8pjl.ca>
-In-Reply-To: <20230918234108.GN19790@gate.crashing.org>
-References: <20230918175529.19011-1-peter@n8pjl.ca> <20230918234108.GN19790@gate.crashing.org>
-Feedback-ID: 53133685:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Message-ID: <20230918234108.GN19790@gate.crashing.org>
+References: <20230918175529.19011-1-peter@n8pjl.ca>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230918175529.19011-1-peter@n8pjl.ca>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,31 +52,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Monday, September 18th, 2023 at 19:41, Segher Boessenkool <segher@kernel=
-.crashing.org> wrote:
-> On Mon, Sep 18, 2023 at 05:56:09PM +0000, Peter Lafreniere wrote:
->=20
-> > ReiserFS has been considered deprecated for 19 months since commit
-> > eb103a51640e ("reiserfs: Deprecate reiserfs"). However, there are
-> > several architectures that still build it into their defconfig kernels.
-> >=20
-> > As ReiserFS will be removed in 2025, delete all ReiserFS-related option=
-s
-> > from defconfig files before the filesystem's removal.
->=20
->=20
-> This is essentially equivalent to deleting the filesystem now. Why do
-> this? Is there such a hurry?
+On Mon, Sep 18, 2023 at 05:56:09PM +0000, Peter Lafreniere wrote:
+> ReiserFS has been considered deprecated for 19 months since commit
+> eb103a51640e ("reiserfs: Deprecate reiserfs"). However, there are
+> several architectures that still build it into their defconfig kernels.
+> 
+> As ReiserFS will be removed in 2025, delete all ReiserFS-related options
+> from defconfig files before the filesystem's removal.
 
-This is not equivalent to deleting the filesystem. The filesystem can still
-be configured into kernels, and few distros use a defconfig kernel anyway.
+This is essentially equivalent to deleting the filesystem now.  Why do
+this?  Is there such a hurry?
 
->=20
->=20
-> Segher
 
-Cheers,
-
-Peter Lafreniere
-<peter@n8pjl.ca>
-
+Segher
