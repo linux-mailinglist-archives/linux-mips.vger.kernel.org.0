@@ -2,148 +2,226 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C257A419E
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 08:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED43B7A425D
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 09:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239315AbjIRG5N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Sep 2023 02:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S239892AbjIRHan (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 03:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240048AbjIRG5K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 02:57:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3A5E6
-        for <linux-mips@vger.kernel.org>; Sun, 17 Sep 2023 23:56:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695020176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h2mcwAczqQrH8FC4T+/52u6VelTTkFaOGAGOTHdcUPg=;
-        b=N2SHxQheYCAyYoDTubgHuQAo6cWzg53c12ssjO+5szHBD7K65iNY4El/SeaUBS9lWqrv0k
-        PTjCdpFshiIVvQUAHQc/LP+cam10FGYSdKG+CZ9I51T3Hmh0ip/Q/ZkfXCXDvLpMsPxfHr
-        XFokbYp5RNv8w2vFVSTM/Snl6bYnY0E=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-262-V68NoDMHPzGYVBrTcRiceA-1; Mon, 18 Sep 2023 02:56:13 -0400
-X-MC-Unique: V68NoDMHPzGYVBrTcRiceA-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3172a94b274so2811235f8f.0
-        for <linux-mips@vger.kernel.org>; Sun, 17 Sep 2023 23:56:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695020172; x=1695624972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h2mcwAczqQrH8FC4T+/52u6VelTTkFaOGAGOTHdcUPg=;
-        b=ITajvp09SdPtfC/CEEc2FN8eiN0cPXS9eaIO4evXQXdHpVOqSF6W4FHJxpb4S/gVhv
-         yWxs3Ov5xpch4gPCxdCqIzCdtlJHvvhGVgps5PYKqJqrAFxWETO199L449/AfWsTN/Li
-         tA4a3/Zp/JKyRI3RFBVeJtha+R3MnDeWNFLSqLr3jW9HtIERI/cYCoRccnB5C3ZLvtfl
-         GZS2u88UmWn1MIOC0C76Ia2T/I3k0OgMSrc8XPWC7LfRel8jkYxVmS6VvTffdjfddmmK
-         jMGuSUzsqbkeTDjpn8Li8IrfYzxHhAxrXF+smKrLW7NEdKN3pN90/Ewge+op6bNx2DnW
-         cYzw==
-X-Gm-Message-State: AOJu0YxDewKiI3uCa7rE1K6pHXPzxjwOmk+Zx+FKPd2uVeLhKlsqpb2f
-        YXNrqDB6Ee/s0uSFFnWWRfe/HzmdYgQzC+7KzrdYkLBh9RJfEaxI4lqCF/Kc56QH5junZBf7uG0
-        LEr8EHwn5u9kgyWH3OZfT1A==
-X-Received: by 2002:a5d:4c4a:0:b0:31f:8999:c409 with SMTP id n10-20020a5d4c4a000000b0031f8999c409mr6947593wrt.66.1695020172210;
-        Sun, 17 Sep 2023 23:56:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG6F/Z9q4tB58E26+mCTcb2TpjD2EEslfwOYb0HqPPBuG0zLaR6K3OsqOUHedxMDM3AqkpDEA==
-X-Received: by 2002:a5d:4c4a:0:b0:31f:8999:c409 with SMTP id n10-20020a5d4c4a000000b0031f8999c409mr6947581wrt.66.1695020171900;
-        Sun, 17 Sep 2023 23:56:11 -0700 (PDT)
-Received: from [10.33.192.205] (nat-pool-str-t.redhat.com. [149.14.88.106])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05600001c300b003143b14848dsm11523936wrx.102.2023.09.17.23.56.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Sep 2023 23:56:11 -0700 (PDT)
-Message-ID: <a6a77718-219f-30f6-b8de-acd7aadf3b0c@redhat.com>
-Date:   Mon, 18 Sep 2023 08:56:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 18/26] KVM: s390: Stop adding virt/kvm to the arch include
- path
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
+        with ESMTP id S240293AbjIRHaf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 03:30:35 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE3AD3;
+        Mon, 18 Sep 2023 00:30:15 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF90C433C7;
+        Mon, 18 Sep 2023 07:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695022214;
+        bh=FqY2R7Jtz2z1dS35nfgqn/BnUCyRu2xGf4mJU4r0njM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XNmM3/b0JFbkgOm/zfpoekf5cae26/g6XLPaphd0+yZhWzNrdc4u19ycIPTWNFm6m
+         9Celv2Wb3Q5nRFcdMvHFJ4GRqO2qyDDZz1jP7wIEZ3Y8JHy68r3oUsQ4IEO0Vtjd5l
+         MWP6ADW37I33+ugGA7YfuegWUH+Gn366DxorgNUDiJ4JU0hFytzxH6zJ4ahVC4OF7o
+         i2CGqshElLIQD67W0Y/co2EvMmfkgVCBMPR9hHDUkZjT/Awusm1X0DUINdeDGtq7ce
+         deuuDA2yx7KoWsRzJZri3bCH7lilJOu6sbE4PTUNL0yHtV0Ghtcx/Pg5zFymPEenhw
+         p/MI2wjlDBs5Q==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
         Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Anish Ghulati <aghulati@google.com>,
-        Venkatesh Srinivas <venkateshs@chromium.org>,
-        Andrew Thornton <andrewth@google.com>
-References: <20230916003118.2540661-1-seanjc@google.com>
- <20230916003118.2540661-19-seanjc@google.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20230916003118.2540661-19-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v3 00/13]  mm: jit/text allocator
+Date:   Mon, 18 Sep 2023 10:29:42 +0300
+Message-Id: <20230918072955.2507221-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16/09/2023 02.31, Sean Christopherson wrote:
-> Don't add virt/kvm to KVM s390's include path, the headers in virt/kvm are
-> intended to be used only by other code in virt/kvm, i.e. are "private" to
-> the core KVM code.  It's not clear that s390 *ever* included a header from
-> virt/kvm, i.e. odds are good the "-Ivirt/kvm" was copied from a x86's
-> Makefile when s390 support was first added.
-> 
-> The only headers in virt/kvm at the time were the x86 specific ioapic.h,
-> and iodev.h, neither of which shows up as an #include in the diff for the
-> commit range 37817f2982d0f..e976a2b997fc4.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/s390/kvm/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index 02217fb4ae10..f17249ab2a72 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -5,7 +5,7 @@
->   
->   include $(srctree)/virt/kvm/Makefile.kvm
->   
-> -ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
-> +ccflags-y := -Iarch/s390/kvm
->   
->   kvm-y += kvm-s390.o intercept.o interrupt.o priv.o sigp.o
->   kvm-y += diag.o gaccess.o guestdbg.o vsie.o pv.o
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+Hi,
+
+module_alloc() is used everywhere as a mean to allocate memory for code.
+
+Beside being semantically wrong, this unnecessarily ties all subsystmes
+that need to allocate code, such as ftrace, kprobes and BPF to modules and
+puts the burden of code allocation to the modules code.
+
+Several architectures override module_alloc() because of various
+constraints where the executable memory can be located and this causes
+additional obstacles for improvements of code allocation.
+
+A centralized infrastructure for code allocation allows allocations of
+executable memory as ROX, and future optimizations such as caching large
+pages for better iTLB performance and providing sub-page allocations for
+users that only need small jit code snippets.
+
+Rick Edgecombe proposed perm_alloc extension to vmalloc [1] and Song Liu
+proposed execmem_alloc [2], but both these approaches were targeting BPF
+allocations and lacked the ground work to abstract executable allocations
+and split them from the modules core.
+
+Thomas Gleixner suggested to express module allocation restrictions and
+requirements as struct mod_alloc_type_params [3] that would define ranges,
+protections and other parameters for different types of allocations used by
+modules and following that suggestion Song separated allocations of
+different types in modules (commit ac3b43283923 ("module: replace
+module_layout with module_memory")) and posted "Type aware module
+allocator" set [4].
+
+I liked the idea of parametrising code allocation requirements as a
+structure, but I believe the original proposal and Song's module allocator
+was too module centric, so I came up with these patches.
+
+This set splits code allocation from modules by introducing
+execmem_text_alloc(), execmem_data_alloc() and execmem_free(), APIs,
+replaces call sites of module_alloc() and module_memfree() with the new
+APIs and implements core text and related allocations in a central place.
+
+Instead of architecture specific overrides for module_alloc(), the
+architectures that require non-default behaviour for text allocation must
+fill execmem_alloc_params structure and implement execmem_arch_params()
+that returns a pointer to that structure. If an architecture does not
+implement execmem_arch_params(), the defaults compatible with the current
+modules::module_alloc() are used.
+
+Since architectures define different restrictions on placement,
+permissions, alignment and other parameters for memory that can be used by
+different subsystems that allocate executable memory, execmem APIs
+take a type argument, that will be used to identify the calling subsystem
+and to allow architectures to define parameters for ranges suitable for that
+subsystem.
+
+The new infrastructure allows decoupling of BPF, kprobes and ftrace from
+modules, and most importantly it paves the way for ROX allocations for
+executable memory.
+
+[1] https://lore.kernel.org/lkml/20201120202426.18009-1-rick.p.edgecombe@intel.com/
+[2] https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
+[3] https://lore.kernel.org/all/87v8mndy3y.ffs@tglx/
+[4] https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org
+
+v3 changes:
+* add type parameter to execmem allocation APIs
+* remove BPF dependency on modules
+
+v2: https://lore.kernel.org/all/20230616085038.4121892-1-rppt@kernel.org
+* Separate "module" and "others" allocations with execmem_text_alloc()
+and jit_text_alloc()
+* Drop ROX entablement on x86
+* Add ack for nios2 changes, thanks Dinh Nguyen
+
+v1: https://lore.kernel.org/all/20230601101257.530867-1-rppt@kernel.org
+
+Mike Rapoport (IBM) (13):
+  nios2: define virtual address space for modules
+  mm: introduce execmem_text_alloc() and execmem_free()
+  mm/execmem, arch: convert simple overrides of module_alloc to execmem
+  mm/execmem, arch: convert remaining overrides of module_alloc to
+    execmem
+  modules, execmem: drop module_alloc
+  mm/execmem: introduce execmem_data_alloc()
+  arm64, execmem: extend execmem_params for generated code allocations
+  riscv: extend execmem_params for generated code allocations
+  powerpc: extend execmem_params for kprobes allocations
+  arch: make execmem setup available regardless of CONFIG_MODULES
+  x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
+  kprobes: remove dependency on CONFIG_MODULES
+  bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
+
+ arch/Kconfig                       |   2 +-
+ arch/arm/kernel/module.c           |  32 -------
+ arch/arm/mm/init.c                 |  38 ++++++++
+ arch/arm64/kernel/module.c         | 124 -------------------------
+ arch/arm64/kernel/probes/kprobes.c |   7 --
+ arch/arm64/mm/init.c               | 132 +++++++++++++++++++++++++++
+ arch/arm64/net/bpf_jit_comp.c      |  11 ---
+ arch/loongarch/kernel/module.c     |   6 --
+ arch/loongarch/mm/init.c           |  20 ++++
+ arch/mips/kernel/module.c          |  10 +-
+ arch/mips/mm/init.c                |  20 ++++
+ arch/nios2/include/asm/pgtable.h   |   5 +-
+ arch/nios2/kernel/module.c         |  28 +++---
+ arch/parisc/kernel/module.c        |  12 +--
+ arch/parisc/mm/init.c              |  22 ++++-
+ arch/powerpc/kernel/kprobes.c      |  16 +---
+ arch/powerpc/kernel/module.c       |  37 --------
+ arch/powerpc/mm/mem.c              |  62 +++++++++++++
+ arch/riscv/kernel/module.c         |  10 --
+ arch/riscv/kernel/probes/kprobes.c |  10 --
+ arch/riscv/mm/init.c               |  39 ++++++++
+ arch/riscv/net/bpf_jit_core.c      |  13 ---
+ arch/s390/kernel/ftrace.c          |   4 +-
+ arch/s390/kernel/kprobes.c         |   4 +-
+ arch/s390/kernel/module.c          |  42 +--------
+ arch/s390/mm/init.c                |  28 ++++++
+ arch/sparc/kernel/module.c         |  33 +------
+ arch/sparc/mm/Makefile             |   2 +
+ arch/sparc/mm/execmem.c            |  25 +++++
+ arch/sparc/net/bpf_jit_comp_32.c   |   8 +-
+ arch/x86/Kconfig                   |   1 +
+ arch/x86/kernel/ftrace.c           |  16 +---
+ arch/x86/kernel/kprobes/core.c     |   4 +-
+ arch/x86/kernel/module.c           |  51 -----------
+ arch/x86/mm/init.c                 |  29 ++++++
+ include/linux/execmem.h            | 141 ++++++++++++++++++++++++++++
+ include/linux/moduleloader.h       |  15 ---
+ kernel/bpf/Kconfig                 |   2 +-
+ kernel/bpf/core.c                  |   6 +-
+ kernel/kprobes.c                   |  51 ++++++-----
+ kernel/module/Kconfig              |   1 +
+ kernel/module/main.c               |  45 ++-------
+ kernel/trace/trace_kprobe.c        |  11 +++
+ mm/Kconfig                         |   3 +
+ mm/Makefile                        |   1 +
+ mm/execmem.c                       | 142 +++++++++++++++++++++++++++++
+ mm/mm_init.c                       |   2 +
+ 47 files changed, 801 insertions(+), 522 deletions(-)
+ create mode 100644 arch/sparc/mm/execmem.c
+ create mode 100644 include/linux/execmem.h
+ create mode 100644 mm/execmem.c
+
+
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+-- 
+2.39.2
 
