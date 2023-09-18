@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47B27A4C01
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 17:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301BE7A4C83
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 17:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbjIRPY2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Sep 2023 11:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S229628AbjIRPe5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 11:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239996AbjIRPY1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 11:24:27 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2A4E5B
-        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 08:21:37 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-773ac11de71so231451285a.2
-        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 08:21:37 -0700 (PDT)
+        with ESMTP id S229814AbjIRPer (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 11:34:47 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C2C111
+        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 08:32:53 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-773ac11de71so231971385a.2
+        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 08:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1695050472; x=1695655272; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1695050988; x=1695655788; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9iwt12QdmH2nPtcjR0iEq1G+1D18erLjJ1cQj58qe4I=;
-        b=Q/2lfiKYNE/5K44PTGLhus4LlnlDi7yhqp/bgjYuFQ0srmDvs9Vtf+YrDz+IMsI1HW
-         8WvtWWsMgjFnPgsBGQaoAkFmfzAva1/GK+AfQarXQ6qfMQV0DGj8+Gy8CfKOOwJovRTu
-         k8biRM6eQ1SdamNDRhZcNmwefP1gxTQZAevYCGXlMHDNI02s5j/dcovffbbAJuSz5x79
-         pvDtijN5fAs8mvNBahRLnCvozpxm7uSEkD1oz0Bb1GySdXnLQq9/IXTZRMsUXFfq74BR
-         pKjFQ6T951q3tMjM6MNkEuZBLWQ3Yu/qzjivb8N9rDCwpFzpjjj9OFyIEvF2qF8qG2yP
-         Fw0g==
+        bh=nmpxNm78kWfejPgZcglZLNttpcA+aOzIbjCglm6BlEY=;
+        b=iBJjtY1Ysirfv1RRP/4GMFsA9mAYIyTD+UT+03ccEzw5EDMfzI6oHpUfK8Q3Sqw87y
+         Zm/P9T2GpKrNeY3Z+Rh6l9JQ7V8/LokfQ0pn60Ci8ONqKxKW79C55fa2gXht15GQtX0C
+         64WAiH79mX6EDqXdD+ArVitvUY5CKqtZTl0umfdK4fTyvquNvBdiX4JPqK3ooJ1QxdGS
+         o7ZQMofak1jK09GksMgjLmyQUtOYCy+i+ogq8qJW1HCgANjPt08PkP0dPyDSXfaa065n
+         iiT30ne1wvQ0++9UDY2eu9bW18A0hCTSXa9+3HrXmAh7UBcckDKTVmBhlaWUbxztFEV5
+         fdeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695050472; x=1695655272;
+        d=1e100.net; s=20230601; t=1695050988; x=1695655788;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9iwt12QdmH2nPtcjR0iEq1G+1D18erLjJ1cQj58qe4I=;
-        b=SowC0QgOnp2EYy8W1q2UhOHhz9D6/xYhR2YH65Yg1/HqbYjqTK5xoaEBT/c2eSUuAG
-         YfBMkDtyuq+iLEiwtPajHA1DzjPdI/KyZMPumiKVpDDsCXYQXTI1o06cDIq49F02ezMs
-         FOL0n/eXwkgrgSvVT0wjD8jTGpPAfhtpQpoCmkGypVljmWE+qAoATxcu4whUYYU/tZwX
-         ZgAygWYtty+VgOAsDf2aEisYtulitR4dH4xVH6jXQeEf6jOM0s90Z+1cmYOOG2VjJyVe
-         1Ir5ruQfhyQLXJTAE5e3XdcX7oXKIxp0tgCte7MJmL2ajZYS2AmrUUus0Rrf+PhQcBxt
-         bvFA==
-X-Gm-Message-State: AOJu0YysHDdmhHLrATl5svJsAQIarNw7KW/rgEgcA/rbtL0MuvbSKFdG
-        hQVqGfI3CFqUTyUQdb+4JYIbSw==
-X-Google-Smtp-Source: AGHT+IEUJFa3aXEX1YodKfdMrwJPEEuzBhbA2hgycHy86i8DANtxQ0UmL29SlN96YZ1Wg+zGpbaj/w==
-X-Received: by 2002:a05:620a:31a8:b0:76d:a110:856d with SMTP id bi40-20020a05620a31a800b0076da110856dmr11089993qkb.0.1695050471902;
-        Mon, 18 Sep 2023 08:21:11 -0700 (PDT)
+        bh=nmpxNm78kWfejPgZcglZLNttpcA+aOzIbjCglm6BlEY=;
+        b=AWKhMHRXUTJkHuHYTZIWV91POsjD+Wx1NhxBBrq2TCvZg/e+04YuZ5lhIrV8kCInYu
+         67J3yks9q8290H92QEGsA397fH+wlkVgd9DpLRZgKN2rYDiomD6OxMFsptSVJwgVze2P
+         jJEB5Pss7QHJu6SraKmYcUcTRKRHXzRlFE9B89ySDOEnEkybioM52E7bd0qRvt2SUmNd
+         lrFvkeILce6nzBX39S9e0gdelH7WZWcjf0B0FDeO8n0tB9P85DfcV47X25wasIUJHeMf
+         D8X/Mkp1cOYcUAyYFu3iWBI/vQ3ARSgwSsRoAVuPmyXgdpQ648C06BRlsAAsBGa+bm4f
+         Y17g==
+X-Gm-Message-State: AOJu0Yw2gKjaRr1gqBvobRM5LNlrwCg/2shHtYG40UgfjGFh+HEAbtwB
+        3s1HZ4YcnxgzLAZbbKH3FJCt6w==
+X-Google-Smtp-Source: AGHT+IE5R1x821mq0T9l2iChMZP/v62/zLl2heVXzUEZigk+bm+oq/r6FG+m4/T/InbSxJxTjGr9mw==
+X-Received: by 2002:a05:620a:2887:b0:76d:aa93:2e3c with SMTP id j7-20020a05620a288700b0076daa932e3cmr11157815qkp.24.1695050987781;
+        Mon, 18 Sep 2023 08:29:47 -0700 (PDT)
 Received: from ziepe.ca (hlfxns017vw-142-68-26-201.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.26.201])
-        by smtp.gmail.com with ESMTPSA id i20-20020a05620a145400b0076f18be9a64sm3220186qkl.81.2023.09.18.08.21.11
+        by smtp.gmail.com with ESMTPSA id s4-20020a05620a16a400b0076d0312b8basm3183843qkj.131.2023.09.18.08.29.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 08:21:11 -0700 (PDT)
+        Mon, 18 Sep 2023 08:29:47 -0700 (PDT)
 Received: from jgg by wakko with local (Exim 4.95)
         (envelope-from <jgg@ziepe.ca>)
-        id 1qiG3i-0005PK-IY;
-        Mon, 18 Sep 2023 12:21:10 -0300
-Date:   Mon, 18 Sep 2023 12:21:10 -0300
+        id 1qiGC2-0005S2-Ku;
+        Mon, 18 Sep 2023 12:29:46 -0300
+Date:   Mon, 18 Sep 2023 12:29:46 -0300
 From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -90,15 +90,14 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Anish Ghulati <aghulati@google.com>,
         Venkatesh Srinivas <venkateshs@chromium.org>,
         Andrew Thornton <andrewth@google.com>
-Subject: Re: [PATCH 05/26] vfio: KVM: Pass get/put helpers from KVM to VFIO,
- don't do circular lookup
-Message-ID: <20230918152110.GI13795@ziepe.ca>
+Subject: Re: [PATCH 06/26] KVM: Drop CONFIG_KVM_VFIO and just look at KVM+VFIO
+Message-ID: <20230918152946.GJ13795@ziepe.ca>
 References: <20230916003118.2540661-1-seanjc@google.com>
- <20230916003118.2540661-6-seanjc@google.com>
+ <20230916003118.2540661-7-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230916003118.2540661-6-seanjc@google.com>
+In-Reply-To: <20230916003118.2540661-7-seanjc@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -109,26 +108,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 05:30:57PM -0700, Sean Christopherson wrote:
-> Explicitly pass KVM's get/put helpers to VFIO when attaching a VM to
-> VFIO instead of having VFIO do a symbol lookup back into KVM.  Having both
-> KVM and VFIO do symbol lookups increases the overall complexity and places
-> an unnecessary dependency on KVM (from VFIO) without adding any value.
+On Fri, Sep 15, 2023 at 05:30:58PM -0700, Sean Christopherson wrote:
+> Drop KVM's KVM_VFIO Kconfig, and instead compile in VFIO support if
+> and only if VFIO itself is enabled.  Similar to the recent change to have
+> VFIO stop looking at HAVE_KVM, compiling in support for talking to VFIO
+> just because the architecture supports VFIO is nonsensical.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  drivers/vfio/vfio.h      |  2 ++
->  drivers/vfio/vfio_main.c | 74 +++++++++++++++++++---------------------
->  include/linux/vfio.h     |  4 ++-
->  virt/kvm/vfio.c          |  9 +++--
->  4 files changed, 47 insertions(+), 42 deletions(-)
+> This fixes a bug where RISC-V doesn't select KVM_VFIO, i.e. would silently
+> fail to do connect KVM and VFIO, even though RISC-V supports VFIO.  The
+> bug is benign as the only driver in all of Linux that actually uses the
+> KVM reference provided by VFIO is KVM-GT, which is x86/Intel specific.
 
-I don't mind this, but Christoph had disliked my prior attempt to do
-this with function pointers..
+Hmm, I recall that all the S390 drivers need it as well.
 
-The get can be inlined, IIRC, what about putting a pointer to the put
-inside the kvm struct?
+static int vfio_ap_mdev_open_device(struct vfio_device *vdev)
+{
+        struct ap_matrix_mdev *matrix_mdev =
+                container_of(vdev, struct ap_matrix_mdev, vdev);
 
-The the normal kvm get/put don't have to exported symbols at all?
+        if (!vdev->kvm)
+                return -EINVAL;
+
+        return vfio_ap_mdev_set_kvm(matrix_mdev, vdev->kvm);
+
+
+I wonder if we should be making the VFIO drivers that need the kvm to
+ask for it? 'select CONFIG_NEED_VFIO_KVM' or something?
+
+Regardless, I fully agree with getting rid of the arch flag.
+
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+> --- a/virt/kvm/Makefile.kvm
+> +++ b/virt/kvm/Makefile.kvm
+> @@ -6,7 +6,9 @@
+>  KVM ?= ../../../virt/kvm
+>  
+>  kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
+> -kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
+> +ifdef CONFIG_VFIO
+> +kvm-y += $(KVM)/vfio.o
+> +endif
+
+I wonder if kvm-m magically works in kbuild so you don't need the ifdef?
 
 Jason
