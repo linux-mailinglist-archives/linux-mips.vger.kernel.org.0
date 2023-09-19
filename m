@@ -2,99 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEE87A68AD
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 18:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180817A698E
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 19:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjISQQN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Sep 2023 12:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S229853AbjISRX6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Sep 2023 13:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjISQQM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Sep 2023 12:16:12 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A530BA9;
-        Tue, 19 Sep 2023 09:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail2; t=1695140160; x=1695399360;
-        bh=k2QmhXn3FHpsD31Ag66sjWvY57vLi94vGdI9Jg32c2Q=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=VjPOUfr+BDKot6jNtzfiNQUBn+0rrhZJiA59iRWy30aLqarcEfUbJl13WNuPnXIoW
-         NywHiVkOkN0sAhAj5HVCpUg5MCHPnoVtVm3uKwvnlLQz2bUOxdLprD9u+w4LbKTPgA
-         bnBfsyBEq3NfeW6N9NlCpqkwDvrEgdVVXns49DKnopvogQCzzy0NJzr2/B+6TZ37p2
-         pBG3Imgo+IjObhl+GtscMyMDCDfzeNnzpCBmxFsxt25WKmx+xpxmqyJ0hqsjVZLW+n
-         JXFusuE18XA6ozPVKnAkxmiePcriJHUHal7GefK+IYNNYtydrpkBO7Z/E7Jw9j+Yfj
-         +4CaTlaacEEcQ==
-Date:   Tue, 19 Sep 2023 16:15:41 +0000
-To:     geert@linux-m68k.org
-From:   Peter Lafreniere <peter@n8pjl.ca>
-Cc:     anton.ivanov@cambridgegreys.com, ink@jurassic.park.msu.ru,
-        jack@suse.cz, johannes@sipsolutions.net,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, peter@n8pjl.ca,
-        reiserfs-devel@vger.kernel.org, richard.henderson@linaro.org,
-        richard@nod.at, segher@kernel.crashing.org,
-        tsbogend@alpha.franken.de
-Subject: Re: [PATCH 0/7] arch/*: config: Remove ReiserFS from defconfig
-Message-ID: <20230919161535.4774-1-peter@n8pjl.ca>
-In-Reply-To: <CAMuHMdXQ=xpeY3tmLXe1kgJbRtmVAn62rEhvzO+VB7GCgy4F8w@mail.gmail.com>
-References: <20230918175529.19011-1-peter@n8pjl.ca> <20230918234108.GN19790@gate.crashing.org> <20230919000026.7409-1-peter@n8pjl.ca> <20230919151630.GO19790@gate.crashing.org> <20230919155832.4179-1-peter@n8pjl.ca> <CAMuHMdXQ=xpeY3tmLXe1kgJbRtmVAn62rEhvzO+VB7GCgy4F8w@mail.gmail.com>
-Feedback-ID: 53133685:user:proton
+        with ESMTP id S230137AbjISRX5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Sep 2023 13:23:57 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFD9AD;
+        Tue, 19 Sep 2023 10:23:51 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-59bebd5bdadso61362617b3.0;
+        Tue, 19 Sep 2023 10:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695144230; x=1695749030; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ke+rhIpc8Yj4RHSOIcCUf04IBals1/6zBz6t3mWbRfs=;
+        b=lqDp+sTrbpvsk/gj6cxQsxnsxilv2449oWmf02MP18Xn0eLh9Ct5RDlUus59A/bA+A
+         VPdAMIkGw0N9hXn+CgxCvdsxmDAsmaL+TbGJqGbG/0S17YmIjdl1vL5u5MSCcUfwQhXS
+         2aV7utyejtOUbS2yOyCrIRuVDgF0lBQaWdya1unG0yOcWF7KP7IqlwSSxvPRAfP7f1XZ
+         xwtQgvkjqzOCvXgLjUvxSeJ/BgMf6x1kKBgmJYVsGORk4205Czkr4/sjjtAveTBj6Y7l
+         TETp1prWNaoa/Zfkuej9pngYXjS1mPLK7MdNG0EPR/GzMuQYqasp1RZxBsU3cLUFkgin
+         nSjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695144230; x=1695749030;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ke+rhIpc8Yj4RHSOIcCUf04IBals1/6zBz6t3mWbRfs=;
+        b=eXNKAyuZXXYTsYKaTQmTQ0BGR1x2e3Qv6p5pYQoESJFnSIxeBCANoHBTM/tMF3e+qK
+         aY8QK/3iSmdRS31vtt69X0jLUluSMwxUk2AHsfOsbi4fF4JKTZMOKBA0WTh5zrwlrDrR
+         3ocGmWtVa6+WEUQWIQ7Nwwsk0o6dlsFNmNZ4kPDQWL+xc/DJOg2Igzja53AdVvHAP8Fc
+         A+/AErOMetq9Mix3rBntsvsXEi0MYoUTCHdQvTRM4tSMOWj8veVPqOvOb4uZHhNkkplY
+         b95KR+o9rO2ymAM8dCGAqcTW7pc/flyhpa8h+/4mqLshdy0DnHtapSzMnnUs4OV7eaFZ
+         jRaQ==
+X-Gm-Message-State: AOJu0Yye14ZDNq0Qc4m3G++8Hf0u3teiDlJGnjBI6ttUMAVpOVMR+Mor
+        XsnFSiszHTOcW1NZiu5es+0=
+X-Google-Smtp-Source: AGHT+IFYba94/tWKEV5d0wk1Ylg0gSJJMGYXAHDrHy5oPNZruwSqpKZ/9cU/3wLGaHbcTR7JOuKvlQ==
+X-Received: by 2002:a81:4810:0:b0:586:9c4e:a9a4 with SMTP id v16-20020a814810000000b005869c4ea9a4mr145786ywa.5.1695144230386;
+        Tue, 19 Sep 2023 10:23:50 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
+        by smtp.gmail.com with ESMTPSA id u127-20020a0dd285000000b0059bce30a498sm3316842ywd.139.2023.09.19.10.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Sep 2023 10:23:49 -0700 (PDT)
+Date:   Tue, 19 Sep 2023 10:23:46 -0700
+From:   Vishal Moola <vishal.moola@gmail.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, tsbogend@alpha.franken.de,
+        dave.hansen@linux.intel.com, luto@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, arnd@arndb.de, willy@infradead.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] mm: add statistics for PUD level pagetable
+Message-ID: <ZQnZIkOfY0btsd8A@unknowna0e70b2ca394.attlocal.net>
+References: <876c71c03a7e69c17722a690e3225a4f7b172fb2.1695017383.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <876c71c03a7e69c17722a690e3225a4f7b172fb2.1695017383.git.baolin.wang@linux.alibaba.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert,
+On Mon, Sep 18, 2023 at 02:31:42PM +0800, Baolin Wang wrote:
+> Recently, we found that cross-die access to pagetable pages on ARM64
+> machines can cause performance fluctuations in our business. Currently,
+> there are no PMU events available to track this situation on our ARM64
+> machines, so an accurate pagetable accounting can help to analyze this
+> issue, but now the PUD level pagetable accounting is missed.
+> 
+> So introducing pagetable_pud_ctor/dtor() to help to get an accurate
+> PUD pagetable accounting, as well as converting the architectures with
+> using generic PUD pagatable allocation to add corresponding PUD pagetable
+> accounting. Moreover this patch will also mark the PUD level pagetable
+> with PG_table flag, which will help to do sanity validation in unpoison_memory().
+> 
+> On my testing machine, I can see more pagetables statistics after the patch
+> with page-types tool:
+> 
+> Before patch:
+>         flags           page-count      MB  symbolic-flags                     long-symbolic-flags
+> 0x0000000004000000           27326      106  __________________________g_________________       pgtable
+> After patch:
+> 0x0000000004000000           27541      107  __________________________g_________________       pgtable
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-On Tue, Sep 19, 2023 at 12:02, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
->=20
-> Hi Peter,
->=20
-> On Tue, Sep 19, 2023 at 5:58=E2=80=AFPM Peter Lafreniere peter@n8pjl.ca w=
-rote:
->=20
-> > 2) Stops building an obsolete and largely-unused filesystem unnecessari=
-ly.
-> > Some hobbyist targets like m68k and alpha may prefer to keep all filesy=
-stems
-> > available until total removal, but others like arm and UML have no need=
- for
-> > ReiserFS to be built unless specifically configured.
->=20
->=20
-> As UML is used a lot for testing, isn't it actually counter-productive
-> to remove ReiserFS from the UML defconfig? The less testing it
-> receives, the higher the chance of introducing regressions.
-
-UML is used for testing, but in my view that makes the inclusion of
-ReiserFS in its defconfig even worse. Users of UML are trying to test a
-particular function, and so tend to use ext[2-4], as those are included in
-the defconfig and are well tested and stable. So there is no extra testing
-being done on ReiserFS due to its inclusion in the defconfig.
-
-Keeping UML's defconfig as slim as possible improves build times, which is
-particularly important for kernel testing and development.
-
->=20
-> Gr{oetje,eeting}s,
->=20
-> Geert
->
-
-Cheers,
-Peter Lafreniere=20
-
+Acked-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
