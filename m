@@ -2,126 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E75E7A6565
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 15:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22D07A673A
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 16:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbjISNjU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Sep 2023 09:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S232832AbjISOsg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Sep 2023 10:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjISNjU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Sep 2023 09:39:20 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77C7F1;
-        Tue, 19 Sep 2023 06:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1695130751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+QLWuMCA8uqSaf6u009WU4b4yzoaqqM21KWtJyzYuxg=;
-        b=iCc2/upcJkfkvH0xQrbsK3G7BP4gBeQwbbFAx3N5WdQBOxUur8NpRNPxKrc/ag827Zexp/
-        8iGlcobQSeNUxJKYiAeb15zM6u2D0uHnLheJmNBgivj04za+qei7qZbHtyWrZN9VbGG3Q/
-        3x1798tRLkNyxWvy1K9DHGsGPjFFMKs=
-Message-ID: <7554150cb8b097a84133524df9fd05e70707b6ce.camel@crapouillou.net>
+        with ESMTP id S232830AbjISOsf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Sep 2023 10:48:35 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1F1DD
+        for <linux-mips@vger.kernel.org>; Tue, 19 Sep 2023 07:48:29 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qic1Y-000412-AJ; Tue, 19 Sep 2023 16:48:24 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qic1X-007Tkb-SD; Tue, 19 Sep 2023 16:48:23 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qic1X-0031nB-Ie; Tue, 19 Sep 2023 16:48:23 +0200
+Date:   Tue, 19 Sep 2023 16:48:22 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-mips@vger.kernel.org, kernel@pengutronix.de
 Subject: Re: [PATCH 09/59] dma: dma-jz4780: Convert to platform remove
  callback returning void
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Vinod Koul <vkoul@kernel.org>
-Cc:     linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-        kernel@pengutronix.de
-Date:   Tue, 19 Sep 2023 15:39:10 +0200
-In-Reply-To: <20230919133207.1400430-10-u.kleine-koenig@pengutronix.de>
+Message-ID: <20230919144822.yepo3eq3tmptllqv@pengutronix.de>
 References: <20230919133207.1400430-1-u.kleine-koenig@pengutronix.de>
-         <20230919133207.1400430-10-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20230919133207.1400430-10-u.kleine-koenig@pengutronix.de>
+ <7554150cb8b097a84133524df9fd05e70707b6ce.camel@crapouillou.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lzkeeqrbsjhowzsb"
+Content-Disposition: inline
+In-Reply-To: <7554150cb8b097a84133524df9fd05e70707b6ce.camel@crapouillou.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Uwe,
 
-Le mardi 19 septembre 2023 =C3=A0 15:31 +0200, Uwe Kleine-K=C3=B6nig a =C3=
-=A9crit=C2=A0:
-> The .remove() callback for a platform driver returns an int which
-> makes
-> many driver authors wrongly assume it's possible to do error handling
-> by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource
-> leaks.
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new() which already returns void. Eventually after all
-> drivers
-> are converted, .remove_new() is renamed to .remove().
+--lzkeeqrbsjhowzsb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-"is renamed" -> "will be renamed"?
-
+On Tue, Sep 19, 2023 at 03:39:10PM +0200, Paul Cercueil wrote:
+> Hi Uwe,
 >=20
-> Trivially convert this driver from always returning zero in the
-> remove
-> callback to the void returning variant.
+> Le mardi 19 septembre 2023 =E0 15:31 +0200, Uwe Kleine-K=F6nig a =E9crit=
+=A0:
+> > The .remove() callback for a platform driver returns an int which
+> > makes
+> > many driver authors wrongly assume it's possible to do error handling
+> > by
+> > returning an error code. However the value returned is ignored (apart
+> > from emitting a warning) and this typically results in resource
+> > leaks.
+> > To improve here there is a quest to make the remove callback return
+> > void. In the first step of this quest all drivers are converted to
+> > .remove_new() which already returns void. Eventually after all
+> > drivers
+> > are converted, .remove_new() is renamed to .remove().
 >=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> "is renamed" -> "will be renamed"?
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+I guess you're right here. I fixed that in my template, but I won't
+resend this series (and the others with the same issue) for now.
 
-Cheers,
--Paul
+Thanks
+Uwe
 
-> ---
-> =C2=A0drivers/dma/dma-jz4780.c | 6 ++----
-> =C2=A01 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-> index adbd47bd6adf..c9cfa341db51 100644
-> --- a/drivers/dma/dma-jz4780.c
-> +++ b/drivers/dma/dma-jz4780.c
-> @@ -1008,7 +1008,7 @@ static int jz4780_dma_probe(struct
-> platform_device *pdev)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
-> =C2=A0}
-> =C2=A0
-> -static int jz4780_dma_remove(struct platform_device *pdev)
-> +static void jz4780_dma_remove(struct platform_device *pdev)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct jz4780_dma_dev *jz=
-dma =3D platform_get_drvdata(pdev);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int i;
-> @@ -1020,8 +1020,6 @@ static int jz4780_dma_remove(struct
-> platform_device *pdev)
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (i =3D 0; i < jzdma->=
-soc_data->nb_channels; i++)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0tasklet_kill(&jzdma->chan[i].vchan.task);
-> -
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> =C2=A0}
-> =C2=A0
-> =C2=A0static const struct jz4780_dma_soc_data jz4740_dma_soc_data =3D {
-> @@ -1124,7 +1122,7 @@ MODULE_DEVICE_TABLE(of, jz4780_dma_dt_match);
-> =C2=A0
-> =C2=A0static struct platform_driver jz4780_dma_driver =3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D jz4780_dma_probe,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.remove=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D jz4780_dma_remove,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.remove_new=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=3D jz4780_dma_remove,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver=C2=A0=3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0.name=C2=A0=C2=A0=C2=A0=3D "jz4780-dma",
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D jz4780_dma_dt_match,
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--lzkeeqrbsjhowzsb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUJtLUACgkQj4D7WH0S
+/k7S1Af/cUM7DlWIsad70QoNd9BpSiK/TK4UD8Uo+SmV1ztuonT3Lgub0tHMdyr1
+oGXzCw4zOnULEJln0w6vMlkSOx1ZTmSlTJ2j1bv/paV6d+0CZzq1dcJgap3cPCKM
+R3BRcY5u3lMjhBW6GmK+wSOoKB3y3Z7KnWw7voVWCACIzpVFVWUBt+KNIlwWB26N
+c2XDAHQmDkGOjRDuF8koOrlbjDb6Sef21fxQKVz5Vs7zKvRklDfpTWNF9IhQqBUx
+ElrK3qq+gEklJJfTFycKpdvl0TZsL7vXWQUq55HSVqZIMuwXMdgOZ00h38lChCH1
+J2xq0VQKfgUvG0IiA/rGSXWBBY61/Q==
+=U4lt
+-----END PGP SIGNATURE-----
+
+--lzkeeqrbsjhowzsb--
