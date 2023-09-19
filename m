@@ -2,117 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16847A54DE
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Sep 2023 23:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221557A5665
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 02:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjIRVML (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 18 Sep 2023 17:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
+        id S230319AbjISAA4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 18 Sep 2023 20:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjIRVML (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 17:12:11 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B248E;
-        Mon, 18 Sep 2023 14:12:05 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8AAEC433C8;
-        Mon, 18 Sep 2023 21:12:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695071525;
-        bh=m/n53GAvddAGYEj8KIWHPEfGhiEY0hHq/daTN/xqmFs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lT6zdRyXLl3hGuDf4Nmys6NDjz2efBIL530DSrN/5R5/MRcQKduO3iwEIe/7x/+w2
-         Z8CCwA50YfY9NmcTYlhnpktZTivUUex6T+i5eEfh0sP7g4927U7pMO84D07R5uQK5M
-         vBIlzWxcu1TwjS/d4EVqTPKVPrLn4+69kUMEIoDy7RwpksLVaFf/wg9sZXzQ8NEJ79
-         p1VOE/dv37lACSur8VEm86e4EzSZJsXMvfFNl5tCpidcZat1b2us9VdssDOB+m1zRj
-         NLYItvKkINSQ6o1g6ynePQDp+4HuEpK3ybeCVliZ7KCbTkdDnCDOXVbkuvfwSJT7cG
-         XDOt1yurB5n0A==
-Received: (nullmailer pid 1768524 invoked by uid 1000);
-        Mon, 18 Sep 2023 21:12:02 -0000
-Date:   Mon, 18 Sep 2023 16:12:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mithat.guner@xeront.com,
-        erkin.bozoglu@xeront.com, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: mtmips: document pins of groups
-Message-ID: <20230918211202.GA1743810-robh@kernel.org>
-References: <20230917162837.277405-1-arinc.unal@arinc9.com>
- <20230917162837.277405-2-arinc.unal@arinc9.com>
+        with ESMTP id S230187AbjISAA4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 18 Sep 2023 20:00:56 -0400
+Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E81599
+        for <linux-mips@vger.kernel.org>; Mon, 18 Sep 2023 17:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
+        s=protonmail2; t=1695081647; x=1695340847;
+        bh=Lli3Yj6tPCTPu+N9cNfbF8RCVOR8MAz0xLiJXkVxWMI=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=hlGTyd596DF2dmgY1RxK0nQKhn95J6GICdAnV17WrFbnFOG+MUmgHjlK7mvMUvSEW
+         Ny4WgaiMDNZDqse07BwO8txDjO1zp+XCxYLRYfUVTs73ENUZWdUW3K0uwPYGnlgd/G
+         BO/jK2xmW9w8NhmGRL9T08JW7TZ5A05Hcx9idS+msnB0qobVQ7g2S387X/W2cCyH+s
+         +cfQQ5WzCJy/YxylDrE93+mUvvi8MVrAFAbcB+EdRp/WqkuaiR2cNd0V5FTmvVb5+f
+         If3BANatKOYi35sl2kqXvBNdhpWK8CBBDctN/+jKC4EWv2dLWh3Nt1kHLo9r03mTki
+         KBwkIvgnmCEaw==
+Date:   Tue, 19 Sep 2023 00:00:34 +0000
+To:     segher@kernel.crashing.org
+From:   Peter Lafreniere <peter@n8pjl.ca>
+Cc:     anton.ivanov@cambridgegreys.com, geert@linux-m68k.org,
+        ink@jurassic.park.msu.ru, jack@suse.cz, johannes@sipsolutions.net,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-um@lists.infradead.org, linux@armlinux.org.uk,
+        linuxppc-dev@lists.ozlabs.org, peter@n8pjl.ca,
+        reiserfs-devel@vger.kernel.org, richard.henderson@linaro.org,
+        richard@nod.at, tsbogend@alpha.franken.de
+Subject: Re: [PATCH 0/7] arch/*: config: Remove ReiserFS from defconfig
+Message-ID: <20230919000026.7409-1-peter@n8pjl.ca>
+In-Reply-To: <20230918234108.GN19790@gate.crashing.org>
+References: <20230918175529.19011-1-peter@n8pjl.ca> <20230918234108.GN19790@gate.crashing.org>
+Feedback-ID: 53133685:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230917162837.277405-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Sep 17, 2023 at 07:28:37PM +0300, Arınç ÜNAL wrote:
-> Document the pins of each group on the MediaTek MTMIPS SoC pin controllers.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 22 ++++++++++++-
->  .../pinctrl/mediatek,mt7621-pinctrl.yaml      | 18 +++++++++-
->  .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 33 ++++++++++++++++++-
->  .../pinctrl/ralink,rt2880-pinctrl.yaml        | 17 +++++++++-
->  .../pinctrl/ralink,rt305x-pinctrl.yaml        | 16 ++++++++-
->  .../pinctrl/ralink,rt3352-pinctrl.yaml        | 17 +++++++++-
->  .../pinctrl/ralink,rt3883-pinctrl.yaml        | 16 ++++++++-
->  .../pinctrl/ralink,rt5350-pinctrl.yaml        | 13 +++++++-
->  8 files changed, 144 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-> index 221adcef6e14..eb9d9d2bd90f 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-> @@ -44,8 +44,28 @@ patternProperties:
->                     wdt refclk, wdt rst, wled]
->  
->            groups:
-> -            description:
-> +            description: |
->                An array of strings. Each string contains the name of a group.
-> +
-> +              group             pins
-> +              ------------------------------------------------------------------
-> +              "i2c"             1, 2
-> +              "spi"             3, 4, 5, 6
-> +              "uartf"           7, 8, 9, 10, 11, 12, 13, 14
-> +              "uartlite"        15, 16
-> +              "wdt"             17
-> +              "pa"              18, 19, 20, 21
-> +              "mdio"            22, 23
-> +              "rgmii1"          24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
-> +              "pcie"            36
-> +              "spi refclk"      37, 38, 39
-> +              "ephy"            40, 41, 42, 43, 44
-> +              "nd_sd"           45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
-> +                                57, 58, 59
-> +
-> +              "rgmii2"          60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71
-> +              "wled"            72
+On Monday, September 18th, 2023 at 19:41, Segher Boessenkool <segher@kernel=
+.crashing.org> wrote:
+> On Mon, Sep 18, 2023 at 05:56:09PM +0000, Peter Lafreniere wrote:
+>=20
+> > ReiserFS has been considered deprecated for 19 months since commit
+> > eb103a51640e ("reiserfs: Deprecate reiserfs"). However, there are
+> > several architectures that still build it into their defconfig kernels.
+> >=20
+> > As ReiserFS will be removed in 2025, delete all ReiserFS-related option=
+s
+> > from defconfig files before the filesystem's removal.
+>=20
+>=20
+> This is essentially equivalent to deleting the filesystem now. Why do
+> this? Is there such a hurry?
 
-This list of strings should be an enum like 'function' above.
+This is not equivalent to deleting the filesystem. The filesystem can still
+be configured into kernels, and few distros use a defconfig kernel anyway.
 
-> +
->              maxItems: 1
+>=20
+>=20
+> Segher
 
-This is wrong if more than 1 string is allowed...
+Cheers,
 
-Same goes for the rest of the changes.
+Peter Lafreniere
+<peter@n8pjl.ca>
 
-Rob
