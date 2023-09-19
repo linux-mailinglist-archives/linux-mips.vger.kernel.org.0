@@ -2,96 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3AF7A5D36
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 11:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B885A7A5E02
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Sep 2023 11:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjISJBy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Sep 2023 05:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S229522AbjISJdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Sep 2023 05:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjISJBx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Sep 2023 05:01:53 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF64102;
-        Tue, 19 Sep 2023 02:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695114107; x=1726650107;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3lbpMHnCnN4tgBMsnlxIOe9ua6EYGffh/u6hevJylxY=;
-  b=QgfyaQEKqkUA78LLt4ACvbxztG+rDwxAXhUlnqRGeP8yg31t5m9a88pJ
-   zYYdyxJuRlC2zkRcqVdJjnSDuiERgzNDAcx3w+/8TPMBYCkhlSaAFi3qk
-   Cy/pP6qj2mlVWorpDwsUjalNl+pIk4FL5zN+bvyQtBDrpJT6GfMd3uPVd
-   QJRRQB+RrpfNG6qZmZ6mMz4VmIHv68939bZUcJ04YeTkBkP29ZRYvEXR+
-   49L59+6dJDUGuQ9dlZXHySMcPjHud85ybqNFVUe3D7CHyeEzhlBw1VQYd
-   SV15XhdDtiwFtBZ2y4wXCxrKG069ehgmb51lSwWtr3x1PMSQPYFdkB9/S
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="377201128"
-X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
-   d="scan'208";a="377201128"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 02:01:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="695833326"
-X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
-   d="scan'208";a="695833326"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.84]) ([10.238.8.84])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 02:01:36 -0700
-Message-ID: <e397d30c-c6af-e68f-d18e-b4e3739c5389@linux.intel.com>
-Date:   Tue, 19 Sep 2023 17:01:31 +0800
+        with ESMTP id S229449AbjISJdu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Sep 2023 05:33:50 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF21EC;
+        Tue, 19 Sep 2023 02:33:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA97EC433C8;
+        Tue, 19 Sep 2023 09:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695116023;
+        bh=avUzQ65GcPX7paR7cIIF/tntqPhqLmf4/xu1oPsGAeA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rvpy6WWTErgqnvURFZ7gC9+YNK0xDeaGDAd4Rk71KSBrd/2tha6bs0TJrF4pAHTjs
+         cfDAkqzl8Y7wQvFgmt5rJ5cgIiakkGFbSfrmko8LbDv3MBeUphZ1GkKmQkn/TVrU16
+         o9tuNLc1VtYH+G4jH2OEaq1eqJh6+a10TYkhdMBZ1CErahj3xdPsxw1NA2i8/+E6rB
+         YHQs5IW7ixMh0RtMUFTslwT/0n5Jg1WO/OMohaZPhfSd9SZYR1S2AJt+d+Zj8fsBAG
+         qak1FiVG/ALXiRfzShX8NnlCJHusqfFEMRLy81Lp01vV8TiRIc1ZBGDTXNkt9a3RGi
+         1q2ntTusF2uYQ==
+Date:   Tue, 19 Sep 2023 11:33:40 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        dri-devel@lists.freedesktop.org, airlied@gmail.com,
+        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [RFT PATCH 03/15] drm/ingenic: Call drm_atomic_helper_shutdown()
+ at shutdown time
+Message-ID: <i25dbp63khr35wmdjltttbmhoc37ejzulzzkqj6xosptde44mg@ijga2qee4vby>
+References: <20230901234202.566951-1-dianders@chromium.org>
+ <20230901164111.RFT.3.Iea742f06d8bec41598aa40378fc625fbd7e8a3d6@changeid>
+ <288af70dafc5e73d0fdfac71a33449385d4d6bd3.camel@crapouillou.net>
+ <CAD=FV=VuJe7ACFw3pt1z=EAh14_Z4iTOc5VKJt24CGwZYjRpeQ@mail.gmail.com>
+ <3prgpsxxnf3hzeqcpjs5r37nfojbkuwk4ezizrwfrcthm666k6@t2q2qcpnfkiu>
+ <CAD=FV=VSTP2g1RttMu_9+AGQbMK87MzQO+tw1cZBEJ3g-jAmYg@mail.gmail.com>
+ <vkdjbjda23fwofsbt23wtjgiya3uhelby7evwtvteqkpwb4dr4@ybla63hqndic>
+ <CAD=FV=VWF8tP2aykNW7+4tkqQExdoja71OqtiDFGZs+c7Gjttw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [RFC PATCH v12 14/33] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230914015531.1419405-1-seanjc@google.com>
- <20230914015531.1419405-15-seanjc@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230914015531.1419405-15-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hk3mjln4nblbmh47"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VWF8tP2aykNW7+4tkqQExdoja71OqtiDFGZs+c7Gjttw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,88 +59,244 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
+--hk3mjln4nblbmh47
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 9/14/2023 9:55 AM, Sean Christopherson wrote:
-[...]
-> +
-> +static void kvm_gmem_invalidate_begin(struct kvm_gmem *gmem, pgoff_t start,
-> +				      pgoff_t end)
-> +{
-> +	struct kvm_memory_slot *slot;
-> +	struct kvm *kvm = gmem->kvm;
-> +	unsigned long index;
-> +	bool flush = false;
-> +
-> +	KVM_MMU_LOCK(kvm);
-> +
-> +	kvm_mmu_invalidate_begin(kvm);
-> +
-> +	xa_for_each_range(&gmem->bindings, index, slot, start, end - 1) {
-> +		pgoff_t pgoff = slot->gmem.pgoff;
-> +
-> +		struct kvm_gfn_range gfn_range = {
-> +			.start = slot->base_gfn + max(pgoff, start) - pgoff,
-> +			.end = slot->base_gfn + min(pgoff + slot->npages, end) - pgoff,
-> +			.slot = slot,
-> +			.may_block = true,
-> +		};
-> +
-> +		flush |= kvm_mmu_unmap_gfn_range(kvm, &gfn_range);
-> +	}
-> +
-> +	if (flush)
-> +		kvm_flush_remote_tlbs(kvm);
-> +
-> +	KVM_MMU_UNLOCK(kvm);
-> +}
-> +
-> +static void kvm_gmem_invalidate_end(struct kvm_gmem *gmem, pgoff_t start,
-> +				    pgoff_t end)
-> +{
-> +	struct kvm *kvm = gmem->kvm;
-> +
-> +	KVM_MMU_LOCK(kvm);
-> +	if (xa_find(&gmem->bindings, &start, end - 1, XA_PRESENT))
-> +		kvm_mmu_invalidate_end(kvm);
-kvm_mmu_invalidate_begin() is called unconditionally in 
-kvm_gmem_invalidate_begin(),
-but kvm_mmu_invalidate_end() is not here.
-This makes the kvm_gmem_invalidate_{begin, end}() calls asymmetric.
+On Thu, Sep 14, 2023 at 03:29:16PM -0700, Doug Anderson wrote:
+> Hi,
+>=20
+> On Thu, Sep 14, 2023 at 1:14=E2=80=AFAM Maxime Ripard <mripard@kernel.org=
+> wrote:
+> >
+> > > > So it doesn't have any relationship with the unbind/remove timing, =
+and
+> > > > for all we know it can be there indefinitely, while the application
+> > > > continues to interact with the driver.
+> > >
+> > > I spent some time thinking about similar issues recently and, assuming
+> > > my understanding is correct, I'd at least partially disagree.
+> > >
+> > > Specifically, I _think_ the only thing that's truly required to remain
+> > > valid until userspace closes the last open "fd" is the memory for the
+> > > "struct drm_device" itself, right? My understanding is that this is
+> > > similar to how "struct device" works. The memory backing a "struct
+> > > device" has to live until the last client releases a reference to it
+> > > even if everything else about a device has gone away. So if it was all
+> > > working perfectly then if the Linux driver backing the "struct
+> > > drm_device" goes away then we'd release resources and NULL out a bunch
+> > > of stuff in the "struct drm_device" but still keep the actual "struct
+> > > drm_device" around since userspace still has a reference. Pretty much
+> > > all userspace calls would fail, but at least they wouldn't crash. Is
+> > > that roughly the gist?
+> >
+> > Yes, but also, no.
+> >
+> > In the spirit, you're right. However, there's three things interfering
+> > here:
+> >
+> >   - You don't always have a match between device and KMS entity. Display
+> >     pipelines are usually multiple devices working together, and while
+> >     you probably have a 1:1 relationship with bridges and panels (and to
+> >     some extent encoders/connectors), the planes and framebuffers for
+> >     example are a mess :) So, if the device backing the planes is to be
+> >     removed, what are you removing exactly? All of the planes and
+> >     framebuffers? Do you free the buffers allocated by the userspace
+> >     (that it might still use?)?
+> >
+> >   - In addition to that, KMS doesn't deal with individual entities being
+> >     hotplugged so neither the subsystem nor the application expect to
+> >     have a connector being removed.
+> >
+> >   - ioctl's aren't filtered once the device is starting to get removed
+> >     on most drivers.
+> >
+> > So due to 1 and 2, we can't really partially remove components unless
+> > the application is aware of it, and it doesn't expect to. And most
+> > drivers still allow (probably unwillingly though) the application to
+> > call ioctls once the DRM device has lost at least one of its backing
+> > devices.
+>=20
+> We "can't", but we "can", right? Userspace can freely unbind a driver.
+> Unless you want to dig into if the community would allow a driver to
+> block "unbind" then we have to, at the very least, not crash the
+> kernel when userspace does this. Ideally we'd have something more
+> elegant than just "don't crash the kernel", but at least we shouldn't
+> crash.
 
+I'm not sure what you mean here, sorry
 
-> +	KVM_MMU_UNLOCK(kvm);
-> +}
-> +
-> +static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
-> +{
-> +	struct list_head *gmem_list = &inode->i_mapping->private_list;
-> +	pgoff_t start = offset >> PAGE_SHIFT;
-> +	pgoff_t end = (offset + len) >> PAGE_SHIFT;
-> +	struct kvm_gmem *gmem;
-> +
-> +	/*
-> +	 * Bindings must stable across invalidation to ensure the start+end
-> +	 * are balanced.
-> +	 */
-> +	filemap_invalidate_lock(inode->i_mapping);
-> +
-> +	list_for_each_entry(gmem, gmem_list, entry) {
-> +		kvm_gmem_invalidate_begin(gmem, start, end);
-> +		kvm_gmem_invalidate_end(gmem, start, end);
-> +	}
-Why to loop for each gmem in gmem_list here?
+> > > Assuming that's correct, then _most_ of the resource acquiring /
+> > > memory allocation can still happen in the device probe() routine and
+> > > can still use devm as long as we do something to ensure that any
+> > > resources released are no longer pointed to by anything in the "struct
+> > > drm_device".
+> > >
+> > > To make it concrete, I think we want this (feel free to correct). For
+> > > simplicity, I'm assuming a driver that _doesn't_ use the component
+> > > framework:
+> > >
+> > > a) Linux driver probe() happens. The "struct drm_device" is allocated
+> > > in probe() by devm_drm_dev_alloc(). This takes a reference to the
+> > > "struct drm_device". The device also acquires resources / allocates
+> > > memory.
+> >
+> > You need to differentiate resources and allocations there. Resources can
+> > be expected to go away at the same time than the device, so using devm
+> > is fine. Allocations are largely disconnected from the device lifetime,
+> > and using devm leads to UAF.
+>=20
+> Right. I think my original point was looking at "ingenic-drm-drv.c".
+> Much of the "devm" stuff there is resources and those specific things
+> could be moved to probe() instead of bind(), right?
 
-IIUIC, offset is the offset according to the inode, it is only 
-meaningful to the
-inode passed in, i.e, it is only meaningful to the gmem binding with the 
-inode,
-not others.
+It depends. The registers, clock, regmap allocations are fine. The panel
+isn't for example.
 
+> For allocations, I think you'd have to look at each allocation. If the
+> allocation needed to live as long as the "struct drm_device" then devm
+> is clearly the wrong choice. ...but not every allocation needs to live
+> that long.
 
-> +
-> +	filemap_invalidate_unlock(inode->i_mapping);
-> +
-> +	return 0;
-> +}
-> +
-[...]
+Most of the allocations are in a KMS driver though? At least all the
+structures that store either planes, crtcs, encoders, connectors, panels
+or bridges (plus their state) need to be allocated through drmm.
+
+> Also, even if in the "simple" case allocations need to live as long as
+> a "struct drm_device", it's possible that there are some cases where
+> there's only an indirect reference to the memory. In that case, you
+> could NULL out the indirect reference and then free it. Obviously
+> someone would need to take care here.
+
+I guess we could, but it would be fairly hard to do since if we clear a
+connector, we would need to clear that particular allocation, but also
+=66rom all the states that reference it, and the entities that store a
+pointer to it somehow (some of them possibly in drivers). It's not super
+valuable anyway since the current expectation is that it's all or
+nothing, if you remove one connector you are expected to remove the
+whole KMS driver.
+
+> > > b) Userspace acquires a reference to the "struct drm_device". Refcount
+> > > is now 2 (one from userspace, one from the Linux driver).
+> > >
+> > > c) The Linux driver unbinds, presumably because userspace requested
+> > > it. From earlier I think we decided that we can't (by design) block
+> > > unbind. Once unbind happens then we shouldn't try to keep operating
+> > > the device
+> >
+> > That part is correct, because the resources aren't there anymore.
+> >
+> > > the driver should stop running.
+> >
+> > But for the reasons above, the driver needs to still operate (in a
+> > degraded mode).
+>=20
+> So I think here is where the disconnect is from our viewpoints. IMO
+> when a Linux driver is unbound then it makes no sense to try to
+> operate the device in "a degraded mode". When a Linux driver is
+> unbound then it should be releasing all of the resources from the
+> device (iomaps, IRQs, regulators, GPIOs, etc). That's just what
+> unbinding a driver is supposed to do.
+
+I guess we agree on that part.
+
+> I understand what you're saying above about display pipelines being
+> multiple Linux drivers working together and that it doesn't make lots
+> of sense to just unbind a random Linux device driver in the middle of
+> things.
+
+That's not what I'm saying though. What I'm saying is that if we remove
+one, everything must go. And that's what ingenic is doing btw. But all
+the allocations still need to stay until the last fd is closed.
+
+> ...and I don't really have a simple/great answer for how to do
+> something super elegant if userspace tries to just randomly unbind one
+> of the many drivers in an active display pipeline.
+
+That's not a concern. I know vc4 handles that just fine, probably others
+too.
+
+> > > As part of the unbind, the remove() is called and also "devm"
+> > > resources are deallocated. If any of the things freed are pointed to
+> > > by the "struct drm_device" then the code needs to NULL them out at
+> > > this time.
+> >
+> > Right, we also need to make sure we don't access any of the resources
+> > that got freed. This is typically done by protecting all the accesses
+> > with drm_dev_enter/drm_dev_exit.
+> >
+> > > Also we should make sure that any callback functions that userspace
+> > > could cause to be invoked return errors.
+> >
+> > That would prevent any new ioctl from occuring after the device has been
+> > removed, but that doesn't fix the race condition if it's removed while
+> > there's a commit happening. This is further complicated by the fact that
+> > commits can be queued (so you would have multiple submitted already) or
+> > made asynchronous.
+>=20
+> I guess I would have expected that the remove() callback in the device
+> would prevent new commits from starting and then block waiting until
+> any in-progress commits were finished? ...kinda like how drivers call
+> del_timer_sync() in their remove functions...
+>=20
+>=20
+> > > Our code could go away at any point here since userspace could "rmmod"
+> > > our module.
+> >
+> > Yeah, we probably have a bug there. Boris also reported something like
+> > that recently where if you add an action with drmm_add_action, and then
+> > remove the module, the function would have been free'd by the time it
+> > executes.
+>=20
+> I'm fairly certain that you can prevent a module from being unloaded
+> by just grabbing a refcount to it. However, I'm not sure that's the
+> right solution. If we're trying to run driver code after a driver has
+> been unbound then, IMO, that's the bug.
+
+init, exit and probe run while the device in unbound.
+
+> > > However, it's not a panacea for everything. Specifically once
+> > > the Linux driver unbind finishes then the device isn't functional
+> > > anymore.
+> >
+> > What's wrong with it then?
+>=20
+> I'm mostly just saying don't just search-and-replace "devm" with
+> "drmm" in your driver and call it done. You need to think carefully
+> about which things are which lifetime.
+
+Sure, where did I say anything different? For vc4, it took me a ~60
+patches to do the conversion, so yeah, it's not just a sed call.
+
+> Ironically, while digging into this I'm tempted to take back my
+> original request. Despite the kernel docs I pointed at [1], it
+> actually looks like it might be fine to use "devm" within a
+> component's bind() function. In try_to_bring_up_aggregate_device() it
+> seems like the code is opening up a nested "devres" group specifically
+> to allow this to work. A little bit of testing that I did with this
+> shows that, indeed, the nesting seems to be working. Am I missing
+> something here?
+
+I don't think we're on the same page, because I also don't know why
+that's relevant in that particular context?
+
+Sure, you can use devm in a component framework driver. The limitations
+I'm talking about have nothing to do with the component framework but
+rather between devm and KMS. So all the issues I brought up are still
+very much relevant for a single device doing devm_ allocations at probe.
+
+Maxime
+
+--hk3mjln4nblbmh47
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZQlq9AAKCRDj7w1vZxhR
+xd21AQCvWBuoYKCHRtoJkg2ixDhpE58+7aOV2cBNc0tqLf6krQD/aEJAm2jYK/aw
+ZbSRpzivtFRNhcNVJwo69UROHMKH6QE=
+=uZlq
+-----END PGP SIGNATURE-----
+
+--hk3mjln4nblbmh47--
