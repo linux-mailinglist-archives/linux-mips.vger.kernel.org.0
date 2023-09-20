@@ -2,79 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78E57A8DA0
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 22:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949797A8E19
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 23:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjITUOz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Sep 2023 16:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S230004AbjITVAc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Sep 2023 17:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjITUOy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 16:14:54 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE23A9;
-        Wed, 20 Sep 2023 13:14:48 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c3d6d88231so1656475ad.0;
-        Wed, 20 Sep 2023 13:14:48 -0700 (PDT)
+        with ESMTP id S229998AbjITVAb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 17:00:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED159C6
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 14:00:24 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d818fb959f4so432141276.1
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 14:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695240888; x=1695845688; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=iBAkISg4liJpMSv79ebj2TeKhgO/99XxEW65IYWMigQ=;
-        b=MdjFWySsnCCx6jy//SfWXKUVvYIWNmGWBHU2BV9hFd8KrNplYqiobZwWieUIn8tomf
-         1Vf8s93XEF4iLgUin1QBLwTpfBWH+IuwRsqUnR/7H9TfA4fu8zuP+1uLQ3A7skeaW1tn
-         6P8SFfQ/26WGNN5+yL6dBeymRWrHo0f9s+q1nD1Y4nNvIXwFYQ8QaFc+yVhU15hv6Td3
-         qGyyUmMGljhIOm7KdWSRQ2oGjsJBlEuJ6ba0ZIsSBrY2etYXh32QhnjM23pMWEquk0nP
-         n4ZkqiyhfVFBvIniy/7HwrK9GEblMKucIMjwV6IexkXVtZ4qDcKuCrukJutnG0HQIGNN
-         W7Qg==
+        d=google.com; s=20230601; t=1695243624; x=1695848424; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WD85YU6GCdPtOsLZeVlIeZZfzAYdtoOH/7wu6gyWXNI=;
+        b=lrXR4KDKyB3CuUyGP5uNfXTfoHTjrrZkUVpu9kQNuYv9InUBqUeB4fMdB30349PPIZ
+         RcGYV8CUadyrYi4ihZfTHpQg/09qpPl+c/zYxq0o2P7dwkfgXkXcp+bq3MVEF+9duUBe
+         HTtCh9+ypTXfAcyFaAzJk68f4w++iv6tmGozumlieWuG+llNlw0IlHzHC0WhvmQeQ47D
+         BIPb11gg7udeYiklPqgWMrsDyd383pwOvV8mQ+zScwuU8lJXO0Vahq5kKfJ4f6dThPzb
+         EXaItMpjNVLeAY+6Kq+gMt7n0juNGBqQvhqE4dZEpjqEgFDXknQSWJecxRAUASzTRNFm
+         LQQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695240888; x=1695845688;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iBAkISg4liJpMSv79ebj2TeKhgO/99XxEW65IYWMigQ=;
-        b=FTdWeV7uZKoevf1ozSrR3ul9Q+swQEdnpTm1IlwGWJuQPEGvgnp4nuzY9XDoTdmK82
-         oMVYmPVCggcaYyMytsLkoaKu0eZMFYwziTUvwrv1agjqFnsTkstONIM4OlddRvNQGJmq
-         UnxhvVtwngkPL8YW0S+XsnuJDLcCJiSqg9ueUVwhkrVgIe0mx95zx3L8BY2HAq9GZKNH
-         k71/1YBjYoDse/R9TFZmSUcLnQSEHZdXRKama2mEtgBTtLsvHqbu4vuoqKkTSdvrp+Om
-         b95U0VGgVOlVMGD52sLfy/a6ktUrbzGCHVsWs8dG1XWNZ57gK86jLMB6JVtySqKhpTlD
-         GwXg==
-X-Gm-Message-State: AOJu0YzdMW2DNdEn6BOUHgA0qixE2ERIy6E6ejAvzbIQdtgc38gLxfFY
-        daBzVUFkZTZrjRmcZ39gjPN1AtlcskU=
-X-Google-Smtp-Source: AGHT+IEmCDf8b3mlYUNXqLfFkKrJ9PDxO9NjeDkIOVQFK/O/Z5JIlGM1JSxzUBcTuFaxCR1315FDQw==
-X-Received: by 2002:a17:903:1211:b0:1c3:61d9:2b32 with SMTP id l17-20020a170903121100b001c361d92b32mr2187662plh.45.1695240887675;
-        Wed, 20 Sep 2023 13:14:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902d38c00b001b9de4fb749sm1311015pld.20.2023.09.20.13.14.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 13:14:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f1abf571-c903-ad51-10eb-1e20d2b3ab75@roeck-us.net>
-Date:   Wed, 20 Sep 2023 13:14:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 4/6] watchdog: ar7_wdt: remove driver to prepare for
- platform removal
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mips@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
- <20230920201035.3445-5-wsa+renesas@sang-engineering.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230920201035.3445-5-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        d=1e100.net; s=20230601; t=1695243624; x=1695848424;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WD85YU6GCdPtOsLZeVlIeZZfzAYdtoOH/7wu6gyWXNI=;
+        b=EIyzmY3f8qiE6HSVWkrxuU1lfpBOvqa5E4RQWK8NflxkkICqw64oD6I1gXtdfd1R5y
+         9Lz7T7HkwXeV235lZ59kGphQ/5fVOb5pW3A2x8hdQg2iIeLnvjJPCvEh5/bSOErgaZge
+         1RPL+vWuWFB2KP3AAyY6hhZUHvYwh3ygmwyojWjqy6wpSfRPBaGpGw8/ZoKbUzNp4iP4
+         KQSXfoTy1BGEuu2RnvcrQhlDDcm/l5Fwl9lEuAHLQHdmujmU9bn/wEtkaSw8zbS44Cdf
+         YIJROjEtEa97SHgYveyGyGx5nWEy3viT4pYONoU6XytZB+U+Fy/Or3eQ9ex5OdCyA7Pu
+         eC/Q==
+X-Gm-Message-State: AOJu0YyP/VF3pgXOYJwa5H3cUX9zWwqSjmJU2kOZovI6N4paVJ9tu6Nl
+        YbvO5FwBpnZkNeSQRSRrwyrW3qR3Mx8=
+X-Google-Smtp-Source: AGHT+IE6bowhyf6hyHthYBPyW6IZfmwFxVZA3ErkF6QZibGvin1ESoG81Vf7MPhR8G5wDRxCxsmQT8EV7w4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:496:0:b0:d7f:2cb6:7d88 with SMTP id
+ 144-20020a250496000000b00d7f2cb67d88mr58003ybe.13.1695243624102; Wed, 20 Sep
+ 2023 14:00:24 -0700 (PDT)
+Date:   Wed, 20 Sep 2023 14:00:22 -0700
+In-Reply-To: <ZQP6ZqXH81V24Lj/@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-12-seanjc@google.com>
+ <ZQP6ZqXH81V24Lj/@yzhao56-desk.sh.intel.com>
+Message-ID: <ZQtdZmJ3SekURjiQ@google.com>
+Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,52 +102,85 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/20/23 13:10, Wolfram Sang wrote:
-> AR7 is going to be removed from the Kernel, so remove its watchdog
-> support. This allows us to remove the platform because this driver
-> includes a platform specific header.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Fri, Sep 15, 2023, Yan Zhao wrote:
+> On Wed, Sep 13, 2023 at 06:55:09PM -0700, Sean Christopherson wrote:
+> > From: Chao Peng <chao.p.peng@linux.intel.com>
+> > 
+> > In confidential computing usages, whether a page is private or shared is
+> > necessary information for KVM to perform operations like page fault
+> > handling, page zapping etc. There are other potential use cases for
+> > per-page memory attributes, e.g. to make memory read-only (or no-exec,
+> > or exec-only, etc.) without having to modify memslots.
+> > 
+> ...
+> >> +bool kvm_range_has_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+> > +				     unsigned long attrs)
+> > +{
+> > +	XA_STATE(xas, &kvm->mem_attr_array, start);
+> > +	unsigned long index;
+> > +	bool has_attrs;
+> > +	void *entry;
+> > +
+> > +	rcu_read_lock();
+> > +
+> > +	if (!attrs) {
+> > +		has_attrs = !xas_find(&xas, end);
+> > +		goto out;
+> > +	}
+> > +
+> > +	has_attrs = true;
+> > +	for (index = start; index < end; index++) {
+> > +		do {
+> > +			entry = xas_next(&xas);
+> > +		} while (xas_retry(&xas, entry));
+> > +
+> > +		if (xas.xa_index != index || xa_to_value(entry) != attrs) {
+> Should "xa_to_value(entry) != attrs" be "!(xa_to_value(entry) & attrs)" ?
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+No, the exact comparsion is deliberate.  The intent of the API is to determine
+if the entire range already has the desired attributes, not if there is overlap
+between the two.
 
-> ---
->   drivers/watchdog/Kconfig   |   6 -
->   drivers/watchdog/Makefile  |   1 -
->   drivers/watchdog/ar7_wdt.c | 315 -------------------------------------
->   3 files changed, 322 deletions(-)
->   delete mode 100644 drivers/watchdog/ar7_wdt.c
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 751458959411..b9f715d73fe8 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1768,12 +1768,6 @@ config SIBYTE_WDOG
->   	  To compile this driver as a loadable module, choose M here.
->   	  The module will be called sb_wdog.
->   
-> -config AR7_WDT
-> -	tristate "TI AR7 Watchdog Timer"
-> -	depends on AR7 || (MIPS && 32BIT && COMPILE_TEST)
-> -	help
-> -	  Hardware driver for the TI AR7 Watchdog Timer.
-> -
->   config TXX9_WDT
->   	tristate "Toshiba TXx9 Watchdog Timer"
->   	depends on CPU_TX49XX || (MIPS && COMPILE_TEST)
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 7eab9de311cb..7cbc34514ec1 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -168,7 +168,6 @@ obj-$(CONFIG_INDYDOG) += indydog.o
->   obj-$(CONFIG_JZ4740_WDT) += jz4740_wdt.o
->   obj-$(CONFIG_WDT_MTX1) += mtx-1_wdt.o
->   obj-$(CONFIG_SIBYTE_WDOG) += sb_wdog.o
-> -obj-$(CONFIG_AR7_WDT) += ar7_wdt.o
->   obj-$(CONFIG_TXX9_WDT) += txx9wdt.o
->   obj-$(CONFIG_OCTEON_WDT) += octeon-wdt.o
->   octeon-wdt-y := octeon-wdt-main.o octeon-wdt-nmi.o
-> diff --git a/drivers/watchdog/ar7_wdt.c b/drivers/watchdog/ar7_wdt.c
-> deleted file mode 100644
-> index cdcaeb0961ac..000000000000
+E.g. if/when RWX attributes are supported, the exact comparison is needed to
+handle a RW => R conversion.
 
+> > +			has_attrs = false;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +out:
+> > +	rcu_read_unlock();
+> > +	return has_attrs;
+> > +}
+> > +
+> ...
+> > +/* Set @attributes for the gfn range [@start, @end). */
+> > +static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+> > +				     unsigned long attributes)
+> > +{
+> > +	struct kvm_mmu_notifier_range pre_set_range = {
+> > +		.start = start,
+> > +		.end = end,
+> > +		.handler = kvm_arch_pre_set_memory_attributes,
+> > +		.on_lock = kvm_mmu_invalidate_begin,
+> > +		.flush_on_ret = true,
+> > +		.may_block = true,
+> > +	};
+> > +	struct kvm_mmu_notifier_range post_set_range = {
+> > +		.start = start,
+> > +		.end = end,
+> > +		.arg.attributes = attributes,
+> > +		.handler = kvm_arch_post_set_memory_attributes,
+> > +		.on_lock = kvm_mmu_invalidate_end,
+> > +		.may_block = true,
+> > +	};
+> > +	unsigned long i;
+> > +	void *entry;
+> > +	int r = 0;
+> > +
+> > +	entry = attributes ? xa_mk_value(attributes) : NULL;
+> Also here, do we need to get existing attributes of a GFN first ?
+
+No?  @entry is the new value that will be set for all entries.  This line doesn't
+touch the xarray in any way.  Maybe I'm just not understanding your question.
