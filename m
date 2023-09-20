@@ -2,59 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD3D7A841B
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 15:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5437A866A
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 16:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbjITN4I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Sep 2023 09:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S235126AbjITOYU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Sep 2023 10:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbjITNzj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 09:55:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A6BD7
-        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 06:55:07 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59c15767524so66874737b3.0
-        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 06:55:07 -0700 (PDT)
+        with ESMTP id S234979AbjITOYR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 10:24:17 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE26D3
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 07:24:10 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5784671b7ebso3091187a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 07:24:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695218106; x=1695822906; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695219850; x=1695824650; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0APReAt4bNnnd5kx+NahuCYj0tgbUgwxY6/xmv3q1x8=;
-        b=qYN6MLIfTj4icmmBpIkd0WLhJxjSRWRnp5CVrZ5zO23Hc6SEWKaxnDv2NJItwfDuFQ
-         6RVvMGhZPLFVWocauiDyLryXn63S6KPTLdALA3Qsdgqj3uuPB/A2o/4ptf1HYp9bQI/0
-         1cYLmwlGz2SJqRrIPPncawpZ4aDzCTJ8sW2gL6tfKGnzilsZLa6El4ASlO1PaFkjNm/O
-         bYywfPO/0UW/nevxIlFfp0aeaozdgulhoho9Sa50zXYSvg9W6zOTkgKB/8FODKp3Zw2Z
-         dwA7/f8AInE7LDVv1jVJABSqsl1VCpa8fzDiXuUQzjW4V/dFydMGpeKFv2KS3ghLlvrS
-         QzZA==
+        bh=DOI6e5Fz0eSccYOGv0a2XgOrMIQyrqURVkPdu4XpUSk=;
+        b=OdKcggWCZY2WLZg3BR5y9Qaj6VyhXLyvl6oJlR09C7EAcdWY7dpuz50dDSjkdtsSix
+         RMq4f2c/gEEGfZc3SPb7ZbGg38xceu/gcoJCvba3XRu7T9YAfJmD94dU2FUkIKE8Scpv
+         AjMy76ufmRmNk7SZqkvRXWqyoQMPu2HUzT3Xi1u7MZjreQ/5XUKrlvPn57iY//9mAIEO
+         uhPy6gEzm3RXtu+TSpKXLcEc//YAmg35x5qKKnXJG/tuB4GKwyzMKJABJ8gPnDz/mO6q
+         /giYzhixp+w5k4J00eWuKJF+0OWk+J0bGfmL7vSpMRs5E9O8HO4hXDdrjVXFbI0ThYsn
+         eOqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695218106; x=1695822906;
+        d=1e100.net; s=20230601; t=1695219850; x=1695824650;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0APReAt4bNnnd5kx+NahuCYj0tgbUgwxY6/xmv3q1x8=;
-        b=eOGRawTYNMv3HEndHMXE8MzOS4amITBaXnjdrNieygjnHEzG6yF+ESQtf4x0dAx3e8
-         UuLipTBq91esx06wARszaBwFYtiLMeL8psS+tc85n7ZCZnAG6Td0vong6+KLVuOHLdgT
-         8I7UBMTodElObFDR/A1rj/8zumo/YwEhmIp3afcyiU5Q8tYVzQZHwkNYeY0wM20AKsvo
-         TwCDsiillfeJuPnFLEymBJakUQTXbXVsI6iPA98yA87bm8iKmPsq7CjCF+jR+/nsvqmo
-         3vAvtCThqmzsdj7UyrAJfU61sT0KYVdgSQE2EfTKIHtdeF37+Z2NArtOeiOIEjFnYF+6
-         SQlw==
-X-Gm-Message-State: AOJu0YxFzgqTFvTeJ+J6w2tV2e07v8PtGTWNXlr2STwsChPwf3899LMW
-        UYhnPhU4iZvL/iQJTh7CqOIHRFFKE00=
-X-Google-Smtp-Source: AGHT+IHuQ24Hy0wlZqpKThD2hndi3rYWapG+J/d1L/ai4z7W/k7rmZdxNg2zwHr4zmYKJTJyjaSKmjFgB/U=
+        bh=DOI6e5Fz0eSccYOGv0a2XgOrMIQyrqURVkPdu4XpUSk=;
+        b=Z8a4KL2YlBKbg2Y8QLKYbSxuYBcZlaS3eDBVGUh1X2t8W9ryL/FLEl4GOdbiVbu8HJ
+         wUSGPaIwffd4nIhgdUtp0pp9vV+fRhdGdLjA0lHCuWKRVZ3avSYC8LKfpkBC4WRJNqyO
+         T5HXGBcCMMfk13QdmqEU7+YYCswYUGEzJtpK1pxuoncxkXxZ9pwE+6f6FfEYJIhFLB/6
+         MFH9ZoGINarHKPwdnPpTtlkETUKJDhGudFltENl6XVceCR8xSCd9civ9yWbw+dC7OQ4H
+         Q7S4Ab7QxN2wYv+pEFS+DGNwwcl/yt92Zw8mSkYnITnQWXG6fPiTPe3CbfddstHIFs70
+         iKHQ==
+X-Gm-Message-State: AOJu0YxrPi61JbXJonwWGQM6XDSwq76f3eVSvlh8kcUnGOqlcd5HDJmt
+        a7rHp0+PzsB1rKAVwoHmFhE36DBx5Zo=
+X-Google-Smtp-Source: AGHT+IG+7+KaIB01fLVIPGeb7tjb/zu/hrsNFs+xXo/mmyM/aDSVQYbb0kWI4ACm+gkgu18FM/xCEI0V+P0=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ae57:0:b0:59b:ee27:bbe9 with SMTP id
- g23-20020a81ae57000000b0059bee27bbe9mr35901ywk.9.1695218106527; Wed, 20 Sep
- 2023 06:55:06 -0700 (PDT)
-Date:   Wed, 20 Sep 2023 06:55:05 -0700
-In-Reply-To: <ZQqMBEL61p739dpF@yilunxu-OptiPlex-7050>
+ (user=seanjc job=sendgmr) by 2002:a17:902:f203:b0:1c0:ac09:4032 with SMTP id
+ m3-20020a170902f20300b001c0ac094032mr25326plc.9.1695219850013; Wed, 20 Sep
+ 2023 07:24:10 -0700 (PDT)
+Date:   Wed, 20 Sep 2023 07:24:08 -0700
+In-Reply-To: <e397d30c-c6af-e68f-d18e-b4e3739c5389@linux.intel.com>
 Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-3-seanjc@google.com>
- <ZQqMBEL61p739dpF@yilunxu-OptiPlex-7050>
-Message-ID: <ZQr5uXhV6Cnx4DYT@google.com>
-Subject: Re: [RFC PATCH v12 02/33] KVM: Use gfn instead of hva for mmu_notifier_retry
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-15-seanjc@google.com>
+ <e397d30c-c6af-e68f-d18e-b4e3739c5389@linux.intel.com>
+Message-ID: <ZQsAiGuw/38jIOV7@google.com>
+Subject: Re: [RFC PATCH v12 14/33] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
 From:   Sean Christopherson <seanjc@google.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -66,19 +73,14 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         Chao Peng <chao.p.peng@linux.intel.com>,
         Fuad Tabba <tabba@google.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Anish Moorthy <amoorthy@google.com>,
         Yu Zhang <yu.c.zhang@linux.intel.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         Vishal Annapurve <vannapurve@google.com>,
         Ackerley Tng <ackerleytng@google.com>,
@@ -101,39 +103,122 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 20, 2023, Xu Yilun wrote:
-> On 2023-09-13 at 18:55:00 -0700, Sean Christopherson wrote:
-> > +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
+On Tue, Sep 19, 2023, Binbin Wu wrote:
+> 
+> 
+> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
+> [...]
+> > +
+> > +static void kvm_gmem_invalidate_begin(struct kvm_gmem *gmem, pgoff_t start,
+> > +				      pgoff_t end)
 > > +{
-> > +	lockdep_assert_held_write(&kvm->mmu_lock);
+> > +	struct kvm_memory_slot *slot;
+> > +	struct kvm *kvm = gmem->kvm;
+> > +	unsigned long index;
+> > +	bool flush = false;
 > > +
-> > +	WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
+> > +	KVM_MMU_LOCK(kvm);
 > > +
-> >  	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
-> >  		kvm->mmu_invalidate_range_start = start;
-> >  		kvm->mmu_invalidate_range_end = end;
+> > +	kvm_mmu_invalidate_begin(kvm);
+> > +
+> > +	xa_for_each_range(&gmem->bindings, index, slot, start, end - 1) {
+> > +		pgoff_t pgoff = slot->gmem.pgoff;
+> > +
+> > +		struct kvm_gfn_range gfn_range = {
+> > +			.start = slot->base_gfn + max(pgoff, start) - pgoff,
+> > +			.end = slot->base_gfn + min(pgoff + slot->npages, end) - pgoff,
+> > +			.slot = slot,
+> > +			.may_block = true,
+> > +		};
+> > +
+> > +		flush |= kvm_mmu_unmap_gfn_range(kvm, &gfn_range);
+> > +	}
+> > +
+> > +	if (flush)
+> > +		kvm_flush_remote_tlbs(kvm);
+> > +
+> > +	KVM_MMU_UNLOCK(kvm);
+> > +}
+> > +
+> > +static void kvm_gmem_invalidate_end(struct kvm_gmem *gmem, pgoff_t start,
+> > +				    pgoff_t end)
+> > +{
+> > +	struct kvm *kvm = gmem->kvm;
+> > +
+> > +	KVM_MMU_LOCK(kvm);
+> > +	if (xa_find(&gmem->bindings, &start, end - 1, XA_PRESENT))
+> > +		kvm_mmu_invalidate_end(kvm);
+> kvm_mmu_invalidate_begin() is called unconditionally in
+> kvm_gmem_invalidate_begin(),
+> but kvm_mmu_invalidate_end() is not here.
+> This makes the kvm_gmem_invalidate_{begin, end}() calls asymmetric.
+
+Another ouch :-(
+
+And there should be no need to acquire mmu_lock() unconditionally, the inode's
+mutex protects the bindings, not mmu_lock.
+
+I'll get a fix posted today.  I think KVM can also add a sanity check to detect
+unresolved invalidations, e.g.
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 7ba1ab1832a9..2a2d18070856 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1381,8 +1381,13 @@ static void kvm_destroy_vm(struct kvm *kvm)
+         * No threads can be waiting in kvm_swap_active_memslots() as the
+         * last reference on KVM has been dropped, but freeing
+         * memslots would deadlock without this manual intervention.
++        *
++        * If the count isn't unbalanced, i.e. KVM did NOT unregister between
++        * a start() and end(), then there shouldn't be any in-progress
++        * invalidations.
+         */
+        WARN_ON(rcuwait_active(&kvm->mn_memslots_update_rcuwait));
++       WARN_ON(!kvm->mn_active_invalidate_count && kvm->mmu_invalidate_in_progress);
+        kvm->mn_active_invalidate_count = 0;
+ #else
+        kvm_flush_shadow_all(kvm);
+
+
+or an alternative style
+
+	if (kvm->mn_active_invalidate_count)
+		kvm->mn_active_invalidate_count = 0;
+	else
+		WARN_ON(kvm->mmu_invalidate_in_progress)
+
+> > +	KVM_MMU_UNLOCK(kvm);
+> > +}
+> > +
+> > +static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+> > +{
+> > +	struct list_head *gmem_list = &inode->i_mapping->private_list;
+> > +	pgoff_t start = offset >> PAGE_SHIFT;
+> > +	pgoff_t end = (offset + len) >> PAGE_SHIFT;
+> > +	struct kvm_gmem *gmem;
+> > +
+> > +	/*
+> > +	 * Bindings must stable across invalidation to ensure the start+end
+> > +	 * are balanced.
+> > +	 */
+> > +	filemap_invalidate_lock(inode->i_mapping);
+> > +
+> > +	list_for_each_entry(gmem, gmem_list, entry) {
+> > +		kvm_gmem_invalidate_begin(gmem, start, end);
+> > +		kvm_gmem_invalidate_end(gmem, start, end);
+> > +	}
+> Why to loop for each gmem in gmem_list here?
 > 
-> IIUC, Now we only add or override a part of the invalidate range in
-> these fields, IOW only the range in last slot is stored when we unlock.
+> IIUIC, offset is the offset according to the inode, it is only meaningful to
+> the inode passed in, i.e, it is only meaningful to the gmem binding with the
+> inode, not others.
 
-Ouch.  Good catch!
+The code is structured to allow for multiple gmem instances per inode.  This isn't
+actually possible in the initial code base, but it's on the horizon[*].  I included
+the list-based infrastructure in this initial series to ensure that guest_memfd
+can actually support multiple files per inode, and to minimize the churn when the
+"link" support comes along.
 
-> That may break mmu_invalidate_retry_gfn() cause it can never know the
-> whole invalidate range.
-> 
-> How about we extend the mmu_invalidate_range_start/end everytime so that
-> it records the whole invalidate range:
-> 
-> if (kvm->mmu_invalidate_range_start == INVALID_GPA) {
-> 	kvm->mmu_invalidate_range_start = start;
-> 	kvm->mmu_invalidate_range_end = end;
-> } else {
-> 	kvm->mmu_invalidate_range_start =
-> 		min(kvm->mmu_invalidate_range_start, start);
-> 	kvm->mmu_invalidate_range_end =
-> 		max(kvm->mmu_invalidate_range_end, end);
-> }
+[*] https://lore.kernel.org/all/cover.1691446946.git.ackerleytng@google.com
 
-Yeah, that does seem to be the easiest solution.
-
-I'll post a fixup patch, unless you want the honors.
