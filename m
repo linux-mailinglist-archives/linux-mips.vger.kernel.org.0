@@ -2,127 +2,228 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49997A77B4
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 11:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AA57A7918
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 12:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbjITJhx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 20 Sep 2023 05:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S234287AbjITKXY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Sep 2023 06:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbjITJhw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 05:37:52 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337259E;
-        Wed, 20 Sep 2023 02:37:46 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-773e8a62b05so84946785a.0;
-        Wed, 20 Sep 2023 02:37:46 -0700 (PDT)
+        with ESMTP id S234278AbjITKXY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 06:23:24 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B854B9
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 03:23:16 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-53087f0e18bso6595964a12.3
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 03:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695205394; x=1695810194; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RBlFPN4rTkvNkIwWrvWpLVOcnwv+R23CbwzJnrGYB5Q=;
+        b=vl7v/rHUnxVgRjBExA2/rBghzGOU38LmkRZ4TENkUu1g+eUHFyL0qHMzFLf2EJtmQW
+         zSYvkAw7uG2DH/8waB8Ha3s3ob2bGiw+B+08VLoLSRfI39BmKOakZ9mSp7m2Nuhd3TjX
+         cHo9xNu75S3sokRMALw1IfcYNnvTGdcEZTP6wz17vk7ZBH+mwVYKBcA3FwhH3qzgrmvK
+         OjqtiqijTajMZ11UJRri2ELeVlcQTZCX7QZQQmEIirqFOSwP7Fl0XdXtdcuKUnc10Wlp
+         zFiufk91rGHDrWmeGBkZRXGlZQmV9Iz+LdX/+RJ1RRYeFHq58ZndaZByTSa8I27VcRCX
+         TIkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695202665; x=1695807465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JcKwdyW9PID8T3nWdTHS9gLtWKlKQ0LLCT75T/ZuZuw=;
-        b=AkC6DMGnUzgWzgb2VOFpDVphNQTtmyCgY3FeFJvDZbDSghkEst1X2Yg+IOyNyjtsWx
-         OGccdTCh0IJRGpk3lt1ub0TzYZtQxctRjWuOVAQwT8slSd80IpA2wnt5HgwcDbzCQDF4
-         UlduL59SZwXfpWV2DZDZTOew6TRoRp/cbsvOvi2+ffVzPhTVKmWhyhnWJEFOjhbfuHbO
-         ctg47Y5u14rAxzc8H3NW8ZsEpFkY9EhUwt9mPRztBOce+qz/jXVPuQE3FWCEJiNLzH92
-         KLRRdcxEKs5JRAkN995I0tYfD8JRA6OdzvbNOJflHQNF4P3GPZFoyAi2jpJIafXt8q7s
-         0fYQ==
-X-Gm-Message-State: AOJu0YwHPbrC8gegmpsqQdthUA9A7iNLjegXfCqOzhj3qhqxbGQVwC/u
-        54ntOOFcyvWZM4PUPbHk8but7LXFkrhofw==
-X-Google-Smtp-Source: AGHT+IHAmfPYX0T2pYm4Tposc4SM/FZTjzTsi0LvEINKR7shef7bVnTyYlrZx3ne8+hzrSSbiiHmMw==
-X-Received: by 2002:a05:620a:2443:b0:773:b795:c9e9 with SMTP id h3-20020a05620a244300b00773b795c9e9mr2435905qkn.17.1695202665006;
-        Wed, 20 Sep 2023 02:37:45 -0700 (PDT)
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com. [209.85.160.181])
-        by smtp.gmail.com with ESMTPSA id i11-20020a37c20b000000b0076e1e2d6496sm4682171qkm.104.2023.09.20.02.37.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 02:37:44 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-414b0bdea1cso40766741cf.1;
-        Wed, 20 Sep 2023 02:37:44 -0700 (PDT)
-X-Received: by 2002:a0d:c705:0:b0:59c:1880:18e0 with SMTP id
- j5-20020a0dc705000000b0059c188018e0mr1688724ywd.21.1695202235254; Wed, 20 Sep
- 2023 02:30:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695205394; x=1695810194;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RBlFPN4rTkvNkIwWrvWpLVOcnwv+R23CbwzJnrGYB5Q=;
+        b=kfkC9BaUYQtn1zEO3Y9ouX8i0QWUtmvKEMLITHef6bopAXAwRCJ32fXlujLAP8stTr
+         c51f/m+YQNfYT2ggOsBEB3Csx1nBrPaOjmHGaiyf17PZpOQ3P4e0Y0yx5+oswbFx19MW
+         M1jsiLyLnEQ1AplAeo8eHM/OpApAZu+Eifdbs53k8X7halVvGbVXEJgn9dX2tISfuFs+
+         qGktOTHlXE8ckkIO7xUZxBhwrsRhmKZS3mEOH5usuMnBM+P1TBRHrxlsOUHMg9MDm76t
+         71aKm+YrfFoiUbZ5H4a/sEQtH2g5Miv3+WmEzY2WJs14GREbzN+P7oKOCSng+1AJFya3
+         luGA==
+X-Gm-Message-State: AOJu0YxzZMkQkHg7mT0sLVduvzrgnJKChsdIAKOK0gk751uettN7e9Qa
+        3f3jRVouPx8bOvQU4i/AzUsUllD7n6YRJQTysQZjQA==
+X-Google-Smtp-Source: AGHT+IFQ9N7cmG2hrJt3k0vQuqNuVRpWI/r0U6RCPWb3X6phrFE4fTmuSKXBdG5HqOkgH191zMBCWg==
+X-Received: by 2002:a17:906:1015:b0:9a9:d651:68f5 with SMTP id 21-20020a170906101500b009a9d65168f5mr1642291ejm.3.1695205394405;
+        Wed, 20 Sep 2023 03:23:14 -0700 (PDT)
+Received: from uffe-tuxpro14.. (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
+        by smtp.gmail.com with ESMTPSA id cf21-20020a170906b2d500b009ad8d444be4sm9061397ejb.43.2023.09.20.03.23.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 03:23:13 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-mips@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: [PATCH v3 05/17] pmdomain: bcm: Move Kconfig options to the pmdomain subsystem
+Date:   Wed, 20 Sep 2023 12:22:22 +0200
+Message-Id: <20230920102222.39831-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230918175529.19011-1-peter@n8pjl.ca> <20230918234108.GN19790@gate.crashing.org>
- <20230919000026.7409-1-peter@n8pjl.ca> <20230919151630.GO19790@gate.crashing.org>
- <20230919155832.4179-1-peter@n8pjl.ca> <CAMuHMdXQ=xpeY3tmLXe1kgJbRtmVAn62rEhvzO+VB7GCgy4F8w@mail.gmail.com>
- <20230919161535.4774-1-peter@n8pjl.ca>
-In-Reply-To: <20230919161535.4774-1-peter@n8pjl.ca>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 20 Sep 2023 11:30:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWQwDzAnbQvBvt3iuL=UPxtufU=TgQM=oKjDvmgmrcy3g@mail.gmail.com>
-Message-ID: <CAMuHMdWQwDzAnbQvBvt3iuL=UPxtufU=TgQM=oKjDvmgmrcy3g@mail.gmail.com>
-Subject: Re: [PATCH 0/7] arch/*: config: Remove ReiserFS from defconfig
-To:     Peter Lafreniere <peter@n8pjl.ca>
-Cc:     anton.ivanov@cambridgegreys.com, ink@jurassic.park.msu.ru,
-        jack@suse.cz, johannes@sipsolutions.net,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org, linux@armlinux.org.uk,
-        linuxppc-dev@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
-        richard.henderson@linaro.org, richard@nod.at,
-        segher@kernel.crashing.org, tsbogend@alpha.franken.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Peter,
+The Kconfig options belongs closer to the corresponding implementations,
+hence let's move them from the soc subsystem to the pmdomain subsystem.
 
-On Tue, Sep 19, 2023 at 6:16 PM Peter Lafreniere <peter@n8pjl.ca> wrote:
-> On Tue, Sep 19, 2023 at 12:02, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Tue, Sep 19, 2023 at 5:58 PM Peter Lafreniere peter@n8pjl.ca wrote:
-> > > 2) Stops building an obsolete and largely-unused filesystem unnecessarily.
-> > > Some hobbyist targets like m68k and alpha may prefer to keep all filesystems
-> > > available until total removal, but others like arm and UML have no need for
-> > > ReiserFS to be built unless specifically configured.
-> >
-> >
-> > As UML is used a lot for testing, isn't it actually counter-productive
-> > to remove ReiserFS from the UML defconfig? The less testing it
-> > receives, the higher the chance of introducing regressions.
->
-> UML is used for testing, but in my view that makes the inclusion of
-> ReiserFS in its defconfig even worse. Users of UML are trying to test a
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <linux-rpi-kernel@lists.infradead.org>
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-Why?
-Because you want to avoid doing any testing at all on deprecated features?
+Changes in v3:
+	- Dropped the SOC_BCM63XX config altogether.
 
-> particular function, and so tend to use ext[2-4], as those are included in
-> the defconfig and are well tested and stable. So there is no extra testing
-> being done on ReiserFS due to its inclusion in the defconfig.
+---
+ drivers/pmdomain/Kconfig     |  1 +
+ drivers/pmdomain/bcm/Kconfig | 42 +++++++++++++++++++++++++++++
+ drivers/soc/bcm/Kconfig      | 51 ------------------------------------
+ 3 files changed, 43 insertions(+), 51 deletions(-)
+ create mode 100644 drivers/pmdomain/bcm/Kconfig
 
-I'd expect global file system testers to use something along the line of:
-
-    for i in $(grep -v nodev /proc/filesystems ); do
-        echo --- Testing $i ---
-        dd if=/dev/zero of=testimage bs=1M count=1 seek=10000
-        mkfs.$i testimage
-        mount testimage /mnt -t $i
-        [run xfstests on testimage]
-        rm -f testimage
-    done
-
-> Keeping UML's defconfig as slim as possible improves build times, which is
-> particularly important for kernel testing and development.
-
-Good luck testing all functionality using a "slim" kernel ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/pmdomain/Kconfig b/drivers/pmdomain/Kconfig
+index 482d9e970e14..ddc05d6af100 100644
+--- a/drivers/pmdomain/Kconfig
++++ b/drivers/pmdomain/Kconfig
+@@ -4,5 +4,6 @@ menu "PM Domains"
+ source "drivers/pmdomain/actions/Kconfig"
+ source "drivers/pmdomain/amlogic/Kconfig"
+ source "drivers/pmdomain/apple/Kconfig"
++source "drivers/pmdomain/bcm/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/pmdomain/bcm/Kconfig b/drivers/pmdomain/bcm/Kconfig
+new file mode 100644
+index 000000000000..b28c9f6d256b
+--- /dev/null
++++ b/drivers/pmdomain/bcm/Kconfig
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menu "Broadcom PM Domains"
++
++config BCM2835_POWER
++	bool "BCM2835 power domain driver"
++	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
++	default y if ARCH_BCM2835
++	select PM_GENERIC_DOMAINS if PM
++	select RESET_CONTROLLER
++	help
++	  This enables support for the BCM2835 power domains and reset
++	  controller.  Any usage of power domains by the Raspberry Pi
++	  firmware means that Linux usage of the same power domain
++	  must be accessed using the RASPBERRYPI_POWER driver
++
++config RASPBERRYPI_POWER
++	bool "Raspberry Pi power domain driver"
++	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
++	depends on RASPBERRYPI_FIRMWARE=y
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the RPi power domains which can be enabled
++	  or disabled via the RPi firmware.
++
++config BCM_PMB
++	bool "Broadcom PMB (Power Management Bus) driver"
++	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
++	default ARCH_BCMBCA
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the Broadcom's PMB (Power Management Bus) that
++	  is used for disabling and enabling SoC devices.
++
++config BCM63XX_POWER
++	bool "BCM63xx power domain driver"
++	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  This enables support for the BCM63xx power domains controller on
++	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
++
++endmenu
+diff --git a/drivers/soc/bcm/Kconfig b/drivers/soc/bcm/Kconfig
+index f96906795fa6..1f5577cfd68c 100644
+--- a/drivers/soc/bcm/Kconfig
++++ b/drivers/soc/bcm/Kconfig
+@@ -1,36 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menu "Broadcom SoC drivers"
+ 
+-config BCM2835_POWER
+-	bool "BCM2835 power domain driver"
+-	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+-	default y if ARCH_BCM2835
+-	select PM_GENERIC_DOMAINS if PM
+-	select RESET_CONTROLLER
+-	help
+-	  This enables support for the BCM2835 power domains and reset
+-	  controller.  Any usage of power domains by the Raspberry Pi
+-	  firmware means that Linux usage of the same power domain
+-	  must be accessed using the RASPBERRYPI_POWER driver
+-
+-config RASPBERRYPI_POWER
+-	bool "Raspberry Pi power domain driver"
+-	depends on ARCH_BCM2835 || (COMPILE_TEST && OF)
+-	depends on RASPBERRYPI_FIRMWARE=y
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the RPi power domains which can be enabled
+-	  or disabled via the RPi firmware.
+-
+-config SOC_BCM63XX
+-	bool "Broadcom 63xx SoC drivers"
+-	depends on BMIPS_GENERIC || COMPILE_TEST
+-	help
+-	  Enables drivers for the Broadcom 63xx series of chips.
+-	  Drivers can be enabled individually within this menu.
+-
+-	  If unsure, say N.
+-
+ config SOC_BRCMSTB
+ 	bool "Broadcom STB SoC drivers"
+ 	depends on ARM || ARM64 || BMIPS_GENERIC || COMPILE_TEST
+@@ -42,27 +12,6 @@ config SOC_BRCMSTB
+ 
+ 	  If unsure, say N.
+ 
+-config BCM_PMB
+-	bool "Broadcom PMB (Power Management Bus) driver"
+-	depends on ARCH_BCMBCA || (COMPILE_TEST && OF)
+-	default ARCH_BCMBCA
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the Broadcom's PMB (Power Management Bus) that
+-	  is used for disabling and enabling SoC devices.
+-
+-if SOC_BCM63XX
+-
+-config BCM63XX_POWER
+-	bool "BCM63xx power domain driver"
+-	depends on BMIPS_GENERIC || (COMPILE_TEST && OF)
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  This enables support for the BCM63xx power domains controller on
+-	  BCM6318, BCM6328, BCM6362 and BCM63268 SoCs.
+-
+-endif # SOC_BCM63XX
+-
+ source "drivers/soc/bcm/brcmstb/Kconfig"
+ 
+ endmenu
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
