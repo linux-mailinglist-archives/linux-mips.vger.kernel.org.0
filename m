@@ -2,73 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125FC7A8E67
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 23:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFEA7A8E6B
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 23:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjITV1F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Sep 2023 17:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S229546AbjITV2Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Sep 2023 17:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjITV1E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 17:27:04 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD11E5;
-        Wed, 20 Sep 2023 14:26:58 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1c1ff5b741cso2098585ad.2;
-        Wed, 20 Sep 2023 14:26:58 -0700 (PDT)
+        with ESMTP id S229497AbjITV2P (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 17:28:15 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD24AC6;
+        Wed, 20 Sep 2023 14:28:09 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-34fc881e09bso871075ab.2;
+        Wed, 20 Sep 2023 14:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695245218; x=1695850018; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695245289; x=1695850089; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OW1bCapNnc1pk804XZRkkc9oHw8Yk6bRTQr+o6NDMqY=;
-        b=Edq/jF3IDa3RTxb0IdCYRb9uFq9vEeOWU0lXDn7+NkfsuniJh/izyZTTa0uB7TeD6H
-         UI7flZ34QQkINvEOOycvFhQT0JT0HJW6PuS4rNg/RiZO6AsX+lT7QUAR7lkrggFc+uTG
-         fJ/NRIsUJUE28fWX1X6dOuulYShumLmc2maZRwAFYdGVGTFguRf2AsOvL2BuRDAS1APu
-         ZAfJcGrT566sdz/6uxMrzQrxtPBlwSv5XW2JmfIsLGXVUgF1xtjDT7qq5qT0IToduBrI
-         zDziY1VkuxbDKcSebZwAqTSwNChpiQplFZa1wuk7yd8n13PTdQvy8mWbSI/Px5JgbEAw
-         S/sA==
+        bh=zhZr7XjcT0X2QYa+khDqj+sffAHbjsR+ohS+RJ8dCLg=;
+        b=ks3gZSw7WOK/jgaY7mYqyVNVOPDmd+nFYJyHRN3ryAS4cgY7l0R5YJ55xnZAF7uU5a
+         OsOwDu7qIqqa3gcEj0Rb1BqQnmrIV7At3DK99ecwH2eAFDchwo2FZTeGtQjLhHn1i1kg
+         ZnP0mN06+w/aj6pkQssis0qEx9WHQy+SgYdIWcuBYgFkg/aGSU05Z7qaQH3PAqSWVevR
+         qJ2JdTTOO/YSpV23fOVpzp25I/v4elOw43KPFAe9zrRqRpGa9aO4WSrXVNQKBKPyOuEc
+         veAqrJVnHSai4TBcpVwPC0ZA7EVShFRZGO8aSVW3p8Q3inUM/JPGKtY0LJ93Y03Baw7K
+         6hjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695245218; x=1695850018;
+        d=1e100.net; s=20230601; t=1695245289; x=1695850089;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OW1bCapNnc1pk804XZRkkc9oHw8Yk6bRTQr+o6NDMqY=;
-        b=RrTyzMCKsFyT/EWStB+I4kwTdhHmMK8rBpjglpiTchmFcq2G9IQgL/AI2y4DJIu0K+
-         oAgsnOPJS8PHz3RInyq0dc6YiGZ8P3+DE2S04FJUe2wgLEBTKVjR69NmGYefnU0fnSrb
-         dV4wxNQl2pkoTldhhFvYWdHWXSzsJSM65I6pBqVP8K8roxK4Qd02t9WlVCFGyIlAvXRV
-         q5kZmA9WvjCxC+XU2OxEQ7TFHFBuv6lZ8zvBBi1e4MLvtSJE5T7zocw1u9YmIAfkLCqQ
-         8tIdcX77Gt95CG+acpcOdkQh65rwuHX0i/jFHx/Pco04M2zpm1sS55UtdRzYM3JjjPiw
-         +X5Q==
-X-Gm-Message-State: AOJu0YxEc3qUqbt+74e5ZxUnv0e8wfpTaGGEBt2whSKtLChsSBph/F/D
-        /Yd5Gj7FNttguSrMr5lGDgs=
-X-Google-Smtp-Source: AGHT+IGxQgG724Kp+Ls03txNsv0GZaXgxL1G1SYNw1KTDuPn8lU1gPwHqtMo2lhhvLrVOt0ZXch4Dw==
-X-Received: by 2002:a17:902:7202:b0:1bb:77a2:edda with SMTP id ba2-20020a170902720200b001bb77a2eddamr2751222plb.36.1695245218001;
-        Wed, 20 Sep 2023 14:26:58 -0700 (PDT)
+        bh=zhZr7XjcT0X2QYa+khDqj+sffAHbjsR+ohS+RJ8dCLg=;
+        b=mT77SlYuFiyeuuhqwyleqVJL7PnkMZWzLJgl650ZRtKeNGIl331ZArsn60zZmjuyY7
+         1sNPAGyupk82nRWmbGAvOq6y4TQLfFwORr+MQok7/gAmgidm909POLSn3zgUMWz2Tne6
+         kAqhmddrkhVFwcRG7HTTotSgDa9oNhsxEgCPAHFxOASHTBO41mewcwleGS/VkuERc7ca
+         +T9k7oKeqbUOHSGr2mfXq/z9u7urqxDLP+krCPAUg+gvBKLM+UFLRph0CqSCkeKncQpd
+         gzns3FT+J6TXrj/uF4bN1YU5de03/pmebcMfZW8RD7SnXC3UYdvsJA92O2V9HAhe3naV
+         PYVg==
+X-Gm-Message-State: AOJu0Yz1OECBSne/mr7ZfYrx50LlAOgz8xfPmuBG04/DJXE1FYO6K/bz
+        2is668IK4+1+7qu0bZVVhsNmvL6ZI6EVqA==
+X-Google-Smtp-Source: AGHT+IEKn+RRSyJ7Tm9O9pl8f/uL+D/7bP3OcnoQxLDN7tkrURK2brualWCoB2JKacZaWdorMLL5Tw==
+X-Received: by 2002:a05:6e02:1b06:b0:349:36e1:10fb with SMTP id i6-20020a056e021b0600b0034936e110fbmr4867998ilv.18.1695245289107;
+        Wed, 20 Sep 2023 14:28:09 -0700 (PDT)
 Received: from [10.67.49.139] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a170902c10900b001b9d7c8f44dsm10936885pli.182.2023.09.20.14.26.54
+        by smtp.googlemail.com with ESMTPSA id c22-20020a637256000000b005705b322b3esm10089058pgn.70.2023.09.20.14.28.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 14:26:55 -0700 (PDT)
-Message-ID: <12861f5b-a618-fc78-a0c2-05c2aab326f3@gmail.com>
-Date:   Wed, 20 Sep 2023 14:26:53 -0700
+        Wed, 20 Sep 2023 14:28:08 -0700 (PDT)
+Message-ID: <81cdff2f-8689-9e91-c0aa-e4df796fccb2@gmail.com>
+Date:   Wed, 20 Sep 2023 14:28:07 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH 5/6] net: cpmac: remove driver to prepare for platform
- removal
+Subject: Re: [PATCH 6/6] MIPS: AR7: remove platform
 Content-Language: en-US
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-mips@vger.kernel.org
 Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org
 References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
- <20230920201035.3445-6-wsa+renesas@sang-engineering.com>
+ <20230920201035.3445-7-wsa+renesas@sang-engineering.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230920201035.3445-6-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230920201035.3445-7-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,10 +78,14 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 9/20/23 13:10, Wolfram Sang wrote:
-> AR7 is going to be removed from the Kernel, so remove its networking
-> support in form of the cpmac driver. This allows us to remove the
-> platform because this driver includes a platform specific header.
+> After a discussion about removing VLYNQ support from the Kernel, it was
+> concluded that its only user, the AR7 platform can go [1]. Even OpenWRT
+> has removed support because these devices are "stuck with 3.18" [2].
 > 
+> [1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
+> [2] https://openwrt.org/docs/techref/targets/ar7
+> 
+> Suggested-by: Jonas Gorski <jonas.gorski@gmail.com>
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
