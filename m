@@ -2,115 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278737A87DD
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 17:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FE07A88B4
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 17:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234501AbjITPHT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Sep 2023 11:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S234622AbjITPoq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Sep 2023 11:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbjITPHS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 11:07:18 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A719AF;
-        Wed, 20 Sep 2023 08:07:12 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id DE07F5C01BB;
-        Wed, 20 Sep 2023 11:07:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 20 Sep 2023 11:07:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695222428; x=1695308828; bh=ms
-        4LUioRCx9g5Fcd6Nj2Z553BmfY/nfNy++/9p0eMTE=; b=BHuLRfyyuipWu6am6/
-        M3C5KuEVtPRgHdnUSWE2tXf1NF5z/c0HjnG1qXb1WaGZu8Uq7k1Lq5DXx3SfUhLJ
-        +AGNDQ0Gvdy1xUAqZGHxFG0dPweDd4IWaDHtLa1Ju8frSZGFQNlRlxX/YTmR+QTm
-        FrxvvQHeQGOAH4tKQgxAP8/n/XDBfPur4ivYpz7AqfbRaoZFC/0DB/LRt6ogTvDK
-        ibhf89hk7VyhvpN4sS3aoNoWA5NNg9KqAE+6NjLPwBok0RZB1mJOs3iV6MFt/MH4
-        Dtvydol1NjIVeiH0yas9c7mbU50veoZbaGHU9IbQP2FByO/vbbLSQKTuw+/nHr+K
-        WV2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695222428; x=1695308828; bh=ms4LUioRCx9g5
-        Fcd6Nj2Z553BmfY/nfNy++/9p0eMTE=; b=qgZHhiyUGnQdiRx/usTNHt32rPNJr
-        9B5WYZMfGf4Wh7FyO6A52lomoJ9ynn4fijFhbL1uXxQvXbZqDqwI3RtNixlUDdBY
-        nr7g83/UKByMv2jpbfoqr0MMhEyLeVl4HTvngpxiAH2TNzYOuQTYsysj+12PQUhh
-        NfZeCSd5kQ2vll+YcV+q/+APQLD6yBY/5mJ6KzJ/VXaqAf54B8D5OfAW8ja+q4S8
-        OwObw1sDeIiXVgJxGcmw5NakTXzLLouS4lIeLJo/w8h5AT4kacfRuTF+izO/lkmJ
-        F56Yyuk075kXqXJcxdmlOPxlIIi+Xm++i+2jPz5jH6sqj1NLjf7H1eCog==
-X-ME-Sender: <xms:nAoLZYwrTKoT42bcnpXZ4-w53D73C76DbJIuYsMLzYvbbB86qR_ffQ>
-    <xme:nAoLZcRulMbaUjUAhbE-QFya1Gxyi5QzCzhATtS7FolBRFqxN9c07Aga3yV4Qoxiq
-    eWbYSyImVFth6dskDE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekfedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:nAoLZaWZx_TRLb7BjvQU3lpTtrt3jJpa0avXJjdRrHX-EzABxErB_A>
-    <xmx:nAoLZWgVBoycMfqp10qcSIzofTqfa999ofexvDZjpX2k4ORya7JL9g>
-    <xmx:nAoLZaBR9j0jFMUdPxCKTuDNgoxms16P9lFOofBz07ktzPmbvA4Yng>
-    <xmx:nAoLZe6LFDULF3sZ_R6NM9MvFBnTENxcVdrZ0bbn_jFL0BMhje4eJA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EC7C5B60089; Wed, 20 Sep 2023 11:07:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
+        with ESMTP id S236798AbjITPop (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 11:44:45 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98244A9
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 08:44:39 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2bffc55af02so61983311fa.2
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 08:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695224678; x=1695829478; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nwiViBM+Ng2Zbve/53EB1qRCOS4sOxEjrY7Ch3Gjuko=;
+        b=CRkX8zcM82KHlrizb10Yz9xe/1/6uo+QQYDQDMA5yyWiGPv/IEijh0qZYLl30QnU1l
+         OLduempe77iTYsoyUWy0z2lRBoscVhwqXx5j5yPT9GERdsEyjQYmz8CkklSzNfGW+fo5
+         7b2PQK1y1JWVF5OXvP2ruchyAxyBThUiuyNe5kmHoYQtgYr7MtskHhmHbbiv5bZoVzyw
+         3o5KEhVi+zWG+MofxwRVgTh8CCePeWxQYr3tiLQ32M6ID7iGXycp2bemIzk2j42JrKwN
+         wBeZWO+Mj/66sV15igMNAgIaIIR5oRWLLakCCzXUJKxLyCVDCQVFoCLbRBq6eO0mI09I
+         sQ/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695224678; x=1695829478;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nwiViBM+Ng2Zbve/53EB1qRCOS4sOxEjrY7Ch3Gjuko=;
+        b=DfefnMlnRv0s5eyF++UVkZr3qUH1i04cKGMk5kjWscQQUnaih4u2cjqCldszitFyBG
+         UCCUlBBXAJbOpUAzCeUJ2twpz9p7FYlNXXfwhetBrYI4Hn1wUx/kEBZw9UBrsuhzh0pe
+         ZeKSYA8U24R9keY8xaFoH2N6ZLeGDvb7RW4MqSkm9toD8Ehtp6gqge7Jxib65hNoemPX
+         ozqHElsh7pETArHCTmGguyh7H0kv9RQPY+24v4UxuxXVvuMufLjfAaIGpm1Bzz1lHyO8
+         gz8h4by/3e4uHuLCSppB07d7H3c8m15B5gQLI9YTX/5WH93/n3QRvOWLx0KkRbDZSjZG
+         9/hQ==
+X-Gm-Message-State: AOJu0YzUvltpKMOzRK02QfcFoVk7ZYJ6hgHVmSfRIZNty+F3GYCnQ/XD
+        +oOiMDnBRLp+Jb/rH7lyD7MXPA==
+X-Google-Smtp-Source: AGHT+IHL1BxFCB0RMETNh8MVHkFqrO5tu9cYC6MGMWkxjrGnG4pdcx7diZ7tSnuuONrha5On1aR5JA==
+X-Received: by 2002:a2e:6a09:0:b0:2bc:b557:cee9 with SMTP id f9-20020a2e6a09000000b002bcb557cee9mr2559470ljc.43.1695224677761;
+        Wed, 20 Sep 2023 08:44:37 -0700 (PDT)
+Received: from [172.20.41.70] (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170906710600b00992e14af9c3sm9624125ejj.143.2023.09.20.08.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Sep 2023 08:44:37 -0700 (PDT)
+Message-ID: <6fb10313-ac31-f5ed-763f-4424ec502d78@linaro.org>
+Date:   Wed, 20 Sep 2023 17:44:34 +0200
 MIME-Version: 1.0
-Message-Id: <df784a58-23f8-43d2-8506-ab1d351da8fe@app.fastmail.com>
-In-Reply-To: <20230912135050.17155-1-tzimmermann@suse.de>
-References: <20230912135050.17155-1-tzimmermann@suse.de>
-Date:   Wed, 20 Sep 2023 11:06:48 -0400
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Helge Deller" <deller@gmx.de>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v4 0/5] ppc, fbdev: Clean up fbdev mmap helper
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.1
+Subject: Re: [PATCH 09/59] dma: dma-jz4780: Convert to platform remove
+ callback returning void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org,
+        dmaengine@vger.kernel.org, kernel@pengutronix.de
+References: <20230919133207.1400430-1-u.kleine-koenig@pengutronix.de>
+ <20230919133207.1400430-10-u.kleine-koenig@pengutronix.de>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230919133207.1400430-10-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 12, 2023, at 09:48, Thomas Zimmermann wrote:
-> Clean up and rename fb_pgprotect() to work without struct file. Then
-> refactor the implementation for PowerPC. This change has been discussed
-> at [1] in the context of refactoring fbdev's mmap code.
->
-> The first two patches update fbdev and replace fbdev's fb_pgprotect()
-> with pgprot_framebuffer() on all architectures. The new helper's stream-
-> lined interface enables more refactoring within fbdev's mmap
-> implementation.
->
-> Patches 3 to 5 adapt PowerPC's internal interfaces to provide
-> phys_mem_access_prot() that works without struct file. Neither the
-> architecture code or fbdev helpers need the parameter.
->
-> v4:
-> 	* fix commit message (Christophe)
-> v3:
-> 	* rename fb_pgrotect() to pgprot_framebuffer() (Arnd)
+On 19/9/23 15:31, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart
+> from emitting a warning) and this typically results in resource leaks.
+> To improve here there is a quest to make the remove callback return
+> void. In the first step of this quest all drivers are converted to
+> .remove_new() which already returns void. Eventually after all drivers
+> are converted, .remove_new() is renamed to .remove().
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>   drivers/dma/dma-jz4780.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
 
-I had another look today, and everything look good to me now.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-Whole series
-
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
