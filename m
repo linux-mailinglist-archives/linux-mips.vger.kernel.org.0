@@ -2,93 +2,298 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFEA7A8E6B
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Sep 2023 23:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA8D7A8FF0
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Sep 2023 01:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjITV2Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Sep 2023 17:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S229478AbjITXo4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Sep 2023 19:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjITV2P (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 17:28:15 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD24AC6;
-        Wed, 20 Sep 2023 14:28:09 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-34fc881e09bso871075ab.2;
-        Wed, 20 Sep 2023 14:28:09 -0700 (PDT)
+        with ESMTP id S229468AbjITXoz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Sep 2023 19:44:55 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6BDD8
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 16:44:49 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1c4375c1406so2860905ad.1
+        for <linux-mips@vger.kernel.org>; Wed, 20 Sep 2023 16:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695245289; x=1695850089; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zhZr7XjcT0X2QYa+khDqj+sffAHbjsR+ohS+RJ8dCLg=;
-        b=ks3gZSw7WOK/jgaY7mYqyVNVOPDmd+nFYJyHRN3ryAS4cgY7l0R5YJ55xnZAF7uU5a
-         OsOwDu7qIqqa3gcEj0Rb1BqQnmrIV7At3DK99ecwH2eAFDchwo2FZTeGtQjLhHn1i1kg
-         ZnP0mN06+w/aj6pkQssis0qEx9WHQy+SgYdIWcuBYgFkg/aGSU05Z7qaQH3PAqSWVevR
-         qJ2JdTTOO/YSpV23fOVpzp25I/v4elOw43KPFAe9zrRqRpGa9aO4WSrXVNQKBKPyOuEc
-         veAqrJVnHSai4TBcpVwPC0ZA7EVShFRZGO8aSVW3p8Q3inUM/JPGKtY0LJ93Y03Baw7K
-         6hjw==
+        d=google.com; s=20230601; t=1695253489; x=1695858289; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YMbatuEIGrWsTlMlK7Tk6yapZGH8kwO0Z4+wG56Y3PQ=;
+        b=hz/qLqNkPaJwrFs4Bfl+b+D2DMfp7nppSPU1y3a9M5mOOqTEaCTcY1Qb/tbs/vZJ3I
+         0pCFwsgOoCU/5SKXWlWY4gG1/VF9tXAoJ9NyLvdFYKn3YpubFq7yoaFJfPa5G0hxuVIj
+         1wjHcqK/1f1di1Of2NbZnD6XaaYIY9+sfkiVl7uRYef/Ob3p0P2MRcGj16uQSiu+F8co
+         2e/NVdI9W30clWI2J7aTfD8OqTUEQtplGpPRBuMluYGTt+Rd/Kjx/qxgtQJEZdxGSIeT
+         Z9lCU8YVH7CjyVp2P3ZuerKl4vl0jJajuspHr5RdWeLVpD/8UQhic6ZUVt2cLw23Ge28
+         nsEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695245289; x=1695850089;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zhZr7XjcT0X2QYa+khDqj+sffAHbjsR+ohS+RJ8dCLg=;
-        b=mT77SlYuFiyeuuhqwyleqVJL7PnkMZWzLJgl650ZRtKeNGIl331ZArsn60zZmjuyY7
-         1sNPAGyupk82nRWmbGAvOq6y4TQLfFwORr+MQok7/gAmgidm909POLSn3zgUMWz2Tne6
-         kAqhmddrkhVFwcRG7HTTotSgDa9oNhsxEgCPAHFxOASHTBO41mewcwleGS/VkuERc7ca
-         +T9k7oKeqbUOHSGr2mfXq/z9u7urqxDLP+krCPAUg+gvBKLM+UFLRph0CqSCkeKncQpd
-         gzns3FT+J6TXrj/uF4bN1YU5de03/pmebcMfZW8RD7SnXC3UYdvsJA92O2V9HAhe3naV
-         PYVg==
-X-Gm-Message-State: AOJu0Yz1OECBSne/mr7ZfYrx50LlAOgz8xfPmuBG04/DJXE1FYO6K/bz
-        2is668IK4+1+7qu0bZVVhsNmvL6ZI6EVqA==
-X-Google-Smtp-Source: AGHT+IEKn+RRSyJ7Tm9O9pl8f/uL+D/7bP3OcnoQxLDN7tkrURK2brualWCoB2JKacZaWdorMLL5Tw==
-X-Received: by 2002:a05:6e02:1b06:b0:349:36e1:10fb with SMTP id i6-20020a056e021b0600b0034936e110fbmr4867998ilv.18.1695245289107;
-        Wed, 20 Sep 2023 14:28:09 -0700 (PDT)
-Received: from [10.67.49.139] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c22-20020a637256000000b005705b322b3esm10089058pgn.70.2023.09.20.14.28.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 14:28:08 -0700 (PDT)
-Message-ID: <81cdff2f-8689-9e91-c0aa-e4df796fccb2@gmail.com>
-Date:   Wed, 20 Sep 2023 14:28:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 6/6] MIPS: AR7: remove platform
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mips@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
- <20230920201035.3445-7-wsa+renesas@sang-engineering.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230920201035.3445-7-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20230601; t=1695253489; x=1695858289;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YMbatuEIGrWsTlMlK7Tk6yapZGH8kwO0Z4+wG56Y3PQ=;
+        b=ZED+xBx6St/9RGXIFWaphyQHNJqH/9YY06g86rvtAOk1Snd4IFS7YW6UkEMwZ1oY4R
+         QusQgMzisYBvAtYaHjmIODoUZeG31EY5jAOaV36K2/nYbU5NYWQwDRmok2uAZWc4hM5w
+         PFK6XgGbfgpZXa4/RDcHGVQTwHA5gdSvyMk2hnJldl7F4F6GgUEuGOvDEGQEpk7rr7Jr
+         +TTViqvCH0sWH3EhSEmcii5HiEFEUGtOCTh/r90r/RF7fl55/Yu6w2MFhj+Zfaylh1NO
+         vO/x8mBrnUO0UnoZz6EBFQmgD/JFrDAhXt2wGIe3ZHWhgeNZFMBIVzPgjWr5usKw1zOp
+         LPgA==
+X-Gm-Message-State: AOJu0Yy6uuAOpEmC+NfzrUyCuf1Vs65dBFCYfIQktCvqDaYcIySAxijJ
+        jUpjY8+7CfKYfOBSALOy9MeI4CmuJ2Y=
+X-Google-Smtp-Source: AGHT+IHQbG7yFE9jJPEUI1XKEjcd5Hn7eouqEyZetIlWhAmmYx1Ip3XqohOdLN8YNlfaQrxQ5DSfhNksAYI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:22d0:b0:1ae:6895:cb96 with SMTP id
+ y16-20020a17090322d000b001ae6895cb96mr56298plg.5.1695253488829; Wed, 20 Sep
+ 2023 16:44:48 -0700 (PDT)
+Date:   Wed, 20 Sep 2023 16:44:47 -0700
+In-Reply-To: <20230918163647.m6bjgwusc7ww5tyu@amd.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-15-seanjc@google.com>
+ <20230918163647.m6bjgwusc7ww5tyu@amd.com>
+Message-ID: <ZQuD77vlBiSU/PE4@google.com>
+Subject: Re: [RFC PATCH v12 14/33] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/20/23 13:10, Wolfram Sang wrote:
-> After a discussion about removing VLYNQ support from the Kernel, it was
-> concluded that its only user, the AR7 platform can go [1]. Even OpenWRT
-> has removed support because these devices are "stuck with 3.18" [2].
+On Mon, Sep 18, 2023, Michael Roth wrote:
+> > +static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+> > +{
+> > +	struct list_head *gmem_list = &inode->i_mapping->private_list;
+> > +	pgoff_t start = offset >> PAGE_SHIFT;
+> > +	pgoff_t end = (offset + len) >> PAGE_SHIFT;
+> > +	struct kvm_gmem *gmem;
+> > +
+> > +	/*
+> > +	 * Bindings must stable across invalidation to ensure the start+end
+> > +	 * are balanced.
+> > +	 */
+> > +	filemap_invalidate_lock(inode->i_mapping);
+> > +
+> > +	list_for_each_entry(gmem, gmem_list, entry) {
+> > +		kvm_gmem_invalidate_begin(gmem, start, end);
 > 
-> [1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
-> [2] https://openwrt.org/docs/techref/targets/ar7
-> 
-> Suggested-by: Jonas Gorski <jonas.gorski@gmail.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> In v11 we used to call truncate_inode_pages_range() here to drop filemap's
+> reference on the folio. AFAICT the folios are only getting free'd upon
+> guest shutdown without this. Was this on purpose?
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Nope, I just spotted this too.  And then after scratching my head for a few minutes,
+wondering if I was having an -ENOCOFFEE moment, I finally read your mail.  *sigh*
+
+Looking at my reflog history, I'm pretty sure I deleted the wrong line when
+removing the truncation from kvm_gmem_error_page().
+
+> > +		kvm_gmem_invalidate_end(gmem, start, end);
+> > +	}
+> > +
+> > +	filemap_invalidate_unlock(inode->i_mapping);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
+> > +{
+> > +	struct address_space *mapping = inode->i_mapping;
+> > +	pgoff_t start, index, end;
+> > +	int r;
+> > +
+> > +	/* Dedicated guest is immutable by default. */
+> > +	if (offset + len > i_size_read(inode))
+> > +		return -EINVAL;
+> > +
+> > +	filemap_invalidate_lock_shared(mapping);
+> 
+> We take the filemap lock here, but not for
+> kvm_gmem_get_pfn()->kvm_gmem_get_folio(). Is it needed there as well?
+
+No, we specifically do not want to take a rwsem when faulting in guest memory.
+Callers of kvm_gmem_get_pfn() *must* guard against concurrent invalidations via
+mmu_invalidate_seq and friends.
+
+> > +	/*
+> > +	 * For simplicity, require the offset into the file and the size of the
+> > +	 * memslot to be aligned to the largest possible page size used to back
+> > +	 * the file (same as the size of the file itself).
+> > +	 */
+> > +	if (!kvm_gmem_is_valid_size(offset, flags) ||
+> > +	    !kvm_gmem_is_valid_size(size, flags))
+> > +		goto err;
+> 
+> I needed to relax this check for SNP. KVM_GUEST_MEMFD_ALLOW_HUGEPAGE
+> applies to entire gmem inode, so it makes sense for userspace to enable
+> hugepages if start/end are hugepage-aligned, but QEMU will do things
+> like map overlapping regions for ROMs and other things on top of the
+> GPA range that the gmem inode was originally allocated for. For
+> instance:
+> 
+>   692500@1689108688.696338:kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0x80000000 ua=0x7fbf5be00000 ret=0 restricted_fd=19 restricted_offset=0x0
+>   692500@1689108688.699802:kvm_set_user_memory AddrSpace#0 Slot#1 flags=0x4 gpa=0x100000000 size=0x380000000 ua=0x7fbfdbe00000 ret=0 restricted_fd=19 restricted_offset=0x80000000
+>   692500@1689108688.795412:kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x0 gpa=0x0 size=0x0 ua=0x7fbf5be00000 ret=0 restricted_fd=19 restricted_offset=0x0
+>   692500@1689108688.795550:kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0xc0000 ua=0x7fbf5be00000 ret=0 restricted_fd=19 restricted_offset=0x0
+>   692500@1689108688.796227:kvm_set_user_memory AddrSpace#0 Slot#6 flags=0x4 gpa=0x100000 size=0x7ff00000 ua=0x7fbf5bf00000 ret=0 restricted_fd=19 restricted_offset=0x100000
+> 
+> Because of that the KVM_SET_USER_MEMORY_REGIONs for non-THP-aligned GPAs
+> will fail. Maybe instead it should be allowed, and kvm_gmem_get_folio()
+> should handle the alignment checks on a case-by-case and simply force 4k
+> for offsets corresponding to unaligned bindings?
+
+Yeah, I wanted to keep the code simple, but disallowing small bindings/memslots
+is probably going to be a deal-breaker.  Even though I'm skeptical that QEMU
+_needs_ to play these games for SNP guests, not playing nice will make it all
+but impossible to use guest_memfd for regular VMs.
+
+And the code isn't really any more complex, so long as we punt on allowing
+hugepages on interior sub-ranges.
+
+Compile-tested only, but this?
+
+---
+ virt/kvm/guest_mem.c | 54 ++++++++++++++++++++++----------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
+index a819367434e9..dc12e38211df 100644
+--- a/virt/kvm/guest_mem.c
++++ b/virt/kvm/guest_mem.c
+@@ -426,20 +426,6 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags,
+ 	return err;
+ }
+ 
+-static bool kvm_gmem_is_valid_size(loff_t size, u64 flags)
+-{
+-	if (size < 0 || !PAGE_ALIGNED(size))
+-		return false;
+-
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	if ((flags & KVM_GUEST_MEMFD_ALLOW_HUGEPAGE) &&
+-	    !IS_ALIGNED(size, HPAGE_PMD_SIZE))
+-		return false;
+-#endif
+-
+-	return true;
+-}
+-
+ int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args)
+ {
+ 	loff_t size = args->size;
+@@ -452,9 +438,15 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args)
+ 	if (flags & ~valid_flags)
+ 		return -EINVAL;
+ 
+-	if (!kvm_gmem_is_valid_size(size, flags))
++	if (size < 0 || !PAGE_ALIGNED(size))
+ 		return -EINVAL;
+ 
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	if ((flags & KVM_GUEST_MEMFD_ALLOW_HUGEPAGE) &&
++	    !IS_ALIGNED(size, HPAGE_PMD_SIZE))
++		return false;
++#endif
++
+ 	return __kvm_gmem_create(kvm, size, flags, kvm_gmem_mnt);
+ }
+ 
+@@ -462,7 +454,7 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 		  unsigned int fd, loff_t offset)
+ {
+ 	loff_t size = slot->npages << PAGE_SHIFT;
+-	unsigned long start, end, flags;
++	unsigned long start, end;
+ 	struct kvm_gmem *gmem;
+ 	struct inode *inode;
+ 	struct file *file;
+@@ -481,16 +473,9 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 		goto err;
+ 
+ 	inode = file_inode(file);
+-	flags = (unsigned long)inode->i_private;
+ 
+-	/*
+-	 * For simplicity, require the offset into the file and the size of the
+-	 * memslot to be aligned to the largest possible page size used to back
+-	 * the file (same as the size of the file itself).
+-	 */
+-	if (!kvm_gmem_is_valid_size(offset, flags) ||
+-	    !kvm_gmem_is_valid_size(size, flags))
+-		goto err;
++	if (offset < 0 || !PAGE_ALIGNED(offset))
++		return -EINVAL;
+ 
+ 	if (offset + size > i_size_read(inode))
+ 		goto err;
+@@ -591,8 +576,23 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 	page = folio_file_page(folio, index);
+ 
+ 	*pfn = page_to_pfn(page);
+-	if (max_order)
+-		*max_order = compound_order(compound_head(page));
++	if (!max_order)
++		goto success;
++
++	*max_order = compound_order(compound_head(page));
++	if (!*max_order)
++		goto success;
++
++	/*
++	 * For simplicity, allow mapping a hugepage if and only if the entire
++	 * binding is compatible, i.e. don't bother supporting mapping interior
++	 * sub-ranges with hugepages (unless userspace comes up with a *really*
++	 * strong use case for needing hugepages within unaligned bindings).
++	 */
++	if (!IS_ALIGNED(slot->gmem.pgoff, 1ull << *max_order) ||
++	    !IS_ALIGNED(slot->npages, 1ull << *max_order))
++		*max_order = 0;
++success:
+ 	r = 0;
+ 
+ out_unlock:
+
+base-commit: bc1a54ee393e0574ea422525cf0b2f1e768e38c5
 -- 
-Florian
 
