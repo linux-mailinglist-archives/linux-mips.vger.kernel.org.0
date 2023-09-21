@@ -2,58 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292CE7A9D7F
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Sep 2023 21:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBFB7AA30C
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Sep 2023 23:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjIUTiO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Sep 2023 15:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
+        id S232786AbjIUVqe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Sep 2023 17:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjIUThz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Sep 2023 15:37:55 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FE5EBCFF
-        for <linux-mips@vger.kernel.org>; Thu, 21 Sep 2023 12:10:39 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-59beea5ce93so25729547b3.0
-        for <linux-mips@vger.kernel.org>; Thu, 21 Sep 2023 12:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695323438; x=1695928238; darn=vger.kernel.org;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=msCRqftjzvMka6Rl5V/NvDEz768neF2Qswneru1ptF4=;
-        b=ANIsopKH6FB/YfeeiHhknjvBJ5XAITWb1M/gbs+yBeC/ao6mEHXNiCijAVIw3AUBEu
-         /L10qRlBCqsFUCKjuQ13ougwWzehqWocSM7xFbHiwYegbOYJIt/J8GRTSphAAc/IXNxA
-         o/QR0WmMt3Rr9/Z8RTFG6WRUg72slcENJ91CRvg4tLf3p19skDGjdSesRMqooJ1TxrwN
-         kPhHasmtBgG5lahnT+KGJMN8FxVv+FrAn5x5/Kv9qYOj8nLmDk3goWg8x91Iiv6qr5n8
-         fwxGc9VtkPBY6BwtxtcN575WzcMCKX9wO1T2K3HDKmiEMiuIAhwnOqpeTpRRAHJ8OTQF
-         ea5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695323438; x=1695928238;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=msCRqftjzvMka6Rl5V/NvDEz768neF2Qswneru1ptF4=;
-        b=gq1a8i/scxEGQfCTUd9oo4Mt+UizXL+UacvS0AIJ4sGvK1D/tVkwMKBTGZI3bJQ4Zv
-         qRmsPcnXnyRdzRMQ/+bXOw7AXuvw3knb9mhv6Id5wFQuY64a6udJppb3BGCtKA2MF+WO
-         yzW6dpk3vQ1vwxVU5PUUzc1V7PJxXuJ9OHwYNPV6wM0sKRGlgAdPY2I7jmQagsUoYqUI
-         xov+nnxSF7SzDvOWXp300oSaLiM7TT6N1WmIRD4zRr5bscY/TlTprwQ+ChogsSuKqbiC
-         4GLbLO8V+fP1d7qs14l8M+D+mQUBGiO+ukug0uz/b3wfTZNUR3GrZR8KYdJh+W5RgZj3
-         2iHw==
-X-Gm-Message-State: AOJu0Yw5hYgc+PBvXDdKC68HWWbw2ERcjP5pd526peqCrKwq4KzMbWZk
-        NQw3VYwGPykUE9uKh/X26Dl5Ico2v4o=
-X-Google-Smtp-Source: AGHT+IHW881nAqFnjABVXUT4908B5v4pAo/onJespz4HnG5MCVd8NLEq9DsMcDxqDXD3hJb4Zo/K0u0JOVE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:70a:b0:58c:e8da:4d1a with SMTP id
- bs10-20020a05690c070a00b0058ce8da4d1amr8361ywb.2.1695323438500; Thu, 21 Sep
- 2023 12:10:38 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 12:10:36 -0700
-In-Reply-To: <20230914015531.1419405-15-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-15-seanjc@google.com>
-Message-ID: <ZQyVLEKXbpJ9Wvud@google.com>
+        with ESMTP id S231373AbjIUVqY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Sep 2023 17:46:24 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BA05158C;
+        Thu, 21 Sep 2023 10:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695316539; x=1726852539;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=D2Ofh4NhqIgE7X1sOt5XtBxAR4C9rpdFRo7VG5iLwuA=;
+  b=KHvCncRSrBruGvH+50Kzeqz0hI190vMoeAaMPYNqi/DKx6bH/+pwcu+T
+   7ISPlgSAOpVv/9rAQ1AASpc3LdOc2ec90SoxCzTu8LfL7ORZE97YCK38+
+   LPCEZIzg9RI7BB4jSnpCEvfcmED2C1PVm/raU41zajX11Crudp3clWwTe
+   mSeTYJLXS7U3wbJ8czV5XhnqjiUQdYx8EQzWGn2XmPEV2003tRaJVFcYV
+   R/H5YvNaDJvUyOH64W3we1R/l2tY0qolAyk42QfnVun/FuWlzezSY33Ny
+   GIFb6FBEg2K+ZpDplNCdxU//pzcvuXI+qrnPySJkp5Obw0Tek+e7x+YXF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="380337398"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="380337398"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 22:58:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="740494287"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="740494287"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.17.222]) ([10.93.17.222])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 22:58:02 -0700
+Message-ID: <f9ca9457-ca64-484c-7306-97a3236210da@linux.intel.com>
+Date:   Thu, 21 Sep 2023 13:58:00 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
 Subject: Re: [RFC PATCH v12 14/33] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
  guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -65,13 +64,7 @@ To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         Chao Peng <chao.p.peng@linux.intel.com>,
         Fuad Tabba <tabba@google.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
@@ -90,25 +83,143 @@ To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Liam Merwick <liam.merwick@oracle.com>,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230914015531.1419405-1-seanjc@google.com>
+ <20230914015531.1419405-15-seanjc@google.com>
+ <e397d30c-c6af-e68f-d18e-b4e3739c5389@linux.intel.com>
+ <ZQsAiGuw/38jIOV7@google.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <ZQsAiGuw/38jIOV7@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 13, 2023, Sean Christopherson wrote:
->  virt/kvm/guest_mem.c       | 593 +++++++++++++++++++++++++++++++++++++
 
-Getting to the really important stuff...
 
-Anyone object to naming the new file guest_memfd.c instead of guest_mem.c?  Just
-the file, i.e. still keep the gmem namespace.
+On 9/20/2023 10:24 PM, Sean Christopherson wrote:
+> On Tue, Sep 19, 2023, Binbin Wu wrote:
+>>
+>> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
+>> [...]
+>>> +
+>>> +static void kvm_gmem_invalidate_begin(struct kvm_gmem *gmem, pgoff_t start,
+>>> +				      pgoff_t end)
+>>> +{
+>>> +	struct kvm_memory_slot *slot;
+>>> +	struct kvm *kvm = gmem->kvm;
+>>> +	unsigned long index;
+>>> +	bool flush = false;
+>>> +
+>>> +	KVM_MMU_LOCK(kvm);
+>>> +
+>>> +	kvm_mmu_invalidate_begin(kvm);
+>>> +
+>>> +	xa_for_each_range(&gmem->bindings, index, slot, start, end - 1) {
+>>> +		pgoff_t pgoff = slot->gmem.pgoff;
+>>> +
+>>> +		struct kvm_gfn_range gfn_range = {
+>>> +			.start = slot->base_gfn + max(pgoff, start) - pgoff,
+>>> +			.end = slot->base_gfn + min(pgoff + slot->npages, end) - pgoff,
+>>> +			.slot = slot,
+>>> +			.may_block = true,
+>>> +		};
+>>> +
+>>> +		flush |= kvm_mmu_unmap_gfn_range(kvm, &gfn_range);
+>>> +	}
+>>> +
+>>> +	if (flush)
+>>> +		kvm_flush_remote_tlbs(kvm);
+>>> +
+>>> +	KVM_MMU_UNLOCK(kvm);
+>>> +}
+>>> +
+>>> +static void kvm_gmem_invalidate_end(struct kvm_gmem *gmem, pgoff_t start,
+>>> +				    pgoff_t end)
+>>> +{
+>>> +	struct kvm *kvm = gmem->kvm;
+>>> +
+>>> +	KVM_MMU_LOCK(kvm);
+>>> +	if (xa_find(&gmem->bindings, &start, end - 1, XA_PRESENT))
+>>> +		kvm_mmu_invalidate_end(kvm);
+>> kvm_mmu_invalidate_begin() is called unconditionally in
+>> kvm_gmem_invalidate_begin(),
+>> but kvm_mmu_invalidate_end() is not here.
+>> This makes the kvm_gmem_invalidate_{begin, end}() calls asymmetric.
+> Another ouch :-(
+>
+> And there should be no need to acquire mmu_lock() unconditionally, the inode's
+> mutex protects the bindings, not mmu_lock.
+>
+> I'll get a fix posted today.  I think KVM can also add a sanity check to detect
+> unresolved invalidations, e.g.
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 7ba1ab1832a9..2a2d18070856 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1381,8 +1381,13 @@ static void kvm_destroy_vm(struct kvm *kvm)
+>           * No threads can be waiting in kvm_swap_active_memslots() as the
+>           * last reference on KVM has been dropped, but freeing
+>           * memslots would deadlock without this manual intervention.
+> +        *
+> +        * If the count isn't unbalanced, i.e. KVM did NOT unregister between
+> +        * a start() and end(), then there shouldn't be any in-progress
+> +        * invalidations.
+>           */
+>          WARN_ON(rcuwait_active(&kvm->mn_memslots_update_rcuwait));
+> +       WARN_ON(!kvm->mn_active_invalidate_count && kvm->mmu_invalidate_in_progress);
+>          kvm->mn_active_invalidate_count = 0;
+>   #else
+>          kvm_flush_shadow_all(kvm);
+>
+>
+> or an alternative style
+>
+> 	if (kvm->mn_active_invalidate_count)
+> 		kvm->mn_active_invalidate_count = 0;
+> 	else
+> 		WARN_ON(kvm->mmu_invalidate_in_progress)
+>
+>>> +	KVM_MMU_UNLOCK(kvm);
+>>> +}
+>>> +
+>>> +static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+>>> +{
+>>> +	struct list_head *gmem_list = &inode->i_mapping->private_list;
+>>> +	pgoff_t start = offset >> PAGE_SHIFT;
+>>> +	pgoff_t end = (offset + len) >> PAGE_SHIFT;
+>>> +	struct kvm_gmem *gmem;
+>>> +
+>>> +	/*
+>>> +	 * Bindings must stable across invalidation to ensure the start+end
+>>> +	 * are balanced.
+>>> +	 */
+>>> +	filemap_invalidate_lock(inode->i_mapping);
+>>> +
+>>> +	list_for_each_entry(gmem, gmem_list, entry) {
+>>> +		kvm_gmem_invalidate_begin(gmem, start, end);
+>>> +		kvm_gmem_invalidate_end(gmem, start, end);
+>>> +	}
+>> Why to loop for each gmem in gmem_list here?
+>>
+>> IIUIC, offset is the offset according to the inode, it is only meaningful to
+>> the inode passed in, i.e, it is only meaningful to the gmem binding with the
+>> inode, not others.
+> The code is structured to allow for multiple gmem instances per inode.  This isn't
+> actually possible in the initial code base, but it's on the horizon[*].  I included
+> the list-based infrastructure in this initial series to ensure that guest_memfd
+> can actually support multiple files per inode, and to minimize the churn when the
+> "link" support comes along.
+>
+> [*] https://lore.kernel.org/all/cover.1691446946.git.ackerleytng@google.com
+Got it, thanks for the explanation!
 
-Using guest_memfd.c would make it much more obvious that the file holds more than
-generic "guest memory" APIs, and would provide a stronger conceptual connection
-with memfd.c.
+
+
