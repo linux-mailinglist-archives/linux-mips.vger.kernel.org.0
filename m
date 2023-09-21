@@ -2,46 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB1F7AA4AE
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 00:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5087AA511
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 00:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbjIUWP0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Sep 2023 18:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S230156AbjIUWbH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Sep 2023 18:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjIUWPP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Sep 2023 18:15:15 -0400
+        with ESMTP id S229509AbjIUWbG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Sep 2023 18:31:06 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671A999;
-        Thu, 21 Sep 2023 15:15:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DFB4C433B6;
-        Thu, 21 Sep 2023 22:15:08 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB3391;
+        Thu, 21 Sep 2023 15:31:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC786C433CD;
+        Thu, 21 Sep 2023 22:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695334508;
-        bh=j+YpilMLGCC5ERDcgjdZY/UEYbvSwBxJ4mCRlrG3+go=;
+        s=k20201202; t=1695335460;
+        bh=MM21fpAAqNycTt4Xaf9NDcGQ0SQTcft6//RqlmbkVyQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=L+gPhURipQCVv5lQ6lMZEeHafe2Map2Z3SouhfPMvOq3LIN5npAvywgTLrdsrYoDw
-         lcSQt8Ka8fmcf1d8ZM8qIlXPNumlpX3JZKdESMC/KpenaIBv7uGMi+LUkvfCfO+Vlt
-         Ms3BphwgqclEjVmwfHiEkkrb7+Ta8zh3Ag+RqoFwGGlsIzXfHKrtVOjxsaXB9alIhH
-         JK+MwyCKXlDL+alHW9KkokkF6FFQuanhqMW2Sdmh2NRZkCVnTo9ppIcJLwe1SwZkYz
-         JQdTcMm4ZdnaSVT+CVcsNzzz7DKO5EXfQ9zO0FIrMF11/hIqK2vZeqyr2ZUZVULtBX
-         NHK7vuo8iml0w==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50337b43ee6so2384844e87.3;
-        Thu, 21 Sep 2023 15:15:08 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yz6LQ7OFX4l8PRAF6m5TPSjW+jAccwG8ucpwcrP41ii8KG8riIo
-        p5zrHoy/uro0IDaCuObv8tfVteYpmks0JnVOHoE=
-X-Google-Smtp-Source: AGHT+IEOsdVYa+3bdtK+lEO/ooz4+HKzafq7xPbE1njdx3C8+57KFx3hJ2XTTULe0kNONSMtwPONNYKDgjY7yPaLcMU=
-X-Received: by 2002:a05:6512:3254:b0:503:1c07:f7f9 with SMTP id
- c20-20020a056512325400b005031c07f7f9mr5552939lfr.29.1695334506735; Thu, 21
- Sep 2023 15:15:06 -0700 (PDT)
+        b=BJxXZzf/aXubyQy2npZARHLDDjhgoXgiIEWqva3Fcvcj9zcoZxEU8fccdvHJ+HE1c
+         zzl8qTcUY9d4Go4O1phE4VHiUrxF82TprIMut63M6/i0lBXABCB/bZlTOwWqPbu1BQ
+         q5zu/0Z8B9EGkvCak3DZShCJdshYKc/r/AcXEeYIu2QyWVYI9Vx+BhQ1n26cL4/b0+
+         PS4cfkMveOYxyjpv6hbMeZ6FHOjVVnzGDFbwXlAgoIyH9v7qk7z8sPhWkYP6GlWWax
+         6oJu48Ae0Rkgt9SjGUY0GxlfVZDTstOKna+Ts701hrySxm3sOn2mvMBH6VjZ4iOt+Q
+         WLPXTkK17R7VA==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50337b43ee6so2400559e87.3;
+        Thu, 21 Sep 2023 15:31:00 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwJ80atVQpPwKTRF29CYxJEvthpXSCSKKKNW/fjVvmDib0yO3aJ
+        pd4b/1HM4ExSD3usFq4LwbrZRDCDzrhHjZ27SQQ=
+X-Google-Smtp-Source: AGHT+IH8pmyQuqpvewRyL7QPTAL4jcebA+VNDdobgdjzXZOsPDkVCcZQaQNB105RzqTdIxkf8GblFKytjbdsRKyccPQ=
+X-Received: by 2002:a05:6512:10c4:b0:500:7f71:e46b with SMTP id
+ k4-20020a05651210c400b005007f71e46bmr7439120lfg.1.1695335458957; Thu, 21 Sep
+ 2023 15:30:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230918072955.2507221-1-rppt@kernel.org> <20230918072955.2507221-3-rppt@kernel.org>
-In-Reply-To: <20230918072955.2507221-3-rppt@kernel.org>
+References: <20230918072955.2507221-1-rppt@kernel.org> <20230918072955.2507221-10-rppt@kernel.org>
+In-Reply-To: <20230918072955.2507221-10-rppt@kernel.org>
 From:   Song Liu <song@kernel.org>
-Date:   Thu, 21 Sep 2023 15:14:54 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7y2T+tajK71NfYhquhGJKpLpL+EoxxzqrVhEuAamDH3w@mail.gmail.com>
-Message-ID: <CAPhsuW7y2T+tajK71NfYhquhGJKpLpL+EoxxzqrVhEuAamDH3w@mail.gmail.com>
-Subject: Re: [PATCH v3 02/13] mm: introduce execmem_text_alloc() and execmem_free()
+Date:   Thu, 21 Sep 2023 15:30:46 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5Vg7yDn8zb5ez4JY4efoQ6aW+vYm9OL+Xr0NJnLfMYHg@mail.gmail.com>
+Message-ID: <CAPhsuW5Vg7yDn8zb5ez4JY4efoQ6aW+vYm9OL+Xr0NJnLfMYHg@mail.gmail.com>
+Subject: Re: [PATCH v3 09/13] powerpc: extend execmem_params for kprobes allocations
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -84,45 +84,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 12:30=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wr=
+On Mon, Sep 18, 2023 at 12:31=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wr=
 ote:
 >
 [...]
-> +
-> +/**
-> + * enum execmem_type - types of executable memory ranges
-> + *
-> + * There are several subsystems that allocate executable memory.
-> + * Architectures define different restrictions on placement,
-> + * permissions, alignment and other parameters for memory that can be us=
-ed
-> + * by these subsystems.
-> + * Types in this enum identify subsystems that allocate executable memor=
-y
-> + * and let architectures define parameters for ranges suitable for
-> + * allocations by each subsystem.
-> + *
-> + * @EXECMEM_DEFAULT: default parameters that would be used for types tha=
-t
-> + * are not explcitly defined.
-> + * @EXECMEM_MODULE_TEXT: parameters for module text sections
-> + * @EXECMEM_KPROBES: parameters for kprobes
-> + * @EXECMEM_FTRACE: parameters for ftrace
-> + * @EXECMEM_BPF: parameters for BPF
-> + * @EXECMEM_TYPE_MAX:
-> + */
-> +enum execmem_type {
-> +       EXECMEM_DEFAULT,
+> @@ -135,5 +138,13 @@ struct execmem_params __init *execmem_arch_params(vo=
+id)
+>
+>         range->pgprot =3D prot;
+>
+> +       execmem_params.ranges[EXECMEM_KPROBES].start =3D VMALLOC_START;
+> +       execmem_params.ranges[EXECMEM_KPROBES].start =3D VMALLOC_END;
 
-I found EXECMEM_DEFAULT more confusing than helpful.
+.end =3D VMALLOC_END.
 
+Thanks,
 Song
 
-> +       EXECMEM_MODULE_TEXT =3D EXECMEM_DEFAULT,
-> +       EXECMEM_KPROBES,
-> +       EXECMEM_FTRACE,
-> +       EXECMEM_BPF,
-> +       EXECMEM_TYPE_MAX,
-> +};
 > +
-[...]
+> +       if (strict_module_rwx_enabled())
+> +               execmem_params.ranges[EXECMEM_KPROBES].pgprot =3D PAGE_KE=
+RNEL_ROX;
+> +       else
+> +               execmem_params.ranges[EXECMEM_KPROBES].pgprot =3D PAGE_KE=
+RNEL_EXEC;
+> +
+>         return &execmem_params;
+>  }
+> --
+> 2.39.2
+>
+>
