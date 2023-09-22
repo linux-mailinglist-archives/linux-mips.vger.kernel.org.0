@@ -2,201 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BBF7AAFA0
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 12:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A457AB3AB
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 16:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbjIVKhi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Sep 2023 06:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S229758AbjIVOar (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Sep 2023 10:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbjIVKhc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 06:37:32 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F999;
-        Fri, 22 Sep 2023 03:37:24 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85F6740004;
-        Fri, 22 Sep 2023 10:37:08 +0000 (UTC)
-Message-ID: <6d686c54-078d-8d71-d4e2-c754cf92c557@ghiti.fr>
-Date:   Fri, 22 Sep 2023 12:37:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 08/13] riscv: extend execmem_params for generated code
- allocations
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBl?= =?UTF-8?Q?l?= <bjorn@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
+        with ESMTP id S229534AbjIVOaq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 10:30:46 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509DB100
+        for <linux-mips@vger.kernel.org>; Fri, 22 Sep 2023 07:30:40 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1c46ce0c39fso17617975ad.2
+        for <linux-mips@vger.kernel.org>; Fri, 22 Sep 2023 07:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695393040; x=1695997840; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KA5pwz3/DRQHr6a2ee4M3bjnbEYA57TwsoBM67hI6zU=;
+        b=KasGxCGhlZLETJKdrWXwCt6Sdf48q70UTGzJbwZWC64s/HsrhafPEns5rIOCSmMzCF
+         Z5vslQF3uqwntveLyJRT9X55sm2SN9LTyROw1FjsOmgBxDplUWBzYf6ax3BA5UjL4ELb
+         YJsPknZYvqdQlxlzPz5zEqhGnX9Tu6BG6ioY3BFN0N3mSdjWPjyuvkUiP6pxEe6NnfWJ
+         PLkmtSJXOkV0KCojJ/JCp+rGSD8krrci1aKN7jafsYbX+RWwpM95HeeOfmLnmkf1PMs0
+         7NxA3aqKWL8UbhrNt+pus28C2KMT02kQ3ra3JKNW0AJ2IeAxWRuxOn4ft3DclAvaZpdM
+         jwSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695393040; x=1695997840;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KA5pwz3/DRQHr6a2ee4M3bjnbEYA57TwsoBM67hI6zU=;
+        b=HHRq9M7V11XCjYwXIG4jp4rQdJRRPfSLX1LQ32BNS0p354dhoUvBhoVtkzxEYFMlA0
+         AXRVScDbIS20rCTb3mP7C6fnjdefImYJ3GLlj0DXWmxPUYaN2BzhIRNhYjd75S12yrlH
+         7f1r+QGHxcgGvIfE5HQil6amEcCGLmexC3l2QBCweC6Be2kj7bmCunhaz46c7LsA3xxC
+         QvPEc6epXp11c0snev1c20veY9dX+WgOUIjqkpfBxsDiZNHJdUziI+HLjiX99hs+O8nx
+         uLayQo0R20B3nkcYqSgN65h2+nVPeOQK1mQvyZbSH2bqC2Opup39uarC1Bi+ZuuCrCyX
+         swOw==
+X-Gm-Message-State: AOJu0YyNMWFKa6S2LJ+QkKDQ4/gkQC4uZ7CyF7wfLRs3pLMSsA1Dcl6t
+        KMwBZ0vgaY83600yniird2NCkAAAcjc=
+X-Google-Smtp-Source: AGHT+IE7TdAMSox3QZ9i3XY42vmW+YqwJtHLDXCrkzOQDSyIHqr/K/m4w9DaaKuedrPKXRX2zXN/sfp+lRA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:1cf:b0:1b9:df8f:888c with SMTP id
+ e15-20020a17090301cf00b001b9df8f888cmr102903plh.8.1695393039713; Fri, 22 Sep
+ 2023 07:30:39 -0700 (PDT)
+Date:   Fri, 22 Sep 2023 07:30:38 -0700
+In-Reply-To: <117db856-9aec-e91c-b1d4-db2b90ae563d@intel.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-8-seanjc@google.com>
+ <117db856-9aec-e91c-b1d4-db2b90ae563d@intel.com>
+Message-ID: <ZQ2lDk3iOEz8NNg0@google.com>
+Subject: Re: [RFC PATCH v12 07/33] KVM: Add KVM_EXIT_MEMORY_FAULT exit to
+ report faults to userspace
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-9-rppt@kernel.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230918072955.2507221-9-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Mike,
+On Fri, Sep 22, 2023, Xiaoyao Li wrote:
+> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
+> > From: Chao Peng <chao.p.peng@linux.intel.com>
+> > 
+> > Add a new KVM exit type to allow userspace to handle memory faults that
+> > KVM cannot resolve, but that userspace *may* be able to handle (without
+> > terminating the guest).
+> > 
+> > KVM will initially use KVM_EXIT_MEMORY_FAULT to report implicit
+> > conversions between private and shared memory.  With guest private memory,
+> > there will be  two kind of memory conversions:
+> > 
+> >    - explicit conversion: happens when the guest explicitly calls into KVM
+> >      to map a range (as private or shared)
+> > 
+> >    - implicit conversion: happens when the guest attempts to access a gfn
+> >      that is configured in the "wrong" state (private vs. shared)
+> > 
+> > On x86 (first architecture to support guest private memory), explicit
+> > conversions will be reported via KVM_EXIT_HYPERCALL+KVM_HC_MAP_GPA_RANGE,
+> 
+> side topic.
+> 
+> Do we expect to integrate TDVMCALL(MAPGPA) of TDX into KVM_HC_MAP_GPA_RANGE?
 
-On 18/09/2023 09:29, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> The memory allocations for kprobes and BPF on RISC-V are not placed in
-> the modules area and these custom allocations are implemented with
-> overrides of alloc_insn_page() and  bpf_jit_alloc_exec().
->
-> Slightly reorder execmem_params initialization to support both 32 and 64
-> bit variants, define EXECMEM_KPROBES and EXECMEM_BPF ranges in
-> riscv::execmem_params and drop overrides of alloc_insn_page() and
-> bpf_jit_alloc_exec().
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->   arch/riscv/kernel/module.c         | 21 ++++++++++++++++++++-
->   arch/riscv/kernel/probes/kprobes.c | 10 ----------
->   arch/riscv/net/bpf_jit_core.c      | 13 -------------
->   3 files changed, 20 insertions(+), 24 deletions(-)
->
-> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-> index 343a0edfb6dd..31505ecb5c72 100644
-> --- a/arch/riscv/kernel/module.c
-> +++ b/arch/riscv/kernel/module.c
-> @@ -436,20 +436,39 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
->   	return 0;
->   }
->   
-> -#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
-> +#ifdef CONFIG_MMU
->   static struct execmem_params execmem_params __ro_after_init = {
->   	.ranges = {
->   		[EXECMEM_DEFAULT] = {
->   			.pgprot = PAGE_KERNEL,
->   			.alignment = 1,
->   		},
-> +		[EXECMEM_KPROBES] = {
-> +			.pgprot = PAGE_KERNEL_READ_EXEC,
-> +			.alignment = 1,
-> +		},
-> +		[EXECMEM_BPF] = {
-> +			.pgprot = PAGE_KERNEL,
-> +			.alignment = 1,
+Yes, that's my expectation.
 
+> > but reporting KVM_EXIT_HYPERCALL for implicit conversions is undesriable
+> > as there is (obviously) no hypercall, and there is no guarantee that the
+> > guest actually intends to convert between private and shared, i.e. what
+> > KVM thinks is an implicit conversion "request" could actually be the
+> > result of a guest code bug.
+> > 
+> > KVM_EXIT_MEMORY_FAULT will be used to report memory faults that appear to
+> > be implicit conversions.
+> > 
+> > Place "struct memory_fault" in a second anonymous union so that filling
+> > memory_fault doesn't clobber state from other yet-to-be-fulfilled exits,
+> > and to provide additional information if KVM does NOT ultimately exit to
+> > userspace with KVM_EXIT_MEMORY_FAULT, e.g. if KVM suppresses (or worse,
+> > loses) the exit, as KVM often suppresses exits for memory failures that
+> > occur when accessing paravirt data structures.  The initial usage for
+> > private memory will be all-or-nothing, but other features such as the
+> > proposed "userfault on missing mappings" support will use
+> > KVM_EXIT_MEMORY_FAULT for potentially _all_ guest memory accesses, i.e.
+> > will run afoul of KVM's various quirks.
+> 
+> So when exit reason is KVM_EXIT_MEMORY_FAULT, how can we tell which field in
+> the first union is valid?
+> 
+> When exit reason is not KVM_EXIT_MEMORY_FAULT, how can we know the info in
+> the second union run.memory is valid without a run.memory.valid field?
 
-Not entirely sure it is the same alignment (sorry did not go through the 
-entire series), but if it is, the alignment above ^ is not the same that 
-is requested by our current bpf_jit_alloc_exec() implementation which is 
-PAGE_SIZE.
+I'll respond to this separately with a trimmed Cc list.  I suspect this will be
+a rather lengthy conversation, and it has almost nothing to do with guest_memfd.
 
+> > +Note!  KVM_EXIT_MEMORY_FAULT is unique among all KVM exit reasons in that it
+> > +accompanies a return code of '-1', not '0'!  errno will always be set to EFAULT
+> > +or EHWPOISON when KVM exits with KVM_EXIT_MEMORY_FAULT, userspace should assume
+> > +kvm_run.exit_reason is stale/undefined for all other error numbers.
+> > +
+> 
+> Initially, this section is the copy of struct kvm_run and had comments for
+> each field accordingly. Unfortunately, the consistence has not been well
+> maintained during the new filed being added.
+> 
+> Do we expect to fix it?
 
-> +		},
->   	},
->   };
->   
->   struct execmem_params __init *execmem_arch_params(void)
->   {
-> +#ifdef CONFIG_64BIT
->   	execmem_params.ranges[EXECMEM_DEFAULT].start = MODULES_VADDR;
->   	execmem_params.ranges[EXECMEM_DEFAULT].end = MODULES_END;
-> +#else
-> +	execmem_params.ranges[EXECMEM_DEFAULT].start = VMALLOC_START;
-> +	execmem_params.ranges[EXECMEM_DEFAULT].end = VMALLOC_END;
-> +#endif
-> +
-> +	execmem_params.ranges[EXECMEM_KPROBES].start = VMALLOC_START;
-> +	execmem_params.ranges[EXECMEM_KPROBES].end = VMALLOC_END;
-> +
-> +	execmem_params.ranges[EXECMEM_BPF].start = BPF_JIT_REGION_START;
-> +	execmem_params.ranges[EXECMEM_BPF].end = BPF_JIT_REGION_END;
->   
->   	return &execmem_params;
->   }
-> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-> index 2f08c14a933d..e64f2f3064eb 100644
-> --- a/arch/riscv/kernel/probes/kprobes.c
-> +++ b/arch/riscv/kernel/probes/kprobes.c
-> @@ -104,16 +104,6 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->   	return 0;
->   }
->   
-> -#ifdef CONFIG_MMU
-> -void *alloc_insn_page(void)
-> -{
-> -	return  __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START, VMALLOC_END,
-> -				     GFP_KERNEL, PAGE_KERNEL_READ_EXEC,
-> -				     VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-> -				     __builtin_return_address(0));
-> -}
-> -#endif
-> -
->   /* install breakpoint in text */
->   void __kprobes arch_arm_kprobe(struct kprobe *p)
->   {
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index 7b70ccb7fec3..c8a758f0882b 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
-> @@ -218,19 +218,6 @@ u64 bpf_jit_alloc_exec_limit(void)
->   	return BPF_JIT_REGION_SIZE;
->   }
->   
-> -void *bpf_jit_alloc_exec(unsigned long size)
-> -{
-> -	return __vmalloc_node_range(size, PAGE_SIZE, BPF_JIT_REGION_START,
-> -				    BPF_JIT_REGION_END, GFP_KERNEL,
-> -				    PAGE_KERNEL, 0, NUMA_NO_NODE,
-> -				    __builtin_return_address(0));
-> -}
-> -
-> -void bpf_jit_free_exec(void *addr)
-> -{
-> -	return vfree(addr);
-> -}
-> -
->   void *bpf_arch_text_copy(void *dst, void *src, size_t len)
->   {
->   	int ret;
-
-
-Otherwise, you can add:
-
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thanks,
-
-Alex
-
+AFAIK, no one is working on cleaning up this section of the docs, but as always,
+patches are welcome :-)
