@@ -2,56 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9697AB3CE
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 16:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6317AB41B
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 16:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjIVOjP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Sep 2023 10:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S232047AbjIVOwE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Sep 2023 10:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjIVOjO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 10:39:14 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4570AC6;
-        Fri, 22 Sep 2023 07:39:07 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 67AC3FF80E;
-        Fri, 22 Sep 2023 14:39:04 +0000 (UTC)
+        with ESMTP id S232042AbjIVOvy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 10:51:54 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8987C1AB;
+        Fri, 22 Sep 2023 07:51:47 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A6F3C60002;
+        Fri, 22 Sep 2023 14:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1695393546;
+        t=1695394306;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tT8hyAzx4ZhqoZcyPUvFHwNUdgW73Re8JuIC98mcHSU=;
-        b=kGr+G68sW/V6sxZ+CuqPiY9XD8wSflqq81r1Kdwt1d+k2gNxqDeRjw0CKV8hnDyXl5xDnT
-        1G9WCCX5cnViNlsg5N/BJUkz9OsFw9THGrF1zduUv5m7vwXMBHyKW92qoym6v0zCwNZ5Te
-        7Gi0AApBFZDcecO0gKa6gsfc/L/Y2tovnyKnXHd4D8ooLZZKnXibyGZpE4oTpPj964F9ZQ
-        oip070eo8uATdJJAV3WtFrsslsfSb3adXV92SKw6Si7/xaYS6UZKtTkFNLJpt+wGZavM95
-        IN0pMDUj21bDbRQkgER13PamXMwDFzokfqcgZFrEN3hl0zXOAbA4/X+PxXrHBw==
-Date:   Fri, 22 Sep 2023 16:39:03 +0200
+        bh=rxkNTHSpXY1FBSVoWeaPKNX10l14oI/LawwsZvgPfC0=;
+        b=lOrRisDvkm2oli7EqfXVLclHRxqKI3Mn1eN2ahFXZmvQjGv6VFSwK+Vximt5IEmcIldgSC
+        ZZ6YuTHvOnDLpBhEgDSh6HayOwTez/xagZukxdfzgU9L13tguMC48964xWfggdG34KHKMb
+        rdvvog6LNY0wzBTLVY9OJFEx3FEHpkajrG4ReNZfjq2mnSC/BaMYfMIekNBav7IWbf1zI/
+        zDx2rPUD/3mCU3MpK5ke3IUktsEa9ItrGNSdVYTFD2UiTfzsqohnGgslpWpLDH4XjKly8E
+        U+W2S0HxefYCGSjQrqIV4s2VMbNB3/z9oZpREBOSmR1rJiosJWKNREMD5uBTNg==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+To:     Kees Cook <keescook@chromium.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] mtd: parsers: ar7: remove support
-Message-ID: <20230922163903.3f49ea2a@xps-13>
-In-Reply-To: <20230922061530.3121-3-wsa+renesas@sang-engineering.com>
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
-        <20230922061530.3121-3-wsa+renesas@sang-engineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: ingenic: Annotate struct ingenic_nfc with __counted_by
+Date:   Fri, 22 Sep 2023 16:51:44 +0200
+Message-Id: <20230922145144.578496-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230915201234.never.868-kees@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'e87f0d64c9063eb26337db79edeccbdd0710eb66'
+Content-Transfer-Encoding: 8bit
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,35 +61,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Wolfram,
+On Fri, 2023-09-15 at 20:12:35 UTC, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct ingenic_nfc.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: Harvey Hunt <harveyhuntnexus@gmail.com>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-wsa+renesas@sang-engineering.com wrote on Fri, 22 Sep 2023 08:15:23
-+0200:
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-> AR7 is going to be removed from the Kernel, so remove its support for
-> MTD.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
-> Changes since v1:
-> * added ack
->=20
->  arch/arm/configs/pxa_defconfig |   1 -
-
-I'm not sure it is wise to merge defconfig changes through mtd. Would
-you mind sending this change aside to avoid potential conflicts? Each
-patch can live on their own anyway.
-
->  drivers/mtd/parsers/Kconfig    |   5 --
->  drivers/mtd/parsers/Makefile   |   1 -
->  drivers/mtd/parsers/ar7part.c  | 129 ---------------------------------
-
-Do you have other changes related to this file in your tree? It failed
-to apply on my side.
-
->  4 files changed, 136 deletions(-)
->  delete mode 100644 drivers/mtd/parsers/ar7part.c
-
-Thanks,
-Miqu=C3=A8l
+Miquel
