@@ -2,194 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC6D7AA9E0
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 09:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87DD7AAA77
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 09:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjIVHRF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Sep 2023 03:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S231567AbjIVHlI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Sep 2023 03:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjIVHRE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 03:17:04 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2047.outbound.protection.outlook.com [40.107.12.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39595CA;
-        Fri, 22 Sep 2023 00:16:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Phs5wbNfo4l8A9IfYWAo0A5GsiWo6lX5NsiYJXQTBHTHgaWIGWQIA5EAl75zSxKuBanG0glSzcMrrWxsB+FFQqCz9EUogNxAkdbKZ73H+swdTt6V7HvciqnySRci8MWcb7DP9rvRdNJLW6Wos6xPXB6rOlvIYWnIwgHJDXowUvpxO+EKUDMcINy66d+ReC3QR7m5LVhZ/3UfXp0GAG7utqjo+01iQ/GfCDW8M8CJuH20olnCNNFH+ahyc9da50wXV4XviqCeZkGc8tl/3HcDj41JL37HCyOO5CKqIixTg1vxIdycAto1xHFoW2f3marjET2pf7BWYVsB/SVBmag1Yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s+ipTyndc3JI0IRFDOJdyzJBLPs/TJVy5KEcp3k1rHI=;
- b=YCe2iRL+JxwQf/O1jx1I5xEdVFFsDVoDrJQOrwm0Ie5iNuJvSrH/85nSxBQ8OiqXMsMgonOZbzn2nL7InUGCPYus1OaSi1qENtb0AyU2IoaoOdEGULNkYq8wcm9U8hyhNweHmZFReWtgOo2ApW4pGsfeqd41bErCUpa+IbGW61EuwtpnilIuqOiQ5LUR7Hp4TrRvjk2kqIspMOQK2PkdM889fPEJymCwPPI0Ql7FlObcA2SHhrCTH/5yeSqPjGm90gGqp/z0QaGH/8wze4J4o+OlH04AcyN4LoDwTjfcugIUwk7SXOv0l/wYzHttTag2Ip82ICanBT4gkT8Qm8QWHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s+ipTyndc3JI0IRFDOJdyzJBLPs/TJVy5KEcp3k1rHI=;
- b=UoITgA9NPh5ShTNW4h9R0jSDJ0BfvauVI64C6y5ilrnYCSvrybQYQQk00dDvXjZpzzrVDLq2dtdcJ/e/G/Ah4LjGuD5kTMv9r2qWuMg62yy10i2i1apj8lVlR6ke/D53tBpvYTjYUZxB21DiXXy/25TJOQzluAYleUh8X90P7xLd/7HoiWnXS+xZ5E3dtTEsYLncEa/17ZfhjJNUslyfYQBPs9vnPblxsTz9nRKIe6aNLfkSuVpsgUti/xjD2DEEggqPvyGVL/Jlu8R+QdFVycO0o+/KRrlhvdEVesaXNksCOW9OXRavVbbm0X+z9JPaDqLtfu2SKkISq0EZIs/eUQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB3354.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:147::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.20; Fri, 22 Sep
- 2023 07:16:52 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2820:d3a6:1cdf:c60e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2820:d3a6:1cdf:c60e%7]) with mapi id 15.20.6813.017; Fri, 22 Sep 2023
- 07:16:52 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Song Liu <song@kernel.org>, Mike Rapoport <rppt@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v3 06/13] mm/execmem: introduce execmem_data_alloc()
-Thread-Topic: [PATCH v3 06/13] mm/execmem: introduce execmem_data_alloc()
-Thread-Index: AQHZ6gIemvXxoUb2LEiShTuWJhQ1PLAl6IqAgACM8oA=
-Date:   Fri, 22 Sep 2023 07:16:52 +0000
-Message-ID: <9b73ad3d-cfda-bce5-2589-e8674a58c827@csgroup.eu>
-References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-7-rppt@kernel.org>
- <CAPhsuW73NMvdpmyrhGouQSAHEL9wRw_A+8dZ-5R4BU=UHH83cw@mail.gmail.com>
-In-Reply-To: <CAPhsuW73NMvdpmyrhGouQSAHEL9wRw_A+8dZ-5R4BU=UHH83cw@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB3354:EE_
-x-ms-office365-filtering-correlation-id: 245184b2-a1ed-4d84-6990-08dbbb3be509
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0mv5w6bZYp86Ay20dtpSMtEgaosNF8oi/Bct2RfyuLVSsswmD0PgM4Cceo1JT/TTraC2oMwO2n8iX/bXunGhhJs3L0ei1mSLv29Hj8V3xqfMXCKQNm7VaA1ilGzVD0nSs356rasjeuCOGI1LjjdMjaBynG7w7GmzxdqVPqXGO4qaOWdbYac69ZcyswnWMJ8VWx9BlmpPovEOKNk5XNrE6cG4UiBAszX2ilk4VivLJlzS6U7vpcuPgJ8brWrLCb2CCwL2zNJ3vIvDyDgC1xFf1tEpNNE67rqwxASxkKuO0f/dfT8/C0uU5rzoWtIJcdAN69oG+PhvAukBncAHZrcPTz66yIzkMpYCd9FLJZU57oNJrNYsYsXwo4geh+uG0ZxDqCycp13kXShrwao70O4/SeXmsBp0lquhDrpLvODmaJ81WnIc+6hRoer/Ccom6SwzdTpyAg4h4qCjgrebwqUvfFrmXV7Zl1NpIzzjx6wbzDYEbOuE9uDH4v6pDpaSRh0gvQGba8ZOpFNhEeCvbN0BxmZ70YBbuDxSQL3kXu2THrg7ME4F72VHPaaXLM5ECK1kRHqBF1K1IdPPsJstlvK6Dd1T4ysSRDt7mxE38nCQqipoeK0P5EOHa4dg+ObqmH/4WMEyHcSWE9cUMgu9+0tN10MukqpqMmj/rVHpp94M/6IdGLIl6FnXgIy4DkdJTnaU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(136003)(396003)(366004)(346002)(186009)(1800799009)(451199024)(6486002)(71200400001)(66946007)(6506007)(91956017)(53546011)(110136005)(54906003)(66476007)(64756008)(66446008)(66556008)(76116006)(478600001)(31686004)(6512007)(41300700001)(8936002)(4326008)(44832011)(8676002)(26005)(36756003)(2616005)(5660300002)(31696002)(86362001)(7416002)(316002)(7406005)(2906002)(38100700002)(122000001)(38070700005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L1NwVVJ0bGhGa2l2Y1h5WWozTzlWRGpmSmpaMVRScm5VUklzVUgyWkFiSTVr?=
- =?utf-8?B?cm9GaERwaUFCblBRenlNYTJ3ajAwMjZzTFBCbkxFZGo1M1dRMnZad09rWDgy?=
- =?utf-8?B?ZUNYN1ZzcWwzMjh3djluSkN4bjZON1dsN2VNcVhSOHNab0dkU2toWXRCOUZV?=
- =?utf-8?B?M3MyemJNVGVQVjBaMi95VFZSTVZIWFd1cVY1cmJnTDBqRGVIRXdyWGRreUdy?=
- =?utf-8?B?NU1KNlFOVjV1ODBtVGVSNVhXR1pBdU5TK3U5STIxTXhlUUJxWkp5YXJtUXNo?=
- =?utf-8?B?Wm5PeGFXcUVhVkZTZWNlQ0JGdTVFM3hvQnBhNE8wWmdsL2s1TG5DWmRSSGNv?=
- =?utf-8?B?M29JSmZJVS9RaUcySXlMWnlWVjZselI2M05iY0RYZGtsY05qWVZZT2tPbVl0?=
- =?utf-8?B?eXVLOFZHNUdlalJiUW5vU20wUnk0anN5TFhWVmx6YWFKTU9ncXJKdG1ZOU5j?=
- =?utf-8?B?TTZiRktwK1hMQ0h6VU1mbXM1MkdQOW1DOFM4cjlhU01QRHkxWTR5NXRwNHB4?=
- =?utf-8?B?UjIvaGxrLytoOC8xTEk0RThWamFUbkNmTFJhTmRWbTBkZG5NVWR4VU1acDN4?=
- =?utf-8?B?TWNjZkN6aVVwdDBRQk8raHg4Skt3bG5rbU9sTWtOTkdEV2Jhc3ZNcEVZWDBz?=
- =?utf-8?B?WmY2YTBNcE9uNDM5K1hlbjFJc3RMSzEzSkVWTW5jYzhkVGFieWtyK21XT1c5?=
- =?utf-8?B?SXZmUTF6bmVwL1pObmx1ZDdDeEhTMC9BNk9aV1dpSmdEemJvaWpka1ZxQStk?=
- =?utf-8?B?N3pDcE1qZVdNWjVFdkg1bGdSbnlNT3AvajJicDh0dTZxRkFLc2ZkbitsaE1s?=
- =?utf-8?B?QVRSdFFNU2VKTUIzZUs5YnlVOTNxbitxbGJQMzJ3TXVydnBhdnpnQnMwU1dT?=
- =?utf-8?B?WDhHREdPLzJhd0xKS2RUTWRnSUhrU0dnRUFzb3hOVEdOeHRZb2tBYXUvRVd4?=
- =?utf-8?B?RlZMK3I4N0NuSmU5VVRMZ204azZDTWFlN2FlTkxHOTNDL1dEWGNmaWlVWFkx?=
- =?utf-8?B?VktzZFRnV2xiSTA1dG9aN0tpM3BxZUZyTjVWS1JONmV1eWJiYkF2ZTdUbEpE?=
- =?utf-8?B?Tm1adTRxTmxyOXhMZ2cwdi9xMTF6Q1hsK2xVU2xRYjYzYlcwOFZyb0tzMnlZ?=
- =?utf-8?B?cjJjU3pVeXhRVnN4TWgwUDZlNWdQazVVQ3F3Q2hTVjcvUUE0L2xHZGx4RGhI?=
- =?utf-8?B?d2REOVVZU3lkUVZ3YkVmQWNMY0JHUlpkZWk4OEt1WVR0UzRuTXJXdC96QWYv?=
- =?utf-8?B?Um9pK3BSQnlHaHN1T1A2ZGpVbnFIZnVNMHB1cVliMjBDb0NRNmV4U0VlYXZu?=
- =?utf-8?B?Smk2YVJoT25ldmV3RWN6OFdCY3Joc3RkUTd0dmo2bXVGVnNST0NNUkV2OVRU?=
- =?utf-8?B?M3hKWmFDZTM4NS9jdUUrY1UwV3hubkxvVHhlbGd5UWJxVk1BWVZMU1g2Ylln?=
- =?utf-8?B?aDJST1o1WC8rcWZBT0RsSTBldzVFTTUzeWYzR0VKcG83dE5UNXc2Mkt1M2Nr?=
- =?utf-8?B?R2dpNzhEbDZWeFh2TC96OFdvNkpUcUtiTUlYY2pFZVg0K0hmNGxnS0tmUmRk?=
- =?utf-8?B?R1k1WE1idVMxWTJqcmxxUDRxYm1IaTZnSHhpQVJCV1F0ay9RbXRkbDNQdkhT?=
- =?utf-8?B?RDk1ZW5qeXAwWWluUkNITTJqcmNxbXoveTlsVWVraFNLeVJNc1lWZTBpSXBi?=
- =?utf-8?B?dC9pS1M3c09FTmRTRytBN0poMTN3Z21MWjFidFpMZkR1eTRnZ280RkxGTXdV?=
- =?utf-8?B?Q1l0akw0R3YzVk5LVnFXdkRPd1psOGExNGZWYWcvTzI5SlhFOHIxbEJZVW8w?=
- =?utf-8?B?bDdJak5aTFRkMVhadEVWWmdqSFV2N3RPcUdCTHhiUzlrSDJuL1BiR3VweWtG?=
- =?utf-8?B?OGkyT2hCS3Q0M3hNMkYzRjJ0LyswVHlCYmtlVVdtMUdxT1IvN09FbkVQbUVC?=
- =?utf-8?B?RGtJV0pvUWRlVjVrODd4YnZoais2eEFPNmVUZzFObmEvMldNNUhsV0g1K0xP?=
- =?utf-8?B?MzBoYjRPb2FIRXkzYWRicldPZDdKd0NOQWZ6b0hqbjVOS0RNK3dUUGlRWjVY?=
- =?utf-8?B?a1BTUDFCdXBseFI3T0hnNDlja2xiVEZjRlNCZjlEQkJKb2k0UnI5V2UzNitw?=
- =?utf-8?B?dTQ1SlBkMTBVdjdtdXJyRS9NSGhlRS9UUTdNQzFyUjJxbkNZRUVoclpSQnYw?=
- =?utf-8?B?V3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4B69B42185B2164389C8C6BDDA95596B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        with ESMTP id S231254AbjIVHlI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 03:41:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B586195;
+        Fri, 22 Sep 2023 00:40:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1DBF21F38A;
+        Fri, 22 Sep 2023 07:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1695368457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=UzGwVSjCR+yrFPQyulO5JFw6QA4KG0lIL/Ovv19nuW0=;
+        b=q0wXyfa7VKohYeGvfMV9OwXzUerxqyyRSCMEIu1AzS19RbP/lgKdE7ADR1dJ7isHFduccz
+        PzycuR8DqGEoR7jcaRRmhAq3eVAmpABLzw1f4WUVxPGZjjFt5KIirgAzQrGTEQILav7mHX
+        FpBy6HejQqPlYiR3RMK4U9XHrXIWARM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1695368457;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=UzGwVSjCR+yrFPQyulO5JFw6QA4KG0lIL/Ovv19nuW0=;
+        b=HJ8cMoVH3n0b50SM9KRefgE3ppqzlQ/byNBIh3g6Nl8D+bOk8Xfbm5PcA1IZARyxgLy1iU
+        rD+JOrvLST5UDGBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA34B13478;
+        Fri, 22 Sep 2023 07:40:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id q1oJLAhFDWXuJAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 22 Sep 2023 07:40:56 +0000
+Message-ID: <79b3dd76-7b3e-4be2-946a-6f20532f7ff8@suse.de>
+Date:   Fri, 22 Sep 2023 09:40:55 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 245184b2-a1ed-4d84-6990-08dbbb3be509
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2023 07:16:52.2832
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YlwhPCZc6WT8Jgl2ZHbmfKpPhBw+XS/eYc26rgXKS82AVYC623sHgPIgSgPrd6uZVVIdxKxB4nFtV4jKIGsyxzX/NmJsbjhJG+S/LpwpzPQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3354
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] fbdev: Avoid file argument in fb_pgprotect()
+To:     Javier Martinez Canillas <javierm@redhat.com>, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, arnd@arndb.de,
+        deller@gmx.de
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20230912135050.17155-1-tzimmermann@suse.de>
+ <20230912135050.17155-2-tzimmermann@suse.de>
+ <87il85l1d4.fsf@minerva.mail-host-address-is-not-set>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <87il85l1d4.fsf@minerva.mail-host-address-is-not-set>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------WWtw0AZdar3TECEKBCRy3XTn"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-DQoNCkxlIDIyLzA5LzIwMjMgw6AgMDA6NTIsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IE9uIE1v
-biwgU2VwIDE4LCAyMDIzIGF0IDEyOjMx4oCvQU0gTWlrZSBSYXBvcG9ydCA8cnBwdEBrZXJuZWwu
-b3JnPiB3cm90ZToNCj4+DQo+IFsuLi5dDQo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9l
-eGVjbWVtLmggYi9pbmNsdWRlL2xpbnV4L2V4ZWNtZW0uaA0KPj4gaW5kZXggNTE5YmRmZGNhNTk1
-Li4wOWQ0NWFjNzg2ZTkgMTAwNjQ0DQo+PiAtLS0gYS9pbmNsdWRlL2xpbnV4L2V4ZWNtZW0uaA0K
-Pj4gKysrIGIvaW5jbHVkZS9saW51eC9leGVjbWVtLmgNCj4+IEBAIC0yOSw2ICsyOSw3IEBADQo+
-PiAgICAqIEBFWEVDTUVNX0tQUk9CRVM6IHBhcmFtZXRlcnMgZm9yIGtwcm9iZXMNCj4+ICAgICog
-QEVYRUNNRU1fRlRSQUNFOiBwYXJhbWV0ZXJzIGZvciBmdHJhY2UNCj4+ICAgICogQEVYRUNNRU1f
-QlBGOiBwYXJhbWV0ZXJzIGZvciBCUEYNCj4+ICsgKiBARVhFQ01FTV9NT0RVTEVfREFUQTogcGFy
-YW1ldGVycyBmb3IgbW9kdWxlIGRhdGEgc2VjdGlvbnMNCj4+ICAgICogQEVYRUNNRU1fVFlQRV9N
-QVg6DQo+PiAgICAqLw0KPj4gICBlbnVtIGV4ZWNtZW1fdHlwZSB7DQo+PiBAQCAtMzcsNiArMzgs
-NyBAQCBlbnVtIGV4ZWNtZW1fdHlwZSB7DQo+PiAgICAgICAgICBFWEVDTUVNX0tQUk9CRVMsDQo+
-PiAgICAgICAgICBFWEVDTUVNX0ZUUkFDRSwNCj4gDQo+IEluIGxvbmdlciB0ZXJtLCBJIHRoaW5r
-IHdlIGNhbiBpbXByb3ZlIHRoZSBKSVRlZCBjb2RlIGFuZCBtZXJnZQ0KPiBrcHJvYmUvZnRyYWNl
-L2JwZi4gdG8gdXNlIHRoZSBzYW1lIHJhbmdlcy4gQWxzbywgZG8gd2UgbmVlZCBzcGVjaWFsDQo+
-IHNldHRpbmcgZm9yIEZUUkFDRT8gSWYgbm90LCBsZXQncyBqdXN0IHJlbW92ZSBpdC4NCg0KSG93
-IGNhbiB3ZSBkbyB0aGF0ID8gU29tZSBwbGF0Zm9ybXMgbGlrZSBwb3dlcnBjIHJlcXVpcmUgZXhl
-Y3V0YWJsZSANCm1lbW9yeSBmb3IgQlBGIGFuZCBub24tZXhlYyBtZW0gZm9yIEtQUk9CRSBzbyBp
-dCBjYW4ndCBiZSBpbiB0aGUgc2FtZSANCmFyZWEvcmFuZ2VzLg0KDQo+IA0KPj4gICAgICAgICAg
-RVhFQ01FTV9CUEYsDQo+PiArICAgICAgIEVYRUNNRU1fTU9EVUxFX0RBVEEsDQo+PiAgICAgICAg
-ICBFWEVDTUVNX1RZUEVfTUFYLA0KPj4gICB9Ow0KPiANCj4gT3ZlcmFsbCwgaXQgaXMgZ3JlYXQg
-dGhhdCBrcHJvYmUvZnRyYWNlL2JwZiBubyBsb25nZXIgZGVwZW5kIG9uIG1vZHVsZXMuDQo+IA0K
-PiBPVE9ILCBJIHRoaW5rIHdlIHNob3VsZCBtZXJnZSBleGVjbWVtX3R5cGUgYW5kIGV4aXN0aW5n
-IG1vZF9tZW1fdHlwZS4NCj4gT3RoZXJ3aXNlLCB3ZSBzdGlsbCBuZWVkIHRvIGhhbmRsZSBwYWdl
-IHBlcm1pc3Npb25zIGluIG11bHRpcGxlIHBsYWNlcy4NCj4gV2hhdCBpcyBvdXIgcGxhbiBmb3Ig
-dGhhdD8NCj4gDQoNCkNocmlzdG9waGUNCg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------WWtw0AZdar3TECEKBCRy3XTn
+Content-Type: multipart/mixed; boundary="------------8JZrsftAebvYOCedOF8WyKJL";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>, mpe@ellerman.id.au,
+ npiggin@gmail.com, christophe.leroy@csgroup.eu, arnd@arndb.de, deller@gmx.de
+Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+ sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Message-ID: <79b3dd76-7b3e-4be2-946a-6f20532f7ff8@suse.de>
+Subject: Re: [PATCH v4 1/5] fbdev: Avoid file argument in fb_pgprotect()
+References: <20230912135050.17155-1-tzimmermann@suse.de>
+ <20230912135050.17155-2-tzimmermann@suse.de>
+ <87il85l1d4.fsf@minerva.mail-host-address-is-not-set>
+In-Reply-To: <87il85l1d4.fsf@minerva.mail-host-address-is-not-set>
+
+--------------8JZrsftAebvYOCedOF8WyKJL
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkgSmF2aWVyDQoNCkFtIDIwLjA5LjIzIHVtIDEwOjAxIHNjaHJpZWIgSmF2aWVyIE1hcnRp
+bmV6IENhbmlsbGFzOg0KPiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5k
+ZT4gd3JpdGVzOg0KPiANCj4gSGVsbG8gVGhvbWFzLA0KPiANCj4+IE9ubHkgUG93ZXJQQydz
+IGZiX3BncHJvdGVjdCgpIG5lZWRzIHRoZSBmaWxlIGFyZ3VtZW50LCBhbHRob3VnaA0KPj4g
+dGhlIGltcGxlbWVudGF0aW9uIGRvZXMgbm90IHVzZSBpdC4gUGFzcyBOVUxMIHRvIHRoZSBp
+bnRlcm5hbA0KPiANCj4gQ2FuIHlvdSBwbGVhc2UgbWVudGlvbiB0aGUgZnVuY3Rpb24gdGhh
+dCdzIHRoZSBpbXBsZW1lbnRhdGlvbiBmb3INCg0KU3VyZQ0KDQo+IFBvd2VyUEMgPyBJZiBJ
+J20gbG9va2luZyBhdCB0aGUgY29kZSBjb3JyZWN0bHksIHRoYXQgZnVuY3Rpb24gaXMNCj4g
+cGh5c19tZW1fYWNjZXNzX3Byb3QoKSBkZWZpbmVkIGluIHRoZSBhcmNoL3Bvd2VycGMvbW0v
+bWVtLmMgZmlsZToNCj4gDQo+IHBncHJvdF90IHBoeXNfbWVtX2FjY2Vzc19wcm90KHN0cnVj
+dCBmaWxlICpmaWxlLCB1bnNpZ25lZCBsb25nIHBmbiwNCj4gCQkJICAgICAgdW5zaWduZWQg
+bG9uZyBzaXplLCBwZ3Byb3RfdCB2bWFfcHJvdCkNCj4gew0KPiAJaWYgKHBwY19tZC5waHlz
+X21lbV9hY2Nlc3NfcHJvdCkNCj4gCQlyZXR1cm4gcHBjX21kLnBoeXNfbWVtX2FjY2Vzc19w
+cm90KGZpbGUsIHBmbiwgc2l6ZSwgdm1hX3Byb3QpOw0KPiANCj4gCWlmICghcGFnZV9pc19y
+YW0ocGZuKSkNCj4gCQl2bWFfcHJvdCA9IHBncHJvdF9ub25jYWNoZWQodm1hX3Byb3QpOw0K
+PiANCj4gCXJldHVybiB2bWFfcHJvdDsNCj4gfQ0KPiANCj4gYW5kIGlmIHNldCwgcHBjX21k
+LnBoeXNfbWVtX2FjY2Vzc19wcm90IGlzIHBjaV9waHlzX21lbV9hY2Nlc3NfcHJvdCgpDQo+
+IHRoYXQgaXMgZGVmaW5lZCBpbiB0aGUgYXJjaC9wb3dlcnBjL2tlcm5lbC9wY2ktY29tbW9u
+LmMgc291cmNlIGZpbGU6DQo+IA0KPiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51
+eC92Ni42LXJjMi9zb3VyY2UvYXJjaC9wb3dlcnBjL2tlcm5lbC9wY2ktY29tbW9uLmMjTDUy
+NA0KDQpZZXMsIHRoYXQncyBjb3JyZWN0LiBUaGUgb25seSB2YWx1ZSBmb3IgdGhhdCBmdW5j
+dGlvbiBwb2ludGVyIGFwcGVhcnMgdG8gDQpiZSBwY2lfcGh5c19tZW1fYWNjZXNzX3Byb3Qo
+KQ0KDQo+IA0KPiBUaGF0IGZ1bmN0aW9uIGluZGVlZCBkb2Vzbid0IHVzZSB0aGUgZmlsZSBh
+cmd1bWVudC4gU28geW91ciBwYXRjaCBsb29rcw0KPiBjb3JyZWN0IHRvIG1lLg0KPiANCj4g
+UmV2aWV3ZWQtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQu
+Y29tPg0KDQpUaGFua3MNCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCg0KLS0gDQpU
+aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
+d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYx
+IE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRy
+ZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcp
+DQo=
+
+--------------8JZrsftAebvYOCedOF8WyKJL--
+
+--------------WWtw0AZdar3TECEKBCRy3XTn
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmUNRQgFAwAAAAAACgkQlh/E3EQov+D1
+wBAAkkU6MKDBuTUiaD5TKHmO7dXPKVu+AbeDL4Nke0dAJDVIT+UBb+vi1qxDQB8YYspeiMfvCzWG
+cgvmtKC2LLNIvGbNIgSr3lxDRjIVhAMtz2vgO46C3YYKmC+2yvbkf1kpPqO/RshwRPGSq1MaL10P
+945+zfGtItDzcX7eq3vaeyE+4NjnlHY4RAolQTyks2slRTKCEZ4yMhrf5gWegjGdLHWq+Z30mZht
+1s3wXdSHhpo29wiBcIkPHWCJHbmVafC+xAfbjvCu5H4oK8Ftj5/Ina3RCDxC9p3UaZ+t326qCNjJ
+nzWbrs4IP/eLt/tA3x0zfF914RJa8IobSscsWTWhM6Cth+vxh3h8P0IXgJAiU+T9WFTQL0beFmyq
+aeDDx0UFVbD74FrgyETElnCygHLpuwt7SGRSAncJcYHIqxYgrqIZj5+3PjTz2TLyzCy2HVtEzLJe
+c+aIxxt1A9DpBD2/FuoL2dnOg8wPHVDg1IW8eL5nnTI/H8V5APzplncFtAN+DFaKzU0Rh+hJX70O
+AZkJze0bICeSTuN9EG6wVMzo7fY+jN9WcWoA64sUd92rLr9PicSDovOn4DQKDKRikp1HOMHwGz1A
+U/VS8zMmskbqpUSuCDszZDUNJaP9DVC1GMZ2aJjiK3s0878gJNCOKxUyA/FgII+GJle1GwblCwJB
+DOs=
+=tnOC
+-----END PGP SIGNATURE-----
+
+--------------WWtw0AZdar3TECEKBCRy3XTn--
