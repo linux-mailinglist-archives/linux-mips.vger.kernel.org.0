@@ -2,211 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50BC7AA8DF
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 08:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC6D7AA9E0
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 09:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjIVGQG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Sep 2023 02:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S230000AbjIVHRF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Sep 2023 03:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjIVGQE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 02:16:04 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A6419D
-        for <linux-mips@vger.kernel.org>; Thu, 21 Sep 2023 23:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=from:to:cc:subject:date:message-id
-        :in-reply-to:references:mime-version:content-transfer-encoding;
-         s=k1; bh=PBIK72HHguYgSAXkX++54+0ynqVyWWRjkT4uhKM7s/E=; b=VDcXh6
-        W7SwgMZtqAVpDOSRcAXl98l56PCM1Q0vXofo9juxeqleGK/Otw6KD7GwJP66WsAb
-        qghVDa1QbHqVmWA5fYBmY1G818UYQLnkk3eNqJcHmZIdHhQjtBadadZjObz2+UtN
-        Qv0PbMBkB8i/j2fJS0BeohX3E79Gm516/yEt/WZ9p5Mb1MBzWpLWh0RLf6L0DILQ
-        +WrrrmfSvMFqp3hgtT++Xc4HYkOC5/SJStwr4JGOD9v9E7G0/mqyZN+qiFPNhvDW
-        p6b9ki/QqfSpaNK6Fq3uxiwcBpr7vfYzQq4xp/LMw6GBPQKVPO9iOtfiFVkINqZ4
-        nmT8eA1gzOcM/dEA==
-Received: (qmail 1269224 invoked from network); 22 Sep 2023 08:15:45 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2023 08:15:45 +0200
-X-UD-Smtp-Session: l3s3148p1@U0v5iewFHoYujntX
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        with ESMTP id S229623AbjIVHRE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 03:17:04 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2047.outbound.protection.outlook.com [40.107.12.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39595CA;
+        Fri, 22 Sep 2023 00:16:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Phs5wbNfo4l8A9IfYWAo0A5GsiWo6lX5NsiYJXQTBHTHgaWIGWQIA5EAl75zSxKuBanG0glSzcMrrWxsB+FFQqCz9EUogNxAkdbKZ73H+swdTt6V7HvciqnySRci8MWcb7DP9rvRdNJLW6Wos6xPXB6rOlvIYWnIwgHJDXowUvpxO+EKUDMcINy66d+ReC3QR7m5LVhZ/3UfXp0GAG7utqjo+01iQ/GfCDW8M8CJuH20olnCNNFH+ahyc9da50wXV4XviqCeZkGc8tl/3HcDj41JL37HCyOO5CKqIixTg1vxIdycAto1xHFoW2f3marjET2pf7BWYVsB/SVBmag1Yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s+ipTyndc3JI0IRFDOJdyzJBLPs/TJVy5KEcp3k1rHI=;
+ b=YCe2iRL+JxwQf/O1jx1I5xEdVFFsDVoDrJQOrwm0Ie5iNuJvSrH/85nSxBQ8OiqXMsMgonOZbzn2nL7InUGCPYus1OaSi1qENtb0AyU2IoaoOdEGULNkYq8wcm9U8hyhNweHmZFReWtgOo2ApW4pGsfeqd41bErCUpa+IbGW61EuwtpnilIuqOiQ5LUR7Hp4TrRvjk2kqIspMOQK2PkdM889fPEJymCwPPI0Ql7FlObcA2SHhrCTH/5yeSqPjGm90gGqp/z0QaGH/8wze4J4o+OlH04AcyN4LoDwTjfcugIUwk7SXOv0l/wYzHttTag2Ip82ICanBT4gkT8Qm8QWHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s+ipTyndc3JI0IRFDOJdyzJBLPs/TJVy5KEcp3k1rHI=;
+ b=UoITgA9NPh5ShTNW4h9R0jSDJ0BfvauVI64C6y5ilrnYCSvrybQYQQk00dDvXjZpzzrVDLq2dtdcJ/e/G/Ah4LjGuD5kTMv9r2qWuMg62yy10i2i1apj8lVlR6ke/D53tBpvYTjYUZxB21DiXXy/25TJOQzluAYleUh8X90P7xLd/7HoiWnXS+xZ5E3dtTEsYLncEa/17ZfhjJNUslyfYQBPs9vnPblxsTz9nRKIe6aNLfkSuVpsgUti/xjD2DEEggqPvyGVL/Jlu8R+QdFVycO0o+/KRrlhvdEVesaXNksCOW9OXRavVbbm0X+z9JPaDqLtfu2SKkISq0EZIs/eUQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB3354.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:147::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.20; Fri, 22 Sep
+ 2023 07:16:52 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2820:d3a6:1cdf:c60e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2820:d3a6:1cdf:c60e%7]) with mapi id 15.20.6813.017; Fri, 22 Sep 2023
+ 07:16:52 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Song Liu <song@kernel.org>, Mike Rapoport <rppt@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] MIPS: AR7: remove platform
-Date:   Fri, 22 Sep 2023 08:15:27 +0200
-Message-Id: <20230922061530.3121-7-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 06/13] mm/execmem: introduce execmem_data_alloc()
+Thread-Topic: [PATCH v3 06/13] mm/execmem: introduce execmem_data_alloc()
+Thread-Index: AQHZ6gIemvXxoUb2LEiShTuWJhQ1PLAl6IqAgACM8oA=
+Date:   Fri, 22 Sep 2023 07:16:52 +0000
+Message-ID: <9b73ad3d-cfda-bce5-2589-e8674a58c827@csgroup.eu>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-7-rppt@kernel.org>
+ <CAPhsuW73NMvdpmyrhGouQSAHEL9wRw_A+8dZ-5R4BU=UHH83cw@mail.gmail.com>
+In-Reply-To: <CAPhsuW73NMvdpmyrhGouQSAHEL9wRw_A+8dZ-5R4BU=UHH83cw@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB3354:EE_
+x-ms-office365-filtering-correlation-id: 245184b2-a1ed-4d84-6990-08dbbb3be509
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0mv5w6bZYp86Ay20dtpSMtEgaosNF8oi/Bct2RfyuLVSsswmD0PgM4Cceo1JT/TTraC2oMwO2n8iX/bXunGhhJs3L0ei1mSLv29Hj8V3xqfMXCKQNm7VaA1ilGzVD0nSs356rasjeuCOGI1LjjdMjaBynG7w7GmzxdqVPqXGO4qaOWdbYac69ZcyswnWMJ8VWx9BlmpPovEOKNk5XNrE6cG4UiBAszX2ilk4VivLJlzS6U7vpcuPgJ8brWrLCb2CCwL2zNJ3vIvDyDgC1xFf1tEpNNE67rqwxASxkKuO0f/dfT8/C0uU5rzoWtIJcdAN69oG+PhvAukBncAHZrcPTz66yIzkMpYCd9FLJZU57oNJrNYsYsXwo4geh+uG0ZxDqCycp13kXShrwao70O4/SeXmsBp0lquhDrpLvODmaJ81WnIc+6hRoer/Ccom6SwzdTpyAg4h4qCjgrebwqUvfFrmXV7Zl1NpIzzjx6wbzDYEbOuE9uDH4v6pDpaSRh0gvQGba8ZOpFNhEeCvbN0BxmZ70YBbuDxSQL3kXu2THrg7ME4F72VHPaaXLM5ECK1kRHqBF1K1IdPPsJstlvK6Dd1T4ysSRDt7mxE38nCQqipoeK0P5EOHa4dg+ObqmH/4WMEyHcSWE9cUMgu9+0tN10MukqpqMmj/rVHpp94M/6IdGLIl6FnXgIy4DkdJTnaU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(136003)(396003)(366004)(346002)(186009)(1800799009)(451199024)(6486002)(71200400001)(66946007)(6506007)(91956017)(53546011)(110136005)(54906003)(66476007)(64756008)(66446008)(66556008)(76116006)(478600001)(31686004)(6512007)(41300700001)(8936002)(4326008)(44832011)(8676002)(26005)(36756003)(2616005)(5660300002)(31696002)(86362001)(7416002)(316002)(7406005)(2906002)(38100700002)(122000001)(38070700005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L1NwVVJ0bGhGa2l2Y1h5WWozTzlWRGpmSmpaMVRScm5VUklzVUgyWkFiSTVr?=
+ =?utf-8?B?cm9GaERwaUFCblBRenlNYTJ3ajAwMjZzTFBCbkxFZGo1M1dRMnZad09rWDgy?=
+ =?utf-8?B?ZUNYN1ZzcWwzMjh3djluSkN4bjZON1dsN2VNcVhSOHNab0dkU2toWXRCOUZV?=
+ =?utf-8?B?M3MyemJNVGVQVjBaMi95VFZSTVZIWFd1cVY1cmJnTDBqRGVIRXdyWGRreUdy?=
+ =?utf-8?B?NU1KNlFOVjV1ODBtVGVSNVhXR1pBdU5TK3U5STIxTXhlUUJxWkp5YXJtUXNo?=
+ =?utf-8?B?Wm5PeGFXcUVhVkZTZWNlQ0JGdTVFM3hvQnBhNE8wWmdsL2s1TG5DWmRSSGNv?=
+ =?utf-8?B?M29JSmZJVS9RaUcySXlMWnlWVjZselI2M05iY0RYZGtsY05qWVZZT2tPbVl0?=
+ =?utf-8?B?eXVLOFZHNUdlalJiUW5vU20wUnk0anN5TFhWVmx6YWFKTU9ncXJKdG1ZOU5j?=
+ =?utf-8?B?TTZiRktwK1hMQ0h6VU1mbXM1MkdQOW1DOFM4cjlhU01QRHkxWTR5NXRwNHB4?=
+ =?utf-8?B?UjIvaGxrLytoOC8xTEk0RThWamFUbkNmTFJhTmRWbTBkZG5NVWR4VU1acDN4?=
+ =?utf-8?B?TWNjZkN6aVVwdDBRQk8raHg4Skt3bG5rbU9sTWtOTkdEV2Jhc3ZNcEVZWDBz?=
+ =?utf-8?B?WmY2YTBNcE9uNDM5K1hlbjFJc3RMSzEzSkVWTW5jYzhkVGFieWtyK21XT1c5?=
+ =?utf-8?B?SXZmUTF6bmVwL1pObmx1ZDdDeEhTMC9BNk9aV1dpSmdEemJvaWpka1ZxQStk?=
+ =?utf-8?B?N3pDcE1qZVdNWjVFdkg1bGdSbnlNT3AvajJicDh0dTZxRkFLc2ZkbitsaE1s?=
+ =?utf-8?B?QVRSdFFNU2VKTUIzZUs5YnlVOTNxbitxbGJQMzJ3TXVydnBhdnpnQnMwU1dT?=
+ =?utf-8?B?WDhHREdPLzJhd0xKS2RUTWRnSUhrU0dnRUFzb3hOVEdOeHRZb2tBYXUvRVd4?=
+ =?utf-8?B?RlZMK3I4N0NuSmU5VVRMZ204azZDTWFlN2FlTkxHOTNDL1dEWGNmaWlVWFkx?=
+ =?utf-8?B?VktzZFRnV2xiSTA1dG9aN0tpM3BxZUZyTjVWS1JONmV1eWJiYkF2ZTdUbEpE?=
+ =?utf-8?B?Tm1adTRxTmxyOXhMZ2cwdi9xMTF6Q1hsK2xVU2xRYjYzYlcwOFZyb0tzMnlZ?=
+ =?utf-8?B?cjJjU3pVeXhRVnN4TWgwUDZlNWdQazVVQ3F3Q2hTVjcvUUE0L2xHZGx4RGhI?=
+ =?utf-8?B?d2REOVVZU3lkUVZ3YkVmQWNMY0JHUlpkZWk4OEt1WVR0UzRuTXJXdC96QWYv?=
+ =?utf-8?B?Um9pK3BSQnlHaHN1T1A2ZGpVbnFIZnVNMHB1cVliMjBDb0NRNmV4U0VlYXZu?=
+ =?utf-8?B?Smk2YVJoT25ldmV3RWN6OFdCY3Joc3RkUTd0dmo2bXVGVnNST0NNUkV2OVRU?=
+ =?utf-8?B?M3hKWmFDZTM4NS9jdUUrY1UwV3hubkxvVHhlbGd5UWJxVk1BWVZMU1g2Ylln?=
+ =?utf-8?B?aDJST1o1WC8rcWZBT0RsSTBldzVFTTUzeWYzR0VKcG83dE5UNXc2Mkt1M2Nr?=
+ =?utf-8?B?R2dpNzhEbDZWeFh2TC96OFdvNkpUcUtiTUlYY2pFZVg0K0hmNGxnS0tmUmRk?=
+ =?utf-8?B?R1k1WE1idVMxWTJqcmxxUDRxYm1IaTZnSHhpQVJCV1F0ay9RbXRkbDNQdkhT?=
+ =?utf-8?B?RDk1ZW5qeXAwWWluUkNITTJqcmNxbXoveTlsVWVraFNLeVJNc1lWZTBpSXBi?=
+ =?utf-8?B?dC9pS1M3c09FTmRTRytBN0poMTN3Z21MWjFidFpMZkR1eTRnZ280RkxGTXdV?=
+ =?utf-8?B?Q1l0akw0R3YzVk5LVnFXdkRPd1psOGExNGZWYWcvTzI5SlhFOHIxbEJZVW8w?=
+ =?utf-8?B?bDdJak5aTFRkMVhadEVWWmdqSFV2N3RPcUdCTHhiUzlrSDJuL1BiR3VweWtG?=
+ =?utf-8?B?OGkyT2hCS3Q0M3hNMkYzRjJ0LyswVHlCYmtlVVdtMUdxT1IvN09FbkVQbUVC?=
+ =?utf-8?B?RGtJV0pvUWRlVjVrODd4YnZoais2eEFPNmVUZzFObmEvMldNNUhsV0g1K0xP?=
+ =?utf-8?B?MzBoYjRPb2FIRXkzYWRicldPZDdKd0NOQWZ6b0hqbjVOS0RNK3dUUGlRWjVY?=
+ =?utf-8?B?a1BTUDFCdXBseFI3T0hnNDlja2xiVEZjRlNCZjlEQkJKb2k0UnI5V2UzNitw?=
+ =?utf-8?B?dTQ1SlBkMTBVdjdtdXJyRS9NSGhlRS9UUTdNQzFyUjJxbkNZRUVoclpSQnYw?=
+ =?utf-8?B?V3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4B69B42185B2164389C8C6BDDA95596B@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 245184b2-a1ed-4d84-6990-08dbbb3be509
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2023 07:16:52.2832
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YlwhPCZc6WT8Jgl2ZHbmfKpPhBw+XS/eYc26rgXKS82AVYC623sHgPIgSgPrd6uZVVIdxKxB4nFtV4jKIGsyxzX/NmJsbjhJG+S/LpwpzPQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3354
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After a discussion about removing VLYNQ support from the Kernel, it was
-concluded that its only user, the AR7 platform can go [1]. Even OpenWRT
-has removed support because these devices are "stuck with 3.18" [2].
-
-[1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
-[2] https://openwrt.org/docs/techref/targets/ar7
-
-Suggested-by: Jonas Gorski <jonas.gorski@gmail.com>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
----
-Changes since v1:
-* added ack
-
- arch/mips/Kbuild.platforms              |   1 -
- arch/mips/Kconfig                       |  22 -
- arch/mips/ar7/Makefile                  |  11 -
- arch/mips/ar7/Platform                  |   5 -
- arch/mips/ar7/clock.c                   | 439 --------------
- arch/mips/ar7/gpio.c                    | 332 -----------
- arch/mips/ar7/irq.c                     | 165 ------
- arch/mips/ar7/memory.c                  |  51 --
- arch/mips/ar7/platform.c                | 722 ------------------------
- arch/mips/ar7/prom.c                    | 256 ---------
- arch/mips/ar7/setup.c                   |  93 ---
- arch/mips/ar7/time.c                    |  31 -
- arch/mips/boot/compressed/uart-16550.c  |   5 -
- arch/mips/configs/ar7_defconfig         | 119 ----
- arch/mips/include/asm/mach-ar7/ar7.h    | 191 -------
- arch/mips/include/asm/mach-ar7/irq.h    |  16 -
- arch/mips/include/asm/mach-ar7/prom.h   |  12 -
- arch/mips/include/asm/mach-ar7/spaces.h |  22 -
- 18 files changed, 2493 deletions(-)
- delete mode 100644 arch/mips/ar7/Makefile
- delete mode 100644 arch/mips/ar7/Platform
- delete mode 100644 arch/mips/ar7/clock.c
- delete mode 100644 arch/mips/ar7/gpio.c
- delete mode 100644 arch/mips/ar7/irq.c
- delete mode 100644 arch/mips/ar7/memory.c
- delete mode 100644 arch/mips/ar7/platform.c
- delete mode 100644 arch/mips/ar7/prom.c
- delete mode 100644 arch/mips/ar7/setup.c
- delete mode 100644 arch/mips/ar7/time.c
- delete mode 100644 arch/mips/configs/ar7_defconfig
- delete mode 100644 arch/mips/include/asm/mach-ar7/ar7.h
- delete mode 100644 arch/mips/include/asm/mach-ar7/irq.h
- delete mode 100644 arch/mips/include/asm/mach-ar7/prom.h
- delete mode 100644 arch/mips/include/asm/mach-ar7/spaces.h
-
-diff --git a/arch/mips/Kbuild.platforms b/arch/mips/Kbuild.platforms
-index caad195ba5c1..a2311c4bce6a 100644
---- a/arch/mips/Kbuild.platforms
-+++ b/arch/mips/Kbuild.platforms
-@@ -2,7 +2,6 @@
- # All platforms listed in alphabetic order
- 
- platform-$(CONFIG_MIPS_ALCHEMY)		+= alchemy/
--platform-$(CONFIG_AR7)			+= ar7/
- platform-$(CONFIG_ATH25)		+= ath25/
- platform-$(CONFIG_ATH79)		+= ath79/
- platform-$(CONFIG_BCM47XX)		+= bcm47xx/
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index bc8421859006..76db82542519 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -202,28 +202,6 @@ config MIPS_ALCHEMY
- 	select SYS_SUPPORTS_ZBOOT
- 	select COMMON_CLK
- 
--config AR7
--	bool "Texas Instruments AR7"
--	select BOOT_ELF32
--	select COMMON_CLK
--	select DMA_NONCOHERENT
--	select CEVT_R4K
--	select CSRC_R4K
--	select IRQ_MIPS_CPU
--	select NO_EXCEPT_FILL
--	select SWAP_IO_SPACE
--	select SYS_HAS_CPU_MIPS32_R1
--	select SYS_HAS_EARLY_PRINTK
--	select SYS_SUPPORTS_32BIT_KERNEL
--	select SYS_SUPPORTS_LITTLE_ENDIAN
--	select SYS_SUPPORTS_MIPS16
--	select SYS_SUPPORTS_ZBOOT_UART16550
--	select GPIOLIB
--	select VLYNQ
--	help
--	  Support for the Texas Instruments AR7 System-on-a-Chip
--	  family: TNETD7100, 7200 and 7300.
--
- config ATH25
- 	bool "Atheros AR231x/AR531x SoC support"
- 	select CEVT_R4K
-diff --git a/arch/mips/ar7/Makefile b/arch/mips/ar7/Makefile
-deleted file mode 100644
-index cd51c6c6e686..000000000000
-diff --git a/arch/mips/ar7/Platform b/arch/mips/ar7/Platform
-deleted file mode 100644
-index a9257cc01c3c..000000000000
-diff --git a/arch/mips/ar7/clock.c b/arch/mips/ar7/clock.c
-deleted file mode 100644
-index c717acbc5506..000000000000
-diff --git a/arch/mips/ar7/gpio.c b/arch/mips/ar7/gpio.c
-deleted file mode 100644
-index 4ed833b9cc2f..000000000000
-diff --git a/arch/mips/ar7/irq.c b/arch/mips/ar7/irq.c
-deleted file mode 100644
-index f0a7942d393e..000000000000
-diff --git a/arch/mips/ar7/memory.c b/arch/mips/ar7/memory.c
-deleted file mode 100644
-index ce8024c1a54e..000000000000
-diff --git a/arch/mips/ar7/platform.c b/arch/mips/ar7/platform.c
-deleted file mode 100644
-index 215149a85d83..000000000000
-diff --git a/arch/mips/ar7/prom.c b/arch/mips/ar7/prom.c
-deleted file mode 100644
-index 5810d3993fc6..000000000000
-diff --git a/arch/mips/ar7/setup.c b/arch/mips/ar7/setup.c
-deleted file mode 100644
-index 352d5dbc777c..000000000000
-diff --git a/arch/mips/ar7/time.c b/arch/mips/ar7/time.c
-deleted file mode 100644
-index 72aa77d7087b..000000000000
-diff --git a/arch/mips/boot/compressed/uart-16550.c b/arch/mips/boot/compressed/uart-16550.c
-index 96d28f211121..09dcd2c561d9 100644
---- a/arch/mips/boot/compressed/uart-16550.c
-+++ b/arch/mips/boot/compressed/uart-16550.c
-@@ -13,11 +13,6 @@
- #define PORT(offset) (CKSEG1ADDR(UART_BASE) + (offset))
- #endif
- 
--#ifdef CONFIG_AR7
--#include <ar7.h>
--#define PORT(offset) (CKSEG1ADDR(AR7_REGS_UART0) + (4 * offset))
--#endif
--
- #ifdef CONFIG_MACH_INGENIC
- #define INGENIC_UART_BASE_ADDR	(0x10030000 + 0x1000 * CONFIG_ZBOOT_INGENIC_UART)
- #define PORT(offset) (CKSEG1ADDR(INGENIC_UART_BASE_ADDR) + (4 * offset))
-diff --git a/arch/mips/configs/ar7_defconfig b/arch/mips/configs/ar7_defconfig
-deleted file mode 100644
-index 329c60aa570a..000000000000
-diff --git a/arch/mips/include/asm/mach-ar7/ar7.h b/arch/mips/include/asm/mach-ar7/ar7.h
-deleted file mode 100644
-index 1e8621a6afa3..000000000000
-diff --git a/arch/mips/include/asm/mach-ar7/irq.h b/arch/mips/include/asm/mach-ar7/irq.h
-deleted file mode 100644
-index 46bb730ea970..000000000000
-diff --git a/arch/mips/include/asm/mach-ar7/prom.h b/arch/mips/include/asm/mach-ar7/prom.h
-deleted file mode 100644
-index 9e1d20b06f57..000000000000
-diff --git a/arch/mips/include/asm/mach-ar7/spaces.h b/arch/mips/include/asm/mach-ar7/spaces.h
-deleted file mode 100644
-index a004d94dfbdd..000000000000
--- 
-2.35.1
-
+DQoNCkxlIDIyLzA5LzIwMjMgw6AgMDA6NTIsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IE9uIE1v
+biwgU2VwIDE4LCAyMDIzIGF0IDEyOjMx4oCvQU0gTWlrZSBSYXBvcG9ydCA8cnBwdEBrZXJuZWwu
+b3JnPiB3cm90ZToNCj4+DQo+IFsuLi5dDQo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9l
+eGVjbWVtLmggYi9pbmNsdWRlL2xpbnV4L2V4ZWNtZW0uaA0KPj4gaW5kZXggNTE5YmRmZGNhNTk1
+Li4wOWQ0NWFjNzg2ZTkgMTAwNjQ0DQo+PiAtLS0gYS9pbmNsdWRlL2xpbnV4L2V4ZWNtZW0uaA0K
+Pj4gKysrIGIvaW5jbHVkZS9saW51eC9leGVjbWVtLmgNCj4+IEBAIC0yOSw2ICsyOSw3IEBADQo+
+PiAgICAqIEBFWEVDTUVNX0tQUk9CRVM6IHBhcmFtZXRlcnMgZm9yIGtwcm9iZXMNCj4+ICAgICog
+QEVYRUNNRU1fRlRSQUNFOiBwYXJhbWV0ZXJzIGZvciBmdHJhY2UNCj4+ICAgICogQEVYRUNNRU1f
+QlBGOiBwYXJhbWV0ZXJzIGZvciBCUEYNCj4+ICsgKiBARVhFQ01FTV9NT0RVTEVfREFUQTogcGFy
+YW1ldGVycyBmb3IgbW9kdWxlIGRhdGEgc2VjdGlvbnMNCj4+ICAgICogQEVYRUNNRU1fVFlQRV9N
+QVg6DQo+PiAgICAqLw0KPj4gICBlbnVtIGV4ZWNtZW1fdHlwZSB7DQo+PiBAQCAtMzcsNiArMzgs
+NyBAQCBlbnVtIGV4ZWNtZW1fdHlwZSB7DQo+PiAgICAgICAgICBFWEVDTUVNX0tQUk9CRVMsDQo+
+PiAgICAgICAgICBFWEVDTUVNX0ZUUkFDRSwNCj4gDQo+IEluIGxvbmdlciB0ZXJtLCBJIHRoaW5r
+IHdlIGNhbiBpbXByb3ZlIHRoZSBKSVRlZCBjb2RlIGFuZCBtZXJnZQ0KPiBrcHJvYmUvZnRyYWNl
+L2JwZi4gdG8gdXNlIHRoZSBzYW1lIHJhbmdlcy4gQWxzbywgZG8gd2UgbmVlZCBzcGVjaWFsDQo+
+IHNldHRpbmcgZm9yIEZUUkFDRT8gSWYgbm90LCBsZXQncyBqdXN0IHJlbW92ZSBpdC4NCg0KSG93
+IGNhbiB3ZSBkbyB0aGF0ID8gU29tZSBwbGF0Zm9ybXMgbGlrZSBwb3dlcnBjIHJlcXVpcmUgZXhl
+Y3V0YWJsZSANCm1lbW9yeSBmb3IgQlBGIGFuZCBub24tZXhlYyBtZW0gZm9yIEtQUk9CRSBzbyBp
+dCBjYW4ndCBiZSBpbiB0aGUgc2FtZSANCmFyZWEvcmFuZ2VzLg0KDQo+IA0KPj4gICAgICAgICAg
+RVhFQ01FTV9CUEYsDQo+PiArICAgICAgIEVYRUNNRU1fTU9EVUxFX0RBVEEsDQo+PiAgICAgICAg
+ICBFWEVDTUVNX1RZUEVfTUFYLA0KPj4gICB9Ow0KPiANCj4gT3ZlcmFsbCwgaXQgaXMgZ3JlYXQg
+dGhhdCBrcHJvYmUvZnRyYWNlL2JwZiBubyBsb25nZXIgZGVwZW5kIG9uIG1vZHVsZXMuDQo+IA0K
+PiBPVE9ILCBJIHRoaW5rIHdlIHNob3VsZCBtZXJnZSBleGVjbWVtX3R5cGUgYW5kIGV4aXN0aW5n
+IG1vZF9tZW1fdHlwZS4NCj4gT3RoZXJ3aXNlLCB3ZSBzdGlsbCBuZWVkIHRvIGhhbmRsZSBwYWdl
+IHBlcm1pc3Npb25zIGluIG11bHRpcGxlIHBsYWNlcy4NCj4gV2hhdCBpcyBvdXIgcGxhbiBmb3Ig
+dGhhdD8NCj4gDQoNCkNocmlzdG9waGUNCg==
