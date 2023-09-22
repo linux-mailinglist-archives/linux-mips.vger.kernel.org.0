@@ -2,174 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A457AB3AB
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 16:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9697AB3CE
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 16:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjIVOar (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Sep 2023 10:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S230451AbjIVOjP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Sep 2023 10:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjIVOaq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 10:30:46 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509DB100
-        for <linux-mips@vger.kernel.org>; Fri, 22 Sep 2023 07:30:40 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1c46ce0c39fso17617975ad.2
-        for <linux-mips@vger.kernel.org>; Fri, 22 Sep 2023 07:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695393040; x=1695997840; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KA5pwz3/DRQHr6a2ee4M3bjnbEYA57TwsoBM67hI6zU=;
-        b=KasGxCGhlZLETJKdrWXwCt6Sdf48q70UTGzJbwZWC64s/HsrhafPEns5rIOCSmMzCF
-         Z5vslQF3uqwntveLyJRT9X55sm2SN9LTyROw1FjsOmgBxDplUWBzYf6ax3BA5UjL4ELb
-         YJsPknZYvqdQlxlzPz5zEqhGnX9Tu6BG6ioY3BFN0N3mSdjWPjyuvkUiP6pxEe6NnfWJ
-         PLkmtSJXOkV0KCojJ/JCp+rGSD8krrci1aKN7jafsYbX+RWwpM95HeeOfmLnmkf1PMs0
-         7NxA3aqKWL8UbhrNt+pus28C2KMT02kQ3ra3JKNW0AJ2IeAxWRuxOn4ft3DclAvaZpdM
-         jwSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695393040; x=1695997840;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KA5pwz3/DRQHr6a2ee4M3bjnbEYA57TwsoBM67hI6zU=;
-        b=HHRq9M7V11XCjYwXIG4jp4rQdJRRPfSLX1LQ32BNS0p354dhoUvBhoVtkzxEYFMlA0
-         AXRVScDbIS20rCTb3mP7C6fnjdefImYJ3GLlj0DXWmxPUYaN2BzhIRNhYjd75S12yrlH
-         7f1r+QGHxcgGvIfE5HQil6amEcCGLmexC3l2QBCweC6Be2kj7bmCunhaz46c7LsA3xxC
-         QvPEc6epXp11c0snev1c20veY9dX+WgOUIjqkpfBxsDiZNHJdUziI+HLjiX99hs+O8nx
-         uLayQo0R20B3nkcYqSgN65h2+nVPeOQK1mQvyZbSH2bqC2Opup39uarC1Bi+ZuuCrCyX
-         swOw==
-X-Gm-Message-State: AOJu0YyNMWFKa6S2LJ+QkKDQ4/gkQC4uZ7CyF7wfLRs3pLMSsA1Dcl6t
-        KMwBZ0vgaY83600yniird2NCkAAAcjc=
-X-Google-Smtp-Source: AGHT+IE7TdAMSox3QZ9i3XY42vmW+YqwJtHLDXCrkzOQDSyIHqr/K/m4w9DaaKuedrPKXRX2zXN/sfp+lRA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:1cf:b0:1b9:df8f:888c with SMTP id
- e15-20020a17090301cf00b001b9df8f888cmr102903plh.8.1695393039713; Fri, 22 Sep
- 2023 07:30:39 -0700 (PDT)
-Date:   Fri, 22 Sep 2023 07:30:38 -0700
-In-Reply-To: <117db856-9aec-e91c-b1d4-db2b90ae563d@intel.com>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-8-seanjc@google.com>
- <117db856-9aec-e91c-b1d4-db2b90ae563d@intel.com>
-Message-ID: <ZQ2lDk3iOEz8NNg0@google.com>
-Subject: Re: [RFC PATCH v12 07/33] KVM: Add KVM_EXIT_MEMORY_FAULT exit to
- report faults to userspace
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230339AbjIVOjO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 10:39:14 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4570AC6;
+        Fri, 22 Sep 2023 07:39:07 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 67AC3FF80E;
+        Fri, 22 Sep 2023 14:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1695393546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tT8hyAzx4ZhqoZcyPUvFHwNUdgW73Re8JuIC98mcHSU=;
+        b=kGr+G68sW/V6sxZ+CuqPiY9XD8wSflqq81r1Kdwt1d+k2gNxqDeRjw0CKV8hnDyXl5xDnT
+        1G9WCCX5cnViNlsg5N/BJUkz9OsFw9THGrF1zduUv5m7vwXMBHyKW92qoym6v0zCwNZ5Te
+        7Gi0AApBFZDcecO0gKa6gsfc/L/Y2tovnyKnXHd4D8ooLZZKnXibyGZpE4oTpPj964F9ZQ
+        oip070eo8uATdJJAV3WtFrsslsfSb3adXV92SKw6Si7/xaYS6UZKtTkFNLJpt+wGZavM95
+        IN0pMDUj21bDbRQkgER13PamXMwDFzokfqcgZFrEN3hl0zXOAbA4/X+PxXrHBw==
+Date:   Fri, 22 Sep 2023 16:39:03 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 2/6] mtd: parsers: ar7: remove support
+Message-ID: <20230922163903.3f49ea2a@xps-13>
+In-Reply-To: <20230922061530.3121-3-wsa+renesas@sang-engineering.com>
+References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+        <20230922061530.3121-3-wsa+renesas@sang-engineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 22, 2023, Xiaoyao Li wrote:
-> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
-> > From: Chao Peng <chao.p.peng@linux.intel.com>
-> > 
-> > Add a new KVM exit type to allow userspace to handle memory faults that
-> > KVM cannot resolve, but that userspace *may* be able to handle (without
-> > terminating the guest).
-> > 
-> > KVM will initially use KVM_EXIT_MEMORY_FAULT to report implicit
-> > conversions between private and shared memory.  With guest private memory,
-> > there will be  two kind of memory conversions:
-> > 
-> >    - explicit conversion: happens when the guest explicitly calls into KVM
-> >      to map a range (as private or shared)
-> > 
-> >    - implicit conversion: happens when the guest attempts to access a gfn
-> >      that is configured in the "wrong" state (private vs. shared)
-> > 
-> > On x86 (first architecture to support guest private memory), explicit
-> > conversions will be reported via KVM_EXIT_HYPERCALL+KVM_HC_MAP_GPA_RANGE,
-> 
-> side topic.
-> 
-> Do we expect to integrate TDVMCALL(MAPGPA) of TDX into KVM_HC_MAP_GPA_RANGE?
+Hi Wolfram,
 
-Yes, that's my expectation.
+wsa+renesas@sang-engineering.com wrote on Fri, 22 Sep 2023 08:15:23
++0200:
 
-> > but reporting KVM_EXIT_HYPERCALL for implicit conversions is undesriable
-> > as there is (obviously) no hypercall, and there is no guarantee that the
-> > guest actually intends to convert between private and shared, i.e. what
-> > KVM thinks is an implicit conversion "request" could actually be the
-> > result of a guest code bug.
-> > 
-> > KVM_EXIT_MEMORY_FAULT will be used to report memory faults that appear to
-> > be implicit conversions.
-> > 
-> > Place "struct memory_fault" in a second anonymous union so that filling
-> > memory_fault doesn't clobber state from other yet-to-be-fulfilled exits,
-> > and to provide additional information if KVM does NOT ultimately exit to
-> > userspace with KVM_EXIT_MEMORY_FAULT, e.g. if KVM suppresses (or worse,
-> > loses) the exit, as KVM often suppresses exits for memory failures that
-> > occur when accessing paravirt data structures.  The initial usage for
-> > private memory will be all-or-nothing, but other features such as the
-> > proposed "userfault on missing mappings" support will use
-> > KVM_EXIT_MEMORY_FAULT for potentially _all_ guest memory accesses, i.e.
-> > will run afoul of KVM's various quirks.
-> 
-> So when exit reason is KVM_EXIT_MEMORY_FAULT, how can we tell which field in
-> the first union is valid?
-> 
-> When exit reason is not KVM_EXIT_MEMORY_FAULT, how can we know the info in
-> the second union run.memory is valid without a run.memory.valid field?
+> AR7 is going to be removed from the Kernel, so remove its support for
+> MTD.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+> Changes since v1:
+> * added ack
+>=20
+>  arch/arm/configs/pxa_defconfig |   1 -
 
-I'll respond to this separately with a trimmed Cc list.  I suspect this will be
-a rather lengthy conversation, and it has almost nothing to do with guest_memfd.
+I'm not sure it is wise to merge defconfig changes through mtd. Would
+you mind sending this change aside to avoid potential conflicts? Each
+patch can live on their own anyway.
 
-> > +Note!  KVM_EXIT_MEMORY_FAULT is unique among all KVM exit reasons in that it
-> > +accompanies a return code of '-1', not '0'!  errno will always be set to EFAULT
-> > +or EHWPOISON when KVM exits with KVM_EXIT_MEMORY_FAULT, userspace should assume
-> > +kvm_run.exit_reason is stale/undefined for all other error numbers.
-> > +
-> 
-> Initially, this section is the copy of struct kvm_run and had comments for
-> each field accordingly. Unfortunately, the consistence has not been well
-> maintained during the new filed being added.
-> 
-> Do we expect to fix it?
+>  drivers/mtd/parsers/Kconfig    |   5 --
+>  drivers/mtd/parsers/Makefile   |   1 -
+>  drivers/mtd/parsers/ar7part.c  | 129 ---------------------------------
 
-AFAIK, no one is working on cleaning up this section of the docs, but as always,
-patches are welcome :-)
+Do you have other changes related to this file in your tree? It failed
+to apply on my side.
+
+>  4 files changed, 136 deletions(-)
+>  delete mode 100644 drivers/mtd/parsers/ar7part.c
+
+Thanks,
+Miqu=C3=A8l
