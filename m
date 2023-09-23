@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3A27AC360
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Sep 2023 17:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA597AC38F
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Sep 2023 18:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjIWPnn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Sep 2023 11:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
+        id S231948AbjIWQWD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Sep 2023 12:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjIWPnn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Sep 2023 11:43:43 -0400
+        with ESMTP id S231915AbjIWQWB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Sep 2023 12:22:01 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBBD100;
-        Sat, 23 Sep 2023 08:43:37 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A27C433C7;
-        Sat, 23 Sep 2023 15:43:25 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26792;
+        Sat, 23 Sep 2023 09:21:52 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13699C433C7;
+        Sat, 23 Sep 2023 16:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695483816;
-        bh=ljgPDKGzFtkM9CGruxS2yf0TQKHwYcBRpz7ZIM8VO3w=;
+        s=k20201202; t=1695486112;
+        bh=epTBeih4MHoaHBpc48qML+P/ARMeb7d09SNlM/hQxw0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UdoqwjNCGj6+dmcR2by5om8f6OGdHooNrFAdirAK1+mff8rgXeaENEbWOfJO5o/PC
-         OJ43I0E8Te05bmcEVu+q3++C1e9dGOgWncbQbW9sES2Ibe2Pdsm+p44SaI/GSc9eJn
-         k1TIpPAI+1+0z14moXMdYfGTEFg/c4FGc6F68knV28yyNaM4SU8WYGPaWhzn5xPNAt
-         FG0AxN1gAVv9xHc/jH6GfcIvluITorwBbApgU2SfgTJcYKv7Yh/vBJZDq2ZFWWRfdD
-         gacKAomGi0R18n+DQTrEIea+0KrDaRDhkeAyfdIkOyz1+kcZ1YK3P1S2X1RDLM9+UU
-         ZFkbq4f/xAuEw==
-Date:   Sat, 23 Sep 2023 18:42:40 +0300
+        b=ofaXj1oNTs/VBLYlvMmVzGA3HsxAlJskkj7XrUmUTDzx/0RPqgkm91Z7JgVfNThA+
+         jF51Gkq+/u8f3Pl9hK1BmDVAsawYyQVDaZs6NfxlIM+VHJDmPuMKHs1TOy64LPBIRA
+         iuS6IcsT1zTuxev9K6pIMvYP5Qodr6WpU9hqxXwD4ixmanyA2+kLliocF453RBJkLn
+         2TOewMq1E/GW1XYu4R2CCfYUfUpS+zAxWOefS4IClhNx863WjbFLsgwwYry2hXBCvO
+         tH3ho75+Hir/pB3LPn6CIdrcMEvj+m5czuQ0yH+wcE6dXhoEdwLJTXJ/XABJAw1gmy
+         81I0fO8rK/6Jg==
+Date:   Sat, 23 Sep 2023 19:20:55 +0300
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Song Liu <song@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -59,17 +59,16 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
         netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 02/13] mm: introduce execmem_text_alloc() and
- execmem_free()
-Message-ID: <20230923154240.GK3303@kernel.org>
+Subject: Re: [PATCH v3 06/13] mm/execmem: introduce execmem_data_alloc()
+Message-ID: <20230923162055.GL3303@kernel.org>
 References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-3-rppt@kernel.org>
- <CAPhsuW4bQY5fo_+K2z4uUdd4r0wYF1eT3bAya=YqcEcmqdGXvg@mail.gmail.com>
+ <20230918072955.2507221-7-rppt@kernel.org>
+ <CAPhsuW73NMvdpmyrhGouQSAHEL9wRw_A+8dZ-5R4BU=UHH83cw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW4bQY5fo_+K2z4uUdd4r0wYF1eT3bAya=YqcEcmqdGXvg@mail.gmail.com>
+In-Reply-To: <CAPhsuW73NMvdpmyrhGouQSAHEL9wRw_A+8dZ-5R4BU=UHH83cw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,44 +79,157 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 03:10:26PM -0700, Song Liu wrote:
-> On Mon, Sep 18, 2023 at 12:30 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Thu, Sep 21, 2023 at 03:52:21PM -0700, Song Liu wrote:
+> On Mon, Sep 18, 2023 at 12:31 AM Mike Rapoport <rppt@kernel.org> wrote:
 > >
 > [...]
-> > +
-> > +#include <linux/mm.h>
-> > +#include <linux/vmalloc.h>
-> > +#include <linux/execmem.h>
-> > +#include <linux/moduleloader.h>
-> > +
-> > +static void *execmem_alloc(size_t size)
-> > +{
-> > +       return module_alloc(size);
-> > +}
-> > +
-> > +void *execmem_text_alloc(enum execmem_type type, size_t size)
-> > +{
-> > +       return execmem_alloc(size);
-> > +}
+> > diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> > index 519bdfdca595..09d45ac786e9 100644
+> > --- a/include/linux/execmem.h
+> > +++ b/include/linux/execmem.h
+> > @@ -29,6 +29,7 @@
+> >   * @EXECMEM_KPROBES: parameters for kprobes
+> >   * @EXECMEM_FTRACE: parameters for ftrace
+> >   * @EXECMEM_BPF: parameters for BPF
+> > + * @EXECMEM_MODULE_DATA: parameters for module data sections
+> >   * @EXECMEM_TYPE_MAX:
+> >   */
+> >  enum execmem_type {
+> > @@ -37,6 +38,7 @@ enum execmem_type {
+> >         EXECMEM_KPROBES,
+> >         EXECMEM_FTRACE,
 > 
-> execmem_text_alloc (and later execmem_data_alloc) both take "type" as
-> input. I guess we can just use execmem_alloc(type, size) for everything?
+> In longer term, I think we can improve the JITed code and merge
+> kprobe/ftrace/bpf. to use the same ranges. Also, do we need special
+> setting for FTRACE? If not, let's just remove it.
 
-We could but I still prefer to keep this distinction.
+I don't think we need to limit how the JITed code is generated because we
+want to support fewer address space ranges for it. 
+
+As for FTRACE, now it's only needed on x86 and s390 and there it happens
+to use the same ranges as MODULES and the rest, but it still gives some
+notion of potential semantic differences and the overhead of keeping it is
+really negligible.
+ 
+> >         EXECMEM_BPF,
+> > +       EXECMEM_MODULE_DATA,
+> >         EXECMEM_TYPE_MAX,
+> >  };
+> 
+> Overall, it is great that kprobe/ftrace/bpf no longer depend on modules.
+> 
+> OTOH, I think we should merge execmem_type and existing mod_mem_type.
+> Otherwise, we still need to handle page permissions in multiple places.
+> What is our plan for that?
+
+Maybe, but I think this is too early. There are several things missing
+before we could remove set_memory usage from modules. E.g. to use ROX
+allocations on x86 we at least should update alternatives handling and
+reach a consensus about synchronization Andy mentioned in his comments to
+v2.
  
 > Thanks,
 > Song
 > 
+> 
+> >
+> > @@ -107,6 +109,23 @@ struct execmem_params *execmem_arch_params(void);
+> >   */
+> >  void *execmem_text_alloc(enum execmem_type type, size_t size);
+> >
+> > +/**
+> > + * execmem_data_alloc - allocate memory for data coupled to code
+> > + * @type: type of the allocation
+> > + * @size: how many bytes of memory are required
+> > + *
+> > + * Allocates memory that will contain data coupled with executable code,
+> > + * like data sections in kernel modules.
+> > + *
+> > + * The memory will have protections defined by architecture.
+> > + *
+> > + * The allocated memory will reside in an area that does not impose
+> > + * restrictions on the addressing modes.
+> > + *
+> > + * Return: a pointer to the allocated memory or %NULL
+> > + */
+> > +void *execmem_data_alloc(enum execmem_type type, size_t size);
 > > +
-> > +void execmem_free(void *ptr)
+> >  /**
+> >   * execmem_free - free executable memory
+> >   * @ptr: pointer to the memory that should be freed
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index c4146bfcd0a7..2ae83a6abf66 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -1188,25 +1188,16 @@ void __weak module_arch_freeing_init(struct module *mod)
+> >  {
+> >  }
+> >
+> > -static bool mod_mem_use_vmalloc(enum mod_mem_type type)
+> > -{
+> > -       return IS_ENABLED(CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC) &&
+> > -               mod_mem_type_is_core_data(type);
+> > -}
+> > -
+> >  static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
+> >  {
+> > -       if (mod_mem_use_vmalloc(type))
+> > -               return vzalloc(size);
+> > +       if (mod_mem_type_is_data(type))
+> > +               return execmem_data_alloc(EXECMEM_MODULE_DATA, size);
+> >         return execmem_text_alloc(EXECMEM_MODULE_TEXT, size);
+> >  }
+> >
+> >  static void module_memory_free(void *ptr, enum mod_mem_type type)
+> >  {
+> > -       if (mod_mem_use_vmalloc(type))
+> > -               vfree(ptr);
+> > -       else
+> > -               execmem_free(ptr);
+> > +       execmem_free(ptr);
+> >  }
+> >
+> >  static void free_mod_mem(struct module *mod)
+> > diff --git a/mm/execmem.c b/mm/execmem.c
+> > index abcbd07e05ac..aeff85261360 100644
+> > --- a/mm/execmem.c
+> > +++ b/mm/execmem.c
+> > @@ -53,11 +53,23 @@ static void *execmem_alloc(size_t size, struct execmem_range *range)
+> >         return kasan_reset_tag(p);
+> >  }
+> >
+> > +static inline bool execmem_range_is_data(enum execmem_type type)
 > > +{
-> > +       /*
-> > +        * This memory may be RO, and freeing RO memory in an interrupt is not
-> > +        * supported by vmalloc.
-> > +        */
-> > +       WARN_ON(in_interrupt());
-> > +       vfree(ptr);
+> > +       return type == EXECMEM_MODULE_DATA;
 > > +}
+> > +
+> >  void *execmem_text_alloc(enum execmem_type type, size_t size)
+> >  {
+> >         return execmem_alloc(size, &execmem_params.ranges[type]);
+> >  }
+> >
+> > +void *execmem_data_alloc(enum execmem_type type, size_t size)
+> > +{
+> > +       WARN_ON_ONCE(!execmem_range_is_data(type));
+> > +
+> > +       return execmem_alloc(size, &execmem_params.ranges[type]);
+> > +}
+> > +
+> >  void execmem_free(void *ptr)
+> >  {
+> >         /*
+> > @@ -93,7 +105,10 @@ static void execmem_init_missing(struct execmem_params *p)
+> >                 struct execmem_range *r = &p->ranges[i];
+> >
+> >                 if (!r->start) {
+> > -                       r->pgprot = default_range->pgprot;
+> > +                       if (execmem_range_is_data(i))
+> > +                               r->pgprot = PAGE_KERNEL;
+> > +                       else
+> > +                               r->pgprot = default_range->pgprot;
+> >                         r->alignment = default_range->alignment;
+> >                         r->start = default_range->start;
+> >                         r->end = default_range->end;
 > > --
 > > 2.39.2
 > >
