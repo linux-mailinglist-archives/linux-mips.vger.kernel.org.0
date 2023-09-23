@@ -2,105 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC657AB939
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Sep 2023 20:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5365F7AC34E
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Sep 2023 17:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjIVSf2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Sep 2023 14:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S231890AbjIWPjK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Sep 2023 11:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjIVSf1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Sep 2023 14:35:27 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695A6AB
-        for <linux-mips@vger.kernel.org>; Fri, 22 Sep 2023 11:35:21 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-31fa15f4cc6so2460842f8f.2
-        for <linux-mips@vger.kernel.org>; Fri, 22 Sep 2023 11:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695407720; x=1696012520; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J9ePrVfdNy/JzYRXiuwdT/jgHodsIKRvT6Kq8KoBVSc=;
-        b=drXB3KZdD4j3ybh06C1KoNUB2WZsoB+lExp+KueeUACwPM8aRrBfT9aTRtcL2Kskok
-         frYDYinNaQ0Y0TKNLHNwMvQ1Tnr2fpasN+hhmarEMhrChzzxQaSK7Dywud6DT1wKpaUP
-         XynlfzmB1S4xJeLW7PZSrx8jJfdHNxNH3NdAxxqTs1gZ8vb/cJ56odPYLd1+/8KULdjY
-         SXzTW+fNMUxDkwybH71j3yEqxBXLqXP6+m189M958wVSCzW3iT3m19ba8VpN8lbhtv8f
-         hIwEIICDALP4fOwUgW5pul3aEWmunipxMu7sRXEz9cnqdEgKY3kJYIr8S3oN/LlVjKqd
-         2+5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695407720; x=1696012520;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J9ePrVfdNy/JzYRXiuwdT/jgHodsIKRvT6Kq8KoBVSc=;
-        b=eCkYdMrPTfnzohKghOOx+ZlhDeer4WDCNN6ny6pTzHaRUNHqz0N7fF96CxhtZ/XK9M
-         tSSNYDmofG0QSoRXAXtYmJR0Aey7GLuVefabA9j6FTEPXzTry77Dpo8XD/WoRnF/1sDy
-         gDtPuTAfvCHbTp0WijRAfF8soK4F88PXMEPilqarXE6wub5ygs/TI8JMRwzMO9Q+19xJ
-         UwnxUfLsjFvcXZFJxvMzRs5Xig9A/a1AijzoWV8dNUn/W8ITYFQqu9VEt+SVySVgTH/C
-         cCs+DLZmF5ziLumBYaWutbErJ6Yngz3h6HMk2EGDKQ5cELFgHvEhamTJKxrxTymPy3XT
-         iK/w==
-X-Gm-Message-State: AOJu0Yyyi1ljMog8Qudpj2cLzN2yN+8T8NWlfR2fXZET1P36q2y4Lbmq
-        DE06FU2DkB6Em/Wb15zz8ud0Vw==
-X-Google-Smtp-Source: AGHT+IGHNHeD3T2yar23Ec3UH67UtsxfVcBnSqULhmwaYiv+OLl4leNTFgBuPq0hiT5BDrQsK26dyQ==
-X-Received: by 2002:a5d:60c5:0:b0:31f:b91f:23ef with SMTP id x5-20020a5d60c5000000b0031fb91f23efmr441114wrt.51.1695407719864;
-        Fri, 22 Sep 2023 11:35:19 -0700 (PDT)
-Received: from [192.168.192.175] (181.red-88-28-23.dynamicip.rima-tde.net. [88.28.23.181])
-        by smtp.gmail.com with ESMTPSA id m16-20020a5d4a10000000b003200c918c81sm5000406wrq.112.2023.09.22.11.35.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 11:35:19 -0700 (PDT)
-Message-ID: <52ba27b9-79d5-f9cc-450f-fe831e65769a@linaro.org>
-Date:   Fri, 22 Sep 2023 20:35:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH v2 2/6] mtd: parsers: ar7: remove support
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        with ESMTP id S229946AbjIWPjK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Sep 2023 11:39:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EE8100;
+        Sat, 23 Sep 2023 08:39:04 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2139BC433C8;
+        Sat, 23 Sep 2023 15:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695483543;
+        bh=44aW6DcKJaHGXelf02UJMtFK5RbIa4QmGjb00e/7p/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fw2A/tcOcobQiglJay8dvPT5bEfVdzbbmq0FwMYYkRDEvMMNze6l5vdxXC61b2ule
+         JFCwMCsxrAuMW6D9gVnh2enWSeUtDeXGmVEjWBDuVv9KbPW1MRt9tzybn9NNKJQMj2
+         y3Lc/W+nmmCK2KsTrqRVvz29GuwFbt1mGULYw6jBfPPwRcYXpuSga9okI5ya4zHkUD
+         tynDeAbBph8ozw0L4VOesv/AFGSBeSrp7QqXSV98fLRWfSHzHFilN6nNqox4/XsFqb
+         GBdnrmPrEZw+uXG8gLcDpColobXRcu9WsCK8bgQKX9ms+oqH3fV0ph2eOZh795NWNU
+         moLZ9gWnlnDaA==
+Date:   Sat, 23 Sep 2023 18:38:08 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Russell King <linux@armlinux.org.uk>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
- <20230922061530.3121-3-wsa+renesas@sang-engineering.com>
- <20230922163903.3f49ea2a@xps-13> <ZQ3VA/2pAC3Do1Xd@ninjato>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <ZQ3VA/2pAC3Do1Xd@ninjato>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 02/13] mm: introduce execmem_text_alloc() and
+ execmem_free()
+Message-ID: <20230923153808.GI3303@kernel.org>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-3-rppt@kernel.org>
+ <CAPhsuW5-=H1V=VXUYxyGnUdJuNUpRt44QmpwjkDUD=9i0itjuw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW5-=H1V=VXUYxyGnUdJuNUpRt44QmpwjkDUD=9i0itjuw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/9/23 19:55, Wolfram Sang wrote:
+On Thu, Sep 21, 2023 at 03:34:18PM -0700, Song Liu wrote:
+> On Mon, Sep 18, 2023 at 12:30 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
 > 
->> I'm not sure it is wise to merge defconfig changes through mtd. Would
->> you mind sending this change aside to avoid potential conflicts? Each
->> patch can live on their own anyway.
+> [...]
 > 
-> Yup, I can send a seperate patch for it.
+> > diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+> > index 42215f9404af..db5561d0c233 100644
+> > --- a/arch/s390/kernel/module.c
+> > +++ b/arch/s390/kernel/module.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/moduleloader.h>
+> >  #include <linux/bug.h>
+> >  #include <linux/memory.h>
+> > +#include <linux/execmem.h>
+> >  #include <asm/alternative.h>
+> >  #include <asm/nospec-branch.h>
+> >  #include <asm/facility.h>
+> > @@ -76,7 +77,7 @@ void *module_alloc(unsigned long size)
+> >  #ifdef CONFIG_FUNCTION_TRACER
+> >  void module_arch_cleanup(struct module *mod)
+> >  {
+> > -       module_memfree(mod->arch.trampolines_start);
+> > +       execmem_free(mod->arch.trampolines_start);
+> >  }
+> >  #endif
+> >
+> > @@ -510,7 +511,7 @@ static int module_alloc_ftrace_hotpatch_trampolines(struct module *me,
+> >
+> >         size = FTRACE_HOTPATCH_TRAMPOLINES_SIZE(s->sh_size);
+> >         numpages = DIV_ROUND_UP(size, PAGE_SIZE);
+> > -       start = module_alloc(numpages * PAGE_SIZE);
+> > +       start = execmem_text_alloc(EXECMEM_FTRACE, numpages * PAGE_SIZE);
 > 
->>>   drivers/mtd/parsers/Kconfig    |   5 --
->>>   drivers/mtd/parsers/Makefile   |   1 -
->>>   drivers/mtd/parsers/ar7part.c  | 129 ---------------------------------
->>
->> Do you have other changes related to this file in your tree? It failed
->> to apply on my side.
-> 
-> No change. Plain v6.6-rc2. I used "--irreversible-delete", though. Maybe
-> this is causing issues? As I stated in the cover-letter, I wonder if all
-> this should go via MIPS. But there hasn't been any discussion about it
-> yet.
+> This should be EXECMEM_MODULE_TEXT?
 
-MIPS tree for the whole series certainly makes sense.
+This is an ftrace trampoline, so I think it should be FTRACE type of
+allocation.
+ 
+> Thanks,
+> Song
+> 
+> >         if (!start)
+> >                 return -ENOMEM;
+> >         set_memory_rox((unsigned long)start, numpages);
+> [...]
 
+-- 
+Sincerely yours,
+Mike.
