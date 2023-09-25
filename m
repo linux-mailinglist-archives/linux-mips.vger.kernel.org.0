@@ -2,37 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7757AD64D
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Sep 2023 12:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193477ADDDF
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Sep 2023 19:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjIYKpE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Sep 2023 06:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
+        id S233181AbjIYRhz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Sep 2023 13:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjIYKpE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 06:45:04 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D9C3D3;
-        Mon, 25 Sep 2023 03:44:56 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qkj5B-0003cX-00; Mon, 25 Sep 2023 12:44:53 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 9FE43C013D; Mon, 25 Sep 2023 12:43:35 +0200 (CEST)
-Date:   Mon, 25 Sep 2023 12:43:35 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     manuel.lauss@gmail.com, arnd@arndb.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] MIPS: Alchemy: only build mmc support helpers if au1xmmc
- is enabled
-Message-ID: <ZRFkVy3kBytSC5y8@alpha.franken.de>
-References: <20230905070656.196274-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905070656.196274-1-hch@lst.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        with ESMTP id S233098AbjIYRhv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 13:37:51 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3A310F
+        for <linux-mips@vger.kernel.org>; Mon, 25 Sep 2023 10:37:44 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59c240e637aso134387127b3.3
+        for <linux-mips@vger.kernel.org>; Mon, 25 Sep 2023 10:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695663464; x=1696268264; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OSNJSuzGEyn2eFVxut8UHIn8mk8UoHB1vJTBDeWUjg=;
+        b=vHOkqRox53qWWq1w+Y3R/aBAcsqP2f0/LNwJwmzxBUBvbELxtAJ6WQLQ4COw481jWg
+         5XpcRTOL103TSrAzZNlnTMG1Cf+eOC0WZxF+FCAwmbRRdVNuLepHIOBdWyDB08n5YCSe
+         jlJtH2FuqegQqHwVchEEPTST2X8ZE5G4nYrRSKwHxa5x5HM0vMXNJ87VZ0aQtzsS9kdv
+         jAQqIus3+oLXkGka3TY1JEsJ79dwBXNI8OvA2hAUtIPbElxcF8AXME0DcJe+DbcurUGr
+         L+0oTtRH3YdccuVR3DF+3bqDuzvatC7Ug4oeHYoRIb1aOoKvXGwV8mY7IhxF6UXG9hwd
+         1UMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695663464; x=1696268264;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4OSNJSuzGEyn2eFVxut8UHIn8mk8UoHB1vJTBDeWUjg=;
+        b=mpj6wg9U6SvvAopSQ5Mpt/C+SiXt8gXJJsveOYphJDcVt7wjq4SWVlFontiGwwz4my
+         3SRIvl3/Ao/QrKKkGvLad/B1fKEYqcXstZm1sgyx5XeRnL99VJbW/HOBUyh3Y6RlSoVC
+         rF0GKbXjqPW1z9QQfxs3WAraWFhTLxsjgDyMSAAstB529hBbitCzt8/rRtvNrwLOJVtE
+         sSNE4vdfY3lkOV/BqqtvWFmXHxfMrsuI/rq2H3WMh7xGH7qPYjbNJMOSgt6oV6iLCZ0C
+         0OfuGMDoxt89RVplYeMeUpuLv7GC1adc9R2LOkW4SREdnCURSQQwR6SUYbRHZflcwmDp
+         kI4A==
+X-Gm-Message-State: AOJu0YwoKCwtl5phOZbATkhSOQBsDcFqAvSFuQAPLr6z2ffRVNb+jbc2
+        liimHY0+Gu4qIzjBf9Tb6DY1jIDnPZc=
+X-Google-Smtp-Source: AGHT+IFbdNqdQBINXaKsxLFNsbPAlNsb64v79jTXlms6OpZDsyyWIMsDvfLKOISLOkUltg3c0KbHgHQxQwM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:abac:0:b0:d81:fc08:29ea with SMTP id
+ v41-20020a25abac000000b00d81fc0829eamr67094ybi.2.1695663463860; Mon, 25 Sep
+ 2023 10:37:43 -0700 (PDT)
+Date:   Mon, 25 Sep 2023 10:37:42 -0700
+In-Reply-To: <ZQuahXpq2fy8rMDV@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-12-seanjc@google.com>
+ <ZQP6ZqXH81V24Lj/@yzhao56-desk.sh.intel.com> <ZQtdZmJ3SekURjiQ@google.com> <ZQuahXpq2fy8rMDV@yzhao56-desk.sh.intel.com>
+Message-ID: <ZRHFZmaa/6HQnZD1@google.com>
+Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,27 +102,56 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 05, 2023 at 09:06:56AM +0200, Christoph Hellwig wrote:
-> While commit d4a5c59a955b ("mmc: au1xmmc: force non-modular build and
-> remove symbol_get usage") to be built in, it can still build a kernel
-> without MMC support and thuse no mmc_detect_change symbol at all.
+On Thu, Sep 21, 2023, Yan Zhao wrote:
+> On Wed, Sep 20, 2023 at 02:00:22PM -0700, Sean Christopherson wrote:
+> > On Fri, Sep 15, 2023, Yan Zhao wrote:
+> > > On Wed, Sep 13, 2023 at 06:55:09PM -0700, Sean Christopherson wrote:
+> > > > +/* Set @attributes for the gfn range [@start, @end). */
+> > > > +static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+> > > > +				     unsigned long attributes)
+> > > > +{
+> > > > +	struct kvm_mmu_notifier_range pre_set_range = {
+> > > > +		.start = start,
+> > > > +		.end = end,
+> > > > +		.handler = kvm_arch_pre_set_memory_attributes,
+> > > > +		.on_lock = kvm_mmu_invalidate_begin,
+> > > > +		.flush_on_ret = true,
+> > > > +		.may_block = true,
+> > > > +	};
+> > > > +	struct kvm_mmu_notifier_range post_set_range = {
+> > > > +		.start = start,
+> > > > +		.end = end,
+> > > > +		.arg.attributes = attributes,
+> > > > +		.handler = kvm_arch_post_set_memory_attributes,
+> > > > +		.on_lock = kvm_mmu_invalidate_end,
+> > > > +		.may_block = true,
+> > > > +	};
+> > > > +	unsigned long i;
+> > > > +	void *entry;
+> > > > +	int r = 0;
+> > > > +
+> > > > +	entry = attributes ? xa_mk_value(attributes) : NULL;
+> > > Also here, do we need to get existing attributes of a GFN first ?
+> > 
+> > No?  @entry is the new value that will be set for all entries.  This line doesn't
+> > touch the xarray in any way.  Maybe I'm just not understanding your question.
+> Hmm, I thought this interface was to allow users to add/remove an attribute to a GFN
+> rather than overwrite all attributes of a GFN. Now I think I misunderstood the intention.
 > 
-> Add ifdefs to build the mmc support code in the alchemy arch code
-> conditional on mmc support.
-> 
-> Fixes: d4a5c59a955b ("mmc: au1xmmc: force non-modular build and remove symbol_get usage")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/mips/alchemy/devboards/db1000.c | 4 ++++
->  arch/mips/alchemy/devboards/db1200.c | 6 ++++++
->  arch/mips/alchemy/devboards/db1300.c | 4 ++++
->  3 files changed, 14 insertions(+)
+> But I wonder if there is a way for users to just add one attribute, as I don't find
+> ioctl like KVM_GET_MEMORY_ATTRIBUTES for users to get current attributes and then to
+> add/remove one based on that. e.g. maybe in future, KVM wants to add one attribute in
+> kernel without being told by userspace ?
 
-applied to mips-fixes.
+The plan is that memory attributes will be 100% userspace driven, i.e. that KVM
+will never add its own attributes.  That's why there is (currently) no
+KVM_GET_MEMORY_ATTRIBUTES, the intended usage model is that userspace is fully
+responsible for managing attributes, and so should never need to query information
+that it already knows.  If there's a compelling case for getting attributes then
+we could certainly add such an ioctl(), but I hope we never need to add a GET
+because that likely means we've made mistakes along the way.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Giving userspace full control of attributes allows for a simpler uAPI, e.g. if
+userspace doesn't have full control, then setting or clearing bits requires a RMW
+operation, which means creating a more complex ioctl().  That's why its a straight
+SET operation and not an OR type operation.
