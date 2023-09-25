@@ -2,156 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193477ADDDF
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Sep 2023 19:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5607AE1B8
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 00:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbjIYRhz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Sep 2023 13:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S232024AbjIYWeG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Sep 2023 18:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbjIYRhv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 13:37:51 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3A310F
-        for <linux-mips@vger.kernel.org>; Mon, 25 Sep 2023 10:37:44 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59c240e637aso134387127b3.3
-        for <linux-mips@vger.kernel.org>; Mon, 25 Sep 2023 10:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695663464; x=1696268264; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4OSNJSuzGEyn2eFVxut8UHIn8mk8UoHB1vJTBDeWUjg=;
-        b=vHOkqRox53qWWq1w+Y3R/aBAcsqP2f0/LNwJwmzxBUBvbELxtAJ6WQLQ4COw481jWg
-         5XpcRTOL103TSrAzZNlnTMG1Cf+eOC0WZxF+FCAwmbRRdVNuLepHIOBdWyDB08n5YCSe
-         jlJtH2FuqegQqHwVchEEPTST2X8ZE5G4nYrRSKwHxa5x5HM0vMXNJ87VZ0aQtzsS9kdv
-         jAQqIus3+oLXkGka3TY1JEsJ79dwBXNI8OvA2hAUtIPbElxcF8AXME0DcJe+DbcurUGr
-         L+0oTtRH3YdccuVR3DF+3bqDuzvatC7Ug4oeHYoRIb1aOoKvXGwV8mY7IhxF6UXG9hwd
-         1UMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695663464; x=1696268264;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4OSNJSuzGEyn2eFVxut8UHIn8mk8UoHB1vJTBDeWUjg=;
-        b=mpj6wg9U6SvvAopSQ5Mpt/C+SiXt8gXJJsveOYphJDcVt7wjq4SWVlFontiGwwz4my
-         3SRIvl3/Ao/QrKKkGvLad/B1fKEYqcXstZm1sgyx5XeRnL99VJbW/HOBUyh3Y6RlSoVC
-         rF0GKbXjqPW1z9QQfxs3WAraWFhTLxsjgDyMSAAstB529hBbitCzt8/rRtvNrwLOJVtE
-         sSNE4vdfY3lkOV/BqqtvWFmXHxfMrsuI/rq2H3WMh7xGH7qPYjbNJMOSgt6oV6iLCZ0C
-         0OfuGMDoxt89RVplYeMeUpuLv7GC1adc9R2LOkW4SREdnCURSQQwR6SUYbRHZflcwmDp
-         kI4A==
-X-Gm-Message-State: AOJu0YwoKCwtl5phOZbATkhSOQBsDcFqAvSFuQAPLr6z2ffRVNb+jbc2
-        liimHY0+Gu4qIzjBf9Tb6DY1jIDnPZc=
-X-Google-Smtp-Source: AGHT+IFbdNqdQBINXaKsxLFNsbPAlNsb64v79jTXlms6OpZDsyyWIMsDvfLKOISLOkUltg3c0KbHgHQxQwM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:abac:0:b0:d81:fc08:29ea with SMTP id
- v41-20020a25abac000000b00d81fc0829eamr67094ybi.2.1695663463860; Mon, 25 Sep
- 2023 10:37:43 -0700 (PDT)
-Date:   Mon, 25 Sep 2023 10:37:42 -0700
-In-Reply-To: <ZQuahXpq2fy8rMDV@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-12-seanjc@google.com>
- <ZQP6ZqXH81V24Lj/@yzhao56-desk.sh.intel.com> <ZQtdZmJ3SekURjiQ@google.com> <ZQuahXpq2fy8rMDV@yzhao56-desk.sh.intel.com>
-Message-ID: <ZRHFZmaa/6HQnZD1@google.com>
-Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229509AbjIYWeG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 18:34:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2B120;
+        Mon, 25 Sep 2023 15:33:57 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1695681226tcihg9u5
+Received: from linux-lab-host.localdomain ( [116.30.124.152])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 26 Sep 2023 06:33:44 +0800 (CST)
+X-QQ-SSF: 01200000000000E0Y000B00A0000000
+X-QQ-FEAT: mRz6/7wsmIhEdtJxEM3+86IjQT+Q2BIK68FoSWVkt5uacFvPZnMVGdTic5nTs
+        yFZ0ibzgKsflWJT5L40MNO8tEShlHRSZXfPwo1fDK1vqatDKo41I1IcSCrqiVhPV3R730IR
+        pGGbPSYS+zsSxMPHTdxpa5tYEQ5bid0+GVFXPgKxc958NIK+3X2yS09DZdjKtvv+ZgGgu7o
+        TjD9ZGoNdbjLgdkWbeFwPWuG3Ix9bFnm9YzgcMo2/xX+um7cPVbTgxCUiYcCO1ji2JSBSDg
+        W1QAoXySxRkRiichVOSgMt1ehzqHAV2HQiK/pIpW8o7df+gBQPQwGFGwlddP3v0GSA2kNcT
+        V2gskPCLhmWYivb0+S/GRjN4K3Tpg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1329585511254707149
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Cc:     falcon@tinylab.org, palmer@rivosinc.com, paul.walmsley@sifive.com,
+        paulburton@kernel.org, paulmck@kernel.org,
+        tsbogend@alpha.franken.de, w@1wt.eu,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Tim Bird <tim.bird@sony.com>
+Subject: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
+Date:   Tue, 26 Sep 2023 06:33:44 +0800
+Message-Id: <cover.1695679700.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 21, 2023, Yan Zhao wrote:
-> On Wed, Sep 20, 2023 at 02:00:22PM -0700, Sean Christopherson wrote:
-> > On Fri, Sep 15, 2023, Yan Zhao wrote:
-> > > On Wed, Sep 13, 2023 at 06:55:09PM -0700, Sean Christopherson wrote:
-> > > > +/* Set @attributes for the gfn range [@start, @end). */
-> > > > +static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
-> > > > +				     unsigned long attributes)
-> > > > +{
-> > > > +	struct kvm_mmu_notifier_range pre_set_range = {
-> > > > +		.start = start,
-> > > > +		.end = end,
-> > > > +		.handler = kvm_arch_pre_set_memory_attributes,
-> > > > +		.on_lock = kvm_mmu_invalidate_begin,
-> > > > +		.flush_on_ret = true,
-> > > > +		.may_block = true,
-> > > > +	};
-> > > > +	struct kvm_mmu_notifier_range post_set_range = {
-> > > > +		.start = start,
-> > > > +		.end = end,
-> > > > +		.arg.attributes = attributes,
-> > > > +		.handler = kvm_arch_post_set_memory_attributes,
-> > > > +		.on_lock = kvm_mmu_invalidate_end,
-> > > > +		.may_block = true,
-> > > > +	};
-> > > > +	unsigned long i;
-> > > > +	void *entry;
-> > > > +	int r = 0;
-> > > > +
-> > > > +	entry = attributes ? xa_mk_value(attributes) : NULL;
-> > > Also here, do we need to get existing attributes of a GFN first ?
-> > 
-> > No?  @entry is the new value that will be set for all entries.  This line doesn't
-> > touch the xarray in any way.  Maybe I'm just not understanding your question.
-> Hmm, I thought this interface was to allow users to add/remove an attribute to a GFN
-> rather than overwrite all attributes of a GFN. Now I think I misunderstood the intention.
-> 
-> But I wonder if there is a way for users to just add one attribute, as I don't find
-> ioctl like KVM_GET_MEMORY_ATTRIBUTES for users to get current attributes and then to
-> add/remove one based on that. e.g. maybe in future, KVM wants to add one attribute in
-> kernel without being told by userspace ?
+Hi, all
 
-The plan is that memory attributes will be 100% userspace driven, i.e. that KVM
-will never add its own attributes.  That's why there is (currently) no
-KVM_GET_MEMORY_ATTRIBUTES, the intended usage model is that userspace is fully
-responsible for managing attributes, and so should never need to query information
-that it already knows.  If there's a compelling case for getting attributes then
-we could certainly add such an ioctl(), but I hope we never need to add a GET
-because that likely means we've made mistakes along the way.
+This series aims to add DCE based DSE support, here is the first
+revision of the RFC patchset [1], the whole series includes three parts,
+here is the Part1.
 
-Giving userspace full control of attributes allows for a simpler uAPI, e.g. if
-userspace doesn't have full control, then setting or clearing bits requires a RMW
-operation, which means creating a more complex ioctl().  That's why its a straight
-SET operation and not an OR type operation.
+This Part1 adds basic DCE based DSE support.
+
+Part2 will further eliminate the unused syscalls forcely kept by the
+exception tables.
+
+Part3 will add DSE test support with nolibc-test.c.
+
+Changes from RFC patchset [1]:
+
+- The DCE support [2] for RISC-V has been merged [3]
+- The "nolibc: Record used syscalls in their own sections" [4] will be
+  delayed to Part3
+
+- Add debug support for DCE
+- Further allows CONFIG_USED_SYSCALLS accept a file stores used syscalls
+- Now, only accepts symbolic syscalls, not support integral number again
+- Works with newly added riscv syscalls suffix: __riscv_
+- Further trims the syscall tables by removing the tailing invalid parts
+
+The nolibc-test based initrd run well on riscv64 kernel image with dead
+syscalls eliminated:
+
+    $ nm build/riscv64/virt/linux/v6.6-rc2/vmlinux | grep "T __riscv_sys" | grep -v sys_ni_syscall | wc -l
+    48
+
+These options should be enabled:
+
+    CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
+    CONFIG_LD_DEAD_CODE_DATA_ELIMINATION_DEBUG=y
+    CONFIG_TRIM_UNUSED_SYSCALLS=y
+    CONFIG_USED_SYSCALLS="sys_dup sys_dup3 sys_ioctl sys_mknodat sys_mkdirat sys_unlinkat sys_symlinkat sys_linkat sys_mount sys_chdir sys_chroot sys_fchmodat sys_fchownat sys_openat sys_close sys_pipe2 sys_getdents64 sys_lseek sys_read sys_write sys_pselect6 sys_ppoll sys_exit sys_sched_yield sys_kill sys_reboot sys_getpgid sys_prctl sys_gettimeofday sys_getpid sys_getppid sys_getuid sys_geteuid sys_brk sys_munmap sys_clone sys_execve sys_mmap sys_wait4 sys_statx"
+
+The really used syscalls:
+
+    $ echo "sys_dup sys_dup3 sys_ioctl sys_mknodat sys_mkdirat sys_unlinkat sys_symlinkat sys_linkat sys_mount sys_chdir sys_chroot sys_fchmodat sys_fchownat sys_openat sys_close sys_pipe2 sys_getdents64 sys_lseek sys_read sys_write sys_pselect6 sys_ppoll sys_exit sys_sched_yield sys_kill sys_reboot sys_getpgid sys_prctl sys_gettimeofday sys_getpid sys_getppid sys_getuid sys_geteuid sys_brk sys_munmap sys_clone sys_execve sys_mmap sys_wait4 sys_statx" | tr ' ' '\n' | wc -l
+    40
+
+Thanks to Yuan Tan, he has researched and verified the elimination of
+the unused syscalls forcely kept by the exception tables, both section
+group and section link order attributes of ld work. part2 will be sent
+out soon to further remove another 8 unused syscalls and eventually we
+are able to run a dead loop application on a kernel image without
+syscalls.
+
+Best Regards,
+Zhangjin Wu
+
+---
+[1]: https://lore.kernel.org/lkml/cover.1676594211.git.falcon@tinylab.org/
+[2]: https://lore.kernel.org/lkml/234017be6d06ef84844583230542e31068fa3685.1676594211.git.falcon@tinylab.org/
+[3]: https://lore.kernel.org/lkml/CAFP8O3+41QFVyNTVJ2iZYkB0tqnvdLTAoGShgGy-qPP1PHjBEw@mail.gmail.com/
+[4]: https://lore.kernel.org/lkml/cbcbfbb37cabfd9aed6088c75515e4ea86006cff.1676594211.git.falcon@tinylab.org/
+
+Zhangjin Wu (7):
+  DCE: add debug support
+  DCE/DSE: add unused syscalls elimination configure support
+  DCE/DSE: Add a new scripts/Makefile.syscalls
+  DCE/DSE: mips: add HAVE_TRIM_UNUSED_SYSCALLS support
+  DCE/DSE: riscv: move syscall tables to syscalls/
+  DCE/DSE: riscv: add HAVE_TRIM_UNUSED_SYSCALLS support
+  DCE/DSE: riscv: trim syscall tables
+
+ Makefile                                      |  3 +
+ arch/mips/Kconfig                             |  1 +
+ arch/mips/kernel/syscalls/Makefile            | 23 ++++++-
+ arch/riscv/Kconfig                            |  1 +
+ arch/riscv/include/asm/unistd.h               |  2 +
+ arch/riscv/kernel/Makefile                    |  7 +-
+ arch/riscv/kernel/syscalls/Makefile           | 69 +++++++++++++++++++
+ .../{ => syscalls}/compat_syscall_table.c     |  4 +-
+ .../kernel/{ => syscalls}/syscall_table.c     |  4 +-
+ init/Kconfig                                  | 49 +++++++++++++
+ scripts/Makefile.syscalls                     | 29 ++++++++
+ 11 files changed, 182 insertions(+), 10 deletions(-)
+ create mode 100644 arch/riscv/kernel/syscalls/Makefile
+ rename arch/riscv/kernel/{ => syscalls}/compat_syscall_table.c (82%)
+ rename arch/riscv/kernel/{ => syscalls}/syscall_table.c (83%)
+ create mode 100644 scripts/Makefile.syscalls
+
+-- 
+2.25.1
+
