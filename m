@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5607AE1B8
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 00:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5F27AE1BC
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 00:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbjIYWeG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Sep 2023 18:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S232973AbjIYWfc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Sep 2023 18:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjIYWeG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 18:34:06 -0400
+        with ESMTP id S232992AbjIYWfb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 18:35:31 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2B120;
-        Mon, 25 Sep 2023 15:33:57 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1695681226tcihg9u5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8E1192;
+        Mon, 25 Sep 2023 15:35:24 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1695681314trhnno76
 Received: from linux-lab-host.localdomain ( [116.30.124.152])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 26 Sep 2023 06:33:44 +0800 (CST)
-X-QQ-SSF: 01200000000000E0Y000B00A0000000
-X-QQ-FEAT: mRz6/7wsmIhEdtJxEM3+86IjQT+Q2BIK68FoSWVkt5uacFvPZnMVGdTic5nTs
-        yFZ0ibzgKsflWJT5L40MNO8tEShlHRSZXfPwo1fDK1vqatDKo41I1IcSCrqiVhPV3R730IR
-        pGGbPSYS+zsSxMPHTdxpa5tYEQ5bid0+GVFXPgKxc958NIK+3X2yS09DZdjKtvv+ZgGgu7o
-        TjD9ZGoNdbjLgdkWbeFwPWuG3Ix9bFnm9YzgcMo2/xX+um7cPVbTgxCUiYcCO1ji2JSBSDg
-        W1QAoXySxRkRiichVOSgMt1ehzqHAV2HQiK/pIpW8o7df+gBQPQwGFGwlddP3v0GSA2kNcT
-        V2gskPCLhmWYivb0+S/GRjN4K3Tpg==
+        id ; Tue, 26 Sep 2023 06:35:13 +0800 (CST)
+X-QQ-SSF: 01200000002000E0Y000B00A0000000
+X-QQ-FEAT: 5q30pvLz2ifym5SLIzsh144Znm6wRlu+bPV0w9peTQtfsIPVYY0hXdp41PdCD
+        qNzUX3VU0ZbZvFxqzdl781ox5Wff3pzWuKKNI6Te1Y8Odq1dErSA2qLbFA/SMI2cKUrzOVs
+        JqSkwphfZ1OdgeG+SXhsqzaC3EdPtZ01WiX3xWijTjjHsIaAgg69GAJkp+9VvBK+LXtqy1j
+        nrLN7pG00O3beVVn6nNJXOacEGL+QVJsdzrevmusz0g8QdKt9Gmkrc6JmfWCThmyuCXGiVh
+        gjxq5yWAioV+s2WgKuEpfsGOozhlcqRN+oC8EBu5Z9jN5LH+6xf8e1VBtfxSu4YLC8kyaQi
+        XdE5S4RGw+7MohBQiYCuUk9wCwPZJByKg1RLiR97lDnE03vxkhVdJMeJFQ4NQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1329585511254707149
+X-BIZMAIL-ID: 1656431424344420643
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
@@ -35,10 +35,12 @@ Cc:     falcon@tinylab.org, palmer@rivosinc.com, paul.walmsley@sifive.com,
         tsbogend@alpha.franken.de, w@1wt.eu,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Tim Bird <tim.bird@sony.com>
-Subject: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
-Date:   Tue, 26 Sep 2023 06:33:44 +0800
-Message-Id: <cover.1695679700.git.falcon@tinylab.org>
+Subject: [PATCH v1 1/7] DCE: add debug support
+Date:   Tue, 26 Sep 2023 06:35:11 +0800
+Message-Id: <36d7ee5122e3a9c2b307cf6ab1a9508860fd7710.1695679700.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1695679700.git.falcon@tinylab.org>
+References: <cover.1695679700.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -52,91 +54,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, all
+Enable --print-gc-sections for --gc-sections to monitor which sections
+are really eliminated.
 
-This series aims to add DCE based DSE support, here is the first
-revision of the RFC patchset [1], the whole series includes three parts,
-here is the Part1.
-
-This Part1 adds basic DCE based DSE support.
-
-Part2 will further eliminate the unused syscalls forcely kept by the
-exception tables.
-
-Part3 will add DSE test support with nolibc-test.c.
-
-Changes from RFC patchset [1]:
-
-- The DCE support [2] for RISC-V has been merged [3]
-- The "nolibc: Record used syscalls in their own sections" [4] will be
-  delayed to Part3
-
-- Add debug support for DCE
-- Further allows CONFIG_USED_SYSCALLS accept a file stores used syscalls
-- Now, only accepts symbolic syscalls, not support integral number again
-- Works with newly added riscv syscalls suffix: __riscv_
-- Further trims the syscall tables by removing the tailing invalid parts
-
-The nolibc-test based initrd run well on riscv64 kernel image with dead
-syscalls eliminated:
-
-    $ nm build/riscv64/virt/linux/v6.6-rc2/vmlinux | grep "T __riscv_sys" | grep -v sys_ni_syscall | wc -l
-    48
-
-These options should be enabled:
-
-    CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
-    CONFIG_LD_DEAD_CODE_DATA_ELIMINATION_DEBUG=y
-    CONFIG_TRIM_UNUSED_SYSCALLS=y
-    CONFIG_USED_SYSCALLS="sys_dup sys_dup3 sys_ioctl sys_mknodat sys_mkdirat sys_unlinkat sys_symlinkat sys_linkat sys_mount sys_chdir sys_chroot sys_fchmodat sys_fchownat sys_openat sys_close sys_pipe2 sys_getdents64 sys_lseek sys_read sys_write sys_pselect6 sys_ppoll sys_exit sys_sched_yield sys_kill sys_reboot sys_getpgid sys_prctl sys_gettimeofday sys_getpid sys_getppid sys_getuid sys_geteuid sys_brk sys_munmap sys_clone sys_execve sys_mmap sys_wait4 sys_statx"
-
-The really used syscalls:
-
-    $ echo "sys_dup sys_dup3 sys_ioctl sys_mknodat sys_mkdirat sys_unlinkat sys_symlinkat sys_linkat sys_mount sys_chdir sys_chroot sys_fchmodat sys_fchownat sys_openat sys_close sys_pipe2 sys_getdents64 sys_lseek sys_read sys_write sys_pselect6 sys_ppoll sys_exit sys_sched_yield sys_kill sys_reboot sys_getpgid sys_prctl sys_gettimeofday sys_getpid sys_getppid sys_getuid sys_geteuid sys_brk sys_munmap sys_clone sys_execve sys_mmap sys_wait4 sys_statx" | tr ' ' '\n' | wc -l
-    40
-
-Thanks to Yuan Tan, he has researched and verified the elimination of
-the unused syscalls forcely kept by the exception tables, both section
-group and section link order attributes of ld work. part2 will be sent
-out soon to further remove another 8 unused syscalls and eventually we
-are able to run a dead loop application on a kernel image without
-syscalls.
-
-Best Regards,
-Zhangjin Wu
-
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
-[1]: https://lore.kernel.org/lkml/cover.1676594211.git.falcon@tinylab.org/
-[2]: https://lore.kernel.org/lkml/234017be6d06ef84844583230542e31068fa3685.1676594211.git.falcon@tinylab.org/
-[3]: https://lore.kernel.org/lkml/CAFP8O3+41QFVyNTVJ2iZYkB0tqnvdLTAoGShgGy-qPP1PHjBEw@mail.gmail.com/
-[4]: https://lore.kernel.org/lkml/cbcbfbb37cabfd9aed6088c75515e4ea86006cff.1676594211.git.falcon@tinylab.org/
+ Makefile     | 3 +++
+ init/Kconfig | 7 +++++++
+ 2 files changed, 10 insertions(+)
 
-Zhangjin Wu (7):
-  DCE: add debug support
-  DCE/DSE: add unused syscalls elimination configure support
-  DCE/DSE: Add a new scripts/Makefile.syscalls
-  DCE/DSE: mips: add HAVE_TRIM_UNUSED_SYSCALLS support
-  DCE/DSE: riscv: move syscall tables to syscalls/
-  DCE/DSE: riscv: add HAVE_TRIM_UNUSED_SYSCALLS support
-  DCE/DSE: riscv: trim syscall tables
-
- Makefile                                      |  3 +
- arch/mips/Kconfig                             |  1 +
- arch/mips/kernel/syscalls/Makefile            | 23 ++++++-
- arch/riscv/Kconfig                            |  1 +
- arch/riscv/include/asm/unistd.h               |  2 +
- arch/riscv/kernel/Makefile                    |  7 +-
- arch/riscv/kernel/syscalls/Makefile           | 69 +++++++++++++++++++
- .../{ => syscalls}/compat_syscall_table.c     |  4 +-
- .../kernel/{ => syscalls}/syscall_table.c     |  4 +-
- init/Kconfig                                  | 49 +++++++++++++
- scripts/Makefile.syscalls                     | 29 ++++++++
- 11 files changed, 182 insertions(+), 10 deletions(-)
- create mode 100644 arch/riscv/kernel/syscalls/Makefile
- rename arch/riscv/kernel/{ => syscalls}/compat_syscall_table.c (82%)
- rename arch/riscv/kernel/{ => syscalls}/syscall_table.c (83%)
- create mode 100644 scripts/Makefile.syscalls
-
+diff --git a/Makefile b/Makefile
+index 57698d048e2c..a4e522b747cb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -938,6 +938,9 @@ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+ KBUILD_RUSTFLAGS_KERNEL += -Zfunction-sections=y
+ LDFLAGS_vmlinux += --gc-sections
++ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION_DEBUG
++LDFLAGS_vmlinux += --print-gc-sections
++endif
+ endif
+ 
+ ifdef CONFIG_SHADOW_CALL_STACK
+diff --git a/init/Kconfig b/init/Kconfig
+index 6d35728b94b2..4350d8ba7db4 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1404,6 +1404,13 @@ config LD_DEAD_CODE_DATA_ELIMINATION
+ 	  present. This option is not well tested yet, so use at your
+ 	  own risk.
+ 
++config LD_DEAD_CODE_DATA_ELIMINATION_DEBUG
++	bool "Debug dead code and data elimination (EXPERIMENTAL)"
++	depends on LD_DEAD_CODE_DATA_ELIMINATION
++	default n
++	help
++	  Enable --print-gc-sections for --gc-sections
++
+ config LD_ORPHAN_WARN
+ 	def_bool y
+ 	depends on ARCH_WANT_LD_ORPHAN_WARN
 -- 
 2.25.1
 
