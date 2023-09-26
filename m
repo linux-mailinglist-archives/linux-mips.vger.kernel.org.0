@@ -2,102 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAED7AE8FE
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 11:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279EA7AEB69
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 13:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbjIZJ0e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Sep 2023 05:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S230231AbjIZLYz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Sep 2023 07:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbjIZJ0e (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 05:26:34 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FA2B3;
-        Tue, 26 Sep 2023 02:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1695720383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YHBvuudP4pKRGMI+5QzAgBxLIrsXOrLJ9iqlMBxOiN0=;
-        b=jlAges8dZ4ozxPdauu1jCcRu4OkV0xEo1tEkfT8fO1nQra6p2wiuwC1Rt1fTphVsuj2BiE
-        HF3uytG/dHfki4JeWXGvTd/kZVM/n8Rz38K2K5Oeh/e4BgnlBgbFtiUVP3VKSeALttLR3F
-        Gso31O8IU6t459yIbtPB7JiYBTnqiho=
-Message-ID: <8c8a41b2740976f33c3993f609123f957f5df7de.camel@crapouillou.net>
-Subject: Re: [RFT PATCH] mtd: rawnand: ingenic: move the GPIO quirk to
- gpiolib-of.c
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-mips@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Tue, 26 Sep 2023 11:26:21 +0200
-In-Reply-To: <20230926111643.58ee4587@xps-13>
-References: <20230926090623.35595-1-brgl@bgdev.pl>
-         <20230926111643.58ee4587@xps-13>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229726AbjIZLYz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 07:24:55 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C761AE9;
+        Tue, 26 Sep 2023 04:24:44 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 27AAC320091E;
+        Tue, 26 Sep 2023 07:24:43 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 26 Sep 2023 07:24:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695727482; x=1695813882; bh=8e
+        yX8AE9ekmLAMHsyT0GeS5BenFeWtINVJaFHwwMKHA=; b=cx8XGgkMMAcNeF+sP0
+        Xg3n1R6IWF1+SXDGfWQApF4gZU9gK98wjZ0TUjZLFzYcgq8P2RRJCuEdBdODa4hG
+        LwKYI47Zd+dAN2sC7uN5feNdegP+GZb7mb4cJX3pFg4zNHKKCNFUQVkLrJt7eOGy
+        av9AhHq7+EzE3QAK4jK325rz1w3OUvVLfAw7DSQa/RpNs7kW2gOSTtEgEjLwdWtt
+        7feAoyTVZ6ZTf8BytvH5XSxMWdPKa/nb5dXvC6xyPHZVayjpYoBqiW4jAorTVJja
+        tKWHNOJnDGBH7Oyl+MKk4DD1HRisrJ2FlsDSQ2niXV/P7ghs31CB4+l+dtJ2ytA4
+        zyTA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695727482; x=1695813882; bh=8eyX8AE9ekmLA
+        MHsyT0GeS5BenFeWtINVJaFHwwMKHA=; b=pKJsOAmfVoi/4sfxkVCOWL4nh8SdI
+        vTNfaOPB2+Cy4Ja/lQ3Dgdcqqf/JHimuqu1zmUPu1MzuyGpR4BlyFO2fOSqdBrJD
+        dG/SXyM6XoU2sGTJ/NWIMZUJyoecgPZl0b6nkj8lpNQjaLInMfKBHXpPk9o0zZ8N
+        f2+asD/QlnYjipjgbC2xO89dl7+ZJh/tBYo16z1ZVbUowwfDtPnG8XSWj18p/jjv
+        meBDvYSJBIu94daupGg0yGr0/hZUoiL/siu6JSFMX15KLH3A7lYiXNIDrCUb5iLE
+        h/XNs2TVtz2eqKBcgk+145ybDYVcHPe7ZyW0WxZitiwz6DTkzvjhbteiw==
+X-ME-Sender: <xms:eb8SZZEcaTZMFMpYAflPbP6DpBY0f9Jbgp7wKzhigFCtCYXkqvNtBg>
+    <xme:eb8SZeWLDfYUwqlJ229zBamM2dVDiNCtnh-GLyX9v_isYz0AZO3tkJodHRo2fUQWA
+    X280YTNERWABvT2jh8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtddtgdduudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:eb8SZbKm8HNdpZENOy-r1jGJ0F1fTPCpY5PTtvi6CyNDh_zlLriqNg>
+    <xmx:eb8SZfFRNuDq8yK_KKFGXpTKP27IkbOjDlPtYdTHBP_Y0-oiCUp86w>
+    <xmx:eb8SZfUtLwmWAwAlUgE5KB6vkv-NwyElt2tvY67MHACBpgfWmUA18Q>
+    <xmx:er8SZSON_9QoBQ-aD3tFSwDaNYnpnNe3yTR1YBLYE5qoeHqhQ02ViQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 716E8B60089; Tue, 26 Sep 2023 07:24:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <a08e1cee-05e0-447a-b25b-6c2ebb116e8d@app.fastmail.com>
+In-Reply-To: <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com>
+References: <cover.1695679700.git.falcon@tinylab.org>
+ <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com>
+Date:   Tue, 26 Sep 2023 13:24:21 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>, paulburton@kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Willy Tarreau" <w@1wt.eu>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        "Tim Bird" <tim.bird@sony.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Nicolas Pitre" <nico@fluxnic.net>
+Subject: Re: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGksCgpMZSBtYXJkaSAyNiBzZXB0ZW1icmUgMjAyMyDDoCAxMToxNiArMDIwMCwgTWlxdWVsIFJh
-eW5hbCBhIMOpY3JpdMKgOgo+IEhpIEJhcnRvc3osCj4gCj4gYnJnbEBiZ2Rldi5wbMKgd3JvdGUg
-b24gVHVlLCAyNiBTZXAgMjAyMyAxMTowNjoyMyArMDIwMDoKPiAKPiA+IEZyb206IEJhcnRvc3og
-R29sYXN6ZXdza2kgPGJhcnRvc3ouZ29sYXN6ZXdza2lAbGluYXJvLm9yZz4KPiA+IAo+ID4gV2Ug
-aGF2ZSBhIHNwZWNpYWwgcGxhY2UgZm9yIE9GIHBvbGFyaXR5IHF1aXJrcyBpbiBncGlvbGliLW9m
-LmMuCj4gPiBMZXQncwo+ID4gbW92ZSB0aGlzIG92ZXIgdGhlcmUgc28gdGhhdCBpdCBkb2Vzbid0
-IHBvbGx1dGUgdGhlIGRyaXZlci4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogQmFydG9zeiBHb2xh
-c3pld3NraSA8YmFydG9zei5nb2xhc3pld3NraUBsaW5hcm8ub3JnPgo+ID4gLS0tCj4gPiBUaGlz
-IGlzIGFuIGFsdGVybmF0aXZlIHRvIHRoZSBwcmV2aW91cyBwYXRjaCB0aGF0IGluc3RlYWQgb2YK
-PiA+IHJlcGxhY2luZwo+ID4gb25lIGFjdGl2ZS1sb3cgc2V0dGVyIHdpdGggYW5vdGhlciwganVz
-dCBtb3ZlcyB0aGUgcXVpcmsgb3ZlciB0bwo+ID4gZ3Bpb2xpYi1vZi5jCj4gPiAKPiA+IMKgZHJp
-dmVycy9ncGlvL2dwaW9saWItb2YuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIHzCoCA5ICsrKysrKysrKwo+ID4gwqBkcml2ZXJzL210ZC9uYW5kL3Jhdy9pbmdl
-bmljL2luZ2VuaWNfbmFuZF9kcnYuYyB8IDEyIC0tLS0tLS0tLS0tLQo+ID4gwqAyIGZpbGVzIGNo
-YW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMTIgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL2dwaW8vZ3Bpb2xpYi1vZi5jIGIvZHJpdmVycy9ncGlvL2dwaW9saWItb2Yu
-Ywo+ID4gaW5kZXggNTUxNWYzMmNmMTliLi41OGMwYmJlOWQ1NjkgMTAwNjQ0Cj4gPiAtLS0gYS9k
-cml2ZXJzL2dwaW8vZ3Bpb2xpYi1vZi5jCj4gPiArKysgYi9kcml2ZXJzL2dwaW8vZ3Bpb2xpYi1v
-Zi5jCj4gPiBAQCAtMTkyLDYgKzE5MiwxNSBAQCBzdGF0aWMgdm9pZCBvZl9ncGlvX3RyeV9maXh1
-cF9wb2xhcml0eShjb25zdAo+ID4gc3RydWN0IGRldmljZV9ub2RlICpucCwKPiA+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHsgImhpbWF4LGh4ODM1NyIswqDCoMKgwqDCoMKgwqAiZ3Bpb3MtcmVzZXQiLMKgwqBm
-YWxzZSB9LAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB7ICJoaW1heCxoeDgz
-NjkiLMKgwqDCoMKgwqDCoMKgImdwaW9zLXJlc2V0IizCoMKgZmFsc2UgfSwKPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCAqIFRoZSByYi1ncGlvcyBzZW1hbnRpY3Mgd2FzIHVuZG9jdW1lbnRlZCBhbmQKPiA+IHFp
-LGxiNjAgKGFsb25nIHdpdGgKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiB0
-aGUgaW5nZW5pYyBkcml2ZXIpIGdvdCBpdCB3cm9uZy4gVGhlIGFjdGl2ZQo+ID4gc3RhdGUgZW5j
-b2RlcyB0aGUKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBOQU5EIHJlYWR5
-IHN0YXRlLCB3aGljaCBpcyBoaWdoIGxldmVsLiBTaW5jZQo+ID4gdGhlcmUncyBubyBzaWduYWwK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBpbnZlcnRlciBvbiB0aGlzIGJv
-YXJkLCBpdCBzaG91bGQgYmUgYWN0aXZlLQo+ID4gaGlnaC4gTGV0J3MgZml4IHRoYXQKPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBoZXJlIGZvciBvbGRlciBEVHMgc28gd2Ug
-Y2FuIHJlLXVzZSB0aGUgZ2VuZXJpYwo+ID4gbmFuZF9ncGlvX3dhaXRyZHkoKQo+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIGhlbHBlciwgYW5kIGJlIGNvbnNpc3RlbnQgd2l0
-aCB3aGF0IG90aGVyCj4gPiBkcml2ZXJzIGRvLgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHsgInFpLGxiNjAi
-LMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCJyYi1ncGlvcyIswqDCoMKgwqDCoHRydWUgfSwKPiAK
-PiBJIGRpZG4ndCBrbm93IGFib3V0IHN1Y2ggYSBsaXN0LCBpbnRlcmVzdGluZy4gQmV0dGVyIGJl
-IGF3YXJlIHdoZW4KPiBkZWJ1Z2dpbmcgOikKPiAKPiBJSVJDIExpbnVzIHdhcyBmaW5lLCBzbyBp
-ZiBQYXVsIGFsc28gYWdyZWVzIEkgZ3Vlc3MgdGhpcyBpcyBiZXR0ZXIKPiB0YWtpbmcgdGhyb3Vn
-aCB0aGUgZ3BpbyB0cmVlPyBJIGRvbid0IGhhdmUgYW55IGluZ2VuaWMgcmVsYXRlZAo+IGNoYW5n
-ZXMKPiBxdWV1ZWQgcmlnaHQgbm93IHNvIGZlZWwgZnJlZSB0byB0YWtlIGl0LgoKV29ya3MgZm9y
-IG1lLgoKPiAKPiBBY2tlZC1ieTogTWlxdWVsIFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGlu
-LmNvbT4KCkFja2VkLWJ5OiBQYXVsIENlcmN1ZWlsIDxwYXVsQGNyYXBvdWlsbG91Lm5ldD4KCj4g
-VGhhbmtzLAo+IE1pcXXDqGwKCkNoZWVycywKLVBhdWwK
+On Tue, Sep 26, 2023, at 09:14, Arnd Bergmann wrote:
+> On Tue, Sep 26, 2023, at 00:33, Zhangjin Wu wrote:
+>
+> It would be nice to include some size numbers here for at least
+> one practical use case. If you have a defconfig for a shipping
+> product with a small kernel, what is the 'size -B' output you
+> see comparing with and without DCE and, and with DCE+DSE?
 
+To follow up on this myself, for a very rough baseline,
+I tried a riscv tinyconfig build with and without 
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION (this is currently
+not supported on arm, so I did not try it there), and
+then another build with simply *all* system calls stubbed
+out by hacking asm/syscall-wrapper.h:
+
+$ size build/tmp/vmlinux-*
+   text	   data	    bss	     dec    hex	filename
+  754772  220016  71841	 1046629  ff865	vmlinux-tinyconfig
+  717500  223368  71841	 1012709  f73e5	vmlinux-tiny+nosyscalls
+  567310  176200  71473	  814983  c6f87	vmlinux-tiny+gc-sections
+  493278  170752  71433	  735463  b38e7	vmlinux-tiny+gc-sections+nosyscalls
+10120058 3572756 493701	14186515 d87813	vmlinux-defconfig
+ 9953934 3529004 491525	13974463 d53bbf	vmlinux-defconfig+gc
+ 9709856 3500600 489221	13699677 d10a5d	vmlinux-defconfig+gc+nosyscalls
+
+This would put us at an upper bound of 10% size savings (80kb) for
+tinyconfig, which is clearly significant. For defconfig, it's
+still 2.0% or 275kb size reduction when all syscalls are dropped.
+
+     Arnd
