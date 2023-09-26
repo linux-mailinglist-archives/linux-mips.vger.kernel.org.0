@@ -2,217 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC857AE1D5
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 00:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A6B7AE54D
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 07:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjIYWnw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Sep 2023 18:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S232542AbjIZF4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Sep 2023 01:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjIYWnv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Sep 2023 18:43:51 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C05109;
-        Mon, 25 Sep 2023 15:43:43 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1695681815tls4ddg5
-Received: from linux-lab-host.localdomain ( [116.30.124.152])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 26 Sep 2023 06:43:33 +0800 (CST)
-X-QQ-SSF: 01200000002000E0Y000B00A0000000
-X-QQ-FEAT: aBJFcW+uBGYffXzygR0k5C/WLWWZcLSCd2TbMPG0O7Tlzn1m+5D3uZe31rmrB
-        aujFQULia5dBlILNDRUyEjx57EpMsxaL6Hz0UfpOimP01EPYwODfLNDt/08+rViZ0kDvJPS
-        c/l6PK5eg6fwnuRPIEYFxcxK83ddGI9AWtGlJq/Ee72+sNa4MrAQ3EN8Qe34Np4jqLArABG
-        JS2WsLg0nT+US7V5b/8yFqpM/D3X+G29I8CLiztdDhT1Y7JbtyMwz8ftGBL0fuh92PguYE4
-        IKeAjeoyg3J6mOYoYZE003kMKygyo6u/CV03ypKigE7GsLxTYVFe5MpxCrKElLULeYxae/d
-        HtHN7uvHgeUIKpoUbjQ3Dfq7OGBezfWvX3+if5KLWzLVYk17ZVHC2GUJSVYzHQJ1NQ/1p5y
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4775298546958751858
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Cc:     falcon@tinylab.org, palmer@rivosinc.com, paul.walmsley@sifive.com,
-        paulburton@kernel.org, paulmck@kernel.org,
-        tsbogend@alpha.franken.de, w@1wt.eu,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Tim Bird <tim.bird@sony.com>
-Subject: [PATCH v1 7/7] DCE/DSE: riscv: trim syscall tables
-Date:   Tue, 26 Sep 2023 06:43:32 +0800
-Message-Id: <aad452c57bce2ab7983e723d78bd2cc7b6f533c1.1695679700.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1695679700.git.falcon@tinylab.org>
-References: <cover.1695679700.git.falcon@tinylab.org>
+        with ESMTP id S229472AbjIZF4D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 01:56:03 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2ADE9;
+        Mon, 25 Sep 2023 22:55:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 9EADC32009B8;
+        Tue, 26 Sep 2023 01:55:54 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 26 Sep 2023 01:55:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695707754; x=1695794154; bh=YR
+        rleeex828q75JmCNLzXDAVcVLBERWC6QvUePC8cFI=; b=uU92RTmRMEWMLlVvtx
+        i4w6UTw8tlWqOYGhJjwrHDaHb1+iiK8ZLbHSDr8Q4kEuUdh7Fqc/6NB1YxL6uR9h
+        gyrhhWHOWDAAUFvmklo5lI/PfiZ/3/IaMeVy1ddV0ItoW/lsBbE248i1moQpZRoh
+        ZUGYxcjChlhQApofJXRv64crfcpZNSD/SPE6WXEnfBZo8T354gOaifxSQwbZaMAf
+        b2Q/6tT0j/Ac77Qr/uC7DODJFfW3CfmDL+VFk/2MHxvVyx/4UXHEFSe2FuikFfsa
+        KLwFMBDSRi6uxL78Ow6hzYRHxrbBNhEK1k7HR07B1GBfxL/JExwS6yatJrCydv9J
+        kz5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695707754; x=1695794154; bh=YRrleeex828q7
+        5JmCNLzXDAVcVLBERWC6QvUePC8cFI=; b=SOO5xYa9rEjJjyK0tUjttPAxA+W6k
+        gUEVsNGvgYOr+N8UFdrYoXqwRDja2UDLDBjFWqvuVb90C9Wo4uqKBno06aft3+lY
+        g0dvJD9aNuxI97F/TMbehfcdo/zq0pk+xGIK6ZBiHSMCbws/n0Uf0WTrnBF2PXr3
+        dd9OW1e2H7q6OCbgbXzl88drAFBdiaWkc+vVd1bZ3efLVukyOs6NCwnyxP41W9Ld
+        Y4A/rDcDFgtzUYzWSG26DQa0ltuXGcWAtydTI/m/zlhutV+MNx1vS1icRUAKqaHJ
+        m6BKxxE+PrJMuhQLwr08fLmPq2myINs1m8h1UzfVAPDm3Oum16P3awwqQ==
+X-ME-Sender: <xms:aHISZa8xgeauB0XaSgrtJah2-U0olHnVTEXRb_6Nkw9IdqLmXrp7eQ>
+    <xme:aHISZat97w4bQXYA6ZKZaIb_gGm9fbmmu1rUN6u6hJnOAkv_QT2wg9Pzux8suB6sr
+    NXEONxD2AJhjwCnHas>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelhedguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:aHISZQB85KGuwgRCrpGa_iBUUKSt-RsVSGGsjx-z4A07TOEj74qeXA>
+    <xmx:aHISZSc4lMrYhaYapEyW1iMXMakHsTGCGe3YJ6SCeMCC5ueenP8l7Q>
+    <xmx:aHISZfO2xj0Kl9NF0Nkd2KilNan_vsbhEJXeC225ZmS2aE6V8Ztdnw>
+    <xmx:anISZaqw08Y2scEbkHMqs1q4rPsB1bOemD_-rCquvLZYeApib2gsfw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 71738B60089; Tue, 26 Sep 2023 01:55:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [43.154.54.12 listed in list.dnswl.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [43.154.54.12 listed in bl.score.senderscore.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-X-Spam-Level: ******
+Message-Id: <2c4bcf65-69f1-4af6-8f80-fe23a4fb20ab@app.fastmail.com>
+In-Reply-To: <df1ce8c514c3efc1323d5ed69e6ecbdb2542b960.1695679700.git.falcon@tinylab.org>
+References: <cover.1695679700.git.falcon@tinylab.org>
+ <df1ce8c514c3efc1323d5ed69e6ecbdb2542b960.1695679700.git.falcon@tinylab.org>
+Date:   Tue, 26 Sep 2023 07:55:32 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>, paulburton@kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Willy Tarreau" <w@1wt.eu>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        "Tim Bird" <tim.bird@sony.com>
+Subject: Re: [PATCH v1 3/7] DCE/DSE: Add a new scripts/Makefile.syscalls
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When the maximum nr of the used syscalls is smaller than __NR_syscalls
-(original syscalls total). It is able to update __NR_syscalls to
-(maximum nr + 1) and further trim the '>= (maximum nr + 1)' part of the
-syscall tables:
+On Tue, Sep 26, 2023, at 00:38, Zhangjin Wu wrote:
+> When CONFIG_TRIM_UNUSED_SYSCALLS is enabled, get used syscalls from
+> CONFIG_USED_SYSCALLS. CONFIG_USED_SYSCALLS may be a list of used
+> syscalls or a file to store such a list.
+>
+> If CONFIG_USED_SYSCALLS is configured as a list of the used syscalls,
+> directly record them in a used_syscalls variable, if it is a file to
+> store the list, record the file name to the used_syscalls_file variable
+> and put its content to the used_syscalls variable.
+>
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 
-For example:
+I like the idea of configuring the set of syscalls more, but we
+should probably discuss the implementation of this here. You
+introduce two new ways of doing this, on top of the existing
+coarse-grained method (per syscall class Kconfig symbols).
 
-    sys_call_table [143] = {
-	[0 ... 143 - 1] = sys_ni_syscall,
-        [64] = sys_write,
-        [93] = sys_exit,
-        [142] = sys_reboot,
-    }
+Both methods seem a little awkward to me, but are doable
+in principle if we can't come up with a better way. However,
+I'd much prefer to not add both the Kconfig symbol and the
+extra file here, since at least one of them is redundant.
 
-The >= 143 part of the syscall tables can be trimmed.
+Do you have automatic tooling to generate these lists from
+a profile, or do you require manually writing them? Do you
+have an example list?
 
-At the same time, the syscall >= 143 from user space must be ignored
-from do_trap_ecall_u() of traps.c.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- arch/riscv/include/asm/unistd.h               |  2 ++
- arch/riscv/kernel/Makefile                    |  2 ++
- arch/riscv/kernel/syscalls/Makefile           | 22 +++++++++++++++++++
- .../kernel/syscalls/compat_syscall_table.c    |  4 ++--
- arch/riscv/kernel/syscalls/syscall_table.c    |  4 ++--
- 5 files changed, 30 insertions(+), 4 deletions(-)
-
-diff --git a/arch/riscv/include/asm/unistd.h b/arch/riscv/include/asm/unistd.h
-index 221630bdbd07..4d8e41f446ff 100644
---- a/arch/riscv/include/asm/unistd.h
-+++ b/arch/riscv/include/asm/unistd.h
-@@ -23,4 +23,6 @@
- 
- #include <uapi/asm/unistd.h>
- 
-+#ifndef NR_syscalls
- #define NR_syscalls (__NR_syscalls)
-+#endif
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 40aebbf06880..e75424c10729 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -49,7 +49,9 @@ obj-y	+= signal.o
- obj-y	+= syscalls/
- obj-y	+= sys_riscv.o
- obj-y	+= time.o
-+ifneq ($(CONFIG_TRIM_UNUSED_SYSCALLS),y)
- obj-y	+= traps.o
-+endif
- obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
-diff --git a/arch/riscv/kernel/syscalls/Makefile b/arch/riscv/kernel/syscalls/Makefile
-index 3b5969aaa9e8..f1a0597c8b24 100644
---- a/arch/riscv/kernel/syscalls/Makefile
-+++ b/arch/riscv/kernel/syscalls/Makefile
-@@ -14,9 +14,18 @@ else # CONFIG_TRIM_UNUSED_SYSCALLS
- 
- include $(srctree)/scripts/Makefile.syscalls
- 
-+# calculate syscalls total from $(obj)/syscall_table_used.i
-+ifneq ($(used_syscalls),)
-+  NR_syscalls := $$(($$(sed -E -n -e '/^\[([0-9]+|\([0-9]+ \+ [0-9]+\))\] = /{s/^\[(.*)\].*/\1/gp}' $(obj)/syscall_table_used.i | bc | sort -g | tail -1 | grep '[0-9]' || echo -1) + 1))
-+else
-+  NR_syscalls := 0
-+endif
-+
-+CFLAGS_traps_used.o                += -DNR_syscalls=$(NR_syscalls)
- CFLAGS_syscall_table_used.o        += $(call cc-option,-Wno-override-init,)
- CFLAGS_compat_syscall_table_used.o += $(call cc-option,-Wno-override-init,)
- 
-+obj-y                += traps_used.o
- obj-y                += syscall_table_used.o
- obj-$(CONFIG_COMPAT) += compat_syscall_table_used.o
- 
-@@ -24,15 +33,26 @@ obj-$(CONFIG_COMPAT) += compat_syscall_table_used.o
- quiet_cmd_used = USED    $@
-       cmd_used = sed -E -e '/^\[([0-9]+|\([0-9]+ \+ [0-9]+\))\] = /{/= *__riscv_(__sys_|sys_|compat_)*($(used_syscalls)),/!{s%^%/* %g;s%$$% */%g}}' -i $@;
- 
-+# update the syscalls total
-+quiet_cmd_snr = SNR     $@
-+      cmd_snr = snr=$(NR_syscalls); if [ $$snr -ne 0 ]; then \
-+		sed -i -e "s/sys_call_table\[.*\] =/sys_call_table[($$snr)] =/g;s/\[0 ... (.*) - 1\] = __riscv_sys_ni_syscall/[0 ... ($$snr) - 1] = __riscv_sys_ni_syscall/g" $@; \
-+		fi;
-+
-+$(obj)/traps_used.c: $(src)/../traps.c $(obj)/syscall_table_used.i FORCE
-+	$(Q)cp $< $@
-+
- $(obj)/syscall_table_used.c: $(src)/syscall_table.c
- 	$(Q)cp $< $@
- 
- $(obj)/syscall_table_used.i: $(src)/syscall_table_used.c $(used_syscalls_deps) FORCE
- 	$(call if_changed_dep,cpp_i_c)
- 	$(call cmd,used)
-+	$(call cmd,snr)
- 
- $(obj)/syscall_table_used.o: $(obj)/syscall_table_used.i FORCE
- 	$(call if_changed,cc_o_c)
-+	$(call cmd,force_checksrc)
- 
- $(obj)/compat_syscall_table_used.c: $(src)/compat_syscall_table.c
- 	$(Q)cp $< $@
-@@ -40,8 +60,10 @@ $(obj)/compat_syscall_table_used.c: $(src)/compat_syscall_table.c
- $(obj)/compat_syscall_table_used.i: $(src)/compat_syscall_table_used.c $(used_syscalls_deps) FORCE
- 	$(call if_changed_dep,cpp_i_c)
- 	$(call cmd,used)
-+	$(call cmd,snr)
- 
- $(obj)/compat_syscall_table_used.o: $(obj)/compat_syscall_table_used.i FORCE
- 	$(call if_changed,cc_o_c)
-+	$(call cmd,force_checksrc)
- 
- endif # CONFIG_TRIM_UNUSED_SYSCALLS
-diff --git a/arch/riscv/kernel/syscalls/compat_syscall_table.c b/arch/riscv/kernel/syscalls/compat_syscall_table.c
-index ad7f2d712f5f..4756b6858eac 100644
---- a/arch/riscv/kernel/syscalls/compat_syscall_table.c
-+++ b/arch/riscv/kernel/syscalls/compat_syscall_table.c
-@@ -17,7 +17,7 @@
- 
- asmlinkage long compat_sys_rt_sigreturn(void);
- 
--void * const compat_sys_call_table[__NR_syscalls] = {
--	[0 ... __NR_syscalls - 1] = __riscv_sys_ni_syscall,
-+void * const compat_sys_call_table[NR_syscalls] = {
-+	[0 ... NR_syscalls - 1] = __riscv_sys_ni_syscall,
- #include <asm/unistd.h>
- };
-diff --git a/arch/riscv/kernel/syscalls/syscall_table.c b/arch/riscv/kernel/syscalls/syscall_table.c
-index dda913764903..d2b3233ae5d4 100644
---- a/arch/riscv/kernel/syscalls/syscall_table.c
-+++ b/arch/riscv/kernel/syscalls/syscall_table.c
-@@ -16,7 +16,7 @@
- #undef __SYSCALL
- #define __SYSCALL(nr, call)	[nr] = __riscv_##call,
- 
--void * const sys_call_table[__NR_syscalls] = {
--	[0 ... __NR_syscalls - 1] = __riscv_sys_ni_syscall,
-+void * const sys_call_table[NR_syscalls] = {
-+	[0 ... NR_syscalls - 1] = __riscv_sys_ni_syscall,
- #include <asm/unistd.h>
- };
--- 
-2.25.1
-
+      Arnd
