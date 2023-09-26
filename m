@@ -2,72 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D907AE581
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 08:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8E97AE591
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 08:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbjIZGIL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Sep 2023 02:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S233853AbjIZGLR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Sep 2023 02:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233747AbjIZGIK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 02:08:10 -0400
+        with ESMTP id S233856AbjIZGLA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 02:11:00 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0544011D;
-        Mon, 25 Sep 2023 23:08:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6920AE55;
+        Mon, 25 Sep 2023 23:10:41 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 85E0D32009F4;
-        Tue, 26 Sep 2023 02:08:01 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id E07D432009F0;
+        Tue, 26 Sep 2023 02:10:39 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 26 Sep 2023 02:08:02 -0400
+  by compute6.internal (MEProxy); Tue, 26 Sep 2023 02:10:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695708481; x=1695794881; bh=xZ
-        //d5rAxIyL4DIO25l3Kqx9snAaHxvzdTIm60dV7fo=; b=k8GgK8b8bdbMrxec14
-        vQF7AIOuOLxboNppmnLK9zaKi+d+Tp+yVgazv7sqFmNtdeP0aZyrlf2hB+9CyTyN
-        Bxd1N65CUpF5BifXyNljwPU/YIJAYl8cEmqO9eW1ozNxx0StAkRpBJsp5R7EDOy3
-        FVDekivSaQOYc5qjMWOJe79cnfv+KEySWlJ094MwFD1fYe9AtFT419Le66TH3vJS
-        E2y7cYRgaD/RvN205GxckZuiYZ2JTGRiYZnv6SDpII80yMXXkEajwtcKgKWWqzNK
-        vVHTE/5+Hwj8R9Qe888Dc/etYdGyczVAvk9/uNGBSGFRgL7TlnhQMY6CCmKac5/q
-        jxuQ==
+        :subject:subject:to:to; s=fm1; t=1695708639; x=1695795039; bh=oC
+        YIjuW89ugmbyi2Z2bcvS41djt8ybKt3d7f3d7YUtg=; b=ouBK1gk5nfLdyJrDUI
+        wdVsO41CB6GBBarwCeJyFPMDWdoV68AgcEYOMCB167pKfQw5T3b/0yNArFnUaAi1
+        9XPWYRWWdK4GRlTP/vVy9dznUHP+KWfCtdNwRh/UFPzXOqYUEvqQsKEHzjS1Unb7
+        Ur3ehzaONMVwXFqRa0X9d/eu9Va05CnXhf/h9ahqd1V78WjLlMBhS6Osps22QLIm
+        +Wmtf2gBFte97YLyyg0ReXeZM4DCCt5qO0Qlcmt6zGWPsuEsTShJvODFNKVW33TF
+        K8Ps/ik5XfZTK/U1fqviD0qH4xfWosZoUs31UWkITtpDyT1iVofsRxdiM+km24P4
+        lPvg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695708481; x=1695794881; bh=xZ//d5rAxIyL4
-        DIO25l3Kqx9snAaHxvzdTIm60dV7fo=; b=VGOMi6HnfP/cfR1kzW9zh1OSswSZv
-        bKIiaa3E3Ar5x6E4b4QKSoqZ3FYSSs10iBjwp9sl7Wev0ChCekF3gGbCKH39kePz
-        upTMKHZpcyO7pROwYUqN2j5eXZ7VWaj0rXuyvYr1v05qq/t0lTemD0UHnRkuxJh9
-        uVe35RrBngFSnrTeZABHHKjP186/bfOc+BkMg259YYIeS0tXnIUQYq3vrnNuvOjU
-        xWGOM82HD7sKxUoq/sjU2AmF57UgMjwe0/Thfr3oYK/oY2jMU2QMJEl/MkDxG7bK
-        RbNtqegmLQoDj5AN0MYPtS74aYSHrMUXTg2BrqK+w9eSGeRC/akkkuqUQ==
-X-ME-Sender: <xms:QHUSZajDXIX5_yCRxxvH7o-mrbsKQTdX0bAjIs3_kRQ9FyUIW5cH6A>
-    <xme:QHUSZbBaHncRGc0IZDGhQ8qrMWwBalhH1sBWhKd9f9sClogo_5K9bcJarPYD7anHI
-    a3D-seLtmR8uywxBGo>
+        :x-sasl-enc; s=fm2; t=1695708639; x=1695795039; bh=oCYIjuW89ugmb
+        yi2Z2bcvS41djt8ybKt3d7f3d7YUtg=; b=MpaLGSaJtda/meO2nTAhN9DT3q6Uy
+        AkxW0eyOBXlGqw066njGrSEW1Eu6QPBQz8gVp2yN3kQsJjB/qqocqMAHNhF+DO+P
+        ioO/+KCDWcsM5mkd/uqf1vFuL2IDgMw19wFtr8H68rFD6A74oxtqAXIpR62xxkoF
+        BgBTndlxVKGpdn6g9KLQgVeGlGNkftsz5Pk3InWj8odoUtqCtdw0VeMsueuSAXZV
+        Z+meKr+nn/7VkQxXTJonIeIIzqJabeEDCf7e0GLcFI+L6PGKdy8dlZ6FLsEkK9MM
+        +NiHuk3zGFd/yY9M35Sz22fY/yy8rKeaLPQ63oLBpX116mbX7eL+JSdHQ==
+X-ME-Sender: <xms:33USZfZAcbkSN8QCtuvncxGpsKPXgIYsjJsSIReBOXVReTblJGowbA>
+    <xme:33USZebIUzSjZvt6N_6FeN8K5sBdt89_cS4EiFQnocuUiIrhaexA4ul1v1dKboMIM
+    QI2eT5r2fgrHVa8EDY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelhedguddtfecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
     rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
     htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    keetffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QHUSZSEVBy-pvO9Y3AXNe4lXaTCLCq_hUJWd92qLhYb_FVX1DN9JXw>
-    <xmx:QHUSZTQRT8BIkEhcXeJlYjH-WpkB1XpfGY-DiRGJbms_dx66_HEGvQ>
-    <xmx:QHUSZXzPUhtAkHMiX8NWg9APAPN0R3Yp1_t8Srl28f1J7bDpSaBa8g>
-    <xmx:QXUSZffm2tqYl_AVYJWmXUiqNNcVNPAYcaep-TztM4cGFhvs4vNBKQ>
+X-ME-Proxy: <xmx:33USZR-Gky2tN1vqb_XJk8lV_2y5pK0Upu7mfQAdSOYmDAjYzjzP4Q>
+    <xmx:33USZVphx70509OBzc38Mvd8x6PaY5aM90xynxsfDgpUfldWeO4RQA>
+    <xmx:33USZaoTl_b7HbfCBmNplViPJl8yTHsm0-PxiDHMby1GiB4ivUGb3A>
+    <xmx:33USZZ2MP7jWG3cYDDrsd9VqvYUClaPgWkZ-5VFGFAdk9ABmjohJpg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B0DEBB60089; Tue, 26 Sep 2023 02:08:00 -0400 (EDT)
+        id 24B8AB60089; Tue, 26 Sep 2023 02:10:39 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 MIME-Version: 1.0
-Message-Id: <862f42d7-b582-4d88-a9d2-f72ea5bfe903@app.fastmail.com>
-In-Reply-To: <3042b32a13aecbf8f3c8bedee34a4ca8c7d7cb2e.1695679700.git.falcon@tinylab.org>
+Message-Id: <3a8f0d0a-25ad-49c3-9cd2-66db44a4a1e6@app.fastmail.com>
+In-Reply-To: <ce00dad5acdd4aff099b289843e30c83f7e31764.1695679700.git.falcon@tinylab.org>
 References: <cover.1695679700.git.falcon@tinylab.org>
- <3042b32a13aecbf8f3c8bedee34a4ca8c7d7cb2e.1695679700.git.falcon@tinylab.org>
-Date:   Tue, 26 Sep 2023 08:07:40 +0200
+ <ce00dad5acdd4aff099b289843e30c83f7e31764.1695679700.git.falcon@tinylab.org>
+Date:   Tue, 26 Sep 2023 08:10:17 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Zhangjin Wu" <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
@@ -78,7 +78,7 @@ Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
         "Willy Tarreau" <w@1wt.eu>,
         =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         "Tim Bird" <tim.bird@sony.com>
-Subject: Re: [PATCH v1 4/7] DCE/DSE: mips: add HAVE_TRIM_UNUSED_SYSCALLS support
+Subject: Re: [PATCH v1 6/7] DCE/DSE: riscv: add HAVE_TRIM_UNUSED_SYSCALLS support
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -89,39 +89,25 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 26, 2023, at 00:40, Zhangjin Wu wrote:
+On Tue, Sep 26, 2023, at 00:42, Zhangjin Wu wrote:
 > For HAVE_TRIM_UNUSED_SYSCALLS, the syscall tables are hacked with the
-> input used syscalls.
+> inputing unused_syscalls.
 >
-> Based on the used syscalls information, a new version of tbl file is
-> generated from the original tbl file and named with a 'used' suffix.
+> Firstly, the intermediate preprocessed .i files are generated from the
+> original C version of syscall tables respectively, and named with a
+> 'used' suffix: syscall_table_used.i, compat_syscall_table_used.i.
 >
-> With this new tbl file, both unistd_nr_*.h and syscall_table_*.h files
-> are updated to only include the used syscalls.
+> Secondly, all of the unused syscalls are commented.
 >
->     $ grep _Linux_syscalls -ur arch/mips/include/generated/asm/
->     arch/mips/include/generated/asm/unistd_nr_n64.h:#define 
-> __NR_64_Linux_syscalls	165
->     arch/mips/include/generated/asm/unistd_nr_n32.h:#define 
-> __NR_N32_Linux_syscalls	165
->     arch/mips/include/generated/asm/unistd_nr_o32.h:#define 
-> __NR_O32_Linux_syscalls	89
+> At last, two new objective files sufixed with 'used' are generated from
+> the hacked .i files and they are linked into the eventual kernel image.
 >
->     $ grep -vr sys_ni_syscall 
-> arch/mips/include/generated/asm/syscall_table_*.h
->     arch/mips/include/generated/asm/syscall_table_n32.h:__SYSCALL(58, 
-> sys_exit)
->     arch/mips/include/generated/asm/syscall_table_n32.h:__SYSCALL(164, 
-> sys_reboot)
->     arch/mips/include/generated/asm/syscall_table_n64.h:__SYSCALL(58, 
-> sys_exit)
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 
-My feeling is that instead of postprocessing the generated files,
-it would be much better to make the elimination part of the
-existing infrastructure that generates the files from syscall.tbl,
-and finally change the include/asm-generic/unistd.h to the
-same format, as we had planned for a long time.
-
-I should be able to help out with that part.
+As mentioned in my comment on the mips patch, hacking the preprocessed
+file here is too much strain on the old infrastructure, the
+asm-generic/unistd.h file is already too hard to understand for
+anyone and in need of an overhaul, so let's work together on fixing
+it up first.
 
       Arnd
