@@ -2,122 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279EA7AEB69
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 13:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0927AEBFA
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 13:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjIZLYz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Sep 2023 07:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S234036AbjIZL7F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Sep 2023 07:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjIZLYz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 07:24:55 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C761AE9;
-        Tue, 26 Sep 2023 04:24:44 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 27AAC320091E;
-        Tue, 26 Sep 2023 07:24:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 26 Sep 2023 07:24:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695727482; x=1695813882; bh=8e
-        yX8AE9ekmLAMHsyT0GeS5BenFeWtINVJaFHwwMKHA=; b=cx8XGgkMMAcNeF+sP0
-        Xg3n1R6IWF1+SXDGfWQApF4gZU9gK98wjZ0TUjZLFzYcgq8P2RRJCuEdBdODa4hG
-        LwKYI47Zd+dAN2sC7uN5feNdegP+GZb7mb4cJX3pFg4zNHKKCNFUQVkLrJt7eOGy
-        av9AhHq7+EzE3QAK4jK325rz1w3OUvVLfAw7DSQa/RpNs7kW2gOSTtEgEjLwdWtt
-        7feAoyTVZ6ZTf8BytvH5XSxMWdPKa/nb5dXvC6xyPHZVayjpYoBqiW4jAorTVJja
-        tKWHNOJnDGBH7Oyl+MKk4DD1HRisrJ2FlsDSQ2niXV/P7ghs31CB4+l+dtJ2ytA4
-        zyTA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695727482; x=1695813882; bh=8eyX8AE9ekmLA
-        MHsyT0GeS5BenFeWtINVJaFHwwMKHA=; b=pKJsOAmfVoi/4sfxkVCOWL4nh8SdI
-        vTNfaOPB2+Cy4Ja/lQ3Dgdcqqf/JHimuqu1zmUPu1MzuyGpR4BlyFO2fOSqdBrJD
-        dG/SXyM6XoU2sGTJ/NWIMZUJyoecgPZl0b6nkj8lpNQjaLInMfKBHXpPk9o0zZ8N
-        f2+asD/QlnYjipjgbC2xO89dl7+ZJh/tBYo16z1ZVbUowwfDtPnG8XSWj18p/jjv
-        meBDvYSJBIu94daupGg0yGr0/hZUoiL/siu6JSFMX15KLH3A7lYiXNIDrCUb5iLE
-        h/XNs2TVtz2eqKBcgk+145ybDYVcHPe7ZyW0WxZitiwz6DTkzvjhbteiw==
-X-ME-Sender: <xms:eb8SZZEcaTZMFMpYAflPbP6DpBY0f9Jbgp7wKzhigFCtCYXkqvNtBg>
-    <xme:eb8SZeWLDfYUwqlJ229zBamM2dVDiNCtnh-GLyX9v_isYz0AZO3tkJodHRo2fUQWA
-    X280YTNERWABvT2jh8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtddtgdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:eb8SZbKm8HNdpZENOy-r1jGJ0F1fTPCpY5PTtvi6CyNDh_zlLriqNg>
-    <xmx:eb8SZfFRNuDq8yK_KKFGXpTKP27IkbOjDlPtYdTHBP_Y0-oiCUp86w>
-    <xmx:eb8SZfUtLwmWAwAlUgE5KB6vkv-NwyElt2tvY67MHACBpgfWmUA18Q>
-    <xmx:er8SZSON_9QoBQ-aD3tFSwDaNYnpnNe3yTR1YBLYE5qoeHqhQ02ViQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 716E8B60089; Tue, 26 Sep 2023 07:24:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
+        with ESMTP id S233884AbjIZL7E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 07:59:04 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1C2DE;
+        Tue, 26 Sep 2023 04:58:57 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="467831915"
+X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
+   d="scan'208";a="467831915"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 04:58:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="922395899"
+X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
+   d="scan'208";a="922395899"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 04:58:53 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+        (envelope-from <andy@kernel.org>)
+        id 1ql6iI-00000000aw9-1RsA;
+        Tue, 26 Sep 2023 14:58:50 +0300
+Date:   Tue, 26 Sep 2023 14:58:50 +0300
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-mips@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [RFT PATCH] mtd: rawnand: ingenic: move the GPIO quirk to
+ gpiolib-of.c
+Message-ID: <ZRLHeuohRgEtTLHz@smile.fi.intel.com>
+References: <20230926090623.35595-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Message-Id: <a08e1cee-05e0-447a-b25b-6c2ebb116e8d@app.fastmail.com>
-In-Reply-To: <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com>
-References: <cover.1695679700.git.falcon@tinylab.org>
- <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com>
-Date:   Tue, 26 Sep 2023 13:24:21 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhangjin Wu" <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>, paulburton@kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Willy Tarreau" <w@1wt.eu>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        "Tim Bird" <tim.bird@sony.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Nicolas Pitre" <nico@fluxnic.net>
-Subject: Re: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230926090623.35595-1-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 26, 2023, at 09:14, Arnd Bergmann wrote:
-> On Tue, Sep 26, 2023, at 00:33, Zhangjin Wu wrote:
->
-> It would be nice to include some size numbers here for at least
-> one practical use case. If you have a defconfig for a shipping
-> product with a small kernel, what is the 'size -B' output you
-> see comparing with and without DCE and, and with DCE+DSE?
+On Tue, Sep 26, 2023 at 11:06:23AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> We have a special place for OF polarity quirks in gpiolib-of.c. Let's
+> move this over there so that it doesn't pollute the driver.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+> This is an alternative to the previous patch that instead of replacing
+> one active-low setter with another, just moves the quirk over to
+> gpiolib-of.c
 
-To follow up on this myself, for a very rough baseline,
-I tried a riscv tinyconfig build with and without 
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION (this is currently
-not supported on arm, so I did not try it there), and
-then another build with simply *all* system calls stubbed
-out by hacking asm/syscall-wrapper.h:
+Much better than that in my opinion.
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
 
-$ size build/tmp/vmlinux-*
-   text	   data	    bss	     dec    hex	filename
-  754772  220016  71841	 1046629  ff865	vmlinux-tinyconfig
-  717500  223368  71841	 1012709  f73e5	vmlinux-tiny+nosyscalls
-  567310  176200  71473	  814983  c6f87	vmlinux-tiny+gc-sections
-  493278  170752  71433	  735463  b38e7	vmlinux-tiny+gc-sections+nosyscalls
-10120058 3572756 493701	14186515 d87813	vmlinux-defconfig
- 9953934 3529004 491525	13974463 d53bbf	vmlinux-defconfig+gc
- 9709856 3500600 489221	13699677 d10a5d	vmlinux-defconfig+gc+nosyscalls
+>  drivers/gpio/gpiolib-of.c                       |  9 +++++++++
+>  drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 12 ------------
+>  2 files changed, 9 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 5515f32cf19b..58c0bbe9d569 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -192,6 +192,15 @@ static void of_gpio_try_fixup_polarity(const struct device_node *np,
+>  		 */
+>  		{ "himax,hx8357",	"gpios-reset",	false },
+>  		{ "himax,hx8369",	"gpios-reset",	false },
+> +		/*
+> +		 * The rb-gpios semantics was undocumented and qi,lb60 (along with
+> +		 * the ingenic driver) got it wrong. The active state encodes the
+> +		 * NAND ready state, which is high level. Since there's no signal
+> +		 * inverter on this board, it should be active-high. Let's fix that
+> +		 * here for older DTs so we can re-use the generic nand_gpio_waitrdy()
+> +		 * helper, and be consistent with what other drivers do.
+> +		 */
+> +		{ "qi,lb60",		"rb-gpios",	true },
+>  #endif
+>  	};
+>  	unsigned int i;
+> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> index 6748226b8bd1..c816dc137245 100644
+> --- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> @@ -380,18 +380,6 @@ static int ingenic_nand_init_chip(struct platform_device *pdev,
+>  		return ret;
+>  	}
+>  
+> -	/*
+> -	 * The rb-gpios semantics was undocumented and qi,lb60 (along with
+> -	 * the ingenic driver) got it wrong. The active state encodes the
+> -	 * NAND ready state, which is high level. Since there's no signal
+> -	 * inverter on this board, it should be active-high. Let's fix that
+> -	 * here for older DTs so we can re-use the generic nand_gpio_waitrdy()
+> -	 * helper, and be consistent with what other drivers do.
+> -	 */
+> -	if (of_machine_is_compatible("qi,lb60") &&
+> -	    gpiod_is_active_low(nand->busy_gpio))
+> -		gpiod_toggle_active_low(nand->busy_gpio);
+> -
+>  	nand->wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_LOW);
+>  
+>  	if (IS_ERR(nand->wp_gpio)) {
+> -- 
+> 2.39.2
+> 
 
-This would put us at an upper bound of 10% size savings (80kb) for
-tinyconfig, which is clearly significant. For defconfig, it's
-still 2.0% or 275kb size reduction when all syscalls are dropped.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-     Arnd
+
