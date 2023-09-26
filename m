@@ -2,111 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EFF7AE8B8
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 11:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAED7AE8FE
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 11:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbjIZJQ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Sep 2023 05:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S233940AbjIZJ0e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Sep 2023 05:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjIZJQ6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 05:16:58 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4984E6;
-        Tue, 26 Sep 2023 02:16:50 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD6F340004;
-        Tue, 26 Sep 2023 09:16:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1695719809;
+        with ESMTP id S233835AbjIZJ0e (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 05:26:34 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FA2B3;
+        Tue, 26 Sep 2023 02:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1695720383;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=62i6jKle2TrQicZgJBk/autmG/K7qzxoSj1CVO2zc+w=;
-        b=LEwU4lFeHRNnHHEVD100Q7J4C1swRhuGuU9sigjtpACm+bhaLpArGlAqMfJspzhIFeBUcQ
-        Fy0WS340DGTFyJUi/5F11vXu7qXVai/0vdRLqMjDus8oOWW6TsnYmI6JLOYYJrkTxUVyN+
-        L/Doi05uXxgBshAo9saucTBogZODomazcwPZrv4yilbcs0gpHDXCh0FieUi+yPF/X9EyRo
-        0TBaCFbp+RRBEiA0PizTbjdhxhpH6kR/E4qpYgsgoYeBrFEr5Klv1FRX+1n4wtzAZ1Q9BE
-        MgEn1anNzShjL0OKx7LrlOdmM4sFqwLAZmIFGnUPPyO/jcAmrCJVni9GjFAQfA==
-Date:   Tue, 26 Sep 2023 11:16:43 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
+        bh=YHBvuudP4pKRGMI+5QzAgBxLIrsXOrLJ9iqlMBxOiN0=;
+        b=jlAges8dZ4ozxPdauu1jCcRu4OkV0xEo1tEkfT8fO1nQra6p2wiuwC1Rt1fTphVsuj2BiE
+        HF3uytG/dHfki4JeWXGvTd/kZVM/n8Rz38K2K5Oeh/e4BgnlBgbFtiUVP3VKSeALttLR3F
+        Gso31O8IU6t459yIbtPB7JiYBTnqiho=
+Message-ID: <8c8a41b2740976f33c3993f609123f957f5df7de.camel@crapouillou.net>
+Subject: Re: [RFT PATCH] mtd: rawnand: ingenic: move the GPIO quirk to
+ gpiolib-of.c
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andy@kernel.org>,
         Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-mips@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [RFT PATCH] mtd: rawnand: ingenic: move the GPIO quirk to
- gpiolib-of.c
-Message-ID: <20230926111643.58ee4587@xps-13>
-In-Reply-To: <20230926090623.35595-1-brgl@bgdev.pl>
+Date:   Tue, 26 Sep 2023 11:26:21 +0200
+In-Reply-To: <20230926111643.58ee4587@xps-13>
 References: <20230926090623.35595-1-brgl@bgdev.pl>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+         <20230926111643.58ee4587@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Bartosz,
+SGksCgpMZSBtYXJkaSAyNiBzZXB0ZW1icmUgMjAyMyDDoCAxMToxNiArMDIwMCwgTWlxdWVsIFJh
+eW5hbCBhIMOpY3JpdMKgOgo+IEhpIEJhcnRvc3osCj4gCj4gYnJnbEBiZ2Rldi5wbMKgd3JvdGUg
+b24gVHVlLCAyNiBTZXAgMjAyMyAxMTowNjoyMyArMDIwMDoKPiAKPiA+IEZyb206IEJhcnRvc3og
+R29sYXN6ZXdza2kgPGJhcnRvc3ouZ29sYXN6ZXdza2lAbGluYXJvLm9yZz4KPiA+IAo+ID4gV2Ug
+aGF2ZSBhIHNwZWNpYWwgcGxhY2UgZm9yIE9GIHBvbGFyaXR5IHF1aXJrcyBpbiBncGlvbGliLW9m
+LmMuCj4gPiBMZXQncwo+ID4gbW92ZSB0aGlzIG92ZXIgdGhlcmUgc28gdGhhdCBpdCBkb2Vzbid0
+IHBvbGx1dGUgdGhlIGRyaXZlci4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogQmFydG9zeiBHb2xh
+c3pld3NraSA8YmFydG9zei5nb2xhc3pld3NraUBsaW5hcm8ub3JnPgo+ID4gLS0tCj4gPiBUaGlz
+IGlzIGFuIGFsdGVybmF0aXZlIHRvIHRoZSBwcmV2aW91cyBwYXRjaCB0aGF0IGluc3RlYWQgb2YK
+PiA+IHJlcGxhY2luZwo+ID4gb25lIGFjdGl2ZS1sb3cgc2V0dGVyIHdpdGggYW5vdGhlciwganVz
+dCBtb3ZlcyB0aGUgcXVpcmsgb3ZlciB0bwo+ID4gZ3Bpb2xpYi1vZi5jCj4gPiAKPiA+IMKgZHJp
+dmVycy9ncGlvL2dwaW9saWItb2YuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHzCoCA5ICsrKysrKysrKwo+ID4gwqBkcml2ZXJzL210ZC9uYW5kL3Jhdy9pbmdl
+bmljL2luZ2VuaWNfbmFuZF9kcnYuYyB8IDEyIC0tLS0tLS0tLS0tLQo+ID4gwqAyIGZpbGVzIGNo
+YW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMTIgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL2dwaW8vZ3Bpb2xpYi1vZi5jIGIvZHJpdmVycy9ncGlvL2dwaW9saWItb2Yu
+Ywo+ID4gaW5kZXggNTUxNWYzMmNmMTliLi41OGMwYmJlOWQ1NjkgMTAwNjQ0Cj4gPiAtLS0gYS9k
+cml2ZXJzL2dwaW8vZ3Bpb2xpYi1vZi5jCj4gPiArKysgYi9kcml2ZXJzL2dwaW8vZ3Bpb2xpYi1v
+Zi5jCj4gPiBAQCAtMTkyLDYgKzE5MiwxNSBAQCBzdGF0aWMgdm9pZCBvZl9ncGlvX3RyeV9maXh1
+cF9wb2xhcml0eShjb25zdAo+ID4gc3RydWN0IGRldmljZV9ub2RlICpucCwKPiA+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoHsgImhpbWF4LGh4ODM1NyIswqDCoMKgwqDCoMKgwqAiZ3Bpb3MtcmVzZXQiLMKgwqBm
+YWxzZSB9LAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB7ICJoaW1heCxoeDgz
+NjkiLMKgwqDCoMKgwqDCoMKgImdwaW9zLXJlc2V0IizCoMKgZmFsc2UgfSwKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCAqIFRoZSByYi1ncGlvcyBzZW1hbnRpY3Mgd2FzIHVuZG9jdW1lbnRlZCBhbmQKPiA+IHFp
+LGxiNjAgKGFsb25nIHdpdGgKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiB0
+aGUgaW5nZW5pYyBkcml2ZXIpIGdvdCBpdCB3cm9uZy4gVGhlIGFjdGl2ZQo+ID4gc3RhdGUgZW5j
+b2RlcyB0aGUKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBOQU5EIHJlYWR5
+IHN0YXRlLCB3aGljaCBpcyBoaWdoIGxldmVsLiBTaW5jZQo+ID4gdGhlcmUncyBubyBzaWduYWwK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBpbnZlcnRlciBvbiB0aGlzIGJv
+YXJkLCBpdCBzaG91bGQgYmUgYWN0aXZlLQo+ID4gaGlnaC4gTGV0J3MgZml4IHRoYXQKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBoZXJlIGZvciBvbGRlciBEVHMgc28gd2Ug
+Y2FuIHJlLXVzZSB0aGUgZ2VuZXJpYwo+ID4gbmFuZF9ncGlvX3dhaXRyZHkoKQo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIGhlbHBlciwgYW5kIGJlIGNvbnNpc3RlbnQgd2l0
+aCB3aGF0IG90aGVyCj4gPiBkcml2ZXJzIGRvLgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHsgInFpLGxiNjAi
+LMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCJyYi1ncGlvcyIswqDCoMKgwqDCoHRydWUgfSwKPiAK
+PiBJIGRpZG4ndCBrbm93IGFib3V0IHN1Y2ggYSBsaXN0LCBpbnRlcmVzdGluZy4gQmV0dGVyIGJl
+IGF3YXJlIHdoZW4KPiBkZWJ1Z2dpbmcgOikKPiAKPiBJSVJDIExpbnVzIHdhcyBmaW5lLCBzbyBp
+ZiBQYXVsIGFsc28gYWdyZWVzIEkgZ3Vlc3MgdGhpcyBpcyBiZXR0ZXIKPiB0YWtpbmcgdGhyb3Vn
+aCB0aGUgZ3BpbyB0cmVlPyBJIGRvbid0IGhhdmUgYW55IGluZ2VuaWMgcmVsYXRlZAo+IGNoYW5n
+ZXMKPiBxdWV1ZWQgcmlnaHQgbm93IHNvIGZlZWwgZnJlZSB0byB0YWtlIGl0LgoKV29ya3MgZm9y
+IG1lLgoKPiAKPiBBY2tlZC1ieTogTWlxdWVsIFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGlu
+LmNvbT4KCkFja2VkLWJ5OiBQYXVsIENlcmN1ZWlsIDxwYXVsQGNyYXBvdWlsbG91Lm5ldD4KCj4g
+VGhhbmtzLAo+IE1pcXXDqGwKCkNoZWVycywKLVBhdWwK
 
-brgl@bgdev.pl wrote on Tue, 26 Sep 2023 11:06:23 +0200:
-
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->=20
-> We have a special place for OF polarity quirks in gpiolib-of.c. Let's
-> move this over there so that it doesn't pollute the driver.
->=20
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-> This is an alternative to the previous patch that instead of replacing
-> one active-low setter with another, just moves the quirk over to
-> gpiolib-of.c
->=20
->  drivers/gpio/gpiolib-of.c                       |  9 +++++++++
->  drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 12 ------------
->  2 files changed, 9 insertions(+), 12 deletions(-)
->=20
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 5515f32cf19b..58c0bbe9d569 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -192,6 +192,15 @@ static void of_gpio_try_fixup_polarity(const struct =
-device_node *np,
->  		 */
->  		{ "himax,hx8357",	"gpios-reset",	false },
->  		{ "himax,hx8369",	"gpios-reset",	false },
-> +		/*
-> +		 * The rb-gpios semantics was undocumented and qi,lb60 (along with
-> +		 * the ingenic driver) got it wrong. The active state encodes the
-> +		 * NAND ready state, which is high level. Since there's no signal
-> +		 * inverter on this board, it should be active-high. Let's fix that
-> +		 * here for older DTs so we can re-use the generic nand_gpio_waitrdy()
-> +		 * helper, and be consistent with what other drivers do.
-> +		 */
-> +		{ "qi,lb60",		"rb-gpios",	true },
-
-I didn't know about such a list, interesting. Better be aware when
-debugging :)
-
-IIRC Linus was fine, so if Paul also agrees I guess this is better
-taking through the gpio tree? I don't have any ingenic related changes
-queued right now so feel free to take it.
-
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miqu=C3=A8l
