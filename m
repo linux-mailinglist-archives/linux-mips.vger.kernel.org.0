@@ -2,134 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D94D7AFA03
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Sep 2023 07:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32EA7B01C1
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Sep 2023 12:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjI0FXT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Sep 2023 01:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S231395AbjI0KYi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Sep 2023 06:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjI0FWg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Sep 2023 01:22:36 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46345FD1;
-        Tue, 26 Sep 2023 22:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695791982; x=1727327982;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XWRHK3XHMCPUS7DjwBYEn6sN3WEf4Pd1a63R09LlTdM=;
-  b=Rn0ykur+VAe+a1zUi7FEh4gFnxrFp628QOzK1Yld8tZhYzThnszJp/w+
-   Ywz2A0oi8KtkX4j/5zi+g3SG3duu/9UfmpT5BMmMUt7G6Fx2d3PeegCjk
-   8e/8j2kTtqx3d+tlzb2hvCy47F3H+b3hTj8/CWLUnzKfs4YHM6cCA0C6v
-   TLqQH/aIfG191BNg9R+LE/gD9lYMoAH4vXBHB6uXNPkmhzW34XHyhmWBM
-   eHkfrUGMlBsUoQFi4HPfYCjGistMDujHxTvc6e6zwGuSFzFgimPi38UZW
-   +sEoJGpwLdsVYwLJcSCh9le0vKpCGCd5lEyeqJFTr0WfmNwHYazmgFNau
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381633578"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="381633578"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 22:19:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="725676254"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="725676254"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.84]) ([10.238.8.84])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 22:19:32 -0700
-Message-ID: <483f9e1e-7d01-5f06-3bfa-3788d2554724@linux.intel.com>
-Date:   Wed, 27 Sep 2023 13:19:29 +0800
+        with ESMTP id S231404AbjI0KYP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Sep 2023 06:24:15 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C9DCEE;
+        Wed, 27 Sep 2023 03:21:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 4593832003D3;
+        Wed, 27 Sep 2023 06:21:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 27 Sep 2023 06:21:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695810112; x=1695896512; bh=G7
+        dGvBd5JsvFwgK2DiyTTK5tZ9qMJXgbyFZhkcns0j8=; b=jJLQRHOAPLDSOvLQqW
+        WexvwtHRbbvyYZN4KpedDK9YccRpe43O8KW6HCHNmUOvgDytGvWCxRVlt2WRcWAI
+        w7J2R1N8qolU3EvO62bbJOpcszJHsBP6Cstv29tacwiI4pv+fI3A1bsWk5TkAis3
+        lydKl3qhhTWR1SjJNPJePPSt9qTT7rYJCtozU60/KXpPiz2Xsk906JXVplRtaOis
+        T7arKLWfu+xbmagOY9lGeFQgWtGeDY5iZTTGAkhu/Cmn9QUr8j26eodbL5hOb8Y2
+        JDZIDbFr4m6K/8jRSVM1L38P9P5lWtkrIDx41cwz3uXjStv22w78aagvfDMvaNIR
+        89mw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695810112; x=1695896512; bh=G7dGvBd5JsvFw
+        gK2DiyTTK5tZ9qMJXgbyFZhkcns0j8=; b=XuAhfabudNl+kqZNOXcRIxfP89H1a
+        KPFafcBWfDl/Scy7NW7BlMWmJZkxEc2tnHz9ed8U+0WsyVXygiEdK7lCzsSBfB69
+        XRsqdTGQ0MdyPVSIYtFUxltswAeKap/nWJQ6Kh1ZPIZcdMXCVdE219albEBWH073
+        Zvp8ASEatxFtRsRGheszk9lOFk3QMzscA5nXFxzx4ol9FL2V1yt5bu8ubqxHMaDH
+        2VD/4268cqPTilnXUFC+IPXIP1svuq4bwW7oZJkvUh/NzjOMH5I5kaFa55zRfxDv
+        rl7hzJSbHtZtKSBHLbymF9gly5ei0S+T946ox6OuKBxVmD729kf2UY+Ig==
+X-ME-Sender: <xms:PgIUZQgd8wc2oEIwXUtFjGaBVd_-mvP1lYS227cqqe0FiDn0uLTNgw>
+    <xme:PgIUZZCo7skyPjFBGoK2IMEXJHEGYAwh_uDjnYl6ch7H7KOJiBYBD2-hYGLFwGxn3
+    XeG4oHpeDz_6U3JYfM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtdefucetufdoteggodetrfdotffvucfrrh
+    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhguuceu
+    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
+    epvdefjeevfefhvdevjeeuheefieetvdduheeludevtdefhfekleduhfdvjedtieeinecu
+    ffhomhgrihhnpehlfihnrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:PgIUZYF9L6JvIGCmFcBH-mWGhkd-RDEh2UMI0pQsOFgkWAMcm-rhyA>
+    <xmx:PgIUZRTCyY6yWS5f1bwEKcP2SDwSysedEghOT0XswqmFlKSpCxdnIQ>
+    <xmx:PgIUZdxe-Y4wWjYltbwliWqsUiL_Z0RS3qKLeIajl6UkqiCFW_krgw>
+    <xmx:QAIUZT62hUezLzCf7tWCLY3gFCsJGirrafP915pncyO15zAz5TE6UQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D0E99B60089; Wed, 27 Sep 2023 06:21:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230914015531.1419405-1-seanjc@google.com>
- <20230914015531.1419405-12-seanjc@google.com>
- <d66795f8-e524-2912-4b71-92ca4ffe8807@linux.intel.com>
- <ZQteNbPfx6P3r6B8@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZQteNbPfx6P3r6B8@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <f636d6c8-d437-48d4-9582-33b3ee77c145@app.fastmail.com>
+In-Reply-To: <6n7o7p99-9pr2-9orq-6nq1-093n7n7n43o9@syhkavp.arg>
+References: <cover.1695679700.git.falcon@tinylab.org>
+ <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com>
+ <a08e1cee-05e0-447a-b25b-6c2ebb116e8d@app.fastmail.com>
+ <6n7o7p99-9pr2-9orq-6nq1-093n7n7n43o9@syhkavp.arg>
+Date:   Wed, 27 Sep 2023 12:21:27 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nicolas Pitre" <nico@fluxnic.net>
+Cc:     "Zhangjin Wu" <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Palmer Dabbelt" <palmer@rivosinc.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>, paulburton@kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Willy Tarreau" <w@1wt.eu>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        "Tim Bird" <tim.bird@sony.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+Subject: Re: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, Sep 26, 2023, at 22:49, Nicolas Pitre wrote:
+> On Tue, 26 Sep 2023, Arnd Bergmann wrote:
+>
+>> $ size build/tmp/vmlinux-*
+>>    text	   data	    bss	     dec    hex	filename
+>>   754772  220016  71841	 1046629  ff865	vmlinux-tinyconfig
+>>   717500  223368  71841	 1012709  f73e5	vmlinux-tiny+nosyscalls
+>>   567310  176200  71473	  814983  c6f87	vmlinux-tiny+gc-sections
+>>   493278  170752  71433	  735463  b38e7	vmlinux-tiny+gc-sections+nosyscalls
+>> 10120058 3572756 493701	14186515 d87813	vmlinux-defconfig
+>>  9953934 3529004 491525	13974463 d53bbf	vmlinux-defconfig+gc
+>>  9709856 3500600 489221	13699677 d10a5d	vmlinux-defconfig+gc+nosyscalls
+>> 
+>> This would put us at an upper bound of 10% size savings (80kb) for
+>> tinyconfig, which is clearly significant. For defconfig, it's
+>> still 2.0% or 275kb size reduction when all syscalls are dropped.
+>
+> I did something similar a while ago. Results included here:
+>
+> https://lwn.net/Articles/746780/
+>
+> In my case, stubbing out all syscalls produced a 7.8% reduction which 
+> was somewhat disappointing compared to other techniques. Of course it 
+> all depends on what is your actual goal.
 
+Thanks for the link, I had forgotten about your article.
 
-On 9/21/2023 5:03 AM, Sean Christopherson wrote:
-> On Mon, Sep 18, 2023, Binbin Wu wrote:
->>
->> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
->>> From: Chao Peng <chao.p.peng@linux.intel.com>
->> [...]
->>> +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
->>> +/*
->>> + * Returns true if _all_ gfns in the range [@start, @end) have attributes
->>> + * matching @attrs.
->>> + */
->>> +bool kvm_range_has_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
->>> +				     unsigned long attrs)
->>> +{
->>> +	XA_STATE(xas, &kvm->mem_attr_array, start);
->>> +	unsigned long index;
->>> +	bool has_attrs;
->>> +	void *entry;
->>> +
->>> +	rcu_read_lock();
->>> +
->>> +	if (!attrs) {
->>> +		has_attrs = !xas_find(&xas, end);
->> IIUIC, xas_find() is inclusive for "end", so here should be "end - 1" ?
-> Yes, that does appear to be the case.  Inclusive vs. exclusive on gfn ranges has
-> is the bane of my existence.
+With all the findings combined, I guess the filtering
+at the syscall table level is not all that promising
+any more. Going through the list of saved space, I ended up
+with 5.7% (47kb) in the best case after I left the 40 syscalls
+from the example in this thread.
 
-Seems this one is not included in the "KVM: guest_memfd fixes" patch series?
-https://lore.kernel.org/kvm/20230921203331.3746712-1-seanjc@google.com/
+Removing entire groups of features using normal Kconfig symbols
+based on the remaining syscalls that have the largest size
+probably gives better results. I can see possible groups
+of syscalls that could be disabled under CONFIG_EXPERT,
+along with making their underlying infrastructure optional:
 
+- xattr
+- ptrace
+- adjtimex
+- splice/vmsplice/tee
+- unshare/setns
+- sched_*
 
+After those, one would quickly hit diminishing returns.
 
+     Arnd
