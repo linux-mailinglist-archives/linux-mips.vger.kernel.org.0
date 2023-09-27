@@ -2,144 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32EA7B01C1
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Sep 2023 12:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1407B0291
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Sep 2023 13:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjI0KYi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Sep 2023 06:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S231393AbjI0LPz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Sep 2023 07:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbjI0KYP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Sep 2023 06:24:15 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C9DCEE;
-        Wed, 27 Sep 2023 03:21:56 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 4593832003D3;
-        Wed, 27 Sep 2023 06:21:53 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 27 Sep 2023 06:21:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695810112; x=1695896512; bh=G7
-        dGvBd5JsvFwgK2DiyTTK5tZ9qMJXgbyFZhkcns0j8=; b=jJLQRHOAPLDSOvLQqW
-        WexvwtHRbbvyYZN4KpedDK9YccRpe43O8KW6HCHNmUOvgDytGvWCxRVlt2WRcWAI
-        w7J2R1N8qolU3EvO62bbJOpcszJHsBP6Cstv29tacwiI4pv+fI3A1bsWk5TkAis3
-        lydKl3qhhTWR1SjJNPJePPSt9qTT7rYJCtozU60/KXpPiz2Xsk906JXVplRtaOis
-        T7arKLWfu+xbmagOY9lGeFQgWtGeDY5iZTTGAkhu/Cmn9QUr8j26eodbL5hOb8Y2
-        JDZIDbFr4m6K/8jRSVM1L38P9P5lWtkrIDx41cwz3uXjStv22w78aagvfDMvaNIR
-        89mw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695810112; x=1695896512; bh=G7dGvBd5JsvFw
-        gK2DiyTTK5tZ9qMJXgbyFZhkcns0j8=; b=XuAhfabudNl+kqZNOXcRIxfP89H1a
-        KPFafcBWfDl/Scy7NW7BlMWmJZkxEc2tnHz9ed8U+0WsyVXygiEdK7lCzsSBfB69
-        XRsqdTGQ0MdyPVSIYtFUxltswAeKap/nWJQ6Kh1ZPIZcdMXCVdE219albEBWH073
-        Zvp8ASEatxFtRsRGheszk9lOFk3QMzscA5nXFxzx4ol9FL2V1yt5bu8ubqxHMaDH
-        2VD/4268cqPTilnXUFC+IPXIP1svuq4bwW7oZJkvUh/NzjOMH5I5kaFa55zRfxDv
-        rl7hzJSbHtZtKSBHLbymF9gly5ei0S+T946ox6OuKBxVmD729kf2UY+Ig==
-X-ME-Sender: <xms:PgIUZQgd8wc2oEIwXUtFjGaBVd_-mvP1lYS227cqqe0FiDn0uLTNgw>
-    <xme:PgIUZZCo7skyPjFBGoK2IMEXJHEGYAwh_uDjnYl6ch7H7KOJiBYBD2-hYGLFwGxn3
-    XeG4oHpeDz_6U3JYfM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtdefucetufdoteggodetrfdotffvucfrrh
-    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epvdefjeevfefhvdevjeeuheefieetvdduheeludevtdefhfekleduhfdvjedtieeinecu
-    ffhomhgrihhnpehlfihnrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:PgIUZYF9L6JvIGCmFcBH-mWGhkd-RDEh2UMI0pQsOFgkWAMcm-rhyA>
-    <xmx:PgIUZRTCyY6yWS5f1bwEKcP2SDwSysedEghOT0XswqmFlKSpCxdnIQ>
-    <xmx:PgIUZdxe-Y4wWjYltbwliWqsUiL_Z0RS3qKLeIajl6UkqiCFW_krgw>
-    <xmx:QAIUZT62hUezLzCf7tWCLY3gFCsJGirrafP915pncyO15zAz5TE6UQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D0E99B60089; Wed, 27 Sep 2023 06:21:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
+        with ESMTP id S231386AbjI0LPy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Sep 2023 07:15:54 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9598013A
+        for <linux-mips@vger.kernel.org>; Wed, 27 Sep 2023 04:15:52 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-495d687b138so3887156e0c.3
+        for <linux-mips@vger.kernel.org>; Wed, 27 Sep 2023 04:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1695813351; x=1696418151; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qVfAkzwv7s6SJ5GID4gdrqme1d05OJyLXXoD6QHFoE8=;
+        b=JnSF+GrfmmRO07uHO1RaW598bSPFK1uwYXWwCpiCQYiOo0gW0F7N5h0qAYPrJ6M/Xc
+         Jt/BP2Z52BYZjsv6oRGuDrE11wu72ykDovpKsFBhOtcSNznOzwX2CNbtt7SWDlp3GjWe
+         OvgdtsH5UPXLxkKIn3GO2s6sE1vj+YATEIEdNST1FRcYv/d/H/eNl+DcRSZpqMD7vdQt
+         1DAB8BlQvL7NNttkY3uRfia5cFFs8qCHIwnlX2JgjdGhdKp7MfLlN4/DAnhhAZK4NKkA
+         SVO9mqWFon6e/cCjInyuFWCcftEzIbAlzT5xthZztCyHEcVWN6w+ZpnAavMD9ELYKz4v
+         +Jng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695813351; x=1696418151;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qVfAkzwv7s6SJ5GID4gdrqme1d05OJyLXXoD6QHFoE8=;
+        b=v6X22YkXw60+FtKt0PCJQzLDNIksQkH3du403/5E2url+TGMGD/mU5fYRP1os+FZTG
+         6Uan0xj6vGh6i+Wfkj5LoM4/4P4nJBJv7/+h1zZ8O1iOD1WeTmHZQ+wo8GBVhBXL3gCC
+         GtDqx6GufYfoUZw11I3q4uJyrRFYYtPmsI+nb013Zo+KvADhTlb/Fn9g4wjmEh+nnbnr
+         WQ5NnQr9tWHlGuXCj/1NWUPxnuNhKcv4ckDEhSfWCdwPhQsc2k/m2Hv+D2E8YVMNpX/n
+         gN39LQI6U3aZHEL9E62VkP9nzn9s+Ey4nAi7kDQZQlLblM4seBlZrwBO9yX5/Q/92gdE
+         ewUQ==
+X-Gm-Message-State: AOJu0YxHjhLhnXI7Q43B/WDdi1U9Qan1pKYAn67j6BLbKSLXsGt4bKyf
+        oHpWclmnBXLFbbx4jbKtuX455PK0zvL2lMhFCQbpDA==
+X-Google-Smtp-Source: AGHT+IHymKUFP4V3u5zhIDCTbBIqfdNCPcdLUQ8dxI2lTBCq3GJGEzPmhnfIbSU1Z5436i/FSr8W7g7HAbyWn6VcKok=
+X-Received: by 2002:a67:fa05:0:b0:44d:3d29:4940 with SMTP id
+ i5-20020a67fa05000000b0044d3d294940mr1020879vsq.35.1695813351573; Wed, 27 Sep
+ 2023 04:15:51 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <f636d6c8-d437-48d4-9582-33b3ee77c145@app.fastmail.com>
-In-Reply-To: <6n7o7p99-9pr2-9orq-6nq1-093n7n7n43o9@syhkavp.arg>
-References: <cover.1695679700.git.falcon@tinylab.org>
- <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com>
- <a08e1cee-05e0-447a-b25b-6c2ebb116e8d@app.fastmail.com>
- <6n7o7p99-9pr2-9orq-6nq1-093n7n7n43o9@syhkavp.arg>
-Date:   Wed, 27 Sep 2023 12:21:27 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nicolas Pitre" <nico@fluxnic.net>
-Cc:     "Zhangjin Wu" <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Palmer Dabbelt" <palmer@rivosinc.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>, paulburton@kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Willy Tarreau" <w@1wt.eu>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        "Tim Bird" <tim.bird@sony.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-Subject: Re: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230926090623.35595-1-brgl@bgdev.pl>
+In-Reply-To: <20230926090623.35595-1-brgl@bgdev.pl>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 27 Sep 2023 13:15:40 +0200
+Message-ID: <CAMRc=MdAZEGWDK5O5siAsub3qjhx0-MAgzrt6E_eR1rFdBfAFg@mail.gmail.com>
+Subject: Re: [RFT PATCH] mtd: rawnand: ingenic: move the GPIO quirk to gpiolib-of.c
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-mips@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 26, 2023, at 22:49, Nicolas Pitre wrote:
-> On Tue, 26 Sep 2023, Arnd Bergmann wrote:
+On Tue, Sep 26, 2023 at 11:06=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
 >
->> $ size build/tmp/vmlinux-*
->>    text	   data	    bss	     dec    hex	filename
->>   754772  220016  71841	 1046629  ff865	vmlinux-tinyconfig
->>   717500  223368  71841	 1012709  f73e5	vmlinux-tiny+nosyscalls
->>   567310  176200  71473	  814983  c6f87	vmlinux-tiny+gc-sections
->>   493278  170752  71433	  735463  b38e7	vmlinux-tiny+gc-sections+nosyscalls
->> 10120058 3572756 493701	14186515 d87813	vmlinux-defconfig
->>  9953934 3529004 491525	13974463 d53bbf	vmlinux-defconfig+gc
->>  9709856 3500600 489221	13699677 d10a5d	vmlinux-defconfig+gc+nosyscalls
->> 
->> This would put us at an upper bound of 10% size savings (80kb) for
->> tinyconfig, which is clearly significant. For defconfig, it's
->> still 2.0% or 275kb size reduction when all syscalls are dropped.
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
-> I did something similar a while ago. Results included here:
+> We have a special place for OF polarity quirks in gpiolib-of.c. Let's
+> move this over there so that it doesn't pollute the driver.
 >
-> https://lwn.net/Articles/746780/
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+> This is an alternative to the previous patch that instead of replacing
+> one active-low setter with another, just moves the quirk over to
+> gpiolib-of.c
 >
-> In my case, stubbing out all syscalls produced a 7.8% reduction which 
-> was somewhat disappointing compared to other techniques. Of course it 
-> all depends on what is your actual goal.
+>  drivers/gpio/gpiolib-of.c                       |  9 +++++++++
+>  drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 12 ------------
+>  2 files changed, 9 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 5515f32cf19b..58c0bbe9d569 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -192,6 +192,15 @@ static void of_gpio_try_fixup_polarity(const struct =
+device_node *np,
+>                  */
+>                 { "himax,hx8357",       "gpios-reset",  false },
+>                 { "himax,hx8369",       "gpios-reset",  false },
+> +               /*
+> +                * The rb-gpios semantics was undocumented and qi,lb60 (a=
+long with
+> +                * the ingenic driver) got it wrong. The active state enc=
+odes the
+> +                * NAND ready state, which is high level. Since there's n=
+o signal
+> +                * inverter on this board, it should be active-high. Let'=
+s fix that
+> +                * here for older DTs so we can re-use the generic nand_g=
+pio_waitrdy()
+> +                * helper, and be consistent with what other drivers do.
+> +                */
+> +               { "qi,lb60",            "rb-gpios",     true },
+>  #endif
+>         };
+>         unsigned int i;
+> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c b/drivers/mt=
+d/nand/raw/ingenic/ingenic_nand_drv.c
+> index 6748226b8bd1..c816dc137245 100644
+> --- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
+> @@ -380,18 +380,6 @@ static int ingenic_nand_init_chip(struct platform_de=
+vice *pdev,
+>                 return ret;
+>         }
+>
+> -       /*
+> -        * The rb-gpios semantics was undocumented and qi,lb60 (along wit=
+h
+> -        * the ingenic driver) got it wrong. The active state encodes the
+> -        * NAND ready state, which is high level. Since there's no signal
+> -        * inverter on this board, it should be active-high. Let's fix th=
+at
+> -        * here for older DTs so we can re-use the generic nand_gpio_wait=
+rdy()
+> -        * helper, and be consistent with what other drivers do.
+> -        */
+> -       if (of_machine_is_compatible("qi,lb60") &&
+> -           gpiod_is_active_low(nand->busy_gpio))
+> -               gpiod_toggle_active_low(nand->busy_gpio);
+> -
+>         nand->wp_gpio =3D devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_LO=
+W);
+>
+>         if (IS_ERR(nand->wp_gpio)) {
+> --
+> 2.39.2
+>
 
-Thanks for the link, I had forgotten about your article.
+Queued for v6.7.
 
-With all the findings combined, I guess the filtering
-at the syscall table level is not all that promising
-any more. Going through the list of saved space, I ended up
-with 5.7% (47kb) in the best case after I left the 40 syscalls
-from the example in this thread.
-
-Removing entire groups of features using normal Kconfig symbols
-based on the remaining syscalls that have the largest size
-probably gives better results. I can see possible groups
-of syscalls that could be disabled under CONFIG_EXPERT,
-along with making their underlying infrastructure optional:
-
-- xattr
-- ptrace
-- adjtimex
-- splice/vmsplice/tee
-- unshare/setns
-- sched_*
-
-After those, one would quickly hit diminishing returns.
-
-     Arnd
+Bartosz
