@@ -2,112 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1D77AF590
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Sep 2023 22:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D94D7AFA03
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Sep 2023 07:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbjIZUyB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Sep 2023 16:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S229853AbjI0FXT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Sep 2023 01:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjIZUyA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Sep 2023 16:54:00 -0400
-X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 26 Sep 2023 13:53:53 PDT
-Received: from pb-smtp20.pobox.com (pb-smtp20.pobox.com [173.228.157.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06062120;
-        Tue, 26 Sep 2023 13:53:53 -0700 (PDT)
-Received: from pb-smtp20.pobox.com (unknown [127.0.0.1])
-        by pb-smtp20.pobox.com (Postfix) with ESMTP id DEFC6180E3;
-        Tue, 26 Sep 2023 16:49:32 -0400 (EDT)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-        :to:cc:subject:in-reply-to:message-id:references:mime-version
-        :content-type; s=sasl; bh=vnqORXqaBxujrZIwo1zw9KvIE221dEcvbIpGK6
-        4Mu0s=; b=vaFd9L+aUbp5kYsflkkBuBk0cPY9S/Fs34MF26wTXU/E6ubR8UR7CB
-        cja+kCZim2PSDYi06Aaj6lmFuXOAEtN+APYQjGyynNWXFS48os/xaRZeGXtsNqZY
-        BOQGQjDxLTYu6dqEKpQTDrgF4SCIbhFBDNQ6pNxjVfGMPUz4kEhvM=
-Received: from pb-smtp20.sea.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp20.pobox.com (Postfix) with ESMTP id D556B180E2;
-        Tue, 26 Sep 2023 16:49:32 -0400 (EDT)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=vnqORXqaBxujrZIwo1zw9KvIE221dEcvbIpGK64Mu0s=; b=c2g49f/Co2qpG8GQZCZBFdVMaFoFpRzOvTK55BZZtx7t/WROFvbYnzEe/C83x9gt8lr07HbLcISFV83C3MDHOnUE+5TibodhLL4de/jNvbsAQG5TuSX+qCmP1aDziPPCsU4oKob9NklAlUR9sIBKsHrQXkL3g5XyUi4jj6aa77Q=
-Received: from yoda.fluxnic.net (unknown [184.162.17.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp20.pobox.com (Postfix) with ESMTPSA id DE15C180E1;
-        Tue, 26 Sep 2023 16:49:28 -0400 (EDT)
-        (envelope-from nico@fluxnic.net)
-Received: from xanadu (xanadu [10.0.0.101])
-        by yoda.fluxnic.net (Postfix) with ESMTPSA id 90996956C15;
-        Tue, 26 Sep 2023 16:49:26 -0400 (EDT)
-Date:   Tue, 26 Sep 2023 22:49:26 +0200 (CEST)
-From:   Nicolas Pitre <nico@fluxnic.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        paulburton@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Willy Tarreau <w@1wt.eu>,
-        =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>,
-        Tim Bird <tim.bird@sony.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support,
- part1
-In-Reply-To: <a08e1cee-05e0-447a-b25b-6c2ebb116e8d@app.fastmail.com>
-Message-ID: <6n7o7p99-9pr2-9orq-6nq1-093n7n7n43o9@syhkavp.arg>
-References: <cover.1695679700.git.falcon@tinylab.org> <fbb6f526-0db9-4bbe-9635-8cb55b4335ee@app.fastmail.com> <a08e1cee-05e0-447a-b25b-6c2ebb116e8d@app.fastmail.com>
+        with ESMTP id S229546AbjI0FWg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Sep 2023 01:22:36 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46345FD1;
+        Tue, 26 Sep 2023 22:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695791982; x=1727327982;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XWRHK3XHMCPUS7DjwBYEn6sN3WEf4Pd1a63R09LlTdM=;
+  b=Rn0ykur+VAe+a1zUi7FEh4gFnxrFp628QOzK1Yld8tZhYzThnszJp/w+
+   Ywz2A0oi8KtkX4j/5zi+g3SG3duu/9UfmpT5BMmMUt7G6Fx2d3PeegCjk
+   8e/8j2kTtqx3d+tlzb2hvCy47F3H+b3hTj8/CWLUnzKfs4YHM6cCA0C6v
+   TLqQH/aIfG191BNg9R+LE/gD9lYMoAH4vXBHB6uXNPkmhzW34XHyhmWBM
+   eHkfrUGMlBsUoQFi4HPfYCjGistMDujHxTvc6e6zwGuSFzFgimPi38UZW
+   +sEoJGpwLdsVYwLJcSCh9le0vKpCGCd5lEyeqJFTr0WfmNwHYazmgFNau
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381633578"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="381633578"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 22:19:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="725676254"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="725676254"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.8.84]) ([10.238.8.84])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 22:19:32 -0700
+Message-ID: <483f9e1e-7d01-5f06-3bfa-3788d2554724@linux.intel.com>
+Date:   Wed, 27 Sep 2023 13:19:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID: 2FB1520E-5CAE-11EE-B67F-F515D2CDFF5E-78420484!pb-smtp20.pobox.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20230914015531.1419405-1-seanjc@google.com>
+ <20230914015531.1419405-12-seanjc@google.com>
+ <d66795f8-e524-2912-4b71-92ca4ffe8807@linux.intel.com>
+ <ZQteNbPfx6P3r6B8@google.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <ZQteNbPfx6P3r6B8@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 26 Sep 2023, Arnd Bergmann wrote:
-
-> On Tue, Sep 26, 2023, at 09:14, Arnd Bergmann wrote:
-> > On Tue, Sep 26, 2023, at 00:33, Zhangjin Wu wrote:
-> >
-> > It would be nice to include some size numbers here for at least
-> > one practical use case. If you have a defconfig for a shipping
-> > product with a small kernel, what is the 'size -B' output you
-> > see comparing with and without DCE and, and with DCE+DSE?
-> 
-> To follow up on this myself, for a very rough baseline,
-> I tried a riscv tinyconfig build with and without 
-> CONFIG_LD_DEAD_CODE_DATA_ELIMINATION (this is currently
-> not supported on arm, so I did not try it there), and
-> then another build with simply *all* system calls stubbed
-> out by hacking asm/syscall-wrapper.h:
-> 
-> $ size build/tmp/vmlinux-*
->    text	   data	    bss	     dec    hex	filename
->   754772  220016  71841	 1046629  ff865	vmlinux-tinyconfig
->   717500  223368  71841	 1012709  f73e5	vmlinux-tiny+nosyscalls
->   567310  176200  71473	  814983  c6f87	vmlinux-tiny+gc-sections
->   493278  170752  71433	  735463  b38e7	vmlinux-tiny+gc-sections+nosyscalls
-> 10120058 3572756 493701	14186515 d87813	vmlinux-defconfig
->  9953934 3529004 491525	13974463 d53bbf	vmlinux-defconfig+gc
->  9709856 3500600 489221	13699677 d10a5d	vmlinux-defconfig+gc+nosyscalls
-> 
-> This would put us at an upper bound of 10% size savings (80kb) for
-> tinyconfig, which is clearly significant. For defconfig, it's
-> still 2.0% or 275kb size reduction when all syscalls are dropped.
-
-I did something similar a while ago. Results included here:
-
-https://lwn.net/Articles/746780/
-
-In my case, stubbing out all syscalls produced a 7.8% reduction which 
-was somewhat disappointing compared to other techniques. Of course it 
-all depends on what is your actual goal.
 
 
-Nicolas
+On 9/21/2023 5:03 AM, Sean Christopherson wrote:
+> On Mon, Sep 18, 2023, Binbin Wu wrote:
+>>
+>> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
+>>> From: Chao Peng <chao.p.peng@linux.intel.com>
+>> [...]
+>>> +#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+>>> +/*
+>>> + * Returns true if _all_ gfns in the range [@start, @end) have attributes
+>>> + * matching @attrs.
+>>> + */
+>>> +bool kvm_range_has_memory_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+>>> +				     unsigned long attrs)
+>>> +{
+>>> +	XA_STATE(xas, &kvm->mem_attr_array, start);
+>>> +	unsigned long index;
+>>> +	bool has_attrs;
+>>> +	void *entry;
+>>> +
+>>> +	rcu_read_lock();
+>>> +
+>>> +	if (!attrs) {
+>>> +		has_attrs = !xas_find(&xas, end);
+>> IIUIC, xas_find() is inclusive for "end", so here should be "end - 1" ?
+> Yes, that does appear to be the case.  Inclusive vs. exclusive on gfn ranges has
+> is the bane of my existence.
+
+Seems this one is not included in the "KVM: guest_memfd fixes" patch series?
+https://lore.kernel.org/kvm/20230921203331.3746712-1-seanjc@google.com/
+
+
+
