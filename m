@@ -2,157 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CBB7B1552
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Sep 2023 09:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6E27B1554
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Sep 2023 09:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjI1HtU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Sep 2023 03:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S230435AbjI1Htm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Sep 2023 03:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjI1HtT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Sep 2023 03:49:19 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E151997;
-        Thu, 28 Sep 2023 00:49:17 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A57C433C8;
-        Thu, 28 Sep 2023 07:49:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695887357;
-        bh=Gs6aFP7wkoeloUPjh3P+7ZqWXKrUV+lmRvPOXvjf8Ds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C07hz1x9ZBOot13NmBg/w+8/7UOMHZqam5kdmBhRs0FIMx+p817yeI0/AwYqADdFf
-         LyROsByfc7udfgvzO+iVFxt40scEHqiTsEuBV2anPvz2pvOqA5rNaglngGFVYkDqNi
-         8llzR1bKPikKnXdUU/UiExt0M1sNhonfI2Tg9VWZ4Ep2jjWHYlWMlubIYLpGAoPemh
-         /llBuONh0YVRMZh24Aia4Qvo0KfHmtLVm+XDoqoKF4CTK02whHvixcoVQ+egWgMk7x
-         FTO4SCB3n9ecoNHU2OdnjDnT9Gq59BrqP6Jgw3zOEG+2pLxraJj4zpxQ8BtWBKRvcG
-         KuqZYg3uAID5g==
-Date:   Thu, 28 Sep 2023 13:19:13 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Olivier Dautricourt <olivierdautricourt@gmail.com>,
-        Stefan Roese <sr@denx.de>, dmaengine@vger.kernel.org,
-        kernel@pengutronix.de, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Li Yang <leoyang.li@nxp.com>, Zhang Wei <zw@zh-kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-actions@lists.infradead.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Sinan Kaya <okaya@kernel.org>,
-        Green Wan <green.wan@sifive.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Pavel Machek <pavel@denx.de>,
-        Hien Huynh <hien.huynh.px@renesas.com>,
-        Yangtao Li <frank.li@vivo.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-tegra@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        Brian Xu <brian.xu@amd.com>,
-        Raj Kumar Rampelli <raj.kumar.rampelli@amd.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Swati Agarwal <swati.agarwal@amd.com>
-Subject: Re: [PATCH 00/59] dma: Convert to platform remove callback returning
- void
-Message-ID: <ZRUv+WgkovPotwIr@matsya>
-References: <20230919133207.1400430-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230445AbjI1Htl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Sep 2023 03:49:41 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389F492
+        for <linux-mips@vger.kernel.org>; Thu, 28 Sep 2023 00:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=QZFl
+        1a97h2/9g6QzL1NyeY9qjBIRi9sL1LKVpy11Y8s=; b=gHyEXUOcQXilzCMvEm2n
+        9S4y+lKXMsP/dsnsZF4xCtUK9VZi8nJQL+kfiN2vdZ1LMPaN71Y+5fLWLLN1KzoB
+        0ZHeomr+z1e8m2/byiiJpMNvl7UpEtGTrqZxUZERm6f0MppnQtHqZamJMDMMm8yr
+        j8Dj5Txuvubs2P9DazZCuWwYfspe9Bm5MVKZreQulTpZZTDLGcVD5l6qhmltbHhP
+        h6JUL3w4J2ZY+eEp2jTGHbA8HOmtVoCpZNgn0Zv24i5EEKiwp8X62iuYqTC/UkQ+
+        VIE+CsY54WSx5+wezrpWwseas8C/QF5OlvWChnylWbFpBAN+BJ0J7LwpEmLi67Cz
+        jw==
+Received: (qmail 3381278 invoked from network); 28 Sep 2023 09:49:38 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Sep 2023 09:49:38 +0200
+X-UD-Smtp-Session: l3s3148p1@fQDEjGYGOKAujntX
+Date:   Thu, 28 Sep 2023 09:49:38 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] MIPS: AR7: remove platform
+Message-ID: <ZRUwEjpfILlF5dgE@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+ <20230922061530.3121-7-wsa+renesas@sang-engineering.com>
+ <ZRUl6+i/o0cqCV+6@ninjato>
+ <ZRUrVgHyJvvhteGs@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hEEbsm7LPJ6rnXmL"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230919133207.1400430-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZRUrVgHyJvvhteGs@alpha.franken.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 19-09-23, 15:31, Uwe Kleine-König wrote:
-> Hello,
-> 
-> this series convert nearly all platform drivers below drivers/dma to use
-> .remove_new(). The motivation is to get rid of an integer return code
-> that is (mostly) ignored by the platform driver core and error prone on
-> the driver side.
 
-I have applied this, with change of subsystem to dmaengine: xxx
-> 
-> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> returns no value") for an extended explanation and the eventual goal.
-> 
-> There are 4 drivers I didn't convert in this series:
-> 
-> 	drivers/dma/milbeaut-hdmac.c
-> 	drivers/dma/milbeaut-xdmac.c
-> 	drivers/dma/uniphier-mdmac.c
-> 	drivers/dma/uniphier-xdmac.c
-> 
-> These all might return early in .remove() if dmaengine_terminate_sync()
-> fails. I only looked deeper into the first one, and this shows exactly
-> the error that is easy to make with .remove() returning an int: When
-> returning early from .remove(), some cleanup (here:
-> dma_async_device_unregister()) is skipped. So the dma device stays
-> known, but the device is still unregistered and the devm allocated stuff
-> (here e.g. *mdev) is freed. So it can probably easily happen, that
-> something tries to use the dma device and this will likely result in an
-> oops.
+--hEEbsm7LPJ6rnXmL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We should convert these too, thanks for your work for the conversion
 
--- 
-~Vinod
+> > most people involved in this series think that it will be best to take
+> > the whole series via the MIPS tree. Do you agree?
+>=20
+> I'm fine taking it.
+
+Awesome, thank you!
+
+
+--hEEbsm7LPJ6rnXmL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUVMA4ACgkQFA3kzBSg
+KbY++Q//bHN+C7cPFusKMAo4jaMjlgxuC67ZXQ1nWDDW570H0fejmxmxJ73jMOnl
+2wNG8TX8YL4GWRn1b/S4gZmgC/6rL+kt50yH2z13cIvjWFgnMj1WQfX621+XU5d+
+j3yOnElL8OALvJXlmB6SxMvl2bG9XDmvp62n9gCpXJhjmUwvvsMEDBLPBKjITGv1
+yz0vIJmeP+BMN4m20/thlKZPZ5xgH5TotuW++s5N6z4r34Ix5XagCOdqXA4MlD2c
+Sn6XfXEKxMpeTfKvCgwM5mex5mtdQz60BkUEvMQDJt+VN4+4Cmqymrnbqz8Kfdfn
+TxRPlNaKr3AJTGMR/fDIJFzEu9HFDHC2ChygCYYJrRNzJzR51cpHzehzpDa86lLX
+Id1Tt7OFcS7eLXGGgBQwQUAfjTQOaammebuZXN85/yfk+nwELPkqFQpu1WqZCNT6
+8eocVDv8N/8OOeiNWABf37uVz/GJAC5xEZMdUrtBwHxHh63kUGrd5Mw0vDT+kUjV
+ycEuPjhy+LU9Y/x0WYjHJzsOjbY8Vt0LsLxP3zsAYs6hf399oS2kzpzZm4cW5935
+jaGJ/U0xNqX3i1Ypc75x2IcnwazACs4YOkfYULy6K8JjY/ofIH15maLhsBqnS+wi
+I6kxHQJe07U5g8xmthtB73ibxM1m/fGhJT+xuSL9BTzVqm+2eZQ=
+=m+DX
+-----END PGP SIGNATURE-----
+
+--hEEbsm7LPJ6rnXmL--
