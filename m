@@ -2,60 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200A87B2CCC
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Sep 2023 09:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103077B34B7
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Sep 2023 16:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjI2HDs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Sep 2023 03:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S233179AbjI2OSj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Sep 2023 10:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjI2HDr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Sep 2023 03:03:47 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E9A195
-        for <linux-mips@vger.kernel.org>; Fri, 29 Sep 2023 00:03:44 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-45289425da1so5713189137.1
-        for <linux-mips@vger.kernel.org>; Fri, 29 Sep 2023 00:03:44 -0700 (PDT)
+        with ESMTP id S233210AbjI2OSj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Sep 2023 10:18:39 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667D71AE
+        for <linux-mips@vger.kernel.org>; Fri, 29 Sep 2023 07:18:37 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c16757987fso143038501fa.3
+        for <linux-mips@vger.kernel.org>; Fri, 29 Sep 2023 07:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695971023; x=1696575823; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yVYuURB2cheQTyHOhbnV0CiyPuHwKJiKEUrZ0k9NBTk=;
-        b=Vgl4obYEXH9vsMgejsYBa8wKVYAN+ArOHls5/Ytc0GESgxWeZCRNXNCqE/zunqQ08C
-         p73wO533ELQssUGYN8FISNN9J1ceqZh7zGlyXhvl6fg8b6x0XC/k9UA3akBOyLASYvkc
-         Z4NGKQsJ2K/FpNDac0q6mYNHPeVF/hgm4fxx0+gleIYe90SY8IJqRVGDt1npNMM6AaRV
-         3AGubP4shNTONwbWnBK5fvHDxK9lDWlPNxBHWF/6EBmNPwOc2jbeXH+ucFskeuKer/pA
-         n7L9AZOiJP92Pb1IpunAhB0z7bx/ApPRKNKzfBWCB4kwBHUln+2oeImyNthRvZKbpKdb
-         eDAA==
+        d=linaro.org; s=google; t=1695997115; x=1696601915; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8j2Dqke+VIw3sY3uBi50vPFlbJnXICNf1WlSdn5wTHY=;
+        b=FdC09uw+wc+TCnMNqso/naVcmHNbrI3d69FwNjniQ8/rOC2EIZx8XWo3MfQKoiKy4G
+         CkdIf/BinSy1NGF3XJjDexq3EimtzcjvWSZ+WD9dc6OzeLpgFfx70bb7YHF3znP4mpGF
+         Vy8le4E7pHWNElwO/uGRddicBw51s9jUClE0NQHYeN+HjuXZKMInk2iLgyrIb1x2LtTk
+         WiAXY+24aLRPkFiFjSk7SVPw6d20uKt1TGlkKtyqwBLZJ1EccCET5tJc77SL9SHDiLQk
+         uRosEypzoTgp4RyWEHGflFAOQRvTd4TtyV+xRz1WuRZhEP76WldEH21/NFz/F0JZ1jwF
+         L3PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695971023; x=1696575823;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yVYuURB2cheQTyHOhbnV0CiyPuHwKJiKEUrZ0k9NBTk=;
-        b=cE/DRwhnBKXk+JeKwMLuzbBY5o+w6dcqiIfvJPFSsmh6DbyYGctFsfcizeYTa4pEoU
-         M9Oai1/etE7Rqf7DWZktXTKH/y/74bTJ1aRHXySts+BhdsDCpGn2zIuzm11QRQTUf1Ul
-         uK6TXiNzO52v0nuPkhTESND74RrCqSGEzfFtzUwE8WDjxxTKG8CUXPdjK9fvMAZoSjCu
-         9gTZalD6NlUgsV6b/jQdDBWBgV1uZQFfo7LjYOCflbPC9a4rTFWlNJCj2Rwqza8Yxo4C
-         K5+EYI59mF8yCHN9+IZj8hGE/yTO+86h3dQu5Hb7b07tCHRK+1zNw/TBA4ATEysF/gNe
-         Cz7g==
-X-Gm-Message-State: AOJu0YzuGSCfTgd9PGM/cxglu4pLfvaJ0pFxBuTSEZJgYZB5Yotgak3g
-        8boiRKtadhJ+PD1Cg3NbYPhWxknuiPJV/znZN4pJTA==
-X-Google-Smtp-Source: AGHT+IHQAyrtYw6eFyGn+nC8nJKCAAl7jmDDfoPwLpeWUIuOh3FxqsVtkdL3fgC7qCAGj2sBL8dOQY9dTeRAdFaA1BY=
-X-Received: by 2002:a67:cd01:0:b0:44e:9afe:c5b9 with SMTP id
- u1-20020a67cd01000000b0044e9afec5b9mr2704237vsl.23.1695971023130; Fri, 29 Sep
- 2023 00:03:43 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 29 Sep 2023 12:33:31 +0530
-Message-ID: <CA+G9fYvVETLEtiZ=MFRrxgXpmgirVHz-tDOxhU=7_9dtmx7o5g@mail.gmail.com>
-Subject: next: mips: cavium_octeon_defconfig failed - drivers/staging/octeon/ethernet.c:204:37:
- error: storage size of 'rx_status' isn't known
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mips@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     Oliver Crumrine <ozlinux@hotmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        d=1e100.net; s=20230601; t=1695997115; x=1696601915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8j2Dqke+VIw3sY3uBi50vPFlbJnXICNf1WlSdn5wTHY=;
+        b=gqZ2uHdkD+Fcb/ipzdGpr7e2wZHGALSRtVC2u3Mei6owjPAbTw3kYAOefPSHp1PCpg
+         UGLSNxHWuWD0mTwgFOaXtil4tP8zBqN9ibsYirMZ1MbVY30GWMjdpCRZULit2UdUBrIK
+         TgS+K0uREGuPjrknvhFETuEQnZUdPbu8aX/xHT1cdKdWj6J5+iUrKQx/cSjdtlzu/Va8
+         FKTkU5zkyJM4tWKsuVg7Ax7jfT5Fy7PlAILFsNzkTCepIMw3/r4vJoRarBG3t1c4n2JM
+         OewDvKKY8DVtEn9Er8zJ39YTtVZeYw74WyrGK0kiG2RwgyOpx/N5ATsz9wQ+lWgKae7U
+         NcTw==
+X-Gm-Message-State: AOJu0YxpQ8bf5RGriRLQcGwdcw+7gSbDp6rGEUf2Hawf3MnMmbjbcAXt
+        xpN3TgY1CZdwW7wIribIF/rxhw==
+X-Google-Smtp-Source: AGHT+IEekDnaCyM1jFkUv5e/jr17//76CHNCjve7vjqB/6LansiKHyMlI0JbtqXT4j1Rne7qfOcrKw==
+X-Received: by 2002:a2e:b0f9:0:b0:2bd:f8:1b6a with SMTP id h25-20020a2eb0f9000000b002bd00f81b6amr3604555ljl.36.1695997115593;
+        Fri, 29 Sep 2023 07:18:35 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id k13-20020a05651c060d00b002b9358f5088sm1481286lje.53.2023.09.29.07.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 07:18:35 -0700 (PDT)
+Date:   Fri, 29 Sep 2023 17:18:31 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mips@vger.kernel.org, linux-staging@lists.linux.dev,
+        Oliver Crumrine <ozlinux@hotmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: next: mips: cavium_octeon_defconfig failed -
+ drivers/staging/octeon/ethernet.c:204:37: error: storage size of 'rx_status'
+ isn't known
+Message-ID: <ccc85f1b-e932-4aa1-81c2-185df391fe82@kadam.mountain>
+References: <CA+G9fYvVETLEtiZ=MFRrxgXpmgirVHz-tDOxhU=7_9dtmx7o5g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvVETLEtiZ=MFRrxgXpmgirVHz-tDOxhU=7_9dtmx7o5g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,53 +74,11 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The mips cavium_octeon_defconfig builds failing on Linux next from
-Sept 19th tag.
+This is weird.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I managed to reproduce this once but couldn't reproduce it again after
+that.  It seems like an intermittent thing to me.
 
-Build log:
---------
-drivers/staging/octeon/ethernet.c: In function 'cvm_oct_common_get_stats':
-drivers/staging/octeon/ethernet.c:204:37: error: storage size of
-'rx_status' isn't known
-  204 |         struct cvmx_pip_port_status rx_status;
-      |                                     ^~~~~~~~~
-drivers/staging/octeon/ethernet.c:205:37: error: storage size of
-'tx_status' isn't known
-  205 |         struct cvmx_pko_port_status tx_status;
-      |                                     ^~~~~~~~~
-drivers/staging/octeon/ethernet.c:205:37: warning: unused variable
-'tx_status' [-Wunused-variable]
-drivers/staging/octeon/ethernet.c:204:37: warning: unused variable
-'rx_status' [-Wunused-variable]
-  204 |         struct cvmx_pip_port_status rx_status;
-      |                                     ^~~~~~~~~
-drivers/staging/octeon/ethernet.c: In function 'cvm_oct_probe':
-drivers/staging/octeon/ethernet.c:801:22: error: variable 'imode' has
-initializer but incomplete type
-  801 |                 enum cvmx_helper_interface_mode imode =
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/staging/octeon/ethernet.c:801:49: error: storage size of
-'imode' isn't known
-  801 |                 enum cvmx_helper_interface_mode imode =
-      |                                                 ^~~~~
-drivers/staging/octeon/ethernet.c:801:49: warning: unused variable
-'imode' [-Wunused-variable]
-make[6]: *** [scripts/Makefile.build:243:
-drivers/staging/octeon/ethernet.o] Error 1
-make[6]: Target 'drivers/staging/octeon/' not remade because of errors.
-make[5]: *** [scripts/Makefile.build:480: drivers/staging/octeon] Error 2
+regards,
+dan carpenter
 
-
-
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230928/testrun/20145550/suite/build/test/gcc-12-cavium_octeon_defconfig/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230928/testrun/20145550/suite/build/test/gcc-12-cavium_octeon_defconfig/details/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230928/testrun/20145550/suite/build/test/gcc-12-cavium_octeon_defconfig/history/
-
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
