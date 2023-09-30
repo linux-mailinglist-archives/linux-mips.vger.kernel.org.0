@@ -2,109 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A1D7B35F6
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Sep 2023 16:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1057B3FB3
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Sep 2023 11:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbjI2Opt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Sep 2023 10:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S229645AbjI3Jbw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 30 Sep 2023 05:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjI2Opt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Sep 2023 10:45:49 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFC5193
-        for <linux-mips@vger.kernel.org>; Fri, 29 Sep 2023 07:45:46 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-4060b623e64so4996765e9.0
-        for <linux-mips@vger.kernel.org>; Fri, 29 Sep 2023 07:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695998744; x=1696603544; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j1F0jmzSQsTMHopJS20TQ/aPFFBAaPT1nKsTJzCXy4g=;
-        b=oKao3nPh6ta+dYX+IxRMVJr80aA42kaHbcqn0H+PRgUd9n2Ul6Tx9OIwqG0VLtTB3m
-         myzJCOz47gah3KO+Bzm3tQEISD65DURRaMhGKFWlooXlAgEw4O4KlHdnjv//NspX05lo
-         rbGFdITd4oOviSP5pTEEmTRuTtASzGzCnv4q1rt3sNP9HuojATqx9ldFCLRmsDA5Fz1x
-         EkARMeSMLrtcAcPpY+w3bgcVMVASneHxEWSlwuahYSd/qaZlOo7EKvhD1WWLj5AqCLqj
-         RwQ97vSBXqy9DRuKb2C2he2MK3mSPvJ4Y1oYRuh5KtbF9ljiaD560lT4+npkj9+GEyD6
-         q+IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695998744; x=1696603544;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j1F0jmzSQsTMHopJS20TQ/aPFFBAaPT1nKsTJzCXy4g=;
-        b=CvMC4yk6GD5RtLwQr/0nFEozUI0brDdndj27t4Mx++ERazMlA14U2UC/1NfRDMP63i
-         zExv8kIAJNkfF5/xitSkXWtiqbxZQ3f5lfTEJ+MqK9UrKA/b4fACwgaS5eGUw13LM/l+
-         +Lv83VpUN6VvgyvWHX8rEyD81i1ob+2DHxGmwZ1hhhT/LnJ1Wxo5yktekUQjaiKQryV7
-         Fvv1/bpss+rfZXFQJsZCBXIhX3150oOREM3elBzepvewyLkkpzh4v+d8uX30GM8hw0r9
-         UDBqVMoQgdoGAAmbfsI2YfUVO0b9aGT5gUsrB553ZhdsPuca21tOBKgWHYVyKxzBJz1d
-         o8Ig==
-X-Gm-Message-State: AOJu0Yy4UgJZZXKDSnSocvUWrzXqCq1EG3EEp7VE5wMEZzdCQiMS4zep
-        FNRBYEZairMwMoA5ci2Cf/qjRg==
-X-Google-Smtp-Source: AGHT+IEhITBVhRNZEGs03cCgFKEzGiXTWsGzoh/jNUr5RPvZWP24s4gEhBS1OqmZV8t5O4h63M7KFA==
-X-Received: by 2002:a05:600c:3644:b0:406:4e2e:b185 with SMTP id y4-20020a05600c364400b004064e2eb185mr3887296wmq.1.1695998744493;
-        Fri, 29 Sep 2023 07:45:44 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id b9-20020a05600c11c900b0040596352951sm1575517wmi.5.2023.09.29.07.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 07:45:44 -0700 (PDT)
-Date:   Fri, 29 Sep 2023 17:45:41 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mips@vger.kernel.org, linux-staging@lists.linux.dev,
-        Oliver Crumrine <ozlinux@hotmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: next: mips: cavium_octeon_defconfig failed -
- drivers/staging/octeon/ethernet.c:204:37: error: storage size of 'rx_status'
- isn't known
-Message-ID: <f43c92cd-bb2f-43a2-8025-707e4274891d@kadam.mountain>
-References: <CA+G9fYvVETLEtiZ=MFRrxgXpmgirVHz-tDOxhU=7_9dtmx7o5g@mail.gmail.com>
- <ccc85f1b-e932-4aa1-81c2-185df391fe82@kadam.mountain>
- <511073d8-3292-4914-9bcc-8c9acefe3b9a@kadam.mountain>
- <b2da789f-af96-4269-bd5c-54d4cb6f05eb@kadam.mountain>
+        with ESMTP id S233926AbjI3Jbw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 30 Sep 2023 05:31:52 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6764DD;
+        Sat, 30 Sep 2023 02:31:48 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1696066296thr4pjsz
+Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 30 Sep 2023 17:31:33 +0800 (CST)
+X-QQ-SSF: 01200000000000B06000000A0000000
+X-QQ-FEAT: znfcQSa1hKbcYxqfol5fP9hy+d5iapd9bWXb81pkq2JorFRHt2ASdRq962bXO
+        Eyl4InpEH2CpYAFUV9l2NYqPU+ovjnAGXlV6VuKPT6l5hIoGbwACL65IFYfcAOI9R5vxSxh
+        ZVK2QI8L8KAdq3fCDHpMUKqg5zwNrhJUoqciQm/r0agtEM+FpE3cQOMFpaybcCKzl0E4XwZ
+        9z4sDnmlMVDXzTD5KCn1+nfGuufGJHuDtn28ZndGAGAbYBESgzNcHQM4gRGtRIqZuNd1nW1
+        fMB4ZZVjW7hiEYljO5IhyEo5/GJCihu7WTCh7i2Ah7wj3qRXX4Mzy/96toY/0Q8o16OgfJV
+        7p7T0l6pCJRY2QycXGEvTE4JwG19BRfLV6CaVq6Zbm9SizxlAc=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15485949091047528839
+From:   Yuan Tan <tanyuan@tinylab.org>
+To:     falcon@tinylab.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux@weissschuh.net, palmer@rivosinc.com,
+        paul.walmsley@sifive.com, paulburton@kernel.org,
+        paulmck@kernel.org, tim.bird@sony.com, tsbogend@alpha.franken.de,
+        w@1wt.eu
+Subject: Re: [PATCH v1 0/7] DCE/DSE: Add Dead Syscalls Elimination support, part1
+Date:   Sat, 30 Sep 2023 17:31:32 +0800
+Message-Id: <20230930093132.2166-1-tanyuan@tinylab.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1695679700.git.falcon@tinylab.org>
+References: <cover.1695679700.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2da789f-af96-4269-bd5c-54d4cb6f05eb@kadam.mountain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [43.154.54.12 listed in list.dnswl.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [43.154.54.12 listed in bl.score.senderscore.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 05:43:41PM +0300, Dan Carpenter wrote:
-> On Fri, Sep 29, 2023 at 05:39:46PM +0300, Dan Carpenter wrote:
-> > On Fri, Sep 29, 2023 at 05:18:31PM +0300, Dan Carpenter wrote:
-> > > This is weird.
-> > > 
-> > > I managed to reproduce this once but couldn't reproduce it again after
-> > > that.  It seems like an intermittent thing to me.
-> > 
-> > Nope.  I'm just dumb.
-> > 
-> > Commit b33a296d8311 ("staging: octeon: remove typedef in structs
-> > cvmx_pip_port_status_t and cvmx_pko_port_status_t") updated
-> > drivers/staging/octeon/octeon-stubs.h but didn't update
-> > arch/mips/include/asm/octeon/cvmx-pip.h.
-> > 
-> > I can send a patch for that.
-> 
-> Actually, perhaps we should just revert the patch?  Staging patches
-> aren't supposed to touch outside of the staging directory.
+I don't know why linux-kernel@vger.kernel.org reject my email send out by
+thunderbird. So here I am resending this mail with git send-email.
 
-I think all of these break the build...
+Here is a test result about DEAD_CODE_DATA_ELIMINATION (DCE) and dead syscalls
+elimination (DSE). It's based on config[1] and a simple hello.c initramfs.
 
-b33a296d8311 staging: octeon: remove typedef in structs cvmx_pip_port_status_t and cvmx_pko_port_status_t
-4fffe4733cfb staging: octeon: remove typedef in enum cvmx_pko_status_t
-8d26aa90458f staging: octeon: remove typedef in struct cvmx_pko_lock_t
-28fae776c69b staging: octeon: remove typedef in enum cvmx_pow_wait_t
-a13f7e45823c staging: octeon: remove typedef in enum cvmx_helper_interface_mode_t
-7bebd8321776 staging: octeon: remove typedef in enum cvmx_spi_mode_t
+In the DSE test, we set CONFIG_SYSCALLS_USED="sys_write sys_exit
+sys_reboot," which is used by hello.c to simply print "Hello" then exit
+and shut down qemu.
 
-regards,
-dan carpenter
+
+|                                    | syscall remain | vmlinux size     | vmlinux after strip |
+| ---------------------------------- | -------------- | ---------------- | ------------------- |
+| disable DCE                        | 236            | 2559632          | 1963400             |
+| enable DCE                         | 208            | 2037384 (-20.4%) | 1485776 (-24.3%)    |
+| enable DCE and DSE(SHE_GROUP)      | 3              | 1856640 (-27.6%) | 1354424 (-31.0%)    |
+| enable DCE and DSE(SHE_LINK_ORDER) | 3              | 1856664 (-27.6%) | 1354424 (-31.0%)    |
+
+It shows that dead syscalls elimination can save 7% of space based on DCE.
+
+[1]: https://pastebin.com/KG4fd7aT
+
