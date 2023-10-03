@@ -2,81 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AA97B4F27
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Oct 2023 11:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5647B695C
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Oct 2023 14:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbjJBJjb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Oct 2023 05:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S231962AbjJCMsG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Oct 2023 08:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbjJBJja (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Oct 2023 05:39:30 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29E4A7;
-        Mon,  2 Oct 2023 02:39:26 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7F49BFF80A;
-        Mon,  2 Oct 2023 09:39:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1696239565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OXizb9gGd7vJ+bHW/cxJRzpuCYpWwyioDAXH0qfuvtk=;
-        b=bEhjfkT+X0IqLZRPfwYa0v73V18GcN5X6Bpb+/p1hV//YXZeuITd5nIjeYPecbadt467fc
-        UQDlKMBicXXSdQsMB2taV7+R33Sc/f/wEYPk7zchuLLNZZqSLy2VG6xwkkOf6sKUYmpBGr
-        2YKP3uTv3Je+ZFs6k/UGqM9J2Ss5LVpfrN6nHlOAQN+p3jQpj30cL0WorQlsBmrCVZsP4G
-        FWq1VlLGK0ZyunKux0YcIPT7CLdpF4KZF/SFelIFpZe3mrJy9Lpo0leELuBaRx6sodmocR
-        3Euo8HetgP9pFRBaFE4ME2bsfaRtuskvmHm8myywH1ydKZVw3O4PW65wRtUlfQ==
-Date:   Mon, 2 Oct 2023 11:39:11 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] mtd: parsers: ar7: remove support
-Message-ID: <20231002113911.6bf2b73e@xps-13>
-In-Reply-To: <ZRUm4DS3qvRfcPox@ninjato>
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
-        <20230922061530.3121-3-wsa+renesas@sang-engineering.com>
-        <20230922163903.3f49ea2a@xps-13>
-        <ZRUm4DS3qvRfcPox@ninjato>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231804AbjJCMsG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Oct 2023 08:48:06 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77818AC
+        for <linux-mips@vger.kernel.org>; Tue,  3 Oct 2023 05:48:01 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-7741c2fae49so66634585a.0
+        for <linux-mips@vger.kernel.org>; Tue, 03 Oct 2023 05:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696337280; x=1696942080; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YZe9z/CDJkweGhxZy3F+7e7AP42NZQg1sBDsRc6xWLw=;
+        b=PeRLYOLioqfPAPyhLsjGm3+fHcCyHikDzkDViI+Rdq+SbLRi/yze7XyjZc95a9uN77
+         YN1HbMAWxHWMPoaRL/GFvagOUIEwUEnzRv4S5RQz58PqcXShypPksshtOxnOrvWvg7Hm
+         CGTEyB8jpw0NY7dr73p/avmPyGHDFZUYbkEpedVaCnjjHCEDBx1eFwQ8e2sY0mdjwo7F
+         79Yurn8rvgb5bJ3PKQZcoxXinziOy/LH57awDKyc+1b8frx7JawX1I+o69MF7b2wMnMq
+         nGeYnpY2hu3JsSONOtmhe1lfZjsgb2r6R3LQrwLjUxC0GR1RutNB+cpWLdbYmGVE+al0
+         A0OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696337280; x=1696942080;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YZe9z/CDJkweGhxZy3F+7e7AP42NZQg1sBDsRc6xWLw=;
+        b=hBjgSMifi538jbWsgLiVCQahqhOy/GuFxo4/i2X8rJ8EPlkPHme26ORVp99hXpwMLQ
+         LEphjc6O9CZC2o+ayxPcwVmbma3C/LVj0+znd7mnMKAmfRjEsByQPnBUv83lI5m3s7hr
+         n1X0R6VSkh9fruyWf/9XwXdvnKj7i42qNjBkQuSLqWY9z8JaX2e3Hgcz14eo2uzG2vS1
+         4pUn/6ynTb2ON0QlQ2tv6icgrhB4b0bsOVpGhx8uYG3IXHawyvmhHkf6YlJi/PzwCfI8
+         44eNCxBuIPD3VAr2Fkhz/lZr5IX5bJyGWm9SDOlQGsUNyhuFN4IUedWzKMOLDcKX0Vup
+         q+LQ==
+X-Gm-Message-State: AOJu0YwVaA5UG6RH+5cSKRyqm7sXvdPj7Aaffo4Gmqlp0QsvFT5MjQ0F
+        DDOgz03t6xkkBdFZxkx79F5fwfXG7m5FwqKlxrTrcA==
+X-Google-Smtp-Source: AGHT+IGdg5KfMiaxwpI9vdrZwCI62gGbA1qcJqHvAfDGqDxEQ2JSHryTMBO/72MMo9L0zK8WyPrlSIxRkNMNwCJdjzY=
+X-Received: by 2002:a0c:e493:0:b0:656:347b:ea75 with SMTP id
+ n19-20020a0ce493000000b00656347bea75mr13564335qvl.24.1696337280208; Tue, 03
+ Oct 2023 05:48:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-12-seanjc@google.com>
+In-Reply-To: <20230914015531.1419405-12-seanjc@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Tue, 3 Oct 2023 13:47:23 +0100
+Message-ID: <CA+EHjTzSUXx8P9gWmUERg4owxH6r6yNPm1_RL-BzS_2CNPtRKw@mail.gmail.com>
+Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Wolfram,
+Hi,
 
-wsa+renesas@sang-engineering.com wrote on Thu, 28 Sep 2023 09:10:24
-+0200:
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index d2d913acf0df..f8642ff2eb9d 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1227,6 +1227,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE 228
+>  #define KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES 229
+>  #define KVM_CAP_USER_MEMORY2 230
+> +#define KVM_CAP_MEMORY_ATTRIBUTES 231
+>
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>
+> @@ -2293,4 +2294,17 @@ struct kvm_s390_zpci_op {
+>  /* flags for kvm_s390_zpci_op->u.reg_aen.flags */
+>  #define KVM_S390_ZPCIOP_REGAEN_HOST    (1 << 0)
+>
+> +/* Available with KVM_CAP_MEMORY_ATTRIBUTES */
+> +#define KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES    _IOR(KVMIO,  0xd2, __u64)
+> +#define KVM_SET_MEMORY_ATTRIBUTES              _IOW(KVMIO,  0xd3, struct kvm_memory_attributes)
+> +
+> +struct kvm_memory_attributes {
+> +       __u64 address;
+> +       __u64 size;
+> +       __u64 attributes;
+> +       __u64 flags;
+> +};
+> +
+> +#define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+> +
 
-> > I'm not sure it is wise to merge defconfig changes through mtd. Would
-> > you mind sending this change aside to avoid potential conflicts? Each
-> > patch can live on their own anyway. =20
->=20
-> I checked pxa_defconfig history. Most commits in the last 7 years were
-> just removing outdated Kconfig symbols from all kind of subsystems. Like
-> what we want to do here. I think it is okay to keep it.
->=20
+In pKVM, we don't want to allow setting (or clearing) of
+PRIVATE/SHARED attributes from userspace. However, we'd like to use
+the attributes xarray to track the sharing state of guest pages at the
+host kernel.
 
-Ok, I've acked the patch anyway, so now I expect it to be taken through
-the mips tree as suggested earlier. Let me know if it's happening
-differently.
+Moreover, we'd rather the default guest page state be PRIVATE, and
+only specify which pages are shared. All pKVM guest pages start off as
+private, and the majority will remain so.
+
+I'm not sure if this is the best way to do this: One idea would be to
+move the definition of KVM_MEMORY_ATTRIBUTE_PRIVATE to
+arch/*/include/asm/kvm_host.h, which is where
+kvm_arch_supported_attributes() lives as well. This would allow
+different architectures to specify their own attributes (i.e., instead
+we'd have a KVM_MEMORY_ATTRIBUTE_SHARED for pKVM). This wouldn't help
+in terms of preventing userspace from clearing attributes (i.e.,
+setting a 0 attribute) though.
+
+The other thing, which we need for pKVM anyway, is to make
+kvm_vm_set_mem_attributes() global, so that it can be called from
+outside of kvm_main.c (already have a local patch for this that
+declares it in kvm_host.h), and not gate this function by
+KVM_GENERIC_MEMORY_ATTRIBUTES. This would let pKVM select only
+KVM_PRIVATE_MEM (as opposed to KVM_GENERIC_PRIVATE_MEM, which selects
+KVM_GENERIC_MEMORY_ATTRIBUTES), preventing userspace from setting
+these attributes, while allowing pKVM to call
+kvm_vm_set_mem_attributes().
+
+What do you think?
 
 Thanks,
-Miqu=C3=A8l
+/fuad
