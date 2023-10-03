@@ -2,192 +2,451 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8607B6DAD
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Oct 2023 17:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872877B6EAC
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Oct 2023 18:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjJCP7i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Oct 2023 11:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S240658AbjJCQgL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Oct 2023 12:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239420AbjJCP7g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Oct 2023 11:59:36 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2E3B8
-        for <linux-mips@vger.kernel.org>; Tue,  3 Oct 2023 08:59:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-59f8315aabfso15292907b3.0
-        for <linux-mips@vger.kernel.org>; Tue, 03 Oct 2023 08:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696348769; x=1696953569; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xP89tk8jeFUDqiHwgtcyinENLLmFDFAo+sp2wFgmRBw=;
-        b=3VHfewwIV0zOljG/ol2pjU+0vBAWkOLQRPOSIDg5brqaS+50EHIiCl+ps7d84LasCC
-         jz7EfaUe1TP4lksfzPRXjmqvTy2qhmWi6rE0bUp0X2soN22L9f7Tpzv33HVo7nNh1DpK
-         xVGLumlTXW1AIwOdhs8KaR033H4JRtK7qJDnzZJbOZVOAIuVgRgMfBtgHnv9p3YdnuwS
-         poxsb3AIswlAkEV08xxGKdQ+PCQ4u8RqOWnx7mo22z94u7AEoRP+Ocm9CDkjVMbyosWx
-         CaUYYlWPcDj5t6s+bBhCEmtwG+DQmiZ1F93IWvadR9nnbUGaPS4AG69AHcpqDEFwXAXk
-         PMAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696348769; x=1696953569;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xP89tk8jeFUDqiHwgtcyinENLLmFDFAo+sp2wFgmRBw=;
-        b=E4Kt/vMpr0J+0ZvwDe/s/1ZIvS+zviex9gy+n1tSowTIRxxtUteqTe0R4S+Pwlh6LV
-         puC/bI3SZJZSC/zz7N1mdyKVUa5tNlCANAmQAxHXhKrsibfD6LQeCZERd065nB9g24zi
-         ohoHH8+B+yJww/1rrFVDegKaKhZ2C2xg+waAdbhC8YOhE4Ak0env4RHwRULvN+MlyD6k
-         N6iYKYcZm33Av03xyaSk1ZHLuRlCNlAC1up/FjcnDd/tCMtA7tr11y7jCOQaGuLZLxnz
-         owXS5aLYEaOgq6WZtNoLxhsZ4ZEKpAFmyWttAM1mZ77EKhYoy0Bh/4r8zIdZGM+O2FLK
-         k8WQ==
-X-Gm-Message-State: AOJu0YyoWcgE5rLY7ZScFKk97h56jRkcDEy9HBf1aba1U/k0VERNsyCb
-        W9MxT97eu4SwWis2wnk7ZVNijHwgIEc=
-X-Google-Smtp-Source: AGHT+IHlsTPxnmIroL8cntBugIBpa7VGBcPZjKPldlj/dItcEWdxSvIkKSkj76hPSiTFqWvviFkle9Hc81s=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:3604:0:b0:d7a:c85c:725b with SMTP id
- d4-20020a253604000000b00d7ac85c725bmr227114yba.7.1696348768967; Tue, 03 Oct
- 2023 08:59:28 -0700 (PDT)
-Date:   Tue, 3 Oct 2023 08:59:27 -0700
-In-Reply-To: <CA+EHjTzSUXx8P9gWmUERg4owxH6r6yNPm1_RL-BzS_2CNPtRKw@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-12-seanjc@google.com>
- <CA+EHjTzSUXx8P9gWmUERg4owxH6r6yNPm1_RL-BzS_2CNPtRKw@mail.gmail.com>
-Message-ID: <ZRw6X2BptZnRPNK7@google.com>
-Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
-From:   Sean Christopherson <seanjc@google.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        with ESMTP id S240430AbjJCQgB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Oct 2023 12:36:01 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959C0A6;
+        Tue,  3 Oct 2023 09:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696350955; x=1727886955;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=cWKZD+SyDVCIZphXjh9ZrSmuS5EZAvAJ5rfGF7TIGUo=;
+  b=J+C4Jtx3Wg3SUPoAS5W23tOXE5Yd25Rnqeim5lPZdRFKJQ71vILQf3zT
+   MlcGWNc87HkKgELYfLX/eYKFZIZ5C4gZXpmoc42sEu9oswR5HB2beHdX1
+   n+MiiwXD9X05GXt8tpzhzOBVtbE/AZpeK8C7TdBXl7r8lWXQBRGyQeAie
+   RKgpHCEx5vt53qpGHAvMljuZFIDe7/hCxePBdbMa57x4ISJMFqI5fIbbI
+   E0jAHXDOQUL2xo4LyxBDjtzSOUYE6PaMaa7dOI956woLMEN4fF/8YDh2S
+   G9GOSNgAfx/7Y4LD5i3IaNsQK2Kqht0S6eV1ge8JoYDLlz9hoAIPy3ugr
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="386790570"
+X-IronPort-AV: E=Sophos;i="6.03,197,1694761200"; 
+   d="scan'208";a="386790570"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 09:35:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10852"; a="727675517"
+X-IronPort-AV: E=Sophos;i="6.03,197,1694761200"; 
+   d="scan'208";a="727675517"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Oct 2023 09:35:49 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 3 Oct 2023 09:35:46 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Tue, 3 Oct 2023 09:35:46 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Tue, 3 Oct 2023 09:35:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e0PGrRo5qLwx9wEoziiJgM43nkiZlKnJGQO0ehlRpmnLjQJkO+trNw4CNQ2n9EYp+V5HpW56ykmmXvXHOQALmbTgXPy0xpiCXQhI0AYaDY3m8JYKl2xa8V6mu+CejjzSkZiqbgJggsxfjWipaUhBMF01xV8/l0T9m9kTqZKhHKJObq3GJdOJYAVbhUBUQEvDmAC3v6WNrn6BCTecHdx1zeTwqXVzu8XlaGiQwWEJsR8D4EMDrzhAprw9iTr4HYdo5WdSR/B5jA0dn0wQqQgnT0oihvJgculb4rQcwyGDJg+WIsKclt/UtZa5ekP0xgQOpjd1KLH8CcSRFfR8Tl955Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HuUdaP5CJww3Y5MPnHxz2DcfK1pB88n7p8zmeHivxQE=;
+ b=MUYFuz+xAVLbyw5c6ncfGFmVrx+oBFPZulBCh/LUFeV+KY5eLWjZ8OHRMlVLR2NOBaKY77rLVAk/x9LzJ2n0F9GQ26/TZQ94QsYMz9gpuM+QV+7r58g7JP3IxSHteapwyRIHWOl4sGAl1euIt5XhzRfZRre69Lcp4qswjQP7J7Rp4fYZe2UpTjTu7EMRUguFz/M7pVD9xBPX2wB7XmJfaot2R8WVJYUFxpItkfLA/gcVncqxa3WyiFUuG00sWiRIlKyGzvx6UL/H/8q3u1p7LPAzNpe2AvaHr/imFuLOGqVPfor6tRR/kmNCBuiv8KqL8EjDHmnN48aU9e5AAVnIsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by SJ2PR11MB8347.namprd11.prod.outlook.com (2603:10b6:a03:544::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.33; Tue, 3 Oct
+ 2023 16:35:43 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::5e34:ee45:c5e8:59d0]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::5e34:ee45:c5e8:59d0%7]) with mapi id 15.20.6838.028; Tue, 3 Oct 2023
+ 16:35:43 +0000
+Message-ID: <487836fc-7c9f-2662-66a4-fa5e3829cf6b@intel.com>
+Date:   Tue, 3 Oct 2023 09:35:33 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2] arch: Reserve map_shadow_stack() syscall number for
+ all architectures
+To:     <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sergei Trofimovich <slyich@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        Deepak Gupta <debug@rivosinc.com>,
+        <linux-alpha@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-ia64@vger.kernel.org>, <linux-m68k@lists.linux-m68k.org>,
+        <linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>
+References: <20230914185804.2000497-1-sohil.mehta@intel.com>
+Content-Language: en-US
+From:   Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <20230914185804.2000497-1-sohil.mehta@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR04CA0006.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::16) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|SJ2PR11MB8347:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23356520-43ba-4f40-b7c9-08dbc42ec9b8
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pY87qHJZ67+oRnav3o2AiN3F4lj7p+5LpxqvgFJ6mv5y/QDr47JGErj9t69XeAWGiNR3zdTClRbM+EzsAdunfMONmj/r/wUC9Vt4U67KlJIXvubyPAz1A7VX78T+9eSDErmRXoRytu+8haRBsGK/KZF24q2dfl9PT1gPN0vOYOGLUHBM3OM2SCsGH1QJHn+FbUW9CB3ulpnTwKMlLa1eAFK9y404a4wDBg5XkKLLLvNip2Z5Dt5EgCFCbnoeQuS/g0YqMRCSbedZL7VJPTqabZbvgtKCsePdB4xTofCLuzKO45NYWMFQuHFiOvJvRPbhvx8dZwudh7xSsg1Nge++G5FrCiGGSc5WikFkW96GSvkpqlunzofuUM7dRyzwSM7pbpv/CcZG/MGxuP0sa/xSkoVBqzTpKgim4CjQFzpkrGxN6yYbjghWGwiYYeIVBjKEih4freUiIFr5T1lMrtadk91q0zK/p+1KnRIyJw9Se8qG0ctR6q1f030g+JgUJeaILb2+guvRmJWt6s15+E2q5ZSEbdaS1NL+SnzmsduEn7jugEkMV7BR2a6Y3ZuFvQQNcFzfxi1unVRxa75CpVZtCqJPMEoTWWS6u3Y/vM/lRHIqAd3OHJXzdsPODJo+oQSWRkzHr3Z9vCbtnsPtXok3mWd7NvUH3yfLiFBZfJ4pGxc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(346002)(39860400002)(366004)(396003)(230922051799003)(1800799009)(451199024)(186009)(64100799003)(2616005)(82960400001)(5660300002)(26005)(6666004)(8676002)(4326008)(8936002)(86362001)(31686004)(478600001)(31696002)(966005)(6486002)(38100700002)(66556008)(66946007)(66476007)(6916009)(54906003)(316002)(7366002)(7416002)(7406005)(53546011)(2906002)(6512007)(30864003)(6506007)(83380400001)(36756003)(41300700001)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3RnTU9OQnh3SjdzZzJxZDk3TVQ1WW82VnlqWnphRXh5VG85RzA1a3hrM1Ro?=
+ =?utf-8?B?L2VDL3pHbWFEOU9ibUM3WlYxeDRpNEtnc0NYSFppM1RIZU9QeGw0blZ4b1o1?=
+ =?utf-8?B?RlpaTWNodEdRYndURXYzOGVwcFJmWGRUR29lYjV2enNQUmh6eXJkdVFzNkg5?=
+ =?utf-8?B?ZDhVS1FsNy9uMWxMWlQ4aXpHQTl5aGhHbUthQVRnSFNvYXRzMm9kNkFWOWFJ?=
+ =?utf-8?B?ZGZLaTc1MGUxTVFUeWZuTjB3ZFBEZkdjTy8yRU85UWlNeTY1RE83UTNMcUdU?=
+ =?utf-8?B?WnRjanN5T2g4c1JTVmlYWWkxMEJRek4yb3V1bjZaZTJOK21mZ2trTnU5WEFs?=
+ =?utf-8?B?N2QvZStHM2lPNGVhbnVRZUREZktQVGdvZFRTL0tSK2svdGlFSHpPYmNncEpH?=
+ =?utf-8?B?bEN3REk0Ykh3NGFHM291NHRRWHlXWEF4dGp2ajcxdlJOYnVPM1QzN29SbTF1?=
+ =?utf-8?B?cDYwaFE5VHVtREpRamxwUkZiRzVDN1FlekhzanNvNUdvK25QdmlrK1MvanA1?=
+ =?utf-8?B?S25GYUFEV0dyVVJhVmlzNXVDOEd2RWhQNklGY25Uc1k0dGxVVG5rNC9wZUE2?=
+ =?utf-8?B?VjZFWWdWM3ptRUlSbkxuUXVUbDJ0K0pqbkRrVWlrb1NvOUIvVTZ2NTB6Zi9n?=
+ =?utf-8?B?UjBpeEJtbkkzNW9pb1FNMWN0bTFIM3A0NWhXYWJIL090cDFxbnRZY0xwOWdQ?=
+ =?utf-8?B?L2U4NU5udHNzcWY3dUtDN2JjeGx6RnFqc0p6d3R0MUlZTlJ2d1BvYTgvU2di?=
+ =?utf-8?B?ZjgwM25PT1c4Ynd4dlp2UUFuYytkcFBxNHFmNi9rQ0c4ZGI4eldKcW9mbnpa?=
+ =?utf-8?B?SVd1ZEZYNUpMcEdCZmdRcS9yY1dpQkprMDd5TXZtKzJ1cnBoTnQ4a1crcG0v?=
+ =?utf-8?B?NjJyazhReDI1QWxwMWp5bnpnckErRjdtQU5yaitMZEx5UkQ2em1CalBvUGwv?=
+ =?utf-8?B?UDd5VDJ5NmNSYXpjV1dnR3NBREhiVUJ1WGZwTDJJaFpQenplMnpLQnh0R3dC?=
+ =?utf-8?B?YWlkRnIwU3ZGNEJNVmE4WnlodG80S0pFVVAzdG1LL2xKYktoWk0xWWhZWitt?=
+ =?utf-8?B?VEtJRmV3bWVmbTNMVnNxY3ppdy9mYUg5RDdiV2dSYVFwc09mNVZ1VVNleUMr?=
+ =?utf-8?B?cjhObUpsMGU2eTB5Rk50bDZrZHAydFZzdWFMa1dYQTNPTzkxWXVYd0JKTzFm?=
+ =?utf-8?B?QTk0MllDVjRlc3VvWHVKL29CRVZRWTZuaEtOdHpZK2JKZ0dsYW80MURjYzQw?=
+ =?utf-8?B?NFdjNkFkSW94VjRtazRjSGFvSlU5Ulo4ZkZrOXcwZ0lzd1gzWkhta2pqVkpt?=
+ =?utf-8?B?UVczTzMwcko0K0VLVW1qS3gvaGxIcVl2WGUvdzBQMzh3WVAyd0hvejRzTXFC?=
+ =?utf-8?B?enlpN3R4Q3JYZFltVHVmQlpVMHI3YXFPbzBLK1kyczNiQTBCdjh2N3piclll?=
+ =?utf-8?B?UnhJbGdnVHZDQmVoSHBGTFZwalZhNm9Db0R3azdVb1NIR2U2TnNUVmR4YnFW?=
+ =?utf-8?B?N3NRV1VVSlZlcUhpaUREUGJ0Unl6MmZQeTRlNjJPRVhoZ2dMWkpHWTZ5NVVv?=
+ =?utf-8?B?bDh3c3dOTFVrWWNXZlNjSGVWSGhBSEtqdjBsdit5WGxTdEZtL2VkcGFSbzBN?=
+ =?utf-8?B?WHNXS1QrdnBRTUJaMk8vT0M4TjdCWkRBby9Db21veEZKeDEwYm9zKzN3OXk0?=
+ =?utf-8?B?OTh0Z2VSOGJmR2c1UnhLRzBuQUVObkNjYjdyaEkxam9abmJrc2dGN1lMV2tV?=
+ =?utf-8?B?dnJ2eXc3Y1ZvRnpxcmpWeks5amg4cEIvbHRIdzluMmcrbDZrS2dvV2NINUwy?=
+ =?utf-8?B?cjZ6bjZ0Y0JMK25BQTJ3NWc5WHhnWW5GZ2pGbVJmc2JKV0ZSUWRyYTl6VWMz?=
+ =?utf-8?B?eUlHbFo3c1BZN1VqUXJqODJPUC9iWHVNOWV5T2sybTNCUHRRNnpQYW5jbUI1?=
+ =?utf-8?B?aFYva0RBY2VEa2VNQ05XUis1VGtLTFhXRUdHQ21aRTErK2VGaS9zczd6aHdU?=
+ =?utf-8?B?SmF3VHVwTE5STnc4VXA0WWpXMTVTcThUZ2lHL1FtVTkrS05rMEx4dUlOL0ZZ?=
+ =?utf-8?B?YWk2YkVRVTVtdmlieWErUmRETGtuY05TaU5SL2FqeTlFTnRQdlEzdW52UTZO?=
+ =?utf-8?Q?QQLAT2opv7b5dW6/YtX38cfZU?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23356520-43ba-4f40-b7c9-08dbc42ec9b8
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2023 16:35:43.6905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kWJ7H9InOJapywMfVgSQSSPWD8p5HBOT4mY2NmI35F86DE1Thsh/A94rh9iMvIP3T2w5V1RwXxb0oYbqtCn3Mw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8347
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 03, 2023, Fuad Tabba wrote:
-> Hi,
+On 9/14/2023 11:58 AM, Sohil Mehta wrote:
+> commit c35559f94ebc ("x86/shstk: Introduce map_shadow_stack syscall")
+> recently added support for map_shadow_stack() but it is limited to x86
+> only for now. There is a possibility that other architectures (namely,
+> arm64 and RISC-V), that are implementing equivalent support for shadow
+> stacks, might need to add support for it.
 > 
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index d2d913acf0df..f8642ff2eb9d 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1227,6 +1227,7 @@ struct kvm_ppc_resize_hpt {
-> >  #define KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE 228
-> >  #define KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES 229
-> >  #define KVM_CAP_USER_MEMORY2 230
-> > +#define KVM_CAP_MEMORY_ATTRIBUTES 231
-> >
-> >  #ifdef KVM_CAP_IRQ_ROUTING
-> >
-> > @@ -2293,4 +2294,17 @@ struct kvm_s390_zpci_op {
-> >  /* flags for kvm_s390_zpci_op->u.reg_aen.flags */
-> >  #define KVM_S390_ZPCIOP_REGAEN_HOST    (1 << 0)
-> >
-> > +/* Available with KVM_CAP_MEMORY_ATTRIBUTES */
-> > +#define KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES    _IOR(KVMIO,  0xd2, __u64)
-> > +#define KVM_SET_MEMORY_ATTRIBUTES              _IOW(KVMIO,  0xd3, struct kvm_memory_attributes)
-> > +
-> > +struct kvm_memory_attributes {
-> > +       __u64 address;
-> > +       __u64 size;
-> > +       __u64 attributes;
-> > +       __u64 flags;
-> > +};
-> > +
-> > +#define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> > +
+> Independent of that, reserving arch-specific syscall numbers in the
+> syscall tables of all architectures is good practice and would help
+> avoid future conflicts. map_shadow_stack() is marked as a conditional
+> syscall in sys_ni.c. Adding it to the syscall tables of other
+> architectures is harmless and would return ENOSYS when exercised.
 > 
-> In pKVM, we don't want to allow setting (or clearing) of PRIVATE/SHARED
-> attributes from userspace.
-
-Why not?  The whole thing falls apart if userspace doesn't *know* the state of a
-page, and the only way for userspace to know the state of a page at a given moment
-in time is if userspace controls the attributes.  E.g. even if KVM were to provide
-a way for userspace to query attributes, the attributes exposed to usrspace would
-become stale the instant KVM drops slots_lock (or whatever lock protects the attributes)
-since userspace couldn't prevent future changes.
-
-Why does pKVM need to prevent userspace from stating *its* view of attributes?
-
-If the goal is to reduce memory overhead, that can be solved by using an internal,
-non-ABI attributes flag to track pKVM's view of SHARED vs. PRIVATE.  If the guest
-attempts to access memory where pKVM and userspace don't agree on the state,
-generate an exit to userspace.  Or kill the guest.  Or do something else entirely.
-
-> However, we'd like to use the attributes xarray to track the sharing state of
-> guest pages at the host kernel.
+> Note, map_shadow_stack() was assigned #453 during the merge process
+> since #452 was taken by fchmodat2().
 > 
-> Moreover, we'd rather the default guest page state be PRIVATE, and
-> only specify which pages are shared. All pKVM guest pages start off as
-> private, and the majority will remain so.
-
-I would rather optimize kvm_vm_set_mem_attributes() to generate range-based
-xarray entries, at which point it shouldn't matter all that much whether PRIVATE
-or SHARED is the default "empty" state.  We opted not to do that for the initial
-merge purely to keep the code as simple as possible (which is obviously still not
-exactly simple).
-
-With range-based xarray entries, the cost of tagging huge chunks of memory as
-PRIVATE should be a non-issue.  And if that's not enough for whatever reason, I
-would rather define the polarity of PRIVATE on a per-VM basis, but only for internal
-storage.
- 
-> I'm not sure if this is the best way to do this: One idea would be to move
-> the definition of KVM_MEMORY_ATTRIBUTE_PRIVATE to
-> arch/*/include/asm/kvm_host.h, which is where kvm_arch_supported_attributes()
-> lives as well. This would allow different architectures to specify their own
-> attributes (i.e., instead we'd have a KVM_MEMORY_ATTRIBUTE_SHARED for pKVM).
-> This wouldn't help in terms of preventing userspace from clearing attributes
-> (i.e., setting a 0 attribute) though.
+> For Powerpc, map it to sys_ni_syscall() as is the norm for Powerpc
+> syscall tables.
 > 
-> The other thing, which we need for pKVM anyway, is to make
-> kvm_vm_set_mem_attributes() global, so that it can be called from outside of
-> kvm_main.c (already have a local patch for this that declares it in
-> kvm_host.h),
+> For Alpha, map_shadow_stack() takes up #563 as Alpha still diverges from
+> the common syscall numbering system in the other architectures.
+> 
+> Link: https://lore.kernel.org/lkml/20230515212255.GA562920@debug.ba.rivosinc.com/
+> Link: https://lore.kernel.org/lkml/b402b80b-a7c6-4ef0-b977-c0f5f582b78a@sirena.org.uk/
+> 
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> ---
 
-That's no problem, but I am definitely opposed to KVM modifying attributes that
-are owned by userspace.
+Gentle ping...
 
-> and not gate this function by KVM_GENERIC_MEMORY_ATTRIBUTES.
+Are there any additional comments? It applies cleanly on 6.6-rc4.
 
-As above, I am opposed to pKVM having a completely different ABI for managing
-PRIVATE vs. SHARED.  I have no objection to pKVM using unclaimed flags in the
-attributes to store extra metadata, but if KVM_SET_MEMORY_ATTRIBUTES doesn't work
-for pKVM, then we've failed miserably and should revist the uAPI.
+Or does it seem ready to be merged? It has the following
+acknowledgements until now:
+
+Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+>  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+>  arch/arm/tools/syscall.tbl                  | 1 +
+>  arch/arm64/include/asm/unistd.h             | 2 +-
+>  arch/arm64/include/asm/unistd32.h           | 2 ++
+>  arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
+>  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+>  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+>  arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+>  arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+>  arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+>  arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+>  include/uapi/asm-generic/unistd.h           | 5 ++++-
+>  18 files changed, 22 insertions(+), 2 deletions(-)
+>> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl
+b/arch/alpha/kernel/syscalls/syscall.tbl
+> index ad37569d0507..6e8479c96e65 100644
+> --- a/arch/alpha/kernel/syscalls/syscall.tbl
+> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
+> @@ -492,3 +492,4 @@
+>  560	common	set_mempolicy_home_node		sys_ni_syscall
+>  561	common	cachestat			sys_cachestat
+>  562	common	fchmodat2			sys_fchmodat2
+> +563	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+> index c572d6c3dee0..6d494dfbf5e4 100644
+> --- a/arch/arm/tools/syscall.tbl
+> +++ b/arch/arm/tools/syscall.tbl
+> @@ -466,3 +466,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+> index bd77253b62e0..6a28fb91b85d 100644
+> --- a/arch/arm64/include/asm/unistd.h
+> +++ b/arch/arm64/include/asm/unistd.h
+> @@ -39,7 +39,7 @@
+>  #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+>  #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+>  
+> -#define __NR_compat_syscalls		453
+> +#define __NR_compat_syscalls		454
+>  #endif
+>  
+>  #define __ARCH_WANT_SYS_CLONE
+> diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+> index 78b68311ec81..a201d842ec82 100644
+> --- a/arch/arm64/include/asm/unistd32.h
+> +++ b/arch/arm64/include/asm/unistd32.h
+> @@ -911,6 +911,8 @@ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+>  __SYSCALL(__NR_cachestat, sys_cachestat)
+>  #define __NR_fchmodat2 452
+>  __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
+> +#define __NR_map_shadow_stack 453
+> +__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
+>  
+>  /*
+>   * Please add new compat syscalls above this comment and update
+> diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+> index 83d8609aec03..be02ce9d376f 100644
+> --- a/arch/ia64/kernel/syscalls/syscall.tbl
+> +++ b/arch/ia64/kernel/syscalls/syscall.tbl
+> @@ -373,3 +373,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+> index 259ceb125367..bee2d2f7f82c 100644
+> --- a/arch/m68k/kernel/syscalls/syscall.tbl
+> +++ b/arch/m68k/kernel/syscalls/syscall.tbl
+> @@ -452,3 +452,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+> index a3798c2637fd..09eda7ed91b0 100644
+> --- a/arch/microblaze/kernel/syscalls/syscall.tbl
+> +++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+> @@ -458,3 +458,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+> index 152034b8e0a0..3c02cc3886ca 100644
+> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+> @@ -391,3 +391,4 @@
+>  450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	n32	cachestat			sys_cachestat
+>  452	n32	fchmodat2			sys_fchmodat2
+> +453	n32	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+> index cb5e757f6621..aa9ed6a7cb48 100644
+> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+> @@ -367,3 +367,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	n64	cachestat			sys_cachestat
+>  452	n64	fchmodat2			sys_fchmodat2
+> +453	n64	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> index 1a646813afdc..756f6feb21c2 100644
+> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> @@ -440,3 +440,4 @@
+>  450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	o32	cachestat			sys_cachestat
+>  452	o32	fchmodat2			sys_fchmodat2
+> +453	o32	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+> index e97c175b56f9..c80eedbe0170 100644
+> --- a/arch/parisc/kernel/syscalls/syscall.tbl
+> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
+> @@ -451,3 +451,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+> index 20e50586e8a2..87a54acf8346 100644
+> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
+> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+> @@ -539,3 +539,4 @@
+>  450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_ni_syscall
+> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+> index 0122cc156952..22249c07e556 100644
+> --- a/arch/s390/kernel/syscalls/syscall.tbl
+> +++ b/arch/s390/kernel/syscalls/syscall.tbl
+> @@ -455,3 +455,4 @@
+>  450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
+>  451  common	cachestat		sys_cachestat			sys_cachestat
+>  452  common	fchmodat2		sys_fchmodat2			sys_fchmodat2
+> +453  common	map_shadow_stack	sys_map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+> index e90d585c4d3e..5ccfe6fbb6b1 100644
+> --- a/arch/sh/kernel/syscalls/syscall.tbl
+> +++ b/arch/sh/kernel/syscalls/syscall.tbl
+> @@ -455,3 +455,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+> index 4ed06c71c43f..b2d664edebdd 100644
+> --- a/arch/sparc/kernel/syscalls/syscall.tbl
+> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
+> @@ -498,3 +498,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+> index 2d0b1bd866ea..743a7ef5a4b9 100644
+> --- a/arch/x86/entry/syscalls/syscall_32.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
+> @@ -457,3 +457,4 @@
+>  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	i386	cachestat		sys_cachestat
+>  452	i386	fchmodat2		sys_fchmodat2
+> +453	i386	map_shadow_stack	sys_map_shadow_stack
+> diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+> index fc1a4f3c81d9..94e6bcc2bec7 100644
+> --- a/arch/xtensa/kernel/syscalls/syscall.tbl
+> +++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+> @@ -423,3 +423,4 @@
+>  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
+>  451	common	cachestat			sys_cachestat
+>  452	common	fchmodat2			sys_fchmodat2
+> +453	common	map_shadow_stack		sys_map_shadow_stack
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> index abe087c53b4b..203ae30d7761 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -823,8 +823,11 @@ __SYSCALL(__NR_cachestat, sys_cachestat)
+>  #define __NR_fchmodat2 452
+>  __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
+>  
+> +#define __NR_map_shadow_stack 453
+> +__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
+> +
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 453
+> +#define __NR_syscalls 454
+>  
+>  /*
+>   * 32 bit systems traditionally used different
+> -- 
+
+
