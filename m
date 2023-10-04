@@ -2,383 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CFA7B78EA
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Oct 2023 09:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735C67B8066
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Oct 2023 15:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241516AbjJDHn4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Oct 2023 03:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
+        id S242591AbjJDNNv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Oct 2023 09:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbjJDHnz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Oct 2023 03:43:55 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3D99B;
-        Wed,  4 Oct 2023 00:43:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76DEC433C7;
-        Wed,  4 Oct 2023 07:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696405431;
-        bh=HfgYTp0WssHEnePmDkQCGt5XcFpdT2hvV0snW81vExs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bXPCIXQqmxiDqSEwBLhtixM/suy318GVMRJ6EGuhPk1PnYSGAmkDDPIMJWPfN27pF
-         U5LY9+sywq7Emw7feUDXBeMaD4hSGs6HAgDBgKaJhaL25Wv3t5M8vgcKqaJn7RWOT7
-         oAZPadzYPulUBsoEJZGj2zwfW9XTqWJuih/5Jp4L+uXlR/WoSvYPiDzaB/pltBLfo4
-         d9UoNx0EO+x4NzNm744oFmDisOggRVwgAm2otbs2tY6knjZaWkTQKzl+6JFvXCUTGb
-         RHByqlw0miOJpeCdHCbBhot6BVmwyO13QQcIunviXxGry09JzUeIv4j/dv9C1NZHg+
-         EOzJewi7K5Zww==
-Date:   Wed, 4 Oct 2023 13:13:47 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v5 2/2] dmaengine: Loongson1: Add Loongson1 dmaengine
- driver
-Message-ID: <ZR0Xs1IGA3v+EJE/@matsya>
-References: <20230928121953.524608-1-keguang.zhang@gmail.com>
- <20230928121953.524608-3-keguang.zhang@gmail.com>
+        with ESMTP id S242603AbjJDNNt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Oct 2023 09:13:49 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0EA19D
+        for <linux-mips@vger.kernel.org>; Wed,  4 Oct 2023 06:13:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qo1gX-0006n6-QV; Wed, 04 Oct 2023 15:13:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qo1gU-00B2gu-1n; Wed, 04 Oct 2023 15:13:02 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qo1gT-008zBw-Mz; Wed, 04 Oct 2023 15:13:01 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc:     Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        kernel@pengutronix.de, Jan Luebbe <jlu@pengutronix.de>,
+        Stefan Schaeckeler <sschaeck@cisco.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        Shravan Kumar Ramani <shravankr@nvidia.com>,
+        Lei Wang <lewan@microsoft.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Marvin Lin <kflin@nuvoton.com>,
+        Stanley Chu <yschu@nuvoton.com>, openbmc@lists.ozlabs.org,
+        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH 00/21] EDAC: Convert to platform remove callback returning void
+Date:   Wed,  4 Oct 2023 15:12:33 +0200
+Message-Id: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230928121953.524608-3-keguang.zhang@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3651; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=WYjQl7z9JGj88YgXlzr7fZyIrt99MtmffigaMEwVLic=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlHWSMI7Uzjg0jWISOPMOlv6sqLKMPV7Kc5vy8j H3uo7zXHU2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZR1kjAAKCRCPgPtYfRL+ ThSxB/48lI0ZArL+PONe/VbpImFjsyvMaqK3m8vABGLugaugQvPm+ezKMfrdFHZgn/ag7/OOU3m XrGh+rCegvcwGx0jkdCEU3JHVXKaBXj3405UQW4i3KKagwAY4NlFN81UDt36FAd0tsgJWSR0u68 QFR8kLWJhQdGyoWr4lB9768zAid1x9iokYdEuJyOixF9DY9MzfI8ao/bZYdLE/jjf2uPjvNR5nZ lebunfEllY1iT3vKLz956CEZGFtPcimD1rG/yVaHkFmkmPIwXwjc9s+3/B6lUoNQUfLqPTAHq/U 84R8vcdKFarqQ2t+hdu3pIYjSTl6TCvvBAnupEiwM7I/h+Sb
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28-09-23, 20:19, Keguang Zhang wrote:
-> This patch adds DMA Engine driver for Loongson1 SoCs.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V4 -> V5:
->    Add DT support
->    Use DT data instead of platform data
->    Use chan_id of struct dma_chan instead of own id
->    Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
->    Update the author information to my official name
-> V3 -> V4:
->    Use dma_slave_map to find the proper channel.
->    Explicitly call devm_request_irq() and tasklet_kill().
->    Fix namespace issue.
->    Some minor fixes and cleanups.
-> V2 -> V3:
->    Rename ls1x_dma_filter_fn to ls1x_dma_filter.
-> V1 -> V2:
->    Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
->    and rearrange it in alphabetical order in Kconfig and Makefile.
->    Fix comment style.
-> 
->  drivers/dma/Kconfig         |   9 +
->  drivers/dma/Makefile        |   1 +
->  drivers/dma/loongson1-dma.c | 492 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 502 insertions(+)
->  create mode 100644 drivers/dma/loongson1-dma.c
-> 
-> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-> index 4ccae1a3b884..0b0d5c61b4a0 100644
-> --- a/drivers/dma/Kconfig
-> +++ b/drivers/dma/Kconfig
-> @@ -369,6 +369,15 @@ config K3_DMA
->  	  Support the DMA engine for Hisilicon K3 platform
->  	  devices.
->  
-> +config LOONGSON1_DMA
-> +	tristate "Loongson1 DMA support"
-> +	depends on MACH_LOONGSON32
-> +	select DMA_ENGINE
-> +	select DMA_VIRTUAL_CHANNELS
-> +	help
-> +	  This selects support for the DMA controller in Loongson1 SoCs,
-> +	  which is required by Loongson1 NAND and AC97 support.
-> +
->  config LPC18XX_DMAMUX
->  	bool "NXP LPC18xx/43xx DMA MUX for PL080"
->  	depends on ARCH_LPC18XX || COMPILE_TEST
-> diff --git a/drivers/dma/Makefile b/drivers/dma/Makefile
-> index 83553a97a010..887103db5ee3 100644
-> --- a/drivers/dma/Makefile
-> +++ b/drivers/dma/Makefile
-> @@ -47,6 +47,7 @@ obj-$(CONFIG_INTEL_IDMA64) += idma64.o
->  obj-$(CONFIG_INTEL_IOATDMA) += ioat/
->  obj-y += idxd/
->  obj-$(CONFIG_K3_DMA) += k3dma.o
-> +obj-$(CONFIG_LOONGSON1_DMA) += loongson1-dma.o
->  obj-$(CONFIG_LPC18XX_DMAMUX) += lpc18xx-dmamux.o
->  obj-$(CONFIG_MILBEAUT_HDMAC) += milbeaut-hdmac.o
->  obj-$(CONFIG_MILBEAUT_XDMAC) += milbeaut-xdmac.o
-> diff --git a/drivers/dma/loongson1-dma.c b/drivers/dma/loongson1-dma.c
-> new file mode 100644
-> index 000000000000..b589103d5ae0
-> --- /dev/null
-> +++ b/drivers/dma/loongson1-dma.c
-> @@ -0,0 +1,492 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * DMA Driver for Loongson-1 SoC
-> + *
-> + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
-> + */
-> +
-> +#include <linux/dmapool.h>
-> +#include <linux/init.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_dma.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#include "dmaengine.h"
-> +#include "virt-dma.h"
-> +
-> +/* Loongson 1 DMA Register Definitions */
-> +#define LS1X_DMA_CTRL		0x0
-> +
-> +/* DMA Control Register Bits */
-> +#define LS1X_DMA_STOP		BIT(4)
-> +#define LS1X_DMA_START		BIT(3)
-> +
-> +#define LS1X_DMA_ADDR_MASK	GENMASK(31, 6)
-> +
-> +/* DMA Command Register Bits */
-> +#define LS1X_DMA_RAM2DEV		BIT(12)
-> +#define LS1X_DMA_TRANS_OVER		BIT(3)
-> +#define LS1X_DMA_SINGLE_TRANS_OVER	BIT(2)
-> +#define LS1X_DMA_INT			BIT(1)
-> +#define LS1X_DMA_INT_MASK		BIT(0)
-> +
-> +#define LS1X_DMA_MAX_CHANNELS	3
-> +
-> +struct ls1x_dma_lli {
-> +	u32 next;		/* next descriptor address */
-> +	u32 saddr;		/* memory DMA address */
-> +	u32 daddr;		/* device DMA address */
-> +	u32 length;
-> +	u32 stride;
-> +	u32 cycles;
-> +	u32 cmd;
-> +} __aligned(64);
-> +
-> +struct ls1x_dma_hwdesc {
-> +	struct ls1x_dma_lli *lli;
-> +	dma_addr_t phys;
-> +};
-> +
-> +struct ls1x_dma_desc {
-> +	struct virt_dma_desc vdesc;
-> +	struct ls1x_dma_chan *chan;
-> +
-> +	enum dma_transfer_direction dir;
-> +	enum dma_transaction_type type;
-> +
-> +	unsigned int nr_descs;	/* number of descriptors */
-> +	unsigned int nr_done;	/* number of completed descriptors */
-> +	struct ls1x_dma_hwdesc hwdesc[];	/* DMA coherent descriptors */
-> +};
-> +
-> +struct ls1x_dma_chan {
-> +	struct virt_dma_chan vchan;
-> +	struct dma_pool *desc_pool;
-> +	struct dma_slave_config cfg;
-> +
-> +	void __iomem *reg_base;
-> +	int irq;
-> +
-> +	struct ls1x_dma_desc *desc;
-> +};
-> +
-> +struct ls1x_dma {
-> +	struct dma_device ddev;
-> +	void __iomem *reg_base;
-> +
-> +	unsigned int nr_chans;
-> +	struct ls1x_dma_chan chan[];
-> +};
-> +
-> +#define to_ls1x_dma_chan(dchan)		\
-> +	container_of(dchan, struct ls1x_dma_chan, vchan.chan)
-> +
-> +#define to_ls1x_dma_desc(vdesc)		\
-> +	container_of(vdesc, struct ls1x_dma_desc, vdesc)
-> +
-> +/* macros for registers read/write */
-> +#define chan_readl(chan, off)		\
-> +	readl((chan)->reg_base + (off))
-> +
-> +#define chan_writel(chan, off, val)	\
-> +	writel((val), (chan)->reg_base + (off))
-> +
-> +static inline struct device *chan2dev(struct dma_chan *chan)
-> +{
-> +	return &chan->dev->device;
-> +}
-> +
-> +static void ls1x_dma_free_chan_resources(struct dma_chan *dchan)
-> +{
-> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-> +
-> +	vchan_free_chan_resources(&chan->vchan);
-> +	dma_pool_destroy(chan->desc_pool);
-> +	chan->desc_pool = NULL;
-> +}
-> +
-> +static int ls1x_dma_alloc_chan_resources(struct dma_chan *dchan)
-> +{
-> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-> +
-> +	chan->desc_pool = dma_pool_create(dma_chan_name(dchan),
-> +					  dchan->device->dev,
-> +					  sizeof(struct ls1x_dma_lli),
-> +					  __alignof__(struct ls1x_dma_lli), 0);
-> +	if (!chan->desc_pool)
-> +		return -ENOMEM;
-> +
-> +	return 0;
-> +}
-> +
-> +static void ls1x_dma_free_desc(struct virt_dma_desc *vdesc)
-> +{
-> +	struct ls1x_dma_desc *desc = to_ls1x_dma_desc(vdesc);
-> +
-> +	if (desc->nr_descs) {
-> +		unsigned int i = desc->nr_descs;
-> +		struct ls1x_dma_hwdesc *hwdesc;
-> +
-> +		do {
-> +			hwdesc = &desc->hwdesc[--i];
-> +			dma_pool_free(desc->chan->desc_pool, hwdesc->lli,
-> +				      hwdesc->phys);
-> +		} while (i);
-> +	}
-> +
-> +	kfree(desc);
-> +}
-> +
-> +static struct ls1x_dma_desc *ls1x_dma_alloc_desc(struct ls1x_dma_chan *chan,
-> +						 int sg_len)
-> +{
-> +	struct ls1x_dma_desc *desc;
-> +
-> +	desc = kzalloc(struct_size(desc, hwdesc, sg_len), GFP_NOWAIT);
+Hello,
 
-why do you need a helper to do kzalloc?
+this series converts all platform drivers below drivers/edac to use
+.remove_new(). The motivation is to get rid of an integer return code
+that is (mostly) ignored by the platform driver core and error prone on
+the driver side. However none of the edac drivers suffered from the easy
+to make bug, so all drivers are converted in a trivial way.
 
-> +
-> +	return desc;
-> +}
-> +
-> +static struct dma_async_tx_descriptor *
-> +ls1x_dma_prep_slave_sg(struct dma_chan *dchan, struct scatterlist *sgl,
-> +		       unsigned int sg_len,
-> +		       enum dma_transfer_direction direction,
-> +		       unsigned long flags, void *context)
-> +{
-> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-> +	struct dma_slave_config *cfg = &chan->cfg;
-> +	struct ls1x_dma_desc *desc;
-> +	struct scatterlist *sg;
-> +	unsigned int dev_addr, bus_width, cmd, i;
-> +
-> +	if (!is_slave_direction(direction)) {
-> +		dev_err(chan2dev(dchan), "invalid DMA direction!\n");
-> +		return NULL;
-> +	}
-> +
-> +	dev_dbg(chan2dev(dchan), "sg_len=%d, dir=%s, flags=0x%lx\n", sg_len,
-> +		direction == DMA_MEM_TO_DEV ? "to device" : "from device",
-> +		flags);
-> +
-> +	switch (direction) {
-> +	case DMA_MEM_TO_DEV:
-> +		dev_addr = cfg->dst_addr;
-> +		bus_width = cfg->dst_addr_width;
-> +		cmd = LS1X_DMA_RAM2DEV | LS1X_DMA_INT;
-> +		break;
-> +	case DMA_DEV_TO_MEM:
-> +		dev_addr = cfg->src_addr;
-> +		bus_width = cfg->src_addr_width;
-> +		cmd = LS1X_DMA_INT;
-> +		break;
-> +	default:
-> +		dev_err(chan2dev(dchan),
-> +			"unsupported DMA transfer direction! %d\n", direction);
-> +		return NULL;
-> +	}
-> +
-> +	/* allocate DMA descriptor */
-> +	desc = ls1x_dma_alloc_desc(chan, sg_len);
-> +	if (!desc)
-> +		return NULL;
-> +
-> +	for_each_sg(sgl, sg, sg_len, i) {
-> +		dma_addr_t buf_addr = sg_dma_address(sg);
-> +		size_t buf_len = sg_dma_len(sg);
-> +		struct ls1x_dma_hwdesc *hwdesc = &desc->hwdesc[i];
-> +		struct ls1x_dma_lli *lli;
-> +
-> +		if (!is_dma_copy_aligned(dchan->device, buf_addr, 0, buf_len)) {
-> +			dev_err(chan2dev(dchan), "%s: buffer is not aligned!\n",
-> +				__func__);
-> +			goto err;
-> +		}
-> +
-> +		/* allocate HW DMA descriptors */
-> +		lli = dma_pool_alloc(chan->desc_pool, GFP_NOWAIT,
-> +				     &hwdesc->phys);
-> +		if (!lli) {
-> +			dev_err(chan2dev(dchan),
-> +				"%s: failed to alloc HW DMA descriptor!\n",
-> +				__func__);
-> +			goto err;
-> +		}
-> +		hwdesc->lli = lli;
-> +
-> +		/* config HW DMA descriptors */
-> +		lli->saddr = buf_addr;
-> +		lli->daddr = dev_addr;
-> +		lli->length = buf_len / bus_width;
-> +		lli->stride = 0;
-> +		lli->cycles = 1;
-> +		lli->cmd = cmd;
-> +		lli->next = 0;
-> +
-> +		if (i)
-> +			desc->hwdesc[i - 1].lli->next = hwdesc->phys;
-> +
-> +		dev_dbg(chan2dev(dchan),
-> +			"hwdesc=%px, saddr=%08x, daddr=%08x, length=%u\n",
-> +			hwdesc, buf_addr, dev_addr, buf_len);
-> +	}
-> +
-> +	/* config DMA descriptor */
-> +	desc->chan = chan;
-> +	desc->dir = direction;
-> +	desc->type = DMA_SLAVE;
-> +	desc->nr_descs = sg_len;
-> +	desc->nr_done = 0;
-> +
-> +	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
-> +err:
-> +	desc->nr_descs = i;
-> +	ls1x_dma_free_desc(&desc->vdesc);
-> +	return NULL;
-> +}
-> +
-> +static int ls1x_dma_slave_config(struct dma_chan *dchan,
-> +				 struct dma_slave_config *config)
-> +{
-> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-> +
-> +	chan->cfg = *config;
+See commit 5c5a7680e67b ("platform: Provide a remove callback that
+returns no value") for an extended explanation and the eventual goal.
 
-You are using only addr and width, why keep full structure?
+The patch for npcm was already sent back in June
+(https://lore.kernel.org/linux-edac/20230628071354.665300-1-u.kleine-koenig@pengutronix.de)
+but didn't result in enthusiastic review comments and it wasn't picked
+up.
+
+There are no interdependencies between the patches. As there are still
+quite a few drivers to convert, I'm happy about every patch that makes
+it in. So even if there is a merge conflict with one patch until you
+apply, please apply the remainder of this series anyhow. I'll come back
+to the part that you (maybe) skipped at a later point.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (21):
+  EDAC/altera: Convert to platform remove callback returning void
+  EDAC/armada_xp: Convert to platform remove callback returning void
+  EDAC/aspeed: Convert to platform remove callback returning void
+  EDAC/bluefield: Convert to platform remove callback returning void
+  EDAC/cell: Convert to platform remove callback returning void
+  EDAC/cpc925: Convert to platform remove callback returning void
+  EDAC/dmc520: Convert to platform remove callback returning void
+  EDAC/highbank_l2: Convert to platform remove callback returning void
+  EDAC/highbank_mc: Convert to platform remove callback returning void
+  EDAC/mpc85xx: Convert to platform remove callback returning void
+  EDAC/npcm: Convert to platform remove callback returning void
+  EDAC/octeon-l2c: Convert to platform remove callback returning void
+  EDAC/octeon-lmc: Convert to platform remove callback returning void
+  EDAC/octeon-pc: Convert to platform remove callback returning void
+  EDAC/octeon-pci: Convert to platform remove callback returning void
+  EDAC/ppc4xx: Convert to platform remove callback returning void
+  EDAC/qcom: Convert to platform remove callback returning void
+  EDAC/synopsys: Convert to platform remove callback returning void
+  EDAC/ti: Convert to platform remove callback returning void
+  EDAC/xgene: Convert to platform remove callback returning void
+  EDAC/zynqmp: Convert to platform remove callback returning void
+
+ drivers/edac/altera_edac.c      | 12 ++++--------
+ drivers/edac/armada_xp_edac.c   | 12 ++++--------
+ drivers/edac/aspeed_edac.c      |  6 ++----
+ drivers/edac/bluefield_edac.c   |  6 ++----
+ drivers/edac/cell_edac.c        |  5 ++---
+ drivers/edac/cpc925_edac.c      |  6 ++----
+ drivers/edac/dmc520_edac.c      |  6 ++----
+ drivers/edac/highbank_l2_edac.c |  5 ++---
+ drivers/edac/highbank_mc_edac.c |  5 ++---
+ drivers/edac/mpc85xx_edac.c     | 11 ++++-------
+ drivers/edac/npcm_edac.c        |  6 ++----
+ drivers/edac/octeon_edac-l2c.c  |  6 ++----
+ drivers/edac/octeon_edac-lmc.c  |  5 ++---
+ drivers/edac/octeon_edac-pc.c   |  5 ++---
+ drivers/edac/octeon_edac-pci.c  |  6 ++----
+ drivers/edac/ppc4xx_edac.c      |  7 ++-----
+ drivers/edac/qcom_edac.c        |  6 ++----
+ drivers/edac/synopsys_edac.c    |  6 ++----
+ drivers/edac/ti_edac.c          |  6 ++----
+ drivers/edac/xgene_edac.c       |  6 ++----
+ drivers/edac/zynqmp_edac.c      |  6 ++----
+ 21 files changed, 48 insertions(+), 91 deletions(-)
+
+
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
 -- 
-~Vinod
+2.40.1
+
