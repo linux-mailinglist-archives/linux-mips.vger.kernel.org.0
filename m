@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538C57BA28D
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Oct 2023 17:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08457BA3E7
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Oct 2023 18:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbjJEPk5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Oct 2023 11:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S240437AbjJEQAF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Oct 2023 12:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbjJEPk0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Oct 2023 11:40:26 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C290545A2;
-        Thu,  5 Oct 2023 07:55:11 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 69804C000E;
-        Thu,  5 Oct 2023 14:55:08 +0000 (UTC)
+        with ESMTP id S234704AbjJEP5n (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Oct 2023 11:57:43 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FBA4695;
+        Thu,  5 Oct 2023 08:17:49 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3EE6BE0010;
+        Thu,  5 Oct 2023 15:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1696517709;
+        t=1696519067;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SvI9F4vpIQD7DGUds/vKMgxKyvlPUyCYmEns2PApKAM=;
-        b=Fcc6hcRqta8x25TA7UMjiq2gKaY+Q0us1KsJDE/UkN+k0KIcdLxomfknYlV9sp58coRJtE
-        4VwtTbzPhf8EXROYr+gVTy688geKbr5i0ujDTwWT8Yt0HJYsPWfT2TxWTM9D6AaJiHodRm
-        nVt8DH8DGnXS1RLIx6XzvCs01V1XhsFYQ1TovqYlI7OYD0wfLFo/Zu2rzwfbt2N2OvH/PK
-        XwAXKhrfmDR8QHw3Px6XENUOZA8ZL4KX7yTd18QkZcwVDF6X2pcE20zK1GXSrvB9hMTICH
-        VRUVB4+IvyAJc+bGMSlHXjBphHnQCFmNBAN8KzeRW3TG3UtE17eu/OjkcKb9zw==
+        bh=nvH8TojWLX5PBOVWWWtrIYBix9PjUxHjvbmCvPQRWkE=;
+        b=iuj2Hf/o0T6P92uvZ0fWwcbUtAvIpStnI6H/7KBQEoGLMSa1VL4jOjF+/UvE1MfEYUy/CW
+        77vDVJjOyLBExgbxDHtiDz84KzSrxp3OnDH+RvgMWW+PaKOR0N+Sjkdqcu+LDW2WeSyKBh
+        bF2Z1+LMcDuCzLOuc9adjddmWhISxGvg3ZxBXv0r72M42BjJrjumsUd+hiXqfC5FJe+nyP
+        XBviODz8fWkbFSsvFRLMsF1gul/fpCcTg8JKUzTmPzq++AkUeUwpynPlDGhFJ28rZKMIwJ
+        AvUgu8nqDCysAe5zC98Kc/DYZ0G255+S9tRU5m/hfK5DZ5tT849KxdSphJZFfA==
 From:   Gregory CLEMENT <gregory.clement@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Paul Burton <paulburton@kernel.org>,
@@ -40,20 +40,21 @@ Cc:     Paul Burton <paulburton@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 06/11] dt-bindings: mips: Add bindings for Mobileye SoCs
-In-Reply-To: <CAL_Jsq+NkRM07U8enKSVvpOg+9qtDdnkqs2Pc0X8LgjVVo7Vhg@mail.gmail.com>
+Subject: Re: [PATCH 08/11] MIPS: mobileye: Add EyeQ5 dtsi
+In-Reply-To: <CAL_Jsq+Pn=kWFL32Cit-vnyJg2pnap2TMn4LPVr9nTmyK-FrZw@mail.gmail.com>
 References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-7-gregory.clement@bootlin.com>
- <CAL_Jsq+NkRM07U8enKSVvpOg+9qtDdnkqs2Pc0X8LgjVVo7Vhg@mail.gmail.com>
-Date:   Thu, 05 Oct 2023 16:55:08 +0200
-Message-ID: <87pm1tce5v.fsf@BL-laptop>
+ <20231004161038.2818327-9-gregory.clement@bootlin.com>
+ <CAL_Jsq+Pn=kWFL32Cit-vnyJg2pnap2TMn4LPVr9nTmyK-FrZw@mail.gmail.com>
+Date:   Thu, 05 Oct 2023 17:17:45 +0200
+Message-ID: <87mswxcd46.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-GND-Sasl: gregory.clement@bootlin.com
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,112 +66,173 @@ Hello Rob,
 > On Wed, Oct 4, 2023 at 11:11=E2=80=AFAM Gregory CLEMENT
 > <gregory.clement@bootlin.com> wrote:
 >>
->> Add the yaml bindings for Mobileye SoCs. Currently only EyeQ5 is
->> supported
+>> Add a device tree include file for the Mobileye EyeQ5 SoC.
+>>
+>> Based on the work of Slava Samsonov <stanislav.samsonov@intel.com>
 >>
 >> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 >> ---
->>  .../devicetree/bindings/mips/mobileye.yaml    | 36 +++++++++
->>  include/dt-bindings/soc/mobileye,eyeq5.h      | 77 +++++++++++++++++++
->>  2 files changed, 113 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/mips/mobileye.yaml
->>  create mode 100644 include/dt-bindings/soc/mobileye,eyeq5.h
+>>  arch/mips/boot/dts/Makefile                   |   1 +
+>>  arch/mips/boot/dts/mobileye/Makefile          |   4 +
+>>  .../boot/dts/mobileye/eyeq5-fixed-clocks.dtsi | 315 ++++++++++++++++++
+>>  arch/mips/boot/dts/mobileye/eyeq5.dtsi        | 138 ++++++++
+>>  4 files changed, 458 insertions(+)
+>>  create mode 100644 arch/mips/boot/dts/mobileye/Makefile
+>>  create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
+>>  create mode 100644 arch/mips/boot/dts/mobileye/eyeq5.dtsi
 >>
->> diff --git a/Documentation/devicetree/bindings/mips/mobileye.yaml b/Docu=
-mentation/devicetree/bindings/mips/mobileye.yaml
+>> diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+>> index 928f38a79dff..edb8e8dee758 100644
+>> --- a/arch/mips/boot/dts/Makefile
+>> +++ b/arch/mips/boot/dts/Makefile
+>> @@ -8,6 +8,7 @@ subdir-$(CONFIG_LANTIQ)                 +=3D lantiq
+>>  subdir-$(CONFIG_MACH_LOONGSON64)       +=3D loongson
+>>  subdir-$(CONFIG_SOC_VCOREIII)          +=3D mscc
+>>  subdir-$(CONFIG_MIPS_MALTA)            +=3D mti
+>> +subdir-$(CONFIG_SOC_EYEQ5)             +=3D mobileye
+>>  subdir-$(CONFIG_LEGACY_BOARD_SEAD3)    +=3D mti
+>>  subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)        +=3D ni
+>>  subdir-$(CONFIG_MACH_PIC32)            +=3D pic32
+>> diff --git a/arch/mips/boot/dts/mobileye/Makefile b/arch/mips/boot/dts/m=
+obileye/Makefile
 >> new file mode 100644
->> index 000000000000..f47767bc2c8f
+>> index 000000000000..99c4124fd4c0
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mips/mobileye.yaml
->> @@ -0,0 +1,36 @@
->> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
->
-> Use what checkpatch tells you.
-
-From my point of view GPL-2.0-or-later is compatible with GPL-2.0-only,
-but OK I will do this.
-
->
+>> +++ b/arch/mips/boot/dts/mobileye/Makefile
+>> @@ -0,0 +1,4 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
 >> +# Copyright 2023 Mobileye Vision Technologies Ltd.
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mips/mobileye.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +title: Mobileye SoC series
->> +
->> +maintainers:
->> +  - Vladimir Kondratiev <vladimir.kondratiev@intel.com>
->> +  - Gregory CLEMENT <gregory.clement@bootlin.com>
->> +  - Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
->> +
->> +description: |
+>> +obj-$(CONFIG_BUILTIN_DTB)      +=3D $(addsuffix .o, $(dtb-y))
 >
-> Don't need '|'.
+> You didn't add anything to 'dtb-y'. Did you test this?
 
-OK
+Initially yes, and finally we switch on the FIT image generation, so we
+don't use it anymore
 
 >
->> +    Boards with a Mobileye SoC shall have the following properties.
->> +
->> +properties:
->> +  $nodename:
->> +    const: '/'
->> +
->> +  compatible:
->> +    oneOf:
->> +      - description: Boards with Mobileye EyeQ5 SoC
->> +        items:
->> +          - enum:
->> +              - mobileye,eyeq5-epm5
->> +          - const: mobileye,eyeq5
->> +
->> +      - description: Boards with Mobileye EyeQ6 SoC
->> +        items:
->> +          - const: mobileye,eyeq6
->
-> Not valid to have only SoC compatible. Add this when you have a user.
+> Also, CONFIG_BUILTIN_DTB is supposed to be for legacy bootloaders
+> which don't understand DT. For a new SoC, fix the bootloader.
 
-OK
+I can remove it
 
 >
->> +
->> +additionalProperties: true
->> +
->> +...
->> diff --git a/include/dt-bindings/soc/mobileye,eyeq5.h b/include/dt-bindi=
-ngs/soc/mobileye,eyeq5.h
+>> diff --git a/arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi b/arch/=
+mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
 >> new file mode 100644
->> index 000000000000..7d8cb97b45bf
+>> index 000000000000..a0066465ac8b
 >> --- /dev/null
->> +++ b/include/dt-bindings/soc/mobileye,eyeq5.h
->> @@ -0,0 +1,77 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +++ b/arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
+>> @@ -0,0 +1,315 @@
+>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >> +/*
 >> + * Copyright 2023 Mobileye Vision Technologies Ltd.
 >> + */
->> +#ifndef _DT_BINDINGS_SOC_MOBILEYE_EYEQ5_H
->> +#define _DT_BINDINGS_SOC_MOBILEYE_EYEQ5_H
->> +
->> +/* EQ5 interrupts */
->> +#define NUM_INT_I2C_A                  1
->> +#define NUM_INT_I2C_B                  2
->> +#define NUM_INT_I2C_C                  3
->> +#define NUM_INT_I2C_D                  4
->> +#define NUM_INT_I2C_E                  5
 >
-> These are interrupt numbers? Note that we never do headers for
-> interrupt numbers, so drop this.
+> I assume these aren't all really fixed, but just 'I don't have a clock
+> driver yet'. That creates an ABI issue when you add the clock
+> driver(s). Just FYI.
+
+Indeed they aren't all fixed. The plan is to replace the relevant ones by a
+real clock driver when ready.
+
+In this case some part of the dts file will be modified. But is it a
+real issue ?
+
+Booting with a new kernel with an old dtb will still continue to work in
+the same way. it's only new tdb with old kernel that won't work, but we
+are not supposed to support this case.
+
+
+>
+>> +
+>> +/ {
+>> +       /* Fixed clock */
+>> +       pll_cpu: pll_cpu {
+>
+> Don't use _ in node names.
+
+OK
+[...]
+
+>> +/* PLL_CPU derivatives */
+>> +       occ_cpu: occ_cpu {
+>> +               compatible =3D "fixed-factor-clock";
+>> +               clocks =3D <&pll_cpu>;
+>> +               #clock-cells =3D <0>;
+>> +               clock-div =3D <1>;
+>> +               clock-mult =3D <1>;
+>> +               clock-output-names =3D "occ_cpu";
+>
+> Isn't the default name the node name? Drop these unless you really
+> have a need and they aren't redundant.
+
+indeed it's not used, I remove them too.
+[...]
+
+>> --- /dev/null
+>> +++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+>> @@ -0,0 +1,138 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>
+> Doesn't match eyeq5-fixed-clocks.dtsi
 
 OK
 
-Thanks for the review the changesrequested will be part of the next
-version.
+>
+>> +/*
+>> + * Copyright 2023 Mobileye Vision Technologies Ltd.
+>> + */
+>> +
+>> +#include <dt-bindings/interrupt-controller/mips-gic.h>
+>> +#include <dt-bindings/soc/mobileye,eyeq5.h>
+>> +
+>> +/memreserve/ 0x40000000 0xc0000000; /* DDR32 */
+>> +/memreserve/ 0x08000000 0x08000000; /* DDR_LOW */
+>> +
+>> +#include "eyeq5-fixed-clocks.dtsi"
+>> +
+>> +/* almost all GIC IRQs has the same characteristics. provide short form=
+ */
+>
+> Maybe so, but I prefer not having 2 levels of lookup to figure out values.
+>
+>> +#define GIC_IRQ(x) GIC_SHARED (x) IRQ_TYPE_LEVEL_HIGH
+
+OK I remove it.
+
+>> +
+>> +/ {
+>> +       #address-cells =3D <2>;
+>> +       #size-cells =3D <2>;
+>> +       cpus {
+>> +               #address-cells =3D <1>;
+>> +               #size-cells =3D <0>;
+>> +               cpu@0 {
+>> +                       device_type =3D "cpu";
+>> +                       compatible =3D "mti,i6500";
+>> +                       reg =3D <0>;
+>> +                       clocks =3D <&core0_clk>;
+>> +               };
+>> +       };
+>> +
+>> +       reserved-memory {
+>> +               #address-cells =3D <2>;
+>> +               #size-cells =3D <2>;
+>> +               ranges;
+>> +
+>> +/* These reserved memory regions are also defined in bootmanager
+>> + * for configuring inbound translation for BARS, don't change
+>> + * these without syncing with bootmanager
+>> + */
+>
+> Indent with the rest of the node.
+
+OK
+
+Thanks,
 
 Gregory
-
->
-> Rob
 
 --=20
 Gregory Clement, Bootlin
