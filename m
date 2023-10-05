@@ -2,147 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5E07B991E
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Oct 2023 02:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4729A7BA181
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Oct 2023 16:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244152AbjJEAJw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Oct 2023 20:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S239279AbjJEOrD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Oct 2023 10:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244055AbjJEAJv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Oct 2023 20:09:51 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7EC95;
-        Wed,  4 Oct 2023 17:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696464585; x=1728000585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vD9VEolBkptu3ld3JXFL+7vX77/UDE2BMoEaEvzGOjk=;
-  b=cbrtMiQalejOiuXysqp7G2hc5/BesTnJ1JLcLd3TuAHGU4ZuA2SM/app
-   +TIh33WOIpKYIU7Obw9TCPaVpnbTyppnZ2EXIgW4W+NCk/+ccFCBLulKH
-   bwnzvmRmC1E+VnQEJD4DojP2/1MCerk5DfsCNZHDCxK/vhmC7o89v9RRA
-   lkHwqnubIRQOvAHNr4nHO9bFRevCIp9iiL7kjrg49kBft6CLDjqGjwYx1
-   BM0rsVw2y76sUzWR6537S7oTr6GxFweiJyI0h01r+qX0A+xRSt93sVhi8
-   XVpXMWXQS4jr9hR7BcdTNZfSp+ONPbXvlhh/GXdiNXcXSGk12ffrfCrBv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="383252183"
-X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="383252183"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 17:09:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="875327203"
-X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="875327203"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Oct 2023 17:09:39 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qoBvf-000Kn6-0S;
-        Thu, 05 Oct 2023 00:09:36 +0000
-Date:   Thu, 5 Oct 2023 08:08:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: Re: [PATCH 10/11] MIPS: generic: Add support for Mobileye EyeQ5
-Message-ID: <202310050726.GDpZbMDO-lkp@intel.com>
-References: <20231004161038.2818327-11-gregory.clement@bootlin.com>
+        with ESMTP id S240091AbjJEOox (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Oct 2023 10:44:53 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9CE6E91;
+        Thu,  5 Oct 2023 07:22:50 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2146C43391;
+        Thu,  5 Oct 2023 05:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696483656;
+        bh=hXymtCmkQgS1mz4WN4LARQgIXsgfg8oCoZqTgfgSt/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BbpCpY2Q0zEwY41GucwBsBZTdMge6AGCY7bXU/clMyyCXKJTV0EDLKXZQhP6Gmvyb
+         i7tzzZViGYUX1/BLXHrp9MgUNcssHkKZ+E07sMIo2XQd9Xhgj8wBFQLGyOjD2kEs17
+         PxOhx0u+oKdQ8lrzOhlumXDQrrVIpZHitXF+j0a79GixClpVIz2eZl61qc1UDcG73I
+         FDMmfOiG2H8IzEuKKw/M7PogaSgM8X2WZc5kjl+Dp1+hjjwCugO78vBqHSBJRgrtI8
+         iiiR0aNTydrnms7VNPMV5M6X+tEx0k+2XJsejW9H5dww52kR9ESsW7JTvRKWQR81qv
+         y9fkPnEwbon1w==
+Date:   Thu, 5 Oct 2023 08:26:22 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "bjorn@kernel.org" <bjorn@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "puranjay12@gmail.com" <puranjay12@gmail.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 03/13] mm/execmem, arch: convert simple overrides of
+ module_alloc to execmem
+Message-ID: <20231005052622.GD3303@kernel.org>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-4-rppt@kernel.org>
+ <607927885bb8ca12d4cd5787f01207c256cc8798.camel@intel.com>
+ <00277a3acb36d2309156264c7e8484071bc91614.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231004161038.2818327-11-gregory.clement@bootlin.com>
+In-Reply-To: <00277a3acb36d2309156264c7e8484071bc91614.camel@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Gregory,
+On Wed, Oct 04, 2023 at 03:39:26PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2023-10-03 at 17:29 -0700, Rick Edgecombe wrote:
+> > It seems a bit weird to copy all of this. Is it trying to be faster
+> > or
+> > something?
+> > 
+> > Couldn't it just check r->start in execmem_text/data_alloc() path and
+> > switch to EXECMEM_DEFAULT if needed then? The execmem_range_is_data()
+> > part that comes later could be added to the logic there too. So this
+> > seems like unnecessary complexity to me or I don't see the reason.
+> 
+> I guess this is a bad idea because if you have the full size array
+> sitting around anyway you might as well use it and reduce the
+> exec_mem_alloc() logic.
 
-kernel test robot noticed the following build errors:
+That's was the idea, indeed. :)
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on lee-mfd/for-mfd-next linus/master v6.6-rc4 next-20231004]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Just looking at it from the x86 side (and
+> similar) though, where there is actually only one execmem_range and it
+> building this whole array with identical data and it seems weird.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-CLEMENT/MIPS-compressed-Use-correct-instruction-for-64-bit-code/20231005-001314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231004161038.2818327-11-gregory.clement%40bootlin.com
-patch subject: [PATCH 10/11] MIPS: generic: Add support for Mobileye EyeQ5
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20231005/202310050726.GDpZbMDO-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231005/202310050726.GDpZbMDO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310050726.GDpZbMDO-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/tty/serial/amba-pl011.c: In function 'pl011_sgbuf_init':
->> drivers/tty/serial/amba-pl011.c:380:30: error: implicit declaration of function 'phys_to_page'; did you mean 'pfn_to_page'? [-Werror=implicit-function-declaration]
-     380 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
-         |                              ^~~~~~~~~~~~
-         |                              pfn_to_page
->> drivers/tty/serial/amba-pl011.c:380:30: warning: passing argument 2 of 'sg_set_page' makes pointer from integer without a cast [-Wint-conversion]
-     380 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
-         |                              ^~~~~~~~~~~~~~~~~~~~~~
-         |                              |
-         |                              int
-   In file included from include/linux/kfifo.h:42,
-                    from include/linux/tty_port.h:5,
-                    from include/linux/tty.h:12,
-                    from drivers/tty/serial/amba-pl011.c:26:
-   include/linux/scatterlist.h:136:69: note: expected 'struct page *' but argument is of type 'int'
-     136 | static inline void sg_set_page(struct scatterlist *sg, struct page *page,
-         |                                                        ~~~~~~~~~~~~~^~~~
-   cc1: some warnings being treated as errors
-
-
-vim +380 drivers/tty/serial/amba-pl011.c
-
-68b65f7305e54b drivers/serial/amba-pl011.c     Russell King   2010-12-22  368  
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  369  static int pl011_sgbuf_init(struct dma_chan *chan, struct pl011_sgbuf *sg,
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  370  	enum dma_data_direction dir)
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  371  {
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  372  	dma_addr_t dma_addr;
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  373  
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  374  	sg->buf = dma_alloc_coherent(chan->device->dev,
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  375  		PL011_DMA_BUFFER_SIZE, &dma_addr, GFP_KERNEL);
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  376  	if (!sg->buf)
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  377  		return -ENOMEM;
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  378  
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  379  	sg_init_table(&sg->sg, 1);
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27 @380  	sg_set_page(&sg->sg, phys_to_page(dma_addr),
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  381  		PL011_DMA_BUFFER_SIZE, offset_in_page(dma_addr));
-cb06ff102e2d79 drivers/tty/serial/amba-pl011.c Chanho Min     2013-03-27  382  	sg_dma_address(&sg->sg) = dma_addr;
-c64be9231e0893 drivers/tty/serial/amba-pl011.c Andrew Jackson 2014-11-07  383  	sg_dma_len(&sg->sg) = PL011_DMA_BUFFER_SIZE;
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  384  
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  385  	return 0;
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  386  }
-ead76f329f777c drivers/tty/serial/amba-pl011.c Linus Walleij  2011-02-24  387  
+Right, most architectures have only one range, but to support all variants
+that we have, execmem has to maintain the whole array.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
