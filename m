@@ -2,91 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDAF7BB5A2
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Oct 2023 12:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9217BB607
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Oct 2023 13:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjJFKsw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Oct 2023 06:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S231953AbjJFLMU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Oct 2023 07:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbjJFKsv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Oct 2023 06:48:51 -0400
+        with ESMTP id S231915AbjJFLMT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Oct 2023 07:12:19 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F97CE;
-        Fri,  6 Oct 2023 03:48:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA67C5;
+        Fri,  6 Oct 2023 04:12:16 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 46D433200A9D;
-        Fri,  6 Oct 2023 06:48:46 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 33E1B3200B46;
+        Fri,  6 Oct 2023 07:12:15 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 06 Oct 2023 06:48:47 -0400
+  by compute5.internal (MEProxy); Fri, 06 Oct 2023 07:12:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1696589325; x=1696675725; bh=le
-        yFjl8HS70GWzN5CT67TcqvaCI0kPyY068isyY4OnY=; b=ZpK7ASyHutJAVMo+u4
-        ZPGe9MPqhFWhEm32ALLsXHRWeWO3qHQqrX1KSJt2dzfFZZylzd0G+WekMZayYgGK
-        YjOxdW0NJFpPtq/6USwI+Wi92Kz632j+eM62wHFKaIs2py1Y2MqBTZBg/uvWU+Gm
-        lvowDYUFkt2/rYvQ7aMkqLu0G4PuTehws1uaaY5ZmuG9VFbY1sLh08vgU6l4KHfZ
-        mfkXwEyXRA6oaEM2dCwuKRHapu1FoTATr56yHY4yDofrQX8Q6S2QZUyFU7GwnYoC
-        V1r79cb/UprMDcjqBKxzW9rsDxQgk/hTS+TLzp7ITTInSko6kVmqWXouzB8sgmYa
-        TzJg==
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1696590734; x=1696677134; bh=qkt+m70PAHdUwl4bbxA9Wg0tllCUmbYfUGV
+        1peNteno=; b=hIvK4T7NBaS1Dz9lWQxY6XhaCxH3HKfop/ZhiwgFroEkz5UsF67
+        0IFF/LLRwZN/xBewnnys987qhZDH8vrdgQWdZtjox3eYm2zBtbGSD5Nqq9g703Wv
+        YMM7TNizUa1Vf3fNEWXzLpgQbWvPdaVBDc4eQKP761nXiF7QIyXueLjmfCPaJrFJ
+        zrTO1oro9RWWJWlyw/QlycMye30P/UL8nAARa8b1n0jg6iqkMLmZqoS9nt0Gq4Q9
+        qFVDz8slKz3o+MtLC6jZn/+uz8eu7DO7TMICaRydNt36B7OXMApnsHH+9+DR8JdZ
+        5xmT5iOke1fadJHxtvlkH8kroZh/2Yq05Cg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1696589325; x=1696675725; bh=leyFjl8HS70GW
-        zN5CT67TcqvaCI0kPyY068isyY4OnY=; b=cqpH9J5ux2sLwhmOTde1ABpq289EL
-        289XreMdwlJ7MNgHmmRLOcw1zlNk7TWpDLWKWVnuiMlSk94yHcEQ9BApOnBaAlBp
-        ct1RC8W2Zi7+6tPwZ1nFkwNokUz2/ggRKUIe5VUg2JblkNFVNdvCXY6WR5q5QukK
-        mUsSnfBqNPDd8Pbqe7EouBUAhHuz3ke237l0X7WAErw8J8HrOwXDYq2KWPRh0o0J
-        +aGRFS8mjzW5BXl5kcjrzb8/Fw/rdtntuDlJQ0bLcKIlEnOGWyWw+tMoTIBS6DI7
-        8fxJur0qkaGXSHVnDmH4fIhxI3wbwi5ltRJVLeCLbAizOhf1v2Z3GCesw==
-X-ME-Sender: <xms:DOYfZfpCxTrUuBUFqm1Ku1nBlj7vrGMaJIg8wW3zzDNX6lQ6JJEJTA>
-    <xme:DOYfZZo8mBISdAOCKw8Lsy5QGyj_5IR2ghXJGrTENreLJDc9P8b2YrU_XVr-lw6xH
-    VNEknUseaPQ_8lzyKg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigdefudcutefuodetggdotefrodftvf
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1696590734; x=1696677134; bh=qkt+m70PAHdUwl4bbxA9Wg0tllCUmbYfUGV
+        1peNteno=; b=hJ2tWgOaqQ1G3IUK6fK+/hNHrQwIpfqVWsTkC4YSuPqkGFcweB7
+        kMgbWk4QisAJ0OK4WC46JkZhCiHtWq8e6siGS5wzl+l6rxIzJS2HYs3GFHN4mjkN
+        RM/Gj/Af6IXBDWSmyogbttjRRDYKQ8h9552erlqBUuM3sSx8X5YcxM58V3XuZ13I
+        tfxwIDpezVGGzmbEysYupKXvk7uanqsBsqqea4ZweRSJj7/Zso3VELRfCCGLYmrw
+        KWBAIdrStq4izTFjpkLyNyLuTxtOmrOkWuQtVPViW4t7XVSnp5x6ukFkXa6MSrN5
+        WXwVrqlNhXygvFZlmyaytRLbDs3En7VF3fA==
+X-ME-Sender: <xms:jusfZZCWiMt1_JCsiYXdMaK4_2b7hLooPK7xkwm6v_DsQaqFDFixrQ>
+    <xme:jusfZXiXI1WPmyP7zhaUOkJIbBb7_Fkf6Sf0GD4cDOsPDMXjycG3yyla08KpqX0r-
+    W6LfDBnsocbfkFdgbI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigdefiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:DeYfZcOBnBLXRjS0QEM81DIuGU9x2FmDvsflXlepFR97_JxK6jF9_Q>
-    <xmx:DeYfZS7e34dC7rm3TBFmJ6rxQZS0jc5l4Uu_UTk-X5xzAw4e7_9_8w>
-    <xmx:DeYfZe6xmu6SSfKDPUD1BqcjFUYVxYNgn2-et_F0p7g_OI6hBQOy9A>
-    <xmx:DeYfZezyLNuK8LieZiRh_YMVEvL-syL89bDDQ9ud25kFDe6PFRzKyg>
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffeftdelveejveeikeekgeejgeekfeehhfevleevveektdduiedtjeevteeh
+    ueelnecuffhomhgrihhnpehprghlohhsrggrrhhirdhfihdplhhinhhugihtvhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhn
+    ugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:jusfZUmmPeQcRyNfk_5vBhfM8hA8Lr0XdqHI0OCZar2xHhVJQfP4QA>
+    <xmx:jusfZTzP1G_UzxM9iPigFXx9D42mv36DOydvv-p5fg6dCpLlxt8UxQ>
+    <xmx:jusfZeToXx9zCpRJQl2K01VsV5TYLXqtY6dKLgUHpC__buZWPbjNgQ>
+    <xmx:jusfZTJ84k51-t8nz5TGYDcG3SRitx2ebXs24hVX_IHShlLOyx8dcQ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D564FB6008D; Fri,  6 Oct 2023 06:48:44 -0400 (EDT)
+        id 2F611B6008D; Fri,  6 Oct 2023 07:12:14 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Message-Id: <53050bbd-6a46-470d-9764-c83b8588698e@app.fastmail.com>
-In-Reply-To: <87sf6pcebd.fsf@BL-laptop>
+Message-Id: <721f56db-8e36-44aa-8984-48cdbcdc271d@app.fastmail.com>
+In-Reply-To: <20231004161038.2818327-12-gregory.clement@bootlin.com>
 References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-6-gregory.clement@bootlin.com>
- <hu5ksk2gw7zbbeiwi4unfo242qm2wfn36bpgea5inlamn4kqrf@magwi4w7gp3x>
- <87sf6pcebd.fsf@BL-laptop>
-Date:   Fri, 06 Oct 2023 12:48:03 +0200
+ <20231004161038.2818327-12-gregory.clement@bootlin.com>
+Date:   Fri, 06 Oct 2023 13:11:53 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Serge Semin" <fancer.lancer@gmail.com>
-Cc:     =?UTF-8?Q?Phil_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
         "Paul Burton" <paulburton@kernel.org>,
         "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, "Rob Herring" <robh+dt@kernel.org>,
         "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
         "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
         "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
         =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
         "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 05/11] dt-bindings: mips: cpu: Add I-Class I6500 Multiprocessor
- Core
-Content-Type: text/plain
+Subject: Re: [PATCH 11/11] MAINTAINERS: Add entry for Mobileye MIPS SoCs
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -96,48 +94,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 5, 2023, at 16:51, Gregory CLEMENT wrote:
->> On Wed, Oct 04, 2023 at 06:10:32PM +0200, Gregory CLEMENT wrote:
->>> The MIPS Warrior I-class I6500 was announced by Imagination
->>> Technologies in 2016 and is used in the Mobileye SoC EyeQ5.
->>> 
->>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->>> ---
->>>  Documentation/devicetree/bindings/mips/cpus.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>> 
->>> diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
->>> index cf382dea3922..87fd2842ba68 100644
->>> --- a/Documentation/devicetree/bindings/mips/cpus.yaml
->>> +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
->>> @@ -39,6 +39,7 @@ properties:
->>>        - mti,mips24KEc
->>>        - mti,mips14KEc
->>>        - mti,mips14Kc
->>
->>> +      - mti,i6500
->>
->> Since the CPU core vendor is Imagination Technologies thus it would
->> be more appropriate to have the "img," prefix. Wouldn't it?
+On Wed, Oct 4, 2023, at 18:10, Gregory CLEMENT wrote:
+> Add Vlad, Th=C3=A9o and myself as co-maintainers for the Mobileye MIPS
+> SoCs.
 >
-> According to Documentation/devicetree/bindings/vendor-prefixes.yaml
+> Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  MAINTAINERS | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 >
-> "^mti,.*":
->     description: Imagination Technologies Ltd. (formerly MIPS
->     Technologies Inc.)
->
-> So I think it's OK.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 90f13281d297..6aedeab5f07c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14423,6 +14423,18 @@ W:	http://palosaari.fi/linux/
+>  Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+>  F:	drivers/media/dvb-frontends/mn88473*
+>=20
+> +MOBILEYE MIPS SOCS
+> +M:	Vladimir Kondratiev <vladimir.kondratiev@intel.com>
+> +M:	Gregory CLEMENT <gregory.clement@bootlin.com>
+> +M:	Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-I don't see any good solution, they changed their name and
-ownership too many times. I would actually revert back the
-description here to "MIPS Technologies Inc" instead of trying
-to keep track of what they currently call themselves.
+Is Vladimir's @intel.com address going to stay valid in the
+future? I would have assumed that after the spin-out, all
+remaining developers working on eyeq would go back to a
+mobileye address.
 
-Since we already have both the 'mips,' and 'mti,' vendow
-names for the 14Kc, 14KEc and 24KEc parts, maybe we can
-just go back to 'mips,' for all cores past the mti era
-rather than trying to date and geolocate each of the
-classic cores as one of 'mti', 'img', 'wavecomp', 'tallwood',
-'mips' 'cipunited' etc.
-
-   Arnd
+     Arnd
