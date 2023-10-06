@@ -2,74 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9217BB607
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Oct 2023 13:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24777BB63D
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Oct 2023 13:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjJFLMU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Oct 2023 07:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S230232AbjJFLSZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Oct 2023 07:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjJFLMT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Oct 2023 07:12:19 -0400
+        with ESMTP id S231911AbjJFLSZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Oct 2023 07:18:25 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA67C5;
-        Fri,  6 Oct 2023 04:12:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56316CE;
+        Fri,  6 Oct 2023 04:18:24 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 33E1B3200B46;
-        Fri,  6 Oct 2023 07:12:15 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id BCA313200B34;
+        Fri,  6 Oct 2023 07:18:22 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 06 Oct 2023 07:12:16 -0400
+  by compute5.internal (MEProxy); Fri, 06 Oct 2023 07:18:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1696590734; x=1696677134; bh=qkt+m70PAHdUwl4bbxA9Wg0tllCUmbYfUGV
-        1peNteno=; b=hIvK4T7NBaS1Dz9lWQxY6XhaCxH3HKfop/ZhiwgFroEkz5UsF67
-        0IFF/LLRwZN/xBewnnys987qhZDH8vrdgQWdZtjox3eYm2zBtbGSD5Nqq9g703Wv
-        YMM7TNizUa1Vf3fNEWXzLpgQbWvPdaVBDc4eQKP761nXiF7QIyXueLjmfCPaJrFJ
-        zrTO1oro9RWWJWlyw/QlycMye30P/UL8nAARa8b1n0jg6iqkMLmZqoS9nt0Gq4Q9
-        qFVDz8slKz3o+MtLC6jZn/+uz8eu7DO7TMICaRydNt36B7OXMApnsHH+9+DR8JdZ
-        5xmT5iOke1fadJHxtvlkH8kroZh/2Yq05Cg==
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1696591102; x=1696677502; bh=z5
+        NdTY64ZepBsdx67FJPyl45pKLPoXCLJeK8YZK4KTE=; b=Gd4UGF/IcLw+Xib6jT
+        m06c9O6Cr9obBggvEngJ8x9sqa0M9DfGCuG+qfHIpvARZ/7v1+iV/Rj+4k57f2GC
+        al278tWK223bKXtlqciedkwiXs2erlMEdAAM7PRuL++xT4trZv3uTmeeUIvCmPnt
+        pb1pBLbagouNs84wiDIhMYuHsUq/ZJpQvlALlckI4l5VZeH7RMwn3drVTyl1dCPm
+        YpeGd0dzJezTH/a8XKQzctEHDCeYQbflhUNprpMOuInRttHF7XahI7TxZhRfiHbx
+        3YuTFFuTvz75nrbBuX2G098Wq9bshpSAQ+ECYKTWv9sujW0Pzvvdo3UezaSmKRYq
+        1/kQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1696590734; x=1696677134; bh=qkt+m70PAHdUwl4bbxA9Wg0tllCUmbYfUGV
-        1peNteno=; b=hJ2tWgOaqQ1G3IUK6fK+/hNHrQwIpfqVWsTkC4YSuPqkGFcweB7
-        kMgbWk4QisAJ0OK4WC46JkZhCiHtWq8e6siGS5wzl+l6rxIzJS2HYs3GFHN4mjkN
-        RM/Gj/Af6IXBDWSmyogbttjRRDYKQ8h9552erlqBUuM3sSx8X5YcxM58V3XuZ13I
-        tfxwIDpezVGGzmbEysYupKXvk7uanqsBsqqea4ZweRSJj7/Zso3VELRfCCGLYmrw
-        KWBAIdrStq4izTFjpkLyNyLuTxtOmrOkWuQtVPViW4t7XVSnp5x6ukFkXa6MSrN5
-        WXwVrqlNhXygvFZlmyaytRLbDs3En7VF3fA==
-X-ME-Sender: <xms:jusfZZCWiMt1_JCsiYXdMaK4_2b7hLooPK7xkwm6v_DsQaqFDFixrQ>
-    <xme:jusfZXiXI1WPmyP7zhaUOkJIbBb7_Fkf6Sf0GD4cDOsPDMXjycG3yyla08KpqX0r-
-    W6LfDBnsocbfkFdgbI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigdefiecutefuodetggdotefrodftvf
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1696591102; x=1696677502; bh=z5NdTY64ZepBs
+        dx67FJPyl45pKLPoXCLJeK8YZK4KTE=; b=cF2M6BaK0gq3qRq+/pmVE9NmpeiGN
+        pluWDyr+VZ05Z7Kp+HL97837zlNXHASo494GJqgX9AOhzxY6VeBTI42tY1UMPJzc
+        LWekEmxWExpqLPm4X9cd/+C1+qV2VBNe06+D9ChXvdNP6z/GMAFLVnXFh15xVI4N
+        O9IGAQXVeGkptgKIHbWH+GAqkPsbHpHD/vG8ToRLEWSQu0ava82aLvwXWKY8GWW1
+        0LHFKxbuAk/TCADxMdc4WmSrUpvHRbWWIPbqn4VlwyYYW2BfRWv69xtVulbg3kd4
+        /5VOVSLXgE8HziHoE7htkPAFOBoYxPHXzuMXTDsCmJXSaCVXaNgGmX3jw==
+X-ME-Sender: <xms:_ewfZS21i3ADiV4AptO8pa03qUZrttAZt90IyhLsa5FlhK_WBQxkLQ>
+    <xme:_ewfZVGutMPcCsre88Xm-Touds5SPuDUWiAMze9jXh554QlDKXYI7uyIzMhAV-QQ2
+    7slrF6w69f6Q6r6BAo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigdefjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffeftdelveejveeikeekgeejgeekfeehhfevleevveektdduiedtjeevteeh
-    ueelnecuffhomhgrihhnpehprghlohhsrggrrhhirdhfihdplhhinhhugihtvhdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhn
-    ugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jusfZUmmPeQcRyNfk_5vBhfM8hA8Lr0XdqHI0OCZar2xHhVJQfP4QA>
-    <xmx:jusfZTzP1G_UzxM9iPigFXx9D42mv36DOydvv-p5fg6dCpLlxt8UxQ>
-    <xmx:jusfZeToXx9zCpRJQl2K01VsV5TYLXqtY6dKLgUHpC__buZWPbjNgQ>
-    <xmx:jusfZTJ84k51-t8nz5TGYDcG3SRitx2ebXs24hVX_IHShlLOyx8dcQ>
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:_ewfZa5Wl5AJDfChousd-sseeCt99y6CH8SUdlpBXgzQh13Ftlzycg>
+    <xmx:_ewfZT2om5lK2P10LhGj8lqcjEfjV4XSF8tHIRHYSAjZnHHzwczYeA>
+    <xmx:_ewfZVE07Xo0tjfEDclLi-jaGGm7YsKWaRDkVNsV_CqttEGTNGmrUg>
+    <xmx:_uwfZd98vbUA3RxZHl1d-yolxAg9XHMthMqGhSk45BtsRE5Tddb8PQ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2F611B6008D; Fri,  6 Oct 2023 07:12:14 -0400 (EDT)
+        id BEE2DB60089; Fri,  6 Oct 2023 07:18:21 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Message-Id: <721f56db-8e36-44aa-8984-48cdbcdc271d@app.fastmail.com>
-In-Reply-To: <20231004161038.2818327-12-gregory.clement@bootlin.com>
+Message-Id: <37d3c19a-4106-45f9-ae2a-99bf41a8bab0@app.fastmail.com>
+In-Reply-To: <20231004161038.2818327-10-gregory.clement@bootlin.com>
 References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-12-gregory.clement@bootlin.com>
-Date:   Fri, 06 Oct 2023 13:11:53 +0200
+ <20231004161038.2818327-10-gregory.clement@bootlin.com>
+Date:   Fri, 06 Oct 2023 13:18:00 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Gregory Clement" <gregory.clement@bootlin.com>,
         "Paul Burton" <paulburton@kernel.org>,
@@ -82,9 +80,8 @@ Cc:     "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
         "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
         =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
         "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 11/11] MAINTAINERS: Add entry for Mobileye MIPS SoCs
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 09/11] MIPS: mobileye: Add EPM5 device tree
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -95,32 +92,23 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Wed, Oct 4, 2023, at 18:10, Gregory CLEMENT wrote:
-> Add Vlad, Th=C3=A9o and myself as co-maintainers for the Mobileye MIPS
-> SoCs.
->
-> Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> ---
->  MAINTAINERS | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90f13281d297..6aedeab5f07c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14423,6 +14423,18 @@ W:	http://palosaari.fi/linux/
->  Q:	http://patchwork.linuxtv.org/project/linux-media/list/
->  F:	drivers/media/dvb-frontends/mn88473*
->=20
-> +MOBILEYE MIPS SOCS
-> +M:	Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> +M:	Gregory CLEMENT <gregory.clement@bootlin.com>
-> +M:	Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> +
+> +	chosen {
+> +		bootargs = "cca=5 earlycon console=ttyAMA2 ddr32_alias=0x40000000";
+> +		stdout-path = "serial2:115200n8";
+> +	};
+> +
 
-Is Vladimir's @intel.com address going to stay valid in the
-future? I would have assumed that after the spin-out, all
-remaining developers working on eyeq would go back to a
-mobileye address.
+The bootargs should not be needed here, at least most of them:
+
+- no need to set both console= and the stdout-path if you have
+  earlycon support
+
+- ddr32_alias=0x40000000 sounds like something that should be
+  part of the dtb elsewhere and not require a command line argument.
+  I assume this is needed to even build?
+
+- For cca=, it looks like this is intended to be autodetected from
+  the c0_config register. Does that not work for you for some reason?
 
      Arnd
