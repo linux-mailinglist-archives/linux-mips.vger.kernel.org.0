@@ -2,39 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96C47BB300
+	by mail.lfdr.de (Postfix) with ESMTP id E116E7BB301
 	for <lists+linux-mips@lfdr.de>; Fri,  6 Oct 2023 10:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjJFIYx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Oct 2023 04:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S230190AbjJFIYy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Oct 2023 04:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbjJFIYx (ORCPT
+        with ESMTP id S230076AbjJFIYx (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Oct 2023 04:24:53 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4523FC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4C58FD;
         Fri,  6 Oct 2023 01:24:51 -0700 (PDT)
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qog8g-0002lX-00; Fri, 06 Oct 2023 10:24:50 +0200
+        id 1qog8g-0002lZ-00; Fri, 06 Oct 2023 10:24:50 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 67E78C0198; Fri,  6 Oct 2023 10:20:05 +0200 (CEST)
-Date:   Fri, 6 Oct 2023 10:20:05 +0200
+        id 2F811C01D1; Fri,  6 Oct 2023 10:21:15 +0200 (CEST)
+Date:   Fri, 6 Oct 2023 10:21:15 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] MIPS: AR7: remove platform
-Message-ID: <ZR/DNeUMn+BD2NMD@alpha.franken.de>
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
- <20230922061530.3121-7-wsa+renesas@sang-engineering.com>
- <ZRUl6+i/o0cqCV+6@ninjato>
- <ZRUrVgHyJvvhteGs@alpha.franken.de>
- <ZRUwEjpfILlF5dgE@ninjato>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: Re: [PATCH v3] MIPS: loongson32: Remove dma.h and nand.h
+Message-ID: <ZR/De/IBKIlhoiwM@alpha.franken.de>
+References: <20230830133505.505597-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZRUwEjpfILlF5dgE@ninjato>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230830133505.505597-1-keguang.zhang@gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -44,16 +40,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 28, 2023 at 09:49:38AM +0200, Wolfram Sang wrote:
+On Wed, Aug 30, 2023 at 09:35:05PM +0800, Keguang Zhang wrote:
+> Since commit 7b3415f581c7 ("MIPS: Loongson32: Remove
+> unused platform devices"), struct plat_ls1x_dma and plat_ls1x_nand
+> are unused. Then, dma.h and nand.h are useless.
+> Therefore, remove these useless header files.
 > 
-> > > most people involved in this series think that it will be best to take
-> > > the whole series via the MIPS tree. Do you agree?
-> > 
-> > I'm fine taking it.
-> 
-> Awesome, thank you!
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> ---
+> V2 -> V3: Fix the build error
+>           Add Reviewed-by tag from Philippe Mathieu-Daudé
+> V1 -> V2: Remove include of dma.h and nand.h
+>           Update the commit message
+> ---
+>  arch/mips/include/asm/mach-loongson32/dma.h   | 21 ---------------
+>  arch/mips/include/asm/mach-loongson32/nand.h  | 26 -------------------
+>  .../include/asm/mach-loongson32/platform.h    |  3 ---
+>  arch/mips/loongson32/common/platform.c        |  2 --
+>  arch/mips/loongson32/ls1b/board.c             |  2 --
+>  5 files changed, 54 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/mach-loongson32/dma.h
+>  delete mode 100644 arch/mips/include/asm/mach-loongson32/nand.h
 
-the series doesn't apply to mips-next, can you rebase it top of it ?
+applied to mips-next.
 
 Thomas.
 
