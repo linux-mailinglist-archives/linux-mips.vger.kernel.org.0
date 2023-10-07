@@ -2,42 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A2C7BC7F6
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Oct 2023 15:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2767BC7FB
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Oct 2023 15:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343859AbjJGN3w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Oct 2023 09:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S1343878AbjJGNgG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 7 Oct 2023 09:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343627AbjJGN3w (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Oct 2023 09:29:52 -0400
+        with ESMTP id S1343627AbjJGNgF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Oct 2023 09:36:05 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAE6AB;
-        Sat,  7 Oct 2023 06:29:48 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1696685377tixjkyac
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB62BA;
+        Sat,  7 Oct 2023 06:36:03 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1696685746tumf87vq
 Received: from linux-lab-host.localdomain ( [116.30.131.235])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 07 Oct 2023 21:29:36 +0800 (CST)
+        id ; Sat, 07 Oct 2023 21:35:45 +0800 (CST)
 X-QQ-SSF: 01200000000000E0Y000000A0000000
-X-QQ-FEAT: uGhnJwy6xZJV/e0VH8OkfFMOH//RSXNosQBDUF7ZgNu4tnUxukivDhU5cuyB7
-        XloNsxalsLoVEKJoacjMo8tIjByfc9yws6qcaf5yIW9vl4Sv8vreGJSeYU7AnrWpgiDjEGA
-        /jVVbA5i3USp5MjqqBTn7YOLTz3XIIk0qn5ClJkR2xmjHJe1kDXBygKbAmPMgDx5LOtLS6Y
-        9eGAxj+0xWVb5DMJ2JSUQzJYwkL0JeVKE3cTS2GilDQ4XBJ2f3/XgtY2brOAxG5IBiIEp74
-        u6q4EA4mlAyAUABRZ/h/CfeFTtBNqUYqJFiYk/TTGJP+USiKteN/iTi3Ckn6dFgQ/1ZCpgf
-        WHHE9ur/U9x9YStAXTpSGRtqgQrNZ5IHLT5LFabhyeGDssoI6sMKWeHh1cdKI6fImGtbTAq
+X-QQ-FEAT: 3M0okmaRx3jgGcczq7ckLHewl2tbA5gqgi51LqUGP7as6L5o4OHQBGbMr+O0K
+        Ev5u1YtIpPxQGtJlVHeYgCFGWuSyU4pupUt3i9h5i6zVcsE9kmXpl7AbGbnnLBOxIZeJQPL
+        +Uf+RAHoyB1WFXVIuEQ+hM+OUqylNxlzXA9MGEgfMEhjuEEyP835Kv4abK53J0LUbGOnySj
+        JxxpaCy54pY0AHvDEJ/5ycR62jiLW/n5w+rhGGqYxuoJG8GNAJr8OBXEIj6XKza1Sw4w5Nj
+        27F3twjB0oVAqiVQJOYZP6DupfkRZWP2HbTzQPMtM/u15Tu153r5elnFLt4UgaJcgJmVG0Z
+        mQlI8VDelUKWCRAEg97X1DbevJXNLRuEWG8ACCAxcpwN6vtCWNF6jsT4uDBoQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8522446484513126745
+X-BIZMAIL-ID: 6264558970741984576
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     arnd@arndb.de
 Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        tim.bird@sony.com
-Subject: Re: [PATCH v1 6/7] DCE/DSE: riscv: add HAVE_TRIM_UNUSED_SYSCALLS support
-Date:   Sat,  7 Oct 2023 21:29:35 +0800
-Message-Id: <20231007132935.6276-1-falcon@tinylab.org>
+        tim.bird@sony.com, tanyuan@tinylab.org
+Subject: Re: [PATCH v1 7/7] DCE/DSE: riscv: trim syscall tables
+Date:   Sat,  7 Oct 2023 21:35:44 +0800
+Message-Id: <20231007133544.6580-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3a8f0d0a-25ad-49c3-9cd2-66db44a4a1e6@app.fastmail.com>
-References: <3a8f0d0a-25ad-49c3-9cd2-66db44a4a1e6@app.fastmail.com>
+In-Reply-To: <e160b4df-92ce-4b9c-96ba-200f259c8216@app.fastmail.com>
+References: <e160b4df-92ce-4b9c-96ba-200f259c8216@app.fastmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -54,48 +54,50 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi, Arnd
 
-> On Tue, Sep 26, 2023, at 00:42, Zhangjin Wu wrote:
-> > For HAVE_TRIM_UNUSED_SYSCALLS, the syscall tables are hacked with the
-> > inputing unused_syscalls.
+> On Tue, Sep 26, 2023, at 00:43, Zhangjin Wu wrote:
+> > When the maximum nr of the used syscalls is smaller than __NR_syscalls
+> > (original syscalls total). It is able to update __NR_syscalls to
+> > (maximum nr + 1) and further trim the '>= (maximum nr + 1)' part of the
+> > syscall tables:
 > >
-> > Firstly, the intermediate preprocessed .i files are generated from the
-> > original C version of syscall tables respectively, and named with a
-> > 'used' suffix: syscall_table_used.i, compat_syscall_table_used.i.
+> > For example:
 > >
-> > Secondly, all of the unused syscalls are commented.
+> >     sys_call_table [143] = {
+> > 	[0 ... 143 - 1] = sys_ni_syscall,
+> >         [64] = sys_write,
+> >         [93] = sys_exit,
+> >         [142] = sys_reboot,
+> >     }
 > >
-> > At last, two new objective files sufixed with 'used' are generated from
-> > the hacked .i files and they are linked into the eventual kernel image.
+> > The >= 143 part of the syscall tables can be trimmed.
+> >
+> > At the same time, the syscall >= 143 from user space must be ignored
+> > from do_trap_ecall_u() of traps.c.
 > >
 > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  arch/riscv/include/asm/unistd.h               |  2 ++
+> >  arch/riscv/kernel/Makefile                    |  2 ++
+> >  arch/riscv/kernel/syscalls/Makefile           | 22 +++++++++++++++++++
+> >  .../kernel/syscalls/compat_syscall_table.c    |  4 ++--
+> >  arch/riscv/kernel/syscalls/syscall_table.c    |  4 ++--
+> >  5 files changed, 30 insertions(+), 4 deletions(-)
 > 
-> As mentioned in my comment on the mips patch, hacking the preprocessed
-> file here is too much strain on the old infrastructure, the
-> asm-generic/unistd.h file is already too hard to understand for
-> anyone and in need of an overhaul, so let's work together on fixing
-> it up first.
+> This bit feels like you are overoptimizing for a corner case:
+> there is not much to be gained in terms of memory savings, but
+> you add complexity in an area that I feel should be made common
+> between architectures.
+> 
+> I hope to get back to working on consolidating both the
+> syscall.tbl input files and the build infrastructure for them
+> across architectures, and you make that harder here, so I'd
+> prefer you to drop this part, at least until the code is
+> shared across all architectures.
 >
 
-Ok, I was thinking about using asm/syscall_table.h instead of asm/unistd.h like mips.
-
-    void * const sys_call_table[NR_syscalls] = {
-    	[0 ... NR_syscalls - 1] = __riscv_sys_ni_syscall,
-    #include <asm/syscall_table.h>
-    };
-
-Therefore, we can generate syscall_table.h from asm/unist.h with a tool like scripts/syscallused.sh
-
-Another solution may be firstly generate a list of `#define __USED_NR_##call 1`
-for the used syscalls from Kconfig symbol, and then change __SYSCALL() macro
-to:
-
-   #define __SYSCALL(nr, call)     [nr] = __is_defined(__USED_NR_##call) ? __riscv_##call : __riscv_sys_ni_syscall,
-
-`include/linux/kconfig.h` defined the '__is_defined'.
-
-This method may work for the archs with .tbl files too.
+Agree, let's drop it.
 
 Thanks,
 Zhangjin
 
->       Arnd
+>     Arnd
