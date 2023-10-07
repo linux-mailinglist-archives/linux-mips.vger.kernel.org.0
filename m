@@ -2,204 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368257BC4DC
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Oct 2023 07:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F17F7BC698
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Oct 2023 12:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbjJGFqE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Oct 2023 01:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S1343781AbjJGKCI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 7 Oct 2023 06:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbjJGFqE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Oct 2023 01:46:04 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1FBCE;
-        Fri,  6 Oct 2023 22:46:01 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53829312d12so8544548a12.0;
-        Fri, 06 Oct 2023 22:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696657560; x=1697262360; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=28EjpLmU0JWs2tbhhlyKo79n+tgLbbY2JqMG52GJQ54=;
-        b=miRvuiJoENJ4V7Fe7L9sWH6yGQL4+pg3bkDHHFXYqzSvGjJ0i8i8hqhQ1M/tc6c0tV
-         Um1NnEUBnZY6Uy0sYHIpdneK/3uq8D7qHgjQNBMukHg0ua/6rKlO5akPziPPKLetRnGI
-         HlLDy4wa4Lj3ijLoH4qHatOptXmP68fu1RPbYgR1Y/YYOO9/sMFPMxaxv79g02WNW2tf
-         SCqnwh+aCc3pL4NFmfoem222Lsu4MmBtovlRrs/FMVUxEwqgmjUMZNdJyW5CBECYeVoH
-         ZeJLkKzUft+J8oj8STMYWmggRSRE+B2HN5xP7MaCvVXqVt50W3r53aIwdtFuF6l2TsBo
-         niXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696657560; x=1697262360;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=28EjpLmU0JWs2tbhhlyKo79n+tgLbbY2JqMG52GJQ54=;
-        b=ohQ5jy2xrrGUouhDcUF53l0ivdkfOc/DHrj+Po/O3or/gxZNCgxTayU7ju2XYNw0rW
-         6ICBu4wpHlZE8F7WgRsIw6iJ0FaVA4jcAndV3dmcw8nFJJmG9ejOA2WPsZOWRMMWCBDA
-         N8KTgak3pMPcAwLhKFFIaLsiga5NiSjgiK7LeBuqXCl99ucXW7zy2jFJZ56/Y6lZud/W
-         C/s/aoEbZUcqKKJxv5/WdbPqwDAt4IhAiqFjchexNlsJ3fu344xgKYs4Y2isiwQDu75z
-         tYqnypIFy2c22WwWaODvSPu/ybA+gAmiDqNBw88Y++QbJI8VnoOBTGUuzE1iPweEhWk4
-         iVZg==
-X-Gm-Message-State: AOJu0YxSQMkEOGNGq9/oYftt4pQy3e87mhr9KZCtv+1tltVi4Mce9aMz
-        EeL/86smdA2yGhn2HWcZaDtp2soKejDC+17+5SQ=
-X-Google-Smtp-Source: AGHT+IHA1HYlOdi0Ar0nVTg3qzB6qyPAJjYJ5cjJZ4myeP9TeqvaMuNZzH5/0lvmk/KejpjH6VQOfxGwT4eTR2oTKJE=
-X-Received: by 2002:a05:6402:35ca:b0:52e:3ce8:e333 with SMTP id
- z10-20020a05640235ca00b0052e3ce8e333mr5474640edc.18.1696657559662; Fri, 06
- Oct 2023 22:45:59 -0700 (PDT)
+        with ESMTP id S234189AbjJGKCG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Oct 2023 06:02:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5126CBD;
+        Sat,  7 Oct 2023 03:01:55 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1696672903tvp5usk6
+Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 07 Oct 2023 18:01:40 +0800 (CST)
+X-QQ-SSF: 01200000000000B06000000A0000000
+X-QQ-FEAT: nA8mzCjPbKiHnigyrSNt2QncUdhNDjJJS34WRMdLE0y4F8gnTGB3njnhR1HFy
+        rak4LOMTDfVDpJ5RHPQKXYbyYLbJdqRpn5MKHf2n7hUlr1BbzxxH0RL4PiCJPXcP2ThCMu8
+        apvW3gH4oAvBgWJhIL4XEViAzyEILpuRJ+PCt5srAHeUPFlzBJI8i2N8NhS2lvEckAqxrX2
+        2+J74FxmriubHqWFe2Ra11s1aA7g8VCQ1I3McxbAWUJdnUbCzOJZ1kqNz53pkipFOkQV3Cu
+        esaGPUgjy44OxzOQQWxsdnDZTopmvFcisKDizzYlBqtLjLaYyYD9qvTZOj+GlaxyL+ak4mr
+        0Yj3slYYyEhU95hCW10lhW/h5G9hQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1783803011377048823
+From:   Yuan Tan <tanyuan@tinylab.org>
+To:     falcon@tinylab.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux@weissschuh.net, palmer@rivosinc.com,
+        paul.walmsley@sifive.com, paulburton@kernel.org,
+        paulmck@kernel.org, tim.bird@sony.com, tsbogend@alpha.franken.de,
+        w@1wt.eu
+Subject: Re: [PATCH v1 2/7] DCE/DSE: add unused syscalls elimination configure support
+Date:   Sat,  7 Oct 2023 18:01:39 +0800
+Message-Id: <20231007100139.3501-1-tanyuan@tinylab.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <3f0eaf5fcb19f1c70cab075a97f067846f36f736.1695679700.git.falcon@tinylab.org>
+References: <3f0eaf5fcb19f1c70cab075a97f067846f36f736.1695679700.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230928121953.524608-1-keguang.zhang@gmail.com>
- <20230928121953.524608-2-keguang.zhang@gmail.com> <20230928-capacity-husked-305f03680834@spud>
-In-Reply-To: <20230928-capacity-husked-305f03680834@spud>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Sat, 7 Oct 2023 13:45:23 +0800
-Message-ID: <CAJhJPsVT371gPN++UNK-cggb8uVxWqpJAoEbFGV8+syxfvnGAQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: dma: Add Loongson-1 DMA
-To:     Conor Dooley <conor@kernel.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 12:42=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
-ote:
->
-> Hey,
->
-> On Thu, Sep 28, 2023 at 08:19:52PM +0800, Keguang Zhang wrote:
-> > Add devicetree binding document for Loongson-1 DMA.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > V4 -> V5:
-> >    A newly added patch
-> >
-> >  .../bindings/dma/loongson,ls1x-dma.yaml       | 64 +++++++++++++++++++
-> >  1 file changed, 64 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls1x=
--dma.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.ya=
-ml b/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.yaml
-> > new file mode 100644
-> > index 000000000000..51b45d998a58
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.yaml
-> > @@ -0,0 +1,64 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/dma/loongson,ls1x-dma.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson-1 DMA Controller
-> > +
-> > +maintainers:
-> > +  - Keguang Zhang <keguang.zhang@gmail.com>
-> > +
-> > +description: |
->
-> This | isn't required as you have no formatting to preserve here.
->
-Will remove '|'.
+Hi Zhangjin,
+ 
+> A minimal embedded Linux system may only has a very few of functions and
+> only uses a minimal subset of the posix syscalls, the unused syscalls
+> will never be used and eventually in a dead status, that also means disk
+> storage and memory footprint waste.
+> 
+> Based on dead code elimination support, it is able to further eliminate
+> the above dead or unused syscalls.
+> 
+> Firstly, both a new common CONFIG_TRIM_UNUSED_SYSCALLS option and a new
+> architecture specific HAVE_TRIM_UNUSED_SYSCALLS are added to enable or
+> disable such feature.
+> 
+> Secondly, a new CONFIG_USED_SYSCALLS option is added to allow configure
+> the syscalls used in a target system. CONFIG_USED_SYSCALLS can be a list
+> of the used syscalls or a file to store such a list.
+> 
+> Based on the above options, it is able to only reserve the used syscalls
+> and let CONFIG_LD_DEAD_CODE_DATA_ELIMINATION trim the unused ones for us
+> automatically.
+> 
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  init/Kconfig | 42 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+> 
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 4350d8ba7db4..aa648ce8bca1 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1457,6 +1457,11 @@ config BPF
+>  	bool
+>  	select CRYPTO_LIB_SHA1
+>  
+> +config HAVE_TRIM_UNUSED_SYSCALLS
+> +	bool
+> +	depends on HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+> +	default n
+> +
+>  menuconfig EXPERT
+>  	bool "Configure standard kernel features (expert users)"
+>  	# Unhide debug options, to make the on-by-default options visible
+> @@ -1683,6 +1688,43 @@ config MEMBARRIER
+>  
+>  	  If unsure, say Y.
+>  
+> +config TRIM_UNUSED_SYSCALLS
+> +	bool "Trim unused syscalls (EXPERIMENTAL)" if EXPERT
+> +	default n
+> +	depends on HAVE_TRIM_UNUSED_SYSCALLS
+> +	depends on HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+> +	select LD_DEAD_CODE_DATA_ELIMINATION
+> +	help
+> +	  Say Y here to trim all of the unused syscalls for a target system.
 
-> > +  Loongson-1 DMA controller provides 3 independent channels for
-> > +  peripherals such as NAND and AC97.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - loongson,ls1b-dma
-> > +      - loongson,ls1c-dma
->
-> From a skim of the driver, these two devices seem to be compatible,
-> and therefore one should fall back to the other.
->
-Got it. How about changing to one const?
-  compatible:
-    const: loongson,ls1-dma
+I think changing this sentence to "Say Y here to trim all of the unused
+syscalls, excluding those defined in USED_SYSCALLS." would be clearer.
 
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    description: Each channel has a dedicated interrupt line.
-> > +    minItems: 1
-> > +    maxItems: 3
-> > +
-> > +  interrupt-names:
-> > +    minItems: 1
-> > +    items:
-> > +      - pattern: ch0
-> > +      - pattern: ch1
-> > +      - pattern: ch2
-> > +
-> > +  '#dma-cells':
-> > +    description: The single cell represents the channel index.
->
-> This description is unnecessary.
->
-Will delete the description.
+By the way, consider adding the three files syscall_table_used.c,
+compat_syscall_table_used.c, and traps_used.c to the .gitignore file.
 
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-names
-> > +  - '#dma-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    dma: dma-controller@1fd01160 {
->
-> This label is unused.
->
-Will delete the lablel.
-
-> > +        compatible =3D "loongson,ls1b-dma";
-> > +        reg =3D <0x1fd01160 0x18>;
-> > +
-> > +        interrupt-parent =3D <&intc0>;
-> > +        interrupts =3D <13 IRQ_TYPE_EDGE_RISING>,
-> > +                  <14 IRQ_TYPE_EDGE_RISING>,
-> > +                  <15 IRQ_TYPE_EDGE_RISING>;
->
-> Odd mixed indentation here. Bindings use spaces only.
->
-Will fix the indentation.
-
-> Thanks,
-> Conor.
->
-> > +        interrupt-names =3D "ch0", "ch1", "ch2";
-> > +
-> > +        #dma-cells =3D <1>;
-> > +    };
-> > --
-> > 2.39.2
-> >
-
-
-
---
-Best regards,
-
-Keguang Zhang
+> +
+> +	  Note, this is only for minimal embedded systems, please don't use it
+> +	  for generic Linux distributions.
+> +
+> +	  If unsure, say N.
+> +
+> +config USED_SYSCALLS
+> +	string "Configure used syscalls (EXPERIMENTAL)" if EXPERT
+> +	depends on TRIM_UNUSED_SYSCALLS
+> +	default ""
+> +	help
+> +	  This option allows to configure the syscalls used in a target system,
+> +	  the unused ones will be disabled and trimmed by TRIM_UNUSED_SYSCALLS.
+> +
+> +	  The used syscalls should be listed one by one like this:
+> +
+> +	      write exit reboot
+> +
+> +	  Or put them into a file specified by this option, one syscall per
+> +	  line is recommended for such a config file:
+> +
+> +	      write
+> +	      exit
+> +	      reboot
+> +
+> +	  Note, If keep this empty, all of the syscalls will be trimmed.
+> +
+> +	  If unsure, please disable TRIM_UNUSED_SYSCALLS.
+> +
+>  config KALLSYMS
+>  	bool "Load all symbols for debugging/ksymoops" if EXPERT
+>  	default y
+> -- 
