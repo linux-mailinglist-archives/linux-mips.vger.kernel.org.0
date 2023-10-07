@@ -2,89 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C587BC9B4
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Oct 2023 22:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407A87BC9D4
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Oct 2023 22:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344150AbjJGUO5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Oct 2023 16:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S1344159AbjJGUnb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 7 Oct 2023 16:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343782AbjJGUO4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Oct 2023 16:14:56 -0400
+        with ESMTP id S1344151AbjJGUnb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Oct 2023 16:43:31 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217F9C5;
-        Sat,  7 Oct 2023 13:14:55 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id B11963200AFB;
-        Sat,  7 Oct 2023 16:14:51 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Sat, 07 Oct 2023 16:14:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1696709691; x=1696796091; bh=HAd1G1CE8pMJy+IQqhNmJgcfkB8TtDe7tK8
-        J8WflhKQ=; b=A1lblkpKm1sih/Lz24VdS7Kqa27QIOHQxeLLmg8DW3ZhnJOsvYg
-        X0Kzqog/j1RGX+Ag3jyXUisBGhU4xvevkxSPpfVfFl/L9jRVZoCxSDL64W/BOTOK
-        PVhjzdg96Ohnnr6u/r8lpKvtXoC5jjDDrF+tefaY2nvuKep/RIfmndRXWpnec9Ko
-        WHLSBxpSN+OClSXW8SfUxwZKQYKQK4o6h598Ax9lkSJTbB7K47qqn+k/DZIUKlus
-        xqsn+sCyj8wf4qKTTy7pLzMiWisINlYFbMTT2Ngw2Va3NPSG2kTIODDGYvhYlGxz
-        WEp5us7/Vmzee2HxghnXI8giqwtmkykgOUA==
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F18E93;
+        Sat,  7 Oct 2023 13:43:29 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 282563200A41;
+        Sat,  7 Oct 2023 16:43:28 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute5.internal (MEProxy); Sat, 07 Oct 2023 16:43:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1696711407; x=1696797807; bh=Jd
+        6oPV1HwL3F0QLUt2/FiCFCe/IH/cVqDsjrmGPSj08=; b=PcbdYMujupkVriXQqs
+        nxdE2yb0NKJK03O8nigY9gnDF4ryRVi81s4Ql7hIQoqL/oB9hIrWuL2fYkv+w7z+
+        QWUSKwMTFJHKJV9yPM1kNsRkCqoHpTUBp/eBgb3L0mdfeQLlKZ/Q4BfBJvzcMs2h
+        XwksBGE+sOPkPxsDHxaJZJfI7HwcThXLOGJWa1COswoS+CilKoP3QpILKAr1l3tD
+        G0RjMroZmrZQHVOalenDRm0SvulC0D6v8SPkMBdKMu78J+bTH71p1BYsdWP4LN5T
+        wqgw3J0IeUmQamPEfbCSRZWSTchHBBzmPmCZd1YLQhVVlh2OyzusrtD5fHQ+O6AC
+        2XPw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1696709691; x=1696796091; bh=HAd1G1CE8pMJy+IQqhNmJgcfkB8TtDe7tK8
-        J8WflhKQ=; b=MyYd0mb0piU10gXi8GuZntCd+O9GcH7SazJXKah19uzTqldK11i
-        Pc88fUtnls7jXyw+3GZxcemfk2gxYwouFiXs15LFaTrgKTpekpP5yKrV94oKDIbf
-        TRpn0JSEoSu/X7ndo72Bl9jOgPr5aHF8Ww3ABb/SgCyxdUgT5zAvEIBJbVe2oODb
-        FxK3Qj4NtajUXHOzNKPPIGmZkrhWwtdX96myNbaJzufV9R2BXOfg6QWTOqjrZHlf
-        JwlGeMkMxOC+w7VaxmUKLOasEchr/oK0xOEum73rdGqL8km5XIcmxoJc92mrVq1G
-        tng6l0Xkpkr73nGmMOPEKWziRo+04NX9ZMA==
-X-ME-Sender: <xms:OrwhZRAPlNhx_Bvd-XO17N_zoRlfdORCB5MDks69NG2Bj-aQcUwwiw>
-    <xme:OrwhZfjlSEcq07lAWr3TCJf8ZPBe7p5v_2qtS2jis65AZ7uC_ZRPta1anNjpuFtF3
-    m5iquGjkyxQ8z6HNi8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeelgddugeeiucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1696711407; x=1696797807; bh=Jd6oPV1HwL3F0
+        QLUt2/FiCFCe/IH/cVqDsjrmGPSj08=; b=G7pisHS29ez4Ol95QqqbusGJhoNNJ
+        pAsabspLytCgj8DLReaWzIm37dEA+HPsgSttggb7GLGl0mKboZ6zRzEULwDd3BpV
+        zU0XbPu8jQlg5wtgmxnlm4sZNGDuTC9mzt8Q7kcx2YSD20nukAkqv1tANMn1sVg+
+        l3VfFEAfgiJ9zE5xSJvEgX1h/rjZ0y3l3zmiIluYmbgKsSvOTftV2Srzojzjunvr
+        TCQr8SEa66GJf2clQ20rzgTJ/d4O+pJXQ/Jo9cP5edRK/oOX7lveK0iqyROT5RQE
+        OlRI04Mdja+ylFoltGOmjA9mjgmrz0mHLXWFCL3I/P27Hn6/oDCBQAqug==
+X-ME-Sender: <xms:7sIhZZFhBKHrMsWHLQ4zGOJ7owyyT2VbzInwF4N9e8urmVyfbKLAkA>
+    <xme:7sIhZeXsJ3Z-HUsXQG1LJrUCEFX-RIHOvN8aytEev0Mj58M0Udsl9vfw_xWKKcfS-
+    pwZBGrGaAiGWbPHSqM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeelgdduhedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:OrwhZckSp-A9biPxEJktOQlu4jPHjgc7ZJ2VnylTeQGSw2VfWRV74w>
-    <xmx:OrwhZbwBM6auAYtjcxGFWXgjsKZDhi2aRtneDrSgeMn43F7laynBDQ>
-    <xmx:OrwhZWRp2nSlaAyP_Yad9U-rM_D4KIDhznsD4XYeACoJ22EqZAvyDA>
-    <xmx:O7whZbIc_jFD4cQA8GYruD9tMo5TIrxpJ3Cmi_iLTlznhWkJl_20fg>
-Feedback-ID: ifd894703:Fastmail
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:7sIhZbLzUR6vB6xPR6lsD7j2SIeliFn5jIIZqk2YAUv961Na_0i5Nw>
+    <xmx:7sIhZfEa0tLbzsd_ByT8eBFtRMD3ba4hGhQpdAxedXwW-OL-ypRzHQ>
+    <xmx:7sIhZfXCGZgPKR9acScDMctWGIvNOZaOxQ7-NwcS4l4jHu1akZrEVA>
+    <xmx:78IhZchZnLA6eEMzNChcHlX-lvzo3H2Lj4kxnNBBTo0Cw5xXHwzmmg>
+Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 07853B60089; Sat,  7 Oct 2023 16:14:49 -0400 (EDT)
+        id 7825E1700089; Sat,  7 Oct 2023 16:43:26 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Message-Id: <f98d0cf9-6339-4cb1-8019-56bc71bfb822@app.fastmail.com>
-In-Reply-To: <20231004161038.2818327-4-gregory.clement@bootlin.com>
-References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-4-gregory.clement@bootlin.com>
-Date:   Sat, 07 Oct 2023 21:14:29 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Gregory CLEMENT" <gregory.clement@bootlin.com>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
-        "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
-        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 03/11] MIPS: support RAM beyond 32-bit
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <c289bdb9-a1ec-4929-9ebf-1713a0b38e33@app.fastmail.com>
+In-Reply-To: <20231007132935.6276-1-falcon@tinylab.org>
+References: <3a8f0d0a-25ad-49c3-9cd2-66db44a4a1e6@app.fastmail.com>
+ <20231007132935.6276-1-falcon@tinylab.org>
+Date:   Sat, 07 Oct 2023 22:43:06 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, "Tim Bird" <tim.bird@sony.com>
+Subject: Re: [PATCH v1 6/7] DCE/DSE: riscv: add HAVE_TRIM_UNUSED_SYSCALLS support
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -94,79 +83,68 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-=E5=9C=A82023=E5=B9=B410=E6=9C=884=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=E5=
-=8D=885:10=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> From: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
+On Sat, Oct 7, 2023, at 15:29, Zhangjin Wu wrote:
+>> On Tue, Sep 26, 2023, at 00:42, Zhangjin Wu wrote:
+>> > For HAVE_TRIM_UNUSED_SYSCALLS, the syscall tables are hacked with the
+>> > inputing unused_syscalls.
+>> >
+>> > Firstly, the intermediate preprocessed .i files are generated from the
+>> > original C version of syscall tables respectively, and named with a
+>> > 'used' suffix: syscall_table_used.i, compat_syscall_table_used.i.
+>> >
+>> > Secondly, all of the unused syscalls are commented.
+>> >
+>> > At last, two new objective files sufixed with 'used' are generated from
+>> > the hacked .i files and they are linked into the eventual kernel image.
+>> >
+>> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+>> 
+>> As mentioned in my comment on the mips patch, hacking the preprocessed
+>> file here is too much strain on the old infrastructure, the
+>> asm-generic/unistd.h file is already too hard to understand for
+>> anyone and in need of an overhaul, so let's work together on fixing
+>> it up first.
+>>
 >
-> Support platforms where RAM is mapped beyond 32-bit.
+> Ok, I was thinking about using asm/syscall_table.h instead of 
+> asm/unistd.h like mips.
 >
-> The kernel parameter ddr32_alias allows to setup the alias to point
-> outside the first 4 GB of memory.
-
-Are you trying to fix the problem that if kernel text is loaded in
-XKPHYS there is no way to to set EBASE to that region?
-
-The common practice for other 64bit MIPS system is to load kernel
-in KSEG0 and add low 4G mirror with rest of the high memory to buddy
-system. By doing this Kernel still have access to all memory beyond
-32 bit, the only draw back is Kernel's text and data can't be relocted
-beyond 32-bit.
-
-Loading kernel into KSEG0 (i.e. with KBUILD_SYM32) have significant bene=
-fit
-on performance, so I think you shouldn't try to load kernel into XKPHYS
-without a good reason, but it might be helpful to add a BUG_ON at
-CPS driver to handle such situation.
-
-Btw: Is your target hardware publicly available? Folks at CIP United
-are looking for EyeQ5 boards for a while, they are supporting MIPS R6
-support at various projects.
-
-Thanks
-Jiaxun
-
+>     void * const sys_call_table[NR_syscalls] = {
+>     	[0 ... NR_syscalls - 1] = __riscv_sys_ni_syscall,
+>     #include <asm/syscall_table.h>
+>     };
 >
-> Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  arch/mips/kernel/smp-cps.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+> Therefore, we can generate syscall_table.h from asm/unist.h with a tool 
+> like scripts/syscallused.sh
 >
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index 47e76722a306..fcfb19487612 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -34,6 +34,16 @@ static unsigned __init core_vpe_count(unsigned int=20
-> cluster, unsigned core)
->  	return min(smp_max_threads, mips_cps_numvps(cluster, core));
->  }
->=20
-> +static int ddr32_alias;
-> +
-> +static int __init ddr32_alias_setup(char *str)
-> +{
-> +	get_option(&str, &ddr32_alias);
-> +
-> +	return 0;
-> +}
-> +early_param("ddr32_alias", ddr32_alias_setup);
-> +
->  /**
->   * plat_core_entry - query reset vector for NMI/reset
->   *
-> @@ -52,7 +62,7 @@ static u32 plat_core_entry(void)
->  {
->  #if defined(CONFIG_USE_XKPHYS)
->  	return (UNCAC_ADDR(mips_cps_core_entry) & 0xffffffff)
-> -			| CM_GCR_Cx_RESET_BASE_MODE;
-> +			| ddr32_alias | CM_GCR_Cx_RESET_BASE_MODE;
->  #else
->  	return CKSEG1ADDR((unsigned long)mips_cps_core_entry);
->  #endif
-> --=20
-> 2.40.1
+> Another solution may be firstly generate a list of `#define __USED_NR_##call 1`
+> for the used syscalls from Kconfig symbol, and then change __SYSCALL() macro
+> to:
+>
+>    #define __SYSCALL(nr, call)     [nr] = 
+> __is_defined(__USED_NR_##call) ? __riscv_##call : 
+> __riscv_sys_ni_syscall,
+>
+> `include/linux/kconfig.h` defined the '__is_defined'.
+>
+> This method may work for the archs with .tbl files too.
 
---=20
-- Jiaxun
+Right, either way would be much better than than your first
+approach. For the mips version (and all the other
+traditional architectures that use the syscall.tbl method)
+I think I'd integrate the filtering in scripts/syscalltbl.sh
+if we decide to go that way. For the riscv version
+(and all the others using asm-generic/unistd.h), the
+__USED_NR_## macro would be fine as an intermediate
+step, until we manage to convert those to syscall.tbl
+parsing.
+
+On the other hand, based on the earlier findings, my
+overall feeling is that we're better off not adding
+the extra indirection at all, but instead add the
+more Kconfig symbols to control the largest groups
+of syscalls, with the hope of conditionally removing
+additional code for each of these symbols beyond the
+automatic gc-section logic.
+
+      Arnd
