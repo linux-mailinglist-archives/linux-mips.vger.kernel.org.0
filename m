@@ -2,151 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019BB7BCE10
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Oct 2023 13:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA197BE388
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Oct 2023 16:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344681AbjJHLPP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Oct 2023 07:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S234566AbjJIOvM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Oct 2023 10:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344658AbjJHLPP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Oct 2023 07:15:15 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEE2CF
-        for <linux-mips@vger.kernel.org>; Sun,  8 Oct 2023 04:15:12 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-405505b07dfso27367405e9.0
-        for <linux-mips@vger.kernel.org>; Sun, 08 Oct 2023 04:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696763711; x=1697368511; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4A7Ywl9hihXa1Gc4UIbY10UVCyBMjLVlDqZsecQJQNU=;
-        b=MZvVRC1C5nEEGofhTP97+Lr+3jCWZIrBBcZeLYk43FUImXvG8M+yokfFV7rmBqDq1x
-         6s2KOumLyIwgwkB4unedvJqgCtNDn959EO5n0e2PNloHflhZtLl3w36fHXg+vM35ZEiL
-         jl+Rvt2NMTPk5q2WJSn2CB0W7IFAxnbLGM5lHcfb0uS/bIGS4t9eqYxQAg99aVjJ1tKo
-         Uey71Kduru6XytkHTFsJlqAsW3The7kVkumqSBttar+jOzYANauu3AS6rQ9i/sQmqkLI
-         kb3ICeymryvxTOrA8zRG05lL3MHWnL5cXiVZQSsNtGDVLowyOU17QRv9lnWTTwAr77lc
-         eUSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696763711; x=1697368511;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4A7Ywl9hihXa1Gc4UIbY10UVCyBMjLVlDqZsecQJQNU=;
-        b=ksMcXNgmD3Dx5Nxgd+plGG8M2vKnsNkzW1s2tjn8JUCRmjCneG/GF0GM3JTBFqG7O7
-         yO7c2RFF9qExUeUHwpeSQ9MaEo0ZJwnlTY/gcctroA8galzcnwcL2YDgZSFWmH1C8/E5
-         3qPQm9klc4dPT4/Za5GVix9pPT+BWdhB6gbmrnzHa/nkhC/Ynrmg5CpMQADublaEumTm
-         5vJ3WtGl1u92Oc588EpFE3X8N+DOVVhYBKCwbS3u7gAJFS/hMPJcj3DwzluEnjzAAhR3
-         V3M4/w0HIkLGLcAhU/l8OE0ULFxz611c0U679tks8tCE9e3XzYr5Ov+5ZN/RWdmrY80f
-         RIWA==
-X-Gm-Message-State: AOJu0Yy6mV7p3kGjgifnrr6x+Fht8ZIqVOAOoLZJlu4Aw71homvrcAhY
-        B2ijY4pptCSTQHYQGrj3QStLTfIr6knT1EEFEOkRO1x6
-X-Google-Smtp-Source: AGHT+IGg+0+cGMCx87FkmXwfeFsFFwLswqnneXIS78mbdiOfAXs1Fbe82C1ui7ThJFHslIIDsGthCA==
-X-Received: by 2002:a05:600c:895:b0:405:3be0:c78d with SMTP id l21-20020a05600c089500b004053be0c78dmr7221601wmp.3.1696763711113;
-        Sun, 08 Oct 2023 04:15:11 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id j9-20020a5d4649000000b0031fb91f23e9sm6598910wrs.43.2023.10.08.04.15.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Oct 2023 04:15:10 -0700 (PDT)
-Message-ID: <dcd1a84c-3fd1-4e46-965d-dd1ca4cb299a@linaro.org>
-Date:   Sun, 8 Oct 2023 13:15:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: dma: Add Loongson-1 DMA
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S234545AbjJIOvL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Oct 2023 10:51:11 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E73D8F;
+        Mon,  9 Oct 2023 07:51:10 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 23070FF809;
+        Mon,  9 Oct 2023 14:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1696863069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0jOgIroi+iceWUGJkzAJZdhaJt8sxoVXfGAQv9kuVdk=;
+        b=NLU6pUeGGxtOdPdzShVeqEzjjzNJSfum1NtTamhihBpEndp18MGOP6Mxen2fcjy16Xumuq
+        2oTcbY0cKKfK5SvP2qabncSayezcFI1bdb84rTeT22ANBjBcSPdDYij+5ZwlrRfGjAoRdU
+        2se371nUGJCwoYzrVSWO8aYMbRhGAe0cE1Z+Sy0XkWP0N1FBPQGN3kdWF0Ee+PwYTKNeqH
+        4zgTuNJV6gLEE1m4civlQGLZoXg79YTcgrEGPgXmE55snhQUq1X2ZE6uI9fkJ8+ko51JY/
+        d0knW2deRZdvXFSjS0grBf8qMLFOU0xS24CkJl+iSch3i57PSWFSnmyS7MPIGg==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-References: <20230928121953.524608-1-keguang.zhang@gmail.com>
- <20230928121953.524608-2-keguang.zhang@gmail.com>
- <20230928-capacity-husked-305f03680834@spud>
- <CAJhJPsVT371gPN++UNK-cggb8uVxWqpJAoEbFGV8+syxfvnGAQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CAJhJPsVT371gPN++UNK-cggb8uVxWqpJAoEbFGV8+syxfvnGAQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 09/11] MIPS: mobileye: Add EPM5 device tree
+In-Reply-To: <37d3c19a-4106-45f9-ae2a-99bf41a8bab0@app.fastmail.com>
+References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
+ <20231004161038.2818327-10-gregory.clement@bootlin.com>
+ <37d3c19a-4106-45f9-ae2a-99bf41a8bab0@app.fastmail.com>
+Date:   Mon, 09 Oct 2023 16:51:06 +0200
+Message-ID: <87sf6jc0it.fsf@BL-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-GND-Sasl: gregory.clement@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/10/2023 07:45, Keguang Zhang wrote:
+"Arnd Bergmann" <arnd@arndb.de> writes:
 
-> 
->>> +  Loongson-1 DMA controller provides 3 independent channels for
->>> +  peripherals such as NAND and AC97.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - loongson,ls1b-dma
->>> +      - loongson,ls1c-dma
->>
->> From a skim of the driver, these two devices seem to be compatible,
->> and therefore one should fall back to the other.
->>
-> Got it. How about changing to one const?
->   compatible:
->     const: loongson,ls1-dma
+> On Wed, Oct 4, 2023, at 18:10, Gregory CLEMENT wrote:
+>> +
+>> +	chosen {
+>> +		bootargs = "cca=5 earlycon console=ttyAMA2 ddr32_alias=0x40000000";
+>> +		stdout-path = "serial2:115200n8";
+>> +	};
+>> +
+>
+> The bootargs should not be needed here, at least most of them:
+>
+> - no need to set both console= and the stdout-path if you have
+>   earlycon support
 
-No, because there is no fallback here.
+OK I keep stdout-path.
 
+>
+> - ddr32_alias=0x40000000 sounds like something that should be
+>   part of the dtb elsewhere and not require a command line argument.
+>   I assume this is needed to even build?
 
-Best regards,
-Krzysztof
+I will answer on the other email but in short I agree.
+>
+> - For cca=, it looks like this is intended to be autodetected from
+>   the c0_config register. Does that not work for you for some reason?
 
+Indeed I checked and it it nost needed anymore, it is already set in
+cps_smp_setup. I remove it.
+
+Thanks,
+
+Gregory
+
+>
+>      Arnd
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
