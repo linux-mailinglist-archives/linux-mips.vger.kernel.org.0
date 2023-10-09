@@ -2,129 +2,231 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC087BEA08
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Oct 2023 20:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E413D7BECC0
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Oct 2023 23:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjJIStT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Oct 2023 14:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S1378303AbjJIVTR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Oct 2023 17:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234540AbjJIStS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Oct 2023 14:49:18 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF88FA4;
-        Mon,  9 Oct 2023 11:49:16 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1A9B65C038C;
-        Mon,  9 Oct 2023 14:49:16 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute5.internal (MEProxy); Mon, 09 Oct 2023 14:49:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1696877356; x=1696963756; bh=Zu
-        QSty1Pr0GQ8WuUZ7cqBdd8ZxfEBZARJmLRVgF8JZ4=; b=fk0Tv96EG1V2AQn1Et
-        oHX9+9c/bY5b/vjYHzpTGX6UemRqi/eJk1e2ebK09HfWNYdIZU+PePgvXbhSO0WA
-        hNj+9Pn3R77lnHcgR5B+P/E4RsIoIIMvvSpF/zRKuJh2pS5G0yVFgsIYdO1RIHeJ
-        5QSBC24K57fDxrbyy4puRJ+Yxvg/47xGfir83CRjHUb+T3XyfHxmYpmfqntiwabY
-        ScMPfq8tL5CadsRGvzvFKyHiEsCU8ajzG8z4A594I/FFZTmvCqIeC/xeQMBTWfxF
-        m6cOlEsN7ixiDgZM+G+MZ9hg59k2jHCjvJFCvzJHt9QTXrsfxFhjmJ1Ee18OJNhv
-        SB4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1696877356; x=1696963756; bh=ZuQSty1Pr0GQ8
-        WuUZ7cqBdd8ZxfEBZARJmLRVgF8JZ4=; b=evFDh5Vhid6JOiNGwfRbb/saBzJJ7
-        aVnGhW+kC9etAuwlM7Vb3IiO4HoFxR2nMZSKZhkKW/ooPldeHsdbA2I8pX7qCWuX
-        +e9ItiuRkpPHt8etHnioHaBD+by6wPV6/W2RD087T2lAIoh/30Yy6Q6MenJo2CRK
-        2AHxG7M8EgoF87aN5mqeIkI/etAiQnN6vpwHEC2s4W15Te9IfoVcc+1PEFLg/LfY
-        0poV0AoXGOdO4Y4A3G+7zu7Rr7KWSwwRieLk+zV9OUa8quIFTnD8/nH5fUreGTrc
-        LvBclGrYU+hU/pxnQuR/4O2zKclpqGmbP4e+h1bd0sPgEn8mTi7ZgKKgA==
-X-ME-Sender: <xms:K0skZU8jkPFYVlAed8xFMVr8Bh_5-XGZP0SSnVl43msPzgw2_MiPdA>
-    <xme:K0skZcse4rC8Z-JXUnbeqCjm69WC2NX-VFfNclkx8BwAZu2kakSab9ZqkT9tru9Fq
-    q76hxwZsfPHoQ9oVvs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrheefgdduvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:K0skZaDWddxG98DCY9zZIaLrUt_x4yUr_c13nc5ivaH_HB7bh4Gc4w>
-    <xmx:K0skZUeOY51_ggSqH5J4zZS1Gjkj-kCD2g1QjN3L1Q0kf3eegVXkHg>
-    <xmx:K0skZZMi72zmg2tNPVNt1NIc_odji6gRg5H9H2jpfHc_JvVRn75y1w>
-    <xmx:LEskZdld7rdlhRtAb69C_SXYoCwAqBp7b6YhLjnH343RjCaJsqQfoQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1D4F31700093; Mon,  9 Oct 2023 14:49:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
+        with ESMTP id S1378236AbjJIVTQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Oct 2023 17:19:16 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A78B6;
+        Mon,  9 Oct 2023 14:19:08 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D85C433C8;
+        Mon,  9 Oct 2023 21:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696886348;
+        bh=TSGItzmReuXxWm++8av4ew2EUzZA35IjrSGdiAa7ie8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AR02btZ4mgp9dab3ACYI6igrBGiVFEQdmNWNcxHdD8UJq1EhYHaLIGjb3Cwv4s+g+
+         mmathlc5Veu0bcn46YVnxKQY9ABGfLimELcNw0klUlNtKHXpOmX5SgqRxTUCkLFS3o
+         ZS0Ueu7JemOZJOGzANL0FRGqVPg0BpVr9dfyhsQ5nDwbUv63LLomoFEIvX/7i3O4Bj
+         U55wVSdhQ8c2iMBNqigs0yUvbVUtg7hwnPp/Vnt3CUqJhGNKIVOsAVmLVPmdhMkwyJ
+         uLzJxnSI5zcAdgJpatcdE4e1r1jp90wyIblBOJG7uZmhXO5MwaO5T8h/WirbhImG9y
+         IaGxkq1DM1dMw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        WANG Xuerui <kernel@xen0n.name>, Wei Liu <wei.liu@kernel.org>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org
+Subject: [PATCH v3 0/9] video: screen_info cleanups
+Date:   Mon,  9 Oct 2023 23:18:36 +0200
+Message-Id: <20231009211845.3136536-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-Id: <984853b6-b246-454e-828e-abd6ff3076d5@app.fastmail.com>
-In-Reply-To: <87jzrvbyl2.fsf@BL-laptop>
-References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-6-gregory.clement@bootlin.com>
- <hu5ksk2gw7zbbeiwi4unfo242qm2wfn36bpgea5inlamn4kqrf@magwi4w7gp3x>
- <87sf6pcebd.fsf@BL-laptop>
- <53050bbd-6a46-470d-9764-c83b8588698e@app.fastmail.com>
- <20231006164019.GA4040344-robh@kernel.org> <87jzrvbyl2.fsf@BL-laptop>
-Date:   Mon, 09 Oct 2023 20:48:54 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Rob Herring" <robh@kernel.org>
-Cc:     "Serge Semin" <fancer.lancer@gmail.com>,
-        =?UTF-8?Q?Phil_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        "Paul Burton" <paulburton@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
-        "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
-        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 05/11] dt-bindings: mips: cpu: Add I-Class I6500 Multiprocessor
- Core
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 9, 2023, at 17:32, Gregory CLEMENT wrote:
-> Rob Herring <robh@kernel.org> writes:
->> On Fri, Oct 06, 2023 at 12:48:03PM +0200, Arnd Bergmann wrote:
->>> On Thu, Oct 5, 2023, at 16:51, Gregory CLEMENT wrote:
->>> 
->>> I don't see any good solution, they changed their name and
->>> ownership too many times. I would actually revert back the
->>> description here to "MIPS Technologies Inc" instead of trying
->>> to keep track of what they currently call themselves.
->>> 
->>> Since we already have both the 'mips,' and 'mti,' vendow
->>> names for the 14Kc, 14KEc and 24KEc parts, maybe we can
->>> just go back to 'mips,' for all cores past the mti era
->>> rather than trying to date and geolocate each of the
->>> classic cores as one of 'mti', 'img', 'wavecomp', 'tallwood',
->>> 'mips' 'cipunited' etc.
->>
->> I would reserve 'mips' for anything common. Much like 'riscv' is only 
->> for things based on RiscV specs/standards.
->>
->> I would use 'img' here if we know this was designed/implemented by 
->> Imagination.
->
-> If there is no objection I will use 'img' then.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Ok, let's do that then. With this modification:
+v3 changelog
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+No real changes, just rebased for context changes, and picked up the Acks.
+
+This now conflicts with the ia64 removal and introduces one new dependency
+on IA64, but that is harmless and trivial to deal with later.
+
+Link: https://lore.kernel.org/lkml/20230719123944.3438363-1-arnd@kernel.org/
+---
+v2 changelog
+
+I refreshed the first four patches that I sent before with very minor
+updates, and then added some more to further disaggregate the use
+of screen_info:
+
+ - I found that powerpc wasn't using vga16fb any more
+
+ - vgacon can be almost entirely separated from the global
+   screen_info, except on x86
+
+ - similarly, the EFI framebuffer initialization can be
+   kept separate, except on x86.
+
+I did extensive build testing on arm/arm64/x86 and the normal built bot
+testing for the other architectures.
+
+Which tree should this get merged through?
+
+Link: https://lore.kernel.org/lkml/20230707095415.1449376-1-arnd@kernel.org/
+
+
+Arnd Bergmann (9):
+  vgacon: rework Kconfig dependencies
+  vgacon: rework screen_info #ifdef checks
+  dummycon: limit Arm console size hack to footbridge
+  vgacon, arch/*: remove unused screen_info definitions
+  vgacon: remove screen_info dependency
+  vgacon: clean up global screen_info instances
+  vga16fb: drop powerpc support
+  hyperv: avoid dependency on screen_info
+  efi: move screen_info into efi init code
+
+ arch/alpha/kernel/proto.h                     |  2 +
+ arch/alpha/kernel/setup.c                     |  8 +--
+ arch/alpha/kernel/sys_sio.c                   |  8 ++-
+ arch/arm/include/asm/setup.h                  |  5 ++
+ arch/arm/kernel/atags_parse.c                 | 20 +++---
+ arch/arm/kernel/efi.c                         |  6 --
+ arch/arm/kernel/setup.c                       | 11 +--
+ arch/arm64/kernel/efi.c                       |  4 --
+ arch/arm64/kernel/image-vars.h                |  2 +
+ arch/csky/kernel/setup.c                      | 12 ----
+ arch/hexagon/kernel/Makefile                  |  2 -
+ arch/hexagon/kernel/screen_info.c             |  3 -
+ arch/ia64/kernel/setup.c                      | 53 ++++++++-------
+ arch/loongarch/kernel/efi.c                   |  3 +-
+ arch/loongarch/kernel/image-vars.h            |  2 +
+ arch/loongarch/kernel/setup.c                 |  3 -
+ arch/mips/jazz/setup.c                        |  9 ---
+ arch/mips/kernel/setup.c                      | 11 ---
+ arch/mips/mti-malta/malta-setup.c             |  4 +-
+ arch/mips/sibyte/swarm/setup.c                | 26 ++++---
+ arch/mips/sni/setup.c                         | 18 ++---
+ arch/nios2/kernel/setup.c                     |  5 --
+ arch/powerpc/kernel/setup-common.c            | 16 -----
+ arch/riscv/kernel/image-vars.h                |  2 +
+ arch/riscv/kernel/setup.c                     | 12 ----
+ arch/sh/kernel/setup.c                        |  5 --
+ arch/sparc/kernel/setup_32.c                  | 13 ----
+ arch/sparc/kernel/setup_64.c                  | 13 ----
+ arch/x86/kernel/setup.c                       |  2 +-
+ arch/xtensa/kernel/setup.c                    | 12 ----
+ drivers/firmware/efi/efi-init.c               | 14 +++-
+ drivers/firmware/efi/libstub/efi-stub-entry.c |  8 ++-
+ drivers/firmware/pcdp.c                       |  1 -
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c       |  7 +-
+ drivers/hv/vmbus_drv.c                        |  6 +-
+ drivers/video/console/Kconfig                 | 11 +--
+ drivers/video/console/dummycon.c              |  2 +-
+ drivers/video/console/vgacon.c                | 68 +++++++++++--------
+ drivers/video/fbdev/Kconfig                   |  2 +-
+ drivers/video/fbdev/hyperv_fb.c               |  8 +--
+ drivers/video/fbdev/vga16fb.c                 |  9 +--
+ include/linux/console.h                       |  7 ++
+ 42 files changed, 183 insertions(+), 252 deletions(-)
+ delete mode 100644 arch/hexagon/kernel/screen_info.c
+
+-- 
+2.39.2
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Deepak Rawat <drawat.floss@gmail.com>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Javier Martinez Canillas <javierm@redhat.com>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Khalid Aziz <khalid@gonehiking.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: x86@kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-efi@vger.kernel.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-hyperv@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-fbdev@vger.kernel.org
+
