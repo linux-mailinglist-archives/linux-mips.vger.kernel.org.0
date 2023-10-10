@@ -2,102 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0A17BFEAF
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Oct 2023 16:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219B87BFF49
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Oct 2023 16:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjJJODv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Oct 2023 10:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S233322AbjJJO2g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Oct 2023 10:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjJJODu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Oct 2023 10:03:50 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657ACA7
-        for <linux-mips@vger.kernel.org>; Tue, 10 Oct 2023 07:03:49 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-406618d080eso54694315e9.2
-        for <linux-mips@vger.kernel.org>; Tue, 10 Oct 2023 07:03:49 -0700 (PDT)
+        with ESMTP id S233235AbjJJO2c (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Oct 2023 10:28:32 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66E5EA
+        for <linux-mips@vger.kernel.org>; Tue, 10 Oct 2023 07:28:22 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5a7c7262d5eso5964027b3.1
+        for <linux-mips@vger.kernel.org>; Tue, 10 Oct 2023 07:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696946628; x=1697551428; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UdvRmXW1iew14QbNxEmQFkNlLyOKTK7lT27vN956+Lo=;
-        b=xfjenavpV2n8i3gciWyuZVdVWpnHIm9xb2bmXn7twuohNJAwU+G6PtzjTiQ/aQ/A+z
-         GgwOcQ3dOgFODmD1VO6948lBDFcHIgc1OphYQFDcwm0F/QoHSFxKW3qqfMR8J9sHXhuV
-         4eeRphtgSZ1N3qUQwofS1zksudSEpEbOlMi28AzUpwIcbGsGOBqQL/FgUeQV3vv1h0lC
-         gwWh+U09lkTGb4kyuTCZttyUP/cxJ0S38Zd3mEqh2OirJmJl3IV6a3sSGy2qKfNTKeXJ
-         xFqvQR7imSMoNTqCdBZ96slQMV76amLj82HkIu2xY2XngTbF5zNqooNiyVt3zJ3BVGbl
-         UmUQ==
+        d=linaro.org; s=google; t=1696948102; x=1697552902; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u5Rfkqq2sRB/UrRjurgpT2RLtcmwidhch/jC813qmrg=;
+        b=CoAygsd1K68bW0ixq17UgH5e5yysyzcsygMiseotj5BbN1zOR/L8ANOiWFI8H1RKQD
+         Z/xJ2FMl9JtUA9dRKwhl7mpPCywy6vXI2sZ+eXjmy0qf8bS/ZaelqwC2kGOytfemYmwx
+         2vyQzhL2wnv6UMTFIyDF1Zf2cnqvshahThXM0ziyibnphqcQscwseeelUa9DAoA/0LUd
+         eEwiBTzIUnkVMGSi38wQ5Oqmn0Ty7kjfivqNF6z/WMjAISuXt6+WP3GrmdMsw6sICHZg
+         y/qCUNFyz1HY2OicDaQcPJPdE+Wckmo7g/meyjchlpnRWnfkEVF899ONT030YflFkszk
+         sqJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696946628; x=1697551428;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UdvRmXW1iew14QbNxEmQFkNlLyOKTK7lT27vN956+Lo=;
-        b=HJ41B+o/Q9dVDYYHafkdIkjnWxf343VdZvAS2AHFk0YUeH0U79eXFD5ASFov0R9Xvb
-         vOZ2kBQ2ev6dXpNsEJaKE+I8n52gxLGT+Ri/ovQZgE51ciZi5u0Ul8du4HWJ5c3qG9cH
-         CxMWAxlIuNJjwGBMYJOFnn/dLfYwsLz/LjlfKgzFmSO+1xwmamFWMEuR4Z6iuPOBielg
-         vRjpY8SNSGqQ+zwpxQU9R6AhpN7oTG+MrIWA8btZ/8YcNK2+zgUH42GjcPD0jBb3iwwT
-         WddIkaVtqhOHw0tQmNBSnG2nJkI/xm9N/Dd2su0v4XicmjQ9fvvofrSGMrMoU7Whnsm3
-         gk+w==
-X-Gm-Message-State: AOJu0Ywkbhg0k81dfc3oIxMct7ZSEaEyOoa3lk+UIbsj1X1FZXWidY+3
-        A+NWBHFwFtHbs3t2dMcIaMjLDSpV61/MJXaiOn9zLA==
-X-Google-Smtp-Source: AGHT+IFU0WrCQmN8C2yzEFwbmnLz6+v1XRMnUENG4BPmUqBvYBFMytZnr4mSqWwqW+hi1kAJVmFWjg==
-X-Received: by 2002:a1c:f202:0:b0:407:5ad0:ab5b with SMTP id s2-20020a1cf202000000b004075ad0ab5bmr753352wmc.8.1696946626929;
-        Tue, 10 Oct 2023 07:03:46 -0700 (PDT)
-Received: from [192.168.69.115] (aif79-h01-176-172-113-148.dsl.sta.abo.bbox.fr. [176.172.113.148])
-        by smtp.gmail.com with ESMTPSA id q15-20020a7bce8f000000b00405391f485fsm14194190wmj.41.2023.10.10.07.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Oct 2023 07:03:46 -0700 (PDT)
-Message-ID: <3c74029d-7dc2-e257-201a-aac9667a478a@linaro.org>
-Date:   Tue, 10 Oct 2023 16:03:44 +0200
+        d=1e100.net; s=20230601; t=1696948102; x=1697552902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u5Rfkqq2sRB/UrRjurgpT2RLtcmwidhch/jC813qmrg=;
+        b=BR9ZbXYy55i8sR4dk7SdqbksbGtjOoqNccjNAVY4pGZX68GNHVfWp18f3FlGupcPSo
+         zFtBDe4L8r4AyrNL7tPkOSNwv0Wp/Cbg92g6BHm2XlEVVdMvJmQ4BAUPhbV2H+m2XAOk
+         220QZsmFa69a+u1X/DNNM202pKTrghTD3baods8BdvAsZN4YU9Kzmj4dis/ss0gmuwLj
+         tvangmcqDX8MkQv4AOM4GKrqA6XzHAcut1ickoqp8VT/gJJgC+apkfP/KmY3pvUQJSh8
+         87A78tKsBcQnd0ZrK7K/EVrhG+jseGD2wfv0KJ7vtR2fFE9jBFUj6yS63tDuRYIrVZrL
+         Fgtg==
+X-Gm-Message-State: AOJu0YzGA6IlVbeCbUUi0SOJflOX7nDD5xDbYHbBIYL2jyi8AgZ4QSYa
+        sELeqNpZWSaZqu9X7uAOEWkuT0a9yqH1LtQ7s1+KBLCRrBEGBUSO
+X-Google-Smtp-Source: AGHT+IGQjtg07ZEl3kbNS6s2cyMhih+TtYHl/2za/vGD0kAlS3GNGt2q4ev1cjF3EWQukTR3BF0ESm+AOzBq66SQydM=
+X-Received: by 2002:a25:838a:0:b0:d9a:5071:716f with SMTP id
+ t10-20020a25838a000000b00d9a5071716fmr2667802ybk.59.1696948102086; Tue, 10
+ Oct 2023 07:28:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH 12/21] EDAC/octeon-l2c: Convert to platform remove
- callback returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-mips@vger.kernel.org, kernel@pengutronix.de
-References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
- <20231004131254.2673842-13-u.kleine-koenig@pengutronix.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20231004131254.2673842-13-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231006224343.441720-1-robh@kernel.org>
+In-Reply-To: <20231006224343.441720-1-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 10 Oct 2023 16:27:46 +0200
+Message-ID: <CAPDyKFpoan9hbfSuLh0vGnYjAMbn+Nkbg9kNR9wOpXmEzvRSuw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: jz4740: Use device_get_match_data()
+To:     Rob Herring <robh@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/10/23 15:12, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
-> 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Sat, 7 Oct 2023 at 00:43, Rob Herring <robh@kernel.org> wrote:
+>
+> Use preferred device_get_match_data() instead of of_match_device() to
+> get the driver match data. With this, adjust the includes to explicitly
+> include the correct headers.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Applied for next, thanks!
+
+Kind regards
+Uffe
+
+
 > ---
->   drivers/edac/octeon_edac-l2c.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-
+>  drivers/mmc/host/jz4740_mmc.c | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+> index f379ce5b582d..6a45991ca056 100644
+> --- a/drivers/mmc/host/jz4740_mmc.c
+> +++ b/drivers/mmc/host/jz4740_mmc.c
+> @@ -18,9 +18,10 @@
+>  #include <linux/mmc/host.h>
+>  #include <linux/mmc/slot-gpio.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/scatterlist.h>
+>
+> @@ -1040,7 +1041,6 @@ static int jz4740_mmc_probe(struct platform_device* pdev)
+>         int ret;
+>         struct mmc_host *mmc;
+>         struct jz4740_mmc_host *host;
+> -       const struct of_device_id *match;
+>
+>         mmc = mmc_alloc_host(sizeof(struct jz4740_mmc_host), &pdev->dev);
+>         if (!mmc) {
+> @@ -1050,13 +1050,8 @@ static int jz4740_mmc_probe(struct platform_device* pdev)
+>
+>         host = mmc_priv(mmc);
+>
+> -       match = of_match_device(jz4740_mmc_of_match, &pdev->dev);
+> -       if (match) {
+> -               host->version = (enum jz4740_mmc_version)match->data;
+> -       } else {
+> -               /* JZ4740 should be the only one using legacy probe */
+> -               host->version = JZ_MMC_JZ4740;
+> -       }
+> +       /* Default if no match is JZ4740 */
+> +       host->version = (enum jz4740_mmc_version)device_get_match_data(&pdev->dev);
+>
+>         ret = mmc_of_parse(mmc);
+>         if (ret) {
+> @@ -1200,7 +1195,7 @@ static struct platform_driver jz4740_mmc_driver = {
+>         .driver = {
+>                 .name = "jz4740-mmc",
+>                 .probe_type = PROBE_PREFER_ASYNCHRONOUS,
+> -               .of_match_table = of_match_ptr(jz4740_mmc_of_match),
+> +               .of_match_table = jz4740_mmc_of_match,
+>                 .pm = pm_sleep_ptr(&jz4740_mmc_pm_ops),
+>         },
+>  };
+> --
+> 2.40.1
+>
