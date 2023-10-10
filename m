@@ -2,112 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C90C7BF790
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Oct 2023 11:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7419B7BF83E
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Oct 2023 12:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjJJJj1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Oct 2023 05:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S230395AbjJJKNP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Oct 2023 06:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjJJJjZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Oct 2023 05:39:25 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C6A93;
-        Tue, 10 Oct 2023 02:39:24 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC772C433C7;
-        Tue, 10 Oct 2023 09:39:15 +0000 (UTC)
-Date:   Tue, 10 Oct 2023 10:39:13 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
+        with ESMTP id S229892AbjJJKNP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Oct 2023 06:13:15 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE099F;
+        Tue, 10 Oct 2023 03:13:13 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c189dabcc3so64868731fa.1;
+        Tue, 10 Oct 2023 03:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696932791; x=1697537591; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BRHELaZLgBSh0LGg1duwhZy3BbADXLxMR96EJLdeViE=;
+        b=NkaIBSzGQlLfQXRREuxgnxyfaoN4IrWk0fL+PBiJreRzz0/F3EyDktLFi/0CSUM0da
+         6gPy0F61ENgVUZ6EmSMP6EtBccAQakH/H3N8a+YYw/V2vIabdntH0EtQ0OZNBkVXrc/M
+         5FEaOS3fJlj+H/eBQy/EUqzqlL3pPRVNPuueUOD7Ig3VY2YnnTOJwbpAW/ikpYAFJKOt
+         JPDmiHOKroJy1lYAdwvcTrrL+mzZOzhkX8i+hl6eFPsHgq09eAovfX384nkefM9jVLB7
+         IE7uWQ3KyyHjAvaS/nt8jBAI1CxLYSO9Z2o7sNGOvzAR9F4own0R0fZTnuROsaeXxFSq
+         Mh5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696932791; x=1697537591;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BRHELaZLgBSh0LGg1duwhZy3BbADXLxMR96EJLdeViE=;
+        b=nTt8tohAyHessF2WH3EXEmlPBSOd+M8MfWH2YbJiOkbx9yw4Ai5KCKLQKfsIufT+fq
+         oxsrNj/8mXQRJVVFHL93Bro/udeNZtrfvanRDQ6+oR0ZJmx0RThFFPzsoM9yQBs4xtoZ
+         YipdhdEtPboqJN5vVwaQ9yTwVLK1wXPu2/7El92EOGMo0zLeE1UW4eD12c+z2HX6StWQ
+         dvSJQVsN1nVlcf/Qu3x22SEhkaPY9+q8uBXr7c+mytP/eF1pcqt/TnDWcEh6Yl4/K93L
+         nL4vMnxeN0k5PBPIHB+cCfOPn2nPJOqgXrMiZaG4p7I3iSFcyzdxh/EG5tqLJwDho3Qi
+         cP2A==
+X-Gm-Message-State: AOJu0Yz8es+xRagfqNpPUqevU7eYzghkcdtchMq7Y29FYo/OzNoZT/vN
+        WPyFjrbu213idgzKxR/seBU=
+X-Google-Smtp-Source: AGHT+IGfuAkOgUiuAPUH4QZBQ5IrZ3zSWA4/SELweuR50ESCFxP6mrYGFgybNS3/I+y4ddntBArrnA==
+X-Received: by 2002:a2e:7e04:0:b0:2c1:6ede:de20 with SMTP id z4-20020a2e7e04000000b002c16edede20mr13801560ljc.6.1696932791248;
+        Tue, 10 Oct 2023 03:13:11 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id y20-20020a2e9794000000b002bce87faca9sm2399954lji.57.2023.10.10.03.13.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 03:13:10 -0700 (PDT)
+Date:   Tue, 10 Oct 2023 13:13:08 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Phil =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Paul Burton <paulburton@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        WANG Xuerui <kernel@xen0n.name>, Wei Liu <wei.liu@kernel.org>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] efi: move screen_info into efi init code
-Message-ID: <ZSUbwXQCVmuehlKS@arm.com>
-References: <20231009211845.3136536-1-arnd@kernel.org>
- <20231009211845.3136536-10-arnd@kernel.org>
+        linux-mips@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 05/11] dt-bindings: mips: cpu: Add I-Class I6500
+ Multiprocessor Core
+Message-ID: <oyimp3535zlayzdyulqup2iverfseqy4owhzfzuo4aglcz4f5d@4rxqsinj6mur>
+References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
+ <20231004161038.2818327-6-gregory.clement@bootlin.com>
+ <hu5ksk2gw7zbbeiwi4unfo242qm2wfn36bpgea5inlamn4kqrf@magwi4w7gp3x>
+ <87sf6pcebd.fsf@BL-laptop>
+ <53050bbd-6a46-470d-9764-c83b8588698e@app.fastmail.com>
+ <20231006164019.GA4040344-robh@kernel.org>
+ <87jzrvbyl2.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231009211845.3136536-10-arnd@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87jzrvbyl2.fsf@BL-laptop>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 11:18:45PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Oct 09, 2023 at 05:32:57PM +0200, Gregory CLEMENT wrote:
+> Rob Herring <robh@kernel.org> writes:
 > 
-> After the vga console no longer relies on global screen_info, there are
-> only two remaining use cases:
+> > On Fri, Oct 06, 2023 at 12:48:03PM +0200, Arnd Bergmann wrote:
+> >> On Thu, Oct 5, 2023, at 16:51, Gregory CLEMENT wrote:
+> >> >> On Wed, Oct 04, 2023 at 06:10:32PM +0200, Gregory CLEMENT wrote:
+> >> >>> The MIPS Warrior I-class I6500 was announced by Imagination
+> >> >>> Technologies in 2016 and is used in the Mobileye SoC EyeQ5.
+> >> >>> 
+> >> >>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> >> >>> ---
+> >> >>>  Documentation/devicetree/bindings/mips/cpus.yaml | 1 +
+> >> >>>  1 file changed, 1 insertion(+)
+> >> >>> 
+> >> >>> diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
+> >> >>> index cf382dea3922..87fd2842ba68 100644
+> >> >>> --- a/Documentation/devicetree/bindings/mips/cpus.yaml
+> >> >>> +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
+> >> >>> @@ -39,6 +39,7 @@ properties:
+> >> >>>        - mti,mips24KEc
+> >> >>>        - mti,mips14KEc
+> >> >>>        - mti,mips14Kc
+> >> >>
+> >> >>> +      - mti,i6500
+> >> >>
+> >> >> Since the CPU core vendor is Imagination Technologies thus it would
+> >> >> be more appropriate to have the "img," prefix. Wouldn't it?
+> >> >
+> >> > According to Documentation/devicetree/bindings/vendor-prefixes.yaml
+> >> >
+> >> > "^mti,.*":
+> >> >     description: Imagination Technologies Ltd. (formerly MIPS
+> >> >     Technologies Inc.)
+> >> >
+> >> > So I think it's OK.
+> >> 
+> >> I don't see any good solution, they changed their name and
+> >> ownership too many times. I would actually revert back the
+> >> description here to "MIPS Technologies Inc" instead of trying
+> >> to keep track of what they currently call themselves.
+> >> 
+> >> Since we already have both the 'mips,' and 'mti,' vendow
+> >> names for the 14Kc, 14KEc and 24KEc parts, maybe we can
+> >> just go back to 'mips,' for all cores past the mti era
+> >> rather than trying to date and geolocate each of the
+> >> classic cores as one of 'mti', 'img', 'wavecomp', 'tallwood',
+> >> 'mips' 'cipunited' etc.
+> >
+> > I would reserve 'mips' for anything common. Much like 'riscv' is only 
+> > for things based on RiscV specs/standards.
+> >
+> > I would use 'img' here if we know this was designed/implemented by 
+> > Imagination.
 > 
->  - on the x86 architecture, it is used for multiple boot methods
->    (bzImage, EFI, Xen, kexec) to commucate the initial VGA or framebuffer
->    settings to a number of device drivers.
-> 
->  - on other architectures, it is only used as part of the EFI stub,
->    and only for the three sysfb framebuffers (simpledrm, simplefb, efifb).
-> 
-> Remove the duplicate data structure definitions by moving it into the
-> efi-init.c file that sets it up initially for the EFI case, leaving x86
-> as an exception that retains its own definition for non-EFI boots.
-> 
-> The added #ifdefs here are optional, I added them to further limit the
-> reach of screen_info to configurations that have at least one of the
-> users enabled.
-> 
-> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Helge Deller <deller@gmx.de>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/kernel/setup.c                       |  4 ----
->  arch/arm64/kernel/efi.c                       |  4 ----
->  arch/arm64/kernel/image-vars.h                |  2 ++
+> If there is no objection I will use 'img' then.
 
-It's more Ard's thing and he reviewed it already but if you need another
-ack:
+Sounds good. Thanks. Feel free to add then:
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+-Serge(y)
+
+> 
+> Gregory
+> 
+> >
+> > Rob
+> 
+> -- 
+> Gregory Clement, Bootlin
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
