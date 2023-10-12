@@ -2,100 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42247C673A
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Oct 2023 09:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B7B7C6850
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Oct 2023 10:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347111AbjJLHZw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Oct 2023 03:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S235417AbjJLI0N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Oct 2023 04:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347114AbjJLHZv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Oct 2023 03:25:51 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203B990;
-        Thu, 12 Oct 2023 00:25:50 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C7JN7v017051;
-        Thu, 12 Oct 2023 07:25:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=5MqhUHWaw+1K2HvrJPqGawKne8YN3vxBSsQbSVm1zg8=;
- b=p50xijw8s91A2Q9ug3Gd49JWz4ZvgqA6Hy+zMLFDqVv4bzeNaYOveL4uET4RJOp3gesp
- DAwgrwHJ03HgF9eeEvp+eOO7qwrmg+XNvm8OUqoLNt7lJlDAVEqtjN8CiKqDMXhlLcky
- eKGNUZ1kMUtv/z8/kUcfCyEga3J/tdfvDxnt6ZfgS26CGMmztvCMkSoI1bmaVHklgkOD
- 4j0SuHSA9ruFRWECactW6nhgOGtTYpcc3OzdI19+LWOAFipwZEMmcg23yiLFkz2UiyBh
- lGMGaxZYCj+Q2PbNgyXx8ufLOeAMZwfSd+coiMBtiELvWv8yrxN+BKmJ1I/kFUJhuVnc VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpca988bj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Oct 2023 07:25:11 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39C7JNSY017085;
-        Thu, 12 Oct 2023 07:25:10 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpca988ax-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Oct 2023 07:25:10 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39C4sB2E001239;
-        Thu, 12 Oct 2023 07:25:09 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tkkvk5hry-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Oct 2023 07:25:09 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39C7P7Zc27001390
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Oct 2023 07:25:08 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA71020065;
-        Thu, 12 Oct 2023 07:25:07 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8AAA920063;
-        Thu, 12 Oct 2023 07:25:07 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 12 Oct 2023 07:25:07 +0000 (GMT)
-Date:   Thu, 12 Oct 2023 09:25:05 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH mm-unstable v9 14/31] s390: Convert various pgalloc
- functions to use ptdescs
-Message-ID: <20231012072505.6160-A-hca@linux.ibm.com>
-References: <20230807230513.102486-1-vishal.moola@gmail.com>
- <20230807230513.102486-15-vishal.moola@gmail.com>
+        with ESMTP id S235410AbjJLI0L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Oct 2023 04:26:11 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4857EA9
+        for <linux-mips@vger.kernel.org>; Thu, 12 Oct 2023 01:26:09 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-32157c8e4c7so650444f8f.1
+        for <linux-mips@vger.kernel.org>; Thu, 12 Oct 2023 01:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697099168; x=1697703968; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iLRauRBH4aeyVBgsUf72ZcduKD3CXNdCJpgoKyXaTzE=;
+        b=DWWTnxuaZE2C8lwlcr9PnS7q6ZigOe1BG0QxFj88xJ4HpE8JsFM/Qy1R06Oel1EH42
+         wA3mB6jDP4yBtxiR2zY2CqO9oJBM5dNbEeDsoIRd830olIxfIDu628iFzHWv3PVYckbL
+         JZc4NOoTlPjFiISmkEaPfo29gX8o/EAOj8uBUnUmVCqpRArt0VTekLyUjc1ZhvMSTKnJ
+         rOm3NTFlZCTglRHptNefxycIbU4HJI/wVnaLueoGJBhARNlttBOKUJIByHOfKCC/kznU
+         eQnbvgxW7ldPC23xEubIq70qY73Ay4ZjcV0a49KJ2fM+sUknU1R3UifIEX5uD17fGyon
+         /5yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697099168; x=1697703968;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iLRauRBH4aeyVBgsUf72ZcduKD3CXNdCJpgoKyXaTzE=;
+        b=N+2uWxtHLyPQSqpg1ghsVpOVdMP1Yl0Bb8l9EbDr/BqW8UW7/MlZI9CnJIoJel4nJe
+         8aO/c0ll7mxibrF0w6pAwEEJX2lSirVF+Zjtk/UOQwofgSk85I+wX015eHvhkTKVeV7L
+         xtq0qNmLuBkKfcKDM64bwhe1Xj7QvnKswOJ2ATr6Esj11YMlHOO6jbMvoMurRhiuq3Q2
+         /2ccgMHDL82BJC1sjhuZ2X4mDMaAXLW+EoGW1E0l3TQ3wWf2zDYhTVdKPuZNqMJL7IxG
+         ef5LVEApjg10GNj/PKB2x3QfuMK1F+xxvshAbK3OqyZUVKaG6uDvBM0/zEQqO8qLmKJT
+         ziLA==
+X-Gm-Message-State: AOJu0YwVfF3dCykYiC12TXQJGXKR2dcxWTvpWKczIiyMEWVhyAkILOqX
+        EHypJwSw2MsoDijeYow0GPPzbA==
+X-Google-Smtp-Source: AGHT+IH19IstQl6QJ4VeBUsUqjZC9bJd1On8NmKj8/4J6ftXw7EApl15+f/UcbBvU8+71kCic6vXJg==
+X-Received: by 2002:a5d:6e85:0:b0:323:10b8:543e with SMTP id k5-20020a5d6e85000000b0032310b8543emr19104792wrz.49.1697099167560;
+        Thu, 12 Oct 2023 01:26:07 -0700 (PDT)
+Received: from [192.168.26.175] (192.red-88-28-24.dynamicip.rima-tde.net. [88.28.24.192])
+        by smtp.gmail.com with ESMTPSA id bu21-20020a056000079500b0032d829e10c0sm4618147wrb.28.2023.10.12.01.26.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 01:26:07 -0700 (PDT)
+Message-ID: <c4167ddd-f30a-ba4e-c205-3eab53f02b9a@linaro.org>
+Date:   Thu, 12 Oct 2023 10:26:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807230513.102486-15-vishal.moola@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: R9BBv1jP5we_uE3OHfXIw10GtOr53ihr
-X-Proofpoint-GUID: -0DchMoDG4gnKEi3H7t5YnEcLMTMxRGv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_02,2023-10-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=661
- impostorscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310120061
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.1
+Subject: Re: [PATCH 1/2] MIPS: lantic: Fix pcibios_plat_dev_init() "no
+ previous prototype" warning
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        kernel test robot <lkp@intel.com>
+References: <20231010143406.974591-1-helgaas@kernel.org>
+ <20231010143406.974591-2-helgaas@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20231010143406.974591-2-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,38 +79,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 04:04:56PM -0700, Vishal Moola (Oracle) wrote:
-> As part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents, convert various page table functions to use ptdescs.
+On 10/10/23 16:34, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Some of the functions use the *get*page*() helper functions. Convert
-> these to use pagetable_alloc() and ptdesc_address() instead to help
-> standardize page tables further.
+> After bbd8810d3998 ("PCI: Remove unused includes and superfluous struct
+> declaration"), <linux/of_pci.h> no longer includes <linux/pci.h>, which
+> provides the extern declarations for pcibios_plat_dev_init() and
+> pcibios_map_irq() via <asm/pci.h>.
 > 
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> This results in these new warnings:
+> 
+>    arch/mips/pci/fixup-lantiq.c:13:5: warning: no previous prototype for 'pcibios_plat_dev_init' [-Wmissing-prototypes]
+>    arch/mips/pci/fixup-lantiq.c:24:5: warning: no previous prototype for 'pcibios_map_irq' [-Wmissing-prototypes]
+> 
+> Include <linux/pci.h> directly to get these declarations.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202310070445.tzRBNYRC-lkp@intel.com/
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 > ---
->  arch/s390/include/asm/pgalloc.h |   4 +-
->  arch/s390/include/asm/tlb.h     |   4 +-
->  arch/s390/mm/pgalloc.c          | 128 ++++++++++++++++----------------
->  3 files changed, 69 insertions(+), 67 deletions(-)
-...
-> diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
-> index d7374add7820..07fc660a24aa 100644
-> --- a/arch/s390/mm/pgalloc.c
-> +++ b/arch/s390/mm/pgalloc.c
-...
-> @@ -488,16 +486,20 @@ static void base_pgt_free(unsigned long *table)
->  static unsigned long *base_crst_alloc(unsigned long val)
->  {
->  	unsigned long *table;
-> +	struct ptdesc *ptdesc;
->  
-> -	table =	(unsigned long *)__get_free_pages(GFP_KERNEL, CRST_ALLOC_ORDER);
-> -	if (table)
-> -		crst_table_init(table, val);
-> +	ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM, CRST_ALLOC_ORDER);
+>   arch/mips/pci/fixup-lantiq.c | 1 +
+>   1 file changed, 1 insertion(+)
 
-I guess I must miss something, but what is the reason to mask out
-__GFP_HIGHMEM here? It is not part of GFP_KERNEL, nor does s390 support
-HIGHMEM.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
