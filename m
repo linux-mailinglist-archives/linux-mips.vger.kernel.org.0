@@ -2,132 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79277C5743
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Oct 2023 16:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42247C673A
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Oct 2023 09:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343588AbjJKOqf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Oct 2023 10:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S1347111AbjJLHZw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Oct 2023 03:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346706AbjJKOqd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Oct 2023 10:46:33 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23D2CF;
-        Wed, 11 Oct 2023 07:46:29 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A47A3240006;
-        Wed, 11 Oct 2023 14:46:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1697035588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+QVKjHGSsp7llyLK7zXvNe55S5HhglD1KOhqWrzK24o=;
-        b=efH6MLyFYuKhVRsjsyQIblreJjjFhdUvrP5SIy7uZrN57o+MGaBWpe60IvUsA06T59aCRI
-        0790bKGL0Q07jyaZwaDkl/cvzo2ZPcDGSCON/4vtiPXpc4MMNbq/UVSYJ6oFYk4b7YSEwV
-        hXaqJSs2sB/02RlvLWyMuu3J76p1VzXe0E9ibdPEKkWzw4vKe9uMX04889lq+BU/g14xgl
-        0/ytgcvLysO37RAI1C7JlJ26pSJXnpSBPD3Tb3RqYwkBhTGh0BxZz5XlbkfzJPIxahdVb4
-        NZB7h7jzUmygp+rBhXjFNr8UrQ/oFHf1Grvnfi1np6EIscieXSEgBn8PPHFSvw==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 03/11] MIPS: support RAM beyond 32-bit
-In-Reply-To: <e5b8c68e-8a1d-45e7-92bf-db0c2fa812ad@app.fastmail.com>
-References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-4-gregory.clement@bootlin.com>
- <f98d0cf9-6339-4cb1-8019-56bc71bfb822@app.fastmail.com>
- <87edi3bxcl.fsf@BL-laptop>
- <e5b8c68e-8a1d-45e7-92bf-db0c2fa812ad@app.fastmail.com>
-Date:   Wed, 11 Oct 2023 16:46:26 +0200
-Message-ID: <878r89b4jh.fsf@BL-laptop>
+        with ESMTP id S1347114AbjJLHZv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Oct 2023 03:25:51 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203B990;
+        Thu, 12 Oct 2023 00:25:50 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C7JN7v017051;
+        Thu, 12 Oct 2023 07:25:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=5MqhUHWaw+1K2HvrJPqGawKne8YN3vxBSsQbSVm1zg8=;
+ b=p50xijw8s91A2Q9ug3Gd49JWz4ZvgqA6Hy+zMLFDqVv4bzeNaYOveL4uET4RJOp3gesp
+ DAwgrwHJ03HgF9eeEvp+eOO7qwrmg+XNvm8OUqoLNt7lJlDAVEqtjN8CiKqDMXhlLcky
+ eKGNUZ1kMUtv/z8/kUcfCyEga3J/tdfvDxnt6ZfgS26CGMmztvCMkSoI1bmaVHklgkOD
+ 4j0SuHSA9ruFRWECactW6nhgOGtTYpcc3OzdI19+LWOAFipwZEMmcg23yiLFkz2UiyBh
+ lGMGaxZYCj+Q2PbNgyXx8ufLOeAMZwfSd+coiMBtiELvWv8yrxN+BKmJ1I/kFUJhuVnc VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpca988bj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 07:25:11 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39C7JNSY017085;
+        Thu, 12 Oct 2023 07:25:10 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpca988ax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 07:25:10 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39C4sB2E001239;
+        Thu, 12 Oct 2023 07:25:09 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tkkvk5hry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 07:25:09 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39C7P7Zc27001390
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Oct 2023 07:25:08 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA71020065;
+        Thu, 12 Oct 2023 07:25:07 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AAA920063;
+        Thu, 12 Oct 2023 07:25:07 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu, 12 Oct 2023 07:25:07 +0000 (GMT)
+Date:   Thu, 12 Oct 2023 09:25:05 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH mm-unstable v9 14/31] s390: Convert various pgalloc
+ functions to use ptdescs
+Message-ID: <20231012072505.6160-A-hca@linux.ibm.com>
+References: <20230807230513.102486-1-vishal.moola@gmail.com>
+ <20230807230513.102486-15-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230807230513.102486-15-vishal.moola@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: R9BBv1jP5we_uE3OHfXIw10GtOr53ihr
+X-Proofpoint-GUID: -0DchMoDG4gnKEi3H7t5YnEcLMTMxRGv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_02,2023-10-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=661
+ impostorscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310120061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Jiaxun,
+On Mon, Aug 07, 2023 at 04:04:56PM -0700, Vishal Moola (Oracle) wrote:
+> As part of the conversions to replace pgtable constructor/destructors with
+> ptdesc equivalents, convert various page table functions to use ptdescs.
+> 
+> Some of the functions use the *get*page*() helper functions. Convert
+> these to use pagetable_alloc() and ptdesc_address() instead to help
+> standardize page tables further.
+> 
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  arch/s390/include/asm/pgalloc.h |   4 +-
+>  arch/s390/include/asm/tlb.h     |   4 +-
+>  arch/s390/mm/pgalloc.c          | 128 ++++++++++++++++----------------
+>  3 files changed, 69 insertions(+), 67 deletions(-)
+...
+> diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
+> index d7374add7820..07fc660a24aa 100644
+> --- a/arch/s390/mm/pgalloc.c
+> +++ b/arch/s390/mm/pgalloc.c
+...
+> @@ -488,16 +486,20 @@ static void base_pgt_free(unsigned long *table)
+>  static unsigned long *base_crst_alloc(unsigned long val)
+>  {
+>  	unsigned long *table;
+> +	struct ptdesc *ptdesc;
+>  
+> -	table =	(unsigned long *)__get_free_pages(GFP_KERNEL, CRST_ALLOC_ORDER);
+> -	if (table)
+> -		crst_table_init(table, val);
+> +	ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM, CRST_ALLOC_ORDER);
 
-> =E5=9C=A82023=E5=B9=B410=E6=9C=889=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
-=E5=8D=884:59=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
->> Hello Jiaxun,
->>
->>> =E5=9C=A82023=E5=B9=B410=E6=9C=884=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
-=E5=8D=885:10=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
->>>> From: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
->>>>
->>>> Support platforms where RAM is mapped beyond 32-bit.
->>>>
->>>> The kernel parameter ddr32_alias allows to setup the alias to point
->>>> outside the first 4 GB of memory.
->>>
->>> Are you trying to fix the problem that if kernel text is loaded in
->>> XKPHYS there is no way to to set EBASE to that region?
->>
->> Yes that exactly we try to fix.
->>
->>>
->>> The common practice for other 64bit MIPS system is to load kernel
->>> in KSEG0 and add low 4G mirror with rest of the high memory to buddy
->>> system. By doing this Kernel still have access to all memory beyond
->>> 32 bit, the only draw back is Kernel's text and data can't be relocted
->>> beyond 32-bit.
->>>
->>> Loading kernel into KSEG0 (i.e. with KBUILD_SYM32) have significant ben=
-efit
->>> on performance, so I think you shouldn't try to load kernel into XKPHYS
->>> without a good reason, but it might be helpful to add a BUG_ON at
->>> CPS driver to handle such situation.
->>
->> I guess that being in KSEG0 allows to use shorter pointer.  But in our
->> case the RAM is physically connected beyond 32bits, so it is not
->> accessible in KSEG0.
->
-> For most system there should be a mirror of part of DDR which is accessib=
-le
-> at KSEG0 and kernel runs from here. As per my interpretion of your code E=
-yeQ5
-> is also doing this? If not could you please briefly describe the memory m=
-ap?
->
-> For Kernel in KSEG0 the pointer is still 64bit but we can use fewer inst
-> to load ABS pointer into register, see [1].
->
-
-There is a kind of mirror but its physical address start at 0x8000000
-so beyond the first 512MBytes that are used for KSEG0.
-
-In short the 32bits mapping is the following:
-
- - the controllers registers of the SoC are located  until 0x8000000,
- - then from 0x8000000 to 0x10000000 there is the alias to low addresses
-   of the DDR
- - then the SPIflash is mapped to from 0x10000000 to 0x20000000
- - after the PCIe Memory 32-bit addr space is from 0x20000000 to
-   0x40000000
-
-Gregory
-
-> [1]: https://elinux.org/images/1/1f/New-tricks-mips-linux.pdf
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+I guess I must miss something, but what is the reason to mask out
+__GFP_HIGHMEM here? It is not part of GFP_KERNEL, nor does s390 support
+HIGHMEM.
