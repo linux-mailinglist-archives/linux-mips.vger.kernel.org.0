@@ -2,73 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132AE7C71AD
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Oct 2023 17:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43D27C7257
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Oct 2023 18:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347295AbjJLPiH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Oct 2023 11:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S1344044AbjJLQVO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Oct 2023 12:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346441AbjJLPiH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Oct 2023 11:38:07 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 802BEC0;
-        Thu, 12 Oct 2023 08:38:05 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qqxlA-0001sp-00; Thu, 12 Oct 2023 17:38:00 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 61D6EC0148; Thu, 12 Oct 2023 17:34:56 +0200 (CEST)
-Date:   Thu, 12 Oct 2023 17:34:56 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 02/11] MIPS: use virtual addresses from xkphys for MIPS64
-Message-ID: <ZSgSIPxrnx2FmHsk@alpha.franken.de>
-References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-3-gregory.clement@bootlin.com>
+        with ESMTP id S1344060AbjJLQVL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Oct 2023 12:21:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F73DA9;
+        Thu, 12 Oct 2023 09:21:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-503397ee920so1503425e87.1;
+        Thu, 12 Oct 2023 09:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697127668; x=1697732468; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3SPN7XBgYtAbtWzOHt/0rYEE5hOBz9Hk2ZUOg0QfyB0=;
+        b=TNKw66xFB7Gmzg3kLfSQCIKjkEZRmAxFb1/RiyohVI3cY8qHEzndaJBsOkvlhpPkOu
+         WOSwTcLhQKwol4UZ+k9mxK3JzBnf3sEk13GfhO9Gpa09iKtetrceM2DjPrat+/wAgpVo
+         Bw2OM4xNcHmLGNTp/HOPChEUEf6fMawZ1ALZQBWTPSuX+TxZOLUuIpCQuzah0fHQn/dq
+         jdpsksDVqrEXLccCQbfi9+qxnN3ehb6dddmH1RD8OZeAXGsW4pgSeTE3JQzPY87DEW8o
+         V35E4MV2yyqsmKIXc1CNZgmUU6NK8XFvFFt1ijMItlxyvOUmbLepvtVv8KS3cGeKTOet
+         6jyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697127668; x=1697732468;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3SPN7XBgYtAbtWzOHt/0rYEE5hOBz9Hk2ZUOg0QfyB0=;
+        b=ESgYAgQSU//Y9Xzo3ggqBgoDQ/7NKFpJSs+mzG7K1negl02ANf7EQX5i+xlpcnpKAI
+         uHEmj89U+Jmzeqjc65Z3hiKFXAZ3LjKLoCr6de0wTRBc6zfrFp2kLy/YF2r/j+gf1/nK
+         gCVBWTGbngKkq57WhGQoPyiDCRJkLMSyOgK4lNATBMGAJmvn+DVvHBlAmlexM/vsAf5C
+         WZ7GghnQYrzUaFLL8rZvGnQn1Gm2n9r7tqfF5DOGs4Q1YxjoYNTT1UqZsux5LanBZ/qr
+         iL7NGLLAFqwMJ2JAvYzRnuUmOuqXGmh69HonKX/V/IxIEFfrHGAFOfT+/lw/q7uICsRs
+         049A==
+X-Gm-Message-State: AOJu0YzchpT3Gz9EofEanaiONAKH5b5O8yf6OrJwm+u9iuZrUazjUWVM
+        CWckAnOc6aflpvRh601t0D8=
+X-Google-Smtp-Source: AGHT+IGJcGDV8jEbS1mMXyuVP2qOdoVGHW96/rwCFFkIKzmLucR5M69QbrDpBKtWgQ0ScTKfd89XZg==
+X-Received: by 2002:a05:6512:5ca:b0:4fa:5e76:7ad4 with SMTP id o10-20020a05651205ca00b004fa5e767ad4mr17671439lfo.10.1697127667970;
+        Thu, 12 Oct 2023 09:21:07 -0700 (PDT)
+Received: from hp-power-15.localdomain (78-62-135-63.static.zebra.lt. [78.62.135.63])
+        by smtp.gmail.com with ESMTPSA id br34-20020a056512402200b005068e7a2e7dsm2557470lfb.77.2023.10.12.09.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Oct 2023 09:21:07 -0700 (PDT)
+From:   Siarhei Volkau <lis8215@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Siarhei Volkau <lis8215@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH] MIPS: Take in account load hazards for HI/LO restoring
+Date:   Thu, 12 Oct 2023 19:20:27 +0300
+Message-ID: <20231012162027.3411684-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231004161038.2818327-3-gregory.clement@bootlin.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 06:10:29PM +0200, Gregory CLEMENT wrote:
-> From: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
-> 
-> Now 64-bit MIPS uses 32-bit compatible segments KSEG0 and KSEG1
-> to trivially map first 1/2 GByte of physical memory. This memory
-> used to run kernel. This mean, one should have memory installed
-> in this area in order for Linux to work.
-> 
-> Kconfig CONFIG_USE_XKPHYS introduced; it adds support for kernel
-> to use virtual addresses from the XKPHYS segment for both cached
-> and uncached access. XKPHYS allows to access 2^48 bytes of
-> memory, thus allowing kernel to work with any memory
-> configuration.
+MIPS CPUs usually have 1 to 4 cycles load hazards, thus doing load
+and right after move to HI/LO will usually stall the pipeline for
+significant amount of time. Let's take it into account and separate
+loads and mthi/lo in instruction sequence.
 
-IMHO it doesn't make sense to introduce an option for a generic
-kernel, which then renders the generic kernel useless on all
-platforms other then yours.
+The patch uses t6 and t7 registers as temporaries in addition to t8.
 
-Please don't use generic, but setup a new platform for it. Hopefully
-we can get rid all of the weirdness in this patch.
+The patch tries to deal with SmartMIPS, but I know little about and
+haven't tested it.
 
-Thomas.
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+---
+ arch/mips/include/asm/stackframe.h | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
+diff --git a/arch/mips/include/asm/stackframe.h b/arch/mips/include/asm/stackframe.h
+index a8705aef47e1..3821d91b00fd 100644
+--- a/arch/mips/include/asm/stackframe.h
++++ b/arch/mips/include/asm/stackframe.h
+@@ -308,17 +308,11 @@
+ 		jal	octeon_mult_restore
+ #endif
+ #ifdef CONFIG_CPU_HAS_SMARTMIPS
+-		LONG_L	$24, PT_ACX(sp)
+-		mtlhx	$24
+-		LONG_L	$24, PT_HI(sp)
+-		mtlhx	$24
+-		LONG_L	$24, PT_LO(sp)
+-		mtlhx	$24
+-#elif !defined(CONFIG_CPU_MIPSR6)
++		LONG_L	$14, PT_ACX(sp)
++#endif
++#if defined(CONFIG_CPU_HAS_SMARTMIPS) || !defined(CONFIG_CPU_MIPSR6)
+ 		LONG_L	$24, PT_LO(sp)
+-		mtlo	$24
+-		LONG_L	$24, PT_HI(sp)
+-		mthi	$24
++		LONG_L	$15, PT_HI(sp)
+ #endif
+ #ifdef CONFIG_32BIT
+ 		cfi_ld	$8, PT_R8, \docfi
+@@ -327,6 +321,14 @@
+ 		cfi_ld	$10, PT_R10, \docfi
+ 		cfi_ld	$11, PT_R11, \docfi
+ 		cfi_ld	$12, PT_R12, \docfi
++#ifdef CONFIG_CPU_HAS_SMARTMIPS
++		mtlhx	$14
++		mtlhx	$15
++		mtlhx	$24
++#elif !defined(CONFIG_CPU_MIPSR6)
++		mtlo	$24
++		mthi	$15
++#endif
+ 		cfi_ld	$13, PT_R13, \docfi
+ 		cfi_ld	$14, PT_R14, \docfi
+ 		cfi_ld	$15, PT_R15, \docfi
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.41.0
+
