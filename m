@@ -2,150 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321767C77FF
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Oct 2023 22:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2254F7C8EAA
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Oct 2023 23:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344224AbjJLUlj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Oct 2023 16:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S232041AbjJMVD1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Oct 2023 17:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344079AbjJLUli (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Oct 2023 16:41:38 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B87CA;
-        Thu, 12 Oct 2023 13:41:20 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 35F223200B37;
-        Thu, 12 Oct 2023 16:41:14 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 12 Oct 2023 16:41:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1697143273; x=1697229673; bh=Kcx2chQljPp1tO/RTaI3fBXk8864d+5dqsf
-        CYXZoMXY=; b=rJRlgRpG0v+aFSEnYV5yUdnk8chd0XOqsm+FEQ+dQmn8KgHPA98
-        IK9kHWFRXx6rwNcWu4DczT7uz4qWT4lm25rLGUm8u3xF6ONyrr2fsYJM2U+r/7v6
-        5AkYBAhSGeyiw6lFxXvLhFSd8ha6BU4wGHjRGpKpDgZD8vO9HPSESnko3hMBTX76
-        7xef4ex0to/kkOHJSy2MATuFzPM7cDj+OygowP5UkK89dNi2LZnlxro8DBu6VLaC
-        7wLtJa+bm7Kr5xBVhlMM+lFe6+p9ZgKh7FTRzFFjxKrDXT41STfosb6vgIBnIAC0
-        cz1W5I7FVx0RvHS89CzJHuxXVbgICNSbpAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1697143273; x=1697229673; bh=Kcx2chQljPp1tO/RTaI3fBXk8864d+5dqsf
-        CYXZoMXY=; b=IbEzv8FB9FajJZsu6CyFe0MV4PqB6XXzBLEwaOl12s8pz3x6zJb
-        riJYZpepjEglaEWbb/9QM0FqPYkfKOXT1+ZoN9SJTV67m+MAEFNeZ1cMdzqYQ999
-        MkdMzMfNk/REbYThagYky0NxMAVH3OJTPFQP6UoJiaX6LqEcp43qAu+5OVF45FHo
-        LGoioNFenrq4jKUMSaVVNmjd4BTbw5k6NzIrxizNV+ygq93TNyfgTaLxitmstdhL
-        9PlliNUEiyVpA9Y0NHhTOA1LP+FXnisystXN7ChH/LVtJ+85b3s6IdIYIhEJLSNl
-        hIO2qzbP6nJgt6ZP5TcPOlOKooxMWMJ9ZTg==
-X-ME-Sender: <xms:6VkoZSnQzxqL6AApKeEqwtxX28l7eT7u1dgCgxGHBwnRAcLVlnKUhw>
-    <xme:6VkoZZ2TQts-Z8BhJjaNdZJP_ojbLmnxHoyeqWyNX8efqydymZwzwyp6n3gRHxGJo
-    -c5WozGIoT4vkXZNi0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedriedtgddugeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeetleegheefvdejfeeftdfhtdevfefgjeeufefgiedu
-    vdetheefheefgfelfeehudenucffohhmrghinhepvghlihhnuhigrdhorhhgpdgsohhoth
-    hlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:6VkoZQpAFF4boud0oyFbVlqvnKkbuK66Lp6F4DzvGhhn0nXXSwXEEA>
-    <xmx:6VkoZWmsQzq_uXYtTw7hEwiyxpniJvQFmjiA67IlMuWZu2SfKbOIGA>
-    <xmx:6VkoZQ2DxtaP7_1M_DmutKn__3vm9v-4Q9drRwf4JQiQJjbOtkv64A>
-    <xmx:6VkoZZvyt-dhkR4-zVaYN-kGkHx46ilb3jQZUk9-0cOAP7H1Vwpayw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3734536A0075; Thu, 12 Oct 2023 16:41:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
+        with ESMTP id S229679AbjJMVDZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Oct 2023 17:03:25 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B3AB7;
+        Fri, 13 Oct 2023 14:03:21 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d9ac43d3b71so2385538276.0;
+        Fri, 13 Oct 2023 14:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697231000; x=1697835800; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JtiOVCn2uSsz0FoSYRDQt6Ad/oEEDkzUyvmWznVzlSA=;
+        b=azcdS5mk3fTak+nb/eug5AYpCwxC5kpdPWDxsTbKwRaTZsnLV+Lx6RGqcJnIyUdE7E
+         i8mcurTG2K1UAzdKUEP1S6mdqR+ibq2oLmQ3X9nYbM0kG2dZD3+5jy7tWcqTlQuPlXEn
+         YxekVNV3znDqK079lRSP9QXygD9u0NmyD1tg7EsKIgxZZ9rwNdXqbYT+ovXnVO/ci831
+         mgB/pG84f12ARASoT4IyPoOJNm6RHJASuCu6rXvY9sR+TJqwnt77yCRbkYhGzdUBrhXd
+         8X5ZM+bDS4cgt/tdAP3JdjHz4hcbnQ2wJko+oS911py/MlPJdtAAXbYPgvNL5+6cI/+s
+         ivbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697231000; x=1697835800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JtiOVCn2uSsz0FoSYRDQt6Ad/oEEDkzUyvmWznVzlSA=;
+        b=EoOdS6t9q5onboOSajiihDPwrOvD9jjmmZ0TIdOI+n9UUe11Qay6YbTt3flkCOKUJQ
+         ARCPDnwSv6Bs3VDI5IxdZzbQJCIQeqxrf3xuzq1iuv5bwBBeLK+nEebUyPBjCUySqrIR
+         0J68695SPTegha0BBJICgKu6KzXmAdwngFFH/rOG0W2o+RGqynfvOSZaggW1LjGxFCjS
+         3yslMQT6PQGUZSF7jsbLXGalqj48rkF+6H8UV7eBkF7tvXblE7/vRwBvtycqMznRcLJh
+         3l7WnU9pim0Tk9jgbHQv0qJQYzmiG5GIStf3RfL1H0Tt/MyisN30fssYiGCIRgg/Takh
+         049g==
+X-Gm-Message-State: AOJu0YwuMAUa/Yms10yiEquu3Ujskw3v3j1JidWpHUt+4pt3l+aT8B3W
+        QwBTXNyvRLeShvHZLvHa5uEIsTYwQeSGzw8QLec=
+X-Google-Smtp-Source: AGHT+IHWHj9ILTPWExZ8ekeA0/ryyRW0ZV6k5VhEVnOo+k5EpZsvEbKt/nom23K7vTTS2zHZvjjk2tEmm58T8MLLm1U=
+X-Received: by 2002:a5b:64d:0:b0:d9b:3b3e:5a07 with SMTP id
+ o13-20020a5b064d000000b00d9b3b3e5a07mr2004058ybq.5.1697230999223; Fri, 13 Oct
+ 2023 14:03:19 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <b35d73e8-260e-4296-a710-f20676e17c27@app.fastmail.com>
-In-Reply-To: <878r89b4jh.fsf@BL-laptop>
-References: <20231004161038.2818327-1-gregory.clement@bootlin.com>
- <20231004161038.2818327-4-gregory.clement@bootlin.com>
- <f98d0cf9-6339-4cb1-8019-56bc71bfb822@app.fastmail.com>
- <87edi3bxcl.fsf@BL-laptop>
- <e5b8c68e-8a1d-45e7-92bf-db0c2fa812ad@app.fastmail.com>
- <878r89b4jh.fsf@BL-laptop>
-Date:   Thu, 12 Oct 2023 21:40:52 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Gregory CLEMENT" <gregory.clement@bootlin.com>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
-        "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
-        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 03/11] MIPS: support RAM beyond 32-bit
-Content-Type: text/plain;charset=utf-8
+References: <20230807230513.102486-1-vishal.moola@gmail.com>
+ <20230807230513.102486-15-vishal.moola@gmail.com> <20231012072505.6160-A-hca@linux.ibm.com>
+In-Reply-To: <20231012072505.6160-A-hca@linux.ibm.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Fri, 13 Oct 2023 14:03:08 -0700
+Message-ID: <CAOzc2px-SFSnmjcPriiB3cm1fNj3+YC8S0VSp4t1QvDR0f4E2A@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v9 14/31] s390: Convert various pgalloc
+ functions to use ptdescs
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_BLOCKED,T_SPF_HELO_TEMPERROR,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-=E5=9C=A82023=E5=B9=B410=E6=9C=8811=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
-=E5=8D=883:46=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> Hello Jiaxun,
+On Thu, Oct 12, 2023 at 12:25=E2=80=AFAM Heiko Carstens <hca@linux.ibm.com>=
+ wrote:
 >
-[...]
+> On Mon, Aug 07, 2023 at 04:04:56PM -0700, Vishal Moola (Oracle) wrote:
+> > As part of the conversions to replace pgtable constructor/destructors w=
+ith
+> > ptdesc equivalents, convert various page table functions to use ptdescs=
+.
+> >
+> > Some of the functions use the *get*page*() helper functions. Convert
+> > these to use pagetable_alloc() and ptdesc_address() instead to help
+> > standardize page tables further.
+> >
+> > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >  arch/s390/include/asm/pgalloc.h |   4 +-
+> >  arch/s390/include/asm/tlb.h     |   4 +-
+> >  arch/s390/mm/pgalloc.c          | 128 ++++++++++++++++----------------
+> >  3 files changed, 69 insertions(+), 67 deletions(-)
+> ...
+> > diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
+> > index d7374add7820..07fc660a24aa 100644
+> > --- a/arch/s390/mm/pgalloc.c
+> > +++ b/arch/s390/mm/pgalloc.c
+> ...
+> > @@ -488,16 +486,20 @@ static void base_pgt_free(unsigned long *table)
+> >  static unsigned long *base_crst_alloc(unsigned long val)
+> >  {
+> >       unsigned long *table;
+> > +     struct ptdesc *ptdesc;
+> >
+> > -     table =3D (unsigned long *)__get_free_pages(GFP_KERNEL, CRST_ALLO=
+C_ORDER);
+> > -     if (table)
+> > -             crst_table_init(table, val);
+> > +     ptdesc =3D pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM, CRST_ALLO=
+C_ORDER);
 >
-> There is a kind of mirror but its physical address start at 0x8000000
-> so beyond the first 512MBytes that are used for KSEG0.
+> I guess I must miss something, but what is the reason to mask out
+> __GFP_HIGHMEM here? It is not part of GFP_KERNEL, nor does s390 support
+> HIGHMEM.
 
-Really, KSEG0 range is 0x00000000 to 0x20000000, and 0x08000000 to 0x100=
-00000
-is definitely within that range.
+You're not missing anything.
 
-But I'd agree that 0x08000000 to 0x10000000 (32MB) seems too small for k=
-ernel
-text and data. So yeah, it makes sense to load kernel into XKPHYS.
-
-My sugesstion is, kernel does not have to be aware of the mirror deisgn.
-Say that you have DDR fully mapped at 0x100000000, you can split memory
-space into two trunks: 0x08000000 to 0x10000000 and 0x102000000 to end
-of the dram. Since memblock always allocate from first continuous range
-in system, we can guarantee that ebase is allocated with in the first
-trunk.
-
-Thanks
-
->
-> In short the 32bits mapping is the following:
->
->  - the controllers registers of the SoC are located  until 0x8000000,
->  - then from 0x8000000 to 0x10000000 there is the alias to low address=
-es
->    of the DDR
->  - then the SPIflash is mapped to from 0x10000000 to 0x20000000
->  - after the PCIe Memory 32-bit addr space is from 0x20000000 to
->    0x40000000
->
-> Gregory
->
->> [1]: https://elinux.org/images/1/1f/New-tricks-mips-linux.pdf
->
-> --=20
-> Gregory Clement, Bootlin
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
-
---=20
-- Jiaxun
+This was replacing __get_free_pages() which also doesn't support HIGHMEM,
+so I had that in to ensure a non-HIGHMEM allocation in case a
+passed-in gfp_flags
+had it set. In hindsight since we're just passing in the GFP flags
+directly here, we don't
+actually need to mask out GFP_HIGHMEM.
