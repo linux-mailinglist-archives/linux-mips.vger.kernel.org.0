@@ -2,49 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5409E7CC706
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Oct 2023 17:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517D97CD4B5
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Oct 2023 08:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344269AbjJQPHj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Oct 2023 11:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S229737AbjJRG6J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Oct 2023 02:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344279AbjJQPH3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Oct 2023 11:07:29 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1533919BC;
-        Tue, 17 Oct 2023 08:05:46 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6bd0e1b1890so2280142b3a.3;
-        Tue, 17 Oct 2023 08:05:46 -0700 (PDT)
+        with ESMTP id S229676AbjJRG6I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Oct 2023 02:58:08 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFE3B0;
+        Tue, 17 Oct 2023 23:58:06 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5a7c95b8d14so82809827b3.3;
+        Tue, 17 Oct 2023 23:58:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697555145; x=1698159945; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fc+BeKPfjaApdVuZ2mptOISBL2EV+8avGTyYqpZGpXk=;
-        b=XXul8jSnElKAFWr77zuxxKgHVM3pz0IZPj6/FpQ8+C4jV27uH6yxhPJi5lfIuvQA9O
-         msdvn+yNOVDyENYae5tdXkquwpiyeK8mXoeT/MXofb0vAz7UEqqcBWHYh/Z0hbRHCEV/
-         69x0apS8T1CS5Qa7R3Yr+wuycUbXC8y4iK/Fj62ieAKk9CqQXvWParEGK630Erh4FgkK
-         zr6dPiTq2VnBfXM+26TbP0KLy8Sws8ggwcAZZukpCte23XFNHZ6ikMf1F0vqFf+oWq2h
-         EG5NdQMJdkIw1lNKnJe97yaOiWZuXTX+srzngs9ctg70dwTT23vQW4lkk05cDfBoXxn9
-         DRYg==
+        d=gmail.com; s=20230601; t=1697612286; x=1698217086; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kwC4vINsKq9AZoCiHY7v2qaBARUu3Ce9v82O1PQj3I8=;
+        b=YkcPy1I42u2qAWk/UMix0vDl8hSdVc25OHbDbszY7lMTuzdETKKoD9SOJHuzyMlFZI
+         jWYDEN5ZeJLNmFMbnDJryxJcDY2FZAaEdHsTMQd12rRIwU2t5Vfh4QLncREQf1OgshwB
+         sl7QyVlN60dAdhIkailca/lmeux4FhlHJ/WNjVBg+OnzZ5amEm0gTO3UdQGhAPF/ly0S
+         YC1WbzflWA9DGd8nHhvoBY2zVajeD/GXXAgKJj24VjSzsmxEWwEdA1at+pghOpVJOm4K
+         SwfphGgS0ksLEylGSJPkjJbAh6ZnH90M8EieeyzH/1XRh0JX1IzdVQCcxDtu8U6KxKJi
+         5B8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697555145; x=1698159945;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fc+BeKPfjaApdVuZ2mptOISBL2EV+8avGTyYqpZGpXk=;
-        b=o0GInIXWBMlXZJtEb7cx7pySnGeZr/uK5RUEsXoTfeknaAoIk9/btpufbSdTvlWn+I
-         6raG0reMrR28rt501KTp/zvzH7IAhy/Z6blube97wXSBZHj9i/VG8IzS3331fJCkywqE
-         bt4eOAhjXAl/Gq+M0Dvg4sGs5c33LYy3B0/si7IeZemVIl/RXK6fkyXCmbfPrCvBtk0y
-         /iLIRBgcuQf4prZx41ZxgJVcu/teRdYFapd51d35WHCMhKCzxvXKGljqgQNAJC3YOG7d
-         lnkEl/gHNTEWn0G0XXrgWHRAcxdlbMSq1krLUnp2dKatPkYUP/e7bK0uPoQDFZm/bE78
-         hdEQ==
-X-Gm-Message-State: AOJu0YyhN814NgvlKV8vqM5scJzFG5axfIQw+AdpWO6PEwIYmW2UMjkm
-        szwfQZYMd3+I8dHegtr3X6jwehkilZXUWQqrDWg=
-X-Google-Smtp-Source: AGHT+IHRVJcqqQ05a6eUWlxAyiD4fn+eYoln4HJwNwndR9ebKz7p4uoLjo93gwRzO28tEriZtsd5k30PA+Z5wb/S43U=
-X-Received: by 2002:a05:6a20:3d01:b0:163:9f1d:b464 with SMTP id
- y1-20020a056a203d0100b001639f1db464mr2630754pzi.5.1697555145234; Tue, 17 Oct
- 2023 08:05:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697612286; x=1698217086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kwC4vINsKq9AZoCiHY7v2qaBARUu3Ce9v82O1PQj3I8=;
+        b=SBlSWq2XjVhT4DJDwQ48uVkU5YMW6Wkm33+hS0+8Vy3pDtZOmmzrY8v5gTFTP9dZ0B
+         32SNExtNubCUbGHL/LkoxUi3/lkOQT7Ajk0OHom69CFQ7w6q3Pq+MVAVV83Yp6Stubx1
+         LOvrEZhxOqi3vNWicP1Pgku3okjbcdoadbyBSDKMBsnrbtprJHSmGlkXLxvA8YJIamyt
+         602+XcC0hxuW6OLOrD/pH8Dk2px113nneD4rShfhKQMuBPs1NuObNCBp3tpL6sWbWJrg
+         S5eIBb+SUGJ5ZvLyGdO5DUMYZo1yWLjDhtpzYjBW8KmLSjb4Z/QzFrU9HbhtCAtFLa+Y
+         eeqg==
+X-Gm-Message-State: AOJu0Yx5XaESVnYr5GT2Uiz6ILNWMLSIF7T+HpToVHUqRspsIwikqmy4
+        UwOKZkWC72DEl23AeJQzE/LRB9g+KFyW7+6VfeU=
+X-Google-Smtp-Source: AGHT+IE6HbcHtJGJ8vsAFILw76rUp7kVer/XFcoWhaAjgYaag/14z9b9gNxOtypzAhjLZ9R641Sfqma1OaIo29kRNNo=
+X-Received: by 2002:a25:8042:0:b0:d9a:baa8:30a2 with SMTP id
+ a2-20020a258042000000b00d9abaa830a2mr4263564ybn.8.1697612286050; Tue, 17 Oct
+ 2023 23:58:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
  <e62185ca-cdf6-bde9-ad46-f4150db9ed6d@linaro.org> <CAMpQs4JhfuB4=s9VFc+xmw_+8h5u2EwPdM_0x2vO_=SYabAAxw@mail.gmail.com>
@@ -52,13 +53,14 @@ References: <20230821061315.3416836-1-zhoubinbin@loongson.cn>
  <d11873a1-b552-71f5-1100-7464687f8bb4@linaro.org> <a084e6e9-46b0-42ef-b500-69c114ae11b2@flygoat.com>
  <86wmxcejav.wl-maz@kernel.org> <c7898abf-34ca-d0b4-fd0c-935100dcd3f2@flygoat.com>
  <86pm2ye2si.wl-maz@kernel.org> <CAMpQs4LjePLy5RFMz2S=1sa9Zme_UrJmKKRog0LAg_ZhA07TMA@mail.gmail.com>
-In-Reply-To: <CAMpQs4LjePLy5RFMz2S=1sa9Zme_UrJmKKRog0LAg_ZhA07TMA@mail.gmail.com>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Tue, 17 Oct 2023 17:05:33 +0200
-Message-ID: <CAOiHx=mq3hw-LFerb9UzU7VSnLypnvPuo1GomCnN=p0u3xN1Ug@mail.gmail.com>
+ <CAOiHx=mq3hw-LFerb9UzU7VSnLypnvPuo1GomCnN=p0u3xN1Ug@mail.gmail.com>
+In-Reply-To: <CAOiHx=mq3hw-LFerb9UzU7VSnLypnvPuo1GomCnN=p0u3xN1Ug@mail.gmail.com>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Wed, 18 Oct 2023 12:57:53 +0600
+Message-ID: <CAMpQs4+neiaJKp93UcemJbPPbhmf1B7WYNqKh=qx0avrbwW2cQ@mail.gmail.com>
 Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: loongson,liointc:
  Fix warnings about liointc-2.0
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
+To:     Jonas Gorski <jonas.gorski@gmail.com>
 Cc:     Marc Zyngier <maz@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -74,6 +76,7 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         linux-mips@vger.kernel.org, diasyzhang@tencent.com,
         linux-kernel@vger.kernel.org, frowand.list@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -84,59 +87,110 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 16 Oct 2023 at 13:26, Binbin Zhou <zhoubb.aaron@gmail.com> wrote:
+On Tue, Oct 17, 2023 at 9:05=E2=80=AFPM Jonas Gorski <jonas.gorski@gmail.co=
+m> wrote:
 >
-> Hi all:
+> On Mon, 16 Oct 2023 at 13:26, Binbin Zhou <zhoubb.aaron@gmail.com> wrote:
+> >
+> > Hi all:
+> >
+> > Sorry, it's been a while since the last discussion.
+> >
+> > Previously, Krzysztof suggested using the standard "interrupt-map"
+> > attribute instead of the "loongson,parent_int_map" attribute, which I
+> > tried to implement, but the downside of this approach seems to be
+> > obvious.
+> >
+> > First of all, let me explain again the interrupt routing of the
+> > loongson liointc.
+> > For example, the Loongson-2K1000 has 64 interrupt sources, each with
+> > the following 8-bit interrupt routing registers (main regs attribute
+> > in dts):
+> >
+> > +----+-----------------------------------------------------------------=
+--+
+> > | bit  | description
+> >             |
+> > +----+-----------------------------------------------------------------=
+--+
+> > | 3:0 | Processor core to route                                        =
+   |
+> > | 7:4 | Routed processor core interrupt pins (INT0--INT3) |
+> > +-----+----------------------------------------------------------------=
+--+
+> >
+> > The "loongson,parent_int_map" attribute is to describe the routed
+> > interrupt pins to cpuintc.
+> >
+> > However, the "interrupt-map" attribute is not supposed to be used for
+> > interrupt controller in the normal case. Though since commit
+> > 041284181226 ("of/irq: Allow matching of an interrupt-map local to an
+> > interrupt controller"), the "interrupt-map" attribute can be used in
+> > interrupt controller nodes. Some interrupt controllers were found not
+> > to work properly later, so in commit de4adddcbcc2 ("of/irq: Add a
+> > quirk for controllers with their own definition of interrupt-map"), a
+> > quirk was added for these interrupt controllers. As we can see from
+> > the commit message, this is a bad solution in itself.
+> >
+> > Similarly, if we choose to use the "interrupt-map" attribute in the
+> > interrupt controller, we have to use this unfriendly solution (quirk).
+> > Because we hope of_irq_parse_raw() stops at the liointc level rather
+> > than goto its parent level.
+> >
+> > So, I don't think it's a good choice to use a bad solution as a replace=
+ment.
+> >
+> > Do you have any other ideas?
 >
-> Sorry, it's been a while since the last discussion.
+> Assuming this is changeable at runtime, this sounds to me like this
+> mapping/routing could easily be exposed as irqchip cpu affinity. Then
+> userspace can apply all the performance optimizations it wants (and
+> can easily update them without fiddling with the kernel/dts).
 >
-> Previously, Krzysztof suggested using the standard "interrupt-map"
-> attribute instead of the "loongson,parent_int_map" attribute, which I
-> tried to implement, but the downside of this approach seems to be
-> obvious.
->
-> First of all, let me explain again the interrupt routing of the
-> loongson liointc.
-> For example, the Loongson-2K1000 has 64 interrupt sources, each with
-> the following 8-bit interrupt routing registers (main regs attribute
-> in dts):
->
-> +----+-------------------------------------------------------------------+
-> | bit  | description
->             |
-> +----+-------------------------------------------------------------------+
-> | 3:0 | Processor core to route                                           |
-> | 7:4 | Routed processor core interrupt pins (INT0--INT3) |
-> +-----+------------------------------------------------------------------+
->
-> The "loongson,parent_int_map" attribute is to describe the routed
-> interrupt pins to cpuintc.
->
-> However, the "interrupt-map" attribute is not supposed to be used for
-> interrupt controller in the normal case. Though since commit
-> 041284181226 ("of/irq: Allow matching of an interrupt-map local to an
-> interrupt controller"), the "interrupt-map" attribute can be used in
-> interrupt controller nodes. Some interrupt controllers were found not
-> to work properly later, so in commit de4adddcbcc2 ("of/irq: Add a
-> quirk for controllers with their own definition of interrupt-map"), a
-> quirk was added for these interrupt controllers. As we can see from
-> the commit message, this is a bad solution in itself.
->
-> Similarly, if we choose to use the "interrupt-map" attribute in the
-> interrupt controller, we have to use this unfriendly solution (quirk).
-> Because we hope of_irq_parse_raw() stops at the liointc level rather
-> than goto its parent level.
->
-> So, I don't think it's a good choice to use a bad solution as a replacement.
->
-> Do you have any other ideas?
+> And then there would be no need to hardcode/describe it in the dts(i) at =
+all.
 
-Assuming this is changeable at runtime, this sounds to me like this
-mapping/routing could easily be exposed as irqchip cpu affinity. Then
-userspace can apply all the performance optimizations it wants (and
-can easily update them without fiddling with the kernel/dts).
+Hi Jonas:
 
-And then there would be no need to hardcode/describe it in the dts(i) at all.
+Thanks for your reply.
 
-Best Regards,
-Jonas
+It is possible that my non-detailed explanation caused your misunderstandin=
+g.
+Allow me to explain again about the interrupt routing register above,
+which we know is divided into two parts:
+
++----+-------------------------------------------------------------------+
+| bit  | description |
++----+-------------------------------------------------------------------+
+| 3:0 | Processor core to route                                           |
+| 7:4 | Routed processor core interrupt pins (INT0--INT3) |
++-----+------------------------------------------------------------------+
+
+The first part "processor core" will be set to "boot_cpu_id" in the
+driver, which we assume is fixed and we don't need to care about it
+here.
+What we care about is the second part "mapping of device interrupts to
+processor interrupt pins", which is what we want to describe in
+dts(i).
+
+Let's take the Loongson-2K1000 as an example again, it has 64
+interrupt sources as inputs and 4 processor core interrupt pins as
+outputs.
+The sketch is shown below:
+
+Device Interrupts           Interrupt Pins
+                 +-------------+
+         0---->|                |--> INT0
+        ...       | Mapping |--> INT1
+        ...       |                |--> INT2
+        63--->|                |--> INT3
+                 +-------------+
+
+Therefore, this mapping relationship cannot be changed at runtime and
+needs to be hardcoded/described in dts(i).
+
+Thanks.
+Binbin
+>
+> Best Regards,
+> Jonas
