@@ -2,72 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E457D6C81
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Oct 2023 14:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699947D72FA
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Oct 2023 20:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjJYM6a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Oct 2023 08:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S229453AbjJYSKJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Oct 2023 14:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234946AbjJYM63 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 Oct 2023 08:58:29 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F024184
-        for <linux-mips@vger.kernel.org>; Wed, 25 Oct 2023 05:58:27 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40859c46447so30877135e9.1
-        for <linux-mips@vger.kernel.org>; Wed, 25 Oct 2023 05:58:27 -0700 (PDT)
+        with ESMTP id S234939AbjJYSJ5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 Oct 2023 14:09:57 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C57A1AA;
+        Wed, 25 Oct 2023 11:09:53 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ca816f868fso41117485ad.1;
+        Wed, 25 Oct 2023 11:09:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698238705; x=1698843505; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698257393; x=1698862193; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=o3YuyVEdgZZMmRRL1MGrlm9rqrd903CfEJKn3RLe0cI=;
-        b=MSNhn7Qpjv60BuUvuzfKHE+YDwQ+/6hLLDhL+WGCiNJPdtac3ahw120xL9ScsQrjCm
-         UtkZ0GfPO+USxd+RNJeEjaJ3cATDpKzAHzMUbiU3VaFbMGXsE3ppD+z0kZNTapat1QWE
-         fP54zuA4ab52C6Xq/pvb1Ou/OzNrEqcSKMMQGicugLEgvsGrPTzjMx7fJ3dxBuva53uK
-         cHMMjMlBBX5f1cAvG4LlXD7vgXiIx61c13ONdsyHGmAK1TgSGnTv/+RsiIl7SjkL7b2u
-         vQbUXGjuu2Y5RCeK/xTCX43ASo/BVeZLeZCzCg7djqFmWhCSbiZxkRmIw7HCY7xLg6AV
-         pA7w==
+        bh=Gw+AcXPUUwUKlBUNb/H3ifXReKZDanNIXHIBrZtP1Gw=;
+        b=FHjSI0uMTNFgIzHycBJnMI/Y9KNcENPrnFYCHXQ4b3wzzhKS14GTR0EKB7rbd2phhV
+         OIdNbNhK+PalJPWq53Tec2ea6LKTlCeMEG8oFkKFAzpX6elMAhWtBfd118kOOkyATBj+
+         ZqJRlhlIAVgmP20pHrmYOlx1pPnDXpVMcLLouIeQgjJzsZU9y/BvHq6W63nl7kAZtGlz
+         2YjP8AcULHp+JiohzSrha4sHN/hcH7RnNNFtykd6bftvbMTpGOMKoekWI90/jMrJDLP1
+         oLrq0wdUF53x3mt773bVT0ANjcQ+SsKZLG2wi3z7pixM15AJ1W2dOaHZblxpeUO8+jN+
+         RbJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698238705; x=1698843505;
+        d=1e100.net; s=20230601; t=1698257393; x=1698862193;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3YuyVEdgZZMmRRL1MGrlm9rqrd903CfEJKn3RLe0cI=;
-        b=CWph/L8nRJbXedEniVSPY4QMdsvbeqlthSSduoyu9uST+9aAxGOGhvhcGO8s7wXXr2
-         +hIz+A2+LB5PZlFXWfhT90wHlvNd+QRWepfI+yj17iANBtL8yoKOLkS2JRtkOppjOLDP
-         SnG4X61jqFmbINEbSAJi4vDbYfkp+YJOAsHWKPo1jqJtta9mhb9OO30zwj/v5iW9nPRy
-         d/3VDlM9+Ed6rl4ehac37NkND10p/I1pjUGqtUp3kn4zETc5dT8urtf07wsXKBULVMoq
-         HUgGOld6g8E7c0IESLpVOYxp21Xgf7x0e9i62vAynArCkQYotXT9HXtSiF+PJPxI0Txv
-         5AnQ==
-X-Gm-Message-State: AOJu0Yx1DVy5bteYYHlx1RQd+Fi2HbsLjAPXCODxbcGw0+NWVHa6BZLM
-        oO727Fxaj0O6DBUZmd2zqnpERw==
-X-Google-Smtp-Source: AGHT+IEfuEPazASgnCKxv7IwMhAjfOdzHBm51oF9N5cDOtNHdSG3LhrgnJUobDy0ZoJFRDw6CgOWOQ==
-X-Received: by 2002:a05:600c:502a:b0:406:545a:f8fe with SMTP id n42-20020a05600c502a00b00406545af8femr12935805wmr.29.1698238705565;
-        Wed, 25 Oct 2023 05:58:25 -0700 (PDT)
-Received: from [192.168.69.115] (ghy59-h01-176-171-219-76.dsl.sta.abo.bbox.fr. [176.171.219.76])
-        by smtp.gmail.com with ESMTPSA id fc11-20020a05600c524b00b004064cd71aa8sm14782102wmb.34.2023.10.25.05.58.24
+        bh=Gw+AcXPUUwUKlBUNb/H3ifXReKZDanNIXHIBrZtP1Gw=;
+        b=rLnCF1IgcGT6ewNdnT88HZ7gBk/yAjVawEq8ykAhYN4WE29r+tM0WyhnJW5SRVxYw3
+         FHAXUTeG/pTOhmCGWcArs/qvLrIwvC8j0MdAD6EQdATkpqqR2RhuS3AgCniO+QhoU0RL
+         vDeGjNnqvVRgctBg0zI+EPHOeGtjE/Mj3Qu5FNnx4JOBfjUuTXYwWyRmn+x9r9N5fPO0
+         oP4rgNPCD+tHtX7OBmOLAuogjq6l3TnRF2Uc9z2fJqQjfk8SgOwm8zbG6u3DSXkHpwgs
+         gQxnmURgI6pHZxZPf6ufHDm3yNblNvdLvysmGq1JQtb+gqXlLeANdxLKf+w00+gKtEKk
+         Wvow==
+X-Gm-Message-State: AOJu0Yx7ukOwRPCa8M69M5ZFJlm7BsNmLlWMtJNJrKa+fGfG2y3K10MC
+        j/NNWPzJKLK7CiUbnnicnvM=
+X-Google-Smtp-Source: AGHT+IHo8T5lgne0YASthzZIcst0pzNuBbVKdw5X5+m+YX9guVeldoCc+nGjQz/NfHEFtl3VJVQkQA==
+X-Received: by 2002:a17:902:ec8e:b0:1c6:d70:144d with SMTP id x14-20020a170902ec8e00b001c60d70144dmr18113825plg.34.1698257392843;
+        Wed, 25 Oct 2023 11:09:52 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u5-20020a17090282c500b001c7283d3089sm9462393plz.273.2023.10.25.11.09.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 05:58:25 -0700 (PDT)
-Message-ID: <513bc341-25b8-5a57-d760-861a3e88a4a1@linaro.org>
-Date:   Wed, 25 Oct 2023 14:58:23 +0200
+        Wed, 25 Oct 2023 11:09:52 -0700 (PDT)
+Message-ID: <3682d869-072e-4656-9b26-2629d8befeee@gmail.com>
+Date:   Wed, 25 Oct 2023 11:09:48 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH] MAINTAINERS: Add myself as maintainer of the Ralink
- architecture
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] MIPS: Fix kernel in XKPHYS
 Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org
-Cc:     john@phrozen.org, tsbogend@alpha.franken.de,
-        linux-kernel@vger.kernel.org
-References: <20231022090633.792831-1-sergio.paracuellos@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20231022090633.792831-1-sergio.paracuellos@gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        gregory.clement@bootlin.com, vladimir.kondratiev@intel.com
+References: <20231023191400.170052-1-jiaxun.yang@flygoat.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20231023191400.170052-1-jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,23 +73,25 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/10/23 11:06, Sergio Paracuellos wrote:
-> Its been a while since I am making contributions to this architecture.
-> Hence add myself as maintainer.
+On 10/23/23 12:13, Jiaxun Yang wrote:
+> Hi all,
 > 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
-> Hi John, if you are not ok with this please let me know. In other case
-> please ack this patch. I can add myself as Reviewer if you prefer to
-> maintain alone this.
+> This series fixes support for loading kernel to XKPHYS space.
+> It is derived from "MIPS: use virtual addresses from xkphys for MIPS64" [1].
 > 
-> Thanks in advance for your time!
+> Boot tested on boston and QEMU with loading address set to 0xa800000090000000.
+> QEMU patch on the way.
 > 
-> Best regards,
->      Sergio Paracuellos
+> Gregory and Vladimir, do let me know if I missed anything.
 > 
->   MAINTAINERS | 1 +
->   1 file changed, 1 insertion(+)
+> Thanks
+> - Jiaxun
+> 
+> [1]: https://lore.kernel.org/lkml/20231004161038.2818327-3-gregory.clement@bootlin.com/
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+FWIW, tested on a Cobalt Qube 2 (RM5231):
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
