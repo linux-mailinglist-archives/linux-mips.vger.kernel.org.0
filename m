@@ -2,86 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98A87D7EAD
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Oct 2023 10:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544A07D7F26
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Oct 2023 10:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbjJZIlM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 Oct 2023 04:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S229785AbjJZI6Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Oct 2023 04:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234854AbjJZIlE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Oct 2023 04:41:04 -0400
+        with ESMTP id S229642AbjJZI6Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Oct 2023 04:58:24 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A868C10E;
-        Thu, 26 Oct 2023 01:41:01 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6AFC433C8;
-        Thu, 26 Oct 2023 08:40:49 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AEE10E;
+        Thu, 26 Oct 2023 01:58:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B0BC433C7;
+        Thu, 26 Oct 2023 08:58:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698309661;
-        bh=CKweGyf2oPo/e/UZLG1WYH3zEQnVvPRR68BdbBl/TGo=;
+        s=k20201202; t=1698310701;
+        bh=daj1kZsVxPjd+zO39ZAev3zCXUc1FaedBgbX73nudCk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oRC27PQC2plQ2QFtxeYNcapuTdKaVmbmEUR0m69y9zSqXieqEvU2U8HaibfItzWZF
-         yERD96v5VwCZUJZD6El6ZorfVxYGGBw2vENxYrzOh3JNxfzIcWV8Hyo/98RmvjYp1O
-         Ink1QwB6gOI9hZMPLodFMqMmfk4UUgDFD2PT2vR0MIfYSLtLLeyvF4ch6/DBDJ+K3Z
-         0bfW6e3KP7yJWPzCmJpvtwgF2RV+VsKMprb/vimV6IovW84by85aPvP9y1WYUJyow3
-         BUjvGbMWEhiJ9hRAr+vd5AhVyyu5+qGt0miVwVbaUWHgtUSofxp310DRt0OzuziAvf
-         CCAilLzZ675cA==
-Date:   Thu, 26 Oct 2023 11:40:39 +0300
+        b=r2IeoKsV+mJJpE6z2XsX1iIp24lKjd2VIwT/xdGbzM4QJ1z6/95hZgo8dTrbqyffN
+         8DV48I6gafiHJ1W+sQ7xkSCEWs1Wh3ihhaTtNnOomkd5rdfUSH/VyEwenBw8FyxoGy
+         dhmaO/Bq2xkkYLIg5jb3D7re45cnRROW7gfrE4czIzlLWldF8At6B9lE0w5M6vGi01
+         k5USZIeXtTxyoNfpdwZ4lyaGy8S4FOFzwfuRadAU3111ZEEfuMlEZmph7ucAT6ZG1d
+         z6H7920gFiqm1FRnq/jWuFKwHTDrcmSHuk47fqo8k/MnZWV2iXv2IEUOtl8o74ARYW
+         oZPw5JfD44y3w==
+Date:   Thu, 26 Oct 2023 11:58:00 +0300
 From:   Mike Rapoport <rppt@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "bjorn@kernel.org" <bjorn@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
-        "puranjay12@gmail.com" <puranjay12@gmail.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 03/13] mm/execmem, arch: convert simple overrides of
- module_alloc to execmem
-Message-ID: <20231026084039.GJ2824@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 04/13] mm/execmem, arch: convert remaining overrides
+ of module_alloc to execmem
+Message-ID: <20231026085800.GK2824@kernel.org>
 References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-4-rppt@kernel.org>
- <607927885bb8ca12d4cd5787f01207c256cc8798.camel@intel.com>
- <00277a3acb36d2309156264c7e8484071bc91614.camel@intel.com>
- <20231005052622.GD3303@kernel.org>
- <b26d0a201bf631831a956450ebbccc3c16521133.camel@intel.com>
+ <20230918072955.2507221-5-rppt@kernel.org>
+ <20231023171420.GA4041@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b26d0a201bf631831a956450ebbccc3c16521133.camel@intel.com>
+In-Reply-To: <20231023171420.GA4041@willie-the-truck>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -91,70 +78,137 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rick,
+Hi Will,
 
-Sorry for the delay, I was a bit preoccupied with $stuff.
-
-On Thu, Oct 05, 2023 at 06:09:07PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2023-10-05 at 08:26 +0300, Mike Rapoport wrote:
-> > On Wed, Oct 04, 2023 at 03:39:26PM +0000, Edgecombe, Rick P wrote:
-> > > On Tue, 2023-10-03 at 17:29 -0700, Rick Edgecombe wrote:
-> > > > It seems a bit weird to copy all of this. Is it trying to be
-> > > > faster
-> > > > or
-> > > > something?
-> > > > 
-> > > > Couldn't it just check r->start in execmem_text/data_alloc() path
-> > > > and
-> > > > switch to EXECMEM_DEFAULT if needed then? The
-> > > > execmem_range_is_data()
-> > > > part that comes later could be added to the logic there too. So
-> > > > this
-> > > > seems like unnecessary complexity to me or I don't see the
-> > > > reason.
-> > > 
-> > > I guess this is a bad idea because if you have the full size array
-> > > sitting around anyway you might as well use it and reduce the
-> > > exec_mem_alloc() logic.
-> > 
-> > That's was the idea, indeed. :)
-> > 
-> > > Just looking at it from the x86 side (and
-> > > similar) though, where there is actually only one execmem_range and
-> > > it
-> > > building this whole array with identical data and it seems weird.
-> > 
-> > Right, most architectures have only one range, but to support all
-> > variants
-> > that we have, execmem has to maintain the whole array.
+On Mon, Oct 23, 2023 at 06:14:20PM +0100, Will Deacon wrote:
+> Hi Mike,
 > 
-> What about just having an index into a smaller set of ranges. The
-> module area and the extra JIT area. So ->ranges can be size 3
-> (statically allocated in the arch code) for three areas and then the
-> index array can be size EXECMEM_TYPE_MAX. The default 0 value of the
-> indexing array will point to the default area and any special areas can
-> be set in the index point to the desired range.
+> On Mon, Sep 18, 2023 at 10:29:46AM +0300, Mike Rapoport wrote:
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > Extend execmem parameters to accommodate more complex overrides of
+> > module_alloc() by architectures.
+> > 
+> > This includes specification of a fallback range required by arm, arm64
+> > and powerpc and support for allocation of KASAN shadow required by
+> > arm64, s390 and x86.
+> > 
+> > The core implementation of execmem_alloc() takes care of suppressing
+> > warnings when the initial allocation fails but there is a fallback range
+> > defined.
+> > 
+> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > ---
+> >  arch/arm/kernel/module.c     | 38 ++++++++++++---------
+> >  arch/arm64/kernel/module.c   | 57 ++++++++++++++------------------
+> >  arch/powerpc/kernel/module.c | 52 ++++++++++++++---------------
+> >  arch/s390/kernel/module.c    | 52 +++++++++++------------------
+> >  arch/x86/kernel/module.c     | 64 +++++++++++-------------------------
+> >  include/linux/execmem.h      | 14 ++++++++
+> >  mm/execmem.c                 | 43 ++++++++++++++++++++++--
+> >  7 files changed, 167 insertions(+), 153 deletions(-)
 > 
-> Looking at how it would do for x86 and arm64, it looks maybe a bit
-> better to me. A little bit less code and memory usage, and a bit easier
-> to trace the configuration through to the final state (IMO). What do
-> you think? Very rough, on top of this series, below.
-
-I like your suggestion to only have definitions of actual ranges in arch
-code and index array to redirect allocation requests to the right range.
-I'll make the next version along the lines of your patch.
-
-> As I was playing around with this, I was also wondering why it needs
-> two copies of struct execmem_params: one returned from the arch code
-> and one in exec mem. 
-
-No actual reason, one copy is enough, thanks for catching this.
-
-> And why the temporary arch copy is ro_after_init,
-> but the final execmem.c copy is not ro_after_init?
-
-I just missed it, thanks for pointing out.
+> [...]
+> 
+> > diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+> > index dd851297596e..cd6320de1c54 100644
+> > --- a/arch/arm64/kernel/module.c
+> > +++ b/arch/arm64/kernel/module.c
+> > @@ -20,6 +20,7 @@
+> >  #include <linux/random.h>
+> >  #include <linux/scs.h>
+> >  #include <linux/vmalloc.h>
+> > +#include <linux/execmem.h>
+> >  
+> >  #include <asm/alternative.h>
+> >  #include <asm/insn.h>
+> > @@ -108,46 +109,38 @@ static int __init module_init_limits(void)
+> >  
+> >  	return 0;
+> >  }
+> > -subsys_initcall(module_init_limits);
+> >  
+> > -void *module_alloc(unsigned long size)
+> > +static struct execmem_params execmem_params __ro_after_init = {
+> > +	.ranges = {
+> > +		[EXECMEM_DEFAULT] = {
+> > +			.flags = EXECMEM_KASAN_SHADOW,
+> > +			.alignment = MODULE_ALIGN,
+> > +		},
+> > +	},
+> > +};
+> > +
+> > +struct execmem_params __init *execmem_arch_params(void)
+> >  {
+> > -	void *p = NULL;
+> > +	struct execmem_range *r = &execmem_params.ranges[EXECMEM_DEFAULT];
+> >  
+> > -	/*
+> > -	 * Where possible, prefer to allocate within direct branch range of the
+> > -	 * kernel such that no PLTs are necessary.
+> > -	 */
+> 
+> Why are you removing this comment? I think you could just move it next
+> to the part where we set a 128MiB range.
  
+Oops, my bad. Will add it back.
+
+> > -	if (module_direct_base) {
+> > -		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> > -					 module_direct_base,
+> > -					 module_direct_base + SZ_128M,
+> > -					 GFP_KERNEL | __GFP_NOWARN,
+> > -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> > -					 __builtin_return_address(0));
+> > -	}
+> > +	module_init_limits();
+> 
+> Hmm, this used to be run from subsys_initcall(), but now you're running
+> it _really_ early, before random_init(), so randomization of the module
+> space is no longer going to be very random if we don't have early entropy
+> from the firmware or the CPU, which is likely to be the case on most SoCs.
+
+Well, it will be as random as KASLR. Won't that be enough?
+ 
+> > diff --git a/mm/execmem.c b/mm/execmem.c
+> > index f25a5e064886..a8c2f44d0133 100644
+> > --- a/mm/execmem.c
+> > +++ b/mm/execmem.c
+> > @@ -11,12 +11,46 @@ static void *execmem_alloc(size_t size, struct execmem_range *range)
+> >  {
+> >  	unsigned long start = range->start;
+> >  	unsigned long end = range->end;
+> > +	unsigned long fallback_start = range->fallback_start;
+> > +	unsigned long fallback_end = range->fallback_end;
+> >  	unsigned int align = range->alignment;
+> >  	pgprot_t pgprot = range->pgprot;
+> > +	bool kasan = range->flags & EXECMEM_KASAN_SHADOW;
+> > +	unsigned long vm_flags  = VM_FLUSH_RESET_PERMS;
+> > +	bool fallback  = !!fallback_start;
+> > +	gfp_t gfp_flags = GFP_KERNEL;
+> > +	void *p;
+> >  
+> > -	return __vmalloc_node_range(size, align, start, end,
+> > -				   GFP_KERNEL, pgprot, VM_FLUSH_RESET_PERMS,
+> > -				   NUMA_NO_NODE, __builtin_return_address(0));
+> > +	if (PAGE_ALIGN(size) > (end - start))
+> > +		return NULL;
+> > +
+> > +	if (kasan)
+> > +		vm_flags |= VM_DEFER_KMEMLEAK;
+> 
+> Hmm, I don't think we passed this before on arm64, should we have done?
+
+It was there on arm64 before commit 8339f7d8e178 ("arm64: module: remove
+old !KASAN_VMALLOC logic").
+There's no need to pass VM_DEFER_KMEMLEAK when KASAN_VMALLOC is enabled and
+arm64 always selects KASAN_VMALLOC with KASAN.
+
+And for the generic case, I should have made the condition to check for
+KASAN_VMALLOC as well.
+ 
+> Will
+
 -- 
 Sincerely yours,
 Mike.
