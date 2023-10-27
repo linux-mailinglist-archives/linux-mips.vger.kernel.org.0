@@ -2,230 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99A67DA0BD
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Oct 2023 20:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F4B7DA103
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Oct 2023 20:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbjJ0SmO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Oct 2023 14:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S235222AbjJ0Ssu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Oct 2023 14:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346393AbjJ0Slz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Oct 2023 14:41:55 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8D555AA;
-        Fri, 27 Oct 2023 11:30:54 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 063313200A1C;
-        Fri, 27 Oct 2023 14:27:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 27 Oct 2023 14:27:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1698431238; x=
-        1698517638; bh=yIBHHJoeBZonb5tndpSrM+X2Yc5Shk4jUNpLuZRp3To=; b=M
-        M3wd7zqrJC5qXl9sTmLvySfmGQgaon1ZtJSJykSv1wYpkQeCN3718Pl4AU4lW1Tb
-        CoGyagVsVe4ralBcTx4pqHDePWZtxT6WollHVWZeieaOsq7/aozUdSdTgiGyg5vF
-        ptRoMVkp+dOSnUtkoCiRqycWuuKlakRxVRtFQbLzmwnPwZQfPjBiUx1h4rZy2a29
-        GPrgorQE7sl3fJjOtzPifcHYAx01YzY5vV8oSjvZq8MYKDFXYNB95Lrr53cxvChM
-        RueITPoH/FAm1z8aCaWRr94DZyINNSwbwvgli+QN31wjU4LA5k+GRd0UIX27myS6
-        JYDQbG8fWbsOBf68kc1Gw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698431238; x=
-        1698517638; bh=yIBHHJoeBZonb5tndpSrM+X2Yc5Shk4jUNpLuZRp3To=; b=l
-        2sWnMmC28aBM+5g5OlaoLLhCE03Bvf2w5T/NFjg1thPC5zFMxB8l/cMqIznFlPyZ
-        /7afcKESaqeoCrfGtz2cXA2NpLbY7Rvb50JD6JcDTAAIWIB6Q0LtNkkxbsJ0iMFY
-        mc1SX+AqRtxn8bQJn/IKqmRTBHRbDJTRmD1ngHnNaXOniMYuIdurq5gaNfYmyuNC
-        T416LAGmdkLMP8rxcj4EEybqgFsockgWHp2mZ7Xrh/5OsSukKgZz9j8ww4Tc9gFP
-        GZvx8oWIbomZlXTkpn/ZMAN3VezZCaYLE7AGZumJH/PID5gSPcn+qDiqfG7L8njD
-        VFWOCHHGstPXiMyW/BjVA==
-X-ME-Sender: <xms:BgE8ZYvmAFRy4c41V-eaa3DjqU4RTXMeW6lFwErtorVhP4sdf1cTjg>
-    <xme:BgE8ZVcnne1IzF0B1rP7jFmkLJ5fkNIW2lmOeRdJHdNPuYq-3VN8wZkAQJKOzjwSy
-    fML8RtFHkw7XOpDZ70>
-X-ME-Received: <xmr:BgE8ZTxC1gpmCcjSv2FG6O3EkMflBa6Tcd0lbIad630AhoplNcQ37cbQwB2WJ-3aaNcamyoSiws>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
-    dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
-    vgepvdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomh
-X-ME-Proxy: <xmx:BgE8ZbOH73hgi9oEk0A-z-NDPO0ZFAz4daj07RQRPza6PXqRcXiP_w>
-    <xmx:BgE8ZY9dL0F1970LoWRf3Ok-KHyseZ8oMZafcuwe-kodI1-Is2GenQ>
-    <xmx:BgE8ZTXs8xHw9NDHZTPdobs2F2S2uxP3KkyqvWajB8XR_fz-Ll9QnQ>
-    <xmx:BgE8ZXna2ZSbEjp1xLuZRt6zXenRR1eIPE6L3zt9VVXa1RZC6VkW8Q>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Oct 2023 14:27:17 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 3/3] serial: Add an earlycon driver for MIPS UHI semihosting
-Date:   Fri, 27 Oct 2023 19:26:50 +0100
-Message-Id: <20231027182650.281405-8-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231027182650.281405-1-jiaxun.yang@flygoat.com>
-References: <20231027182650.281405-1-jiaxun.yang@flygoat.com>
+        with ESMTP id S235230AbjJ0Ssi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Oct 2023 14:48:38 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF9919A4;
+        Fri, 27 Oct 2023 11:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:To:From:Date:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HiFXZqyJw54wfwetFogk1APc6i0Y5lEQ+f1gkS2eT/g=; b=c3ziwfAjU1g3PsCOMFBYX1rsAQ
+        P1qmZODHTFY8ASI1d3CK4oFwV2EW7IPlm9/XJfHsxukOcrKLSnkTUhNPoCAg89hqsmJ73UPSFeWDY
+        w+OhCOPNsNN4TOIVkZakID+hAnL70tEJimOrWW91HHI7kMOOBu3iiOjQZby73TyMDTYb082hGRRqv
+        Pw+C4PpEgS2tojSOiAfb0Gvz9alINRyVpkXRhWEjjNlX9Cp6eE4e5DpkF/eWmXpe9FQJ6Xh9AEcjt
+        2wOpnzu6FyIchQ1z6r9i4XulWVd1T/W65ZWiWu1LxDkxAXElCF2r6/louEyaOWbKd0LW+JcYps/C9
+        mhqvaOsg==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <aurel32@debian.org>)
+        id 1qwRsH-000T2R-2I; Fri, 27 Oct 2023 18:48:01 +0000
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurel32@debian.org>)
+        id 1qwRsC-001QCL-Gx; Fri, 27 Oct 2023 20:47:56 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.97-RC0)
+        (envelope-from <aurel32@debian.org>)
+        id 1qwRsB-00000004QGA-3TS0;
+        Fri, 27 Oct 2023 20:47:55 +0200
+Date:   Fri, 27 Oct 2023 20:47:55 +0200
+From:   Aurelien Jarno <aurel32@debian.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        syq@debian.org, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: process: Remove lazy context flags for new kernel
+ thread
+Message-ID: <ZTwF23YJJBePDHBp@aurel32.net>
+Mail-Followup-To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, syq@debian.org, stable@vger.kernel.org
+References: <20231026111715.1281728-1-jiaxun.yang@flygoat.com>
+ <ZTvQGs/lEpizUFLh@aurel32.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZTvQGs/lEpizUFLh@aurel32.net>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Debian-User: aurel32
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-UHI is MIPS's implementation of semihosting.
-Add an earlycon driver to help with debugging on boot.
+On 2023-10-27 16:58, Aurelien Jarno wrote:
+> On 2023-10-26 12:17, Jiaxun Yang wrote:
+> > We received a report from debian infra team, says their build machine
+> > crashes regularly with:
+> > 
+> > [ 4066.698500] do_cpu invoked from kernel context![#1]:
+> > [ 4066.703455] CPU: 1 PID: 76608 Comm: iou-sqp-76326 Not tainted 5.10.0-21-loongson-3 #1 Debian 5.10.162-1
+> > [ 4066.712793] Hardware name: Loongson Lemote-3A4000-7A-1w-V1.00-A1901/Lemote-3A4000-7A-1w-V1.00-A1901, BIOS Loongson-PMON-V3.3-20201222 12/22/2020
+> > [ 4066.725672] $ 0   : 0000000000000000 ffffffff80bf2e48 0000000000000001 9800000200804000
+> > [ 4066.733642] $ 4   : 9800000105115280 ffffffff80db4728 0000000000000008 0000020080000200
+> > [ 4066.741607] $ 8   : 0000000000000001 0000000000000001 0000000000000000 0000000002e85400
+> > [ 4066.749571] $12   : 000000005400cce0 ffffffff80199c00 000000000000036f 000000000000036f
+> > [ 4066.757536] $16   : 980000010025c080 ffffffff80ec4740 0000000000000000 980000000234b8c0
+> > [ 4066.765501] $20   : ffffffff80ec5ce0 9800000105115280 98000001051158a0 0000000000000000
+> > [ 4066.773466] $24   : 0000000000000028 9800000200807e58
+> > [ 4066.781431] $28   : 9800000200804000 9800000200807d40 980000000234b8c0 ffffffff80bf3074
+> > [ 4066.789395] Hi    : 00000000000002fb
+> > [ 4066.792943] Lo    : 00000000428f6816
+> > [ 4066.796500] epc   : ffffffff802177c0 _save_fp+0x10/0xa0
+> > [ 4066.801695] ra    : ffffffff80bf3074 __schedule+0x804/0xe08
+> > [ 4066.807230] Status: 5400cce2 KX SX UX KERNEL EXL
+> > [ 4066.811917] Cause : 1000002c (ExcCode 0b)
+> > [ 4066.815899] PrId  : 0014c004 (ICT Loongson-3)
+> > [ 4066.820228] Modules linked in: asix usbnet mii sg ip6t_REJECT nf_reject_ipv6 ip6table_filter ip6_tables nfnetlink_log nfnetlink xt_hashlimit ipt_REJECT nf_reject_ipv4 xt_NFLOG xt_multiport xt_tcpudp xt_state xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_filter sch_fq tcp_bbr fuse drm drm_panel_orientation_quirks configfs ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 crc32c_generic ohci_pci dm_mod r8169 realtek mdio_devres ohci_hcd ehci_pci of_mdio xhci_pci fixed_phy xhci_hcd ehci_hcd libphy usbcore usb_common
+> > [ 4066.868085] Process iou-sqp-76326 (pid: 76608, threadinfo=0000000056dd346c, task=000000001209ac62, tls=000000fff18298e0)
+> > [ 4066.878897] Stack : ffffffff80ec0000 0000000000000000 ffffffff80ec0000 980000010db34100
+> > [ 4066.886867]         9800000100000004 d253a55201683fdc 9800000105115280 0000000000000000
+> > [ 4066.894832]         0000000000000000 0000000000000001 980000010db340e8 0000000000000001
+> > [ 4066.902796]         0000000000000004 0000000000000000 980000010db33d28 ffffffff80bf36d0
+> > [ 4066.910761]         980000010db340e8 980000010db34100 980000010db340c8 ffffffff8070d740
+> > [ 4066.918726]         980000010946cc80 9800000104b56c80 980000010db340c0 0000000000000000
+> > [ 4066.926690]         ffffffff80ec0000 980000010db340c8 980000010025c080 ffffffff80ec5ce0
+> > [ 4066.934654]         0000000000000000 9800000105115280 ffffffff802c59b8 980000010db34108
+> > [ 4066.942619]         980000010db34108 2d7071732d756f69 ffff003632333637 d253a55201683fdc
+> > [ 4066.950585]         ffffffff8070d1c8 980000010db340c0 98000001092276c8 000000007400cce0
+> > [ 4066.958552]         ...
+> > [ 4066.960981] Call Trace:
+> > [ 4066.963414] [<ffffffff802177c0>] _save_fp+0x10/0xa0
+> > [ 4066.968270] [<ffffffff80bf3074>] __schedule+0x804/0xe08
+> > [ 4066.973462] [<ffffffff80bf36d0>] schedule+0x58/0x150
+> > [ 4066.978397] [<ffffffff8070d740>] io_sq_thread+0x578/0x5a0
+> > [ 4066.983764] [<ffffffff8020518c>] ret_from_kernel_thread+0x14/0x1c
+> > [ 4066.989823]
+> > [ 4066.991297] Code: 000c6940  05a10011  00000000 <f4810af0> f4830b10  f4850b30  f4870b50  f4890b70  f48b0b90
+> > 
+> > It seems like kernel is trying to save a FP context for a kthread.
+> > Since we don't use FPU in kernel for now, TIF_USEDFPU must be set
+> > accidentally for that kthread.
+> > 
+> > Inspecting the code it seems like create_io_thread may be invoked
+> > from threads that have FP context alive, causing TIF_USEDFPU to be
+> > copied from that context to kthread unexpectedly.
+> > 
+> > Move around code blocks to ensure flags regarding lazy hardware
+> > context get cleared for kernel threads as well.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Reported-by: Aurelien Jarno <aurel32@debian.org>
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> 
+> Thanks for the patch. In the meantime we have found that the problem is
+> reproducible by building the kitinerary package. The crash happens when
+> cmake starts the build. It's not impossible that other packages are able
+> to also trigger the crash, but we haven't identified them yet.
 
-This driver is capable for print log using UHI's "Plog" or interact
-with KGDB using UHI's stdio function.
+It seems the crash happens with any package built using cmake.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- drivers/tty/serial/Kconfig             | 13 ++++
- drivers/tty/serial/Makefile            |  1 +
- drivers/tty/serial/earlycon-mips-uhi.c | 85 ++++++++++++++++++++++++++
- 3 files changed, 99 insertions(+)
- create mode 100644 drivers/tty/serial/earlycon-mips-uhi.c
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index bdc568a4ab66..04c62c6b45cd 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -85,6 +85,19 @@ config SERIAL_EARLYCON_SEMIHOST
- 	  This is enabled with "earlycon=smh" on the kernel command line.
- 	  The console is enabled when early_param is processed.
- 
-+config SERIAL_EARLYCON_UHI
-+	bool "Early console using MIPS UHI semihosting"
-+	depends on MIPS
-+	select SERIAL_CORE
-+	select SERIAL_CORE_CONSOLE
-+	select SERIAL_EARLYCON
-+	help
-+	  Support for early debug console using UHI semihosting.
-+	  This enables the console before standard serial driver is probed.
-+	  This is enabled with "earlycon=uhi" or "earlycon=uhi_stdio" on the
-+	  kernel command line.
-+	  The console is enabled when early_param is processed.
-+
- config SERIAL_EARLYCON_RISCV_SBI
- 	bool "Early console using RISC-V SBI"
- 	depends on RISCV_SBI_V01
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index f6b8c220dcfb..ef5e9c87aea1 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -9,6 +9,7 @@ serial_base-y := serial_core.o serial_base_bus.o serial_ctrl.o serial_port.o
- obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
- obj-$(CONFIG_SERIAL_EARLYCON_SEMIHOST) += earlycon-semihost.o
- obj-$(CONFIG_SERIAL_EARLYCON_RISCV_SBI) += earlycon-riscv-sbi.o
-+obj-$(CONFIG_SERIAL_EARLYCON_MIPS_UHI) += earlycon-mips-uhi.o
- 
- # These Sparc drivers have to appear before others such as 8250
- # which share ttySx minor node space.  Otherwise console device
-diff --git a/drivers/tty/serial/earlycon-mips-uhi.c b/drivers/tty/serial/earlycon-mips-uhi.c
-new file mode 100644
-index 000000000000..002bb2c37064
---- /dev/null
-+++ b/drivers/tty/serial/earlycon-mips-uhi.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * MIPS UHI semihosting based earlycon
-+ *
-+ * Copyright (C) 2023 Jiaxun Yang <jiaxun.yang@flygoat.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/console.h>
-+#include <linux/init.h>
-+#include <linux/serial_core.h>
-+#include <asm/uhi.h>
-+
-+static int stdin_fd = -1;
-+static int stdout_fd = -1;
-+
-+static void uhi_plog_write(struct console *con, const char *s, unsigned int n)
-+{
-+	uhi_plog(s, 0);
-+}
-+
-+static void uhi_stdout_write(struct console *con, const char *s, unsigned int n)
-+{
-+	if (stdout_fd < 0)
-+		return;
-+
-+	uhi_write(stdout_fd, s, n);
-+}
-+
-+#ifdef CONFIG_CONSOLE_POLL
-+static int uhi_stdin_read(struct console *con, char *s, unsigned int n)
-+{
-+	if (stdin_fd < 0)
-+		return 0;
-+
-+	return uhi_read(stdin_fd, s, n);
-+}
-+#endif
-+
-+static int uhi_stdio_fd_open(struct console *co, char *options)
-+{
-+	/*
-+	 * You have to open both stdin and stdout to get console work
-+	 * properly on some old CodeScape debugger.
-+	 */
-+	stdin_fd = uhi_open("/dev/stdin", UHI_O_RDONLY, 0);
-+	stdout_fd = uhi_open("/dev/stdout", UHI_O_WRONLY, 0);
-+
-+	return (stdin_fd < 0 || stdout_fd < 0) ? -ENODEV : 0;
-+}
-+
-+static int uhi_stdio_fd_close(struct console *co)
-+{
-+	int ret1 = 0, ret2 = 0;
-+
-+	if (stdin_fd >= 0)
-+		ret1 = uhi_close(stdin_fd);
-+	if (stdout_fd >= 0)
-+		ret2 = uhi_close(stdout_fd);
-+
-+	return (ret1 < 0 || ret2 < 0) ? -ENODEV : 0;
-+}
-+
-+static int
-+__init early_uhi_setup(struct earlycon_device *device, const char *opt)
-+{
-+	device->con->write = uhi_plog_write;
-+	return 0;
-+}
-+
-+static int
-+__init early_uhi_stdio_setup(struct earlycon_device *device, const char *opt)
-+{
-+
-+	device->con->setup = uhi_stdio_fd_open;
-+	device->con->exit = uhi_stdio_fd_close;
-+	device->con->write = uhi_stdout_write;
-+#ifdef CONFIG_CONSOLE_POLL
-+	device->con->read = uhi_stdin_read;
-+#endif
-+	return 0;
-+}
-+
-+EARLYCON_DECLARE(uhi, early_uhi_setup);
-+EARLYCON_DECLARE(uhi_stdio, early_uhi_stdio_setup);
 -- 
-2.34.1
-
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
