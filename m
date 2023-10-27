@@ -2,81 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31ED7D81E7
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Oct 2023 13:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A680F7D9C8F
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Oct 2023 17:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjJZLg7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 Oct 2023 07:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S231461AbjJ0PHm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Oct 2023 11:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjJZLg5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Oct 2023 07:36:57 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAFF1A6
-        for <linux-mips@vger.kernel.org>; Thu, 26 Oct 2023 04:36:50 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9be7e3fa1daso127134166b.3
-        for <linux-mips@vger.kernel.org>; Thu, 26 Oct 2023 04:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698320209; x=1698925009; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xWYalsuNl0GeQaeoBCkFUvRNJn+nLsde/vTacVego88=;
-        b=yTIgMX5bryGl0i1x9TUOkBQE9Gc2luBG5YqBBRiGfhFJk3JxwQ0NIRnJMMpA/MJbd/
-         IzEWyz9lS9kTjQmOYxziERNjb1plnPEwfAWfb4FptCkH+EDqtU+IXZefPA/rBVsztnq/
-         neseqPHXCpq1BRrfrkY+KPzCkKV5HVeBuG9X91I+Aluc4P/CKlfK4jfYqI7dp4/diiwM
-         C7/jAxiBWPAOqTGQqhO80fDiXQtR6xaGeZcPDWr1LPS4h4dvSjEb91MkNhO0mGyKO8gk
-         UcLBsQWtom4LchH3H7xP6wrorVEPg7DYy5Dmiu0VEC25u+7LEjXRI0upyp+9kYsVlN8b
-         GOJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698320209; x=1698925009;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xWYalsuNl0GeQaeoBCkFUvRNJn+nLsde/vTacVego88=;
-        b=Z28IA3lDLU6r4APd14MFaX3kOJhoJ7tqhf62L7jhGXSiM0sksXRxRnYoFkOSR29XHf
-         wfR1TJfgygfAokPOdRwbtPeumzN0Acvnh1zVlrrocUU4JLXYdXfERCgEEasaZMNOQcS1
-         TEOxF2LFqUDApBcIfR5Bd/r2gJvi/ifuyp606BOLQLrC04RXTwPKiMuzQeTAP0YA/EUN
-         DnfVC31RhUl04klnn6lA1FGY2c7/s1X9++XlUCZyaimbotG8SjRJPl5fXrA4X/l7+ZRd
-         qKHWFpkeTk6qiteiVAFBLkuTu7Ty9d0TPir95MvKh1IKw2/y1tM1StxAz1EKgyEXBGjw
-         j+jQ==
-X-Gm-Message-State: AOJu0YyMNGmECbx7HaVJF6w4K8WMH5BQrlgpuBuKb/FPSBncqXmSLLk1
-        3XFu0gyUXXuMBE5q1OwuS0RGzw==
-X-Google-Smtp-Source: AGHT+IHXwIFVuNxcH7UCbPkIezQHWYd4SBnppICs6qQor099TsfDj9s962Ec5yeaukOYXULEnOSmkA==
-X-Received: by 2002:a17:907:31ce:b0:9be:ef46:6b9c with SMTP id xf14-20020a17090731ce00b009beef466b9cmr15859738ejb.70.1698320208894;
-        Thu, 26 Oct 2023 04:36:48 -0700 (PDT)
-Received: from [192.168.69.115] (aif79-h01-176-172-114-150.dsl.sta.abo.bbox.fr. [176.172.114.150])
-        by smtp.gmail.com with ESMTPSA id s22-20020a170906221600b009ce03057c48sm2209258ejs.214.2023.10.26.04.36.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Oct 2023 04:36:48 -0700 (PDT)
-Message-ID: <b50e4d3a-5b9b-4f3e-5660-69ec96831790@linaro.org>
-Date:   Thu, 26 Oct 2023 13:36:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
+        with ESMTP id S230101AbjJ0PHm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Oct 2023 11:07:42 -0400
+X-Greylist: delayed 537 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Oct 2023 08:07:39 PDT
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908BAC4;
+        Fri, 27 Oct 2023 08:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=w16Mf1s4zf0bO/tbDWcFsS5VZRR6bRS/T9qEXEJ+Ma0=; b=ED1taatay2hfvVWiRMrsMeii3o
+        1c2Zy5aLTSVM9hdBPO90QJF0Mj9554/MP0QtlV2aQFT/tGUJqDf8pwZu48zESuXL8Gfe6ejvp9hWT
+        rY5uhwmx5soLjVEtKLvzti1GAqJq4+FLdjAlQZfjY0HD4fZratW68uuOW/LTwbn+XDztjSsB+YenO
+        /xub3tTAcq2ZDPUqi61eQNlzSuUZbktD4xJGuY1pVegR0PLwZ7nitOUk5boSML+mqg1xGO6Vz4pYA
+        63UDXoctRMyXRPvDekLj52tWUxEZsDaStr4Bl8zxHveibcusZkO1NrAKLJuv2XGoaDTUDnSHPxdBY
+        +siILG4Q==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <aurel32@debian.org>)
+        id 1qwOII-000K4e-Hd; Fri, 27 Oct 2023 14:58:38 +0000
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurel32@debian.org>)
+        id 1qwOIE-001DW5-U1; Fri, 27 Oct 2023 16:58:34 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.97-RC0)
+        (envelope-from <aurel32@debian.org>)
+        id 1qwOIE-00000004Ism-19Z0;
+        Fri, 27 Oct 2023 16:58:34 +0200
+Date:   Fri, 27 Oct 2023 16:58:34 +0200
+From:   Aurelien Jarno <aurel32@debian.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, syq@debian.org, stable@vger.kernel.org
 Subject: Re: [PATCH] MIPS: process: Remove lazy context flags for new kernel
  thread
-Content-Language: en-US
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        syq@debian.org, stable@vger.kernel.org,
-        Aurelien Jarno <aurel32@debian.org>
+Message-ID: <ZTvQGs/lEpizUFLh@aurel32.net>
+Mail-Followup-To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, syq@debian.org, stable@vger.kernel.org
 References: <20231026111715.1281728-1-jiaxun.yang@flygoat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20231026111715.1281728-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Debian-User: aurel32
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 26/10/23 13:17, Jiaxun Yang wrote:
+On 2023-10-26 12:17, Jiaxun Yang wrote:
 > We received a report from debian infra team, says their build machine
 > crashes regularly with:
 > 
@@ -134,12 +125,18 @@ On 26/10/23 13:17, Jiaxun Yang wrote:
 > Cc: stable@vger.kernel.org
 > Reported-by: Aurelien Jarno <aurel32@debian.org>
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> Folks, it might be helpful to check ST0_CU1 in is_fpu_owner
-> to catch this kind of problem in future, what's your opinion?
-> ---
->   arch/mips/kernel/process.c | 35 +++++++++++++++++------------------
->   1 file changed, 17 insertions(+), 18 deletions(-)
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Thanks for the patch. In the meantime we have found that the problem is
+reproducible by building the kitinerary package. The crash happens when
+cmake starts the build. It's not impossible that other packages are able
+to also trigger the crash, but we haven't identified them yet.
 
+Anyway, I have been able to test a backport of the patch onto the 5.10
+kernel (with minor adjustments) and I confirm it fixes the reported
+issue.
+
+Tested-by: Aurelien Jarno <aurel32@debian.org>
+
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
