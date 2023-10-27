@@ -2,82 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D740B7DA1F1
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Oct 2023 22:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0497DA32C
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Oct 2023 00:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjJ0UtM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Oct 2023 16:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        id S1346583AbjJ0WLX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Oct 2023 18:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjJ0UtL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Oct 2023 16:49:11 -0400
+        with ESMTP id S1346636AbjJ0WLV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Oct 2023 18:11:21 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B991B6;
-        Fri, 27 Oct 2023 13:49:05 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E95153200996;
-        Fri, 27 Oct 2023 16:49:04 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Fri, 27 Oct 2023 16:49:05 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66AF1B8;
+        Fri, 27 Oct 2023 15:11:19 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 665E932008FB;
+        Fri, 27 Oct 2023 18:11:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 27 Oct 2023 18:11:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1698439744; x=1698526144; bh=dtOld/txYEOwF3Z5A2XVbShO6PkSrUylLU0
-        +N0ne2fI=; b=YI7V5BNQfndHxfn7jpabB9fYqmIj+CRgL4ysUxV4nYvbo+5zVCW
-        +9txpKvXCf2MIBhuP29eBKTgByfwLd24YCLCtpLXzsju0A/E+slD2B4er9T0Je4y
-        6fGgiQEF5zPMOgALq/DnyMw7GT2KNJLeiRPdHeg+gIYx3s6+aFvaMZTB1jbzaOUg
-        nugSnN9YJeBHRBDgE4ykcBtUZ/1s9HdoC+/VPlDYBZFgfoAi1eNqsQcsk7R9vN5A
-        JDz21zIlE5Cv6iMvUgjdvZn1wHnRynCIJ9c+Ct+9JQTXTIAEez25cQ8kpQ4mZwiZ
-        4D4fl9hj+dnmzSEaFWZGXEWfb0fXT2leWlA==
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1698444670; x=1698531070; bh=+pfzMKfDeQ
+        MzwHOXJDWiQZICV087zj2gVTi0fZPI8qs=; b=DlDiXG06ZTpS7+rF7PHhLhBPke
+        vPw3vAnkgNQvrzJJ5/tZAf7oOe9Ae/yoYrQoJorQXD3ah8Hvmw4oanD95umtHXqK
+        geRq4C6Ou4QRinj6vZ27OqYwAjTtcREVEjel1WNdUubtsnp1lbseHdf4knYiNHv7
+        lVDaGypXMLK8nIdnTvDHMSe7SkYxuUdQMA/oN2sAA7EnW+xV1GlBWT57VVUXUopm
+        sVZOHTymsWdAAT4BL9lZZzOmgSnqGcUTatVh5wstIdMGK8jrtKt9VhDIvMlUX7yo
+        EIVWGQv0YfmgCpbT+VJti/CuY3RGKz3plE/R6qN7x+/ZOzKeEi9SeUTVDIfA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1698439744; x=1698526144; bh=dtOld/txYEOwF3Z5A2XVbShO6PkSrUylLU0
-        +N0ne2fI=; b=YaTDunpVdvmvwSu7OfYWGjPB0iVxw+pZu8jN6KzAcmHfrBdmh7C
-        IN1WadDtE3ay1uxZ+yvqrQk1FzQErkaXzyX4rO0p7vPgRlh/Q8M8p5kyHgr90+kv
-        6+WN01EqXXm5NjBYpSP0fbHrrwC2VFQQsAJnMJLt8V+4fOEdbyqBPsoBqs82Oxuw
-        4EeLECVPQHqXh7BDooGBfuqX/olIwuwRStzx0XQ/sA6XWO/DBN5Ol3NLezoXZYuj
-        qYG5MUaVMlkAKyuS/vGohmPUpsk23gQHQ6vO6b3JpCh6hC2R9AEkScWJ8sn7t5J4
-        ZtLyzHgwnmbULT8pSNNpt7xLz7cP+s4U6TA==
-X-ME-Sender: <xms:QCI8ZUN9Y6scGzHKDTV_4XERCJ7c4dnWrS_zlbQbIQSwQopVYxlFXA>
-    <xme:QCI8Za-joDeTMvv4l3Bm8RI2tf8O1ZnV5cQawY2LCMFPAXRE-Pynipp2NZalti64A
-    PWVXQ9Y6QZXI8gQ4EE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggdduheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:QCI8ZbRDKaF-fy8xo4u3Iga4END5S3_jR3tAED7QxBdc4Dvl0Gp-rQ>
-    <xmx:QCI8Zcv3OHjULDmtL01KgJoMOgJPual9Gx9XUG7GErEVuJ2ip9RBAw>
-    <xmx:QCI8ZcenSRTI_FSViz_Lj1cbqmFd0NVuhTDvl1v9G7A6p8z-_dLVGw>
-    <xmx:QCI8ZU4Qajc6nRZPYbhX0eBxUNBdowEMSaDEcQSc3xYM_UJ1u9Ydhw>
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1698444670; x=1698531070; bh=+pfzMKfDeQMzw
+        HOXJDWiQZICV087zj2gVTi0fZPI8qs=; b=s9Q/EuMYvqX25dUrxABgywfoOe0jZ
+        /KS0NViMkVHM6vuY92nZ4O7J3JHZ2sns3pPAUsEKZNkEpvv7X+ytq56Il0UTiXzz
+        V00oikWpuKDlA1ip4iypQQaEsNKZwqpAL2ioEi7D0VN8zfJjTVAZtVWbmSJNSuaW
+        NNpaeJOxZmEMSTgeyC8FDAqacenUnVllaoW1wFJ88da3zGQu+K9ECo2JiMDdZKPe
+        5xmi4lSLZmMSTZGmgadHcarkAYWKCTJFPtZfFdIRpiGgMTmABx+DXPbTMrUqjnK6
+        jPkBvARayTKj4gBa4IWNTzVRlNIZEtmLkql58suPlf/LUDZCPJP1yCE1A==
+X-ME-Sender: <xms:fjU8ZViwRGx-FfAbbZgaAlAPckfOfDD4vHEBaXNS13H13mF5NwxxXA>
+    <xme:fjU8ZaBBxPiCTCSlGeLEUrSDnxiH9gIl6MEMnJ-lpIGpZWcgtRMdEkQ8Zp-OgQZxy
+    lLchyNyJU_KaHgVilU>
+X-ME-Received: <xmr:fjU8ZVEJZnWqv4aLbhhl710OAfGvBlFS7E3huGuDo4Av0N7s6xpSQlZoaluG36O1LmNsGJwobLs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleehgddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
+    dttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpedvueetkeeluedugfeuteehtd
+    dutdfhtdelffeghfeiheefieegvddtueevteeiudenucffohhmrghinhepkhgvrhhnvghl
+    rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:fjU8ZaQpYMJjw5T9BfqZvYuudFxOCSLCytLt_K6YD1bdBZw-9ADNTw>
+    <xmx:fjU8ZSzXzv8b-v7JnYrNCjH4XEEEUkuf3NS7Ee42H6t5t0df-VsyKw>
+    <xmx:fjU8ZQ7C2cX9FUtP30SkcF1tbSKEJw9rbC9WO6asv2MtVuTuKJT9yQ>
+    <xmx:fjU8ZcsH1PnJsa5UlmxXlTsKidy5ZiU9TpjY4TzjDDP3n5udum9XOw>
 Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3988636A0075; Fri, 27 Oct 2023 16:49:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Oct 2023 18:11:09 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        gregory.clement@bootlin.com, vladimir.kondratiev@intel.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 00/10] MIPS: Fix kernel in XKPHYS
+Date:   Fri, 27 Oct 2023 23:10:56 +0100
+Message-Id: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-Id: <c6503877-b120-4685-9665-7d728b8fd760@app.fastmail.com>
-In-Reply-To: <20231027182650.281405-8-jiaxun.yang@flygoat.com>
-References: <20231027182650.281405-1-jiaxun.yang@flygoat.com>
- <20231027182650.281405-8-jiaxun.yang@flygoat.com>
-Date:   Fri, 27 Oct 2023 21:48:44 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        jirislaby@kernel.org
-Subject: Re: [PATCH 3/3] serial: Add an earlycon driver for MIPS UHI semihosting
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -88,169 +81,72 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi all,
 
+This series fixes support for loading kernel to XKPHYS space.
+It is derived from "MIPS: use virtual addresses from xkphys for MIPS64" [1].
 
-=E5=9C=A82023=E5=B9=B410=E6=9C=8827=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
-=E5=8D=887:26=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
-> UHI is MIPS's implementation of semihosting.
-> Add an earlycon driver to help with debugging on boot.
->
-> This driver is capable for print log using UHI's "Plog" or interact
-> with KGDB using UHI's stdio function.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  drivers/tty/serial/Kconfig             | 13 ++++
->  drivers/tty/serial/Makefile            |  1 +
->  drivers/tty/serial/earlycon-mips-uhi.c | 85 ++++++++++++++++++++++++++
->  3 files changed, 99 insertions(+)
->  create mode 100644 drivers/tty/serial/earlycon-mips-uhi.c
->
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index bdc568a4ab66..04c62c6b45cd 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -85,6 +85,19 @@ config SERIAL_EARLYCON_SEMIHOST
->  	  This is enabled with "earlycon=3Dsmh" on the kernel command line.
->  	  The console is enabled when early_param is processed.
->=20
-> +config SERIAL_EARLYCON_UHI
+Boot tested on boston and QEMU with loading address set to 0xa800000090000000.
+QEMU patch on the way.
 
-^ Oops there is a symbol name mismatch, will fix in v2.
+For EyeQ5's memory layout, I think you just need to write devicetree memory
+node as:
 
-Sorry for the noise.
+memory@0 {
+	device_type = "memory";
+	reg = < 0x0 0x08000000 0x0 0x08000000
+		0x8 0x08000000 0x0 0x78000000>;
+};
+
+And set kernel load addesss to somewhere in RAM, everything should work.
+
+It makes me a little bit confused that in EyeQ5 enablement patch, you set
+load address to:
+> +else
+> +load-$(CONFIG_MIPS_GENERIC)	+= 0xa800000080100000
+> +endif
+Where does not have memory aviailable.
+
+I guess you might want to set it to 0xa800000800100000?
+Though I would suggest you to set it to 0xa800000808000000, to avoid
+collisions with low mem and reserved mem.
+
+Gregory and Vladimir, do let me know if I missed anything.
 
 Thanks
 - Jiaxun
 
-> +	bool "Early console using MIPS UHI semihosting"
-> +	depends on MIPS
-> +	select SERIAL_CORE
-> +	select SERIAL_CORE_CONSOLE
-> +	select SERIAL_EARLYCON
-> +	help
-> +	  Support for early debug console using UHI semihosting.
-> +	  This enables the console before standard serial driver is probed.
-> +	  This is enabled with "earlycon=3Duhi" or "earlycon=3Duhi_stdio" on=
- the
-> +	  kernel command line.
-> +	  The console is enabled when early_param is processed.
-> +
->  config SERIAL_EARLYCON_RISCV_SBI
->  	bool "Early console using RISC-V SBI"
->  	depends on RISCV_SBI_V01
-> diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-> index f6b8c220dcfb..ef5e9c87aea1 100644
-> --- a/drivers/tty/serial/Makefile
-> +++ b/drivers/tty/serial/Makefile
-> @@ -9,6 +9,7 @@ serial_base-y :=3D serial_core.o serial_base_bus.o=20
-> serial_ctrl.o serial_port.o
->  obj-$(CONFIG_SERIAL_EARLYCON) +=3D earlycon.o
->  obj-$(CONFIG_SERIAL_EARLYCON_SEMIHOST) +=3D earlycon-semihost.o
->  obj-$(CONFIG_SERIAL_EARLYCON_RISCV_SBI) +=3D earlycon-riscv-sbi.o
-> +obj-$(CONFIG_SERIAL_EARLYCON_MIPS_UHI) +=3D earlycon-mips-uhi.o
->=20
->  # These Sparc drivers have to appear before others such as 8250
->  # which share ttySx minor node space.  Otherwise console device
-> diff --git a/drivers/tty/serial/earlycon-mips-uhi.c=20
-> b/drivers/tty/serial/earlycon-mips-uhi.c
-> new file mode 100644
-> index 000000000000..002bb2c37064
-> --- /dev/null
-> +++ b/drivers/tty/serial/earlycon-mips-uhi.c
-> @@ -0,0 +1,85 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * MIPS UHI semihosting based earlycon
-> + *
-> + * Copyright (C) 2023 Jiaxun Yang <jiaxun.yang@flygoat.com>
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/console.h>
-> +#include <linux/init.h>
-> +#include <linux/serial_core.h>
-> +#include <asm/uhi.h>
-> +
-> +static int stdin_fd =3D -1;
-> +static int stdout_fd =3D -1;
-> +
-> +static void uhi_plog_write(struct console *con, const char *s,=20
-> unsigned int n)
-> +{
-> +	uhi_plog(s, 0);
-> +}
-> +
-> +static void uhi_stdout_write(struct console *con, const char *s,=20
-> unsigned int n)
-> +{
-> +	if (stdout_fd < 0)
-> +		return;
-> +
-> +	uhi_write(stdout_fd, s, n);
-> +}
-> +
-> +#ifdef CONFIG_CONSOLE_POLL
-> +static int uhi_stdin_read(struct console *con, char *s, unsigned int =
-n)
-> +{
-> +	if (stdin_fd < 0)
-> +		return 0;
-> +
-> +	return uhi_read(stdin_fd, s, n);
-> +}
-> +#endif
-> +
-> +static int uhi_stdio_fd_open(struct console *co, char *options)
-> +{
-> +	/*
-> +	 * You have to open both stdin and stdout to get console work
-> +	 * properly on some old CodeScape debugger.
-> +	 */
-> +	stdin_fd =3D uhi_open("/dev/stdin", UHI_O_RDONLY, 0);
-> +	stdout_fd =3D uhi_open("/dev/stdout", UHI_O_WRONLY, 0);
-> +
-> +	return (stdin_fd < 0 || stdout_fd < 0) ? -ENODEV : 0;
-> +}
-> +
-> +static int uhi_stdio_fd_close(struct console *co)
-> +{
-> +	int ret1 =3D 0, ret2 =3D 0;
-> +
-> +	if (stdin_fd >=3D 0)
-> +		ret1 =3D uhi_close(stdin_fd);
-> +	if (stdout_fd >=3D 0)
-> +		ret2 =3D uhi_close(stdout_fd);
-> +
-> +	return (ret1 < 0 || ret2 < 0) ? -ENODEV : 0;
-> +}
-> +
-> +static int
-> +__init early_uhi_setup(struct earlycon_device *device, const char *op=
-t)
-> +{
-> +	device->con->write =3D uhi_plog_write;
-> +	return 0;
-> +}
-> +
-> +static int
-> +__init early_uhi_stdio_setup(struct earlycon_device *device, const=20
-> char *opt)
-> +{
-> +
-> +	device->con->setup =3D uhi_stdio_fd_open;
-> +	device->con->exit =3D uhi_stdio_fd_close;
-> +	device->con->write =3D uhi_stdout_write;
-> +#ifdef CONFIG_CONSOLE_POLL
-> +	device->con->read =3D uhi_stdin_read;
-> +#endif
-> +	return 0;
-> +}
-> +
-> +EARLYCON_DECLARE(uhi, early_uhi_setup);
-> +EARLYCON_DECLARE(uhi_stdio, early_uhi_stdio_setup);
-> --=20
-> 2.34.1
+[1]: https://lore.kernel.org/lkml/20231004161038.2818327-3-gregory.clement@bootlin.com/
 
---=20
-- Jiaxun
+Jiaxun Yang (10):
+  MIPS: Export higher/highest relocation functions in uasm
+  MIPS: spaces: Define a couple of handy macros
+  MIPS: genex: Fix except_vec_vi for kernel in XKPHYS
+  MIPS: Fix set_uncached_handler for ebase in XKPHYS
+  MIPS: Refactor mips_cps_core_entry implementation
+  MIPS: Allow kernel base to be set from Kconfig for all platforms
+  MIPS: traps: Handle CPU with non standard vint offset
+  MIPS: Avoid unnecessary reservation of exception space
+  MIPS: traps: Enhance memblock ebase allocation process
+  MIPS: Get rid of CONFIG_NO_EXCEPT_FILL
+
+ arch/mips/Kconfig                           |  27 ++--
+ arch/mips/include/asm/addrspace.h           |   5 +
+ arch/mips/include/asm/mach-generic/spaces.h |   5 +-
+ arch/mips/include/asm/mips-cm.h             |   1 +
+ arch/mips/include/asm/smp-cps.h             |   4 +-
+ arch/mips/include/asm/traps.h               |   1 -
+ arch/mips/include/asm/uasm.h                |   2 +
+ arch/mips/kernel/cps-vec.S                  | 110 +++++--------
+ arch/mips/kernel/cpu-probe.c                |   5 -
+ arch/mips/kernel/cpu-r3k-probe.c            |   2 -
+ arch/mips/kernel/genex.S                    |  19 ++-
+ arch/mips/kernel/head.S                     |   7 +-
+ arch/mips/kernel/smp-cps.c                  | 167 +++++++++++++++++---
+ arch/mips/kernel/traps.c                    |  85 +++++++---
+ arch/mips/mm/uasm.c                         |   6 +-
+ 15 files changed, 293 insertions(+), 153 deletions(-)
+
+-- 
+2.34.1
+
