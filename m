@@ -2,187 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C92D7DA341
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Oct 2023 00:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEE87DA578
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Oct 2023 09:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346646AbjJ0WMU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Oct 2023 18:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S229479AbjJ1HXU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 28 Oct 2023 03:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346750AbjJ0WL7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Oct 2023 18:11:59 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E411734;
-        Fri, 27 Oct 2023 15:11:37 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4DD703200917;
-        Fri, 27 Oct 2023 18:11:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 27 Oct 2023 18:11:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1698444695; x=
-        1698531095; bh=ovE6ErC2FU6MOXhQYQRXjYJQxqoUgfjvz+3gaCNVsfA=; b=u
-        e7ck+5iPL0iPXFtIY+Ef4HQgt0qcg5TNXnQMH8qmACIoCZ4gpNBL0zSWPgifwCIF
-        v7XubnvOnAkAtXObd6PkrAKFcbF8j3Xtpab7Mpovhdr6wyvOy/0W0+IGVH8iehZu
-        pVNvVpPE8BJS6/2+sJatakKTNkqORtnSVHOITvwG841IuRRSY/hVwG7++U24EzFV
-        cwXXJtkQU1+fdYPORtHrxBHUYrwERqpAYFNa2741pSFzr6yiSCoueykoRYVd+9PV
-        NzOLhM2ysyD8w7jSD3vr8W92+Ge74s1U3Ux9mLOEHJ1cdr5Z5phSwEODbgln7Ank
-        VBJFfbkpWEdiCAvU4D7OQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698444695; x=
-        1698531095; bh=ovE6ErC2FU6MOXhQYQRXjYJQxqoUgfjvz+3gaCNVsfA=; b=E
-        Yng0q4pCC6u+tC5gUP8F1ecIF+9/AxrER0glqDMx7YsQlmILMYXrn+x6XEBH+wkQ
-        LlnHKkgD4YiQdGgdpPKqSJvoDnKBQK+aamyuSKeIdwNWJL5XUyC/FOqkut0ejlwY
-        7C7QPYd4+7VjWz7VWAeEfF42lmOz7wvWBhSZkUNynVGcK5pAiEh7wHlExw9lIomB
-        yuThJy4mekqy7tIVBEdiQpAoull3mFh/j/l43QfsTXI2D5tjxF7Xoe0i3aO7axOd
-        CZ2tTIaLi5z0xUt37gOg8n2LoYHsaOGEiBRgeEnhMXonBZiJsaIBTNUZQ5VNBhG8
-        BLo2J74hv38zDwlIyH6BA==
-X-ME-Sender: <xms:lzU8ZbPtkoAGoxZeChVxo8H9xY-wgG17zVXSV5_x1xe1Fs2Io6c3SA>
-    <xme:lzU8ZV8jGGNS9nuSoL2lSp3Nq3hL0aoJ2DK9rWIaJHN-kFXemnte6HgYoHcjXHqwQ
-    f9zsIsqvb4aABqkhx0>
-X-ME-Received: <xmr:lzU8ZaTBAtaHW3cPpyeyX1ihjm9cEcYRgK_X3E153_2oPiObHluqyhyFyQZfippqSVcAuJARhH4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleehgddtjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeeufeefkeffveeuhfevke
-    egheefjeelhfegvdelleeiveduvdevvdfhvdeuleegleenucffohhmrghinhephhgvrggu
-    rdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:lzU8Zfs2OZlAyvWUjFIA0k0Ypn8Qxpje33V7vhqwX3Kd9pDLqPfN3w>
-    <xmx:lzU8ZTevaTqQC4zvxJkxgvLp3AaEDmHzLC-8fWcYEzki3oQ7hIlbUw>
-    <xmx:lzU8Zb2gBYx6-CI7wFfJfHTzw1aNc_RrL8qJuRGmYTlpR599eLtykQ>
-    <xmx:lzU8Za6_vkcRbi7LzIcy8EP6dD4LPgUMH-AqdG05rTM4yoIq2luMvw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Oct 2023 18:11:34 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        gregory.clement@bootlin.com, vladimir.kondratiev@intel.com,
+        with ESMTP id S229458AbjJ1HXT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 28 Oct 2023 03:23:19 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD331B4;
+        Sat, 28 Oct 2023 00:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698477796; x=1730013796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OX7OaWMyGli2yQsdk6/FMKFyw3hJ+qrtmm7RfCwxusY=;
+  b=hu/TxcyZNqlkMJT65XWJFjmOoESfFR80H0YlvhjMEOfFAsrbTmRO12Aj
+   SOnKyIQTlLWVC+vn0XC3Fy3SDdn2NHWC5Kg2NgUBfuLIqSlYPV1HSCnJr
+   LpOhqHHYiiUEY3378haPGYVT7wpxw9Jt+wc0QbxOVgyrpyO2Yxwtp4pm5
+   2zuOP+7qnewAOPpy/UpUTlaGcs2ZlIsJ6D5vBap1+qz6lXxZZXErMGOt+
+   Ks696fFlBT/SSUu/pa8PZN+x4ylJ7DX8qKJNgdUylajDCAAI7nlNZZHfx
+   +ccGUx7ERaYMnPM8mxAJsxwoes31+RNFhX8P+nJMv4mLcCFbQ7YeQeWAo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="391751859"
+X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
+   d="scan'208";a="391751859"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 00:23:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="753333667"
+X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
+   d="scan'208";a="753333667"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Oct 2023 00:23:14 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qwdf5-000BYJ-1g;
+        Sat, 28 Oct 2023 07:23:11 +0000
+Date:   Sat, 28 Oct 2023 15:22:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, gregory.clement@bootlin.com,
+        vladimir.kondratiev@intel.com,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 10/10] MIPS: Get rid of CONFIG_NO_EXCEPT_FILL
-Date:   Fri, 27 Oct 2023 23:11:06 +0100
-Message-Id: <20231027221106.405666-11-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
-References: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v2 05/10] MIPS: Refactor mips_cps_core_entry
+ implementation
+Message-ID: <202310281539.nqlVBqte-lkp@intel.com>
+References: <20231027221106.405666-6-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027221106.405666-6-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-NO_EXCEPT_FILL is used to indicate platform that does not
-need to reserve ebase memory at start of kernel.
+Hi Jiaxun,
 
-This is true for all R2+ platform as they allocate ebase
-memory on fly, and also true for any platform that does
-not load kernel at start of physical memory.
+kernel test robot noticed the following build warnings:
 
-Get rid this Kconfig symbol by use macro to detect conditions
-above.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.6-rc7 next-20231027]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig       | 9 ---------
- arch/mips/kernel/head.S | 7 +++++--
- 2 files changed, 5 insertions(+), 11 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/MIPS-Export-higher-highest-relocation-functions-in-uasm/20231028-061419
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231027221106.405666-6-jiaxun.yang%40flygoat.com
+patch subject: [PATCH v2 05/10] MIPS: Refactor mips_cps_core_entry implementation
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20231028/202310281539.nqlVBqte-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310281539.nqlVBqte-lkp@intel.com/reproduce)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index bfedc8b48a81..e928ebc2cd1f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -149,7 +149,6 @@ config MIPS_GENERIC_KERNEL
- 	select MIPS_CPU_SCACHE
- 	select MIPS_GIC
- 	select MIPS_L1_CACHE_SHIFT_7
--	select NO_EXCEPT_FILL
- 	select PCI_DRIVERS_GENERIC
- 	select SMP_UP if SMP
- 	select SWAP_IO_SPACE
-@@ -210,7 +209,6 @@ config AR7
- 	select CEVT_R4K
- 	select CSRC_R4K
- 	select IRQ_MIPS_CPU
--	select NO_EXCEPT_FILL
- 	select SWAP_IO_SPACE
- 	select SYS_HAS_CPU_MIPS32_R1
- 	select SYS_HAS_EARLY_PRINTK
-@@ -265,7 +263,6 @@ config BMIPS_GENERIC
- 	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU_ALL
- 	select BOOT_RAW
--	select NO_EXCEPT_FILL
- 	select USE_OF
- 	select CEVT_R4K
- 	select CSRC_R4K
-@@ -309,7 +306,6 @@ config BCM47XX
- 	select HAVE_PCI
- 	select IRQ_MIPS_CPU
- 	select SYS_HAS_CPU_MIPS32_R1
--	select NO_EXCEPT_FILL
- 	select SYS_SUPPORTS_32BIT_KERNEL
- 	select SYS_SUPPORTS_LITTLE_ENDIAN
- 	select SYS_SUPPORTS_MIPS16
-@@ -445,7 +441,6 @@ config LANTIQ
- 	select IRQ_MIPS_CPU
- 	select CEVT_R4K
- 	select CSRC_R4K
--	select NO_EXCEPT_FILL
- 	select SYS_HAS_CPU_MIPS32_R1
- 	select SYS_HAS_CPU_MIPS32_R2
- 	select SYS_SUPPORTS_BIG_ENDIAN
-@@ -494,7 +489,6 @@ config MACH_LOONGSON64
- 	select ISA
- 	select I8259
- 	select IRQ_MIPS_CPU
--	select NO_EXCEPT_FILL
- 	select NR_CPUS_DEFAULT_64
- 	select USE_GENERIC_EARLY_PRINTK_8250
- 	select PCI_DRIVERS_GENERIC
-@@ -1177,9 +1171,6 @@ config PCI_GT64XXX_PCI0
- config PCI_XTALK_BRIDGE
- 	bool
- 
--config NO_EXCEPT_FILL
--	bool
--
- config MIPS_SPRAM
- 	bool
- 
-diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
-index b825ed4476c7..4af53b1628f5 100644
---- a/arch/mips/kernel/head.S
-+++ b/arch/mips/kernel/head.S
-@@ -59,10 +59,13 @@
- #endif
- 	.endm
- 
--#ifndef CONFIG_NO_EXCEPT_FILL
-+#if (MIPS_ISA_REV < 2) &&			\
-+	((VMLINUX_LOAD_ADDRESS == KSEG0) ||	\
-+	(VMLINUX_LOAD_ADDRESS == CKSEG0))
- 	/*
- 	 * Reserved space for exception handlers.
--	 * Necessary for machines which link their kernels at KSEG0.
-+	 * Necessary for machines which link their kernels at KSEG0
-+	 * and incapable of moving ebase.
- 	 */
- 	.fill	0x400
- #endif
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310281539.nqlVBqte-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/mips/kernel/smp-cps.c: In function 'setup_cps_vecs':
+>> arch/mips/kernel/smp-cps.c:150:19: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     150 |         cps_vec = (void *)TO_UNCAC(cps_vec_pa);
+         |                   ^
+
+
+vim +150 arch/mips/kernel/smp-cps.c
+
+   114	
+   115	static int __init setup_cps_vecs(void)
+   116	{
+   117		extern void excep_tlbfill(void);
+   118		extern void excep_xtlbfill(void);
+   119		extern void excep_cache(void);
+   120		extern void excep_genex(void);
+   121		extern void excep_intex(void);
+   122		extern void excep_ejtag(void);
+   123		phys_addr_t cps_vec_pa;
+   124		void *cps_vec;
+   125	
+   126		/* Try to allocate in KSEG1 first */
+   127		cps_vec_pa = memblock_phys_alloc_range(BEV_VEC_SIZE, BEV_VEC_ALIGN,
+   128							0x0, KSEGX_SIZE - 1);
+   129	
+   130		if (cps_vec_pa)
+   131			core_entry_reg = CKSEG1ADDR(cps_vec_pa) &
+   132						CM_GCR_Cx_RESET_BASE_BEVEXCBASE;
+   133	
+   134		if (!cps_vec_pa && mips_cm_is64) {
+   135			cps_vec_pa = memblock_phys_alloc_range(BEV_VEC_SIZE, BEV_VEC_ALIGN,
+   136								0x0, SZ_4G - 1);
+   137			if (cps_vec_pa)
+   138				core_entry_reg = (cps_vec_pa & CM_GCR_Cx_RESET_BASE_BEVEXCBASE) |
+   139						CM_GCR_Cx_RESET_BASE_MODE;
+   140		}
+   141	
+   142		if (!cps_vec_pa)
+   143			return -ENOMEM;
+   144	
+   145		/* We want to ensure cache is clean before writing uncached mem */
+   146		blast_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) + BEV_VEC_SIZE);
+   147		bc_wback_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
+   148		__sync();
+   149	
+ > 150		cps_vec = (void *)TO_UNCAC(cps_vec_pa);
+   151		mips_cps_build_core_entry(cps_vec);
+   152	
+   153		memcpy(cps_vec + 0x200, &excep_tlbfill, 0x80);
+   154		memcpy(cps_vec + 0x280, &excep_xtlbfill, 0x80);
+   155		memcpy(cps_vec + 0x300, &excep_cache, 0x80);
+   156		memcpy(cps_vec + 0x380, &excep_genex, 0x80);
+   157		memcpy(cps_vec + 0x400, &excep_intex, 0x80);
+   158		memcpy(cps_vec + 0x480, &excep_ejtag, 0x80);
+   159	
+   160		/* Make sure no prefetched data in cache */
+   161		blast_inv_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) + BEV_VEC_SIZE);
+   162		bc_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
+   163		__sync();
+   164	
+   165		return 0;
+   166	}
+   167	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
