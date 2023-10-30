@@ -2,67 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F167DBF26
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9717DBFA4
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 19:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjJ3RkQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Oct 2023 13:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S230422AbjJ3SUS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Oct 2023 14:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjJ3RkO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:40:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085A8B4
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698687571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=+DXS2SMXoVtHIusoTNobzAVDxifuslX+O0gTNMn/npQ=;
-        b=Ag6UE2BAHIefNXhmix/VL8ONjRqROWaE6/41ZGC7ylIcnOP4F+x3INEoovmzt0X1oygXDG
-        0DrsMFWnJvB07D9Jyy5GZYP0tturANBfzxFw1/mqIEs++XR7293VZQsEAKSyG+s//rkeCW
-        t/AacLlEFUshELCV7IGu1gjdFstSu44=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-543-VZ6x_ikbOXG8_khFAbtlJg-1; Mon, 30 Oct 2023 13:39:29 -0400
-X-MC-Unique: VZ6x_ikbOXG8_khFAbtlJg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4084001846eso35388295e9.1
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:39:29 -0700 (PDT)
+        with ESMTP id S231371AbjJ3SUR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 14:20:17 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9B69E
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 11:20:14 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c5056059e0so69706101fa.3
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 11:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698690013; x=1699294813; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EYDArYAPbuwvLuQnLMgYzD5G3hQJ3JuyTKb70j8k5kM=;
+        b=vMBjNLJLnNwZ92n0kiLKy/KDvv6bmRWazPVY7EzuCAXijQXOd/L6nvrX2ZWXjw+lNq
+         4G5yJaJPhMqxsSmWmQroKSm+2R3tkccCRs0o978wCj0l5sy5+qU6vjM8CCHZZW53vydq
+         p5Q03CC8DatEWTV07ALKn+wiFR2o2FRnMzJbqLuMgJ2Ub5QuR13k3/n1s73F50qjfkJW
+         jYiv09MpMPkZEbaNGpQQ9n6vWpNk1OHs0sffooFU3t8jPASRTjzGdPCT9bTwlS4yKF0n
+         0udHFnJONG3fQytXR4K5Q+c/1vSUxumJ6xHiwhVUu+7gs9M3D3ejbpd+PQJLXSO5jHDJ
+         abyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698687568; x=1699292368;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+DXS2SMXoVtHIusoTNobzAVDxifuslX+O0gTNMn/npQ=;
-        b=H5KbtiEdfC3xI83vMO+/8uFyGHvZzNPqHLWlQ0F98ZDJIZdNa3LkaKh5CAbe4OGBRD
-         xNcAtFj89BERjzeU4Jboors/lRUSxz5gG4KO4puj+arNy4ElE3hJsIhINXQFjs/HT7OP
-         WvYIMe08T6SR7ydW5lJOkojF/vjtlBUdlIvVo++8EgSOWcD221oiH5zxLR3P+LgMlDqc
-         /R91mmKVe55bTQvFexB+p9tg2T5IiDqVY/sVesppYgqi4u/cIzKjatn8J/1siUqu8AeQ
-         RsfE51xhGEgndRd56BWajHS0Of7TvGmP2xKhVqgLKNRdBJFdmb5M64sRdv81qCN5BStn
-         XEAw==
-X-Gm-Message-State: AOJu0YyWIOwYGm01MMNO898DGAL5q33l4a1+EWr2LgKKiNZI/iO69DqK
-        PMkN8O7mPpffE9J0lWffZ5P40fqkddWWbVPEJDskutMelL9KsuEOA5eol9Kz3Djv9I6IDQL2G2Q
-        MpgXBEr/wTbcJ83IxeRkWpg==
-X-Received: by 2002:a05:600c:4748:b0:409:325:e499 with SMTP id w8-20020a05600c474800b004090325e499mr8333108wmo.32.1698687568572;
-        Mon, 30 Oct 2023 10:39:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHjkVjq8oZnh05Prw8i0aF39OlPnVPmFNjtO6TXzNl6UxyV80hGH62Lh8Nc0yfk4QqAnWBdUg==
-X-Received: by 2002:a05:600c:4748:b0:409:325:e499 with SMTP id w8-20020a05600c474800b004090325e499mr8333053wmo.32.1698687568216;
-        Mon, 30 Oct 2023 10:39:28 -0700 (PDT)
-Received: from [192.168.1.174] ([151.81.68.207])
-        by smtp.googlemail.com with ESMTPSA id c18-20020a05600c0a5200b0040770ec2c19sm13195773wmq.10.2023.10.30.10.39.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 10:39:27 -0700 (PDT)
-Message-ID: <80471c15-a37e-4129-8101-d30b8f73cb9f@redhat.com>
-Date:   Mon, 30 Oct 2023 18:39:25 +0100
+        d=1e100.net; s=20230601; t=1698690013; x=1699294813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EYDArYAPbuwvLuQnLMgYzD5G3hQJ3JuyTKb70j8k5kM=;
+        b=mTiruKL6fShffe6lb40loc3KpHyc92hj4uMgrputTHd7bTGi8LHmbdQzgPbdZfINxr
+         pE0buLhGI85i71d/+13sx6muahZgOLa/oI1GEYgxHwsyvcVYDNDJhRW9sJCBmIkrSgeA
+         IlLGlPnuvOdS8l9ENGqDe5FmtOpczX3RuK/RvUhuK/oDBrdoAlMCx4Z9S6z280mre6z5
+         2ugHU7PpXVUsn9lQDAcsn0kS+PC3MVgL4nklW5C0JPVi10B3r+jfWIfeK45m/ECIijSx
+         +wxfCUKAK8MqUcilFMHDh80lXExUSoY3Tu7GlpK0JAz9rCNryHuWYY5Dhka0VPVwYcjU
+         U5Jg==
+X-Gm-Message-State: AOJu0Yzh6UEuQ1NvGvLXWjiYn6RlXkUed/uG/Kx12hSel3EDbaPiZGqU
+        GE0kJS1aExbbC006J+8QLtC6mGZFPclPridvBYYhaw==
+X-Google-Smtp-Source: AGHT+IGWQtTaV5Bzkdlkn1e/3Zt5UNsfNX/Ijo670f/udb747Y9rnFPe4I+UgnAkk/OF+ECMZnUUXa4ItRfh9V5jdaA=
+X-Received: by 2002:a05:6512:10cb:b0:507:aaa9:b080 with SMTP id
+ k11-20020a05651210cb00b00507aaa9b080mr9836391lfg.33.1698690012887; Mon, 30
+ Oct 2023 11:20:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 00/35] KVM: guest_memfd() and per-page attributes
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-4-seanjc@google.com>
+ <ZT_fnAcDAvuPCwws@google.com>
+In-Reply-To: <ZT_fnAcDAvuPCwws@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 30 Oct 2023 11:19:43 -0700
+Message-ID: <CALzav=cjq_MbJgi3DMytVWwZLFxEPi1dp7YiBYRBw-sRf2+BLw@mail.gmail.com>
+Subject: Re: [PATCH v13 03/35] KVM: Use gfn instead of hva for mmu_notifier_retry
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -73,22 +66,20 @@ To:     Sean Christopherson <seanjc@google.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <brauner@kernel.org>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
         Xu Yilun <yilun.xu@intel.com>,
         Chao Peng <chao.p.peng@linux.intel.com>,
         Fuad Tabba <tabba@google.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Anish Moorthy <amoorthy@google.com>,
-        David Matlack <dmatlack@google.com>,
         Yu Zhang <yu.c.zhang@linux.intel.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
         Vlastimil Babka <vbabka@suse.cz>,
         Vishal Annapurve <vannapurve@google.com>,
         Ackerley Tng <ackerleytng@google.com>,
@@ -100,92 +91,28 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Liam Merwick <liam.merwick@oracle.com>,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20231027182217.3615211-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <20231027182217.3615211-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/27/23 20:21, Sean Christopherson wrote:
-> Non-KVM people, please take a gander at two small-ish patches buried in the
-> middle of this series:
-> 
->    fs: Export anon_inode_getfile_secure() for use by KVM
->    mm: Add AS_UNMOVABLE to mark mapping as completely unmovable
-> 
-> Our plan/hope is to take this through the KVM tree for 6.8, reviews (and acks!)
-> would be much appreciated.  Note, adding AS_UNMOVABLE isn't strictly required as
-> it's "just" an optimization, but we'd prefer to have it in place straightaway.
+On Mon, Oct 30, 2023 at 9:53=E2=80=AFAM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> On 2023-10-27 11:21 AM, Sean Christopherson wrote:
+> > From: Chao Peng <chao.p.peng@linux.intel.com>
+> >
+> > +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t =
+end);
+>
+> What is the reason to separate range_add() from begin()?
 
-Reporting what I wrote in the other thread, for wider distribution:
-
-I'm going to wait a couple days more for reviews to come in, post a v14
-myself, and apply the series to kvm/next as soon as Linus merges the 6.7
-changes.  The series will be based on the 6.7 tags/for-linus, and when
-6.7-rc1 comes up, I'll do this to straighten the history:
-
-	git checkout kvm/next
-	git tag -s -f kvm-gmem HEAD
-	git reset --hard v6.7-rc1
-	git merge tags/kvm-gmem
-	# fix conflict with Christian Brauner's VFS series
-	git commit
-	git push kvm
-
-6.8 is not going to be out for four months, and I'm pretty sure that
-anything that would be discovered within "a few weeks" can also be
-applied on top, and the heaviness of a 35-patch series will outweigh any
-imperfections by a long margin.
-
-(Full disclosure: this is _also_ because I want to apply this series to
-the RHEL kernel, and Red Hat has a high level of disdain for
-non-upstream patches.  But it's mostly because I want all dependencies
-to be able to move on and be developed on top of stock kvm/next).
-
-Paolo
-
+Nevermind, I see how it's needed in kvm_mmu_unmap_gfn_range().
