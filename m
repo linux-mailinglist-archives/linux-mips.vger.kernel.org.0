@@ -2,59 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1587DC245
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 23:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ADB7DC24A
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 23:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjJ3WGD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Oct 2023 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S232105AbjJ3WHg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Oct 2023 18:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjJ3WGC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 18:06:02 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9DCFD
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 15:05:59 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5af9b0850fdso43633067b3.1
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 15:05:59 -0700 (PDT)
+        with ESMTP id S231784AbjJ3WHf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 18:07:35 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC9FFA
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 15:07:32 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1cc591d8177so8411345ad.3
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 15:07:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698703558; x=1699308358; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698703652; x=1699308452; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IwVDVsbZSN9+qsHUIXJ8IN4aMaIP7o7r0dMzi80JWo=;
-        b=WZYA3UvCwaSfQcrK1w5QKLxMDZIAMVwX0AttOaceeOv3qvHQR4X+Xyb2Sr7TO1Qkhi
-         MqYgNwofaYVjnCY7OwJQlPk7uGIw2TAu0NGrltOcX+RVNEEPwSO2q0SDHDCwACue+fAt
-         kM6ynu6Fr2EXG6+Gk2Ba5uZFB+IXk+jeKNWNaMavD82UNvBuYFUmIVfcC8zfLfjWQtc7
-         dfFCbjlall6cXUSuUFwfgpHZOTw3zY7QtmVGi8vKF/ycNGJs/IqYEE4YimI0jNkHxrfz
-         5h4wStKPVM8DBvhVrKo7TNLn+4N3e1VJkuM0vWBCBzed5xcMgpjaNMu/TvLMOb4z2oUY
-         n+9Q==
+        bh=EkAABuzKmGyzNibmrxwxoleV2c1qCswFjV4kStA9p5Y=;
+        b=kVEKXpML+Xnymqdjk1TIs+7FkXy/G1sadkB/VgrZzHoFMEIC5U9Cbi2svdIskMQlp2
+         JdcWE3bzzlvB4zldFNiaEwV5b9LGDRGUlatM/AUm9SLVFjS5tUKDbdziWIvm5rkE0KpF
+         jslcwgkRtvHIYTWNHlzL9sKt4LD133P8Jc3i6FwWqTlVmpz7CmYgk0ADh2y9mYSe5dFO
+         4Htk6JSLnncnyPq4aSokKHxDfdSEL7t7Csi/1NtgeY+cp0u5FajTnSSu23DrgTZ78XVp
+         0XaMgLVhEj/MPuYhiA7OzjVCPgs/RRBLh7/s/g74aT3sijqc6TDWioD/cmsPaRSw1ucn
+         nVhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698703558; x=1699308358;
+        d=1e100.net; s=20230601; t=1698703652; x=1699308452;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IwVDVsbZSN9+qsHUIXJ8IN4aMaIP7o7r0dMzi80JWo=;
-        b=OWZTHLpfFk3ScbyQFdIleRfoGL28cJj+vfinuxRQsZXllFaUKeYuJbWVUd7lE+VspU
-         7h7nEou4Fgc2XV0/LoK4Wc1Vi/4J6nehimDEGbujbPgj6ndkbW0jsAPXN/GgmXNvnV75
-         iPZc/ZrvOZUE9pxeS3ijl4HA7JGnn8gRV800/XyWrKlKWe+bMm8Un5Oo32j0aEmIsYaN
-         bhOlBLFy9xveHTlX2WH84FGrBz1OwbFJjYLxzjT5Q33Hwr37IPxLVtZYu/ZZOtTL64j0
-         p+HF1W5atpebuYERUshi9dVJzoEjvm866bIDFq54x7kz8XDIqbBqCTqObGALWjCyKtpd
-         bOiw==
-X-Gm-Message-State: AOJu0YzfOANlpD+a5QH2XUo3CebZ58bk97AqxI1+vxwCQpBWFJ3MVLN/
-        ZZ9IGWjfWnEMtJWwkTjs9ziOmMRU+Rs=
-X-Google-Smtp-Source: AGHT+IEdUnGiaB+HWnyvBXIWgJEvc4p4Jj6o8XAknp5F2BcjElHvOjmW/sQ9BadeZP3HZD1+EeGEwSi+J0Q=
+        bh=EkAABuzKmGyzNibmrxwxoleV2c1qCswFjV4kStA9p5Y=;
+        b=wzhkozqDYXMocSVXLr6gEAhv1KmtAyACf1gQdn1XWRW22ikbDaW01kBtMPuZ3s0dP+
+         IvOYbydHB6lxubPwgNBpm+Pvk8sGux31xcob/0QxeoSqBnGiki7njxksuERKMP/a68th
+         Fk4bXzy7oXLxCUblS/wuWyvVAE5uQ43DIICNGa/Klw4cqR8dkpnaFbMOQdVlG6/cjKQf
+         KyroVp7xZDz+Sgd4Ob3+xtZ4FpLhu467qeh4aI4hUbnBmg5Ig2To9lgcUh53W2dycugj
+         9nEvRB7jtY2ORt7MyOwwVfC3eJeAEvIlNAwageVb9urUgYSBih4jjOrVe7wMvu1DP6GD
+         KEUA==
+X-Gm-Message-State: AOJu0YzcI1N5ogrFwGm8KyC5H3OhfUpnQ5jHrY0BYLiXa+kV7VB0qeYg
+        VslqoZ8JFHbP3U3nA8Q/0igH/YuJRGM=
+X-Google-Smtp-Source: AGHT+IHfmttfYISWufdVkZGI1GGv3oPE0CaVU/9uw2yWegmaBLqLOedbYI1/usu4SKmN8TEK3NCdArCTZyE=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:b108:0:b0:d99:3750:d607 with SMTP id
- g8-20020a25b108000000b00d993750d607mr203752ybj.8.1698703558464; Mon, 30 Oct
- 2023 15:05:58 -0700 (PDT)
-Date:   Mon, 30 Oct 2023 15:05:56 -0700
-In-Reply-To: <ZT_ViJOW1p4TN_fI@google.com>
+ (user=seanjc job=sendgmr) by 2002:a17:902:ed45:b0:1cc:533e:f52b with SMTP id
+ y5-20020a170902ed4500b001cc533ef52bmr49726plb.4.1698703652255; Mon, 30 Oct
+ 2023 15:07:32 -0700 (PDT)
+Date:   Mon, 30 Oct 2023 15:07:30 -0700
+In-Reply-To: <077cec97-7920-4d20-8bd3-fe07ab8bcc29@redhat.com>
 Mime-Version: 1.0
-References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-14-seanjc@google.com>
- <ZT9lQ9c7Bik6FIpw@chao-email> <ZT_ViJOW1p4TN_fI@google.com>
-Message-ID: <ZUAoxCZJnpPGWjpu@google.com>
-Subject: Re: [PATCH v13 13/35] KVM: Introduce per-page memory attributes
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-13-seanjc@google.com>
+ <077cec97-7920-4d20-8bd3-fe07ab8bcc29@redhat.com>
+Message-ID: <ZUApIvo_gIdsfEEV@google.com>
+Subject: Re: [PATCH v13 12/35] KVM: Prepare for handling only shared mappings
+ in mmu_notifier events
 From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -93,85 +94,29 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 30, 2023, Sean Christopherson wrote:
-> On Mon, Oct 30, 2023, Chao Gao wrote:
-> > On Fri, Oct 27, 2023 at 11:21:55AM -0700, Sean Christopherson wrote:
-> > >From: Chao Peng <chao.p.peng@linux.intel.com>
-> > >
-> > >In confidential computing usages, whether a page is private or shared is
-> > >necessary information for KVM to perform operations like page fault
-> > >handling, page zapping etc. There are other potential use cases for
-> > >per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> > >or exec-only, etc.) without having to modify memslots.
-> > >
-> > >Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> > >userspace to operate on the per-page memory attributes.
-> > >  - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
-> > >    a guest memory range.
-> > 
-> > >  - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
-> > >    memory attributes.
-> > 
-> > This ioctl() is already removed. So, the changelog is out-of-date and needs
-> > an update.
+On Mon, Oct 30, 2023, Paolo Bonzini wrote:
+> On 10/27/23 20:21, Sean Christopherson wrote:
+> > @@ -635,6 +635,13 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
+> >  			 * the second or later invocation of the handler).
+> >  			 */
+> >  			gfn_range.arg = range->arg;
+> > +
+> > +			/*
+> > +			 * HVA-based notifications aren't relevant to private
+> > +			 * mappings as they don't have a userspace mapping.
 > 
-> Doh, I lost track of this and the fixup for KVM_CAP_MEMORY_ATTRIBUTES below.
+> It's confusing who "they" is.  Maybe
 > 
-> > >+:Capability: KVM_CAP_MEMORY_ATTRIBUTES
-> > >+:Architectures: x86
-> > >+:Type: vm ioctl
-> > >+:Parameters: struct kvm_memory_attributes(in)
-> > 
-> > 					   ^ add one space here?
-> 
-> Ah, yeah, that does appear to be the standard.
-> > 
-> > 
-> > >+static bool kvm_pre_set_memory_attributes(struct kvm *kvm,
-> > >+					  struct kvm_gfn_range *range)
-> > >+{
-> > >+	/*
-> > >+	 * Unconditionally add the range to the invalidation set, regardless of
-> > >+	 * whether or not the arch callback actually needs to zap SPTEs.  E.g.
-> > >+	 * if KVM supports RWX attributes in the future and the attributes are
-> > >+	 * going from R=>RW, zapping isn't strictly necessary.  Unconditionally
-> > >+	 * adding the range allows KVM to require that MMU invalidations add at
-> > >+	 * least one range between begin() and end(), e.g. allows KVM to detect
-> > >+	 * bugs where the add() is missed.  Rexlaing the rule *might* be safe,
-> > 
-> > 					    ^^^^^^^^ Relaxing
-> > 
-> > >@@ -4640,6 +4850,17 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
-> > > 	case KVM_CAP_BINARY_STATS_FD:
-> > > 	case KVM_CAP_SYSTEM_EVENT_DATA:
-> > > 		return 1;
-> > >+#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
-> > >+	case KVM_CAP_MEMORY_ATTRIBUTES:
-> > >+		u64 attrs = kvm_supported_mem_attributes(kvm);
-> > >+
-> > >+		r = -EFAULT;
-> > >+		if (copy_to_user(argp, &attrs, sizeof(attrs)))
-> > >+			goto out;
-> > >+		r = 0;
-> > >+		break;
-> > 
-> > This cannot work, e.g., no @argp in this function and is fixed by a later commit:
-> > 
-> > 	fcbef1e5e5d2 ("KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for guest-specific backing memory")
-> 
-> I'll post a fixup patch for all of these, thanks much!
+> 	 * HVA-based notifications provide a userspace address,
+> 	 * and as such are only relevant for shared mappings.
 
-Heh, that was an -ENOCOFFEE.  Fixup patches for a changelog goof and an ephemeral
-bug are going to be hard to post.
-
-Paolo, do you want to take care of all of these fixups and typos, or would you
-prefer that I start a v14 branch and then hand it off to you at some point?
+Works for me.
