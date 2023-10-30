@@ -2,64 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F127DBEAB
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34CF7DBEBA
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjJ3RTZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Oct 2023 13:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S229456AbjJ3RWi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Oct 2023 13:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjJ3RTZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:19:25 -0400
+        with ESMTP id S232176AbjJ3RWh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:22:37 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38566AB
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:18:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5535299
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698686318;
+        s=mimecast20190719; t=1698686509;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=Rk1z/nbke87TeFl+NzbMTW3BKeJ5hl7Q8glGeyBEAiE=;
-        b=V005a3pA+/KQ921ND+eANYyZKRw+vIVcRSlZnPmhssp3yne9N5xAdSMR2kGxwaToOPJm3i
-        FwV6EAarRT5UKZyJnlP245aHsHBmUB37TQZ3EhSu7rMo2yGt5hrcCI4qo+K1zSbCHsePSy
-        5JPgtpGrd/q5rncCXNVW4HvGzJEMnG0=
+        bh=boXyb+7L5Zlgo2abx5zbreDpGqLqBIK3j4ToQmqyh+g=;
+        b=VhLQlBUGk/vtwaVl1BlbDsUOCsgb1K5l+mZbM9ZWfGcs3r9MYlL4csBJmjs1nYHX167s55
+        q7lEe8z1yjVIwB7QmYg7k0N4SqcOGJXBAvL8rkUSXziW3Sa6N2HHe9ul+U09nuasLd1VYp
+        Qtvt89UAjVy7j61lmzjWYrbycnKNx74=
 Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
  [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-27-0aJrhYnPPV6e9V8Yzek8OA-1; Mon, 30 Oct 2023 13:18:36 -0400
-X-MC-Unique: 0aJrhYnPPV6e9V8Yzek8OA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4083a670d25so35351005e9.0
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:18:36 -0700 (PDT)
+ us-mta-345-YUaN_zLVMSqyA00XVBD2cQ-1; Mon, 30 Oct 2023 13:21:48 -0400
+X-MC-Unique: YUaN_zLVMSqyA00XVBD2cQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-408f9e9e9b0so36132165e9.2
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:21:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698686315; x=1699291115;
+        d=1e100.net; s=20230601; t=1698686507; x=1699291307;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rk1z/nbke87TeFl+NzbMTW3BKeJ5hl7Q8glGeyBEAiE=;
-        b=dBLjPE/eSK6WcAnZU6Ob/tAopcyp/3qnfE3G2cgDGNE41iLqgmNywAccgexfwrcsH7
-         OZk9JDcFDUJlA3eEb0KOaLHCGX+MfsuTZFjVyxybj/TZRUkyYcd4ExHhqECBdm3PM8wl
-         vxgOOlNK14qN+AyK1/BW/T6SXJIZHizPlk9ZDqqABRV2ID7XguGwGmF/M1jRcdPHH7gF
-         IvYIy2sdQ+Lf5qZ+79S0mDzsblaBD2a+qkhJABQYDZNV3GPZQ0dwRAaJRrpwuXS+RNi6
-         GIvvAiw0LoPAKQAb8kcHc7GW5AyOu5h1l+Nvtjm0v/Ul79guv9c+bvdrtUVP4xzkfo96
-         eZ4g==
-X-Gm-Message-State: AOJu0YxXq5S3hnj0aaPR1cjFw00P/qTY1uEhUFIC1bnw2eS5PFmUdSGz
-        VYOxRLLKIqUjPc2CmejAwwSnEd/7dj5WjOTVMgPSf0oPoP2ksxhZKTSwOvD4bFm+L1NviziUD7S
-        lKfE3dRo3CBopv9BpN2E0tw==
-X-Received: by 2002:a05:600c:3512:b0:408:3e7a:82ea with SMTP id h18-20020a05600c351200b004083e7a82eamr9347591wmq.1.1698686315468;
-        Mon, 30 Oct 2023 10:18:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE2IYd31Kg1xsjAW7zrsQp03VV1LrLjkoWwzBfM1QTMJAHwovsXW/3FoijWAFrYv3Vz5FidRg==
-X-Received: by 2002:a05:600c:3512:b0:408:3e7a:82ea with SMTP id h18-20020a05600c351200b004083e7a82eamr9347545wmq.1.1698686315114;
-        Mon, 30 Oct 2023 10:18:35 -0700 (PDT)
+        bh=boXyb+7L5Zlgo2abx5zbreDpGqLqBIK3j4ToQmqyh+g=;
+        b=JjVL5MdcrlYQvMRE35MAAiFY5DQuQ50kUsTw7zcnbHZ6e17Sc2DnFYki2HjPzriIqC
+         +UiY02k9Vu2XxZTco9U7iI7dWQcn3Qw17HZPBKYKGlQX9DMVjOvk7k3fYRV9q/p9+fH6
+         yBauaC7fSXL+xoOWs5M25Gyhu+AanfYVsXUSsIA0r5hdW/LT/yjSUhyo8huBKEbQJ1SS
+         T2HSXereEDfgHuYrtTpluqbMpOfmPP3iVjyFfriiUYo9lpYIyvi4ywD9fko9IzK5HYa9
+         Ei/xUkK4soVHjcDpEuYFwiLyGpK0kt3qAQ5wi5PHjfbDRSQi9PeOK7JsPWopvp1LRmPr
+         mnsQ==
+X-Gm-Message-State: AOJu0YxrnCvMDXLscTqtErf+DHm5rwHESuSw0gLf8OyJCjww5HgAuzaN
+        NhcTgOmyB06nZ78ZLWRCtBh9fl+M0rhYCZrSIsIxGGYePAwjjHSGjcZtdsj8N6iFO9CLD9mYiv3
+        AkjxJRRUowpiLdjtmopKhOw==
+X-Received: by 2002:a05:600c:548c:b0:401:be70:53b6 with SMTP id iv12-20020a05600c548c00b00401be7053b6mr9028846wmb.15.1698686507248;
+        Mon, 30 Oct 2023 10:21:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE5I9OwLPDhwwdBq05u6PEcpXrmwFdGU+aFTRWkhJj3tDNeJuJ2HVg1bUTUoaNx9gtt3fCykA==
+X-Received: by 2002:a05:600c:548c:b0:401:be70:53b6 with SMTP id iv12-20020a05600c548c00b00401be7053b6mr9028817wmb.15.1698686506934;
+        Mon, 30 Oct 2023 10:21:46 -0700 (PDT)
 Received: from [192.168.1.174] ([151.81.68.207])
-        by smtp.googlemail.com with ESMTPSA id l16-20020adffe90000000b003198a9d758dsm4171497wrr.78.2023.10.30.10.18.29
+        by smtp.googlemail.com with ESMTPSA id c5-20020a05600c0a4500b004094d4292aesm430163wmq.18.2023.10.30.10.21.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 10:18:34 -0700 (PDT)
-Message-ID: <22789e20-1a4a-48af-99ad-3e88c18dd231@redhat.com>
-Date:   Mon, 30 Oct 2023 18:18:26 +0100
+        Mon, 30 Oct 2023 10:21:46 -0700 (PDT)
+Message-ID: <077cec97-7920-4d20-8bd3-fe07ab8bcc29@redhat.com>
+Date:   Mon, 30 Oct 2023 18:21:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 11/35] KVM: Drop .on_unlock() mmu_notifier hook
+Subject: Re: [PATCH v13 12/35] KVM: Prepare for handling only shared mappings
+ in mmu_notifier events
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -101,7 +102,7 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-12-seanjc@google.com>
+ <20231027182217.3615211-13-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
 Autocrypt: addr=pbonzini@redhat.com; keydata=
  xsEhBFRCcBIBDqDGsz4K0zZun3jh+U6Z9wNGLKQ0kSFyjN38gMqU1SfP+TUNQepFHb/Gc0E2
@@ -138,7 +139,7 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <20231027182217.3615211-12-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-13-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -152,26 +153,27 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 10/27/23 20:21, Sean Christopherson wrote:
-> Drop the .on_unlock() mmu_notifer hook now that it's no longer used for
-> notifying arch code that memory has been reclaimed.  Adding .on_unlock()
-> and invoking it *after* dropping mmu_lock was a terrible idea, as doing so
-> resulted in .on_lock() and .on_unlock() having divergent and asymmetric
-> behavior, and set future developers up for failure, i.e. all but asked for
-> bugs where KVM relied on using .on_unlock() to try to run a callback while
-> holding mmu_lock.
-> 
-> Opportunistically add a lockdep assertion in kvm_mmu_invalidate_end() to
-> guard against future bugs of this nature.
+> @@ -635,6 +635,13 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
+>  			 * the second or later invocation of the handler).
+>  			 */
+>  			gfn_range.arg = range->arg;
+> +
+> +			/*
+> +			 * HVA-based notifications aren't relevant to private
+> +			 * mappings as they don't have a userspace mapping.
 
-This is what David suggested to do in patch 3, FWIW.
+It's confusing who "they" is.  Maybe
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+	 * HVA-based notifications provide a userspace address,
+	 * and as such are only relevant for shared mappings.
 
 Paolo
 
-> Reported-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Link: https://lore.kernel.org/all/20230802203119.GB2021422@ls.amr.corp.intel.com
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
+> +			 */
+> +			gfn_range.only_private = false;
+> +			gfn_range.only_shared = true;
+>  			gfn_range.may_block = range->may_block;
+>  
+>  			/*
 
 
