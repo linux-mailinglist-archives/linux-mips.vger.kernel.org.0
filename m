@@ -2,65 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0887DBDD2
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 17:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9F57DBDE1
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 17:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbjJ3Q2s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Oct 2023 12:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        id S231518AbjJ3Qby (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Oct 2023 12:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjJ3Q2r (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 12:28:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884DADF
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 09:27:58 -0700 (PDT)
+        with ESMTP id S231789AbjJ3Qby (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 12:31:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30029A6
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 09:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698683277;
+        s=mimecast20190719; t=1698683471;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=QJRzUGi0crPAdF+PsGr4fd82XBsUf26/RqsTLoK6Cc8=;
-        b=PzDdow5/Wb2YXgvu5Iime0LPp5xVYoWEfI6LnNKBDrY+fgcjqDnTNtER1Q/TyOIzW17SX3
-        Yav9ta0/6t1/oXJAQge7v3G2ijuel5JQUxYw7eI0+amUFBm1xBuQwrlMh5bz2aY0AVsbs4
-        MgBsNJZedzOvLJQo+UJjGD6yqyCJ4sk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=AFGN4ziW+95DqCrq4ZKBGZMP1faea1+XydZr6yChQh0=;
+        b=QKgeY2zWAv/eD9RoIAWjBBfrgjM2gd55KCBP250TEs5K374GAslVlfY9D72cNF0RncLHsi
+        NGUoB6gfj8AF++B1VdF5V23RvSMfUeyjZ5k1mwnNxk3jvonZfYdO/LHEGy5kgOaBj0HRcB
+        FuQjnOn4SV8yLIVPpzoqnhYYm8W3s0c=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-66-SLNBGUyDN6mGij9Xn2qZAQ-1; Mon, 30 Oct 2023 12:27:56 -0400
-X-MC-Unique: SLNBGUyDN6mGij9Xn2qZAQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4083c9b426fso32475395e9.2
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 09:27:56 -0700 (PDT)
+ us-mta-619-5a6wkVXqO-2TSHzq3TpvxQ-1; Mon, 30 Oct 2023 12:31:09 -0400
+X-MC-Unique: 5a6wkVXqO-2TSHzq3TpvxQ-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-507b0270b7fso4899929e87.3
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 09:31:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698683275; x=1699288075;
+        d=1e100.net; s=20230601; t=1698683468; x=1699288268;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QJRzUGi0crPAdF+PsGr4fd82XBsUf26/RqsTLoK6Cc8=;
-        b=idRWEDlKD1RoUjkt+REzL9ovd8Yp2UBQhHBoEtxv/yV0HGOI2chFp5Cn021XKron0b
-         QSAOc1OyfgI2jg1WSFJ5xBXYATEpe7SdZgr2iNM4Lzqr/YluGk1kMGcdiRnMfF4sHa2n
-         eYOUvdF4BMM/qvmJqpPhzu0+0Xd5+bYUhw4Q5jnZcO0ee8+asInmwD0a03eFwtG69WHj
-         BSLp0qqYMrLRAkmhK1ubSyxyrrGvpORPTbnifzxovd3eYsZJ4IHcndhCAuDXQiOeGuZI
-         jnFlHZy5auU4zIbjDoIMuxzMSY0yLpGC0YTAbcpCUUqsid9F6e1zsDb/mQ2LfRDB7iqC
-         nVLg==
-X-Gm-Message-State: AOJu0Yw8260hdRSnRn+lqZx7jfR9H7yW3sp//WwzUTiUxRqppOtp3eFD
-        aS+oN1nm52cCZmCVUIc+yEZKX/dP0LCcpTyVJKEW5Wcwa8I4OEL6C8y7cvGvcGxvzzmOgjI+WVx
-        0gFmhYxKeS2cQpvDL79dZm+TM20YAOw==
-X-Received: by 2002:a05:600c:5204:b0:408:3f61:cb4f with SMTP id fb4-20020a05600c520400b004083f61cb4fmr7847791wmb.23.1698683274959;
-        Mon, 30 Oct 2023 09:27:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHfa0KyfT9rBRGOGCePk10CmFCQx85iYerXM1uRezmX93sdvp3R2tcV7yoRdLLu5R9pLdpikw==
-X-Received: by 2002:a05:600c:5204:b0:408:3f61:cb4f with SMTP id fb4-20020a05600c520400b004083f61cb4fmr7847757wmb.23.1698683274613;
-        Mon, 30 Oct 2023 09:27:54 -0700 (PDT)
+        bh=AFGN4ziW+95DqCrq4ZKBGZMP1faea1+XydZr6yChQh0=;
+        b=GCNcbfdPw6UE85MMwxY3fcCzb7Wf72qE+MjPn8Np8spRsdfP5KbpOO6a2r15ToOV0W
+         aZY3jY0AGk3s604yNwLO7W6Pdj1bEzCWEql2H5sbuXbEnrANXnMNNe4oenVjAs0v8YmD
+         yOwDk3nTIxfJ2oee+9vI+1LWBXtRqj8/ccX3JxWWYPwoFXUMMA5nThwrCnvIEU+5vaWt
+         csiMB3wbJ5ZX34kZ2pmupVLWrSodBEUmQWO5wKrE6PQlH7rHOshH1O5QIb3SQHjPaAvI
+         M7PLU7vfULfjEZWBYOxErydbX4VtiRfcVTma58lWSfCMCGFRIdDDeuRs0cXq+olmQEQC
+         aepA==
+X-Gm-Message-State: AOJu0YwiNaFJDgMHstexQVhS5ZnZC/sNK+pS93yVUbppUdycOModaFmr
+        tiAwfq6FIyLOvEhEVbiTDi8zipOPUJhUGF6lgKew4JcRNozNNVQ/CfbD9VHY7HoTlIxZ+1UsmQJ
+        vFo7xVAw7UenfalmFexcXhg==
+X-Received: by 2002:a05:6512:3287:b0:500:aed0:cb1b with SMTP id p7-20020a056512328700b00500aed0cb1bmr7326624lfe.24.1698683467868;
+        Mon, 30 Oct 2023 09:31:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGRdAajClQLfI8UNi2+tGCjjTj9MUSIZarD5jdmlcc1gAAUSTu27VbeMUcm58GL6U7UOb+lpQ==
+X-Received: by 2002:a05:6512:3287:b0:500:aed0:cb1b with SMTP id p7-20020a056512328700b00500aed0cb1bmr7326601lfe.24.1698683467485;
+        Mon, 30 Oct 2023 09:31:07 -0700 (PDT)
 Received: from [192.168.1.174] ([151.81.68.207])
-        by smtp.googlemail.com with ESMTPSA id u18-20020a05600c19d200b00401b242e2e6sm13160177wmq.47.2023.10.30.09.27.49
+        by smtp.googlemail.com with ESMTPSA id k16-20020a05600c0b5000b0040586360a36sm12945400wmr.17.2023.10.30.09.30.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 09:27:53 -0700 (PDT)
-Message-ID: <ac502d11-1fe8-45ec-bb91-02c94dbcd16d@redhat.com>
-Date:   Mon, 30 Oct 2023 17:27:47 +0100
+        Mon, 30 Oct 2023 09:31:06 -0700 (PDT)
+Message-ID: <bd49d731-9231-44bb-9950-949ee95f3b7e@redhat.com>
+Date:   Mon, 30 Oct 2023 17:30:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 02/35] KVM: Assert that mmu_invalidate_in_progress
- *never* goes negative
+Subject: Re: [PATCH v13 03/35] KVM: Use gfn instead of hva for
+ mmu_notifier_retry
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -102,7 +102,7 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-3-seanjc@google.com>
+ <20231027182217.3615211-4-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
 Autocrypt: addr=pbonzini@redhat.com; keydata=
  xsEhBFRCcBIBDqDGsz4K0zZun3jh+U6Z9wNGLKQ0kSFyjN38gMqU1SfP+TUNQepFHb/Gc0E2
@@ -139,14 +139,13 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <20231027182217.3615211-3-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-4-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -154,47 +153,18 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 10/27/23 20:21, Sean Christopherson wrote:
-> Move the assertion on the in-progress invalidation count from the primary
-> MMU's notifier path to KVM's common notification path, i.e. assert that
-> the count doesn't go negative even when the invalidation is coming from
-> KVM itself.
-> 
-> Opportunistically convert the assertion to a KVM_BUG_ON(), i.e. kill only
-> the affected VM, not the entire kernel.  A corrupted count is fatal to the
-> VM, e.g. the non-zero (negative) count will cause mmu_invalidate_retry()
-> to block any and all attempts to install new mappings.  But it's far from
-> guaranteed that an end() without a start() is fatal or even problematic to
-> anything other than the target VM, e.g. the underlying bug could simply be
-> a duplicate call to end().  And it's much more likely that a missed
-> invalidation, i.e. a potential use-after-free, would manifest as no
-> notification whatsoever, not an end() without a start().
+> From: Chao Peng <chao.p.peng@linux.intel.com> Currently in mmu_notifier 
+> invalidate path, hva range is recorded and then checked against by 
+> mmu_notifier_retry_hva() in the page fault handling path. However, for 
+> the to be introduced private memory, a page fault may not have a hva 
+> associated, checking gfn(gpa) makes more sense. For existing hva based 
+> shared memory, gfn is expected to also work. The only downside is when 
+> aliasing multiple gfns to a single hva, the current algorithm of 
+> checking multiple ranges could result in a much larger range being 
+> rejected. Such aliasing should be uncommon, so the impact is expected 
+> small.
 
 Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   virt/kvm/kvm_main.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 0524933856d4..5a97e6c7d9c2 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -833,6 +833,7 @@ void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
->   	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
->   	 */
->   	kvm->mmu_invalidate_in_progress--;
-> +	KVM_BUG_ON(kvm->mmu_invalidate_in_progress < 0, kvm);
->   }
->   
->   static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
-> @@ -863,8 +864,6 @@ static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
->   	 */
->   	if (wake)
->   		rcuwait_wake_up(&kvm->mn_memslots_update_rcuwait);
-> -
-> -	BUG_ON(kvm->mmu_invalidate_in_progress < 0);
->   }
->   
->   static int kvm_mmu_notifier_clear_flush_young(struct mmu_notifier *mn,
+Paolo
 
