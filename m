@@ -2,65 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653377DBF0A
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8681E7DBF19
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbjJ3RfP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Oct 2023 13:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S231648AbjJ3RhG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Oct 2023 13:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjJ3RfH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:35:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B00493
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:34:20 -0700 (PDT)
+        with ESMTP id S233959AbjJ3RhC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:37:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500FEA9
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:36:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698687259;
+        s=mimecast20190719; t=1698687374;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=5fMqrw+qFhssxj8qhYVvLd8lvq+1o5oZc/SrI7TORTQ=;
-        b=aX7D2XInE3im0lFLJxafHhkRtxARBOstcwsapG6x2d3JTjdZ3VqRgF0QpSfg56C02KacZm
-        pb94k/ApH88eR4CYWHB9oRFIR3J+MFC9TQn4exSyFBvSUT5ZHAh3WI0BQYEa+5TwsVLdAa
-        uL16pDRgM8OREsxchxcUaW0idqhlPcs=
+        bh=3jYLwfXXzRbH81zwo7MCV6nGPuDVHVRPsAgIWckITik=;
+        b=IcA+ZLnpKQJpkCRGDeb33JEkCn0qNxsf+T38lWM+J1FdtxfUv3d9OgweJu6+CVjKyNkrdb
+        xFUFoD42L/cV+VNMIP9EugPeJNCCu6ePeotPp/6SdlzGexxjJrJaQcjpo4kSnAW0weezRq
+        9i8t5ffjdsjeJr6mTv6hFVPs4mNBzpg=
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
  [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-256--zuq4sEjOa6i4FLgZaUxtA-1; Mon, 30 Oct 2023 13:34:17 -0400
-X-MC-Unique: -zuq4sEjOa6i4FLgZaUxtA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-408534c3ec7so33810625e9.1
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:34:17 -0700 (PDT)
+ us-mta-533-6AZ6CbD7O3K3ItSxFDIcFw-1; Mon, 30 Oct 2023 13:36:13 -0400
+X-MC-Unique: 6AZ6CbD7O3K3ItSxFDIcFw-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-407d3e55927so33339385e9.1
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:36:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698687256; x=1699292056;
+        d=1e100.net; s=20230601; t=1698687372; x=1699292172;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5fMqrw+qFhssxj8qhYVvLd8lvq+1o5oZc/SrI7TORTQ=;
-        b=ZE1aPTwbG/jRx2FASKRvE74Szk2H0dP7UIPHdwMsNzvl1GTJogUpfqv+BTl9o4aXan
-         FNv2Itl+mV7N7CU8DgNMatrvgCVooAZ6vHu0b1B8K3WGPLTyXb1B9pvDaIvLvhGQ7XDU
-         nBsKpeUXBJ+UCzYMb5qRV/EgZX6Uq2gScoCNp+AJWLOzQ6nGTJu+lJw+7bTwndTW3JGW
-         K8PgaFQEd5jBDQvyJWJ/mZj6l6A8QNFZyN5JWwyP6557Ezz3eU7nlOWyRkJ9Y4AyjLKt
-         11FAHQoIIpLoHa3xAsbzuQznWeehw31Klt7W1Kg0KkxIe45mV6jqPgWlUjy7IxMoGjZq
-         ilNA==
-X-Gm-Message-State: AOJu0YwXbEh2xBX/Of7noQsJKC77Kd/5nzwmI0bfEytxKS00k0AA2x17
-        t0aUREW3O/aigcBAByBzB/9WeT9dhXy1AWHsYxNgHFt/pDAoVGKmlwNV75GA5EKeKW7OquQu+VH
-        0r0sP8wLIomiL6HOOXZcU/w==
-X-Received: by 2002:a5d:674c:0:b0:32d:bc7d:c431 with SMTP id l12-20020a5d674c000000b0032dbc7dc431mr8595475wrw.1.1698687256656;
-        Mon, 30 Oct 2023 10:34:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGoSwHjCgF60i9p5iHFG+4s/5oKx7xoJBSRpuzoczO/1s/n65Z43CGXqwQnwC+DGZUjQ2L04A==
-X-Received: by 2002:a5d:674c:0:b0:32d:bc7d:c431 with SMTP id l12-20020a5d674c000000b0032dbc7dc431mr8595455wrw.1.1698687256340;
-        Mon, 30 Oct 2023 10:34:16 -0700 (PDT)
+        bh=3jYLwfXXzRbH81zwo7MCV6nGPuDVHVRPsAgIWckITik=;
+        b=Hhht/nDHj2YlO+8MbgdIq0LaR1kdsI2SSNFlp1/yZXcNtGXdLqzlBcVE5rCsgtico4
+         fm1IJpjlCriUxAax7hVgmuBBiGIbzSrTln5WFBVp6UPzTiL5fUBOQ/6Yn1yJjMZsXUXG
+         cr3L2k4RGo+y9A0PHg2/BbohstvR1t9yRYGBPgNJauXGGNpEcQUes4rT2Aq7zbbo1co/
+         Q0PGbPtPgTyEJZUmVTAvUjvbDGU7pynyuHt4WW4pEj4W14or+m+d4/NUQcXVQ8s6HMt2
+         xq+9g3yWMJ7r/0ScodBl32ONI0alyDO/0TCC9nzF9tQohGjgA6B9hjuKAOqUClU9Iopd
+         fx/A==
+X-Gm-Message-State: AOJu0YxILSqw83BLi1r06b9+2SsMaRVMXAXt3I9S6obj/myRFNhwtad/
+        YWKtX70w9VmbMWaNG9ya2x4BIzUY5sq/DroBVp6ghGFzeliucoQZjfXpHImIthdMgcIyaV5ipWc
+        qdXlQmy0FZjzrdsml11YT2A==
+X-Received: by 2002:adf:ec4f:0:b0:32d:8357:42dd with SMTP id w15-20020adfec4f000000b0032d835742ddmr6883249wrn.68.1698687371990;
+        Mon, 30 Oct 2023 10:36:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEboAELdFqaoOZREgnEhsC/lbRki6/0Jdh0l66f6RUru0wLk22AqSmUMVbSPZpU1ZFwEkh2hA==
+X-Received: by 2002:adf:ec4f:0:b0:32d:8357:42dd with SMTP id w15-20020adfec4f000000b0032d835742ddmr6883233wrn.68.1698687371568;
+        Mon, 30 Oct 2023 10:36:11 -0700 (PDT)
 Received: from [192.168.1.174] ([151.81.68.207])
-        by smtp.googlemail.com with ESMTPSA id o26-20020a5d58da000000b0032d2489a399sm8695806wrf.49.2023.10.30.10.34.13
+        by smtp.googlemail.com with ESMTPSA id p14-20020a5d68ce000000b003253523d767sm8703507wrw.109.2023.10.30.10.36.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 10:34:15 -0700 (PDT)
-Message-ID: <9bc69994-c98f-48e4-b956-08a8d98a6e6d@redhat.com>
-Date:   Mon, 30 Oct 2023 18:34:12 +0100
+        Mon, 30 Oct 2023 10:36:10 -0700 (PDT)
+Message-ID: <a56e499f-c91c-45da-b404-444c22b2df24@redhat.com>
+Date:   Mon, 30 Oct 2023 18:36:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 22/35] KVM: Allow arch code to track number of memslot
- address spaces per VM
+Subject: Re: [PATCH v13 23/35] KVM: x86: Add support for "protected VMs" that
+ can utilize private memory
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -102,7 +102,7 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-23-seanjc@google.com>
+ <20231027182217.3615211-24-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
 Autocrypt: addr=pbonzini@redhat.com; keydata=
  xsEhBFRCcBIBDqDGsz4K0zZun3jh+U6Z9wNGLKQ0kSFyjN38gMqU1SfP+TUNQepFHb/Gc0E2
@@ -139,13 +139,14 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <20231027182217.3615211-23-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-24-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -153,15 +154,35 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 10/27/23 20:22, Sean Christopherson wrote:
-> Let x86 track the number of address spaces on a per-VM basis so that KVM
-> can disallow SMM memslots for confidential VMs.  Confidentials VMs are
-> fundamentally incompatible with emulating SMM, which as the name suggests
-> requires being able to read and write guest memory and register state.
+> Add a new x86 VM type, KVM_X86_SW_PROTECTED_VM, to serve as a development
+> and testing vehicle for Confidential (CoCo) VMs, and potentially to even
+> become a "real" product in the distant future, e.g. a la pKVM.
 > 
-> Disallowing SMM will simplify support for guest private memory, as KVM
-> will not need to worry about tracking memory attributes for multiple
-> address spaces (SMM is the only "non-default" address space across all
-> architectures).
+> The private memory support in KVM x86 is aimed at AMD's SEV-SNP and
+> Intel's TDX, but those technologies are extremely complex (understatement),
+> difficult to debug, don't support running as nested guests, and require
+> hardware that's isn't universally accessible.  I.e. relying SEV-SNP or TDX
+> for maintaining guest private memory isn't a realistic option.
+> 
+> At the very least, KVM_X86_SW_PROTECTED_VM will enable a variety of
+> selftests for guest_memfd and private memory support without requiring
+> unique hardware.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
 Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+
+with one nit:
+
+> +---------------------
+> +
+> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> +:Architectures: x86
+> +:Type: system ioctl
+> +
+> +This capability returns a bitmap of support VM types.  The 1-setting of bit @n
+
+s/support/supported/
+
+Paolo
 
