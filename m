@@ -2,65 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909D57DBE92
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F127DBEAB
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Oct 2023 18:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjJ3RM7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Oct 2023 13:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S232897AbjJ3RTZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Oct 2023 13:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbjJ3RM5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:12:57 -0400
+        with ESMTP id S229587AbjJ3RTZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Oct 2023 13:19:25 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E3EF9
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:12:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38566AB
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:18:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698685920;
+        s=mimecast20190719; t=1698686318;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=lo4ysHz5pmHfFsXnk84EoayTJ3hTlIhc3rVOfp1rxtc=;
-        b=WPvO/wF5FLIb4JDzK8m6eajdCMCWjohxM5gkn7u9wmIdyGE28Wks/Ex3QzM0aNT5cBw9xD
-        4snBZi1Je3mkDVGjPBfe+QtRr7RbGIRgFS3aoSwdOfy2rvxb+vjofK+V3YZrchawHeRjiE
-        Q9pLOxhnqIgpAq2/G6UpCLqeWEPJETI=
+        bh=Rk1z/nbke87TeFl+NzbMTW3BKeJ5hl7Q8glGeyBEAiE=;
+        b=V005a3pA+/KQ921ND+eANYyZKRw+vIVcRSlZnPmhssp3yne9N5xAdSMR2kGxwaToOPJm3i
+        FwV6EAarRT5UKZyJnlP245aHsHBmUB37TQZ3EhSu7rMo2yGt5hrcCI4qo+K1zSbCHsePSy
+        5JPgtpGrd/q5rncCXNVW4HvGzJEMnG0=
 Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
  [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-211-NOp2yfJLMBmLhfAOLazplg-1; Mon, 30 Oct 2023 13:11:54 -0400
-X-MC-Unique: NOp2yfJLMBmLhfAOLazplg-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4084163ecd9so34499615e9.3
-        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:11:53 -0700 (PDT)
+ us-mta-27-0aJrhYnPPV6e9V8Yzek8OA-1; Mon, 30 Oct 2023 13:18:36 -0400
+X-MC-Unique: 0aJrhYnPPV6e9V8Yzek8OA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4083a670d25so35351005e9.0
+        for <linux-mips@vger.kernel.org>; Mon, 30 Oct 2023 10:18:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698685913; x=1699290713;
+        d=1e100.net; s=20230601; t=1698686315; x=1699291115;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lo4ysHz5pmHfFsXnk84EoayTJ3hTlIhc3rVOfp1rxtc=;
-        b=munEjfXB57TYqh407mmW84XIUjScOsFMIFqtTscQan6HVVus+Vc6S1yvCeMy/r6Ona
-         mGfJa0X2vSZVDovzzb/rg1dCty5eSwPPYo3n7UdMY05ILnGCG6lRSGnF5498H01Iz/Gc
-         1tZNaPxOI66YJaL9acBi6fciQum+IRQHS3kNcXGZbL6lC4eAF4xnRHoWTqXAuw2kuasi
-         4R1OLaGJwXPAwaI+P/w5SxR3RHUXVHdLlo8pRC5kMRyuFiCMllOSFsuT4eRcwfqJQl1h
-         mIBV9pK8uzxjcnz1kjUl6W1U0ZEQtJSNU2nSaGWMNYgdMsfw6FSH5fOEz7R+GNw7h1wy
-         7Fmw==
-X-Gm-Message-State: AOJu0Yxx3kG75Y1/ybN1mnjQJ1U5KRKsNgwXkhRgYRN3AYOvdMw/6Tok
-        xG5C1J87iK1WPazwYssJLYFJBhkMpidjCs0uueDzQ7uqi5Boi7Dif0/F6l9woGwoCYV/6+VwVKO
-        RetKjzcjqOBceTmoT9khmVw==
-X-Received: by 2002:a05:600c:1c9a:b0:401:d803:6243 with SMTP id k26-20020a05600c1c9a00b00401d8036243mr8797110wms.32.1698685912898;
-        Mon, 30 Oct 2023 10:11:52 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEE3mzsAlLnekLWdY8A4rueILcmfn/0LGvZfOgJVm2OXLCsoyw1l1K7DLfNbIxoxk9UoBDhkg==
-X-Received: by 2002:a05:600c:1c9a:b0:401:d803:6243 with SMTP id k26-20020a05600c1c9a00b00401d8036243mr8797063wms.32.1698685912474;
-        Mon, 30 Oct 2023 10:11:52 -0700 (PDT)
+        bh=Rk1z/nbke87TeFl+NzbMTW3BKeJ5hl7Q8glGeyBEAiE=;
+        b=dBLjPE/eSK6WcAnZU6Ob/tAopcyp/3qnfE3G2cgDGNE41iLqgmNywAccgexfwrcsH7
+         OZk9JDcFDUJlA3eEb0KOaLHCGX+MfsuTZFjVyxybj/TZRUkyYcd4ExHhqECBdm3PM8wl
+         vxgOOlNK14qN+AyK1/BW/T6SXJIZHizPlk9ZDqqABRV2ID7XguGwGmF/M1jRcdPHH7gF
+         IvYIy2sdQ+Lf5qZ+79S0mDzsblaBD2a+qkhJABQYDZNV3GPZQ0dwRAaJRrpwuXS+RNi6
+         GIvvAiw0LoPAKQAb8kcHc7GW5AyOu5h1l+Nvtjm0v/Ul79guv9c+bvdrtUVP4xzkfo96
+         eZ4g==
+X-Gm-Message-State: AOJu0YxXq5S3hnj0aaPR1cjFw00P/qTY1uEhUFIC1bnw2eS5PFmUdSGz
+        VYOxRLLKIqUjPc2CmejAwwSnEd/7dj5WjOTVMgPSf0oPoP2ksxhZKTSwOvD4bFm+L1NviziUD7S
+        lKfE3dRo3CBopv9BpN2E0tw==
+X-Received: by 2002:a05:600c:3512:b0:408:3e7a:82ea with SMTP id h18-20020a05600c351200b004083e7a82eamr9347591wmq.1.1698686315468;
+        Mon, 30 Oct 2023 10:18:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE2IYd31Kg1xsjAW7zrsQp03VV1LrLjkoWwzBfM1QTMJAHwovsXW/3FoijWAFrYv3Vz5FidRg==
+X-Received: by 2002:a05:600c:3512:b0:408:3e7a:82ea with SMTP id h18-20020a05600c351200b004083e7a82eamr9347545wmq.1.1698686315114;
+        Mon, 30 Oct 2023 10:18:35 -0700 (PDT)
 Received: from [192.168.1.174] ([151.81.68.207])
-        by smtp.googlemail.com with ESMTPSA id w16-20020adfcd10000000b0032da75af3easm8617198wrm.80.2023.10.30.10.11.40
+        by smtp.googlemail.com with ESMTPSA id l16-20020adffe90000000b003198a9d758dsm4171497wrr.78.2023.10.30.10.18.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 10:11:51 -0700 (PDT)
-Message-ID: <773328b3-0ef0-4e93-afb9-6fba3302b8a7@redhat.com>
-Date:   Mon, 30 Oct 2023 18:11:39 +0100
+        Mon, 30 Oct 2023 10:18:34 -0700 (PDT)
+Message-ID: <22789e20-1a4a-48af-99ad-3e88c18dd231@redhat.com>
+Date:   Mon, 30 Oct 2023 18:18:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 10/35] KVM: Add a dedicated mmu_notifier flag for
- reclaiming freed memory
+Subject: Re: [PATCH v13 11/35] KVM: Drop .on_unlock() mmu_notifier hook
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -102,7 +101,7 @@ Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-11-seanjc@google.com>
+ <20231027182217.3615211-12-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
 Autocrypt: addr=pbonzini@redhat.com; keydata=
  xsEhBFRCcBIBDqDGsz4K0zZun3jh+U6Z9wNGLKQ0kSFyjN38gMqU1SfP+TUNQepFHb/Gc0E2
@@ -139,14 +138,13 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <20231027182217.3615211-11-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-12-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -154,21 +152,26 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 10/27/23 20:21, Sean Christopherson wrote:
-> Handle AMD SEV's kvm_arch_guest_memory_reclaimed() hook by having
-> __kvm_handle_hva_range() return whether or not an overlapping memslot
-> was found, i.e. mmu_lock was acquired.  Using the .on_unlock() hook
-> works, but kvm_arch_guest_memory_reclaimed() needs to run after dropping
-> mmu_lock, which makes .on_lock() and .on_unlock() asymmetrical.
+> Drop the .on_unlock() mmu_notifer hook now that it's no longer used for
+> notifying arch code that memory has been reclaimed.  Adding .on_unlock()
+> and invoking it *after* dropping mmu_lock was a terrible idea, as doing so
+> resulted in .on_lock() and .on_unlock() having divergent and asymmetric
+> behavior, and set future developers up for failure, i.e. all but asked for
+> bugs where KVM relied on using .on_unlock() to try to run a callback while
+> holding mmu_lock.
 > 
-> Use a small struct to return the tuple of the notifier-specific return,
-> plus whether or not overlap was found.  Because the iteration helpers are
-> __always_inlined, practically speaking, the struct will never actually be
-> returned from a function call (not to mention the size of the struct will
-> be two bytes in practice).
+> Opportunistically add a lockdep assertion in kvm_mmu_invalidate_end() to
+> guard against future bugs of this nature.
 
-Could have been split in two patches, but it's fine anyway.
+This is what David suggested to do in patch 3, FWIW.
 
 Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 
 Paolo
+
+> Reported-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Link: https://lore.kernel.org/all/20230802203119.GB2021422@ls.amr.corp.intel.com
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+
 
