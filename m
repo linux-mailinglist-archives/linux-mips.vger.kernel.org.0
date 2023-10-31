@@ -2,120 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912B07DC878
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 09:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D2B7DCA49
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 10:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235604AbjJaIhB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 04:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S235267AbjJaJ6q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 05:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235459AbjJaIge (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 04:36:34 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088FB19A5;
-        Tue, 31 Oct 2023 01:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698741324; x=1730277324;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=P66Mu8Qvvs1bSZcrJh1IrkuvvxdPz+TRpT/cX8K5jyg=;
-  b=HF/aq1aKX0AEQJ6p5OCq177hf/hgvm8BDy9PuwK4P10EL6t43isbenZV
-   ssgovxU4JCBaCX3RJsx8J3agyvVn54zps6oEFbMcIJ8IInri0SO+Qv7o9
-   vhP+D0K7fELFd0MxMpML28YOYTEVAuvkxeEQO6jNgnM8KVdsHO8xsgK7M
-   LoC5hQ9Ktbry8tcF6+XnT+i0AWw9Yx76pjGyrzq4k6l1L2EXNmHdvVOtP
-   GcRU1YuSC1/JPl1fNcdzuxKOkboVRHVoIDizTEFvxG93PFOkAb7x6BGlY
-   fOhqHtlNUhCthuO5uViTAUjo1SgOdcq5ljaCs65BaRgN5lPk3qakixnUu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10879"; a="474479537"
-X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
-   d="scan'208";a="474479537"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 01:35:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10879"; a="795488444"
-X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
-   d="scan'208";a="795488444"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.9.145]) ([10.93.9.145])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 01:35:11 -0700
-Message-ID: <7c0844d8-6f97-4904-a140-abeabeb552c1@intel.com>
-Date:   Tue, 31 Oct 2023 16:35:08 +0800
+        with ESMTP id S230464AbjJaJ6p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 05:58:45 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D03D8;
+        Tue, 31 Oct 2023 02:58:43 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 85EE93200A30;
+        Tue, 31 Oct 2023 05:58:41 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Tue, 31 Oct 2023 05:58:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1698746321; x=1698832721; bh=hGHPH0otSQhb+ezuJFb5cOt3lM/d83wh5j3
+        /Ve+BNBg=; b=fNmbxvMlV55NZdolsFP5rPiCIgl3z9Odq+LczgeiP88OIpZjoo4
+        K6ASsJhKOYnKYfbBXk66lAIEEpQsiNbC7dX7jE9CecC1NvEiNHbawsAkIBvdhDn7
+        ArT6/ep/q07FIM7nUBHEkA+0cLKNfh8hDaim4bRexdTYNmQw2d6dJ9gD8SpNAfsK
+        kxCuwgPD833Sj/vOC18tTdgCE0JSqoCur1CAY7IGlCWSz/umsBEuTn2wGW6Mpl6p
+        /QE28tMkQEKNBcL6WDln08Ig1YNdNmiuOqCBc6uwUQiOJBSaPJosJEyC8iCG2WSD
+        JoOJZAjZAwoTZ2bn7YhfxNy2qkz9TJLtQig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1698746321; x=1698832721; bh=hGHPH0otSQhb+ezuJFb5cOt3lM/d83wh5j3
+        /Ve+BNBg=; b=M0nMIz5OBIz6py8D1Q+FhV08TDzEuLzN3EnFN4TtYWf34IoioQf
+        bBX6dLiBxA+ed3muDRoFrMH89zBoaWtr73lxsYRCWQXi8zad6vkWn12U81SXQATI
+        3wJBQ979KT4h3rWMuyWQZBrqwNup/3InH52qNxNghPZ0OuYDwqIOUiQTHl7IyX1b
+        2okJjqqqY5yPdyZkv1SqqYHjyePuuWoA5dnu7hcTY8cAyDaBHlEhmtSfCopK5BaE
+        hzpCHsfBceF83o8nQasdYHeN7bH8ivuH/GKQr0vJ7nFku9KYDF6sh/ExcJb0GKBa
+        8h2zfV1F5KjlrSqIp083PBk76w5BqKsYkUw==
+X-ME-Sender: <xms:z89AZRan5mhkNFr0oE97S49XgmLqrk9K-pqu2fcTJB1dVvQxNfZjdA>
+    <xme:z89AZYYEkUg_eOs-ONb7B00c-T-Ncd-JT_RTwzSbo6tIwnRRM7q9BL-t_lEIP7wct
+    xRWdxMCJbVOYnRnvJk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtvddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:z89AZT-pt4ajXvIucm5TTh-V5z2_iSj_O0c1_ybx1j1UTE5pgtoTHQ>
+    <xmx:z89AZfoVOUuspXOJ5tuxGE-yo96_0SZ6jWNPoTBgK2xuOpjUb0TyRQ>
+    <xmx:z89AZcq7yJuHCW29WDkcWogiK4Fxt9CGDlV2s_KeeZpO0cyXtc8EMw>
+    <xmx:0c9AZZ6VoWbK1NBjvwRbHms9EOjMXb7V7h7wPrPHhMKUGlTBu8Yu7w>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3082C36A0075; Tue, 31 Oct 2023 05:58:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 17/35] KVM: Add transparent hugepage support for
- dedicated guest memory
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-18-seanjc@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20231027182217.3615211-18-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Message-Id: <83e32f3a-75c4-4a72-a523-ecef501f9605@app.fastmail.com>
+In-Reply-To: <fd5efc8a21b94e044e4e225255655fc92beb0c63.1698717154.git.zhoubinbin@loongson.cn>
+References: <cover.1698717154.git.zhoubinbin@loongson.cn>
+ <fd5efc8a21b94e044e4e225255655fc92beb0c63.1698717154.git.zhoubinbin@loongson.cn>
+Date:   Tue, 31 Oct 2023 09:58:18 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Binbin Zhou" <zhoubinbin@loongson.cn>,
+        "Binbin Zhou" <zhoubb.aaron@gmail.com>,
+        "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>
+Cc:     "Huacai Chen" <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "Jianmin Lv" <lvjianmin@loongson.cn>,
+        "WANG Xuerui" <git@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] dt-bindings: interrupt-controller: loongson,liointc: Fix
+ dtbs_check warning for reg-names
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/28/2023 2:21 AM, Sean Christopherson wrote:
-> Extended guest_memfd to allow backing guest memory with transparent 
-> hugepages. Require userspace to opt-in via a flag even though there's no 
-> known/anticipated use case for forcing small pages as THP is optional, 
-> i.e. to avoid ending up in a situation where userspace is unaware that 
-> KVM can't provide hugepages.
 
-Personally, it seems not so "transparent" if requiring userspace to opt-in.
 
-People need to 1) check if the kernel built with TRANSPARENT_HUGEPAGE 
-support, or check is the sysfs of transparent hugepage exists; 2)get the 
-maximum support hugepage size 3) ensure the size satisfies the 
-alignment; before opt-in it.
+=E5=9C=A82023=E5=B9=B410=E6=9C=8831=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8A=
+=E5=8D=882:36=EF=BC=8CBinbin Zhou=E5=86=99=E9=81=93=EF=BC=9A
+> As we know, the Loongson-2K0500 is a single-core CPU, and the
+> core1-related register (isr1) does not exist, and we need a separate
+> declaration.
+>
+> This fixes dtbs_check warning:
+>
+> DTC_CHK arch/loongarch/boot/dts/loongson-2k0500-ref.dtb
+> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb:=20
+> interrupt-controller@1fe11400: reg-names: ['main', 'isr0'] is too short
+>         From schema:=20
+> Documentation/devicetree/bindings/interrupt-controller/loongson,lioint=
+c.yaml
+> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb:=20
+> interrupt-controller@1fe11400: Unevaluated properties are not allowed=20
+> ('reg-names' was unexpected)
+>         From schema:=20
+> Documentation/devicetree/bindings/interrupt-controller/loongson,lioint=
+c.yaml
+> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb:=20
+> interrupt-controller@1fe11400: reg: [[0, 534844416, 0, 64], [0,=20
+> 534843456, 0, 8]] is too short
+>         From schema:=20
+> Documentation/devicetree/bindings/interrupt-controller/loongson,lioint=
+c.yaml
+> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb:=20
+> interrupt-controller@1fe11440: reg-names: ['main', 'isr0'] is too short
+>         From schema:=20
+> Documentation/devicetree/bindings/interrupt-controller/loongson,lioint=
+c.yaml
+>
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Even simpler, userspace can blindly try to create guest memfd with 
-transparent hugapage flag. If getting error, fallback to create without 
-the transparent hugepage flag.
-
-However, it doesn't look transparent to me.
+[...]
+--=20
+- Jiaxun
