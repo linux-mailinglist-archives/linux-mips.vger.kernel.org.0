@@ -2,177 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AC17DCA50
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 11:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FECF7DCEAE
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 15:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjJaKAR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 06:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S229705AbjJaOE6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 10:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235929AbjJaKAO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 06:00:14 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55D4A1;
-        Tue, 31 Oct 2023 03:00:11 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 8F1903200A85;
-        Tue, 31 Oct 2023 06:00:09 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Tue, 31 Oct 2023 06:00:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1698746409; x=1698832809; bh=zy3d22Xx9MRE6ZrJA2+1C3ACKZHE8r/2+Yw
-        y56bYQMQ=; b=pMKLK08K/5fcHWfKZiN/rNdxJZpFkYTJon0Pe+MeTKGd4dsdx/t
-        A73gM7E4X7FNU0b6PAaflaYEbch5gaGVuJg9o1OqSXkstfNWfhNfIpS/5w1Oc8uZ
-        2T6YyANNlLWacnFN33dmcJivpkYTgRAaLY3QrecF3MEjRuLEc5i49RmGvYmGZpt6
-        MLngdWIPZ5WXAMrNvVoe+oNipHJJppKVHl7KtzkuEtceoczoEKYI+2iC8CzA9qoZ
-        DPaOLS/Nf9ubFYE3497PY94rKFHxJk2wW6xJrm74tXgcVvn0g2UY4nzr2qSoEp/G
-        k+KvN/gBVfbLABugfWSBTpZB8TX6nrUSe6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1698746409; x=1698832809; bh=zy3d22Xx9MRE6ZrJA2+1C3ACKZHE8r/2+Yw
-        y56bYQMQ=; b=my63bWY7eIBRQwSJf07uzAfJF0h5y5TqAP5AnI5nWk/39qmV0a9
-        lXxesY1cfpPUOj3vN/jzK6kk7iy/7aKL8qrD7MZh6oScAPmzn/aFd4g1zorinxua
-        T3qBtOHU5MSJaenLi+UzrzB6T+XDJ8dZGjVmt2JCvZ16QmbwG8+HRcCSKqi0X5QP
-        3C5z6JREBtDJ0NEu5bP1l+WJLeXrWJvPNRXkuO7BF6l/XIEWmdqCyCOz92kesPh6
-        HcYYDZhxNzp5WTEsw+5kidrgOZfrsbEbnkHq10hYW5pBsLkRJFjKqpwEuwrn7rIF
-        O/ICIGJT0FyuGkHZkPyAYYG8RW7u23a3hxA==
-X-ME-Sender: <xms:KNBAZbQyt_x948R6OvDOsPaKvYeut-mDEqq4iBmXC0Pzt-EHyQuW2w>
-    <xme:KNBAZcxqdE9WKPx_nP4qRMvW3S2JOL2pAzRfV9ToUGD7jdMARqPuVaiYFYaZWWhc7
-    r8Vhrn_DeDO2FYBgiQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtvddgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeekleevffehtdeigfekfefhffdtudffvdeuvedtffet
-    heeuiefhgfetleekleekjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdih
-    rghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:KNBAZQ0Z9b9Oy80kVk6mXl3bv-Nr34y0twv-He7r8n8ia66s8S6BBA>
-    <xmx:KNBAZbDEvJIOasQC0STcvszz0nwFehhBX-4A0mqpjm5vnADYou9ReA>
-    <xmx:KNBAZUijmUG4yHI6WcqZIrBvXkT7_pnkpObsPA38wE3BomfhSLu0Pw>
-    <xmx:KdBAZTTrxq4RgteKMAQWNRkoOprWtbcxxiqxZUyjClEFUBLdkSCIIA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7254036A0075; Tue, 31 Oct 2023 06:00:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
-MIME-Version: 1.0
-Message-Id: <7cb0bf4b-ca0b-4c3e-b965-4e8cd7a805e6@app.fastmail.com>
-In-Reply-To: <cover.1698717154.git.zhoubinbin@loongson.cn>
-References: <cover.1698717154.git.zhoubinbin@loongson.cn>
-Date:   Tue, 31 Oct 2023 09:59:48 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Binbin Zhou" <zhoubinbin@loongson.cn>,
-        "Binbin Zhou" <zhoubb.aaron@gmail.com>,
-        "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>
-Cc:     "Huacai Chen" <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Jianmin Lv" <lvjianmin@loongson.cn>,
-        "WANG Xuerui" <git@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] dt-bindings: interrupt-controller: Fix some
- loongson,liointc warnings
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230142AbjJaOE4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 10:04:56 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62953DE
+        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 07:04:53 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-da033914f7cso5397200276.0
+        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 07:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698761092; x=1699365892; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsemryN+7v+wOBolNu7Hy0wHrULeaB9eFsfVkGp1/e8=;
+        b=FrCK2BdFm4j45mpD+yVokt411jGTt+mhy/sd2Vi1orDmdUK8qPAg6Jm9kdANvFkCjX
+         D442v8pY1sA/+tReHxcAfbkggmdQRySJHmw3dTDtt9FzVamFAh2sclv3iu1KjT281u72
+         7OuE3iL6KlaPE3tSJOcImXWWHQaTRoacU/ptNs1BHPkG77XA6Bw0RcLbLqKCAeiMEx7Q
+         8mt4dKfkx4h/coDYAysMLp5puGQCmD7YT6/nDvz6i+9Nya+wAS0B2PwzR10/ytE10XVW
+         damMDw/uLdR0ixdVowm64jHzCLEN7U/q9ybNbp3O+mIRh/VfbCYgW3gtAP5+mBumgGnY
+         MPlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698761092; x=1699365892;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsemryN+7v+wOBolNu7Hy0wHrULeaB9eFsfVkGp1/e8=;
+        b=LiWejroD5E2xNXqxmVbfoJ06NSSiBPg2cqbiQqoJer0TAxVWOeXNmFJaOeOLjkX9Y8
+         vBN+17ckoLZfh2k3ofAc4/xTUbC/0fURakxPnoHRyu5LQQZCQVCncpu3Uc7ok4xmivA0
+         /2MIKoSeF5rsvn6+CGdZGkc5oVtaSJ9uXx7jnV/lnIGL78LyKvbMbOWHduG9IpIzPdCk
+         VKQ3t+a9Xca++MgABeKUEusIy/TgDAxBlr3Xua06uiUS6e+ZdWH02RSZu2pqmA47Q3Kc
+         NfseauwS+d4HyzEPdcDpvTgaXGwwyOy9QLb/qvYzZGNlDS3jY1mesWddNCi85D9eNR4u
+         00mQ==
+X-Gm-Message-State: AOJu0YwsFqMyRX4dx7g4NDvnPJYsQOcbxHTEgVYhr518e1bmROUhYIHu
+        8eBcEF9moSuaRGV2gONZA2+iB9wkyls=
+X-Google-Smtp-Source: AGHT+IGMRYf422gsAhq04hJnKRMCzmHg+RO6tAl4JuMhPFGeve1lxsPBrReypZbUvK9g95iFN5O303NMZlw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1083:b0:d9a:c3b8:4274 with SMTP id
+ v3-20020a056902108300b00d9ac3b84274mr301710ybu.7.1698761092559; Tue, 31 Oct
+ 2023 07:04:52 -0700 (PDT)
+Date:   Tue, 31 Oct 2023 07:04:51 -0700
+In-Reply-To: <2edd908a-9699-4d8e-9063-c655f1fc9712@intel.com>
+Mime-Version: 1.0
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-9-seanjc@google.com>
+ <2edd908a-9699-4d8e-9063-c655f1fc9712@intel.com>
+Message-ID: <ZUEJg_rBf35NyCG3@google.com>
+Subject: Re: [PATCH v13 08/35] KVM: Introduce KVM_SET_USER_MEMORY_REGION2
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, Oct 31, 2023, Xiaoyao Li wrote:
+> On 10/28/2023 2:21 AM, Sean Christopherson wrote:
+> > Introduce a "version 2" of KVM_SET_USER_MEMORY_REGION so that additional
+> > information can be supplied without setting userspace up to fail.  The
+> > padding in the new kvm_userspace_memory_region2 structure will be used to
+> > pass a file descriptor in addition to the userspace_addr, i.e. allow
+> > userspace to point at a file descriptor and map memory into a guest that
+> > is NOT mapped into host userspace.
+> > 
+> > Alternatively, KVM could simply add "struct kvm_userspace_memory_region2"
+> > without a new ioctl(), but as Paolo pointed out, adding a new ioctl()
+> > makes detection of bad flags a bit more robust, e.g. if the new fd field
+> > is guarded only by a flag and not a new ioctl(), then a userspace bug
+> > (setting a "bad" flag) would generate out-of-bounds access instead of an
+> > -EINVAL error.
+> > 
+> > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> > Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >   Documentation/virt/kvm/api.rst | 21 +++++++++++++++++++
+> >   arch/x86/kvm/x86.c             |  2 +-
+> >   include/linux/kvm_host.h       |  4 ++--
+> >   include/uapi/linux/kvm.h       | 13 ++++++++++++
+> >   virt/kvm/kvm_main.c            | 38 +++++++++++++++++++++++++++-------
+> >   5 files changed, 67 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index 21a7578142a1..ace984acc125 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -6070,6 +6070,27 @@ writes to the CNTVCT_EL0 and CNTPCT_EL0 registers using the SET_ONE_REG
+> >   interface. No error will be returned, but the resulting offset will not be
+> >   applied.
+> > +4.139 KVM_SET_USER_MEMORY_REGION2
+> > +---------------------------------
+> > +
+> > +:Capability: KVM_CAP_USER_MEMORY2
+> > +:Architectures: all
+> > +:Type: vm ioctl
+> > +:Parameters: struct kvm_userspace_memory_region2 (in)
+> > +:Returns: 0 on success, -1 on error
+> > +
+> > +::
+> > +
+> > +  struct kvm_userspace_memory_region2 {
+> > +	__u32 slot;
+> > +	__u32 flags;
+> > +	__u64 guest_phys_addr;
+> > +	__u64 memory_size; /* bytes */
+> > +	__u64 userspace_addr; /* start of the userspace allocated memory */
+> 
+> missing
+> 
+> 	__u64 pad[16];
 
-
-=E5=9C=A82023=E5=B9=B410=E6=9C=8831=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8A=
-=E5=8D=882:36=EF=BC=8CBinbin Zhou=E5=86=99=E9=81=93=EF=BC=9A
-> Hi all:
->
-> Some liointc-related DTBS_CHECK warnings were found when trying to
-> introduce the Loongson-2K DTS{I} for LoongArch.
-> This patch series attempts to fix those warnings, as well as fixing
-> non-standard property naming.
->
-> Of course, these fixes also apply to MIPS Loongson-2K1000/Loongson-3A
-> dts{i}.
->
-> Thanks.
-
-For the whole series:
-
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Apologize for the bad design at the first place :-(
-You tried really hard to get it fixed.
-
-Thanks
-- Jiaxun
-
->
-> -----
-> V3:
-> patch(1/5):
->   - new patch, 'loongson,parent_int_map' renamed to 'loongson,parent-i=
-nt-map';
-> patch(2/5)(3/5):
->   - Separate the change points into separate patches;
-> patch(4/5):
->  - new patch, make sure both parent map forms can be parsed;
-> patch(5/5):
->  - new patch, fix 'loongson,parent_int_map' references in mips loongson
->    dts{i}.
->
-> Link to V2:
-> https://lore.kernel.org/all/20230821061315.3416836-1-zhoubinbin@loongs=
-on.cn/
->
-> V2:
-> 1. Update commit message;
-> 2. "interruprt-names" should be "required", the driver gets the parent
-> interrupts through it;
-> 3. Add more descriptions to explain the rationale for multiple nodes;
-> 4. Rewrite if-else statements.
->
-> Link to V1:
-> https://lore.kernel.org/all/20230815084713.1627520-1-zhoubinbin@loongs=
-on.cn/
->
-> Binbin Zhou (5):
->   dt-bindings: interrupt-controller: loongson,liointc: Standardize the
->     naming of 'loongson,parent-int-map'
->   dt-bindings: interrupt-controller: loongson,liointc: Fix dtbs_check
->     warning for reg-names
->   dt-bindings: interrupt-controller: loongson,liointc: Fix dtbs_check
->     for interrupt-names
->   irqchip/loongson-liointc: Fix 'loongson,parent_int_map' parse
->   MIPS: Loongson64: DTS: Fix 'loongson,parent_int_map' references
->
->  .../loongson,liointc.yaml                     | 44 +++++++++++++------
->  .../boot/dts/loongson/loongson64-2k1000.dtsi  |  4 +-
->  .../dts/loongson/loongson64c-package.dtsi     |  2 +-
->  .../dts/loongson/loongson64g-package.dtsi     |  2 +-
->  .../dts/loongson/loongson64v_4core_virtio.dts |  2 +-
->  drivers/irqchip/irq-loongson-liointc.c        |  7 ++-
->  6 files changed, 41 insertions(+), 20 deletions(-)
->
-> --=20
-> 2.39.3
-
---=20
-- Jiaxun
+I can't even copy+paste correctly :-(
