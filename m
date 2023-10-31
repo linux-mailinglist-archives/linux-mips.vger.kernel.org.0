@@ -2,140 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9157DD58F
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 18:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50437DD5FB
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 19:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346959AbjJaRyJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 13:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
+        id S231550AbjJaSYR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 14:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347092AbjJaRxs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 13:53:48 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479DE192;
-        Tue, 31 Oct 2023 10:53:45 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6ce2cf67be2so3747462a34.2;
-        Tue, 31 Oct 2023 10:53:45 -0700 (PDT)
+        with ESMTP id S231238AbjJaSYQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 14:24:16 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC25BA3
+        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 11:24:13 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cc329ce84cso31059815ad.2
+        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 11:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698776653; x=1699381453; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fA4BSuC8POmGjMQJ0k8vnna5BPAxY9Ekm8SCU7EDDBY=;
+        b=pXXCc/EymZAI1UfbBeV5XR71rJrHgRQDUI+akFhgXsPfgrMeKf3TltpNq883kc+Ihu
+         1qmVyqyIJuErRmSkaVwfEL8WigX4tzxKfuYTviGsSTGl6jekGQ71OKEZ7bpv5cYxYL8l
+         LLsSt+Tpm3NOmyuXbcLqSLtimYgKpEfLzmdJARApIikDo0k5vQcc0DwflTL8jMw/uDs8
+         aXRDjVO3HuVdjkVUEJ75WF1WkeoDES5/XCb8dAxlwOO4J3Qu8nLSFlhdv/IacwLrtgX1
+         jePZ+d1Bh7cLoCKTRLq/EIe+IX92jP3G1HMuSH0Yb+88y6p2TuvEwJIpd8mVDEhfXIwR
+         Rmhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698774824; x=1699379624;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JErNOeS484fSE6jMqFS1aWxPGk/XE6lq+FSKNBvOBGk=;
-        b=tmMiyoirSofB5H3jwHjedPqHQASUoQn1sZEZ3BU3AYzVbOz763LaKDQZs727Vq3qyu
-         8hgxXI0CLrdERf48iTbRTk/e2ekr9g9LglYUW7PzhZH2AtYlQn1uqc+YpC9xLvbGbfBo
-         TVjuaRPzrpRnST37ceGgk1gm2qlZKHvskwqdnswr14FNUOo3tsXwPvjTH4JopXGgP1GU
-         Jn/fW3AlpVglqwx/Rif7YPPpVBy4f/KFUhDojoKZS1ciZb7BGS8nGCyt4RPyMetaRM4Y
-         TWslNQonZfEbARwlutUy8wtQb2Wu8BGEN/icfEzIisT7xX0YYJon91bF1dL7SofH52uf
-         3jOQ==
-X-Gm-Message-State: AOJu0YxiLwm3m0C4HRJl6ic+tggcuJp6dAjbOw+hdkrJYfA/ggLRmxBM
-        WPYmpDYbX0aPuZRXyLvPTQ==
-X-Google-Smtp-Source: AGHT+IHmDV7ekbXMqnPAI+zXPOg9uVdSiGo0HGjlgtqDy0nQceDIWHe1Ss1oJDxPVF8IkiT6rhqXwg==
-X-Received: by 2002:a9d:7f85:0:b0:6b9:8357:61e6 with SMTP id t5-20020a9d7f85000000b006b9835761e6mr13026591otp.35.1698774824296;
-        Tue, 31 Oct 2023 10:53:44 -0700 (PDT)
-Received: from herring.priv ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id a3-20020a9d5c83000000b006c4d6a06a94sm290478oti.76.2023.10.31.10.53.43
+        d=1e100.net; s=20230601; t=1698776653; x=1699381453;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fA4BSuC8POmGjMQJ0k8vnna5BPAxY9Ekm8SCU7EDDBY=;
+        b=DseOBRKTiUTENvubUSioK4xl92wXO83YSQXZe4i58WLMrgYsGptcXhw7QcULA2B0ny
+         5BZt5NLDLjXAs0fsrZVbCKJhEIDnpTaSgVWzrwGgRCooelhr7k6ibSgKFwHsGP77tspK
+         ZVjjGHd9pakLv6btf6LH2i1GzFw8nOmVgqNShFfaFe3a++wPgQJskEp8mnxXc4A1yGR9
+         FaROT3o6TyYdHUgtEkZ69UfjrfIhaiLZhn12WdA5WQu8fFOZq3oggqSejkRCbgAFtHME
+         FIcGOf7uwiAST+pfmo6l8AJDC8vCS/GgVxDwEUUvtvSux5d2kFSEQ0CSv8kiAwSmSWK7
+         ZNig==
+X-Gm-Message-State: AOJu0YyFFC1YPWnOnPxc1bKNOX2Zz/HYy05RpAZ1reKZaI3IziKdsBIO
+        OrKcQTpwbJwRT85X/ExM0T4fjw==
+X-Google-Smtp-Source: AGHT+IFxkiDdZGGfHsdazjXYZcfW0cI1Huw/6T3VggKB9s0vUh/sA7Jolgtag5oCOtU2pTLnT1L5FA==
+X-Received: by 2002:a17:902:ecca:b0:1cc:54b5:b4fa with SMTP id a10-20020a170902ecca00b001cc54b5b4famr5681643plh.18.1698776652868;
+        Tue, 31 Oct 2023 11:24:12 -0700 (PDT)
+Received: from google.com (175.199.125.34.bc.googleusercontent.com. [34.125.199.175])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c20d00b001c5dea67c26sm1620267pll.233.2023.10.31.11.24.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Oct 2023 10:53:43 -0700 (PDT)
-Received: (nullmailer pid 1807481 invoked by uid 1000);
-        Tue, 31 Oct 2023 17:53:42 -0000
-Date:   Tue, 31 Oct 2023 12:53:42 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Tue, 31 Oct 2023 11:24:11 -0700 (PDT)
+Date:   Tue, 31 Oct 2023 11:24:07 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, lvjianmin@loongson.cn,
-        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] dt-bindings: interrupt-controller:
- loongson,liointc: Fix dtbs_check for interrupt-names
-Message-ID: <20231031175342.GA1805362-robh@kernel.org>
-References: <cover.1698717154.git.zhoubinbin@loongson.cn>
- <7fae3ce932b455effcf73ff0208f4776959f2f44.1698717154.git.zhoubinbin@loongson.cn>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+Message-ID: <ZUFGRyQEuWj4RJS0@google.com>
+References: <20231027182217.3615211-1-seanjc@google.com>
+ <20231027182217.3615211-17-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7fae3ce932b455effcf73ff0208f4776959f2f44.1698717154.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231027182217.3615211-17-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 10:36:38AM +0800, Binbin Zhou wrote:
-> The Loongson-2K0500/2K1000 CPUs have 64 interrupt sources as inputs, and
-> a route-mapped node handles up to 32 interrupt sources, so two liointc
-> nodes are defined in dts{i}.
-> Of course, we need to ensure that the routing outputs (intx) of the two
-> nodes cannot conflict.
+On 2023-10-27 11:21 AM, Sean Christopherson wrote:
+> Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-based
+> memory that is tied to a specific KVM virtual machine and whose primary
+> purpose is to serve guest memory.
 > 
-> For example, in Loongson-2K1000, 'int0' is typically used by the liointc0
-> node, then the liointc1 node can only use the outputs starting with
-> 'int1'.
+> A guest-first memory subsystem allows for optimizations and enhancements
+> that are kludgy or outright infeasible to implement/support in a generic
+> memory subsystem.  With guest_memfd, guest protections and mapping sizes
+> are fully decoupled from host userspace mappings.   E.g. KVM currently
+> doesn't support mapping memory as writable in the guest without it also
+> being writable in host userspace, as KVM's ABI uses VMA protections to
+> define the allow guest protection.  Userspace can fudge this by
+> establishing two mappings, a writable mapping for the guest and readable
+> one for itself, but that’s suboptimal on multiple fronts.
 > 
-> So "interrupt-names" should be defined by "pattern".
+> Similarly, KVM currently requires the guest mapping size to be a strict
+> subset of the host userspace mapping size, e.g. KVM doesn’t support
+> creating a 1GiB guest mapping unless userspace also has a 1GiB guest
+> mapping.  Decoupling the mappings sizes would allow userspace to precisely
+> map only what is needed without impacting guest performance, e.g. to
+> harden against unintentional accesses to guest memory.
 > 
-> This fixes dtbs_check warning:
+> Decoupling guest and userspace mappings may also allow for a cleaner
+> alternative to high-granularity mappings for HugeTLB, which has reached a
+> bit of an impasse and is unlikely to ever be merged.
 > 
-> DTC_CHK arch/loongarch/boot/dts/loongson-2k0500-ref.dtb
-> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1fe11440: interrupt-names:0: 'int0' was expected
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1fe11440: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> DTC_CHK arch/loongarch/boot/dts/loongson-2k1000-ref.dtb
-> arch/loongarch/boot/dts/loongson-2k1000-ref.dtb: interrupt-controller@1fe01440: interrupt-names:0: 'int0' was expected
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> arch/loongarch/boot/dts/loongson-2k1000-ref.dtb: interrupt-controller@1fe01440: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../bindings/interrupt-controller/loongson,liointc.yaml    | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> index 7393d7dfbe82..a90c609d351e 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> @@ -54,11 +54,9 @@ properties:
->    interrupt-names:
->      description: List of names for the parent interrupts.
->      items:
-> -      - const: int0
-> -      - const: int1
-> -      - const: int2
-> -      - const: int3
-> +      pattern: int[0-3]
->      minItems: 1
-> +    maxItems: 4
->  
->    '#interrupt-cells':
->      const: 2
-> @@ -87,6 +85,7 @@ required:
->    - compatible
->    - reg
->    - interrupts
-> +  - interrupt-names
+> A guest-first memory subsystem also provides clearer line of sight to
+> things like a dedicated memory pool (for slice-of-hardware VMs) and
+> elimination of "struct page" (for offload setups where userspace _never_
+> needs to mmap() guest memory).
 
-A new required property is an ABI break. Is that okay for this platform? 
-The commit msg should answer that if so.
+All of these use-cases involve using guest_memfd for shared pages, but
+this entire series sets up KVM to only use guest_memfd for private
+pages.
 
+For example, the per-page attributes are a property of a KVM VM, not the
+underlying guest_memfd. So that implies we will need separate
+guest_memfds for private and shared pages. But a given memslot can have
+a mix of private and shared pages. So that implies a memslot will need
+to support 2 guest_memfds? But the UAPI only allows 1 and uses the HVA
+for shared mappings.
 
->    - interrupt-controller
->    - '#interrupt-cells'
->    - loongson,parent-int-map
-> -- 
-> 2.39.3
-> 
+My initial reaction after reading through this series is that the
+per-page private/shared should be a property of the guest_memfd, not the
+VM. Maybe it would even be cleaner in the long-run to make all memory
+attributes a property of the guest_memfd. That way we can scope the
+support to only guest_memfds and not have to worry about making per-page
+attributes work with "legacy" HVA-based memslots.
+
+Maybe can you sketch out how you see this proposal being extensible to
+using guest_memfd for shared mappings?
