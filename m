@@ -2,56 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50437DD5FB
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 19:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8537DD7CA
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 22:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjJaSYR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 14:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S234309AbjJaVgo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 17:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjJaSYQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 14:24:16 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC25BA3
-        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 11:24:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cc329ce84cso31059815ad.2
-        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 11:24:13 -0700 (PDT)
+        with ESMTP id S232063AbjJaVgn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 17:36:43 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A31E4
+        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 14:36:39 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1cc385e90a9so23427025ad.1
+        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 14:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698776653; x=1699381453; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fA4BSuC8POmGjMQJ0k8vnna5BPAxY9Ekm8SCU7EDDBY=;
-        b=pXXCc/EymZAI1UfbBeV5XR71rJrHgRQDUI+akFhgXsPfgrMeKf3TltpNq883kc+Ihu
-         1qmVyqyIJuErRmSkaVwfEL8WigX4tzxKfuYTviGsSTGl6jekGQ71OKEZ7bpv5cYxYL8l
-         LLsSt+Tpm3NOmyuXbcLqSLtimYgKpEfLzmdJARApIikDo0k5vQcc0DwflTL8jMw/uDs8
-         aXRDjVO3HuVdjkVUEJ75WF1WkeoDES5/XCb8dAxlwOO4J3Qu8nLSFlhdv/IacwLrtgX1
-         jePZ+d1Bh7cLoCKTRLq/EIe+IX92jP3G1HMuSH0Yb+88y6p2TuvEwJIpd8mVDEhfXIwR
-         Rmhg==
+        d=google.com; s=20230601; t=1698788199; x=1699392999; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qwUJsYeIlwqw805rRX9kqL0ratglmWsD95jLONcl2+Q=;
+        b=vPTQTo4+Lbze4ruoqvra7qc16oGm5+RnY3vtIOlUyWdbMZKdohUG34DqMmDD1ROoTK
+         tFhKZY9gFy4uAD49KfZCbRJd6JTNCwRKaUYf+GE4HHdILp51xOM2fu73R5CkCWmdbHOj
+         7EvZXgciFKycMEyS1QIANIRo7+Dtljxj1COHbhI4M+RxBX893PsrTlX8KbUeX9QFrdE5
+         W9WeYB2rvox2W3e2B8BrsA/CqwSGeixVpBpifZ8X5U3JFyoP8RUhbNoRo2LYD+LWDwli
+         02Yh6PlBVp+lL/auqu0+l2jKaav9YP7cE43MbnUIe/k6YJJ1oMBTdYKqJtvmcgyPHIML
+         QCXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698776653; x=1699381453;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fA4BSuC8POmGjMQJ0k8vnna5BPAxY9Ekm8SCU7EDDBY=;
-        b=DseOBRKTiUTENvubUSioK4xl92wXO83YSQXZe4i58WLMrgYsGptcXhw7QcULA2B0ny
-         5BZt5NLDLjXAs0fsrZVbCKJhEIDnpTaSgVWzrwGgRCooelhr7k6ibSgKFwHsGP77tspK
-         ZVjjGHd9pakLv6btf6LH2i1GzFw8nOmVgqNShFfaFe3a++wPgQJskEp8mnxXc4A1yGR9
-         FaROT3o6TyYdHUgtEkZ69UfjrfIhaiLZhn12WdA5WQu8fFOZq3oggqSejkRCbgAFtHME
-         FIcGOf7uwiAST+pfmo6l8AJDC8vCS/GgVxDwEUUvtvSux5d2kFSEQ0CSv8kiAwSmSWK7
-         ZNig==
-X-Gm-Message-State: AOJu0YyFFC1YPWnOnPxc1bKNOX2Zz/HYy05RpAZ1reKZaI3IziKdsBIO
-        OrKcQTpwbJwRT85X/ExM0T4fjw==
-X-Google-Smtp-Source: AGHT+IFxkiDdZGGfHsdazjXYZcfW0cI1Huw/6T3VggKB9s0vUh/sA7Jolgtag5oCOtU2pTLnT1L5FA==
-X-Received: by 2002:a17:902:ecca:b0:1cc:54b5:b4fa with SMTP id a10-20020a170902ecca00b001cc54b5b4famr5681643plh.18.1698776652868;
-        Tue, 31 Oct 2023 11:24:12 -0700 (PDT)
-Received: from google.com (175.199.125.34.bc.googleusercontent.com. [34.125.199.175])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c20d00b001c5dea67c26sm1620267pll.233.2023.10.31.11.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Oct 2023 11:24:11 -0700 (PDT)
-Date:   Tue, 31 Oct 2023 11:24:07 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
+        d=1e100.net; s=20230601; t=1698788199; x=1699392999;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qwUJsYeIlwqw805rRX9kqL0ratglmWsD95jLONcl2+Q=;
+        b=K7K4Vu7UCW1C7g4UBFOoXKlz+xotQM7Sho2uXBQOUDSQQ1C7iZZ03JAw34JxZhhyIO
+         gal6kCDJBrvVYM99EDo2zZChID06Xa0givxps1peBiIkLkITDwBi/H9juwtKPvI9LIRz
+         RtVPA/rFssqJ1BAPHlXT3WkoZQTRO/2aj5RfZ7Q9xuXHMCEJe2/vY0uXH+6AtzmmpOgc
+         3OOqCTqPcsjfTIfzaC8iGwuhQmizDLCRxmhZMZkLLAxAxNvSigE4MqilO5MMUg26aSdJ
+         wK0UPZRPvIfzJ+hE9X0yxGOB7NMlcFbsBw+/DOh1/gDniIbXe0SyVqulZ8kLTulBLJcE
+         ZqFQ==
+X-Gm-Message-State: AOJu0YyTN7HvXz0enNjIi23g5cH5GMIQuJnKJCXUP2WfBrEJ6baooAP3
+        hwLpgcrYDIyQme7aWXJvDChO39Z1Kxk=
+X-Google-Smtp-Source: AGHT+IErbOn1a7ghsHO7PXtEmrexZ1Aq9PA/AfhJ0FeZy4uT6qmhxk4RVfIH9rjSv+2WH3z2AoAxZzd2jeI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2609:b0:1b8:8c7:31e6 with SMTP id
+ jd9-20020a170903260900b001b808c731e6mr249399plb.1.1698788199022; Tue, 31 Oct
+ 2023 14:36:39 -0700 (PDT)
+Date:   Tue, 31 Oct 2023 14:36:37 -0700
+In-Reply-To: <ZUFGRyQEuWj4RJS0@google.com>
+Mime-Version: 1.0
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-17-seanjc@google.com>
+ <ZUFGRyQEuWj4RJS0@google.com>
+Message-ID: <ZUFzZf-YmCRYP6qo@google.com>
+Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -76,7 +81,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Anish Moorthy <amoorthy@google.com>,
         Yu Zhang <yu.c.zhang@linux.intel.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>,
         Vlastimil Babka <vbabka@suse.cz>,
         Vishal Annapurve <vannapurve@google.com>,
         Ackerley Tng <ackerleytng@google.com>,
@@ -88,20 +93,11 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Liam Merwick <liam.merwick@oracle.com>,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-Message-ID: <ZUFGRyQEuWj4RJS0@google.com>
-References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-17-seanjc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231027182217.3615211-17-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,54 +105,123 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2023-10-27 11:21 AM, Sean Christopherson wrote:
-> Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-based
-> memory that is tied to a specific KVM virtual machine and whose primary
-> purpose is to serve guest memory.
-> 
-> A guest-first memory subsystem allows for optimizations and enhancements
-> that are kludgy or outright infeasible to implement/support in a generic
-> memory subsystem.  With guest_memfd, guest protections and mapping sizes
-> are fully decoupled from host userspace mappings.   E.g. KVM currently
-> doesn't support mapping memory as writable in the guest without it also
-> being writable in host userspace, as KVM's ABI uses VMA protections to
-> define the allow guest protection.  Userspace can fudge this by
-> establishing two mappings, a writable mapping for the guest and readable
-> one for itself, but that’s suboptimal on multiple fronts.
-> 
-> Similarly, KVM currently requires the guest mapping size to be a strict
-> subset of the host userspace mapping size, e.g. KVM doesn’t support
-> creating a 1GiB guest mapping unless userspace also has a 1GiB guest
-> mapping.  Decoupling the mappings sizes would allow userspace to precisely
-> map only what is needed without impacting guest performance, e.g. to
-> harden against unintentional accesses to guest memory.
-> 
-> Decoupling guest and userspace mappings may also allow for a cleaner
-> alternative to high-granularity mappings for HugeTLB, which has reached a
-> bit of an impasse and is unlikely to ever be merged.
-> 
-> A guest-first memory subsystem also provides clearer line of sight to
-> things like a dedicated memory pool (for slice-of-hardware VMs) and
-> elimination of "struct page" (for offload setups where userspace _never_
-> needs to mmap() guest memory).
+On Tue, Oct 31, 2023, David Matlack wrote:
+> On 2023-10-27 11:21 AM, Sean Christopherson wrote:
+> > Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-ba=
+sed
+> > memory that is tied to a specific KVM virtual machine and whose primary
+> > purpose is to serve guest memory.
+> >=20
+> > A guest-first memory subsystem allows for optimizations and enhancement=
+s
+> > that are kludgy or outright infeasible to implement/support in a generi=
+c
+> > memory subsystem.  With guest_memfd, guest protections and mapping size=
+s
+> > are fully decoupled from host userspace mappings.   E.g. KVM currently
+> > doesn't support mapping memory as writable in the guest without it also
+> > being writable in host userspace, as KVM's ABI uses VMA protections to
+> > define the allow guest protection.  Userspace can fudge this by
+> > establishing two mappings, a writable mapping for the guest and readabl=
+e
+> > one for itself, but that=E2=80=99s suboptimal on multiple fronts.
+> >=20
+> > Similarly, KVM currently requires the guest mapping size to be a strict
+> > subset of the host userspace mapping size, e.g. KVM doesn=E2=80=99t sup=
+port
+> > creating a 1GiB guest mapping unless userspace also has a 1GiB guest
+> > mapping.  Decoupling the mappings sizes would allow userspace to precis=
+ely
+> > map only what is needed without impacting guest performance, e.g. to
+> > harden against unintentional accesses to guest memory.
+> >=20
+> > Decoupling guest and userspace mappings may also allow for a cleaner
+> > alternative to high-granularity mappings for HugeTLB, which has reached=
+ a
+> > bit of an impasse and is unlikely to ever be merged.
+> >=20
+> > A guest-first memory subsystem also provides clearer line of sight to
+> > things like a dedicated memory pool (for slice-of-hardware VMs) and
+> > elimination of "struct page" (for offload setups where userspace _never=
+_
+> > needs to mmap() guest memory).
+>=20
+> All of these use-cases involve using guest_memfd for shared pages, but
+> this entire series sets up KVM to only use guest_memfd for private
+> pages.
+>=20
+> For example, the per-page attributes are a property of a KVM VM, not the
+> underlying guest_memfd. So that implies we will need separate
+> guest_memfds for private and shared pages. But a given memslot can have
+> a mix of private and shared pages. So that implies a memslot will need
+> to support 2 guest_memfds?
 
-All of these use-cases involve using guest_memfd for shared pages, but
-this entire series sets up KVM to only use guest_memfd for private
-pages.
+Yes, someday this may be true.  Allowing guest_memfd (it was probably calle=
+d
+something else at that point) for "regular" memory was discussed in I think=
+ v10?
+We made a concious decision to defer supporting 2 guest_memfds because it i=
+sn't strictly
+necessary to support the TDX/SNP use cases for which all of this was initia=
+lly
+designed, and adding a second guest_memfd and the infrastructure needed to =
+let
+userspace map a guest_memfd can be done on top with minimal overhead.
 
-For example, the per-page attributes are a property of a KVM VM, not the
-underlying guest_memfd. So that implies we will need separate
-guest_memfds for private and shared pages. But a given memslot can have
-a mix of private and shared pages. So that implies a memslot will need
-to support 2 guest_memfds? But the UAPI only allows 1 and uses the HVA
-for shared mappings.
+> But the UAPI only allows 1 and uses the HVA for shared mappings.
+>=20
+> My initial reaction after reading through this series is that the
+> per-page private/shared should be a property of the guest_memfd, not the
+> VM. Maybe it would even be cleaner in the long-run to make all memory
+> attributes a property of the guest_memfd. That way we can scope the
+> support to only guest_memfds and not have to worry about making per-page
+> attributes work with "legacy" HVA-based memslots.
 
-My initial reaction after reading through this series is that the
-per-page private/shared should be a property of the guest_memfd, not the
-VM. Maybe it would even be cleaner in the long-run to make all memory
-attributes a property of the guest_memfd. That way we can scope the
-support to only guest_memfds and not have to worry about making per-page
-attributes work with "legacy" HVA-based memslots.
+Making the private vs. shared state a property of the guest_memfd doesn't w=
+ork
+for TDX and SNP.  We (upstream x86 and KVM maintainers) have taken a hard s=
+tance
+that in-place conversion will not be allowed for TDX/SNP due to the ease wi=
+th
+which a misbehaving userspace and/or guest can crash the host.
 
-Maybe can you sketch out how you see this proposal being extensible to
-using guest_memfd for shared mappings?
+We'd also be betting that there would *never* be a use case for per-gfn att=
+ributes
+for non-standard memory, e.g. virtio-gpu buffers, any kind of device memory=
+, etc.
+
+We'd also effectively be signing up to either support swap and page migrati=
+on in
+guest_memfd, or make those mutually exclusive with per-gfn attributes too.
+
+guest_memfd is only intended for guest DRAM, and if I get my way, will neve=
+r support
+swap (page migration is less scary).  I.e. guest_memfd isn't intended to be=
+ a
+one-size-fits-all solution, nor is it intended to wholesale replace memslot=
+s,
+which is effectively what we'd be doing by deprecating hva-based guest memo=
+ry.
+
+And ignoring all that, the ABI would end up being rather bizarre due to way=
+ guest_memfd
+interacts with memslots.  guest_memfd itself has no real notion of gfns, i.=
+e. the
+shared vs. private state would be tied to a file offset, not a gfn.  That's=
+ a solvable
+problem, e.g. we could make a gfn:offset binding "sticky", but that would e=
+dd extra
+complexity to the ABI, and AFAICT wouldn't buy us that much, if anything.
+
+> Maybe can you sketch out how you see this proposal being extensible to
+> using guest_memfd for shared mappings?
+
+For in-place conversions, e.g. pKVM, no additional guest_memfd is needed.  =
+What's
+missing there is the ability to (safely) mmap() guest_memfd, e.g. KVM needs=
+ to
+ensure there are no outstanding references when converting back to private.
+
+For TDX/SNP, assuming we don't find a performant and robust way to do in-pl=
+ace
+conversions, a second fd+offset pair would be needed.
