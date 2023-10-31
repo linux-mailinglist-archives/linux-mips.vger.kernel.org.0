@@ -2,226 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8537DD7CA
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 22:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540B57DD7E5
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 22:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbjJaVgo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 17:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S1346340AbjJaVts (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 17:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjJaVgn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 17:36:43 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A31E4
-        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 14:36:39 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1cc385e90a9so23427025ad.1
-        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 14:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698788199; x=1699392999; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qwUJsYeIlwqw805rRX9kqL0ratglmWsD95jLONcl2+Q=;
-        b=vPTQTo4+Lbze4ruoqvra7qc16oGm5+RnY3vtIOlUyWdbMZKdohUG34DqMmDD1ROoTK
-         tFhKZY9gFy4uAD49KfZCbRJd6JTNCwRKaUYf+GE4HHdILp51xOM2fu73R5CkCWmdbHOj
-         7EvZXgciFKycMEyS1QIANIRo7+Dtljxj1COHbhI4M+RxBX893PsrTlX8KbUeX9QFrdE5
-         W9WeYB2rvox2W3e2B8BrsA/CqwSGeixVpBpifZ8X5U3JFyoP8RUhbNoRo2LYD+LWDwli
-         02Yh6PlBVp+lL/auqu0+l2jKaav9YP7cE43MbnUIe/k6YJJ1oMBTdYKqJtvmcgyPHIML
-         QCXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698788199; x=1699392999;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qwUJsYeIlwqw805rRX9kqL0ratglmWsD95jLONcl2+Q=;
-        b=K7K4Vu7UCW1C7g4UBFOoXKlz+xotQM7Sho2uXBQOUDSQQ1C7iZZ03JAw34JxZhhyIO
-         gal6kCDJBrvVYM99EDo2zZChID06Xa0givxps1peBiIkLkITDwBi/H9juwtKPvI9LIRz
-         RtVPA/rFssqJ1BAPHlXT3WkoZQTRO/2aj5RfZ7Q9xuXHMCEJe2/vY0uXH+6AtzmmpOgc
-         3OOqCTqPcsjfTIfzaC8iGwuhQmizDLCRxmhZMZkLLAxAxNvSigE4MqilO5MMUg26aSdJ
-         wK0UPZRPvIfzJ+hE9X0yxGOB7NMlcFbsBw+/DOh1/gDniIbXe0SyVqulZ8kLTulBLJcE
-         ZqFQ==
-X-Gm-Message-State: AOJu0YyTN7HvXz0enNjIi23g5cH5GMIQuJnKJCXUP2WfBrEJ6baooAP3
-        hwLpgcrYDIyQme7aWXJvDChO39Z1Kxk=
-X-Google-Smtp-Source: AGHT+IErbOn1a7ghsHO7PXtEmrexZ1Aq9PA/AfhJ0FeZy4uT6qmhxk4RVfIH9rjSv+2WH3z2AoAxZzd2jeI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:2609:b0:1b8:8c7:31e6 with SMTP id
- jd9-20020a170903260900b001b808c731e6mr249399plb.1.1698788199022; Tue, 31 Oct
- 2023 14:36:39 -0700 (PDT)
-Date:   Tue, 31 Oct 2023 14:36:37 -0700
-In-Reply-To: <ZUFGRyQEuWj4RJS0@google.com>
-Mime-Version: 1.0
-References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-17-seanjc@google.com>
- <ZUFGRyQEuWj4RJS0@google.com>
-Message-ID: <ZUFzZf-YmCRYP6qo@google.com>
-Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S1344894AbjJaVtr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 17:49:47 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466C7E8;
+        Tue, 31 Oct 2023 14:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698788985; x=1730324985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8LmVIWxXOjxqP6+KababCGJaUptAGF2CRhq+6uxRgeo=;
+  b=NK8z/4ys8IP8hnl8Mnfo3Yk9EtBc/APfBbVQqBHePTqN+FCVm56uHMsB
+   QFyMo9TbWtmMeJTJkGpSNgOfWmkGkTgf4q7Niclj0+D1BxsoiShEyEEG3
+   qfxjCOkW7gF47hkX1r4BL6m2gb1K+FA8abmUQPW/9rqt6DIlwg0HVsY4m
+   Cks6WBa4JS3OIzFksp8WCBzvFyUJMGrQ0aVw26dtUbbmDAcuUjPf+lBtj
+   LUykikYK7kNU3ISndA0v27LEKCbnnNhV+htJbMEc4AEO2gZQgZIOHPJlG
+   KYxUbIVvGfKh7lmP/3r0SEIP+VXAjVoDPtu79OOTD1epXxgUxcVGJQ3wn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="454850509"
+X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
+   d="scan'208";a="454850509"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 14:49:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="760748095"
+X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
+   d="scan'208";a="760748095"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 31 Oct 2023 14:49:42 -0700
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qxwcG-0000PK-0e;
+        Tue, 31 Oct 2023 21:49:40 +0000
+Date:   Wed, 1 Nov 2023 05:49:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 2/3] MIPS: zboot: Add UHI semihosting debug print support
+Message-ID: <202311010521.7YJZiVJm-lkp@intel.com>
+References: <20231027182650.281405-7-jiaxun.yang@flygoat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027182650.281405-7-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 31, 2023, David Matlack wrote:
-> On 2023-10-27 11:21 AM, Sean Christopherson wrote:
-> > Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-ba=
-sed
-> > memory that is tied to a specific KVM virtual machine and whose primary
-> > purpose is to serve guest memory.
-> >=20
-> > A guest-first memory subsystem allows for optimizations and enhancement=
-s
-> > that are kludgy or outright infeasible to implement/support in a generi=
-c
-> > memory subsystem.  With guest_memfd, guest protections and mapping size=
-s
-> > are fully decoupled from host userspace mappings.   E.g. KVM currently
-> > doesn't support mapping memory as writable in the guest without it also
-> > being writable in host userspace, as KVM's ABI uses VMA protections to
-> > define the allow guest protection.  Userspace can fudge this by
-> > establishing two mappings, a writable mapping for the guest and readabl=
-e
-> > one for itself, but that=E2=80=99s suboptimal on multiple fronts.
-> >=20
-> > Similarly, KVM currently requires the guest mapping size to be a strict
-> > subset of the host userspace mapping size, e.g. KVM doesn=E2=80=99t sup=
-port
-> > creating a 1GiB guest mapping unless userspace also has a 1GiB guest
-> > mapping.  Decoupling the mappings sizes would allow userspace to precis=
-ely
-> > map only what is needed without impacting guest performance, e.g. to
-> > harden against unintentional accesses to guest memory.
-> >=20
-> > Decoupling guest and userspace mappings may also allow for a cleaner
-> > alternative to high-granularity mappings for HugeTLB, which has reached=
- a
-> > bit of an impasse and is unlikely to ever be merged.
-> >=20
-> > A guest-first memory subsystem also provides clearer line of sight to
-> > things like a dedicated memory pool (for slice-of-hardware VMs) and
-> > elimination of "struct page" (for offload setups where userspace _never=
-_
-> > needs to mmap() guest memory).
->=20
-> All of these use-cases involve using guest_memfd for shared pages, but
-> this entire series sets up KVM to only use guest_memfd for private
-> pages.
->=20
-> For example, the per-page attributes are a property of a KVM VM, not the
-> underlying guest_memfd. So that implies we will need separate
-> guest_memfds for private and shared pages. But a given memslot can have
-> a mix of private and shared pages. So that implies a memslot will need
-> to support 2 guest_memfds?
+Hi Jiaxun,
 
-Yes, someday this may be true.  Allowing guest_memfd (it was probably calle=
-d
-something else at that point) for "regular" memory was discussed in I think=
- v10?
-We made a concious decision to defer supporting 2 guest_memfds because it i=
-sn't strictly
-necessary to support the TDX/SNP use cases for which all of this was initia=
-lly
-designed, and adding a second guest_memfd and the infrastructure needed to =
-let
-userspace map a guest_memfd can be done on top with minimal overhead.
+kernel test robot noticed the following build warnings:
 
-> But the UAPI only allows 1 and uses the HVA for shared mappings.
->=20
-> My initial reaction after reading through this series is that the
-> per-page private/shared should be a property of the guest_memfd, not the
-> VM. Maybe it would even be cleaner in the long-run to make all memory
-> attributes a property of the guest_memfd. That way we can scope the
-> support to only guest_memfds and not have to worry about making per-page
-> attributes work with "legacy" HVA-based memslots.
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus linus/master v6.6 next-20231030]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Making the private vs. shared state a property of the guest_memfd doesn't w=
-ork
-for TDX and SNP.  We (upstream x86 and KVM maintainers) have taken a hard s=
-tance
-that in-place conversion will not be allowed for TDX/SNP due to the ease wi=
-th
-which a misbehaving userspace and/or guest can crash the host.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/MIPS-zboot-Add-UHI-semihosting-debug-print-support/20231028-032719
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20231027182650.281405-7-jiaxun.yang%40flygoat.com
+patch subject: [PATCH 2/3] MIPS: zboot: Add UHI semihosting debug print support
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20231101/202311010521.7YJZiVJm-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231101/202311010521.7YJZiVJm-lkp@intel.com/reproduce)
 
-We'd also be betting that there would *never* be a use case for per-gfn att=
-ributes
-for non-standard memory, e.g. virtio-gpu buffers, any kind of device memory=
-, etc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311010521.7YJZiVJm-lkp@intel.com/
 
-We'd also effectively be signing up to either support swap and page migrati=
-on in
-guest_memfd, or make those mutually exclusive with per-gfn attributes too.
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
 
-guest_memfd is only intended for guest DRAM, and if I get my way, will neve=
-r support
-swap (page migration is less scary).  I.e. guest_memfd isn't intended to be=
- a
-one-size-fits-all solution, nor is it intended to wholesale replace memslot=
-s,
-which is effectively what we'd be doing by deprecating hva-based guest memo=
-ry.
+>> arch/mips/boot/compressed/dbg-uhi.c:8:6: warning: no previous prototype for 'puts' [-Wmissing-prototypes]
+       8 | void puts(const char *s)
+         |      ^~~~
 
-And ignoring all that, the ABI would end up being rather bizarre due to way=
- guest_memfd
-interacts with memslots.  guest_memfd itself has no real notion of gfns, i.=
-e. the
-shared vs. private state would be tied to a file offset, not a gfn.  That's=
- a solvable
-problem, e.g. we could make a gfn:offset binding "sticky", but that would e=
-dd extra
-complexity to the ABI, and AFAICT wouldn't buy us that much, if anything.
 
-> Maybe can you sketch out how you see this proposal being extensible to
-> using guest_memfd for shared mappings?
+vim +/puts +8 arch/mips/boot/compressed/dbg-uhi.c
 
-For in-place conversions, e.g. pKVM, no additional guest_memfd is needed.  =
-What's
-missing there is the ability to (safely) mmap() guest_memfd, e.g. KVM needs=
- to
-ensure there are no outstanding references when converting back to private.
+     7	
+   > 8	void puts(const char *s)
 
-For TDX/SNP, assuming we don't find a performant and robust way to do in-pl=
-ace
-conversions, a second fd+offset pair would be needed.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
