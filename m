@@ -2,182 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B0E7DE4A5
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 17:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7E27DE56B
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 18:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjKAQgI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Nov 2023 12:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S232487AbjKARg5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Nov 2023 13:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjKAQgF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 12:36:05 -0400
+        with ESMTP id S232292AbjKARgx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 13:36:53 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4834810D
-        for <linux-mips@vger.kernel.org>; Wed,  1 Nov 2023 09:36:03 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d9cb4de3bf0so7625696276.0
-        for <linux-mips@vger.kernel.org>; Wed, 01 Nov 2023 09:36:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7160CFD
+        for <linux-mips@vger.kernel.org>; Wed,  1 Nov 2023 10:36:50 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-da0cb98f66cso6455446276.2
+        for <linux-mips@vger.kernel.org>; Wed, 01 Nov 2023 10:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698856562; x=1699461362; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=azJu2Dh8gujl5qnxyYwo1n6krfiG0RwudOI1y5vnuB4=;
-        b=yuFCX/+hNdCQoExuPOLtehV1sJV5YXuIC4dK84hnQsWhPdH2Z3iLN7bxdeMtxGj+WB
-         cyzEaD66/7stT4SYcguXXwRhJjsUPKJnPLc7tlAGTT6QQ7U8Hc2NurenL8NF3eoKj+4P
-         RfWTVWvFfkqVD2gRfDU09y5lBFNvzjzueEpuaO2xsVY5I4+kSjoC83fBVUIBnh3QJaL8
-         RsG8orHK+MB9w4bObQ/9WLURAj4uIVelYqCRJKbCGCOjf013V/nSWEedtPb+5hmOsFjL
-         r6GSwII+CK6XrhP83YYhH3pshpbwSDDI4qB9CrX5BKhf+VGh0py3HXKrLZViwVuSh4mC
-         zYng==
+        d=google.com; s=20230601; t=1698860209; x=1699465009; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aa5pPv4/g+I3C3eNDgudVhrFstr6S8Xmtwrf0OlljDI=;
+        b=1G73i3bpqP3lEIiYf1Xa+PqF+ry3FPPmHtzhkTz2ESLqKv/PJo83UzY0L3tGLSLtgw
+         FEf6apQxu3ajl2eaf2jpMXM8oiMYlwvL+Gaj7CmFke3L5WVAzOh6QUSsRjnNhhvyggQP
+         /0obTqP8SXrHs5tm5Lcs1IoffSqT4ZAyvwPXIthiiQ2/DYs3pRsDS0oN02OgNcKyJmxV
+         +il1EDZ1G9lZ1tby+sgxcieBPfodwSlNZ7rJ6OOgSa83N+qrWIIICrK86C1Ay71kdg1m
+         h7J1Ii0mSVbVxFFpS5Ul/5maHoLcclIuFP3aDRfEoQUS+LZ7DrcFMxeDrV3szI4QTAZm
+         WoHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698856562; x=1699461362;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=azJu2Dh8gujl5qnxyYwo1n6krfiG0RwudOI1y5vnuB4=;
-        b=KZ9EY1mehxi0GqMXHL71sg5YRhl4CwrfrRy4hfmY6QJw1JGYPPvgDUoRCJmVcB8ZsC
-         DdwMaF7Z1CUQLC1TR6ziGM03bUJC2iC7m1HWmesG8HLrNe9ecFiKIVf61npPe1/DLlHj
-         90icU/aBxudRl+vtd72EKsWfrnaMLpF2ciMxentKzGmknmOycApZhovbwCOoPmwkCxZW
-         ZbIOQoz8TvBgFjBepshhRmvg22s0zOUcfUAQ8+V0BqQN3zubPZ29xpY3KbUMXzyej4Jo
-         SiW7/iAuirIEpWZhafJD3y3Hqn3cU4m5moBJb5dqTuhV+hKYi5HzGk15yKlBhuXfVVsp
-         pLGg==
-X-Gm-Message-State: AOJu0YxjEg/YiS3Cm+8dbtObbJdDwLq7LdBmadYey8tPDEM6gLvFZxqg
-        bO9zgXr54oJOs9006Ypg99StF372EWo=
-X-Google-Smtp-Source: AGHT+IFqCABorYKmfCmJZy/oBSeOXTtnBU+krovHVjWnvhFIdm8AwbTMBJoMdfZ9FR5pLbycY5bTrtHt4Z4=
+        d=1e100.net; s=20230601; t=1698860209; x=1699465009;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aa5pPv4/g+I3C3eNDgudVhrFstr6S8Xmtwrf0OlljDI=;
+        b=YEoBkhL9rre4PHxq3jPwp6x1ycCJyLRV1lYAXMZnvjfUOwDxsDlbEL/IxxcaR9Ebgx
+         LFU0exp5DXXkI4KtykmtPsLXeCAxwXkS08jsQypbQTxZH/FwSf+2Jru69VCJJhJegD82
+         t7QPm72QpMEpueAUbPmnDSN29SYj27SqIPxj+i4xrsjowNn+z9NjIBxE1XEaVrYTcpSO
+         LjCVQ8nHkQJlGkLA7c90Y1NtOWfEEkUI38/qAnXTdA3VWfqHUgEf+EBcUuPewVUYZqr6
+         4ZhslW1UbiHbIAXOlcqVNQAsU0sveFFu9t3T7djaCnYYKNkroh6lzWlweqJtzZ+Of/f1
+         vU0Q==
+X-Gm-Message-State: AOJu0Yw5VYvRdWKx0V09CTwkOToHh/eJ8KFkct/wKMJlZ7iyjrCMCioM
+        UxNU8XhUhLUv13bnOQunDeb4f9uKkFA=
+X-Google-Smtp-Source: AGHT+IG/a6Sj0mASs5/8PEJQnR69sSphX+9SHKWYEjRPOLGEF4l6c52AgzjYtmdhHr7JL68mzkGP7JI8NEg=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:770f:0:b0:da0:73c2:db78 with SMTP id
- s15-20020a25770f000000b00da073c2db78mr326876ybc.9.1698856562473; Wed, 01 Nov
- 2023 09:36:02 -0700 (PDT)
-Date:   Wed, 1 Nov 2023 09:36:00 -0700
-In-Reply-To: <CABgObfaw4Byuzj5J3k48jdwT0HCKXLJNiuaA9H8Dtg+GOq==Sw@mail.gmail.com>
+ (user=seanjc job=sendgmr) by 2002:a05:6902:168c:b0:da0:3e46:8ba5 with SMTP id
+ bx12-20020a056902168c00b00da03e468ba5mr304342ybb.8.1698860209654; Wed, 01 Nov
+ 2023 10:36:49 -0700 (PDT)
+Date:   Wed, 1 Nov 2023 10:36:48 -0700
+In-Reply-To: <482bfea6f54ea1bb7d1ad75e03541d0ba0e5be6f.camel@intel.com>
 Mime-Version: 1.0
-References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-18-seanjc@google.com>
- <7c0844d8-6f97-4904-a140-abeabeb552c1@intel.com> <ZUEML6oJXDCFJ9fg@google.com>
- <92ba7ddd-2bc8-4a8d-bd67-d6614b21914f@intel.com> <ZUJVfCkIYYFp5VwG@google.com>
- <CABgObfaw4Byuzj5J3k48jdwT0HCKXLJNiuaA9H8Dtg+GOq==Sw@mail.gmail.com>
-Message-ID: <ZUJ-cJfofk2d_I0B@google.com>
-Subject: Re: [PATCH v13 17/35] KVM: Add transparent hugepage support for
- dedicated guest memory
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-10-seanjc@google.com>
+ <482bfea6f54ea1bb7d1ad75e03541d0ba0e5be6f.camel@intel.com>
+Message-ID: <ZUKMsOdg3N9wmEzy@google.com>
+Subject: Re: [PATCH v13 09/35] KVM: Add KVM_EXIT_MEMORY_FAULT exit to report
+ faults to userspace
 From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "mic@digikod.net" <mic@digikod.net>,
+        "liam.merwick@oracle.com" <liam.merwick@oracle.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "tabba@google.com" <tabba@google.com>,
+        "amoorthy@google.com" <amoorthy@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
         Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
+        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
+        "qperret@google.com" <qperret@google.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        Yilun Xu <yilun.xu@intel.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "ackerleytng@google.com" <ackerleytng@google.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Wei W Wang <wei.w.wang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 01, 2023, Paolo Bonzini wrote:
-> On Wed, Nov 1, 2023 at 2:41=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
-> >
-> > On Wed, Nov 01, 2023, Xiaoyao Li wrote:
-> > > On 10/31/2023 10:16 PM, Sean Christopherson wrote:
-> > > > On Tue, Oct 31, 2023, Xiaoyao Li wrote:
-> > > > > On 10/28/2023 2:21 AM, Sean Christopherson wrote:
-> > > But it's different than MADV_HUGEPAGE, in a way. Per my understanding=
-, the
-> > > failure of MADV_HUGEPAGE is not fatal, user space can ignore it and
-> > > continue.
-> > >
-> > > However, the failure of KVM_GUEST_MEMFD_ALLOW_HUGEPAGE is fatal, whic=
-h leads
-> > > to failure of guest memfd creation.
-> >
-> > Failing KVM_CREATE_GUEST_MEMFD isn't truly fatal, it just requires diff=
-erent
-> > action from userspace, i.e. instead of ignoring the error, userspace co=
-uld redo
-> > KVM_CREATE_GUEST_MEMFD with KVM_GUEST_MEMFD_ALLOW_HUGEPAGE=3D0.
-> >
-> > We could make the behavior more like MADV_HUGEPAGE, e.g. theoretically =
-we could
-> > extend fadvise() with FADV_HUGEPAGE, or add a guest_memfd knob/ioctl() =
-to let
-> > userspace provide advice/hints after creating a guest_memfd.  But I sus=
-pect that
-> > guest_memfd would be the only user of FADV_HUGEPAGE, and IMO a post-cre=
-ation hint
-> > is actually less desirable.
-> >
-> > KVM_GUEST_MEMFD_ALLOW_HUGEPAGE will fail only if userspace didn't provi=
-de a
-> > compatible size or the kernel doesn't support THP.  An incompatible siz=
-e is likely
-> > a userspace bug, and for most setups that want to utilize guest_memfd, =
-lack of THP
-> > support is likely a configuration bug.  I.e. many/most uses *want* fail=
-ures due to
-> > KVM_GUEST_MEMFD_ALLOW_HUGEPAGE to be fatal.
-> >
-> > > For current implementation, I think maybe KVM_GUEST_MEMFD_DESIRE_HUGE=
-PAGE
-> > > fits better than KVM_GUEST_MEMFD_ALLOW_HUGEPAGE? or maybe *PREFER*?
-> >
-> > Why?  Verbs like "prefer" and "desire" aren't a good fit IMO because th=
-ey suggest
-> > the flag is a hint, and hints are usually best effort only, i.e. are ig=
-nored if
-> > there is a fundamental incompatibility.
-> >
-> > "Allow" isn't perfect, e.g. I would much prefer a straight KVM_GUEST_ME=
-MFD_USE_HUGEPAGES
-> > or KVM_GUEST_MEMFD_HUGEPAGES flag, but I wanted the name to convey that=
- KVM doesn't
-> > (yet) guarantee hugepages.  I.e. KVM_GUEST_MEMFD_ALLOW_HUGEPAGE is stro=
-nger than
-> > a hint, but weaker than a requirement.  And if/when KVM supports a dedi=
-cated memory
-> > pool of some kind, then we can add KVM_GUEST_MEMFD_REQUIRE_HUGEPAGE.
->=20
-> I think that the current patch is fine, but I will adjust it to always
-> allow the flag, and to make the size check even if !CONFIG_TRANSPARENT_HU=
-GEPAGE.
-> If hugepages are not guaranteed, and (theoretically) you could have no
-> hugepage at all in the result, it's okay to get this result even if THP i=
-s not
-> available in the kernel.
+On Wed, Nov 01, 2023, Kai Huang wrote:
+> 
+> > +7.34 KVM_CAP_MEMORY_FAULT_INFO
+> > +------------------------------
+> > +
+> > +:Architectures: x86
+> > +:Returns: Informational only, -EINVAL on direct KVM_ENABLE_CAP.
+> > +
+> > +The presence of this capability indicates that KVM_RUN will fill
+> > +kvm_run.memory_fault if KVM cannot resolve a guest page fault VM-Exit, e.g. if
+> > +there is a valid memslot but no backing VMA for the corresponding host virtual
+> > +address.
+> > +
+> > +The information in kvm_run.memory_fault is valid if and only if KVM_RUN returns
+> > +an error with errno=EFAULT or errno=EHWPOISON *and* kvm_run.exit_reason is set
+> > +to KVM_EXIT_MEMORY_FAULT.
+> 
+> IIUC returning -EFAULT or whatever -errno is sort of KVM internal
+> implementation.
 
-Can you post a fixup patch?  It's not clear to me exactly what behavior you=
- intend
-to end up with.
+The errno that is returned to userspace is ABI.  In KVM, it's a _very_ poorly
+defined ABI for the vast majority of ioctls(), but it's still technically ABI.
+KVM gets away with being cavalier with errno because the vast majority of errors
+are considered fatal by userespace, i.e. in most cases, userspace simply doesn't
+care about the exact errno.
+
+A good example is KVM_RUN with -EINTR; if KVM were to return something other than
+-EINTR on a pending signal or vcpu->run->immediate_exit, userspace would fall over.
+
+> Is it better to relax the validity of kvm_run.memory_fault when
+> KVM_RUN returns any -errno?
+
+Not unless there's a need to do so, and if there is then we can update the
+documentation accordingly.  If KVM's ABI is that kvm_run.memory_fault is valid
+for any errno, then KVM would need to purge kvm_run.exit_reason super early in
+KVM_RUN, e.g. to prevent an -EINTR return due to immediate_exit from being
+misinterpreted as KVM_EXIT_MEMORY_FAULT.  And purging exit_reason super early is
+subtly tricky because KVM's (again, poorly documented) ABI is that *some* exit
+reasons are preserved across KVM_RUN with vcpu->run->immediate_exit (or with a
+pending signal).
+
+https://lore.kernel.org/all/ZFFbwOXZ5uI%2Fgdaf@google.com
+
+> [...]
+> 
+> 
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -2327,4 +2327,15 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
+> >  /* Max number of entries allowed for each kvm dirty ring */
+> >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> >  
+> > +static inline void kvm_prepare_memory_fault_exit(struct kvm_vcpu *vcpu,
+> > +						 gpa_t gpa, gpa_t size)
+> > +{
+> > +	vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
+> > +	vcpu->run->memory_fault.gpa = gpa;
+> > +	vcpu->run->memory_fault.size = size;
+> > +
+> > +	/* Flags are not (yet) defined or communicated to userspace. */
+> > +	vcpu->run->memory_fault.flags = 0;
+> > +}
+> > +
+> 
+> KVM_CAP_MEMORY_FAULT_INFO is x86 only, is it better to put this function to
+> <asm/kvm_host.h>?
+
+I'd prefer to keep it in generic code, as it's highly likely to end up there
+sooner than later.  There's a known use case for ARM (exit to userspace on missing
+userspace mapping[*]), and I'm guessing pKVM (also ARM) will also utilize this API.
+
+[*] https://lore.kernel.org/all/20230908222905.1321305-8-amoorthy@google.com
