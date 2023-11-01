@@ -2,193 +2,261 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F297DE36F
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 16:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293017DE14A
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 14:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbjKAPRX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Nov 2023 11:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S235094AbjKAMqp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Nov 2023 08:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbjKAPRW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 11:17:22 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82258191;
-        Wed,  1 Nov 2023 08:16:49 -0700 (PDT)
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-        by mailout.nyi.internal (Postfix) with ESMTP id D05445C026B;
-        Wed,  1 Nov 2023 11:16:48 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Wed, 01 Nov 2023 11:16:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1698851808; x=1698938208; bh=Mm+JRDBtZvObmZ+uO6jWZAPic1sg7YIcuKF
-        rNlBR5/c=; b=URsyfAr2jR4DaeRxAEJ+ozYGQ20/t1waQFKOE81pCv3g7T84RR0
-        OwtHcHTHsiXqsjq31xK6GsKqMbVlnwHYTiS9QJE+JAyzYhCQkafHtP1+KOpA2mxX
-        3Ke/5whz4ByHA9i3yrSYG4BpV3Pw+px8M5dquDLq5pL0w1ACsP9laWypcxqZJxFT
-        HuHRYuFds9mLbzj2eysMvR2p2rdXOCEnvFw/79QkkMlolJp4MZbFIJhXdSIVptua
-        7L833q+E5UWgZSGmEcKhVz/wODc0CEN8cBo4FAm997uBMkOhekd96kwyvRSbW/Qf
-        vu1ASJByIUGgrlDzVfxfIKralmNVpTADrYg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1698851808; x=1698938208; bh=Mm+JRDBtZvObmZ+uO6jWZAPic1sg7YIcuKF
-        rNlBR5/c=; b=MD4x5sfy8SNN6nBRoBFlSo413yZMS8RRL93V+HN7If5+1cyGX8P
-        jMpJaXDvMmONqHW1RmZ+WLU4VzNCo2/mpNiarlbY/f4yYGe+OYGRH5JyuB0Kmea3
-        Gv3kQ/vgL2dc2LuJe5yKR3EUYcMNbzKrVu2Vno8DYBQGRKtPBdeIYLkd9+E987qt
-        1EPShDJK046p9f1LodmUFNCOlQQqFTH0UWowTYklHjFYZgcNoD5S+K1/kff6qUNr
-        jsfwvktaBHNN2++ZpECIEFfvqH4QOLXgLgbOlkRydhsiyeVC3l7jaad2VTwyz7xE
-        2oLMY/VxCNo0k78K+9FGmJAmA/U/rQAQ3zw==
-X-ME-Sender: <xms:4GtCZeX1evdsrZliOITD1jXH5K0dJS_M0xXR1aErXxUUSztPkvf6iA>
-    <xme:4GtCZamMWGVce88SmFp0lIe9mjWVu51JMxy--I8_LAw8rZ1hgLaJoKp8DaJ8j_arZ
-    x6HJ8HFG0vnMlEd7fs>
-X-ME-Received: <xmr:4GtCZSYSQOZLqrV88Rgrl40sQWR1tJqEEO2bjIW_qKQp_F0VkB4F1MM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtgedgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
-    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:4GtCZVVKgY2OKaWacaZvqcMSwkobraL04X1PUAyC_BX0AC18NS1kfQ>
-    <xmx:4GtCZYnIdOHhDJq2_2lySTN775zySmevg0pyrOe8rvdm5UzFAHnn8A>
-    <xmx:4GtCZacUFxgS5ECMseLqG3n8yJ4dj9xIrFrdMUZ-Eg00Vy058QyEDQ>
-    <xmx:4GtCZZDIVEFax_WBJSbTB3LNDl3Pp_tj0IxfdipLOkp72qVKT8RUvA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Nov 2023 11:16:47 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Wed, 01 Nov 2023 11:39:09 +0000
-Subject: [PATCH fixes 3/3] MIPS: Loongson64: Handle more memory types
- passed from firmware
+        with ESMTP id S1343681AbjKAMqo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 08:46:44 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FFBF4
+        for <linux-mips@vger.kernel.org>; Wed,  1 Nov 2023 05:46:40 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-41cd4cc515fso48312501cf.1
+        for <linux-mips@vger.kernel.org>; Wed, 01 Nov 2023 05:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698842800; x=1699447600; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mygXGcRJ5YlWP61Tr7KN5KWyfhmOoXTRmQYYFZqOKKI=;
+        b=KDcfelv5DOHAm+W83U3D2+TJfUcylSuZ5QNl5MGBSIxGMmaqRq9grA/fOI8iIX6yni
+         jBOvRGcqd5a1e+zOG5TNZLAUwT/5CQ11eCiOdEZ+BbnpA3QP/XYjCwbXmoV6URdfjIb9
+         CeGPhCDK8FtUkEMAvNEITSNWjdLu9LfYZRR2NeyPY7pVPZXCCmNN1v1AQZKpUzGQI4VB
+         mFmBQ7927BloxVIN5C4SYzt7pXl8EtwQgABAceY+dfJ7fVRqeGlWsIO4oY2kArO4SXcR
+         yWR0HrpYOyY+UEKAC4XrMl4KAnH/jKWBv3BDAe6+4dL5Mf5obJXbirtxRg+gII9nlGT9
+         X8bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698842800; x=1699447600;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mygXGcRJ5YlWP61Tr7KN5KWyfhmOoXTRmQYYFZqOKKI=;
+        b=tTlbAWJYWYKaXVQL9Yhn39rUJU27e0aA0KsJvESBd/j/lyhgp4Ml9fde+N+avFlYk9
+         Y9SVW2x2YqZdbSjiYKHk0BB4Lanj4c6DoPjm+rNWi/R1uMM/DjvHTspTAoSL94Mb5jTn
+         NOY/XzkVZlLKyQglTRXpV9zjn320NBIjGdtKaODSs+EbMvHrg2G2p3TnHPI12yKSxj55
+         cjei0I0XHR90O4O7XD4CIb0EfuDxES1v5uiHpVpqu6t3hoDGG68gq/RRm5ImF+P1F+a1
+         lFaS3eJaVrFCW2+pYVivPD4nPjzyHnWw5WC/NfNN+N1wF3Ky2pltt/zz5LOB1PoDhaC4
+         1AFw==
+X-Gm-Message-State: AOJu0Yz/8AxCSILQ0AKe0JiUaFHDusmdcGRM0hfztEuQkEXc345vJM+n
+        H0mW7YuMHk3/TG+PuoeurARMZhDgn9/FCGKSFOU4pw==
+X-Google-Smtp-Source: AGHT+IHd9N8dL6zdz3IA97hhnoDYG1Yv2Mx5veJZKoCg3Vt6EBcnFz3FSACXzGNwepp4FUZ865yy59BtQyGtgdViYUM=
+X-Received: by 2002:a05:6214:f6c:b0:671:739e:e2fa with SMTP id
+ iy12-20020a0562140f6c00b00671739ee2famr13258176qvb.59.1698842799599; Wed, 01
+ Nov 2023 05:46:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231101-loongson64_fixes-v1-3-2a2582a4bfa9@flygoat.com>
-References: <20231101-loongson64_fixes-v1-0-2a2582a4bfa9@flygoat.com>
-In-Reply-To: <20231101-loongson64_fixes-v1-0-2a2582a4bfa9@flygoat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-2-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-2-seanjc@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Wed, 1 Nov 2023 12:46:02 +0000
+Message-ID: <CA+EHjTy5tmgGmVNGTX4a2Engb+r1AQizsMxwb8xqOi1f9+VQLA@mail.gmail.com>
+Subject: Re: [PATCH v13 01/35] KVM: Tweak kvm_hva_range and hva_handler_t to
+ allow reusing for gfn ranges
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There are many types of revsered memory passed from firmware
-that should be reserved in memblock, and UMA memory passed
-from firmware that should be added to system memory for system
-to use.
+On Fri, Oct 27, 2023 at 7:22=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> Rework and rename "struct kvm_hva_range" into "kvm_mmu_notifier_range" so
+> that the structure can be used to handle notifications that operate on gf=
+n
+> context, i.e. that aren't tied to a host virtual address.  Rename the
+> handler typedef too (arguably it should always have been gfn_handler_t).
+>
+> Practically speaking, this is a nop for 64-bit kernels as the only
+> meaningful change is to store start+end as u64s instead of unsigned longs=
+.
+>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
 
-Also for memblock there is no need to align those space into page,
-which actually cause problems.
+Reviewed-by: Fuad Tabba <tabba@google.com>
+Tested-by: Fuad Tabba <tabba@google.com>
 
-Handle them properly to prevent memory corruption on some systems.
+Cheers,
+/fuad
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/mach-loongson64/boot_param.h |  6 +++-
- arch/mips/loongson64/init.c                        | 42 +++++++++++++---------
- 2 files changed, 31 insertions(+), 17 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
-index c454ef734c45..e007edd6b60a 100644
---- a/arch/mips/include/asm/mach-loongson64/boot_param.h
-+++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
-@@ -14,7 +14,11 @@
- #define ADAPTER_ROM		8
- #define ACPI_TABLE		9
- #define SMBIOS_TABLE		10
--#define MAX_MEMORY_TYPE		11
-+#define UMA_VIDEO_RAM		11
-+#define VUMA_VIDEO_RAM		12
-+#define MAX_MEMORY_TYPE		13
+>  virt/kvm/kvm_main.c | 34 +++++++++++++++++++---------------
+>  1 file changed, 19 insertions(+), 15 deletions(-)
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 486800a7024b..0524933856d4 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -541,18 +541,22 @@ static inline struct kvm *mmu_notifier_to_kvm(struc=
+t mmu_notifier *mn)
+>         return container_of(mn, struct kvm, mmu_notifier);
+>  }
+>
+> -typedef bool (*hva_handler_t)(struct kvm *kvm, struct kvm_gfn_range *ran=
+ge);
+> +typedef bool (*gfn_handler_t)(struct kvm *kvm, struct kvm_gfn_range *ran=
+ge);
+>
+>  typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
+>                              unsigned long end);
+>
+>  typedef void (*on_unlock_fn_t)(struct kvm *kvm);
+>
+> -struct kvm_hva_range {
+> -       unsigned long start;
+> -       unsigned long end;
+> +struct kvm_mmu_notifier_range {
+> +       /*
+> +        * 64-bit addresses, as KVM notifiers can operate on host virtual
+> +        * addresses (unsigned long) and guest physical addresses (64-bit=
+).
+> +        */
+> +       u64 start;
+> +       u64 end;
+>         union kvm_mmu_notifier_arg arg;
+> -       hva_handler_t handler;
+> +       gfn_handler_t handler;
+>         on_lock_fn_t on_lock;
+>         on_unlock_fn_t on_unlock;
+>         bool flush_on_ret;
+> @@ -581,7 +585,7 @@ static const union kvm_mmu_notifier_arg KVM_MMU_NOTIF=
+IER_NO_ARG;
+>              node =3D interval_tree_iter_next(node, start, last))      \
+>
+>  static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+> -                                                 const struct kvm_hva_ra=
+nge *range)
+> +                                                 const struct kvm_mmu_no=
+tifier_range *range)
+>  {
+>         bool ret =3D false, locked =3D false;
+>         struct kvm_gfn_range gfn_range;
+> @@ -608,9 +612,9 @@ static __always_inline int __kvm_handle_hva_range(str=
+uct kvm *kvm,
+>                         unsigned long hva_start, hva_end;
+>
+>                         slot =3D container_of(node, struct kvm_memory_slo=
+t, hva_node[slots->node_idx]);
+> -                       hva_start =3D max(range->start, slot->userspace_a=
+ddr);
+> -                       hva_end =3D min(range->end, slot->userspace_addr =
 +
-+#define MEM_SIZE_IS_IN_BYTES	(1 << 31)
- 
- #define LOONGSON3_BOOT_MEM_MAP_MAX 128
- struct efi_memory_map_loongson {
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index d62262f93069..f25caa6aa9d3 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -49,8 +49,7 @@ void virtual_early_config(void)
- void __init szmem(unsigned int node)
- {
- 	u32 i, mem_type;
--	static unsigned long num_physpages;
--	u64 node_id, node_psize, start_pfn, end_pfn, mem_start, mem_size;
-+	phys_addr_t node_id, mem_start, mem_size;
- 
- 	/* Otherwise come from DTB */
- 	if (loongson_sysconf.fw_interface != LOONGSON_LEFI)
-@@ -64,27 +63,38 @@ void __init szmem(unsigned int node)
- 
- 		mem_type = loongson_memmap->map[i].mem_type;
- 		mem_size = loongson_memmap->map[i].mem_size;
--		mem_start = loongson_memmap->map[i].mem_start;
-+
-+		/* Memory size comes in MB if MEM_SIZE_IS_IN_BYTES not set */
-+		if (mem_size & MEM_SIZE_IS_IN_BYTES)
-+			mem_size &= ~MEM_SIZE_IS_IN_BYTES;
-+		else
-+			mem_size = mem_size << 20;
-+
-+		mem_start = (node_id << 44) | loongson_memmap->map[i].mem_start;
- 
- 		switch (mem_type) {
- 		case SYSTEM_RAM_LOW:
- 		case SYSTEM_RAM_HIGH:
--			start_pfn = ((node_id << 44) + mem_start) >> PAGE_SHIFT;
--			node_psize = (mem_size << 20) >> PAGE_SHIFT;
--			end_pfn  = start_pfn + node_psize;
--			num_physpages += node_psize;
--			pr_info("Node%d: mem_type:%d, mem_start:0x%llx, mem_size:0x%llx MB\n",
--				(u32)node_id, mem_type, mem_start, mem_size);
--			pr_info("       start_pfn:0x%llx, end_pfn:0x%llx, num_physpages:0x%lx\n",
--				start_pfn, end_pfn, num_physpages);
--			memblock_add_node(PFN_PHYS(start_pfn),
--					  PFN_PHYS(node_psize), node,
-+		case UMA_VIDEO_RAM:
-+			pr_info("Node %d, mem_type:%d\t[%pa], %pa bytes usable\n",
-+				(u32)node_id, mem_type, &mem_start, &mem_size);
-+			memblock_add_node(mem_start, mem_size, node,
- 					  MEMBLOCK_NONE);
- 			break;
- 		case SYSTEM_RAM_RESERVED:
--			pr_info("Node%d: mem_type:%d, mem_start:0x%llx, mem_size:0x%llx MB\n",
--				(u32)node_id, mem_type, mem_start, mem_size);
--			memblock_reserve(((node_id << 44) + mem_start), mem_size << 20);
-+		case VIDEO_ROM:
-+		case ADAPTER_ROM:
-+		case ACPI_TABLE:
-+		case SMBIOS_TABLE:
-+			pr_info("Node %d, mem_type:%d\t[%pa], %pa bytes reserved\n",
-+				(u32)node_id, mem_type, &mem_start, &mem_size);
-+			memblock_reserve(mem_start, mem_size);
-+			break;
-+		/* We should not reserve VUMA_VIDEO_RAM as it overlaps with MMIO */
-+		case VUMA_VIDEO_RAM:
-+		default:
-+			pr_info("Node %d, mem_type:%d\t[%pa], %pa bytes unhandled\n",
-+				(u32)node_id, mem_type, &mem_start, &mem_size);
- 			break;
- 		}
- 	}
-
--- 
-2.34.1
-
+> -                                                 (slot->npages << PAGE_S=
+HIFT));
+> +                       hva_start =3D max_t(unsigned long, range->start, =
+slot->userspace_addr);
+> +                       hva_end =3D min_t(unsigned long, range->end,
+> +                                       slot->userspace_addr + (slot->npa=
+ges << PAGE_SHIFT));
+>
+>                         /*
+>                          * To optimize for the likely case where the addr=
+ess
+> @@ -660,10 +664,10 @@ static __always_inline int kvm_handle_hva_range(str=
+uct mmu_notifier *mn,
+>                                                 unsigned long start,
+>                                                 unsigned long end,
+>                                                 union kvm_mmu_notifier_ar=
+g arg,
+> -                                               hva_handler_t handler)
+> +                                               gfn_handler_t handler)
+>  {
+>         struct kvm *kvm =3D mmu_notifier_to_kvm(mn);
+> -       const struct kvm_hva_range range =3D {
+> +       const struct kvm_mmu_notifier_range range =3D {
+>                 .start          =3D start,
+>                 .end            =3D end,
+>                 .arg            =3D arg,
+> @@ -680,10 +684,10 @@ static __always_inline int kvm_handle_hva_range(str=
+uct mmu_notifier *mn,
+>  static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_noti=
+fier *mn,
+>                                                          unsigned long st=
+art,
+>                                                          unsigned long en=
+d,
+> -                                                        hva_handler_t ha=
+ndler)
+> +                                                        gfn_handler_t ha=
+ndler)
+>  {
+>         struct kvm *kvm =3D mmu_notifier_to_kvm(mn);
+> -       const struct kvm_hva_range range =3D {
+> +       const struct kvm_mmu_notifier_range range =3D {
+>                 .start          =3D start,
+>                 .end            =3D end,
+>                 .handler        =3D handler,
+> @@ -771,7 +775,7 @@ static int kvm_mmu_notifier_invalidate_range_start(st=
+ruct mmu_notifier *mn,
+>                                         const struct mmu_notifier_range *=
+range)
+>  {
+>         struct kvm *kvm =3D mmu_notifier_to_kvm(mn);
+> -       const struct kvm_hva_range hva_range =3D {
+> +       const struct kvm_mmu_notifier_range hva_range =3D {
+>                 .start          =3D range->start,
+>                 .end            =3D range->end,
+>                 .handler        =3D kvm_unmap_gfn_range,
+> @@ -835,7 +839,7 @@ static void kvm_mmu_notifier_invalidate_range_end(str=
+uct mmu_notifier *mn,
+>                                         const struct mmu_notifier_range *=
+range)
+>  {
+>         struct kvm *kvm =3D mmu_notifier_to_kvm(mn);
+> -       const struct kvm_hva_range hva_range =3D {
+> +       const struct kvm_mmu_notifier_range hva_range =3D {
+>                 .start          =3D range->start,
+>                 .end            =3D range->end,
+>                 .handler        =3D (void *)kvm_null_fn,
+> --
+> 2.42.0.820.g83a721a137-goog
+>
