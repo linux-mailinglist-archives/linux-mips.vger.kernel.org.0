@@ -2,178 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371A77DDAD2
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 03:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9067DDD1F
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 08:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjKACGC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 22:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S230340AbjKAHZq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Nov 2023 03:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjKACGB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 22:06:01 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C75B4;
-        Tue, 31 Oct 2023 19:05:58 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d84c24a810dso5929638276.2;
-        Tue, 31 Oct 2023 19:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698804358; x=1699409158; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cEKlb9+ZY0B9mrv/T98IQK90StjaDbNde8cN8esmJ2I=;
-        b=KewMRLCavlkUTR3cNhriYucpF6RDEPSScNbMu4qbpZRcqy6VyMofzJJEMs7ROzaoUS
-         oiJ6OKL4gbo/GIdeZXHRhu94d9ny6JprulGkZ5/My2WYIRA9buFx1aC6oX4W7griBKSb
-         xtGKoD5fACuiEKMhuc7cmq7v+zztzeBfRAMwasvQ4N3DlPe6qN2wOOdAdYFeDns8hrlh
-         uYIhpsqHjc2XyfxLiBSwCxsZC4WBJJhZrD4aOekc8255Dasykwgx8y2ds68QB+Ojs8a6
-         3mgcPeZSZarHESGMC99azyGF4Ez4EQcDkKlKzdXAN+50D73vc1YnBi1ZkqfB/xUoJesK
-         Wnig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698804358; x=1699409158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cEKlb9+ZY0B9mrv/T98IQK90StjaDbNde8cN8esmJ2I=;
-        b=BZWj9METYo9OFzJilYQVQhGiu6dY1k3MAsrZsoYhjsyLd9b3vvrqUJHEdQtdISNHD8
-         oL2BymAxyQ753uhUQNdDccF1PZT9z76b2dvW6/uLkc04Yc96en/xWYYbhwstqCsOT+se
-         LN+TGqvO9mhsN+e8YtroG/tRRxd7Bf9DLYVXX9jeNN3NQwWBO2LarguatqHiBiqqQK5W
-         O72yDxLdAMHZTE7qogpiOEA3y1EuNLIkgYzI5GEV5cA9oBcn07Rl4xyBOVTjzkwy3IgK
-         9ei0oIUAlDqEeldY2s85ABZGEULmBychLqrOzDMTny+0RZXpsWOKkmnyLTlewMKRImTa
-         monQ==
-X-Gm-Message-State: AOJu0Yz3oC7DkQ970W107QtEDWSG2zHbql0k0ptN/NOnXomggdLJgFH7
-        B7QXgUC1JzAi8KXuOLsxWCdFoT+prjMiWF+nx5Q=
-X-Google-Smtp-Source: AGHT+IFooif2X5+/CJeuSxxULskFOAk5A4KRknHkAg3yGC3gdg+4uZvRH2WSCmbJ5vxEtXGGlfsugeWUSMqdBCqfOcM=
-X-Received: by 2002:a25:68cd:0:b0:da0:4453:8f10 with SMTP id
- d196-20020a2568cd000000b00da044538f10mr12049799ybc.43.1698804357417; Tue, 31
- Oct 2023 19:05:57 -0700 (PDT)
+        with ESMTP id S230200AbjKAHZp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 03:25:45 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D88C2;
+        Wed,  1 Nov 2023 00:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698823539; x=1730359539;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qWRVoltW9FVs6NYX3CWyFfOjxesJ7ml8CJp5xBKO3/4=;
+  b=EOVCUeozcT1NzVrIgdJtfxx6i7mCK1uws2kYos0e8yuYTfLr0dwqwGKp
+   QmmOYY1fS3NH5F53S2ybE14BH7mliFv39x9GKPVX/usRuck+DRk9o4jv9
+   Ynx6d2WAo/NwEDiXKHCkdMIhKZaWDgQvgxnlbH3kLKd1L/Xv7qdFLqw9d
+   dCvggauYe/b9lAJqQ6XLXAnppfmQXv6irZ+4Sn9ipwMNDymUyKr51/nXK
+   GBjnXY5dncs81GadtrECWaJvVwxMMkGZ9bFFnodamezNFVyEAZHSjZ1gc
+   N7Aq+p4E9q1Tofjmx/V6UuhBce+/wOcYDJiGF9Rtay9IRC/Q5G7u/L+Bg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="392307402"
+X-IronPort-AV: E=Sophos;i="6.03,267,1694761200"; 
+   d="scan'208";a="392307402"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 00:25:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,267,1694761200"; 
+   d="scan'208";a="8964294"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.9.145]) ([10.93.9.145])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2023 00:25:26 -0700
+Message-ID: <92ba7ddd-2bc8-4a8d-bd67-d6614b21914f@intel.com>
+Date:   Wed, 1 Nov 2023 15:25:23 +0800
 MIME-Version: 1.0
-References: <cover.1698717154.git.zhoubinbin@loongson.cn> <7fae3ce932b455effcf73ff0208f4776959f2f44.1698717154.git.zhoubinbin@loongson.cn>
- <20231031175342.GA1805362-robh@kernel.org>
-In-Reply-To: <20231031175342.GA1805362-robh@kernel.org>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Wed, 1 Nov 2023 08:05:46 +0600
-Message-ID: <CAMpQs4+fz7Xx90QnU23kRAtcyaq9nFQAfp7Qa1RxWhpKr_TiHw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] dt-bindings: interrupt-controller:
- loongson,liointc: Fix dtbs_check for interrupt-names
-To:     Rob Herring <robh@kernel.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 17/35] KVM: Add transparent hugepage support for
+ dedicated guest memory
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
-        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, lvjianmin@loongson.cn,
-        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20231027182217.3615211-1-seanjc@google.com>
+ <20231027182217.3615211-18-seanjc@google.com>
+ <7c0844d8-6f97-4904-a140-abeabeb552c1@intel.com>
+ <ZUEML6oJXDCFJ9fg@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <ZUEML6oJXDCFJ9fg@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 11:53=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
-e:
->
-> On Tue, Oct 31, 2023 at 10:36:38AM +0800, Binbin Zhou wrote:
-> > The Loongson-2K0500/2K1000 CPUs have 64 interrupt sources as inputs, an=
-d
-> > a route-mapped node handles up to 32 interrupt sources, so two liointc
-> > nodes are defined in dts{i}.
-> > Of course, we need to ensure that the routing outputs (intx) of the two
-> > nodes cannot conflict.
-> >
-> > For example, in Loongson-2K1000, 'int0' is typically used by the lioint=
-c0
-> > node, then the liointc1 node can only use the outputs starting with
-> > 'int1'.
-> >
-> > So "interrupt-names" should be defined by "pattern".
-> >
-> > This fixes dtbs_check warning:
-> >
-> > DTC_CHK arch/loongarch/boot/dts/loongson-2k0500-ref.dtb
-> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
-fe11440: interrupt-names:0: 'int0' was expected
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
-fe11440: Unevaluated properties are not allowed ('interrupt-names' was unex=
-pected)
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> > DTC_CHK arch/loongarch/boot/dts/loongson-2k1000-ref.dtb
-> > arch/loongarch/boot/dts/loongson-2k1000-ref.dtb: interrupt-controller@1=
-fe01440: interrupt-names:0: 'int0' was expected
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> > arch/loongarch/boot/dts/loongson-2k1000-ref.dtb: interrupt-controller@1=
-fe01440: Unevaluated properties are not allowed ('interrupt-names' was unex=
-pected)
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  .../bindings/interrupt-controller/loongson,liointc.yaml    | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/loo=
-ngson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
-/loongson,liointc.yaml
-> > index 7393d7dfbe82..a90c609d351e 100644
-> > --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,l=
-iointc.yaml
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,l=
-iointc.yaml
-> > @@ -54,11 +54,9 @@ properties:
-> >    interrupt-names:
-> >      description: List of names for the parent interrupts.
-> >      items:
-> > -      - const: int0
-> > -      - const: int1
-> > -      - const: int2
-> > -      - const: int3
-> > +      pattern: int[0-3]
-> >      minItems: 1
-> > +    maxItems: 4
-> >
-> >    '#interrupt-cells':
-> >      const: 2
-> > @@ -87,6 +85,7 @@ required:
-> >    - compatible
-> >    - reg
-> >    - interrupts
-> > +  - interrupt-names
->
-> A new required property is an ABI break. Is that okay for this platform?
-> The commit msg should answer that if so.
+On 10/31/2023 10:16 PM, Sean Christopherson wrote:
+> On Tue, Oct 31, 2023, Xiaoyao Li wrote:
+>> On 10/28/2023 2:21 AM, Sean Christopherson wrote:
+>>> Extended guest_memfd to allow backing guest memory with transparent
+>>> hugepages. Require userspace to opt-in via a flag even though there's no
+>>> known/anticipated use case for forcing small pages as THP is optional,
+>>> i.e. to avoid ending up in a situation where userspace is unaware that
+>>> KVM can't provide hugepages.
+>>
+>> Personally, it seems not so "transparent" if requiring userspace to opt-in.
+>>
+>> People need to 1) check if the kernel built with TRANSPARENT_HUGEPAGE
+>> support, or check is the sysfs of transparent hugepage exists; 2)get the
+>> maximum support hugepage size 3) ensure the size satisfies the alignment;
+>> before opt-in it.
+>>
+>> Even simpler, userspace can blindly try to create guest memfd with
+>> transparent hugapage flag. If getting error, fallback to create without the
+>> transparent hugepage flag.
+>>
+>> However, it doesn't look transparent to me.
+> 
+> The "transparent" part is referring to the underlying kernel mechanism, it's not
+> saying anything about the API.  The "transparent" part of THP is that the kernel
+> doesn't guarantee hugepages, i.e. whether or not hugepages are actually used is
+> (mostly) transparent to userspace.
+> 
+> Paolo also isn't the biggest fan[*], but there are also downsides to always
+> allowing hugepages, e.g. silent failure due to lack of THP or unaligned size,
+> and there's precedent in the form of MADV_HUGEPAGE.
+> 
+> [*] https://lore.kernel.org/all/84a908ae-04c7-51c7-c9a8-119e1933a189@redhat.com
 
-Hi Rob:
+But it's different than MADV_HUGEPAGE, in a way. Per my understanding, 
+the failure of MADV_HUGEPAGE is not fatal, user space can ignore it and 
+continue.
 
-Thanks for your reply.
+However, the failure of KVM_GUEST_MEMFD_ALLOW_HUGEPAGE is fatal, which 
+leads to failure of guest memfd creation.
 
-In fact, 'interrupt-names' is essential for both liointc-1.0 and
-liointc-2.0, and we now pass it to get the corresponding interrupt
-number.
-To a certain extent, I think it's already 'required'.
-Of course, I'll try to explain it more clearly in the commit message.
-
-Thanks.
-Binbin
->
->
-> >    - interrupt-controller
-> >    - '#interrupt-cells'
-> >    - loongson,parent-int-map
-> > --
-> > 2.39.3
-> >
+For current implementation, I think maybe 
+KVM_GUEST_MEMFD_DESIRE_HUGEPAGE fits better than 
+KVM_GUEST_MEMFD_ALLOW_HUGEPAGE? or maybe *PREFER*?
