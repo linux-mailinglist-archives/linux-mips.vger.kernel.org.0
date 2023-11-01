@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6657DE145
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 14:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFB77DE150
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 14:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343724AbjKAMrI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Nov 2023 08:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S235182AbjKAMvH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Nov 2023 08:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbjKAMrH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 08:47:07 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B3E185
-        for <linux-mips@vger.kernel.org>; Wed,  1 Nov 2023 05:47:03 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-672096e0e89so21767726d6.1
-        for <linux-mips@vger.kernel.org>; Wed, 01 Nov 2023 05:47:03 -0700 (PDT)
+        with ESMTP id S235111AbjKAMvG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Nov 2023 08:51:06 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582A6102
+        for <linux-mips@vger.kernel.org>; Wed,  1 Nov 2023 05:51:03 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-66d264e67d8so43189716d6.1
+        for <linux-mips@vger.kernel.org>; Wed, 01 Nov 2023 05:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698842822; x=1699447622; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698843062; x=1699447862; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i1rvjvqySA8gfoAJ2h4xCVn6r+FVikEwY0ryqbt6qgE=;
-        b=tkZvBXUU99Y6DGHqlV7CmraXsSkiESOXpXjHCqzaKtwOaO25j+k+op3nuWbLqAzLJv
-         msff5vgM4xSZGonWvuWKFT/X2NUlwOri+dw2rbRjgxDXjPkef20VwIeful3u/iFk+ZEf
-         tvWyN8ZIVEdnb2ds+/NaelJwumxeiLs924jPtosp40oDqOC1W8+ebv8ACD69AmjtNOn/
-         U2uu/w6nzTzmwhfFI37qaV2Gu0NWrErmtjh4mvJgEYX5mh/eBhRmL/2p0lRRVZeGvDfI
-         KctXwUfDd6Yof1leqTQuWhsPISmIpLC/BGFxNNCTKyjMni9XTcTJZwY5LdOWf7FXWTV9
-         Wptw==
+        bh=DytdUoCbq8poGHKLHOEtAO0D5dohgKyWvCysCxFt+wY=;
+        b=ly5ncPVNpoivFRlisDYz8Hb0PEqnyA/XOL1PFjBsoMHY4MzfhZ3R17TRt0h1EkyEjz
+         3QGvMwZiZRm8l3mc+UdgKXe/WYbIWHxqBvZIQo2mWBKNOBMlLFsjwJ0befWTql4jonoG
+         1Wg/Z+yLAslqneYeBHQ5zucEBKpJyIbaJdUNH7+LJhCgzEdEarVuzPc9RVGAX+8Vpylw
+         mJspx/gpqRRQgO1xL7LV87CebmifDkfrPTYfrcb1F/lScnAIFMrxitVvih55oReziExH
+         /0KH9vi34r91y0hTLMtzcT20rw+kEP6Sp4Z+eGh6I+Fb9chg1XmiyRmdav/2p217PYdA
+         4z1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698842822; x=1699447622;
+        d=1e100.net; s=20230601; t=1698843062; x=1699447862;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i1rvjvqySA8gfoAJ2h4xCVn6r+FVikEwY0ryqbt6qgE=;
-        b=icRH47MiGwkPbcdcNNuyXuPt2XtqzsSqZjswqBw02MX7Z286q1OR1WkEPWJhRiozbR
-         ue5xYitGnYwBrCfbinoFu2pLaQbIg07Wj5cyG9qjGyCk0SEf90q9VZ00O8qz52iH/RN9
-         ckJ4xWkUowB5RJfk7io4H2WD2srvYborjVzlAjxU3EzuC5zuWb41TKhi+vaEI9PkvVkx
-         yjRLaKxR23xWO7l2uzvVoZJGDd99X2PI0H5eynKx3k+hQxqRG1LxxAAyG+vZra9s5cLa
-         VCgl2QjELnbFqBTItEnL/ZR81PBlrjDTriv62r4oC8rGX511YMrreLpeH0l7sj+pmFlN
-         xucw==
-X-Gm-Message-State: AOJu0Yx/doJf0IspQfvgH8jcIaYyNxaFqC/vb+8fG+YrYdzfDv+u99VA
-        +8/tJy1+Yt6rX+SdPgJzGwVMZMChl8qS00jKE4iuqA==
-X-Google-Smtp-Source: AGHT+IEwNefwVjOpplfsdA5Dp0BgUdMFZ8Gr0x2pIdj0EOquTk7Lrcu3yjtemmSczlmcSeWnvG38gd5iU/oYIFP7LzQ=
-X-Received: by 2002:ad4:5de9:0:b0:65d:31e:b810 with SMTP id
- jn9-20020ad45de9000000b0065d031eb810mr19758846qvb.34.1698842821613; Wed, 01
- Nov 2023 05:47:01 -0700 (PDT)
+        bh=DytdUoCbq8poGHKLHOEtAO0D5dohgKyWvCysCxFt+wY=;
+        b=cPTYrYrLgw2FsUxK7eklAH45rkE2Wy+9TSE9PpQ2H3CtLqoSelNC8vRElYGJOhZwUT
+         dRowIwzq+CaDyrjRQkePhRcXomrNOGqWT2btYWgXo2AioAW+oN8vSWztgUlCN/tE3Ite
+         ST0N6RWR2+mCdDwUfHu+TWzEBG9zx8Ay4oV4tz/Qlu7cajib8l2XbVPw0YbWGUvrjApR
+         aEw1lElRi50my8JNrhMdrScOGLOq0lrrrv0IFFCuJGwDTS0zbAyskgjlczZdoVh4kRJZ
+         I88NhkZ1OFlg2ixBrVK+J4fQL8Vq4ME/+sFB8Xxuu0tSRybgJvurLORinOOumr97vjk5
+         R4DQ==
+X-Gm-Message-State: AOJu0YzFfEsm9JmRflzMtU8gJw7HS5ky69EALzPxIyiO7oOCNsAQySRg
+        HmGDV2CRAblsBCVMW6VJzJQB52ube2nSd+unV1bmjQ==
+X-Google-Smtp-Source: AGHT+IF4xR6L8cVnqFnyZjdEh5XAFhWOV7M0s6Xt9NyBBttGvtAf21ACAZmexGcVd+eTPklAY7PiFjol+SoHUZLf4NM=
+X-Received: by 2002:a05:6214:262e:b0:66f:bd35:e889 with SMTP id
+ gv14-20020a056214262e00b0066fbd35e889mr16003984qvb.60.1698843062295; Wed, 01
+ Nov 2023 05:51:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-3-seanjc@google.com>
-In-Reply-To: <20231027182217.3615211-3-seanjc@google.com>
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-5-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-5-seanjc@google.com>
 From:   Fuad Tabba <tabba@google.com>
-Date:   Wed, 1 Nov 2023 12:46:25 +0000
-Message-ID: <CA+EHjTycVAL11xCKQAfm-q4NGbgSH7yMswu+c1XaJdyhUh61zw@mail.gmail.com>
-Subject: Re: [PATCH v13 02/35] KVM: Assert that mmu_invalidate_in_progress
- *never* goes negative
+Date:   Wed, 1 Nov 2023 12:50:26 +0000
+Message-ID: <CA+EHjTxW3P+_fejO6emoZ1=c9EkWJUH63-ffmSumh=6P6MbTqQ@mail.gmail.com>
+Subject: Re: [PATCH v13 04/35] KVM: WARN if there are dangling MMU
+ invalidations at VM destruction
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -107,24 +107,18 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Fri, Oct 27, 2023 at 7:22=E2=80=AFPM Sean Christopherson <seanjc@google.=
 com> wrote:
 >
-> Move the assertion on the in-progress invalidation count from the primary
-> MMU's notifier path to KVM's common notification path, i.e. assert that
-> the count doesn't go negative even when the invalidation is coming from
-> KVM itself.
+> Add an assertion that there are no in-progress MMU invalidations when a
+> VM is being destroyed, with the exception of the scenario where KVM
+> unregisters its MMU notifier between an .invalidate_range_start() call an=
+d
+> the corresponding .invalidate_range_end().
 >
-> Opportunistically convert the assertion to a KVM_BUG_ON(), i.e. kill only
-> the affected VM, not the entire kernel.  A corrupted count is fatal to th=
-e
-> VM, e.g. the non-zero (negative) count will cause mmu_invalidate_retry()
-> to block any and all attempts to install new mappings.  But it's far from
-> guaranteed that an end() without a start() is fatal or even problematic t=
-o
-> anything other than the target VM, e.g. the underlying bug could simply b=
-e
-> a duplicate call to end().  And it's much more likely that a missed
-> invalidation, i.e. a potential use-after-free, would manifest as no
-> notification whatsoever, not an end() without a start().
+> KVM can't detect unpaired calls from the mmu_notifier due to the above
+> exception waiver, but the assertion can detect KVM bugs, e.g. such as the
+> bug that *almost* escaped initial guest_memfd development.
 >
+> Link: https://lore.kernel.org/all/e397d30c-c6af-e68f-d18e-b4e3739c5389@li=
+nux.intel.com
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
 
@@ -134,33 +128,33 @@ Tested-by: Fuad Tabba <tabba@google.com>
 Cheers,
 /fuad
 
->  virt/kvm/kvm_main.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  virt/kvm/kvm_main.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 >
 > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 0524933856d4..5a97e6c7d9c2 100644
+> index 1a577a25de47..4dba682586ee 100644
 > --- a/virt/kvm/kvm_main.c
 > +++ b/virt/kvm/kvm_main.c
-> @@ -833,6 +833,7 @@ void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned=
- long start,
->          * in conjunction with the smp_rmb in mmu_invalidate_retry().
+> @@ -1356,9 +1356,16 @@ static void kvm_destroy_vm(struct kvm *kvm)
+>          * No threads can be waiting in kvm_swap_active_memslots() as the
+>          * last reference on KVM has been dropped, but freeing
+>          * memslots would deadlock without this manual intervention.
+> +        *
+> +        * If the count isn't unbalanced, i.e. KVM did NOT unregister its=
+ MMU
+> +        * notifier between a start() and end(), then there shouldn't be =
+any
+> +        * in-progress invalidations.
 >          */
->         kvm->mmu_invalidate_in_progress--;
-> +       KVM_BUG_ON(kvm->mmu_invalidate_in_progress < 0, kvm);
->  }
->
->  static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *m=
-n,
-> @@ -863,8 +864,6 @@ static void kvm_mmu_notifier_invalidate_range_end(str=
-uct mmu_notifier *mn,
->          */
->         if (wake)
->                 rcuwait_wake_up(&kvm->mn_memslots_update_rcuwait);
-> -
-> -       BUG_ON(kvm->mmu_invalidate_in_progress < 0);
->  }
->
->  static int kvm_mmu_notifier_clear_flush_young(struct mmu_notifier *mn,
+>         WARN_ON(rcuwait_active(&kvm->mn_memslots_update_rcuwait));
+> -       kvm->mn_active_invalidate_count =3D 0;
+> +       if (kvm->mn_active_invalidate_count)
+> +               kvm->mn_active_invalidate_count =3D 0;
+> +       else
+> +               WARN_ON(kvm->mmu_invalidate_in_progress);
+>  #else
+>         kvm_flush_shadow_all(kvm);
+>  #endif
 > --
 > 2.42.0.820.g83a721a137-goog
 >
