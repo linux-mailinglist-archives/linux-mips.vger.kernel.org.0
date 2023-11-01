@@ -2,132 +2,185 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0407DD87A
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Oct 2023 23:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CA07DDAAA
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 02:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjJaWkS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 18:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
+        id S1377007AbjKABm2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 21:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbjJaWkR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 18:40:17 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9392B119
-        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 15:40:14 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-32f7c80ab33so2306576f8f.0
-        for <linux-mips@vger.kernel.org>; Tue, 31 Oct 2023 15:40:14 -0700 (PDT)
+        with ESMTP id S1345060AbjKABm1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 21:42:27 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA09D119;
+        Tue, 31 Oct 2023 18:42:23 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-da0359751dbso411245276.1;
+        Tue, 31 Oct 2023 18:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698792013; x=1699396813; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698802943; x=1699407743; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dJWbuo+9TPVToDVPf96jeRxWUliwPBKXtZxQViTwJnU=;
-        b=1K8ZS/bJ+GdgqaZUvAP2WwNROh7zVafE6rW0I41BI7g6Cuii9iWqj6tqLetfVQnuij
-         mqrLEsygd5w8lFAbQgvkcROrnJCCEWMldrHP4O25qc38/KI1iGCpM4/wrvLPnGiRRjUy
-         UET+n2k3pAZakVazyzGziZONC7dCPAfAWcn8RnZtvZvjJ74w7BjYg9SOd2E/VCWJsh/Q
-         hjUqjy6DwE0Kw7wq3scIRWXIYCWNSNlnBFHdqI4GR7b6c9oH1dXwTcZ3eALS/mu/CWM4
-         6h7c+KWgRKLbE/7nXwFViCsz1g/egULjDKcBBbXrfllPtyavfMqnz40g0XlTC3tuQAJS
-         fXUQ==
+        bh=EqP28swEoFqFBpOsPvURB6Dcv19Cyas9Sj5n5k9cRsM=;
+        b=NrmGem361rCdWpysmkJeD7d2pRTvDa//3MbgBE99zw/y7kH+4NNFlz0B9ykGqZ8AGE
+         fI90sAxBfDL1N98NCYkscRvl0miTjLfW63WTHfYSlJ5cOGKW91+b+k0/6DfLVIK6v8VM
+         im4amIZxsOiS95bNs9+65FVkD1z+GWK5cqsFxbD0lJvQu4+tsm7ckY2iLixCVpKCk1yT
+         Lr7K2s7P7mp7UQyumYw0advBWnwzqIIcr0goJjoNK0MG8IGu7cXFcfjRUouLrSi/5Ph7
+         EJI8P7h8eOWCly3Uy417xrlrR8N9p3g9mfG3oroigd9UmxTpDwcCoV2umGYaEyx7Q3Eg
+         lp5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698792013; x=1699396813;
+        d=1e100.net; s=20230601; t=1698802943; x=1699407743;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dJWbuo+9TPVToDVPf96jeRxWUliwPBKXtZxQViTwJnU=;
-        b=JGdCnT99Z8Xa2Cr0QAXEyRH/rLpj8UqrdTW+HUNlDUWDbm/zz3wvMct/LecZwsw410
-         o7sqpgCfLMoPvRBN6XKryHw/UnnRwZ/erG8PPOqHW3i1+UchUjbvxKYKrVmhZ+DYeItR
-         BSj1JQ58c38OA7UDLcYY8hHOTuyvCV10vmBEWFiEyrxRhZuXmDLmVS3eyVntHAakrhW8
-         +pTktdfKIJXoO5HFCMpR3u02cMWZ81oHjII8yF83+7Cnt8d/rAEBm2icHJ+2Xbd5vQeH
-         yREsU3gUsHjhnKkC7TCFq4QLIxRx6jYz7vUE13WOk2mVd9QiD9Cs+DiTJWX9HVd6bpcF
-         EO4Q==
-X-Gm-Message-State: AOJu0YwWZIH/zocLI6Ioq0Di70oBhLAh+TYi30uT7HW+cdIXhuO82Squ
-        ezrlSOka8qx99Hx/F9BBnKBpsK75oLg34mCCzCUtIg==
-X-Google-Smtp-Source: AGHT+IHkDiPkYLUipg1BNgD620eOceDAkQD+A32NnZclx+AVnVsN45AUMqsjx/qUof6Oj5kTmFWO4hEnjV9b1jDP2pc=
-X-Received: by 2002:adf:d1ef:0:b0:32f:7db1:22fb with SMTP id
- g15-20020adfd1ef000000b0032f7db122fbmr8716023wrd.28.1698792012937; Tue, 31
- Oct 2023 15:40:12 -0700 (PDT)
+        bh=EqP28swEoFqFBpOsPvURB6Dcv19Cyas9Sj5n5k9cRsM=;
+        b=vU9K4Sbw0aREZ7J8tPwpCY7D6U9+0LUD07+slkVRHj9Wlv59LJEFtNrjyiui3trKJ1
+         4E0GtJDP4d/ZRmU1m1+p5Dqgql5+U6fzDAdVO2get632wlu2vhmUNRgU0jdcEFZLsTGS
+         5X2sUwRokAInPenFxzGg811N6KJt11jvosW4dtJJl+kIbrjEYIxW42XOyeRLXnL+vf3M
+         Zi7zmQhBbRS4EjyHvJ4ffX70kMltZtzqKQvYqcChJEx1s8kD2U7O6O6fTfJDb71PEJo1
+         EnKEeOqj2kElUSWOl3BHIuUb9zbNMv7VMoeOagleRStaTASll8DmtdyruchPGT6WqlUH
+         XdxQ==
+X-Gm-Message-State: AOJu0YxuQA5+uWPEuQEB2o4dhzDbpBp1nhKfup3xZP89mbM6wrbv9lf5
+        scxu0T0T5yXBMWWz27/S5t05fH81YXgoAeyoC4s=
+X-Google-Smtp-Source: AGHT+IFa2JpmHdGFDcAM1sUzLsses6Qgyt8fsVsUd3nY2L/J+jzVc7x7mSCYmF8QOruW6ygQIYO6W7vsbej/b/cnyd4=
+X-Received: by 2002:a25:9307:0:b0:da0:7fe0:dc6 with SMTP id
+ f7-20020a259307000000b00da07fe00dc6mr3496481ybo.14.1698802942978; Tue, 31 Oct
+ 2023 18:42:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-17-seanjc@google.com>
- <ZUFGRyQEuWj4RJS0@google.com> <ZUFzZf-YmCRYP6qo@google.com>
-In-Reply-To: <ZUFzZf-YmCRYP6qo@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 31 Oct 2023 15:39:42 -0700
-Message-ID: <CALzav=d9eXZfK=op7A=UftbpuPpUbxqV6CmkqqxxBNuNsUU4nw@mail.gmail.com>
-Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
+References: <cover.1698717154.git.zhoubinbin@loongson.cn> <fd5efc8a21b94e044e4e225255655fc92beb0c63.1698717154.git.zhoubinbin@loongson.cn>
+ <20231031175205.GA1803813-robh@kernel.org>
+In-Reply-To: <20231031175205.GA1803813-robh@kernel.org>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Wed, 1 Nov 2023 07:42:11 +0600
+Message-ID: <CAMpQs4+4bSKC+nUGoD=HpwcSfQ7AUZWm-N_moRZN7kc_q_SrAQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] dt-bindings: interrupt-controller:
+ loongson,liointc: Fix dtbs_check warning for reg-names
+To:     Rob Herring <robh@kernel.org>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+        loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, lvjianmin@loongson.cn,
+        WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 2:36=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
-> On Tue, Oct 31, 2023, David Matlack wrote:
-> > On 2023-10-27 11:21 AM, Sean Christopherson wrote:
-> > > Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-=
-based
-> > > memory that is tied to a specific KVM virtual machine and whose prima=
-ry
-> > > purpose is to serve guest memory.
+On Tue, Oct 31, 2023 at 11:52=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
 >
-> > Maybe can you sketch out how you see this proposal being extensible to
-> > using guest_memfd for shared mappings?
+> On Tue, Oct 31, 2023 at 10:36:37AM +0800, Binbin Zhou wrote:
+> > As we know, the Loongson-2K0500 is a single-core CPU, and the
+> > core1-related register (isr1) does not exist, and we need a separate
+> > declaration.
+> >
+> > This fixes dtbs_check warning:
+> >
+> > DTC_CHK arch/loongarch/boot/dts/loongson-2k0500-ref.dtb
+> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
+fe11400: reg-names: ['main', 'isr0'] is too short
+> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
+ller/loongson,liointc.yaml
+> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
+fe11400: Unevaluated properties are not allowed ('reg-names' was unexpected=
+)
+> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
+ller/loongson,liointc.yaml
+> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
+fe11400: reg: [[0, 534844416, 0, 64], [0, 534843456, 0, 8]] is too short
+> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
+ller/loongson,liointc.yaml
+> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
+fe11440: reg-names: ['main', 'isr0'] is too short
+> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
+ller/loongson,liointc.yaml
+> >
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > ---
+> >  .../loongson,liointc.yaml                     | 22 ++++++++++++++-----
+> >  1 file changed, 16 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/loo=
+ngson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
+/loongson,liointc.yaml
+> > index 0d9511b8a792..7393d7dfbe82 100644
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,l=
+iointc.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,l=
+iointc.yaml
+> > @@ -11,8 +11,13 @@ maintainers:
+> >
+> >  description: |
+> >    This interrupt controller is found in the Loongson-3 family of chips=
+ and
+> > -  Loongson-2K1000 chip, as the primary package interrupt controller wh=
+ich
+> > +  Loongson-2K series chips, as the primary package interrupt controlle=
+r which
+> >    can route local I/O interrupt to interrupt lines of cores.
+> > +  Be aware of the following points.
+> > +  1.The Loongson-2K0500 is a single core CPU, the isr1 register could =
+not be defined;
+> > +  2.The Loongson-2K0500/2K1000 has 64 device interrupt sources as inpu=
+ts, so we
+> > +    need to define two nodes in dts{i} to describe the "0-31" and "32-=
+61" interrupt
+> > +    sources respectively.
+> >
+> >  allOf:
+> >    - $ref: /schemas/interrupt-controller.yaml#
+> > @@ -29,10 +34,14 @@ properties:
+> >      maxItems: 3
+> >
+> >    reg-names:
+> > -    items:
+> > -      - const: main
+> > -      - const: isr0
+> > -      - const: isr1
+> > +    oneOf:
+> > +      - items:
+> > +          - const: main
+> > +          - const: isr0
+> > +      - items:
+> > +          - const: main
+> > +          - const: isr0
+> > +          - const: isr1
 >
-> For in-place conversions, e.g. pKVM, no additional guest_memfd is needed.=
-  What's
-> missing there is the ability to (safely) mmap() guest_memfd, e.g. KVM nee=
-ds to
-> ensure there are no outstanding references when converting back to privat=
-e.
->
-> For TDX/SNP, assuming we don't find a performant and robust way to do in-=
-place
-> conversions, a second fd+offset pair would be needed.
+> Just adding 'minItems: 2' accomplishes the same thing without
+> duplicating the list.
 
-Is there a way to support non-in-place conversions within a single guest_me=
-mfd?
+OK, I will do it.
+
+Thanks.
+Binbin
+>
+> >
+> >    interrupt-controller: true
+> >
+> > @@ -94,7 +103,8 @@ if:
+> >  then:
+> >    properties:
+> >      reg:
+> > -      minItems: 3
+> > +      minItems: 2
+> > +      maxItems: 3
+> >
+> >    required:
+> >      - reg-names
+> > --
+> > 2.39.3
+> >
