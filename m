@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CA07DDAAA
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 02:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAEE7DDAC2
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Nov 2023 02:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377007AbjKABm2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Oct 2023 21:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S1345082AbjKAByX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Oct 2023 21:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345060AbjKABm1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 21:42:27 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA09D119;
-        Tue, 31 Oct 2023 18:42:23 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-da0359751dbso411245276.1;
-        Tue, 31 Oct 2023 18:42:23 -0700 (PDT)
+        with ESMTP id S1345060AbjKAByX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Oct 2023 21:54:23 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83079103;
+        Tue, 31 Oct 2023 18:54:20 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5a7afd45199so64168307b3.0;
+        Tue, 31 Oct 2023 18:54:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698802943; x=1699407743; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698803659; x=1699408459; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EqP28swEoFqFBpOsPvURB6Dcv19Cyas9Sj5n5k9cRsM=;
-        b=NrmGem361rCdWpysmkJeD7d2pRTvDa//3MbgBE99zw/y7kH+4NNFlz0B9ykGqZ8AGE
-         fI90sAxBfDL1N98NCYkscRvl0miTjLfW63WTHfYSlJ5cOGKW91+b+k0/6DfLVIK6v8VM
-         im4amIZxsOiS95bNs9+65FVkD1z+GWK5cqsFxbD0lJvQu4+tsm7ckY2iLixCVpKCk1yT
-         Lr7K2s7P7mp7UQyumYw0advBWnwzqIIcr0goJjoNK0MG8IGu7cXFcfjRUouLrSi/5Ph7
-         EJI8P7h8eOWCly3Uy417xrlrR8N9p3g9mfG3oroigd9UmxTpDwcCoV2umGYaEyx7Q3Eg
-         lp5w==
+        bh=+xndyojUWSZZS6wC+L3oMlDNJUSHBHtUd/985yNA14M=;
+        b=czdPojpVG+MHVDeIkXTi+Uq7k67zx0CnQoj697J7Tqd/FZ+/QJPBiw5HNDniIgdp5C
+         6G5VNqtwlN20KfH88Qa3lZBtlidrxXJ8wYsFk7wTQxYFlvKmyB93mZNZ+0Bv+2xFsvqv
+         AoivZX7fA9KUYnz/W1YEb7Q9qwuO3S5ASadgHkbg9ikkXw3XhDX1vZ1WXNfStz6xpTT4
+         KhuMxnRZBLgTtjxV4ORSh74vgbJkIaME2iGHFBSfGY419lmptZ2Hnu2hPjrEZPqoZcXP
+         o5kSRalRDAnQDB2YSQPvQeNpw0fsWJmyzdnAH6WfFwNWU3gapylMcAc5chusDjcgHpKc
+         rrNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698802943; x=1699407743;
+        d=1e100.net; s=20230601; t=1698803659; x=1699408459;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EqP28swEoFqFBpOsPvURB6Dcv19Cyas9Sj5n5k9cRsM=;
-        b=vU9K4Sbw0aREZ7J8tPwpCY7D6U9+0LUD07+slkVRHj9Wlv59LJEFtNrjyiui3trKJ1
-         4E0GtJDP4d/ZRmU1m1+p5Dqgql5+U6fzDAdVO2get632wlu2vhmUNRgU0jdcEFZLsTGS
-         5X2sUwRokAInPenFxzGg811N6KJt11jvosW4dtJJl+kIbrjEYIxW42XOyeRLXnL+vf3M
-         Zi7zmQhBbRS4EjyHvJ4ffX70kMltZtzqKQvYqcChJEx1s8kD2U7O6O6fTfJDb71PEJo1
-         EnKEeOqj2kElUSWOl3BHIuUb9zbNMv7VMoeOagleRStaTASll8DmtdyruchPGT6WqlUH
-         XdxQ==
-X-Gm-Message-State: AOJu0YxuQA5+uWPEuQEB2o4dhzDbpBp1nhKfup3xZP89mbM6wrbv9lf5
-        scxu0T0T5yXBMWWz27/S5t05fH81YXgoAeyoC4s=
-X-Google-Smtp-Source: AGHT+IFa2JpmHdGFDcAM1sUzLsses6Qgyt8fsVsUd3nY2L/J+jzVc7x7mSCYmF8QOruW6ygQIYO6W7vsbej/b/cnyd4=
-X-Received: by 2002:a25:9307:0:b0:da0:7fe0:dc6 with SMTP id
- f7-20020a259307000000b00da07fe00dc6mr3496481ybo.14.1698802942978; Tue, 31 Oct
- 2023 18:42:22 -0700 (PDT)
+        bh=+xndyojUWSZZS6wC+L3oMlDNJUSHBHtUd/985yNA14M=;
+        b=leZtnIlNMhITlva3yRxqhBRi9C9RZ9WdxkViFZcntjGN7ATWcVL0X6OHTJ8fEgsfio
+         T/+T37gzMU2y7jtdVoMi2LvdoeL/yEiBenYILrYAB0b/yrm2Ds9FjSe2G0I3horXLnv8
+         Pd8BGIuS9NWSCpgRbXRqX1Yz0vDs1gh1kFeMyZM0HUIAnQLWSakn4H246LGglqcTE1O8
+         SNttIBLWWGtb5ZWDZVFYplZOgNEhLTOIY2Vi+A6wSLpi0AvyNDnrSlavlQU5cq7CdPcn
+         9Hw88Gt10VhZYXrN09a/3wDH01sByg7DYN4mSwWy/+GmNGxYmz89XnhIkF2601qFb/eu
+         d7qg==
+X-Gm-Message-State: AOJu0YwnzAE9FBO343M0nD/bYJcA+Xh26Q+ovWCnHipYg6ZIzoasLAop
+        U9Lu/bw44uvDDkwvc4alRe3/5v1jbw8cXfgwpug=
+X-Google-Smtp-Source: AGHT+IGsOuzuHAt1UYOEC9rTH1lEADAwKcru0j0aIocj5HwKzJf8KIsocB0CQEcrqCjW62HvM1bbKDi6S0/YDbKSQNk=
+X-Received: by 2002:a25:8287:0:b0:d9a:f666:b68e with SMTP id
+ r7-20020a258287000000b00d9af666b68emr13529776ybk.30.1698803659588; Tue, 31
+ Oct 2023 18:54:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1698717154.git.zhoubinbin@loongson.cn> <fd5efc8a21b94e044e4e225255655fc92beb0c63.1698717154.git.zhoubinbin@loongson.cn>
- <20231031175205.GA1803813-robh@kernel.org>
-In-Reply-To: <20231031175205.GA1803813-robh@kernel.org>
+References: <cover.1698717154.git.zhoubinbin@loongson.cn> <dc6621dd09b4710c66140b830d0b345682c7b707.1698717154.git.zhoubinbin@loongson.cn>
+ <20231031175055.GA1801059-robh@kernel.org>
+In-Reply-To: <20231031175055.GA1801059-robh@kernel.org>
 From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Wed, 1 Nov 2023 07:42:11 +0600
-Message-ID: <CAMpQs4+4bSKC+nUGoD=HpwcSfQ7AUZWm-N_moRZN7kc_q_SrAQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] dt-bindings: interrupt-controller:
- loongson,liointc: Fix dtbs_check warning for reg-names
+Date:   Wed, 1 Nov 2023 07:54:08 +0600
+Message-ID: <CAMpQs4JeTvNRv0Jg+-HAeKD4S0GEm5j0ReCjRVYAneUsqqPtOg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] dt-bindings: interrupt-controller:
+ loongson,liointc: Standardize the naming of 'loongson,parent-int-map'
 To:     Rob Herring <robh@kernel.org>
 Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
         Huacai Chen <chenhuacai@loongson.cn>,
@@ -80,107 +80,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 11:52=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+On Tue, Oct 31, 2023 at 11:50=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
 e:
 >
-> On Tue, Oct 31, 2023 at 10:36:37AM +0800, Binbin Zhou wrote:
-> > As we know, the Loongson-2K0500 is a single-core CPU, and the
-> > core1-related register (isr1) does not exist, and we need a separate
-> > declaration.
-> >
-> > This fixes dtbs_check warning:
-> >
-> > DTC_CHK arch/loongarch/boot/dts/loongson-2k0500-ref.dtb
-> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
-fe11400: reg-names: ['main', 'isr0'] is too short
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
-fe11400: Unevaluated properties are not allowed ('reg-names' was unexpected=
-)
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
-fe11400: reg: [[0, 534844416, 0, 64], [0, 534843456, 0, 8]] is too short
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> > arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1=
-fe11440: reg-names: ['main', 'isr0'] is too short
-> >         From schema: Documentation/devicetree/bindings/interrupt-contro=
-ller/loongson,liointc.yaml
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  .../loongson,liointc.yaml                     | 22 ++++++++++++++-----
-> >  1 file changed, 16 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/loo=
-ngson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
-/loongson,liointc.yaml
-> > index 0d9511b8a792..7393d7dfbe82 100644
-> > --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,l=
-iointc.yaml
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,l=
-iointc.yaml
-> > @@ -11,8 +11,13 @@ maintainers:
-> >
-> >  description: |
-> >    This interrupt controller is found in the Loongson-3 family of chips=
- and
-> > -  Loongson-2K1000 chip, as the primary package interrupt controller wh=
-ich
-> > +  Loongson-2K series chips, as the primary package interrupt controlle=
-r which
-> >    can route local I/O interrupt to interrupt lines of cores.
-> > +  Be aware of the following points.
-> > +  1.The Loongson-2K0500 is a single core CPU, the isr1 register could =
-not be defined;
-> > +  2.The Loongson-2K0500/2K1000 has 64 device interrupt sources as inpu=
-ts, so we
-> > +    need to define two nodes in dts{i} to describe the "0-31" and "32-=
-61" interrupt
-> > +    sources respectively.
-> >
-> >  allOf:
-> >    - $ref: /schemas/interrupt-controller.yaml#
-> > @@ -29,10 +34,14 @@ properties:
-> >      maxItems: 3
-> >
-> >    reg-names:
-> > -    items:
-> > -      - const: main
-> > -      - const: isr0
-> > -      - const: isr1
-> > +    oneOf:
-> > +      - items:
-> > +          - const: main
-> > +          - const: isr0
-> > +      - items:
-> > +          - const: main
-> > +          - const: isr0
-> > +          - const: isr1
+> On Tue, Oct 31, 2023 at 10:36:36AM +0800, Binbin Zhou wrote:
+> > Since the 'loongson,parent_int_map' attribute naming is non-standard, w=
+e
+> > should use 'loongson,parent-int-map' instead.
+> > Also, 'loongson,parent_int_map' should be marked as deprecated.
 >
-> Just adding 'minItems: 2' accomplishes the same thing without
-> duplicating the list.
+> While yes, '-' is preferred over '_', I don't think it is worth carrying
+> support (here and in the kernel) for both.
 
-OK, I will do it.
+Hi Rob:
+
+We try to keep it compatible as the MIPS Loongson has been using this
+property for a long time.
+Krzysztof also thinks it is required.
 
 Thanks.
 Binbin
 >
 > >
-> >    interrupt-controller: true
-> >
-> > @@ -94,7 +103,8 @@ if:
-> >  then:
-> >    properties:
-> >      reg:
-> > -      minItems: 3
-> > +      minItems: 2
-> > +      maxItems: 3
-> >
-> >    required:
-> >      - reg-names
-> > --
-> > 2.39.3
-> >
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > ---
+> >  .../interrupt-controller/loongson,liointc.yaml    | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
