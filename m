@@ -2,118 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F207DF0D5
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Nov 2023 12:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3C97DF101
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Nov 2023 12:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347123AbjKBLEh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Nov 2023 07:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S229782AbjKBLPM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Nov 2023 07:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346709AbjKBLEg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Nov 2023 07:04:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E1D131
-        for <linux-mips@vger.kernel.org>; Thu,  2 Nov 2023 04:03:46 -0700 (PDT)
+        with ESMTP id S229770AbjKBLPL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Nov 2023 07:15:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91655130
+        for <linux-mips@vger.kernel.org>; Thu,  2 Nov 2023 04:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698923025;
+        s=mimecast20190719; t=1698923660;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=o+sUvKh0Fq9LjCXdXIyTK4b/elLQxFDSaWn4T3QHjyo=;
-        b=Q7sseUwtWEEI0egtOu8UQU3mCkNiq7VM/SJXS6Q575qofflvGnxctjBcnccBX7o/sJJFVf
-        dCEv8xdgMtfhkKKf9Rz1F+upuvMRLoBzGyvndsLT5HJfZcc5p/FJakVkHLU8+Jwf/KcaCY
-        W4PxzFg+IZ+4UW1vC2jByOrmig+yFPg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nE+jpziewfIiESFBa36vSQ59b0yur6c77ORQ4q4A4TQ=;
+        b=VMjjnme95siBMGJmpyz6WxwVYbrc9lgpnUMkAtw9NP6iASHrjDoMMm5SzTitgQz4Bcf3DY
+        wCbp6o9iCcdq94+f8rsVxEDUTZB5AaN0z9zb/nB4IU6hpVET+9EM8MydeXiQICKm97d5pK
+        IIee8Twyb6jAWJG3fTGcHQrOOcIu9sg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-106-WQHzzeqgNaWcK4L_hJQQ5Q-1; Thu, 02 Nov 2023 07:03:44 -0400
-X-MC-Unique: WQHzzeqgNaWcK4L_hJQQ5Q-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9d2ab03a586so54295766b.0
-        for <linux-mips@vger.kernel.org>; Thu, 02 Nov 2023 04:03:44 -0700 (PDT)
+ us-mta-221-MSlTC5VbMECe2i2aYA4ToA-1; Thu, 02 Nov 2023 07:14:19 -0400
+X-MC-Unique: MSlTC5VbMECe2i2aYA4ToA-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-53e3bfec5bdso617091a12.0
+        for <linux-mips@vger.kernel.org>; Thu, 02 Nov 2023 04:14:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698923023; x=1699527823;
+        d=1e100.net; s=20230601; t=1698923658; x=1699528458;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+sUvKh0Fq9LjCXdXIyTK4b/elLQxFDSaWn4T3QHjyo=;
-        b=dBYjDTioWu1C6hU8nrB2VDzia4xDMonz615whPtcjzk3kxM9fMGaFraAy3rvjvCT9d
-         pNXc35afZHLix1ggSXY4XRH5RakA6X4yhtcUqVBQaDuiZkrnLI3ga0A7GsP9GRmdJu/V
-         YCAmsTcecTjne/p9gUQZDIPoSUt3UErO3LKa9gFKYg7cpHmbnjiawxJu9Tw3+xucA/0h
-         I4ZE57HoZnYtfnNLzHOr/6iqgaEND5d66CpNd0cads09r3bXGZyfUZDDiWbr5Ie6J/bh
-         i7LgtURCtKcDYtql1tV3oUv4s3255DFA2fiI/nQI9KxofcnOKzQT4tM20QgJbrsPpCIs
-         9x2A==
-X-Gm-Message-State: AOJu0Ywd3e/MxdtqdGDhf60l1Ly52vQ+R+rQP+zmDK3qAvpunRrSxZC0
-        /3+kPdp4mz/pPHvjwUsr6gogADZTVIAkBj4kRxwxNzdnAUOPtAw5+9q3ZrWsgDRUU+soTwUJKm8
-        EbrSxzAWMdvb7yc+Lj3m1KQ==
-X-Received: by 2002:a17:907:7b99:b0:9be:30c2:b8fd with SMTP id ne25-20020a1709077b9900b009be30c2b8fdmr4830859ejc.66.1698923023219;
-        Thu, 02 Nov 2023 04:03:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGAextU6brGleAr873WsCzugduD1+qH+WMku84F2ppJAKPGqD6aYcxwyzrmazywVumiiQ5fXg==
-X-Received: by 2002:a17:907:7b99:b0:9be:30c2:b8fd with SMTP id ne25-20020a1709077b9900b009be30c2b8fdmr4830827ejc.66.1698923022777;
-        Thu, 02 Nov 2023 04:03:42 -0700 (PDT)
+        bh=nE+jpziewfIiESFBa36vSQ59b0yur6c77ORQ4q4A4TQ=;
+        b=DH6K1rNpjPG0voiqip/Il0BBLGNvHiYPDz9jZlJQXRq/sqBLx/2y5EWYNmDM/ZImX4
+         DqkL90G5CidcZz+QWhcsTAIlNCjJPNUAKy2VN6V2EXB+ZAWGeo03FN9PuxSxAj+Mhubi
+         7l93yvUjP6a4Ay9RuTOk2VrM+9LOwjYjFSJmL8GCS5zmO2Q/GrlJgKI00uzpBulBsdgT
+         1cw04itNBKVhQwoAs4lfA+CBKHtwZ4vNjenUDA8hkIpP9umLA4TkLGzgggb6LLnGO7/l
+         Oegl/ay8BLV6AgUDi1ztGJE05/LSIlP64nlWxI/GNAVmGsIMzehmvFkbqQTDP2+mHdlz
+         CVbQ==
+X-Gm-Message-State: AOJu0YyvHghgBUbx4juwF1jKwOjAdQSsJlm7xUpZ4hDSq67YHVZ45dnB
+        RYUn5PAeLnmycKng13ED5a+CARjylJuiSeJwCy+T5183hOUSs80rxYg5YjEed58u1efjD17MzXx
+        G8l8PKh8I1RhFFG0xbw2xsQ==
+X-Received: by 2002:a05:6402:d6b:b0:541:29c8:959b with SMTP id ec43-20020a0564020d6b00b0054129c8959bmr12074277edb.39.1698923658430;
+        Thu, 02 Nov 2023 04:14:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEXhppfRa15KEqVY2rnJoTwoiSC4PZM5XqKpBQUyQg58A1nLwAa47Vx7RLL9LFOmphAlpAU2Q==
+X-Received: by 2002:a05:6402:d6b:b0:541:29c8:959b with SMTP id ec43-20020a0564020d6b00b0054129c8959bmr12074247edb.39.1698923658101;
+        Thu, 02 Nov 2023 04:14:18 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id hk22-20020a170906c9d600b0099cb0a7098dsm1010698ejb.19.2023.11.02.04.03.39
+        by smtp.googlemail.com with ESMTPSA id r25-20020a50c019000000b00537666d307csm2257960edb.32.2023.11.02.04.14.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Nov 2023 04:03:42 -0700 (PDT)
-Message-ID: <496b78bb-ad12-4eed-a62c-8c2fd725ec61@redhat.com>
-Date:   Thu, 2 Nov 2023 12:03:39 +0100
+        Thu, 02 Nov 2023 04:14:17 -0700 (PDT)
+Message-ID: <cbd46f04-c53b-4d22-9730-76f2ace141d9@redhat.com>
+Date:   Thu, 2 Nov 2023 12:14:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 09/35] KVM: Add KVM_EXIT_MEMORY_FAULT exit to report
- faults to userspace
+Subject: Re: [PATCH v13 12/35] KVM: Prepare for handling only shared mappings
+ in mmu_notifier events
 Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Cc:     "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "liam.merwick@oracle.com" <liam.merwick@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "amoorthy@google.com" <amoorthy@google.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "tabba@google.com" <tabba@google.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "Annapurve, Vishal" <vannapurve@google.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "qperret@google.com" <qperret@google.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "ackerleytng@google.com" <ackerleytng@google.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+To:     Binbin Wu <binbin.wu@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-10-seanjc@google.com>
- <482bfea6f54ea1bb7d1ad75e03541d0ba0e5be6f.camel@intel.com>
- <ZUKMsOdg3N9wmEzy@google.com>
- <64e3764e36ba7a00d94cc7db1dea1ef06b620aaf.camel@intel.com>
- <32cb71700aedcbd1f65276cf44a601760ffc364b.camel@intel.com>
+ <20231027182217.3615211-13-seanjc@google.com>
+ <9963b77c-3a38-4f89-b21e-48d0fdda8f53@linux.intel.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
 Autocrypt: addr=pbonzini@redhat.com; keydata=
  xsEhBFRCcBIBDqDGsz4K0zZun3jh+U6Z9wNGLKQ0kSFyjN38gMqU1SfP+TUNQepFHb/Gc0E2
@@ -150,12 +140,12 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <32cb71700aedcbd1f65276cf44a601760ffc364b.camel@intel.com>
+In-Reply-To: <9963b77c-3a38-4f89-b21e-48d0fdda8f53@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -164,39 +154,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/2/23 10:35, Huang, Kai wrote:
-> IIUC KVM can already handle the case of poisoned
-> page by sending signal to user app: 
+On 11/2/23 06:59, Binbin Wu wrote:
 > 
-> 	static int kvm_handle_error_pfn(struct kvm_vcpu *vcpu, 
-> 			struct kvm_page_fault *fault)                                               
-> 	{       
-> 		...
-> 
->        		if (fault->pfn == KVM_PFN_ERR_HWPOISON) {
->               		kvm_send_hwpoison_signal(fault->slot, fault->gfn);
->                 	return RET_PF_RETRY;                                          
->         	}
-> 	}
+>> Add flags to "struct kvm_gfn_range" to let notifier events target
+>> only shared and only private mappings, and write up the existing
+>> mmu_notifier events to be shared-only (private memory is never
+>> associated with a userspace virtual address, i.e. can't be reached
+>> via mmu_notifiers).
+>> 
+>> Add two flags so that KVM can handle the three possibilities
+>> (shared, private, and shared+private) without needing something
+>> like a tri-state enum.
+>
+> I see the two flags are set/cleared in __kvm_handle_hva_range() in
+> this patch and kvm_handle_gfn_range() from the later patch 13/35, but
+> I didn't see they are used/read in this patch series if I didn't miss
+> anything.  How are they supposed to be used in KVM?
 
-EHWPOISON is not implemented by this series, so it should be left out of 
-the documentation.
-
-
-> Currently as mentioned above when
-> vepc fault handler cannot allocate EPC page KVM returns -EFAULT to Qemu, and
-> Qemu prints ...
-> 
-> 	...: Bad address
-> 	<dump guest cpu registers>
-> 
-> ... which is nonsense.
-> 
-> If we can use memory_fault.flags (or is 'fault_reason' a better name?) to carry
-> a specific value for EPC to let Qemu know and Qemu can then do more reasonable
-> things.
-
-Yes, that's a good idea that can be implemented on top.
+They are going to be used by SNP/TDX patches.
 
 Paolo
 
