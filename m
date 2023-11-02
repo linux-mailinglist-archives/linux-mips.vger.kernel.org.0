@@ -2,76 +2,222 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686647DF427
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Nov 2023 14:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0467DF453
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Nov 2023 14:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235129AbjKBNn0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Nov 2023 09:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S234984AbjKBNxF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Nov 2023 09:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjKBNnZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Nov 2023 09:43:25 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18AFA6
-        for <linux-mips@vger.kernel.org>; Thu,  2 Nov 2023 06:43:22 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id 98e67ed59e1d1-2802b744e52so1709994a91.0
-        for <linux-mips@vger.kernel.org>; Thu, 02 Nov 2023 06:43:22 -0700 (PDT)
+        with ESMTP id S230134AbjKBNxF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Nov 2023 09:53:05 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2F418C
+        for <linux-mips@vger.kernel.org>; Thu,  2 Nov 2023 06:53:01 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-6705379b835so5757576d6.1
+        for <linux-mips@vger.kernel.org>; Thu, 02 Nov 2023 06:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698932602; x=1699537402; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1w+j/4c/1BFWl/3h59aajp4r9v+fftTqF3noyIrajI=;
-        b=MpfUcsLzaKwJR9QTMAidSTP6hb9Xdj0z1Q7MLp+Vb8O77PQeyxyj0A6cWxrCivO5Cd
-         YqALMjO8szvfXSIUbLpIQGe0g3XU9d4025QGCnCaxUDVnlb17B8PYLX3nsVYZIfaUejJ
-         FWRAVDZmiYif/h0aJ5DfeCWNzGLEvsd5vdsXKb9Fe9ve426w/iy1+mdzXdKNIxDrfp0b
-         FJohIgZaykaAlMryT+8+jZN9ATqHbrWziIuSPcBD7TTgf3dl/wxxPQNU7cL+L2RFQ53L
-         WkLuSWVk8DYci6ByTzeMrMVSqzgU9qldSFvzJxXJ3ZOS1eg7kN1IV/xrQNhZ47twfwKv
-         IRug==
+        d=google.com; s=20230601; t=1698933181; x=1699537981; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8MiH+OD80Lz6N2WkoQWVzzSH5wdFrVwABmyWNvMjndg=;
+        b=puJ1+etwmG1T9jWC97a5D1hZmH3E7zo8G+dkgE6ehm7uZxvMFernk9/nmUG201fqhM
+         L0dTDeR0LgHpkAOVOYzE2x9qhC8h6zX3vgvuZDlxCx1aj7SzmQl1ub1s01z+0mmQMkAj
+         jGhdLpgZpiEkiBjfD0UXKVOP3AKUkZACWhu+XpYTGmKtXUNjom5hzruY8f0Xss7UdqnX
+         LHKHO33djXgPrvLgdZ9ZVMibV/bvkTDp0aBvAdpDzYiG1O03h4WoasCfyySf0942UtQv
+         NTOIvK3Xrv/eRKBwsuvQoNcXIwNzQ5sL+8fQ5EplF5RrEzG2ENRo9DAUcQKl21B8IaR+
+         GcPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698932602; x=1699537402;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F1w+j/4c/1BFWl/3h59aajp4r9v+fftTqF3noyIrajI=;
-        b=PR0Paid18a1UpYtgQ4NoW7DFxWbgOjzbXHzOGrh3ja6v9/liW7SNAaarhRiFh2n4B6
-         B9AdTLxzPDAJdYxFPeFkR4Xuheel+9lHQYGznEqv8f84G8ODkCa4y7z7QzDPcUO9PoEr
-         +lH0LQOpVbGJm1t0PH9/kKvq+xmEh+5QbgEYnAeSeLmKkkvAzGncCpZLA3pPLiPFX2SR
-         NLADZDJyfpc4q35Vy3eNt3uA2tg77Iuw4dV+tVpnaRvuKFzjhKtSoDTx60IdoZUmPvPQ
-         3b0WARNPEgud345In6f93uW1R154rJznKQjVDBStZw0ACZU2qRDdObyBUc6n321mQNLh
-         ENJg==
-X-Gm-Message-State: AOJu0YxtU8ZFCYu505QZBOYG6RmTQzc2VQ1qEQpUpFpxvB647XIAh48E
-        2JTTd9zjBznN1wPRrzTmNE0rEDNzAfX3Xk7qxQ8=
-X-Google-Smtp-Source: AGHT+IGy0aWdRerRtEyiW1V62Ygg+dMuLduPTG9KwqED5OxORsHJf8dFCiGgTIPehbuALrXEA7kHtXfJXxZAfz9TFN0=
-X-Received: by 2002:a17:90a:f197:b0:27f:e955:5682 with SMTP id
- bv23-20020a17090af19700b0027fe9555682mr11954321pjb.3.1698932602225; Thu, 02
- Nov 2023 06:43:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698933181; x=1699537981;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8MiH+OD80Lz6N2WkoQWVzzSH5wdFrVwABmyWNvMjndg=;
+        b=YUkbdIIiRgWA484jA7jKkFEr5KrlWWCk+hWlEPbtSafLzm+KfGqeBjWUgS4SzO+/T9
+         JKVdIoPvuMQZf3ZYpTA4lI+cTKf7HwyrVeyyYNR6Scw3AoSedx/2txUy+SP1k7TukdkS
+         9WurdD66MSSnOYyL8gaB11U2xjGnVgiteyD4V1uR8JUXys9hTcLNxEMlga/UWaMXUdIR
+         ZgWaXy+yg3tJ4/sjChvRK30ltcFkgDpKTnKNwRNsGEar2ZgPM9f6m48+y56+l2Hudmb0
+         YrwUyA2Nz/bVzrnvFDYNCfi4MS720nzqbwELgH/7UcnMQF3tUSKAXegEHdBOsEpQINlZ
+         I7Jw==
+X-Gm-Message-State: AOJu0YzxHbkiqsxn+Y1lY0iunWRkwPGBQ/MgxwnxFFFjCjtMUlS8HhFe
+        fTwGATYNxJEhMs9kIgCvDNfwboi6gGw03k1Y+zql3w==
+X-Google-Smtp-Source: AGHT+IHABEQi7q2gF4GYbu+6KWyVOhp4LTc7vcuWRR/ds6omy7P2Nr93O+4ItCwG4g8ZUZhgbGUZVOPe8u3aj0mVGQs=
+X-Received: by 2002:ad4:5761:0:b0:672:4e8c:9aa5 with SMTP id
+ r1-20020ad45761000000b006724e8c9aa5mr14682447qvx.47.1698933180583; Thu, 02
+ Nov 2023 06:53:00 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7022:92b:b0:6e:e303:a059 with HTTP; Thu, 2 Nov 2023
- 06:43:21 -0700 (PDT)
-Reply-To: oj616414@gmail.com
-From:   johnson pattaego <alidjiman00229@gmail.com>
-Date:   Thu, 2 Nov 2023 13:43:21 +0000
-Message-ID: <CAECK7AbzY8512_8Wup_uqbkEiToJnKJV+azw=WpZzKYkg9EsqA@mail.gmail.com>
-Subject: =?UTF-8?B?w5xkdsO2emzDtm0sLy8v?=
-To:     undisclosed-recipients:;
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-17-seanjc@google.com>
+ <CA+EHjTzj4drYKONVOLP19DYpJ4O8kSXcFzw2AKier1QdcFKx_Q@mail.gmail.com>
+ <ZUF8A5KpwpA6IKUH@google.com> <CA+EHjTwTT9cFzYTtwT43nLJS01Sgt0NqzUgKAnfo2fiV3tEvXg@mail.gmail.com>
+ <ZULJYg5cf1UrNq3e@google.com>
+In-Reply-To: <ZULJYg5cf1UrNq3e@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Thu, 2 Nov 2023 13:52:23 +0000
+Message-ID: <CA+EHjTzGzXnfXHh0m5iHt9m3BxerkUS56EVPDA_az6n2FRnk3w@mail.gmail.com>
+Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=C3=9Cdv=C3=B6zl=C3=B6m, van egy v=C3=A1llalkoz=C3=A1som, amelyre =C3=BAgy =
-hivatkoztam r=C3=A1d, mint
-neked   ugyanaz a vezet=C3=A9kn=C3=A9v, mint a n=C3=A9hai =C3=BCgyfelem, de=
- a r=C3=A9szletek az
-al=C3=A1bbiak lesznek =C3=A9rtes=C3=ADtj=C3=BCk =C3=96nt, amikor meger=C5=
-=91s=C3=ADti ennek az e-mailnek
-a k=C3=A9zhezv=C3=A9tel=C3=A9t. =C3=9Cdv=C3=B6zlettel,
+On Wed, Nov 1, 2023 at 9:55=E2=80=AFPM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Wed, Nov 01, 2023, Fuad Tabba wrote:
+> > > > > @@ -1034,6 +1034,9 @@ static void kvm_destroy_dirty_bitmap(struct=
+ kvm_memory_slot *memslot)
+> > > > >  /* This does not remove the slot from struct kvm_memslots data s=
+tructures */
+> > > > >  static void kvm_free_memslot(struct kvm *kvm, struct kvm_memory_=
+slot *slot)
+> > > > >  {
+> > > > > +       if (slot->flags & KVM_MEM_PRIVATE)
+> > > > > +               kvm_gmem_unbind(slot);
+> > > > > +
+> > > >
+> > > > Should this be called after kvm_arch_free_memslot()? Arch-specific =
+ode
+> > > > might need some of the data before the unbinding, something I thoug=
+ht
+> > > > might be necessary at one point for the pKVM port when deleting a
+> > > > memslot, but realized later that kvm_invalidate_memslot() ->
+> > > > kvm_arch_guest_memory_reclaimed() was the more logical place for it=
+.
+> > > > Also, since that seems to be the pattern for arch-specific handlers=
+ in
+> > > > KVM.
+> > >
+> > > Maybe?  But only if we can about symmetry between the allocation and =
+free paths
+> > > I really don't think kvm_arch_free_memslot() should be doing anything=
+ beyond a
+> > > "pure" free.  E.g. kvm_arch_free_memslot() is also called after movin=
+g a memslot,
+> > > which hopefully we never actually have to allow for guest_memfd, but =
+any code in
+> > > kvm_arch_free_memslot() would bring about "what if" questions regardi=
+ng memslot
+> > > movement.  I.e. the API is intended to be a "free arch metadata assoc=
+iated with
+> > > the memslot".
+> > >
+> > > Out of curiosity, what does pKVM need to do at kvm_arch_guest_memory_=
+reclaimed()?
+> >
+> > It's about the host reclaiming ownership of guest memory when tearing
+> > down a protected guest. In pKVM, we currently teardown the guest and
+> > reclaim its memory when kvm_arch_destroy_vm() is called. The problem
+> > with guestmem is that kvm_gmem_unbind() could get called before that
+> > happens, after which the host might try to access the unbound guest
+> > memory. Since the host hasn't reclaimed ownership of the guest memory
+> > from hyp, hilarity ensues (it crashes).
+> >
+> > Initially, I hooked reclaim guest memory to kvm_free_memslot(), but
+> > then I needed to move the unbind later in the function. I realized
+> > later that kvm_arch_guest_memory_reclaimed() gets called earlier (at
+> > the right time), and is more aptly named.
+>
+> Aha!  I suspected that might be the case.
+>
+> TDX and SNP also need to solve the same problem of "reclaiming" memory be=
+fore it
+> can be safely accessed by the host.  The plan is to add an arch hook (or =
+two?)
+> into guest_memfd that is invoked when memory is freed from guest_memfd.
+>
+> Hooking kvm_arch_guest_memory_reclaimed() isn't completely correct as del=
+eting a
+> memslot doesn't *guarantee* that guest memory is actually reclaimed (whic=
+h reminds
+> me, we need to figure out a better name for that thing before introducing
+> kvm_arch_gmem_invalidate()).
+
+I see. I'd assumed that that was what you're using. I agree that it's
+not completely correct, so for the moment, I assume that if that
+happens we have a misbehaving host, teardown the guest and reclaim its
+memory.
+
+> The effective false positives aren't fatal for the current usage because =
+the hook
+> is used only for x86 SEV guests to flush caches.  An unnecessary flush ca=
+n cause
+> performance issues, but it doesn't affect correctness. For TDX and SNP, a=
+nd IIUC
+> pKVM, false positives are fatal because KVM could assign memory back to t=
+he host
+> that is still owned by guest_memfd.
+
+Yup.
+
+> E.g. a misbehaving userspace could prematurely delete a memslot.  And the=
+ more
+> fun example is intrahost migration, where the plan is to allow pointing m=
+ultiple
+> guest_memfd files at a single guest_memfd inode:
+> https://lore.kernel.org/all/cover.1691446946.git.ackerleytng@google.com
+>
+> There was a lot of discussion for this, but it's scattered all over the p=
+lace.
+> The TL;DR is is that the inode will represent physical memory, and a file=
+ will
+> represent a given "struct kvm" instance's view of that memory.  And so th=
+e memory
+> isn't reclaimed until the inode is truncated/punched.
+>
+> I _think_ this reflects the most recent plan from the guest_memfd side:
+> https://lore.kernel.org/all/1233d749211c08d51f9ca5d427938d47f008af1f.1689=
+893403.git.isaku.yamahata@intel.com
+
+Thanks for pointing that out. I think this might be the way to go.
+I'll have a closer look at this and see how to get it to work with
+pKVM.
+
+Cheers,
+/fuad
