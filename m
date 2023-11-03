@@ -2,204 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD747E01FB
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 12:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCE77E05D8
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 16:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbjKCKly (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Nov 2023 06:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S230175AbjKCP5t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Nov 2023 11:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233083AbjKCKlx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 06:41:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5DED44
-        for <linux-mips@vger.kernel.org>; Fri,  3 Nov 2023 03:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699008062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=Lp6Jz+POVOM2ymATN0+4roKlcGz/gu2UjTswWR4Ytbw=;
-        b=cRg4+PCqqSlOE2s/8+SbHCWChJ/PgzTXRoLzGH2VKsxlFbC6nK51LMuzcKpx7+fFQ85SE9
-        ZqdCL60k0CdCxvgpyvUtNst78QeZG6G9eFzeg/QI6b37gEj2F0Veh//aj0hpgG1tnhl+/z
-        GKWyOQ93PVAwx6y1OyziDH2saneefoY=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-644-KZnQWs7GOLKdofdW3le-eA-1; Fri, 03 Nov 2023 06:41:01 -0400
-X-MC-Unique: KZnQWs7GOLKdofdW3le-eA-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9c15543088aso220447466b.1
-        for <linux-mips@vger.kernel.org>; Fri, 03 Nov 2023 03:41:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699008060; x=1699612860;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lp6Jz+POVOM2ymATN0+4roKlcGz/gu2UjTswWR4Ytbw=;
-        b=C9S7wnte+5ozj3F35H7Xtz09TmvYztZLPZPfiRbi73jCGSqUubYTc0343yHfOBQS6F
-         MXedBR+dHYTOIVwBKh4br2GNJicwa711a8sI3PLtajAuEMuaqx4/mh9rl67r/k2YOarJ
-         ArZXKnIrK9LDamhfhI8YfBTxZL/6qIb5+L8VbNvXQ6aJZqun/1XXmw2iy3BNHBBNJk8T
-         MPWunM4r9mBy13zA7Bh7diQamr2qPYaxYwCTD3qC6XRjNyuVB9xzDXH/brK90lxqSEq6
-         dJOkFMh1BFwSE21SBjVIOTlq61Ra31jPdNzPF5T1F1nJrMCMdY+T0OD14BmT6+nsXuLB
-         H1Eg==
-X-Gm-Message-State: AOJu0YzZJPJDbY/QoqAfzR7SYPZ901bsQdczmCpRD8rb2LFOOnVo0qp0
-        LfraLNgtNRc1Xb+3AnbRYvYDHEGdb+cEqdCNsBXZ26dCxB8+1skecgboFWlgd8cLxmSSkvE61uY
-        dxJUiSKEJEbooJZ6D9cj13A==
-X-Received: by 2002:a17:906:7950:b0:9bf:c00f:654a with SMTP id l16-20020a170906795000b009bfc00f654amr2302808ejo.24.1699008059837;
-        Fri, 03 Nov 2023 03:40:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEYL84kQ58i2cP4K6S7xeuKGH18ZQ7RIKhzKbyX3E6c1jOpr4P+mCWZM0GIPaXqH2aak15cSg==
-X-Received: by 2002:a17:906:7950:b0:9bf:c00f:654a with SMTP id l16-20020a170906795000b009bfc00f654amr2302775ejo.24.1699008059454;
-        Fri, 03 Nov 2023 03:40:59 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:4783:a68:c1ee:15c5? ([2001:b07:6468:f312:4783:a68:c1ee:15c5])
-        by smtp.googlemail.com with ESMTPSA id g4-20020a170906394400b009a5f1d15644sm754493eje.119.2023.11.03.03.40.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Nov 2023 03:40:58 -0700 (PDT)
-Message-ID: <e39a8f6e-c98d-4873-aa3f-2e566dead5c5@redhat.com>
-Date:   Fri, 3 Nov 2023 11:40:56 +0100
+        with ESMTP id S234328AbjKCP5r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 11:57:47 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB884D4E;
+        Fri,  3 Nov 2023 08:57:39 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1699027037tibjddzq
+Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 03 Nov 2023 23:57:14 +0800 (CST)
+X-QQ-SSF: 01200000000000B06000000A0000000
+X-QQ-FEAT: QityeSR92A0CP7ledumJcL/YcFg/S2vCRasLnx4V41TLMZugGiWPhdXyRvEjd
+        NU48y/mVScgRq0fQozHdMCgD4Xnou/kbN39qvapr+jCESqwElCbQD54Ib/JBgMdsLkB96UB
+        M3jhs9MFqlqy2shevC4BLkj/hf6npz1vl8J6spTtbn4BVbDAnNWUHTcXRHaW/ppO0M60ae3
+        Js6L8NjWL5oHz8R3iTbMVYCFm5OMNnFgs7EM1Y0lH9RFylCi3Krfhdqc9Ktp4e9UlZ63HNs
+        TrnY+TU8JL/R1brTVWiAb6dX7W7wXxfeSF0XwINpSFbxJjKtpPiOusLQjvWJLBZWQJ2c1zF
+        XvDr/++U8V9kUDk7qZmnFbFnnW+xV+++Cbc13mk
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3192958384466937205
+From:   Yuan Tan <tanyuan@tinylab.org>
+To:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        luc.vanoostenryck@gmail.com, linux-sparse@vger.kernel.org
+Cc:     linux@weissschuh.net, palmer@rivosinc.com,
+        paul.walmsley@sifive.com, paulburton@kernel.org,
+        paulmck@kernel.org, tim.bird@sony.com, tsbogend@alpha.franken.de,
+        w@1wt.eu, tanyuan@tinylab.org, i@maskray.me
+Subject: [PATCH v1 00/14] DCE/DSE: Add Dead Syscalls Elimination support, part2
+Date:   Fri,  3 Nov 2023 23:56:35 +0800
+Message-Id: <cover.1699025537.git.tanyuan@tinylab.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 15/35] fs: Export anon_inode_getfile_secure() for use
- by KVM
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-16-seanjc@google.com>
- <20231102-freihalten-vorsah-fdd68051b005@brauner>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <20231102-freihalten-vorsah-fdd68051b005@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/2/23 17:24, Christian Brauner wrote:
-> On Fri, Oct 27, 2023 at 11:21:57AM -0700, Sean Christopherson wrote:
->> Export anon_inode_getfile_secure() so that it can be used by KVM to create
->> and manage file-based guest memory without need a fullblow filesystem.
->> The "standard" anon_inode_getfd() doesn't work for KVM's use case as KVM
->> needs a unique inode for each file, e.g. to be able to independently
->> manage the size and lifecycle of a given file.
->>
->> Note, KVM doesn't need a "secure" version, just unique inodes, i.e. ignore
->> the name.
->>
->> Signed-off-by: Sean Christopherson <seanjc@google.com>
->> ---
-> 
-> Before we enshrine this misleading name let's rename this to:
-> 
-> create_anon_inode_getfile()
-> 
-> I don't claim it's a great name but it's better than *_secure() which is
-> very confusing. So just:
-> 
-> struct file *create_anon_inode_getfile(const char *name,
->                                         const struct file_operations *fops,
->                                         void *priv, int flags)
+Hi, all
 
-I slightly prefer anon_inode_create_getfile(); grepping include/linux 
-for '\<create_' vs '_create_' shows that this is much more common.
+This series aims to add Dead Code Elimination(DCE) based Dead Syscalls
+Elimination(DSE) support, here is the RFC patchset[1]. The whole series
+includes three parts, here is the Part2.
 
-Neither userfaultfd (which uses anon_inode_getfd_secure()) nor io_uring 
-strictly speaking need separate inodes; they do want the call to 
-inode_init_security_anon().  But I agree that the new name is better and 
-I will adjust the comments so that it is clear why you'd use this 
-function instead of anon_inode_get{file,fd}().
+Part1 adds basic DCE based DSE support [5].
 
-> May also just remove that context_inode argument from the exported
-> function. The only other caller is io_uring. And neither it nor this
-> patchset need the context_inode thing afaict.
+Part3 will add DSE test support with nolibc-test.c.
 
-True, OTOH we might as well rename anon_inode_getfd_secure() to 
-anon_inode_create_getfd(), and that one does need context_inode.
+This Part2 further eliminates the unused syscalls forcely kept by the
+exception tables. This is just a preliminary approach and requires a lot
+of discussion and modifications.
 
-I'll Cc you on v14 and will carry the patch in my tree.
+Some syscalls use put_user()/get_user() to access memory from
+user-space, the exception tables are added for such memory addresses to
+fixup potential exceptions fairily.
 
-Paolo
+These exception tables are added by the simple '.pushsection' directive
+and there is no explicit section relationship between them and their
+syscall functions, So, all of such tables are explicitly kept by the
+KEEP() directive in vmlinux.lds, but such forcely KEEP() operations
+prevent DCE from eliminating their syscall functions for the tables used
+some addresses in their syscall functions, the insn and fixup addresses
+(arch/riscv/include/asm/asm-extable.h) are from their syscall functions,
+as a result, the ownership reverses.
 
-> Merge conflict risk is
-> extremely low so carrying that as part of this patchset is fine and
-> shouldn't cause huge issues for you.
-> 
+To further eliminate such syscalls, we must fix up this ownership
+reversal issue. At first, the KEEP() operations must be removed from
+vmlinux.lds, but at the same time, we must find a way to tell ld the
+real ownership between the syscalls and their exceptions tables.
+
+Fortunately, under the guidance of Zhangjin Wu, I discovered that both
+SHF_GROUP and SHF_LINK_ORDER can be helpful for such targets ([6] [7]
+[8]), but the former method triggers a warning from as. The binary files
+compiled using both methods turn out to be identical. So maybe we just
+choose the later one?
+
+This series adds a very elementary level of patchset to demonstate how
+to use them to drop KEEP() for all of the exception tables, only for
+RISC-V currently.
+
+This may also be a good start for us to rethink the widely used KEEP().
+This approach can thoroughly eliminate orphan sections, providing the
+compiler with more information. Eventually, most of the KEEP() calls
+can be eliminated.
+
+The nolibc-test based initrd run well on riscv64 kernel image with dead
+syscalls eliminated:
+
+    $ nm build/riscv64/virt/linux/v6.6-rc2/vmlinux | grep "T __riscv_sys" | grep -v sys_ni_syscall | wc -l
+    40
+
+These options should be enabled:
+
+    CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
+    CONFIG_LD_DEAD_CODE_DATA_ELIMINATION_DEBUG=y
+    CONFIG_TRIM_UNUSED_SYSCALLS=y
+    CONFIG_SECTION_SHF_LINK_ORDER_SUPPORT=y
+    CONFIG_USED_SYSCALLS="sys_dup sys_dup3 sys_ioctl sys_mknodat sys_mkdirat sys_unlinkat sys_symlinkat sys_linkat sys_mount sys_chdir sys_chroot sys_fchmodat sys_fchownat sys_openat sys_close sys_pipe2 sys_getdents64 sys_lseek sys_read sys_write sys_pselect6 sys_ppoll sys_exit sys_sched_yield sys_kill sys_reboot sys_getpgid sys_prctl sys_gettimeofday sys_getpid sys_getppid sys_getuid sys_geteuid sys_brk sys_munmap sys_clone sys_execve sys_mmap sys_wait4 sys_statx"
+
+Or using section group intead of section link order:
+
+    CONFIG_SECTION_SHF_GROUP_SUPPORT=y
+
+Thanks to Song Fangrui's idea [9] of SHF_LINK_ORDER. To be honest, this
+part is hard to understand, and there may be some mistakes in my
+solutions. Welcome your further advice. :)
+
+Besides, I want to express my thanks to Zhangjin Wu, Zhiming Xu, Anqi
+Xiao, Jun Kong, and Yuzhe Ling for their help during the investigation
+stage.
+
+Best Regards,
+Yuan Tan
+
+---
+[1]: https://lore.kernel.org/lkml/cover.1676594211.git.falcon@tinylab.org/
+[2]: https://lore.kernel.org/lkml/234017be6d06ef84844583230542e31068fa3685.1676594211.git.falcon@tinylab.org/
+[3]: https://lore.kernel.org/lkml/CAFP8O3+41QFVyNTVJ2iZYkB0tqnvdLTAoGShgGy-qPP1PHjBEw@mail.gmail.com/
+[4]: https://lore.kernel.org/lkml/cbcbfbb37cabfd9aed6088c75515e4ea86006cff.1676594211.git.falcon@tinylab.org/
+[5]: https://lore.kernel.org/lkml/cover.1695679700.git.falcon@tinylab.org/
+[6]: https://maskray.me/blog/2021-07-25-comdat-and-section-group
+[7]: https://maskray.me/blog/2021-01-31-metadata-sections-comdat-and-shf-link-order
+[8]: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html
+[9]: https://sourceware.org/pipermail/binutils/2023-July/128521.html
+
+Yuan Tan (10):
+  DCE/DSE: add HAVE_SECTION_SHF_LINK_ORDER_SUPPORT option
+  DCE/DSE: add HAVE_SECTION_SHF_GROUP_SUPPORT option
+  DCE/DSE: add HAVE_SECTION_NO_KEEP_SUPPORT option
+  DCE/DSE: add choice of methods to build reference for orphan sections
+  DCE/DSE: inhibit .size directive for SHF_GROUP
+  DCE/DSE: riscv: make every ex_table's name unique
+  DCE/DSE: riscv: build reference for .pushsection in C functions
+  DCE/DSE: riscv: build reference for .pushsection in assembly
+  DCE/DSE: add SECTION_NO_KEEP_SUPPORT option
+  DCE/DSE: vmlinux.lds.h: allow NO_KEEP on __ex_table sections
+
+Zhangjin Wu (4):
+  DCE/DSE: allow keep unique bounded sections
+  compiler: add a global __QUITE_UNIQUE_ID()
+  compiler: add unique __SECTION_NAME()
+  compiler: add unique LABEL_NAME()
+
+ Makefile                             |  3 ++
+ arch/riscv/include/asm/asm-extable.h | 43 +++++++++++++---
+ arch/riscv/lib/uaccess.S             | 60 +++++++++++-----------
+ include/asm-generic/vmlinux.lds.h    | 28 ++++++++---
+ include/linux/compiler.h             | 25 ++++++++++
+ include/linux/compiler_types.h       |  8 +--
+ init/Kconfig                         | 74 ++++++++++++++++++++++++++++
+ 7 files changed, 193 insertions(+), 48 deletions(-)
+
+-- 
+2.34.1
 
