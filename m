@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772647E0613
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781867E0616
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 17:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345226AbjKCQCn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Nov 2023 12:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S1345253AbjKCQC6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Nov 2023 12:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345199AbjKCQCm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 12:02:42 -0400
+        with ESMTP id S1345028AbjKCQC5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 12:02:57 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD69D1BF;
-        Fri,  3 Nov 2023 09:02:38 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1699027345tuzi88hk
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D600191;
+        Fri,  3 Nov 2023 09:02:53 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1699027360tslboa5k
 Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 04 Nov 2023 00:02:22 +0800 (CST)
+        id ; Sat, 04 Nov 2023 00:02:37 +0800 (CST)
 X-QQ-SSF: 01200000000000B06000000A0000000
-X-QQ-FEAT: YlW+rreuxxXoxvlIlb1sqNHnSOT+l5Yn7jheMGM0MN7wg16F1FQezu3ESPCIn
-        SG4dX7pl9FbKYtPlw5xFGKF9hdEiY4GXCO8Dcbx8/cg7Og+QCU3+CXMPCfzr3ILF+7b8OJC
-        We3CArNs3/RzbQomd2+K7yNXkmGAdxxgFstmrUQolP47JcSLPCcnWVH+pzG+WBKc95SRuk6
-        GRNeVQS005EaooagskyJFuMF58jFp792MV4/nMVDor5tdI0R+v9ntYb8OLdlo+bjQBPaFjZ
-        3tXMXILkQNqiZOfSFuWlhMCs5t5EvoYMyXZptegM68V3A/gfjehT5qri7Me9UwyV2uMy7Yw
-        qI4nF3fFj9RVpkTbEo40dXUlw5DXyqiA0exePUzOcNNH73+MM0=
+X-QQ-FEAT: 7jw2iSiCazppqEZda0FgbOVV0oUxEDe97G1OqE9PhKq+YFsptbTaM72oSfNLr
+        AD0Rl3ypOCGWEW9q28c8fe7xZFoGZTdi1QAY8K+KTMUayL9hWr96UxcaNJtLe6LdaMGwtpX
+        BwHTtHTHJzq/kG3A/XX2TPtRplT1QquC/iFXm4VN4rkOTyS6xCTnYMmeMD8fweOZ6lxxg9G
+        /XDXZS9Sx0O+dUqnfzgEUIbwhgPow7med1tsdccavOIHLWbUxGONnMNosCU65bCoGAryQXM
+        h3QZ1PNHF6M2M5XcV0SPWLIP3Mh2iYhULZT+jJ0uhU5wY5HLI9yciZnigOQckzi1DUcDPQz
+        rZgdCteRPe17Zyov/8oA0PumZTnDfvFuF3JEDkhDXY+3gdHHO0=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1289692222090341736
+X-BIZMAIL-ID: 15807065003592512725
 From:   Yuan Tan <tanyuan@tinylab.org>
 To:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
@@ -36,7 +36,7 @@ Cc:     linux@weissschuh.net, palmer@rivosinc.com,
         paulmck@kernel.org, tim.bird@sony.com, tsbogend@alpha.franken.de,
         w@1wt.eu, tanyuan@tinylab.org, i@maskray.me
 Subject: [PATCH v1 10/14] DCE/DSE: riscv: make every ex_table's name unique
-Date:   Sat,  4 Nov 2023 00:02:18 +0800
+Date:   Sat,  4 Nov 2023 00:02:36 +0800
 Message-Id: <f0ee9abfd8d7b27489a4efe3196813225ce5680f.1699025537.git.tanyuan@tinylab.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1699025537.git.tanyuan@tinylab.org>
