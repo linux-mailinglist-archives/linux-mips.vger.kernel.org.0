@@ -2,44 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2B37DFE86
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 05:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3047B7E0083
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 11:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjKCEKr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Nov 2023 00:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S1347214AbjKCJm7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Nov 2023 05:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjKCEKq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 00:10:46 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4DE1A8;
-        Thu,  2 Nov 2023 21:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698984638; x=1730520638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=juHXPhfl2UOyfQDlVnje9FjGKXxO1moD004mEr2wKcQ=;
-  b=oA3yIDjlqC57hp6Mk5iqy9d8CSACWtzIyRlXtuJ57/THHaVvlzF4eY/Z
-   JXGQxzvRJDenWw42fg9cfPC6gu7+LuvEq6Y0S541X8Aq/owMXSASnF7Vc
-   h+pW9407ajlI2aEliW3rWG701gbfzBJ7AyZgXfTf8S59bqOLfgvblgX37
-   KKK+x8nFxDHgVeBA4qQPV+zX8L89qb6Sz0du/XYs7sjqht/6FuLT4p1hu
-   fmDR8xN4S9uqreYiRpo1RUo8tVxuSBWpBUMpkamQcAHR+wjPhc9mNnOZq
-   J+nfdLY/9LIpyx1VdYb4T8P7tf9WLqIenJTSHPwIYGQvHo8E/vYxl/JID
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="387762853"
-X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="387762853"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 21:10:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="1008694807"
-X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="1008694807"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Nov 2023 21:10:28 -0700
-Date:   Fri, 3 Nov 2023 12:09:01 +0800
-From:   Xu Yilun <yilun.xu@linux.intel.com>
+        with ESMTP id S1347166AbjKCJm7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 05:42:59 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44C3D47
+        for <linux-mips@vger.kernel.org>; Fri,  3 Nov 2023 02:42:55 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-66d12b3b479so10473406d6.1
+        for <linux-mips@vger.kernel.org>; Fri, 03 Nov 2023 02:42:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699004575; x=1699609375; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KR3uUy+lpOtuK74sFvr5LpDDKafluOWW+OG46f9Hrzo=;
+        b=PLifHEsmRHpPtO/bkvhueEZllLgnEf4sVw6fk80yY0NqAEoWrTttWEylmGiTW/kb46
+         2ok3ePRS9R9U2ILpGsYJe7bLWUG7M9JJI7ZDxHWExAN+5qKG4gqzN6IbjrJklS1GdQi9
+         5IrvE85NDccRnOTaSzRWCO+3krPNSZU9Ca4BFDbHxd/NixgAlfBIAarCl3eyi4ff2ZnV
+         KIpWMS1ct6ZmKkbjGa705xZrzg1wKXMVJ47GfI1SzW9/E1U/y7y+X2mAiwez7KkSo47A
+         7ZulluUL0N9pHvg2X++2Dig8zDdbVBMxzepsYZH04yBYIBcsRuz/pMZw8hSSltN5h97G
+         PJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699004575; x=1699609375;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KR3uUy+lpOtuK74sFvr5LpDDKafluOWW+OG46f9Hrzo=;
+        b=bCWQ04JVBDEgT3X6gZWYii+A4pDHOfWKdpMuSN7c5Dy1iGQdB33pI/4a5qAy2mfYM8
+         b0Y5CvQktQVmkSF5xvfy/YDRgSU7k4e5gB8DinFXSnXgof8fGmtXpQYL/HhhCD1zNzqL
+         ABqO0xyZV5NAhNnMfmKBTreJpfOuV7mW0qnhGwF9wK5r5cIbeGQimWW/Or732iXfy8sA
+         qfTVfQkBsze94o7ueqCrixGPvkMho4HwVqcSwR9hOIaUXqRSHEtZcNrdA6FqVyR0Zny1
+         CYm23ZAVuQaLEEyZ02uh6QAigoIUHCKNNpwWM8+lsKeKd8gBD9jExgwneTxOCbpiKCpM
+         HupQ==
+X-Gm-Message-State: AOJu0Yy5TkeI9f5YxLvW0vm9rPAMQo1yNzkd1MLNMotJe2gzw1TgQ3Mh
+        dTPmABFZQyOl49pEte7otgT5pk1YmTOL5twrwT9rNA==
+X-Google-Smtp-Source: AGHT+IHMtnnuJ+fshc7oeOwDt21mO974uTwKm6avpjixqQMFQPk6nu4AOneq997yl+dXgdaxeuVP+cu76MznLmTOvmQ=
+X-Received: by 2002:a05:6214:401c:b0:66d:34a8:3ed0 with SMTP id
+ kd28-20020a056214401c00b0066d34a83ed0mr22048546qvb.26.1699004574544; Fri, 03
+ Nov 2023 02:42:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-17-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-17-seanjc@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Fri, 3 Nov 2023 09:42:17 +0000
+Message-ID: <CA+EHjTxEvJpfA7urRj6EbbuwTGWAw6ZYu6NmX9sLT5Cdp5p3eA@mail.gmail.com>
+Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -60,13 +73,12 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
         Xu Yilun <yilun.xu@intel.com>,
         Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Anish Moorthy <amoorthy@google.com>,
         David Matlack <dmatlack@google.com>,
         Yu Zhang <yu.c.zhang@linux.intel.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
         Vlastimil Babka <vbabka@suse.cz>,
         Vishal Annapurve <vannapurve@google.com>,
         Ackerley Tng <ackerleytng@google.com>,
@@ -78,61 +90,38 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Liam Merwick <liam.merwick@oracle.com>,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v13 09/35] KVM: Add KVM_EXIT_MEMORY_FAULT exit to report
- faults to userspace
-Message-ID: <ZURyXWhZDSCBnMV1@yilunxu-OptiPlex-7050>
-References: <20231027182217.3615211-1-seanjc@google.com>
- <20231027182217.3615211-10-seanjc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231027182217.3615211-10-seanjc@google.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 27, 2023 at 11:21:51AM -0700, Sean Christopherson wrote:
+Hi,
+
+...
+
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index e2252c748fd6..e82c69d5e755 100644
 > --- a/Documentation/virt/kvm/api.rst
 > +++ b/Documentation/virt/kvm/api.rst
-> @@ -6723,6 +6723,26 @@ array field represents return values. The userspace should update the return
->  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
->  spec refer, https://github.com/riscv/riscv-sbi-doc.
->  
-> +::
+
+...
+
+> +4.141 KVM_CREATE_GUEST_MEMFD
+> +----------------------------
 > +
-> +		/* KVM_EXIT_MEMORY_FAULT */
-> +		struct {
-> +			__u64 flags;
-> +			__u64 gpa;
-> +			__u64 size;
-> +		} memory;
-                  ^
+> +:Capability: KVM_CAP_GUEST_MEMFD
+> +:Architectures: none
+> +:Type: vm ioctl
+> +:Parameters: struct struct kvm_create_guest_memfd(in)
 
-Should update to "memory_fault" to align with other places.
+One struct too many.
 
-[...]
-
-> @@ -520,6 +521,12 @@ struct kvm_run {
->  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
->  			__u32 flags;
->  		} notify;
-> +		/* KVM_EXIT_MEMORY_FAULT */
-> +		struct {
-> +			__u64 flags;
-> +			__u64 gpa;
-> +			__u64 size;
-> +		} memory_fault;
->  		/* Fix the size of the union. */
->  		char padding[256];
->  	};
-
-Thanks,
-Yilun
-
-> 
+Cheers,
+/fuad
