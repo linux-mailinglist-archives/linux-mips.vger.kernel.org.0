@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5357E0AD8
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 22:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE407E0AED
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Nov 2023 23:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjKCVs3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Nov 2023 17:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S230392AbjKCWEp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Nov 2023 18:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjKCVs2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 17:48:28 -0400
+        with ESMTP id S230076AbjKCWEo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 18:04:44 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADD8D61
-        for <linux-mips@vger.kernel.org>; Fri,  3 Nov 2023 14:47:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A660CF
+        for <linux-mips@vger.kernel.org>; Fri,  3 Nov 2023 15:03:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699048059;
+        s=mimecast20190719; t=1699049037;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=F+aB8ULpCtjf+Gcfe540UtUd+NJKrSGjq+RpmL2JNA8=;
-        b=RgRwyvVZweBgVGAk6L6MhvfxHJGscaB6d5jr81JqVo4s0w9hsRIIEJlnDURFJdyV/1J0iz
-        /c/m5cNh+TfxAKUfmrEmNmD4fs0wdbDaZnpOKBltp0OAevh4Ooh51xDB1BjBakijtxwsnp
-        7VVb4wGJKRJUy+7aoZL0i1bFIvOldb8=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rXpne+78UGenenxYxx9+jLWMRynS8s68tp81l2tHoL4=;
+        b=IdMprQ0xA6T2hFeeeHJ/9kuegBHcZEq9WQghye+QUoGISj7MhFS2ac3iN0QPXa4Qr1AvQ5
+        nqnn47VW8E0VFHpQZrOT7QuC7MHQTIyBt21Y3CRYuTNko1Y25x2R1f6EdgBaW4K9Ai937D
+        YJu5CGC0iJYdSPBRJ9cFbBwSTmELh4c=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-669-NUnQ1bAIPXSCO0KKA2nC4A-1; Fri, 03 Nov 2023 17:47:37 -0400
-X-MC-Unique: NUnQ1bAIPXSCO0KKA2nC4A-1
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1cc1ddb34ccso20000815ad.1
-        for <linux-mips@vger.kernel.org>; Fri, 03 Nov 2023 14:47:37 -0700 (PDT)
+ us-mta-381-DauOWN2gMH2gGI7fHtL6sg-1; Fri, 03 Nov 2023 18:03:56 -0400
+X-MC-Unique: DauOWN2gMH2gGI7fHtL6sg-1
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-280740f54b9so2089400a91.3
+        for <linux-mips@vger.kernel.org>; Fri, 03 Nov 2023 15:03:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699048057; x=1699652857;
+        d=1e100.net; s=20230601; t=1699049035; x=1699653835;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F+aB8ULpCtjf+Gcfe540UtUd+NJKrSGjq+RpmL2JNA8=;
-        b=Frp+LW2dLBxluw3JUZd+wqSbEmuHiXoCpkEH0YPaQDHSkK1fJ0cmnOzs9Piytmj/y/
-         6UOfwE4wVQhkl1+ij41OSIs+BOc6mY89dViJqtNFuTwSGOWO4pxLybjtHiXRsyTP+rWa
-         f13Hr5LmPOKUx9QQhjawQGxGadNMPG/ASUb2TmysMRotD9ri3qCrDnjBoSi//aeypYr0
-         YHGxtfHdKZMYepFpVWsu2CJRlnPTJuCZ67E077LsbHW1DU/jMostkqdTcZ+iDFcNgvlW
-         sBx6vy96ZeV+sO6Hvp/Q1mpowIG6PJFZTzlgEOfRa7hfDX9qM7BfLA3B64rSg1OL1AmJ
-         LdOQ==
-X-Gm-Message-State: AOJu0Yydqt+nzWH/06cC+N+fS1V34I6TPfUgcttc4AE0Dy2y4fQllCGd
-        L4iPbxl+W2SiADeu/XEnT72rLyOI2X8AxeGg/cSBgtRvG08JAncEUtAkmfof5rIaMP4pympqmb3
-        mqeGk2+0JbXxhok2eRK1sow==
-X-Received: by 2002:a17:902:d28b:b0:1c7:755d:ccc8 with SMTP id t11-20020a170902d28b00b001c7755dccc8mr17083774plc.29.1699048056771;
-        Fri, 03 Nov 2023 14:47:36 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFdAXninLAKiU84+Ewx4UvETdEvykTsgu1OMaAqceXcjYCMbCq9Ef0fn5aeDPHxQVvb9/cevQ==
-X-Received: by 2002:a17:902:d28b:b0:1c7:755d:ccc8 with SMTP id t11-20020a170902d28b00b001c7755dccc8mr17083727plc.29.1699048056432;
-        Fri, 03 Nov 2023 14:47:36 -0700 (PDT)
+        bh=rXpne+78UGenenxYxx9+jLWMRynS8s68tp81l2tHoL4=;
+        b=jPLv00pl//Pqdw+LWNbsPHESg/t1M5GtpUZSV9B3qUx/qBMWvjzF05BEQK9CvkSP5G
+         HA51UgLT6W/ChUZtOG8v6v5fRXUoS0aa3efAf72EpzQ7zEWK3gbv06+IVkuoMJuN7r8N
+         rKeSloo+ElvXBXevwwTXZeXvUsB3JCp/YP5GhkD3kLtAMTwDq+oQj99t4Akh25pR9LSf
+         f7U80HfQ4JHl4Yh+n4gxw2SRllyFEiou/V7c6vpNCRLYu2GGr+I7dEKzZUxWZ/IWdWuw
+         5MN/fzj0zbYqKIzS9Iisy+8JK5sbPM88XJTWCmKOgwBZiueQLupuVNOrYK0xJIKbKVHS
+         /OnA==
+X-Gm-Message-State: AOJu0YxTocZzUmzL3IfZVk8Fb5rik2Qb7YVkVGyihIcfaMPvdsrJIAHW
+        Grb+xYfEN1qmXons5RijGotbC960bAnrtEcLc7Gk8YEaZahuAGKxIhxp6OLnIfe4pf7L8wbfG3V
+        wKbZZd4X9vb+hfoQ5rNKzBQ==
+X-Received: by 2002:a17:90a:7547:b0:280:2609:6d47 with SMTP id q65-20020a17090a754700b0028026096d47mr15580968pjk.19.1699049035276;
+        Fri, 03 Nov 2023 15:03:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFS5Dh794kn050Jmor3G/4m9PpE2w1GtTAul8MncDw85TpgTEhPbh0ocZRGWoVXSassV2SO7A==
+X-Received: by 2002:a17:90a:7547:b0:280:2609:6d47 with SMTP id q65-20020a17090a754700b0028026096d47mr15580944pjk.19.1699049034936;
+        Fri, 03 Nov 2023 15:03:54 -0700 (PDT)
 Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902ec8e00b001cc2c7a30f2sm1807591plg.155.2023.11.03.14.47.35
+        by smtp.gmail.com with ESMTPSA id v3-20020a17090ad58300b00280976d4ce3sm1815162pju.37.2023.11.03.15.03.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 14:47:35 -0700 (PDT)
-Date:   Fri, 3 Nov 2023 14:47:35 -0700
+        Fri, 03 Nov 2023 15:03:54 -0700 (PDT)
+Date:   Fri, 3 Nov 2023 15:03:53 -0700
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     Jason Gunthorpe <jgg@nvidia.com>
 Cc:     acpica-devel@lists.linuxfoundation.org,
@@ -96,64 +96,66 @@ Cc:     acpica-devel@lists.linuxfoundation.org,
         virtualization@lists.linux-foundation.org,
         Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
         Zhenhua Huang <quic_zhenhuah@quicinc.com>
-Subject: Re: [PATCH RFC 02/17] of: Do not return struct iommu_ops from
+Subject: Re: [PATCH RFC 03/17] of: Use -ENODEV consistently in
  of_iommu_configure()
-Message-ID: <2qhocnpfy4lbmfm4erccztrwoec5sjphvktcyvxdb75qbjyozu@aht6gj2zzuhj>
+Message-ID: <4iktbjhxkddukf7vywxquz5ffgik73wdw7p7rdqhsbsumhzhsl@y6u7tjbczafc>
 References: <0-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
- <2-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
- <ld3rrnpix5x5kirfjlk6oafhoikkge4fgvcljhmiljuqge5266@asdcw5cfp53e>
+ <3-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ld3rrnpix5x5kirfjlk6oafhoikkge4fgvcljhmiljuqge5266@asdcw5cfp53e>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <3-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Nov 03, 2023 at 02:42:01PM -0700, Jerry Snitselaar wrote:
-> On Fri, Nov 03, 2023 at 01:44:47PM -0300, Jason Gunthorpe wrote:
-> > Nothing needs this pointer. Return a normal error code with the usual
-> > IOMMU semantic that ENODEV means 'there is no IOMMU driver'.
-> > 
-> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> > ---
-> >  drivers/iommu/of_iommu.c | 29 ++++++++++++++++++-----------
-> >  drivers/of/device.c      | 22 +++++++++++++++-------
-> >  include/linux/of_iommu.h | 13 ++++++-------
-> >  3 files changed, 39 insertions(+), 25 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
-> > index 157b286e36bf3a..e2fa29c16dd758 100644
-> > --- a/drivers/iommu/of_iommu.c
-> > +++ b/drivers/iommu/of_iommu.c
-> > @@ -107,20 +107,26 @@ static int of_iommu_configure_device(struct device_node *master_np,
-> >  		      of_iommu_configure_dev(master_np, dev);
-> >  }
-> >  
-> > -const struct iommu_ops *of_iommu_configure(struct device *dev,
-> > -					   struct device_node *master_np,
-> > -					   const u32 *id)
-> > +/*
-> > + * Returns:
-> > + *  0 on success, an iommu was configured
-> > + *  -ENODEV if the device does not have any IOMMU
-> > + *  -EPROBEDEFER if probing should be tried again
-> > + *  -errno fatal errors
+On Fri, Nov 03, 2023 at 01:44:48PM -0300, Jason Gunthorpe wrote:
+> Instead of returning 1 and trying to handle positive error codes just
+> stick to the convention of returning -ENODEV. Remove references to ops
+> from of_iommu_configure(), a NULL ops will already generate an error code.
 > 
-> It looks to me like it will only return 0, -ENODEV, or -EPROBEDEFER
-> with other -errno getting boiled down to -ENODEV.
+> There is no reason to check dev->bus, if err=0 at this point then the
+> called configure functions thought there was an iommu and we should try to
+> probe it. Remove it.
 > 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/iommu/of_iommu.c | 42 +++++++++++++---------------------------
+>  1 file changed, 13 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
+> index e2fa29c16dd758..4f77495a2543ea 100644
+> --- a/drivers/iommu/of_iommu.c
+> +++ b/drivers/iommu/of_iommu.c
+> @@ -17,7 +17,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/fsl/mc.h>
+>  
+> -#define NO_IOMMU	1
+> +#define NO_IOMMU	-ENODEV
+>  
 
-Ah, I should've looked at the next patch first. So, never mind on this
-and the question about the dev_dbg.
+With this the following can be simplified in of_iommu_configure_dev_id:
 
+diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
+index 4f77495a2543..b9b995712029 100644
+--- a/drivers/iommu/of_iommu.c
++++ b/drivers/iommu/of_iommu.c
+@@ -61,7 +61,7 @@ static int of_iommu_configure_dev_id(struct device_node *master_np,
+ 			 "iommu-map-mask", &iommu_spec.np,
+ 			 iommu_spec.args);
+ 	if (err)
+-		return err == -ENODEV ? NO_IOMMU : err;
++		return err;
+ 
+ 	err = of_iommu_xlate(dev, &iommu_spec);
+ 	of_node_put(iommu_spec.np);
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
