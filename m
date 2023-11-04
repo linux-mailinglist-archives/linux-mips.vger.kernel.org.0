@@ -2,137 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5A57E0C11
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Nov 2023 00:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73957E0CE9
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Nov 2023 01:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjKCXR3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Nov 2023 19:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S231161AbjKDAs5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Nov 2023 20:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjKCXR2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 19:17:28 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C92D52
-        for <linux-mips@vger.kernel.org>; Fri,  3 Nov 2023 16:17:25 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5b31e000e97so36317837b3.1
-        for <linux-mips@vger.kernel.org>; Fri, 03 Nov 2023 16:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699053445; x=1699658245; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wL2niLMenc8rXWamhCVdrH1GL3hMVyvGfUspx7X4DS0=;
-        b=y34aghm2O6SNvK8GRGqx/sn9ZtIKtyEKMe8V+/zJansECIFreEzwNQdaN7qaCTMxno
-         iQyNclZxVpo458htEdZJR3G15cLAf//+VCR0X7Bb9mY8NQfPYk2RLQxot9vowL58J+WQ
-         5hHhx/vsC4Fi5BrmYkOcz2Ry0VrZACj8kcr2w0P5oaF34k83fCp/HQQiRzJGW8Gpgnpt
-         LE8G4T/CWtPumWqO8WdX3VhR7PfMiIcBYnlzl1o/d6i7pLaKqyDczwP5Xg+Vnz46J/mp
-         wCPQ54D8JTsXgyveHL72zftw7M4doAMgz1QNm9HMEpFyaIBnh8OXueGidAopbHc09qPm
-         VOOg==
+        with ESMTP id S231536AbjKDAsx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Nov 2023 20:48:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0D1D54
+        for <linux-mips@vger.kernel.org>; Fri,  3 Nov 2023 17:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1699058886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mWMUyNNUnPsRLjoGsaCfd4VrJc7Ffw/kOlF19kCtm60=;
+        b=Dr4Z/LDzJjCC0yGvNs8FbQNoB91udIAY2PhQgiV0vlcQ9MhFn6V0Nv5ixz51AoWGuPQEQS
+        5R9nvbBy3ZrOWe0QqOkwbyhoKUzvOUeF9L1lkkUz/HvCEg6OqLULa/kKu74pqm+S+qFHJ1
+        ZL7t7t9riTuju5CWMczJggUXZPYJDwU=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-694-KNqZdylPNK6NaV2NpKx_vQ-1; Fri, 03 Nov 2023 20:48:04 -0400
+X-MC-Unique: KNqZdylPNK6NaV2NpKx_vQ-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3b3e82429edso3627853b6e.2
+        for <linux-mips@vger.kernel.org>; Fri, 03 Nov 2023 17:48:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699053445; x=1699658245;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wL2niLMenc8rXWamhCVdrH1GL3hMVyvGfUspx7X4DS0=;
-        b=Vl17TLXC5INSGJxtKoXkHMYGGrV0pl6rhoFmE22d4ZmAdSOJSbngqriAUmq8I6revh
-         vN0knpztrZmpPrpvzYbEk8fFmCX9sdKUfBJLsV+Tn6PACR7rUdra2t52PjynLik7UXwt
-         qL3BIBvYcOI5rokhYVGWa8gmmSg/w2d/Tn3gRZgOMuuiteE6goEzShH2/n99T09TSFYX
-         RKr08fOiSCv0Ont9l1V5t2F35q4pVcEP8/LcnnyTKixvOgMEvMZVVDJGO+eL+9x85Czt
-         XMO7nfKVU30Wo5dFeHqLYrCq7mzZ6Hz5X0rVvKRVPGIe3KjMkorMwENYZP6q9cZ2T12Y
-         Hikg==
-X-Gm-Message-State: AOJu0YzP8wjcwEF7sVFpUXbqRFEQrPyGZmglEErJ5b+p5q1/8cyghmV+
-        Sl4DtNyNR+1rCvoz/2wUE9jFlf0BES4=
-X-Google-Smtp-Source: AGHT+IGJDyi83TwJx+I35GsLQytKZmA4RJCyClEGAPsqdhhOEgS+Lm1oHaoRVNSHVuwQA3+7WVp40Ul4xUY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4958:0:b0:59f:3cde:b33a with SMTP id
- w85-20020a814958000000b0059f3cdeb33amr84737ywa.6.1699053444944; Fri, 03 Nov
- 2023 16:17:24 -0700 (PDT)
-Date:   Fri, 3 Nov 2023 16:17:23 -0700
-In-Reply-To: <CA+EHjTzGzXnfXHh0m5iHt9m3BxerkUS56EVPDA_az6n2FRnk3w@mail.gmail.com>
-Mime-Version: 1.0
-References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-17-seanjc@google.com>
- <CA+EHjTzj4drYKONVOLP19DYpJ4O8kSXcFzw2AKier1QdcFKx_Q@mail.gmail.com>
- <ZUF8A5KpwpA6IKUH@google.com> <CA+EHjTwTT9cFzYTtwT43nLJS01Sgt0NqzUgKAnfo2fiV3tEvXg@mail.gmail.com>
- <ZULJYg5cf1UrNq3e@google.com> <CA+EHjTzGzXnfXHh0m5iHt9m3BxerkUS56EVPDA_az6n2FRnk3w@mail.gmail.com>
-Message-ID: <ZUV_g1_3pj62OgF-@google.com>
-Subject: Re: [PATCH v13 16/35] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        d=1e100.net; s=20230601; t=1699058883; x=1699663683;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mWMUyNNUnPsRLjoGsaCfd4VrJc7Ffw/kOlF19kCtm60=;
+        b=BqoBUDvsb9xTBg7QhSbvmw1a9aM0z+ldJBd2jsC/MFc3pqoYXTYoW8Bs6+DG6TMVWG
+         FZHtKlPOssYLVupdB7ibkG8I/y3ToOBfHcPDCOLBHVnHFSxT4+zFYrQIaJYcjNcEpjAi
+         kvnP+UsVBq6YUU8M1ES5F+Z4a/6xKFa5LgB9KBWJKx1rBmsDRpxIknFEbZ6CgE6Ts4ZO
+         OaJD3IJdw4vfz1TYqUKD8euMJrE2PXyTR58pT6O3gwiKeGlrqMcXRRKUNuEbhHb/VWlO
+         ruQI7toSxl4pqHV7nAxz1zKXzmpKWVZbj1LaUMph6QYerLO0AbXOQVDSbXosYOahPyjD
+         N6hw==
+X-Gm-Message-State: AOJu0Yy8rHh4rxQbjgiMMbXGZrM4S+14yjYIsaSa3X9cu7jG2z+2IGPq
+        8XBMaOpDKPVD19d4ZoCOgXpDgDHbc/kAMwrqhg6Q16a9RkHA251Dpo4YSBbfycA6qRlQZOKbRQV
+        r0BqwF2kkzhhRyszzPkhaFg==
+X-Received: by 2002:a05:6808:2e90:b0:3b5:95eb:f76e with SMTP id gt16-20020a0568082e9000b003b595ebf76emr2039976oib.24.1699058883442;
+        Fri, 03 Nov 2023 17:48:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHbl3cnWwz1S+869RAlRQHhIhHXgs+QsQ+oiCvUWDqrKYbBZJdPrVYEi95zUnZ7fv/l03IwvA==
+X-Received: by 2002:a05:6808:2e90:b0:3b5:95eb:f76e with SMTP id gt16-20020a0568082e9000b003b595ebf76emr2039947oib.24.1699058883200;
+        Fri, 03 Nov 2023 17:48:03 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id n23-20020a635c57000000b005b458aa0541sm1838143pgm.15.2023.11.03.17.48.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 17:48:02 -0700 (PDT)
+Date:   Fri, 3 Nov 2023 17:48:01 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     acpica-devel@lists.linuxfoundation.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-tegra@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hector Martin <marcan@marcan.st>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
+        Zhenhua Huang <quic_zhenhuah@quicinc.com>
+Subject: Re: [PATCH RFC 04/17] acpi: Do not return struct iommu_ops from
+ acpi_iommu_configure_id()
+Message-ID: <xvgdxrlcpvafst6qypgwehtleaihsedgoiat6akv6au2j4xrjw@rk4dl4xbnq6o>
+References: <0-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
+ <4-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 02, 2023, Fuad Tabba wrote:
-> On Wed, Nov 1, 2023 at 9:55=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
-> > E.g. a misbehaving userspace could prematurely delete a memslot.  And t=
-he more
-> > fun example is intrahost migration, where the plan is to allow pointing=
- multiple
-> > guest_memfd files at a single guest_memfd inode:
-> > https://lore.kernel.org/all/cover.1691446946.git.ackerleytng@google.com
-> >
-> > There was a lot of discussion for this, but it's scattered all over the=
- place.
-> > The TL;DR is is that the inode will represent physical memory, and a fi=
-le will
-> > represent a given "struct kvm" instance's view of that memory.  And so =
-the memory
-> > isn't reclaimed until the inode is truncated/punched.
-> >
-> > I _think_ this reflects the most recent plan from the guest_memfd side:
-> > https://lore.kernel.org/all/1233d749211c08d51f9ca5d427938d47f008af1f.16=
-89893403.git.isaku.yamahata@intel.com
+On Fri, Nov 03, 2023 at 01:44:49PM -0300, Jason Gunthorpe wrote:
+> Nothing needs this pointer. Return a normal error code with the usual
+> IOMMU semantic that ENODEV means 'there is no IOMMU driver'.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/acpi/scan.c | 24 +++++++++++++++---------
+>  1 file changed, 15 insertions(+), 9 deletions(-)
+> 
 
-Doh, sitting in my TODO folder...
+...
 
-https://lore.kernel.org/all/20231016115028.996656-1-michael.roth@amd.com
+>  #else /* !CONFIG_IOMMU_API */
+> @@ -1623,7 +1624,7 @@ static const struct iommu_ops *acpi_iommu_configure_id(struct device *dev,
+>  int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+>  			  const u32 *input_id)
+>  {
+> -	const struct iommu_ops *iommu;
+> +	int ret;
+>  
+>  	if (attr == DEV_DMA_NOT_SUPPORTED) {
+>  		set_dma_ops(dev, &dma_dummy_ops);
+> @@ -1632,10 +1633,15 @@ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+>  
+>  	acpi_arch_dma_setup(dev);
+>  
+> -	iommu = acpi_iommu_configure_id(dev, input_id);
+> -	if (PTR_ERR(iommu) == -EPROBE_DEFER)
+> +	ret = acpi_iommu_configure_id(dev, input_id);
+> +	if (ret == -EPROBE_DEFER)
+>  		return -EPROBE_DEFER;
+>  
+                return ret; ?
 
-> Thanks for pointing that out. I think this might be the way to go.
-> I'll have a closer look at this and see how to get it to work with
-> pKVM.
+> +	/*
+> +	 * Historically this routine doesn't fail driver probing due to errors
+> +	 * in acpi_iommu_configure()
+
+              acpi_iommu_configure_id()
+
+> +	 */
+> +
+>  	arch_setup_dma_ops(dev, 0, U64_MAX, attr == DEV_DMA_COHERENT);
+>  
+>  	return 0;
+> -- 
+> 2.42.0
+> 
+
