@@ -2,49 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52647E16D0
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Nov 2023 22:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A68E7E16D7
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Nov 2023 22:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjKEVU5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 5 Nov 2023 16:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S229468AbjKEVf3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sun, 5 Nov 2023 16:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjKEVU4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Nov 2023 16:20:56 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04olkn2081.outbound.protection.outlook.com [40.92.46.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ECCE0;
-        Sun,  5 Nov 2023 13:20:52 -0800 (PST)
+        with ESMTP id S229445AbjKEVf2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Nov 2023 16:35:28 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2083.outbound.protection.outlook.com [40.92.19.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E384CC;
+        Sun,  5 Nov 2023 13:35:25 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gj3oI3NlZDBVK1aUUMVz/7NnqdAdSK2JdoNySe/SxzdiJ98mETp2smALJ6hE7u6Ai3thjiylsWBUNXIM+eok/jv4Zss9dNI4AKaqdPO/r9Ei/pt6/bNnbzG1xppKtRZFaey276KOF3v5GZ3rWB1dogRoz1e07l1+rh0JhZOzhvT6tYq4zTvtU/W2VXtz8920712hEwiEdX0m/cIgbamrLNKoIfvTfnELUa9uXy+Qbzg2rMW+K4PFyiRfD6y1cXh9070B9c35yEeYTjETIEIcvBn5sraxVA0xOubqXD44KJWzFyEEFCJe0gJC2ADU5TLwL5twmHEL5JoOL6y7ayBGIw==
+ b=LXBvO8LphVKxg08UhPpXrAtlbtDwND8MPBcj32R/yL7vdHrzuC0lb6v6TKcRO1DLsfVHbY+47BfspTv39OiskgIdi26xCo8xHWU3mCft8VeyjZSyEUNh6i8qY/mn4X/02yav8m2HCE6u4pJmX9B63pgXXYwAPfkhBBMmUQ0xSM0jFP38Q+TyfiA+3NIZ2mPDYqy6+bX8XwZTtnvToNG+nheIqQ+ERfhXmr9HcW5oz2nuXGA2wGRBNzivnxxXqdjagi7HTJnou07Qv+ft3Zc9EMf8zjN3638FYnVtKl2xO4PwWH81tUiT9L0pEx7bCc1Wa9g2i7CsduJk7AGO/rO9kg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hj8oBW5Z1WV883J45tm10/a58Q2NBnepuFlqRvVxPdA=;
- b=hQqxxsw/q2zW4Uih+Krwmrplt2Tm7sup3AbZNp2yLZasUPXCafQQvSDf7t4iVu/dyJ6IuGvWhMIt+zi/nS5S2yCwRfldrBpBZFfktiwpsHkcAOovon+5LLXm1e6rMVSxp1qlvkHn9E9u1HEu3b06pQkSexJvySb+h/IQmAjTl4KAakpbR9DClpauUYPac7UifpnlDDUpH615XYmn03tdcinR+gzfp8RWw69OtJRl08ZSaZUQ95lAlB5GIx2h0HamcPKZIVe6sDuNx/k9dqiyB0Zq+WUUi0imLGF5Ojov9GGRhXKgW95wtybH0gOs4FJmx+IVz+Qjk7ySB58PIdYqzw==
+ bh=4fee2/nkaXARA2Lmk9RPO8HmODWLL6RsgiqxXirb3E0=;
+ b=kknJvgiqTkStVN5uBKVIw5wA5C3sFj7s9IjobdG2PO+ALM/AwJ3fk5UCaf4LhxVS1F0Dpq01+8aUFuNKQWSynocVpYnvIHF5AfTYKxNSC9esp1mslg36fjTyVmh1MrN1dWS5X00A67Gvz+rVcMJhAUYiFBGulyiwp7zGmYgzzVTIIFuQRwIFFJ43wFqnY+DOmTAEnK8Pw+JW/pGDg75F17rge5rzfgqZ2jxXNaXSWIAipdz1JAaDtYqAgsCUWanaHLdXDnk/M/vlEIT925ewNdyXSDIREzEjsnAKJn+tGbYa7xOfDTo7LnsCKkXF+BQbTyBWyJHNdMwtQ0Ws/NhdFg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from DS7PR12MB5765.namprd12.prod.outlook.com (2603:10b6:8:74::19) by
- BN9PR12MB5066.namprd12.prod.outlook.com (2603:10b6:408:133::19) with
+ BL1PR12MB5077.namprd12.prod.outlook.com (2603:10b6:208:310::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.27; Sun, 5 Nov
- 2023 21:20:50 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Sun, 5 Nov
+ 2023 21:35:24 +0000
 Received: from DS7PR12MB5765.namprd12.prod.outlook.com
  ([fe80::2493:49ba:b06b:fa80]) by DS7PR12MB5765.namprd12.prod.outlook.com
  ([fe80::2493:49ba:b06b:fa80%6]) with mapi id 15.20.6954.021; Sun, 5 Nov 2023
- 21:20:50 +0000
-X-Gm-Message-State: AOJu0YznZc5GHqGJlE44UPLuTuhA0o0vMs1AqTnV6SyHJAiQSt9gWwoj
-        8hUilOAZGQxN9p4K+3NwGqCtRCnmo2uGRxe2tQs=
-X-Google-Smtp-Source: AGHT+IG3nECb0gKMLk6bcCTgg5JIOEKs3Po2EY/hacYzyJwwhvoK4rtrquC8P+WzETEvftr6+CYdZgiF+4eHdGDlhvQ=
-X-Received: by 2002:a1f:a754:0:b0:49d:fab:fa37 with SMTP id
- q81-20020a1fa754000000b0049d0fabfa37mr22304751vke.4.1699218838480; Sun, 05
- Nov 2023 13:13:58 -0800 (PST)
-References: <cover.1699025537.git.tanyuan@tinylab.org> <f0ee9abfd8d7b27489a4efe3196813225ce5680f.1699025537.git.tanyuan@tinylab.org>
-In-Reply-To: <f0ee9abfd8d7b27489a4efe3196813225ce5680f.1699025537.git.tanyuan@tinylab.org>
+ 21:35:24 +0000
+X-Gm-Message-State: AOJu0YwnCG6sXnwtdB+/qSv9qTbe2c+AotQEB0DFzhb9ExAYkCSD7y66
+        hV/8PBtj7qoj8qvti7sUYa8TRn+Qn6OPv4DnCaY=
+X-Google-Smtp-Source: AGHT+IH3aZvI1eMGpsPB0I0COnDVTcvduEhLb1O+mnH4PM006GzrEh2MBuKBL8Iojm22/7/4gs0xvlBWSf/uTbMQS/c=
+X-Received: by 2002:a05:6808:655:b0:3b2:db86:209 with SMTP id
+ z21-20020a056808065500b003b2db860209mr24066073oih.38.1699220122158; Sun, 05
+ Nov 2023 13:35:22 -0800 (PST)
+References: <cover.1699025537.git.tanyuan@tinylab.org> <c1c9913c0974b96faaab664ef354cf8775cd7554.1699025537.git.tanyuan@tinylab.org>
+In-Reply-To: <c1c9913c0974b96faaab664ef354cf8775cd7554.1699025537.git.tanyuan@tinylab.org>
 From:   Fangrui Song <i@maskray.me>
-Date:   Sun, 5 Nov 2023 13:13:47 -0800
-X-Gmail-Original-Message-ID: <CAN30aBER3MnxPztEGDO2NCg3FzGwf3-2jmE51timpcxwEiOORQ@mail.gmail.com>
-Message-ID: <DS7PR12MB57652C7C17103B3FF729BD79CBABA@DS7PR12MB5765.namprd12.prod.outlook.com>
-Subject: Re: [PATCH v1 10/14] DCE/DSE: riscv: make every ex_table's name unique
+Date:   Sun, 5 Nov 2023 13:35:11 -0800
+X-Gmail-Original-Message-ID: <CAN30aBF68V5OLa1DkpFgEjt2Pc3n3J=bKLvtZCXCD12JHtUB5A@mail.gmail.com>
+Message-ID: <DS7PR12MB576555798778F91D449FD5C9CBABA@DS7PR12MB5765.namprd12.prod.outlook.com>
+Subject: Re: [PATCH v1 08/14] DCE/DSE: add choice of methods to build
+ reference for orphan sections
 To:     Yuan Tan <tanyuan@tinylab.org>
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
@@ -55,56 +56,56 @@ Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         w@1wt.eu
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-TMN:  [oh3WIoIarCxItbmcK8JaFJD8Lj9YuFvn]
-X-ClientProxiedBy: SA1P222CA0041.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2d0::15) To DS7PR12MB5765.namprd12.prod.outlook.com
+X-TMN:  [ct2+A/8QVOjgmSquHoUdCc/EAIt5Iv/1]
+X-ClientProxiedBy: SN7PR04CA0166.namprd04.prod.outlook.com
+ (2603:10b6:806:125::21) To DS7PR12MB5765.namprd12.prod.outlook.com
  (2603:10b6:8:74::19)
-X-Microsoft-Original-Message-ID: <CAN30aBER3MnxPztEGDO2NCg3FzGwf3-2jmE51timpcxwEiOORQ@mail.gmail.com>
+X-Microsoft-Original-Message-ID: <CAN30aBF68V5OLa1DkpFgEjt2Pc3n3J=bKLvtZCXCD12JHtUB5A@mail.gmail.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5765:EE_|BN9PR12MB5066:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94b975e2-e9aa-4aa0-5fd7-08dbde4515b8
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5765:EE_|BL1PR12MB5077:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb571626-f9eb-4feb-962e-08dbde471e2a
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: khlidg3yExkjJy9j9TeHbg9Ev1xn7gNumpUS2l8shYe4HWLUCt/e5kGmMemORf+wIdcRONEk9FGYgsSyQu67LDRM6e4B7ZSowiduwOqycRn/ae/EYUUdggXpUnBz1GPYoIZRaj3ezZb42M0Jjegq8CaYnbgQVsnUMVOKxZ9WaiK8eS17FBc3Awuy27wb9AJw3N1PsVdbiHxibl23gOhDWBW0EuPlRNcX6ogzjuYMHXrhMdA3p4ww2Ft4GKL+bvXU2kKDTDj2Q36x42DPTLIHgLRnM02i9uvuJgKgYlAp0+8TKlKNzzHydC9mLVuLHcD51mm4o5k4bSr/CQ006AQuzwxAfmDIJ96rdyi4aPi+eckXncL7oSIlthdKGicU5jz9SZ+DOeWYiNXX7e/yExLfPMbR4JlC7oT3vG6iiIK2CVCjMbKtkvqEsDCpAchDxcHIAH9ClJpVxxmkJ3KkUV5rMTkh00jiF5CHFOjbXIo40Aoe2AQTnEYZF+7yRpwlP6S3NyWdo4vNC1dGwtxHLPOFDCzW9SWh6TAuKmeFurGRjGadd7zCJOJNYB32N0ukfy3iBQDaGgXbg3VC//Ul7B7z/iyM28p48UFlWbpFI7VXFgM=
+X-Microsoft-Antispam-Message-Info: tN6w1tOmr7JOqiEWEv9YH+rsPevOWTi1/7vB0/LOu4cYXTH0jjeaoXuuqryuz7MylJcGSnItjCP2ZyHUHcp8BJ+BjL6NSeGTRWuiRHOO2tpVvy4D7xoJ3MOW3wY9h6B07kcMuHyEOhWEXfirMetUu0JWN7F+hDsyknlZc46LhD+fL/4OTkMrlCZmVbtgtPkyiGl/cQadF4Cr6G+AHWKPTYpZAWR0joQu1PVKf2POsyIeO7ANosUUY/nNN7aCliqjF5xnyUMUgw2v20yinG5dkeOk7MTk61pXL6riNswli9peB1cloU+iaxuUaJ6S6DfK0425RYwJTvVDmJOVybQn6SQmDsicdX4/u3eqEhXuOd2MMjYokzQ17KiOZ/uMKNBIUoqESyqcTInFICCq3A+3O8eDBlj7xg+iMbXAvMLUu6WRgEPVPRBsrS+uGp92ZI1uwub7lrCMxZA5ShhQX0Wl5c2T1ObmkdH54smAboRP8zHKgks7wocTuz129EzOKMTPCY6JMnxVt9T+D2klHvgU39MqgdrY4aFCJujUzb3T6LexOn3Nd8okxzKNb8kv/iExScwicl3KkwIS48r6mI5V4k2oZY9WeM9M7GpiUU4ntJ4=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2ZlY1dlY1lPVTIrS0YzVmFxNXJjRWVUT21Ra3A2aWM3ZmFXdFdSaXNGcjJN?=
- =?utf-8?B?WUVUQXFyQVFIK1kyWWZaY0k5ejA4dXh6WXE5b1EwbVdiamMyZEIrZy9HaVpS?=
- =?utf-8?B?bWpBOXVDYUpieXpMbk1tbUdQUS9FaDUzOFNSVlFCK25hcGgveDRJbUhVSTc1?=
- =?utf-8?B?a1pydXc0UDF1WnNucEJ5VWU5L05hL3dEVDR2QzFsaU5VU2dCVnNMM1J6QU03?=
- =?utf-8?B?U2pmQis5RkxKbncwRmVBdjRDRXV3WGxORTJ0am1tUnk5Q1cyMktGdUJ4K1k2?=
- =?utf-8?B?ZS9oVk1hRHgvU2U0U20xbFcrc1pQN1F5U2hlUlBDY0orQjlESWlzUHBtU21N?=
- =?utf-8?B?TE5DeUN3VXhvaS94b2xJTkpHSlBGaHorbVNxL2FZY256YWxyOXEwY3dlVWFK?=
- =?utf-8?B?T1d0M3RXTnFMT0FqeWU5ZDdLQkUyVmJzQmZlL0I5MjR1SUREZVJhSXZDNEMz?=
- =?utf-8?B?ajVNVU81RlV2UVR0bzVhb1RWcmhmcitCV3NzaWlWTGs3c0RyRlZDVzR1eHcz?=
- =?utf-8?B?RFl0RXZZYmVVd0Y5RFY3U1hWZXIwdU1yQ0tYQTRLUE5BejdkTi9TdjM1K2d4?=
- =?utf-8?B?SzFKUXFESTBraVRQNHJSRkZEdGtVR0d1TTVYc2hGc0lOZER0VGdLZEg3UXZZ?=
- =?utf-8?B?ZWQwTXdwZHFBOWxFRWlxNmVRZmFMaWVpZHJ6Rlo2Z2FRN3FQZURrSlhmUEs3?=
- =?utf-8?B?d3NIYTU5N29sTlRJY0dBNlE3aHBkMmh0VE42b0s3RHdlVmNMbjd2YVBtdmpW?=
- =?utf-8?B?bzRGQVhWZklsZ0FpNWZkQ1I5R3FuajZaK2xFRFZZTEFWbzVnNFJ1UUhpTElM?=
- =?utf-8?B?N2oyYzNNZFRmZG1PL3hGcUxTY1E1WlVNaVJKOS82VHNOMUxIVzlrcVJLK2ta?=
- =?utf-8?B?YTh0N3Y5SmJFOHVGV0lFM2Rvampodjl3enhTT2VJSDJuSDVSTG4xT2F6MzFB?=
- =?utf-8?B?THJDc3FyK0JuTjdXcFJQZlc2MHRmZWZtYVIrK1psZmE0aGxhMXBBRzJFMnpo?=
- =?utf-8?B?TngrYlhEeldVYXBHM20rcW5mV3JybGF5WmlQY0dMR2kyUGlIMzRTSWwrVzJw?=
- =?utf-8?B?YldyNE8zTDhJTTVFL0RMeWJJbHUvMEQ1RVo2YmFaUjFxYUYzbytQclcwVFlv?=
- =?utf-8?B?a0IzRG4zaXZld1JpQmJEdEZVN2xwMFJITzAvNGwxWUlQTExWenBjSi9GeGRJ?=
- =?utf-8?B?ZmhuNFZsYWFvRGJkNlNaRnVUNEF3Nitwb3hFMHQ5VkdPZ08zcnRPYUk2MmFy?=
- =?utf-8?B?UTdTc21LS3h5RENaSmNrR2hrOVQ1OFloL1ZiaGo2cjhVa0JlQWFsRkZPa3Z5?=
- =?utf-8?B?ZitMOTlWRHBhWmR2UWFWUFcrd05LNzA2N1cxVUQwSUZzUHd2SmRYQTFjb2tq?=
- =?utf-8?B?cEFzbXhLQ3NGc1Y3SndsbW1FYlEyWWVGcjJmcWFtUFFlV1J6VlFoU3lqdEtz?=
- =?utf-8?B?ODdzc0ZMSGtxUGtGdjFibkxqUXFlNlpDQU4yRlQ2VW93VFMxUGdBNUZhdnky?=
- =?utf-8?B?dlBwVmZqcjNmVVJLZHFTaDlZZE5MNVJhWHQ4WUVsTmphekhhMzVRaGRUOHJx?=
- =?utf-8?Q?qDnoO2669L1uqCCjWekFgpFZAG23gl6h7cQ7PdN/2WWCFK?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RnF6T1NoTWEzR1B0dTdoZjFhZ0ZtR0lpZ0NPOWR0a1IxM1lYMlFzckg1Q2Mw?=
+ =?utf-8?B?TU0wWTVBempBK2VJOFBqL05yZmUwNGdvMGdXUmZXZXh4NC9ZamdlMnZkQ3Fw?=
+ =?utf-8?B?ZlJzbFpPMUkvQVB5L1NTQTdYQmk3Z05yM0FXK2QwWWh4SmdncHNINFkwbXdV?=
+ =?utf-8?B?cnpLQjFLS3NYYVZGbmJKYm43WGM3aWhjbFhzRnJodnhaeWxEeGZpdjVvbVRm?=
+ =?utf-8?B?ZHAvZ1kzTUNaL0psT2Zkd2p6QU56SHpESi9UUmNENkJPRHVmZ2d1RWFnT2lq?=
+ =?utf-8?B?NlY3ZXh4MlRGTDloK2FkOW14eU80ZW12OFhwOElhRmovVlltMkUrWWpOZzF5?=
+ =?utf-8?B?endSaW8xTkVwWmljb3Npb3JPOTVBcm1iekFlc0cxTFg4cW1GbTRiSWsrUEMv?=
+ =?utf-8?B?aXMzaWdONTFyWnJzcVZ4Q3AvN0IyV0RvdTRLSHNvQUF5YjRVV2w5cUR2VkVB?=
+ =?utf-8?B?OGtFengvRWgxc0lMZG1VYXBaN1kvSEFCVzMxMGFFRFMrSjZCckNNckJ6YUNy?=
+ =?utf-8?B?VFdKaWdXSUZEK1hjc09kaHJISjk2VTg3WVFXYzROajZ6eHFWSHJNZU91bC9X?=
+ =?utf-8?B?S04ra1VBTXRQTWJNcmVoTjA3NENPTWJXTktncE1hTi9XeXNkNkx4OHZTNlkr?=
+ =?utf-8?B?cmM4YzdvSmhSRUc3NGFHdGQ3L1UvU1VyWjFVZXFtbGJ1QWwwTUtvN2pWMVB1?=
+ =?utf-8?B?WjZUREJCeVQ3MlZ4K3J1L01xbWlBdU5IaEx5T0FENzVPYXJ5MWJqU1V1Z1J4?=
+ =?utf-8?B?aFM0ODNYRkx1NmNLcGttYVRxWW1SWmZzUTZPR3BPc2x3NXBRa294dUZTTkFX?=
+ =?utf-8?B?VFJoR05aNlBFMWlWRENibHEvbGZ0Vm4wYVlrd0orNnFXWWZjUVpUcWozTEtW?=
+ =?utf-8?B?dkdXMDJTcEpUMURLSHpOWFB1M0prb1FvRW9hY24rVElSMGgvMG9iWXJjZ1N3?=
+ =?utf-8?B?Q0FoWWRicGhvVkFXZzdGV0VDWVd6UzREQ0RaSkhOMStKQTdKQTV4YWFTOVJM?=
+ =?utf-8?B?dFdCYlhFaHlWZ2tZNStiS2hOTmF0aWNYUEFwODJlN3VPS0ZtL2pLVjhiQnh4?=
+ =?utf-8?B?MFhGeFdTUHJTaFMwbHhlUDQrWVpzQnVrV3BZM0VUcGVBZ3U5bW9ZNzJlY2Yr?=
+ =?utf-8?B?MGdteGwwY0lZRmF4V3gwUmo2UUk2aDlTTW03bXVTQmNydVNUM0Y5ZFc3MWlR?=
+ =?utf-8?B?emN3VzRBTkhxc2F5L3hydTRzMjAxcGc0NWp3d2N5eUFzN1BWaFpuL2g1KzRE?=
+ =?utf-8?B?cjgzN3Q5a0hJTmNQR2ErU08waUJEb3BJM3dYanNCU2U3MzI4T0dMU3ZzTVB1?=
+ =?utf-8?B?SVNDeW9DUW9UZ0VWRXpIRzRHU3FTWlk1ZStsVmFFL1U5NG8vZ002dnI2UVJP?=
+ =?utf-8?B?VGdJb1pyNmdSTjYzSWhQWWNEUGowSDNKUG5iOGhSbVY1RkRTMjFwNDhKdkti?=
+ =?utf-8?B?WjAyM3RDQUxEUzYrVWhLc01BNGtFS3NSdnB2eWMvQzA3N3pCMUJkTGcyWXQy?=
+ =?utf-8?B?VjVtejlxcTJlQlJNYTRYWjBOemVlcXhCZU9IU3ROdzFnQTZaWHRoQm10djFC?=
+ =?utf-8?Q?No598uQWaJmb2p1mJVM7YSDIQSydTSPLDclgTuIn0BvHev?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-5183d.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94b975e2-e9aa-4aa0-5fd7-08dbde4515b8
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb571626-f9eb-4feb-962e-08dbde471e2a
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5765.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2023 21:20:50.4264
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2023 21:35:23.6173
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5066
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5077
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -115,58 +116,116 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Nov 3, 2023 at 9:02 AM Yuan Tan <tanyuan@tinylab.org> wrote:
+On Fri, Nov 3, 2023 at 9:01 AM Yuan Tan <tanyuan@tinylab.org> wrote:
 >
-> gc-sections require section names to be unique.
-
-This is not precise, since a monolithic section can be garbage
-collected as well.
-
-https://maskray.me/blog/2021-02-28-linker-garbage-collection
-
-"Without the options, the compiler tends to produce monolithic text
-and data sections. The large sections make the GC coarse-grained and
-they will likely be retained as a whole. ld --gc-sections can still
-discard some sections, but the effect is likely very poor."
-
-
+> Due to .pushsection producing orphan sections, the kernel currently uses
+> `KEEP()` in the linker script to address this issue.
+>
+> Here we purpose two methods to build reference for pushed section,
+> SHF_LINK_ORDER method and SECTION_SHF_GROUP method.
+>
+> The binary files compiled using both methods turn out to be identical,
+> and it doesn't produce any side effects.
+>
 > Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
 > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 > ---
->  arch/riscv/include/asm/asm-extable.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  init/Kconfig | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
 >
-> diff --git a/arch/riscv/include/asm/asm-extable.h b/arch/riscv/include/asm/asm-extable.h
-> index 00a96e7a9664..d0be5a838242 100644
-> --- a/arch/riscv/include/asm/asm-extable.h
-> +++ b/arch/riscv/include/asm/asm-extable.h
-> @@ -9,10 +9,12 @@
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 9834dbb0ddae..9599d2de44e8 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1740,6 +1740,56 @@ config USED_SYSCALLS
 >
->  #ifdef CONFIG_MMU
+>           If unsure, please disable TRIM_UNUSED_SYSCALLS.
 >
-> +#include <linux/compiler.h>
+> +choice
+> +       prompt "Trim methods" if EXPERT
+> +       default RESTRICTED_TRIM_UNUSED_SYSCALLS
+> +       depends on TRIM_UNUSED_SYSCALLS
+> +       help
+> +         This option selects the method to trim unused syscall wrongly kept.
 > +
->  #ifdef __ASSEMBLY__
->
->  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)     \
-> -       .pushsection    __ex_table, "a";                \
-> +       .pushsection    __SECTION_NAME(__ex_table), "a";                \
->         .balign         4;                              \
->         .long           ((insn) - .);                   \
->         .long           ((fixup) - .);                  \
-> @@ -31,7 +33,7 @@
->  #include <asm/gpr-num.h>
+> +         The binary files compiled using both methods are identical.
+> +
+> +         If the trim methods is not specified, some syscalls are kept by
+> +         linker script and can not be trimmed.
+> +
+> +config RESTRICTED_TRIM_UNUSED_SYSCALLS
+> +       bool "Leave some kept syscalls (EXPERIMENTAL)" if EXPERT
+> +       help
+> +         Say Y here to trim 'unused' syscalls wrongly kept by __ex_table
+> +         like sections in kernel space.
+> +
+> +         Some syscalls are kept by linker script and can not be trimmed.
+> +
+> +         If unsure, choose this.
+> +
+> +config SECTION_SHF_LINK_ORDER_SUPPORT
+> +       bool "Using SHF_LINK_ORDER attribute (EXPERIMENTAL)" if EXPERT
+> +       depends on HAVE_SECTION_SHF_LINK_ORDER_SUPPORT
+> +       help
+> +         Say Y here to trim more 'unused' syscalls wrongly kept by __ex_table
+> +         like sections in kernel space.
 
-__SECTION_NAME is probably added by a previous patch.
-An alternative is to use the .section directive's `unique` feature
-(binutils>=2.35).
+SHF_LINK_ORDER can be used for other metadata sections. The help
+message reads as that __ex_table is the only use case.
+It can be rephrased to us __ex_table as an example.
 
->  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)     \
-> -       ".pushsection   __ex_table, \"a\"\n"            \
-> +       ".pushsection " __SECTION_NAME(__ex_table) ", \"a\"\n"          \
->         ".balign        4\n"                            \
->         ".long          ((" insn ") - .)\n"             \
->         ".long          ((" fixup ") - .)\n"            \
+> +         This option uses the SHF_LINK_ORDER attribute to build references for
+> +         orphan sections. Therefore, these sections are no longer kept in the
+> +         linker script.
+
+https://sourceware.org/binutils/docs/ld/Orphan-Sections.html
+"Orphan sections are sections present in the input files which are not
+explicitly placed into the output file by the linker script."
+
+If the linker script still references the relevant sections, they are
+not orphan.
+I think it's best to focus on the semantics (metadata sections),
+rather than the linker input property (orphan).
+
+Suggest:
+
+This option allows the use of SHF_LINK_ORDER to mark a metadata
+section as discardable when the linker discards its referenced
+section.
+The linker semantics require that the metadata section is not
+referenced by any other section.
+
+> +         If unsure, not choose this.
+> +
+
+
+> +config SECTION_SHF_GROUP_SUPPORT
+> +       bool "Using SHF_GROUP attribute (EXPERIMENTAL)" if EXPERT
+> +       depends on HAVE_SECTION_SHF_GROUP_SUPPORT
+> +       help
+> +         Say Y here to trim more 'unused' syscalls wrongly kept by __ex_table
+> +         like sections in kernel space.
+> +
+> +         This option uses the SHF_GROUP attribute to build references for
+> +         orphan sections. Therefore, these sections are no longer kept in the
+> +         linker script.
+> +
+> +         If unsure, not choose this.
+> +
+> +endchoice
+> +
+
+SHF_GROUP has size overhead in relocatable object files. If
+SHF_LINK_ORDER works for __extable, I suggest that we postpone
+SECTION_SHF_GROUP_SUPPORT until it is absolutely needed.
+
+As I mentioned in a binutils thread, .attach_to_group is not supported
+by LLVM integrated assembler and it could be tricky to implement.
+The toolchain requirement (2020) is no better than SHF_LINK_ORDER.
+
+>  config KALLSYMS
+>         bool "Load all symbols for debugging/ksymoops" if EXPERT
+>         default y
 > --
 > 2.34.1
 >
