@@ -2,60 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FE07E1FE8
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Nov 2023 12:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E437E1FF1
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Nov 2023 12:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbjKFLZg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Nov 2023 06:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S230018AbjKFL04 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Nov 2023 06:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjKFLZg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Nov 2023 06:25:36 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1274FBE
-        for <linux-mips@vger.kernel.org>; Mon,  6 Nov 2023 03:25:32 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-66fbcaf03c6so29132666d6.1
-        for <linux-mips@vger.kernel.org>; Mon, 06 Nov 2023 03:25:32 -0800 (PST)
+        with ESMTP id S229583AbjKFL0y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Nov 2023 06:26:54 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48BEC9
+        for <linux-mips@vger.kernel.org>; Mon,  6 Nov 2023 03:26:50 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-779f2718accso312474085a.1
+        for <linux-mips@vger.kernel.org>; Mon, 06 Nov 2023 03:26:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699269931; x=1699874731; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1699270010; x=1699874810; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8FgFIIfzRIOk5S3UyWAM1hrnYX4eHCPdXXTgA8O3M1A=;
-        b=CSAKZPPUhSeyEd+FVcFc/wE7BH7/lltaIavlc/tV7hlCdyKd83MMBTrV4+2QdjaVI5
-         re4Un19fI8++TRdDNzRRKVcWvhkLL5hRE/PqjHicq6Yg52UVbIXndvrRV6Y+TqCqW1KP
-         qwPYKB/RiUmn66O/9+Cxdqjq0ID/uK5pDYKZLyw9rZRF4ogasppO4z/41nUiWVolLMta
-         dMqk+CU3+vSnN3anBCRC9fxV98Q/ooEzqgWQN4zqGELxiSKQ8Q3rnh5J5cUjgD/5TWLv
-         B1bAVx7MMqrfiqcClz5zDUFdg87t03JoNLveKQUJkQ3+GPd+OuaUIRgcoruGyCpDK+Lr
-         x1cw==
+        bh=bcdCS6aA0hU/P/1Lxpxkfas8L67FF+zkKmd2vDLbKHk=;
+        b=Hmug/IcMuWLcWO11j6vSFnt2652G6K+eWeDxe18rWZL9wyC+bPveocbxbcN/JlBsAQ
+         zPDyyPmt6RXGDIF7neCe4+h7HYWvB+obEy0KzLPUxK8QR9h+Ofi1I4c+bR3YKRcmGt6Q
+         6gOptmV/oUBNO0l3CxF2JfN3xqVVFHMa+UAt9COnCE4SZfF4CwVHoTdAFD8uxN6DEg13
+         4DeizrP24RbE5SUqomX/sD+ZCBEGQTSGa/vgyLdseUzclzlnePMlmam6vrbOGAoZUtz9
+         RlE1YWY+ZR2mbZbrYpzQZ9jhkpjVPLbXjARg6Z19SoB9039QBQWNDpiCqqGptotmpSot
+         q3Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699269931; x=1699874731;
+        d=1e100.net; s=20230601; t=1699270010; x=1699874810;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8FgFIIfzRIOk5S3UyWAM1hrnYX4eHCPdXXTgA8O3M1A=;
-        b=KvAdICR665MluLSO1WzXS+KNb/Yh4PESUit4ncu3/cvxKFjAEIivVswNxHD7cXt14W
-         /No8n7LsBg4Ru4k1bzYeSOijFY4ZecC4YdCZ6iwxDnPMZTx2LCeLmiVmykS1BiT157MX
-         03YddXbRkn1MHlrViJjk8zBqNQrquOL87bu6PXZdYE2hHjHhnjNYKs6DXml9iFxWft88
-         rx7UPuxqSkPOYeXAwq9b9d64uDsLyiUUFAqZaaAADurpUM3IllvnkYY7ijC+Xyk7eSq5
-         q0Jl+8XXiYlShPhFVaqGB+lzpwDDNN7VFqEYLRe8LBnGZ8iCGS6F6xSJ9bQIoFCs5JHs
-         fBgA==
-X-Gm-Message-State: AOJu0Ywh4Pyf8e/P5M7IJ8o6amigLkvUe0mXQw7NWbDb1aejNQN5Fna0
-        ia7o9kd13U9YcdAYLECsMH7LUwnMpKtf0yTvYZZpdw==
-X-Google-Smtp-Source: AGHT+IF4yL2/LL4u2aXRMHdIO4tBxiGnD2Sg0p8AaFV/BRnT///c7YsCa6iLfBADu8SZkPGs+0c1ElvE1cEBNyIvvIQ=
-X-Received: by 2002:a05:6214:ac9:b0:671:7312:bf5 with SMTP id
- g9-20020a0562140ac900b0067173120bf5mr32557664qvi.17.1699269931062; Mon, 06
- Nov 2023 03:25:31 -0800 (PST)
+        bh=bcdCS6aA0hU/P/1Lxpxkfas8L67FF+zkKmd2vDLbKHk=;
+        b=DGxPvjNyYt2PNYZnMsLzAwmk9dfv4PViUUWBzYcvUEZL45LLHrht5+P2jCNR5mX2l8
+         qO6gRLFqg5OIOAeLNoy50EFWXBq+AhznIXJaVK4ZBoiPKhORM0fc9e3hjyE8QGGUdx2k
+         Oei7R+Me0sdwA2zeWEseij+9//OqmdrDhqY+Fd0GlXsN71MCky/kjS7UN/cAkRxnfm0X
+         tEkLbzI3hV2qF1xqld7UgNgrdw2GARFfaVYQgzY+IJYN1q6DXKLkZkyNKFXPJN+9R6DI
+         OfriAwbr95j5O4dSXNxuHI9gPDyVSEZNUBCPFZCyhaEX835xAJ3Wac7KxR1Cd53ETbgr
+         O0qg==
+X-Gm-Message-State: AOJu0YwWyDV3kJQgWKSsnXIKEIcL5iEWXozkqxbOv76pM5K0kOx/PVFO
+        Uk0IgWiDNkFYYyMzKvRf1zZBTRfO7atG5dWsR5skQg==
+X-Google-Smtp-Source: AGHT+IFasxLYHHudhBN/+4eIX1OsOhIRfSB2CWnjQO7Y6r4dz1/Ca+R2Pv6YHi7+A5fsQfNYO2/OlOsYvWwG9CsrzMM=
+X-Received: by 2002:a05:6214:2506:b0:658:26d7:72e0 with SMTP id
+ gf6-20020a056214250600b0065826d772e0mr20208405qvb.4.1699270009660; Mon, 06
+ Nov 2023 03:26:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20231105163040.14904-1-pbonzini@redhat.com> <20231105163040.14904-26-pbonzini@redhat.com>
-In-Reply-To: <20231105163040.14904-26-pbonzini@redhat.com>
+References: <20231027182217.3615211-1-seanjc@google.com> <20231027182217.3615211-28-seanjc@google.com>
+In-Reply-To: <20231027182217.3615211-28-seanjc@google.com>
 From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 6 Nov 2023 11:24:54 +0000
-Message-ID: <CA+EHjTxy6TWM3oBG0Q6v5090XTrs+M8_m5=6Z2E1P-HyTkrGWg@mail.gmail.com>
-Subject: Re: [PATCH 25/34] KVM: selftests: Add helpers to convert guest memory
- b/w private and shared
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
+Date:   Mon, 6 Nov 2023 11:26:13 +0000
+Message-ID: <CA+EHjTyjeKymYaJ3kTpVzRFPLKxeDEf9B-DGo7xif_FPN1dFBQ@mail.gmail.com>
+Subject: Re: [PATCH v13 27/35] KVM: selftests: Add helpers to convert guest
+ memory b/w private and shared
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -63,7 +63,6 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <brauner@kernel.org>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
@@ -91,12 +90,12 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Wang <wei.w.wang@intel.com>,
         Liam Merwick <liam.merwick@oracle.com>,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -105,8 +104,8 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Nov 5, 2023 at 4:34=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com> =
-wrote:
+On Fri, Oct 27, 2023 at 7:23=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
 >
 > From: Vishal Annapurve <vannapurve@google.com>
 >
@@ -116,7 +115,7 @@ wrote:
 )
 > when converting memory, as the attributes are the single source of true.
 
-nit: true->truth
+true->truth
 
 > Provide allocate() helpers so that tests can mimic a userspace that frees
 > private memory on conversion, e.g. to prioritize memory usage over
@@ -125,8 +124,6 @@ nit: true->truth
 > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 > Co-developed-by: Sean Christopherson <seanjc@google.com>
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Message-Id: <20231027182217.3615211-28-seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
 >  .../selftests/kvm/include/kvm_util_base.h     | 48 +++++++++++++++++++
 >  tools/testing/selftests/kvm/lib/kvm_util.c    | 28 +++++++++++
@@ -203,10 +200,10 @@ pa,
 >
 > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/s=
 elftests/kvm/lib/kvm_util.c
-> index b63500fca627..95a553400ea9 100644
+> index 45050f54701a..a140aee8d0f5 100644
 > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1167,6 +1167,34 @@ void vm_mem_region_delete(struct kvm_vm *vm, uint3=
+> @@ -1176,6 +1176,34 @@ void vm_mem_region_delete(struct kvm_vm *vm, uint3=
 2_t slot)
 >         __vm_mem_region_delete(vm, memslot2region(vm, slot), true);
 >  }
@@ -227,8 +224,8 @@ PUNCH_HOLE : 0);
 > +               uint64_t offset;
 > +
 > +               region =3D userspace_mem_region_find(vm, gpa, gpa);
-> +               TEST_ASSERT(region && region->region.flags & KVM_MEM_GUES=
-T_MEMFD,
+> +               TEST_ASSERT(region && region->region.flags & KVM_MEM_PRIV=
+ATE,
 > +                           "Private memory region not found for GPA 0x%l=
 x", gpa);
 > +
@@ -250,9 +247,6 @@ len,
 > +       }
 > +}
 > +
->  /* Returns the size of a vCPU's kvm_run structure. */
->  static int vcpu_mmap_sz(void)
->  {
 
 Nits aside:
 
@@ -262,7 +256,10 @@ Tested-by: Fuad Tabba <tabba@google.com>
 Cheers,
 /fuad
 
+
+>  /* Returns the size of a vCPU's kvm_run structure. */
+>  static int vcpu_mmap_sz(void)
+>  {
 > --
-> 2.39.1
->
+> 2.42.0.820.g83a721a137-goog
 >
