@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE597E203F
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Nov 2023 12:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A017E2043
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Nov 2023 12:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjKFLo5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Nov 2023 06:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S231502AbjKFLp3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Nov 2023 06:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjKFLo5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Nov 2023 06:44:57 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D8DC6
-        for <linux-mips@vger.kernel.org>; Mon,  6 Nov 2023 03:44:53 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5a86b6391e9so52332237b3.0
-        for <linux-mips@vger.kernel.org>; Mon, 06 Nov 2023 03:44:53 -0800 (PST)
+        with ESMTP id S229583AbjKFLp2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Nov 2023 06:45:28 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56506DF
+        for <linux-mips@vger.kernel.org>; Mon,  6 Nov 2023 03:45:24 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-77063481352so433614285a.1
+        for <linux-mips@vger.kernel.org>; Mon, 06 Nov 2023 03:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699271092; x=1699875892; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1699271123; x=1699875923; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DX7ek6JbnQBP3kmz+KR8GNUYI0kM1PtX+UUHfn3vax8=;
-        b=VNbdkXhidZPy2jyspbi+mWrdtQTAWbWJMGSXLu11+BoTws5mX97/h8fnfNA2YHtR5S
-         pnSp6VIcooBGySQ96XECwJsRn8RkrAcwbf3JvjIjxo64IBBjH/0Zu9xnHEBEONaYyOLj
-         vYNm4iuT6bI/bFTiOGU7PSeQbSxO6+teJD5HvjyRtsnE8XVrbM/dzsrEr3Wpj8dvrZJk
-         xFnBnhx+hcTEr4GABAKg8/+16QKYDcjnPmmWrFTXhEpt52YBY12duJbTG+Fve8R7qKlr
-         cLgqhf062bF0xiH5sfOKCGAkieIs5cLBUFyjGkEBC/yUPlx0auzSTpJa1FXbpwwTqgB9
-         pbyQ==
+        bh=A3+w7KiTzzQhCpJeg/0ek2R61CW1ssLM/7mTLxlOjqg=;
+        b=4IwvNUR5qOPvn1KUD3+tl3uxvbjObIJMmG7O40nSKxNFcgMPoKK4MylCFywjpLnL6D
+         CmFllknfWqjSUUI24y0/vVnrW23F0TciCzyTQ6EC74Sy2kgi8ZRg9ith8W2cAvMT/VtC
+         DGwrVxqW2FT8pumfrCbLfJha50h5gSVuv+3ndrtxkKKSOv4H22ypNPsA8Fvr+bDMD6VA
+         VrjsakR+SrzRRDUh/Tx/3hHz1viVqHAL4eNfrgVC3N1vAJ4bAYh+u95Cy6FOpuniWoP1
+         9npXtgTaqaYJiaM8m4XVOZAS6IE6y2tLReV89otrKduKzHF8ThDRw+tUJhXsxM1+kQqh
+         k0ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699271092; x=1699875892;
+        d=1e100.net; s=20230601; t=1699271123; x=1699875923;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DX7ek6JbnQBP3kmz+KR8GNUYI0kM1PtX+UUHfn3vax8=;
-        b=N+S2jM99cV/I3VDmpn7f/qgeOj5wsQzLZQ64TKQu2hVuPM1OfXwXDdTHdRg5jfjL9r
-         1ih70ijzwFdthr6bExCCG5O5rLHkTyN0SSO38cAskGjyw2NT58WWLXbLmCB2zEV0r9cT
-         O1HPs8C46j+32Vz6kx5MW24bDlkpGw84H+ASxkJUfoKmfJrRA9+3LcfPSj0jmChb7nTz
-         LRHvb92/yF7StkObQ0OBDJ/K3eGbYr96EJ6BNFt+J8vSUAF4R6NZKo/buwPWMgho18DH
-         3J/sswAh6AJJnIccA9Ha2IRMc2iIK3TUPYcP6x597ZCk4hJZtjYu2K8iLsemZnl0sVUL
-         LJiA==
-X-Gm-Message-State: AOJu0Yxt/eRAvOOobUupM6Czw5GHRTL0qtiy/ApDNO60zybP+pY5QE5n
-        sf7+8xIqz97EMra84kpCago6elVa58rcVbGpmSBILQ==
-X-Google-Smtp-Source: AGHT+IERnN25ZpQWhSoveHYhjH1bHINt0TuAVLiTz7wZcF5ueihZgXoSAZV3dV6i7b/f23cd983VPNMQFTyQCDpDsN0=
-X-Received: by 2002:a0d:ccc5:0:b0:5a7:e4fe:ea3 with SMTP id
- o188-20020a0dccc5000000b005a7e4fe0ea3mr10768851ywd.22.1699271092440; Mon, 06
- Nov 2023 03:44:52 -0800 (PST)
+        bh=A3+w7KiTzzQhCpJeg/0ek2R61CW1ssLM/7mTLxlOjqg=;
+        b=YQ3kpQS84Pmhb4Sc6gaJvRHugoxK7l5mV7x3zKQGiUvcPFmxJwscY4x1QNOmEl7dhI
+         Ks4XEH7IYMYe5wNS3MsAolntUUW7NHiDKZXhONf0+vuUtgU1fHcLISTRELIk/IJtmu5o
+         zNO3L6PQxC6kXi2GBntz616/6OVyNa6c0UQuOqm+/BmzFqj9EpYG/heeu3Rok/5BEUf3
+         8gYfifFbEMZvh/nJll01dk1HAkbgCWgHrLZqvjJme4tpRac5SC57XsL1z1NYTg8qNJa2
+         bJLzOqAgnoLgGuTV/+SI7dpVbU07TR+APbQLTnaLFnLgYIMtN6ohD3rI5zLPAYa+rIga
+         zDzQ==
+X-Gm-Message-State: AOJu0Yyhf98Hl7X6Ihkf21s+jbxOWHbb7cbbzl1Oa8waoGzio4KubqLM
+        0s2JPNayHeHoG3rLk2zCWzJrDEeJb8OIKjb5ZhUVEw==
+X-Google-Smtp-Source: AGHT+IEl8/TeQ8yyhv97l+6UdWpd06zPBShx21QRSHFWAyL7jvCOyQqirpZN3XS/gBNGYYwpqQ32Yp/yP3xLHN3ZnjE=
+X-Received: by 2002:a05:6214:252f:b0:66d:13c2:1c31 with SMTP id
+ gg15-20020a056214252f00b0066d13c21c31mr13196146qvb.24.1699271123298; Mon, 06
+ Nov 2023 03:45:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20231105163040.14904-1-pbonzini@redhat.com> <20231105163040.14904-27-pbonzini@redhat.com>
-In-Reply-To: <20231105163040.14904-27-pbonzini@redhat.com>
+References: <20231105163040.14904-1-pbonzini@redhat.com> <20231105163040.14904-29-pbonzini@redhat.com>
+In-Reply-To: <20231105163040.14904-29-pbonzini@redhat.com>
 From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 6 Nov 2023 11:44:16 +0000
-Message-ID: <CA+EHjTymGLsfHvdP4fPOFWTtaRwbtbCOBZ0XOC3gsX+nYm-cZQ@mail.gmail.com>
-Subject: Re: [PATCH 26/34] KVM: selftests: Add helpers to do
- KVM_HC_MAP_GPA_RANGE hypercalls (x86)
+Date:   Mon, 6 Nov 2023 11:44:47 +0000
+Message-ID: <CA+EHjTyxH9JNL67Kz0y90CjrP_HMhmePav7qukJvMOcJrk81pg@mail.gmail.com>
+Subject: Re: [PATCH 28/34] KVM: selftests: Add GUEST_SYNC[1-6] macros for
+ synchronizing more data
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
@@ -108,17 +108,14 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Sun, Nov 5, 2023 at 4:34=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com> =
 wrote:
 >
-> From: Vishal Annapurve <vannapurve@google.com>
+> From: Sean Christopherson <seanjc@google.com>
 >
-> Add helpers for x86 guests to invoke the KVM_HC_MAP_GPA_RANGE hypercall,
-> which KVM will forward to userspace and thus can be used by tests to
-> coordinate private<=3D>shared conversions between host userspace code and
-> guest code.
+> Add GUEST_SYNC[1-6]() so that tests can pass the maximum amount of
+> information supported via ucall(), without needing to resort to shared
+> memory.
 >
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> [sean: drop shared/private helpers (let tests specify flags)]
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Message-Id: <20231027182217.3615211-29-seanjc@google.com>
+> Message-Id: <20231027182217.3615211-31-seanjc@google.com>
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
 
@@ -128,47 +125,37 @@ Tested-by: Fuad Tabba <tabba@google.com>
 Cheers,
 /fuad
 
->  .../selftests/kvm/include/x86_64/processor.h      | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+>  tools/testing/selftests/kvm/include/ucall_common.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/too=
-ls/testing/selftests/kvm/include/x86_64/processor.h
-> index 25bc61dac5fb..a84863503fcb 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -15,6 +15,7 @@
->  #include <asm/msr-index.h>
->  #include <asm/prctl.h>
->
-> +#include <linux/kvm_para.h>
->  #include <linux/stringify.h>
->
->  #include "../kvm_util.h"
-> @@ -1194,6 +1195,20 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, u=
-int64_t a1, uint64_t a2,
->  uint64_t __xen_hypercall(uint64_t nr, uint64_t a0, void *a1);
->  void xen_hypercall(uint64_t nr, uint64_t a0, void *a1);
->
-> +static inline uint64_t __kvm_hypercall_map_gpa_range(uint64_t gpa,
-> +                                                    uint64_t size, uint6=
-4_t flags)
-> +{
-> +       return kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIF=
-T, flags, 0);
-> +}
+> diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/t=
+esting/selftests/kvm/include/ucall_common.h
+> index ce33d306c2cb..0fb472a5a058 100644
+> --- a/tools/testing/selftests/kvm/include/ucall_common.h
+> +++ b/tools/testing/selftests/kvm/include/ucall_common.h
+> @@ -52,6 +52,17 @@ int ucall_nr_pages_required(uint64_t page_size);
+>  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4) \
+>                                 ucall(UCALL_SYNC, 6, "hello", stage, arg1=
+, arg2, arg3, arg4)
+>  #define GUEST_SYNC(stage)      ucall(UCALL_SYNC, 2, "hello", stage)
+> +#define GUEST_SYNC1(arg0)      ucall(UCALL_SYNC, 1, arg0)
+> +#define GUEST_SYNC2(arg0, arg1)        ucall(UCALL_SYNC, 2, arg0, arg1)
+> +#define GUEST_SYNC3(arg0, arg1, arg2) \
+> +                               ucall(UCALL_SYNC, 3, arg0, arg1, arg2)
+> +#define GUEST_SYNC4(arg0, arg1, arg2, arg3) \
+> +                               ucall(UCALL_SYNC, 4, arg0, arg1, arg2, ar=
+g3)
+> +#define GUEST_SYNC5(arg0, arg1, arg2, arg3, arg4) \
+> +                               ucall(UCALL_SYNC, 5, arg0, arg1, arg2, ar=
+g3, arg4)
+> +#define GUEST_SYNC6(arg0, arg1, arg2, arg3, arg4, arg5) \
+> +                               ucall(UCALL_SYNC, 6, arg0, arg1, arg2, ar=
+g3, arg4, arg5)
 > +
-> +static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t si=
-ze,
-> +                                              uint64_t flags)
-> +{
-> +       uint64_t ret =3D __kvm_hypercall_map_gpa_range(gpa, size, flags);
-> +
-> +       GUEST_ASSERT(!ret);
-> +}
-> +
->  void __vm_xsave_require_permission(uint64_t xfeature, const char *name);
+>  #define GUEST_PRINTF(_fmt, _args...) ucall_fmt(UCALL_PRINTF, _fmt, ##_ar=
+gs)
+>  #define GUEST_DONE()           ucall(UCALL_DONE, 0)
 >
->  #define vm_xsave_require_permission(xfeature)  \
 > --
 > 2.39.1
 >
