@@ -2,136 +2,213 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E687E3B52
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Nov 2023 12:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BC67E3FE5
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Nov 2023 14:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbjKGLtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Nov 2023 06:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S234127AbjKGNTK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Nov 2023 08:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjKGLtO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Nov 2023 06:49:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1FF10A
-        for <linux-mips@vger.kernel.org>; Tue,  7 Nov 2023 03:49:11 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38904C433C7
-        for <linux-mips@vger.kernel.org>; Tue,  7 Nov 2023 11:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699357751;
-        bh=zG1AG6s9H4mVUWEREHKyWLjEcAuuHQCGHsj0eiqoWjY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cvWca5F7Y53oEf2uLuJyty+BZ1hmHcO+zzvwX/4Q7yNDAzRI7tWy4lYqPf6HyExsU
-         e1hzr1wToEgt4cE9nCwW6TzgNNsMlIJwF3/tog7YLUNF+erADlqU6YN6DiXGfYrP4p
-         ctvZkRF3mTWvYRRPPs8SvueBUngPhCneKMax8G2sWiZdWYTSUrKcj8K4o9mpG71Nd/
-         Adkotxn0zE9Wpctat0FmphCxGHTe8Kr+nwIZF1gRF9bFc5kio3n1PtHpnVTSjouVWH
-         5GCodX9YnMuIUoD66hV7A8k9NP1Mz9pI+uqEZNapZwG1HOPn/INE/gtRo3PgDjvYhq
-         b+bzABR2vF+qQ==
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9e2838bcb5eso70004466b.0
-        for <linux-mips@vger.kernel.org>; Tue, 07 Nov 2023 03:49:11 -0800 (PST)
-X-Gm-Message-State: AOJu0YxThIDQs5gjbm39z3okOT4/ERoixbInSHWIuL1p+e/y8dXs33Ki
-        /3mhOQ3GNjDdGRfCulexIU6y+8eMIFvzI9DSYlc=
-X-Google-Smtp-Source: AGHT+IEMFIJo0PX1nm5d6zO9FOaZgW3caWPL9frZMn/i8nvR3Adus6PZH+wE9M3bXY9q3O2rI0PNVe2N9Jqkgm0XNb8=
-X-Received: by 2002:a17:907:783:b0:9b9:f980:8810 with SMTP id
- xd3-20020a170907078300b009b9f9808810mr18190379ejb.34.1699357749604; Tue, 07
- Nov 2023 03:49:09 -0800 (PST)
+        with ESMTP id S233917AbjKGNSv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Nov 2023 08:18:51 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464416190
+        for <linux-mips@vger.kernel.org>; Tue,  7 Nov 2023 04:54:48 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-67131800219so38590396d6.3
+        for <linux-mips@vger.kernel.org>; Tue, 07 Nov 2023 04:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699361687; x=1699966487; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FuFbqjfsVCp34XchBGKV0CWjcihho4T2q4FA5kjS7eU=;
+        b=Un6EMDABv8osp1SzeUde9l3uSm1+LK4uI3/Wu+cFXyVNMIZ0rMR/5y2WqYz4ljDei6
+         +UstRklWEF315C2RRPERQYquxJILvOtavMpOMBrD9ZCSJ3kQUhQTpUQwGYNsKlKFV0Au
+         9pDAFk4IyHTnT/i1e73IyiDfD5vNhZdZuY4rhCmkL8fsbbKEtuE2zqRBlSj+26h995MX
+         cTYnsTzPvhxmwqkUDQXtHHDHN0RvpgVHyXtyt0AzZjgVgEAWnZfyez76Z8CSRihgpf2t
+         id7TSCEyy1BVRHpWMH0os1JdBe+OFN7EUOdHo5pQT5H3VHK4OH1mJP2VKGwrTYPh03be
+         asyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699361687; x=1699966487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FuFbqjfsVCp34XchBGKV0CWjcihho4T2q4FA5kjS7eU=;
+        b=kNvOt9CeDwTqUO8wS51Jw9rWrJB+BKOEjrsv82cMkLy4WHlqdnR9501JUrw1z2CViN
+         BddU+0fChcQNhr1F76UCNph6iPaOsB5yQDZSdHWTNBWHH4fLpmGsAbDf6mH6weTeoZW6
+         O+PXalquy1h+RsSfyH1Sw2nCYeqoEupwmCA2+MwgT0+PZT8rHO66EGtXfGKZCjGfr+jf
+         ZgrteWSpaSNZcFz+trtk8k+fF6BNuxaOXJGQ2Fr1NmWpq6XuIRtICq6HBdIAcyf0aZQm
+         /ZwPTLUoaej1PWcKYVRT1kL6CW0FUCplZ4+5hAfJuXhW8du5B68celXGHLBR6ok9kQCI
+         w7cw==
+X-Gm-Message-State: AOJu0Yzsd3n1uNaSOzPIruAe/FqVrn58Z/R6ApvPM4tWqLaGLiVf/Txi
+        Q67tuxIuxOHChy2wJr/mYihwsmK3Lvdsci/ZYVPTKQ==
+X-Google-Smtp-Source: AGHT+IHS9JUkEkC/BybEMf4UmdGXo/DmXLNK4bOT/jrKIAqRMkLyM4gXD6uMK1OzLS09666PL8dXekXtndn5vIwFZqQ=
+X-Received: by 2002:a05:6214:260c:b0:66f:bb36:9a51 with SMTP id
+ gu12-20020a056214260c00b0066fbb369a51mr33614248qvb.36.1699361687221; Tue, 07
+ Nov 2023 04:54:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20231106121206.62650-1-stefan.wiehler@nokia.com>
-In-Reply-To: <20231106121206.62650-1-stefan.wiehler@nokia.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 7 Nov 2023 19:48:58 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4V3t=f9r95kBROj37my0OYOsJ73X_7kJ7UkCOaJQNCnA@mail.gmail.com>
-Message-ID: <CAAhV-H4V3t=f9r95kBROj37my0OYOsJ73X_7kJ7UkCOaJQNCnA@mail.gmail.com>
-Subject: Re: [PATCH v2] mips/smp: Call rcutree_report_cpu_starting() earlier
-To:     Stefan Wiehler <stefan.wiehler@nokia.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
+References: <20231105163040.14904-1-pbonzini@redhat.com> <20231105163040.14904-31-pbonzini@redhat.com>
+In-Reply-To: <20231105163040.14904-31-pbonzini@redhat.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Tue, 7 Nov 2023 12:54:10 +0000
+Message-ID: <CA+EHjTyZoLLv1nRfCEY4nHrbHadphn37jw3OPS17x1dAm_YUxA@mail.gmail.com>
+Subject: Re: [PATCH 30/34] KVM: selftests: Add KVM_SET_USER_MEMORY_REGION2 helper
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+On Sun, Nov 5, 2023 at 4:34=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com> =
+wrote:
+>
+> From: Chao Peng <chao.p.peng@linux.intel.com>
+>
+> Add helpers to invoke KVM_SET_USER_MEMORY_REGION2 directly so that tests
+> can validate of features that are unique to "version 2" of "set user
+> memory region", e.g. do negative testing on gmem_fd and gmem_offset.
+>
+> Provide a raw version as well as an assert-success version to reduce
+> the amount of boilerplate code need for basic usage.
+>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Message-Id: <20231027182217.3615211-33-seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
 
-On Mon, Nov 6, 2023 at 8:16=E2=80=AFPM Stefan Wiehler <stefan.wiehler@nokia=
-.com> wrote:
+Reviewed-by: Fuad Tabba <tabba@google.com>
+Tested-by: Fuad Tabba <tabba@google.com>
+
+Cheers,
+/fuad
+
+>  .../selftests/kvm/include/kvm_util_base.h     |  7 +++++
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 29 +++++++++++++++++++
+>  2 files changed, 36 insertions(+)
 >
-> rcutree_report_cpu_starting() must be called before
-> clockevents_register_device() to avoid the following lockdep splat trigge=
-red by
-> calling list_add() when CONFIG_PROVE_RCU_LIST=3Dy:
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/=
+testing/selftests/kvm/include/kvm_util_base.h
+> index 157508c071f3..8ec122f5fcc8 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -522,6 +522,13 @@ void vm_set_user_memory_region(struct kvm_vm *vm, ui=
+nt32_t slot, uint32_t flags,
+>                                uint64_t gpa, uint64_t size, void *hva);
+>  int __vm_set_user_memory_region(struct kvm_vm *vm, uint32_t slot, uint32=
+_t flags,
+>                                 uint64_t gpa, uint64_t size, void *hva);
+> +void vm_set_user_memory_region2(struct kvm_vm *vm, uint32_t slot, uint32=
+_t flags,
+> +                               uint64_t gpa, uint64_t size, void *hva,
+> +                               uint32_t guest_memfd, uint64_t guest_memf=
+d_offset);
+> +int __vm_set_user_memory_region2(struct kvm_vm *vm, uint32_t slot, uint3=
+2_t flags,
+> +                                uint64_t gpa, uint64_t size, void *hva,
+> +                                uint32_t guest_memfd, uint64_t guest_mem=
+fd_offset);
+> +
+>  void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>         enum vm_mem_backing_src_type src_type,
+>         uint64_t guest_paddr, uint32_t slot, uint64_t npages,
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/s=
+elftests/kvm/lib/kvm_util.c
+> index 1c74310f1d44..d05d95cc3693 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -873,6 +873,35 @@ void vm_set_user_memory_region(struct kvm_vm *vm, ui=
+nt32_t slot, uint32_t flags,
+>                     errno, strerror(errno));
+>  }
 >
->   WARNING: suspicious RCU usage
->   ...
->   -----------------------------
->   kernel/locking/lockdep.c:3680 RCU-list traversed in non-reader section!=
-!
->
->   other info that might help us debug this:
->
->   RCU used illegally from offline CPU!
->   rcu_scheduler_active =3D 1, debug_locks =3D 1
->   no locks held by swapper/1/0.
->   ...
->   Call Trace:
->   [<ffffffff8012a434>] show_stack+0x64/0x158
->   [<ffffffff80a93d98>] dump_stack_lvl+0x90/0xc4
->   [<ffffffff801c9e9c>] __lock_acquire+0x1404/0x2940
->   [<ffffffff801cbf3c>] lock_acquire+0x14c/0x448
->   [<ffffffff80aa4260>] _raw_spin_lock_irqsave+0x50/0x88
->   [<ffffffff8021e0c8>] clockevents_register_device+0x60/0x1e8
->   [<ffffffff80130ff0>] r4k_clockevent_init+0x220/0x3a0
->   [<ffffffff801339d0>] start_secondary+0x50/0x3b8
->
-> raw_smp_processor_id() is required in order to avoid calling into lockdep
-> before RCU has declared the CPU to be watched for readers.
->
-> See also commit 29368e093921 ("x86/smpboot:  Move rcu_cpu_starting() earl=
-ier"),
-> commit de5d9dae150c ("s390/smp: move rcu_cpu_starting() earlier") and com=
-mit
-> 99f070b62322 ("powerpc/smp: Call rcu_cpu_starting() earlier").
->
-> Signed-off-by: Stefan Wiehler <stefan.wiehler@nokia.com>
-> ---
-> - Rename rcu_cpu_starting() to rcutree_report_cpu_starting() due to commi=
-t
-> 448e9f34d91d ("rcu: Standardize explicit CPU-hotplug calls")
-> ---
->  arch/mips/kernel/smp.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-> index 8fbef537fb88..82e2e051b416 100644
-> --- a/arch/mips/kernel/smp.c
-> +++ b/arch/mips/kernel/smp.c
-> @@ -351,10 +351,11 @@ early_initcall(mips_smp_ipi_init);
->   */
->  asmlinkage void start_secondary(void)
->  {
-> -       unsigned int cpu;
-> +       unsigned int cpu =3D raw_smp_processor_id();
->
->         cpu_probe();
->         per_cpu_trap_init(false);
-> +       rcutree_report_cpu_starting(cpu);
->         mips_clockevent_init();
->         mp_ops->init_secondary();
->         cpu_report();
-> @@ -366,7 +367,6 @@ asmlinkage void start_secondary(void)
->          */
->
->         calibrate_delay();
-> -       cpu =3D smp_processor_id();
->         cpu_data[cpu].udelay_val =3D loops_per_jiffy;
->
->         set_cpu_sibling_map(cpu);
+> +int __vm_set_user_memory_region2(struct kvm_vm *vm, uint32_t slot, uint3=
+2_t flags,
+> +                                uint64_t gpa, uint64_t size, void *hva,
+> +                                uint32_t guest_memfd, uint64_t guest_mem=
+fd_offset)
+> +{
+> +       struct kvm_userspace_memory_region2 region =3D {
+> +               .slot =3D slot,
+> +               .flags =3D flags,
+> +               .guest_phys_addr =3D gpa,
+> +               .memory_size =3D size,
+> +               .userspace_addr =3D (uintptr_t)hva,
+> +               .guest_memfd =3D guest_memfd,
+> +               .guest_memfd_offset =3D guest_memfd_offset,
+> +       };
+> +
+> +       return ioctl(vm->fd, KVM_SET_USER_MEMORY_REGION2, &region);
+> +}
+> +
+> +void vm_set_user_memory_region2(struct kvm_vm *vm, uint32_t slot, uint32=
+_t flags,
+> +                               uint64_t gpa, uint64_t size, void *hva,
+> +                               uint32_t guest_memfd, uint64_t guest_memf=
+d_offset)
+> +{
+> +       int ret =3D __vm_set_user_memory_region2(vm, slot, flags, gpa, si=
+ze, hva,
+> +                                              guest_memfd, guest_memfd_o=
+ffset);
+> +
+> +       TEST_ASSERT(!ret, "KVM_SET_USER_MEMORY_REGION2 failed, errno =3D =
+%d (%s)",
+> +                   errno, strerror(errno));
+> +}
+> +
+> +
+>  /* FIXME: This thing needs to be ripped apart and rewritten. */
+>  void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type=
+,
+>                 uint64_t guest_paddr, uint32_t slot, uint64_t npages,
 > --
-> 2.31.0
+> 2.39.1
+>
 >
