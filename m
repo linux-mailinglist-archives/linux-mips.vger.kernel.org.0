@@ -2,193 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4407E3AE3
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Nov 2023 12:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E687E3B52
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Nov 2023 12:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbjKGLP6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Nov 2023 06:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S232147AbjKGLtO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Nov 2023 06:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234244AbjKGLPw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Nov 2023 06:15:52 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DA291;
-        Tue,  7 Nov 2023 03:15:49 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id B8ACB5C00C3;
-        Tue,  7 Nov 2023 06:15:48 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 07 Nov 2023 06:15:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1699355748; x=1699442148; bh=Mm+JRDBtZvObmZ+uO6jWZAPic1sg7YIcuKF
-        rNlBR5/c=; b=ZgutTNumwvrMQGpNLynyX595KkXb8khTPQvzCl8bQRelwmW6sR8
-        ZL6a1xeJhByoEXW9gKqpZOWsT681eMNHkfoPMYSWiCNNDCu6B2ZwFRMf6qnGKJKR
-        XhdvuCIr0wySjHR13QT6bx6JJo9jafua7E4WdH4otWmPbRJXUCYSk1vqSw0kVaLK
-        vnyfCNXvkS6B56MDGzfF9InkEGFH8E9/NbQIUruGYA6KHBNZK4ziHpBPRhEklxva
-        u5kyElhodfRNxzIFlRBvDUZ7F4GqNGJEPmSag725ptkObt5do/VJn3I1kkmxfnpJ
-        K/5DopC2QZylwJ/Nhq8kg9UH12saxp3RHuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1699355748; x=1699442148; bh=Mm+JRDBtZvObmZ+uO6jWZAPic1sg7YIcuKF
-        rNlBR5/c=; b=RXVpR9wwXujQRrtHExjLnvo4Wufi6GYIyA/k7kDomw7UlG5qTIG
-        B8GOW01ACMzdhfXFc9FBAJZNC2EOP6MMEqwJBfuEyl9nt5y1ytGKNFdBJ51itpQ4
-        tCB9L/NLE5iBnQ7jmimJgD5rtgH9fw0YPQYAoGSUichidkyqhUUuN/yz8OMywLEz
-        UOGc3FTahRPc8NfJaDgSIS9g11jrmgtffmn2UmHysX16MqLbrdiNR0pWhGgmy9Vx
-        InFxKRbu80TOXzDtHtIGJnxkQWe41eepWNLQrGBusxsQKc1bdDxFvwRunXjRHrRp
-        kj+WTN0IG6tRLm2+JnobXyo/heVKSWm+6EQ==
-X-ME-Sender: <xms:ZBxKZcH2gLxZgxpLs56D8lnVGvNDNd0sMVqCcatkGtdVeJXI53U8hg>
-    <xme:ZBxKZVWSfEAHtGm5mfXeg6GpSmnrXYcPZeXMND9f0NBZxMMELhqt1WMe_q3GJzx51
-    -qQSxkqrBtn-hbklAY>
-X-ME-Received: <xmr:ZBxKZWIEP_T2NzWsckJSOe2YcXO5NMVK5NpcFQlN5-9xWPtPYtsvsX0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudduiedgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
-    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:ZBxKZeFVAOh-lOoOXwaVkoFF0V7wUUYeGTIg4SJedHm94pJvpiOAmw>
-    <xmx:ZBxKZSV7_Jo9V9htDuPVjuHHvoh6kn6ltTIAGaNOU3QaAwX_NbANOg>
-    <xmx:ZBxKZRNJJvFjeZZPaixUSX12bfZ_zLWA2t5cqWDmnWTGm1Iy3YGRnQ>
-    <xmx:ZBxKZUexpqjyC-LRq_0OPhmESL6vzJei6nul1zE2pe-FEyNuIttFMQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 Nov 2023 06:15:47 -0500 (EST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Tue, 07 Nov 2023 11:15:20 +0000
-Subject: [PATCH fixes v2 3/3] MIPS: Loongson64: Handle more memory types
- passed from firmware
+        with ESMTP id S233674AbjKGLtO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Nov 2023 06:49:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1FF10A
+        for <linux-mips@vger.kernel.org>; Tue,  7 Nov 2023 03:49:11 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38904C433C7
+        for <linux-mips@vger.kernel.org>; Tue,  7 Nov 2023 11:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699357751;
+        bh=zG1AG6s9H4mVUWEREHKyWLjEcAuuHQCGHsj0eiqoWjY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cvWca5F7Y53oEf2uLuJyty+BZ1hmHcO+zzvwX/4Q7yNDAzRI7tWy4lYqPf6HyExsU
+         e1hzr1wToEgt4cE9nCwW6TzgNNsMlIJwF3/tog7YLUNF+erADlqU6YN6DiXGfYrP4p
+         ctvZkRF3mTWvYRRPPs8SvueBUngPhCneKMax8G2sWiZdWYTSUrKcj8K4o9mpG71Nd/
+         Adkotxn0zE9Wpctat0FmphCxGHTe8Kr+nwIZF1gRF9bFc5kio3n1PtHpnVTSjouVWH
+         5GCodX9YnMuIUoD66hV7A8k9NP1Mz9pI+uqEZNapZwG1HOPn/INE/gtRo3PgDjvYhq
+         b+bzABR2vF+qQ==
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9e2838bcb5eso70004466b.0
+        for <linux-mips@vger.kernel.org>; Tue, 07 Nov 2023 03:49:11 -0800 (PST)
+X-Gm-Message-State: AOJu0YxThIDQs5gjbm39z3okOT4/ERoixbInSHWIuL1p+e/y8dXs33Ki
+        /3mhOQ3GNjDdGRfCulexIU6y+8eMIFvzI9DSYlc=
+X-Google-Smtp-Source: AGHT+IEMFIJo0PX1nm5d6zO9FOaZgW3caWPL9frZMn/i8nvR3Adus6PZH+wE9M3bXY9q3O2rI0PNVe2N9Jqkgm0XNb8=
+X-Received: by 2002:a17:907:783:b0:9b9:f980:8810 with SMTP id
+ xd3-20020a170907078300b009b9f9808810mr18190379ejb.34.1699357749604; Tue, 07
+ Nov 2023 03:49:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231107-loongson64_fixes-v2-3-5c49ceed7950@flygoat.com>
-References: <20231107-loongson64_fixes-v2-0-5c49ceed7950@flygoat.com>
-In-Reply-To: <20231107-loongson64_fixes-v2-0-5c49ceed7950@flygoat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20231106121206.62650-1-stefan.wiehler@nokia.com>
+In-Reply-To: <20231106121206.62650-1-stefan.wiehler@nokia.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 7 Nov 2023 19:48:58 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4V3t=f9r95kBROj37my0OYOsJ73X_7kJ7UkCOaJQNCnA@mail.gmail.com>
+Message-ID: <CAAhV-H4V3t=f9r95kBROj37my0OYOsJ73X_7kJ7UkCOaJQNCnA@mail.gmail.com>
+Subject: Re: [PATCH v2] mips/smp: Call rcutree_report_cpu_starting() earlier
+To:     Stefan Wiehler <stefan.wiehler@nokia.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There are many types of revsered memory passed from firmware
-that should be reserved in memblock, and UMA memory passed
-from firmware that should be added to system memory for system
-to use.
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Also for memblock there is no need to align those space into page,
-which actually cause problems.
-
-Handle them properly to prevent memory corruption on some systems.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/mach-loongson64/boot_param.h |  6 +++-
- arch/mips/loongson64/init.c                        | 42 +++++++++++++---------
- 2 files changed, 31 insertions(+), 17 deletions(-)
-
-diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
-index c454ef734c45..e007edd6b60a 100644
---- a/arch/mips/include/asm/mach-loongson64/boot_param.h
-+++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
-@@ -14,7 +14,11 @@
- #define ADAPTER_ROM		8
- #define ACPI_TABLE		9
- #define SMBIOS_TABLE		10
--#define MAX_MEMORY_TYPE		11
-+#define UMA_VIDEO_RAM		11
-+#define VUMA_VIDEO_RAM		12
-+#define MAX_MEMORY_TYPE		13
-+
-+#define MEM_SIZE_IS_IN_BYTES	(1 << 31)
- 
- #define LOONGSON3_BOOT_MEM_MAP_MAX 128
- struct efi_memory_map_loongson {
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index d62262f93069..f25caa6aa9d3 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -49,8 +49,7 @@ void virtual_early_config(void)
- void __init szmem(unsigned int node)
- {
- 	u32 i, mem_type;
--	static unsigned long num_physpages;
--	u64 node_id, node_psize, start_pfn, end_pfn, mem_start, mem_size;
-+	phys_addr_t node_id, mem_start, mem_size;
- 
- 	/* Otherwise come from DTB */
- 	if (loongson_sysconf.fw_interface != LOONGSON_LEFI)
-@@ -64,27 +63,38 @@ void __init szmem(unsigned int node)
- 
- 		mem_type = loongson_memmap->map[i].mem_type;
- 		mem_size = loongson_memmap->map[i].mem_size;
--		mem_start = loongson_memmap->map[i].mem_start;
-+
-+		/* Memory size comes in MB if MEM_SIZE_IS_IN_BYTES not set */
-+		if (mem_size & MEM_SIZE_IS_IN_BYTES)
-+			mem_size &= ~MEM_SIZE_IS_IN_BYTES;
-+		else
-+			mem_size = mem_size << 20;
-+
-+		mem_start = (node_id << 44) | loongson_memmap->map[i].mem_start;
- 
- 		switch (mem_type) {
- 		case SYSTEM_RAM_LOW:
- 		case SYSTEM_RAM_HIGH:
--			start_pfn = ((node_id << 44) + mem_start) >> PAGE_SHIFT;
--			node_psize = (mem_size << 20) >> PAGE_SHIFT;
--			end_pfn  = start_pfn + node_psize;
--			num_physpages += node_psize;
--			pr_info("Node%d: mem_type:%d, mem_start:0x%llx, mem_size:0x%llx MB\n",
--				(u32)node_id, mem_type, mem_start, mem_size);
--			pr_info("       start_pfn:0x%llx, end_pfn:0x%llx, num_physpages:0x%lx\n",
--				start_pfn, end_pfn, num_physpages);
--			memblock_add_node(PFN_PHYS(start_pfn),
--					  PFN_PHYS(node_psize), node,
-+		case UMA_VIDEO_RAM:
-+			pr_info("Node %d, mem_type:%d\t[%pa], %pa bytes usable\n",
-+				(u32)node_id, mem_type, &mem_start, &mem_size);
-+			memblock_add_node(mem_start, mem_size, node,
- 					  MEMBLOCK_NONE);
- 			break;
- 		case SYSTEM_RAM_RESERVED:
--			pr_info("Node%d: mem_type:%d, mem_start:0x%llx, mem_size:0x%llx MB\n",
--				(u32)node_id, mem_type, mem_start, mem_size);
--			memblock_reserve(((node_id << 44) + mem_start), mem_size << 20);
-+		case VIDEO_ROM:
-+		case ADAPTER_ROM:
-+		case ACPI_TABLE:
-+		case SMBIOS_TABLE:
-+			pr_info("Node %d, mem_type:%d\t[%pa], %pa bytes reserved\n",
-+				(u32)node_id, mem_type, &mem_start, &mem_size);
-+			memblock_reserve(mem_start, mem_size);
-+			break;
-+		/* We should not reserve VUMA_VIDEO_RAM as it overlaps with MMIO */
-+		case VUMA_VIDEO_RAM:
-+		default:
-+			pr_info("Node %d, mem_type:%d\t[%pa], %pa bytes unhandled\n",
-+				(u32)node_id, mem_type, &mem_start, &mem_size);
- 			break;
- 		}
- 	}
-
--- 
-2.34.1
-
+On Mon, Nov 6, 2023 at 8:16=E2=80=AFPM Stefan Wiehler <stefan.wiehler@nokia=
+.com> wrote:
+>
+> rcutree_report_cpu_starting() must be called before
+> clockevents_register_device() to avoid the following lockdep splat trigge=
+red by
+> calling list_add() when CONFIG_PROVE_RCU_LIST=3Dy:
+>
+>   WARNING: suspicious RCU usage
+>   ...
+>   -----------------------------
+>   kernel/locking/lockdep.c:3680 RCU-list traversed in non-reader section!=
+!
+>
+>   other info that might help us debug this:
+>
+>   RCU used illegally from offline CPU!
+>   rcu_scheduler_active =3D 1, debug_locks =3D 1
+>   no locks held by swapper/1/0.
+>   ...
+>   Call Trace:
+>   [<ffffffff8012a434>] show_stack+0x64/0x158
+>   [<ffffffff80a93d98>] dump_stack_lvl+0x90/0xc4
+>   [<ffffffff801c9e9c>] __lock_acquire+0x1404/0x2940
+>   [<ffffffff801cbf3c>] lock_acquire+0x14c/0x448
+>   [<ffffffff80aa4260>] _raw_spin_lock_irqsave+0x50/0x88
+>   [<ffffffff8021e0c8>] clockevents_register_device+0x60/0x1e8
+>   [<ffffffff80130ff0>] r4k_clockevent_init+0x220/0x3a0
+>   [<ffffffff801339d0>] start_secondary+0x50/0x3b8
+>
+> raw_smp_processor_id() is required in order to avoid calling into lockdep
+> before RCU has declared the CPU to be watched for readers.
+>
+> See also commit 29368e093921 ("x86/smpboot:  Move rcu_cpu_starting() earl=
+ier"),
+> commit de5d9dae150c ("s390/smp: move rcu_cpu_starting() earlier") and com=
+mit
+> 99f070b62322 ("powerpc/smp: Call rcu_cpu_starting() earlier").
+>
+> Signed-off-by: Stefan Wiehler <stefan.wiehler@nokia.com>
+> ---
+> - Rename rcu_cpu_starting() to rcutree_report_cpu_starting() due to commi=
+t
+> 448e9f34d91d ("rcu: Standardize explicit CPU-hotplug calls")
+> ---
+>  arch/mips/kernel/smp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+> index 8fbef537fb88..82e2e051b416 100644
+> --- a/arch/mips/kernel/smp.c
+> +++ b/arch/mips/kernel/smp.c
+> @@ -351,10 +351,11 @@ early_initcall(mips_smp_ipi_init);
+>   */
+>  asmlinkage void start_secondary(void)
+>  {
+> -       unsigned int cpu;
+> +       unsigned int cpu =3D raw_smp_processor_id();
+>
+>         cpu_probe();
+>         per_cpu_trap_init(false);
+> +       rcutree_report_cpu_starting(cpu);
+>         mips_clockevent_init();
+>         mp_ops->init_secondary();
+>         cpu_report();
+> @@ -366,7 +367,6 @@ asmlinkage void start_secondary(void)
+>          */
+>
+>         calibrate_delay();
+> -       cpu =3D smp_processor_id();
+>         cpu_data[cpu].udelay_val =3D loops_per_jiffy;
+>
+>         set_cpu_sibling_map(cpu);
+> --
+> 2.31.0
+>
