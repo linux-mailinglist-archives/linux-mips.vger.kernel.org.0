@@ -2,80 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54237E5AB9
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 16:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256B27E5AD5
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 17:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbjKHP7M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 10:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S230081AbjKHQLp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 11:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjKHP7L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 10:59:11 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28D31BC3;
-        Wed,  8 Nov 2023 07:59:08 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 705276000A;
-        Wed,  8 Nov 2023 15:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1699459147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+kB2MAhqd2CZLOXA9zNCWTpxhkyv6CSvJsAidaTRfM8=;
-        b=KKWV5oa4oO9WQ67xnEEwSXBsBlzSskaYTpOkboLkWa5FAVNWFeSdcUgK/5QaocyH62Qu1k
-        TcmmbOUN8DpF27Jw8fuIno/znuahXsLUsmLAFLlMLYEzn9foFKHbiC3yZ7snvoHnzjDnsQ
-        3Wop1gCuH2cYUViRgtcxTAO/dWjCdALBNakXOjYcWAzxyAKpwj/irGRtn5HO3UO69a0epX
-        a6jfLehliImS1qxCAWFp8gvFanv7Admk4FH+Vqly/M5x7Y2hv5gHnV+aDv9A/7cPsqkS0r
-        pk29HXu8SZexmLp88HPpYegT1eFpPPdJWNMTVNFNfDXl5AnYSdZZkEWkUoN4HA==
-Date:   Wed, 8 Nov 2023 16:59:05 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        with ESMTP id S230074AbjKHQLo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 11:11:44 -0500
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F18519A5;
+        Wed,  8 Nov 2023 08:11:42 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3b6a837a2e1so1343991b6e.0;
+        Wed, 08 Nov 2023 08:11:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699459901; x=1700064701;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=egO/3A8usR47pYsFMHy7at49a3WUUkqONQqbQuU8j7Y=;
+        b=uQod2uDabayaXs6n7pwKDCysCHgfTd9wESlvdVVu/fkWxQyzZ9A7WLlQiagmCnXVy/
+         MNk/dfTd9iTDPTgBL00944LlP6QON7nPmmuq6LNrkUX7/e4U9gzyWnp1z3GAR2zMWrmT
+         zI52HfydorbUqrEvI2Zgor+S7ZfCLWBUWUY0Ksgfq4m88rsSgp6NtcbyASZOpWQrHTx8
+         XWvZUvMZgA7Oul39qQeb+WAVbH8PdIBbD458O6GhsqXkAqrOnAmj02lMwbJnSREPqkH4
+         Fp61PR25gxnM72SeSV4M7hSutG/7if41F9ZPNLUfw8egVvxrZK6hiXb7mHCoKprIVKQz
+         /bOw==
+X-Gm-Message-State: AOJu0YzG5Ll5iELF/d99pw9llmLPrWJhhm49rzpE2822eRK/aVpabPXv
+        lumrtbvPV7jeErhKVyjQjA==
+X-Google-Smtp-Source: AGHT+IFG1ydbraxTf3qUlkUHE402Zq2u5RjAY4fdhcYCPQiBAZE+mNt+Ni+JkQlZMBRuNIEkL2d3Ow==
+X-Received: by 2002:a05:6808:15a8:b0:3a9:cfb5:4641 with SMTP id t40-20020a05680815a800b003a9cfb54641mr3241896oiw.48.1699459901513;
+        Wed, 08 Nov 2023 08:11:41 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bg42-20020a05680817aa00b003afc33bf048sm1959000oib.2.2023.11.08.08.11.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Nov 2023 08:11:40 -0800 (PST)
+Received: (nullmailer pid 2284755 invoked by uid 1000);
+        Wed, 08 Nov 2023 16:11:38 -0000
+Date:   Wed, 8 Nov 2023 10:11:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     acpica-devel@lists.linuxfoundation.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-tegra@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hector Martin <marcan@marcan.st>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 6/6] mtd: rawnand: gpio: Rename file
-Message-ID: <20231108165905.4675430e@xps-13>
-In-Reply-To: <20231108-fix-mips-nand-v1-6-5fc5586d04de@linaro.org>
-References: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
-        <20231108-fix-mips-nand-v1-6-5fc5586d04de@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
+        Zhenhua Huang <quic_zhenhuah@quicinc.com>
+Subject: Re: [PATCH RFC 03/17] of: Use -ENODEV consistently in
+ of_iommu_configure()
+Message-ID: <20231108161138.GA2254211-robh@kernel.org>
+References: <0-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
+ <3-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Linus,
+On Fri, Nov 03, 2023 at 01:44:48PM -0300, Jason Gunthorpe wrote:
+> Instead of returning 1 and trying to handle positive error codes just
+> stick to the convention of returning -ENODEV. Remove references to ops
+> from of_iommu_configure(), a NULL ops will already generate an error code.
 
-linus.walleij@linaro.org wrote on Wed, 08 Nov 2023 15:33:54 +0100:
+nit: "iommu: of: ..." or "iommu/of: " for the subject. "of: ..." is 
+generally drivers/of/.
 
-> The implementation of the GPIO NAND controller is just "gpio"
-> with the usecase for NAND implied from the folder nand/raw.
->=20
-> This is not so great when the module gets the name "gpio.ko".
-> Rename the implementation to nand-gpio.c so the module is
-> named nand-gpio.ko which is more reasonable.
->=20
-> We put "nand" first instead of "gpio" because the order is
-> usually <subsystem>-<driver>.c, cf ls drivers/gpio/
-
-Do you mind if we take the "english" version which would rather be
-"gpio-nand-controller.c/o"? I _really_ want people to understand we
-don't emulate the storage but the host part here.
-
-Thanks,
-Miqu=C3=A8l
+> 
+> There is no reason to check dev->bus, if err=0 at this point then the
+> called configure functions thought there was an iommu and we should try to
+> probe it. Remove it.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/iommu/of_iommu.c | 42 +++++++++++++---------------------------
+>  1 file changed, 13 insertions(+), 29 deletions(-)
