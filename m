@@ -2,178 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E47F7E5B33
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 17:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEF67E5BE0
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 18:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjKHQaw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 11:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S231862AbjKHRAr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 12:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjKHQav (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 11:30:51 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369E5131;
-        Wed,  8 Nov 2023 08:30:48 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 734F540007;
-        Wed,  8 Nov 2023 16:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1699461046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VLbjMm8CapA/rh6ea6MaxhFQiWRqSIGNi9ooV+XSXQA=;
-        b=H5RcxR+gyjvPBRicNUXoyZogtVKqafMoV4GpEPPSbKVgjHLAgpKUtwjbwf4VBCZ3KXL378
-        H3XTfZiJ7R3PoIf/Tuwk80t5DQ1lW41yelvn/L9EyeWlFBgTXNPL34mzfl4bCHWacad8jW
-        Nmdo4+OlrFSynigCkq0QfcdJTWsLcziTLA00xNqXsWHOLwG7A3kU7Vh9BzOa5ZpYfmamJa
-        Qg62h3GAdcVzmKQ50MWbA9SRUKZoTXhkKlA5hUJPCWSC+E+e32DegCENV4M4ogtFRHqmCD
-        QFYFIW6r3RJebjhatR87lXd10VOalIhY5R6ZjOLqbccVwWhlIldO9QX+NdYT5A==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        vladimir.kondratiev@intel.com,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v2 05/10] MIPS: Refactor mips_cps_core_entry implementation
-In-Reply-To: <20231027221106.405666-6-jiaxun.yang@flygoat.com>
-References: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
- <20231027221106.405666-6-jiaxun.yang@flygoat.com>
-Date:   Wed, 08 Nov 2023 17:30:46 +0100
-Message-ID: <87o7g46wcp.fsf@BL-laptop>
+        with ESMTP id S232249AbjKHRAq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 12:00:46 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AEC1FFC
+        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 09:00:43 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-5872b8323faso3844181eaf.1
+        for <linux-mips@vger.kernel.org>; Wed, 08 Nov 2023 09:00:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699462842; x=1700067642; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1LRS4MOzwpv79nEdyxX9W+Fzi/lnfht07XTGfi+1KqQ=;
+        b=xm2zYdHdATIPwMb+Pzb/gwvnCgP8i28SFAzA7dtEO+O8HxNrPvGKqOIxAgKbAS1phM
+         6YOhSIyIzYnTWXlbdcq9SOpw7lNuk+1kSLjK5jGwFaTslcIja4PlJIyLDccs9/Dn5Rd0
+         srSpi5K5vrY7tFa+XUXCbnzgQKlk8D9vrB+4Z7TPDNIZZnxS0eMmD7bIs2j+wuNvGbxt
+         yJ4xJEfTEfh2wPanjZt+6pwuZVTAwQuKD9izTG0NFMkKYdFDGu4Wd1lh1b88Bg+fmCGE
+         I00F/2td8Q1KdHM3zZii9aivQ00ulfdKTPA9i2cynCqGzeJJrVzt6I/BAvHmMKp0WlWc
+         L+SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699462842; x=1700067642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1LRS4MOzwpv79nEdyxX9W+Fzi/lnfht07XTGfi+1KqQ=;
+        b=SwvAIIzua290XwGjApbEG+OeiO2Gvz/Ktl6SNjA+TH8p+EnCtaJN0wajyTBMTnpByF
+         /+WH/MLJZdf6Wku3ZXSiRqyOEZHllY/qXg5LL/HXCs1fxAidzFAOW6xyFNirJQbGAMlq
+         MXwdY8FN1ua4JGDxRtRLH3p9SfMC3byv+Hwr8AAhv6+ISwGuOextzUaQQ/6FoMywcao/
+         S9+mBJFLSI+gtN90ISotiUGRYq/NAwZRyrNdv8LbY+ZtrOB66tzAlVQGh3S9QT54uv0h
+         CtGTrhgQVQGgs1kdLOR8VMJ+GoPTv9izIszZGWhN+MZk9nXhRiJ+3B+W/mdIDndC22At
+         FVkA==
+X-Gm-Message-State: AOJu0YyTTGq7jWE91FQJo7ZjfSnjoR+DeGkzuy5muwjk1E6HlFRs+tL7
+        lfgQgMIEHIzouxmsa4KRVbyys1MZ8Is1s8eq5pmsxQ==
+X-Google-Smtp-Source: AGHT+IFUowk4ELsOivnzaXxc0QlUV4Wvcfh03Hm5SSyMQjwcPTJCFQB+7xIvrXwxFUaSBNJXJhJv8dNqTjB0k78gAdI=
+X-Received: by 2002:a4a:bd87:0:b0:589:df75:2d83 with SMTP id
+ k7-20020a4abd87000000b00589df752d83mr1373195oop.1.1699462842423; Wed, 08 Nov
+ 2023 09:00:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gregory.clement@bootlin.com
+References: <20231105163040.14904-1-pbonzini@redhat.com> <20231105163040.14904-28-pbonzini@redhat.com>
+In-Reply-To: <20231105163040.14904-28-pbonzini@redhat.com>
+From:   Anish Moorthy <amoorthy@google.com>
+Date:   Wed, 8 Nov 2023 09:00:00 -0800
+Message-ID: <CAF7b7mrGYuyjyEPAesYzZ6+KDuNAmvRxEonT7JC8NDPsSP+qDA@mail.gmail.com>
+Subject: Re: [PATCH 27/34] KVM: selftests: Introduce VM "shape" to allow tests
+ to specify the VM type
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Matlack <dmatlack@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Jiaxun,
+This commit breaks the arm64 selftests build btw: looks like a simple overs=
+ight?
 
-> Now the exception vector for CPS systems are allocated on-fly
-> with memblock as well.
->
-> It will try to allocate from KSEG1 first, and then try to allocate
-> in low 4G if possible.
->
-> The main reset vector is now generated by uasm, to avoid tons
-> of patches to the code. Other vectors are copied to the location
-> later.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-
-> +
-> +static int __init setup_cps_vecs(void)
-> +{
-[...]
-> +
-> +	/* We want to ensure cache is clean before writing uncached mem */
-> +	blast_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) +
-> BEV_VEC_SIZE);
-
-In my case this call failed because when setup_cps_vecs is called, the
-cache information are not initialized yet!
-
-As a workaround I moved the cpu_cache_init() call before
-plat_smp_setup() in the /arch/mips/kernel/setup.c file.
-
-Obviously it is not the right thing to do, but it shows that the cache
-related function are called too early. For example, in
-blast_dcache_range, the value returned by cpu_dcache_line_size was 0
-instead of 64, because the value cpu_data[0].dcache.linesz was not set
-yet.
-
-So I wonder who it managed to work in your setup. What is the machine
-running in QEMU ?
-
-Does it use someting like the following line ?
-#define cpu_dcache_line_size()       32
-
-
-> +	bc_wback_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
-> +	__sync();
-> +
-> +	cps_vec = (void *)TO_UNCAC(cps_vec_pa);
-> +	mips_cps_build_core_entry(cps_vec);
-> +
-> +	memcpy(cps_vec + 0x200, &excep_tlbfill, 0x80);
-> +	memcpy(cps_vec + 0x280, &excep_xtlbfill, 0x80);
-> +	memcpy(cps_vec + 0x300, &excep_cache, 0x80);
-> +	memcpy(cps_vec + 0x380, &excep_genex, 0x80);
-> +	memcpy(cps_vec + 0x400, &excep_intex, 0x80);
-> +	memcpy(cps_vec + 0x480, &excep_ejtag, 0x80);
-> +
-> +	/* Make sure no prefetched data in cache */
-> +	blast_inv_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) + BEV_VEC_SIZE);
-> +	bc_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
-> +	__sync();
-> +
-> +	return 0;
-> +}
-
-[...]
-
->  	/* If we have an FPU, enroll ourselves in the FPU-full mask */
-> @@ -110,10 +241,14 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
->  {
->  	unsigned ncores, core_vpes, c, cca;
->  	bool cca_unsuitable, cores_limited;
-> -	u32 *entry_code;
->  
->  	mips_mt_set_cpuoptions();
->  
-> +	if (!core_entry_reg) {
-> +		pr_err("core_entry address unsuitable, disabling smp-cps\n");
-> +		goto err_out;
-> +	}
-> +
->  	/* Detect whether the CCA is unsuited to multi-core SMP */
->  	cca = read_c0_config() & CONF_CM_CMASK;
->  	switch (cca) {
-> @@ -145,20 +280,6 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
->  			(cca_unsuitable && cpu_has_dc_aliases) ? " & " : "",
->  			cpu_has_dc_aliases ? "dcache aliasing" : "");
->  
-> -	/*
-> -	 * Patch the start of mips_cps_core_entry to provide:
-> -	 *
-> -	 * s0 = kseg0 CCA
-> -	 */
-> -	entry_code = (u32 *)&mips_cps_core_entry;
-> -	uasm_i_addiu(&entry_code, 16, 0, cca);
-> -	UASM_i_LA(&entry_code, 17, (long)mips_gcr_base);
-> -	BUG_ON((void *)entry_code > (void *)&mips_cps_core_entry_patch_end);
-> -	blast_dcache_range((unsigned long)&mips_cps_core_entry,
-> -			   (unsigned long)entry_code);
-> -	bc_wback_inv((unsigned long)&mips_cps_core_entry,
-> -		     (void *)entry_code - (void *)&mips_cps_core_entry);
-> -	__sync();
-
-The original code here was called later during boot from
-kernel_init_freeable() which is called by kernel_init() after all the
-calls in start_kernel. That's why there were no issue before the move.
-
-Gregory
-
->  
->  	/* Allocate core boot configuration structs */
->  	ncores = mips_cps_numcores(0);
-> @@ -213,7 +334,7 @@ static void boot_core(unsigned int core, unsigned int vpe_id)
->  	mips_cm_lock_other(0, core, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
->  
->  	/* Set its reset vector */
-> -	write_gcr_co_reset_base(CKSEG1ADDR((unsigned long)mips_cps_core_entry));
-> +	write_gcr_co_reset_base(core_entry_reg);
->  
->  	/* Ensure its coherency is disabled */
->  	write_gcr_co_coherence(0);
-> @@ -290,7 +411,6 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
->  	unsigned vpe_id = cpu_vpe_id(&cpu_data[cpu]);
->  	struct core_boot_config *core_cfg = &mips_cps_core_bootcfg[core];
->  	struct vpe_boot_config *vpe_cfg = &core_cfg->vpe_config[vpe_id];
-> -	unsigned long core_entry;
->  	unsigned int remote;
->  	int err;
-> 
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+$ cd ${LINUX_ROOT}/tools/testing/selftests/kvm
+$ CROSS_COMPILE=3Daarch64-linux-gnu- ARCH=3Darm64 make
+# ...
+aarch64/page_fault_test.c: In function =E2=80=98run_test=E2=80=99:
+aarch64/page_fault_test.c:708:28: error: incompatible type for
+argument 1 of =E2=80=98____vm_create=E2=80=99
+  708 |         vm =3D ____vm_create(mode);
+         |                            ^~~~
+         |                            |
+         |                            enum vm_guest_mode
+In file included from include/kvm_util.h:10,
+                 from aarch64/page_fault_test.c:14:
+include/kvm_util_base.h:806:46: note: expected =E2=80=98struct vm_shape=E2=
+=80=99 but
+argument is of type =E2=80=98enum vm_guest_mode=E2=80=99
+  806 | struct kvm_vm *____vm_create(struct vm_shape shape);
