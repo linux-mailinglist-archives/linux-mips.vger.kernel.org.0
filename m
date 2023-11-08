@@ -2,133 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF467E5E84
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 20:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C307E5E5D
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 20:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjKHT1D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 14:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S230118AbjKHTLa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 14:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjKHT1C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 14:27:02 -0500
-X-Greylist: delayed 965 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Nov 2023 11:27:00 PST
-Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF072113
-        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 11:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=t0PhdPpL9ITFkVHWShkqwebGTKveq1EAqYCULbPtu5I=;
-        b=HOH6miiY3B+TPoRIYH1MiG21R2R+dh1yYG8FVwEQyDXIhn1Ao3kJLxPWfeHQZl9v5C+Z5Chab0l7C
-         HikW4LWGdU4we9PVHZJww6fDwD1yj+77Jj5I/65wiERNQSINaBzToUrUeOoJSPC/FGkywpiTFZYc/w
-         G5VUedzBJU7HvjvKlrHVnE6S2n/CsFEdiawBE7NIbof73jQYss2IVV4HvlcVLH+T8ZX3pzF6bx9t1o
-         bMg34L0eMDuXbRC6rLKy6PjcIUoJKPRTeePAKA2fUAAx68YXNhrJFCda5nk8ULj+i07dneXw+hSXiH
-         JNZyftfJd+q/T1+u1UqHapE9CdUwJnw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=t0PhdPpL9ITFkVHWShkqwebGTKveq1EAqYCULbPtu5I=;
-        b=xWIbuz4e/7unjVoPKeu7dePVTkZEjAQgGTQa2oJ1BHdQOZexDAZtyLcvnX3YqDagH5rAul9U45aVe
-         EhYmmucCA==
-X-HalOne-ID: 87baf6c1-7e6a-11ee-909c-a34c9b1f9040
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay2 (Halon) with ESMTPSA
-        id 87baf6c1-7e6a-11ee-909c-a34c9b1f9040;
-        Wed, 08 Nov 2023 19:10:52 +0000 (UTC)
-Date:   Wed, 8 Nov 2023 20:10:50 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        with ESMTP id S229610AbjKHTLa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 14:11:30 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02CB210A;
+        Wed,  8 Nov 2023 11:11:27 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6ce31c4a653so4418730a34.3;
+        Wed, 08 Nov 2023 11:11:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699470687; x=1700075487;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1u7VYnOagIS9pU6lT0JPQUPsCHt998/w+J9rxTrBSoA=;
+        b=XSR6jNL9ozufKPBv09tppwB9pjHHuH/c3aYJm/Pmvn6B7V6StsjBwqjJfpTrF/Gir7
+         AOrqjOVsSHnNxSkz6jIWhR/opGcQY1aHTpEUPxWnnsylK5v7TTc4gPrbyAYbyLoQi4cw
+         f4WXpxF1+uOMp0xF6ctjxaF5vEBbeBdhOn2q3PQGtzcTv1zyss5ItTy49hoXr9Di6bcd
+         xChZlswVVwEdLHyeuksqfkG4HPG88//2wxs0nqkAImUlNRZkB2vljj4jypL3JM2mWfX8
+         OH9TVOrB3RPzzihY98klFE8SYs6zl3vOfyFawUUtkHhkISbjdfHotMl5X98DkLA5wLEq
+         G3vw==
+X-Gm-Message-State: AOJu0Yxzlt3NX6RkuSi5JKxrd3fIV0KLVVFlprIYT1kwAch4LR1Q8B62
+        +wGJ1BajIZ2mctLaX0rM6A==
+X-Google-Smtp-Source: AGHT+IEQxcoP2w100Rf4cT1thURGIfqiKk7j/H0pCBg1+7YdEio2W+/30kOdWF9bH2ez152xfdG2Sg==
+X-Received: by 2002:a05:6830:1bc6:b0:6c4:c3ac:a9dc with SMTP id v6-20020a0568301bc600b006c4c3aca9dcmr3256504ota.21.1699470687064;
+        Wed, 08 Nov 2023 11:11:27 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id az5-20020a056830458500b006c4727812fdsm1983578otb.15.2023.11.08.11.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Nov 2023 11:11:26 -0800 (PST)
+Received: (nullmailer pid 2771930 invoked by uid 1000);
+        Wed, 08 Nov 2023 19:11:25 -0000
+Date:   Wed, 8 Nov 2023 13:11:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Geoff Levand <geoff@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Helge Deller <deller@gmx.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Timur Tabi <timur@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 09/22] [v2] arch: fix asm-offsets.c building with
- -Wmissing-prototypes
-Message-ID: <20231108191050.GA171153@ravnborg.org>
-References: <20231108125843.3806765-1-arnd@kernel.org>
- <20231108125843.3806765-10-arnd@kernel.org>
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        Howard Harte <hharte@magicandroidapps.com>
+Subject: Re: [PATCH 2/6] dt-bindings: mtd: Rewrite gpio-control-nand in schema
+Message-ID: <20231108191125.GA2754195-robh@kernel.org>
+References: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
+ <20231108-fix-mips-nand-v1-2-5fc5586d04de@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231108125843.3806765-10-arnd@kernel.org>
+In-Reply-To: <20231108-fix-mips-nand-v1-2-5fc5586d04de@linaro.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 08, 2023 at 01:58:30PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Nov 08, 2023 at 03:33:50PM +0100, Linus Walleij wrote:
+> This creates a schema for GPIO controlled NAND. The txt
+> schema was old and wrong.
 > 
-> When -Wmissing-prototypes is enabled, the some asm-offsets.c files fail
-> to build, even when this warning is disabled in the Makefile for normal
-> files:
-> 
-> arch/sparc/kernel/asm-offsets.c:22:5: error: no previous prototype for 'sparc32_foo' [-Werror=missing-prototypes]
-> arch/sparc/kernel/asm-offsets.c:48:5: error: no previous prototype for 'foo' [-Werror=missing-prototypes]
-> 
-> Address this by making use of the same trick as x86, marking these
-> functions as 'static __used' to avoid the need for a prototype
-> by not drop them in dead-code elimination.
-> 
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Link: https://lore.kernel.org/lkml/CAK7LNARfEmFk0Du4Hed19eX_G6tUC5wG0zP+L1AyvdpOF4ybXQ@mail.gmail.com/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Looks good. I sometimes looks at sparc patches so I looked at this one.
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> Mark the old way of passing GPIOs in a long array as
+> deprecated and encourage per-pin GPIO assignments with
+> the named nnn-gpios phandles.
+
+We have 1 user upstream with only a single commit adding it in 2017. 
+This doesn't seem like something that's going to gain new users either. 
+Is it really worth modernizing this binding? 
+
+Rob
