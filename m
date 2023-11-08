@@ -2,60 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57127E5927
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 15:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FBD7E592B
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 15:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344457AbjKHOeU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 09:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S234627AbjKHOea (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 09:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbjKHOeH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 09:34:07 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929D91FE1
-        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 06:34:05 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50949b7d7ffso9335184e87.0
-        for <linux-mips@vger.kernel.org>; Wed, 08 Nov 2023 06:34:05 -0800 (PST)
+        with ESMTP id S1344321AbjKHOeT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 09:34:19 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D91FD5
+        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 06:34:06 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-507bd644a96so10014042e87.3
+        for <linux-mips@vger.kernel.org>; Wed, 08 Nov 2023 06:34:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699454044; x=1700058844; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699454045; x=1700058845; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pGzclwbFLS82d1Yy6hJpVSYEp7mUVdHhXoDoAeHaQ9o=;
-        b=oVABV4XWqQX4uB44dRsT21hjjoqdkvOgsOImOXTAtpUICemdRUdvYHEH8YLYH5PtT3
-         4fyTASLfBvHLpqJ+VPkTw1r+RqvuyPD4stWb5qv0K/DHFOyqz1udM4zi4zXIbb95DMzZ
-         bkH6Qv7nvR4e7n752njaUhxNhOR0TRIzGwjn71sdhhcP0G/8yeKfUMGFcZgJvdB29RWe
-         tcU8zC1LztlpGR0/g7NiI8vWMjazb4cccWzCjlvsloZetpCM/OmJ3WnRIZIU4C3MzmWU
-         dVSneU0XTqZRu1ZlBGClW9kI4CWBNBVoiZlZ6er2n3MHMa3zBvArToJ26mp35Q6526Y0
-         ogYw==
+        bh=78GU8j4+SoSSNRmxCZnZFjlRCHFt/xGux/FgF9FARuk=;
+        b=BA5E9/N+hjkCBkXNo2GSEYWwgGb4ioYhqdzF7T0DzpCReIDP/433BPXtvE85AJrAkz
+         GN3ACgC45g1C15b6V/fsatzmsaGVpEKBCeZcG5faFhyGLkzC2Wrk104ejAn4EopzQ5ZR
+         dHgyH+FM8KHQ/MjXLxt3mGYxpF0OVPMniExqnVf4+ggq44GGKiNTa74brIbsTRO70ZX+
+         jaGEjzu8gA5stmVsYCvAkPDka+SrXLJfGGLrl5PdRccl+Q+rFLWJLV+kz4XZm/wiECH1
+         yuL0WY6JFltpZj8rBkG0vv+romuVYkHpPbKQGfje959be4/CUncvxAQsrbL2+hevnkhh
+         OaNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699454044; x=1700058844;
+        d=1e100.net; s=20230601; t=1699454045; x=1700058845;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pGzclwbFLS82d1Yy6hJpVSYEp7mUVdHhXoDoAeHaQ9o=;
-        b=ZIGC6bGpiboucFFpFYz88TSeOd2Rhql1ZZeW4HX4qMi6rXke7MjWwH4EdrjhjeKIBB
-         GFzo7M2phxNtMJ2IgqlQpC2nHUYgLREHrkFH6Uh64TvViOtASA1P2NbJZwhYsOFDWR1U
-         uxt8vZFkO+Jqp2qf4eEeiGFgZB0x3+S32aU9sssoSHwc2ZbZ232Rxf0tREjOm0sjPTN5
-         vHKTHLtFC7md0l0ffFM/27/6oiu9cRpdmMjwbU1JFEfBYDopRcU9jIZ1o6P0aKq8WADg
-         a96QzMczYKYhmBORJ2GhvKZePoGneiB0X5Ibvwt462sGDkKNfh4O1CMvA1pyUPuw5nO2
-         lTwQ==
-X-Gm-Message-State: AOJu0Yz4NZeh7wRBQ/nEk51IFSpzXpPrmglPc83Et9JalT5CWm2xIGLC
-        rbuLKyoetFBABL7S3nzFaSlW/w==
-X-Google-Smtp-Source: AGHT+IHO/EX+mYFpXV9cnozSua00aYKVLxHpApEI0ijPX+/t/mJFnU4RbkNl70WWo+NHt88Fl9uYmA==
-X-Received: by 2002:ac2:5a1a:0:b0:509:4541:5e97 with SMTP id q26-20020ac25a1a000000b0050945415e97mr1368218lfn.29.1699454043887;
-        Wed, 08 Nov 2023 06:34:03 -0800 (PST)
+        bh=78GU8j4+SoSSNRmxCZnZFjlRCHFt/xGux/FgF9FARuk=;
+        b=eVt11nPMNGBBJId/rIu8NQ39uoLGc+xCKtAF5QGTGGrvCT2tRduDbfRK/Fo8QQcWJ4
+         ib3t5C3l+2bXumBTUX+kBMDw9i3bjRHrcLgz9gOgnb2/ROoMqK92l1pcFGvLeN1Ad4aq
+         WbjoE2nrs2QSa5I7nDk1BGOyb/feUAG55R2yn6oT+GTMInWSZ1UJ81fCyTAjMZnAcid9
+         9Rb4r+4aOsOTQjh9RR0gy64yUnVssGJZt1M10iRhk1bRDFYb2UkXwLudLQfPCQ4TodG+
+         1cflw3SCDefZAx/AnBtus3qyhpSkDXzgYlBeYVED2rzH3Voh9OCrA9Bxzb3ZQItI8XHA
+         OSSw==
+X-Gm-Message-State: AOJu0YyFvhLg/zhIlDVJd2APMR4cocSqDvDkaQbDBx5rbLixW/IQAXJV
+        Lw/NZdmSZ9zWW4tU7x0VlbERag==
+X-Google-Smtp-Source: AGHT+IH6IcpUsu8l3iZ6cm3VeKSRvHVjWLm4/aWcEw/O+09FccupiAh8GMMm2qcpdhgkIocbk45f1A==
+X-Received: by 2002:a19:9110:0:b0:507:b935:9f5f with SMTP id t16-20020a199110000000b00507b9359f5fmr1441210lfd.24.1699454044974;
+        Wed, 08 Nov 2023 06:34:04 -0800 (PST)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id q10-20020ac24a6a000000b00507a3b8b007sm686773lfp.110.2023.11.08.06.34.02
+        by smtp.gmail.com with ESMTPSA id q10-20020ac24a6a000000b00507a3b8b007sm686773lfp.110.2023.11.08.06.34.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Nov 2023 06:34:03 -0800 (PST)
+        Wed, 08 Nov 2023 06:34:04 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 08 Nov 2023 15:33:53 +0100
-Subject: [PATCH 5/6] mtd: rawnand: gpio: Support standard nand width
+Date:   Wed, 08 Nov 2023 15:33:54 +0100
+Subject: [PATCH 6/6] mtd: rawnand: gpio: Rename file
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231108-fix-mips-nand-v1-5-5fc5586d04de@linaro.org>
+Message-Id: <20231108-fix-mips-nand-v1-6-5fc5586d04de@linaro.org>
 References: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
 In-Reply-To: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
 To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
@@ -78,36 +78,39 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The standard property for describing the band width of a NAND
-memory is "nand-bus-width" not "bank-width". The new bindings
-support both so make Linux check both in priority order.
+The implementation of the GPIO NAND controller is just "gpio"
+with the usecase for NAND implied from the folder nand/raw.
+
+This is not so great when the module gets the name "gpio.ko".
+Rename the implementation to nand-gpio.c so the module is
+named nand-gpio.ko which is more reasonable.
+
+We put "nand" first instead of "gpio" because the order is
+usually <subsystem>-<driver>.c, cf ls drivers/gpio/
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/mtd/nand/raw/gpio.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/mtd/nand/raw/Makefile                | 2 +-
+ drivers/mtd/nand/raw/{gpio.c => nand-gpio.c} | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/raw/gpio.c b/drivers/mtd/nand/raw/gpio.c
-index 5553101c709c..d5bd245b0c0d 100644
---- a/drivers/mtd/nand/raw/gpio.c
-+++ b/drivers/mtd/nand/raw/gpio.c
-@@ -183,7 +183,15 @@ static int gpio_nand_get_config(struct device *dev,
- {
- 	u32 val;
- 
--	if (!device_property_read_u32(dev, "bank-width", &val)) {
-+	/* The preferred binding takes precedence */
-+	if (!device_property_read_u32(dev, "nand-bus-width", &val)) {
-+		if (val == 16) {
-+			chip->options |= NAND_BUSWIDTH_16;
-+		} else if (val != 8) {
-+			dev_err(dev, "invalid nand-bus-width %u\n", val);
-+			return -EINVAL;
-+		}
-+	} else if (!device_property_read_u32(dev, "bank-width", &val)) {
- 		if (val == 2) {
- 			chip->options |= NAND_BUSWIDTH_16;
- 		} else if (val != 1) {
+diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
+index 25120a4afada..f0e377332812 100644
+--- a/drivers/mtd/nand/raw/Makefile
++++ b/drivers/mtd/nand/raw/Makefile
+@@ -18,7 +18,7 @@ obj-$(CONFIG_MTD_NAND_NANDSIM)		+= nandsim.o
+ obj-$(CONFIG_MTD_NAND_CS553X)		+= cs553x_nand.o
+ obj-$(CONFIG_MTD_NAND_NDFC)		+= ndfc.o
+ obj-$(CONFIG_MTD_NAND_ATMEL)		+= atmel/
+-obj-$(CONFIG_MTD_NAND_GPIO)		+= gpio.o
++obj-$(CONFIG_MTD_NAND_GPIO)		+= nand-gpio.o
+ omap2_nand-objs := omap2.o
+ obj-$(CONFIG_MTD_NAND_OMAP2) 		+= omap2_nand.o
+ obj-$(CONFIG_MTD_NAND_OMAP_BCH_BUILD)	+= omap_elm.o
+diff --git a/drivers/mtd/nand/raw/gpio.c b/drivers/mtd/nand/raw/nand-gpio.c
+similarity index 100%
+rename from drivers/mtd/nand/raw/gpio.c
+rename to drivers/mtd/nand/raw/nand-gpio.c
 
 -- 
 2.34.1
