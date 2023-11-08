@@ -2,116 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FBD7E592B
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 15:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BAC7E59C3
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 16:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbjKHOea (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 09:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S233115AbjKHPK5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 10:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344321AbjKHOeT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 09:34:19 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D91FD5
-        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 06:34:06 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-507bd644a96so10014042e87.3
-        for <linux-mips@vger.kernel.org>; Wed, 08 Nov 2023 06:34:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699454045; x=1700058845; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=78GU8j4+SoSSNRmxCZnZFjlRCHFt/xGux/FgF9FARuk=;
-        b=BA5E9/N+hjkCBkXNo2GSEYWwgGb4ioYhqdzF7T0DzpCReIDP/433BPXtvE85AJrAkz
-         GN3ACgC45g1C15b6V/fsatzmsaGVpEKBCeZcG5faFhyGLkzC2Wrk104ejAn4EopzQ5ZR
-         dHgyH+FM8KHQ/MjXLxt3mGYxpF0OVPMniExqnVf4+ggq44GGKiNTa74brIbsTRO70ZX+
-         jaGEjzu8gA5stmVsYCvAkPDka+SrXLJfGGLrl5PdRccl+Q+rFLWJLV+kz4XZm/wiECH1
-         yuL0WY6JFltpZj8rBkG0vv+romuVYkHpPbKQGfje959be4/CUncvxAQsrbL2+hevnkhh
-         OaNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699454045; x=1700058845;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=78GU8j4+SoSSNRmxCZnZFjlRCHFt/xGux/FgF9FARuk=;
-        b=eVt11nPMNGBBJId/rIu8NQ39uoLGc+xCKtAF5QGTGGrvCT2tRduDbfRK/Fo8QQcWJ4
-         ib3t5C3l+2bXumBTUX+kBMDw9i3bjRHrcLgz9gOgnb2/ROoMqK92l1pcFGvLeN1Ad4aq
-         WbjoE2nrs2QSa5I7nDk1BGOyb/feUAG55R2yn6oT+GTMInWSZ1UJ81fCyTAjMZnAcid9
-         9Rb4r+4aOsOTQjh9RR0gy64yUnVssGJZt1M10iRhk1bRDFYb2UkXwLudLQfPCQ4TodG+
-         1cflw3SCDefZAx/AnBtus3qyhpSkDXzgYlBeYVED2rzH3Voh9OCrA9Bxzb3ZQItI8XHA
-         OSSw==
-X-Gm-Message-State: AOJu0YyFvhLg/zhIlDVJd2APMR4cocSqDvDkaQbDBx5rbLixW/IQAXJV
-        Lw/NZdmSZ9zWW4tU7x0VlbERag==
-X-Google-Smtp-Source: AGHT+IH6IcpUsu8l3iZ6cm3VeKSRvHVjWLm4/aWcEw/O+09FccupiAh8GMMm2qcpdhgkIocbk45f1A==
-X-Received: by 2002:a19:9110:0:b0:507:b935:9f5f with SMTP id t16-20020a199110000000b00507b9359f5fmr1441210lfd.24.1699454044974;
-        Wed, 08 Nov 2023 06:34:04 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id q10-20020ac24a6a000000b00507a3b8b007sm686773lfp.110.2023.11.08.06.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Nov 2023 06:34:04 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 08 Nov 2023 15:33:54 +0100
-Subject: [PATCH 6/6] mtd: rawnand: gpio: Rename file
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231108-fix-mips-nand-v1-6-5fc5586d04de@linaro.org>
-References: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
-In-Reply-To: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        with ESMTP id S233898AbjKHPKv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 10:10:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2419A1FCA;
+        Wed,  8 Nov 2023 07:10:49 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8E3C433CC;
+        Wed,  8 Nov 2023 15:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699456248;
+        bh=ubRWv4gCHYtZyc/7EUxKBrb1M8Jq2gNnH2Iv89hahkg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V4wNromlDBNArj+XlVHbk1Tpho83VHKj4KF3u+g8D/gDHOgmbzk9TF5F0k0bfjyJ5
+         QAa+SJ1H1vdt9z6QLXRKqy3OD3OdIvi0IIM6oR9t+f/Qou1n/kmZp3N4Ld5+Em6SUX
+         C152TcjhS6BX54Dd5mExY/uqbFmfwaVKqqV5higpeeV5QYXEeI2g8nKEM8QO7JpfaW
+         oYvzN3/QTGIj+pp0Nd5j3aFNPnFwrr1RCnhA/mv97Odgb/1aJ2xdCVJdaJgtaQHSY0
+         fqhoFzKt0Xnl3SB0XmmHuBK+2Zwe0i1mRrDK0QRCpnefsPz2sjmCZbZODNGq5w3ycl
+         CDBBZ1wKet15w==
+Date:   Wed, 8 Nov 2023 07:10:44 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Geoff Levand <geoff@infradead.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Guo Ren <guoren@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.4
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Helge Deller <deller@gmx.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Timur Tabi <timur@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 17/22] powerpc: ps3: move udbg_shutdown_ps3gelic
+ prototype
+Message-ID: <20231108071044.6abdf09e@kernel.org>
+In-Reply-To: <1b3ccc4a-41f7-46ad-9c5c-5ef44a96426e@infradead.org>
+References: <20231108125843.3806765-1-arnd@kernel.org>
+        <20231108125843.3806765-18-arnd@kernel.org>
+        <1b3ccc4a-41f7-46ad-9c5c-5ef44a96426e@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The implementation of the GPIO NAND controller is just "gpio"
-with the usecase for NAND implied from the folder nand/raw.
+On Wed, 8 Nov 2023 14:18:09 +0000 Geoff Levand wrote:
+> Seems good to me.  I'll test it next chance I get.
+> 
+> Signed-off-by: Geoff Levand <geoff@infradead.org>
 
-This is not so great when the module gets the name "gpio.ko".
-Rename the implementation to nand-gpio.c so the module is
-named nand-gpio.ko which is more reasonable.
+Seems like this is best routed via powerpc:
 
-We put "nand" first instead of "gpio" because the order is
-usually <subsystem>-<driver>.c, cf ls drivers/gpio/
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/mtd/nand/raw/Makefile                | 2 +-
- drivers/mtd/nand/raw/{gpio.c => nand-gpio.c} | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index 25120a4afada..f0e377332812 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -18,7 +18,7 @@ obj-$(CONFIG_MTD_NAND_NANDSIM)		+= nandsim.o
- obj-$(CONFIG_MTD_NAND_CS553X)		+= cs553x_nand.o
- obj-$(CONFIG_MTD_NAND_NDFC)		+= ndfc.o
- obj-$(CONFIG_MTD_NAND_ATMEL)		+= atmel/
--obj-$(CONFIG_MTD_NAND_GPIO)		+= gpio.o
-+obj-$(CONFIG_MTD_NAND_GPIO)		+= nand-gpio.o
- omap2_nand-objs := omap2.o
- obj-$(CONFIG_MTD_NAND_OMAP2) 		+= omap2_nand.o
- obj-$(CONFIG_MTD_NAND_OMAP_BCH_BUILD)	+= omap_elm.o
-diff --git a/drivers/mtd/nand/raw/gpio.c b/drivers/mtd/nand/raw/nand-gpio.c
-similarity index 100%
-rename from drivers/mtd/nand/raw/gpio.c
-rename to drivers/mtd/nand/raw/nand-gpio.c
-
--- 
-2.34.1
-
+Acked-by: Jakub Kicinski <kuba@kernel.org>
