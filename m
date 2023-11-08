@@ -2,127 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164BE7E5876
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 15:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F22B7E590F
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 15:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjKHOSf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 09:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
+        id S232680AbjKHOeE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 09:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjKHOSe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 09:18:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD71716;
-        Wed,  8 Nov 2023 06:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=oPbIgwC0BijVgGIquFkJt/4vZ7saVONMlD6xtHIWlpI=; b=Ce8QxVd4WKG0h9ztVM/Vn/nozc
-        8DRtZ9C1JiuIIVlzxZxS+Ui3PxxM3jqb/akrMqXYO3WvQUBJmaQyrGweyeK/v/2+8fZJtis97EdQ/
-        Z2OUj+WkOgKAiPwjdTmxLpAN/0e+qc+yEGVcCGOKaE6IPc3x5sP1qOZYrVD/iYkmeJ7ckobeBHTNA
-        IarXDpeU/s6fQAOkNZdunXkH+NJj5F0m3DXdHv+wbdxzqwV/TXUawSYG3lJPeRoYipVWG2Yq80nQd
-        BOosblKbS23sgiPA/jNunjiRIP4lrtzpk4Tekhmsx6ugm9zT+y/qPe6q2ru9aKlrV+bDPpPIT9NHA
-        JfjaNGoA==;
-Received: from [2001:8a0:6c72:c100:c7fb:dbc0:2c8e:ab9a]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1r0jNp-001S65-JA; Wed, 08 Nov 2023 14:18:18 +0000
-Message-ID: <1b3ccc4a-41f7-46ad-9c5c-5ef44a96426e@infradead.org>
-Date:   Wed, 8 Nov 2023 14:18:09 +0000
+        with ESMTP id S1344630AbjKHOeB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 09:34:01 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA441FCA
+        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 06:33:59 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-507a62d4788so9484092e87.0
+        for <linux-mips@vger.kernel.org>; Wed, 08 Nov 2023 06:33:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699454037; x=1700058837; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YcULZ9PGcbiz4pOSYdWqK1KBS4j8l5GIDZ+NaSWycPw=;
+        b=zvKBXC5mGb15nr6GNShso8tgMsgpfhx1kHY/rv2v7yVw3RJwDRmTQiDu6WQ+j4UY5N
+         j1AG0Pd4DRPcJjypqJk9r2zsve8IWmNDYFjoZhawTw2V0ubnmZWtv8eyCbHRjl+WrGz4
+         lZmy5tYqAF/2nueJ4Qz41Mnpk0rYl/NqWHtYjCE9pkmCMrtTEc8afZes4/J/W1wbpD54
+         D6sgIzOL/yFlDDWQJiwlaUsuwKvwi8NquNGbkfyWioKEgQ7kE2NVb34MP+J5ExOwiTQX
+         3aj6BoDaJMos1dj8rO8Udy4BAIkUolOrr4SnZsawG12kSfUeiutzGnSGrUSH9cyluPSC
+         4fTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699454037; x=1700058837;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YcULZ9PGcbiz4pOSYdWqK1KBS4j8l5GIDZ+NaSWycPw=;
+        b=dMdKtx7LlughdBjRG9SWjtNt7A07GRcRbGtlAE3w4/TvNCZoco7VkHrim/ZOZuzPDQ
+         uu+H4MJme3tN20RCCQZYXAaQovDarRf92RBgG40cbKCQVR+gPyPhaeLN2XpEVJ2jTrwC
+         U3LDWUbfFUleAn3sugJfo1t4QNrcQofe3P27HvnntgQdXwR28JreEX6KIh3UrAc4Hezd
+         fkvL0AXM1yo6Dnh4fSWx8ODifAqiknZuZ5GNYaIoq1PAv/YTR22S8zr44njdNcnQwXq2
+         jJ+qWMV5SL4qVVdbgIt8m6SOmaX47WER6ZnCo2hQmzbHKF5wy21RYmhTrYqpAX7FVoaC
+         SWZA==
+X-Gm-Message-State: AOJu0YyTJEhwl+XvesI/+aDIx65z1dZxC4mVuLYigHJJHuZ/K4zW+Kdn
+        WZ9tKRevht1xOv+sjBmNgVv/3A==
+X-Google-Smtp-Source: AGHT+IHfdWgUd7peX98jM5hIRx+rFXqSbrGst/IoGRVbU4s1SKmlHEwnM062t9jx1mAFjSR1p5D80Q==
+X-Received: by 2002:a05:6512:31d0:b0:509:2b81:fc40 with SMTP id j16-20020a05651231d000b005092b81fc40mr1835669lfe.9.1699454037158;
+        Wed, 08 Nov 2023 06:33:57 -0800 (PST)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id q10-20020ac24a6a000000b00507a3b8b007sm686773lfp.110.2023.11.08.06.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Nov 2023 06:33:56 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/6] Fix polarity and bindings for GPIO-based NAND drivers
+Date:   Wed, 08 Nov 2023 15:33:48 +0100
+Message-Id: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 17/22] powerpc: ps3: move udbg_shutdown_ps3gelic prototype
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Helge Deller <deller@gmx.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Timur Tabi <timur@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-References: <20231108125843.3806765-1-arnd@kernel.org>
- <20231108125843.3806765-18-arnd@kernel.org>
-Content-Language: en-US
-From:   Geoff Levand <geoff@infradead.org>
-In-Reply-To: <20231108125843.3806765-18-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEycS2UC/x2MQQqAIBAAvyJ7bkGtoPpKdDBdaw+ZKEQg/j3pO
+ DAzBTIlpgyLKJDo4cx3aKA6AfY04SBk1xi01L1SckTPL14cMwYTHNpZ0e4m6c3goTUxURP+37r
+ V+gEN+7w/XwAAAA==
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Howard Harte <hharte@magicandroidapps.com>
+X-Mailer: b4 0.12.4
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arnd,
+The AMD Delta and generic GPIO-based NAND drivers are using GPIO lines
+extensively to communicate with a raw NAND flash.
 
-On 11/8/23 12:58, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Allmodconfig kernels produce a missing-prototypes warning:
-> 
-> arch/powerpc/platforms/ps3/gelic_udbg.c:239:6: error: no previous prototype for 'udbg_shutdown_ps3gelic' [-Werror=missing-prototypes]
-> 
-> Move the declaration from a local header to asm/ps3.h where it can be
-> seen from both the caller and the definition.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/powerpc/include/asm/ps3.h               | 6 ++++++
->  arch/powerpc/platforms/ps3/gelic_udbg.c      | 1 +
->  drivers/net/ethernet/toshiba/ps3_gelic_net.h | 6 ------
->  3 files changed, 7 insertions(+), 6 deletions(-)
+Some confusion has crept into the naming leading to the two drivers using
+inversed semantics differently for pins with the same name.
 
-Seems good to me.  I'll test it next chance I get.
+Fix the situation by naming the pins consistently without any inversion
+names (such as nce for a negative active chip enable).
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
+Fix up all in-tree users.
 
+Next rewrite the device tree bindings in YAML schema, and fix up the
+single in-tree DTS file (MIPS) to use the new bindings where each signal
+is specified explicitly instead of an array with some "blanks" for unused
+lines.
+
+Last clean up the GPIO NAND driver to drop use of board file provided
+data as no boards using this remain, and use device properties removing
+the explicit reliance on device tree.
+
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Linus Walleij (6):
+      mtd: rawnand: ams-delta/gpio: Unify polarity
+      dt-bindings: mtd: Rewrite gpio-control-nand in schema
+      MIPS: NI 169445: Fix NAND GPIOs
+      mtd: rawnand: gpio: Use device properties
+      mtd: rawnand: gpio: Support standard nand width
+      mtd: rawnand: gpio: Rename file
+
+ .../devicetree/bindings/mtd/gpio-control-nand.txt  |  47 ------
+ .../devicetree/bindings/mtd/gpio-control-nand.yaml | 168 +++++++++++++++++++++
+ Documentation/devicetree/bindings/mtd/mtd.yaml     |   2 +-
+ arch/arm/mach-omap1/board-ams-delta.c              |   8 +-
+ arch/mips/boot/dts/ni/169445.dts                   |  13 +-
+ drivers/mtd/nand/raw/Makefile                      |   2 +-
+ drivers/mtd/nand/raw/ams-delta.c                   |  60 ++++----
+ drivers/mtd/nand/raw/{gpio.c => nand-gpio.c}       | 120 +++++----------
+ 8 files changed, 251 insertions(+), 169 deletions(-)
+---
+base-commit: be3ca57cfb777ad820c6659d52e60bbdd36bf5ff
+change-id: 20231105-fix-mips-nand-c91ebd80fa4f
+
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
 
