@@ -2,112 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BAC7E59C3
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 16:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1B97E5A87
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Nov 2023 16:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbjKHPK5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 10:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S229581AbjKHPyI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 10:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233898AbjKHPKv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 10:10:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2419A1FCA;
-        Wed,  8 Nov 2023 07:10:49 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8E3C433CC;
-        Wed,  8 Nov 2023 15:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699456248;
-        bh=ubRWv4gCHYtZyc/7EUxKBrb1M8Jq2gNnH2Iv89hahkg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V4wNromlDBNArj+XlVHbk1Tpho83VHKj4KF3u+g8D/gDHOgmbzk9TF5F0k0bfjyJ5
-         QAa+SJ1H1vdt9z6QLXRKqy3OD3OdIvi0IIM6oR9t+f/Qou1n/kmZp3N4Ld5+Em6SUX
-         C152TcjhS6BX54Dd5mExY/uqbFmfwaVKqqV5higpeeV5QYXEeI2g8nKEM8QO7JpfaW
-         oYvzN3/QTGIj+pp0Nd5j3aFNPnFwrr1RCnhA/mv97Odgb/1aJ2xdCVJdaJgtaQHSY0
-         fqhoFzKt0Xnl3SB0XmmHuBK+2Zwe0i1mRrDK0QRCpnefsPz2sjmCZbZODNGq5w3ycl
-         CDBBZ1wKet15w==
-Date:   Wed, 8 Nov 2023 07:10:44 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Geoff Levand <geoff@infradead.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
+        with ESMTP id S229521AbjKHPyH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 10:54:07 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2821BC3;
+        Wed,  8 Nov 2023 07:54:04 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C80EA60008;
+        Wed,  8 Nov 2023 15:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1699458843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bYS94S7++WYKx+tHBKHHGfIvXY84QiR+o61nAhem3TE=;
+        b=JMmrAxt6CfsPfRIT849ExEJi2VTTQkFSMaqLfqgUH4rvB5ZfddAYUbwUnjgGxDIq8YaOxl
+        B5Zs58doliOu1V5XAgr5Tw38Z1+5CRVNvd7AZsFJ5YKyTc5v/EX8df+BFjxU/kDeqmhRWV
+        8mifPlDY5iQb3p6b6jxvAmqf0Y87HAK6Iz/dWJ2ogWB2MW6jdZshdyV/tjYtH+CDrseL6c
+        tW0wdNCF061azZnNKVx9kSNfGNTvWf/PXpbdSKGyKItVc1PwwFQztE7OqJlQDOQ8QYNGuv
+        K+J87XKp360j9MWnbE3DsJ5UTmGYXLso7wSAid5sirjABqj0oBrNjYf/fsuuPg==
+Date:   Wed, 8 Nov 2023 16:53:59 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Helge Deller <deller@gmx.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Timur Tabi <timur@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 17/22] powerpc: ps3: move udbg_shutdown_ps3gelic
- prototype
-Message-ID: <20231108071044.6abdf09e@kernel.org>
-In-Reply-To: <1b3ccc4a-41f7-46ad-9c5c-5ef44a96426e@infradead.org>
-References: <20231108125843.3806765-1-arnd@kernel.org>
-        <20231108125843.3806765-18-arnd@kernel.org>
-        <1b3ccc4a-41f7-46ad-9c5c-5ef44a96426e@infradead.org>
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 4/6] mtd: rawnand: gpio: Use device properties
+Message-ID: <20231108165359.33dccef0@xps-13>
+In-Reply-To: <20231108-fix-mips-nand-v1-4-5fc5586d04de@linaro.org>
+References: <20231108-fix-mips-nand-v1-0-5fc5586d04de@linaro.org>
+        <20231108-fix-mips-nand-v1-4-5fc5586d04de@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 8 Nov 2023 14:18:09 +0000 Geoff Levand wrote:
-> Seems good to me.  I'll test it next chance I get.
-> 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
+Hi Linus,
 
-Seems like this is best routed via powerpc:
+linus.walleij@linaro.org wrote on Wed, 08 Nov 2023 15:33:52 +0100:
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+> The platform data (struct gpio_nand_platdata) isn't really used
+> in any boardfile in the kernel: the only probe path is from
+> device tree.
+>=20
+> Convert the driver to not use the platform data header at all
+> and read out the device tree properties using device
+> properties so we don't need to have the driver be exclusively
+> device tree either: ACPI or software nodes work fine if
+> need be. Drop the ifdeffery around CONFIG_OF as a consequence.
+>=20
+> The code reads "bank-width" to plat->options flags and passes
+> it directly to the NAND chip struct, so just assign this
+> directly to the chip instead.
+>=20
+> The code reads one property "chip-delay" that it stores
+> in pdata->delay and never use, so drop this altogether.
+> If timings should be supported this can probably be done in
+> a more detailed way using the new elaborate timings structs
+> that exist for NAND.
+>=20
+> The platform data contains a callback to augment partitions,
+> but since there are no board files using this platform
+> data to define a gpio NAND device, this is never used so
+> the code handling it can be deleted.
+
+Nice cleanup. I'm a bit more reluctant on the bindings side, I'll come
+back to it later, but the driver side looks neat.
+
+Thanks,
+Miqu=C3=A8l
