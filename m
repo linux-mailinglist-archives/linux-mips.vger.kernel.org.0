@@ -2,190 +2,219 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D117E6A76
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Nov 2023 13:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C737E6B11
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Nov 2023 14:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjKIMXf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Nov 2023 07:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S231882AbjKINNA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Nov 2023 08:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjKIMXe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Nov 2023 07:23:34 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6C52D55;
-        Thu,  9 Nov 2023 04:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1699532610;
-        bh=R2IIgl4ZRFgwipCQ4ZBWquxZCbtnLxeQT8yMzVcSClk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=JOE+Y96nQb0g0fD7YjgIsTtXOrsQ0zdJ9Xit6bae239vdgrtE8Xe20tGEjOEwp6b5
-         bBGasTtN2qhciM6Vxj5gO1APMLHXfhhNabxTTxDpDoDz6AXcIv0hdu9+rRXuZNmSj3
-         PriUuPEOny5OCaNxYhuQeMYyhW0D7Uuip11fA5kii4KmxM9zaRV2MnEviCDpMHy6zq
-         fUfZ9elCA6bj44/a3P1CQqNaCruTVzrNA2B2UxDQEd/EBpaSM5DHluHgXy74J1JLYp
-         rlgnpTfcT5fdD0htnPYkbVFENF7DqxPzxI5N3NUPYBgm/lUlPDoiySV3dJVovZ01Br
-         M0UtCQNJ+RaEQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SR1MD6jtmz4wd2;
-        Thu,  9 Nov 2023 23:23:20 +1100 (AEDT)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
-Cc:     Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        guoren <guoren@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Geoff Levand <geoff@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>, Helge Deller <deller@gmx.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Timur Tabi <timur@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH 15/22] arch: vdso: consolidate gettime prototypes
-In-Reply-To: <886df4e4-9fc2-ca52-e7e9-53688e6e821a@csgroup.eu>
-References: <20231108125843.3806765-1-arnd@kernel.org>
- <20231108125843.3806765-16-arnd@kernel.org>
- <ecedb0f1-9543-35c6-18bd-723e6bf21173@csgroup.eu>
- <d94de5b8-db92-4055-9484-f2666973c02a@app.fastmail.com>
- <87o7g3qlf5.fsf@mail.lhotse>
- <886df4e4-9fc2-ca52-e7e9-53688e6e821a@csgroup.eu>
-Date:   Thu, 09 Nov 2023 23:23:20 +1100
-Message-ID: <87il6bqfnr.fsf@mail.lhotse>
+        with ESMTP id S231438AbjKINM7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Nov 2023 08:12:59 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FB2D7D;
+        Thu,  9 Nov 2023 05:12:57 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C5C203200B38;
+        Thu,  9 Nov 2023 08:12:56 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 09 Nov 2023 08:12:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1699535576; x=1699621976; bh=VUoLuTRFhMmnckn2Yaf8HbYIFSNgbAvysFC
+        peIQOBok=; b=qlGUE0ss2rp3PU81gzKbAgP69MRSWgKCN8AR879kv+fz8Gj5GoB
+        bHe/CKcuqFjFPtvDThE52F3pfPx7D/tOt+K2DV7WAA+4N668AULlpYN79rW/7yDM
+        aj8L3iwdMJdSOxxaKTzRMTpHtixwCKLJvoZo5SkFgNaolxc3C6PbSzpWi1xQYCZ7
+        Ty5zAcLMFw/RsIpL0UKP5+lE7irnADt6GbyPHOGyhHBFchicYKP68c/kpBYZy+tw
+        zaOco3/5uAM0ftc70e2NPqRTly3TU9RMyRHBfCbgkySs7GZ4G/xQVOOKvxg9O+JA
+        fc+w++zBVpPkUXWdsJQOx04fCxhryHnZFiw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1699535576; x=1699621976; bh=VUoLuTRFhMmnckn2Yaf8HbYIFSNgbAvysFC
+        peIQOBok=; b=LFXWh8lUOAQnM8234AXyKozL2bqOducTR0rsIY/YpElF5a2X2p2
+        aU8SO+OtgK58gxrGE7dzQFxo+uFrjrq3hF3Wcag/0NqY6f82HHFnSYmg8T0LI1Ir
+        qJjpI5ZqXYKJUoU2MroyAN9wY6B7Hw4Jr3XzKrg9Jhm1Y4dE7j9et7HzQDu+/2Oy
+        nqtspg+vti8fp/pnelB6CNV6mzX91yCRo7z8M4exbv3rhim3d44ndN2NM5AsaZ8t
+        7honL4MQjzrXQZiUQhPfUoLDVMw5iWAk9m5ybpdh3RM60kItWjR6JliYGN2pEwPk
+        IU+2mCpE09ADaMTD+mNFX1AYu5nXnZBzr7Q==
+X-ME-Sender: <xms:19pMZaQQkLgqOYjzfbYDzN88I5G7omhUK4wEf_3cTndemLTppqxEcg>
+    <xme:19pMZfyJcNvThvyZX1aJlayiID4LI4gZL7yGMiCO_lxEgNUPjWV24THXPqPBJdfEg
+    SxucOwfPySX59Knvhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddvuddggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:19pMZX2Akz5ojDYmyYjBfbN2JJUx_3rtJXofWOr6etd3sWD2FW0oJg>
+    <xmx:19pMZWBvXUhv6oT7LGbnzG4BQPf3rO-5v93vPGWwx58i5n3eWJhiWw>
+    <xmx:19pMZThwnOoMrVRLqgyuJi-dWSxjrjbQPBqYDyD0Lo2TLARjgUjbXw>
+    <xmx:2NpMZWtMwCTu01rFVR7pzE7d9vDpjKTa9NNNBzIT-UrliGWI1x7YJg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B44E536A0075; Thu,  9 Nov 2023 08:12:55 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1108-g3a29173c6d-fm-20231031.005-g3a29173c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Message-Id: <1c17f4da-4f40-408a-80d9-f534d8bddb6a@app.fastmail.com>
+In-Reply-To: <87o7g46wcp.fsf@BL-laptop>
+References: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
+ <20231027221106.405666-6-jiaxun.yang@flygoat.com> <87o7g46wcp.fsf@BL-laptop>
+Date:   Thu, 09 Nov 2023 13:12:29 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Gregory CLEMENT" <gregory.clement@bootlin.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        vladimir.kondratiev@intel.com
+Subject: Re: [PATCH v2 05/10] MIPS: Refactor mips_cps_core_entry implementation
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 09/11/2023 =C3=A0 11:18, Michael Ellerman a =C3=A9crit=C2=A0:
->> "Arnd Bergmann" <arnd@arndb.de> writes:
->>> On Wed, Nov 8, 2023, at 19:31, Christophe Leroy wrote:
->>>> Le 08/11/2023 =C3=A0 13:58, Arnd Bergmann a =C3=A9crit=C2=A0:
->>>
->>>> powerpc has functions doing more or less the same, they are called
->>>> __c_kernel_clock_gettime() and alike with their prototypes siting in
->>>> arch/powerpc/include/asm/vdso/gettimeofday.h
->>>>
->>>> Should those prototypes be moved to include/vdso/gettime.h too and
->>>> eventually renamed, or are they considered too powerpc specific ?
->>>
->>> I don't actually know, my initial interpretation was that
->>> these function names are part of the user ABI for the vdso,
->>> but I never looked closely enough at how vdso works to
->>> be sure what the actual ABI is.
->>=20
->> AFAIK the ABI is just the symbols we export, as defined in the linker
->> script:
->>=20
->> /*
->>   * This controls what symbols we export from the DSO.
->>   */
->> VERSION
->> {
->> 	VDSO_VERSION_STRING {
->> 	global:
->> 		__kernel_get_syscall_map;
->> 		__kernel_gettimeofday;
->> 		__kernel_clock_gettime;
->> 		__kernel_clock_getres;
->> 		__kernel_get_tbfreq;
->> 		__kernel_sync_dicache;
->> 		__kernel_sigtramp_rt64;
->> 		__kernel_getcpu;
->> 		__kernel_time;
->>=20
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-arch/powerpc/kernel/vdso/vdso64.lds.S?h=3Dv6.6&#n117
->>=20
->>> If __c_kernel_clock_gettime() etc are not part of the user-facing
->>> ABI, I think renaming them for consistency with the other
->>> architectures would be best.
->>=20
->> The __c symbols are not part of the ABI, so we could rename them.
->>=20
->> At the moment though they don't have the same prototype as the generic
->> versions, because we find the VDSO data in asm and pass it to the C
->> functions, eg:
->>=20
->> int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct time=
-zone *tz,
->> 			    const struct vdso_data *vd);
->>=20
->> I think we can rework that though, by implementing
->> __arch_get_vdso_data() and getting the vdso_data in C. Then we'd be able
->> to share the prototypes.
+
+
+=E5=9C=A82023=E5=B9=B411=E6=9C=888=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =E4=
+=B8=8B=E5=8D=884:30=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+> Hello Jiaxun,
 >
-> I think it would not a been good idea, it would be less performant, for=20
-> explanation see commit=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3De876f0b69dc993e86ca7795e63e98385aa9a7ef3
+>> Now the exception vector for CPS systems are allocated on-fly
+>> with memblock as well.
+>>
+>> It will try to allocate from KSEG1 first, and then try to allocate
+>> in low 4G if possible.
+>>
+>> The main reset vector is now generated by uasm, to avoid tons
+>> of patches to the code. Other vectors are copied to the location
+>> later.
+>>
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>
+>> +
+>> +static int __init setup_cps_vecs(void)
+>> +{
+> [...]
+>> +
+>> +	/* We want to ensure cache is clean before writing uncached mem */
+>> +	blast_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) +
+>> BEV_VEC_SIZE);
+>
+> In my case this call failed because when setup_cps_vecs is called, the
+> cache information are not initialized yet!
+>
+> As a workaround I moved the cpu_cache_init() call before
+> plat_smp_setup() in the /arch/mips/kernel/setup.c file.
+>
+> Obviously it is not the right thing to do, but it shows that the cache
+> related function are called too early. For example, in
+> blast_dcache_range, the value returned by cpu_dcache_line_size was 0
+> instead of 64, because the value cpu_data[0].dcache.linesz was not set
+> yet.
 
-Ah thanks. I was wondering why you had done it in asm.
+Oops, that's a problem!
 
-It's a pity but you're right that's probably a measurable performance
-hit for some of those calls.
+>
+> So I wonder who it managed to work in your setup. What is the machine
+> running in QEMU .
 
-cheers
+I'm using QEMU boston with vmlinux only.
+
+QEMU does not emulate Cache at all so that won't be a problem on QEMU
+but it may be a problem for actual hardware.
+
+The proper solution might be leave allocation here but move uasm generat=
+ion
+to a later point.
+
+>
+> Does it use someting like the following line ?
+> #define cpu_dcache_line_size()       32
+>
+>
+>> +	bc_wback_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
+>> +	__sync();
+>> +
+>> +	cps_vec =3D (void *)TO_UNCAC(cps_vec_pa);
+>> +	mips_cps_build_core_entry(cps_vec);
+>> +
+>> +	memcpy(cps_vec + 0x200, &excep_tlbfill, 0x80);
+>> +	memcpy(cps_vec + 0x280, &excep_xtlbfill, 0x80);
+>> +	memcpy(cps_vec + 0x300, &excep_cache, 0x80);
+>> +	memcpy(cps_vec + 0x380, &excep_genex, 0x80);
+>> +	memcpy(cps_vec + 0x400, &excep_intex, 0x80);
+>> +	memcpy(cps_vec + 0x480, &excep_ejtag, 0x80);
+>> +
+>> +	/* Make sure no prefetched data in cache */
+>> +	blast_inv_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) + BEV=
+_VEC_SIZE);
+>> +	bc_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
+>> +	__sync();
+>> +
+>> +	return 0;
+>> +}
+>
+> [...]
+>
+>>  	/* If we have an FPU, enroll ourselves in the FPU-full mask */
+>> @@ -110,10 +241,14 @@ static void __init cps_prepare_cpus(unsigned in=
+t max_cpus)
+>>  {
+>>  	unsigned ncores, core_vpes, c, cca;
+>>  	bool cca_unsuitable, cores_limited;
+>> -	u32 *entry_code;
+>> =20
+>>  	mips_mt_set_cpuoptions();
+>> =20
+>> +	if (!core_entry_reg) {
+>> +		pr_err("core_entry address unsuitable, disabling smp-cps\n");
+>> +		goto err_out;
+>> +	}
+>> +
+>>  	/* Detect whether the CCA is unsuited to multi-core SMP */
+>>  	cca =3D read_c0_config() & CONF_CM_CMASK;
+>>  	switch (cca) {
+>> @@ -145,20 +280,6 @@ static void __init cps_prepare_cpus(unsigned int=
+ max_cpus)
+>>  			(cca_unsuitable && cpu_has_dc_aliases) ? " & " : "",
+>>  			cpu_has_dc_aliases ? "dcache aliasing" : "");
+>> =20
+>> -	/*
+>> -	 * Patch the start of mips_cps_core_entry to provide:
+>> -	 *
+>> -	 * s0 =3D kseg0 CCA
+>> -	 */
+>> -	entry_code =3D (u32 *)&mips_cps_core_entry;
+>> -	uasm_i_addiu(&entry_code, 16, 0, cca);
+>> -	UASM_i_LA(&entry_code, 17, (long)mips_gcr_base);
+>> -	BUG_ON((void *)entry_code > (void *)&mips_cps_core_entry_patch_end);
+>> -	blast_dcache_range((unsigned long)&mips_cps_core_entry,
+>> -			   (unsigned long)entry_code);
+>> -	bc_wback_inv((unsigned long)&mips_cps_core_entry,
+>> -		     (void *)entry_code - (void *)&mips_cps_core_entry);
+>> -	__sync();
+>
+> The original code here was called later during boot from
+> kernel_init_freeable() which is called by kernel_init() after all the
+> calls in start_kernel. That's why there were no issue before the move.
+
+I guess move uasm generation code here will be helpful :-)
+
+>
+> Gregory
+>
+>> =20
+
+
+--=20
+- Jiaxun
