@@ -2,105 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787517E610F
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Nov 2023 00:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8E17E61AA
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Nov 2023 02:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjKHXh3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Nov 2023 18:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
+        id S231187AbjKIBIW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Nov 2023 20:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjKHXh2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 18:37:28 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E0125B7
-        for <linux-mips@vger.kernel.org>; Wed,  8 Nov 2023 15:37:26 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d81e9981ff4so306418276.3
-        for <linux-mips@vger.kernel.org>; Wed, 08 Nov 2023 15:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699486645; x=1700091445; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oIcgmcP1EY6htEGo1pN6EVJRVE+qt/I8BKL1s/KEy5I=;
-        b=YjDT3b3VA5LXmyfE5qxo4b0/zfiVxJVJeLNa3NwEIBTpx2nyLw1ZikWDHAFae/eh6Q
-         qA89LqZRT7XLc837NgiEZ2ol0WfnDtajGMJD+X6zJbrA2rnbgrnLY78dxvgV2FmDLEzu
-         u0nDiLzZsEHgTo2orj6d0Iu2zO5Wqonjpzy7A+Ylle05gUwsz6OVMrk8s/6EMRriEvC0
-         uhW3GVwyXFcX4JO8e6PVeMUf0MJuwRCj1q1HcYeK1SWzAXE24wGtiTrq09bu1EqZAIzi
-         k8YlqHi7Ige+g1TkzI9GToUx2g2Li8gC2Dn31k+9P+8XMJpGwhlHJ2YHoNzMhHoTdJea
-         rT4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699486645; x=1700091445;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oIcgmcP1EY6htEGo1pN6EVJRVE+qt/I8BKL1s/KEy5I=;
-        b=pm+0C1ptxr32hiy2kUAJqWBvdzbqERZ4Y5aZi1IFOEYB2iAf3quXVzxFTnf9yKY9fh
-         9osDxorFx/vCZGmwJKZ3ByLh2+REP331joxaGE8ncEt2Z3clJAb7goXZRvUVn81Qfkac
-         0cS22+b7ntdY7GS4XoAkAKBze8te3oRmMUKmJmSUWn8fKYELjHgQVQsxSjaK9ynf0ZAo
-         SFrZ0hixBtW2JswGNKAurI6keLPR9J5VbPEQYb2gRx+l8tBv3cY6DCoQtPZ/xWX8kMwe
-         PdvCLuwREMib3uwubOV7NnlmQK0fiepKBOU5gFcxFIcVPcEGf9LWfQf15ZjmTQTrsYQE
-         wJkw==
-X-Gm-Message-State: AOJu0YxOKNie2KddQRkRbTw9DLAp7rF++yKJwKoO8pEVHVL4I428v356
-        dhdK6P+BJaWQ/GTLUEg2lGJmX9DvKTk9eQ==
-X-Google-Smtp-Source: AGHT+IEQyf2yih5ALlCfgSEkVLSLt0Zq5IBGBmP/Cna+y8K3zSa/6bcCrG6olPCsXpdGmctjh3MSlNk2LvNOvw==
-X-Received: from laogai.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:2c9])
- (user=amoorthy job=sendgmr) by 2002:a05:6902:102:b0:da3:723b:b2a4 with SMTP
- id o2-20020a056902010200b00da3723bb2a4mr72222ybh.7.1699486645232; Wed, 08 Nov
- 2023 15:37:25 -0800 (PST)
-Date:   Wed,  8 Nov 2023 23:37:19 +0000
-In-Reply-To: <CAF7b7mrGYuyjyEPAesYzZ6+KDuNAmvRxEonT7JC8NDPsSP+qDA@mail.gmail.com>
-Mime-Version: 1.0
-References: <CAF7b7mrGYuyjyEPAesYzZ6+KDuNAmvRxEonT7JC8NDPsSP+qDA@mail.gmail.com>
-X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231108233723.3380042-1-amoorthy@google.com>
-Subject: Re: [PATCH 27/34] KVM: selftests: Introduce VM "shape" to allow tests
- to specify the VM type
-From:   Anish Moorthy <amoorthy@google.com>
-To:     amoorthy@google.com
-Cc:     ackerleytng@google.com, akpm@linux-foundation.org,
-        anup@brainfault.org, aou@eecs.berkeley.edu, brauner@kernel.org,
-        chao.p.peng@linux.intel.com, chenhuacai@kernel.org,
-        david@redhat.com, dmatlack@google.com, isaku.yamahata@gmail.com,
-        isaku.yamahata@intel.com, jarkko@kernel.org,
-        kirill.shutemov@linux.intel.com, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        liam.merwick@oracle.com, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        mail@maciej.szmigiero.name, maz@kernel.org, mic@digikod.net,
-        michael.roth@amd.com, mpe@ellerman.id.au, oliver.upton@linux.dev,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, pbonzini@redhat.com,
-        qperret@google.com, seanjc@google.com, tabba@google.com,
-        vannapurve@google.com, vbabka@suse.cz, viro@zeniv.linux.org.uk,
-        wei.w.wang@intel.com, willy@infradead.org, xiaoyao.li@intel.com,
-        yilun.xu@intel.com, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229508AbjKIBIV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Nov 2023 20:08:21 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B390211F;
+        Wed,  8 Nov 2023 17:08:19 -0800 (PST)
+Received: from kwepemm000013.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SQkN45Xx2zfb3S;
+        Thu,  9 Nov 2023 09:08:04 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm000013.china.huawei.com (7.193.23.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Thu, 9 Nov 2023 09:07:44 +0800
+Subject: Re: [PATCH 02/22] [RESEND^2] jffs2: mark
+ __jffs2_dbg_superblock_counts() static
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        <linux-kbuild@vger.kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Guo Ren <guoren@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Geoff Levand <geoff@infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Timur Tabi <timur@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        <linux-alpha@vger.kernel.org>,
+        <linux-snps-arc@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-trace-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
+        <loongarch@lists.linux.dev>, <linux-m68k@lists.linux-m68k.org>,
+        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-bcachefs@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+References: <20231108125843.3806765-1-arnd@kernel.org>
+ <20231108125843.3806765-3-arnd@kernel.org>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <cf3724db-e130-01f2-c41e-f2f1e88fc1a8@huawei.com>
+Date:   Thu, 9 Nov 2023 09:07:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20231108125843.3806765-3-arnd@kernel.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm000013.china.huawei.com (7.193.23.81)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 8, 2023 at 9:00=E2=80=AFAM Anish Moorthy <amoorthy@google.com> =
-wrote:
+ÔÚ 2023/11/8 20:58, Arnd Bergmann Ð´µÀ:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> This commit breaks the arm64 selftests build btw: looks like a simple ove=
-rsight?
-
-Yup, fix is a one-liner. Posted below.
-
-diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/=
-testing/selftests/kvm/aarch64/page_fault_test.c
-index eb4217b7c768..08a5ca5bed56 100644
---- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-+++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-@@ -705,7 +705,7 @@ static void run_test(enum vm_guest_mode mode, void *arg=
-)
-=20
- 	print_test_banner(mode, p);
-=20
--	vm =3D ____vm_create(mode);
-+	vm =3D ____vm_create(VM_SHAPE(mode));
- 	setup_memslots(vm, p);
- 	kvm_vm_elf_load(vm, program_invocation_name);
- 	setup_ucall(vm);
+> This function is only called locally and does not need to be
+> global. Since there is no external prototype, gcc warns about
+> the non-static definition:
+>
+> fs/jffs2/debug.c:160:6: error: no previous prototype for '__jffs2_dbg_superblock_counts' [-Werror=missing-prototypes]
+>
+> Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   fs/jffs2/debug.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
