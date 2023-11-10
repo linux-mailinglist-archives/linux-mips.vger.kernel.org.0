@@ -1,117 +1,155 @@
-Return-Path: <linux-mips-owner@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6067E7E53
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 18:43:53 +0100 (CET)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbjKJRnw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Nov 2023 12:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbjKJRna (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Nov 2023 12:43:30 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8BA83E8;
-        Thu,  9 Nov 2023 23:18:14 -0800 (PST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0DB57E7EA8
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 18:46:54 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 694FB2814FA
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 17:46:53 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E8C21A1F;
+	Fri, 10 Nov 2023 17:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PYceR66E"
+X-Original-To: linux-mips@vger.kernel.org
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770AD23750
+	for <linux-mips@vger.kernel.org>; Fri, 10 Nov 2023 17:46:29 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E693A270;
+	Fri, 10 Nov 2023 00:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699600695; x=1731136695;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NF0h8QzfztbFfHhC9cK2K5o6pamjC/MGDzjiJJkHWtk=;
-  b=FPDkfux8T/Bun4Ar3l/CBtKS1YHC+nqdusz7a3YnwjeIXGQn3xX33EwY
-   0c/BVaqBt34kitHmbPg35d7OGi9acQaQfTJdOzjwwWOhTfYmUNduwKZyx
-   hZb6Nd7xvabHPwMfbdQ7m3V2UdaWEhOcgONKJNdXgh3ScWgl1xNiOdZmw
-   Kxpf7PJdw3U0fQKuHuYcCC/38ANfBmcD/rUxuW29qvZrpd8EsnPgeA891
-   h6HaBAleEeOCD6clTXV7/a+anvB8ZE7KC8AyYtIM9kBajIl5cWiKCJr8h
-   35UcVBpp4fO4WCT6Z0jBmS+Xe1SeeUYJ888CZSQMFOJAQGbjD9aYMiJSp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="394051333"
+  t=1699606177; x=1731142177;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+ZJrwu8dlZjYjWjLp1gdXlOokUQXh0jEVn+ZKnk4oik=;
+  b=PYceR66EXOOXDQMLEQuKPFUevL1DWYt1S3i0quVTe5GxSStVQH5GJ2hO
+   7W5RqIN7ZSilJhi6ax/jlJkhYqsZmv3RvyimTLF/+OSNmp61/udEw9OE7
+   9wFxRePSNY4+0Url4yC2/3fTytW3L5+s9yuopMUdX/V8b/uxupe4YF2Q1
+   KCzI1R8wtxe1CiNj0FdA/Na5oyuZZ18TUx+ngzoTq+osfopJWWMFm7ZAp
+   GAv906zAhqsQ27zcIwlGb/2DSuBJ1Okh/Krt1X9rzdZY93CHz1Ibp8t92
+   s2Uu1Ze/7GIPgTcuYtG3mqif3BY5jdlP0G9hpzprxdthPANgS/A05ybl0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="380545608"
 X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="394051333"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 23:18:14 -0800
+   d="scan'208";a="380545608"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 00:49:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="907397742"
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="887305217"
 X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="907397742"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Nov 2023 23:18:08 -0800
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1r1LmH-0009TW-2w;
-        Fri, 10 Nov 2023 07:18:05 +0000
-Date:   Fri, 10 Nov 2023 15:17:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pratyush Brahma <quic_pbrahma@quicinc.com>,
-        Tomas Mudrunka <tomas.mudrunka@gmail.com>,
-        Sean Anderson <sean.anderson@seco.com>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        xe-linux-external@cisco.com,
-        Ruslan Ruslichenko <rruslich@cisco.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] CMDLINE: x86: convert to generic builtin command line
-Message-ID: <202311101507.q12gPUvS-lkp@intel.com>
-References: <20231110013817.2378507-7-danielwa@cisco.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231110013817.2378507-7-danielwa@cisco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+   d="scan'208";a="887305217"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.9.145]) ([10.93.9.145])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 00:49:24 -0800
+Message-ID: <b4ec10ab-9d06-4784-8893-6e2e895cd9b1@intel.com>
+Date: Fri, 10 Nov 2023 16:49:21 +0800
 Precedence: bulk
-List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
+List-Id: <linux-mips.vger.kernel.org>
+List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 16/34] KVM: x86: "Reset" vcpu->run->exit_reason early in
+ KVM_RUN
+To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, Huacai Chen <chenhuacai@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Sean Christopherson <seanjc@google.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ Xu Yilun <yilun.xu@intel.com>, Chao Peng <chao.p.peng@linux.intel.com>,
+ Fuad Tabba <tabba@google.com>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Anish Moorthy <amoorthy@google.com>, David Matlack <dmatlack@google.com>,
+ Yu Zhang <yu.c.zhang@linux.intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
+ =?UTF-8?Q?n?= <mic@digikod.net>, Vlastimil Babka <vbabka@suse.cz>,
+ Vishal Annapurve <vannapurve@google.com>,
+ Ackerley Tng <ackerleytng@google.com>,
+ Maciej Szmigiero <mail@maciej.szmigiero.name>,
+ David Hildenbrand <david@redhat.com>, Quentin Perret <qperret@google.com>,
+ Michael Roth <michael.roth@amd.com>, Wang <wei.w.wang@intel.com>,
+ Liam Merwick <liam.merwick@oracle.com>,
+ Isaku Yamahata <isaku.yamahata@gmail.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20231105163040.14904-1-pbonzini@redhat.com>
+ <20231105163040.14904-17-pbonzini@redhat.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20231105163040.14904-17-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Daniel,
+On 11/6/2023 12:30 AM, Paolo Bonzini wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> Initialize run->exit_reason to KVM_EXIT_UNKNOWN early in KVM_RUN to reduce
+> the probability of exiting to userspace with a stale run->exit_reason that
+> *appears* to be valid.
+> 
+> To support fd-based guest memory (guest memory without a corresponding
+> userspace virtual address), KVM will exit to userspace for various memory
+> related errors, which userspace *may* be able to resolve, instead of using
+> e.g. BUS_MCEERR_AR.  And in the more distant future, KVM will also likely
+> utilize the same functionality to let userspace "intercept" and handle
+> memory faults when the userspace mapping is missing, i.e. when fast gup()
+> fails.
+> 
+> Because many of KVM's internal APIs related to guest memory use '0' to
+> indicate "success, continue on" and not "exit to userspace", reporting
+> memory faults/errors to userspace will set run->exit_reason and
+> corresponding fields in the run structure fields in conjunction with a
+> a non-zero, negative return code, e.g. -EFAULT or -EHWPOISON.  And because
+> KVM already returns  -EFAULT in many paths, there's a relatively high
+> probability that KVM could return -EFAULT without setting run->exit_reason,
+> in which case reporting KVM_EXIT_UNKNOWN is much better than reporting
+> whatever exit reason happened to be in the run structure.
+> 
+> Note, KVM must wait until after run->immediate_exit is serviced to
+> sanitize run->exit_reason as KVM's ABI is that run->exit_reason is
+> preserved across KVM_RUN when run->immediate_exit is true.
+> 
+> Link: https://lore.kernel.org/all/20230908222905.1321305-1-amoorthy@google.com
+> Link: https://lore.kernel.org/all/ZFFbwOXZ5uI%2Fgdaf@google.com
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Tested-by: Fuad Tabba <tabba@google.com>
+> Message-Id: <20231027182217.3615211-19-seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
-[auto build test WARNING on v6.6]
-[cannot apply to arm64/for-next/core efi/next tip/x86/core robh/for-next linus/master next-20231110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ---
+>   arch/x86/kvm/x86.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 8f9d8939b63b..f661acb01c58 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11082,6 +11082,7 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+>   {
+>   	int r;
+>   
+> +	vcpu->run->exit_reason = KVM_EXIT_UNKNOWN;
+>   	vcpu->arch.l1tf_flush_l1d = true;
+>   
+>   	for (;;) {
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Walker/CMDLINE-add-generic-builtin-command-line/20231110-094423
-base:   v6.6
-patch link:    https://lore.kernel.org/r/20231110013817.2378507-7-danielwa%40cisco.com
-patch subject: [PATCH 6/8] CMDLINE: x86: convert to generic builtin command line
-config: x86_64-kismet-CONFIG_SYSTEM_EXTRA_CERTIFICATE-CONFIG_CMDLINE_EXTRA-0-0 (https://download.01.org/0day-ci/archive/20231110/202311101507.q12gPUvS-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20231110/202311101507.q12gPUvS-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311101507.q12gPUvS-lkp@intel.com/
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for SYSTEM_EXTRA_CERTIFICATE when selected by CMDLINE_EXTRA
-   
-   WARNING: unmet direct dependencies detected for SYSTEM_EXTRA_CERTIFICATE
-     Depends on [n]: CRYPTO [=y] && SYSTEM_TRUSTED_KEYRING [=n]
-     Selected by [y]:
-     - CMDLINE_EXTRA [=y] && GENERIC_CMDLINE [=y] && CMDLINE_BOOL [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
