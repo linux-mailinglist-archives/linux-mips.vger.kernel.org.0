@@ -1,74 +1,68 @@
-Return-Path: <linux-mips+bounces-10-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EF4F7E81F1
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 19:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05DE67E8203
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 19:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BFF61C20A1D
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 18:48:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36C431C20B33
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 18:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6BDD1DFDC;
-	Fri, 10 Nov 2023 18:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F50E3AC28;
+	Fri, 10 Nov 2023 18:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ooUP/eBV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Mq8O9/RS"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FED61C6BD
-	for <linux-mips@vger.kernel.org>; Fri, 10 Nov 2023 18:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AC239878;
+	Fri, 10 Nov 2023 18:51:47 +0000 (UTC)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DAF66005;
-	Fri, 10 Nov 2023 10:48:05 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4CEB2C433C7;
-	Fri, 10 Nov 2023 18:48:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699642085;
-	bh=3qfKX6VrG+VoTvYxXdQnb45c+J2P4l76pZ2B8pYkpI8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=ooUP/eBVKnNyZRlQOHuiExRS6QAaL7R5FSjG8o3A+4FVgn4jWxeh5KFVbZqy4m/UM
-	 qdCz8osmpST1ILYG/NWP0xF2VuLOtWcFo1+sc0BIQAH0ggZ7qaxk2Sj2oNw1LxaRsk
-	 XK5xzd1ZQuXSb+0TgPG20kCGy2tiGiLqslHNz68+7Al38aj8mWhPShOHNBxPX6wLMD
-	 WY49WItLEz7TEY1vNa4QYFomRxqO8ati7B+2sE158VmM7+/Bv8yrvCKXFhntToHyrZ
-	 UlLIHxDkz3p36v/zaPA1ZTrC+IcVgfp3/Zw3XzTSzzDzmcCJo6x2qRNYgr9ZWUsY8i
-	 zEmEHoaIJwOUQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37D22EAB08C;
-	Fri, 10 Nov 2023 18:48:05 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS changes for v6.7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZUyeqBC1CEFmApgZ@alpha.franken.de>
-References: <ZUyeqBC1CEFmApgZ@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZUyeqBC1CEFmApgZ@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.7
-X-PR-Tracked-Commit-Id: 4b7d3ab445653336db9854eedad812607760c015
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 656d88c3b654c0ccc0ff63aa75101c6c9f0a5300
-Message-Id: <169964208522.13214.18392921613361072145.pr-tracker-bot@kernel.org>
-Date: Fri, 10 Nov 2023 18:48:05 +0000
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF051199F;
+	Fri, 10 Nov 2023 10:51:46 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70210C433C9;
+	Fri, 10 Nov 2023 18:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1699642305;
+	bh=5EsdFpo+n5trUWFX0VrZzBijTcaJAiV+yar8oOtb48I=;
+	h=Date:From:To:Subject:From;
+	b=Mq8O9/RS2b9oSO2hvUh7dQH1MEn7Wc4xSuWopL0Bpg7JIjs4oe3HCDBcDn6hOGfzk
+	 laEnQ92cnxQaPYuCgwG6EJLP2chjZodN/036lEwFAtclH+623CZzYNA8PH94yCR5Dn
+	 nRg0hH+cDfrSz9O9DgeYKIR7/4XCTMBCH8rAKWaI=
+Date: Fri, 10 Nov 2023 13:51:44 -0500
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To: linux-embedded@vger.kernel.org, linux-ext4@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-fpga@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+	linux-gcc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-hotplug@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-ia64@vger.kernel.org, linux-ide@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-m68k@vger.kernel.org, linux-man@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-msdos@vger.kernel.org
+Subject: PSA: This list is being migrated (no action required)
+Message-ID: <cfriwrxovqzcrptf74ccq52lcqj2nsergucufsz6wlh45fdnz3@z5e5y2lowbq2>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Level: ***
 
-The pull request you sent on Thu, 9 Nov 2023 09:56:08 +0100:
+Hello, all:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.7
+This list is being migrated to new vger infrastructure. No action is required
+on your part and there will be no change in how you interact with this list
+after the migration is completed.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/656d88c3b654c0ccc0ff63aa75101c6c9f0a5300
+There will be a short 30-minute delay to the list archives on lore.kernel.org.
+Once the backend work is done, I will follow up with another message.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+-K
 
