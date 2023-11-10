@@ -2,459 +2,298 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B62C7E76E0
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 02:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA0A7E775A
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 03:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjKJByJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Nov 2023 20:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S234633AbjKJCWy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Nov 2023 21:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjKJByI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Nov 2023 20:54:08 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABE244BA;
-        Thu,  9 Nov 2023 17:54:06 -0800 (PST)
+        with ESMTP id S229632AbjKJCWx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Nov 2023 21:22:53 -0500
+Received: from rcdn-iport-2.cisco.com (rcdn-iport-2.cisco.com [173.37.86.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B80420B;
+        Thu,  9 Nov 2023 18:22:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699581246; x=1731117246;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/ir+TT9QA0tCXZ0ZfOcG8EVOXV1LHqiUY1q9ig2bjkM=;
-  b=jX7rqwdoy7re55PLg9fCkFgsZrw/Y22aXr0qfLW4DxllkCBSmkDDr3sW
-   Ft1wJtq5axm8hHUbJIA8lwuMx84i9rYhnwQapqB2SoHijp9A7pcolWAx/
-   EdZVHubIT7skNAe4+2++dWpqTRlPc5pnziWJBMkwMZEumhTEKx4/PFqER
-   0QNGgg4DOCLXzRPXGEW59DQTHI/68No3V0vt2EO1ar4WjvQ6cjJyWWvex
-   A3kVtKnVyN5dnl9VDqP6iOS0LY6WBtpPCTsWgdL023pIE2ejh5GiorVcK
-   d0s4hVHKuvdx27RUaqC2vIVO0RbwuIYfyd7j1s/BjjjaZmJFqbw2VYEcA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="456612338"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="456612338"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 17:54:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="713510691"
-X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
-   d="scan'208";a="713510691"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.9.145]) ([10.93.9.145])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 17:53:48 -0800
-Message-ID: <956d8ee3-8b63-4a2d-b0c4-c0d3d74a0f6f@intel.com>
-Date:   Fri, 10 Nov 2023 09:53:41 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 15/34] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
+  d=cisco.com; i=@cisco.com; l=3578; q=dns/txt; s=iport;
+  t=1699582971; x=1700792571;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=B7JYBJU6QBps/roSTVx2aQVbBc5hudjWVLDcr0R6610=;
+  b=mXj0zlwUWcXY9AjIxuHJ2helLKkYq7CksfZHgjYyYhHecmY8+xRDnXU4
+   LRvAC68W9Ng4Awjk+cP+W8YwbB2fjjW1VbakWUkvTwFR/Db+wJI88PzPR
+   1FGas11FCQP2lhV2Dn2bwn/Q1QgSChumXpE9Ld5a21Cplw6OHqEYoDdRG
+   s=;
+X-CSE-ConnectionGUID: 9dfve5gdRomCV1Kvq8TDuA==
+X-CSE-MsgGUID: HxcCFtj8TqGTrT5efH+1mw==
+X-IPAS-Result: =?us-ascii?q?A0B5AADSkk1lmJ1dJa1aHQEBAQEJARIBBQUBQCWBFggBC?=
+ =?us-ascii?q?wGBZlJ4WyoSSIgeA4ROX4hjA4V6jEMciyWBJQNWDwEBAQ0BAUQEAQGFBgKHJ?=
+ =?us-ascii?q?gImNAkOAQICAgEBAQEDAgMBAQEBAQEBAgEBBQEBAQIBBwQUAQEBAQEBAQEeG?=
+ =?us-ascii?q?QUQDieFaA2GTAEBAQECARIoBgEBNwEECwIBCA4KHQEQECIlAgQOBSKCXII8I?=
+ =?us-ascii?q?wMBoV8BgUACiih4gTSBAYIJAQEGBAWybQmBSAGICwGKCicbgUlEhD8+gmECg?=
+ =?us-ascii?q?VEPhkOHCoIfBzKBCgwJKlmDUoMPijxdIkdwHQMHA38QKwcELRsHBgkUGBUjB?=
+ =?us-ascii?q?lEEKCQJExI+BIFjgVEKfz8PDhGCPyICBzY2GUiCWxUMNEp2ECoEFBeBEgRqG?=
+ =?us-ascii?q?xUeNxESFw0DCHQdAhEjPAMFAwQzChINCyEFFEIDQgZJCwMCGgUDAwSBNgUNH?=
+ =?us-ascii?q?gIQGgYNJwMDE00CEBQDHh0DAwYDCzEDMIEZDFEDbx82CTwPDB8COQ0nKAI1V?=
+ =?us-ascii?q?wUSAhYDJB1FA0QdQAN4PTUUGwZnoTSBIIFaAQ8WEoEyCzWSeIJrAa58CoQNo?=
+ =?us-ascii?q?WmDboxzmQ+YP6JeS4R/AgQCBAUCDgEBBoFjOoFbcBWDIlIZD44gDA0Jg1aPe?=
+ =?us-ascii?q?XY7AgcLAQEDCYhwgloBAQ?=
+IronPort-PHdr: A9a23:Lm7jyB1N+z2jACCmsmDPZ1BlVkEcU/3cNwoR7N8gk71RN/jl9JX5N
+ 0uZ7vJo3xfFXoTevupNkPGe87vhVmoJ/YubvTgcfYZNWR4IhYRenwEpDMOfT0yuBPXrdCc9W
+ s9FUQwt5Gm1ZHBcA922fFjOuju35D8WFA/4MF95L+L0F4rNhuy81vu5/NvYZAAbzDa4aKl5e
+ Q2/th6Z9tFDmJZrMK831hrPrzNEev8Dw2RuKBPbk0P359y7+9ho9CE4hg==
+IronPort-Data: A9a23:VTSA7KPmEh7JPITvrR0tl8FynXyQoLVcMsEvi/4bfWQNrUomhDEPz
+ zNMDDqHMvuKYTT8co91bYW1/UoH6pGDyoMyG3M5pCpnJ55oRWUpJjg4wmPYZX76whjrFRo/h
+ ykmQoCdaphyFjmF/kvF3oHJ9RFUzbuPSqf3FNnKMyVwQR4MYCo6gHqPocZh6mJTqYb/W1jlV
+ e/a+ZWFYwb8gmYsawr41orawP9RlKWq0N8nlgRWicBj5Df2i3QTBZQDEqC9R1OQrl58R7PSq
+ 07rldlVz0uBl/sfIorNfoXTLiXmdoXv0T2m0RK6bUQNbi9q/UTe2o5jXBYVhNw+Zz+hx7idw
+ /0V3XC8pJtA0qDkwIwgvxdk/y5WbKFI5rKaLnSFtsm48RTlbWK8/9lzJRRjVWEY0r4f7WBm7
+ /cULnUGaQqOwrzwy7OgQe4qjcMmRCXpFNpA4Tc7kneIVrB/HM+rr6bivbe02B88j8ZPEPLBb
+ uISaCFka1LLZBgn1lI/UcljwLn02yOiG9FegHKFroEZ/2qD8BVe7KLRbdfbWp/TQNoAyy50o
+ UqfrzimXXn2Lue3zTuD72Lpi+HOtT30VZhUF7Ci8PNuxlqJyQQ7DBwQSEv+ovOki0qyc8xQJ
+ lZS+Sc0q6U2skuxQbHVUxCmoXWJogQRVvJOHOAgrgKA0KzZ50CeHGdsZjpAbsE28cw7Xzon0
+ neXkN7zQz9iqruYTTSa7Lj8hTezPzUFaGoDfTQsUwQI+Z/grZs1gxaJScxseJNZlfXvEj32h
+ juNtiV72fMYjNUA0OOw+lWvby+QSobhHwI7+AiKUW6f6QZSWteGeZX41XTGxKMVRGqGdWWps
+ H8BksmYyekBC5CRiSCAKNnh+pn0uZ5p1xWB3DZS84kdGyeFoCH8INgBiN1qDAI4bZZeIG6Bj
+ Fr74FsJvPdu0G2Wgbibir9d5uwwxqTmUN/iTP2RMJxFY4N6c0mM+yQGia+sM4LFzhREfUIXY
+ MrznSOQ4ZAyVf0PIN2eHLZ17FPT7npirV4/vLiip/hd7ZKQZWSOVZAOO0aUY+Yy4cus+VuEo
+ osCa5XWm04ADIUShxU7F6ZNdDjmylBlXfjLRzB/KoZv3yI/Qjh6Uq+NqV/fU9Y5xfo9ehj0E
+ oGVAx8ElwWXaYzvIgSRYXcrc6L0QZt6thoG0d8EYz6VN4wYSd/3ts83LsJvFZF+rbwL5aAvF
+ ZEtJZ7fasmjvxyaoVzxm7Gn8tw7HPlq7CrTVxeYjM8XJsUwH1CZpY+4LmMCNkAmV0KKiCf3m
+ JX5vivzSpsYTAMkB8HTAM9DBXvo1ZTBsIqeh3f1H+Q=
+IronPort-HdrOrdr: A9a23:4iDR5KnwaxYKpDc757lxddcOqEvpDfNQiWdD5ihNYBxZY6Wkfp
+ +V7ZcmPE7P6Ar5BktApTnZAtjwfZq9z/JICYl4B8baYOF/0FHYYr2KnrGSswEIfBeOt9K1tJ
+ 0QPJSWbeeAb2SS4vyKnTVQf+xQp+VvtZrY+9s2rE0dDT2CCZsQkzuRYzzzeiYZNWw2YabRVq
+ DsmfavzADQAUj/G/7LfEXtKNKz3OEj+qiWByIuNloM0iXLpzWu77LxDhif2Tkjcx4n+90f2F
+ mAuTbUooG4vd+G6jK07QLuBpJt9+fJ+59mPoihm8IVIjLjhkKDf4J6QYCPuzgzvaWG9EsquM
+ OkmWZjA+1Dr1fqOk2lqxrk3AftlBw07WX59FOeiXz/5eTkWTMBDdZbj44xSGqd16NghqA57E
+ t45RPei3NlN2KYoM073amRa/herDvynZPlq59Js5UQa/pFVFYbl/1twKocKuZzIMu90vFlLA
+ GrZ/usuMq/tjihHi3kl3gqz9q2UnspGBCaBkAEp8yOyjBT2Gt01k0C2aUk7z09Hb8GOtF5Dt
+ 7/Q+9VvaALStVTYbN2Be8HT8fyAmvRQQjUOGbXJVj8DqkIN3/EtpayudwOla2XUY1NyIF3lI
+ XKUVteu2J3c0XyCdeW1JkO9hzWWm2yUTnk18kb7Zlkvb/3QqbtLES4OR0Tutrlp+9aDtzQWv
+ 61Np4TC/j/LXH2EYIMxAH6U4k6EwhWbCTUgKdMZ7ujmLO9FmSxjJ2vTB/6HsuYLQoZ
+X-Talos-CUID: 9a23:Ni5paW3KhIcJR9eADJHLKbxfS8wrbHCAw3vqJEqTNz9KVqTFdXON0fYx
+X-Talos-MUID: =?us-ascii?q?9a23=3A3EFgwQ/rXmNEBPQ48MZPnhOQf+d46I+AFEJdrYw?=
+ =?us-ascii?q?ph9O4aCF+G3TEiSviFw=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from rcdn-core-6.cisco.com ([173.37.93.157])
+  by rcdn-iport-2.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 02:22:50 +0000
+Received: from alln-opgw-4.cisco.com (alln-opgw-4.cisco.com [173.37.147.252])
+        by rcdn-core-6.cisco.com (8.15.2/8.15.2) with ESMTPS id 3AA2MnUg008365
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Nov 2023 02:22:49 GMT
+X-CSE-ConnectionGUID: /u25q1JGRrKLe7yy31dhbA==
+X-CSE-MsgGUID: eGDr26SBToqqmWi0XZvang==
+Authentication-Results: alln-opgw-4.cisco.com; dkim=pass (signature verified) header.i=@cisco.com; spf=Pass smtp.mailfrom=danielwa@cisco.com; dmarc=pass (p=quarantine dis=none) d=cisco.com
+X-IronPort-AV: E=Sophos;i="6.03,291,1694736000"; 
+   d="scan'208";a="7784892"
+Received: from mail-dm6nam10lp2101.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.101])
+  by alln-opgw-4.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 02:22:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZlE2M6/zraXxJzO1WT1p5Yo2fuigjBglmBfcnUJZJpvMC94j5AugxLMC/8Qnwo9yp+Xa9xviJd0WEL1Vuz6t0M78od/TsPg25nwfRDPZ8B84djYoZDJWu6+MbaoJayNufXlBRreEhvjcFsq3mCtJzdjd7REG619hnV70SZARTyTYfasuh8MqjwGK6S2tOw6iDYcp8ymP3AXM2gDflWTGQqA2ekosgo4bYsEBQr9c270FKx5LFH3ehDoM/hjLS858YI8Rc0yeWWnexBaMX81NQongGyJrSIPqiRt4LNhH8KrU1wrzbdrlSibAP2RZKW3thk96ExhvRygxew7Zz29xFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bXHlYCdqJf2Sg5u51PQkvsB2ASTaVj/Eqw/qJgZXTTQ=;
+ b=J3yXeRLbSiUWGu0sr9btAZQswEFvrckp2v7Y5hdpUQK4Zq5yertaNieDk5hHavsIbtoUzGbxtS6VnZkVU/u3IjwYAu5NGThaJprhZdIZxa53UY52rGikm7J+gzrMUjRMPlrmIOBNhriRCzktVNLuBVyrOjFqwHktALPMwTpdTXDW486LrWs4iUORkGq3TzTKyNyW9E8QyTCarDRrDwZBrjEiT/lO4j8ZnTPRX++7QKeHc3WJXgqqv1Cckntr+EU6TPzlhapq3GJhmMTUKIF01PF1s0W6rOpjYf33STH2eCnZdoN//2iCORTcbjvaivKcW4pICyWFfYO/wJo66daXWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
+ dkim=pass header.d=cisco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bXHlYCdqJf2Sg5u51PQkvsB2ASTaVj/Eqw/qJgZXTTQ=;
+ b=LD08jXxNtfA3jyF/5fY8HJGVkzygQ/WoUSEIGDec56bzrw3OmBfmnv2lXS1fF4aLB2ZhiaHHS96bDKCKimm77qqhE1oZQu3YCaN9y4e8cUJdt4gfZmRL6nxDsibaCQcUT/d8h7ZUAxu22XcUrEo2AbxuON/QrS52+8TnIX+B24U=
+Received: from SJ0PR11MB5790.namprd11.prod.outlook.com (2603:10b6:a03:422::15)
+ by PH0PR11MB4950.namprd11.prod.outlook.com (2603:10b6:510:33::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Fri, 10 Nov
+ 2023 02:22:27 +0000
+Received: from SJ0PR11MB5790.namprd11.prod.outlook.com
+ ([fe80::a59:2fb9:3446:4f8]) by SJ0PR11MB5790.namprd11.prod.outlook.com
+ ([fe80::a59:2fb9:3446:4f8%6]) with mapi id 15.20.6977.018; Fri, 10 Nov 2023
+ 02:22:27 +0000
+From:   "Daniel Walker (danielwa)" <danielwa@cisco.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Pratyush Brahma <quic_pbrahma@quicinc.com>,
+        Tomas Mudrunka <tomas.mudrunka@gmail.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH 0/8] generic command line v6
+Thread-Topic: [PATCH 0/8] generic command line v6
+Thread-Index: AQHaE3y/55d8FUfbk020UwDeu5551A==
+Date:   Fri, 10 Nov 2023 02:22:27 +0000
+Message-ID: <ZU2T3VPYosP+ZR1b@goliath>
+References: <20231110013817.2378507-1-danielwa@cisco.com>
+ <20231109175142.49428d5f51325680764663bf@linux-foundation.org>
+In-Reply-To: <20231109175142.49428d5f51325680764663bf@linux-foundation.org>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Xu Yilun <yilun.xu@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20231105163040.14904-1-pbonzini@redhat.com>
- <20231105163040.14904-16-pbonzini@redhat.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20231105163040.14904-16-pbonzini@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR11MB5790:EE_|PH0PR11MB4950:EE_
+x-ms-office365-filtering-correlation-id: 5b67ce5c-ba34-4985-9529-08dbe193e216
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +zhcYj6Fuoy/Qc4nMSsUL1uXCx4Z1rIeE6hRjknjaPnDYEgYsh4snetOqvLFKQmgT8G5He4CJ982A1OMXcQhOIpAwWFll6P0BzfPeoq4l5z300W9QDyo1rf9HJ/1oF/1FOAinGPWdERqxTp5Y8drw1Og0Keg19UsA6qNQwdb5qiCv/IKpS3E9EtMIkObkGaeneYildjiA5iYhecKXnQ36Z7QHILIfcln51bvuIg9R6G5rc56ESLDo5HMRdD0zPTnZm9OprzV01E1raSSrEYR9Z2Gy0RnUBVzcxE+NywbMZMVP6wPjPke8A1LY90zFPFP/4fFGLQwb0OFWf+LWKcp7QtbbJ+nr8idFERsptV3Jm6Ss0+M/YHYCNA1iIdFK7VHQ2PjJQCtj6y4ctvXIADFE9OkM1VPNShoGm/tlGnX6NtaNabQrstgZjrPXS01GVX0guq1AOONzuQV4wy7kWE16dG9fij+VdqPdB1M9s83KNU0AaeZFQVFSYkl/0rffvqm4IdDBl+xei8/Fa4IrQbZAm5YYj+ow7le6aH61y9vIWIvopkryZWLznhjgBkoAkdDqn8jtAscHRSlPGm5Cm5Ln80uPWAvcnqjEpWMhE6RgUzFaFkHvEY8pGewlxAv1mjfLO5epog8BOMghhh4LV82FBLneg095E6QkZzPTVyiwOE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5790.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(39860400002)(136003)(346002)(376002)(366004)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(2906002)(66899024)(83380400001)(86362001)(38070700009)(33716001)(38100700002)(26005)(122000001)(71200400001)(6506007)(76116006)(4326008)(8936002)(8676002)(6512007)(9686003)(66556008)(64756008)(54906003)(41300700001)(66946007)(66446008)(316002)(478600001)(6486002)(6916009)(66476007)(5660300002)(7416002)(41533002)(67856001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RbZZDjEqfAyAMejfoGvAQTwCxM1j/ck4InsyxTHAG0gkwne7HJkDHHEmoswy?=
+ =?us-ascii?Q?JnrmrquKNaXCrBQHtdI4B7vLYD+TG4t1vSKnqBvd1JjtjxhY/TySQey1ri8L?=
+ =?us-ascii?Q?moyCVGtvAtNz+EPR0+/EnONnHKcbnbb2FvGESlby8c1hDxwXvi8ZiiUTTxVv?=
+ =?us-ascii?Q?kznFKPQuWAt+GTdChUoxk+F/4+iDeMGjV4Qx/qup6PsTrEpfnl5gQwRxyCqS?=
+ =?us-ascii?Q?9aOuc8IAZCWeXtAVwpgYG25fNMCE+w6VBsqhlM6L9gY9S9+RcqFdsj3JhMQV?=
+ =?us-ascii?Q?0S+ocLF+moER6+zHT5AVGcstlD/+Z8P67cod6q36CtGMpmBQ7jn9/UXu3Jd/?=
+ =?us-ascii?Q?XF/fYIwAHSXtQ4ZlLtdbd/snQcwisYZ5uG02hcpj/4ZHSWQUpqP4PyLpRalM?=
+ =?us-ascii?Q?f+Gr10KxFVsPqVF0qCic9yuAnIapJix4pKl04MKNCpE01krv5O15dLZVo6Gg?=
+ =?us-ascii?Q?+T7StuWRjuZ4xWPy3p1E2hhFl3Rjs8J0KKpQjPnWTeJrv6vVx4ThZq1/2Pj6?=
+ =?us-ascii?Q?j7zoD/9NjM0Tc97JEO61o6P9v+fo/cOqijNHysZxjnWMGhMS3bFtA6f67r6R?=
+ =?us-ascii?Q?It2cEssc0Nu5fv5ORdW4OEgALiFoDlprlbSxQhDwdoqpx7SIjcTI1w+DHRg/?=
+ =?us-ascii?Q?8y+KK/2OfNBFqeh5xTPtfC2mTXpw0UfjY6OC/51zYqCCLMT4yzKbSZEkwTbV?=
+ =?us-ascii?Q?+O5Cpe1qoM63/AiWm/MQNGD11fQZNuyDOE2LLl/HKQ3iUqs5P6o1ASD5ihVy?=
+ =?us-ascii?Q?uwIxCi1QMRcjrSFLrmqdLPwzg0tAM/LHsP28dyhbIdIgnJ4APGt3YbyK4X9L?=
+ =?us-ascii?Q?Nk66G2Z7EohjISfpkG8bYMQ6cR6KweaWzz/ON111KKAtIAPEpr5ZPOt0HVb3?=
+ =?us-ascii?Q?QDFC/l6Zpbhe1qdXdnlso7w2ixRf5RrICvS+GlOaOxRaDdV7YiYRvftsor8D?=
+ =?us-ascii?Q?nLHg5P0M7+5GJbdRMMb3cUlfA3YRtT/SYPGnpxcX/ALKc3SFH7Jsr+f/3e2f?=
+ =?us-ascii?Q?+EuYrwADtsKeTcJ0uajXrHJOzQ09JRxH8UdpROhimuf92lRFQ6oni3tsBMYh?=
+ =?us-ascii?Q?57faWlj9wWWWCihf8UR16SkIX2rSkNGEg2Iv865DXHKfuOm1cx0MZUhtJWt5?=
+ =?us-ascii?Q?uPdyLlRaKQ6FQCjwSimzgiCOI4jBIU6Y4nWFgJhJmgCQ3reitdR7xWlhTNxz?=
+ =?us-ascii?Q?bNIezK+AJSL5uh1ixdLtGfm3OoUZ7ksAYE4qQbyGo+Zg3hLG3ud8yr9uefl7?=
+ =?us-ascii?Q?DRBkDJ5PniWHx6Tf/wMpfL0YPBXoA3K4YDIRy0EQQ/BI87pPBWY0RascAifw?=
+ =?us-ascii?Q?ppACTA4qugKbWXLSWMv3kPZC/rDOKCLb6TghyaeVgK1faiB7p+9zyVsDlcOW?=
+ =?us-ascii?Q?COnwJm16gFezut+FR915jngoJcq/sT2ai4FhUtYJ5de9NYXYQNNTZO8ONc+q?=
+ =?us-ascii?Q?Lmlo2e6DdqjAh25fitWq2RkdXOY3GHiNbouRMZ0boS7bRJ2KCTVVadvgRQ65?=
+ =?us-ascii?Q?PdsYutWltNBBLwXgGF4NGnbNoCZ+nXzkTLkyUE1KLWxIt97IRQmAOoiIuk9C?=
+ =?us-ascii?Q?GdmpDiqUmuaMZc27SNkB1qhYzJYRYOyfNupjzBcD?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3092527A105ADF46AAF5421F010E28FE@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: cisco.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5790.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b67ce5c-ba34-4985-9529-08dbe193e216
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2023 02:22:27.2043
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KK4UR6e7pN9Me3SPGW3ogy0duaxcxJb4VhqtTqpVAHvrZyIt27moF2skLKZ+BT1Q6y+6pDStO6oEQXp2OUNRJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4950
+X-Outbound-SMTP-Client: 173.37.147.252, alln-opgw-4.cisco.com
+X-Outbound-Node: rcdn-core-6.cisco.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/6/2023 12:30 AM, Paolo Bonzini wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-based
-> memory that is tied to a specific KVM virtual machine and whose primary
-> purpose is to serve guest memory.
-> 
-> A guest-first memory subsystem allows for optimizations and enhancements
-> that are kludgy or outright infeasible to implement/support in a generic
-> memory subsystem.  With guest_memfd, guest protections and mapping sizes
-> are fully decoupled from host userspace mappings.   E.g. KVM currently
-> doesn't support mapping memory as writable in the guest without it also
-> being writable in host userspace, as KVM's ABI uses VMA protections to
-> define the allow guest protection.  Userspace can fudge this by
-> establishing two mappings, a writable mapping for the guest and readable
-> one for itself, but that’s suboptimal on multiple fronts.
-> 
-> Similarly, KVM currently requires the guest mapping size to be a strict
-> subset of the host userspace mapping size, e.g. KVM doesn’t support
-> creating a 1GiB guest mapping unless userspace also has a 1GiB guest
-> mapping.  Decoupling the mappings sizes would allow userspace to precisely
-> map only what is needed without impacting guest performance, e.g. to
-> harden against unintentional accesses to guest memory.
-> 
-> Decoupling guest and userspace mappings may also allow for a cleaner
-> alternative to high-granularity mappings for HugeTLB, which has reached a
-> bit of an impasse and is unlikely to ever be merged.
-> 
-> A guest-first memory subsystem also provides clearer line of sight to
-> things like a dedicated memory pool (for slice-of-hardware VMs) and
-> elimination of "struct page" (for offload setups where userspace _never_
-> needs to mmap() guest memory).
-> 
-> More immediately, being able to map memory into KVM guests without mapping
-> said memory into the host is critical for Confidential VMs (CoCo VMs), the
-> initial use case for guest_memfd.  While AMD's SEV and Intel's TDX prevent
-> untrusted software from reading guest private data by encrypting guest
-> memory with a key that isn't usable by the untrusted host, projects such
-> as Protected KVM (pKVM) provide confidentiality and integrity *without*
-> relying on memory encryption.  And with SEV-SNP and TDX, accessing guest
-> private memory can be fatal to the host, i.e. KVM must be prevent host
-> userspace from accessing guest memory irrespective of hardware behavior.
-> 
-> Attempt #1 to support CoCo VMs was to add a VMA flag to mark memory as
-> being mappable only by KVM (or a similarly enlightened kernel subsystem).
-> That approach was abandoned largely due to it needing to play games with
-> PROT_NONE to prevent userspace from accessing guest memory.
-> 
-> Attempt #2 to was to usurp PG_hwpoison to prevent the host from mapping
-> guest private memory into userspace, but that approach failed to meet
-> several requirements for software-based CoCo VMs, e.g. pKVM, as the kernel
-> wouldn't easily be able to enforce a 1:1 page:guest association, let alone
-> a 1:1 pfn:gfn mapping.  And using PG_hwpoison does not work for memory
-> that isn't backed by 'struct page', e.g. if devices gain support for
-> exposing encrypted memory regions to guests.
-> 
-> Attempt #3 was to extend the memfd() syscall and wrap shmem to provide
-> dedicated file-based guest memory.  That approach made it as far as v10
-> before feedback from Hugh Dickins and Christian Brauner (and others) led
-> to it demise.
-> 
-> Hugh's objection was that piggybacking shmem made no sense for KVM's use
-> case as KVM didn't actually *want* the features provided by shmem.  I.e.
-> KVM was using memfd() and shmem to avoid having to manage memory directly,
-> not because memfd() and shmem were the optimal solution, e.g. things like
-> read/write/mmap in shmem were dead weight.
-> 
-> Christian pointed out flaws with implementing a partial overlay (wrapping
-> only _some_ of shmem), e.g. poking at inode_operations or super_operations
-> would show shmem stuff, but address_space_operations and file_operations
-> would show KVM's overlay.  Paraphrashing heavily, Christian suggested KVM
-> stop being lazy and create a proper API.
-> 
-> Link: https://lore.kernel.org/all/20201020061859.18385-1-kirill.shutemov@linux.intel.com
-> Link: https://lore.kernel.org/all/20210416154106.23721-1-kirill.shutemov@linux.intel.com
-> Link: https://lore.kernel.org/all/20210824005248.200037-1-seanjc@google.com
-> Link: https://lore.kernel.org/all/20211111141352.26311-1-chao.p.peng@linux.intel.com
-> Link: https://lore.kernel.org/all/20221202061347.1070246-1-chao.p.peng@linux.intel.com
-> Link: https://lore.kernel.org/all/ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com
-> Link: https://lore.kernel.org/all/20230418-anfallen-irdisch-6993a61be10b@brauner
-> Link: https://lore.kernel.org/all/ZEM5Zq8oo+xnApW9@google.com
-> Link: https://lore.kernel.org/linux-mm/20230306191944.GA15773@monkey
-> Link: https://lore.kernel.org/linux-mm/ZII1p8ZHlHaQ3dDl@casper.infradead.org
-> Cc: Fuad Tabba <tabba@google.com>
-> Cc: Vishal Annapurve <vannapurve@google.com>
-> Cc: Ackerley Tng <ackerleytng@google.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Maciej Szmigiero <mail@maciej.szmigiero.name>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Quentin Perret <qperret@google.com>
-> Cc: Michael Roth <michael.roth@amd.com>
-> Cc: Wang <wei.w.wang@intel.com>
-> Cc: Liam Merwick <liam.merwick@oracle.com>
-> Cc: Isaku Yamahata <isaku.yamahata@gmail.com>
-> Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Co-developed-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Co-developed-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Co-developed-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Message-Id: <20231027182217.3615211-17-seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->   Documentation/virt/kvm/api.rst |  69 ++++-
->   fs/anon_inodes.c               |   1 +
->   include/linux/kvm_host.h       |  48 +++
->   include/uapi/linux/kvm.h       |  15 +-
->   virt/kvm/Kconfig               |   4 +
->   virt/kvm/Makefile.kvm          |   1 +
->   virt/kvm/guest_memfd.c         | 538 +++++++++++++++++++++++++++++++++
->   virt/kvm/kvm_main.c            |  59 +++-
->   virt/kvm/kvm_mm.h              |  26 ++
->   9 files changed, 754 insertions(+), 7 deletions(-)
->   create mode 100644 virt/kvm/guest_memfd.c
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 083ed507e200..6d681f45969e 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6202,6 +6202,15 @@ superset of the features supported by the system.
->   :Parameters: struct kvm_userspace_memory_region2 (in)
->   :Returns: 0 on success, -1 on error
->   
-> +KVM_SET_USER_MEMORY_REGION2 is an extension to KVM_SET_USER_MEMORY_REGION that
-> +allows mapping guest_memfd memory into a guest.  All fields shared with
-> +KVM_SET_USER_MEMORY_REGION identically.  Userspace can set KVM_MEM_GUEST_MEMFD
-> +in flags to have KVM bind the memory region to a given guest_memfd range of
-> +[guest_memfd_offset, guest_memfd_offset + memory_size].  The target guest_memfd
-> +must point at a file created via KVM_CREATE_GUEST_MEMFD on the current VM, and
-> +the target range must not be bound to any other memory region.  All standard
-> +bounds checks apply (use common sense).
-> +
->   ::
->   
->     struct kvm_userspace_memory_region2 {
-> @@ -6210,9 +6219,24 @@ superset of the features supported by the system.
->   	__u64 guest_phys_addr;
->   	__u64 memory_size; /* bytes */
->   	__u64 userspace_addr; /* start of the userspace allocated memory */
-> +	__u64 guest_memfd_offset;
-> +	__u32 guest_memfd;
-> +	__u32 pad1;
-> +	__u64 pad2[14];
->     };
->   
-> -See KVM_SET_USER_MEMORY_REGION.
-> +A KVM_MEM_GUEST_MEMFD region _must_ have a valid guest_memfd (private memory) and
-> +userspace_addr (shared memory).  However, "valid" for userspace_addr simply
-> +means that the address itself must be a legal userspace address.  The backing
-> +mapping for userspace_addr is not required to be valid/populated at the time of
-> +KVM_SET_USER_MEMORY_REGION2, e.g. shared memory can be lazily mapped/allocated
-> +on-demand.
-> +
-> +When mapping a gfn into the guest, KVM selects shared vs. private, i.e consumes
-> +userspace_addr vs. guest_memfd, based on the gfn's KVM_MEMORY_ATTRIBUTE_PRIVATE
-> +state.  At VM creation time, all memory is shared, i.e. the PRIVATE attribute
-> +is '0' for all gfns.  Userspace can control whether memory is shared/private by
-> +toggling KVM_MEMORY_ATTRIBUTE_PRIVATE via KVM_SET_MEMORY_ATTRIBUTES as needed.
->   
->   4.141 KVM_SET_MEMORY_ATTRIBUTES
->   -------------------------------
-> @@ -6250,6 +6274,49 @@ the state of a gfn/page as needed.
->   
->   The "flags" field is reserved for future extensions and must be '0'.
->   
-> +4.142 KVM_CREATE_GUEST_MEMFD
-> +----------------------------
-> +
-> +:Capability: KVM_CAP_GUEST_MEMFD
-> +:Architectures: none
-> +:Type: vm ioctl
-> +:Parameters: struct kvm_create_guest_memfd(in)
-> +:Returns: 0 on success, <0 on error
-> +
-> +KVM_CREATE_GUEST_MEMFD creates an anonymous file and returns a file descriptor
-> +that refers to it.  guest_memfd files are roughly analogous to files created
-> +via memfd_create(), e.g. guest_memfd files live in RAM, have volatile storage,
-> +and are automatically released when the last reference is dropped.  Unlike
-> +"regular" memfd_create() files, guest_memfd files are bound to their owning
-> +virtual machine (see below), cannot be mapped, read, or written by userspace,
-> +and cannot be resized  (guest_memfd files do however support PUNCH_HOLE).
-> +
-> +::
-> +
-> +  struct kvm_create_guest_memfd {
-> +	__u64 size;
-> +	__u64 flags;
-> +	__u64 reserved[6];
-> +  };
-> +
-> +Conceptually, the inode backing a guest_memfd file represents physical memory,
-> +i.e. is coupled to the virtual machine as a thing, not to a "struct kvm".  The
-> +file itself, which is bound to a "struct kvm", is that instance's view of the
-> +underlying memory, e.g. effectively provides the translation of guest addresses
-> +to host memory.  This allows for use cases where multiple KVM structures are
-> +used to manage a single virtual machine, e.g. when performing intrahost
-> +migration of a virtual machine.
-> +
-> +KVM currently only supports mapping guest_memfd via KVM_SET_USER_MEMORY_REGION2,
-> +and more specifically via the guest_memfd and guest_memfd_offset fields in
-> +"struct kvm_userspace_memory_region2", where guest_memfd_offset is the offset
-> +into the guest_memfd instance.  For a given guest_memfd file, there can be at
-> +most one mapping per page, i.e. binding multiple memory regions to a single
-> +guest_memfd range is not allowed (any number of memory regions can be bound to
-> +a single guest_memfd file, but the bound ranges must not overlap).
-> +
-> +See KVM_SET_USER_MEMORY_REGION2 for additional details.
-> +
->   5. The kvm_run structure
->   ========================
->   
-> diff --git a/fs/anon_inodes.c b/fs/anon_inodes.c
-> index 3d4a27f8b4fe..6f3d31b4d1e3 100644
-> --- a/fs/anon_inodes.c
-> +++ b/fs/anon_inodes.c
-> @@ -181,6 +181,7 @@ struct file *anon_inode_create_getfile(const char *name,
->   	return __anon_inode_getfile(name, fops, priv, flags,
->   				    context_inode, true);
->   }
-> +EXPORT_SYMBOL_GPL(anon_inode_create_getfile);
->   
->   static int __anon_inode_getfd(const char *name,
->   			      const struct file_operations *fops,
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 68a144cb7dbc..a6de526c0426 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -589,8 +589,20 @@ struct kvm_memory_slot {
->   	u32 flags;
->   	short id;
->   	u16 as_id;
-> +
-> +#ifdef CONFIG_KVM_PRIVATE_MEM
-> +	struct {
-> +		struct file __rcu *file;
-> +		pgoff_t pgoff;
-> +	} gmem;
-> +#endif
->   };
->   
-> +static inline bool kvm_slot_can_be_private(const struct kvm_memory_slot *slot)
-> +{
-> +	return slot && (slot->flags & KVM_MEM_GUEST_MEMFD);
-> +}
-> +
+On Thu, Nov 09, 2023 at 05:51:42PM -0800, Andrew Morton wrote:
+> On Thu,  9 Nov 2023 17:38:04 -0800 Daniel Walker <danielwa@cisco.com> wro=
+te:
+>=20
+> > This release is an up-rev of the v5 patches. No additional features hav=
+e
+> > been added. Some changes were mode to function names and some changes t=
+o
+> > Kconfig dependencies. Also updated the config conversion for mips.
+> >=20
+> > There are a number of people who have expressed interest in these
+> > patches either by asking for them to be merge or testing them. If
+> > people are so inclined please continue to request them to be merge
+> > or to ask the status of the next release. It's helpful to motivate me t=
+o
+> > release them again and for the maintainers to see the interest
+> > generated.
+> >=20
+> > These patches have been used by Cisco Systems, Inc. on millions of
+> > released products to great effect. Hopefully they can be used by the
+> > entire Linux eco system.
+> >=20
+>=20
+> fyi, none of the above is suitable for a [0/N] changelog - it's all
+> transitory stuff which tells readers nothing much about what the
+> patchset does.
+=20
+I did not think about it this way. It's because I've submitted this so many
+times. I guess I assume everyone knows what it is.
 
-maybe we can move this block and ...
+> And that info is sorely missed.  I can see that it's a code cleanup,
+> but I'm sure Cisco wouldn't expend resources to maintain such a thing.=20
+> There's something else here.
 
-<snip>
+I think the prior submissions there was no cover letter, maybe I should jus=
+t
+achoo that entirely.
 
-> @@ -2355,6 +2379,30 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
->   					struct kvm_gfn_range *range);
->   bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
->   					 struct kvm_gfn_range *range);
-> +
-> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM) &&
-> +	       kvm_get_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> +}
-> +#else
-> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> +{
-> +	return false;
-> +}
->   #endif /* CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES */
+> In [1/8] I see "Even with mips and powerpc enhancement the needs of
+> Cisco are not met on these platforms" and "This unified implementation
+> offers the same functionality needed by Cisco on all platform which we
+> enable it on".
+>=20
+> Well OK, what are these needs?   What functionality changes does this
+> patchset offer which Cisco finds useful?  IOW, what were the
+> requirements?  What's wrong with the old code and how does this
+> patchset fix/enhance that?
 
-this block to Patch 18?
+The limitation is that you can't append and prepend to the command line at =
+the
+same time in any of the architectures. Having access to both allows OEMs to=
+ deal
+with broken bootloaders which can't easily be upgraded. Others have respond=
+ed
+that they also use these patches for this same reason.
 
+In 2/8 and 3/8 I modify the insert-sys-cert tool to allow modification of t=
+he
+command line append and prepend after the build. This allow for an SDK
+provided with a binary kernel and for the command line append/prepend to st=
+ill
+be modified identically to how that's done with certificates.
 
-<snip>
+Making all this generic means each platform has a unified set of command li=
+ne
+services. Cisco uses x86/arm32/arm64/mips/powerpc , and it's nice to have a=
+ll
+the same features across platforms.
 
-> @@ -4844,6 +4875,10 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->   #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
->   	case KVM_CAP_MEMORY_ATTRIBUTES:
->   		return kvm_supported_mem_attributes(kvm);
-> +#endif
-> +#ifdef CONFIG_KVM_PRIVATE_MEM
-> +	case KVM_CAP_GUEST_MEMFD:
-> +		return !kvm || kvm_arch_has_private_mem(kvm);
->   #endif
->   	default:
->   		break;
-> @@ -5277,6 +5312,18 @@ static long kvm_vm_ioctl(struct file *filp,
->   	case KVM_GET_STATS_FD:
->   		r = kvm_vm_ioctl_get_stats_fd(kvm);
->   		break;
-> +#ifdef CONFIG_KVM_PRIVATE_MEM
-> +	case KVM_CREATE_GUEST_MEMFD: {
-> +		struct kvm_create_guest_memfd guest_memfd;
+>=20
+> I see the patchset updates nothing under Documentation/.  Should it do
+> so?  Could it do so?
 
-Do we need a guard of below?
+The only documentation is Kconfig descriptions and commit messages. I suppo=
+se it
+could have something under Documentation/. The only part which could use mo=
+re
+documentation are the changes in 2/8 and 3/8. That feature is maybe confusi=
+ng
+and has limitations which are maybe not clear. Although the same limitation=
+ exist for
+inserting certificates.
 
-		r = -EINVAL;
-		if (!kvm_arch_has_private_mem(kvm))
-			goto out;
+>=20
+> I don't know what is the expected merge patch for this work.  I can
+> grab them if no other maintainer is in the firing line.
 
+merge patch ? Do you mean merge description ? I think your the maintainer i=
+n the
+firing line for this one.
 
-
-> +		r = -EFAULT;
-> +		if (copy_from_user(&guest_memfd, argp, sizeof(guest_memfd)))
-> +			goto out;
-> +
-> +		r = kvm_gmem_create(kvm, &guest_memfd);
-> +		break;
-> +	}
-> +#endif
->   	default:
->   		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
->   	}
-> @@ -6409,6 +6456,8 @@ int kvm_init(unsigned vcpu_size, unsigned vcpu_align, struct module *module)
->   	if (WARN_ON_ONCE(r))
->   		goto err_vfio;
->   
-> +	kvm_gmem_init(module);
-> +
->   	/*
->   	 * Registration _must_ be the very last thing done, as this exposes
->   	 * /dev/kvm to userspace, i.e. all infrastructure must be setup!
-> diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
-> index 180f1a09e6ba..ecefc7ec51af 100644
-> --- a/virt/kvm/kvm_mm.h
-> +++ b/virt/kvm/kvm_mm.h
-> @@ -37,4 +37,30 @@ static inline void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm,
->   }
->   #endif /* HAVE_KVM_PFNCACHE */
->   
-> +#ifdef CONFIG_KVM_PRIVATE_MEM
-> +void kvm_gmem_init(struct module *module);
-> +int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args);
-> +int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
-> +		  unsigned int fd, loff_t offset);
-> +void kvm_gmem_unbind(struct kvm_memory_slot *slot);
-> +#else
-> +static inline void kvm_gmem_init(struct module *module)
-> +{
-> +
-> +}
-> +
-> +static inline int kvm_gmem_bind(struct kvm *kvm,
-> +					 struct kvm_memory_slot *slot,
-> +					 unsigned int fd, loff_t offset)
-> +{
-> +	WARN_ON_ONCE(1);
-> +	return -EIO;
-> +}
-> +
-> +static inline void kvm_gmem_unbind(struct kvm_memory_slot *slot)
-> +{
-> +	WARN_ON_ONCE(1);
-> +}
-> +#endif /* CONFIG_KVM_PRIVATE_MEM */
-> +
->   #endif /* __KVM_MM_H__ */
-
+Daniel=
