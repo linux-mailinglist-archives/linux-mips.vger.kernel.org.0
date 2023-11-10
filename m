@@ -2,219 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C737E6B11
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Nov 2023 14:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AEE7E76A0
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Nov 2023 02:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjKINNA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Nov 2023 08:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S229591AbjKJBj0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Nov 2023 20:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjKINM7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Nov 2023 08:12:59 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FB2D7D;
-        Thu,  9 Nov 2023 05:12:57 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id C5C203200B38;
-        Thu,  9 Nov 2023 08:12:56 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 09 Nov 2023 08:12:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1699535576; x=1699621976; bh=VUoLuTRFhMmnckn2Yaf8HbYIFSNgbAvysFC
-        peIQOBok=; b=qlGUE0ss2rp3PU81gzKbAgP69MRSWgKCN8AR879kv+fz8Gj5GoB
-        bHe/CKcuqFjFPtvDThE52F3pfPx7D/tOt+K2DV7WAA+4N668AULlpYN79rW/7yDM
-        aj8L3iwdMJdSOxxaKTzRMTpHtixwCKLJvoZo5SkFgNaolxc3C6PbSzpWi1xQYCZ7
-        Ty5zAcLMFw/RsIpL0UKP5+lE7irnADt6GbyPHOGyhHBFchicYKP68c/kpBYZy+tw
-        zaOco3/5uAM0ftc70e2NPqRTly3TU9RMyRHBfCbgkySs7GZ4G/xQVOOKvxg9O+JA
-        fc+w++zBVpPkUXWdsJQOx04fCxhryHnZFiw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1699535576; x=1699621976; bh=VUoLuTRFhMmnckn2Yaf8HbYIFSNgbAvysFC
-        peIQOBok=; b=LFXWh8lUOAQnM8234AXyKozL2bqOducTR0rsIY/YpElF5a2X2p2
-        aU8SO+OtgK58gxrGE7dzQFxo+uFrjrq3hF3Wcag/0NqY6f82HHFnSYmg8T0LI1Ir
-        qJjpI5ZqXYKJUoU2MroyAN9wY6B7Hw4Jr3XzKrg9Jhm1Y4dE7j9et7HzQDu+/2Oy
-        nqtspg+vti8fp/pnelB6CNV6mzX91yCRo7z8M4exbv3rhim3d44ndN2NM5AsaZ8t
-        7honL4MQjzrXQZiUQhPfUoLDVMw5iWAk9m5ybpdh3RM60kItWjR6JliYGN2pEwPk
-        IU+2mCpE09ADaMTD+mNFX1AYu5nXnZBzr7Q==
-X-ME-Sender: <xms:19pMZaQQkLgqOYjzfbYDzN88I5G7omhUK4wEf_3cTndemLTppqxEcg>
-    <xme:19pMZfyJcNvThvyZX1aJlayiID4LI4gZL7yGMiCO_lxEgNUPjWV24THXPqPBJdfEg
-    SxucOwfPySX59Knvhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddvuddggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:19pMZX2Akz5ojDYmyYjBfbN2JJUx_3rtJXofWOr6etd3sWD2FW0oJg>
-    <xmx:19pMZWBvXUhv6oT7LGbnzG4BQPf3rO-5v93vPGWwx58i5n3eWJhiWw>
-    <xmx:19pMZThwnOoMrVRLqgyuJi-dWSxjrjbQPBqYDyD0Lo2TLARjgUjbXw>
-    <xmx:2NpMZWtMwCTu01rFVR7pzE7d9vDpjKTa9NNNBzIT-UrliGWI1x7YJg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B44E536A0075; Thu,  9 Nov 2023 08:12:55 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1108-g3a29173c6d-fm-20231031.005-g3a29173c
+        with ESMTP id S229491AbjKJBjZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Nov 2023 20:39:25 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Nov 2023 17:39:22 PST
+Received: from rcdn-iport-1.cisco.com (rcdn-iport-1.cisco.com [173.37.86.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E723444A4;
+        Thu,  9 Nov 2023 17:39:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=3762; q=dns/txt; s=iport;
+  t=1699580363; x=1700789963;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PtUp1GjfEwZS61DxzSRMFo9GD7QWcRxAdJGBMTXDcM0=;
+  b=CHJNTpVfqbPEflg+O6phpSNh0QOXm5wE1W5tLaNTfGH7e2TBUAyr+Ft8
+   SteOPYyT+L6f6ROCXUCsomQwBQjfd/FD97smCNwfJezOf4zPtG0x2B6yN
+   ihm+mFd2d47xGicvnR4wbqRHoOcdnIvtgUoMSaXG7W3FVx1flRah8n7tm
+   4=;
+X-CSE-ConnectionGUID: Tg5rtsM1RzKj3gJducQSPg==
+X-CSE-MsgGUID: 2YLxlXJiRgOPNW/RlT7pzw==
+X-IPAS-Result: =?us-ascii?q?A0ANAADbh01lmJtdJa1aHAEBAQEBAQcBARIBAQQEAQGBe?=
+ =?us-ascii?q?wcBAQsBhAdAjTenQ4F+DwEBAQ9EBAEBhQaHKAImNAkOAQIEAQEBAQMCAwEBA?=
+ =?us-ascii?q?QEBAQECAQEFAQEBAgEHBBQBAQEBAQEBAR4ZBRAOJ4V1hwUBRoE+AYMQgl8Dr?=
+ =?us-ascii?q?VeCLIEBsyiBaIFIAYxDgR6ENScbgUlEhAeLfASJJQcygUlZg1KDD4o8f0daF?=
+ =?us-ascii?q?h0DBwNWKRArBwQtIgYJFC0jBlEEFxEkCRMSPgSDNAp/Pw8OEYI/IgI9NhlIg?=
+ =?us-ascii?q?lsVQARGdhAqBBQXgRJuGxUeNxESFw0DCHQdAhEjPAMFAwQzChINCyEFFEIDQ?=
+ =?us-ascii?q?gZJCwMCGgUDAwSBNgUNHgIQLScDAxNNAhAUAzsDAwYDCzEDMFVEDFEDbx8aH?=
+ =?us-ascii?q?Ak8DwwfAhseDScoAjVDAxEFEgIWAyQZBEUDCQMHBUlAAwsYDUgRLDUGDhsGP?=
+ =?us-ascii?q?3MHoGJyAS1igTCUODKPBIIdoEeEF4FfnyoaM4QBjHOZD5g/IKMJhSiBYzqBW?=
+ =?us-ascii?q?zMaCBsVgyNRGQ+OOZMbAV0jbQIHCwEBAwmLSgEB?=
+IronPort-Data: A9a23:xFsu3a1wctyYQEMMyPbD5aJ3kn2cJEfYwER7XKvMYLTBsI5bpzZWz
+ mUXX2DXPvfZZmqhLtojO43goB8A6pbVztZhSAtu3Hw8FHgiRegpqji6wuYcGwvIc6UvmWo+t
+ 512huHodZ1yFjmE4E71btANlFEkvYmQXL3wFeXYDS54QA5gWU8JhAlq8wIDqtYAbeORXUXV4
+ rsen+WFYAX+gmctajpNg06+gEoHUMra6WtwUmMWPZinjHeG/1EJAZQWI72GLneQauG4ycbjG
+ o4vZJnglo/o109F5uGNy94XQWVWKlLmBjViv1INM0SUbreukQRpukozHKJ0hU66EFxllfgpo
+ DlGncTYpQvEosQglcxFOyS0HR2SMoV69+LdPWOa6PaB7E+dfFng3v5XN3k5aNhwFuZfWQmi9
+ NQCIzwLKxuEne/znPSwS/JngYIoK8yD0IE34y47i2qGS6d9B8meHs0m5vcAtNs0rsxHG/fTY
+ 9UQQTFudx/HJRZIPz/7Dbpnx7v41iWuImMwRFS9/5sT82zj7g1L35/VFuWSQNi2Gt1HgRPNz
+ o7B1z2pXk5FXDCF8hKB83SxlqrCkyLTRo0fDvu7++RsjVnVwXYcYDUSVF2msby6gFO/X953N
+ UMZ4GwtoLI0+UjtScPyNzW0rWCFtRMAQdddO/M15RvLyafO5QudQG8eQVZpbN0gqd9zRjEw0
+ FKNt83mCCYps7CPT3+ZsLCOoluaPSkTMH9HbDUBCAgI+d/upKk3jwnTVZBiFqCvh9H4ED22x
+ CqFxAA4hr4UiccQ/6u59EvDjnShu/DhSAI4/QzKWmSk4xliTIGiYIOs5B7Q6vMoBICQUlmIu
+ lAHltKY4eRICouC/ASNWOwlDqC14OzDOzrZ6XZrHp885yy18DuvcJ545DBlOFwvNdQAcDXyJ
+ kjJtmt54J5VIWvvaK5veKqvBMkwi6vtD9LoUrbTdNUmSoghKieE8TtoaErW2Hri+GA3nKg5f
+ 56dfcu2FnEcIb9qxz3wTOAYuZc3wSU33iXWWJzh0hKk2JKRYXeUTfEON17mRvkk7aizuA/P+
+ tZaPuOT1hRUUev1JCLQ9OY7JFMSKFA/BJbru4lZcfOFLgN6GWYnTfjLztsJd4VjnqlRvujJ+
+ 2mwXkJGyVH/w2bOL0CEcHllY7L0VpE5pnt9IDdEFUyv0XgLYou16qobMZwtctEP/+x5zOVoS
+ OEFdoOED+5IWxzM4DsHaoTl6oF/HDy0hAaKFymoej4ye9hnXQOhxzP/VhHk+C9LBS2tuI5i5
+ bahzQjcB5EEQmyOEfo6dtqTwA6roWM4wdhgfEmTLftfZU7Vy7BlfnmZYuAMH+kALhDKxz2/3
+ gmQAAsFqeSln2PT2ISX7Uxjh9r0e9aSDna2DEGAsunrbXiyEn6LhN4fALzRLFgxQUutoP36D
+ di52c0QJxHuobqnm5B3H7AuxqUk6p6z4bRb1Q9jWn7MajxH64+MwFHYgaGjVYUUm9e1XDdav
+ GrTprG23p3VYKvY/KY5flZNUwh6/ah8dsPuxfo0Ol7mwyR84aCKV05fVzHV1n0MceYpbt91m
+ rh90CLz1+BZokRzWjphpn4Mn1lg0lRcO0nanshAWdSy2lZDJq9qO8CGVEcaH61jm/0VYhV1f
+ Vd4dYLJhq9XwQLZYmEvGH3WtdexdrxQ0C2mOGQqfgzT8vKc36df9EQIoVwfEF8Ppj0ZiL0bB
+ 4SeHxAvTUl412021JErsqHFM1wpOSB1DWSokAtRyD2GHxX4PoEPRUVkUduwEIki2zo0VlBmE
+ HuwkQ4JjR6CkBnN4xYP
+IronPort-HdrOrdr: A9a23:1pk2VKypleQTi517Rul2KrPwJb1zdoMgy1knxilNoNJuHvBw8P
+ re/sjzuiWbtN98YhsdcLO7Scq9qA3nlKKdiLN5VdyftWLd11dAQrsO0WKb+V3d8+mUzJ846U
+ +mGJIObeHNMQ==
+X-Talos-CUID: =?us-ascii?q?9a23=3A/Eqiz2mXSOSCeZI2EUGthTci2VnXOUHSkW3MOGr?=
+ =?us-ascii?q?hM3RKSuaaa1ON85pfq8U7zg=3D=3D?=
+X-Talos-MUID: 9a23:xtDHAwvI7ZhpOKvHds2n3gBGJMNYwaWUB2c1t6pBgc24ajRiJGLI
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.03,291,1694736000"; 
+   d="scan'208";a="134884996"
+Received: from rcdn-core-4.cisco.com ([173.37.93.155])
+  by rcdn-iport-1.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 01:38:19 +0000
+Received: from goliath.lan ([10.25.128.169])
+        by rcdn-core-4.cisco.com (8.15.2/8.15.2) with ESMTP id 3AA1cHVG011466;
+        Fri, 10 Nov 2023 01:38:17 GMT
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pratyush Brahma <quic_pbrahma@quicinc.com>,
+        Tomas Mudrunka <tomas.mudrunka@gmail.com>,
+        Sean Anderson <sean.anderson@seco.com>, x86@kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org
+Cc:     linux-efi@vger.kernel.org
+Subject: [PATCH 0/8] generic command line v6
+Date:   Thu,  9 Nov 2023 17:38:04 -0800
+Message-Id: <20231110013817.2378507-1-danielwa@cisco.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-Id: <1c17f4da-4f40-408a-80d9-f534d8bddb6a@app.fastmail.com>
-In-Reply-To: <87o7g46wcp.fsf@BL-laptop>
-References: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
- <20231027221106.405666-6-jiaxun.yang@flygoat.com> <87o7g46wcp.fsf@BL-laptop>
-Date:   Thu, 09 Nov 2023 13:12:29 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Gregory CLEMENT" <gregory.clement@bootlin.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        vladimir.kondratiev@intel.com
-Subject: Re: [PATCH v2 05/10] MIPS: Refactor mips_cps_core_entry implementation
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.25.128.169, [10.25.128.169]
+X-Outbound-Node: rcdn-core-4.cisco.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This release is an up-rev of the v5 patches. No additional features have
+been added. Some changes were mode to function names and some changes to
+Kconfig dependencies. Also updated the config conversion for mips.
+
+There are a number of people who have expressed interest in these
+patches either by asking for them to be merge or testing them. If
+people are so inclined please continue to request them to be merge
+or to ask the status of the next release. It's helpful to motivate me to
+release them again and for the maintainers to see the interest
+generated.
+
+These patches have been used by Cisco Systems, Inc. on millions of
+released products to great effect. Hopefully they can be used by the
+entire Linux eco system.
+
+My apologies on the length between releases. I will try to release more
+often.
 
 
-=E5=9C=A82023=E5=B9=B411=E6=9C=888=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =E4=
-=B8=8B=E5=8D=884:30=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> Hello Jiaxun,
->
->> Now the exception vector for CPS systems are allocated on-fly
->> with memblock as well.
->>
->> It will try to allocate from KSEG1 first, and then try to allocate
->> in low 4G if possible.
->>
->> The main reset vector is now generated by uasm, to avoid tons
->> of patches to the code. Other vectors are copied to the location
->> later.
->>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->
->> +
->> +static int __init setup_cps_vecs(void)
->> +{
-> [...]
->> +
->> +	/* We want to ensure cache is clean before writing uncached mem */
->> +	blast_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) +
->> BEV_VEC_SIZE);
->
-> In my case this call failed because when setup_cps_vecs is called, the
-> cache information are not initialized yet!
->
-> As a workaround I moved the cpu_cache_init() call before
-> plat_smp_setup() in the /arch/mips/kernel/setup.c file.
->
-> Obviously it is not the right thing to do, but it shows that the cache
-> related function are called too early. For example, in
-> blast_dcache_range, the value returned by cpu_dcache_line_size was 0
-> instead of 64, because the value cpu_data[0].dcache.linesz was not set
-> yet.
+Daniel Walker (8):
+  CMDLINE: add generic builtin command line
+  scripts: insert-sys-cert: add command line insert capability
+  scripts: insert-sys-cert: change name to insert-symbol
+  CMDLINE: mips: convert to generic builtin command line
+  drivers: firmware: efi: libstub: enable generic commandline
+  CMDLINE: x86: convert to generic builtin command line
+  of: replace command line handling
+  CMDLINE: arm64: convert to generic builtin command line
 
-Oops, that's a problem!
+ arch/arm64/Kconfig                            |  33 +--
+ arch/arm64/include/asm/setup.h                |   4 +
+ arch/arm64/include/uapi/asm/setup.h           |   2 +
+ arch/arm64/kernel/idreg-override.c            |   9 +-
+ arch/arm64/kernel/pi/kaslr_early.c            |  14 +-
+ arch/mips/Kconfig                             |   4 +-
+ arch/mips/Kconfig.debug                       |  44 ----
+ arch/mips/configs/ar7_defconfig               |  12 +-
+ arch/mips/configs/bcm47xx_defconfig           |  10 +-
+ arch/mips/configs/bcm63xx_defconfig           |  21 +-
+ arch/mips/configs/bmips_be_defconfig          |  17 +-
+ arch/mips/configs/bmips_stb_defconfig         | 139 ++++------
+ arch/mips/configs/ci20_defconfig              |   8 +-
+ arch/mips/configs/cu1000-neo_defconfig        |  19 +-
+ arch/mips/configs/cu1830-neo_defconfig        |  19 +-
+ arch/mips/configs/generic_defconfig           |  15 +-
+ arch/mips/configs/gpr_defconfig               |  33 +--
+ arch/mips/configs/loongson3_defconfig         |  29 +--
+ arch/mips/include/asm/setup.h                 |   2 +
+ arch/mips/kernel/relocate.c                   |  17 +-
+ arch/mips/kernel/setup.c                      |  36 +--
+ arch/mips/pic32/pic32mzda/early_console.c     |   2 +-
+ arch/mips/pic32/pic32mzda/init.c              |   3 +-
+ arch/x86/Kconfig                              |  44 +---
+ arch/x86/kernel/setup.c                       |  18 +-
+ .../firmware/efi/libstub/efi-stub-helper.c    |  29 +++
+ drivers/firmware/efi/libstub/efi-stub.c       |   9 +
+ drivers/firmware/efi/libstub/efistub.h        |   1 +
+ drivers/firmware/efi/libstub/x86-stub.c       |  14 +-
+ drivers/of/fdt.c                              |  22 +-
+ include/linux/cmdline.h                       | 137 ++++++++++
+ init/Kconfig                                  |  79 ++++++
+ lib/Kconfig                                   |   4 +
+ lib/Makefile                                  |   3 +
+ lib/generic_cmdline.S                         |  53 ++++
+ lib/test_cmdline1.c                           | 139 ++++++++++
+ scripts/Makefile                              |   2 +-
+ .../{insert-sys-cert.c => insert-symbol.c}    | 243 ++++++++++++------
+ 38 files changed, 807 insertions(+), 482 deletions(-)
+ create mode 100644 include/linux/cmdline.h
+ create mode 100644 lib/generic_cmdline.S
+ create mode 100644 lib/test_cmdline1.c
+ rename scripts/{insert-sys-cert.c => insert-symbol.c} (72%)
 
->
-> So I wonder who it managed to work in your setup. What is the machine
-> running in QEMU .
+-- 
+2.39.2
 
-I'm using QEMU boston with vmlinux only.
-
-QEMU does not emulate Cache at all so that won't be a problem on QEMU
-but it may be a problem for actual hardware.
-
-The proper solution might be leave allocation here but move uasm generat=
-ion
-to a later point.
-
->
-> Does it use someting like the following line ?
-> #define cpu_dcache_line_size()       32
->
->
->> +	bc_wback_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
->> +	__sync();
->> +
->> +	cps_vec =3D (void *)TO_UNCAC(cps_vec_pa);
->> +	mips_cps_build_core_entry(cps_vec);
->> +
->> +	memcpy(cps_vec + 0x200, &excep_tlbfill, 0x80);
->> +	memcpy(cps_vec + 0x280, &excep_xtlbfill, 0x80);
->> +	memcpy(cps_vec + 0x300, &excep_cache, 0x80);
->> +	memcpy(cps_vec + 0x380, &excep_genex, 0x80);
->> +	memcpy(cps_vec + 0x400, &excep_intex, 0x80);
->> +	memcpy(cps_vec + 0x480, &excep_ejtag, 0x80);
->> +
->> +	/* Make sure no prefetched data in cache */
->> +	blast_inv_dcache_range(TO_CAC(cps_vec_pa), TO_CAC(cps_vec_pa) + BEV=
-_VEC_SIZE);
->> +	bc_inv(TO_CAC(cps_vec_pa), BEV_VEC_SIZE);
->> +	__sync();
->> +
->> +	return 0;
->> +}
->
-> [...]
->
->>  	/* If we have an FPU, enroll ourselves in the FPU-full mask */
->> @@ -110,10 +241,14 @@ static void __init cps_prepare_cpus(unsigned in=
-t max_cpus)
->>  {
->>  	unsigned ncores, core_vpes, c, cca;
->>  	bool cca_unsuitable, cores_limited;
->> -	u32 *entry_code;
->> =20
->>  	mips_mt_set_cpuoptions();
->> =20
->> +	if (!core_entry_reg) {
->> +		pr_err("core_entry address unsuitable, disabling smp-cps\n");
->> +		goto err_out;
->> +	}
->> +
->>  	/* Detect whether the CCA is unsuited to multi-core SMP */
->>  	cca =3D read_c0_config() & CONF_CM_CMASK;
->>  	switch (cca) {
->> @@ -145,20 +280,6 @@ static void __init cps_prepare_cpus(unsigned int=
- max_cpus)
->>  			(cca_unsuitable && cpu_has_dc_aliases) ? " & " : "",
->>  			cpu_has_dc_aliases ? "dcache aliasing" : "");
->> =20
->> -	/*
->> -	 * Patch the start of mips_cps_core_entry to provide:
->> -	 *
->> -	 * s0 =3D kseg0 CCA
->> -	 */
->> -	entry_code =3D (u32 *)&mips_cps_core_entry;
->> -	uasm_i_addiu(&entry_code, 16, 0, cca);
->> -	UASM_i_LA(&entry_code, 17, (long)mips_gcr_base);
->> -	BUG_ON((void *)entry_code > (void *)&mips_cps_core_entry_patch_end);
->> -	blast_dcache_range((unsigned long)&mips_cps_core_entry,
->> -			   (unsigned long)entry_code);
->> -	bc_wback_inv((unsigned long)&mips_cps_core_entry,
->> -		     (void *)entry_code - (void *)&mips_cps_core_entry);
->> -	__sync();
->
-> The original code here was called later during boot from
-> kernel_init_freeable() which is called by kernel_init() after all the
-> calls in start_kernel. That's why there were no issue before the move.
-
-I guess move uasm generation code here will be helpful :-)
-
->
-> Gregory
->
->> =20
-
-
---=20
-- Jiaxun
