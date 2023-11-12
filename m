@@ -1,150 +1,301 @@
-Return-Path: <linux-mips+bounces-17-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-18-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39EC97E8E4E
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Nov 2023 05:22:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B55F7E91CE
+	for <lists+linux-mips@lfdr.de>; Sun, 12 Nov 2023 18:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE93AB209C7
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Nov 2023 04:22:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2A051F20F72
+	for <lists+linux-mips@lfdr.de>; Sun, 12 Nov 2023 17:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AA42100;
-	Sun, 12 Nov 2023 04:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FacYEZCQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDA2156CC;
+	Sun, 12 Nov 2023 17:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B8D1FB7;
-	Sun, 12 Nov 2023 04:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF58C433AB;
-	Sun, 12 Nov 2023 04:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699762926;
-	bh=FJL4JNEf9Nr1DoflQgnKi0tfP9lyYuVjCmmad2iv8TA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FacYEZCQKy7zh6VsDp47yhkL+9he5Y+BzcuRtc1i6KHlTBkqaeroQJJDPLMRFLWD9
-	 QNhskha1onUHVMj2O/qk8mK8c0vJZhiTXumXWS0CGWZks5ZJFrR6dvkAIDGJkCeV/t
-	 6amg22+gEIHVdyPSQgk0L9lJZr+X87dXFazyXH2ThFIzgEMWpLCJskz/nC6CtTqsA+
-	 Z9NTC9QINWCby1hgnVCHVFMOnhZXaqZYk/4H/uttsH8za+SgromnkZZytr79DMdLq5
-	 z6fSwHr0XX/U0fb4cdcZFZDuYKieV7M2bNXh4VB6zTAsNqvA0mOlgafeRuwkTVq4La
-	 Yez2M8oVwyWiQ==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-52bd9ddb741so5252690a12.0;
-        Sat, 11 Nov 2023 20:22:06 -0800 (PST)
-X-Gm-Message-State: AOJu0Yw1fRuDc9XcvafNK/1x/b/M4Fh4EyZo0KDm9eGurcS/rIWfQqv0
-	VjXPKVOG7l2f08dG09H3CibhTWMVH9X87+xsUQs=
-X-Google-Smtp-Source: AGHT+IGKtBb4zpepnAgJWTPQf4OFL8Yxg0IypTLD7L38xtqORdph/fQnU2/w9oi/MfemCZAy/+rZ76w/2ug+y+JaBNQ=
-X-Received: by 2002:a05:6402:3d9:b0:53f:731a:e513 with SMTP id
- t25-20020a05640203d900b0053f731ae513mr2174574edw.25.1699762924720; Sat, 11
- Nov 2023 20:22:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A631548F;
+	Sun, 12 Nov 2023 17:35:26 +0000 (UTC)
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0595D211B;
+	Sun, 12 Nov 2023 09:35:25 -0800 (PST)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1cc4f777ab9so26246275ad.0;
+        Sun, 12 Nov 2023 09:35:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699810524; x=1700415324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WoHWK6gINi+EEwKTGP1Dg7yIjtZGVaNrtn4vb+1P0Pc=;
+        b=fqSD7VGKbfWxci9Tr/tCTUhiRZutfr1bbi0M0yqzqJT9HTcf8uNJS0cRKm5EOhL0LI
+         7Ixh6IxqVX71ODB9qVFPb6iOxa8mnVcdurFKh+N+W9XL7n5Ou3GJrXdxip25sTrgXbf/
+         oVnHy7sE1ILzcZdUSXZoF1s+4gXdYEMuGByVVMXvHHAhxIYa3vME5skzwYjzUPA82rFI
+         f+QkMglQ1Fl429L5fGyhsYuwPHClAROLV0VmJ771lJs9yELqNFAboOb3WXqYIf7ZEkXC
+         AVcDCIqSNaHTZ/7rVAMN1BjgpfPMS5+Lxphj8Pgx6laj+VrdL9bH4e83DENHly6pkxFc
+         6+rA==
+X-Gm-Message-State: AOJu0Yzc914Lv5i0bm+S9ZjYowbav/3ZQghCkUnP5cWFIu5RMuhH+DnY
+	cOdy1RHLxn4kShITR8vb0zE=
+X-Google-Smtp-Source: AGHT+IFd+7BefBv/n/fSSGw7xmysLeuCAiNT7/refCQp1UZ16kLfECcyF3DpQcfnxFHM4Pm1w5+ajw==
+X-Received: by 2002:a17:902:b618:b0:1cc:138a:287b with SMTP id b24-20020a170902b61800b001cc138a287bmr2491072pls.3.1699810524296;
+        Sun, 12 Nov 2023 09:35:24 -0800 (PST)
+Received: from localhost ([156.39.10.100])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b001cc32f46757sm2761359plh.107.2023.11.12.09.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Nov 2023 09:35:23 -0800 (PST)
+Date: Sun, 12 Nov 2023 09:35:23 -0800
+From: Moritz Fischer <mdf@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: acpica-devel@lists.linuxfoundation.org,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org,
+	David Woodhouse <dwmw2@infradead.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	"K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org,
+	linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Hector Martin <marcan@marcan.st>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Sven Peter <sven@svenpeter.dev>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Krishna Reddy <vdumpa@nvidia.com>, Vineet Gupta <vgupta@kernel.org>,
+	virtualization@lists.linux-foundation.org,
+	Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
+	Zhenhua Huang <quic_zhenhuah@quicinc.com>
+Subject: Re: [PATCH RFC 01/17] iommu: Remove struct iommu_ops *iommu from
+ arch_setup_dma_ops()
+Message-ID: <ZVEM23qFzLnnXiEz@archbook>
+References: <0-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
+ <1-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231108125843.3806765-1-arnd@kernel.org> <20231108125843.3806765-13-arnd@kernel.org>
-In-Reply-To: <20231108125843.3806765-13-arnd@kernel.org>
-From: Guo Ren <guoren@kernel.org>
-Date: Sat, 11 Nov 2023 23:21:53 -0500
-X-Gmail-Original-Message-ID: <CAJF2gTSEziwKn+f6DfZXRuzW1SXaWraKL2HdXMRkEOGyuHq3MQ@mail.gmail.com>
-Message-ID: <CAJF2gTSEziwKn+f6DfZXRuzW1SXaWraKL2HdXMRkEOGyuHq3MQ@mail.gmail.com>
-Subject: Re: [PATCH 12/22] csky: fix arch_jump_label_transform_static override
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Geoff Levand <geoff@infradead.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	x86@kernel.org, Helge Deller <deller@gmx.de>, 
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Timur Tabi <timur@kernel.org>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, David Woodhouse <dwmw2@infradead.org>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, Kees Cook <keescook@chromium.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Al Viro <viro@zeniv.linux.org.uk>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-bcachefs@vger.kernel.org, linux-mtd@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1-v1-5f734af130a3+34f-iommu_fwspec_jgg@nvidia.com>
 
-On Wed, Nov 8, 2023 at 8:02=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The arch_jump_label_transform_static() function in csky was originally me=
-ant to
-> override the generic __weak function, but that got changed to an #ifndef =
-check.
->
-> This showed up as a missing-prototype warning:
-> arch/csky/kernel/jump_label.c:43:6: error: no previous prototype for 'arc=
-h_jump_label_transform_static' [-Werror=3Dmissing-prototypes]
->
-> Change the method to use the new method of having a #define and a prototy=
-pe
-> for the global function.
->
-> Fixes: 7e6b9db27de9 ("jump_label: make initial NOP patching the special c=
-ase")
-> Fixes: 4e8bb4ba5a55 ("csky: Add jump-label implementation")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Nov 03, 2023 at 01:44:46PM -0300, Jason Gunthorpe wrote:
+> This is not being used to pass ops, it is just a way to tell if an
+> iommu driver was probed. These days this can be detected directly via
+> device_iommu_mapped(). Call device_iommu_mapped() in the two places that
+> need to check it and remove the iommu parameter everywhere.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+
+Reviewed-by: Moritz Fischer <mdf@kernel.org>
 > ---
->  arch/csky/include/asm/jump_label.h | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/arch/csky/include/asm/jump_label.h b/arch/csky/include/asm/j=
-ump_label.h
-> index d488ba6084bc..98a3f4b168bd 100644
-> --- a/arch/csky/include/asm/jump_label.h
-> +++ b/arch/csky/include/asm/jump_label.h
-> @@ -43,5 +43,10 @@ static __always_inline bool arch_static_branch_jump(st=
-ruct static_key *key,
->         return true;
+>  arch/arc/mm/dma.c               |  2 +-
+>  arch/arm/mm/dma-mapping-nommu.c |  2 +-
+>  arch/arm/mm/dma-mapping.c       | 10 +++++-----
+>  arch/arm64/mm/dma-mapping.c     |  4 ++--
+>  arch/mips/mm/dma-noncoherent.c  |  2 +-
+>  arch/riscv/mm/dma-noncoherent.c |  2 +-
+>  drivers/acpi/scan.c             |  3 +--
+>  drivers/hv/hv_common.c          |  2 +-
+>  drivers/of/device.c             |  2 +-
+>  include/linux/dma-map-ops.h     |  4 ++--
+>  10 files changed, 16 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/arc/mm/dma.c b/arch/arc/mm/dma.c
+> index 2a7fbbb83b7056..197707bc765889 100644
+> --- a/arch/arc/mm/dma.c
+> +++ b/arch/arc/mm/dma.c
+> @@ -91,7 +91,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+>   * Plug in direct dma map ops.
+>   */
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -			const struct iommu_ops *iommu, bool coherent)
+> +			bool coherent)
+>  {
+>  	/*
+>  	 * IOC hardware snoops all DMA traffic keeping the caches consistent
+> diff --git a/arch/arm/mm/dma-mapping-nommu.c b/arch/arm/mm/dma-mapping-nommu.c
+> index cfd9c933d2f09c..b94850b579952a 100644
+> --- a/arch/arm/mm/dma-mapping-nommu.c
+> +++ b/arch/arm/mm/dma-mapping-nommu.c
+> @@ -34,7 +34,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
 >  }
->
-> +enum jump_label_type;
-> +void arch_jump_label_transform_static(struct jump_entry *entry,
-> +                                     enum jump_label_type type);
-> +#define arch_jump_label_transform_static arch_jump_label_transform_stati=
-c
-> +
->  #endif  /* __ASSEMBLY__ */
->  #endif /* __ASM_CSKY_JUMP_LABEL_H */
-> --
-> 2.39.2
->
->
-Thank you!
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
---=20
-Best Regards
- Guo Ren
+>  
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -			const struct iommu_ops *iommu, bool coherent)
+> +			bool coherent)
+>  {
+>  	if (IS_ENABLED(CONFIG_CPU_V7M)) {
+>  		/*
+> diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+> index 5409225b4abc06..6c359a3af8d9c7 100644
+> --- a/arch/arm/mm/dma-mapping.c
+> +++ b/arch/arm/mm/dma-mapping.c
+> @@ -1713,7 +1713,7 @@ void arm_iommu_detach_device(struct device *dev)
+>  EXPORT_SYMBOL_GPL(arm_iommu_detach_device);
+>  
+>  static void arm_setup_iommu_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -				    const struct iommu_ops *iommu, bool coherent)
+> +				    bool coherent)
+>  {
+>  	struct dma_iommu_mapping *mapping;
+>  
+> @@ -1748,7 +1748,7 @@ static void arm_teardown_iommu_dma_ops(struct device *dev)
+>  #else
+>  
+>  static void arm_setup_iommu_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -				    const struct iommu_ops *iommu, bool coherent)
+> +				    bool coherent)
+>  {
+>  }
+>  
+> @@ -1757,7 +1757,7 @@ static void arm_teardown_iommu_dma_ops(struct device *dev) { }
+>  #endif	/* CONFIG_ARM_DMA_USE_IOMMU */
+>  
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -			const struct iommu_ops *iommu, bool coherent)
+> +			bool coherent)
+>  {
+>  	/*
+>  	 * Due to legacy code that sets the ->dma_coherent flag from a bus
+> @@ -1776,8 +1776,8 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+>  	if (dev->dma_ops)
+>  		return;
+>  
+> -	if (iommu)
+> -		arm_setup_iommu_dma_ops(dev, dma_base, size, iommu, coherent);
+> +	if (device_iommu_mapped(dev))
+> +		arm_setup_iommu_dma_ops(dev, dma_base, size, coherent);
+>  
+>  	xen_setup_dma_ops(dev);
+>  	dev->archdata.dma_ops_setup = true;
+> diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
+> index 3cb101e8cb29ba..61886e43e3a10f 100644
+> --- a/arch/arm64/mm/dma-mapping.c
+> +++ b/arch/arm64/mm/dma-mapping.c
+> @@ -47,7 +47,7 @@ void arch_teardown_dma_ops(struct device *dev)
+>  #endif
+>  
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -			const struct iommu_ops *iommu, bool coherent)
+> +			bool coherent)
+>  {
+>  	int cls = cache_line_size_of_cpu();
+>  
+> @@ -58,7 +58,7 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+>  		   ARCH_DMA_MINALIGN, cls);
+>  
+>  	dev->dma_coherent = coherent;
+> -	if (iommu)
+> +	if (device_iommu_mapped(dev))
+>  		iommu_setup_dma_ops(dev, dma_base, dma_base + size - 1);
+>  
+>  	xen_setup_dma_ops(dev);
+> diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+> index 3c4fc97b9f394b..0f3cec663a12cd 100644
+> --- a/arch/mips/mm/dma-noncoherent.c
+> +++ b/arch/mips/mm/dma-noncoherent.c
+> @@ -138,7 +138,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+>  
+>  #ifdef CONFIG_ARCH_HAS_SETUP_DMA_OPS
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -		const struct iommu_ops *iommu, bool coherent)
+> +		bool coherent)
+>  {
+>  	dev->dma_coherent = coherent;
+>  }
+> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
+> index b76e7e192eb183..f91fa741c41211 100644
+> --- a/arch/riscv/mm/dma-noncoherent.c
+> +++ b/arch/riscv/mm/dma-noncoherent.c
+> @@ -135,7 +135,7 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
+>  }
+>  
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -		const struct iommu_ops *iommu, bool coherent)
+> +			bool coherent)
+>  {
+>  	WARN_TAINT(!coherent && riscv_cbom_block_size > ARCH_DMA_MINALIGN,
+>  		   TAINT_CPU_OUT_OF_SPEC,
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 691d4b7686ee7e..a6891ad0ceee2c 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -1636,8 +1636,7 @@ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+>  	if (PTR_ERR(iommu) == -EPROBE_DEFER)
+>  		return -EPROBE_DEFER;
+>  
+> -	arch_setup_dma_ops(dev, 0, U64_MAX,
+> -				iommu, attr == DEV_DMA_COHERENT);
+> +	arch_setup_dma_ops(dev, 0, U64_MAX, attr == DEV_DMA_COHERENT);
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index ccad7bca3fd3da..fd938b6dfa7ed4 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -489,7 +489,7 @@ void hv_setup_dma_ops(struct device *dev, bool coherent)
+>  	 * Hyper-V does not offer a vIOMMU in the guest
+>  	 * VM, so pass 0/NULL for the IOMMU settings
+>  	 */
+> -	arch_setup_dma_ops(dev, 0, 0, NULL, coherent);
+> +	arch_setup_dma_ops(dev, 0, 0, coherent);
+>  }
+>  EXPORT_SYMBOL_GPL(hv_setup_dma_ops);
+>  
+> diff --git a/drivers/of/device.c b/drivers/of/device.c
+> index 1ca42ad9dd159d..65c71be71a8d45 100644
+> --- a/drivers/of/device.c
+> +++ b/drivers/of/device.c
+> @@ -193,7 +193,7 @@ int of_dma_configure_id(struct device *dev, struct device_node *np,
+>  	dev_dbg(dev, "device is%sbehind an iommu\n",
+>  		iommu ? " " : " not ");
+>  
+> -	arch_setup_dma_ops(dev, dma_start, size, iommu, coherent);
+> +	arch_setup_dma_ops(dev, dma_start, size, coherent);
+>  
+>  	if (!iommu)
+>  		of_dma_set_restricted_buffer(dev, np);
+> diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
+> index f2fc203fb8a1a2..2cb98a12c50348 100644
+> --- a/include/linux/dma-map-ops.h
+> +++ b/include/linux/dma-map-ops.h
+> @@ -426,10 +426,10 @@ bool arch_dma_unmap_sg_direct(struct device *dev, struct scatterlist *sg,
+>  
+>  #ifdef CONFIG_ARCH_HAS_SETUP_DMA_OPS
+>  void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> -		const struct iommu_ops *iommu, bool coherent);
+> +		bool coherent);
+>  #else
+>  static inline void arch_setup_dma_ops(struct device *dev, u64 dma_base,
+> -		u64 size, const struct iommu_ops *iommu, bool coherent)
+> +		u64 size, bool coherent)
+>  {
+>  }
+>  #endif /* CONFIG_ARCH_HAS_SETUP_DMA_OPS */
+> -- 
+> 2.42.0
+> 
 
