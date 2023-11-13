@@ -1,129 +1,315 @@
-Return-Path: <linux-mips+bounces-29-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-30-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2A5A7E99F9
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 11:16:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83BA07E9C0A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 13:21:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 628EDB207F1
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 10:16:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A35B61C208FE
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 12:21:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9070C1C681;
-	Mon, 13 Nov 2023 10:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406F71D6A7;
+	Mon, 13 Nov 2023 12:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yu7Hdo/5"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357011C680
-	for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 10:16:08 +0000 (UTC)
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B1CD79;
-	Mon, 13 Nov 2023 02:16:05 -0800 (PST)
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5842a7fdc61so2194679eaf.3;
-        Mon, 13 Nov 2023 02:16:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FF31D692
+	for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 12:21:35 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1CD5
+	for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 04:21:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699878092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=zIHSrYUcQnxoKXdjZZpZq5jMd/3daIfiQKpFrLHTsdU=;
+	b=Yu7Hdo/5plblCptHPcHHXf+9vRvOj/Zk8ApYb0pxBvJ66oGqymud4iKofR7RbBenSPB2SZ
+	i4CeNmmAZVYqgVegeajfF9gLmPOZYcbPHoP1x+LFH+ypB+/47TyRCHY7EcD/QcF50rd7T7
+	4Jy5iTD5qb94R8BKs3JXOJUpIzc6iVA=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-376-A9dkB10-Mx-Z_w5o7aLGCw-1; Mon, 13 Nov 2023 07:21:31 -0500
+X-MC-Unique: A9dkB10-Mx-Z_w5o7aLGCw-1
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-7ba6bf56798so1559258241.3
+        for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 04:21:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699870564; x=1700475364;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uTO0ERk3BWfb6UISnsbuegKh0j43MXQ3l4j0lmIgta4=;
-        b=JfGLhsNo5m8suJvgK+8n0BsIsiyUaFUsLjcAunR0AVy8ay9gdDT7LgYtcoF7QqfGMy
-         Ar4ua7pR+w2iY4XltNotEOevA2YbFKbsBqnRUx9p0zqZjqn/VGYgGV2Z9U2XEK9PREMY
-         vBNjks/2D46148SiaSKzUvpE/X4EjSjg/6wIYhFRPPJO5ogQKVxL5AgLieQoZ8UKyEKE
-         dbzEStmGLvayqFHnS5XJLOkRHnSdf0hj1DXW+AeYjnYNvSS+3Ugp/T0x+CHeWTtr3ueP
-         +iF08RhBCnerq3ai4sUoMIjApXnx1cuxC6QpzGI6/t5Gy+C+MbdCZ/4pMdohaZ6vlM9M
-         tsQQ==
-X-Gm-Message-State: AOJu0Yyh1hkmB8rhSwWkYelg4+JPfSNIKg8FlDgWCvEdAXUD9r1oVVJ4
-	BBlA2E9oEBHs6I7aajvRxCrIT5SpGZwLkQ==
-X-Google-Smtp-Source: AGHT+IGy4cVdjJ2mQP6WMbuJtvBHqDH9VWqBbeWjRiz/nWrUeGAptgpvQBJQm8420lPJQtPC++1Wfg==
-X-Received: by 2002:a4a:d291:0:b0:581:f2de:25f8 with SMTP id h17-20020a4ad291000000b00581f2de25f8mr5711593oos.0.1699870564572;
-        Mon, 13 Nov 2023 02:16:04 -0800 (PST)
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com. [209.85.167.179])
-        by smtp.gmail.com with ESMTPSA id v8-20020a4a8c48000000b00581df2cb1e6sm933209ooj.32.2023.11.13.02.16.04
+        d=1e100.net; s=20230601; t=1699878091; x=1700482891;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zIHSrYUcQnxoKXdjZZpZq5jMd/3daIfiQKpFrLHTsdU=;
+        b=ZWTXADCn8O9gHRbkhp/PVm3Y1K6+KSH+2wQxN3WoJRZLPURLSJaPsF2LenkKxHTF9Q
+         1eI8CUe1jD3J+GdMD56Zf5G/R4Z8Ke5vql5j/Bc6M0Qe/0KCpJaiQWWevOr8YTyZdUMl
+         KQA8j1DlLfzCkCzirZzKNcao87u1RUeKoSLq0lC2ce7PJ/LMIe9LzCUjX7WOA8qqUrcP
+         6PIXNq3uSStIBkSn0vRxxMUERQL/7cRGvuzON2kVfr1WuDXZvlazkffV/3DGQrweVQy0
+         7C+NV+znbBC0huSjkao/IXNOG3PM0nwo8FqIM+fWIkXOiiMuFLYLlmk8u1IZ5EwyB6FO
+         QDoQ==
+X-Gm-Message-State: AOJu0YwUHfYqjT6FdR6WjkhaEeozqsi0Gcamf35FoTxY4ms94jBNrt2a
+	zWvR9h2FAAP8D/Yq69NjBpNB+s8LX49xCySK5ulve7FhEyIATrdFRbgQLEGPML0i1avntJMstoN
+	HREpuf3Q/4L3+ZEVsJS+1rw==
+X-Received: by 2002:a67:f2c8:0:b0:457:670f:e2eb with SMTP id a8-20020a67f2c8000000b00457670fe2ebmr6417765vsn.20.1699878090985;
+        Mon, 13 Nov 2023 04:21:30 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFKSa6ruCnuzN9s2Ejc4l9S4h3ZVAauCQx41zE3qMS0kOL2lujOmHkFT5dC7rrBHQxe5Bi5+A==
+X-Received: by 2002:a67:f2c8:0:b0:457:670f:e2eb with SMTP id a8-20020a67f2c8000000b00457670fe2ebmr6417723vsn.20.1699878090682;
+        Mon, 13 Nov 2023 04:21:30 -0800 (PST)
+Received: from [192.168.157.67] ([12.191.197.195])
+        by smtp.googlemail.com with ESMTPSA id j22-20020ac874d6000000b00419801b1094sm1904299qtr.13.2023.11.13.04.21.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Nov 2023 02:16:04 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3b2f507c03cso2428811b6e.2;
-        Mon, 13 Nov 2023 02:16:04 -0800 (PST)
-X-Received: by 2002:a0d:d74d:0:b0:5a7:d86c:988 with SMTP id
- z74-20020a0dd74d000000b005a7d86c0988mr6382133ywd.28.1699870543575; Mon, 13
- Nov 2023 02:15:43 -0800 (PST)
+        Mon, 13 Nov 2023 04:21:29 -0800 (PST)
+Message-ID: <d3071794-7c02-4ca1-850d-1d5242de4f98@redhat.com>
+Date: Mon, 13 Nov 2023 13:21:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de> <20231110152927.70601-4-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20231110152927.70601-4-u.kleine-koenig@pengutronix.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 13 Nov 2023 11:15:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU8nCWzTuBeSTPkR=heWqdAYrhAJ9ZgydzWNRqkTuT+xg@mail.gmail.com>
-Message-ID: <CAMuHMdU8nCWzTuBeSTPkR=heWqdAYrhAJ9ZgydzWNRqkTuT+xg@mail.gmail.com>
-Subject: Re: [PATCH 03/52] serial: 8250: Convert to platform remove callback
- returning void
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, Al Cooper <alcooperx@gmail.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Paul Cercueil <paul@crapouillou.net>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	John Ogness <john.ogness@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Tony Lindgren <tony@atomide.com>, Petr Mladek <pmladek@suse.com>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, Johan Hovold <johan@kernel.org>, 
-	Chen-Yu Tsai <wenst@chromium.org>, Andi Shyti <andi.shyti@linux.intel.com>, 
-	Thomas Richard <thomas.richard@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Jacob Keller <jacob.e.keller@intel.com>, 
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, kernel@pengutronix.de, 
-	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 00/34] KVM: guest_memfd() and per-page attributes
+Content-Language: en-US
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+ Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Sean Christopherson <seanjc@google.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ Xiaoyao Li <xiaoyao.li@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>, Fuad Tabba <tabba@google.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Anish Moorthy <amoorthy@google.com>,
+ David Matlack <dmatlack@google.com>, Yu Zhang <yu.c.zhang@linux.intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
+ =?UTF-8?Q?n?= <mic@digikod.net>, Vlastimil Babka <vbabka@suse.cz>,
+ Vishal Annapurve <vannapurve@google.com>,
+ Ackerley Tng <ackerleytng@google.com>,
+ Maciej Szmigiero <mail@maciej.szmigiero.name>,
+ David Hildenbrand <david@redhat.com>, Quentin Perret <qperret@google.com>,
+ Michael Roth <michael.roth@amd.com>, Wang <wei.w.wang@intel.com>,
+ Liam Merwick <liam.merwick@oracle.com>,
+ Isaku Yamahata <isaku.yamahata@gmail.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20231105163040.14904-1-pbonzini@redhat.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ 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
+In-Reply-To: <20231105163040.14904-1-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 10, 2023 at 4:31=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
->
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On 11/5/23 17:30, Paolo Bonzini wrote:
+> The "development cycle" for this version is going to be very short;
+> ideally, next week I will merge it as is in kvm/next, taking this through
+> the KVM tree for 6.8 immediately after the end of the merge window.
+> The series is still based on 6.6 (plus KVM changes for 6.7) so it
+> will require a small fixup for changes to get_file_rcu() introduced in
+> 6.7 by commit 0ede61d8589c ("file: convert to SLAB_TYPESAFE_BY_RCU").
+> The fixup will be done as part of the merge commit, and most of the text
+> above will become the commit message for the merge.
 
->  drivers/tty/serial/8250/8250_dw.c           | 6 ++----
->  drivers/tty/serial/8250/8250_em.c           | 5 ++---
+The changes from review are small enough and entirely in tests, so
+I went ahead and pushed it to kvm/next, together with "selftests: kvm/s390x: use vm_create_barebones()" which also fixed testcase failures (similar to the aarch64/page_fault_test.c hunk below).
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+The guestmemfd branch on kvm.git was force-pushed, and can be used for further
+development if you don't want to run 6.7-rc1 for whatever reason.
 
-Gr{oetje,eeting}s,
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 38882263278d..926241e23aeb 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -1359,7 +1359,6 @@ yet and must be cleared on entry.
+  	__u64 guest_phys_addr;
+  	__u64 memory_size; /* bytes */
+  	__u64 userspace_addr; /* start of the userspace allocated memory */
+-	__u64 pad[16];
+    };
+  
+    /* for kvm_userspace_memory_region::flags */
+diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+index eb4217b7c768..08a5ca5bed56 100644
+--- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
++++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+@@ -705,7 +705,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+  
+  	print_test_banner(mode, p);
+  
+-	vm = ____vm_create(mode);
++	vm = ____vm_create(VM_SHAPE(mode));
+  	setup_memslots(vm, p);
+  	kvm_vm_elf_load(vm, program_invocation_name);
+  	setup_ucall(vm);
+diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+index ea0ae7e25330..fd389663c49b 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_test.c
++++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+@@ -6,14 +6,6 @@
+   */
+  
+  #define _GNU_SOURCE
+-#include "test_util.h"
+-#include "kvm_util_base.h"
+-#include <linux/bitmap.h>
+-#include <linux/falloc.h>
+-#include <sys/mman.h>
+-#include <sys/types.h>
+-#include <sys/stat.h>
+-
+  #include <stdlib.h>
+  #include <string.h>
+  #include <unistd.h>
+@@ -21,6 +13,15 @@
+  #include <stdio.h>
+  #include <fcntl.h>
+  
++#include <linux/bitmap.h>
++#include <linux/falloc.h>
++#include <sys/mman.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++
++#include "test_util.h"
++#include "kvm_util_base.h"
++
+  static void test_file_read_write(int fd)
+  {
+  	char buf[64];
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index e4d2cd9218b2..1b58f943562f 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -819,6 +819,7 @@ static inline struct kvm_vm *vm_create_barebones(void)
+  	return ____vm_create(VM_SHAPE_DEFAULT);
+  }
+  
++#ifdef __x86_64__
+  static inline struct kvm_vm *vm_create_barebones_protected_vm(void)
+  {
+  	const struct vm_shape shape = {
+@@ -828,6 +829,7 @@ static inline struct kvm_vm *vm_create_barebones_protected_vm(void)
+  
+  	return ____vm_create(shape);
+  }
++#endif
+  
+  static inline struct kvm_vm *vm_create(uint32_t nr_runnable_vcpus)
+  {
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index d05d95cc3693..9b29cbf49476 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1214,7 +1214,7 @@ void vm_guest_mem_fallocate(struct kvm_vm *vm, uint64_t base, uint64_t size,
+  		TEST_ASSERT(region && region->region.flags & KVM_MEM_GUEST_MEMFD,
+  			    "Private memory region not found for GPA 0x%lx", gpa);
+  
+-		offset = (gpa - region->region.guest_phys_addr);
++		offset = gpa - region->region.guest_phys_addr;
+  		fd_offset = region->region.guest_memfd_offset + offset;
+  		len = min_t(uint64_t, end - gpa, region->region.memory_size - offset);
+  
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index 343e807043e1..1efee1cfcff0 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -433,6 +433,7 @@ static void test_add_max_memory_regions(void)
+  }
+  
+  
++#ifdef __x86_64__
+  static void test_invalid_guest_memfd(struct kvm_vm *vm, int memfd,
+  				     size_t offset, const char *msg)
+  {
+@@ -523,14 +524,13 @@ static void test_add_overlapping_private_memory_regions(void)
+  	close(memfd);
+  	kvm_vm_free(vm);
+  }
++#endif
+  
+  int main(int argc, char *argv[])
+  {
+  #ifdef __x86_64__
+  	int i, loops;
+-#endif
+  
+-#ifdef __x86_64__
+  	/*
+  	 * FIXME: the zero-memslot test fails on aarch64 and s390x because
+  	 * KVM_RUN fails with ENOEXEC or EFAULT.
+@@ -542,6 +542,7 @@ int main(int argc, char *argv[])
+  
+  	test_add_max_memory_regions();
+  
++#ifdef __x86_64__
+  	if (kvm_has_cap(KVM_CAP_GUEST_MEMFD) &&
+  	    (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))) {
+  		test_add_private_memory_region();
+@@ -550,7 +551,6 @@ int main(int argc, char *argv[])
+  		pr_info("Skipping tests for KVM_MEM_GUEST_MEMFD memory regions\n");
+  	}
+  
+-#ifdef __x86_64__
+  	if (argc > 1)
+  		loops = atoi_positive("Number of iterations", argv[1]);
+  	else
+diff --git a/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
+index 2f02f6128482..13e72fcec8dd 100644
+--- a/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
++++ b/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
+@@ -1,6 +1,6 @@
+  // SPDX-License-Identifier: GPL-2.0-only
+  /*
+- * Copyright (C) 2022, Google LLC.
++ * Copyright (C) 2023, Google LLC.
+   */
+  #include <linux/kvm.h>
+  #include <pthread.h>
 
-                        Geert
+Paolo
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
