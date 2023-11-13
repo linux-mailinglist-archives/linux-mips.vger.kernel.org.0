@@ -1,159 +1,196 @@
-Return-Path: <linux-mips+bounces-25-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-26-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F4277E952A
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 03:37:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F517E9593
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 04:37:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49047281147
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 02:37:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E08B1F210DF
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 03:37:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67EA79EA;
-	Mon, 13 Nov 2023 02:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA40D8C11;
+	Mon, 13 Nov 2023 03:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+0oSnA5"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6985D846B;
-	Mon, 13 Nov 2023 02:37:01 +0000 (UTC)
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 460EC1BF7;
-	Sun, 12 Nov 2023 18:36:56 -0800 (PST)
-Received: from loongson.cn (unknown [112.20.112.120])
-	by gateway (Coremail) with SMTP id _____8Bx5fDGi1FlxG45AA--.48217S3;
-	Mon, 13 Nov 2023 10:36:54 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.112.120])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxvi_Bi1Fly1JAAA--.9842S4;
-	Mon, 13 Nov 2023 10:36:52 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	loongson-kernel@lists.loongnix.cn,
-	devicetree@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	linux-mips@vger.kernel.org,
-	lvjianmin@loongson.cn,
-	WANG Xuerui <git@xen0n.name>,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v4 5/5] MIPS: Loongson64: DTS: Fix 'loongson,parent_int_map' references
-Date: Mon, 13 Nov 2023 10:36:47 +0800
-Message-Id: <5673f5d246625397595803c3f5f9b70397930ca7.1699521866.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <cover.1699521866.git.zhoubinbin@loongson.cn>
-References: <cover.1699521866.git.zhoubinbin@loongson.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457BF8BF6;
+	Mon, 13 Nov 2023 03:37:24 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC97D1;
+	Sun, 12 Nov 2023 19:37:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699846642; x=1731382642;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y+d5ffj+cXty8WEYU0vUgR9r7fyajtAWyyGi3xYe0Go=;
+  b=i+0oSnA5dFJENImLX9uLJ2SfhDUw/gT6wgwzhWtGJSyOjQYnywGugUM5
+   uBqZW1F9FZoVGQOZDJCGJRbyyFVvvHeeE33GJT4yAiJbBAN73szADqJ0y
+   M/aM8xovSE5mFsDHpUD2EwaN6DQHeymBmeamBryZHHmfTOQRGqYsho2at
+   d3uKSkNriRFq26n2wHvXu1J6PXhUK2aoqPgD3bZ2EMPwq3w+RQEiQ5d4k
+   SElmB0ZDxskPmaybFsS3+wzAraq8EPXai2H6ovDNg2SZIQv5h7aeQacJ8
+   yr/e2nnuP2Rczxn1fDKpmb8/fPSiXKloHaSfr/UaF21/+x0LtjMNt0GPW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="421469892"
+X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
+   d="scan'208";a="421469892"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 19:37:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="764228152"
+X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
+   d="scan'208";a="764228152"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.6.77]) ([10.93.6.77])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 19:37:09 -0800
+Message-ID: <b897d2ac-8a07-40a7-af59-dd746c56081e@intel.com>
+Date: Mon, 13 Nov 2023 11:37:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8Dxvi_Bi1Fly1JAAA--.9842S4
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZr13Zry7Xw1UAF4xAr1fGrX_yoW5tF48pw
-	43Aa18Gw4xKr17A398G34UJr1fZFZ0yFZrWF4xGFW8A39aga4UXr1fJF1rtrs3Gry5Xa42
-	9r1vgrWUKFykCabCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-	XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY
-	1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0eOJUUUUUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 15/34] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, Huacai Chen <chenhuacai@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>, Fuad Tabba <tabba@google.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Anish Moorthy <amoorthy@google.com>,
+ David Matlack <dmatlack@google.com>, Yu Zhang <yu.c.zhang@linux.intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
+ =?UTF-8?Q?n?= <mic@digikod.net>, Vlastimil Babka <vbabka@suse.cz>,
+ Vishal Annapurve <vannapurve@google.com>,
+ Ackerley Tng <ackerleytng@google.com>,
+ Maciej Szmigiero <mail@maciej.szmigiero.name>,
+ David Hildenbrand <david@redhat.com>, Quentin Perret <qperret@google.com>,
+ Michael Roth <michael.roth@amd.com>, Wang <wei.w.wang@intel.com>,
+ Liam Merwick <liam.merwick@oracle.com>,
+ Isaku Yamahata <isaku.yamahata@gmail.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20231105163040.14904-1-pbonzini@redhat.com>
+ <20231105163040.14904-16-pbonzini@redhat.com>
+ <956d8ee3-8b63-4a2d-b0c4-c0d3d74a0f6f@intel.com>
+ <ZU51A3U6E3aZXayC@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <ZU51A3U6E3aZXayC@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Since 'loongson,parent_int_map' has been deprecated, replace all
-relevant references in the MIPS loongson dts{i} with
-'loongson,parent-int-map'.
+On 11/11/2023 2:22 AM, Sean Christopherson wrote:
+> On Fri, Nov 10, 2023, Xiaoyao Li wrote:
+>> On 11/6/2023 12:30 AM, Paolo Bonzini wrote:
+>>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>>> index 68a144cb7dbc..a6de526c0426 100644
+>>> --- a/include/linux/kvm_host.h
+>>> +++ b/include/linux/kvm_host.h
+>>> @@ -589,8 +589,20 @@ struct kvm_memory_slot {
+>>>    	u32 flags;
+>>>    	short id;
+>>>    	u16 as_id;
+>>> +
+>>> +#ifdef CONFIG_KVM_PRIVATE_MEM
+>>> +	struct {
+>>> +		struct file __rcu *file;
+>>> +		pgoff_t pgoff;
+>>> +	} gmem;
+>>> +#endif
+>>>    };
+>>> +static inline bool kvm_slot_can_be_private(const struct kvm_memory_slot *slot)
+>>> +{
+>>> +	return slot && (slot->flags & KVM_MEM_GUEST_MEMFD);
+>>> +}
+>>> +
+>>
+>> maybe we can move this block and ...
+>>
+>> <snip>
+>>
+>>> @@ -2355,6 +2379,30 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
+>>>    					struct kvm_gfn_range *range);
+>>>    bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+>>>    					 struct kvm_gfn_range *range);
+>>> +
+>>> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>>> +{
+>>> +	return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM) &&
+>>> +	       kvm_get_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
+>>> +}
+>>> +#else
+>>> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+>>> +{
+>>> +	return false;
+>>> +}
+>>>    #endif /* CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES */
+>>
+>> this block to Patch 18?
+> 
+> It would work, but my vote is to keep them here to minimize the changes to common
+> KVM code in the x86 enabling.  It's not a strong preference though.  Of course,
+> at this point, fiddling with this sort of thing is probably a bad idea in terms
+> of landing guest_memfd.
 
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi       | 4 ++--
- arch/mips/boot/dts/loongson/loongson64c-package.dtsi     | 2 +-
- arch/mips/boot/dts/loongson/loongson64g-package.dtsi     | 2 +-
- arch/mips/boot/dts/loongson/loongson64v_4core_virtio.dts | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Indeed. It's OK then.
 
-diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index f878f47e4501..36f499a3772e 100644
---- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -71,7 +71,7 @@ liointc0: interrupt-controller@1fe11400 {
- 			interrupts = <2>;
- 			interrupt-names = "int0";
- 
--			loongson,parent_int_map = <0xffffffff>, /* int0 */
-+			loongson,parent-int-map = <0xffffffff>, /* int0 */
- 						<0x00000000>, /* int1 */
- 						<0x00000000>, /* int2 */
- 						<0x00000000>; /* int3 */
-@@ -91,7 +91,7 @@ liointc1: interrupt-controller@1fe11440 {
- 			interrupts = <3>;
- 			interrupt-names = "int1";
- 
--			loongson,parent_int_map = <0x00000000>, /* int0 */
-+			loongson,parent-int-map = <0x00000000>, /* int0 */
- 						<0xffffffff>, /* int1 */
- 						<0x00000000>, /* int2 */
- 						<0x00000000>; /* int3 */
-diff --git a/arch/mips/boot/dts/loongson/loongson64c-package.dtsi b/arch/mips/boot/dts/loongson/loongson64c-package.dtsi
-index 5bb876a4de52..38de0108e804 100644
---- a/arch/mips/boot/dts/loongson/loongson64c-package.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64c-package.dtsi
-@@ -35,7 +35,7 @@ liointc: interrupt-controller@3ff01400 {
- 			interrupts = <2>, <3>;
- 			interrupt-names = "int0", "int1";
- 
--			loongson,parent_int_map = <0xf0ffffff>, /* int0 */
-+			loongson,parent-int-map = <0xf0ffffff>, /* int0 */
- 						<0x0f000000>, /* int1 */
- 						<0x00000000>, /* int2 */
- 						<0x00000000>; /* int3 */
-diff --git a/arch/mips/boot/dts/loongson/loongson64g-package.dtsi b/arch/mips/boot/dts/loongson/loongson64g-package.dtsi
-index d4314f62ccc2..8972adcb83d6 100644
---- a/arch/mips/boot/dts/loongson/loongson64g-package.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64g-package.dtsi
-@@ -32,7 +32,7 @@ liointc: interrupt-controller@3ff01400 {
- 			interrupts = <2>, <3>;
- 			interrupt-names = "int0", "int1";
- 
--			loongson,parent_int_map = <0x00ffffff>, /* int0 */
-+			loongson,parent-int-map = <0x00ffffff>, /* int0 */
- 						<0xff000000>, /* int1 */
- 						<0x00000000>, /* int2 */
- 						<0x00000000>; /* int3 */
-diff --git a/arch/mips/boot/dts/loongson/loongson64v_4core_virtio.dts b/arch/mips/boot/dts/loongson/loongson64v_4core_virtio.dts
-index d0588d81e0c2..88642fee1bbd 100644
---- a/arch/mips/boot/dts/loongson/loongson64v_4core_virtio.dts
-+++ b/arch/mips/boot/dts/loongson/loongson64v_4core_virtio.dts
-@@ -34,7 +34,7 @@ liointc: interrupt-controller@3ff01400 {
- 			interrupts = <2>, <3>;
- 			interrupt-names = "int0", "int1";
- 
--			loongson,parent_int_map = <0x00000001>, /* int0 */
-+			loongson,parent-int-map = <0x00000001>, /* int0 */
- 						<0xfffffffe>, /* int1 */
- 						<0x00000000>, /* int2 */
- 						<0x00000000>; /* int3 */
--- 
-2.39.3
+>>> @@ -4844,6 +4875,10 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>>>    #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+>>>    	case KVM_CAP_MEMORY_ATTRIBUTES:
+>>>    		return kvm_supported_mem_attributes(kvm);
+>>> +#endif
+>>> +#ifdef CONFIG_KVM_PRIVATE_MEM
+>>> +	case KVM_CAP_GUEST_MEMFD:
+>>> +		return !kvm || kvm_arch_has_private_mem(kvm);
+>>>    #endif
+>>>    	default:
+>>>    		break;
+>>> @@ -5277,6 +5312,18 @@ static long kvm_vm_ioctl(struct file *filp,
+>>>    	case KVM_GET_STATS_FD:
+>>>    		r = kvm_vm_ioctl_get_stats_fd(kvm);
+>>>    		break;
+>>> +#ifdef CONFIG_KVM_PRIVATE_MEM
+>>> +	case KVM_CREATE_GUEST_MEMFD: {
+>>> +		struct kvm_create_guest_memfd guest_memfd;
+>>
+>> Do we need a guard of below?
+>>
+>> 		r = -EINVAL;
+>> 		if (!kvm_arch_has_private_mem(kvm))
+>> 			goto out;
+> 
+> Argh, yeah, that's weird since KVM_CAP_GUEST_MEMFD says "not supported" if the
+> VM doesn't support private memory.
+> 
+> Enforcing that would break guest_memfd_test.c though.  And having to create a
+> "special" VM just to test basic guest_memfd functionality would be quite
+> annoying.
+> 
+> So my vote is to do:
+> 
+> 	case KVM_CAP_GUEST_MEMFD:
+> 		return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM);
+
+I'm fine with it.
+
+> There's no harm to KVM if userspace creates a file it can't use, and at some
+> point KVM will hopefully support guest_memfd irrespective of private memory.
 
 
