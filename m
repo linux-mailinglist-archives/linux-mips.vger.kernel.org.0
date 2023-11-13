@@ -1,196 +1,156 @@
-Return-Path: <linux-mips+bounces-26-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-27-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F517E9593
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 04:37:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A0D57E9703
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 08:20:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E08B1F210DF
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 03:37:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08D3C1F20FE1
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 07:20:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA40D8C11;
-	Mon, 13 Nov 2023 03:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+0oSnA5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B4F13FEF;
+	Mon, 13 Nov 2023 07:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457BF8BF6;
-	Mon, 13 Nov 2023 03:37:24 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC97D1;
-	Sun, 12 Nov 2023 19:37:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699846642; x=1731382642;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Y+d5ffj+cXty8WEYU0vUgR9r7fyajtAWyyGi3xYe0Go=;
-  b=i+0oSnA5dFJENImLX9uLJ2SfhDUw/gT6wgwzhWtGJSyOjQYnywGugUM5
-   uBqZW1F9FZoVGQOZDJCGJRbyyFVvvHeeE33GJT4yAiJbBAN73szADqJ0y
-   M/aM8xovSE5mFsDHpUD2EwaN6DQHeymBmeamBryZHHmfTOQRGqYsho2at
-   d3uKSkNriRFq26n2wHvXu1J6PXhUK2aoqPgD3bZ2EMPwq3w+RQEiQ5d4k
-   SElmB0ZDxskPmaybFsS3+wzAraq8EPXai2H6ovDNg2SZIQv5h7aeQacJ8
-   yr/e2nnuP2Rczxn1fDKpmb8/fPSiXKloHaSfr/UaF21/+x0LtjMNt0GPW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="421469892"
-X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
-   d="scan'208";a="421469892"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 19:37:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="764228152"
-X-IronPort-AV: E=Sophos;i="6.03,298,1694761200"; 
-   d="scan'208";a="764228152"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.93.6.77]) ([10.93.6.77])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2023 19:37:09 -0800
-Message-ID: <b897d2ac-8a07-40a7-af59-dd746c56081e@intel.com>
-Date: Mon, 13 Nov 2023 11:37:05 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127C915480
+	for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 07:20:07 +0000 (UTC)
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62E910E5;
+	Sun, 12 Nov 2023 23:20:04 -0800 (PST)
+X-QQ-mid: bizesmtp63t1699859986trcai2ec
+Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 13 Nov 2023 15:19:43 +0800 (CST)
+X-QQ-SSF: 01200000000000B06000000A0000000
+X-QQ-FEAT: CR3LFp2JE4kJjXOcdkorczscpSzH6+axHpSU32WFVYbv/RGXMGwZNm0mqCz6D
+	gz9/sgtHdEu0Hpdze0GuS3D6Irg4Df8QiNwDsaA6ysM60/Ho50JMfM3UXJDjxhxTAQJmf08
+	2g+pmLbzG6sqegUOfI7Bqk0cBi8wPyNlP79jzi4+2G/4EB+bteo4XqATZZMPqdIZxNerVW7
+	zYzBrU5bsvqnxAgq9RY7WWSKOF4WLCtt1HmqlkFh/RReaAs7ttv7DELAls5+VJ7BadjYxZ5
+	lnXtZ30WpuH37gpQ2xpywx2N6bQQzJWukdBKANUZas2U6RtWXYUj1hf5q4jZyp24XNNb9tI
+	jXfxcsenjYsV+UPuIj2lO0Tur+eydKLmUqICFwU
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17312017847681261293
+From: Yuan Tan <tanyuan@tinylab.org>
+To: i@maskray.me
+Cc: arnd@arndb.de,
+	falcon@tinylab.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-sparse@vger.kernel.org,
+	linux@weissschuh.net,
+	luc.vanoostenryck@gmail.com,
+	palmer@rivosinc.com,
+	paul.walmsley@sifive.com,
+	paulburton@kernel.org,
+	paulmck@kernel.org,
+	tanyuan@tinylab.org,
+	tim.bird@sony.com,
+	tsbogend@alpha.franken.de,
+	w@1wt.eu
+Subject: Re: [PATCH v1 09/14] DCE/DSE: inhibit .size directive for SHF_GROUP
+Date: Mon, 13 Nov 2023 15:19:42 +0800
+Message-Id: <20231113071942.35259-1-tanyuan@tinylab.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <DS7PR12MB576503711253C682DCE40524CBABA@DS7PR12MB5765.namprd12.prod.outlook.com>
+References: <DS7PR12MB576503711253C682DCE40524CBABA@DS7PR12MB5765.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 15/34] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, Huacai Chen <chenhuacai@kernel.org>,
- Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
- Chao Peng <chao.p.peng@linux.intel.com>, Fuad Tabba <tabba@google.com>,
- Jarkko Sakkinen <jarkko@kernel.org>, Anish Moorthy <amoorthy@google.com>,
- David Matlack <dmatlack@google.com>, Yu Zhang <yu.c.zhang@linux.intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
- =?UTF-8?Q?n?= <mic@digikod.net>, Vlastimil Babka <vbabka@suse.cz>,
- Vishal Annapurve <vannapurve@google.com>,
- Ackerley Tng <ackerleytng@google.com>,
- Maciej Szmigiero <mail@maciej.szmigiero.name>,
- David Hildenbrand <david@redhat.com>, Quentin Perret <qperret@google.com>,
- Michael Roth <michael.roth@amd.com>, Wang <wei.w.wang@intel.com>,
- Liam Merwick <liam.merwick@oracle.com>,
- Isaku Yamahata <isaku.yamahata@gmail.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20231105163040.14904-1-pbonzini@redhat.com>
- <20231105163040.14904-16-pbonzini@redhat.com>
- <956d8ee3-8b63-4a2d-b0c4-c0d3d74a0f6f@intel.com>
- <ZU51A3U6E3aZXayC@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <ZU51A3U6E3aZXayC@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 
-On 11/11/2023 2:22 AM, Sean Christopherson wrote:
-> On Fri, Nov 10, 2023, Xiaoyao Li wrote:
->> On 11/6/2023 12:30 AM, Paolo Bonzini wrote:
->>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->>> index 68a144cb7dbc..a6de526c0426 100644
->>> --- a/include/linux/kvm_host.h
->>> +++ b/include/linux/kvm_host.h
->>> @@ -589,8 +589,20 @@ struct kvm_memory_slot {
->>>    	u32 flags;
->>>    	short id;
->>>    	u16 as_id;
->>> +
->>> +#ifdef CONFIG_KVM_PRIVATE_MEM
->>> +	struct {
->>> +		struct file __rcu *file;
->>> +		pgoff_t pgoff;
->>> +	} gmem;
->>> +#endif
->>>    };
->>> +static inline bool kvm_slot_can_be_private(const struct kvm_memory_slot *slot)
->>> +{
->>> +	return slot && (slot->flags & KVM_MEM_GUEST_MEMFD);
->>> +}
->>> +
->>
->> maybe we can move this block and ...
->>
->> <snip>
->>
->>> @@ -2355,6 +2379,30 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
->>>    					struct kvm_gfn_range *range);
->>>    bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
->>>    					 struct kvm_gfn_range *range);
->>> +
->>> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->>> +{
->>> +	return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM) &&
->>> +	       kvm_get_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
->>> +}
->>> +#else
->>> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
->>> +{
->>> +	return false;
->>> +}
->>>    #endif /* CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES */
->>
->> this block to Patch 18?
+Hi, Fangrui
+
+Thank you for your time :)
+
+On 11/6/2023 4:50 AM, Fangrui Song wrote:
+> On Fri, Nov 3, 2023 at 9:01 AM Yuan Tan <tanyuan@tinylab.org> wrote:
+> >
+> > .size directive fails in some functions with SHF_GROUP, this is not
+> > really required for normal building, inhibit it to silence the compiling
+> > failures with SHF_GROUP.
+> >
+> > Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  Makefile | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index a4e522b747cb..f67b6e8d2c45 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -936,6 +936,9 @@ endif
+> >  # `rustc`'s `-Zfunction-sections` applies to data too (as of 1.59.0).
+> >  ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+> >  KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+> > +ifdef CONFIG_SECTION_SHF_GROUP_SUPPORT
+> > +KBUILD_CFLAGS_KERNEL += -finhibit-size-directive
+> > +endif
+> >  KBUILD_RUSTFLAGS_KERNEL += -Zfunction-sections=y
+> >  LDFLAGS_vmlinux += --gc-sections
+> >  ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION_DEBUG
+> > --
+> > 2.34.1
+> >
 > 
-> It would work, but my vote is to keep them here to minimize the changes to common
-> KVM code in the x86 enabling.  It's not a strong preference though.  Of course,
-> at this point, fiddling with this sort of thing is probably a bad idea in terms
-> of landing guest_memfd.
+> Clang doesn't support -finhibit-size-directive, so this would break
+> Clang builds.
 
-Indeed. It's OK then.
+Currently, Clang doesn't support LD_DEAD_CODE_DATA_ELIMINATION. So in this
+patch series I didn't take much thought about clang.
 
->>> @@ -4844,6 +4875,10 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->>>    #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
->>>    	case KVM_CAP_MEMORY_ATTRIBUTES:
->>>    		return kvm_supported_mem_attributes(kvm);
->>> +#endif
->>> +#ifdef CONFIG_KVM_PRIVATE_MEM
->>> +	case KVM_CAP_GUEST_MEMFD:
->>> +		return !kvm || kvm_arch_has_private_mem(kvm);
->>>    #endif
->>>    	default:
->>>    		break;
->>> @@ -5277,6 +5312,18 @@ static long kvm_vm_ioctl(struct file *filp,
->>>    	case KVM_GET_STATS_FD:
->>>    		r = kvm_vm_ioctl_get_stats_fd(kvm);
->>>    		break;
->>> +#ifdef CONFIG_KVM_PRIVATE_MEM
->>> +	case KVM_CREATE_GUEST_MEMFD: {
->>> +		struct kvm_create_guest_memfd guest_memfd;
->>
->> Do we need a guard of below?
->>
->> 		r = -EINVAL;
->> 		if (!kvm_arch_has_private_mem(kvm))
->> 			goto out;
 > 
-> Argh, yeah, that's weird since KVM_CAP_GUEST_MEMFD says "not supported" if the
-> VM doesn't support private memory.
+> GCC has had this option since 1992, but it is not used in the wild.
+> https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-finhibit-size-directive
+> says
 > 
-> Enforcing that would break guest_memfd_test.c though.  And having to create a
-> "special" VM just to test basic guest_memfd functionality would be quite
-> annoying.
+> > ... This option is used when compiling crtstuff.c; you should not need to use it for anything else.
 > 
-> So my vote is to do:
+> What problem have you seen with .size directives (st_size field in
+> symbol table entries)?
+
+$ make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- fs/ioctl.o
+/tmp/ccy5E3wN.s: Error: .size expression for __riscv_sys_ioctl does not evaluate to a constant
+make[3]: *** [scripts/Makefile.build:243: fs/ioctl.o] Error 1
+make[2]: *** [scripts/Makefile.build:480: fs] Error 2
+make[1]: *** [/home/tanyuan/projects/linux/Makefile:1916: .] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
+
+And the fs/ioctl.s is like
+	.section	.text.__riscv_sys_ioctl,"ax",@progbits
+	.align	1
+	.globl	__riscv_sys_ioctl
+	.type	__riscv_sys_ioctl, @function
+__riscv_sys_ioctl:
+        ...
+        ...
+	.size	__riscv_sys_ioctl, .-__riscv_sys_ioctl
+
+I cannot understand this error and this option just solve the problem :)
+
 > 
-> 	case KVM_CAP_GUEST_MEMFD:
-> 		return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM);
-
-I'm fine with it.
-
-> There's no harm to KVM if userspace creates a file it can't use, and at some
-> point KVM will hopefully support guest_memfd irrespective of private memory.
-
+> % cat a.c
+> int v;
+> void f() {}
+> % diff -u0 <(gcc -S a.c -o -) <(gcc -S -finhibit-size-directive a.c -o -)
+> --- /proc/self/fd/11    2023-11-05 12:42:51.298618475 -0800
+> +++ /proc/self/fd/15    2023-11-05 12:42:51.298618475 -0800
+> @@ -7 +6,0 @@
+> -       .size   v, 4
+> @@ -27 +25,0 @@
+> -       .size   f, .-f
+> 
+> 
 
