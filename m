@@ -1,156 +1,114 @@
-Return-Path: <linux-mips+bounces-27-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-28-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0D57E9703
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 08:20:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B1867E9891
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 10:09:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08D3C1F20FE1
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 07:20:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 285FA1F20C20
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Nov 2023 09:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B4F13FEF;
-	Mon, 13 Nov 2023 07:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B8F18624;
+	Mon, 13 Nov 2023 09:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="gQ3C+vqt"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127C915480
-	for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 07:20:07 +0000 (UTC)
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62E910E5;
-	Sun, 12 Nov 2023 23:20:04 -0800 (PST)
-X-QQ-mid: bizesmtp63t1699859986trcai2ec
-Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 13 Nov 2023 15:19:43 +0800 (CST)
-X-QQ-SSF: 01200000000000B06000000A0000000
-X-QQ-FEAT: CR3LFp2JE4kJjXOcdkorczscpSzH6+axHpSU32WFVYbv/RGXMGwZNm0mqCz6D
-	gz9/sgtHdEu0Hpdze0GuS3D6Irg4Df8QiNwDsaA6ysM60/Ho50JMfM3UXJDjxhxTAQJmf08
-	2g+pmLbzG6sqegUOfI7Bqk0cBi8wPyNlP79jzi4+2G/4EB+bteo4XqATZZMPqdIZxNerVW7
-	zYzBrU5bsvqnxAgq9RY7WWSKOF4WLCtt1HmqlkFh/RReaAs7ttv7DELAls5+VJ7BadjYxZ5
-	lnXtZ30WpuH37gpQ2xpywx2N6bQQzJWukdBKANUZas2U6RtWXYUj1hf5q4jZyp24XNNb9tI
-	jXfxcsenjYsV+UPuIj2lO0Tur+eydKLmUqICFwU
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17312017847681261293
-From: Yuan Tan <tanyuan@tinylab.org>
-To: i@maskray.me
-Cc: arnd@arndb.de,
-	falcon@tinylab.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sparse@vger.kernel.org,
-	linux@weissschuh.net,
-	luc.vanoostenryck@gmail.com,
-	palmer@rivosinc.com,
-	paul.walmsley@sifive.com,
-	paulburton@kernel.org,
-	paulmck@kernel.org,
-	tanyuan@tinylab.org,
-	tim.bird@sony.com,
-	tsbogend@alpha.franken.de,
-	w@1wt.eu
-Subject: Re: [PATCH v1 09/14] DCE/DSE: inhibit .size directive for SHF_GROUP
-Date: Mon, 13 Nov 2023 15:19:42 +0800
-Message-Id: <20231113071942.35259-1-tanyuan@tinylab.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <DS7PR12MB576503711253C682DCE40524CBABA@DS7PR12MB5765.namprd12.prod.outlook.com>
-References: <DS7PR12MB576503711253C682DCE40524CBABA@DS7PR12MB5765.namprd12.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B8E18623
+	for <linux-mips@vger.kernel.org>; Mon, 13 Nov 2023 09:09:39 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B5610D0;
+	Mon, 13 Nov 2023 01:09:38 -0800 (PST)
+Received: from [100.107.97.3] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 25D3C66003B2;
+	Mon, 13 Nov 2023 09:09:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1699866575;
+	bh=+biIpFAEesmQeyQ0ajxFqoWe4IfKev4rpI+PhrI9rhQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gQ3C+vqtj839O3n3L/ymQgH5t2FA4orXI/4KbT4WaNjrPKOE9Zd2VJsOerugMFMDK
+	 7gxj104S3lY4XsC0+1zWzEjORjCy5vKauxi14SaX5z8noDgNuw8aoDj4GM3bQ6XZW5
+	 5v7erfC5J0ixZXoprbrjUaiIQK+96g2IW61NrTRRuFSTHaXINn0BVekFaloiQoIyuy
+	 j0DwcdKMIoMh+5EKeg9qKvTxq1q/mrjYZtKPpPd1wg2R54ahkspMyhbHSdZb8nuxxc
+	 EaavpD76t7v/qgNdgboQD5sK0vkceUzToyzWcyjYaEU5TlVl28UA7jGHq/fJuGr/vv
+	 7c2XU5BP2NyGA==
+Message-ID: <023e2184-c2e4-4f3e-a1e1-492dbf7a2e7f@collabora.com>
+Date: Mon, 13 Nov 2023 10:09:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/52] serial: 8250: Convert to platform remove callback
+ returning void
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>, Al Cooper <alcooperx@gmail.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Paul Cercueil <paul@crapouillou.net>, Vladimir Zapolskiy <vz@mleia.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ John Ogness <john.ogness@linutronix.de>, Thomas Gleixner
+ <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>,
+ Petr Mladek <pmladek@suse.com>, Biju Das <biju.das.jz@bp.renesas.com>,
+ Johan Hovold <johan@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>,
+ Andi Shyti <andi.shyti@linux.intel.com>,
+ Thomas Richard <thomas.richard@bootlin.com>, Rob Herring <robh@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>,
+ =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ Jacob Keller <jacob.e.keller@intel.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, kernel@pengutronix.de,
+ linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-tegra@vger.kernel.org
+References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
+ <20231110152927.70601-4-u.kleine-koenig@pengutronix.de>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20231110152927.70601-4-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 
-Hi, Fangrui
-
-Thank you for your time :)
-
-On 11/6/2023 4:50 AM, Fangrui Song wrote:
-> On Fri, Nov 3, 2023 at 9:01 AM Yuan Tan <tanyuan@tinylab.org> wrote:
-> >
-> > .size directive fails in some functions with SHF_GROUP, this is not
-> > really required for normal building, inhibit it to silence the compiling
-> > failures with SHF_GROUP.
-> >
-> > Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  Makefile | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index a4e522b747cb..f67b6e8d2c45 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -936,6 +936,9 @@ endif
-> >  # `rustc`'s `-Zfunction-sections` applies to data too (as of 1.59.0).
-> >  ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
-> >  KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
-> > +ifdef CONFIG_SECTION_SHF_GROUP_SUPPORT
-> > +KBUILD_CFLAGS_KERNEL += -finhibit-size-directive
-> > +endif
-> >  KBUILD_RUSTFLAGS_KERNEL += -Zfunction-sections=y
-> >  LDFLAGS_vmlinux += --gc-sections
-> >  ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION_DEBUG
-> > --
-> > 2.34.1
-> >
+Il 10/11/23 16:29, Uwe Kleine-König ha scritto:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart
+> from emitting a warning) and this typically results in resource leaks.
 > 
-> Clang doesn't support -finhibit-size-directive, so this would break
-> Clang builds.
-
-Currently, Clang doesn't support LD_DEAD_CODE_DATA_ELIMINATION. So in this
-patch series I didn't take much thought about clang.
-
+> To improve here there is a quest to make the remove callback return
+> void. In the first step of this quest all drivers are converted to
+> .remove_new(), which already returns void. Eventually after all drivers
+> are converted, .remove_new() will be renamed to .remove().
 > 
-> GCC has had this option since 1992, but it is not used in the wild.
-> https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-finhibit-size-directive
-> says
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
 > 
-> > ... This option is used when compiling crtstuff.c; you should not need to use it for anything else.
-> 
-> What problem have you seen with .size directives (st_size field in
-> symbol table entries)?
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-$ make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- fs/ioctl.o
-/tmp/ccy5E3wN.s: Error: .size expression for __riscv_sys_ioctl does not evaluate to a constant
-make[3]: *** [scripts/Makefile.build:243: fs/ioctl.o] Error 1
-make[2]: *** [scripts/Makefile.build:480: fs] Error 2
-make[1]: *** [/home/tanyuan/projects/linux/Makefile:1916: .] Error 2
-make: *** [Makefile:234: __sub-make] Error 2
+For MediaTek:
 
-And the fs/ioctl.s is like
-	.section	.text.__riscv_sys_ioctl,"ax",@progbits
-	.align	1
-	.globl	__riscv_sys_ioctl
-	.type	__riscv_sys_ioctl, @function
-__riscv_sys_ioctl:
-        ...
-        ...
-	.size	__riscv_sys_ioctl, .-__riscv_sys_ioctl
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I cannot understand this error and this option just solve the problem :)
-
-> 
-> % cat a.c
-> int v;
-> void f() {}
-> % diff -u0 <(gcc -S a.c -o -) <(gcc -S -finhibit-size-directive a.c -o -)
-> --- /proc/self/fd/11    2023-11-05 12:42:51.298618475 -0800
-> +++ /proc/self/fd/15    2023-11-05 12:42:51.298618475 -0800
-> @@ -7 +6,0 @@
-> -       .size   v, 4
-> @@ -27 +25,0 @@
-> -       .size   f, .-f
-> 
-> 
 
