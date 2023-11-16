@@ -1,102 +1,136 @@
-Return-Path: <linux-mips+bounces-87-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-88-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 696C87EE614
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Nov 2023 18:41:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A33FB7EE892
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Nov 2023 22:00:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A003B20B2F
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Nov 2023 17:41:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9526B1C208B8
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Nov 2023 21:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028A2446DF;
-	Thu, 16 Nov 2023 17:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD5C4501C;
+	Thu, 16 Nov 2023 21:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AR8LC9Rd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCF91A8;
-	Thu, 16 Nov 2023 09:41:30 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3b3ec45d6e9so682696b6e.0;
-        Thu, 16 Nov 2023 09:41:30 -0800 (PST)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E21A4
+	for <linux-mips@vger.kernel.org>; Thu, 16 Nov 2023 13:00:25 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a828bdcfbaso19435477b3.2
+        for <linux-mips@vger.kernel.org>; Thu, 16 Nov 2023 13:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700168424; x=1700773224; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pcg1jHOi88FLN7hCqkcZwcR8zkGGhGMDTBufXRqyOok=;
+        b=AR8LC9RdzQJ6e04orRQ7NovChpkme4uD8a5w8U6EF3WUGxEuLhURPJTy96rf3K4WNQ
+         xxE8sD7/d3QeR+YsUnwL0t5v7PZ70vsTr+Bd1xceYyZx2I8BC5Zt5HKTqJTCKcxVxKmh
+         35TdC1VPrs8AdH1hr5SatgucrL3Y5+9Bs0t1NfLBqwJM6o6y2vGjM9+/C0lTaHwuVY+r
+         lRe/yBmNqO+6EZkX/WhUQRyWdRoDD05/VHwJb0B0qyJ2Fob6cmgQwA7MdHE5KMTEz0lT
+         xtLMml7o5rQD6n4+cQIRCtXO0HDgRih3fpwt8Qp2XhCAXNQCxaqWg4qKY5XmzysECn8X
+         JLLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700156489; x=1700761289;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ABfkYaj47jaES+mQXWgRNK27QJ0O5U/rrf/a7dbWEMg=;
-        b=ZkDTnOx6JgTZaXP3xOxUb2OfEER7S6JN2+9XZ7vz/eiJMNoF245sTXFr6UdYeo5y2q
-         VSqKHFoWJQAdNl9AyhIkdeAKC7B8d4D+Xp9cSxkbl53TTigECc/4YQHMtodAKU0pdL1S
-         BkH7IbWmeyoUlqHWbr+eDkik+ts/Yy18Fr2C4yjny/VooNos3ZFgzY9/rG7GQmAYwYHx
-         CuSP6vfYvP2jLB4i85VI+WgoX9oIJpJ6rU8pJ/W+IBV/i7pbl/fUqlhH7h6gRhzq4fmO
-         3rOItHR9G6JsOqCTb+SBrGs4cZ148s11IE0hoO9EOFriLxNcpHJ6RdH4E4/79gMAuctO
-         h+1g==
-X-Gm-Message-State: AOJu0YzhL7by0q0ZG5rbm5OVkF4VkouNFWK1Dc27zJTLOfRLnRdIWm1M
-	8UZKHua2wUqNhqIgKEzGVA==
-X-Google-Smtp-Source: AGHT+IE6t3oIR0pf1vfQIwTEe5MVblRWpnxB1ypu8pSSJiWzA0ah9nyrvXeg+GJHD3IVeuYLd+lTLg==
-X-Received: by 2002:aca:f03:0:b0:3b2:f27a:8a52 with SMTP id 3-20020aca0f03000000b003b2f27a8a52mr17997456oip.41.1700156489652;
-        Thu, 16 Nov 2023 09:41:29 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v19-20020a544493000000b003b2e536a96dsm1899274oiv.24.2023.11.16.09.41.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 09:41:29 -0800 (PST)
-Received: (nullmailer pid 2522272 invoked by uid 1000);
-	Thu, 16 Nov 2023 17:41:27 -0000
-Date: Thu, 16 Nov 2023 11:41:27 -0600
-From: Rob Herring <robh@kernel.org>
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: WANG Xuerui <git@xen0n.name>, Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org, lvjianmin@loongson.cn, Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, loongson-kernel@lists.loongnix.cn, Huacai Chen <chenhuacai@loongson.cn>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Binbin Zhou <zhoubb.aaron@gmail.com>, devicetree@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v4 3/5] dt-bindings: interrupt-controller:
- loongson,liointc: Fix dtbs_check warning for interrupt-names
-Message-ID: <170015648721.2522214.13442341316883618917.robh@kernel.org>
-References: <cover.1699521866.git.zhoubinbin@loongson.cn>
- <a162081f9b707580700a2b10719300511c6e6baf.1699521866.git.zhoubinbin@loongson.cn>
+        d=1e100.net; s=20230601; t=1700168424; x=1700773224;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pcg1jHOi88FLN7hCqkcZwcR8zkGGhGMDTBufXRqyOok=;
+        b=QhwmQ+AmFY0jM88Bf4AxoXtTe2iP4gEcgKdSNLxJOWc/Z1VNXvttoU1aCUGM9yXWyC
+         Bzw/JrfPcOIhUqYcRiZUNoRVhyNoVdgWLTniGPEbq+j7fxjzHBYuDpJy4uCT7JizgSZo
+         Tzabm8Y1SCKqTsykeC7yUHj9fh31xQxUSb+2W3NRj3LwGbmhLEW1URMuWrVSwP+ONrtx
+         KKVmBzdyWN2zvu5ox6BtI55F+6cz4Ta2y40iZ/9BRbGX0h4uTcmIYt/SzhL7iOqFu12q
+         KOq7GQMbIGT7tJksaeXPkaVfNbwJ/C8HBLf8LDdH2yMhAzidpJsRf3yFbX/MoUiHBx7P
+         dB5Q==
+X-Gm-Message-State: AOJu0YzFnjvHZwsQGXhQsvdLK84SPoF//tQsyYNiUpLm0NJqzZosuBKG
+	6fwh5dIEl29Vhd8Mks0wFmcJLlGYLPZokg4XzA==
+X-Google-Smtp-Source: AGHT+IERExc4D+qrt27go/xYBPrtoAORZdvfQFtSO07pMqMqSuTLQB8wBOPMZT1riqPUGW5/Jxx9EA2kvlBTv30QyA==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:7644:0:b0:da3:a4ae:1525 with SMTP
+ id r65-20020a257644000000b00da3a4ae1525mr393167ybc.5.1700168424573; Thu, 16
+ Nov 2023 13:00:24 -0800 (PST)
+Date: Thu, 16 Nov 2023 21:00:22 +0000
+In-Reply-To: <20231105163040.14904-33-pbonzini@redhat.com> (message from Paolo
+ Bonzini on Sun,  5 Nov 2023 17:30:35 +0100)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a162081f9b707580700a2b10719300511c6e6baf.1699521866.git.zhoubinbin@loongson.cn>
+Mime-Version: 1.0
+Message-ID: <diqzfs15o1ll.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [PATCH 32/34] KVM: selftests: Add basic selftest for guest_memfd()
+From: Ackerley Tng <ackerleytng@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev, 
+	chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org, 
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	seanjc@google.com, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	willy@infradead.org, akpm@linux-foundation.org, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, xiaoyao.li@intel.com, yilun.xu@intel.com, 
+	chao.p.peng@linux.intel.com, tabba@google.com, jarkko@kernel.org, 
+	amoorthy@google.com, dmatlack@google.com, yu.c.zhang@linux.intel.com, 
+	isaku.yamahata@intel.com, mic@digikod.net, vbabka@suse.cz, 
+	vannapurve@google.com, mail@maciej.szmigiero.name, david@redhat.com, 
+	qperret@google.com, michael.roth@amd.com, wei.w.wang@intel.com, 
+	liam.merwick@oracle.com, isaku.yamahata@gmail.com, 
+	kirill.shutemov@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-On Mon, 13 Nov 2023 10:36:45 +0800, Binbin Zhou wrote:
-> The Loongson-2K0500/2K1000 CPUs have 64 interrupt sources as inputs, and
-> a route-mapped node handles up to 32 interrupt sources, so two liointc
-> nodes are defined in dts{i}.
-> 
-> Of course, we have to make sure that the routing outputs ("intx") of the
-> two nodes do not conflict, i.e. "int0" can only be used as a routing
-> output for one of them. Therefore, "interrupt-names" should be defined
-> as "pattern".
-> 
-> In addition, since "interrupt-names" and "interrupts" are one-to-one
-> correspondence, we pass it to get the corresponding interrupt number in
-> the driver. Setting it to "required" does not break ABI, because it
-> is already logically represented as "required".
-> 
-> This fixes dtbs_check warning:
-> 
-> DTC_CHK arch/loongarch/boot/dts/loongson-2k0500-ref.dtb
-> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1fe11440: interrupt-names:0: 'int0' was expected
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> arch/loongarch/boot/dts/loongson-2k0500-ref.dtb: interrupt-controller@1fe11440: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> DTC_CHK arch/loongarch/boot/dts/loongson-2k1000-ref.dtb
-> arch/loongarch/boot/dts/loongson-2k1000-ref.dtb: interrupt-controller@1fe01440: interrupt-names:0: 'int0' was expected
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> arch/loongarch/boot/dts/loongson-2k1000-ref.dtb: interrupt-controller@1fe01440: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
->         From schema: Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> 
-> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../bindings/interrupt-controller/loongson,liointc.yaml    | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
+> <snip>
+>
+> +static void test_create_guest_memfd_invalid(struct kvm_vm *vm)
+> +{
+> +	size_t page_size = getpagesize();
+> +	uint64_t flag;
+> +	size_t size;
+> +	int fd;
+> +
+> +	for (size = 1; size < page_size; size++) {
+> +		fd = __vm_create_guest_memfd(vm, size, 0);
+> +		TEST_ASSERT(fd == -1 && errno == EINVAL,
+> +			    "guest_memfd() with non-page-aligned page size '0x%lx' should fail with EINVAL",
+> +			    size);
+> +	}
+> +
+> +	for (flag = 1; flag; flag <<= 1) {
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Since transparent hugepage support is no longer officially part of this
+series, 
 
+> +		uint64_t bit;
+
+this declaration of bit can be removed.
+
+> +
+> +		fd = __vm_create_guest_memfd(vm, page_size, flag);
+> +		TEST_ASSERT(fd == -1 && errno == EINVAL,
+> +			    "guest_memfd() with flag '0x%lx' should fail with EINVAL",
+> +			    flag);
+> +
+
+This loop can also be removed,
+
+> +		for_each_set_bit(bit, &valid_flags, 64) {
+> +			fd = __vm_create_guest_memfd(vm, page_size, flag | BIT_ULL(bit));
+> +			TEST_ASSERT(fd == -1 && errno == EINVAL,
+> +				    "guest_memfd() with flags '0x%llx' should fail with EINVAL",
+> +				    flag | BIT_ULL(bit));
+> +		}
+
+otherwise this won't compile because valid_flags is not declared.
+
+These lines will have to be added back when adding transparent hugepage
+support.
+
+> +	}
+> +}
+
+Tested-by: Ackerley Tng <ackerleytng@google.com>
 
