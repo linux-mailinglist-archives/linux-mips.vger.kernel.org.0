@@ -1,244 +1,152 @@
-Return-Path: <linux-mips+bounces-92-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-93-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2FC27EFED7
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 11:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E094C7F0052
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 16:37:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F61D281020
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 10:09:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 951AE280EB6
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 15:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185911094F;
-	Sat, 18 Nov 2023 10:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88ED914A83;
+	Sat, 18 Nov 2023 15:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="I+6tloqd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B597D5B;
-	Sat, 18 Nov 2023 02:08:56 -0800 (PST)
-Received: from dggpemm100001.china.huawei.com (unknown [172.30.72.55])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4SXTrY6JprzMmjJ;
-	Sat, 18 Nov 2023 18:04:13 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Sat, 18 Nov 2023 18:08:52 +0800
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
-To: Arnd Bergmann <arnd@arndb.de>
-CC: <linux-arch@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-hexagon@vger.kernel.org>,
-	<linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>, Kefeng Wang
-	<wangkefeng.wang@huawei.com>, Richard Henderson
-	<richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Russell King <linux@armlinux.org.uk>, Brian Cain <bcain@quicinc.com>, "James
- E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Nicholas Piggin
-	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
-	"David S. Miller" <davem@davemloft.net>, Stanislav Kinsburskii
-	<stanislav.kinsburskii@gmail.com>
-Subject: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
-Date: Sat, 18 Nov 2023 18:08:27 +0800
-Message-ID: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.27.0
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB664C4;
+	Sat, 18 Nov 2023 07:36:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:To:From:Date:Reply-To:Cc:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=nmqU21qbLBipYaRstMKAglKCu2uL8lE+8Hu6o1FhMEI=; b=I+6tloqdssaYDTvjf127c/KdoC
+	0ijQ7lvtFPm3q6J7iqH9NhXl1qNIGG3fIKug1TAMNjAJtvCOe/wUKhdf0DkfH2fzkcCT9p2NUzPCl
+	r6QwfjYgPl1A2qfXJEBfVPV3fDMs4aYk6MRjmU4gI6sKQ0mEVlV1FK3UEmkhD5orhOmMEEMnTl4hW
+	3PDJyW1VRNs+f5VXm/dfDd1m08/OQ1X94HGsDSq7P3ziiINrydAnApnTq6yPBHn2XG76Aj0S5gXQ3
+	jWYBAgxFS3arDVU4wRnjfdDewoz/KRA06t/LydyiKqDtVbtQaeEvUTRjlfs7PlLO8t88r+9PW/hQ8
+	YIl2IA8g==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.94.2)
+	(envelope-from <aurel32@debian.org>)
+	id 1r4NNK-002GW9-7M; Sat, 18 Nov 2023 15:36:50 +0000
+Received: from ohm.aurel32.net ([2001:bc8:30d7:111::2] helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <aurel32@debian.org>)
+	id 1r4NNG-00AvqW-UC; Sat, 18 Nov 2023 16:36:46 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.97)
+	(envelope-from <aurel32@debian.org>)
+	id 1r4NNF-00000003iRQ-0d40;
+	Sat, 18 Nov 2023 16:36:45 +0100
+Date: Sat, 18 Nov 2023 16:36:45 +0100
+From: Aurelien Jarno <aurel32@debian.org>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+	syq@debian.org, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: process: Remove lazy context flags for new kernel
+ thread
+Message-ID: <ZVjaDTcjNpD3m0cC@aurel32.net>
+Mail-Followup-To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tsbogend@alpha.franken.de, syq@debian.org, stable@vger.kernel.org
+References: <20231026111715.1281728-1-jiaxun.yang@flygoat.com>
+ <ZTvQGs/lEpizUFLh@aurel32.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm100001.china.huawei.com (7.185.36.93)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZTvQGs/lEpizUFLh@aurel32.net>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Debian-User: aurel32
 
-The asm-generic/io.h already has default definition, remove unnecessary
-arch's defination.
+Hi,
 
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Brian Cain <bcain@quicinc.com>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- arch/alpha/include/asm/io.h    | 6 ------
- arch/arm/include/asm/io.h      | 6 ------
- arch/hexagon/include/asm/io.h  | 6 ------
- arch/m68k/include/asm/io_mm.h  | 6 ------
- arch/mips/include/asm/io.h     | 7 -------
- arch/parisc/include/asm/io.h   | 6 ------
- arch/powerpc/include/asm/io.h  | 6 ------
- arch/sh/include/asm/io.h       | 7 -------
- arch/sparc/include/asm/io_64.h | 6 ------
- 9 files changed, 56 deletions(-)
+On 2023-10-27 16:58, Aurelien Jarno wrote:
+> On 2023-10-26 12:17, Jiaxun Yang wrote:
+> > We received a report from debian infra team, says their build machine
+> > crashes regularly with:
+> > 
+> > [ 4066.698500] do_cpu invoked from kernel context![#1]:
+> > [ 4066.703455] CPU: 1 PID: 76608 Comm: iou-sqp-76326 Not tainted 5.10.0-21-loongson-3 #1 Debian 5.10.162-1
+> > [ 4066.712793] Hardware name: Loongson Lemote-3A4000-7A-1w-V1.00-A1901/Lemote-3A4000-7A-1w-V1.00-A1901, BIOS Loongson-PMON-V3.3-20201222 12/22/2020
+> > [ 4066.725672] $ 0   : 0000000000000000 ffffffff80bf2e48 0000000000000001 9800000200804000
+> > [ 4066.733642] $ 4   : 9800000105115280 ffffffff80db4728 0000000000000008 0000020080000200
+> > [ 4066.741607] $ 8   : 0000000000000001 0000000000000001 0000000000000000 0000000002e85400
+> > [ 4066.749571] $12   : 000000005400cce0 ffffffff80199c00 000000000000036f 000000000000036f
+> > [ 4066.757536] $16   : 980000010025c080 ffffffff80ec4740 0000000000000000 980000000234b8c0
+> > [ 4066.765501] $20   : ffffffff80ec5ce0 9800000105115280 98000001051158a0 0000000000000000
+> > [ 4066.773466] $24   : 0000000000000028 9800000200807e58
+> > [ 4066.781431] $28   : 9800000200804000 9800000200807d40 980000000234b8c0 ffffffff80bf3074
+> > [ 4066.789395] Hi    : 00000000000002fb
+> > [ 4066.792943] Lo    : 00000000428f6816
+> > [ 4066.796500] epc   : ffffffff802177c0 _save_fp+0x10/0xa0
+> > [ 4066.801695] ra    : ffffffff80bf3074 __schedule+0x804/0xe08
+> > [ 4066.807230] Status: 5400cce2 KX SX UX KERNEL EXL
+> > [ 4066.811917] Cause : 1000002c (ExcCode 0b)
+> > [ 4066.815899] PrId  : 0014c004 (ICT Loongson-3)
+> > [ 4066.820228] Modules linked in: asix usbnet mii sg ip6t_REJECT nf_reject_ipv6 ip6table_filter ip6_tables nfnetlink_log nfnetlink xt_hashlimit ipt_REJECT nf_reject_ipv4 xt_NFLOG xt_multiport xt_tcpudp xt_state xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_filter sch_fq tcp_bbr fuse drm drm_panel_orientation_quirks configfs ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 crc32c_generic ohci_pci dm_mod r8169 realtek mdio_devres ohci_hcd ehci_pci of_mdio xhci_pci fixed_phy xhci_hcd ehci_hcd libphy usbcore usb_common
+> > [ 4066.868085] Process iou-sqp-76326 (pid: 76608, threadinfo=0000000056dd346c, task=000000001209ac62, tls=000000fff18298e0)
+> > [ 4066.878897] Stack : ffffffff80ec0000 0000000000000000 ffffffff80ec0000 980000010db34100
+> > [ 4066.886867]         9800000100000004 d253a55201683fdc 9800000105115280 0000000000000000
+> > [ 4066.894832]         0000000000000000 0000000000000001 980000010db340e8 0000000000000001
+> > [ 4066.902796]         0000000000000004 0000000000000000 980000010db33d28 ffffffff80bf36d0
+> > [ 4066.910761]         980000010db340e8 980000010db34100 980000010db340c8 ffffffff8070d740
+> > [ 4066.918726]         980000010946cc80 9800000104b56c80 980000010db340c0 0000000000000000
+> > [ 4066.926690]         ffffffff80ec0000 980000010db340c8 980000010025c080 ffffffff80ec5ce0
+> > [ 4066.934654]         0000000000000000 9800000105115280 ffffffff802c59b8 980000010db34108
+> > [ 4066.942619]         980000010db34108 2d7071732d756f69 ffff003632333637 d253a55201683fdc
+> > [ 4066.950585]         ffffffff8070d1c8 980000010db340c0 98000001092276c8 000000007400cce0
+> > [ 4066.958552]         ...
+> > [ 4066.960981] Call Trace:
+> > [ 4066.963414] [<ffffffff802177c0>] _save_fp+0x10/0xa0
+> > [ 4066.968270] [<ffffffff80bf3074>] __schedule+0x804/0xe08
+> > [ 4066.973462] [<ffffffff80bf36d0>] schedule+0x58/0x150
+> > [ 4066.978397] [<ffffffff8070d740>] io_sq_thread+0x578/0x5a0
+> > [ 4066.983764] [<ffffffff8020518c>] ret_from_kernel_thread+0x14/0x1c
+> > [ 4066.989823]
+> > [ 4066.991297] Code: 000c6940  05a10011  00000000 <f4810af0> f4830b10  f4850b30  f4870b50  f4890b70  f48b0b90
+> > 
+> > It seems like kernel is trying to save a FP context for a kthread.
+> > Since we don't use FPU in kernel for now, TIF_USEDFPU must be set
+> > accidentally for that kthread.
+> > 
+> > Inspecting the code it seems like create_io_thread may be invoked
+> > from threads that have FP context alive, causing TIF_USEDFPU to be
+> > copied from that context to kthread unexpectedly.
+> > 
+> > Move around code blocks to ensure flags regarding lazy hardware
+> > context get cleared for kernel threads as well.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Reported-by: Aurelien Jarno <aurel32@debian.org>
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> 
+> Thanks for the patch. In the meantime we have found that the problem is
+> reproducible by building the kitinerary package. The crash happens when
+> cmake starts the build. It's not impossible that other packages are able
+> to also trigger the crash, but we haven't identified them yet.
+> 
+> Anyway, I have been able to test a backport of the patch onto the 5.10
+> kernel (with minor adjustments) and I confirm it fixes the reported
+> issue.
+> 
+> Tested-by: Aurelien Jarno <aurel32@debian.org>
 
-diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
-index 7aeaf7c30a6f..5e5d21ebc584 100644
---- a/arch/alpha/include/asm/io.h
-+++ b/arch/alpha/include/asm/io.h
-@@ -651,12 +651,6 @@ extern void outsl (unsigned long port, const void *src, unsigned long count);
- #endif
- #define RTC_ALWAYS_BCD	0
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--
- /*
-  * These get provided from <asm-generic/iomap.h> since alpha does not
-  * select GENERIC_IOMAP.
-diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-index 56b08ed6cc3b..1815748f5d2a 100644
---- a/arch/arm/include/asm/io.h
-+++ b/arch/arm/include/asm/io.h
-@@ -407,12 +407,6 @@ struct pci_dev;
- #define pci_iounmap pci_iounmap
- extern void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--
- #include <asm-generic/io.h>
- 
- #ifdef CONFIG_MMU
-diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
-index e2b308e32a37..97d57751ce3b 100644
---- a/arch/hexagon/include/asm/io.h
-+++ b/arch/hexagon/include/asm/io.h
-@@ -58,12 +58,6 @@ static inline void *phys_to_virt(unsigned long address)
- 	return __va(address);
- }
- 
--/*
-- * convert a physical pointer to a virtual kernel pointer for
-- * /dev/mem access.
-- */
--#define xlate_dev_mem_ptr(p)    __va(p)
--
- /*
-  * IO port access primitives.  Hexagon doesn't have special IO access
-  * instructions; all I/O is memory mapped.
-diff --git a/arch/m68k/include/asm/io_mm.h b/arch/m68k/include/asm/io_mm.h
-index 47525f2a57e1..090aec54b8fa 100644
---- a/arch/m68k/include/asm/io_mm.h
-+++ b/arch/m68k/include/asm/io_mm.h
-@@ -389,12 +389,6 @@ static inline void isa_delay(void)
- 
- #define __ARCH_HAS_NO_PAGE_ZERO_MAPPED		1
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--
- #define readb_relaxed(addr)	readb(addr)
- #define readw_relaxed(addr)	readw(addr)
- #define readl_relaxed(addr)	readl(addr)
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 062dd4e6b954..2158ff302430 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -548,13 +548,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST) = (v))
- #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + __CSR_32_ADJUST))
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--#define unxlate_dev_mem_ptr(p, v) do { } while (0)
--
- void __ioread64_copy(void *to, const void __iomem *from, size_t count);
- 
- #endif /* _ASM_IO_H */
-diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
-index 366537042465..9c06cafb0e70 100644
---- a/arch/parisc/include/asm/io.h
-+++ b/arch/parisc/include/asm/io.h
-@@ -267,12 +267,6 @@ extern void iowrite64be(u64 val, void __iomem *addr);
- #define iowrite16_rep iowrite16_rep
- #define iowrite32_rep iowrite32_rep
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--
- extern int devmem_is_allowed(unsigned long pfn);
- 
- #include <asm-generic/io.h>
-diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-index 5220274a6277..79421c285066 100644
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -709,12 +709,6 @@ static inline void name at					\
- #define memcpy_fromio memcpy_fromio
- #define memcpy_toio memcpy_toio
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--
- /*
-  * We don't do relaxed operations yet, at least not with this semantic
-  */
-diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
-index ac521f287fa5..be7ac06423a9 100644
---- a/arch/sh/include/asm/io.h
-+++ b/arch/sh/include/asm/io.h
-@@ -304,13 +304,6 @@ unsigned long long poke_real_address_q(unsigned long long addr,
- 
- #define ioremap_uc	ioremap
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--#define unxlate_dev_mem_ptr(p, v) do { } while (0)
--
- #include <asm-generic/io.h>
- 
- #define ARCH_HAS_VALID_PHYS_ADDR_RANGE
-diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
-index 9303270b22f3..75ae9bf3bb7b 100644
---- a/arch/sparc/include/asm/io_64.h
-+++ b/arch/sparc/include/asm/io_64.h
-@@ -470,12 +470,6 @@ static inline int sbus_can_burst64(void)
- struct device;
- void sbus_set_sbus64(struct device *, int);
- 
--/*
-- * Convert a physical pointer to a virtual kernel pointer for /dev/mem
-- * access
-- */
--#define xlate_dev_mem_ptr(p)	__va(p)
--
- #endif
- 
- #endif /* !(__SPARC64_IO_H) */
+It seems that this patch hasn't been merged yet, either in Linus' tree
+or in the MIPS tree. Is there anything blocking?
+
+Regards
+Aurelien
+
 -- 
-2.27.0
-
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
