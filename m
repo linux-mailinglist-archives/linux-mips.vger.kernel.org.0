@@ -1,151 +1,186 @@
-Return-Path: <linux-mips+bounces-99-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-100-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F5987F023A
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 20:06:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 146BD7F025E
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 20:27:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08FD0281008
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 19:06:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4552C1C20433
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Nov 2023 19:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F141B28B;
-	Sat, 18 Nov 2023 19:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91EBB182DA;
+	Sat, 18 Nov 2023 19:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nhXlTlRs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27744182;
-	Sat, 18 Nov 2023 11:06:30 -0800 (PST)
-Received: from [192.168.1.103] (31.173.87.19) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Sat, 18 Nov
- 2023 22:06:15 +0300
-Subject: Re: [PATCH 00/34] biops: add atomig find_bit() operations
-To: Bart Van Assche <bvanassche@acm.org>, Yury Norov <yury.norov@gmail.com>,
-	<linux-kernel@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, "H.
- Peter Anvin" <hpa@zytor.com>, "James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>, "Md. Haris Iqbal"
-	<haris.iqbal@ionos.com>, Akinobu Mita <akinobu.mita@gmail.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Bjorn Andersson <andersson@kernel.org>, Borislav
- Petkov <bp@alien8.de>, Chaitanya Kulkarni <kch@nvidia.com>, Christian Brauner
-	<brauner@kernel.org>, Damien Le Moal <damien.lemoal@opensource.wdc.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, David Disseldorp <ddiss@suse.de>,
-	Edward Cree <ecree.xilinx@gmail.com>, Eric Dumazet <edumazet@google.com>,
-	Fenghua Yu <fenghua.yu@intel.com>, Geert Uytterhoeven <geert@linux-m68k.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman
-	<gregory.greenman@intel.com>, Hans Verkuil <hverkuil@xs4all.nl>, Hans de
- Goede <hdegoede@redhat.com>, Hugh Dickins <hughd@google.com>, Ingo Molnar
-	<mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>, Jaroslav Kysela
-	<perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe
-	<axboe@kernel.dk>, Jiri Pirko <jiri@resnulli.us>, Jiri Slaby
-	<jirislaby@kernel.org>, Kalle Valo <kvalo@kernel.org>, Karsten Graul
-	<kgraul@linux.ibm.com>, Karsten Keil <isdn@linux-pingi.de>, Kees Cook
-	<keescook@chromium.org>, Leon Romanovsky <leon@kernel.org>, Mark Rutland
-	<mark.rutland@arm.com>, Martin Habets <habetsm.xilinx@gmail.com>, Mauro
- Carvalho Chehab <mchehab@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Nicholas Piggin <npiggin@gmail.com>, Oliver
- Neukum <oneukum@suse.com>, Paolo Abeni <pabeni@redhat.com>, Paolo Bonzini
-	<pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ping-Ke Shih
-	<pkshih@realtek.com>, Rich Felker <dalias@libc.org>, Rob Herring
-	<robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Sathya Prakash
- Veerichetty <sathya.prakash@broadcom.com>, Sean Christopherson
-	<seanjc@google.com>, Shuai Xue <xueshuai@linux.alibaba.com>, Stanislaw
- Gruszka <stf_xl@wp.pl>, Steven Rostedt <rostedt@goodmis.org>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
-	<tglx@linutronix.de>, Valentin Schneider <vschneid@redhat.com>, Vitaly
- Kuznetsov <vkuznets@redhat.com>, Wenjia Zhang <wenjia@linux.ibm.com>, Will
- Deacon <will@kernel.org>, Yoshinori Sato <ysato@users.sourceforge.jp>,
-	<GR-QLogic-Storage-Upstream@marvell.com>, <alsa-devel@alsa-project.org>,
-	<ath10k@lists.infradead.org>, <dmaengine@vger.kernel.org>,
-	<iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-block@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-	<linux-hyperv@vger.kernel.org>, <linux-m68k@lists.linux-m68k.org>,
-	<linux-media@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-net-drivers@amd.com>, <linux-pci@vger.kernel.org>,
-	<linux-rdma@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-	<linux-scsi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<linux-sh@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <mpi3mr-linuxdrv.pdl@broadcom.com>,
-	<netdev@vger.kernel.org>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-CC: Jan Kara <jack@suse.cz>, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-	Matthew Wilcox <willy@infradead.org>, Rasmus Villemoes
-	<linux@rasmusvillemoes.dk>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Maxim Kuvyrkov
-	<maxim.kuvyrkov@linaro.org>, Alexey Klimov <klimov.linux@gmail.com>
-References: <20231118155105.25678-1-yury.norov@gmail.com>
- <792fc3d8-6834-48f8-9737-f1531459d245@acm.org>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <cb01a8af-d62b-27b4-f6fc-d1f3fbf676ee@omp.ru>
-Date: Sat, 18 Nov 2023 22:06:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D607182;
+	Sat, 18 Nov 2023 11:27:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700335624; x=1731871624;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7oM0Oe15GY24uVXAs/p2DnzhDDjC2fzvA/A3qyVQxc4=;
+  b=nhXlTlRsRYCFhwRG7XT//XdNTNhByJiaZIAZfBzj8AuLXEXrI5U1woLJ
+   aRajIZdfAgtvgjfOFEfGU65DLSMkFvVGGh8daGyB9xRI0T3/3gqI4SLIh
+   vP4eBkrZ2UO8ILboq/dLXgPMHa7cLD0e+b4ubdK+sdS0+PAth6pRMLUla
+   Ii1Ho55lyJCNQcsedi0MmA/Br+OhFcypC0Vkkv9zNYj11hcagKZ37NMAc
+   JTmR7lvLtg6rPYdcTqTFX7WNMXfNJPbmMxhenHaqteADiw8DZjUoeTflB
+   1Jgr4kmf7uz7RerXNgODuoF1cut2MShHHVolGNwExB5MSxV5rbTu1ueBk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="4554067"
+X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
+   d="scan'208";a="4554067"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 11:27:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
+   d="scan'208";a="13795239"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 18 Nov 2023 11:26:59 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r4Qxz-0004Cf-3C;
+	Sat, 18 Nov 2023 19:26:55 +0000
+Date: Sun, 19 Nov 2023 03:26:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kefeng Wang <wangkefeng.wang@huawei.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: oe-kbuild-all@lists.linux.dev, Kefeng Wang <wangkefeng.wang@huawei.com>,
+	Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	linux-hexagon@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+	Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	linux-m68k@lists.linux-m68k.org,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	linux-arm-kernel@lists.infradead.org,
+	Brian Cain <bcain@quicinc.com>, linux-parisc@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and
+ unxlate_dev_mem_ptr()
+Message-ID: <202311190352.yqCpBjIn-lkp@intel.com>
+References: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <792fc3d8-6834-48f8-9737-f1531459d245@acm.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.87.19]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 11/18/2023 18:50:09
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 181454 [Nov 18 2023]
-X-KSE-AntiSpam-Info: Version: 6.0.0.2
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_arrow_text}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.19 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.19 in (user) dbl.spamhaus.org}
-X-KSE-AntiSpam-Info:
-	omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.19
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/18/2023 18:54:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/18/2023 3:15:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
 
-On 11/18/23 7:18 PM, Bart Van Assche wrote:
-[...]
->> Add helpers around test_and_{set,clear}_bit() that allow to search for
->> clear or set bits and flip them atomically.
-> 
-> There is a typo in the subject: shouldn't "atomig" be changed
-> into "atomic"?
+Hi Kefeng,
 
-   And "biops" to "bitops"? :-)
+kernel test robot noticed the following build errors:
 
-> Thanks,
-> 
-> Bart.
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on geert-m68k/for-next geert-m68k/for-linus deller-parisc/for-next powerpc/next powerpc/fixes linus/master v6.7-rc1 next-20231117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-MBR, Sergey
+url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/asm-io-remove-unnecessary-xlate_dev_mem_ptr-and-unxlate_dev_mem_ptr/20231118-183038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20231118100827.1599422-1-wangkefeng.wang%40huawei.com
+patch subject: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
+config: mips-db1xxx_defconfig (https://download.01.org/0day-ci/archive/20231119/202311190352.yqCpBjIn-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311190352.yqCpBjIn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311190352.yqCpBjIn-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/char/mem.c: In function 'read_mem':
+>> drivers/char/mem.c:159:31: error: implicit declaration of function 'xlate_dev_mem_ptr' [-Werror=implicit-function-declaration]
+     159 |                         ptr = xlate_dev_mem_ptr(p);
+         |                               ^~~~~~~~~~~~~~~~~
+>> drivers/char/mem.c:159:29: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     159 |                         ptr = xlate_dev_mem_ptr(p);
+         |                             ^
+>> drivers/char/mem.c:164:25: error: implicit declaration of function 'unxlate_dev_mem_ptr' [-Werror=implicit-function-declaration]
+     164 |                         unxlate_dev_mem_ptr(p, ptr);
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/char/mem.c: In function 'write_mem':
+   drivers/char/mem.c:235:29: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     235 |                         ptr = xlate_dev_mem_ptr(p);
+         |                             ^
+   cc1: some warnings being treated as errors
+
+
+vim +/xlate_dev_mem_ptr +159 drivers/char/mem.c
+
+^1da177e4c3f41 Linus Torvalds                2005-04-16  133  
+22ec1a2aea73b9 Kees Cook                     2017-12-01  134  	bounce = kmalloc(PAGE_SIZE, GFP_KERNEL);
+22ec1a2aea73b9 Kees Cook                     2017-12-01  135  	if (!bounce)
+22ec1a2aea73b9 Kees Cook                     2017-12-01  136  		return -ENOMEM;
+22ec1a2aea73b9 Kees Cook                     2017-12-01  137  
+^1da177e4c3f41 Linus Torvalds                2005-04-16  138  	while (count > 0) {
+fa29e97bb8c70f Wu Fengguang                  2009-12-14  139  		unsigned long remaining;
+b5b38200ebe548 Kees Cook                     2018-03-27  140  		int allowed, probe;
+fa29e97bb8c70f Wu Fengguang                  2009-12-14  141  
+f222318e9c3a31 Wu Fengguang                  2009-12-14  142  		sz = size_inside_page(p, count);
+^1da177e4c3f41 Linus Torvalds                2005-04-16  143  
+22ec1a2aea73b9 Kees Cook                     2017-12-01  144  		err = -EPERM;
+a4866aa812518e Kees Cook                     2017-04-05  145  		allowed = page_is_allowed(p >> PAGE_SHIFT);
+a4866aa812518e Kees Cook                     2017-04-05  146  		if (!allowed)
+22ec1a2aea73b9 Kees Cook                     2017-12-01  147  			goto failed;
+22ec1a2aea73b9 Kees Cook                     2017-12-01  148  
+22ec1a2aea73b9 Kees Cook                     2017-12-01  149  		err = -EFAULT;
+a4866aa812518e Kees Cook                     2017-04-05  150  		if (allowed == 2) {
+a4866aa812518e Kees Cook                     2017-04-05  151  			/* Show zeros for restricted memory. */
+a4866aa812518e Kees Cook                     2017-04-05  152  			remaining = clear_user(buf, sz);
+a4866aa812518e Kees Cook                     2017-04-05  153  		} else {
+^1da177e4c3f41 Linus Torvalds                2005-04-16  154  			/*
+a4866aa812518e Kees Cook                     2017-04-05  155  			 * On ia64 if a page has been mapped somewhere as
+a4866aa812518e Kees Cook                     2017-04-05  156  			 * uncached, then it must also be accessed uncached
+a4866aa812518e Kees Cook                     2017-04-05  157  			 * by the kernel or data corruption may occur.
+^1da177e4c3f41 Linus Torvalds                2005-04-16  158  			 */
+^1da177e4c3f41 Linus Torvalds                2005-04-16 @159  			ptr = xlate_dev_mem_ptr(p);
+e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  160  			if (!ptr)
+22ec1a2aea73b9 Kees Cook                     2017-12-01  161  				goto failed;
+a4866aa812518e Kees Cook                     2017-04-05  162  
+fe557319aa06c2 Christoph Hellwig             2020-06-17  163  			probe = copy_from_kernel_nofault(bounce, ptr, sz);
+e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18 @164  			unxlate_dev_mem_ptr(p, ptr);
+b5b38200ebe548 Kees Cook                     2018-03-27  165  			if (probe)
+22ec1a2aea73b9 Kees Cook                     2017-12-01  166  				goto failed;
+22ec1a2aea73b9 Kees Cook                     2017-12-01  167  
+22ec1a2aea73b9 Kees Cook                     2017-12-01  168  			remaining = copy_to_user(buf, bounce, sz);
+a4866aa812518e Kees Cook                     2017-04-05  169  		}
+a4866aa812518e Kees Cook                     2017-04-05  170  
+fa29e97bb8c70f Wu Fengguang                  2009-12-14  171  		if (remaining)
+22ec1a2aea73b9 Kees Cook                     2017-12-01  172  			goto failed;
+e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  173  
+^1da177e4c3f41 Linus Torvalds                2005-04-16  174  		buf += sz;
+^1da177e4c3f41 Linus Torvalds                2005-04-16  175  		p += sz;
+^1da177e4c3f41 Linus Torvalds                2005-04-16  176  		count -= sz;
+^1da177e4c3f41 Linus Torvalds                2005-04-16  177  		read += sz;
+8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  178  		if (should_stop_iteration())
+8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  179  			break;
+^1da177e4c3f41 Linus Torvalds                2005-04-16  180  	}
+22ec1a2aea73b9 Kees Cook                     2017-12-01  181  	kfree(bounce);
+^1da177e4c3f41 Linus Torvalds                2005-04-16  182  
+^1da177e4c3f41 Linus Torvalds                2005-04-16  183  	*ppos += read;
+^1da177e4c3f41 Linus Torvalds                2005-04-16  184  	return read;
+22ec1a2aea73b9 Kees Cook                     2017-12-01  185  
+22ec1a2aea73b9 Kees Cook                     2017-12-01  186  failed:
+22ec1a2aea73b9 Kees Cook                     2017-12-01  187  	kfree(bounce);
+22ec1a2aea73b9 Kees Cook                     2017-12-01  188  	return err;
+^1da177e4c3f41 Linus Torvalds                2005-04-16  189  }
+^1da177e4c3f41 Linus Torvalds                2005-04-16  190  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
