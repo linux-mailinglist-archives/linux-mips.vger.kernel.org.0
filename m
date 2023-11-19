@@ -1,192 +1,263 @@
-Return-Path: <linux-mips+bounces-101-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-102-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42F817F042B
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Nov 2023 04:14:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2C8A7F04C1
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Nov 2023 09:16:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 975DF280E92
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Nov 2023 03:14:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF51D1C208EA
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Nov 2023 08:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCF001877;
-	Sun, 19 Nov 2023 03:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3B11C3B;
+	Sun, 19 Nov 2023 08:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crKG24SE"
+	dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b="fnmZORRU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2260DB3;
-	Sat, 18 Nov 2023 19:14:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700363662; x=1731899662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DgMR+20joI22QFpxuYG34MFkzxuJ+eU5dAVuggNsAkY=;
-  b=crKG24SEVzDB+/qpn5UkJtaCvz4M5b+dCf1WRzbgH/97u50JW2nzuMR2
-   OsiyuOcCJqNzgEKS7AzwKzQUzoQm5dN2FmgRCakBDYJATQjlVWC39UQl0
-   O+WjvD0TTEcmq6wZwUePSt61/FoKDnFL8BkLoEj67fJgmUla1hTxflQro
-   0it5PAlXhVj/JDPWqnCgUUGK5DpHc74ShAz7iAqoMTAIXKkJkhbsaqp4W
-   om2CW063g7wFvgC1mfE8i5jsOx1+jwrA5bVPjkPiY1/tk2oYMR+JiIQ1/
-   kmW07znCra8rmfHDNFj8/dRKLsgP1N56aEksIrEjn/TZ8DEGcxXyK29Fu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="370812188"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="370812188"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 19:14:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="800823006"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="800823006"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 Nov 2023 19:14:14 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r4YGC-0004aP-0K;
-	Sun, 19 Nov 2023 03:14:12 +0000
-Date: Sun, 19 Nov 2023 11:13:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kefeng Wang <wangkefeng.wang@huawei.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	linux-hexagon@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	linux-m68k@lists.linux-m68k.org,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	linux-arm-kernel@lists.infradead.org,
-	Brian Cain <bcain@quicinc.com>, linux-parisc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and
- unxlate_dev_mem_ptr()
-Message-ID: <202311191145.pppExJS6-lkp@intel.com>
-References: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
+X-Greylist: delayed 345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Nov 2023 00:16:36 PST
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F01312D;
+	Sun, 19 Nov 2023 00:16:35 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id DD580447DB;
+	Sun, 19 Nov 2023 08:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1700381447; bh=GM+if5fLHpvJrFY5qSih6je/CvwvPPLKRrXfiPD5JZ0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fnmZORRU99JAVouDyTggPcE3iI5afMoj+u2Q93VQ586jKo2M/q9GZEdwubNM4sfTG
+	 O/GNq8IBB2FxoNxqr+83D6QLnNoyRUshU83ipS6MAOREVA4UCBzzO13RzDdjxIUQMP
+	 eudSVW93AZc92wzpKNKzYiJbsCHq3HNLwf37Q4rYng+gvpQzwQv6Hir4FQs3pVEOHW
+	 PWvxNrEeCr6uJqj6WxIZxJOcGOrqTmHPOFdam47KxGPA3SBUOixBt51uEWtRaaJNpU
+	 +oztbcTSFkScA/2bBEJM1o2bzkZzy2rOmG6UsRBkmN8P7aMUR0GoioW59JerR3gTgu
+	 E9BI6sjTeb8xw==
+Message-ID: <20a7ef6d-a8ca-4bd8-ad7e-11856db617a2@marcan.st>
+Date: Sun, 19 Nov 2023 17:10:30 +0900
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 06/17] iommu: Add iommu_fwspec_alloc/dealloc()
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@nvidia.com>, acpica-devel@lists.linux.dev,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Albert Ou <aou@eecs.berkeley.edu>,
+ asahi@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>,
+ Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org,
+ David Woodhouse <dwmw2@infradead.org>, Frank Rowand
+ <frowand.list@gmail.com>, Hanjun Guo <guohanjun@huawei.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, iommu@lists.linux.dev,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Jonathan Hunter <jonathanh@nvidia.com>, Joerg Roedel <joro@8bytes.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
+ linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org,
+ linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, patches@lists.linux.dev,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Robert Moore <robert.moore@intel.com>, Rob Herring <robh+dt@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Sven Peter <sven@svenpeter.dev>, Thierry Reding <thierry.reding@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Krishna Reddy <vdumpa@nvidia.com>, Vineet Gupta <vgupta@kernel.org>,
+ virtualization@lists.linux.dev, Wei Liu <wei.liu@kernel.org>,
+ Will Deacon <will@kernel.org>
+Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Lu Baolu <baolu.lu@linux.intel.com>, Christoph Hellwig <hch@lst.de>,
+ Jerry Snitselaar <jsnitsel@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+ Zhenhua Huang <quic_zhenhuah@quicinc.com>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ Rob Herring <robh@kernel.org>
+References: <6-v2-36a0088ecaa7+22c6e-iommu_fwspec_jgg@nvidia.com>
+From: Hector Martin <marcan@marcan.st>
+In-Reply-To: <6-v2-36a0088ecaa7+22c6e-iommu_fwspec_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Kefeng,
+On 2023/11/15 23:05, Jason Gunthorpe wrote:
+> Allow fwspec to exist independently from the dev->iommu by providing
+> functions to allow allocating and freeing the raw struct iommu_fwspec.
+> 
+> Reflow the existing paths to call the new alloc/dealloc functions.
+> 
+> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/iommu/iommu.c | 82 ++++++++++++++++++++++++++++++++-----------
+>  include/linux/iommu.h | 11 +++++-
+>  2 files changed, 72 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 18a82a20934d53..86bbb9e75c7e03 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -361,10 +361,8 @@ static void dev_iommu_free(struct device *dev)
+>  	struct dev_iommu *param = dev->iommu;
+>  
+>  	dev->iommu = NULL;
+> -	if (param->fwspec) {
+> -		fwnode_handle_put(param->fwspec->iommu_fwnode);
+> -		kfree(param->fwspec);
+> -	}
+> +	if (param->fwspec)
+> +		iommu_fwspec_dealloc(param->fwspec);
+>  	kfree(param);
+>  }
+>  
+> @@ -2920,10 +2918,61 @@ const struct iommu_ops *iommu_ops_from_fwnode(struct fwnode_handle *fwnode)
+>  	return ops;
+>  }
+>  
+> +static int iommu_fwspec_assign_iommu(struct iommu_fwspec *fwspec,
+> +				     struct device *dev,
+> +				     struct fwnode_handle *iommu_fwnode)
+> +{
+> +	const struct iommu_ops *ops;
+> +
+> +	if (fwspec->iommu_fwnode) {
+> +		/*
+> +		 * fwspec->iommu_fwnode is the first iommu's fwnode. In the rare
+> +		 * case of multiple iommus for one device they must point to the
+> +		 * same driver, checked via same ops.
+> +		 */
+> +		ops = iommu_ops_from_fwnode(iommu_fwnode);
 
-kernel test robot noticed the following build errors:
+This carries over a related bug from the original code: If a device has
+two IOMMUs and the first one probes but the second one defers, ops will
+be NULL here and the check will fail with EINVAL.
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on geert-m68k/for-next geert-m68k/for-linus deller-parisc/for-next powerpc/next powerpc/fixes linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Adding a check for that case here fixes it:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/asm-io-remove-unnecessary-xlate_dev_mem_ptr-and-unxlate_dev_mem_ptr/20231118-183038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20231118100827.1599422-1-wangkefeng.wang%40huawei.com
-patch subject: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/reproduce)
+		if (!ops)
+			return driver_deferred_probe_check_state(dev);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311191145.pppExJS6-lkp@intel.com/
+With that, for the whole series:
 
-All errors (new ones prefixed by >>):
+Tested-by: Hector Martin <marcan@marcan.st>
 
->> drivers/char/mem.c:159:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ptr = xlate_dev_mem_ptr(p);
-                                 ^
->> drivers/char/mem.c:159:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                           ptr = xlate_dev_mem_ptr(p);
-                               ^ ~~~~~~~~~~~~~~~~~~~~
->> drivers/char/mem.c:164:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           unxlate_dev_mem_ptr(p, ptr);
-                           ^
-   drivers/char/mem.c:235:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ptr = xlate_dev_mem_ptr(p);
-                                 ^
-   drivers/char/mem.c:235:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                           ptr = xlate_dev_mem_ptr(p);
-                               ^ ~~~~~~~~~~~~~~~~~~~~
-   drivers/char/mem.c:243:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           unxlate_dev_mem_ptr(p, ptr);
-                           ^
-   6 errors generated.
+I can't specifically test for the probe races the series intends to fix
+though, since that bug we only hit extremely rarely. I'm just testing
+that nothing breaks.
 
+> +		if (fwspec->ops != ops)
+> +			return -EINVAL;
+> +		return 0;
+> +	}
+> +
+> +	if (!fwspec->ops) {
+> +		ops = iommu_ops_from_fwnode(iommu_fwnode);
+> +		if (!ops)
+> +			return driver_deferred_probe_check_state(dev);
+> +		fwspec->ops = ops;
+> +	}
+> +
+> +	of_node_get(to_of_node(iommu_fwnode));
+> +	fwspec->iommu_fwnode = iommu_fwnode;
+> +	return 0;
+> +}
+> +
+> +struct iommu_fwspec *iommu_fwspec_alloc(void)
+> +{
+> +	struct iommu_fwspec *fwspec;
+> +
+> +	fwspec = kzalloc(sizeof(*fwspec), GFP_KERNEL);
+> +	if (!fwspec)
+> +		return ERR_PTR(-ENOMEM);
+> +	return fwspec;
+> +}
+> +
+> +void iommu_fwspec_dealloc(struct iommu_fwspec *fwspec)
+> +{
+> +	if (!fwspec)
+> +		return;
+> +
+> +	if (fwspec->iommu_fwnode)
+> +		fwnode_handle_put(fwspec->iommu_fwnode);
+> +	kfree(fwspec);
+> +}
+> +
+>  int iommu_fwspec_init(struct device *dev, struct fwnode_handle *iommu_fwnode,
+>  		      const struct iommu_ops *ops)
+>  {
+>  	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+> +	int ret;
+>  
+>  	if (fwspec)
+>  		return ops == fwspec->ops ? 0 : -EINVAL;
+> @@ -2931,29 +2980,22 @@ int iommu_fwspec_init(struct device *dev, struct fwnode_handle *iommu_fwnode,
+>  	if (!dev_iommu_get(dev))
+>  		return -ENOMEM;
+>  
+> -	fwspec = kzalloc(sizeof(*fwspec), GFP_KERNEL);
+> -	if (!fwspec)
+> -		return -ENOMEM;
+> +	fwspec = iommu_fwspec_alloc();
+> +	if (IS_ERR(fwspec))
+> +		return PTR_ERR(fwspec);
+>  
+> -	of_node_get(to_of_node(iommu_fwnode));
+> -	fwspec->iommu_fwnode = iommu_fwnode;
+>  	fwspec->ops = ops;
+> +	ret = iommu_fwspec_assign_iommu(fwspec, dev, iommu_fwnode);
+> +	if (ret) {
+> +		iommu_fwspec_dealloc(fwspec);
+> +		return ret;
+> +	}
+> +
+>  	dev_iommu_fwspec_set(dev, fwspec);
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_fwspec_init);
+>  
+> -void iommu_fwspec_free(struct device *dev)
+> -{
+> -	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+> -
+> -	if (fwspec) {
+> -		fwnode_handle_put(fwspec->iommu_fwnode);
+> -		kfree(fwspec);
+> -		dev_iommu_fwspec_set(dev, NULL);
+> -	}
+> -}
+> -EXPORT_SYMBOL_GPL(iommu_fwspec_free);
+>  
+>  int iommu_fwspec_add_ids(struct device *dev, u32 *ids, int num_ids)
+>  {
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index e98a4ca8f536b7..c7c68cb59aa4dc 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -813,9 +813,18 @@ struct iommu_sva {
+>  	struct iommu_domain		*domain;
+>  };
+>  
+> +struct iommu_fwspec *iommu_fwspec_alloc(void);
+> +void iommu_fwspec_dealloc(struct iommu_fwspec *fwspec);
+> +
+>  int iommu_fwspec_init(struct device *dev, struct fwnode_handle *iommu_fwnode,
+>  		      const struct iommu_ops *ops);
+> -void iommu_fwspec_free(struct device *dev);
+> +static inline void iommu_fwspec_free(struct device *dev)
+> +{
+> +	if (!dev->iommu)
+> +		return;
+> +	iommu_fwspec_dealloc(dev->iommu->fwspec);
+> +	dev->iommu->fwspec = NULL;
+> +}
+>  int iommu_fwspec_add_ids(struct device *dev, u32 *ids, int num_ids);
+>  const struct iommu_ops *iommu_ops_from_fwnode(struct fwnode_handle *fwnode);
+>  
 
-vim +/xlate_dev_mem_ptr +159 drivers/char/mem.c
-
-^1da177e4c3f41 Linus Torvalds                2005-04-16  133  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  134  	bounce = kmalloc(PAGE_SIZE, GFP_KERNEL);
-22ec1a2aea73b9 Kees Cook                     2017-12-01  135  	if (!bounce)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  136  		return -ENOMEM;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  137  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  138  	while (count > 0) {
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  139  		unsigned long remaining;
-b5b38200ebe548 Kees Cook                     2018-03-27  140  		int allowed, probe;
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  141  
-f222318e9c3a31 Wu Fengguang                  2009-12-14  142  		sz = size_inside_page(p, count);
-^1da177e4c3f41 Linus Torvalds                2005-04-16  143  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  144  		err = -EPERM;
-a4866aa812518e Kees Cook                     2017-04-05  145  		allowed = page_is_allowed(p >> PAGE_SHIFT);
-a4866aa812518e Kees Cook                     2017-04-05  146  		if (!allowed)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  147  			goto failed;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  148  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  149  		err = -EFAULT;
-a4866aa812518e Kees Cook                     2017-04-05  150  		if (allowed == 2) {
-a4866aa812518e Kees Cook                     2017-04-05  151  			/* Show zeros for restricted memory. */
-a4866aa812518e Kees Cook                     2017-04-05  152  			remaining = clear_user(buf, sz);
-a4866aa812518e Kees Cook                     2017-04-05  153  		} else {
-^1da177e4c3f41 Linus Torvalds                2005-04-16  154  			/*
-a4866aa812518e Kees Cook                     2017-04-05  155  			 * On ia64 if a page has been mapped somewhere as
-a4866aa812518e Kees Cook                     2017-04-05  156  			 * uncached, then it must also be accessed uncached
-a4866aa812518e Kees Cook                     2017-04-05  157  			 * by the kernel or data corruption may occur.
-^1da177e4c3f41 Linus Torvalds                2005-04-16  158  			 */
-^1da177e4c3f41 Linus Torvalds                2005-04-16 @159  			ptr = xlate_dev_mem_ptr(p);
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  160  			if (!ptr)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  161  				goto failed;
-a4866aa812518e Kees Cook                     2017-04-05  162  
-fe557319aa06c2 Christoph Hellwig             2020-06-17  163  			probe = copy_from_kernel_nofault(bounce, ptr, sz);
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18 @164  			unxlate_dev_mem_ptr(p, ptr);
-b5b38200ebe548 Kees Cook                     2018-03-27  165  			if (probe)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  166  				goto failed;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  167  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  168  			remaining = copy_to_user(buf, bounce, sz);
-a4866aa812518e Kees Cook                     2017-04-05  169  		}
-a4866aa812518e Kees Cook                     2017-04-05  170  
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  171  		if (remaining)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  172  			goto failed;
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  173  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  174  		buf += sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  175  		p += sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  176  		count -= sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  177  		read += sz;
-8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  178  		if (should_stop_iteration())
-8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  179  			break;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  180  	}
-22ec1a2aea73b9 Kees Cook                     2017-12-01  181  	kfree(bounce);
-^1da177e4c3f41 Linus Torvalds                2005-04-16  182  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  183  	*ppos += read;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  184  	return read;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  185  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  186  failed:
-22ec1a2aea73b9 Kees Cook                     2017-12-01  187  	kfree(bounce);
-22ec1a2aea73b9 Kees Cook                     2017-12-01  188  	return err;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  189  }
-^1da177e4c3f41 Linus Torvalds                2005-04-16  190  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Hector
 
