@@ -1,28 +1,28 @@
-Return-Path: <linux-mips+bounces-111-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-110-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09C9C7F0E7B
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 10:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5E897F0E77
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 10:06:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AD861C21531
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 09:06:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6A181C21233
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 09:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C983610954;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F78110941;
 	Mon, 20 Nov 2023 09:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78441EB;
-	Mon, 20 Nov 2023 01:06:45 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9613E8;
+	Mon, 20 Nov 2023 01:06:44 -0800 (PST)
 Received: from loongson.cn (unknown [112.20.112.120])
-	by gateway (Coremail) with SMTP id _____8Dxl+ihIVtlYiw7AA--.15404S3;
-	Mon, 20 Nov 2023 17:06:41 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8AxTeuiIVtlaSw7AA--.46141S3;
+	Mon, 20 Nov 2023 17:06:42 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.112.120])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxS9ydIVtlrmRHAA--.24751S2;
-	Mon, 20 Nov 2023 17:06:39 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxS9ydIVtlrmRHAA--.24751S3;
+	Mon, 20 Nov 2023 17:06:41 +0800 (CST)
 From: Binbin Zhou <zhoubinbin@loongson.cn>
 To: Binbin Zhou <zhoubb.aaron@gmail.com>,
 	Huacai Chen <chenhuacai@loongson.cn>,
@@ -41,10 +41,12 @@ Cc: Huacai Chen <chenhuacai@kernel.org>,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v5 0/5] dt-bindings: interrupt-controller: Fix some loongson,liointc warnings
-Date: Mon, 20 Nov 2023 17:06:22 +0800
-Message-Id: <cover.1700449792.git.zhoubinbin@loongson.cn>
+Subject: [PATCH v5 1/5] dt-bindings: interrupt-controller: loongson,liointc: Standardize the naming of 'loongson,parent-int-map'
+Date: Mon, 20 Nov 2023 17:06:23 +0800
+Message-Id: <cae772aa897f6b10c3f5c4c93a256b50c5de4b21.1700449792.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <cover.1700449792.git.zhoubinbin@loongson.cn>
+References: <cover.1700449792.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,11 +54,11 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8DxS9ydIVtlrmRHAA--.24751S2
+X-CM-TRANSID:AQAAf8DxS9ydIVtlrmRHAA--.24751S3
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7WryfJFyxGrW5Zr1rAF13trc_yoW5Jry5pF
-	sxC3ZrGr45Kr4xAws8Jay8ZF1rZ398JasxWFs7A348CayDJw1qqr1SkF48Ar47CryaqFya
-	qrWkKFWUGFyjkFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoW7CF4rZFyrZr45tF4kXw4rXrc_yoW8Wr45pF
+	ZxC3WDGF48tF17A390qa4vkF1fZrn8A3ZruFZ3AayxAFZrtw1DXr4akFn5A3W5CrW8XFy7
+	ZryF9a1UKa47JabCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
 	0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
@@ -72,79 +74,51 @@ X-Coremail-Antispam: 1Uk129KBj93XoW7WryfJFyxGrW5Zr1rAF13trc_yoW5Jry5pF
 	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7Cj
 	xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYE_NUUUUU=
 
-Hi all:
+Since the 'loongson,parent_int_map' attribute naming is non-standard, we
+should use 'loongson,parent-int-map' instead.
 
-Some liointc-related DTBS_CHECK warnings were found when trying to
-introduce the Loongson-2K DTS{I} for LoongArch.
-This patch series attempts to fix those warnings, as well as fixing
-non-standard property naming.
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ .../bindings/interrupt-controller/loongson,liointc.yaml   | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Of course, these fixes also apply to MIPS Loongson-2K1000.
-
-Thanks.
-
------
-V5:
-- Add Reviewed-by tag;
-patch(1/5):
-  - Just drop 'loongson,parent_int_map' instead of marking it as
-    deprecated.
-
-Link to V4:
-https://lore.kernel.org/all/cover.1699521866.git.zhoubinbin@loongson.cn/
-
-V4:
-- Add Acked-by tag;
-patch(2/5):
-  - Just add 'maxitem 2' instead of duplicating the list;
-patch(3/5):
-  - Rewite commit message for 'interrupt-names'.
-
-Link to V3:
-https://lore.kernel.org/all/cover.1698717154.git.zhoubinbin@loongson.cn/
-
-V3:
-patch(1/5):
-  - new patch, 'loongson,parent_int_map' renamed to 'loongson,parent-int-map';
-patch(2/5)(3/5):
-  - Separate the change points into separate patches;
-patch(4/5):
- - new patch, make sure both parent map forms can be parsed;
-patch(5/5):
- - new patch, fix 'loongson,parent_int_map' references in mips loongson
-   dts{i}.
-
-Link to V2:
-https://lore.kernel.org/all/20230821061315.3416836-1-zhoubinbin@loongson.cn/
-
-V2:
-1. Update commit message;
-2. "interruprt-names" should be "required", the driver gets the parent
-interrupts through it;
-3. Add more descriptions to explain the rationale for multiple nodes;
-4. Rewrite if-else statements.
-
-Link to V1:
-https://lore.kernel.org/all/20230815084713.1627520-1-zhoubinbin@loongson.cn/
-
-Binbin Zhou (5):
-  dt-bindings: interrupt-controller: loongson,liointc: Standardize the
-    naming of 'loongson,parent-int-map'
-  dt-bindings: interrupt-controller: loongson,liointc: Fix dtbs_check
-    warning for reg-names
-  dt-bindings: interrupt-controller: loongson,liointc: Fix dtbs_check
-    warning for interrupt-names
-  irqchip/loongson-liointc: Fix 'loongson,parent_int_map' parse
-  MIPS: Loongson64: DTS: Fix 'loongson,parent_int_map' references
-
- .../loongson,liointc.yaml                     | 26 +++++++++++--------
- .../boot/dts/loongson/loongson64-2k1000.dtsi  |  4 +--
- .../dts/loongson/loongson64c-package.dtsi     |  2 +-
- .../dts/loongson/loongson64g-package.dtsi     |  2 +-
- .../dts/loongson/loongson64v_4core_virtio.dts |  2 +-
- drivers/irqchip/irq-loongson-liointc.c        |  7 ++++-
- 6 files changed, 26 insertions(+), 17 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+index 00b570c82903..70c125bf8095 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+@@ -54,7 +54,7 @@ properties:
+   '#interrupt-cells':
+     const: 2
+ 
+-  loongson,parent_int_map:
++  loongson,parent-int-map:
+     description: |
+       This property points how the children interrupts will be mapped into CPU
+       interrupt lines. Each cell refers to a parent interrupt line from 0 to 3
+@@ -71,8 +71,7 @@ required:
+   - interrupts
+   - interrupt-controller
+   - '#interrupt-cells'
+-  - loongson,parent_int_map
+-
++  - loongson,parent-int-map
+ 
+ unevaluatedProperties: false
+ 
+@@ -109,11 +108,10 @@ examples:
+       interrupts = <2>, <3>;
+       interrupt-names = "int0", "int1";
+ 
+-      loongson,parent_int_map = <0xf0ffffff>, /* int0 */
++      loongson,parent-int-map = <0xf0ffffff>, /* int0 */
+                                 <0x0f000000>, /* int1 */
+                                 <0x00000000>, /* int2 */
+                                 <0x00000000>; /* int3 */
+-
+     };
+ 
+ ...
 -- 
 2.39.3
 
