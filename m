@@ -1,99 +1,125 @@
-Return-Path: <linux-mips+bounces-121-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-122-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 606497F1DA2
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 20:59:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 657DE7F206F
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 23:37:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91FA21C20EB4
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 19:59:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DEED28281F
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 22:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A5736B00;
-	Mon, 20 Nov 2023 19:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82AD436B15;
+	Mon, 20 Nov 2023 22:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HY2eAvDD"
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dg1hNBY0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05929AA;
-	Mon, 20 Nov 2023 11:59:38 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1e9bb3a0bfeso3000181fac.3;
-        Mon, 20 Nov 2023 11:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700510377; x=1701115177; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJBR3xUJ90fNqoXNnd3g+YCrJa3COLV0n8rrwwfxSX0=;
-        b=HY2eAvDDZiv24MeUWpSyl1qqkiuL1mapjg+3F3u3TKKJGWTOXnm7oDXOKS4z4zBFig
-         Q6Ky8FPySafYaDOM0eOWuHuhgE2Mn+0nht0fJ7To2OdNm8z8pdTTKHgSs6AWGyA8zNlI
-         y3puLE5Xi0kGnn7AlQN8m5/5/ixWbrjll5qFZlgT2BzlNwCO+XBkf9ZHFaAKjW78gm+/
-         TiFLFJkqYUwoQ3d7tnaJlF/kyFMLJGr5XmV2MyYybeW/F1U+2gmT4rDHI71gj1ziT2zy
-         eP7APQWObOzJww5I+5nKueGH38lfFNdRD5SOarJb/G8gxdFI1vu1bzYP/VRxAx5LhCci
-         8qzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700510377; x=1701115177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YJBR3xUJ90fNqoXNnd3g+YCrJa3COLV0n8rrwwfxSX0=;
-        b=NaySBAPx8cGPyXe0ZkCGdnlV8KJ9gxv7QDTDOfhFnFTGGnSDtCXQW1Jy5ZJwf7fiwA
-         lu5oO7ujGm8wsINJWjjblUTsCrnSGD/BnD9CowiHqolBOeRkeORLvRBSwYtqK9s6W2MB
-         agd2iuJFSeBPfEEgDl644i+p0bnzXGTiuOyCKl12706JPb6W/pHxzLJemOc3lEPr0MJf
-         FfrzvlZUQ0MHkjG8VPD6P7EsvQlJ+Xqyn0tbaxQ+IS1qE2WY5i5UXkrMBsoT1P40gSpp
-         6VnGK+Q761qEbswSEO1mT5BS/25ttGv/IR/UloxqIM5TdGZXroQPSZ7qcp6RICkiftFR
-         y4Xg==
-X-Gm-Message-State: AOJu0YwwbHaBHom7UgsBslcNthzTqNlaCW7ZL2FeU5xZ6+MAosBgsOHE
-	mi83PuLrOzO5GO1i+ITsMWpxja96pJ7DPpNGAZtfD9cU
-X-Google-Smtp-Source: AGHT+IHErDTudVD9D0Xs6J9fHo53Jc2qgzfK4kq24U4ws4Et4usKh7Ru6ZcV/W943JLQEEu6O9dDRJe1Gv7tRXOquxI=
-X-Received: by 2002:a05:6871:82b:b0:1e9:dd4b:d0aa with SMTP id
- q43-20020a056871082b00b001e9dd4bd0aamr9331470oap.48.1700510377374; Mon, 20
- Nov 2023 11:59:37 -0800 (PST)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08863A2;
+	Mon, 20 Nov 2023 14:37:42 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2A8FC40E0031;
+	Mon, 20 Nov 2023 22:37:40 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Qlr3bOPqbg-W; Mon, 20 Nov 2023 22:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1700519856; bh=x9IsRR5+1IkHxb6g4ZF6VKh5RWuwsZ6e/RDXJfhFiD8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dg1hNBY0wesA8gF8gY062vLM00Xkf87s/irWgAp0+1T2yNZoU2eVnkYYyVrxkfpHz
+	 v/CDNxZDsCqarhLXL027s+pfyo+cb00NQ+heMcdDK5qHf4eCmwP5AC8Ko4XXrEvh0h
+	 qy5WiIgPjMvMtCy9MzPe9CYO9L00hoz00Ae8YDNpQaCpMJbiDtn3ldGtOYWTHCJcOd
+	 POUfqOEZmCTk+RCnJetbB71ya+N0vBNuO4UOEIjbyEAX7/qMJhNBUyhUeOKBaWpdr9
+	 YXlgbmJesULfeTbywn5O1jZW+CDsSN28Moe7bkZurTMsNjeVqFfIeDunus09ODlB+9
+	 fEfyLgKfgFGkHZ6pJpHYRJey0eezKUVcZ8Qc59gKQ92a1zr76WREbMpAypqCcPtj97
+	 vg1YoUfOfTbsDQ+D2jCCoGLNi+iEV1PzyzEn3Z73VmCGWfY4BbSsFShjd77tGlbqKQ
+	 izFw8wSSMT1BGhfp+Ro1kCZ/D2RdiArgVse5ESOch3H+PRJc2DiRB/eSKimWYc0Imc
+	 51ftFCVoExnkhJIHP6oIv23Ozazu8LiNp7aCnA5yDl3BAJl0GeAJMZXNjZcEFeADub
+	 rKKadA08E2hrF5E+9USWuVi6IRhECjsE9szf2Lan9eZJvUIChphm7NPyJeVdCD+kcQ
+	 vrlIcs/4QTTXJRxGHEKkBd/w=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EC2FE40E01AD;
+	Mon, 20 Nov 2023 22:36:56 +0000 (UTC)
+Date: Mon, 20 Nov 2023 23:36:51 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>, Dinh Nguyen <dinguyen@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+	kernel@pengutronix.de, Jan Luebbe <jlu@pengutronix.de>,
+	Stefan Schaeckeler <sschaeck@cisco.com>,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	Shravan Kumar Ramani <shravankr@nvidia.com>,
+	Lei Wang <lewan@microsoft.com>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Johannes Thumshirn <morbidrsa@gmail.com>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Marvin Lin <kflin@nuvoton.com>, Stanley Chu <yschu@nuvoton.com>,
+	openbmc@lists.ozlabs.org, Ralf Baechle <ralf@linux-mips.org>,
+	linux-mips@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: Re: [PATCH 00/21] EDAC: Convert to platform remove callback
+ returning void
+Message-ID: <20231120223651.GIZVvfg1amJyXdmYKQ@fat_crate.local>
+References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231022090633.792831-1-sergio.paracuellos@gmail.com> <513bc341-25b8-5a57-d760-861a3e88a4a1@linaro.org>
-In-Reply-To: <513bc341-25b8-5a57-d760-861a3e88a4a1@linaro.org>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Mon, 20 Nov 2023 20:59:25 +0100
-Message-ID: <CAMhs-H8A0p=nFSnU9pRn=rTC_=CH6jXFQdYgZdimFNq9+dVqSw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add myself as maintainer of the Ralink architecture
-To: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Cc: linux-mips@vger.kernel.org, john@phrozen.org, tsbogend@alpha.franken.de, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 25, 2023 at 2:58=E2=80=AFPM Philippe Mathieu-Daud=C3=A9
-<philmd@linaro.org> wrote:
->
-> On 22/10/23 11:06, Sergio Paracuellos wrote:
-> > Its been a while since I am making contributions to this architecture.
-> > Hence add myself as maintainer.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> > Hi John, if you are not ok with this please let me know. In other case
-> > please ack this patch. I can add myself as Reviewer if you prefer to
-> > maintain alone this.
-> >
-> > Thanks in advance for your time!
-> >
-> > Best regards,
-> >      Sergio Paracuellos
-> >
-> >   MAINTAINERS | 1 +
-> >   1 file changed, 1 insertion(+)
->
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
->
+On Wed, Oct 04, 2023 at 03:12:33PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> Uwe Kleine-K=C3=B6nig (21):
+>   EDAC/altera: Convert to platform remove callback returning void
+>   EDAC/armada_xp: Convert to platform remove callback returning void
+>   EDAC/aspeed: Convert to platform remove callback returning void
+>   EDAC/bluefield: Convert to platform remove callback returning void
+>   EDAC/cell: Convert to platform remove callback returning void
+>   EDAC/cpc925: Convert to platform remove callback returning void
+>   EDAC/dmc520: Convert to platform remove callback returning void
+>   EDAC/highbank_l2: Convert to platform remove callback returning void
+>   EDAC/highbank_mc: Convert to platform remove callback returning void
+>   EDAC/mpc85xx: Convert to platform remove callback returning void
+>   EDAC/npcm: Convert to platform remove callback returning void
+>   EDAC/octeon-l2c: Convert to platform remove callback returning void
+>   EDAC/octeon-lmc: Convert to platform remove callback returning void
+>   EDAC/octeon-pc: Convert to platform remove callback returning void
+>   EDAC/octeon-pci: Convert to platform remove callback returning void
+>   EDAC/ppc4xx: Convert to platform remove callback returning void
+>   EDAC/qcom: Convert to platform remove callback returning void
+>   EDAC/synopsys: Convert to platform remove callback returning void
+>   EDAC/ti: Convert to platform remove callback returning void
+>   EDAC/xgene: Convert to platform remove callback returning void
+>   EDAC/zynqmp: Convert to platform remove callback returning void
 
-Thomas, can you take this patch through the mips tree?
+All applied, thanks.
 
-Thanks,
-    Sergio Paracuellos
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
