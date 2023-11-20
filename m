@@ -1,125 +1,116 @@
-Return-Path: <linux-mips+bounces-122-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-123-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 657DE7F206F
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 23:37:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6651F7F20BB
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 23:53:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DEED28281F
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 22:37:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E1012823D5
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Nov 2023 22:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82AD436B15;
-	Mon, 20 Nov 2023 22:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AF639864;
+	Mon, 20 Nov 2023 22:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dg1hNBY0"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TJV+6/Hj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08863A2;
-	Mon, 20 Nov 2023 14:37:42 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2A8FC40E0031;
-	Mon, 20 Nov 2023 22:37:40 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Qlr3bOPqbg-W; Mon, 20 Nov 2023 22:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1700519856; bh=x9IsRR5+1IkHxb6g4ZF6VKh5RWuwsZ6e/RDXJfhFiD8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dg1hNBY0wesA8gF8gY062vLM00Xkf87s/irWgAp0+1T2yNZoU2eVnkYYyVrxkfpHz
-	 v/CDNxZDsCqarhLXL027s+pfyo+cb00NQ+heMcdDK5qHf4eCmwP5AC8Ko4XXrEvh0h
-	 qy5WiIgPjMvMtCy9MzPe9CYO9L00hoz00Ae8YDNpQaCpMJbiDtn3ldGtOYWTHCJcOd
-	 POUfqOEZmCTk+RCnJetbB71ya+N0vBNuO4UOEIjbyEAX7/qMJhNBUyhUeOKBaWpdr9
-	 YXlgbmJesULfeTbywn5O1jZW+CDsSN28Moe7bkZurTMsNjeVqFfIeDunus09ODlB+9
-	 fEfyLgKfgFGkHZ6pJpHYRJey0eezKUVcZ8Qc59gKQ92a1zr76WREbMpAypqCcPtj97
-	 vg1YoUfOfTbsDQ+D2jCCoGLNi+iEV1PzyzEn3Z73VmCGWfY4BbSsFShjd77tGlbqKQ
-	 izFw8wSSMT1BGhfp+Ro1kCZ/D2RdiArgVse5ESOch3H+PRJc2DiRB/eSKimWYc0Imc
-	 51ftFCVoExnkhJIHP6oIv23Ozazu8LiNp7aCnA5yDl3BAJl0GeAJMZXNjZcEFeADub
-	 rKKadA08E2hrF5E+9USWuVi6IRhECjsE9szf2Lan9eZJvUIChphm7NPyJeVdCD+kcQ
-	 vrlIcs/4QTTXJRxGHEKkBd/w=
-Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EC2FE40E01AD;
-	Mon, 20 Nov 2023 22:36:56 +0000 (UTC)
-Date: Mon, 20 Nov 2023 23:36:51 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Tony Luck <tony.luck@intel.com>, Dinh Nguyen <dinguyen@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	kernel@pengutronix.de, Jan Luebbe <jlu@pengutronix.de>,
-	Stefan Schaeckeler <sschaeck@cisco.com>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	Shravan Kumar Ramani <shravankr@nvidia.com>,
-	Lei Wang <lewan@microsoft.com>,
-	Andre Przywara <andre.przywara@arm.com>,
-	Johannes Thumshirn <morbidrsa@gmail.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Marvin Lin <kflin@nuvoton.com>, Stanley Chu <yschu@nuvoton.com>,
-	openbmc@lists.ozlabs.org, Ralf Baechle <ralf@linux-mips.org>,
-	linux-mips@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-arm-msm@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Khuong Dinh <khuong@os.amperecomputing.com>,
-	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-Subject: Re: [PATCH 00/21] EDAC: Convert to platform remove callback
- returning void
-Message-ID: <20231120223651.GIZVvfg1amJyXdmYKQ@fat_crate.local>
-References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114F7CF
+	for <linux-mips@vger.kernel.org>; Mon, 20 Nov 2023 14:53:04 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5c239897895so1002801a12.2
+        for <linux-mips@vger.kernel.org>; Mon, 20 Nov 2023 14:53:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1700520783; x=1701125583; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jj/vQll/FXoy8ynJ7Qc2odNrUXWiiF64P1hSHAKTnLo=;
+        b=TJV+6/Hjq4Mewn2fI8FIeDdxzYZ3UyjLy2g1qYqHn0qKm4X5Lai6NZRNtH5YJ98k1I
+         a6l7RGAy8lpggsIo5s8nb6WLFemAN7F8KRsKr0LKn4uZgW8J9rqWNUY4bMSvUIio7204
+         lQiUwoB54lkZvokSYE0NUY9Ui6mbjBtTp6dw5oDhSzvq+ASDN90KV2jxoowcLbHEewGL
+         D9E8G5H2+dWqZ967YfP02MaS+tqJznZLG2DUYr4BgvUHMq/W0Y5cayHWxgNFPAOQgF/s
+         oSq86P6Z52FcwSMa6/DUyc0mXeAjxFxDTtvYOuNm+tvst2a0Ds4ecgV0bWB6qd36dxr6
+         99IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700520783; x=1701125583;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jj/vQll/FXoy8ynJ7Qc2odNrUXWiiF64P1hSHAKTnLo=;
+        b=P78utebUHIR2jtNtFV1qp1x5VlEyZeT6m74+JbF0oKdKEqYrEApuqSm31LpzuJn1VT
+         WuFGH7BDjHz8wZw26I/j62uCATAqwCgEDu2MCQH0LFvMsW6rwtjyT6tZbMlr7P4ebb1Z
+         rms8f6ByGVlXPBBxv9fU08LwTx1/kfmGIEM6W4ptKdLfr1SFArEbhLkS2BakZYVZWzJn
+         jqhMr7vmSTrMuhppxXiNvvmiSKkhkLImFoo9ik7iBG7e2/DGT4mUchp4/dJvRgRm8yFu
+         x3Ql08aeq8JOIxmV6dmr6U1J8qPH7jmxeShLi3DoGXo0jZnUMytyTIl+KnmFZ+byVoW5
+         4Y7w==
+X-Gm-Message-State: AOJu0YwOLcn6HScpqXJxI0TItY0CCZox89fxJo+cUmukuj3Cx8DttgWz
+	QC92qPaP8o2/d/0RdUzs109lRR8sjXfW/4NC0rU0cg==
+X-Google-Smtp-Source: AGHT+IFZPPhV0R/g5zHGb3q3Uo9IH7rXXP80OMq0eithxekw9SzGz9ATfztUful4gMY68aa6sJe0kX0Yn689XQCOKAw=
+X-Received: by 2002:a17:90b:1a89:b0:27d:2364:44f6 with SMTP id
+ ng9-20020a17090b1a8900b0027d236444f6mr7022804pjb.6.1700520783377; Mon, 20 Nov
+ 2023 14:53:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
-Content-Transfer-Encoding: quoted-printable
+From: Ignat Korchagin <ignat@cloudflare.com>
+Date: Mon, 20 Nov 2023 22:52:52 +0000
+Message-ID: <CALrw=nHpRQQaQTP_jZfREgrQEMpS8jBF8JQCv4ygqXycE-StaA@mail.gmail.com>
+Subject: Potential config regression after 89cde455 ("kexec: consolidate kexec
+ and crash options into kernel/Kconfig.kexec")
+To: eric.devolder@oracle.com
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	chenhuacai@kernel.org, geert@linux-m68k.org, tsbogend@alpha.franken.de, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	dave.hansen@linux.intel.com, x86@kernel.org, 
+	linux-kernel <linux-kernel@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au, 
+	npiggin@gmail.com, christophe.leroy@csgroup.eu, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com, 
+	gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com, 
+	svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org, paulmck@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, frederic@kernel.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Ard Biesheuvel <ardb@kernel.org>, samitolvanen@google.com, 
+	juerg.haefliger@canonical.com, arnd@arndb.de, rmk+kernel@armlinux.org.uk, 
+	linus.walleij@linaro.org, sebastian.reichel@collabora.com, rppt@kernel.org, 
+	kirill.shutemov@linux.intel.com, anshuman.khandual@arm.com, ziy@nvidia.com, 
+	masahiroy@kernel.org, ndesaulniers@google.com, mhiramat@kernel.org, 
+	ojeda@kernel.org, thunder.leizhen@huawei.com, xin3.li@intel.com, 
+	tj@kernel.org, Greg KH <gregkh@linuxfoundation.org>, tsi@tuyoix.net, bhe@redhat.com, 
+	hbathini@linux.ibm.com, sourabhjain@linux.ibm.com, boris.ostrovsky@oracle.com, 
+	konrad.wilk@oracle.com, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Oct 04, 2023 at 03:12:33PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Uwe Kleine-K=C3=B6nig (21):
->   EDAC/altera: Convert to platform remove callback returning void
->   EDAC/armada_xp: Convert to platform remove callback returning void
->   EDAC/aspeed: Convert to platform remove callback returning void
->   EDAC/bluefield: Convert to platform remove callback returning void
->   EDAC/cell: Convert to platform remove callback returning void
->   EDAC/cpc925: Convert to platform remove callback returning void
->   EDAC/dmc520: Convert to platform remove callback returning void
->   EDAC/highbank_l2: Convert to platform remove callback returning void
->   EDAC/highbank_mc: Convert to platform remove callback returning void
->   EDAC/mpc85xx: Convert to platform remove callback returning void
->   EDAC/npcm: Convert to platform remove callback returning void
->   EDAC/octeon-l2c: Convert to platform remove callback returning void
->   EDAC/octeon-lmc: Convert to platform remove callback returning void
->   EDAC/octeon-pc: Convert to platform remove callback returning void
->   EDAC/octeon-pci: Convert to platform remove callback returning void
->   EDAC/ppc4xx: Convert to platform remove callback returning void
->   EDAC/qcom: Convert to platform remove callback returning void
->   EDAC/synopsys: Convert to platform remove callback returning void
->   EDAC/ti: Convert to platform remove callback returning void
->   EDAC/xgene: Convert to platform remove callback returning void
->   EDAC/zynqmp: Convert to platform remove callback returning void
+Good day!
 
-All applied, thanks.
+We have recently started to evaluate Linux 6.6 and noticed that we
+cannot disable CONFIG_KEXEC anymore, but keep CONFIG_CRASH_DUMP
+enabled. It seems to be related to commit 89cde455 ("kexec:
+consolidate kexec and crash options into kernel/Kconfig.kexec"), where
+a CONFIG_KEXEC dependency was added to CONFIG_CRASH_DUMP.
 
---=20
-Regards/Gruss,
-    Boris.
+In our current kernel (Linux 6.1) we only enable CONFIG_KEXEC_FILE
+with enforced signature check to support the kernel crash dumping
+functionality and would like to keep CONFIG_KEXEC disabled for
+security reasons [1].
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I was reading the long commit message, but the reason for adding
+CONFIG_KEXEC as a dependency for CONFIG_CRASH_DUMP evaded me. And I
+believe from the implementation perspective CONFIG_KEXEC_FILE should
+suffice here (as we successfully used it for crashdumps on Linux 6.1).
+
+Is there a reason for adding this dependency or is it just an
+oversight? Would some solution of requiring either CONFIG_KEXEC or
+CONFIG_KEXEC_FILE work here?
+
+Ignat
+
+[1]: https://mjg59.dreamwidth.org/28746.html
 
