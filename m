@@ -1,146 +1,204 @@
-Return-Path: <linux-mips+bounces-144-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-145-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C78D97F32B7
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 16:52:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 736937F3304
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 17:01:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03F5D1C21C04
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 15:52:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C3A9282E91
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 16:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97324317B;
-	Tue, 21 Nov 2023 15:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F1355915F;
+	Tue, 21 Nov 2023 16:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F4CE7A0/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86365125
-	for <linux-mips@vger.kernel.org>; Tue, 21 Nov 2023 07:52:00 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5T2b-0006Jz-7c; Tue, 21 Nov 2023 16:51:57 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5T2a-00AcF7-KQ; Tue, 21 Nov 2023 16:51:56 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5T2a-0052T6-BI; Tue, 21 Nov 2023 16:51:56 +0100
-Date: Tue, 21 Nov 2023 16:51:56 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: Thierry Reding <thierry.reding@gmail.com>, linux-pwm@vger.kernel.org,
-	linux-mips@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v3 014/108] pwm: jz4740: Make use of pwmchip_parent()
- macro
-Message-ID: <20231121155156.pi6e4mlov2ke2rfx@pengutronix.de>
-References: <20231121134901.208535-1-u.kleine-koenig@pengutronix.de>
- <20231121134901.208535-15-u.kleine-koenig@pengutronix.de>
- <ba21c20b20364a39d5ffff81dac8bd300a746dbb.camel@crapouillou.net>
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2065.outbound.protection.outlook.com [40.107.220.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34213187;
+	Tue, 21 Nov 2023 08:01:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MJLUljYF0oYZ+OVERCBrXO0jNocEtLxzJsFxeh1evjDusHjFH6R3n8qH5HIpu2oM4L3IwbhHwicUEpDVrh9tZJfDfUq3qKp9i9tZ5zGT0wG6vMnf/TJ/OSEl4/t6lu7mQ35T9wW0yXOtfj1TCKFTrd8B81Be1EZccOFy5WfhfoNdAGdGiOvf53EdaOB4XM4bbgc7zILZJiiQGQLh5f7R57zgWoNnrw6r88KDeF0AlFeroyDGDgIie7M9B9gdIYtyeEW+P5uASQsRK3yL6xLtWiJu3cSW22sqT7S7U5aCI4lasNzzIp4psGqCYXAWTRKctqm2oU+HTkB17u+f3ohU8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EaWajGbtNv2+IFIOz3uXT43RSyWI+LMZKih8z1s/+FM=;
+ b=Y7QcIQGcob65IDPY7bgnSlM5TgrYaSIY1gtlSQ8XwTCufQ7+79tAOgWiVjJyDrOkggY8VEwv5/ZQdLWi1jRC2vBxegZmgo/kYK1Ryggst3Rzag4EBRztPGG5rp/tQ5lyKAaMhZ4bMEtK+2njWNzaJqNAol4s01nKL4rIZYImovF6JbOI1CGFL6bqJ+f9D1WTlhZ84n1toBvl7N+527DruOocKzoRakaOOlNM6iU4EKlXCNItqJz6n2m2sf4uZ1KUEBspKAh7CVDOyAh1eIsjZ6qF5Xgq297MvMPKWG+6dYvmlCf/8kt9E2ffxHIw3XtVErWEA+0CbirEtgsLMweUOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EaWajGbtNv2+IFIOz3uXT43RSyWI+LMZKih8z1s/+FM=;
+ b=F4CE7A0/1BBMYnmTbfBpKnyGbWxFjKJIs4vG9pp+K3ZkrsWjdsSZLViFxKLkfvGgg+6dt4G31Jcuhxto02n866v+Qw/10kkFc14ihKc5lfxIb07/P9QbKT/5WfRri4KZgM/D3Rj/cRv636QE48MMUTXL4Mq7KaQM2kxhNiaQNzurTPI8OEv5actnpPQWVH6mLmUlMKGGa+mFTvAJOBMcENvYjMiEjUxkfDxxpSXqNaNMh2s7MmFgxCkkEGCfqDpsCmdehEMGzM/CTUKyBXNHXv+mPo8Gh9kTybBERGzB2lqNThT9BMJ4wUdHszpYzTNHmtbqv1jAp5pWB31hsXyBeg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB5392.namprd12.prod.outlook.com (2603:10b6:5:39f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27; Tue, 21 Nov
+ 2023 16:01:00 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7002.027; Tue, 21 Nov 2023
+ 16:01:00 +0000
+Date: Tue, 21 Nov 2023 12:00:58 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: acpica-devel@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org,
+	David Woodhouse <dwmw2@infradead.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>, iommu@lists.linux.dev,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	"K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org,
+	linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, patches@lists.linux.dev,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Sven Peter <sven@svenpeter.dev>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Krishna Reddy <vdumpa@nvidia.com>, Vineet Gupta <vgupta@kernel.org>,
+	virtualization@lists.linux.dev, Wei Liu <wei.liu@kernel.org>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 06/17] iommu: Add iommu_fwspec_alloc/dealloc()
+Message-ID: <20231121160058.GG6083@nvidia.com>
+References: <6-v2-36a0088ecaa7+22c6e-iommu_fwspec_jgg@nvidia.com>
+ <20a7ef6d-a8ca-4bd8-ad7e-11856db617a2@marcan.st>
+ <1eb12c35-e64e-4c32-af99-8743dc2ec266@marcan.st>
+ <20231119141329.GA6083@nvidia.com>
+ <90855bbf-e845-4e4d-a713-df71d1e477d2@marcan.st>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90855bbf-e845-4e4d-a713-df71d1e477d2@marcan.st>
+X-ClientProxiedBy: DS7P222CA0011.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::18)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ic7kkssgaahevrve"
-Content-Disposition: inline
-In-Reply-To: <ba21c20b20364a39d5ffff81dac8bd300a746dbb.camel@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5392:EE_
+X-MS-Office365-Filtering-Correlation-Id: b60a5d6c-a677-4371-2df0-08dbeaab0e00
+X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	FTtJY+Zp8L/mr0DZ74nEcpNjuAuWsKl8zf3rw26PdP2lT0BoRPehDWYgg+B2J6oHQEL0AuYqsZOvWnEOzW3XGEm/KVvsSGhlfvdlOQ/5DJZ2+LQBUYZThlPOSZK0wwS3aTyrh0pE9T57M+GHd/u9DP2yUBC8z+oE1I1eA3lNiKpEz/J8XhA3n7P8GOTreR+DvQ/9qxVI/+mAolIzonibsmBgQKAfspVLECsyTW1Yv9+p+bIwwcO5rjq24HAr+ei+G4Ru+KcfIwnYR/vM2oMCTewKgox1+P6q4iNTjb8+zUMRchrEs374gIViHal+urgWclV86TwpwztTfYi4FApO9MD9XDc9vDg3g6qc6Wm9HwGumheXfGJqMHO+lTwhxC5ol33QpAS0452D232rGALwi5tQZUhLraQYz4PJJNxrsMdibmLzqcx4PSDx561eGa5Kln0yQtLwobnleumDrAhXEUECf3KOLbT79oD7Y2A0EV51286+NLSU9ltD2jr2fjtEe0QQFgY4WNup32w8m06B1a5KnG4j7yb5Sv3qd3LfxZIft6yOxVwOSaY6uRu/GgX0
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(346002)(136003)(366004)(396003)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(66556008)(66476007)(66946007)(316002)(54906003)(6916009)(6506007)(6512007)(36756003)(2616005)(26005)(478600001)(6486002)(1076003)(38100700002)(83380400001)(33656002)(86362001)(5660300002)(7416002)(7406005)(2906002)(8676002)(4326008)(8936002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?65UkRiaimReLhAAAV4TyNayB+V6XJJqGoZQ356Mq7ae211pi+rtqxqBVAHrY?=
+ =?us-ascii?Q?bqNkrO1IIBJ1qndaItdgk3k96WlcexQ8zo9vJ/mJyWWW1lW0PGAfEf7Z7qqn?=
+ =?us-ascii?Q?QMibbdch2k7laEsW8jmtXoBsflm/e1ZBN/3ZljBhhmg82in0lcKVZwpTpmSK?=
+ =?us-ascii?Q?+tvx+h6sMetLoIJYkCr7T8ykzZqg+2q0am3OXMFmmPzO7v8wp563NtV4VWk4?=
+ =?us-ascii?Q?GcOiuhTZJ3Oo2iQ1p3gy13ngra+7+g0Jj4OUXT+HOvwr0Qu9o+4aFOxQIfGF?=
+ =?us-ascii?Q?8cNabQgiPPUBiTxKEq1hK0DmTUtnAPBKNip3D1d+KkRgANQttKW7CqGhDiq6?=
+ =?us-ascii?Q?TJUV6RG9g7ZQ8Nih740HVvrTf5V206P/JYBbqj+FcupVXBPrA5VQhrAeL7sf?=
+ =?us-ascii?Q?H4vRcjEXIWa4NHlusZwpTE7I8RZqSFHmbwzbEq59O+Lia8kSsTKi9IbgdnfP?=
+ =?us-ascii?Q?aiDkNscxqfbNZSQJ5FlR8fgH2UGvM2idhnKUsUD9V08VfALFTaibGjdQxmMy?=
+ =?us-ascii?Q?ilskqHbysLyDwaoZG9MlqXepIexq93dgnK9SJv6dyM2S/QvywoJsGtAEQ744?=
+ =?us-ascii?Q?51ewGw8gd/jes4PwCjJOHcGevXlOa+TJbeAeJ9/+BCEt+UYojas0ds43g6Fg?=
+ =?us-ascii?Q?8XCENwPk/OM/oMlHxr2J6YHcT9Iax0U3C8ZK5PVsqOb/NAIg6wrbvM+jPYuo?=
+ =?us-ascii?Q?HFljF7o0oRV0DGkAZiWGL9X+Q0z1v0HDBo2Ljm5mE/bnkok60wUixBQ7z2P7?=
+ =?us-ascii?Q?oxnh1mNxaNfTRt6ozXxxQpzQ7coZulRE17jBu9aC4Divjo6dOZ6Xr0FKWyIQ?=
+ =?us-ascii?Q?AbpO91VoGax3BTX6sZs5du3/Z0WXr8em5BfUZ6HFgrN8D9BDAeJ2CqE7M0A7?=
+ =?us-ascii?Q?pT8osfSGFj+Mt5DjSdO8aYV6fB7tQl7ZNQmNji0dsMI+VY+w4yswpbAbXlOG?=
+ =?us-ascii?Q?9SVLZeANVDfdDtbBQrGTNmtJZB/zEbfj5eVQ7mqre96JM3iPR13roKa24jj3?=
+ =?us-ascii?Q?VXsc/bh6FGdUAhJnvkNK5K91JVT/oWDjQbPgSkQeuFW8eZYVyAehBP2qjl3e?=
+ =?us-ascii?Q?IQo1etQ4lOGpexoZaxzuxdXUN3SGsF2a2zFJ+ScCccnvSoGXPI2Yit1nujmu?=
+ =?us-ascii?Q?b77mVm0qHG86bBrMGXTVpvfsAwTGPp+m86x0/Wyx2OeYzZj+QHcSxRC/meDD?=
+ =?us-ascii?Q?gFKYAVC2TWMH3Hp9xfYmft8rgR3PkncZjekJMUhJdamePLC0/L+nFUKyEyS0?=
+ =?us-ascii?Q?Cx1F0mnA30zuoynV5ncHmUoJmKEf200u2v4b7ki60oK96zlNnJorrSc/j2aJ?=
+ =?us-ascii?Q?4RVDgYmxThPxTNUkloL2BJEyzXQX97sfPaVlUqcz7df7Z3mRzHZUdMy5bOsx?=
+ =?us-ascii?Q?gbrnb4l2kdyfIKgawnvNiBrB4YR4gFgBmlljH2dT3kAF1hjSjqKgBd18UqH9?=
+ =?us-ascii?Q?uK+1nb5Is32O2AkvNiZ/KqrPkNRz06+QKzrVIC6pN1Iq2k1VKXngSgjkYY6M?=
+ =?us-ascii?Q?KgD+KweI3Tw/LxrcbaDQqZLHSbuR5Pa6/9DPloTYXCLhL9LHHlbhxbPxT5a5?=
+ =?us-ascii?Q?cxYkrH6ZBFU5B7ZU+QYo+I90vjvhgdOESUR5Ztlw?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b60a5d6c-a677-4371-2df0-08dbeaab0e00
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 16:00:59.9732
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SNTOnKA8Xw3mgTSwaX2a/2yBVEIInTXzKlBh6jNLABuux4SegzlAyaZGUe48Dyrp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5392
+
+On Tue, Nov 21, 2023 at 03:47:48PM +0900, Hector Martin wrote:
+> > Which is sensitive only to !NULL fwspec, and if EPROBE_DEFER is
+> > returned fwspec will be freed and dev->iommu->fwspec will be NULL
+> > here.
+> > 
+> > In the NULL case it does a 'bus probe' with a NULL fwspec and all the
+> > fwspec drivers return immediately from their probe functions.
+> > 
+> > Did I miss something?
+> 
+> apple_dart is not a fwspec driver and doesn't do that :-)
+
+It implements of_xlate that makes it a driver using the fwspec probe
+path.
+
+The issue is in apple-dart. Its logic for avoiding bus probe vs
+fwspec probe is not correct.
+
+It does:
+
+static int apple_dart_of_xlate(struct device *dev, struct of_phandle_args *args)
+{
+ [..]
+ 	dev_iommu_priv_set(dev, cfg);
 
 
---ic7kkssgaahevrve
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Then:
 
-Hello Paul,
+static struct iommu_device *apple_dart_probe_device(struct device *dev)
+{
+	struct apple_dart_master_cfg *cfg = dev_iommu_priv_get(dev);
+	struct apple_dart_stream_map *stream_map;
+	int i;
 
-On Tue, Nov 21, 2023 at 03:13:58PM +0100, Paul Cercueil wrote:
-> Le mardi 21 novembre 2023 =E0 14:49 +0100, Uwe Kleine-K=F6nig a =E9crit=
-=A0:
-> > struct pwm_chip::dev is about to change. To not have to touch this
-> > driver in the same commit as struct pwm_chip::dev, use the macro
-> > provided for exactly this purpose.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > =A0drivers/pwm/pwm-jz4740.c | 17 ++++++++---------
-> > =A01 file changed, 8 insertions(+), 9 deletions(-)
-> >=20
-> > diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-> > index e9375de60ad6..555c2db3968d 100644
-> > --- a/drivers/pwm/pwm-jz4740.c
-> > +++ b/drivers/pwm/pwm-jz4740.c
-> > @@ -35,13 +35,12 @@ static inline struct jz4740_pwm_chip
-> > *to_jz4740(struct pwm_chip *chip)
-> > =A0	return container_of(chip, struct jz4740_pwm_chip, chip);
-> > =A0}
-> > =A0
-> > -static bool jz4740_pwm_can_use_chn(struct jz4740_pwm_chip *jz,
-> > -				=A0=A0 unsigned int channel)
-> > +static bool jz4740_pwm_can_use_chn(struct pwm_chip *chip, unsigned
-> > int channel)
-> > =A0{
-> > =A0	/* Enable all TCU channels for PWM use by default except
-> > channels 0/1 */
-> > -	u32 pwm_channels_mask =3D GENMASK(jz->chip.npwm - 1, 2);
-> > +	u32 pwm_channels_mask =3D GENMASK(chip->npwm - 1, 2);
-> > =A0
-> > -	device_property_read_u32(jz->chip.dev->parent,
-> > +	device_property_read_u32(pwmchip_parent(chip)->parent,
-> > =A0				 "ingenic,pwm-channels-mask",
-> > =A0				 &pwm_channels_mask);
->=20
-> You could have used pwmchip_parent(&jz->chip) and not change the
-> prototype.
+	if (!cfg)
+		return ERR_PTR(-ENODEV);
 
-Later in the series jz->chip goes away. So following your advice only
-makes me touch this code once more later.
+Which leaks the cfg memory on rare error cases and wrongly allows the
+driver to probe without a fwspec, which I think is what you are
+hitting.
 
-> > @@ -149,7 +148,7 @@ static int jz4740_pwm_apply(struct pwm_chip
-> > *chip, struct pwm_device *pwm,
-> > =A0	 */
-> > =A0	rate =3D clk_round_rate(clk, tmp);
-> > =A0	if (rate < 0) {
-> > -		dev_err(chip->dev, "Unable to round rate: %ld",
-> > rate);
-> > +		dev_err(pwmchip_parent(chip), "Unable to round rate:
-> > %ld", rate);
->=20
-> While you're at it - and if you need a v4 - maybe sneak in a \n there?
+It should be
 
-I'll try to remember :-)
+       if (!dev_iommu_fwspec_get(dev) || !cfg)
+		return ERR_PTR(-ENODEV);
 
-Best regards
-Uwe
+To ensure the driver never probes on the bus path.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Clearing the dev->iommu in the core code has the side effect of
+clearing (and leaking) the cfg which would hide this issue.
 
---ic7kkssgaahevrve
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVc0hsACgkQj4D7WH0S
-/k5x+wf/aMnntCuRfV1rG8EiIOlMpAvPqa8iJIJ/Rt8LLmTjtMir9i+/qzUJcy6M
-TqQN61e2vawrSa7PGJvFd5qlUWRKnzLtCHLS32xGcoL1oesAxWMUNH2/sE9Y8RXy
-SKL65r/S5fEDCwWIUwnJ91vlc3qHkof3YHLwHqnVf6GmRLJEH6py5PJYlY9yYllZ
-GyRRVaD5JeXrQ2+XK122ETY+VbuCdiY6FeP09anuQzwjOFK33mCAzmmIrLPikWq9
-nIJKEgax9dDCb5I2djhh8XG5jRMkwsVqVTDzxUZ0qcZqR/5dWrr68C7bTYK6lB0l
-/mDPXm9WUJU1ABuqCMCDkRnYU6djgA==
-=/I1Y
------END PGP SIGNATURE-----
-
---ic7kkssgaahevrve--
+Jason
 
