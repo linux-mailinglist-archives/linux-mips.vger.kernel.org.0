@@ -1,182 +1,157 @@
-Return-Path: <linux-mips+bounces-126-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-127-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD9867F25E9
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 07:48:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FE307F26B6
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 08:54:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96455282591
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 06:48:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 556A12829F7
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Nov 2023 07:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779E91B28B;
-	Tue, 21 Nov 2023 06:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BED347B6;
+	Tue, 21 Nov 2023 07:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b="yBZ7Udel"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FYLLvUEw"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEDF90;
-	Mon, 20 Nov 2023 22:48:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id EDDAF42137;
-	Tue, 21 Nov 2023 06:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1700549281; bh=ujaYq3QQkb3U4N6JNFFQq4uH4QKQpO8RJp9aJVbB0w0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=yBZ7Udel893+M2pzDMgdTushmaUgXq0nIf/5xxASROF107adcyenfoQIJKpJop3QE
-	 1+yTIUhVbWxOP7swSXHE/1waIz+ytnfqIeOR+pXsrjnxJ9YDy9OcehudknnZZfDU0W
-	 yBoxtsLq/eITHB2A8C7zHMk/QpuQDhn54/ueeppNZr5bacp1NBly8id6vI/+HcZLF9
-	 Y3o89xan9Av9novKYwloiJeRxCXK4RdvbSm3KrREtUx62PnuC+h7WkJf1goRn4PDd/
-	 8BaauSYV42Ok4T8UBbrfnw8aItI789XfEb5enuqF6bZ2I7QNWWCAUkdCy2CTlvEfD+
-	 wJAB4I2ql495A==
-Message-ID: <90855bbf-e845-4e4d-a713-df71d1e477d2@marcan.st>
-Date: Tue, 21 Nov 2023 15:47:48 +0900
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4458EC3
+	for <linux-mips@vger.kernel.org>; Mon, 20 Nov 2023 23:53:59 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-28396255b81so2874421a91.0
+        for <linux-mips@vger.kernel.org>; Mon, 20 Nov 2023 23:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1700553239; x=1701158039; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n94+xDIkUOqQeszLqyF1GvL8Xx0iP7KzdJ36tDGQoLY=;
+        b=FYLLvUEwsMqttI+5JckkwIMcCzZcBLvmmk50zS1nJV09DWpS7lCL8JiIBMFFT96/JI
+         4MgRhH8RL1aJu6n66ZZAK/2+c5C0dOkslLtBf3LNJdagfWKzZS3LWPd2f7oNhFz/gHr2
+         w/JXCPTDIiU4uIxF8RPUf6O2D7E6ssbHa7i4QdFmgCxqrzfyGg+MtmAqywZX3dx6q0b3
+         CfRm0F8+r304/BFzUeTnWMZPeaJfUCQ7HS4kBxlXg/o4mBBhi128XkCh2UHwG8KH7i3T
+         HrqshIkW+TT/lr8x9GCwdhrkViRfXRwiCaEd2IXIRLa/tQwIJ4ba0esMlbWrCrLX6NJe
+         blFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700553239; x=1701158039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n94+xDIkUOqQeszLqyF1GvL8Xx0iP7KzdJ36tDGQoLY=;
+        b=C72Brb3/sAWifAZOu2EaatUTtrWHz53mStlmS1/7O9w/z77vUj+7Zug6I2ZJYnXokL
+         yxmdBa6gbMaJ4UscUb+YK9XmKcA9TJV8Nqk8Jeu0o5p9WiVMF1LE1JhtKQgEioZISOVD
+         gx2b99eJTmprBqWtkeFALBWVsBFChJgonCXSlqUJ4o/l29jXLp+p7mumAX/H/uM2r4Jp
+         VZIJRaBrLKB+Ni1paRyq/LMLtuEd5H73N4X4KHEBcSnc3hsXu1D/fNT2XTyAPy2L79sl
+         KhHCF7HZfgd/cHj5IfVnqnyNbTOtCANVnA8+vZLNvuDcSmsIvr6zpe/A4Q1oTcWvt/ki
+         znmQ==
+X-Gm-Message-State: AOJu0Yw4JnH1x44VpvnmVK7V3BnsqgXeJdy35YYvOdFwiYzb72c4Uc7B
+	RpmMPaCPkWM8IjoZELnGFxeKk14CKpHtdY+rXD5CQQ==
+X-Google-Smtp-Source: AGHT+IFEH3g7IKb8uSXGkQLcfDFQGeKgdMM5+Twg24L86I2m/VOT+I8Lea+NYKy/4gFSwZ3WTdUJVHHh1PwvYjXVr94=
+X-Received: by 2002:a17:90a:8b01:b0:280:f534:6b9c with SMTP id
+ y1-20020a17090a8b0100b00280f5346b9cmr7974497pjn.21.1700553238477; Mon, 20 Nov
+ 2023 23:53:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/17] iommu: Add iommu_fwspec_alloc/dealloc()
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: acpica-devel@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
- Catalin Marinas <catalin.marinas@arm.com>, Dexuan Cui <decui@microsoft.com>,
- devicetree@vger.kernel.org, David Woodhouse <dwmw2@infradead.org>,
- Frank Rowand <frowand.list@gmail.com>, Hanjun Guo <guohanjun@huawei.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, iommu@lists.linux.dev,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Jonathan Hunter <jonathanh@nvidia.com>, Joerg Roedel <joro@8bytes.org>,
- "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
- linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org,
- linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, patches@lists.linux.dev,
- Paul Walmsley <paul.walmsley@sifive.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Robert Moore <robert.moore@intel.com>, Rob Herring <robh+dt@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Sven Peter <sven@svenpeter.dev>, Thierry Reding <thierry.reding@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Krishna Reddy <vdumpa@nvidia.com>, Vineet Gupta <vgupta@kernel.org>,
- virtualization@lists.linux.dev, Wei Liu <wei.liu@kernel.org>,
- Will Deacon <will@kernel.org>
-References: <6-v2-36a0088ecaa7+22c6e-iommu_fwspec_jgg@nvidia.com>
- <20a7ef6d-a8ca-4bd8-ad7e-11856db617a2@marcan.st>
- <1eb12c35-e64e-4c32-af99-8743dc2ec266@marcan.st>
- <20231119141329.GA6083@nvidia.com>
-From: Hector Martin <marcan@marcan.st>
-In-Reply-To: <20231119141329.GA6083@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <CALrw=nHpRQQaQTP_jZfREgrQEMpS8jBF8JQCv4ygqXycE-StaA@mail.gmail.com>
+ <ZVwMzXxWkgonIAfc@MiWiFi-R3L-srv>
+In-Reply-To: <ZVwMzXxWkgonIAfc@MiWiFi-R3L-srv>
+From: Ignat Korchagin <ignat@cloudflare.com>
+Date: Tue, 21 Nov 2023 07:53:47 +0000
+Message-ID: <CALrw=nG8xsYw7XKyL_VMHtKiaBcQCKvC8UVp-C9-BdeN4A1Daw@mail.gmail.com>
+Subject: Re: Potential config regression after 89cde455 ("kexec: consolidate
+ kexec and crash options into kernel/Kconfig.kexec")
+To: Baoquan He <bhe@redhat.com>, eric_devolder@yahoo.com
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	chenhuacai@kernel.org, geert@linux-m68k.org, tsbogend@alpha.franken.de, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	dave.hansen@linux.intel.com, x86@kernel.org, 
+	linux-kernel <linux-kernel@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au, 
+	npiggin@gmail.com, christophe.leroy@csgroup.eu, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com, 
+	gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com, 
+	svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org, paulmck@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, frederic@kernel.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Ard Biesheuvel <ardb@kernel.org>, samitolvanen@google.com, 
+	juerg.haefliger@canonical.com, arnd@arndb.de, rmk+kernel@armlinux.org.uk, 
+	linus.walleij@linaro.org, sebastian.reichel@collabora.com, rppt@kernel.org, 
+	kirill.shutemov@linux.intel.com, anshuman.khandual@arm.com, ziy@nvidia.com, 
+	masahiroy@kernel.org, ndesaulniers@google.com, mhiramat@kernel.org, 
+	ojeda@kernel.org, thunder.leizhen@huawei.com, xin3.li@intel.com, 
+	tj@kernel.org, Greg KH <gregkh@linuxfoundation.org>, tsi@tuyoix.net, 
+	hbathini@linux.ibm.com, sourabhjain@linux.ibm.com, boris.ostrovsky@oracle.com, 
+	konrad.wilk@oracle.com, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Nov 21, 2023 at 1:50=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
+>
+> Eric DeVolder's Oracle mail address is not available anymore, add his
+> current mail address he told me.
 
+Thank you!
 
-On 2023/11/19 23:13, Jason Gunthorpe wrote:
-> On Sun, Nov 19, 2023 at 06:19:43PM +0900, Hector Martin wrote:
->>>> +static int iommu_fwspec_assign_iommu(struct iommu_fwspec *fwspec,
->>>> +				     struct device *dev,
->>>> +				     struct fwnode_handle *iommu_fwnode)
->>>> +{
->>>> +	const struct iommu_ops *ops;
->>>> +
->>>> +	if (fwspec->iommu_fwnode) {
->>>> +		/*
->>>> +		 * fwspec->iommu_fwnode is the first iommu's fwnode. In the rare
->>>> +		 * case of multiple iommus for one device they must point to the
->>>> +		 * same driver, checked via same ops.
->>>> +		 */
->>>> +		ops = iommu_ops_from_fwnode(iommu_fwnode);
->>>
->>> This carries over a related bug from the original code: If a device has
->>> two IOMMUs and the first one probes but the second one defers, ops will
->>> be NULL here and the check will fail with EINVAL.
->>>
->>> Adding a check for that case here fixes it:
->>>
->>> 		if (!ops)
->>> 			return driver_deferred_probe_check_state(dev);
-> 
-> Yes!
-> 
->>> With that, for the whole series:
->>>
->>> Tested-by: Hector Martin <marcan@marcan.st>
->>>
->>> I can't specifically test for the probe races the series intends to fix
->>> though, since that bug we only hit extremely rarely. I'm just testing
->>> that nothing breaks.
->>
->> Actually no, this fix is not sufficient. If the first IOMMU is ready
->> then the xlate path allocates dev->iommu, which then
->> __iommu_probe_device takes as a sign that all IOMMUs are ready and does
->> the device init.
-> 
-> It doesn't.. The code there is:
-> 
-> 	if (!fwspec && dev->iommu)
-> 		fwspec = dev->iommu->fwspec;
-> 	if (fwspec)
-> 		ops = fwspec->ops;
-> 	else
-> 		ops = dev->bus->iommu_ops;
-> 	if (!ops) {
-> 		ret = -ENODEV;
-> 		goto out_unlock;
-> 	}
-> 
-> Which is sensitive only to !NULL fwspec, and if EPROBE_DEFER is
-> returned fwspec will be freed and dev->iommu->fwspec will be NULL
-> here.
-> 
-> In the NULL case it does a 'bus probe' with a NULL fwspec and all the
-> fwspec drivers return immediately from their probe functions.
-> 
-> Did I miss something?
+> On 11/20/23 at 10:52pm, Ignat Korchagin wrote:
+> > Good day!
+> >
+> > We have recently started to evaluate Linux 6.6 and noticed that we
+> > cannot disable CONFIG_KEXEC anymore, but keep CONFIG_CRASH_DUMP
+> > enabled. It seems to be related to commit 89cde455 ("kexec:
+> > consolidate kexec and crash options into kernel/Kconfig.kexec"), where
+> > a CONFIG_KEXEC dependency was added to CONFIG_CRASH_DUMP.
+> >
+> > In our current kernel (Linux 6.1) we only enable CONFIG_KEXEC_FILE
+> > with enforced signature check to support the kernel crash dumping
+> > functionality and would like to keep CONFIG_KEXEC disabled for
+> > security reasons [1].
+> >
+> > I was reading the long commit message, but the reason for adding
+> > CONFIG_KEXEC as a dependency for CONFIG_CRASH_DUMP evaded me. And I
+> > believe from the implementation perspective CONFIG_KEXEC_FILE should
+> > suffice here (as we successfully used it for crashdumps on Linux 6.1).
+> >
+> > Is there a reason for adding this dependency or is it just an
+> > oversight? Would some solution of requiring either CONFIG_KEXEC or
+> > CONFIG_KEXEC_FILE work here?
+>
+> I searched the patch history, found Eric didn't add the dependency on
+> CONFIG_KEXEC at the beginning. Later a linux-next building failure with
+> randconfig was reported, in there CONFIG_CRASH_DUMP enabled, while
+> CONFIG_KEXEC is disabled. Finally Eric added the KEXEC dependency for
+> CRASH_DUMP. Please see below link for more details:
+>
+> https://lore.kernel.org/all/3e8eecd1-a277-2cfb-690e-5de2eb7b988e@oracle.c=
+om/T/#u
 
-apple_dart is not a fwspec driver and doesn't do that :-)
+Thank you for digging this up. However I'm still confused, because
+this is exactly how we configure Linux 6.1 (although we do have
+CONFIG_KEXEC_FILE enabled) and we don't have any problems. I believe
+we did not investigate this issue properly.
 
-> 
->> Then when the xlate comes along again after suceeding
->> with the second IOMMU, __iommu_probe_device sees the device is already
->> in a group and never initializes the second IOMMU, leaving the device
->> with only one IOMMU.
-> 
-> This should be fixed by the first hunk to check every iommu and fail?
-> 
-> BTW, do you have a systems with same device attached to multiple
-> iommus?
+> And besides, the newly added CONFIG_CRASH_HOTPLUG also needs
+> CONFIG_KEXEC if the elfcorehdr is allowed to be manipulated when
+> cpu/memory hotplug hapened.
 
-Yes, Apple ARM64 machines all have multiple ganged IOMMUs for certain
-devices (USB and ISP). We also attach all display IOMMUs to the global
-virtual display-subsystem device to handle framebuffer mappings, instead
-of trying to dynamically map them to a bunch of individual display
-controllers (which is a lot more painful). That last one is what
-reliably reproduces this problem, display breaks without both previous
-patches ever since we started supporting more than one display output.
-The first one is not enough.
+This still feels like a regression to me: any crash dump support
+should be independent of KEXEC syscalls being present. While probably
+the common case (including us) that the crashing kernel and recovery
+kernel are the same, they don't have to be. We need kexec syscall in
+the crashing kernel, but crashdump support in the recovery kernel (but
+the recovery kernel not having the kexec syscalls should be totally
+fine). If we do require some code definitions from kexec - at most we
+should put them under CONFIG_KEXEC_CORE.
 
-> I've noticed another bug here, many drivers don't actually support
-> differing iommu instances and nothing seems to check it..
-
-apple-dart does (as long as all the IOMMUs are using that driver).
-
-> 
-> Thanks,
-> Jason
-> 
-> 
-
-- Hector
+> Thanks
+> Baoquan
+>
 
