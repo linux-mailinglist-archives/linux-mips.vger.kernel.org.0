@@ -1,284 +1,178 @@
-Return-Path: <linux-mips+bounces-153-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-154-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77FAC7F47F8
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 14:41:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D4F67F4831
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 14:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31234281469
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 13:41:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7C09281033
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 13:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98DF556760;
-	Wed, 22 Nov 2023 13:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831254BA97;
+	Wed, 22 Nov 2023 13:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=baikalelectronics.ru header.i=@baikalelectronics.ru header.b="ZaSD9yzm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nFo3rrRt"
 X-Original-To: linux-mips@vger.kernel.org
-X-Greylist: delayed 544 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Nov 2023 05:41:34 PST
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 207AF1A5;
-	Wed, 22 Nov 2023 05:41:34 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-	by post.baikalelectronics.com (Proxmox) with ESMTP id ABDF8E0EB9;
-	Wed, 22 Nov 2023 16:32:28 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	baikalelectronics.ru; h=cc:cc:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=post; bh=HbHrbH/rcUkVvlTKh1z1
-	S+UWZ0eNJU9qPvTnkmX9sAo=; b=ZaSD9yzmzX2d2SuTq2gLARr4fmQLcPAm4gKl
-	AYfiEFaVpXuA5Wrk7l0Ktf0fiWuiQiGIHm0k/0nIkD8vyKM+bMaEa7YSt/5js9PM
-	ynIzPSyXYnF6qF8AcgteuvPHs6zCjSkTsIeI1SjurBfVjtYYaz7pHQjBWifkGn9+
-	QeIruH8=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-	by post.baikalelectronics.com (Proxmox) with ESMTP id 74B73E0EB4;
-	Wed, 22 Nov 2023 16:32:28 +0300 (MSK)
-Received: from mobilestation (10.8.30.118) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 22 Nov 2023 16:32:28 +0300
-Date: Wed, 22 Nov 2023 16:32:27 +0300
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	<linux-mips@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Serge Semin <fancer.lancer@gmail.com>, Alexey
- Malahov <Alexey.Malahov@baikalelectronics.ru>
-Subject: Re: [PATCH] MAINTAINERS: add section MIPS BAIKAL-T1 SOC DRIVERS
-Message-ID: <mku6gvd4rfkxzk2vrdjbizglte526ygyfhnwialtri44oqzikt@pq2l7mk25jgc>
-References: <20231122054142.31322-1-lukas.bulwahn@gmail.com>
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926A9BC;
+	Wed, 22 Nov 2023 05:50:07 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c887d1fb8fso33751431fa.0;
+        Wed, 22 Nov 2023 05:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700661006; x=1701265806; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VGvo2wK/qUHrm7e4nS+FqOamAmN2Y01aRBg4wudRWCI=;
+        b=nFo3rrRtfsbe3+X6hbnd2uJJiwLwJWqkz/JmWE/HGWtroXsPBhUfnwRtgZEnf5oL/w
+         JjRZyljTXeyIpmc+ngJKrt/TtejzxmGvUbw8+6GCpoLpl24eH29XpehMYjRqh9oXdlbF
+         BF6ILc93UmA8eHIDqHAH8UcHQQTemBeEATlPLdubNojn9ZEtjJirKGr4HK6EAUWaJcla
+         yZqkuFZM4pxbr29U/6OrXaqvfJWia8SYfCF7y0+X+ND3ud3dy1/Oue/lOoQfrGVdr0Hj
+         9ZPkcHfwxQ5GS3Vyn3Mu/NwRXhex81TN9csm01Z+Rh6sEfHik6yZkA5/2/LGFD2kd11I
+         KS+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700661006; x=1701265806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VGvo2wK/qUHrm7e4nS+FqOamAmN2Y01aRBg4wudRWCI=;
+        b=LkcHq0Wc5gwKjLMPy2yjhPUkNgCy3CDBJGRbz94+BvL4No/PlNJFvnTNDsLw1W/dcJ
+         ip0iClPAw59qLsWh4GdzRjYs+A3gPPU/PrJBXLrMNBvJ6MpKx0DOVNxckXrA0pYlE9gz
+         wJ5VbKlqnfznRQZN+rop7TxTU1J9hbKXlZV2ZMVNyONW34ukxANgp6k0AvW0kwklu+4u
+         czuZX258qvVosVQDoVsI9VdhYOcou5MAYbQq7ecjIMVkYbvr/jX3f857WVv5fQ0oGGo3
+         4YmbgsJR71nmWFB3I5Pk1Ght5cZ6o0hkRxRMZCcGZ4G+RFS03lRIUAUuzoeQr5A+UJet
+         8UUQ==
+X-Gm-Message-State: AOJu0YwvHrMrs4WCG0yXv9qDJui0OauBilofsDNev16Rcbgy4RAs9g1A
+	UsNizHH63bMuvYEW8ecAPmFYrMea98YrslyeCTU=
+X-Google-Smtp-Source: AGHT+IGADla5AngdafjZj4xVSn2bMpwu94RIXGs1aggs+dTW20GqVt+KqN6QW83yuruj4ESEnG/vy5fguAMd3CGAzQY=
+X-Received: by 2002:a2e:908f:0:b0:2c8:874b:8f19 with SMTP id
+ l15-20020a2e908f000000b002c8874b8f19mr1706701ljg.51.1700661005611; Wed, 22
+ Nov 2023 05:50:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ec57xuvyqxygqblb"
-Content-Disposition: inline
-In-Reply-To: <20231122054142.31322-1-lukas.bulwahn@gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <20231122054142.31322-1-lukas.bulwahn@gmail.com> <mku6gvd4rfkxzk2vrdjbizglte526ygyfhnwialtri44oqzikt@pq2l7mk25jgc>
+In-Reply-To: <mku6gvd4rfkxzk2vrdjbizglte526ygyfhnwialtri44oqzikt@pq2l7mk25jgc>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date: Wed, 22 Nov 2023 14:49:54 +0100
+Message-ID: <CAKXUXMwGgtJVWmrFX0chpgNC++Ok54t-qXxware+aEDiyZFszw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add section MIPS BAIKAL-T1 SOC DRIVERS
+To: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Serge Semin <fancer.lancer@gmail.com>, 
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---ec57xuvyqxygqblb
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+On Wed, Nov 22, 2023 at 2:32=E2=80=AFPM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> Hi Lukas
+>
+> On Wed, Nov 22, 2023 at 06:41:42AM +0100, Lukas Bulwahn wrote:
+> > In recent years, a number of drivers for the MIPS Baikal-T1 SoC have be=
+en
+> > added to the kernel tree, but there is no dedicated MAINTAINERS section=
+ for
+> > this SoC.
+> >
+> > As all of the code has been contributed by Serge Semin, let us assume h=
+e is
+> > still the active maintainer for this code rather than marking it orphan=
+.
+> >
+> > Add a new section MIPS BAIKAL-T1 SOC DRIVERS in MAINTAINERS.
+>
+> Thanks for submitting this patch. I was going to send a similar change
+> in the framework of the arch-series which is hanging up in my local
+> repo and alas is still under construction. I know I shouldn't have
+> been waiting (I'm sorry about that), but I didn't expect the entire
+> work would have taken so much time. On a way to finishing it up I had
+> to switch my efforts to the EDAC and network drivers and got sucked by
+> the amount of work there. But I will definitely submit the Baikal-T1
+> SoC arch patchset when my work on another area is finally over.
+>
+> Here are several comments about this patch. (Please see my last
+> comment should you be ok with accepting the patches with already fixed
+> notes.)
+>
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> >  MAINTAINERS | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 9613c9c3cc97..820f1ab1ee80 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -14474,6 +14474,19 @@ F:   arch/mips/
+> >  F:   drivers/platform/mips/
+> >  F:   include/dt-bindings/mips/
+> >
+> > +MIPS BAIKAL-T1 SOC DRIVERS
+>
+> > +M:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>
+> It's better to change the email to
+> +M:     Serge Semin <fancer.lancer@gmail.com>
+> I quicker respond from my private inbox, than from the corporate one.
+> This will also be useful should the corporate email eventually change.
+>
+> > +S:   Maintained
+>
+> +F:     Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
+> +F:     Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
+>
+> > +F:   Documentation/hwmon/bt1-pvt.rst
+>
+> I'd prefer this and these -+ being in a separate entry (see the
+> attached patches), because | the respective device IP-cores have been
+> re-used in another SoC. So | eventually the entries will be updated to
+> reflect that.              +---------------------------------+
+>                                                              |
+> > +F:   drivers/ata/ahci_dwc.c                               |
+>                                                              |
+> I believe this is already listed in the MAINTAINERS file.    |
+>                                                              |
+> > +F:   drivers/bus/bt1-*.c                                  |
+> > +F:   drivers/clk/baikal-t1/                               |
+> > +F:   drivers/hwmon/bt1-pvt.[ch] <-------------------------+
+> > +F:   drivers/memory/bt1-l2-ctl.c                          |
+> > +F:   drivers/mtd/maps/physmap-bt1-rom.[ch]                |
+> > +F:   drivers/pci/controller/dwc/pcie-bt1.c <--------------+
+>
+> > +F:   drivers/spi/spi-dw-bt1.c
+>
+> This is already marked as maintained by me in the framework of the
+> generic DW APB SSI driver (See the "SYNOPSYS DESIGNWARE APB SSI
+> DRIVER" entry in the MAINTAINERS file).
+>
+> Anyway in order to save your time from editing this patch. I've
+> prepared a series which takes into account all the comments above. If
+> you are ok with it, I can submit it for review. What do you think?
+>
 
-Hi Lukas
+Sure, go ahead and submit your series. I just wanted to have all files
+in ./drivers/bus/ have a proper maintainer and then got to look at the
+BAIKAL T1 files.
 
-On Wed, Nov 22, 2023 at 06:41:42AM +0100, Lukas Bulwahn wrote:
-> In recent years, a number of drivers for the MIPS Baikal-T1 SoC have been
-> added to the kernel tree, but there is no dedicated MAINTAINERS section for
-> this SoC.
-> 
-> As all of the code has been contributed by Serge Semin, let us assume he is
-> still the active maintainer for this code rather than marking it orphan.
-> 
-> Add a new section MIPS BAIKAL-T1 SOC DRIVERS in MAINTAINERS.
+Lukas
 
-Thanks for submitting this patch. I was going to send a similar change
-in the framework of the arch-series which is hanging up in my local
-repo and alas is still under construction. I know I shouldn't have
-been waiting (I'm sorry about that), but I didn't expect the entire
-work would have taken so much time. On a way to finishing it up I had
-to switch my efforts to the EDAC and network drivers and got sucked by
-the amount of work there. But I will definitely submit the Baikal-T1
-SoC arch patchset when my work on another area is finally over.
-
-Here are several comments about this patch. (Please see my last
-comment should you be ok with accepting the patches with already fixed
-notes.)
-
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  MAINTAINERS | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9613c9c3cc97..820f1ab1ee80 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14474,6 +14474,19 @@ F:	arch/mips/
->  F:	drivers/platform/mips/
->  F:	include/dt-bindings/mips/
->  
-> +MIPS BAIKAL-T1 SOC DRIVERS
-
-> +M:	Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-It's better to change the email to
-+M:	Serge Semin <fancer.lancer@gmail.com>
-I quicker respond from my private inbox, than from the corporate one.
-This will also be useful should the corporate email eventually change.
-
-> +S:	Maintained
-
-+F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-+F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
-
-> +F:	Documentation/hwmon/bt1-pvt.rst
-
-I'd prefer this and these -+ being in a separate entry (see the
-attached patches), because | the respective device IP-cores have been
-re-used in another SoC. So | eventually the entries will be updated to
-reflect that.              +---------------------------------+
-                                                             |
-> +F:	drivers/ata/ahci_dwc.c                               |
-                                                             |
-I believe this is already listed in the MAINTAINERS file.    |
-                                                             |
-> +F:	drivers/bus/bt1-*.c                                  |
-> +F:	drivers/clk/baikal-t1/                               |
-> +F:	drivers/hwmon/bt1-pvt.[ch] <-------------------------+
-> +F:	drivers/memory/bt1-l2-ctl.c                          |
-> +F:	drivers/mtd/maps/physmap-bt1-rom.[ch]                |
-> +F:	drivers/pci/controller/dwc/pcie-bt1.c <--------------+
-
-> +F:	drivers/spi/spi-dw-bt1.c
-
-This is already marked as maintained by me in the framework of the
-generic DW APB SSI driver (See the "SYNOPSYS DESIGNWARE APB SSI
-DRIVER" entry in the MAINTAINERS file).
-
-Anyway in order to save your time from editing this patch. I've
-prepared a series which takes into account all the comments above. If
-you are ok with it, I can submit it for review. What do you think?
-
--Serge(y)
-
-> +
->  MIPS BOSTON DEVELOPMENT BOARD
->  M:	Paul Burton <paulburton@kernel.org>
->  L:	linux-mips@vger.kernel.org
-> -- 
-> 2.17.1
-> 
-> 
-
---ec57xuvyqxygqblb
-Content-Type: text/x-patch; charset="us-ascii"
-Content-Disposition: attachment;
-	filename="0001-MAINTAINERS-Add-maintainer-for-Baikal-T1-PVT-hwmon-d.patch"
-
-From 3474717c649d994afade36f8117695a84120ab26 Mon Sep 17 00:00:00 2001
-From: Serge Semin <fancer.lancer@gmail.com>
-Date: Fri, 7 Feb 2020 12:37:59 +0300
-Subject: [PATCH 1/3] MAINTAINERS: Add maintainer for Baikal-T1 PVT hwmon
- driver
-
-Add myself as a maintainer of the Baikal-T1 PVT sensors driver.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 97f51d5ec1cf..9e50a77d746e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3467,6 +3467,14 @@ F:	drivers/video/backlight/
- F:	include/linux/backlight.h
- F:	include/linux/pwm_backlight.h
- 
-+BAIKAL-T1 PVT HARDWARE MONITOR DRIVER
-+M:	Serge Semin <fancer.lancer@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
-+F:	Documentation/hwmon/bt1-pvt.rst
-+F:	drivers/hwmon/bt1-pvt.[ch]
-+
- BARCO P50 GPIO DRIVER
- M:	Santosh Kumar Yadav <santoshkumar.yadav@barco.com>
- M:	Peter Korsgaard <peter.korsgaard@barco.com>
--- 
-2.42.1
-
-
---ec57xuvyqxygqblb
-Content-Type: text/x-patch; charset="us-ascii"
-Content-Disposition: attachment;
-	filename="0002-MAINTAINERS-Add-maintainer-for-Baikal-T1-PCIe-driver.patch"
-
-From 460caf4c02f3b9620cf63127a443e05361ff382a Mon Sep 17 00:00:00 2001
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Date: Tue, 22 Mar 2022 23:11:59 +0300
-Subject: [PATCH 2/3] MAINTAINERS: Add maintainer for Baikal-T1 PCIe driver
-
-Add myself as a maintainer of the Baikal-T1 PCIe Root Port driver.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9e50a77d746e..52ee905c50f4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16796,6 +16796,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/pci/axis,artpec*
- F:	drivers/pci/controller/dwc/*artpec*
- 
-+PCIE DRIVER FOR BAIKAL-T1
-+M:	Serge Semin <fancer.lancer@gmail.com>
-+L:	linux-pci@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-+F:	drivers/pci/controller/dwc/pcie-bt1.c
-+
- PCIE DRIVER FOR CAVIUM THUNDERX
- M:	Robert Richter <rric@kernel.org>
- L:	linux-pci@vger.kernel.org
--- 
-2.42.1
-
-
---ec57xuvyqxygqblb
-Content-Type: text/x-patch; charset="us-ascii"
-Content-Disposition: attachment;
-	filename="0003-MAINTAINERS-Add-maintainer-for-MIPS-Baikal-T1-platfo.patch"
-
-From 16297c21f443fac69bf1d60924a9ef8602de8a2e Mon Sep 17 00:00:00 2001
-From: Serge Semin <fancer.lancer@gmail.com>
-Date: Fri, 7 Feb 2020 12:43:00 +0300
-Subject: [PATCH 3/3] MAINTAINERS: Add maintainer for MIPS Baikal-T1 platform
- code
-
-Add myself as a maintainer of the MIPS Baikal-T1 platform-specific
-drivers. The arch-code hasn't been submitted yet, but will be soon enough.
-Until then it's better to have the already available drivers marked as
-maintained.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 52ee905c50f4..a56e241608ae 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14491,6 +14491,17 @@ F:	arch/mips/
- F:	drivers/platform/mips/
- F:	include/dt-bindings/mips/
- 
-+MIPS BAIKAL-T1 PLATFORM
-+M:	Serge Semin <fancer.lancer@gmail.com>
-+L:	linux-mips@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-+F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
-+F:	drivers/bus/bt1-*.c
-+F:	drivers/clk/baikal-t1/
-+F:	drivers/memory/bt1-l2-ctl.c
-+F:	drivers/mtd/maps/physmap-bt1-rom.[ch]
-+
- MIPS BOSTON DEVELOPMENT BOARD
- M:	Paul Burton <paulburton@kernel.org>
- L:	linux-mips@vger.kernel.org
--- 
-2.42.1
-
-
---ec57xuvyqxygqblb--
-
+> -Serge(y)
+>
+> > +
+> >  MIPS BOSTON DEVELOPMENT BOARD
+> >  M:   Paul Burton <paulburton@kernel.org>
+> >  L:   linux-mips@vger.kernel.org
+> > --
+> > 2.17.1
+> >
+> >
 
