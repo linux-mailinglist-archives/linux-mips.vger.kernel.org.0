@@ -1,112 +1,212 @@
-Return-Path: <linux-mips+bounces-150-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-151-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0F137F3DAE
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 06:42:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA3AA7F41BD
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 10:34:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 997C1281C1A
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 05:42:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 031031C209B2
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 09:34:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7409011C9E;
-	Wed, 22 Nov 2023 05:41:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 546CF3E480;
+	Wed, 22 Nov 2023 09:34:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aeLGbfb0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BwWuuSDS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D5B185;
-	Tue, 21 Nov 2023 21:41:53 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-548f6f3cdc9so2474634a12.2;
-        Tue, 21 Nov 2023 21:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700631711; x=1701236511; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/aZqmcfYBbrAwHfQxSijXcVr/4Fn8eCufnaWHNVSYUo=;
-        b=aeLGbfb0HMdvORo2L05IAWuHypYYkYV0hHu6ycMbS5E6QuFOmpWSMhjZdojuYfseuF
-         C8Hy38BXlYXuMjLYcPvsLvMz6eecSpXj6lr6/SoSyD6Vj+fin0WDKisb4MyGjAZ0T5Il
-         Jxf6RMVg8EPAqBZVF4NbBEY4fb8csAl/fL4Kdasmd4ScIRn5ub+0HatdYOwrcbpLvPPB
-         tbnnKzifIMs0xCN74jIKLyLC8EEnE/Ylr9EhFhiK8TF+oNQK1aeg6PNSJhwFe5GkM4Wo
-         IbWyIOV/8P317669Cty4H/q+GD0aPIAinSyn0Rr4G59GNP0G6Hn/TbyUCTu+gNtcaJtr
-         09pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700631711; x=1701236511;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/aZqmcfYBbrAwHfQxSijXcVr/4Fn8eCufnaWHNVSYUo=;
-        b=Th3yzdbHMQzCi/2du/l3Wh5EGze0E/vQBCyC4+1ZrHZ1fZbC8NFAKL1fwD/1nKog97
-         8b6WZ3PA3DZZlNME31vqZG9WOZs5LQlupEWWv04NgjWyGSmwOigJXgO2SSmvjbxvJ/tw
-         NinqdVTTeqLVBO8pTc+cKZoUpWvdIVVMXUE+MNNMq3fZqjg2DUxsngE/HWPl/d64Qkjb
-         /txH91VMqUjebp1W/g7sYCnXMRt9k2t8QFn+tFpLTW0pDvcbI3ow8SbFwroxt4N7CNKy
-         E1WyX0atEBsYmWOUpCEBsGD0vnLua/w9aGUhhznxI57xjqISuXF+3Hu3zI6jU6eyMkBP
-         SoIw==
-X-Gm-Message-State: AOJu0YyapdWm1xPpJ+l88HQqAghQnaS7OC1OhHG7QSCG2OVe38ySl38w
-	+XJkr1zPPVmGCua0XSNMWkSar8fguJ4=
-X-Google-Smtp-Source: AGHT+IEImB9WEU8Dff7wAmw0uyKQ6unSKzYjR8guFrN7so2VrCSOyEM6eY2QufNTE5ftsjeRLo6A7g==
-X-Received: by 2002:a17:906:4119:b0:a03:a857:c6e0 with SMTP id j25-20020a170906411900b00a03a857c6e0mr507265ejk.77.1700631711167;
-        Tue, 21 Nov 2023 21:41:51 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:14bb:d13c:65e3:46bf])
-        by smtp.gmail.com with ESMTPSA id r15-20020a1709067fcf00b00985ed2f1584sm6132440ejs.187.2023.11.21.21.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 21:41:50 -0800 (PST)
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To: Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: add section MIPS BAIKAL-T1 SOC DRIVERS
-Date: Wed, 22 Nov 2023 06:41:42 +0100
-Message-Id: <20231122054142.31322-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E04E12A
+	for <linux-mips@vger.kernel.org>; Wed, 22 Nov 2023 01:34:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700645683;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+OTgZltwB2ZS+YZyn6PYgFPXeR3pdRlWkz0aWS8O4HE=;
+	b=BwWuuSDSvBZX8Mo7G/uzuxwxVixnrmmdqUnkZx0OtwE1DVMH27AH4c6jJvXbP/BVBm2pnd
+	77sZlTm5mtm89rkaBPL3o9nnd+bXlfVH6dL/cYz2vincEezSthdFNVSkUO8hR+dnyun2so
+	bzfx4LydAh4Vj2wfqlYfnQ+tbldTuWc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-591-_biuZLCONCOAsgDXiclx4A-1; Wed,
+ 22 Nov 2023 04:34:40 -0500
+X-MC-Unique: _biuZLCONCOAsgDXiclx4A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8960E3C0FCA6;
+	Wed, 22 Nov 2023 09:34:39 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.97])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 2A80F1C060AE;
+	Wed, 22 Nov 2023 09:34:36 +0000 (UTC)
+Date: Wed, 22 Nov 2023 17:34:33 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Ignat Korchagin <ignat@cloudflare.com>
+Cc: eric_devolder@yahoo.com, linux@armlinux.org.uk, catalin.marinas@arm.com,
+	will@kernel.org, chenhuacai@kernel.org, geert@linux-m68k.org,
+	tsbogend@alpha.franken.de,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+	glaubitz@physik.fu-berlin.de, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	dave.hansen@linux.intel.com, x86@kernel.org,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	kernel@xen0n.name, mpe@ellerman.id.au, npiggin@gmail.com,
+	christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+	gor@linux.ibm.com, agordeev@linux.ibm.com,
+	borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
+	keescook@chromium.org, paulmck@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>, frederic@kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ard Biesheuvel <ardb@kernel.org>, samitolvanen@google.com,
+	juerg.haefliger@canonical.com, arnd@arndb.de,
+	rmk+kernel@armlinux.org.uk, linus.walleij@linaro.org,
+	sebastian.reichel@collabora.com, rppt@kernel.org,
+	kirill.shutemov@linux.intel.com, anshuman.khandual@arm.com,
+	ziy@nvidia.com, masahiroy@kernel.org, ndesaulniers@google.com,
+	mhiramat@kernel.org, ojeda@kernel.org, thunder.leizhen@huawei.com,
+	xin3.li@intel.com, tj@kernel.org,
+	Greg KH <gregkh@linuxfoundation.org>, tsi@tuyoix.net,
+	hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	kernel-team <kernel-team@cloudflare.com>
+Subject: Re: Potential config regression after 89cde455 ("kexec: consolidate
+ kexec and crash options into kernel/Kconfig.kexec")
+Message-ID: <ZV3LKVOokpx2WvKp@MiWiFi-R3L-srv>
+References: <CALrw=nHpRQQaQTP_jZfREgrQEMpS8jBF8JQCv4ygqXycE-StaA@mail.gmail.com>
+ <ZVwMzXxWkgonIAfc@MiWiFi-R3L-srv>
+ <CALrw=nG8xsYw7XKyL_VMHtKiaBcQCKvC8UVp-C9-BdeN4A1Daw@mail.gmail.com>
+ <CALrw=nH-vcROja2W23rUKEEZMZhxsQiNB4P_ZZQ-XhPHAJGxrg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALrw=nH-vcROja2W23rUKEEZMZhxsQiNB4P_ZZQ-XhPHAJGxrg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-In recent years, a number of drivers for the MIPS Baikal-T1 SoC have been
-added to the kernel tree, but there is no dedicated MAINTAINERS section for
-this SoC.
+On 11/21/23 at 09:43am, Ignat Korchagin wrote:
+> On Tue, Nov 21, 2023 at 7:53 AM Ignat Korchagin <ignat@cloudflare.com> wrote:
+> >
+> > On Tue, Nov 21, 2023 at 1:50 AM Baoquan He <bhe@redhat.com> wrote:
+> > >
+> > > Eric DeVolder's Oracle mail address is not available anymore, add his
+> > > current mail address he told me.
+> >
+> > Thank you!
+> >
+> > > On 11/20/23 at 10:52pm, Ignat Korchagin wrote:
+> > > > Good day!
+> > > >
+> > > > We have recently started to evaluate Linux 6.6 and noticed that we
+> > > > cannot disable CONFIG_KEXEC anymore, but keep CONFIG_CRASH_DUMP
+> > > > enabled. It seems to be related to commit 89cde455 ("kexec:
+> > > > consolidate kexec and crash options into kernel/Kconfig.kexec"), where
+> > > > a CONFIG_KEXEC dependency was added to CONFIG_CRASH_DUMP.
+> > > >
+> > > > In our current kernel (Linux 6.1) we only enable CONFIG_KEXEC_FILE
+> > > > with enforced signature check to support the kernel crash dumping
+> > > > functionality and would like to keep CONFIG_KEXEC disabled for
+> > > > security reasons [1].
+> > > >
+> > > > I was reading the long commit message, but the reason for adding
+> > > > CONFIG_KEXEC as a dependency for CONFIG_CRASH_DUMP evaded me. And I
+> > > > believe from the implementation perspective CONFIG_KEXEC_FILE should
+> > > > suffice here (as we successfully used it for crashdumps on Linux 6.1).
+> > > >
+> > > > Is there a reason for adding this dependency or is it just an
+> > > > oversight? Would some solution of requiring either CONFIG_KEXEC or
+> > > > CONFIG_KEXEC_FILE work here?
+> > >
+> > > I searched the patch history, found Eric didn't add the dependency on
+> > > CONFIG_KEXEC at the beginning. Later a linux-next building failure with
+> > > randconfig was reported, in there CONFIG_CRASH_DUMP enabled, while
+> > > CONFIG_KEXEC is disabled. Finally Eric added the KEXEC dependency for
+> > > CRASH_DUMP. Please see below link for more details:
+> > >
+> > > https://lore.kernel.org/all/3e8eecd1-a277-2cfb-690e-5de2eb7b988e@oracle.com/T/#u
+> >
+> > Thank you for digging this up. However I'm still confused, because
+> > this is exactly how we configure Linux 6.1 (although we do have
+> > CONFIG_KEXEC_FILE enabled) and we don't have any problems. I believe
+> > we did not investigate this issue properly.
+> 
+> I did some preliminary investigation for this. If I patch out the
+> dependency on CONFIG_KEXEC the kernel builds just fine for x86
+> (without CONFIG_CRASH_HOTPLUG - which is probably another issue) - so
+> this was the previous behaviour. I can see that the reported error is
+> for arm architecture and was able to reproduce it with a simple cross
+> compiler in Debian. However, I think it is still somehow related to
+> this patchset as the previous kernels (up to 6.5) build fine with just
+> CONFIG_CRASH_DUMP and without CONFIG_KEXEC for arm as well. So even
+> for arm it was introduced in 6.6.
 
-As all of the code has been contributed by Serge Semin, let us assume he is
-still the active maintainer for this code rather than marking it orphan.
+Thanks for the information.
 
-Add a new section MIPS BAIKAL-T1 SOC DRIVERS in MAINTAINERS.
+I haven't run the reproducer of issue reported on Eric's old patchset,
+while checkout to kernel 6.1, only s390 selected KEXEC for CRASH_DUMP
+already. And with the ARM building breakage, the simplest idea is 
+to select KEXEC only for ARM or S390 CRASH_DUMP. I plan to try the
+reproducer later. If you have any idea or draft patch, please feel free
+to post.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+diff --git a/kernel/Kconfig.kexec b/kernel/Kconfig.kexec
+index 7aff28ded2f4..382dcd8d7a9d 100644
+--- a/kernel/Kconfig.kexec
++++ b/kernel/Kconfig.kexec
+@@ -97,7 +97,7 @@ config CRASH_DUMP
+        depends on ARCH_SUPPORTS_KEXEC
+        select CRASH_CORE
+        select KEXEC_CORE
+-       select KEXEC
++       select KEXEC if (ARM || S390)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9613c9c3cc97..820f1ab1ee80 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14474,6 +14474,19 @@ F:	arch/mips/
- F:	drivers/platform/mips/
- F:	include/dt-bindings/mips/
- 
-+MIPS BAIKAL-T1 SOC DRIVERS
-+M:	Serge Semin <Sergey.Semin@baikalelectronics.ru>
-+S:	Maintained
-+F:	Documentation/hwmon/bt1-pvt.rst
-+F:	drivers/ata/ahci_dwc.c
-+F:	drivers/bus/bt1-*.c
-+F:	drivers/clk/baikal-t1/
-+F:	drivers/hwmon/bt1-pvt.[ch]
-+F:	drivers/memory/bt1-l2-ctl.c
-+F:	drivers/mtd/maps/physmap-bt1-rom.[ch]
-+F:	drivers/pci/controller/dwc/pcie-bt1.c
-+F:	drivers/spi/spi-dw-bt1.c
-+
- MIPS BOSTON DEVELOPMENT BOARD
- M:	Paul Burton <paulburton@kernel.org>
- L:	linux-mips@vger.kernel.org
--- 
-2.17.1
+
+arch/s390/Kconfig in kernel 6.1:
+config CRASH_DUMP
+        bool "kernel crash dumps"
+        select KEXEC
+        help
+          Generate crash dump after being started by kexec.
+          Crash dump kernels are loaded in the main kernel with kexec-tools
+          into a specially reserved region and then later executed after
+          a crash by kdump/kexec.
+          Refer to <file:Documentation/s390/zfcpdump.rst> for more details on this.
+          This option also enables s390 zfcpdump.
+          See also <file:Documentation/s390/zfcpdump.rst>
+
+> 
+> > > And besides, the newly added CONFIG_CRASH_HOTPLUG also needs
+> > > CONFIG_KEXEC if the elfcorehdr is allowed to be manipulated when
+> > > cpu/memory hotplug hapened.
+> >
+> > This still feels like a regression to me: any crash dump support
+> > should be independent of KEXEC syscalls being present. While probably
+> > the common case (including us) that the crashing kernel and recovery
+> > kernel are the same, they don't have to be. We need kexec syscall in
+> > the crashing kernel, but crashdump support in the recovery kernel (but
+> > the recovery kernel not having the kexec syscalls should be totally
+> > fine). If we do require some code definitions from kexec - at most we
+> > should put them under CONFIG_KEXEC_CORE.
+> >
+> > > Thanks
+> > > Baoquan
+> > >
+> 
+> Ignat
+> 
 
 
