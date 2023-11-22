@@ -1,116 +1,73 @@
-Return-Path: <linux-mips+bounces-184-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-185-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 933487F4F6E
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 19:24:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C8B7F4F88
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 19:29:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45D911F20EF6
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 18:24:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F9A11C209DE
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 18:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79C45D495;
-	Wed, 22 Nov 2023 18:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28DC4F5E9;
+	Wed, 22 Nov 2023 18:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlWSmf+8"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="CVd7/2dy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C143A2;
-	Wed, 22 Nov 2023 10:24:39 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c50305c5c4so1013661fa.1;
-        Wed, 22 Nov 2023 10:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700677477; x=1701282277; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ygdtXD6vQmhTkyIIFbEZLW4cEgmK3nTQybwd/aOy/dw=;
-        b=DlWSmf+8f7QUpkhL5IcS9u0DvbcRC+XQ2AlTWBtvdwo6I7b9ZyEr4vo3GD+Ogt7xl/
-         kEi6YuCS0Na4VtPiUpZVeFdeb+7xr5TtvfLLtveGP+3wfwK3Qj7xbDsq+JijgqcoMvzB
-         HJ91BZuP1gXhOCvD1KRu0J4wHtZDb86i46ivcPCc9ZCHkEgGl3mJdYwNWWlcpwRld1lq
-         zh/6sXcFw2nQkvz54rJgbI9LMhY5teVDWWXDzQAZTY9Ucrv4TvsPkipmFwUFM8ElctwC
-         Iv9lotx5l+Tgp/U0ZHnQs2gnm8c8W5vfjmd7eOCnHbR+XXv2c7MA2W2VngqHqkyl6JzT
-         ECVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700677477; x=1701282277;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ygdtXD6vQmhTkyIIFbEZLW4cEgmK3nTQybwd/aOy/dw=;
-        b=t9zj5TJn0HAptGgV9zU4uTLn62sTHZX+tEUnUc7Yto2zrrddJBBnImdoe0lb3AF2t5
-         vYUzz+b9RoFsy0jFv/FogP1Q5JADKl79wY64j7D7ETFjS2mhP3cvtv+rRLQQXaSC+FOa
-         5W8u2zTXs1T0GTxeEifivNT81hWDM0cLlnUqm7qw0phMBT9yfFgytU+OW8jxR5wkxUsM
-         YQvCmR+jgjY0wLnyjjYllEINKKGIwR1AJxCbGcF7hLm9VZF7+xecYHN0inqm92p1bDL6
-         QACVpt8ayPTHzbAWxc8ZMxXegTpGq3IBx17RLv6aeI+qoedk14K7eTGmtSjOSvm9Dnzj
-         X3oQ==
-X-Gm-Message-State: AOJu0YycL3Mg0WYFsTTT7WS1l2DtlEJz58aDeaINd87eNlTY7wgTiuLV
-	f2phgWK1i6RQEnfrUxMLmvI=
-X-Google-Smtp-Source: AGHT+IGOQXheOS+Gt4rJnqKjpbv7GijHFeJguvjzbMNW2BiOOY31AXGILBqTgE/H996cdvS6H0FlrA==
-X-Received: by 2002:a2e:9d54:0:b0:2c5:15dc:ba99 with SMTP id y20-20020a2e9d54000000b002c515dcba99mr2236124ljj.51.1700677477316;
-        Wed, 22 Nov 2023 10:24:37 -0800 (PST)
-Received: from localhost ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id w5-20020a2ea3c5000000b002b9e5fe86dasm11422lje.81.2023.11.22.10.24.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 10:24:36 -0800 (PST)
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>
-Cc: Serge Semin <fancer.lancer@gmail.com>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
-	Aleksandar Rikalo <arikalo@gmail.com>,
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
-	Chao-ying Fu <cfu@wavecomp.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Yinglu Yang <yangyinglu@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Marc Zyngier <maz@kernel.org>,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] mips: Set dump-stack arch description
-Date: Wed, 22 Nov 2023 21:24:05 +0300
-Message-ID: <20231122182419.30633-8-fancer.lancer@gmail.com>
-X-Mailer: git-send-email 2.42.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67EA4F5E1
+	for <linux-mips@vger.kernel.org>; Wed, 22 Nov 2023 18:29:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1DAC433C8;
+	Wed, 22 Nov 2023 18:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1700677742;
+	bh=qsGh4PHkc0mg1b/d1tYd78id5VXrFh16WcGzldQw1Yo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CVd7/2dyvM4ZZaZhMypGSXAXmchB52w3uxIDBo/44hGyQ8Im+Ody44375XiPRro2r
+	 J0LMiq/WzPnBqBM+9D4McwJyaxL9AILUjVvlrvd3Su9GSFarF38MmnhI84MwZDHc1v
+	 2oV5dSPY8+X5KKODaMS6k8iqVAJLMdOL5OgXEAOI=
+Date: Wed, 22 Nov 2023 10:29:00 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Serge Semin <fancer.lancer@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Mike Rapoport
+ <rppt@kernel.org>, Matthew Wilcox <willy@infradead.org>, Alexey Malahov
+ <Alexey.Malahov@baikalelectronics.ru>, Arnd Bergmann <arnd@arndb.de>,
+ Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Aleksandar Rikalo
+ <arikalo@gmail.com>, Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
+ Chao-ying Fu <cfu@wavecomp.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Yinglu Yang <yangyinglu@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] MIPS: mm: Fix some memory-related issues
+Message-Id: <20231122102900.68216218f77b61e342f37627@linux-foundation.org>
 In-Reply-To: <20231122182419.30633-1-fancer.lancer@gmail.com>
 References: <20231122182419.30633-1-fancer.lancer@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-In the framework of the MIPS architecture the mips_set_machine_name()
-method is defined to set the machine name. The name currently is only used
-in the /proc/cpuinfo file content generation. Let's have it utilized to
-mach-personalize the dump-stack data too in a way it's done on ARM, ARM64,
-RISC-V, etc.
+On Wed, 22 Nov 2023 21:23:58 +0300 Serge Semin <fancer.lancer@gmail.com> wrote:
 
-Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
----
- arch/mips/kernel/prom.c | 2 ++
- 1 file changed, 2 insertions(+)
+> Just recently I've rebased my MIPS32-related work from kernel 6.5-rc4 onto
+> the latest kernel 6.7-rc1 and immediately got into a bootup-time
+> mm-related bug (see patches 3-5 in this series). After fixing it I decided
+> it was time to submit for review the generic MIPS code fixes which I have
+> been collecting in my local repo for the last year. I was going to submit
+> them a bit later after I finished working on a patchset with my SoC
+> arch-specific changes, but since it was getting bigger and bigger, it
+> turned to be reasonable to spill out the generic part of series right away
+> especially seeing it might get to be useful in the most recent kernel.
 
-diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
-index f88ce78e13e3..6062e6fa589a 100644
---- a/arch/mips/kernel/prom.c
-+++ b/arch/mips/kernel/prom.c
-@@ -28,6 +28,8 @@ __init void mips_set_machine_name(const char *name)
- 
- 	strscpy(mips_machine_name, name, sizeof(mips_machine_name));
- 	pr_info("MIPS: machine is %s\n", mips_get_machine_name());
-+
-+	dump_stack_set_arch_desc(name);
- }
- 
- char *mips_get_machine_name(void)
--- 
-2.42.1
-
+It would have been better to separate out the two tiny unrelated MM
+patches from this series.  I'll steal them - if they later turn up via
+the MIPS tree then that's OK.
 
