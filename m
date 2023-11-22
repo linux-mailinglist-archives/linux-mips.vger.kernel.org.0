@@ -1,54 +1,80 @@
-Return-Path: <linux-mips+bounces-176-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-177-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DEC47F4DC5
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 18:05:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BF5E7F4F63
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 19:24:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51E1B2814FD
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 17:05:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C47B1C20AB5
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 18:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D4F5787E;
-	Wed, 22 Nov 2023 17:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552FB5D4A1;
+	Wed, 22 Nov 2023 18:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=baikalelectronics.ru header.i=@baikalelectronics.ru header.b="EvhYv0D5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gMPbJWOh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6568A1A5;
-	Wed, 22 Nov 2023 09:05:16 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-	by post.baikalelectronics.com (Proxmox) with ESMTP id 2C979E0EBB;
-	Wed, 22 Nov 2023 20:05:15 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:from:from:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=post;
-	 bh=DpPTDtezDz6LzG5AwmetxU6wxuU0QGpGPaHxHQ0gF6E=; b=EvhYv0D5GI5a
-	ZTsWPVMAsSZ30a4g1To1xC50KVuGg/id8c0m653KIkp0cm37dHXHEc+w5m6+98yt
-	tKGmA4eiduPRPEnHuUUPFkcHbZkX1BJviz3p6GKBJtv8ayzcMDUdLFQN430lbOBh
-	ZVtyhMLWd93Y1pruwJNM4tJf4bR6RDc=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-	by post.baikalelectronics.com (Proxmox) with ESMTP id 07D53E0EB4;
-	Wed, 22 Nov 2023 20:05:15 +0300 (MSK)
-Received: from localhost (10.8.30.118) by mail (192.168.51.25) with Microsoft
- SMTP Server (TLS) id 15.0.1395.4; Wed, 22 Nov 2023 20:05:14 +0300
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>, Thomas Bogendoerfer
-	<tsbogend@alpha.franken.de>
-CC: Serge Semin <Sergey.Semin@baikalelectronics.ru>, Serge Semin
-	<fancer.lancer@gmail.com>, Alexey Malahov
-	<Alexey.Malahov@baikalelectronics.ru>, Arnd Bergmann <arnd@arndb.de>,
-	<linux-mips@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] MAINTAINERS: Add maintainer for MIPS Baikal-T1 platform code
-Date: Wed, 22 Nov 2023 20:04:52 +0300
-Message-ID: <20231122170506.27267-4-Sergey.Semin@baikalelectronics.ru>
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89BDA2;
+	Wed, 22 Nov 2023 10:24:24 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c876f1e44dso1147541fa.0;
+        Wed, 22 Nov 2023 10:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700677463; x=1701282263; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZqSoai9pFK0GqresiQ3Tq3Y3O3t4JmiFmz/3QD+TGg=;
+        b=gMPbJWOhswn5ISVbGiAK1ZoPpQfLNltxl3xPh5Y1dw7c6YC6mLGb3LccFU/ouYcBc1
+         qKFg1RcuUmA0fvE+Zbqzpz2EQy9kFqFkAw3Gc+pGPn4q3BPUTyeWsJly9AH5TFQ/haWR
+         /o6Y3tNvOjtYDebO8j0d21D3HpKgMSEe2bqt5KDVgMXIfbMzGZzRzvwF+cwTWW1E26Il
+         MtDGYMynA+9swiHNksRnuW/S0q+BCwpDFwNDk/TopWBJq88beIgEJDfAaKRSJtnEjq/v
+         o+kwo05couMQZowmXcrNnNXEo6rituMManWa10gauE/bJk1KnITwO3d+TN16MPXsLAP1
+         jJwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700677463; x=1701282263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pZqSoai9pFK0GqresiQ3Tq3Y3O3t4JmiFmz/3QD+TGg=;
+        b=JJeyuORkNbBqq1/EDfqYxKF08DHm1a0wzu5oqTDkwGpqFhHHA912fRO6pKejWXDSyu
+         Fm7pVA3b7NDZ/Rjd8eV45fuM80WKL7/XelyW0BSDyJLiQ0zx0csdCxN5Te5XllrWuaFG
+         JFGGrtzrG2Cnlq7HeQqjUuyZk6XY4brK+0jD3x/08OiDlv/HGWr1eX0K5noAq142yUtb
+         IixWlPfwTl3pYJDNJUUhqJ/eHR/znJFVDJBPFXpap0jmI1CEew//nnVLX+8/1Ony6BQO
+         ud2jTAuZRj6juxfOrmcVJE5xeckaOQOmkxBZO/V2LMrBrjPM/fek14NceBNvFRCFGVxc
+         VXoA==
+X-Gm-Message-State: AOJu0Yz9e3lX0dR9tOUraB228OFrTJo0Zbl2Tw2SeVzw7POJUpQn+FlQ
+	+SSvEAtaAAbi/PSLWFGnqsg=
+X-Google-Smtp-Source: AGHT+IEdXztrfEOfr2tODY/5p4eV//O7lSRUCCr4vRo1zq1D8sIg0ukQ4XcMXDtJo1WCQTaJ0w3pkQ==
+X-Received: by 2002:a2e:a9a6:0:b0:2c5:8a4:9e6f with SMTP id x38-20020a2ea9a6000000b002c508a49e6fmr2531940ljq.37.1700677462609;
+        Wed, 22 Nov 2023 10:24:22 -0800 (PST)
+Received: from localhost ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id f16-20020a2e9510000000b002bc3fbe9fd5sm11819ljh.55.2023.11.22.10.24.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 10:24:21 -0800 (PST)
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>
+Cc: Serge Semin <fancer.lancer@gmail.com>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
+	Aleksandar Rikalo <arikalo@gmail.com>,
+	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
+	Chao-ying Fu <cfu@wavecomp.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Yinglu Yang <yangyinglu@loongson.cn>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Marc Zyngier <maz@kernel.org>,
+	linux-mips@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] MIPS: mm: Fix some memory-related issues
+Date: Wed, 22 Nov 2023 21:23:58 +0300
+Message-ID: <20231122182419.30633-1-fancer.lancer@gmail.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231122170506.27267-1-Sergey.Semin@baikalelectronics.ru>
-References: <20231122170506.27267-1-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,43 +82,79 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 
-Add myself as a maintainer of the MIPS Baikal-T1 platform-specific
-drivers. The arch-code hasn't been submitted yet, but will be soon enough.
-Until then it's better to have the already available drivers marked as
-maintained.
+Just recently I've rebased my MIPS32-related work from kernel 6.5-rc4 onto
+the latest kernel 6.7-rc1 and immediately got into a bootup-time
+mm-related bug (see patches 3-5 in this series). After fixing it I decided
+it was time to submit for review the generic MIPS code fixes which I have
+been collecting in my local repo for the last year. I was going to submit
+them a bit later after I finished working on a patchset with my SoC
+arch-specific changes, but since it was getting bigger and bigger, it
+turned to be reasonable to spill out the generic part of series right away
+especially seeing it might get to be useful in the most recent kernel.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+So this series starts with the MIPS-specific dmi_early_remap()
+implementation fix. It is utilized by the DMI driver in the framework of
+the dmi_setup() method, which is called at the very early boot stage - in
+setup_arch((). No VM available at that stage which is required for the
+ioremap_cache() to properly work. Thus it was a mistake to have the
+dmi_early_remap() macro-function defined as ioremap_cache(). It should
+have been ioremap_uc() in first place.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 52ee905c50f4..a56e241608ae 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14491,6 +14491,17 @@ F:	arch/mips/
- F:	drivers/platform/mips/
- F:	include/dt-bindings/mips/
- 
-+MIPS BAIKAL-T1 PLATFORM
-+M:	Serge Semin <fancer.lancer@gmail.com>
-+L:	linux-mips@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-+F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
-+F:	drivers/bus/bt1-*.c
-+F:	drivers/clk/baikal-t1/
-+F:	drivers/memory/bt1-l2-ctl.c
-+F:	drivers/mtd/maps/physmap-bt1-rom.[ch]
-+
- MIPS BOSTON DEVELOPMENT BOARD
- M:	Paul Burton <paulburton@kernel.org>
- L:	linux-mips@vger.kernel.org
+After that goes a fix for the high-memory zone PFNs calculation procedure
+on MIPS. It turned out that after some not that recent commit the
+IO-memory PFNs got to the high-memory even though they were directly
+reachable, thus should have been left in the normal zone.
+
+Then a series of fixes for the recently discovered mm-bug is presented.
+Any attempt to re-map the IO-memory with the cached attribute caused the
+bootup procedure to crash with the "Unhandled kernel unaligned access"
+message. After some digging I found out that the problem was in the
+uninitialized IO-memory pages. Please see the patch "mips: Fix max_mapnr
+being uninitialized on early stages" description for the detailed
+explanation of the problem and suggested fix. Afterwards I submitted
+several cleanup patches for the MIPS/mm and generic mm code.
+
+The patchset is closed with a small improvement which sets the MIPS
+board/machine name to the dump-stack module in order to print
+arch-personalized oopses in the same way as it's done on ARM, ARM64,
+RISC-V, etc.
+
+That's it for today.) Thanks for review in advance. Any tests are very
+welcome.
+
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>
+Cc: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+Cc: Chao-ying Fu <cfu@wavecomp.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Yinglu Yang <yangyinglu@loongson.cn>,
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (7):
+  mips: dmi: Fix early remap on MIPS32
+  mips: Fix incorrect max_low_pfn adjustment
+  mips: Fix max_mapnr being uninitialized on early stages
+  mips: Optimize max_mapnr init procedure
+  mm/mm_init.c: Extend init unavailable range doc info
+  mm/mm_init.c: Append '\n' to the unavailable ranges log-message
+  mips: Set dump-stack arch description
+
+ arch/mips/include/asm/dmi.h |  2 +-
+ arch/mips/kernel/prom.c     |  2 ++
+ arch/mips/kernel/setup.c    |  4 ++--
+ arch/mips/mm/init.c         | 16 +++++++++-------
+ mm/mm_init.c                |  3 ++-
+ 5 files changed, 16 insertions(+), 11 deletions(-)
+
 -- 
 2.42.1
-
 
 
