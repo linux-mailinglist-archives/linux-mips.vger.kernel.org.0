@@ -1,178 +1,162 @@
-Return-Path: <linux-mips+bounces-154-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-171-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D4F67F4831
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 14:50:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 961B57F4D82
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 17:56:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7C09281033
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 13:50:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD52B1C20AA4
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 16:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831254BA97;
-	Wed, 22 Nov 2023 13:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85ECC4E62E;
+	Wed, 22 Nov 2023 16:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nFo3rrRt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WXzcTe1y"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926A9BC;
-	Wed, 22 Nov 2023 05:50:07 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c887d1fb8fso33751431fa.0;
-        Wed, 22 Nov 2023 05:50:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700661006; x=1701265806; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VGvo2wK/qUHrm7e4nS+FqOamAmN2Y01aRBg4wudRWCI=;
-        b=nFo3rrRtfsbe3+X6hbnd2uJJiwLwJWqkz/JmWE/HGWtroXsPBhUfnwRtgZEnf5oL/w
-         JjRZyljTXeyIpmc+ngJKrt/TtejzxmGvUbw8+6GCpoLpl24eH29XpehMYjRqh9oXdlbF
-         BF6ILc93UmA8eHIDqHAH8UcHQQTemBeEATlPLdubNojn9ZEtjJirKGr4HK6EAUWaJcla
-         yZqkuFZM4pxbr29U/6OrXaqvfJWia8SYfCF7y0+X+ND3ud3dy1/Oue/lOoQfrGVdr0Hj
-         9ZPkcHfwxQ5GS3Vyn3Mu/NwRXhex81TN9csm01Z+Rh6sEfHik6yZkA5/2/LGFD2kd11I
-         KS+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700661006; x=1701265806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VGvo2wK/qUHrm7e4nS+FqOamAmN2Y01aRBg4wudRWCI=;
-        b=LkcHq0Wc5gwKjLMPy2yjhPUkNgCy3CDBJGRbz94+BvL4No/PlNJFvnTNDsLw1W/dcJ
-         ip0iClPAw59qLsWh4GdzRjYs+A3gPPU/PrJBXLrMNBvJ6MpKx0DOVNxckXrA0pYlE9gz
-         wJ5VbKlqnfznRQZN+rop7TxTU1J9hbKXlZV2ZMVNyONW34ukxANgp6k0AvW0kwklu+4u
-         czuZX258qvVosVQDoVsI9VdhYOcou5MAYbQq7ecjIMVkYbvr/jX3f857WVv5fQ0oGGo3
-         4YmbgsJR71nmWFB3I5Pk1Ght5cZ6o0hkRxRMZCcGZ4G+RFS03lRIUAUuzoeQr5A+UJet
-         8UUQ==
-X-Gm-Message-State: AOJu0YwvHrMrs4WCG0yXv9qDJui0OauBilofsDNev16Rcbgy4RAs9g1A
-	UsNizHH63bMuvYEW8ecAPmFYrMea98YrslyeCTU=
-X-Google-Smtp-Source: AGHT+IGADla5AngdafjZj4xVSn2bMpwu94RIXGs1aggs+dTW20GqVt+KqN6QW83yuruj4ESEnG/vy5fguAMd3CGAzQY=
-X-Received: by 2002:a2e:908f:0:b0:2c8:874b:8f19 with SMTP id
- l15-20020a2e908f000000b002c8874b8f19mr1706701ljg.51.1700661005611; Wed, 22
- Nov 2023 05:50:05 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14457A2;
+	Wed, 22 Nov 2023 08:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700672207; x=1732208207;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=70OauZuRPP6KycCByQoWfpx5xjLJf3PsZvlJylbXqz8=;
+  b=WXzcTe1yXjfhs0AbXLORozR1rPNZEzT5nM4ZqzwdOcMbPZhj920mkAOG
+   KRA1UmbIMNGLuM4hnHtGdC4stO0Ns0rLVXoPCXlT0uw71Kv3zIKIRR8ic
+   PHJNimvTBEi99EadQKbFhA11u3AwpirMU6Lqs2cGXFlojgHA3Ywqy+hko
+   RupK2fJkDZ0WQNDpHAyg7+ypM6TRdxJN09RI5ACq1qOCDnHOD6WIVqk/9
+   wsmXX+3Ig7Q1vNbrOp6wVXu8jmctVhuP7KU6SmnlgKZiYy4RIqEE57aCd
+   5VZlO+Fvb+EYjpUDER2c9Ojx2gMofw976XKGcyWspTC4i3eNRQrdRyxu1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="5235458"
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="5235458"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 08:56:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="857815512"
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="857815512"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Nov 2023 08:56:16 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id D2FBE291; Wed, 22 Nov 2023 18:40:44 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org,
+	linux-mips@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Cc: Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Hal Feng <hal.feng@starfivetech.com>
+Subject: [PATCH v1 00/17] pinctrl: Convert struct group_desc to use struct pingroup
+Date: Wed, 22 Nov 2023 18:35:32 +0200
+Message-ID: <20231122164040.2262742-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231122054142.31322-1-lukas.bulwahn@gmail.com> <mku6gvd4rfkxzk2vrdjbizglte526ygyfhnwialtri44oqzikt@pq2l7mk25jgc>
-In-Reply-To: <mku6gvd4rfkxzk2vrdjbizglte526ygyfhnwialtri44oqzikt@pq2l7mk25jgc>
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date: Wed, 22 Nov 2023 14:49:54 +0100
-Message-ID: <CAKXUXMwGgtJVWmrFX0chpgNC++Ok54t-qXxware+aEDiyZFszw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: add section MIPS BAIKAL-T1 SOC DRIVERS
-To: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Serge Semin <fancer.lancer@gmail.com>, 
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 22, 2023 at 2:32=E2=80=AFPM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> Hi Lukas
->
-> On Wed, Nov 22, 2023 at 06:41:42AM +0100, Lukas Bulwahn wrote:
-> > In recent years, a number of drivers for the MIPS Baikal-T1 SoC have be=
-en
-> > added to the kernel tree, but there is no dedicated MAINTAINERS section=
- for
-> > this SoC.
-> >
-> > As all of the code has been contributed by Serge Semin, let us assume h=
-e is
-> > still the active maintainer for this code rather than marking it orphan=
-.
-> >
-> > Add a new section MIPS BAIKAL-T1 SOC DRIVERS in MAINTAINERS.
->
-> Thanks for submitting this patch. I was going to send a similar change
-> in the framework of the arch-series which is hanging up in my local
-> repo and alas is still under construction. I know I shouldn't have
-> been waiting (I'm sorry about that), but I didn't expect the entire
-> work would have taken so much time. On a way to finishing it up I had
-> to switch my efforts to the EDAC and network drivers and got sucked by
-> the amount of work there. But I will definitely submit the Baikal-T1
-> SoC arch patchset when my work on another area is finally over.
->
-> Here are several comments about this patch. (Please see my last
-> comment should you be ok with accepting the patches with already fixed
-> notes.)
->
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >  MAINTAINERS | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 9613c9c3cc97..820f1ab1ee80 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -14474,6 +14474,19 @@ F:   arch/mips/
-> >  F:   drivers/platform/mips/
-> >  F:   include/dt-bindings/mips/
-> >
-> > +MIPS BAIKAL-T1 SOC DRIVERS
->
-> > +M:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
->
-> It's better to change the email to
-> +M:     Serge Semin <fancer.lancer@gmail.com>
-> I quicker respond from my private inbox, than from the corporate one.
-> This will also be useful should the corporate email eventually change.
->
-> > +S:   Maintained
->
-> +F:     Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-> +F:     Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
->
-> > +F:   Documentation/hwmon/bt1-pvt.rst
->
-> I'd prefer this and these -+ being in a separate entry (see the
-> attached patches), because | the respective device IP-cores have been
-> re-used in another SoC. So | eventually the entries will be updated to
-> reflect that.              +---------------------------------+
->                                                              |
-> > +F:   drivers/ata/ahci_dwc.c                               |
->                                                              |
-> I believe this is already listed in the MAINTAINERS file.    |
->                                                              |
-> > +F:   drivers/bus/bt1-*.c                                  |
-> > +F:   drivers/clk/baikal-t1/                               |
-> > +F:   drivers/hwmon/bt1-pvt.[ch] <-------------------------+
-> > +F:   drivers/memory/bt1-l2-ctl.c                          |
-> > +F:   drivers/mtd/maps/physmap-bt1-rom.[ch]                |
-> > +F:   drivers/pci/controller/dwc/pcie-bt1.c <--------------+
->
-> > +F:   drivers/spi/spi-dw-bt1.c
->
-> This is already marked as maintained by me in the framework of the
-> generic DW APB SSI driver (See the "SYNOPSYS DESIGNWARE APB SSI
-> DRIVER" entry in the MAINTAINERS file).
->
-> Anyway in order to save your time from editing this patch. I've
-> prepared a series which takes into account all the comments above. If
-> you are ok with it, I can submit it for review. What do you think?
->
+The struct group_desc has a lot of duplication with struct pingroup. 
+Deduplicate that by embeddind the latter in the former and convert
+users.
 
-Sure, go ahead and submit your series. I just wanted to have all files
-in ./drivers/bus/ have a proper maintainer and then got to look at the
-BAIKAL T1 files.
+Linus, assuming everything is fine, I can push this to my tree.
+Or you can apply it (assumming all CIs and people are happy with
+the series).
 
-Lukas
+NB. This series contains previously sent patches for Qualcomm and
+Nuovoton. Here the updated version for Qualcomm that splits previous
+patch to two and fixes compilation warnings.
 
-> -Serge(y)
->
-> > +
-> >  MIPS BOSTON DEVELOPMENT BOARD
-> >  M:   Paul Burton <paulburton@kernel.org>
-> >  L:   linux-mips@vger.kernel.org
-> > --
-> > 2.17.1
-> >
-> >
+NB. The function_desc is in plan to follow the similar deduplication.
+
+Andy Shevchenko (17):
+  pinctrl: equilibrium: Convert to use struct pingroup
+  pinctrl: nuvoton: Convert to use struct pingroup and
+    PINCTRL_PINGROUP()
+  pinctrl: qcom: lpass-lpi: Replace kernel.h with what is being used
+  pinctrl: qcom: lpass-lpi: Remove unused member in struct lpi_pingroup
+  pinctrl: core: Add a convenient define PINCTRL_GROUP_DESC()
+  pinctrl: ingenic: Make use of PINCTRL_GROUP_DESC()
+  pinctrl: mediatek: Make use of PINCTRL_GROUP_DESC()
+  pinctrl: core: Embed struct pingroup into struct group_desc
+  pinctrl: bcm: Convert to use grp member
+  pinctrl: equilibrium: Convert to use grp member
+  pinctrl: imx: Convert to use grp member
+  pinctrl: ingenic: Convert to use grp member
+  pinctrl: keembay: Convert to use grp member
+  pinctrl: mediatek: Convert to use grp member
+  pinctrl: renesas: Convert to use grp member
+  pinctrl: starfive: Convert to use grp member
+  pinctrl: core: Remove unused members from struct group_desc
+
+ drivers/pinctrl/bcm/pinctrl-ns.c              |  4 +-
+ drivers/pinctrl/core.c                        | 11 ++---
+ drivers/pinctrl/core.h                        | 17 ++++---
+ drivers/pinctrl/freescale/pinctrl-imx.c       | 44 +++++++++----------
+ drivers/pinctrl/mediatek/pinctrl-moore.c      | 13 +++---
+ drivers/pinctrl/mediatek/pinctrl-moore.h      |  7 +--
+ drivers/pinctrl/mediatek/pinctrl-paris.h      |  7 +--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c     |  9 ++--
+ drivers/pinctrl/pinctrl-equilibrium.c         | 36 +++++++--------
+ drivers/pinctrl/pinctrl-ingenic.c             | 27 +++++-------
+ drivers/pinctrl/pinctrl-keembay.c             | 11 +++--
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.h      |  6 +--
+ .../pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c   | 16 -------
+ .../pinctrl/qcom/pinctrl-sc8280xp-lpass-lpi.c | 20 ---------
+ .../pinctrl/qcom/pinctrl-sm6115-lpass-lpi.c   | 20 ---------
+ .../pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c   | 15 -------
+ .../pinctrl/qcom/pinctrl-sm8350-lpass-lpi.c   | 16 -------
+ .../pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c   | 24 ----------
+ .../pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c   | 24 ----------
+ .../pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c   | 24 ----------
+ drivers/pinctrl/renesas/pinctrl-rza1.c        |  2 +-
+ drivers/pinctrl/renesas/pinctrl-rza2.c        | 10 ++---
+ drivers/pinctrl/renesas/pinctrl-rzg2l.c       |  4 +-
+ drivers/pinctrl/renesas/pinctrl-rzv2m.c       |  4 +-
+ .../starfive/pinctrl-starfive-jh7100.c        |  8 ++--
+ .../starfive/pinctrl-starfive-jh7110.c        |  8 ++--
+ 26 files changed, 102 insertions(+), 285 deletions(-)
+
+-- 
+2.43.0.rc1.1.gbec44491f096
+
 
