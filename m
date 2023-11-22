@@ -1,234 +1,284 @@
-Return-Path: <linux-mips+bounces-152-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-153-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8270E7F4299
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 10:47:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77FAC7F47F8
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 14:41:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5EF51C209CA
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 09:47:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31234281469
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Nov 2023 13:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 084255645C;
-	Wed, 22 Nov 2023 09:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98DF556760;
+	Wed, 22 Nov 2023 13:41:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DrqPc3I8"
+	dkim=pass (1024-bit key) header.d=baikalelectronics.ru header.i=@baikalelectronics.ru header.b="ZaSD9yzm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDF41FF5
-	for <linux-mips@vger.kernel.org>; Wed, 22 Nov 2023 01:47:47 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ce627400f6so37962555ad.2
-        for <linux-mips@vger.kernel.org>; Wed, 22 Nov 2023 01:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1700646466; x=1701251266; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NnfP4RJbON+lj35IXs9J/yXXOpNJWed6Pm5g2c+cjNg=;
-        b=DrqPc3I8KAANsz2ZPzGvIzvvxPmpaOa5yJyZkEaA4qz9m26rjLAaecr6zZPQrqnzkE
-         ikmaeVyhPG3Jm8EtOjttEshmOWd4T+x/XiZ3uzvvh6RziWCNDWT2WE/HFzJee0a6A+28
-         LrBpbdvGCHVIcY3EbK+bonNNYhFr6g/hq6unMCbCe8ovZlrY+C+lIFHOEyy5WZw0DqZ6
-         prv/5EOs0WZiAXxf9MV6hvKBendGDOYooz0HuZ49yQv6I9RgbmlezN1DF8PRB+Y032SE
-         3Tq4U+9e0Jjc4bX5Urr71zJxW2o90qLWueit7zlRtMHVZWVn24YoKFe2pxOxh0JGYCN1
-         LjUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700646466; x=1701251266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NnfP4RJbON+lj35IXs9J/yXXOpNJWed6Pm5g2c+cjNg=;
-        b=RnYchOV6TBgr1WeMPC06ZWswBcF4kxeTOxkkO6Tnc47606oAKOCyPfV5XHWUGde1Jb
-         e31aPA/L7UdC7TW58+4FSMSSU9eur7wuVnPzMpXKjyRgGNfy7PcNqdHeOinee4Vwuj/U
-         ZMGEEEJrBFId2UwBtB4ZbTlljNiyt8vptkZw1JmCBv5JBIMiYH5pvS4GkCtwLnf1T/Uo
-         HKZfjhlWZVeJirhq2IsxUQDKci+4NWeB3rfGWRZ5fki7ch2uen1scyE10n9EifCvvvPU
-         jCotBQNPahju5XjHnAp9N+42UJMqkVhv2SXKA7+vqBR/RkztIC3PziVDw/8U30WIcZjS
-         xz3g==
-X-Gm-Message-State: AOJu0Yw6qfOiGeL1D1IkHbOKXANqG6U0UK4Mndt4TzUcqbdldWYtyRoH
-	a13wRLEV6LGtd+fIjRWJ5DnzYxArP5BxwQHDi7zZ6Q==
-X-Google-Smtp-Source: AGHT+IEoe5dhUWpYOgp49hInJ/tXkDzht17Dpr4KVAZ7DyJBSpmejqoRh7l88C3hHutZlPs8wlq5Gnw1rhenR1f8+40=
-X-Received: by 2002:a17:90b:1d04:b0:27d:5946:5e2c with SMTP id
- on4-20020a17090b1d0400b0027d59465e2cmr1934810pjb.12.1700646466036; Wed, 22
- Nov 2023 01:47:46 -0800 (PST)
+X-Greylist: delayed 544 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Nov 2023 05:41:34 PST
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 207AF1A5;
+	Wed, 22 Nov 2023 05:41:34 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+	by post.baikalelectronics.com (Proxmox) with ESMTP id ABDF8E0EB9;
+	Wed, 22 Nov 2023 16:32:28 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	baikalelectronics.ru; h=cc:cc:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=post; bh=HbHrbH/rcUkVvlTKh1z1
+	S+UWZ0eNJU9qPvTnkmX9sAo=; b=ZaSD9yzmzX2d2SuTq2gLARr4fmQLcPAm4gKl
+	AYfiEFaVpXuA5Wrk7l0Ktf0fiWuiQiGIHm0k/0nIkD8vyKM+bMaEa7YSt/5js9PM
+	ynIzPSyXYnF6qF8AcgteuvPHs6zCjSkTsIeI1SjurBfVjtYYaz7pHQjBWifkGn9+
+	QeIruH8=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+	by post.baikalelectronics.com (Proxmox) with ESMTP id 74B73E0EB4;
+	Wed, 22 Nov 2023 16:32:28 +0300 (MSK)
+Received: from mobilestation (10.8.30.118) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 22 Nov 2023 16:32:28 +0300
+Date: Wed, 22 Nov 2023 16:32:27 +0300
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	<linux-mips@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Serge Semin <fancer.lancer@gmail.com>, Alexey
+ Malahov <Alexey.Malahov@baikalelectronics.ru>
+Subject: Re: [PATCH] MAINTAINERS: add section MIPS BAIKAL-T1 SOC DRIVERS
+Message-ID: <mku6gvd4rfkxzk2vrdjbizglte526ygyfhnwialtri44oqzikt@pq2l7mk25jgc>
+References: <20231122054142.31322-1-lukas.bulwahn@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALrw=nHpRQQaQTP_jZfREgrQEMpS8jBF8JQCv4ygqXycE-StaA@mail.gmail.com>
- <ZVwMzXxWkgonIAfc@MiWiFi-R3L-srv> <CALrw=nG8xsYw7XKyL_VMHtKiaBcQCKvC8UVp-C9-BdeN4A1Daw@mail.gmail.com>
- <CALrw=nH-vcROja2W23rUKEEZMZhxsQiNB4P_ZZQ-XhPHAJGxrg@mail.gmail.com> <ZV3LKVOokpx2WvKp@MiWiFi-R3L-srv>
-In-Reply-To: <ZV3LKVOokpx2WvKp@MiWiFi-R3L-srv>
-From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Wed, 22 Nov 2023 09:47:34 +0000
-Message-ID: <CALrw=nGadgbwuNAFacatz-agpGn9NvtgaCUXu73MzAzZq07k-g@mail.gmail.com>
-Subject: Re: Potential config regression after 89cde455 ("kexec: consolidate
- kexec and crash options into kernel/Kconfig.kexec")
-To: Baoquan He <bhe@redhat.com>
-Cc: eric_devolder@yahoo.com, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, chenhuacai@kernel.org, geert@linux-m68k.org, 
-	tsbogend@alpha.franken.de, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	dave.hansen@linux.intel.com, x86@kernel.org, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au, 
-	npiggin@gmail.com, christophe.leroy@csgroup.eu, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com, 
-	gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com, 
-	svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org, paulmck@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, frederic@kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Ard Biesheuvel <ardb@kernel.org>, samitolvanen@google.com, 
-	juerg.haefliger@canonical.com, arnd@arndb.de, rmk+kernel@armlinux.org.uk, 
-	linus.walleij@linaro.org, sebastian.reichel@collabora.com, rppt@kernel.org, 
-	kirill.shutemov@linux.intel.com, anshuman.khandual@arm.com, ziy@nvidia.com, 
-	masahiroy@kernel.org, ndesaulniers@google.com, mhiramat@kernel.org, 
-	ojeda@kernel.org, thunder.leizhen@huawei.com, xin3.li@intel.com, 
-	tj@kernel.org, Greg KH <gregkh@linuxfoundation.org>, tsi@tuyoix.net, 
-	hbathini@linux.ibm.com, sourabhjain@linux.ibm.com, boris.ostrovsky@oracle.com, 
-	konrad.wilk@oracle.com, kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="ec57xuvyqxygqblb"
+Content-Disposition: inline
+In-Reply-To: <20231122054142.31322-1-lukas.bulwahn@gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 
-On Wed, Nov 22, 2023 at 9:34=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
->
-> On 11/21/23 at 09:43am, Ignat Korchagin wrote:
-> > On Tue, Nov 21, 2023 at 7:53=E2=80=AFAM Ignat Korchagin <ignat@cloudfla=
-re.com> wrote:
-> > >
-> > > On Tue, Nov 21, 2023 at 1:50=E2=80=AFAM Baoquan He <bhe@redhat.com> w=
-rote:
-> > > >
-> > > > Eric DeVolder's Oracle mail address is not available anymore, add h=
-is
-> > > > current mail address he told me.
-> > >
-> > > Thank you!
-> > >
-> > > > On 11/20/23 at 10:52pm, Ignat Korchagin wrote:
-> > > > > Good day!
-> > > > >
-> > > > > We have recently started to evaluate Linux 6.6 and noticed that w=
-e
-> > > > > cannot disable CONFIG_KEXEC anymore, but keep CONFIG_CRASH_DUMP
-> > > > > enabled. It seems to be related to commit 89cde455 ("kexec:
-> > > > > consolidate kexec and crash options into kernel/Kconfig.kexec"), =
-where
-> > > > > a CONFIG_KEXEC dependency was added to CONFIG_CRASH_DUMP.
-> > > > >
-> > > > > In our current kernel (Linux 6.1) we only enable CONFIG_KEXEC_FIL=
-E
-> > > > > with enforced signature check to support the kernel crash dumping
-> > > > > functionality and would like to keep CONFIG_KEXEC disabled for
-> > > > > security reasons [1].
-> > > > >
-> > > > > I was reading the long commit message, but the reason for adding
-> > > > > CONFIG_KEXEC as a dependency for CONFIG_CRASH_DUMP evaded me. And=
- I
-> > > > > believe from the implementation perspective CONFIG_KEXEC_FILE sho=
-uld
-> > > > > suffice here (as we successfully used it for crashdumps on Linux =
-6.1).
-> > > > >
-> > > > > Is there a reason for adding this dependency or is it just an
-> > > > > oversight? Would some solution of requiring either CONFIG_KEXEC o=
-r
-> > > > > CONFIG_KEXEC_FILE work here?
-> > > >
-> > > > I searched the patch history, found Eric didn't add the dependency =
-on
-> > > > CONFIG_KEXEC at the beginning. Later a linux-next building failure =
-with
-> > > > randconfig was reported, in there CONFIG_CRASH_DUMP enabled, while
-> > > > CONFIG_KEXEC is disabled. Finally Eric added the KEXEC dependency f=
-or
-> > > > CRASH_DUMP. Please see below link for more details:
-> > > >
-> > > > https://lore.kernel.org/all/3e8eecd1-a277-2cfb-690e-5de2eb7b988e@or=
-acle.com/T/#u
-> > >
-> > > Thank you for digging this up. However I'm still confused, because
-> > > this is exactly how we configure Linux 6.1 (although we do have
-> > > CONFIG_KEXEC_FILE enabled) and we don't have any problems. I believe
-> > > we did not investigate this issue properly.
-> >
-> > I did some preliminary investigation for this. If I patch out the
-> > dependency on CONFIG_KEXEC the kernel builds just fine for x86
-> > (without CONFIG_CRASH_HOTPLUG - which is probably another issue) - so
-> > this was the previous behaviour. I can see that the reported error is
-> > for arm architecture and was able to reproduce it with a simple cross
-> > compiler in Debian. However, I think it is still somehow related to
-> > this patchset as the previous kernels (up to 6.5) build fine with just
-> > CONFIG_CRASH_DUMP and without CONFIG_KEXEC for arm as well. So even
-> > for arm it was introduced in 6.6.
->
-> Thanks for the information.
->
-> I haven't run the reproducer of issue reported on Eric's old patchset,
-> while checkout to kernel 6.1, only s390 selected KEXEC for CRASH_DUMP
-> already. And with the ARM building breakage, the simplest idea is
-> to select KEXEC only for ARM or S390 CRASH_DUMP. I plan to try the
-> reproducer later. If you have any idea or draft patch, please feel free
-> to post.
+--ec57xuvyqxygqblb
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-The thing is - before 6.6 even ARM did not require KEXEC for
-CRASH_DUMP (at least to successfully compile), so I think we should
-understand what changed first before adding a dependency for ARM. I'll
-try to investigate more, if I have time.
+Hi Lukas
 
-> diff --git a/kernel/Kconfig.kexec b/kernel/Kconfig.kexec
-> index 7aff28ded2f4..382dcd8d7a9d 100644
-> --- a/kernel/Kconfig.kexec
-> +++ b/kernel/Kconfig.kexec
-> @@ -97,7 +97,7 @@ config CRASH_DUMP
->         depends on ARCH_SUPPORTS_KEXEC
->         select CRASH_CORE
->         select KEXEC_CORE
-> -       select KEXEC
-> +       select KEXEC if (ARM || S390)
->
->
-> arch/s390/Kconfig in kernel 6.1:
-> config CRASH_DUMP
->         bool "kernel crash dumps"
->         select KEXEC
->         help
->           Generate crash dump after being started by kexec.
->           Crash dump kernels are loaded in the main kernel with kexec-too=
-ls
->           into a specially reserved region and then later executed after
->           a crash by kdump/kexec.
->           Refer to <file:Documentation/s390/zfcpdump.rst> for more detail=
-s on this.
->           This option also enables s390 zfcpdump.
->           See also <file:Documentation/s390/zfcpdump.rst>
->
-> >
-> > > > And besides, the newly added CONFIG_CRASH_HOTPLUG also needs
-> > > > CONFIG_KEXEC if the elfcorehdr is allowed to be manipulated when
-> > > > cpu/memory hotplug hapened.
-> > >
-> > > This still feels like a regression to me: any crash dump support
-> > > should be independent of KEXEC syscalls being present. While probably
-> > > the common case (including us) that the crashing kernel and recovery
-> > > kernel are the same, they don't have to be. We need kexec syscall in
-> > > the crashing kernel, but crashdump support in the recovery kernel (bu=
-t
-> > > the recovery kernel not having the kexec syscalls should be totally
-> > > fine). If we do require some code definitions from kexec - at most we
-> > > should put them under CONFIG_KEXEC_CORE.
-> > >
-> > > > Thanks
-> > > > Baoquan
-> > > >
-> >
-> > Ignat
-> >
->
+On Wed, Nov 22, 2023 at 06:41:42AM +0100, Lukas Bulwahn wrote:
+> In recent years, a number of drivers for the MIPS Baikal-T1 SoC have been
+> added to the kernel tree, but there is no dedicated MAINTAINERS section for
+> this SoC.
+> 
+> As all of the code has been contributed by Serge Semin, let us assume he is
+> still the active maintainer for this code rather than marking it orphan.
+> 
+> Add a new section MIPS BAIKAL-T1 SOC DRIVERS in MAINTAINERS.
+
+Thanks for submitting this patch. I was going to send a similar change
+in the framework of the arch-series which is hanging up in my local
+repo and alas is still under construction. I know I shouldn't have
+been waiting (I'm sorry about that), but I didn't expect the entire
+work would have taken so much time. On a way to finishing it up I had
+to switch my efforts to the EDAC and network drivers and got sucked by
+the amount of work there. But I will definitely submit the Baikal-T1
+SoC arch patchset when my work on another area is finally over.
+
+Here are several comments about this patch. (Please see my last
+comment should you be ok with accepting the patches with already fixed
+notes.)
+
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  MAINTAINERS | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9613c9c3cc97..820f1ab1ee80 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14474,6 +14474,19 @@ F:	arch/mips/
+>  F:	drivers/platform/mips/
+>  F:	include/dt-bindings/mips/
+>  
+> +MIPS BAIKAL-T1 SOC DRIVERS
+
+> +M:	Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
+It's better to change the email to
++M:	Serge Semin <fancer.lancer@gmail.com>
+I quicker respond from my private inbox, than from the corporate one.
+This will also be useful should the corporate email eventually change.
+
+> +S:	Maintained
+
++F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
++F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
+
+> +F:	Documentation/hwmon/bt1-pvt.rst
+
+I'd prefer this and these -+ being in a separate entry (see the
+attached patches), because | the respective device IP-cores have been
+re-used in another SoC. So | eventually the entries will be updated to
+reflect that.              +---------------------------------+
+                                                             |
+> +F:	drivers/ata/ahci_dwc.c                               |
+                                                             |
+I believe this is already listed in the MAINTAINERS file.    |
+                                                             |
+> +F:	drivers/bus/bt1-*.c                                  |
+> +F:	drivers/clk/baikal-t1/                               |
+> +F:	drivers/hwmon/bt1-pvt.[ch] <-------------------------+
+> +F:	drivers/memory/bt1-l2-ctl.c                          |
+> +F:	drivers/mtd/maps/physmap-bt1-rom.[ch]                |
+> +F:	drivers/pci/controller/dwc/pcie-bt1.c <--------------+
+
+> +F:	drivers/spi/spi-dw-bt1.c
+
+This is already marked as maintained by me in the framework of the
+generic DW APB SSI driver (See the "SYNOPSYS DESIGNWARE APB SSI
+DRIVER" entry in the MAINTAINERS file).
+
+Anyway in order to save your time from editing this patch. I've
+prepared a series which takes into account all the comments above. If
+you are ok with it, I can submit it for review. What do you think?
+
+-Serge(y)
+
+> +
+>  MIPS BOSTON DEVELOPMENT BOARD
+>  M:	Paul Burton <paulburton@kernel.org>
+>  L:	linux-mips@vger.kernel.org
+> -- 
+> 2.17.1
+> 
+> 
+
+--ec57xuvyqxygqblb
+Content-Type: text/x-patch; charset="us-ascii"
+Content-Disposition: attachment;
+	filename="0001-MAINTAINERS-Add-maintainer-for-Baikal-T1-PVT-hwmon-d.patch"
+
+From 3474717c649d994afade36f8117695a84120ab26 Mon Sep 17 00:00:00 2001
+From: Serge Semin <fancer.lancer@gmail.com>
+Date: Fri, 7 Feb 2020 12:37:59 +0300
+Subject: [PATCH 1/3] MAINTAINERS: Add maintainer for Baikal-T1 PVT hwmon
+ driver
+
+Add myself as a maintainer of the Baikal-T1 PVT sensors driver.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 97f51d5ec1cf..9e50a77d746e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3467,6 +3467,14 @@ F:	drivers/video/backlight/
+ F:	include/linux/backlight.h
+ F:	include/linux/pwm_backlight.h
+ 
++BAIKAL-T1 PVT HARDWARE MONITOR DRIVER
++M:	Serge Semin <fancer.lancer@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
++F:	Documentation/hwmon/bt1-pvt.rst
++F:	drivers/hwmon/bt1-pvt.[ch]
++
+ BARCO P50 GPIO DRIVER
+ M:	Santosh Kumar Yadav <santoshkumar.yadav@barco.com>
+ M:	Peter Korsgaard <peter.korsgaard@barco.com>
+-- 
+2.42.1
+
+
+--ec57xuvyqxygqblb
+Content-Type: text/x-patch; charset="us-ascii"
+Content-Disposition: attachment;
+	filename="0002-MAINTAINERS-Add-maintainer-for-Baikal-T1-PCIe-driver.patch"
+
+From 460caf4c02f3b9620cf63127a443e05361ff382a Mon Sep 17 00:00:00 2001
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Date: Tue, 22 Mar 2022 23:11:59 +0300
+Subject: [PATCH 2/3] MAINTAINERS: Add maintainer for Baikal-T1 PCIe driver
+
+Add myself as a maintainer of the Baikal-T1 PCIe Root Port driver.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9e50a77d746e..52ee905c50f4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16796,6 +16796,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/pci/axis,artpec*
+ F:	drivers/pci/controller/dwc/*artpec*
+ 
++PCIE DRIVER FOR BAIKAL-T1
++M:	Serge Semin <fancer.lancer@gmail.com>
++L:	linux-pci@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
++F:	drivers/pci/controller/dwc/pcie-bt1.c
++
+ PCIE DRIVER FOR CAVIUM THUNDERX
+ M:	Robert Richter <rric@kernel.org>
+ L:	linux-pci@vger.kernel.org
+-- 
+2.42.1
+
+
+--ec57xuvyqxygqblb
+Content-Type: text/x-patch; charset="us-ascii"
+Content-Disposition: attachment;
+	filename="0003-MAINTAINERS-Add-maintainer-for-MIPS-Baikal-T1-platfo.patch"
+
+From 16297c21f443fac69bf1d60924a9ef8602de8a2e Mon Sep 17 00:00:00 2001
+From: Serge Semin <fancer.lancer@gmail.com>
+Date: Fri, 7 Feb 2020 12:43:00 +0300
+Subject: [PATCH 3/3] MAINTAINERS: Add maintainer for MIPS Baikal-T1 platform
+ code
+
+Add myself as a maintainer of the MIPS Baikal-T1 platform-specific
+drivers. The arch-code hasn't been submitted yet, but will be soon enough.
+Until then it's better to have the already available drivers marked as
+maintained.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+---
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 52ee905c50f4..a56e241608ae 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14491,6 +14491,17 @@ F:	arch/mips/
+ F:	drivers/platform/mips/
+ F:	include/dt-bindings/mips/
+ 
++MIPS BAIKAL-T1 PLATFORM
++M:	Serge Semin <fancer.lancer@gmail.com>
++L:	linux-mips@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
++F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
++F:	drivers/bus/bt1-*.c
++F:	drivers/clk/baikal-t1/
++F:	drivers/memory/bt1-l2-ctl.c
++F:	drivers/mtd/maps/physmap-bt1-rom.[ch]
++
+ MIPS BOSTON DEVELOPMENT BOARD
+ M:	Paul Burton <paulburton@kernel.org>
+ L:	linux-mips@vger.kernel.org
+-- 
+2.42.1
+
+
+--ec57xuvyqxygqblb--
+
 
