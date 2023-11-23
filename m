@@ -1,72 +1,71 @@
-Return-Path: <linux-mips+bounces-244-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-245-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 692AA7F6578
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 18:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F75F7F6580
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 18:34:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23F932819C4
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 17:32:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE89A2819AD
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 17:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EB5405DA;
-	Thu, 23 Nov 2023 17:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1521F176;
+	Thu, 23 Nov 2023 17:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="gcuciQNH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kv69WDjo"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="acJmjms2";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cOcqtAYo"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B78D44;
-	Thu, 23 Nov 2023 09:31:59 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC61AB0;
+	Thu, 23 Nov 2023 09:33:54 -0800 (PST)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 051533200A0C;
-	Thu, 23 Nov 2023 12:31:54 -0500 (EST)
+	by mailout.west.internal (Postfix) with ESMTP id E7AD53200A81;
+	Thu, 23 Nov 2023 12:33:52 -0500 (EST)
 Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 23 Nov 2023 12:31:56 -0500
+  by compute3.internal (MEProxy); Thu, 23 Nov 2023 12:33:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1700760714; x=1700847114; bh=r7YWHIfKs1lRtQljNoq9n0N8njCRxKVxB0j
-	/oEqFGJ8=; b=gcuciQNHPyLhNrt9hMusqeRhRHncBl86lxovPoBIi0uz5ETFy35
-	sy26tYy2lcezp4at8sXuI+gxGYBpZmL0463jgrb4tmk1Pc+ZU1nInpXvNbuOjFGW
-	ZvHwdiu9HmlPH+FxyQOU+RKAWmgnqxwRZYRsADYnGR1AJvGcgoCw51rgIKtVXEei
-	tV7LX/kHuvfNU0Jr/pTcJWPYPS9/UJdPFgL3F3SOeYfTUgoDFncfyU/oCu7or3VJ
-	H5Sq+h4N5U/Vlb6rTUL34x5kXeLlMabxOZJ0qrUfLIWkxFN4gspnyNUMvW57Tcoy
-	75UKOblrACO/yOiHnAQJm+i4DJr6OwU1Log==
+	1700760832; x=1700847232; bh=27SDTQSVNSOteu3KKkKr7JW9siSN9Q+1UTF
+	B8KAZ5YA=; b=acJmjms2lNSKCid+/n/CTUSeUKdjClGGB7LXwCChe77TE9MID9T
+	P9gI3N8gQUA7tIK/vZiQrzEIVhc7ys27xnbx/IiVOP7lcAuthNpIr6mUdj9nGqeF
+	CkDtA3CJrZXrlNeUnqt0bM9zg4LVC8uBlzcmp30d8JzyR4D5bTj7mqvG6h0pzTAj
+	XQXZPEMSZ0XtQibWSwduuf2164/PEgT1+eC5eqR6yOgj/wDU2HGoJlzTmk9B5vq2
+	bt5PB6/U9IK6YHxUvuKbAxa4v4BhgIEIpt044s9vchnRooWrzCECqfNXTJfGRCvI
+	dBP4/gmHc8vVv8g8PMJYHAeJGfDEx+/S7/A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
 	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1700760714; x=1700847114; bh=r7YWHIfKs1lRtQljNoq9n0N8njCRxKVxB0j
-	/oEqFGJ8=; b=kv69WDjo+qyKK7pmC0j7JuBlJFHfQw3agKWMBEE9Sfc4gMBXits
-	bUB7y2f+s3m5leDUyYdRYSZ+UAYkCUB6YZZoUj7W8s7KEgw8J5rq1mY43enhdCVc
-	6KJQLsBFLtUnUVR7KQZYmzXaNWe36bsCFX3l5vcYYni5n97sGESyyDP7Z8SXQWo/
-	BvAKYZlkJN/GSBbzkJTU7IIemoAjwNZDuNDP4c5jxhQo7pqNDaEpb1XEETLTsTFb
-	sHFhlkD7FKtOTCzILVXKwpVybK8D06hu+2rzNwUvI4dVM1eLdiOtaDKG4NE1aQEr
-	Il7an2b45E1XkS+dKAGNNXF0UQkLUjMu00w==
-X-ME-Sender: <xms:ioxfZTUuN9wJnwXh8PAnpluylHi_g4qSH9Fdpolif4Y4jZeYg6lnYA>
-    <xme:ioxfZblm1C3UZdBSumou4iztnFohGLw0cx3KiaE_-9hb3LmvRMQPxtNIWDKDxvw0f
-    pbzzZ0bRxVgc5wFg6I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehfedguddttdcutefuodetggdotefrod
+	1700760832; x=1700847232; bh=27SDTQSVNSOteu3KKkKr7JW9siSN9Q+1UTF
+	B8KAZ5YA=; b=cOcqtAYo5IgG5pzOd6Su/JTI1FCQ95828mAhmzWcWPfE+RfTbTv
+	wkKl14OMnwW+1dgzeHIxZGCAEAqq+5gMz6uYuoRshLDhtLdarHNd6KSIHHqAdiwT
+	RLPAlGXohmPbG07t+ruKfA6If+53e6xq83vDtTCTFfrgG5A94DeSLZXpkRh4HAq3
+	Oab+WmpLS9sgDp9Q4UlBsxdDWVIsRzXYNSgkfcKJuUNv/OMtdfhtJDGJJLZ0sEX8
+	WaXiMeYMPtZzdUMscbEwj/jbEKH4EGW8KjasdgwVpf/KAcVUNbzST7r7gtDrqprT
+	Sy1htvBdI1+CGBcp0QNEUqg61FpErd4T0lw==
+X-ME-Sender: <xms:_4xfZaaZrXowojPdLLPl2xLeof_QdLOYDkIMhW2FhG1_D2-X_H4h0g>
+    <xme:_4xfZdar8xTBmPB-mAxqpqE9KJCfZdMQEMPDYLAEgribhQbqzkRpmsh8Pq8tWo6w_
+    FrcGszupBeut9cb0DA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehfedguddtudcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
     lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
-    homheqnecuggftrfgrthhtvghrnhepkeelveffhedtiefgkeefhffftdduffdvueevtdff
-    teehueeihffgteelkeelkeejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdr
-    higrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:ioxfZfZKpm9WG62x6XNl1UWP2qr5lcr1QtT92BuNuoO-Qqb-i5ZlPg>
-    <xmx:ioxfZeVa0qQisTL-4f-tC7bBbij3kZAoyudiuXLVOe0wPGP2JoBP_A>
-    <xmx:ioxfZdk1msiY1Zi3OOVhgAsMEEmfjTpZg2GwF8KXW8rr780ltNRAmw>
-    <xmx:ioxfZWfwTXpAIux1XSpGVByRIFugkV9VmG8RJSs0osSGcR8tbk_C0w>
+    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
+    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:_4xfZU_GyswmJ7J3KM_M9aNMJ0K1BgWdnPlEp71HceVr75J93xblCg>
+    <xmx:_4xfZcrVOPi8D20MitBkesxiY7y3n2rGTycn5KhejTwATT6Rv2VlXQ>
+    <xmx:_4xfZVpHwj62HaJ7BUMWpcksMl4jiBAdgZvqL52XBsZUOIi1mNK5Rg>
+    <xmx:AI1fZdaDbogwNbZpA2Vd1hJ3xC2sD6N8O4Sr6BeN6X3c3HwjyoM4Sw>
 Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 04C4E36A0075; Thu, 23 Nov 2023 12:31:54 -0500 (EST)
+	id 8719736A0075; Thu, 23 Nov 2023 12:33:51 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
 Precedence: bulk
@@ -75,71 +74,77 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <32db8a76-7842-4d04-94f1-67e3984cb349@app.fastmail.com>
-In-Reply-To: <20231123152639.561231-1-gregory.clement@bootlin.com>
-References: <20231123152639.561231-1-gregory.clement@bootlin.com>
-Date: Thu, 23 Nov 2023 17:31:33 +0000
+Message-Id: <245d3985-9085-4be0-8c74-d95d06334584@app.fastmail.com>
+In-Reply-To: <ZV94rifAIF2p9Nej@alpha.franken.de>
+References: <20231122182419.30633-1-fancer.lancer@gmail.com>
+ <20231122182419.30633-2-fancer.lancer@gmail.com>
+ <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
+ <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
+ <8ca730b9-fa8c-46ea-bdc5-158da0f29c3a@app.fastmail.com>
+ <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
+ <d6d7e27a-b1a1-48af-be6c-aa9097c48992@app.fastmail.com>
+ <ZV94rifAIF2p9Nej@alpha.franken.de>
+Date: Thu, 23 Nov 2023 17:33:31 +0000
 From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "paulburton@kernel.org" <paulburton@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Serge Semin" <fancer.lancer@gmail.com>, "Arnd Bergmann" <arnd@arndb.de>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
+ "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Yinglu Yang" <yangyinglu@loongson.cn>,
+ "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
+ "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
+ "Aleksandar Rikalo" <arikalo@gmail.com>,
+ "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
+ "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
  "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 00/21] Add support for the Mobileye EyeQ5 SoC
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 
 
 =E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
-=E4=B8=8B=E5=8D=883:26=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> Hello,
+=E4=B8=8B=E5=8D=884:07=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
+> On Thu, Nov 23, 2023 at 03:07:09PM +0000, Jiaxun Yang wrote:
+>>=20
+[...]
 >
-> The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
-> and features multiple controllers such as the classic UART, I2C, SPI,
-> as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
-> Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
-> Security Module, Functional Safety Hardware, and MJPEG encoder.
->
-> One peculiarity of this SoC is that the physical address of the DDDR
-> exceeds 32 bits. Given that the architecture is 64 bits, this is not
-> an issue, but it requires some changes in how the mips64 is currently
-> managed during boot.
->
-> This second version comes a few weeks after the first one, because
-> there several iteration to support having kernel code outside kseg.
->
-> To build and test the
-> kernel, we need to run the following commands:
->
-> make 64r6el_defconfig BOARDS=3Deyeq5
-> make vmlinuz.itb
->
-> In order to get ride of the aliasing patch I got, I followed Jiaxun
-> Yang suggestion by splitting the memory in 2 part: low part under
-> 512MB and high part beyond the 4GB. It allows to boot and run Linux on
-> the platform however as a side effect the number of pages used for
-> memmap passed from 512 to 8672 which is a huge consumption of
-> pages. Do you know if there is a way to reduce it ?
+> the problem with all 32bit unmapped segments is their limitations in
+> size. But there is always room to try to use unmapped and fall back
+> to mapped, if it doesn't work. But I doubt anybody is going to
+> implement that.
 
-The best workaround is to enable SPARSEMEM, that's why I sent[1] :-)
+Yep, I guess fallback should be implemented for ioremap_cache as well.
 
-I'm going to reversion my XKPHYS work to fix some other issues I found.
+>
+>> >> AFAIK for Loongson DMI is located at cached memory so using iorema=
+p_uc
+>> >> blindly will cause inconsistency.
+>> >
+>> > why ?
+>>=20
+>> Firmware sometimes does not flush those tables from cache back to mem=
+ory.
+>> For Loongson systems (as well as most MTI systems) cache is enabled by
+>> firmware.
+>
+> kernel flushes all caches on startup, so there shouldn't be a problem.
 
-[1]: https://lore.kernel.org/linux-mips/20231028-mm-v1-0-45377cd158cf@fl=
-ygoat.com/
+Actually dmi_setup() is called before cpu_cache_init().
+
+Thanks
 >
-> I also noticed that if the kernel can't be in kseg0 at all by using
-> low memory at 0x40000000, then I got the following message during
-> boot:
+> Thomas.
 >
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> good idea.                                                [ RFC1925, 2=
+.3 ]
+
 --=20
 - Jiaxun
 
