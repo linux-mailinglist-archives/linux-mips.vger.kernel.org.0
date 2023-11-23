@@ -1,144 +1,125 @@
-Return-Path: <linux-mips+bounces-201-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-202-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E72277F5ACD
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 10:08:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB4007F5B17
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 10:32:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A6011F20EC4
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 09:08:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 664B3281774
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 09:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1283200D9;
-	Thu, 23 Nov 2023 09:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFA721111;
+	Thu, 23 Nov 2023 09:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b="bEylMheX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WBYdpA2u"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1015610E;
-	Thu, 23 Nov 2023 01:08:49 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 9BDB241EF0;
-	Thu, 23 Nov 2023 09:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1700730528; bh=tKvmM8VauJ2SKlC76Ts+IMS9Y0f1D93gbN6PS2aS1RQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=bEylMheXkP1AY7uDhyUgpvOvmafAgnH8kYOyGsGvzSEm3AG0TuKGO12XpHG7pIpPk
-	 7DWjDpQ/2UVGkEBlWmpkMsK+kkFSTbFl2mNZf+evyauyJJjLkxYiIMvQnQZccc7GYl
-	 eyA+fRFKB/4nH2lfKLFZ7jOWf+ZnhEEAdxplIRYiCSC8oH9YCENIvFOPHr97tQOVpS
-	 vFMyIE8sCHGbUWmMQTW6+kNNQZA2kAYPQ/d2k1mzDzQUzP4vU581SpL8b4NQXqoDyL
-	 Nq2SuV6KB6PtAtBepsn6kZamgJlbVvwi56sMxTDqNBWGfHkerXitbj24KAHWAlJH6q
-	 nnb+VrbjJRB5A==
-Message-ID: <ab23469f-19ce-4681-afc9-65518730b51b@marcan.st>
-Date: Thu, 23 Nov 2023 18:08:33 +0900
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229CD19E;
+	Thu, 23 Nov 2023 01:32:29 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-5094727fa67so852167e87.3;
+        Thu, 23 Nov 2023 01:32:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700731947; x=1701336747; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tqEJ9Wsu9O4u7Ifl6pZ1YDAaPyCTLMsbbJ4KpzLqR9M=;
+        b=WBYdpA2uJh485xa1UMp0bVUiKwfXPnC+e/G0ZnrpY2/7JB+Y7gAg11qbLB4lWq5fa5
+         zyHYX4z3jgWPbyruYfjxyT2F7aZcbbrj/Ne/4EgJA15VrGGYvEIFq/CfLD5ldCu1utdr
+         xvO/RbIkgixdciZ4ZeunItPc6ZZl2GU+GJ65jZwzFbmkpIYfzc9mOaPDC7mAkVWZFus+
+         lZdyNS2S9mpXvAzhqPxP1qYPIyDAOc9RQQMF3ox3mgj1tQ69gfVMrPLG6w/G1AHlrLjZ
+         JXOHX3qaoUWqeDtgByXIxdYrvhBPoYUlMBu3vmcxMgedInLAmIwGBKb5vtOTzODoIOLY
+         rZhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700731947; x=1701336747;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tqEJ9Wsu9O4u7Ifl6pZ1YDAaPyCTLMsbbJ4KpzLqR9M=;
+        b=JFAMv0wduZ0oZ29l1zX5zkZygs7OYbrF2Tf/M/x0ARRsS+LxF1dZdoULh6Ucdzi2Ba
+         tiuGxyY3XsjNNqcRbuG8fVItvG327yI8ZHaCxBzRlozKPJLLn5oDjRe9egc1bQ1ffEps
+         uNCxQevrdwENQUf8heLtXpPwkpZSo0FImwv9qBpKCjL+4FW6TKFRjjbplIkwxuobvOHQ
+         B//pbEIVtDyytAr0/Ej42FVhXEfZK9fP7gtAKzQ+CVdJIJo6AUf+JPQTq4yY2RSWcFks
+         epRHPvoQRHmC91ptDeEGLT6UfqBEeSjbmZWmkQfXELF/ERtoxWNLzTClVaEWfRjq6p1A
+         ISzg==
+X-Gm-Message-State: AOJu0YxnSysB3YesRvqIlve1ZjtLCXVRUCn+zUXJ/wKaY6HyXu+rDogJ
+	rtS2Q6pNrXu4ZAk19CVhnjg=
+X-Google-Smtp-Source: AGHT+IEEH3l1v05pUmE2AaeJ8W/B4nA+a7iA1maBjDbATrhvBv1FofrOnDthOQ+pWUtvH83CSBIElw==
+X-Received: by 2002:ac2:4911:0:b0:507:9d70:b297 with SMTP id n17-20020ac24911000000b005079d70b297mr2872785lfi.60.1700731947096;
+        Thu, 23 Nov 2023 01:32:27 -0800 (PST)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id p15-20020a19f00f000000b0050a7052409fsm135201lfc.121.2023.11.23.01.32.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Nov 2023 01:32:26 -0800 (PST)
+Date: Thu, 23 Nov 2023 12:32:24 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>, 
+	Matthew Wilcox <willy@infradead.org>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Yinglu Yang <yangyinglu@loongson.cn>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
+	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Aleksandar Rikalo <arikalo@gmail.com>, 
+	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>, Chao-ying Fu <cfu@wavecomp.com>, Marc Zyngier <maz@kernel.org>, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
+Message-ID: <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
+References: <20231122182419.30633-1-fancer.lancer@gmail.com>
+ <20231122182419.30633-2-fancer.lancer@gmail.com>
+ <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/17] iommu: Add iommu_fwspec_alloc/dealloc()
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: acpica-devel@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
- Catalin Marinas <catalin.marinas@arm.com>, Dexuan Cui <decui@microsoft.com>,
- devicetree@vger.kernel.org, David Woodhouse <dwmw2@infradead.org>,
- Frank Rowand <frowand.list@gmail.com>, Hanjun Guo <guohanjun@huawei.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, iommu@lists.linux.dev,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Jonathan Hunter <jonathanh@nvidia.com>, Joerg Roedel <joro@8bytes.org>,
- "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
- linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org,
- linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, patches@lists.linux.dev,
- Paul Walmsley <paul.walmsley@sifive.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Robert Moore <robert.moore@intel.com>, Rob Herring <robh+dt@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Sven Peter <sven@svenpeter.dev>, Thierry Reding <thierry.reding@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Krishna Reddy <vdumpa@nvidia.com>, Vineet Gupta <vgupta@kernel.org>,
- virtualization@lists.linux.dev, Wei Liu <wei.liu@kernel.org>,
- Will Deacon <will@kernel.org>
-References: <6-v2-36a0088ecaa7+22c6e-iommu_fwspec_jgg@nvidia.com>
- <20a7ef6d-a8ca-4bd8-ad7e-11856db617a2@marcan.st>
- <1eb12c35-e64e-4c32-af99-8743dc2ec266@marcan.st>
- <20231119141329.GA6083@nvidia.com>
- <90855bbf-e845-4e4d-a713-df71d1e477d2@marcan.st>
- <20231121160058.GG6083@nvidia.com>
-From: Hector Martin <marcan@marcan.st>
-In-Reply-To: <20231121160058.GG6083@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
 
-On 2023/11/22 1:00, Jason Gunthorpe wrote:
-> On Tue, Nov 21, 2023 at 03:47:48PM +0900, Hector Martin wrote:
->>> Which is sensitive only to !NULL fwspec, and if EPROBE_DEFER is
->>> returned fwspec will be freed and dev->iommu->fwspec will be NULL
->>> here.
->>>
->>> In the NULL case it does a 'bus probe' with a NULL fwspec and all the
->>> fwspec drivers return immediately from their probe functions.
->>>
->>> Did I miss something?
->>
->> apple_dart is not a fwspec driver and doesn't do that :-)
-> 
-> It implements of_xlate that makes it a driver using the fwspec probe
-> path.
-> 
-> The issue is in apple-dart. Its logic for avoiding bus probe vs
-> fwspec probe is not correct.
-> 
-> It does:
-> 
-> static int apple_dart_of_xlate(struct device *dev, struct of_phandle_args *args)
-> {
->  [..]
->  	dev_iommu_priv_set(dev, cfg);
-> 
-> 
-> Then:
-> 
-> static struct iommu_device *apple_dart_probe_device(struct device *dev)
-> {
-> 	struct apple_dart_master_cfg *cfg = dev_iommu_priv_get(dev);
-> 	struct apple_dart_stream_map *stream_map;
-> 	int i;
-> 
-> 	if (!cfg)
-> 		return ERR_PTR(-ENODEV);
-> 
-> Which leaks the cfg memory on rare error cases and wrongly allows the
-> driver to probe without a fwspec, which I think is what you are
-> hitting.
-> 
-> It should be
-> 
->        if (!dev_iommu_fwspec_get(dev) || !cfg)
-> 		return ERR_PTR(-ENODEV);
-> 
-> To ensure the driver never probes on the bus path.
-> 
-> Clearing the dev->iommu in the core code has the side effect of
-> clearing (and leaking) the cfg which would hide this issue.
+Hi Arnd
 
-Aha! Yes, that makes it work with only the first change. I'll throw the
-apple-dart fix into our tree (and submit it once I get to clearing out
-the branch; the affected consumer driver isn't upstream yet so this
-isn't particularly urgent).
+On Wed, Nov 22, 2023 at 08:35:01PM +0100, Arnd Bergmann wrote:
+> On Wed, Nov 22, 2023, at 19:23, Serge Semin wrote:
+> > dmi_early_remap() has been defined as ioremap_cache() which on MIPS32 gets
+> > to be converted to the VM-based mapping. DMI early remapping is performed
+> > at the setup_arch() stage with no VM available. So calling the
+> > dmi_early_remap() for MIPS32 causes the system to crash at the early boot
+> > time. Fix that by converting dmi_early_remap() to the uncached remapping
+> > which is always available on both 32 and 64-bits MIPS systems.
+> >
+> > Fixes: be8fa1cb444c ("MIPS: Add support for Desktop Management Interface (DMI)")
+> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> > ---
+> >  arch/mips/include/asm/dmi.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/mips/include/asm/dmi.h b/arch/mips/include/asm/dmi.h
+> > index 27415a288adf..525aad1572d1 100644
+> > --- a/arch/mips/include/asm/dmi.h
+> > +++ b/arch/mips/include/asm/dmi.h
+> > @@ -5,7 +5,7 @@
+> >  #include <linux/io.h>
+> >  #include <linux/memblock.h>
+> > 
+> > -#define dmi_early_remap(x, l)		ioremap_cache(x, l)
+> > +#define dmi_early_remap(x, l)		ioremap_uc(x, l)
+> 
 
-- Hector
+> Please don't use ioremap_uc() in new code, we are in the (long)
+> process of removing it from the kernel for everything except
+> x86-32, and it already returns NULL on most of them.
+> 
+> Would the normal ioremap() work for you here? It seems to
+> do the same thing as ioremap_uc() on mips and a couple of 
+> other architectures that have not yet killed it off.
+
+Ok. Thanks for the heads up. I'll fix the patch to be using ioremap()
+in v2. ioremap_uc() is just an macro-alias of ioremap() on MIPS.
+
+-Serge(y)
+
+> 
+>    Arnd
 
