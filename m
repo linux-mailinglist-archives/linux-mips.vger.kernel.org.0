@@ -1,129 +1,173 @@
-Return-Path: <linux-mips+bounces-246-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-251-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 600227F65BE
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 18:46:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4EC17F673B
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 20:34:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A501B210B4
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 17:46:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 913DC281DF0
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 19:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772B2405F0;
-	Thu, 23 Nov 2023 17:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5D24C3B5;
+	Thu, 23 Nov 2023 19:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Av9IVz9u";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LHAbkZsE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jYA+oiM9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AF710DA;
-	Thu, 23 Nov 2023 09:46:44 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 5D2893200A92;
-	Thu, 23 Nov 2023 12:46:43 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 23 Nov 2023 12:46:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1700761602; x=1700848002; bh=JdVkYHyZCwkaqqs8iJxKPLWNDNKV1uUX4zd
-	6JLzaduk=; b=Av9IVz9upWizEgMWXliaWlxTB2n29cXJjymrRgPOhNTeuolTl80
-	qtPWMlJ4KacVpv5o4Yxod+BZtSojlcNJ2d+KsIULxhSKyDwSZR98i9dGaJbM8GOo
-	aZn1xiYh0OCzjBO0RMoDLLDZabAT5q0eldp0Rl5rNkLGqGHWus2l9DbHi2Bev5EI
-	ZFrYlbt2ykoVbfvrbGA+CqlR5shfrrsUp5OQmHP/edRoPTCTds3uhggp8LcNjiRC
-	KBkAPi4aH023MLVv+QLvu3IiOxf1kYMcC9UqtGdC7+TiZZ126AcTiB389G4tLbPb
-	Eidu+yMF+hrgGBbWnTaq2JMkHjsqlj3RAXw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1700761602; x=1700848002; bh=JdVkYHyZCwkaqqs8iJxKPLWNDNKV1uUX4zd
-	6JLzaduk=; b=LHAbkZsEk5baSGX4tj3aOonz7W4kleGgb/h86/BbL2AR9+F/6R7
-	NeX9uB8FIpgahkQVIpI1VwSL+8j3YZCfYLiym4p0zRZWvLd0AzkHPFowbW3Bo5/d
-	ACbo1IDy0xvSVcK4Tzfr0dBkiDGTtzy1vSzK8iLpXtJ7eBfzPg8ROIPZPEbgn21X
-	/wuiXJrlo9sjANfBqEmO9y4wPjwk4bQ5zSFequ8Nl2481aPrnEVPLB9SaWpts77q
-	/P9wI9PCJpwoOhEKhgD15sD2ait/jUyVnvzKZj+SYyJ9fPsMO//u7/WxzgT7F+8j
-	VUC0vBdvCKVpPUYRdI2e/KYLIGrFOU35fNQ==
-X-ME-Sender: <xms:ApBfZYWSeq5YcSACIiu9Ny592KVe02DhqgN9AxKCD-QjHkst-67DOw>
-    <xme:ApBfZcn8ZRo7OH9Y0YWJ7A4_kPsnhLgW-MLUrWjLwDqFp8f_vSFn6fTUYox9w3t7E
-    3q-Z4yhsaaorUG5olI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehfedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
-    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
-    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:ApBfZcaPNS2qOqi6-NIEobQrkLF8d-Baf0jUAo-7DwiuhusYtkMkig>
-    <xmx:ApBfZXWHZeJYLPxL-Wmc2yx8yhT1iW8EBwUK7TzcCHs4EDXglH343Q>
-    <xmx:ApBfZSmPDS-kACi1pAJm-cVih3X2OzAXexYukiz_F-pugmdqbNUEfw>
-    <xmx:ApBfZbc9itzmhbm4YqjXDjn87OwcdTRS-9i_JwGS0cx8AGsFph8JiA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 604E436A0075; Thu, 23 Nov 2023 12:46:42 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6281FD46;
+	Thu, 23 Nov 2023 11:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700768051; x=1732304051;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7pUMEDgOXETK0P7eUQYqpgkIhoD1c+hcpjhL1V6yer4=;
+  b=jYA+oiM9jmx9IpzALF+ygytG/AAHBEfJc23z7tPKySF3TbHao35Pl/iF
+   tNdw+dpeCQaUypUr0Jv+nMk9JxtTRmClA2NxsTAzG2/iBeC4w6dgyraxk
+   boQDte2grQJpy6xX6Y5dDaPzRMr5dw0HSJAykuIbHF7LJgJVDeY6w4MU1
+   E+gMl1YunMl+R+8Fvhdxmx9bqK0lbCSVIud/jfMqpx9XPwiqv5RczgKes
+   zHdw2/xNSbE8elE8zdJ/de/bvjqXgl3ElnJMJf54/E+Dig/LNwNSVZTaB
+   Ap5FU5tZDvSbhlLR6LSyY6h9Pxv+tNEYMzwOJQnZUOzTW3U+XUIYdKZVP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="371671397"
+X-IronPort-AV: E=Sophos;i="6.04,222,1695711600"; 
+   d="scan'208";a="371671397"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 11:34:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="771062219"
+X-IronPort-AV: E=Sophos;i="6.04,222,1695711600"; 
+   d="scan'208";a="771062219"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Nov 2023 11:33:59 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 6E71C1C7; Thu, 23 Nov 2023 21:33:58 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org,
+	linux-mips@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Cc: Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Hal Feng <hal.feng@starfivetech.com>
+Subject: [PATCH v2 00/21] pinctrl: Convert struct group_desc to use struct pingroup
+Date: Thu, 23 Nov 2023 21:31:28 +0200
+Message-ID: <20231123193355.3400852-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <db993514-7daa-41cb-8e6e-179305c16e24@app.fastmail.com>
-In-Reply-To: <20231123152639.561231-21-gregory.clement@bootlin.com>
-References: <20231123152639.561231-1-gregory.clement@bootlin.com>
- <20231123152639.561231-21-gregory.clement@bootlin.com>
-Date: Thu, 23 Nov 2023 17:46:19 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "paulburton@kernel.org" <paulburton@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 20/21] MIPS: generic: Add support for Mobileye EyeQ5
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+The struct group_desc has a lot of duplication with struct pingroup.
+Deduplicate that by embeddind the latter in the former and convert
+users.
 
+Linus, assuming everything is fine, I can push this to my tree.
+Or you can apply it (assumming all CIs and people are happy with
+the series).
 
-=E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
-=E4=B8=8B=E5=8D=883:26=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> Introduce support for the MIPS based Mobileye EyeQ5 SoCs.
->
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
-[...]
-> diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
-> index 7dc5b3821cc6e..04e1fc6f789b5 100644
-> --- a/arch/mips/generic/Kconfig
-> +++ b/arch/mips/generic/Kconfig
-> @@ -48,6 +48,13 @@ config SOC_VCOREIII
->  config MSCC_OCELOT
->  	bool
->=20
-> +config SOC_EYEQ5
-> +	select ARM_AMBA
-> +	select WEAK_ORDERING
-> +	select WEAK_REORDERING_BEYOND_LLSC
-> +	select PHYSICAL_START_BOOL
-> +	bool
+NB. This series contains previously sent patches for Qualcomm and
+Nuovoton. Here the updated version for Qualcomm that splits previous
+patch to two and fixes compilation warnings.
 
-^ I believe WEAK_ORDERING is already selected by MIPS_CPS,
-and WEAK_REORDERING_BEYOND_LLSC should be selected by MIPS_CPS as well.
-=20
-Thanks
---=20
-- Jiaxun
+NB. The function_desc is in plan to follow the similar deduplication.
+
+In v2:
+- added a few patches to fix multiple compile-time errors (LKP)
+- added tag (Jonathan)
+
+v1: https://lore.kernel.org/r/20231122164040.2262742-1-andriy.shevchenko@linux.intel.com
+
+Andy Shevchenko (21):
+  pinctrl: qcom: lpass-lpi: Replace kernel.h with what is being used
+  pinctrl: qcom: lpass-lpi: Remove unused member in struct lpi_pingroup
+  pinctrl: equilibrium: Use temporary variable to hold pins
+  pinctrl: imx: Use temporary variable to hold pins
+  pinctrl: core: Make pins const in struct group_desc
+  pinctrl: equilibrium: Convert to use struct pingroup
+  pinctrl: keembay: Convert to use struct pingroup
+  pinctrl: nuvoton: Convert to use struct pingroup and
+    PINCTRL_PINGROUP()
+  pinctrl: core: Add a convenient define PINCTRL_GROUP_DESC()
+  pinctrl: ingenic: Make use of PINCTRL_GROUP_DESC()
+  pinctrl: mediatek: Make use of PINCTRL_GROUP_DESC()
+  pinctrl: core: Embed struct pingroup into struct group_desc
+  pinctrl: bcm: Convert to use grp member
+  pinctrl: equilibrium: Convert to use grp member
+  pinctrl: imx: Convert to use grp member
+  pinctrl: ingenic: Convert to use grp member
+  pinctrl: keembay: Convert to use grp member
+  pinctrl: mediatek: Convert to use grp member
+  pinctrl: renesas: Convert to use grp member
+  pinctrl: starfive: Convert to use grp member
+  pinctrl: core: Remove unused members from struct group_desc
+
+ drivers/pinctrl/bcm/pinctrl-ns.c              |  4 +-
+ drivers/pinctrl/core.c                        | 13 +++---
+ drivers/pinctrl/core.h                        | 19 +++++---
+ drivers/pinctrl/freescale/pinctrl-imx.c       | 44 +++++++++----------
+ drivers/pinctrl/mediatek/pinctrl-moore.c      | 13 +++---
+ drivers/pinctrl/mediatek/pinctrl-moore.h      |  7 +--
+ drivers/pinctrl/mediatek/pinctrl-paris.h      |  7 +--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c     |  9 ++--
+ drivers/pinctrl/pinctrl-equilibrium.c         | 39 ++++++++--------
+ drivers/pinctrl/pinctrl-ingenic.c             | 27 +++++-------
+ drivers/pinctrl/pinctrl-keembay.c             |  6 +--
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.h      |  6 +--
+ .../pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c   | 16 -------
+ .../pinctrl/qcom/pinctrl-sc8280xp-lpass-lpi.c | 20 ---------
+ .../pinctrl/qcom/pinctrl-sm6115-lpass-lpi.c   | 20 ---------
+ .../pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c   | 15 -------
+ .../pinctrl/qcom/pinctrl-sm8350-lpass-lpi.c   | 16 -------
+ .../pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c   | 24 ----------
+ .../pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c   | 24 ----------
+ .../pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c   | 24 ----------
+ drivers/pinctrl/renesas/pinctrl-rza1.c        |  2 +-
+ drivers/pinctrl/renesas/pinctrl-rza2.c        | 10 ++---
+ drivers/pinctrl/renesas/pinctrl-rzg2l.c       |  6 +--
+ drivers/pinctrl/renesas/pinctrl-rzv2m.c       |  6 +--
+ .../starfive/pinctrl-starfive-jh7100.c        |  8 ++--
+ .../starfive/pinctrl-starfive-jh7110.c        |  8 ++--
+ 26 files changed, 106 insertions(+), 287 deletions(-)
+
+-- 
+2.43.0.rc1.1.gbec44491f096
+
 
