@@ -1,52 +1,51 @@
-Return-Path: <linux-mips+bounces-190-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-188-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E865F7F56E5
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 04:12:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ADCE7F56E0
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 04:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1644B1C20D9B
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 03:12:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 393CFB21055
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 03:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9C0C79CC;
-	Thu, 23 Nov 2023 03:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34BE879DF;
+	Thu, 23 Nov 2023 03:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1yR1pwa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HkDkgejS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302331A4;
-	Wed, 22 Nov 2023 19:12:22 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166A31A4;
+	Wed, 22 Nov 2023 19:12:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700709142; x=1732245142;
+  t=1700709139; x=1732245139;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UnGQBf6lO2CjcsVhvS6vUPaT2j1YbZBexAjYz4DyprU=;
-  b=I1yR1pwaKdHVoXDejrbL6aHmyTeIuwTDb9hN8wdUdxBALB3QkxC8N3Xv
-   kCA+pSMcBBg/apLLIyX9G/fHgB220wbabaUdyDAuqwsCkTXZ/Taqxhlxb
-   885v2X3swhjOUeYnf0TsLq0K+pLNF67x19OMlvnINfAhA0tcbeXtlI1vT
-   xnJoLDymQe3rvQ4XFSSkhl71PFYpvY7RvYRd2Dafz6VUKQPIIkvP/Jgar
-   BdnD2NCoK8AMY+rvsHvkC76XlkjiEJ+1ii0TdL+I2SwcjmmRGFJzbgJTP
-   nwpQNygh7ZHtvC3EZ4RADxUqEkG40UhiO0jmFApIJSMSj9sFSf2CNlX5t
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="458685599"
+  bh=3sBlfJImwRaqa6aryIZaVq3UckHfBRFnYA7tVrAvU28=;
+  b=HkDkgejSTaKHw0KrfZzucjWPtINUcXlHo85Zfuh6vyo0ndxkUvzr0UUI
+   q6qQACLh1E22hnbms7xxvohwvkPnC4Jl3RAgQTVRHwLjdWQPMlm1K14Cb
+   vmjD9ftI3+Wo6WTQB4W8aTwPfk3cu1QRXOYO8FsdPae/YErv9QmIgX0lG
+   x4ldtN1ReiTmF8MwEwMUM9WmpZ+yvcOzeFclFAfAw5D2UD8uIqTdNCuHS
+   Crahd8QZkX9ImMkXRN+4gDWby532nPkAEYHxcRyVvdXuQdEp9hRSdfvyl
+   Tm2L0Pq8ehsOSRhMsGK0jrbnnDw7fnM6u0AH5uheCHWVEosZmkCABYzjF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="13744904"
 X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="458685599"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 19:12:20 -0800
+   d="scan'208";a="13744904"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 19:12:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="716933921"
 X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="716933921"
+   d="scan'208";a="8712749"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Nov 2023 19:12:12 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 22 Nov 2023 19:12:11 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r608Q-0001AC-0r;
-	Thu, 23 Nov 2023 03:12:10 +0000
-Date: Thu, 23 Nov 2023 11:11:21 +0800
+	id 1r608P-00019r-1j;
+	Thu, 23 Nov 2023 03:12:09 +0000
+Date: Thu, 23 Nov 2023 11:11:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
@@ -62,8 +61,8 @@ To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
 	openbmc@lists.ozlabs.org, linux-mips@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+Cc: oe-kbuild-all@lists.linux.dev, Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	Dong Aisheng <aisheng.dong@nxp.com>,
 	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
@@ -75,7 +74,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
 Subject: Re: [PATCH v1 01/17] pinctrl: equilibrium: Convert to use struct
  pingroup
-Message-ID: <202311230820.oBQop844-lkp@intel.com>
+Message-ID: <202311230820.MGDyVHJW-lkp@intel.com>
 References: <20231122164040.2262742-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -89,10 +88,10 @@ In-Reply-To: <20231122164040.2262742-2-andriy.shevchenko@linux.intel.com>
 
 Hi Andy,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next geert-renesas-drivers/renesas-pinctrl pinctrl-samsung/for-next linus/master v6.7-rc2 next-20231122]
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next geert-renesas-drivers/renesas-pinctrl pinctrl-samsung/for-next linus/master v6.7-rc2 next-20231122]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -101,27 +100,35 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-e
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
 patch link:    https://lore.kernel.org/r/20231122164040.2262742-2-andriy.shevchenko%40linux.intel.com
 patch subject: [PATCH v1 01/17] pinctrl: equilibrium: Convert to use struct pingroup
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231123/202311230820.oBQop844-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311230820.oBQop844-lkp@intel.com/reproduce)
+config: i386-randconfig-001-20231123 (https://download.01.org/0day-ci/archive/20231123/202311230820.MGDyVHJW-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311230820.MGDyVHJW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311230820.oBQop844-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311230820.MGDyVHJW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/pinctrl/pinctrl-equilibrium.c:750:17: error: read-only variable is not assignable
-                           grp->pins[j] = pin_id;
-                           ~~~~~~~~~~~~ ^
->> drivers/pinctrl/pinctrl-equilibrium.c:761:23: error: no member named 'num_pins' in 'struct pingroup'
-                                                   grp->pins, grp->num_pins,
-                                                              ~~~  ^
-   2 errors generated.
+   drivers/pinctrl/pinctrl-equilibrium.c: In function 'eqbr_build_groups':
+   drivers/pinctrl/pinctrl-equilibrium.c:750:17: error: assignment of read-only location '*(grp->pins + (sizetype)((unsigned int)j * 4))'
+     750 |    grp->pins[j] = pin_id;
+         |                 ^
+   drivers/pinctrl/pinctrl-equilibrium.c:761:23: error: 'struct pingroup' has no member named 'num_pins'; did you mean 'npins'?
+     761 |       grp->pins, grp->num_pins,
+         |                       ^~~~~~~~
+         |                       npins
+>> drivers/pinctrl/pinctrl-equilibrium.c:761:10: warning: passing argument 3 of 'pinctrl_generic_add_group' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     761 |       grp->pins, grp->num_pins,
+         |       ~~~^~~~~~
+   In file included from drivers/pinctrl/pinctrl-equilibrium.c:16:
+   drivers/pinctrl/core.h:225:15: note: expected 'int *' but argument is of type 'const unsigned int *'
+     225 |          int *gpins, int ngpins, void *data);
+         |          ~~~~~^~~~~
 
 
-vim +750 drivers/pinctrl/pinctrl-equilibrium.c
+vim +761 drivers/pinctrl/pinctrl-equilibrium.c
 
    702	
    703	static int eqbr_build_groups(struct eqbr_pinctrl_drv_data *drvdata)
@@ -171,7 +178,7 @@ vim +750 drivers/pinctrl/pinctrl-equilibrium.c
    747					of_node_put(np);
    748					return -EINVAL;
    749				}
- > 750				grp->pins[j] = pin_id;
+   750				grp->pins[j] = pin_id;
    751				if (of_property_read_u32_index(np, "pinmux", j, &pinmux_id)) {
    752					dev_err(dev, "Group %s: Read intel pinmux id failed\n",
    753						grp->name);
