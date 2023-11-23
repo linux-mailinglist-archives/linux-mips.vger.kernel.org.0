@@ -1,169 +1,76 @@
-Return-Path: <linux-mips+bounces-216-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-217-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 073F87F5ED3
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 13:13:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0822A7F5F07
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 13:30:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94317B21292
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 12:13:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6BF3280F61
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 12:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8467F241E5;
-	Thu, 23 Nov 2023 12:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Mn6gZel2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CWiHG2HC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BB824A0F;
+	Thu, 23 Nov 2023 12:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDDA199;
-	Thu, 23 Nov 2023 04:13:37 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id E9B033200AD3;
-	Thu, 23 Nov 2023 07:13:32 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 23 Nov 2023 07:13:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1700741612; x=1700828012; bh=bqTTK97AMSpZYhD615Hms/vz78ad6/G8f6h
-	LgVljG2E=; b=Mn6gZel2hDy2U4uSAOinnxIYhsA32Dx/zcfQZ4OrQb3O8oSTi1+
-	RUthCgCiYT7gNz5tzurx9Z87nMFqnK7kjKPd/O7A5VUOH7O92vmI1ln5y+yL6CIB
-	cn4iAH4KievCDLgXVP8VJO0Sp1lPkiv2DQ9RPkiIGR2xMVPbD18FIF8QF/eVBYEZ
-	E508qNeUGUzFJlMVl8VMZ5y82gOT+pSUBF+b+wOShNWv26Po99N/3NjEaT/VI6eo
-	neB+0Pe9fmBD9t0w/U5rGKrgTLYPloArKChr+A5oIpgky3v8KtIMQHT809fHTBdI
-	aJMQSzFYBRMf/uFzt5lkbePGW0D3GOnkrqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1700741612; x=1700828012; bh=bqTTK97AMSpZYhD615Hms/vz78ad6/G8f6h
-	LgVljG2E=; b=CWiHG2HCNR3PUb8Zber+487Gm0pSObixAc5WZjphYBU74QjOaX6
-	qpMCQUi//ILgW0v/HBj7dEJVID3N67HAEZ8tA9qUcTOcFIn13mWjYYpsxY07/6Wt
-	WHT03CR9vosF04wKel8cNgdALy1dXE7iavfb3IIRANiosvwvsndx93E3RfkoYy1C
-	EWbFh3xVD7smkjkYxNuI7vDw/4GfNI7okhTTwIUGYTR2E+bGKRslVeOOLBoYhQKb
-	y6x0ym88zjmHXSBT9vKXaC4B2wgUpxS2XcXr55TmWuP9EC1UMtG5YLLM0iIEyowW
-	9lLW6y2Yj8heNz/f4LyyIog6j8Sy6roYQTg==
-X-ME-Sender: <xms:60FfZay4e70_6RGnkS871rITuaJIl2ckwUu52XNbTdVD2y-fyEyR_Q>
-    <xme:60FfZWRFHoS33fQA1vb56UHjrTyUmFMm6UU2MlhV7WFZvRYFWj49Nr1rhv4EN1IDm
-    FonS-oWMADMnuuNWrs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehfedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:60FfZcW7yxrzsBn8TlhRKH-cya1ihhj9bIuJs3jBgnnx6kfewA-KxQ>
-    <xmx:60FfZQhd8afvL4fAh3eG0g9LmMQIChgU1DB4OBy2E5VaI6HwQeKD4w>
-    <xmx:60FfZcCQ_UomU--4eeyinEfzfvXBZdlL9qdjNLrITwz-hgD2xFQwCw>
-    <xmx:7EFfZaRw49s2rdQCFi9_saUGyFFcxQ6Yy3ymEngrsxGUT6X0si9Xqg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 9E2B336A0075; Thu, 23 Nov 2023 07:13:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9ECD120;
+	Thu, 23 Nov 2023 04:30:11 -0800 (PST)
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1r68qC-0000v8-00; Thu, 23 Nov 2023 13:29:56 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id D8DBEC0136; Thu, 23 Nov 2023 13:29:31 +0100 (CET)
+Date: Thu, 23 Nov 2023 13:29:31 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Serge Semin <fancer.lancer@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Yinglu Yang <yangyinglu@loongson.cn>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
+	Aleksandar Rikalo <arikalo@gmail.com>,
+	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
+	Chao-ying Fu <cfu@wavecomp.com>, Marc Zyngier <maz@kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
+Message-ID: <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
+References: <20231122182419.30633-1-fancer.lancer@gmail.com>
+ <20231122182419.30633-2-fancer.lancer@gmail.com>
+ <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
+ <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
+ <8ca730b9-fa8c-46ea-bdc5-158da0f29c3a@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8ca730b9-fa8c-46ea-bdc5-158da0f29c3a@app.fastmail.com>
-In-Reply-To: 
- <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
-References: <20231122182419.30633-1-fancer.lancer@gmail.com>
- <20231122182419.30633-2-fancer.lancer@gmail.com>
- <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
- <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
-Date: Thu, 23 Nov 2023 12:13:11 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Serge Semin" <fancer.lancer@gmail.com>, "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
- "Tiezhu Yang" <yangtiezhu@loongson.cn>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Yinglu Yang" <yangyinglu@loongson.cn>,
- "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
- "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
- "Aleksandar Rikalo" <arikalo@gmail.com>,
- "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
- "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ca730b9-fa8c-46ea-bdc5-158da0f29c3a@app.fastmail.com>
 
+On Thu, Nov 23, 2023 at 12:13:11PM +0000, Jiaxun Yang wrote:
+> > Ok. Thanks for the heads up. I'll fix the patch to be using ioremap()
+> > in v2. ioremap_uc() is just an macro-alias of ioremap() on MIPS.
+> 
+> Perhaps we need to fix ioremap_cache so it can give a KSEG1 address?
 
+KSEG0 ?
 
-=E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
-=E4=B8=8A=E5=8D=889:32=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
-> Hi Arnd
->
-> On Wed, Nov 22, 2023 at 08:35:01PM +0100, Arnd Bergmann wrote:
->> On Wed, Nov 22, 2023, at 19:23, Serge Semin wrote:
->> > dmi_early_remap() has been defined as ioremap_cache() which on MIPS=
-32 gets
->> > to be converted to the VM-based mapping. DMI early remapping is per=
-formed
->> > at the setup_arch() stage with no VM available. So calling the
->> > dmi_early_remap() for MIPS32 causes the system to crash at the earl=
-y boot
->> > time. Fix that by converting dmi_early_remap() to the uncached rema=
-pping
->> > which is always available on both 32 and 64-bits MIPS systems.
->> >
->> > Fixes: be8fa1cb444c ("MIPS: Add support for Desktop Management Inte=
-rface (DMI)")
->> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
->> > ---
->> >  arch/mips/include/asm/dmi.h | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/arch/mips/include/asm/dmi.h b/arch/mips/include/asm/dm=
-i.h
->> > index 27415a288adf..525aad1572d1 100644
->> > --- a/arch/mips/include/asm/dmi.h
->> > +++ b/arch/mips/include/asm/dmi.h
->> > @@ -5,7 +5,7 @@
->> >  #include <linux/io.h>
->> >  #include <linux/memblock.h>
->> >=20
->> > -#define dmi_early_remap(x, l)		ioremap_cache(x, l)
->> > +#define dmi_early_remap(x, l)		ioremap_uc(x, l)
->>=20
->
->> Please don't use ioremap_uc() in new code, we are in the (long)
->> process of removing it from the kernel for everything except
->> x86-32, and it already returns NULL on most of them.
->>=20
->> Would the normal ioremap() work for you here? It seems to
->> do the same thing as ioremap_uc() on mips and a couple of=20
->> other architectures that have not yet killed it off.
->
-> Ok. Thanks for the heads up. I'll fix the patch to be using ioremap()
-> in v2. ioremap_uc() is just an macro-alias of ioremap() on MIPS.
+> AFAIK for Loongson DMI is located at cached memory so using ioremap_uc
+> blindly will cause inconsistency.
 
-Perhaps we need to fix ioremap_cache so it can give a KSEG1 address?
-AFAIK for Loongson DMI is located at cached memory so using ioremap_uc
-blindly will cause inconsistency.
+why ?
 
-Thanks
-- Jiaxun
+Thomas.
 
->
-> -Serge(y)
->
->>=20
->>    Arnd
-
---=20
-- Jiaxun
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
