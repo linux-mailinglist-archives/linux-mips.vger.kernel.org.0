@@ -1,101 +1,145 @@
-Return-Path: <linux-mips+bounces-243-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-244-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD1737F6490
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 17:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 692AA7F6578
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 18:32:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88F23281967
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 16:59:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23F932819C4
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 17:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C533E480;
-	Thu, 23 Nov 2023 16:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EB5405DA;
+	Thu, 23 Nov 2023 17:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="gcuciQNH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kv69WDjo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9802A2686;
-	Thu, 23 Nov 2023 08:57:36 -0800 (PST)
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-357cf6725acso3657235ab.3;
-        Thu, 23 Nov 2023 08:57:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700758655; x=1701363455;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FZ8qb96leYWBeEYNvRPViCNjrrMGYEq8mNITgSdMLdo=;
-        b=KjTYu/iuVP3SmGpgu9IOIj2SUwZOo5OvJ8mtYKReLE11Q9hsBbvNSWE/bPsq2vCKXD
-         KcLdfOmiiZHj8zsBNTqvTXM4y5Yv9/v2ugmgyP9x8ZtzzSL4FoITqhH2Gn7hZKlfBayl
-         tgfZOXuPN276xR7zsa5G0Ub7NUzElQZ5a1dtYlMPpXipX6HjWXNX8ZB8PhSpjiCGjwzC
-         sZqpljxOdR/UddQDzmUTyp+kZLD9Y1aYppZhTZvHsL7W93Vxps8Vszvg6FT7hl9EhOrv
-         uyA7NZoTe0hCErJkAa1wT2AsqaNYp0165WIjklCHcSq2j4XYiXUhlnh8/vhGH64gzJuU
-         eTgg==
-X-Gm-Message-State: AOJu0YzmSyDmePNbKmWYv2IC1lX0s7Be/SZ1tt20AKjOkEQMAxQoMSxx
-	OIviTbJwuWzb7kAPJD7bKslrHw4T3A==
-X-Google-Smtp-Source: AGHT+IFzxECFsSo4GLPifEzAf79kWk0gRbrpLrp6x1m2AzG0ellQW7WIhAWTQdJvEqembwRWXneZtQ==
-X-Received: by 2002:a05:6e02:b42:b0:34f:70ec:d4cf with SMTP id f2-20020a056e020b4200b0034f70ecd4cfmr267367ilu.8.1700758655486;
-        Thu, 23 Nov 2023 08:57:35 -0800 (PST)
-Received: from herring.priv ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id b17-20020a92c851000000b0035b0b56e0e1sm474965ilq.53.2023.11.23.08.57.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 08:57:34 -0800 (PST)
-Received: (nullmailer pid 1620054 invoked by uid 1000);
-	Thu, 23 Nov 2023 16:57:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B78D44;
+	Thu, 23 Nov 2023 09:31:59 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id 051533200A0C;
+	Thu, 23 Nov 2023 12:31:54 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 23 Nov 2023 12:31:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+	1700760714; x=1700847114; bh=r7YWHIfKs1lRtQljNoq9n0N8njCRxKVxB0j
+	/oEqFGJ8=; b=gcuciQNHPyLhNrt9hMusqeRhRHncBl86lxovPoBIi0uz5ETFy35
+	sy26tYy2lcezp4at8sXuI+gxGYBpZmL0463jgrb4tmk1Pc+ZU1nInpXvNbuOjFGW
+	ZvHwdiu9HmlPH+FxyQOU+RKAWmgnqxwRZYRsADYnGR1AJvGcgoCw51rgIKtVXEei
+	tV7LX/kHuvfNU0Jr/pTcJWPYPS9/UJdPFgL3F3SOeYfTUgoDFncfyU/oCu7or3VJ
+	H5Sq+h4N5U/Vlb6rTUL34x5kXeLlMabxOZJ0qrUfLIWkxFN4gspnyNUMvW57Tcoy
+	75UKOblrACO/yOiHnAQJm+i4DJr6OwU1Log==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1700760714; x=1700847114; bh=r7YWHIfKs1lRtQljNoq9n0N8njCRxKVxB0j
+	/oEqFGJ8=; b=kv69WDjo+qyKK7pmC0j7JuBlJFHfQw3agKWMBEE9Sfc4gMBXits
+	bUB7y2f+s3m5leDUyYdRYSZ+UAYkCUB6YZZoUj7W8s7KEgw8J5rq1mY43enhdCVc
+	6KJQLsBFLtUnUVR7KQZYmzXaNWe36bsCFX3l5vcYYni5n97sGESyyDP7Z8SXQWo/
+	BvAKYZlkJN/GSBbzkJTU7IIemoAjwNZDuNDP4c5jxhQo7pqNDaEpb1XEETLTsTFb
+	sHFhlkD7FKtOTCzILVXKwpVybK8D06hu+2rzNwUvI4dVM1eLdiOtaDKG4NE1aQEr
+	Il7an2b45E1XkS+dKAGNNXF0UQkLUjMu00w==
+X-ME-Sender: <xms:ioxfZTUuN9wJnwXh8PAnpluylHi_g4qSH9Fdpolif4Y4jZeYg6lnYA>
+    <xme:ioxfZblm1C3UZdBSumou4iztnFohGLw0cx3KiaE_-9hb3LmvRMQPxtNIWDKDxvw0f
+    pbzzZ0bRxVgc5wFg6I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehfedguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+    homheqnecuggftrfgrthhtvghrnhepkeelveffhedtiefgkeefhffftdduffdvueevtdff
+    teehueeihffgteelkeelkeejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdr
+    higrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:ioxfZfZKpm9WG62x6XNl1UWP2qr5lcr1QtT92BuNuoO-Qqb-i5ZlPg>
+    <xmx:ioxfZeVa0qQisTL-4f-tC7bBbij3kZAoyudiuXLVOe0wPGP2JoBP_A>
+    <xmx:ioxfZdk1msiY1Zi3OOVhgAsMEEmfjTpZg2GwF8KXW8rr780ltNRAmw>
+    <xmx:ioxfZWfwTXpAIux1XSpGVByRIFugkV9VmG8RJSs0osSGcR8tbk_C0w>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 04C4E36A0075; Thu, 23 Nov 2023 12:31:54 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: linux-kernel@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>, Paul Burton <paulburton@kernel.org>, =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20231123152639.561231-17-gregory.clement@bootlin.com>
+Message-Id: <32db8a76-7842-4d04-94f1-67e3984cb349@app.fastmail.com>
+In-Reply-To: <20231123152639.561231-1-gregory.clement@bootlin.com>
 References: <20231123152639.561231-1-gregory.clement@bootlin.com>
- <20231123152639.561231-17-gregory.clement@bootlin.com>
-Message-Id: <170075865279.1620038.1272295223287776285.robh@kernel.org>
-Subject: Re: [PATCH v2 16/21] dt-bindings: mips: Add bindings for Mobileye
- SoCs
-Date: Thu, 23 Nov 2023 09:57:32 -0700
+Date: Thu, 23 Nov 2023 17:31:33 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
+ "paulburton@kernel.org" <paulburton@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 00/21] Add support for the Mobileye EyeQ5 SoC
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-On Thu, 23 Nov 2023 16:26:33 +0100, Gregory CLEMENT wrote:
-> Add the yaml bindings for Mobileye SoCs. Currently only EyeQ5 is
-> supported
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  .../devicetree/bindings/mips/mobileye.yaml    | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/mobileye.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+=E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
+=E4=B8=8B=E5=8D=883:26=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+> Hello,
+>
+> The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
+> and features multiple controllers such as the classic UART, I2C, SPI,
+> as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
+> Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
+> Security Module, Functional Safety Hardware, and MJPEG encoder.
+>
+> One peculiarity of this SoC is that the physical address of the DDDR
+> exceeds 32 bits. Given that the architecture is 64 bits, this is not
+> an issue, but it requires some changes in how the mips64 is currently
+> managed during boot.
+>
+> This second version comes a few weeks after the first one, because
+> there several iteration to support having kernel code outside kseg.
+>
+> To build and test the
+> kernel, we need to run the following commands:
+>
+> make 64r6el_defconfig BOARDS=3Deyeq5
+> make vmlinuz.itb
+>
+> In order to get ride of the aliasing patch I got, I followed Jiaxun
+> Yang suggestion by splitting the memory in 2 part: low part under
+> 512MB and high part beyond the 4GB. It allows to boot and run Linux on
+> the platform however as a side effect the number of pages used for
+> memmap passed from 512 to 8672 which is a huge consumption of
+> pages. Do you know if there is a way to reduce it ?
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/mips/mobileye.yaml:16:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
+The best workaround is to enable SPARSEMEM, that's why I sent[1] :-)
 
-dtschema/dtc warnings/errors:
+I'm going to reversion my XKPHYS work to fix some other issues I found.
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231123152639.561231-17-gregory.clement@bootlin.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+[1]: https://lore.kernel.org/linux-mips/20231028-mm-v1-0-45377cd158cf@fl=
+ygoat.com/
+>
+> I also noticed that if the kernel can't be in kseg0 at all by using
+> low memory at 0x40000000, then I got the following message during
+> boot:
+>
+--=20
+- Jiaxun
 
