@@ -1,147 +1,155 @@
-Return-Path: <linux-mips+bounces-206-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-207-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09E3F7F5CAF
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 11:42:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 197227F5D39
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 12:05:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9613281937
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 10:42:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D066B20F19
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 11:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A5218B13;
-	Thu, 23 Nov 2023 10:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB4A22EE7;
+	Thu, 23 Nov 2023 11:05:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ihKsQelF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9YhBGVo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B4D1B3;
-	Thu, 23 Nov 2023 02:42:44 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-5079f6efd64so859286e87.2;
-        Thu, 23 Nov 2023 02:42:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700736162; x=1701340962; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xrnV7nS3OBUBQAMEeIHmejCmPI+DcGisAbLFB1tJJtQ=;
-        b=ihKsQelF2Kp1+pl96PMTqiTbLQQPnrSpURkqKgxbEzNYIbw/fMzYFgBlcc7RdyHn+p
-         lA1L83OraB+VyZwL6o+hZgOp7kxSRWJfPy7rInxqKWzzwfKRCeu0WtBrRv/sySgfOqgP
-         1OZntgL/lJnuX8bhgAHIcWHZ2w67+ojk+e6RajSBicH/1/zvqA4N5YdySQuUeQ9AYWrW
-         vspsMmWwhaFqr9RLPI2rxRNZP3fHf9jCb9iy4OLBM+nhYuMRThWPCWDXxY8FHAo7R2X9
-         BmGE3hZm0hWKdwc6/AXUts7ohGl+XmPHO9y1NbH06XTTtaiZK43eRIV8kzMAgs597ViJ
-         BxYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700736162; x=1701340962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xrnV7nS3OBUBQAMEeIHmejCmPI+DcGisAbLFB1tJJtQ=;
-        b=nNNXLZpzmgwetx58MFkjOG4/jAtVtHt8Qhp72RExjJjuSjnnDgHepJxrYDB4m6yG4I
-         SpVVKmm+FamfuHxX1nzLWCILbEjGwOhgO3BbGShNH6HYI1HDbJiNFFKeZmHGx5z8zRGk
-         mxP/6dv7cKLu3GZIT3Y1DPxhcmZbz8Ja8+deTnTnwvpY+ej9x757pm7xNa39GseylDUm
-         NkLochNvz/HYvpv+/la4zgBtm54xjWS4IVQmvhkir3TzFUlLkbvYdtUT7l6QfzlrOppi
-         3TXp4soEbAU2ru/gNs0JRl6ZFyijXQkG7wLVf2UKgceRjm6QEI7cbwKMjuCBSKz7hijN
-         27xA==
-X-Gm-Message-State: AOJu0YxBkiaTNEEnw5A93z0VpbE6keAP6MhylOaG0rnL8E0J7+OGnkXw
-	OHSRkgzL/Vf+236ypTcMJ+o=
-X-Google-Smtp-Source: AGHT+IEuC/FGMJEnoXd87iYw2NkrDXJnpZSKeimjdsQ3wY+a6LvOITJ0oxi7Cu1NFybJIeJdq/Tumw==
-X-Received: by 2002:a05:6512:1584:b0:503:f:1343 with SMTP id bp4-20020a056512158400b00503000f1343mr4033443lfb.19.1700736162201;
-        Thu, 23 Nov 2023 02:42:42 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id u5-20020ac25185000000b004fe47879d93sm152758lfi.106.2023.11.23.02.42.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 02:42:41 -0800 (PST)
-Date: Thu, 23 Nov 2023 13:42:39 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Matthew Wilcox <willy@infradead.org>, 
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, Arnd Bergmann <arnd@arndb.de>, 
-	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Aleksandar Rikalo <arikalo@gmail.com>, 
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>, Chao-ying Fu <cfu@wavecomp.com>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, Yinglu Yang <yangyinglu@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] mm/mm_init.c: Extend init unavailable range doc info
-Message-ID: <ehlzzv37o4exdn4smmu653wzjdotzdv3dhr3bduvemxssp37ro@sgegnyprquk4>
-References: <20231122182419.30633-1-fancer.lancer@gmail.com>
- <20231122182419.30633-6-fancer.lancer@gmail.com>
- <20231123101854.GF636165@kernel.org>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EF8225AE;
+	Thu, 23 Nov 2023 11:05:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C85C433C7;
+	Thu, 23 Nov 2023 11:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700737521;
+	bh=kmSnZk3RczC2wW7hFftznkdHr9ZkDg70PDOUA+ZVjaE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=M9YhBGVoZhY2hbzM62ATfyVt/7tQ/oQ/qZpdbJ2qea36LpolKDbmowhX0AC5g7lLk
+	 sieaJZf1+aJIe6RlnZFwpUWbe/PNidPyvX1032SN/Lwqzuba5orpijIZqVQRxHnO8W
+	 LRftkoW7bXxIrXatQbuFQGzAdw2elNRJIxC3rIjn2qQVQcfC9JkzCiX6xGNFCITeE3
+	 AOg4JIWtddSPTOo6FzQGoFztM6o4Hy4i/nts34VgnTPpGB8h4PDw8YDdN3d0w6RELS
+	 lnxhloqHqGtyXUCmF3Imyl4OpgK7uvUX4NtIedFziLAPEYOAuGarmedGM1FejKTB+G
+	 xC85zbozSZrPA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Rich Felker <dalias@libc.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Richard Weinberger <richard@nod.at>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	linux-arch@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH v3 0/6] Treewide: enable -Wmissing-prototypes
+Date: Thu, 23 Nov 2023 12:05:00 +0100
+Message-Id: <20231123110506.707903-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231123101854.GF636165@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Mike
+From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, Nov 23, 2023 at 12:18:54PM +0200, Mike Rapoport wrote:
-> Hi Serge,
-> 
-> On Wed, Nov 22, 2023 at 09:24:03PM +0300, Serge Semin wrote:
-> > Besides of the already described reasons the pages backended memory holes
-> > might be persistent due to having memory mapped IO spaces behind those
-> > ranges in the framework of flatmem kernel config. Add such note to the
-> > init_unavailable_range() method kdoc in order to point out to one more
-> > reason of having the function executed for such regions.
-> > 
-> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
-> > 
-> > ---
-> > 
-> > Please let me know if the IO-space pages must be initialized somehow
-> > differently rather relying on free_area_init() executing the
-> > init_unavailable_range() method.
-> 
+Hi Andrew,
 
-> Maybe I'm missing something, but why do you need struct pages in the
-> IO space?
+I think all other patches I have sent for -Wmissing-prototypes have made it
+into linux-next by now, these ones either got an Ack from the respective
+maintainers, or never got a reply. I just merged a few patches from my
+previous series into the asm-generic tree, these are not in linux-next
+today but should be for the next next. I also resent the powerpc patches
+to make sure they get merged soon.
 
-In my case at the very least that's due to having a SRAM device
-available in the middle of the MMIO-space. The region is getting
-mapped using the ioremap_wc() method (Uncached Write-Combine CA),
-which eventually is converted to calling get_vm_area() and
-ioremap_page_range() (see ioremap_prot() function on MIPS), which in
-its turn use the page structs for mapping. Another similar case is
-using ioremap_wc() in the PCIe outbound ATU space mapping of
-the graphic/video cards framebuffers.
+Can you pick these six up into -mm for v6.8?
 
-In general having the pages array defined for the IO-memory is
-required for mapping the IO-space other than just uncached (my sram
-case for example) or, for instance, with special access attribute for
-the user-space (if I am not missing something in a way VM works in
-that case).
+Quoting from my description to patch 6/6:
+  "At this point, there are five architectures with a number of known
+   regressions: alpha, nios2, mips, sh and sparc. In the previous version
+   of this patch, I had turned off the missing prototype warnings for the 15
+   architectures that still had issues, but since there are only five left,
+   I think we can leave the rest to the maintainers (Cc'd here) as well."
 
--Serge(y)
+The series is also likely to cause occasional build regressions on linux-next
+as developers add new code that misses prototypes. Hopefully this should
+be resolved by the time the patches make it into a release and everyone
+gets the warnings right away.
 
-> 
-> > ---
-> >  mm/mm_init.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/mm/mm_init.c b/mm/mm_init.c
-> > index 077bfe393b5e..3fa33e2d32ba 100644
-> > --- a/mm/mm_init.c
-> > +++ b/mm/mm_init.c
-> > @@ -796,6 +796,7 @@ overlap_memmap_init(unsigned long zone, unsigned long *pfn)
-> >   * - physical memory bank size is not necessarily the exact multiple of the
-> >   *   arbitrary section size
-> >   * - early reserved memory may not be listed in memblock.memory
-> > + * - memory mapped IO space
-> >   * - memory layouts defined with memmap= kernel parameter may not align
-> >   *   nicely with memmap sections
-> >   *
-> > -- 
-> > 2.42.1
-> > 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+    Arnd
+
+Arnd Bergmann (6):
+  ida: make 'ida_dump' static
+  jffs2: mark __jffs2_dbg_superblock_counts() static
+  sched: fair: move unused stub functions to header
+  x86: sta2x11: include header for sta2x11_get_instance() prototype
+  usb: fsl-mph-dr-of: mark fsl_usb2_mpc5121_init() static
+  Makefile.extrawarn: turn on missing-prototypes globally
+
+ arch/x86/pci/sta2x11-fixup.c     |  1 +
+ drivers/usb/host/fsl-mph-dr-of.c |  2 +-
+ fs/jffs2/debug.c                 |  2 +-
+ kernel/sched/fair.c              | 13 -------------
+ kernel/sched/sched.h             | 11 +++++++++++
+ lib/test_ida.c                   |  2 +-
+ scripts/Makefile.extrawarn       |  4 ++--
+ 7 files changed, 17 insertions(+), 18 deletions(-)
+
+-- 
+2.39.2
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mtd@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: x86@kernel.org
 
