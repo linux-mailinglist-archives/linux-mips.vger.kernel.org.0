@@ -1,188 +1,169 @@
-Return-Path: <linux-mips+bounces-215-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-216-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9573E7F5D7B
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 12:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 073F87F5ED3
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 13:13:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A06AB20F39
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 11:12:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94317B21292
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Nov 2023 12:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A865B22EF9;
-	Thu, 23 Nov 2023 11:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8467F241E5;
+	Thu, 23 Nov 2023 12:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b="kwIYoWcK"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Mn6gZel2";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CWiHG2HC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639E6D4A;
-	Thu, 23 Nov 2023 03:12:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1700737905; x=1701342705; i=j.neuschaefer@gmx.net;
-	bh=qHIRuVjw/0Toi1F/14ZNchv8iBh7eioF0IAeNc5thr0=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:
-	 In-Reply-To;
-	b=kwIYoWcKf67p1X692kNow6H37zBF24YUt6Xkd6M4CMY1ehkBcCXux1PX+qqg54+N
-	 9W5HjPZfuyjU24UXlxL21Y5aG0uw2a8FCTRtiIuMvjjb4Cza+L1+i4r6+IRExoj/1
-	 ZPoTJ0hGvUDDW7uaBo3xIADYrkRSTx7Eed1jd6iyYXeXbjlhRHkecGuyMlrgFBSXD
-	 NzLV+8XRXDIjsI5R/tvDH/NazNeskEsLgN02dCTl45HJ9FgunP5ybjZ7KZXLqDWvg
-	 BrKopGUqj3c3bs/pULYSpRQT1WIQ1VaSTozOLIDMe2WuAgjqe44VSqoseS10tNbpX
-	 VXa3UoVBv797ILuVdg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([89.0.47.44]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1HZo-1r3NX91GaQ-002snb; Thu, 23
- Nov 2023 12:11:45 +0100
-Date: Thu, 23 Nov 2023 12:11:42 +0100
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Jianlong Huang <jianlong.huang@starfivetech.com>,
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	openbmc@lists.ozlabs.org, linux-mips@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Sean Wang <sean.wang@kernel.org>,
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Hal Feng <hal.feng@starfivetech.com>
-Subject: Re: [PATCH v1 02/17] pinctrl: nuvoton: Convert to use struct
- pingroup and PINCTRL_PINGROUP()
-Message-ID: <ZV8zbizJO8yNEomn@probook>
-References: <20231122164040.2262742-1-andriy.shevchenko@linux.intel.com>
- <20231122164040.2262742-3-andriy.shevchenko@linux.intel.com>
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDDA199;
+	Thu, 23 Nov 2023 04:13:37 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id E9B033200AD3;
+	Thu, 23 Nov 2023 07:13:32 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 23 Nov 2023 07:13:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+	1700741612; x=1700828012; bh=bqTTK97AMSpZYhD615Hms/vz78ad6/G8f6h
+	LgVljG2E=; b=Mn6gZel2hDy2U4uSAOinnxIYhsA32Dx/zcfQZ4OrQb3O8oSTi1+
+	RUthCgCiYT7gNz5tzurx9Z87nMFqnK7kjKPd/O7A5VUOH7O92vmI1ln5y+yL6CIB
+	cn4iAH4KievCDLgXVP8VJO0Sp1lPkiv2DQ9RPkiIGR2xMVPbD18FIF8QF/eVBYEZ
+	E508qNeUGUzFJlMVl8VMZ5y82gOT+pSUBF+b+wOShNWv26Po99N/3NjEaT/VI6eo
+	neB+0Pe9fmBD9t0w/U5rGKrgTLYPloArKChr+A5oIpgky3v8KtIMQHT809fHTBdI
+	aJMQSzFYBRMf/uFzt5lkbePGW0D3GOnkrqw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1700741612; x=1700828012; bh=bqTTK97AMSpZYhD615Hms/vz78ad6/G8f6h
+	LgVljG2E=; b=CWiHG2HCNR3PUb8Zber+487Gm0pSObixAc5WZjphYBU74QjOaX6
+	qpMCQUi//ILgW0v/HBj7dEJVID3N67HAEZ8tA9qUcTOcFIn13mWjYYpsxY07/6Wt
+	WHT03CR9vosF04wKel8cNgdALy1dXE7iavfb3IIRANiosvwvsndx93E3RfkoYy1C
+	EWbFh3xVD7smkjkYxNuI7vDw/4GfNI7okhTTwIUGYTR2E+bGKRslVeOOLBoYhQKb
+	y6x0ym88zjmHXSBT9vKXaC4B2wgUpxS2XcXr55TmWuP9EC1UMtG5YLLM0iIEyowW
+	9lLW6y2Yj8heNz/f4LyyIog6j8Sy6roYQTg==
+X-ME-Sender: <xms:60FfZay4e70_6RGnkS871rITuaJIl2ckwUu52XNbTdVD2y-fyEyR_Q>
+    <xme:60FfZWRFHoS33fQA1vb56UHjrTyUmFMm6UU2MlhV7WFZvRYFWj49Nr1rhv4EN1IDm
+    FonS-oWMADMnuuNWrs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehfedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:60FfZcW7yxrzsBn8TlhRKH-cya1ihhj9bIuJs3jBgnnx6kfewA-KxQ>
+    <xmx:60FfZQhd8afvL4fAh3eG0g9LmMQIChgU1DB4OBy2E5VaI6HwQeKD4w>
+    <xmx:60FfZcCQ_UomU--4eeyinEfzfvXBZdlL9qdjNLrITwz-hgD2xFQwCw>
+    <xmx:7EFfZaRw49s2rdQCFi9_saUGyFFcxQ6Yy3ymEngrsxGUT6X0si9Xqg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 9E2B336A0075; Thu, 23 Nov 2023 07:13:31 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9hHdmhEn3QkQ/1K+"
-Content-Disposition: inline
-In-Reply-To: <20231122164040.2262742-3-andriy.shevchenko@linux.intel.com>
-X-Provags-ID: V03:K1:zjNy6ebVKDzd7AEE0/nsnKTw50ViiRNCHikw/qZ5yzvBoxpjpTz
- HuFhbYVNf3YEHc9MbVHMPqFM13ooVqoYIlO28oTqTO3TqRj4iSbysfuAMyOnYgsCh5FQ78z
- P7qOIwLX0a6l3eskPKk8wB5tHRAjmBptshJd+ljjDbEOIKGogudpPxVTdxC+iTqvsT+hcJd
- eDREktDD+IHC114QUAtOw==
-UI-OutboundReport: notjunk:1;M01:P0:y+PsMVlI0gs=;Ai/+ZpDC7M5bugNmYWGO9L7vFlz
- 2WubMq9jgvakIfRSscOQi5KlOlKYuGVb+i5EPcics8R7b0xcRLibYn4OTTpSNQGaQTOJwGw+8
- W4Q7pdLyoguKl7d5ELtHOlnjYBTnAEchLrHDprAzbT0pm4liSqW8yiHWpqJeT0qPa/DE3Pja3
- Q5Z2Y98XPiMRaRwkVMZc/EkqAP/qgXNkCrQMBJjev4vsYF1CeRJsKYsDu3Y+r5cWsDlip1bbt
- vBgM4fOGvzsRhlEdNat8Y3n/Vgqez30ywuxPD5Gy9T75fx4ADPyPC/zL/O+fAwTPTkCE9w/TH
- nFZXcqSRDEuvtC/cS8QcRdQzyq90i08o/Ne46BrCHyvjRQrgiNDVmhusLkBNG4MX53zGiTLj8
- nt4OD5BbGGo+Je6mXJQELxmwRF6Mb2+7rdL4P03yd1pE/VCccXBX5CbP2bJMM4MyhNvAS4Pai
- mVqi+GCEoLYrGHaqjsPfI4eeU8gaTgM0llwyjOpFhBOVT1be9I+IKHNsFiPSGh1lf1FRKPGl1
- 9n1HRfnC1seURAZXzes1f6cqrFKXQ9EfXNRNL8SKKeD0KCBqBzX+v/DHtSP2R19yz34QA+w2l
- pSdPWj6cKhIoQAI1NWcL1OTfCwc5nlAKwOK5emPDX0Y9lwfy69hVy0AM26iQ4Imz0/HOnvlwJ
- E/6O84+5RqeNF7X8N1ENFoobAgv7I3Eowqv2q+cKfY70CU0yACWDlWiqcvbLqGDYdr7gmEFeh
- rtLZS67dX+nGhL6my4VZgHcO4MD7nzV6e6nftkcod5Q9IQLys+9N8X416dOtY1POJVzUdr9Nu
- JjdU+yjhnFPMjzKXoL4TAUV+0nfxg2EeXJkr9WwLuksEvi3MaCIQH0Nxo45AvvtCWNlDRkKKl
- 2lecIiakBCmUUHEd+TtOVn7C/tUQpKC4oQkcVFg4MwdOMwcDVpyueYk3V0Kf75V8+Wlv8lXqD
- p/T/U2cfwpE9tGZ5jDR/SNDkWxs=
-
-
---9hHdmhEn3QkQ/1K+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Message-Id: <8ca730b9-fa8c-46ea-bdc5-158da0f29c3a@app.fastmail.com>
+In-Reply-To: 
+ <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
+References: <20231122182419.30633-1-fancer.lancer@gmail.com>
+ <20231122182419.30633-2-fancer.lancer@gmail.com>
+ <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
+ <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
+Date: Thu, 23 Nov 2023 12:13:11 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Serge Semin" <fancer.lancer@gmail.com>, "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
+ "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Yinglu Yang" <yangyinglu@loongson.cn>,
+ "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
+ "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
+ "Aleksandar Rikalo" <arikalo@gmail.com>,
+ "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
+ "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 22, 2023 at 06:35:34PM +0200, Andy Shevchenko wrote:
-> The pin control header provides struct pingroup and PINCTRL_PINGROUP() ma=
-cro.
-> Utilize them instead of open coded variants in the driver.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
 
-Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 
-Thanks.
+=E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
+=E4=B8=8A=E5=8D=889:32=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
+> Hi Arnd
+>
+> On Wed, Nov 22, 2023 at 08:35:01PM +0100, Arnd Bergmann wrote:
+>> On Wed, Nov 22, 2023, at 19:23, Serge Semin wrote:
+>> > dmi_early_remap() has been defined as ioremap_cache() which on MIPS=
+32 gets
+>> > to be converted to the VM-based mapping. DMI early remapping is per=
+formed
+>> > at the setup_arch() stage with no VM available. So calling the
+>> > dmi_early_remap() for MIPS32 causes the system to crash at the earl=
+y boot
+>> > time. Fix that by converting dmi_early_remap() to the uncached rema=
+pping
+>> > which is always available on both 32 and 64-bits MIPS systems.
+>> >
+>> > Fixes: be8fa1cb444c ("MIPS: Add support for Desktop Management Inte=
+rface (DMI)")
+>> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+>> > ---
+>> >  arch/mips/include/asm/dmi.h | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/arch/mips/include/asm/dmi.h b/arch/mips/include/asm/dm=
+i.h
+>> > index 27415a288adf..525aad1572d1 100644
+>> > --- a/arch/mips/include/asm/dmi.h
+>> > +++ b/arch/mips/include/asm/dmi.h
+>> > @@ -5,7 +5,7 @@
+>> >  #include <linux/io.h>
+>> >  #include <linux/memblock.h>
+>> >=20
+>> > -#define dmi_early_remap(x, l)		ioremap_cache(x, l)
+>> > +#define dmi_early_remap(x, l)		ioremap_uc(x, l)
+>>=20
+>
+>> Please don't use ioremap_uc() in new code, we are in the (long)
+>> process of removing it from the kernel for everything except
+>> x86-32, and it already returns NULL on most of them.
+>>=20
+>> Would the normal ioremap() work for you here? It seems to
+>> do the same thing as ioremap_uc() on mips and a couple of=20
+>> other architectures that have not yet killed it off.
+>
+> Ok. Thanks for the heads up. I'll fix the patch to be using ioremap()
+> in v2. ioremap_uc() is just an macro-alias of ioremap() on MIPS.
 
->  drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/=
-nuvoton/pinctrl-wpcm450.c
-> index 0cff44b07b29..4589900244c7 100644
-> --- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-> +++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-> @@ -474,9 +474,8 @@ enum {
->  #undef WPCM450_GRP
->  };
-> =20
-> -static struct group_desc wpcm450_groups[] =3D {
-> -#define WPCM450_GRP(x) { .name =3D #x, .pins =3D x ## _pins, \
-> -			.num_pins =3D ARRAY_SIZE(x ## _pins) }
-> +static struct pingroup wpcm450_groups[] =3D {
-> +#define WPCM450_GRP(x) PINCTRL_PINGROUP(#x, x ## _pins, ARRAY_SIZE(x ## =
-_pins))
->  	WPCM450_GRPS
->  #undef WPCM450_GRP
->  };
-> @@ -852,7 +851,7 @@ static int wpcm450_get_group_pins(struct pinctrl_dev =
-*pctldev,
->  				  const unsigned int **pins,
->  				  unsigned int *npins)
->  {
-> -	*npins =3D wpcm450_groups[selector].num_pins;
-> +	*npins =3D wpcm450_groups[selector].npins;
->  	*pins  =3D wpcm450_groups[selector].pins;
-> =20
->  	return 0;
-> @@ -901,7 +900,7 @@ static int wpcm450_pinmux_set_mux(struct pinctrl_dev =
-*pctldev,
->  	struct wpcm450_pinctrl *pctrl =3D pinctrl_dev_get_drvdata(pctldev);
-> =20
->  	wpcm450_setfunc(pctrl->gcr_regmap, wpcm450_groups[group].pins,
-> -			wpcm450_groups[group].num_pins, function);
-> +			wpcm450_groups[group].npins, function);
-> =20
->  	return 0;
->  }
-> --=20
-> 2.43.0.rc1.1.gbec44491f096
->=20
+Perhaps we need to fix ioremap_cache so it can give a KSEG1 address?
+AFAIK for Loongson DMI is located at cached memory so using ioremap_uc
+blindly will cause inconsistency.
 
---9hHdmhEn3QkQ/1K+
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks
+- Jiaxun
 
------BEGIN PGP SIGNATURE-----
+>
+> -Serge(y)
+>
+>>=20
+>>    Arnd
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmVfM24ACgkQCDBEmo7z
-X9s6kQ/9FPGH46fURmUk0S/+zlgZKVtDIOldB02JGZTZ/rh43+6rFimcMZyEOlPt
-Iv2ayCrzPHBvgeRMsIdjSCQmtd8XYpLMrkvcir3exY+crh1YGKkyV8RdMJH1RY4a
-C/vRxiZ0684SCsbp1mF03LBU+b96lpFxbxwSdGvLJJMV3yIxe5eADpzZcmyVWzOy
-Q4F7135UoIFZvDgeptqWbygX6poDcHwG4XOPfTYPit1obw4C9lSuIIbepKnWTe9W
-Ut2dTCCIhi0as5InSkuHVSdAuTiOtwcaxPe0uxyhlu+2Wup5ibtz8cL5FfJ1cSEu
-D6KUjGfNUDovRkcgsDBgPSkLl/6miLMNCZ5bWlTvjYXE3C7hSH9PI1vicWhZh0GB
-fLTApAj38g5kdUOcfa+1+Zwv+x2I9dSwdXycqhCF7evDmUbIqwNe1W+dU9RhOX8r
-cFCjFW04uG2nR0ivbf6M3vnqwxGyERCVEj3r5SGimlW9h67E4PHou3p7adEGxwOg
-Rblhxt6s2TlmUvM07L9tjWYLhWBkOgr1+P5xfMVkpcvwUZAa/dwj5bf+qgtoJk9O
-vt8hpySZt8nXp0ynOK9YuVHRdb325ScArKv+sw6rZusAK9Jsq/EIBqOTLvcodCQi
-IgttVi+NmWwrA+ZLB5codjpKhZMPXeA0XEaWAxgu0PZ5PlJRvA4=
-=f6qz
------END PGP SIGNATURE-----
-
---9hHdmhEn3QkQ/1K+--
+--=20
+- Jiaxun
 
