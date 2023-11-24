@@ -1,71 +1,71 @@
-Return-Path: <linux-mips+bounces-283-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-284-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BB1B7F85C5
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 23:04:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 110D77F863C
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 23:34:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4C9EB20BC1
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 22:04:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB63E2825A5
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 22:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B293C470;
-	Fri, 24 Nov 2023 22:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C333A8F6;
+	Fri, 24 Nov 2023 22:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="A+OmL5iu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="twOj/8Jc"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="nAweOz3Y";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="puCY3FCl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E77127;
-	Fri, 24 Nov 2023 14:04:13 -0800 (PST)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0D810FB;
+	Fri, 24 Nov 2023 14:34:50 -0800 (PST)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 5C23F5C017F;
-	Fri, 24 Nov 2023 17:04:10 -0500 (EST)
+	by mailout.nyi.internal (Postfix) with ESMTP id 0B2D45C0166;
+	Fri, 24 Nov 2023 17:34:47 -0500 (EST)
 Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Fri, 24 Nov 2023 17:04:10 -0500
+  by compute3.internal (MEProxy); Fri, 24 Nov 2023 17:34:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1700863450; x=1700949850; bh=3UtEYHzWi0cxnEeCsISUpA7msvYeRg40USl
-	PBvQDAxw=; b=A+OmL5iuR0zReaEYJ15GjQZg4vyIFXItuIFwm5dyiW5T4gkg5vB
-	O3y1vEmDpFw4XObQBw8S+hZRpzogyJyTFmhG2+30qmPo4cAzhli//p7Xo0xlYdm1
-	HAyMt5+hPPBYMAmiaiJ28TApebpiNxFRXs4GB7HBWyVtBQUMvcn/4s/jVsg/IWws
-	XssMoqNkkSUyZUh627dVqhMVg53/fr4mKmvapK+ChgQrurZJBfS4Yc7m/1MQYKc6
-	sidfB5JX2x1DmjiQdvNNzsevqfIMP6hcV70YbnA+hZB2vgAekGpuscafQCq3EtT3
-	dsfKyA/+zzMUAho0X0+YX3mWlJOpbjr74Pw==
+	1700865287; x=1700951687; bh=cITV9NLe1Pev7AShBkoPVTITzs2wGg66LfU
+	zxkV4dXM=; b=nAweOz3YwxiIka2d6mBZi72XfvT5fH4r2Kvp5bjWDssH5B7/WQG
+	rWiH/RAOnu6iEeBIC/xYOWuMHfmjl+wnwMMy7nKVWkmbCzZmxH3vDuiohM420y8f
+	e/8cfeh1yasAJK377PKz9Lb+dbjKJdcm/0KchHKL0+y3G3JGj0kNwlBtadiR5ZKK
+	3QfYr1NwntuSTFY1MIG8eF4BlQsSFGJRiyRxYKv2ryw/O0utvFQZtFITVOUaEfn+
+	lQWEanNIC8n/jkTzuoPcwNohWDAq8Lk5LOZERTNWN4jjSWxSf/p/aWD5zobK+qXJ
+	znrMZgMIgOSnUR0twQVz1M9D6R0K8J9FPow==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
 	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1700863450; x=1700949850; bh=3UtEYHzWi0cxnEeCsISUpA7msvYeRg40USl
-	PBvQDAxw=; b=twOj/8Jcx0NWHjeF1j6wOPWK7iooNT5JJaNkH43/2QPNogNn/tb
-	7JlN9Jgl7OH0//175OqqtGkvZXNETNHDVrjnRTE2dYC2aRe8NS3cBxfRS3TkrgxS
-	q9RHfaYXLVDlKtbRO1wccGQQV2UIDnVyL9C45hhb0IlJbfkJO8g+JknA9uHVVwVY
-	PnwjCl/fo6dt0YHUl1yy0R1NvLc243cufFp0E0HkrrOwy4AAt69IbDeA1D9IcSv0
-	CjrzG+GgyJXkCwAwh2nx0r7aclfam9EFjZ41h4zMGoX7okhqfPOQ8VnxZ9/rU30z
-	sSKm3gGHvGJK1CTFz/SuqgqFbC1X6DA4MiA==
-X-ME-Sender: <xms:2R1hZeEP-Qfu_lD44kF0vynJRv_jOkRp0wK31dkeBQcDh6VMArK7aQ>
-    <xme:2R1hZfUEsjLpj2O6_O2FfsC02yiQuWRn8zKsLKb16P3l1xqfj1ZCOAIHkvRvrHXxN
-    W-oMKMGiEjfnWlMH4o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehhedgudehjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
-    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
-    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:2R1hZYKSfIWn3srG8g6clC1T-aBuI_9Dy4LS8Fjp_HUYvl4PupGy1g>
-    <xmx:2R1hZYGZZtLwimW36tNIPwr80vH8poDSidykKLzWJ5r7mHHsMl19Xg>
-    <xmx:2R1hZUUGyWDk5U_RlDqNGfgQFao_DevH2gcEuZkc4RMYG8Qx9imfVg>
-    <xmx:2h1hZZW_hIY8W3fNySOV5R3_nIwDz8z16cSKf7eYADPCHKObnO6CuA>
+	1700865287; x=1700951687; bh=cITV9NLe1Pev7AShBkoPVTITzs2wGg66LfU
+	zxkV4dXM=; b=puCY3FCl1l9FvNkLfYz8HwXlbCtsSO2dTM/iWlQar5cBvJG0LxX
+	aboAkH81lwqsw5AsOLtP/mW7ljddsSmAjpxkzxSqR1npeMOzf6ycDL8/VmxLR0T8
+	crXqUyFqioArjymhfniTSWNTGTgXYWdpKfCtFpi9DkWtnhVh6/OudQeHpkTKSjLO
+	5btgHs04lbsNLTh+uh+H6st73KSvJleGOLrSpXTQsR3XdjfHHb600HDZuZJ/Tdj5
+	gyVoF6sB1pcdcHVTXhbdivIYJcSz7HvgbAGhcw2mJ9g6dQMACcskQO4tZD1Xf3M+
+	gTD27hVfjnXLiLQQjHGyNPLmbtGtKdspd3Q==
+X-ME-Sender: <xms:BiVhZeZiSB-I_EzpPEQq_lTAkJ1dfnWPyrDZvU420HWToRzUzR8GaQ>
+    <xme:BiVhZRbcqkIAuKT-cpfZWGEY6VznW954HVpc1FqUh7MhVq5zC1P_tOeyaQq57D9vZ
+    J-5LFarcXp0eqhVznk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehiedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:BiVhZY_RI9QOa7r3b2KOMLYJuIP0KfQMES-lkT-2KT_wpiU7JDHrig>
+    <xmx:BiVhZQogPvi0sj2ULCi0NKu4Wp3VXnc-_jzPbtfikeC_Q0hi2BQobw>
+    <xmx:BiVhZZpkuPS0SK9F9HkSeqcGksmiClcyJevUusVKycb69nZopSB95g>
+    <xmx:ByVhZRYMckm-pDYFfCiUlGOaeaoXydTXGvPO3wbch1k8zryO85P_pQ>
 Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 0886F36A0075; Fri, 24 Nov 2023 17:04:08 -0500 (EST)
+	id 9237536A0075; Fri, 24 Nov 2023 17:34:46 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
 Precedence: bulk
@@ -74,7 +74,7 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
+Message-Id: <7040f3a6-64f4-4110-9bf6-e65db85ea034@app.fastmail.com>
 In-Reply-To: 
  <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
 References: <20231122182419.30633-1-fancer.lancer@gmail.com>
@@ -87,7 +87,7 @@ References: <20231122182419.30633-1-fancer.lancer@gmail.com>
  <ZV94rifAIF2p9Nej@alpha.franken.de>
  <245d3985-9085-4be0-8c74-d95d06334584@app.fastmail.com>
  <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
-Date: Fri, 24 Nov 2023 22:03:49 +0000
+Date: Fri, 24 Nov 2023 22:34:28 +0000
 From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
 To: "Serge Semin" <fancer.lancer@gmail.com>,
  "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
@@ -114,16 +114,43 @@ Content-Transfer-Encoding: quoted-printable
 =E4=B8=8B=E5=8D=886:52=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
 > On Thu, Nov 23, 2023 at 05:33:31PM +0000, Jiaxun Yang wrote:
 >>=20
-[...]
+>>=20
+>> =E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88=
+ =E4=B8=8B=E5=8D=884:07=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=
+=BC=9A
+>> > On Thu, Nov 23, 2023 at 03:07:09PM +0000, Jiaxun Yang wrote:
+>> >>=20
+>> [...]
+>> >
+>> > the problem with all 32bit unmapped segments is their limitations in
+>> > size. But there is always room to try to use unmapped and fall back
+>> > to mapped, if it doesn't work. But I doubt anybody is going to
+>> > implement that.
+>>=20
+>> Yep, I guess fallback should be implemented for ioremap_cache as well.
+>>=20
+>> >
+>> >> >> AFAIK for Loongson DMI is located at cached memory so using ior=
+emap_uc
+>> >> >> blindly will cause inconsistency.
+>> >> >
+>> >> > why ?
+>> >>=20
+>> >> Firmware sometimes does not flush those tables from cache back to =
+memory.
+>> >> For Loongson systems (as well as most MTI systems) cache is enable=
+d by
+>> >> firmware.
+>> >
+>> > kernel flushes all caches on startup, so there shouldn't be a probl=
+em.
+>>=20
 >> Actually dmi_setup() is called before cpu_cache_init().
 >
 > To preliminary sum the discussion, indeed there can be issues on the
 > platforms which have DMI initialized on the cached region. Here are
 > several solutions and additional difficulties I think may be caused by
 > implementing them:
-
-Thanks for such detailed conclusion!
-I'd prefer go solution 1, with comments below.
 >
 > 1. Use unmapped cached region utilization in the MIPS32 ioremap_prot()
 > method.
@@ -158,58 +185,10 @@ ress
 > +                       return (void __iomem *) CKSEG0ADDR(phys_addr);
 > +       }
 >
-> Currently I can't figure out what obvious problems it may cause. But
-> It seems suspicious that the cacheable IO-mapping hasn't been
-> implemented by the unmapped cacheable region in the first place. In
-> anyway this solution looks more dangerous than solution 2. because it
-> affects all the MIPS32 platforms at once.
+A nip, _page_cachable_default is set in cpu_cache_init() as well. We'd
+better move it to cpu-probe.c, or give it a reasonable default value.
 
-I just made a quick grep in tree, and it seems like we don't have much
-user of ioremap_cache (as well as ioremap_uc/wc) here so I think it is
-a safe assumption.
-
->
-> 2. Convert dmi_remap_early() to ioremap_uc() (actually just ioremap()
-> as noted by Arnd).
-> As Jiaxun correctly noted this may cause problems on the platforms
-> which don't flush caches before jumping out to the kernel. Thomas said
-> that kernel flushes the caches early on boot, but Jiaxun noted that
-> it's still done after early DMI setup. So the issue with solution 2 is
-> that the setup_arch() method calls dmi_setup() before it flushes the
-> caches by means of the cpu_cache_init() method. I guess it can be
-> fixed just by moving the dmi_setup() method invocation to be after the
-> cpu_cache_init() is called. This solution looks much less invasive
-> than solution 1.
-
-I recall Tiezhu made dmi_setup() here for reasons. The first reason is t=
-hat
-DMI is placed at memory space that is not reserved, so it may get clobbe=
-red
-after mm is up. The second is we may have some early quirks depends on D=
-MI
-information.
-
-Thanks.
->
-> So what do you think? What solution do you prefer? Perhaps
-> alternative?
->
-> -Serge(y)
->
->>=20
->> Thanks
->> >
->> > Thomas.
->> >
->> > --=20
->> > Crap can work. Given enough thrust pigs will fly, but it's not nece=
-ssarily a
->> > good idea.                                                [ RFC1925=
-, 2.3 ]
->>=20
->> --=20
->> - Jiaxun
-
+Thanks
 --=20
 - Jiaxun
 
