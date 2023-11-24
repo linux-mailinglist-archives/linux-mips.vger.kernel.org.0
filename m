@@ -1,60 +1,60 @@
-Return-Path: <linux-mips+bounces-271-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-272-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B25437F6E0B
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 09:26:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 385197F6E14
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 09:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2F281C20D29
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 08:26:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5DC1281249
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 08:27:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F01BA2E;
-	Fri, 24 Nov 2023 08:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36AD09477;
+	Fri, 24 Nov 2023 08:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xewe7av6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T/yZ/9VM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879BD53
-	for <linux-mips@vger.kernel.org>; Fri, 24 Nov 2023 00:25:53 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-a00b056ca38so225532966b.2
-        for <linux-mips@vger.kernel.org>; Fri, 24 Nov 2023 00:25:53 -0800 (PST)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D88F1BE
+	for <linux-mips@vger.kernel.org>; Fri, 24 Nov 2023 00:27:46 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-a00b01955acso234702366b.1
+        for <linux-mips@vger.kernel.org>; Fri, 24 Nov 2023 00:27:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700814352; x=1701419152; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700814465; x=1701419265; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=06j1CkRWYwkZptG6xkvoWjM8LxtoGJ+O7LpPle04QGo=;
-        b=xewe7av6o7QUWQ5NQL7X0GYo6Tf9j8ovTDu/0XQE5yQGZIzuV9jN6jVkFtLz6r4UtZ
-         d4rr258vK6bkFCAxRiezRJwXqpJ0ZT6a9NCxnBdTl5/PmkjuXATTrDQLVXmror9mvo3h
-         YfT0dhx7ibohhFMZxza0OuROrTPXwDS86BjLQegizF0ikQFN2HpsKAmqJsCWLoPZCsrG
-         0vgdjqEZ1BcCW/s3Q48k5WD4cocfakvTiJFF2MRsWB0Iy2bpZhp/meq8eeGAQm95oqOC
-         sl5Iy8kETaH3S5xyTKzy/pA2z2ynfdOQTUeAHUd4jUVz8juscdvEKDqpeOihI4RrX0yD
-         fnVA==
+        bh=f5z4R+/uebh0H8kwZbipC142tI6MNEmnzXMKVJSCviE=;
+        b=T/yZ/9VM3gFy2iZelGPh79mqsR2bLTLRqGVZG4+LpBxFMEWcfk+jlmQApxTswMzJ9J
+         lY/DGn7wqguMQ//K4ESlRAynuUckQBVDneXFVBF+luqGfa+FYDF41xuDXO/Pc8KT9hcp
+         EDNvsKuOVfXQNSYGXqVaRJ+f7AQSHCp0HFj2QyFa13D9F4RSGLthlj3gcRi+nPmDK4u6
+         9txa3QYykiRAq1VzOQ+lYnE3JSEHqieK1eRh5soQ8OET+zFuhzTjU8ZAPbMmToxY/wv1
+         8D4LaV3Zazdks2SQlIrNi5KK0tasjl+b3gJpFNlfEcFRwpiNz4tVwj0olbCkqiswo+p/
+         YUJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700814352; x=1701419152;
+        d=1e100.net; s=20230601; t=1700814465; x=1701419265;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=06j1CkRWYwkZptG6xkvoWjM8LxtoGJ+O7LpPle04QGo=;
-        b=QEKi6vnEO2wd0mx2m+fZUJJ7eBLax3PmlN1pme3dufX4nbvHB0ugfGozgrPrAYbCNk
-         Jx+msrb2D1wqkxkkvXpdYMbcC/sF9+KLnZITs9NOEIseBfzgyyh3MBLuwCMC6F6RiqRs
-         64/ridMZJUNXKwX4wGsXRnO3pqUEpq0KeUkaw3qu8vcjnXI6ZYcNU/9PqatXRZO4e2Th
-         LAnZs2t53wOp78UYj133llO4DPs/pDr1R2p2B9lx5+wj+voWHbt7KYJMT6sZ17B/+e+5
-         8VqLbxopiPleUtZRcs2UDp5xX3BSpvxxRUYU3k+Sj0kE0FV88+1f5FVVy6GBR8O+J/kC
-         561g==
-X-Gm-Message-State: AOJu0Yx5fvcPMvn7of4ZlkQnz837XtpJ0I99lvutsF3uRmvu3ckEswjV
-	+DguEvV0XA4M8pWh9z0fFzL/+g==
-X-Google-Smtp-Source: AGHT+IE+1xFmOaGnWITGqhSW0oqgIUs1SmVbItPcvnsdp8dg5vCLhy+qv9eBsDdn3MaA1Qd2NzywHQ==
-X-Received: by 2002:a17:906:2c05:b0:a04:7e4d:6c19 with SMTP id e5-20020a1709062c0500b00a047e4d6c19mr1259271ejh.68.1700814352143;
-        Fri, 24 Nov 2023 00:25:52 -0800 (PST)
+        bh=f5z4R+/uebh0H8kwZbipC142tI6MNEmnzXMKVJSCviE=;
+        b=Sa0NlL/S/dZrpblSYt19R6r81ePAF40LY8eEORFBjazl0jtzJ/xQSTsEc8GrPiW+yX
+         5SlIVz8nXfqgAAFihtvmtXUlvh30jqTgIhreRxx6Y/dOBWsLMSDJvS5BIZZeLrOJSwT7
+         jU6ZrZQ+dKAddT6lfDmVx9zfLCpH2MrzIh7CmEE8dRPRqnBBMRddYf8rQHJ8S3Vi1KYu
+         p1GNiA8jfP3qKNRXXWDyomy1IQNzuXXqKxVv47FQS6u8O83IbyHreMniPGnCD9rzb8He
+         hHz+PYRIKNjaTx5PWFfyfDXVmDGjOwn/AKyOlxRtXczZTjJh2ny4pHZ0BNC77ORfv2oH
+         q9Tg==
+X-Gm-Message-State: AOJu0Ywekocrh2Q0H53gyKkuM4KuwQgshMsHzbxqvm1lGe9K6Y65+z/V
+	SPq7dUMmwQd9Z5i1ePWBV8PizA==
+X-Google-Smtp-Source: AGHT+IG8Cald1MJmAYnUL5rrZ5j3GsAkBmSpYI9i8bSwtQpqyBsgVgkguxYQiCLF6hkeQEx8/5z4XQ==
+X-Received: by 2002:a17:906:3418:b0:a03:a411:abcb with SMTP id c24-20020a170906341800b00a03a411abcbmr1343935ejb.39.1700814464781;
+        Fri, 24 Nov 2023 00:27:44 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.100])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a170906d28e00b009fad1dfe472sm1770936ejb.153.2023.11.24.00.25.50
+        by smtp.gmail.com with ESMTPSA id ks20-20020a170906f85400b009db53aa4f7bsm1772489ejb.28.2023.11.24.00.27.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Nov 2023 00:25:51 -0800 (PST)
-Message-ID: <3d9677fb-c2a4-40ea-8820-7be18041f869@linaro.org>
-Date: Fri, 24 Nov 2023 09:25:50 +0100
+        Fri, 24 Nov 2023 00:27:44 -0800 (PST)
+Message-ID: <46bba00c-00b7-46db-984c-4391f7fc11f6@linaro.org>
+Date: Fri, 24 Nov 2023 09:27:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 17/21] dt-bindings: mfd: syscon: Document EyeQ5 OLB
+Subject: Re: [PATCH v2 18/21] MIPS: mobileye: Add EyeQ5 dtsi
 Content-Language: en-US
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
  Paul Burton <paulburton@kernel.org>,
@@ -76,7 +76,7 @@ Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20231123152639.561231-1-gregory.clement@bootlin.com>
- <20231123152639.561231-18-gregory.clement@bootlin.com>
+ <20231123152639.561231-19-gregory.clement@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -122,20 +122,107 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231123152639.561231-18-gregory.clement@bootlin.com>
+In-Reply-To: <20231123152639.561231-19-gregory.clement@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/11/2023 16:26, Gregory CLEMENT wrote:
-> Document Mobileye EyeQ5 compatibles for OLB registers that are
-> miscellaneous SoC related registers.
+> Add a device tree include file for the Mobileye EyeQ5 SoC.
 > 
-> It is used to expose SoC specific configuration such as for example
-> reset, clock or pinctrl.
+> Based on the work of Slava Samsonov <stanislav.samsonov@intel.com>
 > 
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+> +	aliases {
+> +		serial0 = &uart0;
+> +		serial1 = &uart1;
+> +		serial2 = &uart2;
+> +	};
+> +
+> +	cpu_intc: interrupt-controller {
+> +		compatible = "mti,cpu-interrupt-controller";
+> +		interrupt-controller;
+> +		#address-cells = <0>;
+> +		#interrupt-cells = <1>;
+> +	};
+> +
+> +	gic: interrupt-controller@140000 {
+
+Why do you put MMIO nodes in top-level?
+
+> +		compatible = "mti,gic";
+> +		reg = <0x0 0x140000 0x0 0x20000>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <3>;
+> +
+> +		/*
+> +		* Declare the interrupt-parent even though the mti,gic
+> +		* binding doesn't require it, such that the kernel can
+> +		* figure out that cpu_intc is the root interrupt
+> +		* controller & should be probed first.
+> +		*/
+> +		interrupt-parent = <&cpu_intc>;
+> +
+> +		timer {
+> +			compatible = "mti,gic-timer";
+> +			interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
+> +			clocks = <&core0_clk>;
+> +		};
+> +	};
+> +
+> +	soc: soc {
+
+Are you sure dtbs_check W=1 does not complain? I think you miss here
+address.
+
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +		compatible = "simple-bus";
+> +
+> +		uart0: serial@800000 {
+> +			compatible = "arm,pl011", "arm,primecell";
+> +			reg = <0 0x800000 0x0 0x1000>;
+> +			reg-io-width = <4>;
+> +			interrupt-parent = <&gic>;
+> +			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks  = <&uart_clk>, <&occ_periph>;
+> +			clock-names = "uartclk", "apb_pclk";
+> +		};
+> +
+> +		uart1: serial@900000 {
+> +			compatible = "arm,pl011", "arm,primecell";
+> +			reg = <0 0x900000 0x0 0x1000>;
+> +			reg-io-width = <4>;
+> +			interrupt-parent = <&gic>;
+> +			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks  = <&uart_clk>, <&occ_periph>;
+> +			clock-names = "uartclk", "apb_pclk";
+> +		};
+> +
+> +		uart2: serial@a00000 {
+> +			compatible = "arm,pl011", "arm,primecell";
+> +			reg = <0 0xa00000 0x0 0x1000>;
+> +			reg-io-width = <4>;
+> +			interrupt-parent = <&gic>;
+> +			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks  = <&uart_clk>, <&occ_periph>;
+> +			clock-names = "uartclk", "apb_pclk";
+> +		};
+> +
+> +		olb: olb@e00000 {
+> +			compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
+> +			reg = <0 0xe00000 0x0 0x400>;
+> +			reg-io-width = <4>;
+> +		};
+> +
+
+Stray blank line.
+
+> +	};
+> +};
 
 Best regards,
 Krzysztof
