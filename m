@@ -1,145 +1,197 @@
-Return-Path: <linux-mips+bounces-278-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-279-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE4DE7F7402
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 13:43:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 341CB7F74D4
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 14:21:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C894281D0C
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 12:43:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F694B20B04
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Nov 2023 13:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0744A1A71D;
-	Fri, 24 Nov 2023 12:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC8E28DB9;
+	Fri, 24 Nov 2023 13:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YsB3oVb1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HYqx8wXc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6949610F3;
-	Fri, 24 Nov 2023 04:43:05 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-a0029289b1bso265410166b.1;
-        Fri, 24 Nov 2023 04:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700829784; x=1701434584; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BMErWZrHTt3cloUIdPXWfcnvwVtdPhBsLJxO7JmzfjI=;
-        b=YsB3oVb1GxUztA507xBQP/TfTW8p+iycypbDsX+cWINx6453gw7PpHLiqrIO2BwYlT
-         9FewjEpDq3K8/ODdh3i7zU7AqE1+5HICujn5rVLIzmx4vfYElw2p6UVKFL4B7W0CriZ0
-         sBkVrYb2q89/+WTdB2y5NjawRQ9/4Og1zfjYxIWhpLXmaLZJ8ZCpcGCs8MxIowis3uaL
-         oROpjaQvPtRRIgm+oXPfUSjoSnBR2yRXSmehpg6KFF0wzJ6+K7/lyG+fUL1sXqCaZaIc
-         jGx+m8r7DLEiG1NEF/XTZbCIQUSO/KXPWGdUv4kawiL+6SgINoSF6a1jtMRcpKodOSNJ
-         B8Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700829784; x=1701434584;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BMErWZrHTt3cloUIdPXWfcnvwVtdPhBsLJxO7JmzfjI=;
-        b=woSVa66NUwIjNBsBLiSgbiz0sJJ9Y72XnZjRvMdQudiFH+KpjHpUorrm5uvQUOIcOv
-         XJeVzTIm76g8yRclh8t3cKNTgRHg40Xa83EX4Sc93IeaHAk1N1TYb5zcvGNZQT4CXUAr
-         5c51wWbnANBSh1cidn93wxb+TUARYLLXqRiCHOplBkapz9w3fzM4dpxtpX29rujO9gJ9
-         /1UMIrVWTapWUB6FeuM8koj+YFH6eHFjJ2lZX431ZpSVF2V9b8RaK16hjZq1oIV4Pqg9
-         39/1Tdom0a2prFd0GLhlci43MVOcTZUqY97tQG7HR47C7hSSHOlE6m/wowU6kcAMwhMb
-         lNiw==
-X-Gm-Message-State: AOJu0YyAE0DBRAghSNJ0ND+1Uq9Kw8cTlGQHHDrWJUuM7nhJnb04dan9
-	4ppXwfDQ4Ab/cInWhMrDnOzBhe3VnO8=
-X-Google-Smtp-Source: AGHT+IE63XXr3Ab/N/AfUN1orWPUu9PZPQZBLkVwDrlTTw/T1+DMwP7B7PWEHI6L6vkT4BWNQ9Q0Tg==
-X-Received: by 2002:a17:906:5c3:b0:a07:bf30:aad2 with SMTP id t3-20020a17090605c300b00a07bf30aad2mr1889725ejt.70.1700829783628;
-        Fri, 24 Nov 2023 04:43:03 -0800 (PST)
-Received: from orome.fritz.box (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g14-20020a170906594e00b009fc6ac28110sm2010048ejr.20.2023.11.24.04.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 04:43:03 -0800 (PST)
-Date: Fri, 24 Nov 2023 13:43:01 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org,
-	linux-pwm@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] pwm: jz4740: Add trailing \n to error messages
-Message-ID: <ZWCaVQXjlBHMW8Jf@orome.fritz.box>
-References: <20231123083322.405390-1-u.kleine-koenig@pengutronix.de>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB11172D;
+	Fri, 24 Nov 2023 05:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700832080; x=1732368080;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oS8G9RbkHOAGAKexG7oDoBknf5c2EZYgB9loDAbntcE=;
+  b=HYqx8wXcA92WquS+RiF+n51fUu4itig07M6YPyCGpUn1y+oBFQIkq5iC
+   1JSRbRV927sfR1H3RNgDTdKt8S29gqI4ou4vhUAkA4khdQQHPLXtwIYBu
+   P2rk4ZTjt9lFeZzdb7ziKoyFevMPJAQqpAD5XxckfDFUmLoUVRpBKnjhm
+   Dpsw2xDSwi6ZPITjGjQQrGgRcHnirX0AltBVb1lGGptzyyj9BSpXB2Ng4
+   6a6iZCyQ96Zfjho6hrGibL0xgIrjb+U6zFMWMxK0cnP4RRBnu+s407nt5
+   m1ltDBvnw8mMmT1wLwDVNBhKbDAC52ZZIMx0cK92PO63WLWva+xLMYmGJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="456765147"
+X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
+   d="scan'208";a="456765147"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 05:20:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="767477118"
+X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
+   d="scan'208";a="767477118"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 24 Nov 2023 05:20:25 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r6W6Z-0002nt-14;
+	Fri, 24 Nov 2023 13:20:23 +0000
+Date: Fri, 24 Nov 2023 21:19:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org, linux-mips@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>
+Subject: Re: [PATCH v2 06/21] pinctrl: equilibrium: Convert to use struct
+ pingroup
+Message-ID: <202311241401.ZPILPdov-lkp@intel.com>
+References: <20231123193355.3400852-7-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="zxQAM6/8SI+n8N3I"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231123083322.405390-1-u.kleine-koenig@pengutronix.de>
-User-Agent: Mutt/2.2.12 (2023-09-09)
+In-Reply-To: <20231123193355.3400852-7-andriy.shevchenko@linux.intel.com>
 
+Hi Andy,
 
---zxQAM6/8SI+n8N3I
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Thu, Nov 23, 2023 at 09:33:23AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> Error messages are supposed to end in \n. Add the line terminator to the
-> two error messages that lack this.
->=20
-> Suggested-by: Paul Cercueil <paul@crapouillou.net>
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->=20
-> this was noticed by Paul in
-> https://lore.kernel.org/linux-pwm/ba21c20b20364a39d5ffff81dac8bd300a746db=
-b.camel@crapouillou.net.
-> Instead of sneaking this into a patch that probably won't get applied
-> quickly, make this explicit.
->=20
-> I based it on top of my PR that can be found at
-> https://lore.kernel.org/linux-pwm/20231121112029.gyv3gqirlycysyr4@pengutr=
-onix.de,
-> but applies just fine to v6.7-rc1.
->=20
-> If you want a fixes-line, that would be:
->=20
-> Fixes: 485b56f08f33 ("pwm: jz4740: Improve algorithm of clock calculation=
-")
->=20
-> for the first hunk and
->=20
-> Fixes: ce1f9cece057 ("pwm: jz4740: Use clocks from TCU driver")
->=20
-> for the second. If this is backported to something before
-> v5.10-rc1~57^2~11, there is another instance with a missing \n.
->=20
-> Best regards
-> Uwe
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next next-20231124]
+[cannot apply to geert-renesas-drivers/renesas-pinctrl pinctrl-samsung/for-next linus/master v6.7-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-My recollection is that the newlines aren't strictly required because
-printk will typically insert them itself (unless KERN_CONT is involved
-at some point). So I don't think this really fixes anything, but I'm
-willing to pick this up for consistency.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-qcom-lpass-lpi-Remove-unused-member-in-struct-lpi_pingroup/20231124-043212
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20231123193355.3400852-7-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v2 06/21] pinctrl: equilibrium: Convert to use struct pingroup
+config: i386-randconfig-141-20231124 (https://download.01.org/0day-ci/archive/20231124/202311241401.ZPILPdov-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20231124/202311241401.ZPILPdov-lkp@intel.com/reproduce)
 
-Thierry
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311241401.ZPILPdov-lkp@intel.com/
 
---zxQAM6/8SI+n8N3I
-Content-Type: application/pgp-signature; name="signature.asc"
+smatch warnings:
+drivers/pinctrl/pinctrl-equilibrium.c:719 eqbr_build_groups() warn: unsigned 'grp->npins' is never less than zero.
 
------BEGIN PGP SIGNATURE-----
+vim +719 drivers/pinctrl/pinctrl-equilibrium.c
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmVgmlMACgkQ3SOs138+
-s6HQ7Q/+PRsUZtwRYInEotcw2KDEZ+cX3yUhsSpuvrwh904N8Uwz+i7+Y2cfdfBP
-Fk6wydqd688NAMSfNguwTNP4R3tSYFamumTuG7nK+0ULqpuK4GQWuHXUXACMo21L
-WMnb1c6mQcRNS6lUf8lH1ZYpDUlrF3ThQANTHq8Ta6DKmZECmMf9N8zxvbLO6P2q
-Fd+F0mcjA3V63cAWTDGM84ctD2IbaK1OlaKfYzG6V/iuD69lsfHGOZP/5H1JrGg1
-jVwXcFJErvw8o4KO3pPRkR7UuAGbBdUDdmQrgxbNnEY5TQfCph7no5xZfDJx9eMB
-T+PG54uDhd1TBbZ9H5Z1DhIOp6z89QwC4E7Ju2W0XHmhKK7IhnlD+jkJUVn7g55C
-BDt2XP916MyAlcpAHM143nqj25AVBFK28eBbXzu+wHejpWSD5WJZ99fmlH0X6Dup
-33ksQcQHBl6rcQkFBhPkax0Ujw7LCwCiROGj8XFMynZj5nbR0D1kLhAUITZDadt9
-dmYOq9DcB2LSFJxBTNtdXmTE4CR4J+vezLk6Bhv/oUnDHXVwNwIGvrecuY6oh3yG
-lubz4gCGLTyzOHYUdE980saXPTcUaEu0RL55kF+4v9HF0c3Xabjpd6oWP4migp6S
-dB3gz6EvPGLLtuRytaeUpTQt0ta5Ps9hMkOavyJddaGnUZDLzho=
-=4Eno
------END PGP SIGNATURE-----
+   702	
+   703	static int eqbr_build_groups(struct eqbr_pinctrl_drv_data *drvdata)
+   704	{
+   705		struct device *dev = drvdata->dev;
+   706		struct device_node *node = dev->of_node;
+   707		unsigned int *pins, *pinmux, pin_id, pinmux_id;
+   708		struct pingroup group, *grp = &group;
+   709		struct device_node *np;
+   710		struct property *prop;
+   711		int j, err;
+   712	
+   713		for_each_child_of_node(node, np) {
+   714			prop = of_find_property(np, "groups", NULL);
+   715			if (!prop)
+   716				continue;
+   717	
+   718			grp->npins = of_property_count_u32_elems(np, "pins");
+ > 719			if (grp->npins < 0) {
+   720				dev_err(dev, "No pins in the group: %s\n", prop->name);
+   721				of_node_put(np);
+   722				return -EINVAL;
+   723			}
+   724			grp->name = prop->value;
+   725			pins = devm_kcalloc(dev, grp->npins, sizeof(*pins), GFP_KERNEL);
+   726			if (!pins) {
+   727				of_node_put(np);
+   728				return -ENOMEM;
+   729			}
+   730			grp->pins = pins;
+   731	
+   732			pinmux = devm_kcalloc(dev, grp->npins, sizeof(*pinmux), GFP_KERNEL);
+   733			if (!pinmux) {
+   734				of_node_put(np);
+   735				return -ENOMEM;
+   736			}
+   737	
+   738			for (j = 0; j < grp->npins; j++) {
+   739				if (of_property_read_u32_index(np, "pins", j, &pin_id)) {
+   740					dev_err(dev, "Group %s: Read intel pins id failed\n",
+   741						grp->name);
+   742					of_node_put(np);
+   743					return -EINVAL;
+   744				}
+   745				if (pin_id >= drvdata->pctl_desc.npins) {
+   746					dev_err(dev, "Group %s: Invalid pin ID, idx: %d, pin %u\n",
+   747						grp->name, j, pin_id);
+   748					of_node_put(np);
+   749					return -EINVAL;
+   750				}
+   751				pins[j] = pin_id;
+   752				if (of_property_read_u32_index(np, "pinmux", j, &pinmux_id)) {
+   753					dev_err(dev, "Group %s: Read intel pinmux id failed\n",
+   754						grp->name);
+   755					of_node_put(np);
+   756					return -EINVAL;
+   757				}
+   758				pinmux[j] = pinmux_id;
+   759			}
+   760	
+   761			err = pinctrl_generic_add_group(drvdata->pctl_dev,
+   762							grp->name, grp->pins, grp->npins,
+   763							pinmux);
+   764			if (err < 0) {
+   765				dev_err(dev, "Failed to register group %s\n", grp->name);
+   766				of_node_put(np);
+   767				return err;
+   768			}
+   769			memset(&group, 0, sizeof(group));
+   770			pinmux = NULL;
+   771		}
+   772	
+   773		return 0;
+   774	}
+   775	
 
---zxQAM6/8SI+n8N3I--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
