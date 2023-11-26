@@ -1,71 +1,56 @@
-Return-Path: <linux-mips+bounces-287-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-288-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B23357F927E
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Nov 2023 12:31:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99AB07F94F2
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Nov 2023 19:57:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4ECA1C209FF
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Nov 2023 11:31:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44D6A280F22
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Nov 2023 18:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FD9CA56;
-	Sun, 26 Nov 2023 11:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fQ5BOAT3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 314D6FBF7;
+	Sun, 26 Nov 2023 18:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0018FE;
-	Sun, 26 Nov 2023 03:31:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700998306; x=1732534306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ROwRrhRWbLg8ydg2IqYW9JIlNogCdtYYyRIfLiHGP9I=;
-  b=fQ5BOAT34bkEVMROU1KQFUcpkjLTorWm0kvyocBFM/oCIZ0BygfjsQa8
-   HiDo1+A7hTMMdcBCTos3Qmw0ZEjfpfz3HdqQtNU4TheGBx6w+/3sVW91A
-   A4rkw3M6Iy5QMC1XSVabpYfuVmwonPkEnx5Jmm3LFPoW2eDDrG1Dz1mRC
-   gDHR/jb6GYIe3awOKzVESwUOmn6QmWAAJ8mMeTtCjHIDw2R03DRwi+7MF
-   myMJy4A4usp6Xm+GyvpBx0Tabf3D+am2WhdvJpAabiBrdvKrWlzlJ/p6k
-   d/TSZ7yIKco56xF8EQTbT5JzGaJ18ETvD292sEtOVka61AvworJF4Jit5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10905"; a="389715625"
-X-IronPort-AV: E=Sophos;i="6.04,228,1695711600"; 
-   d="scan'208";a="389715625"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2023 03:31:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10905"; a="1015283094"
-X-IronPort-AV: E=Sophos;i="6.04,228,1695711600"; 
-   d="scan'208";a="1015283094"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Nov 2023 03:31:42 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r7DMS-00053i-2K;
-	Sun, 26 Nov 2023 11:31:40 +0000
-Date: Sun, 26 Nov 2023 19:31:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: Re: [PATCH v2 13/21] MIPS: traps: Give more explanations if ebase
- doesn't belong to KSEG0
-Message-ID: <202311261838.wgZG2yvS-lkp@intel.com>
-References: <20231123152639.561231-14-gregory.clement@bootlin.com>
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A649DB;
+	Sun, 26 Nov 2023 10:57:17 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-586a516755aso2039694eaf.0;
+        Sun, 26 Nov 2023 10:57:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701025036; x=1701629836;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PZ3lIuB7TROofp/XK5RdQNDCfQK42fsDiRba7dlWv/k=;
+        b=SF/nibQYLKKrKhCgZsIfNi7yzbx/N3Th12nHaON9A65N9r5zwBCtqJeaMnw5Hsj37X
+         mQi7T55WAkE5wGr+EH8SL/5ZpBc7j9IHcwqkad0DDrEAPUF/M8JHjiBDAAGjUd3KGk37
+         8lqat6NuIBgGLwdBcyaw9oUg31q1Ht6Apb/drlmHIojlmiSVFzwXWIBQEbJ4lx7INep1
+         dcHZuLYfjDvRqQkK5QAuWBN/m2+W5DumReUJr51Lac9N+TERY14V54XGvurDTb3kTh2J
+         vs0eRD2J8pzQX/p+nVqSJuwMcz+1UcYw2vSi8+9D6J1xsPwPnomZ8UrQoAHux1nNqnFK
+         zRGw==
+X-Gm-Message-State: AOJu0Yy8ndy8zgPc5Qpn1oZqyhz7DZqawQn2147nehL8/sk9GGOjCAFZ
+	kn7i5RK95x0E25SCj7kZTPRRoyytlQ==
+X-Google-Smtp-Source: AGHT+IESXXGngd5rzDZYKrntqszcw4kI01HKt8M15eBOcGYLERrYrKvMVn5jnWZHZAVQh+aU5SCtPQ==
+X-Received: by 2002:a05:6870:d85:b0:1ef:781a:1f2e with SMTP id mj5-20020a0568700d8500b001ef781a1f2emr4561901oab.1.1701025036682;
+        Sun, 26 Nov 2023 10:57:16 -0800 (PST)
+Received: from herring.priv ([2607:fb91:9e5:15e5:aee2:7746:1955:d879])
+        by smtp.gmail.com with ESMTPSA id s4-20020a056808208400b003b83bb8dbcesm236011oiw.30.2023.11.26.10.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Nov 2023 10:57:15 -0800 (PST)
+Received: (nullmailer pid 31839 invoked by uid 1000);
+	Sun, 26 Nov 2023 18:57:13 -0000
+Date: Sun, 26 Nov 2023 11:57:13 -0700
+From: Rob Herring <robh@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: linux-mips@vger.kernel.org, Paul Burton <paulburton@kernel.org>, linux-kernel@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Rob Herring <robh+dt@kernel.org>, =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH v2 16/21] dt-bindings: mips: Add bindings for Mobileye
+ SoCs
+Message-ID: <170102463021.19577.17303058490928522192.robh@kernel.org>
+References: <20231123152639.561231-1-gregory.clement@bootlin.com>
+ <20231123152639.561231-17-gregory.clement@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -74,135 +59,22 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231123152639.561231-14-gregory.clement@bootlin.com>
-
-Hi Gregory,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on lee-mfd/for-mfd-next linus/master v6.7-rc2 next-20231124]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-CLEMENT/MIPS-Export-higher-highest-relocation-functions-in-uasm/20231124-002644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231123152639.561231-14-gregory.clement%40bootlin.com
-patch subject: [PATCH v2 13/21] MIPS: traps: Give more explanations if ebase doesn't belong to KSEG0
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20231126/202311261838.wgZG2yvS-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231126/202311261838.wgZG2yvS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311261838.wgZG2yvS-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/mips/kernel/traps.c:371:6: warning: no previous prototype for 'show_registers' [-Wmissing-prototypes]
-     371 | void show_registers(struct pt_regs *regs)
-         |      ^~~~~~~~~~~~~~
-   arch/mips/kernel/traps.c:448:17: warning: no previous prototype for 'do_be' [-Wmissing-prototypes]
-     448 | asmlinkage void do_be(struct pt_regs *regs)
-         |                 ^~~~~
-   arch/mips/kernel/traps.c:753:17: warning: no previous prototype for 'do_ov' [-Wmissing-prototypes]
-     753 | asmlinkage void do_ov(struct pt_regs *regs)
-         |                 ^~~~~
-   arch/mips/kernel/traps.c:875:17: warning: no previous prototype for 'do_fpe' [-Wmissing-prototypes]
-     875 | asmlinkage void do_fpe(struct pt_regs *regs, unsigned long fcr31)
-         |                 ^~~~~~
-   arch/mips/kernel/traps.c:1028:17: warning: no previous prototype for 'do_bp' [-Wmissing-prototypes]
-    1028 | asmlinkage void do_bp(struct pt_regs *regs)
-         |                 ^~~~~
-   arch/mips/kernel/traps.c:1115:17: warning: no previous prototype for 'do_tr' [-Wmissing-prototypes]
-    1115 | asmlinkage void do_tr(struct pt_regs *regs)
-         |                 ^~~~~
-   arch/mips/kernel/traps.c:1152:17: warning: no previous prototype for 'do_ri' [-Wmissing-prototypes]
-    1152 | asmlinkage void do_ri(struct pt_regs *regs)
-         |                 ^~~~~
-   arch/mips/kernel/traps.c:1403:17: warning: no previous prototype for 'do_cpu' [-Wmissing-prototypes]
-    1403 | asmlinkage void do_cpu(struct pt_regs *regs)
-         |                 ^~~~~~
-   arch/mips/kernel/traps.c:1508:17: warning: no previous prototype for 'do_msa_fpe' [-Wmissing-prototypes]
-    1508 | asmlinkage void do_msa_fpe(struct pt_regs *regs, unsigned int msacsr)
-         |                 ^~~~~~~~~~
-   arch/mips/kernel/traps.c:1528:17: warning: no previous prototype for 'do_msa' [-Wmissing-prototypes]
-    1528 | asmlinkage void do_msa(struct pt_regs *regs)
-         |                 ^~~~~~
-   arch/mips/kernel/traps.c:1549:17: warning: no previous prototype for 'do_mdmx' [-Wmissing-prototypes]
-    1549 | asmlinkage void do_mdmx(struct pt_regs *regs)
-         |                 ^~~~~~~
-   arch/mips/kernel/traps.c:1561:17: warning: no previous prototype for 'do_watch' [-Wmissing-prototypes]
-    1561 | asmlinkage void do_watch(struct pt_regs *regs)
-         |                 ^~~~~~~~
-   arch/mips/kernel/traps.c:1588:17: warning: no previous prototype for 'do_mcheck' [-Wmissing-prototypes]
-    1588 | asmlinkage void do_mcheck(struct pt_regs *regs)
-         |                 ^~~~~~~~~
-   arch/mips/kernel/traps.c: In function 'do_mcheck':
-   arch/mips/kernel/traps.c:1591:24: warning: variable 'prev_state' set but not used [-Wunused-but-set-variable]
-    1591 |         enum ctx_state prev_state;
-         |                        ^~~~~~~~~~
-   arch/mips/kernel/traps.c: At top level:
-   arch/mips/kernel/traps.c:1613:17: warning: no previous prototype for 'do_mt' [-Wmissing-prototypes]
-    1613 | asmlinkage void do_mt(struct pt_regs *regs)
-         |                 ^~~~~
-   arch/mips/kernel/traps.c:1649:17: warning: no previous prototype for 'do_dsp' [-Wmissing-prototypes]
-    1649 | asmlinkage void do_dsp(struct pt_regs *regs)
-         |                 ^~~~~~
-   arch/mips/kernel/traps.c:1657:17: warning: no previous prototype for 'do_reserved' [-Wmissing-prototypes]
-    1657 | asmlinkage void do_reserved(struct pt_regs *regs)
-         |                 ^~~~~~~~~~~
-   arch/mips/kernel/traps.c:1833:17: warning: no previous prototype for 'cache_parity_error' [-Wmissing-prototypes]
-    1833 | asmlinkage void cache_parity_error(void)
-         |                 ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/traps.c:1881:17: warning: no previous prototype for 'do_ftlb' [-Wmissing-prototypes]
-    1881 | asmlinkage void do_ftlb(void)
-         |                 ^~~~~~~
-   arch/mips/kernel/traps.c:1910:17: warning: no previous prototype for 'do_gsexc' [-Wmissing-prototypes]
-    1910 | asmlinkage void do_gsexc(struct pt_regs *regs, u32 diag1)
-         |                 ^~~~~~~~
-   arch/mips/kernel/traps.c:1945:6: warning: no previous prototype for 'ejtag_exception_handler' [-Wmissing-prototypes]
-    1945 | void ejtag_exception_handler(struct pt_regs *regs)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/traps.c:1990:17: warning: no previous prototype for 'nmi_exception_handler' [-Wmissing-prototypes]
-    1990 | void __noreturn nmi_exception_handler(struct pt_regs *regs)
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/mips/include/asm/bug.h:42,
-                    from include/linux/bug.h:5,
-                    from arch/mips/kernel/traps.c:16:
-   arch/mips/kernel/traps.c: In function 'trap_init':
->> include/linux/kern_levels.h:5:25: warning: format '%llX' expects argument of type 'long long unsigned int', but argument 2 has type 'phys_addr_t' {aka 'unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:427:25: note: in definition of macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:508:9: note: in expansion of macro 'printk'
-     508 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   include/linux/kern_levels.h:12:25: note: in expansion of macro 'KERN_SOH'
-      12 | #define KERN_WARNING    KERN_SOH "4"    /* warning conditions */
-         |                         ^~~~~~~~
-   include/linux/printk.h:508:16: note: in expansion of macro 'KERN_WARNING'
-     508 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                ^~~~~~~~~~~~
-   arch/mips/kernel/traps.c:2428:25: note: in expansion of macro 'pr_warn'
-    2428 |                         pr_warn("ebase(0x%llX) should better be in KSeg0",
-         |                         ^~~~~~~
+In-Reply-To: <20231123152639.561231-17-gregory.clement@bootlin.com>
 
 
-vim +5 include/linux/kern_levels.h
+On Thu, 23 Nov 2023 16:26:33 +0100, Gregory CLEMENT wrote:
+> Add the yaml bindings for Mobileye SoCs. Currently only EyeQ5 is
+> supported
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  .../devicetree/bindings/mips/mobileye.yaml    | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/mobileye.yaml
+> 
 
-314ba3520e513a Joe Perches 2012-07-30  4  
-04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+With the indentation fixed:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Rob Herring <robh@kernel.org>
+
 
