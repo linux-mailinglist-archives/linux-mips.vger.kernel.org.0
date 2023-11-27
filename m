@@ -1,91 +1,192 @@
-Return-Path: <linux-mips+bounces-294-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-295-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C001B7FA8FC
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Nov 2023 19:28:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34CA7FAC47
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Nov 2023 22:09:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 523FAB20F81
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Nov 2023 18:28:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F0452815DB
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Nov 2023 21:09:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438193DB8E;
-	Mon, 27 Nov 2023 18:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E243BB46;
+	Mon, 27 Nov 2023 21:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="OqM1Ivhy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oMtl2vfZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB321B5;
-	Mon, 27 Nov 2023 10:28:38 -0800 (PST)
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6ce327458a6so2093604a34.1;
-        Mon, 27 Nov 2023 10:28:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701109718; x=1701714518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8lHbAwOVAGp3Jtbt+Xomb+VJp96WXonwddtbec/v2sQ=;
-        b=jHdoecg0TSTbyYiCKyb27r7/k6gO4GlUfzlZNmAw0WRGC4LYEciH0JAaz0wo04VPKR
-         HmQwMp4U/+hb/R8oXBkhC983zl4HFZRpaYtaIFwFFu4bg+cc/pEfyJHI2tEjp6XHSoyn
-         6nDCT8o2KbWMhx+uGLViiJVn1Geu+Mcg1Ce+CqODWfTZXYhHcyXkB9Et0H0DUjOV/wNf
-         iuzvCLA5+AcFxmsjRH5TL+B4HbmmSozS6f2dKoSjWmkB0TaJIdaTGmqukprrjPBF2btf
-         VZrFwXsFtgbbF3f2w+sS9ZP9KxiH/Qp3xxDSKkVIeUMs5S2SZ3M/GPTTAMDyU2ma6lOS
-         KryA==
-X-Gm-Message-State: AOJu0YyFHdohBzhXWcfYxXGlNldK9VnhBSbkP8QEVWYYCLY8LExj5+4y
-	ScKZHDpgTM7NsZeH5rzfQ6SjxFVvZA==
-X-Google-Smtp-Source: AGHT+IH1ioL910ojCs2BJrotcJC6TMmff95P6LzxSW4hHnZG0BZEJks3qA0x9adGeBvdttiowYqtdQ==
-X-Received: by 2002:a05:6830:44a9:b0:6d8:1bf7:df43 with SMTP id r41-20020a05683044a900b006d81bf7df43mr4088750otv.14.1701109718072;
-        Mon, 27 Nov 2023 10:28:38 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a056830448800b006d3127234d7sm1400352otv.8.2023.11.27.10.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Nov 2023 10:28:37 -0800 (PST)
-Received: (nullmailer pid 2171552 invoked by uid 1000);
-	Mon, 27 Nov 2023 18:28:36 -0000
-Date: Mon, 27 Nov 2023 12:28:36 -0600
-From: Rob Herring <robh@kernel.org>
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Binbin Zhou <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>, Thomas Gleixner <tglx@linutronix.de>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, loongson-kernel@lists.loongnix.cn, devicetree@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, lvjianmin@loongson.cn, WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] dt-bindings: interrupt-controller:
- loongson,liointc: Standardize the naming of 'loongson,parent-int-map'
-Message-ID: <20231127182836.GA2150516-robh@kernel.org>
-References: <cover.1700449792.git.zhoubinbin@loongson.cn>
- <cae772aa897f6b10c3f5c4c93a256b50c5de4b21.1700449792.git.zhoubinbin@loongson.cn>
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0677219D;
+	Mon, 27 Nov 2023 13:08:55 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 6F5F35C004E;
+	Mon, 27 Nov 2023 16:08:54 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Mon, 27 Nov 2023 16:08:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+	1701119334; x=1701205734; bh=O7eAZBa/VWWZ/OXR3VR79aB+uaJ9c4U23L/
+	jIs+R/4I=; b=OqM1IvhywGfmb7/kGPg8aPxMlu17gR4i5CH9/cqoelecohlYpCR
+	/c1Og9aPbItY0RcGuLHayz3h1Mmo51jLTPjledQBGtv7CLQBdtOywUqY3ebesdjh
+	w/KgFo9dTiMaWYN65I0ofo05JauvgXGn59f0x6BjzkONfKGyBzpoP6Owy4rButba
+	YVA2NRJuSEI+ePvSTkdk4V3idMP6d5l57axFknSG3n+MRxRmc87fsZGMrocrGevy
+	/MeOyX413+ioZH7CnQns3dUBQU3yBOoOltb1i1Bs48iNWsKwZ5C/U8Hijrfe7CMb
+	C4yY9q8rs0vcpj0rd2e2wARn3LeaEBpgmgA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701119334; x=1701205734; bh=O7eAZBa/VWWZ/OXR3VR79aB+uaJ9c4U23L/
+	jIs+R/4I=; b=oMtl2vfZKze5RZUv5gkgqJtSL34cqE0nGLzcTGh1dlkFMyNcSYs
+	Bps/C/1fM/uMFwg+7atKxp9YinmkIQnzIQ5L29wxAxcacsEwETBDMiC+7amaMbXT
+	PceJaJx609MSuf4COEB7azsvh2zagVy0aAxxbTd5fEDm+SsxdCnuiukTrLAIc5Hn
+	jnQBi7Pnnqoc6nOi1St+ZKNFQ5wg0gZ3nvuguKV/5wG25Vy5TtwQEmhCCO3Zz+Pl
+	J/0YHmxFPThmKOyyza8A75mNqp2TMRHiaRXfmdOKg6SydW+V9YjkKHvYmaEsR516
+	lZMKyhcGMuVTBXXq6C7CIE+DsQiVzHXmL7w==
+X-ME-Sender: <xms:ZQVlZUlkX5naVSJjUG7a5LlzcDZJbVDTVFLUDiRTQzRwOh8zZmCl8w>
+    <xme:ZQVlZT1l-Qo5NEm1acyCQ5WNAgEYgQUNyvojv0R5DW-zh-a0ZgHuuGFQi13uhgHQw
+    AZvRlfHcAPUJGxA138>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiuddgudegjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
+    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:ZQVlZSpBwe7Fy4oIQ2uXsQhMR5CRgwHNgR54NHNaXbDK9orhjPgNyg>
+    <xmx:ZQVlZQnnbwzhN-1wZLF_yUzVW9q5knGrwaXAd-cJJ9OiR9ANyTdk7A>
+    <xmx:ZQVlZS05x9tCsC-yoi2q9V77LnxkssFNeWR1RtT6Yw9mPHuSgl2kdg>
+    <xmx:ZgVlZd3C112C-1ZDvi2fs0EzyPbh9HLTILc8Uw5-MetAtKrB_0ao3w>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 14CA836A0075; Mon, 27 Nov 2023 16:08:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1234-gac66594aae-fm-20231122.001-gac66594a
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cae772aa897f6b10c3f5c4c93a256b50c5de4b21.1700449792.git.zhoubinbin@loongson.cn>
+Message-Id: <c73d9dbf-b637-47ff-ae2d-6f8987345410@app.fastmail.com>
+In-Reply-To: 
+ <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
+References: <20231122182419.30633-2-fancer.lancer@gmail.com>
+ <b996b542-4cd3-4f9d-b221-00b2d5ef224e@app.fastmail.com>
+ <c7cuvhuu6py5vxhhvkhekv6ned5sro4a3wzzn7v45oahfw42ud@gyqmucagt5e2>
+ <8ca730b9-fa8c-46ea-bdc5-158da0f29c3a@app.fastmail.com>
+ <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
+ <d6d7e27a-b1a1-48af-be6c-aa9097c48992@app.fastmail.com>
+ <ZV94rifAIF2p9Nej@alpha.franken.de>
+ <245d3985-9085-4be0-8c74-d95d06334584@app.fastmail.com>
+ <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
+ <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
+ <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
+Date: Mon, 27 Nov 2023 21:08:11 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Serge Semin" <fancer.lancer@gmail.com>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
+ "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Yinglu Yang" <yangyinglu@loongson.cn>,
+ "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
+ "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
+ "Aleksandar Rikalo" <arikalo@gmail.com>,
+ "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
+ "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 20, 2023 at 05:06:23PM +0800, Binbin Zhou wrote:
-> Since the 'loongson,parent_int_map' attribute naming is non-standard, we
-> should use 'loongson,parent-int-map' instead.
-> 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../bindings/interrupt-controller/loongson,liointc.yaml   | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> index 00b570c82903..70c125bf8095 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
-> @@ -54,7 +54,7 @@ properties:
->    '#interrupt-cells':
->      const: 2
->  
-> -  loongson,parent_int_map:
-> +  loongson,parent-int-map:
 
-Not what I said to do. Now you just break the ABI instead of maintaining 
-both names.
 
-Just use loongson,parent_int_map *forever*. Drop this patch.
+=E5=9C=A82023=E5=B9=B411=E6=9C=8827=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
+=E4=B8=8B=E5=8D=884:23=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+>> I just made a quick grep in tree, and it seems like we don't have much
+>> user of ioremap_cache (as well as ioremap_uc/wc) here so I think it is
+>> a safe assumption.
+>
+> I wouldn't say there aren't much users. ioremap_wc() and it's
+> devm-version is widely utilized in the GPU and network and some other
+> subsystems. ioremap_cache() isn't widespread indeed. In anyway even a
+> single user must be supported in safely calling the method if it's
+> provided by the arch-code, otherwise the method could be considered as
+> just a bogus stub to have the kernel successfully built. I bet you'll
+> agree with that. But that's not the point in this case,
+>
+> A bit later you also noted:
+>
+> On Fri, Nov 24, 2023 at 10:34:49PM +0000, Jiaxun Yang wrote:
+>> A nip, _page_cachable_default is set in cpu_cache_init() as well. We'd
+>> better move it to cpu-probe.c, or give it a reasonable default value.
+>
+> Right. Thanks. To be honest I haven't noticed that before your
+> message. _page_cachable_default is indeed initialized in the
+> cpu_cache_init() method, several steps after it would be used in the
+> framework of dmi_remap_early(). On the other hand ioremap_cache() is
+> defined as ioremap_prot() with the _page_cachable_default variable
+> passed. So my code will still correctly work unless
+> _page_cachable_default is pre-initialized with something other than
+> zero. On the other hand we can't easily change its default value
+> because it will affect and likely break the r3k (CPU_R3000) and Octeon
+> based platforms, because it's utilized to initialize the
+> protection-map table. Of course we can fix the r3k_cache_init() and
+> octeon_cache_init() methods too so they would get the
+> _page_cachable_default variable back to zero, but it will also make
+> things around it more complicated.
+>
+> Also note, moving the _page_cachable_default initialization to the
+> earlier stages like cpu_probe() won't work better because the field
+> value may get change for instance in the framework of the smp_setup()
+> function (see cps_smp_setup()).
+>
+> So after all the considerations above this solution now looks even
+> clumsier than before.( Any idea how to make it better?
 
-Rob
+I think the best solution maybe just use CKSEG0 to setup map here.
+
+Btw I was thinking about 64 bit here, I thought for 64bit we would
+just embedded prot into XKPHYS, however I quickly figure out
+ioremap_cache was never implemented properly on 64-bit system,
+so does ioremap_wc.
+
+> u64 base =3D (flags =3D=3D _CACHE_UNCACHED ? IO_BASE : UNCAC_BASE);
+
+Which is always uncached mapping.
+
+>>=20
+[...]
+>
+> Note the memory might be clobbered even before dmi_setup() for
+> instance by means of the early_memtest() method. In anyway it would be
+> better if the system booloader would have already reserved the DMI
+> memory (in DTB) or it would have been done by the platform-specific
+> plat_mem_setup() method.
+
+Unfortunately, too many machines are shipped with those badly designed
+firmware. We rely on dmi_setup code to scan and preserve dmi table from
+random location in memory.
+
+>
+>> The second is we may have some early quirks depends on DMI
+>> information.
+>
+> Which quirks do you mean to be dependent in between the current
+> dmi_setup() call place and the cpu_cache_init() method invocation?
+
+I think we don't have any for now.
+
+--=20
+- Jiaxun
 
