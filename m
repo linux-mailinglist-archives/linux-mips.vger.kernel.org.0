@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-316-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-323-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B567FC4BC
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 21:04:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C53A7FC4E3
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 21:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEC151C2103B
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 20:04:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7334B21463
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 20:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EC040BE6;
-	Tue, 28 Nov 2023 20:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7B7B40BFB;
+	Tue, 28 Nov 2023 20:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fczl0kcx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HGcnp9tV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BBD19BB;
-	Tue, 28 Nov 2023 12:04:21 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E46110F0;
+	Tue, 28 Nov 2023 12:08:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701201862; x=1732737862;
+  t=1701202081; x=1732738081;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mX8nkFa+pUFM3JtjtNpLHJ2j2h/kDkAZjOuxZ+/LWq0=;
-  b=fczl0kcx/ZzmUSeSE269Fpq4BdNuN08GTnqTr12jhqzhYU8J89TW85UG
-   pxl/wIGIB4LGnhwjLSRTaj0kah9nx3pFKP6RQbpn1AIvttXNrz/2dItC2
-   Cni49f9KeK6TWiTPiOdZ3iEWuI7NuJJ3KwwTF/oNDyQ+xmOTDbIhOza/O
-   Br8bBS7SZeenCsbirn4ip2IALcyM9zFuVdHgEW68ojDCPHAjqbcR8hPSF
-   Gl7Vb19kvy9x/eHUmburXsGi3GpKYXjdNiS2EixXvX/wEQ+Gsf7cBh65i
-   VJbnYxf2eOpwvFYniepu4/2gwM6dcT3wWSqsE/lJfHcL/CDmIvjpR1Ipf
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="6217746"
+  bh=CyMweha2ZvuLisSoPmNJvwBvM8UVF+24ES7V+e13w7A=;
+  b=HGcnp9tV83iHVtaN4q3xBFp0xWEVUhCfIt65jQiQKYMnqYLsLBsWoHnP
+   +utQEqDPyVspjj5ttLpu5gQW7WdHIAL4x8SurKAMCA97rnfGJbMa4rSLm
+   B74VPX/fV4fBEgskWaVvAxn9qumO7tJad1A5GcTe25Z4OyRQc/BEVU0hQ
+   z1NM464wnJSNVU9ChrJB+Ke71cvKOipy3ezNJFylUCgOhkdGETRg8rNvE
+   rX89URAPImuobIdRzJ5zHbgCmx/GJBv0sLaj1+gy940VFseo7VTA3WOpU
+   Mr2ZNO752ImjTBdnNyWD31xTzSbNEKqC5Sn4cjJMhXRnT+U/KsUT4jko+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="457346999"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="6217746"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 12:02:19 -0800
+   d="scan'208";a="457346999"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 12:06:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="797687945"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="1100254115"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="797687945"
+   d="scan'208";a="1100254115"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 28 Nov 2023 12:02:09 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 28 Nov 2023 12:02:18 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 420E1A94; Tue, 28 Nov 2023 22:01:58 +0200 (EET)
+	id 4F6ADA96; Tue, 28 Nov 2023 22:01:58 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Linus Walleij <linus.walleij@linaro.org>,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
@@ -82,9 +82,9 @@ Cc: Ray Jui <rjui@broadcom.com>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Hal Feng <hal.feng@starfivetech.com>
-Subject: [PATCH v3 08/22] pinctrl: keembay: Convert to use struct pingroup
-Date: Tue, 28 Nov 2023 21:56:57 +0200
-Message-ID: <20231128200155.438722-9-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 09/22] pinctrl: nuvoton: Convert to use struct pingroup and PINCTRL_PINGROUP()
+Date: Tue, 28 Nov 2023 21:56:58 +0200
+Message-ID: <20231128200155.438722-10-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 In-Reply-To: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com>
 References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com>
@@ -94,38 +94,52 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The pin control header provides struct pingroup.
-Utilize it instead of open coded variants in the driver.
+The pin control header provides struct pingroup and PINCTRL_PINGROUP() macro.
+Utilize them instead of open coded variants in the driver.
 
+Reviewed-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/pinctrl-keembay.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-keembay.c b/drivers/pinctrl/pinctrl-keembay.c
-index 152c35bce8ec..87d328853ae4 100644
---- a/drivers/pinctrl/pinctrl-keembay.c
-+++ b/drivers/pinctrl/pinctrl-keembay.c
-@@ -1517,7 +1517,7 @@ static int keembay_gpiochip_probe(struct keembay_pinctrl *kpc,
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+index 0cff44b07b29..4589900244c7 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+@@ -474,9 +474,8 @@ enum {
+ #undef WPCM450_GRP
+ };
  
- static int keembay_build_groups(struct keembay_pinctrl *kpc)
+-static struct group_desc wpcm450_groups[] = {
+-#define WPCM450_GRP(x) { .name = #x, .pins = x ## _pins, \
+-			.num_pins = ARRAY_SIZE(x ## _pins) }
++static struct pingroup wpcm450_groups[] = {
++#define WPCM450_GRP(x) PINCTRL_PINGROUP(#x, x ## _pins, ARRAY_SIZE(x ## _pins))
+ 	WPCM450_GRPS
+ #undef WPCM450_GRP
+ };
+@@ -852,7 +851,7 @@ static int wpcm450_get_group_pins(struct pinctrl_dev *pctldev,
+ 				  const unsigned int **pins,
+ 				  unsigned int *npins)
  {
--	struct group_desc *grp;
-+	struct pingroup *grp;
- 	unsigned int i;
+-	*npins = wpcm450_groups[selector].num_pins;
++	*npins = wpcm450_groups[selector].npins;
+ 	*pins  = wpcm450_groups[selector].pins;
  
- 	kpc->ngroups = kpc->npins;
-@@ -1528,7 +1528,7 @@ static int keembay_build_groups(struct keembay_pinctrl *kpc)
- 	/* Each pin is categorised as one group */
- 	for (i = 0; i < kpc->ngroups; i++) {
- 		const struct pinctrl_pin_desc *pdesc = keembay_pins + i;
--		struct group_desc *kmb_grp = grp + i;
-+		struct pingroup *kmb_grp = grp + i;
+ 	return 0;
+@@ -901,7 +900,7 @@ static int wpcm450_pinmux_set_mux(struct pinctrl_dev *pctldev,
+ 	struct wpcm450_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
  
- 		kmb_grp->name = pdesc->name;
- 		kmb_grp->pins = (int *)&pdesc->number;
+ 	wpcm450_setfunc(pctrl->gcr_regmap, wpcm450_groups[group].pins,
+-			wpcm450_groups[group].num_pins, function);
++			wpcm450_groups[group].npins, function);
+ 
+ 	return 0;
+ }
 -- 
 2.43.0.rc1.1.gbec44491f096
 
