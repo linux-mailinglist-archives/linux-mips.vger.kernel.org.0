@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-322-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-317-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0154E7FC4DA
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 21:06:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D9AD7FC4C1
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 21:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 332621C20BEA
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 20:06:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58E261C20E53
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Nov 2023 20:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0DB240BF7;
-	Tue, 28 Nov 2023 20:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED72640BF3;
+	Tue, 28 Nov 2023 20:04:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WE/mCEuP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFaUrj5M"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BCA19BF;
-	Tue, 28 Nov 2023 12:06:25 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C580A19B9;
+	Tue, 28 Nov 2023 12:04:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701201985; x=1732737985;
+  t=1701201873; x=1732737873;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zSzJJSBORuSF8Rt+BZ5mH8g+0I9DsPIRgct4EsYRglY=;
-  b=WE/mCEuPUkAVm0ELfJ3Msrq5b436O5shG/OLzl33x1bW/xMydOdl+7Nb
-   R4emngsutjGy2M6emv/r6lzTgoQg+C3XVVKGaCBZg7o0NTZxiEYeJhOiS
-   IUNlJapK8MsgsGoShrgB0hyuaEPZWhrvjgh7QEtuy58siE/0nxrZ3/caA
-   Hm++J4ZNt32EA3+Inl6z7yB0rfOzDGaZr3nkP8PqYS/oU7iEIY9sqzU5q
-   q209O44+yPLsSJrMZJ+j3+6d6neN98wRUxh3ClsUX8CXADf+iE/Xe45bG
-   teWbrJ5V20blXNGncLTwB5r7/KN7g23RNSXhHJgnsXEwymsGg4BekUqCb
+  bh=AMy4L5MTw99Pqy+OTzGL349/EMT3/j4eidtVRe1PNcE=;
+  b=lFaUrj5MTFtb55DpbRIVEFhZnQklMQP/KNR7nb6sGY9f/dGpEzL04SMJ
+   9sb2uit5YglvR814VDSyd3yWelPhyDMtdqWbVFMonlxqzDsbW7TiQFWst
+   iZvM9r2Jk3JveBVM7FhcWZC0dYY4jnJHJg1t6KvfTLuVPoMVtllHTIPgN
+   AncihKjVkV/WyFkYT6IS1MpV9X20w2TrNwa3RK5eSDF5UEuJpUWL25QwJ
+   KJoCQw0SgP/e/7uf1GK10JUwqvltA3HTnrC8OErUDLAELzOrnWQTNFN9I
+   EZppF/s+0xzzWMp33JB1ZzI6Y/2ZHtI3x61c6r9NCGWVOVMhE2pILDjNq
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="6218551"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="457345749"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="6218551"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 12:02:47 -0800
+   d="scan'208";a="457345749"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 12:02:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="797688000"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="772420483"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="797688000"
+   d="scan'208";a="772420483"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 28 Nov 2023 12:02:37 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 28 Nov 2023 12:02:37 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 07AA8C4F; Tue, 28 Nov 2023 22:01:59 +0200 (EET)
+	id 16434CA9; Tue, 28 Nov 2023 22:01:59 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Linus Walleij <linus.walleij@linaro.org>,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
@@ -81,11 +81,10 @@ Cc: Ray Jui <rjui@broadcom.com>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Emil Renner Berthing <kernel@esmil.dk>,
-	Hal Feng <hal.feng@starfivetech.com>,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Subject: [PATCH v3 21/22] pinctrl: starfive: Convert to use grp member
-Date: Tue, 28 Nov 2023 21:57:10 +0200
-Message-ID: <20231128200155.438722-22-andriy.shevchenko@linux.intel.com>
+	Hal Feng <hal.feng@starfivetech.com>
+Subject: [PATCH v3 22/22] pinctrl: core: Remove unused members from struct group_desc
+Date: Tue, 28 Nov 2023 21:57:11 +0200
+Message-ID: <20231128200155.438722-23-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 In-Reply-To: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com>
 References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com>
@@ -97,81 +96,73 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert drivers to use grp member embedded in struct group_desc.
+All drivers are converted to use embedded struct pingroup.
+Remove unused members from struct group_desc.
 
-Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c | 8 ++++----
- drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/pinctrl/core.c | 9 ---------
+ drivers/pinctrl/core.h | 9 ---------
+ 2 files changed, 18 deletions(-)
 
-diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
-index ea70b8c61679..21bfbbaede72 100644
---- a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
-+++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
-@@ -654,7 +654,7 @@ static int starfive_set_mux(struct pinctrl_dev *pctldev,
- 		return -EINVAL;
- 
- 	pinmux = group->data;
--	for (i = 0; i < group->num_pins; i++) {
-+	for (i = 0; i < group->grp.npins; i++) {
- 		u32 v = pinmux[i];
- 		unsigned int gpio = starfive_pinmux_to_gpio(v);
- 		u32 dout = starfive_pinmux_to_dout(v);
-@@ -797,7 +797,7 @@ static int starfive_pinconf_group_get(struct pinctrl_dev *pctldev,
+diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
+index e08d4b3b0a56..88de80187445 100644
+--- a/drivers/pinctrl/core.c
++++ b/drivers/pinctrl/core.c
+@@ -559,9 +559,6 @@ const char *pinctrl_generic_get_group_name(struct pinctrl_dev *pctldev,
  	if (!group)
- 		return -EINVAL;
+ 		return NULL;
  
--	return starfive_pinconf_get(pctldev, group->pins[0], config);
-+	return starfive_pinconf_get(pctldev, group->grp.pins[0], config);
+-	if (group->name)
+-		return group->name;
+-
+ 	return group->grp.name;
  }
- 
- static int starfive_pinconf_group_set(struct pinctrl_dev *pctldev,
-@@ -876,8 +876,8 @@ static int starfive_pinconf_group_set(struct pinctrl_dev *pctldev,
- 		}
+ EXPORT_SYMBOL_GPL(pinctrl_generic_get_group_name);
+@@ -588,12 +585,6 @@ int pinctrl_generic_get_group_pins(struct pinctrl_dev *pctldev,
+ 		return -EINVAL;
  	}
  
--	for (i = 0; i < group->num_pins; i++)
--		starfive_padctl_rmw(sfp, group->pins[i], mask, value);
-+	for (i = 0; i < group->grp.npins; i++)
-+		starfive_padctl_rmw(sfp, group->grp.pins[i], mask, value);
+-	if (group->pins) {
+-		*pins = group->pins;
+-		*num_pins = group->num_pins;
+-		return 0;
+-	}
+-
+ 	*pins = group->grp.pins;
+ 	*num_pins = group->grp.npins;
  
- 	return 0;
+diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
+index 863b4956a41e..c1ace4c2eccc 100644
+--- a/drivers/pinctrl/core.h
++++ b/drivers/pinctrl/core.h
+@@ -199,16 +199,10 @@ struct pinctrl_maps {
+ /**
+  * struct group_desc - generic pin group descriptor
+  * @grp: generic data of the pin group (name and pins)
+- * @name: name of the pin group
+- * @pins: array of pins that belong to the group
+- * @num_pins: number of pins in the group
+  * @data: pin controller driver specific data
+  */
+ struct group_desc {
+ 	struct pingroup grp;
+-	const char *name;
+-	const int *pins;
+-	int num_pins;
+ 	void *data;
+ };
+ 
+@@ -216,9 +210,6 @@ struct group_desc {
+ #define PINCTRL_GROUP_DESC(_name, _pins, _num_pins, _data)	\
+ (struct group_desc) {						\
+ 	.grp = PINCTRL_PINGROUP(_name, _pins, _num_pins),	\
+-	.name = _name,						\
+-	.pins = _pins,						\
+-	.num_pins = _num_pins,					\
+ 	.data = _data,						\
  }
-diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c
-index 9d71e8c13310..60160965cd29 100644
---- a/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c
-+++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c
-@@ -307,7 +307,7 @@ static int jh7110_set_mux(struct pinctrl_dev *pctldev,
- 		return -EINVAL;
  
- 	pinmux = group->data;
--	for (i = 0; i < group->num_pins; i++) {
-+	for (i = 0; i < group->grp.npins; i++) {
- 		u32 v = pinmux[i];
- 
- 		if (info->jh7110_set_one_pin_mux)
-@@ -437,7 +437,7 @@ static int jh7110_pinconf_group_get(struct pinctrl_dev *pctldev,
- 	if (!group)
- 		return -EINVAL;
- 
--	return jh7110_pinconf_get(pctldev, group->pins[0], config);
-+	return jh7110_pinconf_get(pctldev, group->grp.pins[0], config);
- }
- 
- static int jh7110_pinconf_group_set(struct pinctrl_dev *pctldev,
-@@ -508,8 +508,8 @@ static int jh7110_pinconf_group_set(struct pinctrl_dev *pctldev,
- 		}
- 	}
- 
--	for (i = 0; i < group->num_pins; i++)
--		jh7110_padcfg_rmw(sfp, group->pins[i], mask, value);
-+	for (i = 0; i < group->grp.npins; i++)
-+		jh7110_padcfg_rmw(sfp, group->grp.pins[i], mask, value);
- 
- 	return 0;
- }
 -- 
 2.43.0.rc1.1.gbec44491f096
 
