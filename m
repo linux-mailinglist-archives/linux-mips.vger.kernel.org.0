@@ -1,202 +1,162 @@
-Return-Path: <linux-mips+bounces-350-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-351-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4FF77FCEDB
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 07:09:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01E557FCEE7
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 07:14:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27E8C282445
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 06:09:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 330271C209E4
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 06:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1616EDF4A;
-	Wed, 29 Nov 2023 06:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D04D514;
+	Wed, 29 Nov 2023 06:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4hz6Fo0z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ua/fyBsY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3CCCA
-	for <linux-mips@vger.kernel.org>; Tue, 28 Nov 2023 22:09:08 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5cef61289fdso63994067b3.1
-        for <linux-mips@vger.kernel.org>; Tue, 28 Nov 2023 22:09:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701238147; x=1701842947; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KtrAPaslMvSrZFznq3cpY4nyS514mOCdxUhLK1bsTtI=;
-        b=4hz6Fo0zr13+6MdTqERmKQ2VkYDymvvESL+rjVDOPONoVDKJ89JS5vZAr9cGWgmXeI
-         iCe4Gr1jGA18zFyltB0mAD/LvIZELVoE4c6EchCPHovFaQBUpiekq7sj9kf+v7Wo8EJx
-         Bm88PjF0fpSLVtBhcE5rMR6F2oPPd6VcEL7z3yoUssqZtKKmZXq1surFKjBwgpE7KTGB
-         45g0aomlFJveBDLt1HtrdcU0h7pVzqQqVGdMrOL48/QkMYR4xYLFGf/1+0gDvqZJ/CB6
-         Go1mLYlC8a6PciJgAAiTpf4CoQrR+BbzOfToCpWOsL7ZNwT+lyqyaGCbo+M6Eii4LMDn
-         IpRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701238147; x=1701842947;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KtrAPaslMvSrZFznq3cpY4nyS514mOCdxUhLK1bsTtI=;
-        b=fWvdmWQyM5D/3HQe1NlSJ6RoG+IT20/PTdg9TpPvV6OF9dREkTayoOsYMabcn1C8Jd
-         3rLSgS+C1/t2fW4hjRKe4RlLsk3MBAxwMlKcDVDd8l+n7mQctDFW0TU5ycie2m5LPq0N
-         s+5L2vGr5KB6bs2sRBEYROb67VK/4w2mt5/DKnV41VuCk0MvzipOarFIvhUfFWd2yWKP
-         dvtpew84iRqJh5gKVf99+Y/JyloT1Llb4t+5SYkKTn/RmPQoKiWic5VQQSgwiSp1w08G
-         gCueIjF4IvRMwGBbhBtwBhCXKyA02bPNV2eMAQ2LUd/sQ+GXagpoiDDT8rpEBECtwUfa
-         4BaQ==
-X-Gm-Message-State: AOJu0YwA99rkGZXSHAutUMjUyRdFVLkb68EFMOYG48dHIj/CYAaw4Dq7
-	zDOaGO/nN+melkOHLhZLpd8kUm7O2jch
-X-Google-Smtp-Source: AGHT+IErKpR33sSuZDb458AGzbTTTl+rmkeUZNxvoUYyius6/ySrcsirHg/Fcs0NR9CFHutX0EyL3PHfE3h2
-X-Received: from morats.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:d9e])
- (user=moritzf job=sendgmr) by 2002:a25:3741:0:b0:db5:2a4:aef1 with SMTP id
- e62-20020a253741000000b00db502a4aef1mr107973yba.13.1701238147290; Tue, 28 Nov
- 2023 22:09:07 -0800 (PST)
-Date: Wed, 29 Nov 2023 06:09:06 +0000
-In-Reply-To: <7-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D06B7473
+	for <linux-mips@vger.kernel.org>; Wed, 29 Nov 2023 06:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0297C433C8;
+	Wed, 29 Nov 2023 06:14:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701238455;
+	bh=mbLTAPRYp1W0J/xE4UKIoyZfhh5JrrZ9nLLWrbqDiA4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ua/fyBsYPFCKRU+n9gjojfDPPjZolZkL02LLa3ytNKIjFIkedHYw6ztgGaRgfSbQp
+	 bd4jeL9XWjrHuz5oP2XwJOvq+/jaVEESUMnno0wWNxF/qWY+DKY3+OIjl2mzTAPhQC
+	 BNo/MwzRd7g7F4Yj4R0sg28dD+532FAS/7fxleaiJK42hw8yaeWGFddIyb2p2RSdnw
+	 tWscpglgRN2p1s4mjGQKCGgMq34Vw5CVS3itPdDAwP6OSxGl3bX0WPNsOvmuGUdjGu
+	 wn92Acg55YqavKhcOdB7lQYkqGFFjVHIdQR5el2X/Jb+mYKiNtYPCue5w658OP2e8b
+	 FGSihS5oElpnw==
+Date: Wed, 29 Nov 2023 08:14:00 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Serge Semin <fancer.lancer@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
+	Aleksandar Rikalo <arikalo@gmail.com>,
+	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
+	Chao-ying Fu <cfu@wavecomp.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Yinglu Yang <yangyinglu@loongson.cn>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Marc Zyngier <maz@kernel.org>,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] mm/mm_init.c: Extend init unavailable range doc info
+Message-ID: <20231129061400.GK636165@kernel.org>
+References: <20231122182419.30633-1-fancer.lancer@gmail.com>
+ <20231122182419.30633-6-fancer.lancer@gmail.com>
+ <20231123101854.GF636165@kernel.org>
+ <ehlzzv37o4exdn4smmu653wzjdotzdv3dhr3bduvemxssp37ro@sgegnyprquk4>
+ <20231124081900.GG636165@kernel.org>
+ <h3g6ynqem6h6hefmdawzaspvzf4u5fwfh7rken3ogy5ucr5z5t@d5gagi2ql4ee>
+ <20231128071339.GJ636165@kernel.org>
+ <z6r4jvuo63deg5ezzrxiewuzgdfwvcluzp45r4gmu7vwx6fmlm@d5r6phck2ovh>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <0-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com> <7-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
-Message-ID: <20231129060906.qti7uztsk2u7ehlp@google.com>
-Subject: Re: [PATCH 07/10] acpi: Do not return struct iommu_ops from acpi_iommu_configure_id()
-From: Moritz Fischer <moritzf@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: David Airlie <airlied@gmail.com>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
-	Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev, 
-	Catalin Marinas <catalin.marinas@arm.com>, Danilo Krummrich <dakr@redhat.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org, 
-	dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	David Woodhouse <dwmw2@infradead.org>, Frank Rowand <frowand.list@gmail.com>, 
-	Hanjun Guo <guohanjun@huawei.com>, Haiyang Zhang <haiyangz@microsoft.com>, iommu@lists.linux.dev, 
-	Jon Hunter <jonathanh@nvidia.com>, Joerg Roedel <joro@8bytes.org>, 
-	Karol Herbst <kherbst@redhat.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Laxman Dewangan <ldewangan@nvidia.com>, Len Brown <lenb@kernel.org>, 
-	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org, 
-	linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Lyude Paul <lyude@redhat.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, nouveau@lists.freedesktop.org, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, Sven Peter <sven@svenpeter.dev>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vineet Gupta <vgupta@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>, 
-	Lu Baolu <baolu.lu@linux.intel.com>, Christoph Hellwig <hch@lst.de>, 
-	Jerry Snitselaar <jsnitsel@redhat.com>, Hector Martin <marcan@marcan.st>, Moritz Fischer <mdf@kernel.org>, 
-	patches@lists.linux.dev, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Rob Herring <robh@kernel.org>, Thierry Reding <thierry.reding@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <z6r4jvuo63deg5ezzrxiewuzgdfwvcluzp45r4gmu7vwx6fmlm@d5r6phck2ovh>
 
-On Tue, Nov 28, 2023 at 08:48:03PM -0400, Jason Gunthorpe wrote:
-> Nothing needs this pointer. Return a normal error code with the usual
-> IOMMU semantic that ENODEV means 'there is no IOMMU driver'.
+On Tue, Nov 28, 2023 at 01:51:32PM +0300, Serge Semin wrote:
+> On Tue, Nov 28, 2023 at 09:13:39AM +0200, Mike Rapoport wrote:
+> > On Fri, Nov 24, 2023 at 02:18:44PM +0300, Serge Semin wrote:
+> 
+> > Do you mind posting your physical memory layout?
+> 
+> I actually already did in response to the last part of your previous
+> message. You must have missed it. Here is the copy of the message:
+ 
+Sorry, for some reason I didn't scroll down your previous mail :)
 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Tested-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> ---
->   drivers/acpi/scan.c | 29 +++++++++++++++++------------
->   1 file changed, 17 insertions(+), 12 deletions(-)
+> > On Fri, Nov 24, 2023 at 02:18:44PM +0300, Serge Semin wrote:
+> > > On Fri, Nov 24, 2023 at 10:19:00AM +0200, Mike Rapoport wrote:
+> > > ...
+> > > > 
+> > > > My guess is that your system has a hole in the physical memory mappings and
+> > > > with FLATMEM that hole will have essentially unused struct pages, which are
+> > > > initialized by init_unavailable_range().  But from mm perspective this is
+> > > > still a hole even though there's some MMIO ranges in that hole.
+> > > 
+> > > Absolutely right. Here is the physical memory layout in my system.
+> > > 0     - 128MB: RAM
+> > > 128MB - 512MB: Memory mapped IO
+> > > 512MB - 768MB..8.256GB: RAM
+> > > 
+> > > > 
+> > > > Now, if that hole is large you are wasting memory for unused memory map and
+> > > > it maybe worth considering using SPARSEMEM.
+> > > 
+> > > Do you think it's worth to move to the sparse memory configuration in
+> > > order to save the 384MB of mapping with the 16K page model? AFAIU flat
+> > > memory config is more performant. Performance is critical on the most
+> > > of the SoC applications especially when using the 10G ethernet or
+> > > the high-speed PCIe devices.
+> 
+> Could you also answer to my question above regarding using the
+> sparsemem instead on my hw memory layout?
+ 
+Currently MIPS defines section size to 256MB, so with your memory layout
+with SPARSMEM there will be two sections of 256MB, at 0 and at 512MB, so
+you'll save memory map for 256M which is roughly 1M with 16k pages.
 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 444a0b3c72f2d8..340ba720c72129 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -1562,8 +1562,7 @@ static inline const struct iommu_ops  
-> *acpi_iommu_fwspec_ops(struct device *dev)
->   	return fwspec ? fwspec->ops : NULL;
->   }
+It's possible 
 
-> -static const struct iommu_ops *acpi_iommu_configure_id(struct device  
-> *dev,
-> -						       const u32 *id_in)
-> +static int acpi_iommu_configure_id(struct device *dev, const u32 *id_in)
->   {
->   	int err;
->   	const struct iommu_ops *ops;
-> @@ -1577,7 +1576,7 @@ static const struct iommu_ops  
-> *acpi_iommu_configure_id(struct device *dev,
->   	ops = acpi_iommu_fwspec_ops(dev);
->   	if (ops) {
->   		mutex_unlock(&iommu_probe_device_lock);
-> -		return ops;
-> +		return 0;
->   	}
+With SPARSEMEM the pfn_to_page() and page_to_pfn() are a bit longer in
+terms of assembly instructions, but I really doubt you'll notice any
+performance difference in real world applications.
 
->   	err = iort_iommu_configure_id(dev, id_in);
-> @@ -1594,12 +1593,14 @@ static const struct iommu_ops  
-> *acpi_iommu_configure_id(struct device *dev,
+> > With FLATMEM the memory map exists for that
+> > hole and hence pfn_valid() returns 1 for the MMIO range as well. That makes
+> > __update_cache() to check folio state and that check would fail if the memory
+> > map contained garbage. But since the hole in the memory map is initialized
+> > with init_unavailable_range() you get a valid struct page/struct folio and
+> > everything is fine.
+> 
+> Right. That's what currently happens on MIPS32 and that's what I had
+> to fix in the framework of this series by the next patch:
+> Link: https://lore.kernel.org/linux-mips/20231122182419.30633-4-fancer.lancer@gmail.com/
+> flatmem version of the pfn_valid() method has been broken due to
+> max_mapnr being uninitialized before mem_init() is called. So
+> init_unavailable_range() didn't initialize the pages on the early
+> bootup stage. Thus afterwards, when max_mapnr has finally got a valid
+> value any attempts to call the __update_cache() method on the MMIO
+> memory hole caused the unaligned access crash.
 
->   	/* Ignore all other errors apart from EPROBE_DEFER */
->   	if (err == -EPROBE_DEFER) {
-> -		return ERR_PTR(err);
-> +		return err;
->   	} else if (err) {
->   		dev_dbg(dev, "Adding to IOMMU failed: %d\n", err);
-> -		return NULL;
-> +		return -ENODEV;
->   	}
-> -	return acpi_iommu_fwspec_ops(dev);
-> +	if (!acpi_iommu_fwspec_ops(dev))
-> +		return -ENODEV;
-> +	return 0;
->   }
+The fix for max_mapnr makes pfn_valid()==1 for the entire memory map and
+this fixes up the struct pages in the hole.
+ 
+> > 
+> > With that, the init_unavailable_range() docs need not mention IO space at
+> > all, they should mention holes within FLATMEM memory map.
+> 
+> Ok. I'll resend the patch with mentioning flatmem holes instead of
+> mentioning the IO-spaces.
+> 
+> > 
+> > As for SPARSEMEM, if the hole does not belong to any section, pfn_valid()
+> > will be false for it and __update_cache() won't try to access memory map.
+> 
+> Ah, I see. In case of the SPARSEMEM config an another version of
+> pfn_valid() will be called. It's defined in the include/linux/mmzone.h
+> header file. Right? If so then no problem there indeed.
+ 
+Yes, SPARSMEM uses pfn_valid() defined in include/linux/mmzone.h
 
->   #else /* !CONFIG_IOMMU_API */
-> @@ -1611,10 +1612,9 @@ int acpi_iommu_fwspec_init(struct device *dev, u32  
-> id,
->   	return -ENODEV;
->   }
+> -Serge(y)
 
-> -static const struct iommu_ops *acpi_iommu_configure_id(struct device  
-> *dev,
-> -						       const u32 *id_in)
-> +static int acpi_iommu_configure_id(struct device *dev, const u32 *id_in)
->   {
-> -	return NULL;
-> +	return -ENODEV;
->   }
-
->   #endif /* !CONFIG_IOMMU_API */
-> @@ -1628,7 +1628,7 @@ static const struct iommu_ops  
-> *acpi_iommu_configure_id(struct device *dev,
->   int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
->   			  const u32 *input_id)
->   {
-> -	const struct iommu_ops *iommu;
-> +	int ret;
-
->   	if (attr == DEV_DMA_NOT_SUPPORTED) {
->   		set_dma_ops(dev, &dma_dummy_ops);
-> @@ -1637,10 +1637,15 @@ int acpi_dma_configure_id(struct device *dev,  
-> enum dev_dma_attr attr,
-
->   	acpi_arch_dma_setup(dev);
-
-> -	iommu = acpi_iommu_configure_id(dev, input_id);
-> -	if (PTR_ERR(iommu) == -EPROBE_DEFER)
-> +	ret = acpi_iommu_configure_id(dev, input_id);
-> +	if (ret == -EPROBE_DEFER)
->   		return -EPROBE_DEFER;
-
-> +	/*
-> +	 * Historically this routine doesn't fail driver probing due to errors
-> +	 * in acpi_iommu_configure_id()
-> +	 */
-> +
->   	arch_setup_dma_ops(dev, 0, U64_MAX, attr == DEV_DMA_COHERENT);
-
->   	return 0;
-> --
-> 2.42.0
-
-
-Reviewed-by: Moritz Fischer <moritzf@google.com>
-
-Cheers,
-Moritz
+-- 
+Sincerely yours,
+Mike.
 
