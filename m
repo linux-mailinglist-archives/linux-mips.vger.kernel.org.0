@@ -1,63 +1,63 @@
-Return-Path: <linux-mips+bounces-356-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-357-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7DA7FD53D
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 12:14:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA32B7FD546
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 12:15:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9FF28213D
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 11:14:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D1FCB21180
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 11:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598111C2A3;
-	Wed, 29 Nov 2023 11:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922A81C697;
+	Wed, 29 Nov 2023 11:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F0D1FF5;
-	Wed, 29 Nov 2023 03:14:42 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-5c8c8f731aaso67862937b3.0;
-        Wed, 29 Nov 2023 03:14:42 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBD119BD;
+	Wed, 29 Nov 2023 03:14:53 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5cdc0b3526eso6401667b3.1;
+        Wed, 29 Nov 2023 03:14:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701256481; x=1701861281;
+        d=1e100.net; s=20230601; t=1701256492; x=1701861292;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UfvOZ/r/9xhV2IOVZmWGdwaESTpDCIgP8OCrBiOEH34=;
-        b=wpBDv/1MfTt7pLEYPHP1CT4Jr+CnuASEhYM+OtIGsZHNAJdIOps1qAo+1AL9PNh97m
-         l2jwANUl6lPzND0SLrpQNzBLKxFDAw1csEtER0qPGazC6JvwQLbRi1HkllARtduGr+WI
-         QCvRraA/MmujSSam5Qzhx733nR3psVrzmyXOybVTVIMPqeZi3n3uWDwwleLOmxJoXytr
-         OyIfBYyoDweu3GYUXs9mCpZk3ZYuf4yzIPWrQqAnR/0C55cXngQd5AOrH4WKJltvgvkE
-         RKk8mOtiCxBWd65L3Hn+wu2vOE/nFh4P7stlFTRAYVZWr7DCNGSYv3zxu4RUV/Rp2SJp
-         yl1A==
-X-Gm-Message-State: AOJu0Yz/Yk794w4cIlPG1/yAvEiprmh/mj/26m2iw6Jx8BUOSIzbP/vi
-	gwf3abz6NHAKteD6muJ0DgfBbVtOpdgZXw==
-X-Google-Smtp-Source: AGHT+IFdxb0wQCD90c+WtUlDl1m6Ai4ilgHchvgLoh1lxsH5zH4N2CifWJEDcvUV5m8mfLx1hT1Zlw==
-X-Received: by 2002:a0d:dd04:0:b0:5ae:dff7:6159 with SMTP id g4-20020a0ddd04000000b005aedff76159mr19766119ywe.18.1701256481401;
-        Wed, 29 Nov 2023 03:14:41 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id ex5-20020a05690c2fc500b005d25be5c7f4sm316582ywb.73.2023.11.29.03.14.40
+        bh=uisL/RS3uo1evP9py88SsS4qsxKCbh35nvAGjS1i0wE=;
+        b=Q/72wQ0cCYgE+9IsRsJeuOg9N12laOCvg9Cek+parfLun0p6Yzm5E1vNwHdZ5i/WcR
+         gaRn2CkoSCOCVD6PHII2Vx2TdTHX/2FylISAsgVPoC0qr3lckRhfyFtmnXkMLNnzqlO/
+         qMMkU3Sn5HD/yAwnTxIlXZq/RscIQ0KOpJ4Dhvfg/Mpx4z2Dxd4XR07kyieRop8I/cSW
+         8fIRK8TavIUgfkuEHJ/Id6aNNvSeTHz/SDQQuXHG48/YqRfBYFHulR1JUEHsnIx18p2i
+         +EGiN0msgE3ipZblWMeXQHE0AXpTyqEewNamZRS/GuPWFLpIYodefXNKetMnNrFcIa0l
+         l7ow==
+X-Gm-Message-State: AOJu0YzoLVzCFFUM/7ACce4GT2GjCwElx9rOisOiLt08qhQMaheNoQmp
+	+Qxh25n1ennya7pRzVH20Jdk5M9prG34ww==
+X-Google-Smtp-Source: AGHT+IHHgKdvE932LyseTas1p7BH5ojNXvtVQ54Qxbky97UxokPfZqDtWXqxEeT/zSLswDdsefyp5A==
+X-Received: by 2002:a05:690c:330a:b0:5d0:3085:38bb with SMTP id fj10-20020a05690c330a00b005d0308538bbmr8045219ywb.13.1701256492177;
+        Wed, 29 Nov 2023 03:14:52 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id g16-20020a81ae50000000b005d0d6fe6635sm1531272ywk.99.2023.11.29.03.14.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Nov 2023 03:14:40 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5b383b4184fso67726077b3.1;
-        Wed, 29 Nov 2023 03:14:40 -0800 (PST)
-X-Received: by 2002:a05:690c:4041:b0:5ce:39b:84c6 with SMTP id
- ga1-20020a05690c404100b005ce039b84c6mr14916699ywb.17.1701256480754; Wed, 29
- Nov 2023 03:14:40 -0800 (PST)
+        Wed, 29 Nov 2023 03:14:50 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5cce5075bd6so6540747b3.0;
+        Wed, 29 Nov 2023 03:14:50 -0800 (PST)
+X-Received: by 2002:a05:690c:338d:b0:5d2:813d:d6a5 with SMTP id
+ fl13-20020a05690c338d00b005d2813dd6a5mr562225ywb.23.1701256490377; Wed, 29
+ Nov 2023 03:14:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com> <20231128200155.438722-23-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20231128200155.438722-23-andriy.shevchenko@linux.intel.com>
+References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com> <20231128200155.438722-14-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20231128200155.438722-14-andriy.shevchenko@linux.intel.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 29 Nov 2023 12:14:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVhhU9ew0KXw1nYygBxTc5ucYq_rBC06=U1b6iRoxdqGw@mail.gmail.com>
-Message-ID: <CAMuHMdVhhU9ew0KXw1nYygBxTc5ucYq_rBC06=U1b6iRoxdqGw@mail.gmail.com>
-Subject: Re: [PATCH v3 22/22] pinctrl: core: Remove unused members from struct group_desc
+Date: Wed, 29 Nov 2023 12:14:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXbAgr0X5_BNdoQjuzhsOjLa2A0vttr7Pkj=ROrC82Vww@mail.gmail.com>
+Message-ID: <CAMuHMdXbAgr0X5_BNdoQjuzhsOjLa2A0vttr7Pkj=ROrC82Vww@mail.gmail.com>
+Subject: Re: [PATCH v3 13/22] pinctrl: core: Embed struct pingroup into struct group_desc
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, 
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
@@ -83,10 +83,11 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 28, 2023 at 9:04=E2=80=AFPM Andy Shevchenko
+On Tue, Nov 28, 2023 at 9:05=E2=80=AFPM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
-> All drivers are converted to use embedded struct pingroup.
-> Remove unused members from struct group_desc.
+> struct group_desc is a particular version of the struct pingroup
+> with associated opaque data. Start switching pin control core and
+> drivers to use it explicitly.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
@@ -96,7 +97,8 @@ Gr{oetje,eeting}s,
 
                         Geert
 
---=20
+
+--
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
 .org
 
