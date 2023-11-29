@@ -1,158 +1,120 @@
-Return-Path: <linux-mips+bounces-358-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-359-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 053A97FD56C
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 12:22:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA167FD6F4
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 13:40:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96F1CB2128B
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 11:22:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51E5282EC5
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 12:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6801C69F;
-	Wed, 29 Nov 2023 11:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A8D19BB9;
+	Wed, 29 Nov 2023 12:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="zRrR8Ur3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2BBD5C;
-	Wed, 29 Nov 2023 03:21:57 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-db4422fff15so5594180276.1;
-        Wed, 29 Nov 2023 03:21:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701256916; x=1701861716;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QQMIsPSnGej6JUmLAmR8223gXbEgbLhru5iUfZNaJ9Y=;
-        b=aG3ATMfT3/n0QjJZAKgzaLaeH9mOjMtsgwwPD4OnB/2zLPL9+9knXssPG0W+TEdMA/
-         vtPnx/c/bVaatTiTZYf3nbOjlEHSutM++w3B0lGZiz4bfKdpk7x4AzjETtdtRJNIw1at
-         ip+oMbP4AT4zTbQnCRVbdnw+WAgrON1Xc/7EyHtD8lVefsYUBGHRiahkQjy71Y91Y51u
-         LDYUPK4DbX4V8CsTif3b5B6BmVFDEPPSNRVErnY42hrPu63ueU09QADCgPucQ/ntmg7s
-         mWCVL558DegtFdF/8rpXOXkYL8BBLPDQ2b7EQse+EW7iqlg2SsVXvF9khgRTGtFW5e3d
-         vsFw==
-X-Gm-Message-State: AOJu0YyQZXo/qE1134HIvr5u9xQBQiA8E2nGbAMZS9A571mCT3wkQD43
-	4LXufgca+SnAf02lSZmGgyqMgRZFX00WCw==
-X-Google-Smtp-Source: AGHT+IFEXZ4xfi2mEgBMBigLSielKuHT15ssBs+m4TCTuJMeTnCclwHqIUn2Cz1OJb25aJ2NQGYCPA==
-X-Received: by 2002:a25:256:0:b0:da0:29df:ae62 with SMTP id 83-20020a250256000000b00da029dfae62mr16626470ybc.35.1701256916142;
-        Wed, 29 Nov 2023 03:21:56 -0800 (PST)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id c84-20020a254e57000000b00d9abff76f5csm4143479ybb.9.2023.11.29.03.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Nov 2023 03:21:56 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-db4422fff15so5594173276.1;
-        Wed, 29 Nov 2023 03:21:56 -0800 (PST)
-X-Received: by 2002:a25:fc22:0:b0:d9a:618a:d727 with SMTP id
- v34-20020a25fc22000000b00d9a618ad727mr16348333ybd.41.1701256915894; Wed, 29
- Nov 2023 03:21:55 -0800 (PST)
+Received: from aposti.net (aposti.net [89.234.176.197])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ED310D4;
+	Wed, 29 Nov 2023 04:40:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1701261623;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=cr7SDYHYCVtmS9GCsJZvy0ptpnGDSw4tSZ96I2SXICU=;
+	b=zRrR8Ur3NcRUURsDYlT0r/pa2WDsbyyBoASlGrp3V15HpHxfka0vhFg3ap+bv8aIcsrtKO
+	dG1ym6Q5AqpHV6KuvauxKRCpQV9e6+SEiFJNK4FhLx0cuTVTCKigOkXVGqrDCmT4ZsgWpn
+	G9cBDwI0ZHj3vddH5Zu3ftV2vDKOn3A=
+Message-ID: <84dd44ca9a07f319a391e72769cc7b9488303d2d.camel@crapouillou.net>
+Subject: Re: [PATCH v3 11/22] pinctrl: ingenic: Make use of
+ PINCTRL_GROUP_DESC()
+From: Paul Cercueil <paul@crapouillou.net>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>,  Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Jonathan =?ISO-8859-1?Q?Neusch=E4fer?=
+ <j.neuschaefer@gmx.net>,  Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>,  Geert Uytterhoeven
+ <geert+renesas@glider.be>, Biju Das <biju.das.jz@bp.renesas.com>, Claudiu
+ Beznea <claudiu.beznea.uj@bp.renesas.com>, Jianlong Huang
+ <jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, 
+ linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-renesas-soc@vger.kernel.org
+Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Dong Aisheng
+ <aisheng.dong@nxp.com>,  Fabio Estevam <festevam@gmail.com>, Shawn Guo
+ <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,  Pengutronix Kernel
+ Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, NXP
+ Linux Team <linux-imx@nxp.com>, Sean Wang <sean.wang@kernel.org>, Lakshmi
+ Sowjanya D <lakshmi.sowjanya.d@intel.com>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
+ <konrad.dybcio@linaro.org>, Emil Renner Berthing <kernel@esmil.dk>, Hal
+ Feng <hal.feng@starfivetech.com>
+Date: Wed, 29 Nov 2023 13:40:19 +0100
+In-Reply-To: <20231128200155.438722-12-andriy.shevchenko@linux.intel.com>
+References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com>
+	 <20231128200155.438722-12-andriy.shevchenko@linux.intel.com>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZMLQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5UzFZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtNz8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe+rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIPdlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7Urf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KFlBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFCqaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IW
+	YXndJO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN7062DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOtX0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEAAYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmcGu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2zMcLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2cLUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com> <20231128200155.438722-7-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20231128200155.438722-7-andriy.shevchenko@linux.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 29 Nov 2023 12:21:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWt0qq-Umd8udb7fxpNVZ=X9O9eZGMVGFSGRO_d9UkgNw@mail.gmail.com>
-Message-ID: <CAMuHMdWt0qq-Umd8udb7fxpNVZ=X9O9eZGMVGFSGRO_d9UkgNw@mail.gmail.com>
-Subject: Re: [PATCH v3 06/22] pinctrl: core: Make pins const in struct group_desc
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Jianlong Huang <jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, 
-	linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	NXP Linux Team <linux-imx@nxp.com>, Sean Wang <sean.wang@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Emil Renner Berthing <kernel@esmil.dk>, 
-	Hal Feng <hal.feng@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
-
-On Tue, Nov 28, 2023 at 9:04=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> It's unclear why it's not a const from day 1. Make the pins member
-> const in struct group_desc. Update necessary APIs.
->
+Le mardi 28 novembre 2023 =C3=A0 21:57 +0200, Andy Shevchenko a =C3=A9crit=
+=C2=A0:
+> Make use of PINCTRL_GROUP_DESC() instead of open coding it.
+>=20
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks for your patch!
+I missed this one in your V2 (didn't notice that there were 2 patches
+touching pinctrl-ingenic).
 
-> --- a/drivers/pinctrl/core.c
-> +++ b/drivers/pinctrl/core.c
-> @@ -642,7 +642,7 @@ static int pinctrl_generic_group_name_to_selector(str=
-uct pinctrl_dev *pctldev,
->   * Note that the caller must take care of locking.
->   */
->  int pinctrl_generic_add_group(struct pinctrl_dev *pctldev, const char *n=
-ame,
-> -                             int *pins, int num_pins, void *data)
-> +                             const int *pins, int num_pins, void *data)
->  {
->         struct group_desc *group;
->         int selector, error;
-> diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
-> index 530370443c19..01ea1ce99fe8 100644
-> --- a/drivers/pinctrl/core.h
-> +++ b/drivers/pinctrl/core.h
-> @@ -203,7 +203,7 @@ struct pinctrl_maps {
->   */
->  struct group_desc {
->         const char *name;
-> -       int *pins;
-> +       const int *pins;
->         int num_pins;
->         void *data;
->  };
-> @@ -222,7 +222,7 @@ struct group_desc *pinctrl_generic_get_group(struct p=
-inctrl_dev *pctldev,
->                                              unsigned int group_selector)=
-;
->
->  int pinctrl_generic_add_group(struct pinctrl_dev *pctldev, const char *n=
-ame,
-> -                             int *gpins, int ngpins, void *data);
-> +                             const int *pins, int num_pins, void *data);
->
->  int pinctrl_generic_remove_group(struct pinctrl_dev *pctldev,
->                                  unsigned int group_selector);
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-Probably this is also the right moment to change all of these to arrays
-of unsigned ints?  Else you will have mixed int/unsigned int after
-"[PATCH v3 13/22] pinctrl: core: Embed struct pingroup into struct
-group_desc", and purely unsigned int after "[PATCH v3 22/22] pinctrl:
-core: Remove unused members from struct group_desc".
+Cheers,
+-Paul
 
-The Renesas pinctrl drivers already pass arrays of unsigned ints.
-Some other drivers still use arrays of ints, though.
+> ---
+> =C2=A0drivers/pinctrl/pinctrl-ingenic.c | 9 ++-------
+> =C2=A01 file changed, 2 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c
+> b/drivers/pinctrl/pinctrl-ingenic.c
+> index ee718f6e2556..393873de910a 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -83,15 +83,10 @@
+> =C2=A0#define JZ4730_PINS_PER_PAIRED_REG	16
+> =C2=A0
+> =C2=A0#define INGENIC_PIN_GROUP_FUNCS(name, id, funcs)		\
+> -	{						\
+> -		name,					\
+> -		id##_pins,				\
+> -		ARRAY_SIZE(id##_pins),			\
+> -		funcs,					\
+> -	}
+> +	PINCTRL_GROUP_DESC(name, id##_pins, ARRAY_SIZE(id##_pins),
+> funcs)
+> =C2=A0
+> =C2=A0#define INGENIC_PIN_GROUP(name, id, func)		\
+> -	INGENIC_PIN_GROUP_FUNCS(name, id, (void *)(func))
+> +	PINCTRL_GROUP_DESC(name, id##_pins, ARRAY_SIZE(id##_pins),
+> (void *)(func))
+> =C2=A0
+> =C2=A0enum jz_version {
+> =C2=A0	ID_JZ4730,
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
