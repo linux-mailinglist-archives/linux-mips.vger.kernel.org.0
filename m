@@ -1,155 +1,208 @@
-Return-Path: <linux-mips+bounces-363-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-368-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26ED97FDB8F
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 16:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 027A87FDC67
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 17:15:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 619271C2092A
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 15:34:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24E391C20901
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 16:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759BB38F85;
-	Wed, 29 Nov 2023 15:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24E33AC17;
+	Wed, 29 Nov 2023 16:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cXIZOmrt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CACDD6E;
-	Wed, 29 Nov 2023 07:34:31 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5ce8eff71e1so51041147b3.0;
-        Wed, 29 Nov 2023 07:34:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701272070; x=1701876870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PopFwY+hhIZfxVE9aZTSkJkF/ON9bFHv/e84VhxRzic=;
-        b=twW48JyFlxMXpPKtz2BhpaRDlUE6GTOzVA0ww8tOU1BGVBe4f3LkmhrIT+9qN2aPvA
-         8UrWGx65AOo0oxDwfC/3V+bpI/rgRGiFGi6fLPP9nZsD1opaFN/BmsRkxpnf8Vtlhi+D
-         RaU4d+DANI7wNUCU4kwuws0A071c6qx5xR9Blba9wiPhZEOr1/SIO7kQbZDU5cb1re5J
-         uYE0DJJLiMJY5C0YOEoKTS8rcyaziafACRKHBFi34ZLQf6+8Dc8EVVApqAS2rFwUuHDa
-         M+2IgPss+i6W65XeOqQu17f50a6qWWIC8mSNaA91NPr0Isf+zspLJWelAFKLI3MAVtEE
-         nUIA==
-X-Gm-Message-State: AOJu0Yyb0N7Kyfg51yMKYyBBIAGFJ+V0Gl/5o8tGZ24tzPDDa5mER6Y6
-	ySqGdbAWbUVDf/7sIuSje3jrcBoeMvklSQ==
-X-Google-Smtp-Source: AGHT+IGHu7D8eS13TdxxyKSbAjrXpBQtZN0OmT0VadmL+cf9abgCKNoHUGqJAPSJp2LBYN88W0yKVg==
-X-Received: by 2002:a81:5e43:0:b0:5be:7046:b2f7 with SMTP id s64-20020a815e43000000b005be7046b2f7mr18852045ywb.40.1701272070526;
-        Wed, 29 Nov 2023 07:34:30 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id j83-20020a816e56000000b0057d24f8278bsm4546860ywc.104.2023.11.29.07.34.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Nov 2023 07:34:30 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-59b5484fbe6so68699917b3.1;
-        Wed, 29 Nov 2023 07:34:30 -0800 (PST)
-X-Received: by 2002:a05:690c:fcb:b0:5cf:b2cc:cf5d with SMTP id
- dg11-20020a05690c0fcb00b005cfb2cccf5dmr12967096ywb.5.1701272070101; Wed, 29
- Nov 2023 07:34:30 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1017D67;
+	Wed, 29 Nov 2023 08:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701274514; x=1732810514;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4rJwzaKl6Nti620s0yITOjM1A5IvNX/6uM1qfPh4kAQ=;
+  b=cXIZOmrtfba/oo0sglY/Z7qHJ3qJ2pJk/3RJ9YhmN6S2N6PXpyuHjTaY
+   qP3Ax/aqBxU7eVBYz/mf/aCoT6p/RWwBr/YRw0MpET2ipOCydHdiQllJT
+   K2fw9wvCRzz742TgZL31fTQFwoxJSxmzKGU1mY8NeKZGm19aiajpd6/tL
+   0STqCKaFQo4+j7BlQOrIBZd6Phsko5AO65S5HUG/v+jR+JyctTcNmLNkr
+   yctsz9AjU7Ia+RNiJTi3mLh9wYtm7tXcSSfqnvh1bPNJ/BKA1o/KSvRW6
+   P9+F9k+62fwgQwcQZ35NiTKDihBQi1hOWcvbAXgbxwL0TCl5K+w+lPqME
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="373372551"
+X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
+   d="scan'208";a="373372551"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 08:15:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="892498851"
+X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
+   d="scan'208";a="892498851"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2023 08:15:02 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 1F65D4D4; Wed, 29 Nov 2023 18:15:00 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org,
+	linux-mips@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Cc: Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Hal Feng <hal.feng@starfivetech.com>
+Subject: [PATCH v4 00/23] pinctrl: Convert struct group_desc to use struct pingroup
+Date: Wed, 29 Nov 2023 18:06:23 +0200
+Message-ID: <20231129161459.1002323-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com>
- <20231128200155.438722-7-andriy.shevchenko@linux.intel.com>
- <CAMuHMdWt0qq-Umd8udb7fxpNVZ=X9O9eZGMVGFSGRO_d9UkgNw@mail.gmail.com>
- <ZWc_o4Dcsb0v5TGB@smile.fi.intel.com> <ZWdJUBNMYj9qvCf2@smile.fi.intel.com>
-In-Reply-To: <ZWdJUBNMYj9qvCf2@smile.fi.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 29 Nov 2023 16:34:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVfMq=nuJhDSq6QFr-hev8af1UpHRAD4g5heVTgQ+7qWA@mail.gmail.com>
-Message-ID: <CAMuHMdVfMq=nuJhDSq6QFr-hev8af1UpHRAD4g5heVTgQ+7qWA@mail.gmail.com>
-Subject: Re: [PATCH v3 06/22] pinctrl: core: Make pins const in struct group_desc
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Jianlong Huang <jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, 
-	linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	NXP Linux Team <linux-imx@nxp.com>, Sean Wang <sean.wang@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Emil Renner Berthing <kernel@esmil.dk>, 
-	Hal Feng <hal.feng@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Andy,
+The struct group_desc has a lot of duplication with struct pingroup.
+Deduplicate that by embeddind the latter in the former and convert
+users.
 
-On Wed, Nov 29, 2023 at 3:23=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Wed, Nov 29, 2023 at 03:41:55PM +0200, Andy Shevchenko wrote:
-> > On Wed, Nov 29, 2023 at 12:21:45PM +0100, Geert Uytterhoeven wrote:
-> > > On Tue, Nov 28, 2023 at 9:04=E2=80=AFPM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > It's unclear why it's not a const from day 1. Make the pins member
-> > > > const in struct group_desc. Update necessary APIs.
->
-> ...
->
-> > > >  int pinctrl_generic_add_group(struct pinctrl_dev *pctldev, const c=
-har *name,
-> > > > -                             int *gpins, int ngpins, void *data);
-> > > > +                             const int *pins, int num_pins, void *=
-data);
-> > > >
-> > > >  int pinctrl_generic_remove_group(struct pinctrl_dev *pctldev,
-> > > >                                  unsigned int group_selector);
-> > >
-> > > Probably this is also the right moment to change all of these to arra=
-ys
-> > > of unsigned ints?  Else you will have mixed int/unsigned int after
-> > > "[PATCH v3 13/22] pinctrl: core: Embed struct pingroup into struct
-> > > group_desc", and purely unsigned int after "[PATCH v3 22/22] pinctrl:
-> > > core: Remove unused members from struct group_desc".
-> >
-> > Hmm... Can it be done later?
-> >
-> > I can, of course try to change the parameter here to be unsigned, but i=
-t most
-> > likely fail the build for those drivers means need more patches, more d=
-elay to
-> > this series.
-> >
-> > Linus?
->
-> On the first glance updating API here does not fail the build.
+Linus, assuming everything is fine, I can push this to my tree.
+Or you can apply it (assumming all CIs and people are happy with
+the series).
 
-That's what I had expected, as drivers already pass int or unsigned int
-arrays anyway.
+NB. It seems to me that GCC 7.x has an issue when compound literal
+is being assigned to a constant object. I believe it's a false positive
+(at least I can't reproduce this with recent GCC and LLVM and hence
+I haven't touched the code in order to address this.
 
-> Lemme incorporate this into v4.
+NB. This series contains previously sent patches for Qualcomm and
+Nuvoton. Here the updated version for Qualcomm that splits previous
+patch to two and fixes compilation warnings.
 
-Thanks!
+NB. The function_desc is in plan to follow the similar deduplication.
 
-> Meanwhile the drivers I left untouched, it might be separate changes
-> to convert from int to const unsigned int.
+In v4:
+- made pins also unsigned in struct group_desc (Geert)
+- made local pins variable unsigned in renesas drivers (Geert)
+- collected more tags (Paul, Geert)
 
-Sounds fine to me.
+v3: https://lore.kernel.org/r/20231128200155.438722-1-andriy.shevchenko@linux.intel.com
 
-Gr{oetje,eeting}s,
+In v3:
+- fixed reported bug in equilibrium code (LKP)
+- collected tags (Emil, Florian, Paul)
 
-                        Geert
+v2: https://lore.kernel.org/r/20231123193355.3400852-1-andriy.shevchenko@linux.intel.com
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+In v2:
+- added a few patches to fix multiple compile-time errors (LKP)
+- added tag (Jonathan)
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+v1: https://lore.kernel.org/r/20231122164040.2262742-1-andriy.shevchenko@linux.intel.com
+
+Andy Shevchenko (23):
+  pinctrl: qcom: lpass-lpi: Replace kernel.h with what is being used
+  pinctrl: qcom: lpass-lpi: Remove unused member in struct lpi_pingroup
+  pinctrl: equilibrium: Unshadow error code of
+    of_property_count_u32_elems()
+  pinctrl: equilibrium: Use temporary variable to hold pins
+  pinctrl: imx: Use temporary variable to hold pins
+  pinctrl: core: Make pins const unsigned int pointer in struct
+    group_desc
+  pinctrl: equilibrium: Convert to use struct pingroup
+  pinctrl: keembay: Convert to use struct pingroup
+  pinctrl: nuvoton: Convert to use struct pingroup and
+    PINCTRL_PINGROUP()
+  pinctrl: core: Add a convenient define PINCTRL_GROUP_DESC()
+  pinctrl: ingenic: Make use of PINCTRL_GROUP_DESC()
+  pinctrl: mediatek: Make use of PINCTRL_GROUP_DESC()
+  pinctrl: core: Embed struct pingroup into struct group_desc
+  pinctrl: bcm: Convert to use grp member
+  pinctrl: equilibrium: Convert to use grp member
+  pinctrl: imx: Convert to use grp member
+  pinctrl: ingenic: Convert to use grp member
+  pinctrl: keembay: Convert to use grp member
+  pinctrl: mediatek: Convert to use grp member
+  pinctrl: renesas: Convert to use grp member
+  pinctrl: starfive: Convert to use grp member
+  pinctrl: core: Remove unused members from struct group_desc
+  pinctrl: Convert unsigned to unsigned int
+
+ drivers/pinctrl/bcm/pinctrl-ns.c              |  4 +-
+ drivers/pinctrl/core.c                        | 41 ++++++++---------
+ drivers/pinctrl/core.h                        | 33 ++++++++------
+ drivers/pinctrl/devicetree.c                  |  8 ++--
+ drivers/pinctrl/freescale/pinctrl-imx.c       | 44 +++++++++----------
+ drivers/pinctrl/mediatek/pinctrl-moore.c      | 13 +++---
+ drivers/pinctrl/mediatek/pinctrl-moore.h      |  7 +--
+ drivers/pinctrl/mediatek/pinctrl-paris.h      |  7 +--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c     |  9 ++--
+ drivers/pinctrl/pinconf-generic.c             | 16 +++----
+ drivers/pinctrl/pinconf.c                     | 14 +++---
+ drivers/pinctrl/pinconf.h                     | 10 ++---
+ drivers/pinctrl/pinctrl-equilibrium.c         | 42 +++++++++---------
+ drivers/pinctrl/pinctrl-ingenic.c             | 27 +++++-------
+ drivers/pinctrl/pinctrl-keembay.c             |  6 +--
+ drivers/pinctrl/pinctrl-utils.c               | 26 +++++------
+ drivers/pinctrl/pinctrl-utils.h               | 18 ++++----
+ drivers/pinctrl/pinmux.c                      | 36 +++++++--------
+ drivers/pinctrl/pinmux.h                      | 20 ++++-----
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.h      |  6 +--
+ .../pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c   | 16 -------
+ .../pinctrl/qcom/pinctrl-sc8280xp-lpass-lpi.c | 20 ---------
+ .../pinctrl/qcom/pinctrl-sm6115-lpass-lpi.c   | 20 ---------
+ .../pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c   | 15 -------
+ .../pinctrl/qcom/pinctrl-sm8350-lpass-lpi.c   | 16 -------
+ .../pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c   | 24 ----------
+ .../pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c   | 24 ----------
+ .../pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c   | 24 ----------
+ drivers/pinctrl/renesas/pinctrl-rza1.c        |  2 +-
+ drivers/pinctrl/renesas/pinctrl-rza2.c        | 10 ++---
+ drivers/pinctrl/renesas/pinctrl-rzg2l.c       |  6 +--
+ drivers/pinctrl/renesas/pinctrl-rzv2m.c       |  6 +--
+ .../starfive/pinctrl-starfive-jh7100.c        |  8 ++--
+ .../starfive/pinctrl-starfive-jh7110.c        |  8 ++--
+ include/linux/pinctrl/machine.h               |  6 +--
+ include/linux/pinctrl/pinconf-generic.h       | 10 ++---
+ include/linux/pinctrl/pinconf.h               | 16 +++----
+ include/linux/pinctrl/pinctrl.h               | 24 +++++-----
+ include/linux/pinctrl/pinmux.h                | 22 +++++-----
+ 39 files changed, 242 insertions(+), 422 deletions(-)
+
+-- 
+2.43.0.rc1.1.gbec44491f096
+
 
