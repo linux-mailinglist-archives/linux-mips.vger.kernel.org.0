@@ -1,70 +1,69 @@
-Return-Path: <linux-mips+bounces-354-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-355-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 319E97FD524
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 12:10:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2CB77FD52E
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 12:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB3BA2820AE
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 11:10:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29B7F1C21127
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Nov 2023 11:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02E11C2A6;
-	Wed, 29 Nov 2023 11:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3953B1C2A5;
+	Wed, 29 Nov 2023 11:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9BD271D;
-	Wed, 29 Nov 2023 03:10:50 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5c08c47c055so65164407b3.1;
-        Wed, 29 Nov 2023 03:10:50 -0800 (PST)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1791BD3;
+	Wed, 29 Nov 2023 03:12:29 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5c8c26cf056so68438927b3.1;
+        Wed, 29 Nov 2023 03:12:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701256248; x=1701861048;
+        d=1e100.net; s=20230601; t=1701256348; x=1701861148;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CIg/lVR/UB6jNsuQOE2z1pZZGLYqtdqMUy/N5XrA7+s=;
-        b=j+nbdeiOc68h3LVA3Aoy2C4hsk4nNwNLPR0NNmEmeCvLKu6rHi+Xq0Q1lALUmg9sZG
-         4ZjlzEcDkfxRprrK50DTrXKBHyNTEcLjsNnQ07zOkUh1zyL7Cl0D55RMsji2TsZfPaWp
-         9tcgDCdnyqU76l5RVXGnHGvfAaz/OYSNipC0xgWxw8n12rkJZwY2D+R/km4DsTJ9BT0S
-         jlNn/SmRcH2TCKJXC70vwxYzJ7jROxi/+m0gFLsW8TdqRlPHeGfkGArdjbUru23XqwGW
-         QVWpH2jrrt3NVj2s3KbL86ryfhMfXMrRXU+SujiahWGXKJkhaTTtVZnDOCXssyrrDznR
-         rH9w==
-X-Gm-Message-State: AOJu0YwBeWSFzRXuoEPp1qM71DVXkEAyKJDzNjCxTE9VncZPtoZqVZmE
-	BYAX4deyGpJSIMjPzvjmzN01xfvtx/6Gjw==
-X-Google-Smtp-Source: AGHT+IGobGQMHmqiy2cLdoyY99eiWypJdrD0bQrkSVLPAPEh8boWvFdsGyiVjYCXdWVZROMHHs/0CQ==
-X-Received: by 2002:a05:690c:2a93:b0:5ce:a930:d641 with SMTP id ek19-20020a05690c2a9300b005cea930d641mr14096395ywb.4.1701256248544;
-        Wed, 29 Nov 2023 03:10:48 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id t5-20020a0dd105000000b0057087e7691bsm4486383ywd.56.2023.11.29.03.10.47
+        bh=XJBAY+EVsFCK+6qYmvKhC75YavWi+kzyxoJ2FmRxal8=;
+        b=jaWtpb1sLMqSdAnmRcCenPS33V/jmiXzByTQY9GkO1pwFnrEr13+MRYKu8ZfwDNkHn
+         +LAZNu1j0WJ/dN38JUuuvDLBLCDgZnnoPdtlmdAQx5SDxTKpCYvgetJ1mnrfhiCRD+Ox
+         likC4IMdUz5zl18QV9jBmIgnrNhOH8cz1byy9oFYu109EDaVuKLMhCbnyZyeT9FB8eMv
+         vmusbwmQzyfcsR1Zy/g13ETGm3VMpwnqPqeVxtREPNv/k3IlMVeycGv+TLRISOzp3yyU
+         oqwmzKJl/jezCl7c6/iU8YAcO3igDPjXIhb/XQFuwOr1f1NtLYAcJN6yBrJp8eKiabQn
+         yp0w==
+X-Gm-Message-State: AOJu0Yzzesn9GxFr9pUJmGGGOZmFJA02RmNOtweiC3bmOqyP/S/tF339
+	MY8OhKx6jwnFt0p2flwJW9YINbhVdMi4PQ==
+X-Google-Smtp-Source: AGHT+IGEUithuImb8Z2qUZxwr6NIlq5U9rnCet+mbGkGv0YjADJBmSs0RsiHmtKVx/S1WylHeziKCg==
+X-Received: by 2002:a05:690c:448c:b0:5d0:17a3:a4dc with SMTP id gr12-20020a05690c448c00b005d017a3a4dcmr11984084ywb.34.1701256348606;
+        Wed, 29 Nov 2023 03:12:28 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id y140-20020a0dd692000000b005cb0b3d9291sm4474283ywd.12.2023.11.29.03.12.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Nov 2023 03:10:47 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-db40898721fso6138611276.3;
-        Wed, 29 Nov 2023 03:10:47 -0800 (PST)
-X-Received: by 2002:a05:6902:566:b0:d7b:90c6:683c with SMTP id
- a6-20020a056902056600b00d7b90c6683cmr19865805ybt.26.1701256247010; Wed, 29
- Nov 2023 03:10:47 -0800 (PST)
+        Wed, 29 Nov 2023 03:12:27 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5cd0af4a7d3so68489867b3.0;
+        Wed, 29 Nov 2023 03:12:26 -0800 (PST)
+X-Received: by 2002:a81:574d:0:b0:5d0:675:575 with SMTP id l74-20020a81574d000000b005d006750575mr10045178ywb.18.1701256346741;
+ Wed, 29 Nov 2023 03:12:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com> <20231128200155.438722-21-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20231128200155.438722-21-andriy.shevchenko@linux.intel.com>
+References: <20231128200155.438722-1-andriy.shevchenko@linux.intel.com> <20231128200155.438722-11-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20231128200155.438722-11-andriy.shevchenko@linux.intel.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 29 Nov 2023 12:10:35 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXPPHN=G8Ej0apBch4hFWic+jWBBt1SWjgz0xD_wFw=Gw@mail.gmail.com>
-Message-ID: <CAMuHMdXPPHN=G8Ej0apBch4hFWic+jWBBt1SWjgz0xD_wFw=Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 20/22] pinctrl: renesas: Convert to use grp member
+Date: Wed, 29 Nov 2023 12:12:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVOTNBkq=ptZ_Y4=+h+jMXKDYXr4iJcs1g7aGYCDKLtuw@mail.gmail.com>
+Message-ID: <CAMuHMdVOTNBkq=ptZ_Y4=+h+jMXKDYXr4iJcs1g7aGYCDKLtuw@mail.gmail.com>
+Subject: Re: [PATCH v3 10/22] pinctrl: core: Add a convenient define PINCTRL_GROUP_DESC()
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, 
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
 	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
 	Jianlong Huang <jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org, 
 	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -83,65 +82,13 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
-
-On Tue, Nov 28, 2023 at 9:04=E2=80=AFPM Andy Shevchenko
+On Tue, Nov 28, 2023 at 9:05=E2=80=AFPM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
-> Convert drivers to use grp member embedded in struct group_desc.
+> Add PINCTRL_GROUP_DESC() macro for inline use.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks for your patch!
-
-> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> @@ -273,7 +273,7 @@ static int rzg2l_pinctrl_set_mux(struct pinctrl_dev *=
-pctldev,
->         struct function_desc *func;
->         unsigned int i, *psel_val;
->         struct group_desc *group;
-> -       int *pins;
-> +       const int *pins;
-
-unsigned, as this no longer signed.
-
->
->         func =3D pinmux_generic_get_function(pctldev, func_selector);
->         if (!func)
-> @@ -283,9 +283,9 @@ static int rzg2l_pinctrl_set_mux(struct pinctrl_dev *=
-pctldev,
->                 return -EINVAL;
->
->         psel_val =3D func->data;
-> -       pins =3D group->pins;
-> +       pins =3D group->grp.pins;
-
-> --- a/drivers/pinctrl/renesas/pinctrl-rzv2m.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rzv2m.c
-> @@ -165,7 +165,7 @@ static int rzv2m_pinctrl_set_mux(struct pinctrl_dev *=
-pctldev,
->         struct function_desc *func;
->         unsigned int i, *psel_val;
->         struct group_desc *group;
-> -       int *pins;
-> +       const int *pins;
-
-unsigned
-
->
->         func =3D pinmux_generic_get_function(pctldev, func_selector);
->         if (!func)
-> @@ -175,9 +175,9 @@ static int rzv2m_pinctrl_set_mux(struct pinctrl_dev *=
-pctldev,
->                 return -EINVAL;
->
->         psel_val =3D func->data;
-> -       pins =3D group->pins;
-> +       pins =3D group->grp.pins;
-
-With the above fixed:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
