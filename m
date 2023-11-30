@@ -1,99 +1,110 @@
-Return-Path: <linux-mips+bounces-403-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-404-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF59D7FEA49
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 09:16:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 769207FECE2
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 11:35:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F07041C20AAC
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 08:16:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF3ABB20A83
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 10:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FCDB134A3;
-	Thu, 30 Nov 2023 08:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lxUKTMQX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D5A30334;
+	Thu, 30 Nov 2023 10:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C172A3;
-	Thu, 30 Nov 2023 00:15:58 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id ABE3760004;
-	Thu, 30 Nov 2023 08:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1701332156;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s69TJTYmQM2Na6w0MNv4Zxu5ZAZSHQgLCcpXlVWiE5Q=;
-	b=lxUKTMQX8E2vo+LCDvXlICGZucgDDgZYYV9wpbwQn4UHEzCvIDDO7nf/zE79tvnzjwVJSE
-	6F9wnSwCtwUz4rPsCF7/U8PaXIfwRS/nhEbcEmuyIk3C/XXm0x9ckfhLILqMHLxEN59dHG
-	ErWJmVlip+O3niyxS7Lfac43KHct0grhDa58gx+0pWyVqc2TW5Txz9qmB1zacLqMvwTU1A
-	maDt0RCjA8Jpz+LdPH5BS6ti77Q/6bhA2e4F9NsvWTuP6rPtbZUUR7sV8S2CcG0IbZUzfM
-	/Da1FsSyGY4X4nvL/YgEBKbK45nD2qJ2iVcwSXVomZHdgAqXXi8XYXqjPAvNMg==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, Jiaxun Yang
- <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 0/2] MIPS: Adjust SPARSEMEM Kconfigs
-In-Reply-To: <20231028-mm-v1-0-45377cd158cf@flygoat.com>
-References: <20231028-mm-v1-0-45377cd158cf@flygoat.com>
-Date: Thu, 30 Nov 2023 09:15:56 +0100
-Message-ID: <878r6ffygz.fsf@BL-laptop>
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D91910DB;
+	Thu, 30 Nov 2023 02:35:13 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5cfc3a48ab2so8117387b3.0;
+        Thu, 30 Nov 2023 02:35:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701340512; x=1701945312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DUdP6LeO/4HAezqcq7YXUkxax+n83AqIPO6DNMdfcCg=;
+        b=fM+yICvpWyE3KUK7SHzjzjq+iYJ2Zp5DyGJfuK695CTd4m9c6bOYdDuPMbCkQqY9TV
+         7UFO5Zw8WWvcr5i714gs+7tCynDPqG6syXvOvDXaMCsRYVQyQGtyOueBsYFfcUruLUfj
+         4Bpd1m9Q6goyYq4wP0NbMs6pyRSiubN2AH9iZyWKjU3zYt8GEdcOQdddvI8siXBVl5ON
+         RIt7EK4s3II7oB52RwMs8d/DXRLa1HM7pF35yaWJv/yVInGnDL3Exn68dNCSGkcjVuhp
+         xNbvdAKt+V1EJ9Q6csU88N/TkGYk3cMLxowGleZrMBRUUotog7LU1mOyPiKFKgrBnUoD
+         vPKg==
+X-Gm-Message-State: AOJu0YzBLiW3JEcvjgtW5YMQe3oqD7q3uPBNz4zKC17UrHJRiRdsENj3
+	QmTmRaYPCN8HrxhLkvwHt3B+x09N0TgaGQ==
+X-Google-Smtp-Source: AGHT+IF0pJeBKISCmyDcQ1B1b0A34RUrl6WFHjFX1LvlcVoN7JOfqf+QfLNSvA6QMNG7B5JdHHZrFQ==
+X-Received: by 2002:a81:5344:0:b0:5ca:e4a6:bb47 with SMTP id h65-20020a815344000000b005cae4a6bb47mr21993982ywb.35.1701340512210;
+        Thu, 30 Nov 2023 02:35:12 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id v127-20020a818585000000b00583b144fe51sm275622ywf.118.2023.11.30.02.35.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Nov 2023 02:35:11 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5cfc3a48ab2so8117187b3.0;
+        Thu, 30 Nov 2023 02:35:11 -0800 (PST)
+X-Received: by 2002:a0d:cc4f:0:b0:5c9:ff96:d78b with SMTP id
+ o76-20020a0dcc4f000000b005c9ff96d78bmr21925523ywd.37.1701340511007; Thu, 30
+ Nov 2023 02:35:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gregory.clement@bootlin.com
+References: <20231129161459.1002323-1-andriy.shevchenko@linux.intel.com> <20231129161459.1002323-7-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20231129161459.1002323-7-andriy.shevchenko@linux.intel.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 30 Nov 2023 11:34:59 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUCEVrg1Dsu9u-cECyXJP4PKXkXibU0QK1G=+juwG9rxQ@mail.gmail.com>
+Message-ID: <CAMuHMdUCEVrg1Dsu9u-cECyXJP4PKXkXibU0QK1G=+juwG9rxQ@mail.gmail.com>
+Subject: Re: [PATCH v4 06/23] pinctrl: core: Make pins const unsigned int
+ pointer in struct group_desc
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Jianlong Huang <jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, 
+	linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Dong Aisheng <aisheng.dong@nxp.com>, 
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	NXP Linux Team <linux-imx@nxp.com>, Sean Wang <sean.wang@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Emil Renner Berthing <kernel@esmil.dk>, 
+	Hal Feng <hal.feng@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Jiaxun,
-
-> Hi,
+On Wed, Nov 29, 2023 at 5:15=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> It's unclear why it's not a const unsigned int pointer from day 1.
+> Make the pins member const unsigned int pointer in struct group_desc.
+> Update necessary APIs.
 >
-> This series adjusted some mm Kconfigs, mainly sparsemem related.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Following your feedback on my series adding support for EyeQ5[1]. I
-tested those 2 patches and as expected it reduces a lot the memory
-consumption, memap consumes 512 pages again while without these patches
-it consumed 8672 pages.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-You can add on both patches my
+Gr{oetje,eeting}s,
 
-Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+                        Geert
 
-Thanks,
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-Gregory
->
-> Hope it is not too late for 6.7 :-)
->
-> Thanks
-> - Jiaxun 
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> Jiaxun Yang (2):
->       MIPS: Enable SPARSEMEM option unconditionally on 64BIT
->       MIPS: generic: Set SPARSEMEM by default for 64BIT kernel
->
->  arch/mips/Kconfig             | 14 +++++++++-----
->  arch/mips/loongson2ef/Kconfig |  4 ++--
->  2 files changed, 11 insertions(+), 7 deletions(-)
-> ---
-> base-commit: 66f1e1ea3548378ff6387b1ce0b40955d54e86aa
-> change-id: 20231028-mm-82dc717e9e49
->
-> Best regards,
-> -- 
-> Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
