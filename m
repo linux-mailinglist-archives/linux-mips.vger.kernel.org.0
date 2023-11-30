@@ -1,148 +1,149 @@
-Return-Path: <linux-mips+bounces-405-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-406-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F06A7FED4F
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 11:51:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3802D7FED6F
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 12:01:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEAFC1C20E2F
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 10:51:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41ABFB20A21
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 11:00:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7CF3B1AB;
-	Thu, 30 Nov 2023 10:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2603C079;
+	Thu, 30 Nov 2023 11:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J9gbblCP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jEuK9Y3Q"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7E7E6;
-	Thu, 30 Nov 2023 02:51:15 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B0CBBC0004;
-	Thu, 30 Nov 2023 10:51:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1701341474;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1OYuYwJSN0zBGGKCXcfpkKinnK6s4X1Q2mTmPEnqu0w=;
-	b=J9gbblCP/PJG4zi6R6neEcZSc4LAnSyAkuhoqSxz+p3EvsCRng3c01bFs7480l3HBd/TYg
-	E7vmyNRweFZ24LhqlmhWXiHiwup1WIkukPgc7J8Eptv78kETmVKlwdd/zWvHxJMmiafz7t
-	2gkBkLhJBsNY2ZUW8+3KaaAQ5bcl8PwxdrQkvazUdWfc/HGXSqkW+kDDtrwL/cZWPwfEy2
-	Irahif5uLwuDuY+oLH/xrCXDvqTq8yDN1JojFX2EAdi/HxG5D5IAH93NWrJ0LeVe6BMING
-	8K5BRggiIvjxiMgqVEWiEQlOgyDGiLYif3F58c9cI5XLCU9x13ogjGoBH/o/jw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Paul Burton
- <paulburton@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob
- Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Tawfik Bayouk
- <tawfik.bayouk@mobileye.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?=
- <philmd@linaro.org>
-Subject: Re: [PATCH v2 15/21] dt-bindings: mips: cpu: Add I-Class I6500
- Multiprocessor Core
-In-Reply-To: <f443830a-ba16-4c5e-9260-6fb38a09cc10@linaro.org>
-References: <20231123152639.561231-1-gregory.clement@bootlin.com>
- <20231123152639.561231-16-gregory.clement@bootlin.com>
- <f443830a-ba16-4c5e-9260-6fb38a09cc10@linaro.org>
-Date: Thu, 30 Nov 2023 11:51:13 +0100
-Message-ID: <874jh3fra6.fsf@BL-laptop>
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF27F10D0;
+	Thu, 30 Nov 2023 03:00:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701342053; x=1732878053;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5Es/sP+Z8lTumroAf9xSnE7FpQCQXhOFzPMrUUJAEDA=;
+  b=jEuK9Y3QzFKrzlzaR5xCJcUG3sihH2hr6oj3+Bq8LPFLTdhAFcNQT+tJ
+   +dIDeU3IMTvFZ+Glx0Da6wi7mXXiqcfRsG/KwAZzY0MifSOxuMcNClxlD
+   lHXRGsz+HVCTjh6QEvI73mQGnpNK0M3mG6aoKxYLAKWVqzq99iyNy/oWf
+   cFbj1JV8PfMf9Jq/ugOk+dYyByIJJL0ajJHU75CygnhuuyZKp9ObF/YAN
+   vqE8mOHPwKCwTyuyQs9yYZp2YNiVuYE9zVrLGYMApxTlWHyaXLRLqpOce
+   4rmqvav1uH8yuwsFerVKufzQsrInDXvmM8LOkHxrPQslndWY/P+LKsqqy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="207308"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="207308"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 03:00:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="17352575"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 30 Nov 2023 03:00:50 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8emm-0001jU-1c;
+	Thu, 30 Nov 2023 11:00:48 +0000
+Date: Thu, 30 Nov 2023 19:00:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wujie Duan <wjduan@linx-info.com>, tsbogend@alpha.franken.de
+Cc: oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Wujie Duan <wjduan@linx-info.com>
+Subject: Re: [PATCH] Mark symbols static where possible for mips/kernel
+Message-ID: <202311301824.pu39T7C9-lkp@intel.com>
+References: <20231128071225.801111-1-wjduan@linx-info.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231128071225.801111-1-wjduan@linx-info.com>
 
-Hello Krzysztof,
+Hi Wujie,
 
-> On 23/11/2023 16:26, Gregory CLEMENT wrote:
->> The MIPS Warrior I-class I6500 was announced by Imagination
->> Technologies in 2016 and is used in the Mobileye SoC EyeQ5.
->>=20
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
->> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
->> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->> ---
->>  Documentation/devicetree/bindings/mips/cpus.yaml | 1 +
->>  1 file changed, 1 insertion(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Document=
-ation/devicetree/bindings/mips/cpus.yaml
->> index cf382dea3922c..b5165cf103e94 100644
->> --- a/Documentation/devicetree/bindings/mips/cpus.yaml
->> +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
->> @@ -39,6 +39,7 @@ properties:
->>        - mti,mips24KEc
->>        - mti,mips14KEc
->>        - mti,mips14Kc
->> +      - img,i6500
->
-> Don't break the order of entries.
+kernel test robot noticed the following build errors:
 
-Do you mean alphabetic order ?
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.7-rc3 next-20231130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-because actually the entries are not really in alphabetic order.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wujie-Duan/Mark-symbols-static-where-possible-for-mips-kernel/20231128-152256
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231128071225.801111-1-wjduan%40linx-info.com
+patch subject: [PATCH] Mark symbols static where possible for mips/kernel
+config: mips-cavium_octeon_defconfig (https://download.01.org/0day-ci/archive/20231130/202311301824.pu39T7C9-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231130/202311301824.pu39T7C9-lkp@intel.com/reproduce)
 
-Should I send first, a patch like the following one ?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311301824.pu39T7C9-lkp@intel.com/
 
-diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentati=
-on/devicetree/bindings/mips/cpus.yaml
-index cf382dea3922c..9bc47868d28b6 100644
---- a/Documentation/devicetree/bindings/mips/cpus.yaml
-+++ b/Documentation/devicetree/bindings/mips/cpus.yaml
-@@ -23,22 +23,22 @@ properties:
-       - brcm,bmips4380
-       - brcm,bmips5000
-       - brcm,bmips5200
--      - ingenic,xburst-mxu1.0
-       - ingenic,xburst-fpu1.0-mxu1.1
-       - ingenic,xburst-fpu2.0-mxu2.0
-+      - ingenic,xburst-mxu1.0
-       - ingenic,xburst2-fpu2.1-mxu2.1-smt
-       - loongson,gs264
-       - mips,m14Kc
--      - mips,mips4Kc
--      - mips,mips4KEc
--      - mips,mips24Kc
-+      - mips,mips1004Kc
-       - mips,mips24KEc
-+      - mips,mips24Kc
-+      - mips,mips4KEc
-+      - mips,mips4Kc
-       - mips,mips74Kc
--      - mips,mips1004Kc
-       - mti,interaptiv
--      - mti,mips24KEc
-       - mti,mips14KEc
-       - mti,mips14Kc
-+      - mti,mips24KEc
-=20
-   reg:
-     maxItems: 1
+All errors (new ones prefixed by >>):
+
+   mips64-linux-ld: arch/mips/kernel/signal_n32.o: in function `setup_rt_frame_n32':
+>> arch/mips/kernel/signal_n32.c:109:(.text+0xb8): undefined reference to `setup_sigcontext'
 
 
-Regards,
+vim +109 arch/mips/kernel/signal_n32.c
 
-Gregory
+^1da177e4c3f41 Linus Torvalds     2005-04-16   91  
+81d103bf806786 Richard Weinberger 2013-10-06   92  static int setup_rt_frame_n32(void *sig_return, struct ksignal *ksig,
+81d103bf806786 Richard Weinberger 2013-10-06   93  			      struct pt_regs *regs, sigset_t *set)
+^1da177e4c3f41 Linus Torvalds     2005-04-16   94  {
+9bbf28a36cae08 Atsushi Nemoto     2006-02-01   95  	struct rt_sigframe_n32 __user *frame;
+^1da177e4c3f41 Linus Torvalds     2005-04-16   96  	int err = 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16   97  
+7c4f563507c33c Richard Weinberger 2014-03-05   98  	frame = get_sigframe(ksig, regs, sizeof(*frame));
+96d4f267e40f95 Linus Torvalds     2019-01-03   99  	if (!access_ok(frame, sizeof (*frame)))
+81d103bf806786 Richard Weinberger 2013-10-06  100  		return -EFAULT;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  101  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  102  	/* Create siginfo.  */
+81d103bf806786 Richard Weinberger 2013-10-06  103  	err |= copy_siginfo_to_user32(&frame->rs_info, &ksig->info);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  104  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  105  	/* Create the ucontext.	 */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  106  	err |= __put_user(0, &frame->rs_uc.uc_flags);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  107  	err |= __put_user(0, &frame->rs_uc.uc_link);
+ea536ad4f231a0 Al Viro            2012-12-23  108  	err |= __compat_save_altstack(&frame->rs_uc.uc_stack, regs->regs[29]);
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @109  	err |= setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
+431dc8040354db Ralf Baechle       2007-02-13  110  	err |= __copy_conv_sigset_to_user(&frame->rs_uc.uc_sigmask, set);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  111  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  112  	if (err)
+81d103bf806786 Richard Weinberger 2013-10-06  113  		return -EFAULT;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  114  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  115  	/*
+^1da177e4c3f41 Linus Torvalds     2005-04-16  116  	 * Arguments to signal handler:
+^1da177e4c3f41 Linus Torvalds     2005-04-16  117  	 *
+^1da177e4c3f41 Linus Torvalds     2005-04-16  118  	 *   a0 = signal number
+^1da177e4c3f41 Linus Torvalds     2005-04-16  119  	 *   a1 = 0 (should be cause)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  120  	 *   a2 = pointer to ucontext
+^1da177e4c3f41 Linus Torvalds     2005-04-16  121  	 *
+^1da177e4c3f41 Linus Torvalds     2005-04-16  122  	 * $25 and c0_epc point to the signal handler, $29 points to
+^1da177e4c3f41 Linus Torvalds     2005-04-16  123  	 * the struct rt_sigframe.
+^1da177e4c3f41 Linus Torvalds     2005-04-16  124  	 */
+81d103bf806786 Richard Weinberger 2013-10-06  125  	regs->regs[ 4] = ksig->sig;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  126  	regs->regs[ 5] = (unsigned long) &frame->rs_info;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  127  	regs->regs[ 6] = (unsigned long) &frame->rs_uc;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  128  	regs->regs[29] = (unsigned long) frame;
+d814c28ceca8f6 David Daney        2010-02-18  129  	regs->regs[31] = (unsigned long) sig_return;
+81d103bf806786 Richard Weinberger 2013-10-06  130  	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  131  
+722bb63de630f9 Franck Bui-Huu     2007-02-05  132  	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
+^1da177e4c3f41 Linus Torvalds     2005-04-16  133  	       current->comm, current->pid,
+^1da177e4c3f41 Linus Torvalds     2005-04-16  134  	       frame, regs->cp0_epc, regs->regs[31]);
+722bb63de630f9 Franck Bui-Huu     2007-02-05  135  
+7b3e2fc847c832 Ralf Baechle       2006-02-08  136  	return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  137  }
+151fd6acd94e12 Ralf Baechle       2007-02-15  138  
 
->
-> Best regards,
-> Krzysztof
->
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
