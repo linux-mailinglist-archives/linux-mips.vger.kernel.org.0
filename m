@@ -1,58 +1,84 @@
-Return-Path: <linux-mips+bounces-406-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-407-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3802D7FED6F
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 12:01:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66CDD7FED8F
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 12:12:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41ABFB20A21
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 11:00:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25175281D65
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 11:12:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2603C079;
-	Thu, 30 Nov 2023 11:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3090E3C091;
+	Thu, 30 Nov 2023 11:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jEuK9Y3Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hS29cAae"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF27F10D0;
-	Thu, 30 Nov 2023 03:00:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701342053; x=1732878053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5Es/sP+Z8lTumroAf9xSnE7FpQCQXhOFzPMrUUJAEDA=;
-  b=jEuK9Y3QzFKrzlzaR5xCJcUG3sihH2hr6oj3+Bq8LPFLTdhAFcNQT+tJ
-   +dIDeU3IMTvFZ+Glx0Da6wi7mXXiqcfRsG/KwAZzY0MifSOxuMcNClxlD
-   lHXRGsz+HVCTjh6QEvI73mQGnpNK0M3mG6aoKxYLAKWVqzq99iyNy/oWf
-   cFbj1JV8PfMf9Jq/ugOk+dYyByIJJL0ajJHU75CygnhuuyZKp9ObF/YAN
-   vqE8mOHPwKCwTyuyQs9yYZp2YNiVuYE9zVrLGYMApxTlWHyaXLRLqpOce
-   4rmqvav1uH8yuwsFerVKufzQsrInDXvmM8LOkHxrPQslndWY/P+LKsqqy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="207308"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="207308"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 03:00:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="17352575"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 30 Nov 2023 03:00:50 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r8emm-0001jU-1c;
-	Thu, 30 Nov 2023 11:00:48 +0000
-Date: Thu, 30 Nov 2023 19:00:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wujie Duan <wjduan@linx-info.com>, tsbogend@alpha.franken.de
-Cc: oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Wujie Duan <wjduan@linx-info.com>
-Subject: Re: [PATCH] Mark symbols static where possible for mips/kernel
-Message-ID: <202311301824.pu39T7C9-lkp@intel.com>
-References: <20231128071225.801111-1-wjduan@linx-info.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8B118E01;
+	Thu, 30 Nov 2023 11:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC73C433C7;
+	Thu, 30 Nov 2023 11:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701342762;
+	bh=GGfXE9jnMr/28RJ1AbOcy/7HFYYF7xL3m95Mfm15Tps=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hS29cAaeUtXdeK+kiZWZ8qW3M4rlyGHM7IrFWTDxn8Nt0aXiAvnbAmRc/aoZ3Gp0j
+	 V7SRDf/8hQJMNOEslGbmVEQwuQ3v/n0aab4QU6apKhqRzbBW1fGVCc4o5+lNiYt0iI
+	 /7/amZz6HtQ5TNJ7z/1iEkJX2GzxXQ/d0Y8W3VVN2EeZqpbt6InWklo12ZeEHk9H/Z
+	 dLnoiGTasJF7l2Ws/GUmhIMMkZ/lsrZ8w7RC7r6TB1mn3zon1xzXFqjFmv6WUa2sKK
+	 u5jJfB5MNcKrcJC5o7DP2m9wYEaZRsNjXWMH0W1KpYnQMkdMULlFup8a//0ud2c0XX
+	 Dh6gxHxqd0DdA==
+Date: Thu, 30 Nov 2023 12:12:26 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: linux-hyperv@vger.kernel.org, Karol Herbst <kherbst@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jerry Snitselaar <jsnitsel@redhat.com>,
+	dri-devel@lists.freedesktop.org, patches@lists.linux.dev,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Hanjun Guo <guohanjun@huawei.com>, linux-riscv@lists.infradead.org,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Wei Liu <wei.liu@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Dexuan Cui <decui@microsoft.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Jon Hunter <jonathanh@nvidia.com>, linux-acpi@vger.kernel.org,
+	iommu@lists.linux.dev, Danilo Krummrich <dakr@redhat.com>,
+	nouveau@lists.freedesktop.org, linux-snps-arc@lists.infradead.org,
+	Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Vineet Gupta <vgupta@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Vinod Koul <vkoul@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Hector Martin <marcan@marcan.st>, linux-mips@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, asahi@lists.linux.dev,
+	Sudeep Holla <sudeep.holla@arm.com>, dmaengine@vger.kernel.org,
+	David Woodhouse <dwmw2@infradead.org>,
+	Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 10/10] ACPI: IORT: Allow COMPILE_TEST of IORT
+Message-ID: <ZWhuGl1l5V5b+w4P@lpieralisi>
+References: <0-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
+ <10-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
+ <ZWc0qPWzNWPkL8vt@lpieralisi>
+ <20231129191240.GZ436702@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -61,89 +87,78 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231128071225.801111-1-wjduan@linx-info.com>
+In-Reply-To: <20231129191240.GZ436702@nvidia.com>
 
-Hi Wujie,
+On Wed, Nov 29, 2023 at 03:12:40PM -0400, Jason Gunthorpe wrote:
+> On Wed, Nov 29, 2023 at 01:55:04PM +0100, Lorenzo Pieralisi wrote:
+> 
+> > I don't think it should be done this way. Is the goal compile testing
+> > IORT code ? 
+> 
+> Yes
+> 
+> > If so, why are we forcing it through the SMMU (only because
+> > it can be compile tested while eg SMMUv3 driver can't ?) menu entry ?
+> 
+> Because something needs to select it, and SMMU is one of the places
+> that are implicitly using it.
+> 
+> It isn't (and shouldn't be) a user selectable kconfig. Currently the
+> only thing that selects it is the ARM64 master kconfig.
 
-kernel test robot noticed the following build errors:
+I never said it should be a user selectable kconfig. I said that
+I don't like using the SMMU entry (only) to select it just because
+that entry allows COMPILE_TEST.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.7-rc3 next-20231130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > This looks a bit artificial (and it is unclear from the Kconfig
+> > file why only that driver selects IORT, it looks like eg the SMMUv3
+> > does not have the same dependency - there is also the SMMUv3 perf
+> > driver to consider).
+> 
+> SMMUv3 doesn't COMPILE_TEST so it picks up the dependency transitivity
+> through ARM64. I'm not sure why IORT was put as a global ARM64 kconfig
+> dependency and not put in the places that directly need it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wujie-Duan/Mark-symbols-static-where-possible-for-mips-kernel/20231128-152256
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231128071225.801111-1-wjduan%40linx-info.com
-patch subject: [PATCH] Mark symbols static where possible for mips/kernel
-config: mips-cavium_octeon_defconfig (https://download.01.org/0day-ci/archive/20231130/202311301824.pu39T7C9-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231130/202311301824.pu39T7C9-lkp@intel.com/reproduce)
+Because IORT is used by few ARM64 system IPs (that are enabled by
+default, eg GIC), it makes sense to have a generic ARM64 select (if ACPI).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311301824.pu39T7C9-lkp@intel.com/
+> "perf driver" ? There is a bunch of GIC stuff that uses this too but I
+> don't know if it compile tests.
 
-All errors (new ones prefixed by >>):
+"SMMUv3 perf driver" drivers/perf/arm_smmuv3_pmu.c
 
-   mips64-linux-ld: arch/mips/kernel/signal_n32.o: in function `setup_rt_frame_n32':
->> arch/mips/kernel/signal_n32.c:109:(.text+0xb8): undefined reference to `setup_sigcontext'
+> > Maybe we can move IORT code into drivers/acpi and add a silent config
+> > option there with a dependency on ARM64 || COMPILE_TEST.
+> 
+> That seems pretty weird to me, this is the right way to approach it,
+> IMHO. Making an entire directory condition is pretty incompatible with
+> COMPILE_TEST as a philosophy.
 
+That's not what I was suggesting. I was suggesting to move iort.c (or
+some portions of it) into drivers/acpi if we care enough to compile test
+it on arches !ARM64.
 
-vim +109 arch/mips/kernel/signal_n32.c
+It is also weird to have a file in drivers/acpi/arm64 that you want
+to compile test on other arches IMO (and I don't think it is very useful
+to compile test it either).
 
-^1da177e4c3f41 Linus Torvalds     2005-04-16   91  
-81d103bf806786 Richard Weinberger 2013-10-06   92  static int setup_rt_frame_n32(void *sig_return, struct ksignal *ksig,
-81d103bf806786 Richard Weinberger 2013-10-06   93  			      struct pt_regs *regs, sigset_t *set)
-^1da177e4c3f41 Linus Torvalds     2005-04-16   94  {
-9bbf28a36cae08 Atsushi Nemoto     2006-02-01   95  	struct rt_sigframe_n32 __user *frame;
-^1da177e4c3f41 Linus Torvalds     2005-04-16   96  	int err = 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16   97  
-7c4f563507c33c Richard Weinberger 2014-03-05   98  	frame = get_sigframe(ksig, regs, sizeof(*frame));
-96d4f267e40f95 Linus Torvalds     2019-01-03   99  	if (!access_ok(frame, sizeof (*frame)))
-81d103bf806786 Richard Weinberger 2013-10-06  100  		return -EFAULT;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  101  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  102  	/* Create siginfo.  */
-81d103bf806786 Richard Weinberger 2013-10-06  103  	err |= copy_siginfo_to_user32(&frame->rs_info, &ksig->info);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  104  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  105  	/* Create the ucontext.	 */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  106  	err |= __put_user(0, &frame->rs_uc.uc_flags);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  107  	err |= __put_user(0, &frame->rs_uc.uc_link);
-ea536ad4f231a0 Al Viro            2012-12-23  108  	err |= __compat_save_altstack(&frame->rs_uc.uc_stack, regs->regs[29]);
-^1da177e4c3f41 Linus Torvalds     2005-04-16 @109  	err |= setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
-431dc8040354db Ralf Baechle       2007-02-13  110  	err |= __copy_conv_sigset_to_user(&frame->rs_uc.uc_sigmask, set);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  111  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  112  	if (err)
-81d103bf806786 Richard Weinberger 2013-10-06  113  		return -EFAULT;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  114  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  115  	/*
-^1da177e4c3f41 Linus Torvalds     2005-04-16  116  	 * Arguments to signal handler:
-^1da177e4c3f41 Linus Torvalds     2005-04-16  117  	 *
-^1da177e4c3f41 Linus Torvalds     2005-04-16  118  	 *   a0 = signal number
-^1da177e4c3f41 Linus Torvalds     2005-04-16  119  	 *   a1 = 0 (should be cause)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  120  	 *   a2 = pointer to ucontext
-^1da177e4c3f41 Linus Torvalds     2005-04-16  121  	 *
-^1da177e4c3f41 Linus Torvalds     2005-04-16  122  	 * $25 and c0_epc point to the signal handler, $29 points to
-^1da177e4c3f41 Linus Torvalds     2005-04-16  123  	 * the struct rt_sigframe.
-^1da177e4c3f41 Linus Torvalds     2005-04-16  124  	 */
-81d103bf806786 Richard Weinberger 2013-10-06  125  	regs->regs[ 4] = ksig->sig;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  126  	regs->regs[ 5] = (unsigned long) &frame->rs_info;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  127  	regs->regs[ 6] = (unsigned long) &frame->rs_uc;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  128  	regs->regs[29] = (unsigned long) frame;
-d814c28ceca8f6 David Daney        2010-02-18  129  	regs->regs[31] = (unsigned long) sig_return;
-81d103bf806786 Richard Weinberger 2013-10-06  130  	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  131  
-722bb63de630f9 Franck Bui-Huu     2007-02-05  132  	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
-^1da177e4c3f41 Linus Torvalds     2005-04-16  133  	       current->comm, current->pid,
-^1da177e4c3f41 Linus Torvalds     2005-04-16  134  	       frame, regs->cp0_epc, regs->regs[31]);
-722bb63de630f9 Franck Bui-Huu     2007-02-05  135  
-7b3e2fc847c832 Ralf Baechle       2006-02-08  136  	return 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  137  }
-151fd6acd94e12 Ralf Baechle       2007-02-15  138  
+> > Don't know but at least it is clearer. As for the benefits of compile
+> > testing IORT code - yes the previous patch is a warning to fix but
+> > I am not so sure about the actual benefits.
+> 
+> IMHO COMPILE_TEST is an inherently good thing. It makes development
+> easier for everyone because you have a less fractured code base to
+> work with.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I am talking about IORT code, not COMPILE_TEST as a whole.
+
+I am not sure what "less fractured" means in this context.
+
+Anyway - it is not a big deal either way but I don't like selecting
+ACPI_IORT only on kconfig entries that allow COMPILE_TEST to implicitly
+compile test it so *if* we want to do it we will have to do it
+differently.
+
+Thanks,
+Lorenzo
 
