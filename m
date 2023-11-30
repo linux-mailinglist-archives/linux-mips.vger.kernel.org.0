@@ -1,178 +1,216 @@
-Return-Path: <linux-mips+bounces-408-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-409-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CCF07FEE71
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 13:00:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D70727FEEDA
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 13:21:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADB441C20C5E
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 12:00:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A13EB20D12
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 12:21:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96ED93C6AA;
-	Thu, 30 Nov 2023 12:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A91A4652E;
+	Thu, 30 Nov 2023 12:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kgp9MapS"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AiT86x1s"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23D310C9
-	for <linux-mips@vger.kernel.org>; Thu, 30 Nov 2023 04:00:32 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-54b0073d50fso834053a12.2
-        for <linux-mips@vger.kernel.org>; Thu, 30 Nov 2023 04:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701345631; x=1701950431; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=npI0PNPPCArBwwRVVZ0pXSN33m5+EJoBDMzm63BCi3A=;
-        b=kgp9MapSPlPL1NOkocsa5E21TBQWwzbEkfyHvqUVZJ92ypQcn36U0fLFb+r+idSRK5
-         YYop/nXi1oalRMEQByaEPoCsHhPl0Ocfy6Jkfslib1ldzBCh/Edows3/wBn/Fu/npMhN
-         sBjtzD75A3yigaUy78BMIzuvUOo+ZpqE9caHZpFoHj+95UkXHjasvif20j7Fh4KzOyte
-         tDmLS/q9ELjaNrJvHw+8UB4EqjFFTYtyL/WDxBjavtcr24mAaiC3Jw5FF1r8QU3fMSih
-         78mbQ2+WUdGKWNdZKJlzJhcz/KK/8nXEO1D6p3203IhkVmH8L3mdWsQdPpe3LYTjPBg4
-         TFCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701345631; x=1701950431;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=npI0PNPPCArBwwRVVZ0pXSN33m5+EJoBDMzm63BCi3A=;
-        b=cU+wV/YZQnIH0Hv9bAOyVVIzY8wlTi+QTzn/SS5BzzLHkuaGokA8m99pTzt/4YUWfU
-         3Uv7q+uw5Fsjg9UIeJ2KH5LMpmuXTD+1yM+KDHhlmq01wq13hzOUh7s0GL3bmIXevwxf
-         5a6L8mSlbCBS/9ubreUPDbBB7G+3N25tUvX1FPdGt4xYgB4axtAi5hFlLIL8EDb8icXq
-         GdllRPPqDYLCgLZkEQF5c5ZDIwbocPSiJrxqe0T3PLKdWfPWD9mdFPyqWuigNwOlTn8l
-         MqNzMlyWASsOlZor46cAUEJJ2tRk6eEfBuH3RxKiMNDcxnh5pZzgibSCvrbdjwfWX+rY
-         HRMQ==
-X-Gm-Message-State: AOJu0Yz3DC5b3UnxKgomFXZ1sNz7Wvdscoj/JkB1B1HwvYMwkGT/Kb2C
-	DlPoQkAqBhzTBJZiDViU8GbbHg==
-X-Google-Smtp-Source: AGHT+IEqX3nSINaCt+TF92BYcgECHcc0CffqpPXooXdphQZmLs6k7OT9rcvi/b7KdQ+26IgSxWLhYg==
-X-Received: by 2002:a05:6402:160e:b0:54b:9881:41b2 with SMTP id f14-20020a056402160e00b0054b988141b2mr7185236edv.12.1701345631190;
-        Thu, 30 Nov 2023 04:00:31 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id r24-20020aa7c158000000b0054ae75dcd6bsm479338edp.95.2023.11.30.04.00.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 04:00:30 -0800 (PST)
-Message-ID: <85b7ab43-4d39-4eb3-b021-1c18a58e99b9@linaro.org>
-Date: Thu, 30 Nov 2023 13:00:28 +0100
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2078.outbound.protection.outlook.com [40.107.102.78])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7554110D1;
+	Thu, 30 Nov 2023 04:21:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SbrYtRd/m7aeL7wxtVSgoWxcla1sgjQ3evd/MJvNCzpiBdA4Ipvu84YG0TW189c5MjZnX27ErQR7j3/eh0UrzfeuvSeJlwfeeyADJt2WNAGbro08aDH/GNszDzFMHf4DNC0xH9vdB8RuMnrXxhni8iJZt+MZWEaXIHxBr5joU+HNx/d8/0A7X+Efjps48cVyYU3z5H529YEtKtrIZIQ+lZF37r94KGkoPrQxIhuQVgob06HuMLuSAglSXuSK382hZHtmh0LHMzkYAwbZTwZNFBTKo7wHeYGdNpLDx+axmNpR/K+80bX4ixvuRpPYcOXjHR4WzkK1wUe1p2CEw3tT0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LJixQ+w47ibikbkMDvSQCF2sK7jVRhZawzlwIjz7Jh8=;
+ b=FVYrwI3BqFs6O8JvmQaavPBE2kfDcLYc6T70rQH64s8L0vKSIsyjMjIb60f1hpAJcXm0gYREzNG2NEhQDDrw/GXSFXcea7LKzVJvwPJ7bD75zwXZaQKOo/8ZRs0zouEZiNoCs64MeLQMyqVt0fj2Q5GcBaQKFTlZKdJvhdXsAV8Y4JxpoMcRpXOHfHuhlt6dJ6pOVW+5QT/UdVRztShK78USMwNmzeloEDE1O0vtvaRXIKkx/lfEjSDe1ggTt3CRXbFAVxF8iCLWL7U/mvtqeA7FFrM7A65wzqzz9IGePT6EVrqAdoK+sS5Tcwgm6nOa0e0+VaEQUKBUvXkw4bRt2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LJixQ+w47ibikbkMDvSQCF2sK7jVRhZawzlwIjz7Jh8=;
+ b=AiT86x1sH4H83A1T+sAtqjfSfze+2wc9rFhL6g6CKdJFbZxaG8ljv3u3rj8RKBVeDtqma7DE+IT6Fw+6Cq1v1TDFOG0EPJkWNVqgIynm8o5m182yR5oRsi7APEcy3XhwQmTI5UktxK1YM18HhwBJp1Xvbg28WUcqcLRsKrcfCSCas1aRxGmKtyHRL+zH9THeMhUt5rSv5VfjgU08zEEQz3sX7P7l1VudS/t7p2X7amc+eEKo1gnBwpUFghy3kDMLjPHfvb/4n1eqen0Eiaz+tdR7V1MVYtkSEJUyerzwnJQ5MIW0lmnNJTy4dq314xGvXAjLSk8K8qFSPqdDGLHtsg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB6839.namprd12.prod.outlook.com (2603:10b6:806:265::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.23; Thu, 30 Nov
+ 2023 12:21:37 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7046.015; Thu, 30 Nov 2023
+ 12:21:37 +0000
+Date: Thu, 30 Nov 2023 08:21:35 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: linux-hyperv@vger.kernel.org, Karol Herbst <kherbst@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jerry Snitselaar <jsnitsel@redhat.com>,
+	dri-devel@lists.freedesktop.org, patches@lists.linux.dev,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Hanjun Guo <guohanjun@huawei.com>, linux-riscv@lists.infradead.org,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Wei Liu <wei.liu@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Dexuan Cui <decui@microsoft.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Jon Hunter <jonathanh@nvidia.com>, linux-acpi@vger.kernel.org,
+	iommu@lists.linux.dev, Danilo Krummrich <dakr@redhat.com>,
+	nouveau@lists.freedesktop.org, linux-snps-arc@lists.infradead.org,
+	Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Vineet Gupta <vgupta@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Vinod Koul <vkoul@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Hector Martin <marcan@marcan.st>, linux-mips@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, asahi@lists.linux.dev,
+	Sudeep Holla <sudeep.holla@arm.com>, dmaengine@vger.kernel.org,
+	David Woodhouse <dwmw2@infradead.org>,
+	Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 10/10] ACPI: IORT: Allow COMPILE_TEST of IORT
+Message-ID: <20231130122135.GG1389974@nvidia.com>
+References: <0-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
+ <10-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
+ <ZWc0qPWzNWPkL8vt@lpieralisi>
+ <20231129191240.GZ436702@nvidia.com>
+ <ZWhuGl1l5V5b+w4P@lpieralisi>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZWhuGl1l5V5b+w4P@lpieralisi>
+X-ClientProxiedBy: SN7PR04CA0044.namprd04.prod.outlook.com
+ (2603:10b6:806:120::19) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/21] dt-bindings: mips: cpu: Add I-Class I6500
- Multiprocessor Core
-Content-Language: en-US
-To: Gregory CLEMENT <gregory.clement@bootlin.com>,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?=
- <philmd@linaro.org>
-References: <20231123152639.561231-1-gregory.clement@bootlin.com>
- <20231123152639.561231-16-gregory.clement@bootlin.com>
- <f443830a-ba16-4c5e-9260-6fb38a09cc10@linaro.org> <874jh3fra6.fsf@BL-laptop>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <874jh3fra6.fsf@BL-laptop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB6839:EE_
+X-MS-Office365-Filtering-Correlation-Id: c56a3fcf-77c8-480d-4e3a-08dbf19ee5ee
+X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	39FFJvs4blwieyKepVr5RR0vYatdHBvCBb9hFrGowdz0BtQ0tVmCh3QDzaU54xor4zGD/pG3D5aQB3M9uOCicc4qbN2RUTajGFko2au/K19O3GcVhgW9R5FD4BAuF0jRNbir+o5GRQ+ZkB073U+MdMAan8BHs14AJjN4fUU3Da/34Jn4CaYyncmyGOxKyFu4Z6vwDGmhO5HsoP4UZfSC8Rt9FYXvh/NbzOcRw7eCODzcJbYzEYumoJ0RJswjWRAgQTrNBILXLSnVCSzTAbnJwMVYuJH1gdzPoHNaw6hlj6aSqPRyTf4/K8ATMyetMq3srP19UEZS7vLLYJ3UCyW8RY2LphTvuA3RjS3FCDzGYzire27e4vaoCFyAE+Fb71YwDpDE3gaeOux2G4k71O4C9/01y5TGhjDQ2LVG1FHY6fM6cg0JLQSlbB/3uDKIk90wv0XOOJOqhgYxXSZ3ua4jbsrVYi7kspkV/N0ai4AeZTXfc34MFcVeYZeefScV+v0IiPD9kGrtRfWmZOWpfanv7EhVzrZIQjMs3gKQOvJTL4sSVHdy4awo1KXRh+m3DimbxQ4nBlsCLvs2bs0wteRNCOnxwI8RPKaKKCdV5XDhy9Ymxjb0pyhQyaYnw1f6pa0C
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(136003)(346002)(39860400002)(396003)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(26005)(1076003)(2616005)(66476007)(66946007)(54906003)(66556008)(7406005)(7366002)(316002)(6916009)(7416002)(2906002)(8676002)(4326008)(8936002)(86362001)(5660300002)(41300700001)(6506007)(6512007)(36756003)(33656002)(478600001)(6486002)(202311291699003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?7Q7CRmLAOPiTqvKa4MushueP6OP8H9hIZQ6Te0DL2gWMKU/iv6R82N5TRtvk?=
+ =?us-ascii?Q?SvnkdJ4yaOqIrtrsCOZL/c/tk9ffutF/khz0rtIuTu19sTZVkyHocI7uFRyb?=
+ =?us-ascii?Q?g91G7Gbx3QSi5ip0eIs8pz7GIp0yAsjXqpTGQI+Ns5SqnLDPSNPtb8Hz4tiL?=
+ =?us-ascii?Q?+oR+1VRcZb6S+j+gXxyeRHwGUyPtxpSrlfSwVfRb5Z9pAhuWmRRk/hokCgyQ?=
+ =?us-ascii?Q?SnPhvdu7hFXD9LI4p6bdYYLgQa4TIKe6RyLh3JflHX24/oGEtcAlCELdaDlH?=
+ =?us-ascii?Q?7usCpFs/wbHteN6xLSUCokxDJ0IYOiVpXO1APUE+uwAHHMDgIkhL7pa5/58F?=
+ =?us-ascii?Q?IoV9HZFlQVSZrIyhqwF1/BfBBMjJqJ+ZaYo8kWBuxyt4A61RL4lo6AHkKUz/?=
+ =?us-ascii?Q?WATqc988SA13uf8+JL1eh2Yg4g3HlqUXZyshb+x6nYxDEh2MkYau7JJ8YwP/?=
+ =?us-ascii?Q?9mxVVODNoM0umEJWXT0KN6a1mPCRPlp7AWzbYU8YzLVunPMyYInZ3Re3VIXU?=
+ =?us-ascii?Q?knglSLO6mG4K5gVMYxujP3prkuRBzk7IZOFbBTfob4ypYF8Imtbxhza7jgUs?=
+ =?us-ascii?Q?N7arU1R2GuluqVmK2g1QGzGCkRCF+zpm2E8H7s/GKrvI0qlKimlEqd5TM5mC?=
+ =?us-ascii?Q?b3YutF8/PRG0Otip9tn1O79Z2j6Q17hxUmMgU4+UP4khMHwPKfxOhIltdgRS?=
+ =?us-ascii?Q?0uq/TyvfY/NsaZoVKvR31r9JTDbS6KwL87eIKfJ5A6pSb0+9E+lWT5E+Jekh?=
+ =?us-ascii?Q?k0DVzfvseOTBtwnscMzZnz2iSVDAmRfK9lK/BWyYq/T60M62YnxX4khhOazm?=
+ =?us-ascii?Q?1UBoavCZX2OKHzPDc3BmQPNcTsCmg7eL0n51J8MPLL9hZJ/ijF5EISHqsSB2?=
+ =?us-ascii?Q?WwwUnCNNsM18EL+S6Nrg8LWbTCKzVYeGqG58R1Beh0TXT1ZrrZcOW/tzOuI5?=
+ =?us-ascii?Q?xl65s89OdshmQ2Z+26vu03QJRbWWiSpZp7NBBiEQRO6nnFdsNrnPRQx1isn4?=
+ =?us-ascii?Q?h/cyVO7k2oJ34gxD1dJ7HDeZvRULCwmcNuAAP0629F7yw+vGOnhsVL7wL8p3?=
+ =?us-ascii?Q?RrUIYS4ITjjF6SYKdKXpqswOwY3stNsz3Aaw0nuxznHMHRYRY3Rc8sGlUnxk?=
+ =?us-ascii?Q?HJAC7RFdIKTWOdURMx2KhMXsb+0r3fE85TQ9TtbzTS0DoyIgxg0IcCKcuGiU?=
+ =?us-ascii?Q?Z9K3ShSiXVqXrckwtBMDteA+v2/+4+jBDaR4TJY5vfDPn2ZiyV4m0nGoqzuS?=
+ =?us-ascii?Q?fTY6cPUK39xNePVTBG9+wQR82ac9m86kcn18hex8XB5yN1HctG1mFkv9vcnQ?=
+ =?us-ascii?Q?hF+oV8S7AcsGjjUF8rE6vCulz8Ns0v1gGUEbOVpDotqn9nM/u77L5rKbqZic?=
+ =?us-ascii?Q?e9/GW7NiAM3M64unOzbRAsaydlqqzg6pZnLAiEJz+miFRaBEh+G03zb/JF8J?=
+ =?us-ascii?Q?s35/S8NfrhoyrgjAobq/CKyMIqp5e5mquTexI5teWFjP66fQSbETceSq2hal?=
+ =?us-ascii?Q?6gHQTIYilnNCustLzHFAJhF+Ri2bNcHmjfPOcFcmLhGdQvIZwCdLkVosY8TK?=
+ =?us-ascii?Q?VsgDO12aG5oWGjMoOPTmcuvxZNCjeOS7R9o4RSRS?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c56a3fcf-77c8-480d-4e3a-08dbf19ee5ee
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2023 12:21:36.8906
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tr94XYyL/1BPueDwYPWzJnAyAKGBEQmBCWZ46SEOUfaMp2CKrqq1JyDvvSPchVYF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6839
 
-On 30/11/2023 11:51, Gregory CLEMENT wrote:
-> Hello Krzysztof,
+On Thu, Nov 30, 2023 at 12:12:26PM +0100, Lorenzo Pieralisi wrote:
+> On Wed, Nov 29, 2023 at 03:12:40PM -0400, Jason Gunthorpe wrote:
+> > On Wed, Nov 29, 2023 at 01:55:04PM +0100, Lorenzo Pieralisi wrote:
+> > 
+> > > I don't think it should be done this way. Is the goal compile testing
+> > > IORT code ? 
+> > 
+> > Yes
+> > 
+> > > If so, why are we forcing it through the SMMU (only because
+> > > it can be compile tested while eg SMMUv3 driver can't ?) menu entry ?
+> > 
+> > Because something needs to select it, and SMMU is one of the places
+> > that are implicitly using it.
+> > 
+> > It isn't (and shouldn't be) a user selectable kconfig. Currently the
+> > only thing that selects it is the ARM64 master kconfig.
 > 
->> On 23/11/2023 16:26, Gregory CLEMENT wrote:
->>> The MIPS Warrior I-class I6500 was announced by Imagination
->>> Technologies in 2016 and is used in the Mobileye SoC EyeQ5.
->>>
->>> Acked-by: Arnd Bergmann <arnd@arndb.de>
->>> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
->>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->>> ---
->>>  Documentation/devicetree/bindings/mips/cpus.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
->>> index cf382dea3922c..b5165cf103e94 100644
->>> --- a/Documentation/devicetree/bindings/mips/cpus.yaml
->>> +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
->>> @@ -39,6 +39,7 @@ properties:
->>>        - mti,mips24KEc
->>>        - mti,mips14KEc
->>>        - mti,mips14Kc
->>> +      - img,i6500
->>
->> Don't break the order of entries.
+> I never said it should be a user selectable kconfig. I said that
+> I don't like using the SMMU entry (only) to select it just because
+> that entry allows COMPILE_TEST.
+
+So you would like each of the drivers that use it to select it?
+
+> > SMMUv3 doesn't COMPILE_TEST so it picks up the dependency transitivity
+> > through ARM64. I'm not sure why IORT was put as a global ARM64 kconfig
+> > dependency and not put in the places that directly need it.
 > 
-> Do you mean alphabetic order ?
+> Because IORT is used by few ARM64 system IPs (that are enabled by
+> default, eg GIC), it makes sense to have a generic ARM64 select (if ACPI).
 
-I guess they are not fully ordered, but adding items to the end of the
-list is for sure not improving the order.
+IMHO that is not a good way to use kconfig, it is obfuscating and
+doesn't support things like COMPILE_TEST.
 
+> > > Maybe we can move IORT code into drivers/acpi and add a silent config
+> > > option there with a dependency on ARM64 || COMPILE_TEST.
+> > 
+> > That seems pretty weird to me, this is the right way to approach it,
+> > IMHO. Making an entire directory condition is pretty incompatible with
+> > COMPILE_TEST as a philosophy.
 > 
-> because actually the entries are not really in alphabetic order.
+> That's not what I was suggesting. I was suggesting to move iort.c (or
+> some portions of it) into drivers/acpi if we care enough to compile test
+> it on arches !ARM64.
 > 
-> Should I send first, a patch like the following one ?
+> It is also weird to have a file in drivers/acpi/arm64 that you want
+> to compile test on other arches IMO (and I don't think it is very useful
+> to compile test it either).
 
-I wouldn't care about fixing existing order, so just the entry could be
-around the ones 'i' because that part is ordered. All entries are
-ordered by vendor prefix, so adding 'img' after 'mti' for sure breaks
-that order.
-> 
+Why? Just because the directory is named "arm64" doesn't mean it
+should be excluded from COMPILE_TEST. arch/arm64 yes, but not random
+directories in the driver tree.
 
-Best regards,
-Krzysztof
+Stuff under drivers/ should strive to get 100% COMPILE_TEST coverage
+as much as practical. This makes everyone else's life easier.
 
+Jason
 
