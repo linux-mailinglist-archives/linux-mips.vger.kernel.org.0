@@ -1,76 +1,121 @@
-Return-Path: <linux-mips+bounces-414-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-415-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0097FF4A4
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 17:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B707FF62C
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 17:36:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 277BF1C20CDA
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 16:19:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4D9B1C21157
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 16:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F6854BF8;
-	Thu, 30 Nov 2023 16:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lbLLL9vY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B2D4777A;
+	Thu, 30 Nov 2023 16:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D8F5467D;
-	Thu, 30 Nov 2023 16:19:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC8CC433C9;
-	Thu, 30 Nov 2023 16:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1701361170;
-	bh=mDtzF7NAf/4/gCyKEm5oMxB9JWjUMGxC0nVhCgSfJiI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lbLLL9vY1iZm73oW0pLb5e2DTUMZwAVzUyefidj4FWo5C5BEKe0QdpDdbG48LcpVR
-	 RGVEOqcSIEiYSLWUJi7eFZbo6zoyYvnMhIuFWrq6+IMh/0b03TTVWdV3YsMdEFRc2Q
-	 BJBvgqW0vCh7Bamjd5FtC0tZZY4LTFNienKCGV/8=
-Date: Thu, 30 Nov 2023 08:19:29 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Stephen Rothwell" <sfr@rothwell.id.au>, linux-next
- <linux-next@vger.kernel.org>, "Linux Kernel Mailing List"
- <linux-kernel@vger.kernel.org>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>, "David S . Miller" <davem@davemloft.net>,
- sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: linux-next: lots of errors/warnings from the
- -Werror=missing-prototypes addition
-Message-Id: <20231130081929.46a79c33edee8651c63112dc@linux-foundation.org>
-In-Reply-To: <4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
-References: <20231130075838.05e5bc9b@oak>
-	<20231129131003.d2c1078847c3865c1ac2dfd5@linux-foundation.org>
-	<ebb5b1a2-ed27-4a77-b62b-1d3f19bddd85@app.fastmail.com>
-	<20231129151030.24b807f1d2b43be301a533b7@linux-foundation.org>
-	<4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F339A1A4;
+	Thu, 30 Nov 2023 08:36:09 -0800 (PST)
+Received: from hutton.arch.nue2.suse.org (unknown [10.168.144.140])
+	by smtp-out1.suse.de (Postfix) with ESMTP id 0BB0321B3E;
+	Thu, 30 Nov 2023 16:36:08 +0000 (UTC)
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org,
+	Aurelien Jarno <aurel32@debian.org>
+Subject: [PATCH] MIPS: kernel: Clear FPU states when setting up kernel threads
+Date: Thu, 30 Nov 2023 17:36:01 +0100
+Message-Id: <20231130163601.185270-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Score: 3.91
+X-Spamd-Result: default: False [3.91 / 50.00];
+	 ARC_NA(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 RCPT_COUNT_THREE(0.00)[4];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 R_MISSING_CHARSET(2.50)[];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 NEURAL_HAM_LONG(-0.99)[-0.994];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[franken.de:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 RCVD_COUNT_ZERO(0.00)[0];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+]
 
-On Thu, 30 Nov 2023 09:07:38 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
+io_uring sets up the io worker kernel thread via a syscall out of an
+user space prrocess. This process might have used FPU and since
+copy_thread() didn't clear FPU states for kernel threads a BUG()
+is triggered for using FPU inside kernel. Move code around
+to always clear FPU state for user and kernel threads.
 
-> > I guess it should precede "Makefile.extrawarn: turn on
-> > missing-prototypes globally".
-> 
-> I already have a collection of patches to fix up known
-> -Wmissing-prototype warnings across architectures in the
-> asm-generic tree, so I'll add this patch there:
-> 
-> commit bdef96eb0b89dfa80992312a8e3b2613bf178ae5
-> Author: Arnd Bergmann <arnd@arndb.de>
-> Date:   Thu Nov 30 00:07:07 2023 +0100
-> 
->     arch: turn off -Werror for architectures with known warnings
+Cc: stable@vger.kernel.org
+Reported-by: Aurelien Jarno <aurel32@debian.org>
+Closes: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1055021
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/kernel/process.c | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-I think this would be better in the mm-nonmm tree, alongside
-"Makefile.extrawarn: turn on missing-prototypes globally".  Can I steal it?
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 5387ed0a5186..b630604c577f 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -121,6 +121,19 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+ 	/*  Put the stack after the struct pt_regs.  */
+ 	childksp = (unsigned long) childregs;
+ 	p->thread.cp0_status = (read_c0_status() & ~(ST0_CU2|ST0_CU1)) | ST0_KERNEL_CUMASK;
++
++	/*
++	 * New tasks lose permission to use the fpu. This accelerates context
++	 * switching for most programs since they don't use the fpu.
++	 */
++	clear_tsk_thread_flag(p, TIF_USEDFPU);
++	clear_tsk_thread_flag(p, TIF_USEDMSA);
++	clear_tsk_thread_flag(p, TIF_MSA_CTX_LIVE);
++
++#ifdef CONFIG_MIPS_MT_FPAFF
++	clear_tsk_thread_flag(p, TIF_FPUBOUND);
++#endif /* CONFIG_MIPS_MT_FPAFF */
++
+ 	if (unlikely(args->fn)) {
+ 		/* kernel thread */
+ 		unsigned long status = p->thread.cp0_status;
+@@ -149,20 +162,8 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+ 	p->thread.reg29 = (unsigned long) childregs;
+ 	p->thread.reg31 = (unsigned long) ret_from_fork;
+ 
+-	/*
+-	 * New tasks lose permission to use the fpu. This accelerates context
+-	 * switching for most programs since they don't use the fpu.
+-	 */
+ 	childregs->cp0_status &= ~(ST0_CU2|ST0_CU1);
+ 
+-	clear_tsk_thread_flag(p, TIF_USEDFPU);
+-	clear_tsk_thread_flag(p, TIF_USEDMSA);
+-	clear_tsk_thread_flag(p, TIF_MSA_CTX_LIVE);
+-
+-#ifdef CONFIG_MIPS_MT_FPAFF
+-	clear_tsk_thread_flag(p, TIF_FPUBOUND);
+-#endif /* CONFIG_MIPS_MT_FPAFF */
+-
+ #ifdef CONFIG_MIPS_FP_SUPPORT
+ 	atomic_set(&p->thread.bd_emu_frame, BD_EMUFRAME_NONE);
+ #endif
+-- 
+2.35.3
+
 
