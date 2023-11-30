@@ -1,63 +1,62 @@
-Return-Path: <linux-mips+bounces-417-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-418-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F4A7FFB01
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 20:16:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B365C7FFB3E
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 20:26:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FE3B1F21041
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 19:16:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDBCD1C203DE
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 19:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341455FF1B;
-	Thu, 30 Nov 2023 19:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2CB45FEED;
+	Thu, 30 Nov 2023 19:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHOUtUQs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZbfDoZ4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A8210DF;
-	Thu, 30 Nov 2023 11:16:51 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50bc4fe8158so1879608e87.0;
-        Thu, 30 Nov 2023 11:16:50 -0800 (PST)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75329D48;
+	Thu, 30 Nov 2023 11:26:25 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-50bca79244fso1867179e87.3;
+        Thu, 30 Nov 2023 11:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701371809; x=1701976609; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=beTU95GN50GYTXIaXw8asjQyUJ5kn1rsDTKmhhbRSLc=;
-        b=NHOUtUQsIXFhNr31aeuq9abXTOYWWMyrKoQppF6zi9wR5FugZ9WwOw63v8gBx/NSrt
-         1p3wsarcTpXJ8UA2KIYMLjnoznHusXVrcSXbbhjXv9btn02QWplp/d+OKjfL3W53xmmX
-         wBk/SsPBUjO4Jn7E/478jr1IcQgtCy0A8McJ6TGbSslKmR77EnAylHmMO+ZQidzTF76c
-         yo29kuFJadjifDxP8qQa58pwoNrjVQLjMy2T+Lx4YMoYiInXoGXadO2GGatMpngMqkD4
-         a8N9+Oo6dqaIrUJP47j/72NV7HDcFnMM33Y0AMJon/5mbws02FTYQJo7xJ2tTC8MN8qF
-         Cpcg==
+        d=gmail.com; s=20230601; t=1701372384; x=1701977184; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMs74unU7j3F1FusL/0cihts5RibnCIqAyk58UQbGC0=;
+        b=mZbfDoZ42+zy1d+b9Y7/jGJBJ1IO7r5I1cOkPloAKuQTouRttLWXcZPhHVnxImQ0uk
+         mRyjcG/EEdUex94aV4tuTi8S/8EzbqRVBg7CfZ4O1FccmhqCb55fjsQ+ZVzCuWenqTrh
+         vQ/G+sWh2lT8Rq97fo3H7lpq++SWpmjsoKi3eAuWMcZHCfc3AU6dhFRmKuxOyvIPOldS
+         3Vk+HmYjDdqwL8K7rZSRMrdAcJ0BwyauOTTUVQS0IvlBxUYH8q488YsxfofZZjNvEiRY
+         PNk68ZlHeaO740lZaCiQemYHKuxZeqZtRvSqhT3Zo/ml2Ze4Hx5Nj4n+bEb38/Wx0X9J
+         tqLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701371809; x=1701976609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=beTU95GN50GYTXIaXw8asjQyUJ5kn1rsDTKmhhbRSLc=;
-        b=mONZymjPAcWH9auLmLvvBL06BB3f4VQPpiY6NdKbjsyNtOTbifWOhRgm07LPNBwXXG
-         UXTxCeS2xawqvRwQLUkrnQwS7pbXk/0CJWV1wYggEXJzp3vfC1OiJeEKt6/32sP58JKH
-         CpWYgVT1nYa7KV0ZpmX51MPwxGLxFUGF9jL8RaENm0GSkqLIpxa4fbx4I+QNsTsECO4U
-         Au8nOuXbTbpTFLJn4RpjcPYpz97NLiEknUMyJzXq5J0Ooo+e4iG+uoV0GmCeXuO385VO
-         JglbeoPkiCmxYaDWNEXiAd6WEDQI5/Qh0gBsIvfECfWfCSpFYrGL+GPh7tnMgt+ZhE/2
-         AueQ==
-X-Gm-Message-State: AOJu0YycETzd5StejUBFiGmBwGYUEb5sBovnk5nsfeCOaw6+W3qtTYEv
-	mfX3XrAAOPI7wvh/YOxnM8Q=
-X-Google-Smtp-Source: AGHT+IEjI7GCoxUOOVd+G0oM4OekkSNj6mkZDuZl+LhOwppbLSARI3DeRgkKK7Ms62A8NDUSE8hsMg==
-X-Received: by 2002:a05:6512:36cb:b0:507:9ef2:fb1c with SMTP id e11-20020a05651236cb00b005079ef2fb1cmr10846lfs.2.1701371808553;
-        Thu, 30 Nov 2023 11:16:48 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701372384; x=1701977184;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lMs74unU7j3F1FusL/0cihts5RibnCIqAyk58UQbGC0=;
+        b=rJUL7oEzPOwE38PAl50oUsBmmwH9m9VxL1mglOtTXsIIQNrbwvVJ4MIpcZ55ZeFToh
+         ZnULP/gg9nBseTrpNzUsYDii01w+8SVT3DpNiBoznGBBqft21rJ3l9LC1AsfSRO7mDUN
+         7gVGQi7Z913rBUzgAq2SM+LF1jlIqK32NL3X5aUh+D5hLTdVZDH5O8XeKyf8P5YLMSnt
+         dsy9iHRKPvxPJNGB3VveLb15f43jLW6LHTsb4ppvR1Oy29xJymBBOxAEk+XC7tVXvvE1
+         9F8AJeLpZs6wH2TvH1kaI1fwEHToaL6chrdWkpsBTQh38b/5J5qlNh2+17h2eyNzoe2m
+         BoYg==
+X-Gm-Message-State: AOJu0YxQztWKP5ecx0wJQx3BByxCFltEyB7XK3XgrMAJ+yAn1BxXlmCp
+	LfVEBEm/4hIs5YFBjdMhzeg=
+X-Google-Smtp-Source: AGHT+IHCWGwWvalIBKki4YozNtwRGbiGw1Q30A2/Q59Vc29DchiDIMWyT7SoQeCsB1Kr6b9roa+Ruw==
+X-Received: by 2002:ac2:59c1:0:b0:50b:d764:76c1 with SMTP id x1-20020ac259c1000000b0050bd76476c1mr8537lfn.80.1701372383383;
+        Thu, 30 Nov 2023 11:26:23 -0800 (PST)
 Received: from mobilestation ([95.79.203.166])
-        by smtp.gmail.com with ESMTPSA id dx14-20020a0565122c0e00b00507a089caf6sm230827lfb.219.2023.11.30.11.16.47
+        by smtp.gmail.com with ESMTPSA id g11-20020a19ee0b000000b0050bc96db130sm234767lfb.275.2023.11.30.11.26.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Nov 2023 11:16:47 -0800 (PST)
-Date: Thu, 30 Nov 2023 22:16:45 +0300
+        Thu, 30 Nov 2023 11:26:23 -0800 (PST)
+Date: Thu, 30 Nov 2023 22:26:20 +0300
 From: Serge Semin <fancer.lancer@gmail.com>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Andrew Morton <akpm@linux-foundation.org>, 
 	Mike Rapoport <rppt@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
 	Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
 	Yinglu Yang <yangyinglu@loongson.cn>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
@@ -65,7 +64,7 @@ Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>, Chao-ying Fu <cfu@wavecomp.com>, Marc Zyngier <maz@kernel.org>, 
 	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
-Message-ID: <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
+Message-ID: <2b6pgqupd7uv5la5h52zczdfkpbtnn3xbz2oqjhqpyiqv6ew35@t2vb7vteespn>
 References: <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
  <d6d7e27a-b1a1-48af-be6c-aa9097c48992@app.fastmail.com>
  <ZV94rifAIF2p9Nej@alpha.franken.de>
@@ -73,67 +72,75 @@ References: <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
  <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
  <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
  <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
- <c73d9dbf-b637-47ff-ae2d-6f8987345410@app.fastmail.com>
- <3pgnihbrp5orh4tmj45fipbfoxdwzjh6uefitdpcea2vgkarcm@d56gv3areswl>
- <2148a67f-bd4f-432e-aa0d-c914a4bd5e0d@app.fastmail.com>
+ <c1c0a409-902e-4609-ae84-8939226b4fa0@app.fastmail.com>
+ <fvbe4625dgh57c3njx7fhd6vlnfxynzipfz43ieu2txflc2q4r@xzvrrmmktxsb>
+ <00c225bf-ed99-4721-9d6a-1e58cdffc79f@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2148a67f-bd4f-432e-aa0d-c914a4bd5e0d@app.fastmail.com>
+In-Reply-To: <00c225bf-ed99-4721-9d6a-1e58cdffc79f@app.fastmail.com>
 
-On Tue, Nov 28, 2023 at 03:46:37PM +0000, Jiaxun Yang wrote:
-> 
-> 
-> 在2023年11月28日十一月 上午11:34，Serge Semin写道：
-> > On Mon, Nov 27, 2023 at 09:08:11PM +0000, Jiaxun Yang wrote:
-> [...]
+On Tue, Nov 28, 2023 at 10:59:10PM +0100, Arnd Bergmann wrote:
+> On Tue, Nov 28, 2023, at 14:52, Serge Semin wrote:
+> > On Tue, Nov 28, 2023 at 01:41:51PM +0100, Arnd Bergmann wrote:
+> >> On Mon, Nov 27, 2023, at 17:23, Serge Semin wrote:
+> >> > On Fri, Nov 24, 2023 at 10:03:49PM +0000, Jiaxun Yang wrote:
+> >> but ioremap_cache() is generally underspecified because the
+> >> resulting pointer is neither safe to dereference nor to pass into
+> >> readl()/writel()/memcpy_fromio() on all architectures.
 > >
-> > Indeed. Thanks for pointing that out. In the last days several times I
-> > was looking at that line and for some reason UNCAC_BASE seemed as
-> > CAC_BASE to me.) Based on what both IO_BASE and UNCAC_BASE are defined
-> > as of the uncached region anyway, then it should be safe for any
-> > currently supported MIPS64 (including the Loongson's) to use ioremap()
-> > in place of dmi_early_remap(). So basically my current patch in the
-> > subject won't change the method semantics. Let's not to try to fix a
-> > problem which doesn't exist then, and keep the patch as is especially
-> > seeing that the alternatives might still cause some troubles. Will you
-> > be ok with that?
+> > I don't know about ARM64 (which for instance has it utilized to access
+> > the DMI region), but at least in case of MIPS32 (a fortiori MIPS64
+> > seeing the ioremap_cache() method actually returns a pointer to the
+> > uncached region) I don't see a reason why it wouldn't be safe in both
+> > cases described by you. All IO and memory regions are accessed by the
+> > generic load and store instructions. The only difference is that the
+> > MMIO-space accessors normally implies additional barriers, which just
+> > slow down the execution, but shouldn't cause any other problem. Could
+> > you clarify why do you think otherwise?
+> 
+> On arch/powerpc, CONFIG_PPC_INDIRECT_MMIO makes all ioremap()
+> type functions return a token that can be passed into the readl/writel
+> family but that is not a pointer you can dereference.
+> 
+> On s390, the mechanism is different, but similarly __iomem
+> tokens are not pointers at all.
+
+Ah, you meant that it was not generically safe. Then your were correct
+for sure. I was talking about the MIPS arch, which doesn't
+differentiate normal and IO memory pointers: all of them are accessed
+by the same instructions. So ioremap_prot() returns just a normal
+pointer there, which can be safely de-referenced.
+
+> 
+> >> There was an effort to convert the remaining ioremap_cache() calls
+> >> into memremap() a few years ago, not sure if that's still being worked
+> >> on but it would be the right thing to do.
+> >
+> > I see. Thanks for the pointing out to that. I guess it could be done
+> > for MIPS too (at least on our MIPS32 platform DMI is just a memory
+> > region pre-initialized by the bootloader), but the conversion would
+> > require much efforts. Alas currently I can't afford to get it
+> > implemented in the framework of this patchset. (I saved your note in
+> > my MIPS TODO list though. Let's hope eventually I'll be able to get
+> > back to this topic.)
 > 
 
-> I'd say the safest option is to use CKSEG0 or TO_CAC here, 
+> I just noticed that the only architectures that actually provide
+> ioremap_cache() are x86, arm, arm64, mips, loongarch, powerpc, sh
+> and xtensa. The ones that have ACPI support still definitely
+> need it, most of the other ones can probably be fixed without
+> too much trouble.
 
-I would have agreed with you if MIPS didn't have that special
-_page_cachable_default variable which is undefined for some platforms
-and which might be re-defined during the boot-up process, and if
-MIPS64 didn't have ioremap_prot() always mapping to the uncached
-region.  But IMO updating ioremap_prot() currently seems more risky
-than just converting dmi_early_remap() to the uncached version
-especially seeing it won't change anything. MIPS64 always have IO
-remapped to the uncached region. MIPS32 won't be able to have cached
-mapping until VM is available, and paging and slabs are initialized.
-So on the early MIPS32 bootup stages ioremap_cache() wouldn't have
-worked anyway.
-
-> but I'm fine
-> with ioremap as long as the semantic remains uncached on Loongson.
-
-Ok. Thanks.
+Ok. Thanks. I'll have a look at that on my free time.
 
 -Serge(y)
 
 > 
-> Thanks.
-> >
-> > -Serge(y)
-> >
-> >> 
-> [...]
-> -- 
-> - Jiaxun
+>      Arnd
 
