@@ -1,121 +1,135 @@
-Return-Path: <linux-mips+bounces-415-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-416-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73B707FF62C
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 17:36:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83B287FF6E7
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 17:49:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4D9B1C21157
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 16:36:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5104B20DEB
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 16:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B2D4777A;
-	Thu, 30 Nov 2023 16:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C06248CCC;
+	Thu, 30 Nov 2023 16:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MCHx7RWi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F339A1A4;
-	Thu, 30 Nov 2023 08:36:09 -0800 (PST)
-Received: from hutton.arch.nue2.suse.org (unknown [10.168.144.140])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 0BB0321B3E;
-	Thu, 30 Nov 2023 16:36:08 +0000 (UTC)
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org,
-	Aurelien Jarno <aurel32@debian.org>
-Subject: [PATCH] MIPS: kernel: Clear FPU states when setting up kernel threads
-Date: Thu, 30 Nov 2023 17:36:01 +0100
-Message-Id: <20231130163601.185270-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.35.3
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5563510F3;
+	Thu, 30 Nov 2023 08:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701362952; x=1732898952;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=HXAZKQLZl/DnOU4OtJdFiiHQn7NurI3k3IMwWiBmDag=;
+  b=MCHx7RWi9D4AH1qegRmpVfOvEddd6y/CrF3Cl3HyL1LHoAqUrPuyFxVp
+   8EEx0SK+WTUa3TKwOaw8Pqi1VGehwl/+iK4NSOSbUjs2Y/w6ioXE0hepu
+   +4brtw42eS8DNUtPs1qX8rPNvtUp2AnvxaaTody52y5ga6zw1NHhg6itR
+   vLV+gTBjyI+GqHN3a16FHgv+7z35h/8S7H76wSGs6MYyk0mF5WNH9LHVr
+   rKsbFXcLwVkfzanc6nMTde8RptmT0Os6Y7y8Lb6f/XW3sep0lcUsrh0rw
+   E29o7e7AgCOFBFmuaAl478WPcggsTwPt8kjaOLLGZFFLEEfYtVUzuLuKa
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="12064101"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="12064101"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 08:49:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="745706056"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="745706056"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 08:49:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1r8kDh-00000000kYA-2Q4s;
+	Thu, 30 Nov 2023 18:48:57 +0200
+Date: Thu, 30 Nov 2023 18:48:57 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Fabio Estevam <festevam@gmail.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org, linux-mips@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Hal Feng <hal.feng@starfivetech.com>
+Subject: Re: [PATCH v4 16/23] pinctrl: imx: Convert to use grp member
+Message-ID: <ZWi8-a_4bdSUBqaV@smile.fi.intel.com>
+References: <20231129161459.1002323-1-andriy.shevchenko@linux.intel.com>
+ <20231129161459.1002323-17-andriy.shevchenko@linux.intel.com>
+ <CAOMZO5CZpQjWKimNReUkwHOc-mF8vWoq2HDhjGKSu6E3g5-aVw@mail.gmail.com>
+ <ZWduPKmBWkaIdLhi@smile.fi.intel.com>
+ <CAOMZO5C_dhvx70nk1HOSZdw8hMMmED69tdsXgydXdpnxHTJ58Q@mail.gmail.com>
+ <ZWdyOc3pCoNihDtD@smile.fi.intel.com>
+ <CACRpkdap2fe-L0v7ttQULGq7d_zVCb2MmD4w=hHxKacKZH8jng@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Score: 3.91
-X-Spamd-Result: default: False [3.91 / 50.00];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 RCPT_COUNT_THREE(0.00)[4];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 R_MISSING_CHARSET(2.50)[];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 NEURAL_HAM_LONG(-0.99)[-0.994];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[franken.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_COUNT_ZERO(0.00)[0];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+]
+In-Reply-To: <CACRpkdap2fe-L0v7ttQULGq7d_zVCb2MmD4w=hHxKacKZH8jng@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-io_uring sets up the io worker kernel thread via a syscall out of an
-user space prrocess. This process might have used FPU and since
-copy_thread() didn't clear FPU states for kernel threads a BUG()
-is triggered for using FPU inside kernel. Move code around
-to always clear FPU state for user and kernel threads.
+On Wed, Nov 29, 2023 at 10:41:14PM +0100, Linus Walleij wrote:
+> On Wed, Nov 29, 2023 at 6:18 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Wed, Nov 29, 2023 at 02:08:38PM -0300, Fabio Estevam wrote:
+> > > On Wed, Nov 29, 2023 at 2:01 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > >
+> > > > It's explained in the first paragraph in the cover letter. Do you
+> > > > want to copy this into each commit message?
+> > >
+> > > Yes, much better to have the information into each commit message.
+> >
+> > Here it would be like
+> > "Because other members will be removed to avoid duplication and
+> > desynchronisation of the generic pin group description."
+> >
+> > Linus, what do you think about this?
+> 
+> I can just add that to each commit while applying if it makes everyone happy.
 
-Cc: stable@vger.kernel.org
-Reported-by: Aurelien Jarno <aurel32@debian.org>
-Closes: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1055021
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/kernel/process.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+I'm pretty much fine, but I dunno if you are using `b4 shazam -H ...` I found
+that very cool feature.
 
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index 5387ed0a5186..b630604c577f 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -121,6 +121,19 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	/*  Put the stack after the struct pt_regs.  */
- 	childksp = (unsigned long) childregs;
- 	p->thread.cp0_status = (read_c0_status() & ~(ST0_CU2|ST0_CU1)) | ST0_KERNEL_CUMASK;
-+
-+	/*
-+	 * New tasks lose permission to use the fpu. This accelerates context
-+	 * switching for most programs since they don't use the fpu.
-+	 */
-+	clear_tsk_thread_flag(p, TIF_USEDFPU);
-+	clear_tsk_thread_flag(p, TIF_USEDMSA);
-+	clear_tsk_thread_flag(p, TIF_MSA_CTX_LIVE);
-+
-+#ifdef CONFIG_MIPS_MT_FPAFF
-+	clear_tsk_thread_flag(p, TIF_FPUBOUND);
-+#endif /* CONFIG_MIPS_MT_FPAFF */
-+
- 	if (unlikely(args->fn)) {
- 		/* kernel thread */
- 		unsigned long status = p->thread.cp0_status;
-@@ -149,20 +162,8 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	p->thread.reg29 = (unsigned long) childregs;
- 	p->thread.reg31 = (unsigned long) ret_from_fork;
- 
--	/*
--	 * New tasks lose permission to use the fpu. This accelerates context
--	 * switching for most programs since they don't use the fpu.
--	 */
- 	childregs->cp0_status &= ~(ST0_CU2|ST0_CU1);
- 
--	clear_tsk_thread_flag(p, TIF_USEDFPU);
--	clear_tsk_thread_flag(p, TIF_USEDMSA);
--	clear_tsk_thread_flag(p, TIF_MSA_CTX_LIVE);
--
--#ifdef CONFIG_MIPS_MT_FPAFF
--	clear_tsk_thread_flag(p, TIF_FPUBOUND);
--#endif /* CONFIG_MIPS_MT_FPAFF */
--
- #ifdef CONFIG_MIPS_FP_SUPPORT
- 	atomic_set(&p->thread.bd_emu_frame, BD_EMUFRAME_NONE);
- #endif
+> No need to resend for that.
+
+Yeah, we may utilise `git msg-filter ...` to fulfill the job (for curious one,
+it can be run even if we are in the middle of `git rebase --interactive ...`).
+
 -- 
-2.35.3
+With Best Regards,
+Andy Shevchenko
+
 
 
