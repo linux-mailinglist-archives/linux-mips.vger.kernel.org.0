@@ -1,130 +1,105 @@
-Return-Path: <linux-mips+bounces-455-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-456-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62EE0800AEF
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 13:31:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E973800CD7
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 15:05:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03AEEB2114B
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:31:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38D44281A81
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 14:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A175208B4;
-	Fri,  1 Dec 2023 12:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076253066E;
+	Fri,  1 Dec 2023 14:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OuPedNNG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V4trwNxF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5644F13E;
-	Fri,  1 Dec 2023 04:31:29 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c9b5c12898so25523161fa.2;
-        Fri, 01 Dec 2023 04:31:29 -0800 (PST)
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFC5171F
+	for <linux-mips@vger.kernel.org>; Fri,  1 Dec 2023 06:05:42 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5cdc0b3526eso17982807b3.1
+        for <linux-mips@vger.kernel.org>; Fri, 01 Dec 2023 06:05:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701433887; x=1702038687; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XiunD3rGt4P6HEz12hNIUnkO3H4wWSc2YPfZTqYm9yc=;
-        b=OuPedNNG78RzU62X1kd/mrtQ/FU05FSlFkFU/+HUVPxqiKiGsQowLjltmlLk4tANt5
-         33ZEh0pTcYACiU3rqUVLBLUpTqGMHtuMSeVdSpEapdJLgdggM/QhNEkho7zIpOQy5AO8
-         OvX+UEUyBvzs3P9IZ5jBH9HuoA/0zgLUNpAEoWxXYSXoOHYTBUPPP/lBeJYoXZbWu7W+
-         P5QOxyzEOSPcwEFJStSnW9S/YI1LuxiBDQ62SQU++FYxVYr7FMYNjGr4OmK59k/pm7YB
-         h8/WYFkBNbntfOGY+BdIkyR8ZIDJDES1FIGZ1grFlildCk+cKgHX0VJ+gewduZdF8Du7
-         gNoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701433887; x=1702038687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1701439541; x=1702044341; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XiunD3rGt4P6HEz12hNIUnkO3H4wWSc2YPfZTqYm9yc=;
-        b=RcBXaamozFMeQXV/rokYx1Yi21weySFtEHeB8SPxNoG1O4i/rExkK683coeVjgJHx9
-         pU9EucoLcAO7yMkCVZ3Zs1q9YMEpsnErAMyBYQCAvuA8Lic1HUuohiy347qRcfFucONm
-         UlccliGJzy4IqphhrHKlAChY4GwnkT70l+1TE/s0dPgvRYM+VpxTnEehShx4JXixsl0H
-         xQyBrJN7Rk97+1mf+ElNuMMgpieoB0pcI2uNPhhpNPY36zI9jxGtlekff6YAhMW4iNKe
-         VXCjNZjCTGQxMq28dsVP02pkYENQNE2Nfb2s6Vy7qi00ZFcoJPIpv1jJLEmglsJCEAqT
-         Rhrw==
-X-Gm-Message-State: AOJu0Yw4RNEKOqCmCG9CvdjL4aNw/XFaL/lXRp00U8z7ANOlXtSH6wJL
-	kXM7ZBGdx0LQiyhsUDFACP4=
-X-Google-Smtp-Source: AGHT+IG8rR0U5EKN7BCgxTGQgipxfo/JHWvXxTZ2FEZ/VetQGkryte+h9ijQaxKv7SNun1rNkxmIOg==
-X-Received: by 2002:a2e:97c1:0:b0:2c9:c51c:5b68 with SMTP id m1-20020a2e97c1000000b002c9c51c5b68mr653304ljj.39.1701433887242;
-        Fri, 01 Dec 2023 04:31:27 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id a14-20020a2e88ce000000b002b6daa3fa2csm382483ljk.69.2023.12.01.04.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 04:31:26 -0800 (PST)
-Date: Fri, 1 Dec 2023 15:31:24 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Paul Burton <paulburton@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 15/22] dt-bindings: mips: cpus: Sort the entries
-Message-ID: <ldsl5czjvfx6s5j3sniyriidzkspncuatfk5qrwmrvje5we7i6@kbafgbwxwnfc>
-References: <20231201111512.803120-1-gregory.clement@bootlin.com>
- <20231201111512.803120-16-gregory.clement@bootlin.com>
+        bh=S981KapfzO045oI7EezmWMBJ8fVn+98mRDxQPvPZv8g=;
+        b=V4trwNxFf+s7KYOqzzLek9nMTOpq3xYJz9nrOKvoJn7RAI7+g6JBhG9uFOYiO9BMna
+         zPok0K+ZnEJw3c+ZEIuldKepv2m+T7vGOU01V4kDVSxBhcg4YEybYL+kXsfpPPKKp2s9
+         9PRjGvWuTA4MbFHG96kM9ohUvPvIiXyHwxlwjRb/izsXem80byp+t1Y+T2gwo2zlflge
+         ZXSZ1AyZS01G7zcHB7LfW97KUBXbDJdCo/TnH7PUCLNBC/1aiqukYZqdQILkvBLvyVdg
+         qdSx+8nFVTEVKhPIvVP94F7xi0TkawDPg6nmuoLAO3z/WPOlrhABWV4Hhi9kIrfU1qe2
+         n56Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701439541; x=1702044341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S981KapfzO045oI7EezmWMBJ8fVn+98mRDxQPvPZv8g=;
+        b=ros4kOwmWGmkiADppUURB/poveobjFLEqytWv3p4H6R4ZwuNf1FcS2H4GxUHS8tr1L
+         AlBpqJoFQOz9wwpZG1QpeKAVBspauiQ7nVkME5iUpT4BCEPlEW06rub1oV30NF9Ysc0v
+         bBhKY8s5wGSLM1Tl3lZt89ub9dJph5QXfBEGoV26nj/WP32I1qg9TBIbhbUJg1Sk6KOG
+         RGdy26kxQEwtQr8L6mkppfy+NHCyzkm4Nkf81opuRhdGo0iPMHCfGaynUJEBG6TyXNNY
+         HOAkWNZYBEJB8DLeE2fQQzc0ANSwC9HhHx7i7jenPI/2mBVrcf84kE5guj6XRyo4nG5i
+         qwbA==
+X-Gm-Message-State: AOJu0YzVhr89+fmJ+TkN98B1ZIFC6N9Fsai0DNeJdQRbpDr/arSMtxXp
+	PqnkAUqZsTHu2J7HkLlmmur5IHuj0C6wGNVV/WIZjw==
+X-Google-Smtp-Source: AGHT+IGgZieAgbL8W8KVNwc6EnusoD/krGGnayXbUe4OQQFB/f3qh/vCdT4Gm9aE0Qgd6YmyIbk9BOCGJMnoZgchng0=
+X-Received: by 2002:a81:a184:0:b0:5d3:b71b:4d30 with SMTP id
+ y126-20020a81a184000000b005d3b71b4d30mr3497574ywg.17.1701439541650; Fri, 01
+ Dec 2023 06:05:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231201111512.803120-16-gregory.clement@bootlin.com>
+References: <20231129161459.1002323-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20231129161459.1002323-1-andriy.shevchenko@linux.intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 1 Dec 2023 15:05:30 +0100
+Message-ID: <CACRpkdZAriTP3iOgmwvoAH-3-aO_ugoEkBHE7mHH5YLxhMXSXg@mail.gmail.com>
+Subject: Re: [PATCH v4 00/23] pinctrl: Convert struct group_desc to use struct pingroup
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Jianlong Huang <jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, 
+	linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Dong Aisheng <aisheng.dong@nxp.com>, 
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	NXP Linux Team <linux-imx@nxp.com>, Sean Wang <sean.wang@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Emil Renner Berthing <kernel@esmil.dk>, 
+	Hal Feng <hal.feng@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 01, 2023 at 12:14:58PM +0100, Gregory CLEMENT wrote:
-> The entries were nearly sorted but there were still some entries at
-> the wrong places. Let's fix it.
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+On Wed, Nov 29, 2023 at 5:15=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> The struct group_desc has a lot of duplication with struct pingroup.
+> Deduplicate that by embeddind the latter in the former and convert
+> users.
+>
+> Linus, assuming everything is fine, I can push this to my tree.
+> Or you can apply it (assumming all CIs and people are happy with
+> the series).
 
--Serge(y)
+I applied the series to devel so we get some rotation in linux-next,
+augmenting the relevant commit messages as discussed!
 
-> ---
->  Documentation/devicetree/bindings/mips/cpus.yaml | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
-> index cf382dea3922c..9bc47868d28b6 100644
-> --- a/Documentation/devicetree/bindings/mips/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
-> @@ -23,22 +23,22 @@ properties:
->        - brcm,bmips4380
->        - brcm,bmips5000
->        - brcm,bmips5200
-> -      - ingenic,xburst-mxu1.0
->        - ingenic,xburst-fpu1.0-mxu1.1
->        - ingenic,xburst-fpu2.0-mxu2.0
-> +      - ingenic,xburst-mxu1.0
->        - ingenic,xburst2-fpu2.1-mxu2.1-smt
->        - loongson,gs264
->        - mips,m14Kc
-> -      - mips,mips4Kc
-> -      - mips,mips4KEc
-> -      - mips,mips24Kc
-> +      - mips,mips1004Kc
->        - mips,mips24KEc
-> +      - mips,mips24Kc
-> +      - mips,mips4KEc
-> +      - mips,mips4Kc
->        - mips,mips74Kc
-> -      - mips,mips1004Kc
->        - mti,interaptiv
-> -      - mti,mips24KEc
->        - mti,mips14KEc
->        - mti,mips14Kc
-> +      - mti,mips24KEc
->  
->    reg:
->      maxItems: 1
-> -- 
-> 2.42.0
-> 
-> 
+Yours,
+Linus Walleij
 
