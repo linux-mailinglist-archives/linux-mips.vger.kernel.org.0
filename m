@@ -1,166 +1,110 @@
-Return-Path: <linux-mips+bounces-421-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-422-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8914D800380
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 07:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B73AC800846
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 11:34:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA2501C20A55
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 06:03:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E87F51C20EE8
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 10:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60EABE6C;
-	Fri,  1 Dec 2023 06:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FD891BDD9;
+	Fri,  1 Dec 2023 10:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LZ1HVA6B"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Efp+K6pp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE7FD7D
-	for <linux-mips@vger.kernel.org>; Thu, 30 Nov 2023 22:03:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701410619;
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456DDE;
+	Fri,  1 Dec 2023 02:34:33 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D85120003;
+	Fri,  1 Dec 2023 10:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1701426871;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/TeMDmB7LckIZA4USFVQUlo1F06QQ0tuHG6egKrLc10=;
-	b=LZ1HVA6BdaA6ue3vqphNJHwdfO7nvYEJQ1n9ybdwo+IuVbQJJ8cAo28cKTwZ9OkzWHF/MS
-	l+zs9gkZnDUXCZ8z3nWTUVCKrUQsokO5A1dL9MMhQ/Bsxgbu4tpjqOivEDUpcJSjzsJRZ+
-	KUH29A2TBflSICXMRXOMbniCjghzywM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-586-d749Q2UvPqiCzf1p7FVvXQ-1; Fri, 01 Dec 2023 01:03:34 -0500
-X-MC-Unique: d749Q2UvPqiCzf1p7FVvXQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DA7D85A58A;
-	Fri,  1 Dec 2023 06:03:33 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (unknown [10.72.113.121])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id ED9E31121307;
-	Fri,  1 Dec 2023 06:03:29 +0000 (UTC)
-From: Baoquan He <bhe@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	akpm@linux-foundation.org,
-	eric_devolder@yahoo.com,
-	lkp@intel.com,
-	Baoquan He <bhe@redhat.com>
-Subject: [PATCH v2] kexec_core: change dependency of object files
-Date: Fri,  1 Dec 2023 14:03:25 +0800
-Message-ID: <20231201060325.26940-1-bhe@redhat.com>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x9QLIDvjWUePyTNPo1KyKIxmABI1QYlXqcofIXZnDv4=;
+	b=Efp+K6ppRKNmXRXC312z4I4B/6CUBUuHRLy8PLz+V/UGueyXXhjUby1z/imQlO2LUhYGLR
+	GLCiyYckN/srl+stf7jfzn6vO8+xatIFz1FFvYGMSuvYAi3wqhfzOT3fcrulMkGFlAu1wJ
+	6sfsj3uvzn9oKJQUzs7Nsw2oDCTQ7M3ErnbzRY7fohDNl9k2hSPTae29J1N6eUF5QhPVDe
+	cf/keirVpnBJrg6utYHwPH1+cFVRs0rSUSj/XvDwYB8MoeDtu35HIV2LS2XSCu2aqyWtBx
+	zv8qYSdo+dMxNt9XMG8q/3X1Sff/mM5tgB3tImLUaHFEtH/5iGRG0Tpgo/cy/Q==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, "paulburton@kernel.org"
+ <paulburton@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Tawfik Bayouk
+ <tawfik.bayouk@mobileye.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 20/21] MIPS: generic: Add support for Mobileye EyeQ5
+In-Reply-To: <db993514-7daa-41cb-8e6e-179305c16e24@app.fastmail.com>
+References: <20231123152639.561231-1-gregory.clement@bootlin.com>
+ <20231123152639.561231-21-gregory.clement@bootlin.com>
+ <db993514-7daa-41cb-8e6e-179305c16e24@app.fastmail.com>
+Date: Fri, 01 Dec 2023 11:34:30 +0100
+Message-ID: <87ttp2dxe1.fsf@BL-laptop>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-When dropping the select of KEXEC for CRASH_DUMP, compiling error
-will be triggered if below config items are set on some architectures.
+"Jiaxun Yang" <jiaxun.yang@flygoat.com> writes:
 
-===
-CONFIG_CRASH_CORE=y
-CONFIG_KEXEC_CORE=y
-CONFIG_CRASH_DUMP=y
-===
+> =E5=9C=A82023=E5=B9=B411=E6=9C=8823=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
+=E4=B8=8B=E5=8D=883:26=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+>> Introduce support for the MIPS based Mobileye EyeQ5 SoCs.
+>>
+>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>> ---
+> [...]
+>> diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
+>> index 7dc5b3821cc6e..04e1fc6f789b5 100644
+>> --- a/arch/mips/generic/Kconfig
+>> +++ b/arch/mips/generic/Kconfig
+>> @@ -48,6 +48,13 @@ config SOC_VCOREIII
+>>  config MSCC_OCELOT
+>>  	bool
+>>=20
+>> +config SOC_EYEQ5
+>> +	select ARM_AMBA
+>> +	select WEAK_ORDERING
+>> +	select WEAK_REORDERING_BEYOND_LLSC
+>> +	select PHYSICAL_START_BOOL
+>> +	bool
+>
+> ^ I believe WEAK_ORDERING is already selected by MIPS_CPS,
 
-E.g the building error on loongarch:
----------------------------------------------------------------
-loongarch64-linux-ld: kernel/kexec_core.o: in function `.L209':
->> kexec_core.c:(.text+0x1660): undefined reference to `machine_kexec_cleanup'
-   loongarch64-linux-ld: kernel/kexec_core.o: in function `.L287':
->> kexec_core.c:(.text+0x1c5c): undefined reference to `machine_crash_shutdown'
->> loongarch64-linux-ld: kexec_core.c:(.text+0x1c64): undefined reference to `machine_kexec'
-   loongarch64-linux-ld: kernel/kexec_core.o: in function `.L2^B5':
->> kexec_core.c:(.text+0x2090): undefined reference to `machine_shutdown'
-   loongarch64-linux-ld: kexec_core.c:(.text+0x20a0): undefined reference to `machine_kexec'
----------------------------------------------------------------
+But MIPS_CPS can be disabled: it is not selected by
+MIPS_GENERIC_KERNEL.
 
-The reason is that currently in arch/loongarch/kernel/Makefile, building
-machine_kexec.o relocate_kernel.o depends on CONFIG_KEXEC. So the
-building of the two object files is skipped because CONFIG_KEXEC=n in
-that case.
+> and WEAK_REORDERING_BEYOND_LLSC should be selected by MIPS_CPS as well.
 
-And this situation exists in m68k, mips and sh ARCH too.
+WEAK_REORDERING_BEYOND_LLSC is only selected by CPU_LOONGSON64 for
+now not by MIPS_CPS
 
-Here, changing the dependency of machine_kexec.o relocate_kernel.o to
-CONFIG_KEXEC_CORE for all relevant architectures.
+Thanks,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202311300946.kHE9Iu71-lkp@intel.com/
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
-v1->v2:
-- V1 only includes fix on loongarch. Add m68k, mips, sh fix in v2 too.
+Gregory
+>=20=20
+> Thanks
+> --=20
+> - Jiaxun
 
- arch/loongarch/kernel/Makefile | 2 +-
- arch/m68k/kernel/Makefile      | 2 +-
- arch/mips/kernel/Makefile      | 2 +-
- arch/sh/kernel/Makefile        | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 4fcc168f0732..3c808c680370 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -57,7 +57,7 @@ obj-$(CONFIG_MAGIC_SYSRQ)	+= sysrq.o
- 
- obj-$(CONFIG_RELOCATABLE)	+= relocate.o
- 
--obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
-+obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
- obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- 
- obj-$(CONFIG_UNWINDER_GUESS)	+= unwind_guess.o
-diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
-index 01fb69a5095f..f335bf3268a1 100644
---- a/arch/m68k/kernel/Makefile
-+++ b/arch/m68k/kernel/Makefile
-@@ -25,7 +25,7 @@ obj-$(CONFIG_PCI) += pcibios.o
- 
- obj-$(CONFIG_M68K_NONCOHERENT_DMA) += dma.o
- 
--obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
-+obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
- obj-$(CONFIG_BOOTINFO_PROC)	+= bootinfo_proc.o
- obj-$(CONFIG_UBOOT)		+= uboot.o
- 
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 853a43ee4b44..ecf3278a32f7 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -90,7 +90,7 @@ obj-$(CONFIG_GPIO_TXX9)		+= gpio_txx9.o
- 
- obj-$(CONFIG_RELOCATABLE)	+= relocate.o
- 
--obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o crash.o
-+obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o crash.o
- obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- obj-$(CONFIG_EARLY_PRINTK)	+= early_printk.o
- obj-$(CONFIG_EARLY_PRINTK_8250)	+= early_printk_8250.o
-diff --git a/arch/sh/kernel/Makefile b/arch/sh/kernel/Makefile
-index 69cd9ac4b2ab..2d7e70537de0 100644
---- a/arch/sh/kernel/Makefile
-+++ b/arch/sh/kernel/Makefile
-@@ -33,7 +33,7 @@ obj-$(CONFIG_SMP)		+= smp.o
- obj-$(CONFIG_SH_STANDARD_BIOS)	+= sh_bios.o
- obj-$(CONFIG_KGDB)		+= kgdb.o
- obj-$(CONFIG_MODULES)		+= sh_ksyms_32.o module.o
--obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
-+obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
- obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
- obj-$(CONFIG_IO_TRAPPED)	+= io_trapped.o
--- 
-2.41.0
-
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
 
