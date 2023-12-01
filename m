@@ -1,173 +1,245 @@
-Return-Path: <linux-mips+bounces-425-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-428-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84225800975
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:12:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FF13800981
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:15:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 375361F20F75
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 11:12:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AF2A1C20F12
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 11:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9615210FB;
-	Fri,  1 Dec 2023 11:12:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B59D21346;
+	Fri,  1 Dec 2023 11:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="rZRhAFAT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="S0f1uCII"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="N8HfEVAf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B00193;
-	Fri,  1 Dec 2023 03:12:45 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 9D9A43200C4D;
-	Fri,  1 Dec 2023 06:12:44 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Fri, 01 Dec 2023 06:12:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1701429164; x=1701515564; bh=3PIXt5ZSJzKEQon5QjhjcyxonBykzWc4ulB
-	U/OMwHv4=; b=rZRhAFATTfRt7GEYbOWyQPKFDhdG2lttpkqE0maaWMeoM76jWir
-	3rBVgTCSI2fyjLbtlvFieAI4GDOvZ7nTwJtqkoBo91h6H6+KGvyyhVr0ErZyZ1Hr
-	1Ueagy+LtN0nxnvU/BwsOHWpL5KM3Sfc2q4Or4JQYGRNAyN3Ky7f/igJdJ02pY8u
-	4dHb5FhU0AhSvwxAtBAWyMM5mIaGc96/aLwnW6HltAo1IfoQ6EwD0iZWk8jvJ9m3
-	zvX5q+kOjV+YL7Y5abFMPsnitv8/Iq4NT6a7nv9esTBu3+hVGkR4Kapd3mvvrj5N
-	cYuSwn2im7AZX8Diyq62KPKdHBMcHp59Pdg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701429164; x=1701515564; bh=3PIXt5ZSJzKEQon5QjhjcyxonBykzWc4ulB
-	U/OMwHv4=; b=S0f1uCIIbRvPR3EALIbaFmH2sQFI09j0Wstna+LmB9U9CSd3v2/
-	tNANe/1nO3MJimrexFGd7ZziImhssfEANl7CA6DgKynZuEqy+Pkac5BLuRWn+/mc
-	pxK5BfqpNviwS6za3/5vp9Lsa9TICx0gIaFdRpOe2/mywJXBpIixRWol9ltmk8qm
-	JoHrZa1NkaIUopZAWU6GD98T+zATeWmHnyTgyY+lJv65ajpt2reyX5BeoTL5mjlH
-	+IXWvwtZDKHVRz3XrLwId3l12G11zxeSmaZhXAnFqZ6fAsG0v+lt/Hp/UBdrae7z
-	QY3GqgQFoSQgC6HMPd9fdRIkCK7DojRQXfA==
-X-ME-Sender: <xms:q79pZZv1bFWbDrH2JKLW-tXP6Q2i_hIVGRkdjuPgBRFW1fKhX11kwQ>
-    <xme:q79pZSfx52BOxAOYYV6zHoftt05bFORuDrmvUoQR0V2rxU-UZGO7GYya4PmlC3nAV
-    RK_IdlsAAMJUf07Jgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpefgudejteevuedvjeeludefffdvieevudehueetfefh
-    udehvdetvdfgudejtefgvdenucffohhmrghinhepuggvsghirghnrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdih
-    rghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:q79pZcwPv77L9ydMrS_8_0FY9NzXnCBLZNrZAPSNfMslowiMNBQUjg>
-    <xmx:q79pZQNufpwJBWh3vv3kBWVRQcv-j4tuzFD6JpxEyIVO9WLQFIcXTQ>
-    <xmx:q79pZZ9Ns3lQgwGvQjg6veD7_Pd9tpBSMt8T_n9AXgNm4xVHVxvInQ>
-    <xmx:rL9pZbLPGMMA4IF2H--qMpxmznhWCN4S0QIt6G6OCzB21YxABeR3Sg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3B48136A0075; Fri,  1 Dec 2023 06:12:43 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D7C1B2;
+	Fri,  1 Dec 2023 03:15:23 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 420B71C0004;
+	Fri,  1 Dec 2023 11:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1701429322;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4imsoNotdCY9kpBwQ1K6ybkxBX5vA3o4lFD6+R+1ft4=;
+	b=N8HfEVAf50Nq7BZnY9kfsTYlgt4koQNK4FTPx+aaqu0yEt9V94CP51O/Xjn9jRYS12H6ix
+	+Mbcjzox9UdKl3AzQ7I9rjshWPK9cZ7EWuiUVOpghkqa/MMhDYG9p7v+wAkryb6zokEk7B
+	HkEmv6MptCwILz7flJbOHQWvjI0p+qtLsamokxexGHGkHy+q3ej0CNHNSHy8jqDB1nReHm
+	6/hQjLpBq1a0VP0R8ZrXMQWcGVcppMVDfpSowvGWPnMDdTonxZrofs17XmkzfUAfFhWfLv
+	BJuRCh8qsGmrRVhCG9Mxi4jl7KPxkQyVRQ4Fsm4v25RySjE7brdB73yYpUi0CQ==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Paul Burton <paulburton@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Vladimir  Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v3 00/22] Add support for the Mobileye EyeQ5 SoC
+Date: Fri,  1 Dec 2023 12:14:43 +0100
+Message-ID: <20231201111512.803120-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6f290f4b-5dc2-44f3-9f2d-01496f78d629@app.fastmail.com>
-In-Reply-To: <20231130163601.185270-1-tsbogend@alpha.franken.de>
-References: <20231130163601.185270-1-tsbogend@alpha.franken.de>
-Date: Fri, 01 Dec 2023 11:12:21 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Cc: "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "Aurelien Jarno" <aurel32@debian.org>
-Subject: Re: [PATCH] MIPS: kernel: Clear FPU states when setting up kernel threads
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: gregory.clement@bootlin.com
 
 
+Hello,
 
-=E5=9C=A82023=E5=B9=B411=E6=9C=8830=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
-=E4=B8=8B=E5=8D=884:36=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
-> io_uring sets up the io worker kernel thread via a syscall out of an
-> user space prrocess. This process might have used FPU and since
-> copy_thread() didn't clear FPU states for kernel threads a BUG()
-> is triggered for using FPU inside kernel. Move code around
-> to always clear FPU state for user and kernel threads.
->
-> Cc: stable@vger.kernel.org
-> Reported-by: Aurelien Jarno <aurel32@debian.org>
-> Closes: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1055021
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
+and features multiple controllers such as the classic UART, I2C, SPI,
+as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
+Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
+Security Module, Functional Safety Hardware, and MJPEG encoder.
 
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+One peculiarity of this SoC is that the physical address of the DDDR
+exceeds 32 bits. Given that the architecture is 64 bits, this is not
+an issue, but it requires some changes in how the mips64 is currently
+managed during boot.
 
-Perhaps
-Suggested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+In this third version there are only few changes done in the device
+tree related part. I however managed to test this series on top of the
+Jiaxun patches enabling SPARSMEM[1], and it fixed my issue about memory
+consumption for memmap.
 
-As well :-)
+To build and test the kernel, we need to run the following commands:
 
-Thanks
-- Jiaxun
-> ---
->  arch/mips/kernel/process.c | 25 +++++++++++++------------
->  1 file changed, 13 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index 5387ed0a5186..b630604c577f 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -121,6 +121,19 @@ int copy_thread(struct task_struct *p, const=20
-> struct kernel_clone_args *args)
->  	/*  Put the stack after the struct pt_regs.  */
->  	childksp =3D (unsigned long) childregs;
->  	p->thread.cp0_status =3D (read_c0_status() & ~(ST0_CU2|ST0_CU1)) |=20
-> ST0_KERNEL_CUMASK;
-> +
-> +	/*
-> +	 * New tasks lose permission to use the fpu. This accelerates context
-> +	 * switching for most programs since they don't use the fpu.
-> +	 */
-> +	clear_tsk_thread_flag(p, TIF_USEDFPU);
-> +	clear_tsk_thread_flag(p, TIF_USEDMSA);
-> +	clear_tsk_thread_flag(p, TIF_MSA_CTX_LIVE);
-> +
-> +#ifdef CONFIG_MIPS_MT_FPAFF
-> +	clear_tsk_thread_flag(p, TIF_FPUBOUND);
-> +#endif /* CONFIG_MIPS_MT_FPAFF */
-> +
->  	if (unlikely(args->fn)) {
->  		/* kernel thread */
->  		unsigned long status =3D p->thread.cp0_status;
-> @@ -149,20 +162,8 @@ int copy_thread(struct task_struct *p, const=20
-> struct kernel_clone_args *args)
->  	p->thread.reg29 =3D (unsigned long) childregs;
->  	p->thread.reg31 =3D (unsigned long) ret_from_fork;
->=20
-> -	/*
-> -	 * New tasks lose permission to use the fpu. This accelerates context
-> -	 * switching for most programs since they don't use the fpu.
-> -	 */
->  	childregs->cp0_status &=3D ~(ST0_CU2|ST0_CU1);
->=20
-> -	clear_tsk_thread_flag(p, TIF_USEDFPU);
-> -	clear_tsk_thread_flag(p, TIF_USEDMSA);
-> -	clear_tsk_thread_flag(p, TIF_MSA_CTX_LIVE);
-> -
-> -#ifdef CONFIG_MIPS_MT_FPAFF
-> -	clear_tsk_thread_flag(p, TIF_FPUBOUND);
-> -#endif /* CONFIG_MIPS_MT_FPAFF */
-> -
->  #ifdef CONFIG_MIPS_FP_SUPPORT
->  	atomic_set(&p->thread.bd_emu_frame, BD_EMUFRAME_NONE);
->  #endif
-> --=20
-> 2.35.3
+make 64r6el_defconfig BOARDS=eyeq5
+make vmlinuz.itb
 
---=20
-- Jiaxun
+I noticed that if the kernel can't be in kseg0 at all by using
+low memory at 0x40000000, then I got the following message during
+boot:
+
+ Run /init as init process
+ Unhandled kernel unaligned access[#1]:
+ CPU: 0 PID: 22 Comm: kcompactd0 Not tainted 6.7.0-rc1-00024-g7d48f10cb2bb-dirty #409
+ $ 0   : 0000000000000000 0000000000000001 0000000000000010 a80000080800e100
+ $ 4   : a8000008088fe758 00000000088fe758 0000000000000004 0000000000000002
+ $ 8   : 0000000000000089 0000000008fa0000 0000000000000000 0000000008ad0000
+ $12   : 00000000140000e1 000000001000001e 0000000000000000 0000000000000141
+ $16   : a80000080321fa30 0000000000000000 b88f553ba6dfc404 a8000008081bfe9c
+ $20   : a800000808ad0000 a8000008081c03e4 0000000000012488 a80000080907afb4
+ $24   : 0000000000000000 0000000008ad0000                                  
+ $28   : a80000080321c000 a80000080321f950 0000000000000000 a80000080800dcd0
+ epc   : a80000080800e104 emulate_load_store_insn+0x544/0xba0
+ ra    : a80000080800dcd0 emulate_load_store_insn+0x110/0xba0
+ Status: 140000e3 KX SX UX KERNEL EXL IE 
+ Cause : 80800410 (ExcCode 04)
+ BadVA : b88f553ba6dfc40b
+ PrId  : 0001b028 (MIPS I6500)
+ Modules linked in:
+ Process kcompactd0 (pid: 22, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+ Stack : 0000000000000000 0000000000000000 00000000dc420010 a8afa5b0e1346800
+         0000000000012488 a80000080907af80 a80000080321fd28 a800000808acfb80
+         a800000808ad0000 0000000000000000 a80000080321fa30 a80000080800e90c
+         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+         0000000000000000 a8afa5b0e1346800 0000000000000000 a80000080907afb4
+         0000000000012488 a80000080907af80 a80000080321fd28 a800000809078d80
+         0000000000000000 0000000000000000 0000000000000000 a800000808003174
+         0000000000000000 0000000000000001 b88f553ba6dfc3f4 f91f7fb9d6d87a3d
+         0000000000000002 fffffffffffffffc 0000000000000080 0000000008b90000
+         0000000000000089 0000000008fc0000 0000000000000000 0000000000000000
+         ...
+ Call Trace:
+ [<a80000080800e104>] emulate_load_store_insn+0x544/0xba0
+ [<a80000080800e90c>] do_ade+0x1ac/0x1520
+ [<a800000808003174>] handle_adel_int+0x30/0x3c
+ 
+ Code: 3c03a800  cbffff4d  24020010 <205100f0> 82510007  92410006  00118a38  02218825  92410005 
+ 
+ ---[ end trace 0000000000000000 ]---
+
+But then I don't see other error when running the system.
+So I don't know if this is a "real" error and how to fix it.
+
+Changelog:
+ v2 -> v3
+
+ - Add more reviewed-by and acked-by tags
+
+ - Fix sorting for cpus entries in Documentation/devicetree/bindings/mips/cpus.yaml
+
+ - Fix indentation issue in Documentation/devicetree/bindings/mips/mobileye.yaml
+
+ - Move gic node under soc node in arch/mips/boot/dts/mobileye/eyeq5.dtsi
+
+ v1 -> v2
+
+ - Added reviewed-by and acked-by tags
+
+ - Fix typos reported
+
+ - In patch 15 use 'img' vendor string instead of mti
+
+ - In patch 16 modify licence
+
+ - In patch 17 give more explanations about the block usage.
+
+ - In patch 18, remove _ in node names, don't use anymore
+   CONFIG_BUILTIN_DTB in Makefile, remove macro, modify licence.
+
+ - In patch 19 remove most of the bootargs and only keeps earlycon. I
+   also split the memory in 2 part in the device tree.
+
+ - Integrate the series from Jiaxun Yang
+   https://lore.kernel.org/linux-mips/20231027221106.405666-1-jiaxun.yang@flygoat.com/
+
+  They are patches 2 to 6 and 8 to 12
+
+  Then I added patch 7 to fix the cache issue visible on the Mobileye
+  platform, I also add patch 13 to improve warning message when ebase
+  doesn't belong to KSEG0
+
+Regards,
+
+Gregory
+
+[1]: https://lore.kernel.org/linux-mips/20231028-mm-v1-0-45377cd158cf@flygoat.com/
+
+Gregory CLEMENT (12):
+  MIPS: compressed: Use correct instruction for 64 bit code
+  MIPS: Fix cache issue with mips_cps_core_entry
+  MIPS: traps: Give more explanations if ebase doesn't belong to KSEG0
+  dt-bindings: Add vendor prefix for Mobileye Vision Technologies Ltd.
+  dt-bindings: mips: cpus: Sort the entries
+  dt-bindings: mips: cpu: Add I-Class I6500 Multiprocessor Core
+  dt-bindings: mips: Add bindings for Mobileye SoCs
+  dt-bindings: mfd: syscon: Document EyeQ5 OLB
+  MIPS: mobileye: Add EyeQ5 dtsi
+  MIPS: mobileye: Add EPM5 device tree
+  MIPS: generic: Add support for Mobileye EyeQ5
+  MAINTAINERS: Add entry for Mobileye MIPS SoCs
+
+Jiaxun Yang (10):
+  MIPS: Export higher/highest relocation functions in uasm
+  MIPS: spaces: Define a couple of handy macros
+  MIPS: genex: Fix except_vec_vi for kernel in XKPHYS
+  MIPS: Fix set_uncached_handler for ebase in XKPHYS
+  MIPS: Refactor mips_cps_core_entry implementation
+  MIPS: Allow kernel base to be set from Kconfig for all platforms
+  MIPS: traps: Handle CPU with non standard vint offset
+  MIPS: Avoid unnecessary reservation of exception space
+  MIPS: traps: Enhance memblock ebase allocation process
+  MIPS: Get rid of CONFIG_NO_EXCEPT_FILL
+
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../devicetree/bindings/mips/cpus.yaml        |  13 +-
+ .../devicetree/bindings/mips/mobileye.yaml    |  32 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  12 +
+ arch/mips/Kconfig                             |  26 +-
+ arch/mips/boot/compressed/head.S              |   4 +-
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/mobileye/Makefile          |   4 +
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts    |  24 ++
+ .../boot/dts/mobileye/eyeq5-fixed-clocks.dtsi | 292 ++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi        | 134 ++++++++
+ arch/mips/configs/generic/board-eyeq5.config  |  43 +++
+ arch/mips/generic/Kconfig                     |  15 +
+ arch/mips/generic/Platform                    |   2 +
+ arch/mips/generic/board-epm5.its.S            |  24 ++
+ arch/mips/include/asm/addrspace.h             |   5 +
+ arch/mips/include/asm/mach-generic/spaces.h   |   5 +-
+ arch/mips/include/asm/mips-cm.h               |   1 +
+ arch/mips/include/asm/smp-cps.h               |   4 +-
+ arch/mips/include/asm/traps.h                 |   1 -
+ arch/mips/include/asm/uasm.h                  |   2 +
+ arch/mips/kernel/cps-vec.S                    | 110 +++----
+ arch/mips/kernel/cpu-probe.c                  |   5 -
+ arch/mips/kernel/cpu-r3k-probe.c              |   2 -
+ arch/mips/kernel/genex.S                      |  19 +-
+ arch/mips/kernel/head.S                       |   7 +-
+ arch/mips/kernel/smp-cps.c                    | 171 ++++++++--
+ arch/mips/kernel/traps.c                      |  90 ++++--
+ arch/mips/mm/uasm.c                           |   6 +-
+ 30 files changed, 896 insertions(+), 161 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mips/mobileye.yaml
+ create mode 100644 arch/mips/boot/dts/mobileye/Makefile
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5.dtsi
+ create mode 100644 arch/mips/configs/generic/board-eyeq5.config
+ create mode 100644 arch/mips/generic/board-epm5.its.S
+
+-- 
+2.42.0
+
 
