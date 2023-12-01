@@ -1,225 +1,260 @@
-Return-Path: <linux-mips+bounces-449-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-450-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E5948009D0
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CFB3800A0A
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:47:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4EB6281A60
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 11:22:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EB3A2817E1
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 11:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B082C2136E;
-	Fri,  1 Dec 2023 11:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FA9219FD;
+	Fri,  1 Dec 2023 11:47:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Un7nKMLr"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="cti0Sb3G";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KiYhWAYq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834DD1B2;
-	Fri,  1 Dec 2023 03:22:50 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-50bc8b7d8ffso2926492e87.0;
-        Fri, 01 Dec 2023 03:22:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701429769; x=1702034569; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tDYTbMEHTA+PA+CkrLL7nufZCEtkNLGajLlCGSCmAZE=;
-        b=Un7nKMLrcWy2uoCJqpOaLDss3Gj3abCXvwCyxffhHx9GDYO+j9ePTjXbu4pFkaQORM
-         LXi9HyxhRm4+q7VGqWDRZMSsX/2ze/oGgf/5Gv86fIGfMfFsIOnU1tyjJ4EycWdVfQlj
-         wgMgnbRZPvj8bw2eb3ozTjNiWYmkIc6wYKNCOP2BO7i3vuG6PVlDucY566r03ZqOPGbO
-         HvZ302HZMOoBJZlFrSjiHgqfCOCoPoUZ6CCRRCqfu8bn2ZtK93uTqip3jgKTRQWrllQG
-         xHXkJPe9/FSvNWv++e035ZDuwREYrTXdY+jnhaD1lKNsz0JhDQoCmTsu2swKPo7O1tqH
-         dxyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701429769; x=1702034569;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tDYTbMEHTA+PA+CkrLL7nufZCEtkNLGajLlCGSCmAZE=;
-        b=wdDnDy22GLa5poh3lkIOQ2VemzBMP2cj6bQ0YdYDhhiPJP9Oba4osf8ju8Pw+rKXfl
-         jMBpNTehQ4UISS6/V9NvZ4BJaGbjC+US1GkrZ3avyPFlT+niZGEW4tkd3IxguIJNJbf7
-         oBodZA92Md2Zu07e7BgNEPzTjEOOZt4qrxKIiaKBhPkrlIQwPVRwDo9c22YEexmbiY/N
-         2NJKaKpylbeznPrRCq/F2NsDYbKR4gKnAhXnnBBYBarRd1HhyfXShCRILlHB9Yi6oZ6R
-         /1GFNdcm25Rw4ITM9mNn6tmCqwRyTQhxJOducshou6hDUKrea4LO2oVxvhYU3S042kDB
-         SLLQ==
-X-Gm-Message-State: AOJu0Yw3al5atToZz6/xlhI23G9V436hkux2E0ZVUV4UjvBa2sszEq7t
-	TdZNAV5Lo4HS3oRVLAmbQec=
-X-Google-Smtp-Source: AGHT+IF/kNTDoQQTbuA8uVZADKdRmi7YjxqAP2WFPIMlihKsslpNF/yUJ1acTPp4hs3YLYpCcnqKnw==
-X-Received: by 2002:a05:6512:488:b0:50b:d764:2916 with SMTP id v8-20020a056512048800b0050bd7642916mr403101lfq.174.1701429768197;
-        Fri, 01 Dec 2023 03:22:48 -0800 (PST)
-Received: from orome.fritz.box (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id r3-20020aa7d143000000b0053de19620b9sm1523779edo.2.2023.12.01.03.22.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 03:22:47 -0800 (PST)
-Date: Fri, 1 Dec 2023 12:22:45 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: David Airlie <airlied@gmail.com>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Albert Ou <aou@eecs.berkeley.edu>, asahi@lists.linux.dev,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Danilo Krummrich <dakr@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Dexuan Cui <decui@microsoft.com>, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	David Woodhouse <dwmw2@infradead.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Hanjun Guo <guohanjun@huawei.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>, iommu@lists.linux.dev,
-	Jon Hunter <jonathanh@nvidia.com>, Joerg Roedel <joro@8bytes.org>,
-	Karol Herbst <kherbst@redhat.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Laxman Dewangan <ldewangan@nvidia.com>, Len Brown <lenb@kernel.org>,
-	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-hyperv@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-snps-arc@lists.infradead.org,
-	linux-tegra@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Lyude Paul <lyude@redhat.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	nouveau@lists.freedesktop.org, Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Sven Peter <sven@svenpeter.dev>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Vineet Gupta <vgupta@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
-	Lu Baolu <baolu.lu@linux.intel.com>, Christoph Hellwig <hch@lst.de>,
-	Jerry Snitselaar <jsnitsel@redhat.com>,
-	Hector Martin <marcan@marcan.st>, Moritz Fischer <mdf@kernel.org>,
-	patches@lists.linux.dev,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 08/10] iommu/tegra: Use tegra_dev_iommu_get_stream_id()
- in the remaining places
-Message-ID: <ZWnCBTWcxqJfemvR@orome.fritz.box>
-References: <0-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
- <8-v1-720585788a7d+811b-iommu_fwspec_p1_jgg@nvidia.com>
- <ZWdlcboM4Xzs38NI@orome.fritz.box>
- <20231129192603.GA1387263@nvidia.com>
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A67A1B3;
+	Fri,  1 Dec 2023 03:47:47 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id E714A3200A8E;
+	Fri,  1 Dec 2023 06:47:45 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Fri, 01 Dec 2023 06:47:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+	1701431265; x=1701517665; bh=7ri5tWAUJf5m69RwLv3NcQqa3J7mZD+4VnE
+	JqjN5jpM=; b=cti0Sb3GU7HoMOuPP9fGsYx+/uuDBCHB/PT1vW7jwhW1F4Uye+C
+	vI55yEmiRg6AG8vh8P254lCMS1Xp5f5aCW+PILNu4AX2up6wkp5oGj3+OuFQgIRg
+	5vxT1ULbCv3mUctmBb9UO5SQWvVUTyuQQOAIkI7lboezTvnKJN6oB/uHdLg1mqK5
+	MuWU2BUZ/b/6anWebeoIyuN7E0AjSuxuN/KD7bNDEplvDzRTLkv9ssdzz9VTg4E1
+	FovAeaIkynAYJn6IURzDKYp4Z3EjvvL41WQ1N5BZkN4u9Iaa8GKiqo7xCWoTyNHe
+	SAnaUpTc8zrlT7KicP+F4vzSNgWT4vXuG3A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701431265; x=1701517665; bh=7ri5tWAUJf5m69RwLv3NcQqa3J7mZD+4VnE
+	JqjN5jpM=; b=KiYhWAYqXPGFmvkgUsTNo4otFI1qgTbiywt89/Bq9CEkRvGLt1S
+	lQy0EPd4oKpmWSXnUwPHMvsx4/swdI81PE21aQzMBPp1GpfkA2CQC198A4IdtyX+
+	HVKATxbd8rcxHYtd0gelltOHeJxnt2l7C7I2cIbmuOIvj+P8p+Ey9GnkxNA5Ee15
+	aKUc4rVbw8jx1Cr+eNi221KSSqul5YJOVdbCDYJIKYJSm4pgWrpF8oQ9tFQOQDqD
+	fLVMI2jIic2QSaVpICvNKWnUxWNcyYh5DZVQFWcDMgRxT4L4Lryp26Vfu+2vLSdb
+	vJx9azWezVFYvYEHNSPQO7r7V4kj8KW1HkA==
+X-ME-Sender: <xms:4cdpZchjquCZxF_jug5S__RCc5dNASZ7uj6JWF59ncLH-zJjNMIa0A>
+    <xme:4cdpZVBIiHIys14tQL0Fqd542V6CAHEXeckkibXE0gPvS2C-3TUpBhYowi9uzsvDY
+    2SEBCZNnW51J1fhX90>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeetvdegffdtgfegjeetgeegjeeitddvvefgieettefg
+    hfeuhfevleduieeffedugeenucffohhmrghinhepihhtshdrshgsnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:4cdpZUECHzYyOYjyZYJSfsYjSqupdS-c9sTYhH281jGgFNlTGJRS6Q>
+    <xmx:4cdpZdTHCZ5jLtsjiUqZjnzkKicEmpB2z2sb03R8hR_6WT4YmrG-dg>
+    <xmx:4cdpZZxRZl8GUKVXTerF_VVh3hqASWRmAKAXVRYDhMduPS1Y4NFsFA>
+    <xmx:4cdpZeqCtBBWz_1eiiJtZQc-8_SytZ3GkvbiOqH6cheam9rnFrwAhg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0BE6C36A0075; Fri,  1 Dec 2023 06:47:44 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="TpTVMO/RkXn9/fAN"
-Content-Disposition: inline
-In-Reply-To: <20231129192603.GA1387263@nvidia.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-
-
---TpTVMO/RkXn9/fAN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-Id: <4eb150cf-3fb7-41c8-accc-06b13e46f086@app.fastmail.com>
+In-Reply-To: <20231201111512.803120-22-gregory.clement@bootlin.com>
+References: <20231201111512.803120-1-gregory.clement@bootlin.com>
+ <20231201111512.803120-22-gregory.clement@bootlin.com>
+Date: Fri, 01 Dec 2023 11:47:16 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
+ "paulburton@kernel.org" <paulburton@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 21/22] MIPS: generic: Add support for Mobileye EyeQ5
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 29, 2023 at 03:26:03PM -0400, Jason Gunthorpe wrote:
-> On Wed, Nov 29, 2023 at 05:23:13PM +0100, Thierry Reding wrote:
-> > > diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/t=
-egra186.c
-> > > index 533f85a4b2bdb7..3e4fbe94dd666e 100644
-> > > --- a/drivers/memory/tegra/tegra186.c
-> > > +++ b/drivers/memory/tegra/tegra186.c
-> > > @@ -111,21 +111,21 @@ static void tegra186_mc_client_sid_override(str=
-uct tegra_mc *mc,
-> > >  static int tegra186_mc_probe_device(struct tegra_mc *mc, struct devi=
-ce *dev)
-> > >  {
-> > >  #if IS_ENABLED(CONFIG_IOMMU_API)
-> > > -	struct iommu_fwspec *fwspec =3D dev_iommu_fwspec_get(dev);
-> > >  	struct of_phandle_args args;
-> > >  	unsigned int i, index =3D 0;
-> > > +	u32 sid;
-> > > =20
-> > > +	WARN_ON(!tegra_dev_iommu_get_stream_id(dev, &sid));
-> >=20
-> > I know the code previously didn't check for any errors, but we may want
-> > to do so now. If tegra_dev_iommu_get_stream_id() ever fails we may end
-> > up writing some undefined value into the override register.
+
+
+=E5=9C=A82023=E5=B9=B412=E6=9C=881=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =E4=
+=B8=8A=E5=8D=8811:15=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+> Introduce support for the MIPS based Mobileye EyeQ5 SoCs.
+>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  arch/mips/configs/generic/board-eyeq5.config | 43 ++++++++++++++++++++
+>  arch/mips/generic/Kconfig                    | 15 +++++++
+>  arch/mips/generic/Platform                   |  2 +
+>  arch/mips/generic/board-epm5.its.S           | 24 +++++++++++
+>  4 files changed, 84 insertions(+)
+>  create mode 100644 arch/mips/configs/generic/board-eyeq5.config
+>  create mode 100644 arch/mips/generic/board-epm5.its.S
+>
+> diff --git a/arch/mips/configs/generic/board-eyeq5.config=20
+> b/arch/mips/configs/generic/board-eyeq5.config
+> new file mode 100644
+> index 0000000000000..d5109fda6e821
+> --- /dev/null
+> +++ b/arch/mips/configs/generic/board-eyeq5.config
+> @@ -0,0 +1,43 @@
+> +CONFIG_HIGH_RES_TIMERS=3Dy
+> +CONFIG_TASKSTATS=3Dy
+> +CONFIG_FIT_IMAGE_FDT_EPM5=3Dy
+> +CONFIG_BOARD_EYEQ5=3Dy
+> +CONFIG_USE_XKPHYS=3Dy
+> +CONFIG_PHYSICAL_START=3D0xa800000808000000
+> +CONFIG_ZBOOT_LOAD_ADDRESS=3D0xA800000080480000
+^ I wonder why are you overriding CONFIG_ZBOOT_LOAD_ADDRESS here, automa=
+tic
+calculation should work well.
+
+Also I think by adding board-eyeq5.config you are hijacking CONFIG_PHYSI=
+CAL_START
+for `make 32r2el_defconfig` without BOARDS option as well.
+
+Probably we should implement something to backlist this board from gener=
+ic
+config.
+
+Thanks
+- Jiaxun
+
+> +CONFIG_CPU_HAS_MSA=3Dy
+> +CONFIG_NET_KEY=3Dy
+> +CONFIG_CAN=3Dy
+> +CONFIG_PCI=3Dy
+> +CONFIG_PCI_MSI=3Dy
+> +CONFIG_PCI_DEBUG=3Dy
+> +CONFIG_PCI_ENDPOINT=3Dy
+> +CONFIG_CONNECTOR=3Dy
+> +CONFIG_MTD=3Dy
+> +CONFIG_MTD_CMDLINE_PARTS=3Dy
+> +CONFIG_MTD_BLOCK=3Dy
+> +CONFIG_MTD_RAM=3Dy
+> +CONFIG_MTD_ROM=3Dy
+> +CONFIG_MTD_PHYSMAP=3Dy
+> +CONFIG_MTD_PHYSMAP_OF=3Dy
+> +CONFIG_MTD_BLOCK2MTD=3Dy
+> +CONFIG_MTD_UBI=3Dy
+> +CONFIG_MTD_UBI_BLOCK=3Dy
+> +CONFIG_NETDEVICES=3Dy
+> +CONFIG_MACVLAN=3Dy
+> +CONFIG_IPVLAN=3Dy
+> +CONFIG_MACB=3Dy
+> +CONFIG_MARVELL_PHY=3Dy
+> +CONFIG_MICREL_PHY=3Dy
+> +CONFIG_CAN_M_CAN=3Dy
+> +CONFIG_SERIAL_AMBA_PL011=3Dy
+> +CONFIG_SERIAL_AMBA_PL011_CONSOLE=3Dy
+> +CONFIG_PINCTRL=3Dy
+> +CONFIG_MMC=3Dy
+> +CONFIG_MMC_SDHCI=3Dy
+> +CONFIG_MMC_SDHCI_CADENCE=3Dy
+> +CONFIG_RESET_CONTROLLER=3Dy
+> +CONFIG_FANOTIFY=3Dy
+> +CONFIG_ROMFS_FS=3Dy
+> +CONFIG_ROMFS_BACKED_BY_BOTH=3Dy
+> +CONFIG_PAGE_SIZE_16KB=3Dy
+> \ No newline at end of file
+> diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
+> index 7dc5b3821cc6e..04e1fc6f789b5 100644
+> --- a/arch/mips/generic/Kconfig
+> +++ b/arch/mips/generic/Kconfig
+> @@ -48,6 +48,13 @@ config SOC_VCOREIII
+>  config MSCC_OCELOT
+>  	bool
 >=20
-> My assumption was it never fails otherwise this probably already
-> doesn't work?
-
-I guess the point I was trying to make is that previously we would not
-have written anything to the stream ID register and so ignoring the
-error here might end up writing to a register that previously we would
-not have written to. Looking at the current code more closely I see now
-that the reason why we wouldn't have written to the register is because
-we would've crashed before.
-
-So I think this okay.
-
+> +config SOC_EYEQ5
+> +	select ARM_AMBA
+> +	select WEAK_ORDERING
+> +	select WEAK_REORDERING_BEYOND_LLSC
+> +	select PHYSICAL_START_BOOL
+> +	bool
+> +
+>  comment "FIT/UHI Boards"
 >=20
-> > I'm also unsure if WARN_ON() is appropriate here. I vaguely recall that
-> > ->probe_device() was called for all devices on the bus and not all of
-> > them may have been associated with the IOMMU. Not all of them may in
-> > fact access memory in the first place.
+>  config FIT_IMAGE_FDT_BOSTON
+> @@ -124,4 +131,12 @@ config VIRT_BOARD_RANCHU
+>  	  Android emulator. Android emulator is based on Qemu, and contains
+>  	  the support for the same set of virtual devices.
 >=20
-> So you are thinkin that of_parse_phandle_with_args() is a NOP
-> sometimes so it will tolerate the failure?
->=20
-> Seems like the best thing to do is just continue to ignore it then?
+> +config FIT_IMAGE_FDT_EPM5
+> +	bool "Include FDT for Mobileye EyeQ5 development platforms"
+> +	select SOC_EYEQ5
+> +	default n
+> +	help
+> +	  Enable this to include the FDT for the EyeQ5 development platforms
+> +	  from Mobileye in the FIT kernel image.
+> +	  This requires u-boot on the platform.
+>  endif
+> diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+> index 0c03623f38970..45db9824a11d6 100644
+> --- a/arch/mips/generic/Platform
+> +++ b/arch/mips/generic/Platform
+> @@ -24,3 +24,5 @@ its-$(CONFIG_FIT_IMAGE_FDT_JAGUAR2)	+=3D=20
+> board-jaguar2.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_SERVAL)	+=3D board-serval.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+=3D board-xilfpga.its.S
+>  its-$(CONFIG_FIT_IMAGE_FDT_MARDUK)	+=3D board-marduk.its.S
+> +its-$(CONFIG_FIT_IMAGE_FDT_EPM5)	+=3D board-epm5.its.S
+> +
+> diff --git a/arch/mips/generic/board-epm5.its.S=20
+> b/arch/mips/generic/board-epm5.its.S
+> new file mode 100644
+> index 0000000000000..08e8c4f183d63
+> --- /dev/null
+> +++ b/arch/mips/generic/board-epm5.its.S
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/ {
+> +	images {
+> +		fdt-mobileye-epm5 {
+> +			description =3D "Mobileeye MP5 Device Tree";
+> +			data =3D /incbin/("boot/dts/mobileye/eyeq5-epm5.dtb");
+> +			type =3D "flat_dt";
+> +			arch =3D "mips";
+> +			compression =3D "none";
+> +			hash {
+> +				algo =3D "sha1";
+> +			};
+> +		};
+> +	};
+> +
+> +    configurations {
+> +		default =3D "conf-1";
+> +		conf-1 {
+> +			description =3D "Mobileye EPM5 Linux kernel";
+> +			kernel =3D "kernel";
+> +			fdt =3D "fdt-mobileye-epm5";
+> +		};
+> +	};
+> +};
+> --=20
+> 2.42.0
 
-Yeah, exactly. It would've just skipped over everything, basically.
-
-> > Perhaps I'm misremembering and the IOMMU core now takes care of only
-> > calling this when fwspec is indeed valid?
->=20
-> Can't advise, I have no idea what tegra_mc_ops is for :)
-
-In a nutshell, it's a hook that allows us to configure the memory
-controller when a device is attached to the IOMMU. The memory controller
-contains a set of registers that specify which memory client uses which
-stream ID by default. For some devices this can be overridden (which is
-where tegra_dev_iommu_get_stream_id() comes into play in those drivers)
-and for other devices we can't override, which is when the memory
-controller defaults come into play.
-
-Anyway, I took a closer look at this and ran some tests. Turns out that
-tegra186_mc_probe_device() really only gets called for devices that have
-their fwspec properly initialized anyway, so I don't think there's
-anything special we need to do here.
-
-Strictly from a static analysis point of view I suppose we could now
-have a situation that sid is uninitialized when the call to
-tegra_dev_iommu_get_stream_id() fails and so using it in the loop is not
-correct, theoretically, but I think that's just not a case that we'll
-ever hit in practice.
-
-So either way is fine with me. I have a slight preference for just
-returning 0 in case tegra_dev_iommu_get_stream_id() fails, because it's
-simple to do and avoids any of these (theoretical) ambiguities. So
-whichever way you decide:
-
-Reviewed-by: Thierry Reding <treding@nvidia.com>
-
---TpTVMO/RkXn9/fAN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmVpwgIACgkQ3SOs138+
-s6HXLg/9HWFRkWBCsjCmwhdNLy/49eLCajrcOU069eBFBS0YM+rhIa4d/XwXv96C
-WEC1AzUuDGAVKvfWbkjzCOtBKr+o0psunt8sHYRX+PtyekOF270j3ud+7Ny/6dQk
-Ca9GevvG0yyYfEcSiowRZXKSzrhj4OSDS83QJbmBiyw3+VyA25+zO/C+Lzib1mG9
-2Kn+od5hqOQFqylwazJAZy358DzVSmyF6iSR0kbmS5mvNrtWS/dT4Zeh2raYJgRn
-MF+f0u+1M8i7Iv65/I5sG83I086p9ictlV1qkMGHY01q7uCAo5p2EM6KlP8Qv/N1
-W+DZQpciP9+ENmkcYjEiNEnNw4efMQThCtXbB4VYxb8Jo/To8eV2/sOGUoLdhwWV
-H8tPPCBfzYtSAsSNXpYK8gWQXCfaHjuO3SFe0itosbSHYw4x+SoECXTVi8L6GBwV
-jDEYuyrcakUhR+vsxuOXlP4TzcIiNoCf1lO8LnfWVjoHcA/1dG1uA6Bup6CtNe+A
-lS3xMmMXDVdZS49hw5EvUTd7Liu+si9RzLkmv4IGWBXlL01VTFYRygKZ1lZLKgPP
-lZWUFLZPunTK7Mlew7PLW7GJg1MzsEkM3htQmVfWzPL7D95RKk3ufiOimGdzknro
-ZaxbslDQOTUAoqgnKVnmzMJbfR+HTasb+X8EuoCb4G9dHDEPq1g=
-=hKzE
------END PGP SIGNATURE-----
-
---TpTVMO/RkXn9/fAN--
+--=20
+- Jiaxun
 
