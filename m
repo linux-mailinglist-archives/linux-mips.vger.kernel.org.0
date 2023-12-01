@@ -1,60 +1,60 @@
-Return-Path: <linux-mips+bounces-452-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-453-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9C60800A53
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 13:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE85800A56
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 13:03:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8546C281C07
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:03:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB8BC281C22
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 12:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2927E1C6A9;
-	Fri,  1 Dec 2023 12:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76AFE21A19;
+	Fri,  1 Dec 2023 12:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E2HKkmH+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t85/wWly"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C0C1B4
-	for <linux-mips@vger.kernel.org>; Fri,  1 Dec 2023 04:03:33 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-332e40315bdso1434874f8f.1
-        for <linux-mips@vger.kernel.org>; Fri, 01 Dec 2023 04:03:33 -0800 (PST)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E814173A
+	for <linux-mips@vger.kernel.org>; Fri,  1 Dec 2023 04:03:40 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-332d5c852a0so1245644f8f.3
+        for <linux-mips@vger.kernel.org>; Fri, 01 Dec 2023 04:03:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701432212; x=1702037012; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701432219; x=1702037019; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oVOc56kK2zwGkd3fAlYzj1nsVh5HFurnhiz0R/5JgWY=;
-        b=E2HKkmH+ea26CqJLlHj0oOH3idoHq/7/HPLLWu22E0hv217z6QyuXsVI9CYEE9bas/
-         gEUB4xD14echWcFqAin9y6MlU7/xF//+Jiq3o/gSScQPY4BFxBkbL0INWiH9HUSnXFrF
-         xm5cGOi1FTFvWdf8k/mlUmOil9RULRhOe33PmgHQPq3pxNiAH8qNxZqW728n5NNXxxYO
-         Bws4431JK4Rb01KJNi5fSZM1xFYj0aw0nPIqQczpU8ri6IemkoEXy0/yBNW5ENIMEDVQ
-         si8spmbYyzFdk3xIxDcZPQxbfhNMbEOyRbaolaJlzMkrY2ll44KiJkhLTC8iAWdg50O6
-         bCKg==
+        bh=pSyeVZfUx/QaoZZLAu2Xq4J88Nuf1srI4i/pbUNDQB4=;
+        b=t85/wWlyibd+5gB3kmDw16vjkRQ5BdUFNCvtBno0JGvM9SPOk8izkYs1l++zLyEBM9
+         UGr5mQxTg4PvcpOTihTyW0+MT78PYrB/uME+3ziDnC0b5WJisP2v+sc2WyjivLj0YGwU
+         vfGElA7SF+lVLm2LYGeM7HCdaIs8zkCiJMvojtXkjudAshHnFQnTPGUELQNqT87Uu1Fx
+         pCS1trVrePKYPETdhyev2Rw2VJ54+rNl7pNjxUCT7vvqBHidlnTiddBWjnsjrV3p8F88
+         fwjgEwpM4McPAxty8Te7YefHE5SQhsNkzb43DjaDMt0NxJAyiC2vJ9gLt6rqJ/b5VRYF
+         4YSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701432212; x=1702037012;
+        d=1e100.net; s=20230601; t=1701432219; x=1702037019;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVOc56kK2zwGkd3fAlYzj1nsVh5HFurnhiz0R/5JgWY=;
-        b=vzbDEDFCL+ldBiYdfK0BFVDY0ROLd/av8dSby5bzNC4OArL7SAZn8YYAh0viAhUEQv
-         uDttc6/Hxc+mQb7w9OxQl40fSK+uSFUYQ999nKcTWiIUQ5TbBwfvV7k/Sv68LdtrfMAP
-         y6aGSe29KUa2vFwDdwo4cI/+ncWMY7lju0zcJUYZ8jkdWOMMRRklViq+yY1ZqpKPlazf
-         WUJaTiQjovwCEk3kr3BpWydukPCWq95uqKJp5zg7Js3SKiNdjMAfmrMrHzux+2tV8EhO
-         Zx08fc+iO3PW0jSnHleWTei4EmKCVcx63j3lWsfEucsjTSrICPsVKMpyeP9iCsjDkT7m
-         ppsg==
-X-Gm-Message-State: AOJu0YzHa2kJq14jwNW1GwdenMcqva8kd13fQyS5kiTtVUhcRUwTuPjM
-	Oss0UDtVTQrilB8I52VdNIkuvg==
-X-Google-Smtp-Source: AGHT+IG3Pslut9pT2LA34/RAuijW/6/8jO9jlPv7SsfwSwTgtx3jeXsxbnu+DV6Sa1Y9i9WlNzdSTA==
-X-Received: by 2002:a05:6000:228:b0:333:2be8:b3e2 with SMTP id l8-20020a056000022800b003332be8b3e2mr722153wrz.62.1701432212145;
-        Fri, 01 Dec 2023 04:03:32 -0800 (PST)
+        bh=pSyeVZfUx/QaoZZLAu2Xq4J88Nuf1srI4i/pbUNDQB4=;
+        b=eaW3yjwIqA9JlZKDAl+e/FJ363MRgIkwHKfDgI8Ck09KIyvzvragS+cOCv3nwkWYLP
+         kg7yNYLljh17YjdP7WCvcTwXGBt4KWlnGZrYj0Dqor7HUYXCVzuG5REWW3bBi/59Ueas
+         S2Ldy4K33KVSKmWlJqrkWzqH1shA785pqRYTBG5cmsxdd6CdkPx8SRyUy3oleUgw1iOJ
+         LHBnXR5EYHysRVZtnnA+y9btEjAJEBeJXHD4Dhb65v/bR6tncf+o2YIsgiBnAkjpztsz
+         Y0MTUw4mUmNWSqRU6Fsk9D2B3G/fNC/mt9BbKtuDQAOwDDg7WJih0Te/R2P9VGKFGExX
+         btew==
+X-Gm-Message-State: AOJu0Yy3DdouGXl4pj8u9177yS/+8o16jLDkAtny3fY1opbd7HCF8Eyl
+	Ail5Si+5uhP56P0QLOGszo3oMw==
+X-Google-Smtp-Source: AGHT+IF5dUgrx4Tj+ziFoMNsMcYo7xEnMr8YijeiQQokjYJnQwQ0zZDXvC484qBTiAstpoMiUEaL7Q==
+X-Received: by 2002:adf:a1c3:0:b0:333:2fd2:5d26 with SMTP id v3-20020adfa1c3000000b003332fd25d26mr808982wrv.88.1701432218937;
+        Fri, 01 Dec 2023 04:03:38 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id cg16-20020a5d5cd0000000b003332656cd73sm3390392wrb.105.2023.12.01.04.03.30
+        by smtp.gmail.com with ESMTPSA id cg16-20020a5d5cd0000000b003332656cd73sm3390392wrb.105.2023.12.01.04.03.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Dec 2023 04:03:31 -0800 (PST)
-Message-ID: <d98ed844-b5d0-42d6-81e8-19a0048db3a4@linaro.org>
-Date: Fri, 1 Dec 2023 13:03:30 +0100
+        Fri, 01 Dec 2023 04:03:38 -0800 (PST)
+Message-ID: <4144b732-2035-4434-9e62-dc0b4378d19e@linaro.org>
+Date: Fri, 1 Dec 2023 13:03:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -62,7 +62,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 15/22] dt-bindings: mips: cpus: Sort the entries
+Subject: Re: [PATCH v3 16/22] dt-bindings: mips: cpu: Add I-Class I6500
+ Multiprocessor Core
 Content-Language: en-US
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
  Paul Burton <paulburton@kernel.org>,
@@ -74,9 +75,11 @@ Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>,
  =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?=
+ <philmd@linaro.org>, Serge Semin <fancer.lancer@gmail.com>
 References: <20231201111512.803120-1-gregory.clement@bootlin.com>
- <20231201111512.803120-16-gregory.clement@bootlin.com>
+ <20231201111512.803120-17-gregory.clement@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -122,18 +125,19 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231201111512.803120-16-gregory.clement@bootlin.com>
+In-Reply-To: <20231201111512.803120-17-gregory.clement@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 01/12/2023 12:14, Gregory CLEMENT wrote:
-> The entries were nearly sorted but there were still some entries at
-> the wrong places. Let's fix it.
+> The MIPS Warrior I-class I6500 was announced by Imagination
+> Technologies in 2016 and is used in the Mobileye SoC EyeQ5.
 > 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 > ---
->  Documentation/devicetree/bindings/mips/cpus.yaml | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
