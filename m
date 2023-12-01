@@ -1,70 +1,71 @@
-Return-Path: <linux-mips+bounces-419-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-420-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B71767FFDA1
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 22:37:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5367FFFFE
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 01:13:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CED2281667
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Nov 2023 21:37:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 476E81C20C26
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 00:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5082B5A0E5;
-	Thu, 30 Nov 2023 21:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8B5368;
+	Fri,  1 Dec 2023 00:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="VUwU1hZ5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xtu8hJy4"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="p4TuFmo2";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AseeZUAs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1215E194;
-	Thu, 30 Nov 2023 13:37:15 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 8071A5C01BC;
-	Thu, 30 Nov 2023 16:37:12 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 30 Nov 2023 16:37:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701380232; x=1701466632; bh=Zz
-	F9h379MrAFj54pXWhL+XcbpUP3DpZlKzF1Dnx5FrY=; b=VUwU1hZ5uvMFqnriFi
-	fZNJ2fUdH7Aa5LbOPjDXL+SMTdE1URP+lXR4UgpTdHT0/25JMTdeoI1foTS7o7HP
-	3v6lsx2tcZwvY0cYSv2A0NVWSyvoaR8S0CW+gtYZb77WwTaP1hdZHZwNmf2HhbF3
-	Njq+2RfP3Umj8yFhfpWDmnwISxlqqgFvEjsJwkVvtiWsJmHMeSvh+8b8fxUQ7+mj
-	HeePWxpvgok5gmZzwKA5hAO3cxAP2+96L5oY3eijzE7Ae7nMBuFG0gX5ilVhViUa
-	3r9opUS+dctQIG5z4VJD3/XgXOfzNNWsG8nJZ/JA74RfVTMW1q0553h7mqJM3WyM
-	1Y+A==
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E8110FA;
+	Thu, 30 Nov 2023 16:13:42 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 7DA245C0114;
+	Thu, 30 Nov 2023 19:13:41 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 30 Nov 2023 19:13:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+	1701389621; x=1701476021; bh=6hNLsCFhInh22vC2aH0mgObvwR0nMUCdEXP
+	sUGEMxfE=; b=p4TuFmo2BFWKo6nUyzd0VhruEGR7APHOVeHa7t90HtYDDkV2GOs
+	WbwD4W+8XGQHFzA6R46rClyZ9uhsApeYU9Bq3qCK8SOAbEH0ByqRIqlcdjEyI9+4
+	LxyiFamBQFNzRhGxUmy0PggFnSiP6eH0bMoFtnjor0Jxw2KO97FXc0npahB0MDqx
+	wVtXRagjRm3scqpbc//fDJ8vLhjMOfDqJZMpZvh8Osj9a5xJoo4qedI3SECKEzqX
+	yA8wjoIYfNuFwD89mweOxyuhcxV/gxq5W004xEYCe92NUWczdo0+u8adnH67fqgD
+	JuPP/kpRa3we6p4x8IrsfM+zUIO/TXvFjrA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701380232; x=1701466632; bh=ZzF9h379MrAFj
-	54pXWhL+XcbpUP3DpZlKzF1Dnx5FrY=; b=xtu8hJy4NCZgJkhuo6Vdqoe7aPaYs
-	hu2d9SSnQuPMZKo/wqq9EX538D/lSwJIZmSwPr46vcjUc85mGIJRsTxXgnTWA44R
-	vbp6/KqI2bzT5406NtyMrkTL1iBqnc4kuPWfnmiBZru9lXDLfe1FPL2RTilrDMoO
-	SiSBdxV/sycERlIt3JNl4FUyT+c+QeRP2GwzmxpKAC+bqZNGjHGpXP+iutR6qC3c
-	Mo0Sv/xy3sMRtpnC1tylWeubJX9nM2HOcHJBPKmyB1XJ/3N+uotC9Ap/Hu7d/Pyc
-	R8bLTE3kqnwQ6gMOlH/vBgkXxk/UJA/9El8blbBCRZhO2rUtxxjj+ntYQ==
-X-ME-Sender: <xms:hwBpZZHQuTBe7RDle2Un4O4CJuIMyYZTAe9_ya1VLyIE1IpJEEyqFw>
-    <xme:hwBpZeUvIvzOgkdiL9MtbJ7cxxWa0SJfkt_97-yww6DW1sLDQhG26JOwtagUDwFJ6
-    VGUQWZxWMXRhndAvp8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeijedgudehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:hwBpZbJ6EsZXwFWS7NTv4ZhUNrXLJ_JLpBnHAvigtsNslQylZulc0g>
-    <xmx:hwBpZfGVFa3Po9QgM2Sr11NTtHLRK4QU47H8uZhxH_Pv7r7YKYgvag>
-    <xmx:hwBpZfUhV4s4k09ASokxWzATzECncoE3Gci5bth3tu3R21KlwWRkUQ>
-    <xmx:iABpZVf0RCnCciZ9H2I4w-dz_IdNmXN2Xg26tDd9qtkl3yds-Q_KyA>
-Feedback-ID: i56a14606:Fastmail
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701389621; x=1701476021; bh=6hNLsCFhInh22vC2aH0mgObvwR0nMUCdEXP
+	sUGEMxfE=; b=AseeZUAspHBmVT0quRu/fmAKonz1GQGNxx9/2hHz/DOFvlD86Tc
+	WSxoaTL/yKw9O64tFfm+I9zOS/vN8FdAwKrKUw4CNwDfJdoBZWldSBgz96c2nGIN
+	vY2YNoLDLYX7w7mlimXfIwhfCCcYIyc/MutJhgQLmFnoPvq2vu6oJ6dKfYFE+SKX
+	ONJVmDmyPtN+tF8DkvxuvUlN1+2G2Fk1UigU4ZYt/r/1kXau4YGaldnbxInqe2sA
+	31hYutAGc2pxbjhnU1B+qqeUd5UqVwQRv7TtXOj+4rjdH3iyCbdGSzlwgNZMRzis
+	NYnIUgGwy+ZPjKej0V4+3mmgnqVNtNU3NKA==
+X-ME-Sender: <xms:MyVpZQw2ntx0IWqZ6vY3aO4mFFcAiAA14kBj3WQIpjrUkVdxGCX8Uw>
+    <xme:MyVpZUTn8Zb9Q9_7HNpgu9EoCv2v-XXBkp9RqYHSDu_topOjNK5WnZ3TFTo4xJcwJ
+    oLZVPVRhWM4YgbI1BM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeikedgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:NCVpZSXo1rzKGpJHv7ZxPno1MBaOYD2Sia_VXrTELi54hAb01HnBNQ>
+    <xmx:NCVpZeiBEdnkjummF-m_JEt_ksJok2PYuBHIXWee_vrG2zVD9sGH7Q>
+    <xmx:NCVpZSCETlUoggUjmk0WilrRDxcMTWhzWVeokfZC4speaHRiITcmEw>
+    <xmx:NSVpZYSmELo37kFV8jvsaU641qYX83T-XPSkU4kw2zViepGpW62x-Q>
+Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id ADD8DB60089; Thu, 30 Nov 2023 16:37:11 -0500 (EST)
+	id DD1A836A0075; Thu, 30 Nov 2023 19:13:39 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1238-g6cccb1fa34-fm-20231128.002-g6cccb1fa
 Precedence: bulk
@@ -73,49 +74,79 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8cef91eb-140c-46a6-b695-70df89bbdb81@app.fastmail.com>
-In-Reply-To: <20231130081929.46a79c33edee8651c63112dc@linux-foundation.org>
-References: <20231130075838.05e5bc9b@oak>
- <20231129131003.d2c1078847c3865c1ac2dfd5@linux-foundation.org>
- <ebb5b1a2-ed27-4a77-b62b-1d3f19bddd85@app.fastmail.com>
- <20231129151030.24b807f1d2b43be301a533b7@linux-foundation.org>
- <4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
- <20231130081929.46a79c33edee8651c63112dc@linux-foundation.org>
-Date: Thu, 30 Nov 2023 22:36:50 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrew Morton" <akpm@linux-foundation.org>
-Cc: "Stephen Rothwell" <sfr@rothwell.id.au>,
- linux-next <linux-next@vger.kernel.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "David S . Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org,
- linux-mips@vger.kernel.org
-Subject: Re: linux-next: lots of errors/warnings from the -Werror=missing-prototypes
- addition
-Content-Type: text/plain
+Message-Id: <bb13c070-bdfe-47ae-afed-a05e1e55bb94@app.fastmail.com>
+In-Reply-To: 
+ <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
+References: <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
+ <d6d7e27a-b1a1-48af-be6c-aa9097c48992@app.fastmail.com>
+ <ZV94rifAIF2p9Nej@alpha.franken.de>
+ <245d3985-9085-4be0-8c74-d95d06334584@app.fastmail.com>
+ <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
+ <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
+ <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
+ <c73d9dbf-b637-47ff-ae2d-6f8987345410@app.fastmail.com>
+ <3pgnihbrp5orh4tmj45fipbfoxdwzjh6uefitdpcea2vgkarcm@d56gv3areswl>
+ <2148a67f-bd4f-432e-aa0d-c914a4bd5e0d@app.fastmail.com>
+ <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
+Date: Fri, 01 Dec 2023 00:13:22 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Serge Semin" <fancer.lancer@gmail.com>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
+ "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Yinglu Yang" <yangyinglu@loongson.cn>,
+ "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
+ "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
+ "Aleksandar Rikalo" <arikalo@gmail.com>,
+ "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
+ "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 30, 2023, at 17:19, Andrew Morton wrote:
-> On Thu, 30 Nov 2023 09:07:38 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
+
+
+=E5=9C=A82023=E5=B9=B411=E6=9C=8830=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
+=E4=B8=8B=E5=8D=887:16=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Nov 28, 2023 at 03:46:37PM +0000, Jiaxun Yang wrote:
+[...]
 >
->> > I guess it should precede "Makefile.extrawarn: turn on
->> > missing-prototypes globally".
->> 
->> I already have a collection of patches to fix up known
->> -Wmissing-prototype warnings across architectures in the
->> asm-generic tree, so I'll add this patch there:
->> 
->> commit bdef96eb0b89dfa80992312a8e3b2613bf178ae5
->> Author: Arnd Bergmann <arnd@arndb.de>
->> Date:   Thu Nov 30 00:07:07 2023 +0100
->> 
->>     arch: turn off -Werror for architectures with known warnings
+>> I'd say the safest option is to use CKSEG0 or TO_CAC here,=20
 >
-> I think this would be better in the mm-nonmm tree, alongside
-> "Makefile.extrawarn: turn on missing-prototypes globally".  Can I steal it?
+> I would have agreed with you if MIPS didn't have that special
+> _page_cachable_default variable which is undefined for some platforms
+> and which might be re-defined during the boot-up process, and if
+> MIPS64 didn't have ioremap_prot() always mapping to the uncached
+> region.  But IMO updating ioremap_prot() currently seems more risky
+> than just converting dmi_early_remap() to the uncached version
+> especially seeing it won't change anything. MIPS64 always have IO
+> remapped to the uncached region. MIPS32 won't be able to have cached
+> mapping until VM is available, and paging and slabs are initialized.
+> So on the early MIPS32 bootup stages ioremap_cache() wouldn't have
+> worked anyway.
 
-Agreed, that does help with bisection. I had pushed out the
-asm-generic branch with the patch earlier today but now reverted
-back to the previous state.
+I really didn't get that, using CKSEG0 on 32bit system and TO_CAC
+on 64bit system won't hurt.
 
-      Arnd
+Something like:
+#ifdef CONFIG_64BIT
+#define dmi_remap(x, l)		(void *)TO_CAC(x)
+#else
+#define dmi_remap(x, l)		(void *)CKSEG0(x)
+#endif
+
+Can help us avoid all the hassle. Since it always ensures we are
+using same CCA to access DMI tables. We can always trust Config.K0
+left by firmware in this case.
+
+You may add some sanity check on 32 bit to avoid generating invalid
+pointer. (And perhaps implement it as ioremap_early.....)=20
+
+Thanks
+--=20
+- Jiaxun
 
