@@ -1,152 +1,166 @@
-Return-Path: <linux-mips+bounces-420-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-421-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D5367FFFFE
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 01:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8914D800380
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 07:03:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 476E81C20C26
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 00:13:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA2501C20A55
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 06:03:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8B5368;
-	Fri,  1 Dec 2023 00:13:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60EABE6C;
+	Fri,  1 Dec 2023 06:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="p4TuFmo2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AseeZUAs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LZ1HVA6B"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E8110FA;
-	Thu, 30 Nov 2023 16:13:42 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 7DA245C0114;
-	Thu, 30 Nov 2023 19:13:41 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 30 Nov 2023 19:13:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1701389621; x=1701476021; bh=6hNLsCFhInh22vC2aH0mgObvwR0nMUCdEXP
-	sUGEMxfE=; b=p4TuFmo2BFWKo6nUyzd0VhruEGR7APHOVeHa7t90HtYDDkV2GOs
-	WbwD4W+8XGQHFzA6R46rClyZ9uhsApeYU9Bq3qCK8SOAbEH0ByqRIqlcdjEyI9+4
-	LxyiFamBQFNzRhGxUmy0PggFnSiP6eH0bMoFtnjor0Jxw2KO97FXc0npahB0MDqx
-	wVtXRagjRm3scqpbc//fDJ8vLhjMOfDqJZMpZvh8Osj9a5xJoo4qedI3SECKEzqX
-	yA8wjoIYfNuFwD89mweOxyuhcxV/gxq5W004xEYCe92NUWczdo0+u8adnH67fqgD
-	JuPP/kpRa3we6p4x8IrsfM+zUIO/TXvFjrA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701389621; x=1701476021; bh=6hNLsCFhInh22vC2aH0mgObvwR0nMUCdEXP
-	sUGEMxfE=; b=AseeZUAspHBmVT0quRu/fmAKonz1GQGNxx9/2hHz/DOFvlD86Tc
-	WSxoaTL/yKw9O64tFfm+I9zOS/vN8FdAwKrKUw4CNwDfJdoBZWldSBgz96c2nGIN
-	vY2YNoLDLYX7w7mlimXfIwhfCCcYIyc/MutJhgQLmFnoPvq2vu6oJ6dKfYFE+SKX
-	ONJVmDmyPtN+tF8DkvxuvUlN1+2G2Fk1UigU4ZYt/r/1kXau4YGaldnbxInqe2sA
-	31hYutAGc2pxbjhnU1B+qqeUd5UqVwQRv7TtXOj+4rjdH3iyCbdGSzlwgNZMRzis
-	NYnIUgGwy+ZPjKej0V4+3mmgnqVNtNU3NKA==
-X-ME-Sender: <xms:MyVpZQw2ntx0IWqZ6vY3aO4mFFcAiAA14kBj3WQIpjrUkVdxGCX8Uw>
-    <xme:MyVpZUTn8Zb9Q9_7HNpgu9EoCv2v-XXBkp9RqYHSDu_topOjNK5WnZ3TFTo4xJcwJ
-    oLZVPVRhWM4YgbI1BM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeikedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:NCVpZSXo1rzKGpJHv7ZxPno1MBaOYD2Sia_VXrTELi54hAb01HnBNQ>
-    <xmx:NCVpZeiBEdnkjummF-m_JEt_ksJok2PYuBHIXWee_vrG2zVD9sGH7Q>
-    <xmx:NCVpZSCETlUoggUjmk0WilrRDxcMTWhzWVeokfZC4speaHRiITcmEw>
-    <xmx:NSVpZYSmELo37kFV8jvsaU641qYX83T-XPSkU4kw2zViepGpW62x-Q>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DD1A836A0075; Thu, 30 Nov 2023 19:13:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1238-g6cccb1fa34-fm-20231128.002-g6cccb1fa
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE7FD7D
+	for <linux-mips@vger.kernel.org>; Thu, 30 Nov 2023 22:03:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701410619;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/TeMDmB7LckIZA4USFVQUlo1F06QQ0tuHG6egKrLc10=;
+	b=LZ1HVA6BdaA6ue3vqphNJHwdfO7nvYEJQ1n9ybdwo+IuVbQJJ8cAo28cKTwZ9OkzWHF/MS
+	l+zs9gkZnDUXCZ8z3nWTUVCKrUQsokO5A1dL9MMhQ/Bsxgbu4tpjqOivEDUpcJSjzsJRZ+
+	KUH29A2TBflSICXMRXOMbniCjghzywM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-586-d749Q2UvPqiCzf1p7FVvXQ-1; Fri, 01 Dec 2023 01:03:34 -0500
+X-MC-Unique: d749Q2UvPqiCzf1p7FVvXQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DA7D85A58A;
+	Fri,  1 Dec 2023 06:03:33 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (unknown [10.72.113.121])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id ED9E31121307;
+	Fri,  1 Dec 2023 06:03:29 +0000 (UTC)
+From: Baoquan He <bhe@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	akpm@linux-foundation.org,
+	eric_devolder@yahoo.com,
+	lkp@intel.com,
+	Baoquan He <bhe@redhat.com>
+Subject: [PATCH v2] kexec_core: change dependency of object files
+Date: Fri,  1 Dec 2023 14:03:25 +0800
+Message-ID: <20231201060325.26940-1-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <bb13c070-bdfe-47ae-afed-a05e1e55bb94@app.fastmail.com>
-In-Reply-To: 
- <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
-References: <ZV9Fq1ihUm1Rn6yO@alpha.franken.de>
- <d6d7e27a-b1a1-48af-be6c-aa9097c48992@app.fastmail.com>
- <ZV94rifAIF2p9Nej@alpha.franken.de>
- <245d3985-9085-4be0-8c74-d95d06334584@app.fastmail.com>
- <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
- <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
- <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
- <c73d9dbf-b637-47ff-ae2d-6f8987345410@app.fastmail.com>
- <3pgnihbrp5orh4tmj45fipbfoxdwzjh6uefitdpcea2vgkarcm@d56gv3areswl>
- <2148a67f-bd4f-432e-aa0d-c914a4bd5e0d@app.fastmail.com>
- <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
-Date: Fri, 01 Dec 2023 00:13:22 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Serge Semin" <fancer.lancer@gmail.com>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Arnd Bergmann" <arnd@arndb.de>, "Andrew Morton" <akpm@linux-foundation.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
- "Tiezhu Yang" <yangtiezhu@loongson.cn>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Yinglu Yang" <yangyinglu@loongson.cn>,
- "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
- "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
- "Aleksandar Rikalo" <arikalo@gmail.com>,
- "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
- "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
+When dropping the select of KEXEC for CRASH_DUMP, compiling error
+will be triggered if below config items are set on some architectures.
 
+===
+CONFIG_CRASH_CORE=y
+CONFIG_KEXEC_CORE=y
+CONFIG_CRASH_DUMP=y
+===
 
-=E5=9C=A82023=E5=B9=B411=E6=9C=8830=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
-=E4=B8=8B=E5=8D=887:16=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
-> On Tue, Nov 28, 2023 at 03:46:37PM +0000, Jiaxun Yang wrote:
-[...]
->
->> I'd say the safest option is to use CKSEG0 or TO_CAC here,=20
->
-> I would have agreed with you if MIPS didn't have that special
-> _page_cachable_default variable which is undefined for some platforms
-> and which might be re-defined during the boot-up process, and if
-> MIPS64 didn't have ioremap_prot() always mapping to the uncached
-> region.  But IMO updating ioremap_prot() currently seems more risky
-> than just converting dmi_early_remap() to the uncached version
-> especially seeing it won't change anything. MIPS64 always have IO
-> remapped to the uncached region. MIPS32 won't be able to have cached
-> mapping until VM is available, and paging and slabs are initialized.
-> So on the early MIPS32 bootup stages ioremap_cache() wouldn't have
-> worked anyway.
+E.g the building error on loongarch:
+---------------------------------------------------------------
+loongarch64-linux-ld: kernel/kexec_core.o: in function `.L209':
+>> kexec_core.c:(.text+0x1660): undefined reference to `machine_kexec_cleanup'
+   loongarch64-linux-ld: kernel/kexec_core.o: in function `.L287':
+>> kexec_core.c:(.text+0x1c5c): undefined reference to `machine_crash_shutdown'
+>> loongarch64-linux-ld: kexec_core.c:(.text+0x1c64): undefined reference to `machine_kexec'
+   loongarch64-linux-ld: kernel/kexec_core.o: in function `.L2^B5':
+>> kexec_core.c:(.text+0x2090): undefined reference to `machine_shutdown'
+   loongarch64-linux-ld: kexec_core.c:(.text+0x20a0): undefined reference to `machine_kexec'
+---------------------------------------------------------------
 
-I really didn't get that, using CKSEG0 on 32bit system and TO_CAC
-on 64bit system won't hurt.
+The reason is that currently in arch/loongarch/kernel/Makefile, building
+machine_kexec.o relocate_kernel.o depends on CONFIG_KEXEC. So the
+building of the two object files is skipped because CONFIG_KEXEC=n in
+that case.
 
-Something like:
-#ifdef CONFIG_64BIT
-#define dmi_remap(x, l)		(void *)TO_CAC(x)
-#else
-#define dmi_remap(x, l)		(void *)CKSEG0(x)
-#endif
+And this situation exists in m68k, mips and sh ARCH too.
 
-Can help us avoid all the hassle. Since it always ensures we are
-using same CCA to access DMI tables. We can always trust Config.K0
-left by firmware in this case.
+Here, changing the dependency of machine_kexec.o relocate_kernel.o to
+CONFIG_KEXEC_CORE for all relevant architectures.
 
-You may add some sanity check on 32 bit to avoid generating invalid
-pointer. (And perhaps implement it as ioremap_early.....)=20
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202311300946.kHE9Iu71-lkp@intel.com/
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+v1->v2:
+- V1 only includes fix on loongarch. Add m68k, mips, sh fix in v2 too.
 
-Thanks
---=20
-- Jiaxun
+ arch/loongarch/kernel/Makefile | 2 +-
+ arch/m68k/kernel/Makefile      | 2 +-
+ arch/mips/kernel/Makefile      | 2 +-
+ arch/sh/kernel/Makefile        | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 4fcc168f0732..3c808c680370 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -57,7 +57,7 @@ obj-$(CONFIG_MAGIC_SYSRQ)	+= sysrq.o
+ 
+ obj-$(CONFIG_RELOCATABLE)	+= relocate.o
+ 
+-obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
++obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
+ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+ 
+ obj-$(CONFIG_UNWINDER_GUESS)	+= unwind_guess.o
+diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
+index 01fb69a5095f..f335bf3268a1 100644
+--- a/arch/m68k/kernel/Makefile
++++ b/arch/m68k/kernel/Makefile
+@@ -25,7 +25,7 @@ obj-$(CONFIG_PCI) += pcibios.o
+ 
+ obj-$(CONFIG_M68K_NONCOHERENT_DMA) += dma.o
+ 
+-obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
++obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
+ obj-$(CONFIG_BOOTINFO_PROC)	+= bootinfo_proc.o
+ obj-$(CONFIG_UBOOT)		+= uboot.o
+ 
+diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+index 853a43ee4b44..ecf3278a32f7 100644
+--- a/arch/mips/kernel/Makefile
++++ b/arch/mips/kernel/Makefile
+@@ -90,7 +90,7 @@ obj-$(CONFIG_GPIO_TXX9)		+= gpio_txx9.o
+ 
+ obj-$(CONFIG_RELOCATABLE)	+= relocate.o
+ 
+-obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o crash.o
++obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o crash.o
+ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+ obj-$(CONFIG_EARLY_PRINTK)	+= early_printk.o
+ obj-$(CONFIG_EARLY_PRINTK_8250)	+= early_printk_8250.o
+diff --git a/arch/sh/kernel/Makefile b/arch/sh/kernel/Makefile
+index 69cd9ac4b2ab..2d7e70537de0 100644
+--- a/arch/sh/kernel/Makefile
++++ b/arch/sh/kernel/Makefile
+@@ -33,7 +33,7 @@ obj-$(CONFIG_SMP)		+= smp.o
+ obj-$(CONFIG_SH_STANDARD_BIOS)	+= sh_bios.o
+ obj-$(CONFIG_KGDB)		+= kgdb.o
+ obj-$(CONFIG_MODULES)		+= sh_ksyms_32.o module.o
+-obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
++obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
+ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+ obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
+ obj-$(CONFIG_IO_TRAPPED)	+= io_trapped.o
+-- 
+2.41.0
+
 
