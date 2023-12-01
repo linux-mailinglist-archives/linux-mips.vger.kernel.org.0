@@ -1,85 +1,72 @@
-Return-Path: <linux-mips+bounces-459-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-460-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEB3B800E2A
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 16:11:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E679A801299
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 19:26:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A70CB20C91
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 15:11:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 153761C20A32
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 18:26:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04CC288D3;
-	Fri,  1 Dec 2023 15:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304C34F5EC;
+	Fri,  1 Dec 2023 18:26:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="M0kwCK5P";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OGHwpSUu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OuL9Uizt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99299DF;
-	Fri,  1 Dec 2023 07:11:39 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 26A6F5C0074;
-	Fri,  1 Dec 2023 10:11:37 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Fri, 01 Dec 2023 10:11:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1701443497; x=1701529897; bh=4/nHC1n36ZRohrH97sK4NTzYkpz1AEDEk5q
-	SQRNbDpw=; b=M0kwCK5PODM/2YOWYeij2ndRc8ouCshzi8Tl/PsVsd4y5OWGMso
-	XpswzNxwP6PZXY1APedcjhWZIKq21U4GWnpSgYprg0mYrfIC6GzXbXnYJ5cndqaC
-	a4zlTeZofE6LzfgeAsZnb2gqTcR+8iSyHmXeoF7VS9q6CqwwIZ3LZRGDpIJbUCsp
-	uvC+P4hIKP1pszzGiqw7k70EVIsBgO9lNMjqyFlcreo9jyKQJNsZ7SFNfGvG/6a2
-	7WfExSh6coXzFIEFhxNJYjvw0aedeHlzPzUovehe9CI5FJUiQI5nDIvYMA1nPxl1
-	w6GYtD9/2GY13CRHR6g7x2KTue19BJRKOOA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701443497; x=1701529897; bh=4/nHC1n36ZRohrH97sK4NTzYkpz1AEDEk5q
-	SQRNbDpw=; b=OGHwpSUuDec00hWSf2v74nIyFFAafTg7S7b0hsNGiIOYxSbxPB3
-	gE2vPMsTb0dCQv9QMWcnwTLAp9aLebKi1ma1Uj7PZXkf02HnH5jnfOlIwzTWKZES
-	OZwdhnL0XJM7ETj0Yajp0ZSmS2QTie181YArYVwbAPHZWF00AdKvzOe9xZDf+IBQ
-	5d8iUCtTcV0xZUQltYOTWtVvrYvBNLExS1xUam9OlDG04O8kYA9VBbNC7amPa0v2
-	coNTEP5A1dzP/9ud0O5HyU/+HArC/Dnz6UtTo4fZvZY8d7mRjgsfdC3MWIlc92ce
-	L9C47Agh0g/uuAxzO45XEaz3qyFIBV3eybA==
-X-ME-Sender: <xms:pvdpZTg7xWyG0ZY-hrelh630n1Nf49ghZhVx3UN3MXFBqAJ6wmUQSQ>
-    <xme:pvdpZQCjxPIumSkx4fG5vsOhnTF84aKUNlxfbL8vcPsYozTSGFJqYC8oJVUsCRZwt
-    jFTBeKk5SrUrLGqQSI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:pvdpZTG_i0NATGFXA0nu9BaL8658hjjcKYRfAeYElUf7qHAB2hiV1Q>
-    <xmx:pvdpZQTaVVRp6W8SHMsVGSq8LTh0Ou8Y8TZbVgEufqrjKPSj3V3DxQ>
-    <xmx:pvdpZQwwYboNFU9cTp2PvSOsrj7sBuXaW9n_Rq2hvAsCWBaKyzCQfw>
-    <xmx:qfdpZcDkHHyARCzh_J9XCw0S2wHpIbF57EEXFUk8mptUvk3cR7LYSA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id F41B436A0075; Fri,  1 Dec 2023 10:11:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
-Precedence: bulk
-X-Mailing-List: linux-mips@vger.kernel.org
-List-Id: <linux-mips.vger.kernel.org>
-List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <f883ed8d-7140-40af-9ebb-cefbd4c40f9d@app.fastmail.com>
-In-Reply-To: 
- <fqwkkyt253uvdaj6qlsu67b25qj35ongh4rbxzgzuwnykl36hi@xinsnpcltpgx>
-References: <ZV94rifAIF2p9Nej@alpha.franken.de>
- <245d3985-9085-4be0-8c74-d95d06334584@app.fastmail.com>
- <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ECB115;
+	Fri,  1 Dec 2023 10:26:36 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50bdec453c8so685861e87.3;
+        Fri, 01 Dec 2023 10:26:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701455195; x=1702059995; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1ep11bMRk1v3QCOoLwm0Yn6OjGUPrQYX7GTrJRrOZYQ=;
+        b=OuL9UiztS2p9EBAvCldsoY8qGsk5PwEs/IyqvdTCTtIyBYc6zxIKqWWDh5dVzqWBGQ
+         8NPiW+pR9BEiuOOSyx4NO+3ivKmVznY1GU/xiGVrejR854C/ZBuxmGybvkhqf/D/VFQ7
+         0JJ9Bo+B/BMYZ9Ru/JbOBsk1pb6HNANhDMwkETtx5v96V1Cdmg7IqsJIRFwIW+O/37If
+         UUJZGncr+fwfL8CYBx/UAKKRWKQMwHfKkTU/L0Zlx1tBS8Q+dSGix29VYX5aRXxFI7IN
+         RE/TgEPTId/PhJs4hFd/4qN+3CflCl6NbWoeeNbrdfb9MHTYp0azTkFVdcsVZfztIb1j
+         lYzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701455195; x=1702059995;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ep11bMRk1v3QCOoLwm0Yn6OjGUPrQYX7GTrJRrOZYQ=;
+        b=MacU4NswbNBHu/cZqZRACUwwQd4ZAgnSrDhSGTVbZ7nKE9fIxsy5oQqgNNzXMPIOB7
+         onfd8+yJOE5f9N/jhAYJEkD9osdEzj8hMv6TzV0BYYTx/gvw79gdY97nb/yzuHPQbfmD
+         qz8N9MpJrIYFWyLe1IF/QAqyQ+ZtUMu0RB8gW7tHd+kX15eUQ248Zz/3RzY3i/7v3tut
+         5+/4jS/rRofMwWKwz9LsF2Ly8pjZ5cxjlHotnc2auLxVHpN8j1whuFrtutC0gan1rySQ
+         EwNdmKpvrrNsenx5KS+eNjFguSxlcdXGkIcJ7DQdn8m31PmAlW14hnkQISe5ksnlOAMr
+         bnZA==
+X-Gm-Message-State: AOJu0YyUf5KLRLO8Ed9w2W+chqOQslv4I6puq8GUA3+iNCKo8ZTpN/eQ
+	jWLVdz5HdrUHtwHXTd8N5K5oYpVMtGYF8g==
+X-Google-Smtp-Source: AGHT+IEd8uxBR2dNyumkQ7246sFbygQLGPDJa56MB2qhN12tmB7F/mg3R6x+3/DOyzDRt6p5svmQMw==
+X-Received: by 2002:a05:6512:32b3:b0:50b:d764:6ea9 with SMTP id q19-20020a05651232b300b0050bd7646ea9mr964105lfe.89.1701455194684;
+        Fri, 01 Dec 2023 10:26:34 -0800 (PST)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id l15-20020ac2554f000000b0050bc6317952sm484042lfk.274.2023.12.01.10.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 10:26:34 -0800 (PST)
+Date: Fri, 1 Dec 2023 21:26:31 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Mike Rapoport <rppt@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Yinglu Yang <yangyinglu@loongson.cn>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
+	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Aleksandar Rikalo <arikalo@gmail.com>, 
+	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>, Chao-ying Fu <cfu@wavecomp.com>, Marc Zyngier <maz@kernel.org>, 
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
+Message-ID: <7lla5haj4r4thqqhqvkzvcu2g5oaquubgp6zyemn4up3acoeev@saxalnh6vudt>
+References: <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
  <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
  <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
  <c73d9dbf-b637-47ff-ae2d-6f8987345410@app.fastmail.com>
@@ -88,101 +75,123 @@ References: <ZV94rifAIF2p9Nej@alpha.franken.de>
  <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
  <bb13c070-bdfe-47ae-afed-a05e1e55bb94@app.fastmail.com>
  <fqwkkyt253uvdaj6qlsu67b25qj35ongh4rbxzgzuwnykl36hi@xinsnpcltpgx>
-Date: Fri, 01 Dec 2023 15:10:13 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Serge Semin" <fancer.lancer@gmail.com>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Arnd Bergmann" <arnd@arndb.de>, "Andrew Morton" <akpm@linux-foundation.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Matthew Wilcox" <willy@infradead.org>,
- "Tiezhu Yang" <yangtiezhu@loongson.cn>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Yinglu Yang" <yangyinglu@loongson.cn>,
- "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
- "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
- "Aleksandar Rikalo" <arikalo@gmail.com>,
- "Dragan Mladjenovic" <dragan.mladjenovic@syrmia.com>,
- "Chao-ying Fu" <cfu@wavecomp.com>, "Marc Zyngier" <maz@kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <f883ed8d-7140-40af-9ebb-cefbd4c40f9d@app.fastmail.com>
+Precedence: bulk
+X-Mailing-List: linux-mips@vger.kernel.org
+List-Id: <linux-mips.vger.kernel.org>
+List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f883ed8d-7140-40af-9ebb-cefbd4c40f9d@app.fastmail.com>
 
+On Fri, Dec 01, 2023 at 03:10:13PM +0000, Jiaxun Yang wrote:
+> 
+> 
+> 在2023年12月1日十二月 下午2:54，Serge Semin写道：
+> > On Fri, Dec 01, 2023 at 12:13:22AM +0000, Jiaxun Yang wrote:
+> >> 
+> >> 
+> >> 在2023年11月30日十一月 下午7:16，Serge Semin写道：
+> >> > On Tue, Nov 28, 2023 at 03:46:37PM +0000, Jiaxun Yang wrote:
+> >> [...]
+> >> >
+> >> >> I'd say the safest option is to use CKSEG0 or TO_CAC here, 
+> >> >
+> >> > I would have agreed with you if MIPS didn't have that special
+> >> > _page_cachable_default variable which is undefined for some platforms
+> >> > and which might be re-defined during the boot-up process, and if
+> >> > MIPS64 didn't have ioremap_prot() always mapping to the uncached
+> >> > region.  But IMO updating ioremap_prot() currently seems more risky
+> >> > than just converting dmi_early_remap() to the uncached version
+> >> > especially seeing it won't change anything. MIPS64 always have IO
+> >> > remapped to the uncached region. MIPS32 won't be able to have cached
+> >> > mapping until VM is available, and paging and slabs are initialized.
+> >> > So on the early MIPS32 bootup stages ioremap_cache() wouldn't have
+> >> > worked anyway.
+> >> 
+> >
+> >> I really didn't get that, using CKSEG0 on 32bit system and TO_CAC
+> >> on 64bit system won't hurt.
+> >> 
+> >> Something like:
+> >> #ifdef CONFIG_64BIT
+> >> #define dmi_remap(x, l)		(void *)TO_CAC(x)
+> >> #else
+> >> #define dmi_remap(x, l)		(void *)CKSEG0(x)
+> >> #endif
+> >> 
+> >> Can help us avoid all the hassle. Since it always ensures we are
+> >> using same CCA to access DMI tables. We can always trust Config.K0
+> >> left by firmware in this case.
+> >
+> > Please note my only concern is about dmi_early_remap(), not
+> > dmi_remap(). The later one can be safely left backended by the
+> > ioremap_cache() method because at the stage it's utilized MIPS32
+> > version of ioremap_prot() will be able to create any mapping it's
+> > requested to. The dmi_early_remap() function is called very early with
+> > no paging or VM or even cache stuff initialized. So currently AFAICS
+> > it just doesn't work on _all_ _MIPS32_ platform, because
+> > ioremap_prot() relies on VM and slab being available to have any
+> > cacheable mapping, which aren't at the moment of the dmi_setup()
+> > function invocation. Seeing the ioremap_cache() is just a stub on
+> > MIPS64 which always performs the uncached mapping, it will be
+> > completely safe to just convert dmi_early_remap() to ioremap() with
+> > no risk to beak anything. dmi_early_remap() semantics won't be
+> > actually changed, it will work as before on MIPS64 and will be fixed
+> > on MIPS32. This (AFAICS) is a completely safe fix of the problem with
+> > just a few affected platforms around.
+> >
+> 
 
+> The only platform enabled DMI in upstream kernel is Loongson64, which
+> I'm perfectly sure that the mapping for DMI tables *should* be Cached.
 
-=E5=9C=A82023=E5=B9=B412=E6=9C=881=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =E4=
-=B8=8B=E5=8D=882:54=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
-> On Fri, Dec 01, 2023 at 12:13:22AM +0000, Jiaxun Yang wrote:
->>=20
->>=20
->> =E5=9C=A82023=E5=B9=B411=E6=9C=8830=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88=
- =E4=B8=8B=E5=8D=887:16=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
->> > On Tue, Nov 28, 2023 at 03:46:37PM +0000, Jiaxun Yang wrote:
->> [...]
->> >
->> >> I'd say the safest option is to use CKSEG0 or TO_CAC here,=20
->> >
->> > I would have agreed with you if MIPS didn't have that special
->> > _page_cachable_default variable which is undefined for some platfor=
-ms
->> > and which might be re-defined during the boot-up process, and if
->> > MIPS64 didn't have ioremap_prot() always mapping to the uncached
->> > region.  But IMO updating ioremap_prot() currently seems more risky
->> > than just converting dmi_early_remap() to the uncached version
->> > especially seeing it won't change anything. MIPS64 always have IO
->> > remapped to the uncached region. MIPS32 won't be able to have cached
->> > mapping until VM is available, and paging and slabs are initialized.
->> > So on the early MIPS32 bootup stages ioremap_cache() wouldn't have
->> > worked anyway.
->>=20
->
->> I really didn't get that, using CKSEG0 on 32bit system and TO_CAC
->> on 64bit system won't hurt.
->>=20
->> Something like:
->> #ifdef CONFIG_64BIT
->> #define dmi_remap(x, l)		(void *)TO_CAC(x)
->> #else
->> #define dmi_remap(x, l)		(void *)CKSEG0(x)
->> #endif
->>=20
->> Can help us avoid all the hassle. Since it always ensures we are
->> using same CCA to access DMI tables. We can always trust Config.K0
->> left by firmware in this case.
->
-> Please note my only concern is about dmi_early_remap(), not
-> dmi_remap(). The later one can be safely left backended by the
-> ioremap_cache() method because at the stage it's utilized MIPS32
-> version of ioremap_prot() will be able to create any mapping it's
-> requested to. The dmi_early_remap() function is called very early with
-> no paging or VM or even cache stuff initialized. So currently AFAICS
-> it just doesn't work on _all_ _MIPS32_ platform, because
-> ioremap_prot() relies on VM and slab being available to have any
-> cacheable mapping, which aren't at the moment of the dmi_setup()
-> function invocation. Seeing the ioremap_cache() is just a stub on
-> MIPS64 which always performs the uncached mapping, it will be
-> completely safe to just convert dmi_early_remap() to ioremap() with
-> no risk to beak anything. dmi_early_remap() semantics won't be
-> actually changed, it will work as before on MIPS64 and will be fixed
-> on MIPS32. This (AFAICS) is a completely safe fix of the problem with
-> just a few affected platforms around.
->
+Then it looks like it must have been broken in the first place.
 
-The only platform enabled DMI in upstream kernel is Loongson64, which
-I'm perfectly sure that the mapping for DMI tables *should* be Cached.
-It is an accident that ioremap_cache is misused here, so I'm proposing
-to replace it with CKSEG0/TO_CAC. Also as per MIPS UHI spec, all the
-data passed from bootloader to firmware should lay in KSEG0, please
-let me know if your platform is an exception here.
+> It is an accident that ioremap_cache is misused here, so I'm proposing
+> to replace it with CKSEG0/TO_CAC. Also as per MIPS UHI spec, all the
+> data passed from bootloader to firmware should lay in KSEG0,
 
-Using ioremap_cache at dmi_early_remap does not sound safe to me as well.
-What if DMI code tried to remap something beyond KSEG range at this plac=
-e?
+I failed to find the MIPS UHI spec. The only link google freely
+provide is
+http://prplfoundation.org/wiki/MIPS_documentation
+but it's broken. Could you please share the doc somehow?
+Anyway AFAICS from the MIPS arch code it only concerns the dtb pointer
+passed to the kernel. Does it really mandate all the data being in KSEG0?
 
-The safest option here is just bypassing ioremap framework, which does
-not give you any advantage but only burden.
+> please
+> let me know if your platform is an exception here.
 
-I'll propose a patch later.
---=20
-- Jiaxun
+No, it's not. U-boot is executed in kseg0 anyway.
+
+> 
+> Using ioremap_cache at dmi_early_remap does not sound safe to me as well.
+> What if DMI code tried to remap something beyond KSEG range at this place?
+
+Right. I've found out that for the safety sake the generic version of the
+ioremap_prot() has been recently updated not to do any mapping if the
+slab hasn't been initialized:
+Link: https://lore.kernel.org/lkml/20230515090848.833045-7-bhe@redhat.com/
+I'll add a similar fix to the MIPS-version of the ioremap_prop()
+method to make sure no early cached remapping is attempted.
+
+> 
+> The safest option here is just bypassing ioremap framework, which does
+> not give you any advantage but only burden.
+> 
+> I'll propose a patch later.
+
+Ok. I see. I'll resubmit my series today as is then. Should you need
+to have the problem fixed differently, please either re-base your
+patch on top of it, or add your explicit comment that you'll have a
+better fix so Thomas could be able to consider to postpone this patch
+mergein until your fix is ready.
+
+-Serge(y)
+
+> -- 
+> - Jiaxun
 
