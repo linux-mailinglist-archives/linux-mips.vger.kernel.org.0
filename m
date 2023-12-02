@@ -1,85 +1,69 @@
-Return-Path: <linux-mips+bounces-469-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-470-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FB94801C62
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Dec 2023 12:14:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6646A801C6A
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Dec 2023 12:19:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A56B1F211A3
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Dec 2023 11:14:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EABB28187D
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Dec 2023 11:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F5D7493;
-	Sat,  2 Dec 2023 11:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A25B81640D;
+	Sat,  2 Dec 2023 11:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+V5pyiV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YeVnEhLb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AECF1B3;
-	Sat,  2 Dec 2023 03:14:54 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-50be9e6427dso262008e87.1;
-        Sat, 02 Dec 2023 03:14:54 -0800 (PST)
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDE318C;
+	Sat,  2 Dec 2023 03:19:01 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50be9e6427dso263849e87.1;
+        Sat, 02 Dec 2023 03:19:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701515693; x=1702120493; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ygdtXD6vQmhTkyIIFbEZLW4cEgmK3nTQybwd/aOy/dw=;
-        b=H+V5pyiVslE0Vdy0IxLksla4ZkUfMHpLREjrSgY0+IoU7vWZInF6iAEa6hmnT4frdH
-         3i/HG4vhM5WiKTy8E2HWfCWEvc5v4ZiIIRkH/sZNN5c3v2QGXW5HQTZxLM+ac0xI08zd
-         s9q0TyKqzM9mhh4Z6lVCaVnJnyYJV12VUOd/tDO6XQnl2rcPRjWXONC0Xt3Rw9eFXi6F
-         vmKB11P3wvb53KJ5iFubeyCWl7CAz5pznJJ9ObMpPRQk14uaBlW3AV81OvZSKexfXNTv
-         95J0nX28HD6hjKc9z8rnPfgydHA4cH+oRgrQyOecW1Dc0cg9SbJmVCgA8BIuVNT0dhU7
-         p3pQ==
+        d=gmail.com; s=20230601; t=1701515940; x=1702120740; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EJ168aVq5QXOtHooxbH+odPbZ9pENqVHXwP/aZSJoxY=;
+        b=YeVnEhLbgyDw3B1XXHHKA8yp6osJqjS6IR1AHUCfiKPszypzFQ+bKI1Y0IXI0Xha5n
+         R0o7bQDcyc0mbhq2i/KnfP7wYJpmoX6q2oztruhfFr3qD/4WziQTKW/6/xexXKYhcASd
+         nl9bgaDbkrUOzhWPg+bA1dhfZjK8wqP+Nxv8NDLrNsG8NdKU1WYRtMbSs9pwsiJ19MYL
+         n+ZIrIyPHg4X92OGTHMg/nSP+bEociJObRA5VoQ+TP9oDKMhyJ2P9Bek4aD8HozjUcdk
+         61yFU6NqdOmefVywLIA7aH1dE6/B4l5ZZOfrrBdzheFry7lIx6IrdeDQWyUT5fcITsRi
+         L/lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701515693; x=1702120493;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ygdtXD6vQmhTkyIIFbEZLW4cEgmK3nTQybwd/aOy/dw=;
-        b=xUMnzUFZkwBjZp1O9/o3/DDwuFWDvsxdu/d5nWtjqXJUF7yXl6Plv103syXL7LRTcR
-         aBCp5LqoAAIk+Dxygn9tpUAUL3uCKQUHqyCDsGlbgLkYCFVG1fqTDaajEtrNkzLY/oIK
-         QLVj9/K16CtM20bQMU46x9agPav3Rvp/wfYzWJ6+N/pseUYj6QkhLlDgTr+YN3VrvVaC
-         KANvc4Lg5uHDxBGB1/RagUaylW9Wjfo8ifLaRbSyeaxvySAm3rk1IemHsdg/dZgbTBux
-         O1f267VDXVYNz81WuMLnFmLAzqvJqz1OSJHbMKmIBlh9YtsfrGZJb2QMHKNtT0Rk/qKF
-         g0dw==
-X-Gm-Message-State: AOJu0Yy/nVYkWIeGGOA0xxyDwIGBEISVFGwasQ9ycdsH+4lgQgevV1sJ
-	IgzuMXD3XMnzovcM1hMOiIQ=
-X-Google-Smtp-Source: AGHT+IFScOFSCgDmnBrEbGs2UJA5K5JEy5fdtO2oKyTDCGHtKc+hpIQHzB67DbaHrlLa/RzVHh6mJA==
-X-Received: by 2002:ac2:44cf:0:b0:50b:df82:3137 with SMTP id d15-20020ac244cf000000b0050bdf823137mr805626lfm.43.1701515692770;
-        Sat, 02 Dec 2023 03:14:52 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701515940; x=1702120740;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EJ168aVq5QXOtHooxbH+odPbZ9pENqVHXwP/aZSJoxY=;
+        b=p1wUj96fQmmKy/hnmFU+p9s/pNc49imNS4KxjxdEW6uNJQ/E+N/oKoTe7KAkT6grpW
+         pclyd8aupC8Fmj4U3W08eJnXdG1YVRMBs7pm8rEg63iIwhGo2c+F1oZWkiqvus7ajx1o
+         AJueupfmwPcWM0SZRGPJrlBnfznFygc0hvMVqOvucdy5DGU9G1JNNhBerIxMD322/4Ra
+         zmRL+w4jYES+8U5Ux/+kCM2i16UlZemtHBtJdRRZnvA94Ae5coW9p+OWwPJ6sNRZJ/7I
+         heCuty4ZN5iUJncHgPRrc+0JDihqza7q4KHVak2OiY2bHrHFBfuBdeBOoVpRVBpoy/FT
+         OhLQ==
+X-Gm-Message-State: AOJu0YweiEk7sphsTYLeFeHDlLA163IuTM5ga8rpz6elOnjY/HAdBhaD
+	XQ1hbsrHFC0SCx5nTb/sYcU=
+X-Google-Smtp-Source: AGHT+IErfZeBgQvhH6+UfukRjO2daCpV0/rvJfCL6UgL0+RAW9RuRhKB9V2J64iiN5h4LjG9319TsQ==
+X-Received: by 2002:ac2:5e63:0:b0:50b:d764:8024 with SMTP id a3-20020ac25e63000000b0050bd7648024mr1399573lfr.87.1701515939941;
+        Sat, 02 Dec 2023 03:18:59 -0800 (PST)
 Received: from localhost ([95.79.203.166])
-        by smtp.gmail.com with ESMTPSA id o8-20020ac24bc8000000b0050bde3d7ed4sm309731lfq.147.2023.12.02.03.14.52
+        by smtp.gmail.com with ESMTPSA id z10-20020a19f70a000000b0050bc4ed121dsm692406lfe.254.2023.12.02.03.18.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Dec 2023 03:14:52 -0800 (PST)
+        Sat, 02 Dec 2023 03:18:59 -0800 (PST)
 From: Serge Semin <fancer.lancer@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+To: Mike Rapoport <rppt@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>
-Cc: Serge Semin <fancer.lancer@gmail.com>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
-	Aleksandar Rikalo <arikalo@gmail.com>,
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Baoquan He <bhe@redhat.com>,
-	Chao-ying Fu <cfu@wavecomp.com>,
-	Yinglu Yang <yangyinglu@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Mike Rapoport <rppt@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Marc Zyngier <maz@kernel.org>,
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-mips@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] mips: Set dump-stack arch description
-Date: Sat,  2 Dec 2023 14:14:23 +0300
-Message-ID: <20231202111430.18059-7-fancer.lancer@gmail.com>
+Subject: [PATCH v2] mm/mm_init.c: Extend init unavailable range doc info
+Date: Sat,  2 Dec 2023 14:18:52 +0300
+Message-ID: <20231202111855.18392-1-fancer.lancer@gmail.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231202111430.18059-1-fancer.lancer@gmail.com>
-References: <20231202111430.18059-1-fancer.lancer@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -88,30 +72,36 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the framework of the MIPS architecture the mips_set_machine_name()
-method is defined to set the machine name. The name currently is only used
-in the /proc/cpuinfo file content generation. Let's have it utilized to
-mach-personalize the dump-stack data too in a way it's done on ARM, ARM64,
-RISC-V, etc.
+Besides of the already described reasons the pages backended memory holes
+might present due to having non-memory regions covered by the contiguous
+flatmem mapping. Add such note to the init_unavailable_range() method kdoc
+in order to point out to one more reason of having the function executed
+for such regions.
 
 Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
----
- arch/mips/kernel/prom.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
-index f88ce78e13e3..6062e6fa589a 100644
---- a/arch/mips/kernel/prom.c
-+++ b/arch/mips/kernel/prom.c
-@@ -28,6 +28,8 @@ __init void mips_set_machine_name(const char *name)
- 
- 	strscpy(mips_machine_name, name, sizeof(mips_machine_name));
- 	pr_info("MIPS: machine is %s\n", mips_get_machine_name());
-+
-+	dump_stack_set_arch_desc(name);
- }
- 
- char *mips_get_machine_name(void)
+---
+
+Link: https://lore.kernel.org/linux-mips/20231122182419.30633-6-fancer.lancer@gmail.com/
+Changelog v2:
+- The holes in the memory are actually justified by having the flatmem
+  mapping model. Change the patch and the log accordingly. (@Mike)
+---
+ mm/mm_init.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 077bfe393b5e..824bf53e8253 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -796,6 +796,7 @@ overlap_memmap_init(unsigned long zone, unsigned long *pfn)
+  * - physical memory bank size is not necessarily the exact multiple of the
+  *   arbitrary section size
+  * - early reserved memory may not be listed in memblock.memory
++ * - non-memory regions covered by the contigious flatmem mapping
+  * - memory layouts defined with memmap= kernel parameter may not align
+  *   nicely with memmap sections
+  *
 -- 
 2.42.1
 
