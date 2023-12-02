@@ -1,197 +1,161 @@
-Return-Path: <linux-mips+bounces-460-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-461-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E679A801299
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 19:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D7FA80191F
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Dec 2023 01:52:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 153761C20A32
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Dec 2023 18:26:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA2721C2095B
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Dec 2023 00:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304C34F5EC;
-	Fri,  1 Dec 2023 18:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4B6015A3;
+	Sat,  2 Dec 2023 00:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OuL9Uizt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BrsRhSBS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ECB115;
-	Fri,  1 Dec 2023 10:26:36 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50bdec453c8so685861e87.3;
-        Fri, 01 Dec 2023 10:26:36 -0800 (PST)
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C0C129
+	for <linux-mips@vger.kernel.org>; Fri,  1 Dec 2023 16:51:57 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-6cde4ac52bcso3596742b3a.2
+        for <linux-mips@vger.kernel.org>; Fri, 01 Dec 2023 16:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701455195; x=1702059995; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1ep11bMRk1v3QCOoLwm0Yn6OjGUPrQYX7GTrJRrOZYQ=;
-        b=OuL9UiztS2p9EBAvCldsoY8qGsk5PwEs/IyqvdTCTtIyBYc6zxIKqWWDh5dVzqWBGQ
-         8NPiW+pR9BEiuOOSyx4NO+3ivKmVznY1GU/xiGVrejR854C/ZBuxmGybvkhqf/D/VFQ7
-         0JJ9Bo+B/BMYZ9Ru/JbOBsk1pb6HNANhDMwkETtx5v96V1Cdmg7IqsJIRFwIW+O/37If
-         UUJZGncr+fwfL8CYBx/UAKKRWKQMwHfKkTU/L0Zlx1tBS8Q+dSGix29VYX5aRXxFI7IN
-         RE/TgEPTId/PhJs4hFd/4qN+3CflCl6NbWoeeNbrdfb9MHTYp0azTkFVdcsVZfztIb1j
-         lYzQ==
+        d=google.com; s=20230601; t=1701478317; x=1702083117; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qf5LyHZHuBq8ET8yZ518WK6d/Ohu8OSBvuXvyN934wU=;
+        b=BrsRhSBSD3WXs1ti220jRiSqqW2dr71Ax39DiD4BQ0UNcXaNJfeQFYVrNVDHoS55zC
+         y9swqZPcBZSpBtAtMPw5opqheNWr+F0k35RZ/nqH4KrLaThcGoyc1iFef3y6QLl693vn
+         jWyDpf/trBqxP3W39teXhPRwhja2TgKbrUxw34gmaN7DI08CvdvsnLSGOX6hgz4kRe/j
+         DLW72mZNakDaT0kEsoXs6DlkD+D0poS5Kkf4if6cxKFUy/MiR73VZ5NfQ5lZn9/neV1K
+         709jINms3S19TPiA609w7wo8lw7BzN/H9RHVZ7X3u14+l/PQ5BIXvloMKS72Ofme80vN
+         +r4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701455195; x=1702059995;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ep11bMRk1v3QCOoLwm0Yn6OjGUPrQYX7GTrJRrOZYQ=;
-        b=MacU4NswbNBHu/cZqZRACUwwQd4ZAgnSrDhSGTVbZ7nKE9fIxsy5oQqgNNzXMPIOB7
-         onfd8+yJOE5f9N/jhAYJEkD9osdEzj8hMv6TzV0BYYTx/gvw79gdY97nb/yzuHPQbfmD
-         qz8N9MpJrIYFWyLe1IF/QAqyQ+ZtUMu0RB8gW7tHd+kX15eUQ248Zz/3RzY3i/7v3tut
-         5+/4jS/rRofMwWKwz9LsF2Ly8pjZ5cxjlHotnc2auLxVHpN8j1whuFrtutC0gan1rySQ
-         EwNdmKpvrrNsenx5KS+eNjFguSxlcdXGkIcJ7DQdn8m31PmAlW14hnkQISe5ksnlOAMr
-         bnZA==
-X-Gm-Message-State: AOJu0YyUf5KLRLO8Ed9w2W+chqOQslv4I6puq8GUA3+iNCKo8ZTpN/eQ
-	jWLVdz5HdrUHtwHXTd8N5K5oYpVMtGYF8g==
-X-Google-Smtp-Source: AGHT+IEd8uxBR2dNyumkQ7246sFbygQLGPDJa56MB2qhN12tmB7F/mg3R6x+3/DOyzDRt6p5svmQMw==
-X-Received: by 2002:a05:6512:32b3:b0:50b:d764:6ea9 with SMTP id q19-20020a05651232b300b0050bd7646ea9mr964105lfe.89.1701455194684;
-        Fri, 01 Dec 2023 10:26:34 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id l15-20020ac2554f000000b0050bc6317952sm484042lfk.274.2023.12.01.10.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 10:26:34 -0800 (PST)
-Date: Fri, 1 Dec 2023 21:26:31 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
-	Mike Rapoport <rppt@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Yinglu Yang <yangyinglu@loongson.cn>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
-	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Aleksandar Rikalo <arikalo@gmail.com>, 
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>, Chao-ying Fu <cfu@wavecomp.com>, Marc Zyngier <maz@kernel.org>, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] mips: dmi: Fix early remap on MIPS32
-Message-ID: <7lla5haj4r4thqqhqvkzvcu2g5oaquubgp6zyemn4up3acoeev@saxalnh6vudt>
-References: <3iksuovvsln3cw3xpmjd7f7xixfvwaneu4ok56fnookvyolpco@wrxxew3thgnq>
- <dfda70b6-3291-462f-bc87-06dcc87bd068@app.fastmail.com>
- <ysij22pivneyg7tk3bv3hti3tsgbzglb6pin3my7r3bokzxjj6@jrjmu45gbupr>
- <c73d9dbf-b637-47ff-ae2d-6f8987345410@app.fastmail.com>
- <3pgnihbrp5orh4tmj45fipbfoxdwzjh6uefitdpcea2vgkarcm@d56gv3areswl>
- <2148a67f-bd4f-432e-aa0d-c914a4bd5e0d@app.fastmail.com>
- <xbkplqgv4ipnofk7hp6ws2rkqk4fsjl3y72blcdephoiocolh7@7l5p5efe7yda>
- <bb13c070-bdfe-47ae-afed-a05e1e55bb94@app.fastmail.com>
- <fqwkkyt253uvdaj6qlsu67b25qj35ongh4rbxzgzuwnykl36hi@xinsnpcltpgx>
- <f883ed8d-7140-40af-9ebb-cefbd4c40f9d@app.fastmail.com>
+        d=1e100.net; s=20230601; t=1701478317; x=1702083117;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qf5LyHZHuBq8ET8yZ518WK6d/Ohu8OSBvuXvyN934wU=;
+        b=HU7MKxvWcBHTr8QHN2+IoGKNQUwkSXhgWJ8akNyZGcDbPOpTqqPyTOhCiGTd4iYQpM
+         ExHPvMt5m+OFYQYMwwCQGCl1ZwOLPcFtdlveQ1PlRPitqnM3onWh2oaS3l1sPJlrMjJJ
+         LbpBw61P+2M10GgXwz4h+JgvJHI/p/z9Ca/q8uN0C7M0mN3uqJET4x5MRroY10O2DfDX
+         rfwxNgOFpZAfm/3SBKu/9OXS6EsfXHHkwOOYzEDzhJbBoSjW61uzK7wpN3Qpj3yDrNEU
+         QiLKeFje6isLqdGGua7uOlwjqOcaD28NaG7HFfIi0U935CvY+TrajKA6aZtQtk9zIPVi
+         sBzg==
+X-Gm-Message-State: AOJu0YxZpZY6ax3B0r1O9X7cBY0GpUgc9c02CIaDqoxqCr8BZBTNLbVO
+	kX4KSRWPIvWaBYRdCA1yW5v0J8raStQ=
+X-Google-Smtp-Source: AGHT+IEloABSTDcKm+41L5WpzazJRfhcCVpuae9X+15kKFthyi+8YQcZOmegDR+VoF+o36yu4wG4kUpnsoo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:5848:0:b0:5b8:fe99:152d with SMTP id
+ i8-20020a635848000000b005b8fe99152dmr4028549pgm.7.1701478317322; Fri, 01 Dec
+ 2023 16:51:57 -0800 (PST)
+Date: Fri, 1 Dec 2023 16:51:55 -0800
+In-Reply-To: <20230918160258.GL13795@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f883ed8d-7140-40af-9ebb-cefbd4c40f9d@app.fastmail.com>
+Mime-Version: 1.0
+References: <20230916003118.2540661-1-seanjc@google.com> <20230916003118.2540661-6-seanjc@google.com>
+ <20230918152110.GI13795@ziepe.ca> <ZQhxpesyXeG+qbS6@google.com> <20230918160258.GL13795@ziepe.ca>
+Message-ID: <ZWp_q1w01NCZi8KX@google.com>
+Subject: Re: [PATCH 05/26] vfio: KVM: Pass get/put helpers from KVM to VFIO,
+ don't do circular lookup
+From: Sean Christopherson <seanjc@google.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Tony Krowiak <akrowiak@linux.ibm.com>, 
+	Halil Pasic <pasic@linux.ibm.com>, Jason Herne <jjherne@linux.ibm.com>, 
+	Harald Freudenberger <freude@linux.ibm.com>, Alex Williamson <alex.williamson@redhat.com>, 
+	Andy Lutomirski <luto@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	Anish Ghulati <aghulati@google.com>, Venkatesh Srinivas <venkateshs@chromium.org>, 
+	Andrew Thornton <andrewth@google.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Dec 01, 2023 at 03:10:13PM +0000, Jiaxun Yang wrote:
+On Mon, Sep 18, 2023, Jason Gunthorpe wrote:
+> On Mon, Sep 18, 2023 at 08:49:57AM -0700, Sean Christopherson wrote:
+> > On Mon, Sep 18, 2023, Jason Gunthorpe wrote:
+> > > On Fri, Sep 15, 2023 at 05:30:57PM -0700, Sean Christopherson wrote:
+> > > > Explicitly pass KVM's get/put helpers to VFIO when attaching a VM to
+> > > > VFIO instead of having VFIO do a symbol lookup back into KVM.  Having both
+> > > > KVM and VFIO do symbol lookups increases the overall complexity and places
+> > > > an unnecessary dependency on KVM (from VFIO) without adding any value.
+> > > > 
+> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > > > ---
+> > > >  drivers/vfio/vfio.h      |  2 ++
+> > > >  drivers/vfio/vfio_main.c | 74 +++++++++++++++++++---------------------
+> > > >  include/linux/vfio.h     |  4 ++-
+> > > >  virt/kvm/vfio.c          |  9 +++--
+> > > >  4 files changed, 47 insertions(+), 42 deletions(-)
+> > > 
+> > > I don't mind this, but Christoph had disliked my prior attempt to do
+> > > this with function pointers..
+> > > 
+> > > The get can be inlined, IIRC, what about putting a pointer to the put
+> > > inside the kvm struct?
+> > 
+> > That wouldn't allow us to achieve our goal, which is to hide the details of
+> > "struct kvm" from VFIO (and the rest of the kernel).
 > 
+> > What's the objection to handing VFIO a function pointer?
 > 
-> 在2023年12月1日十二月 下午2:54，Serge Semin写道：
-> > On Fri, Dec 01, 2023 at 12:13:22AM +0000, Jiaxun Yang wrote:
-> >> 
-> >> 
-> >> 在2023年11月30日十一月 下午7:16，Serge Semin写道：
-> >> > On Tue, Nov 28, 2023 at 03:46:37PM +0000, Jiaxun Yang wrote:
-> >> [...]
-> >> >
-> >> >> I'd say the safest option is to use CKSEG0 or TO_CAC here, 
-> >> >
-> >> > I would have agreed with you if MIPS didn't have that special
-> >> > _page_cachable_default variable which is undefined for some platforms
-> >> > and which might be re-defined during the boot-up process, and if
-> >> > MIPS64 didn't have ioremap_prot() always mapping to the uncached
-> >> > region.  But IMO updating ioremap_prot() currently seems more risky
-> >> > than just converting dmi_early_remap() to the uncached version
-> >> > especially seeing it won't change anything. MIPS64 always have IO
-> >> > remapped to the uncached region. MIPS32 won't be able to have cached
-> >> > mapping until VM is available, and paging and slabs are initialized.
-> >> > So on the early MIPS32 bootup stages ioremap_cache() wouldn't have
-> >> > worked anyway.
-> >> 
-> >
-> >> I really didn't get that, using CKSEG0 on 32bit system and TO_CAC
-> >> on 64bit system won't hurt.
-> >> 
-> >> Something like:
-> >> #ifdef CONFIG_64BIT
-> >> #define dmi_remap(x, l)		(void *)TO_CAC(x)
-> >> #else
-> >> #define dmi_remap(x, l)		(void *)CKSEG0(x)
-> >> #endif
-> >> 
-> >> Can help us avoid all the hassle. Since it always ensures we are
-> >> using same CCA to access DMI tables. We can always trust Config.K0
-> >> left by firmware in this case.
-> >
-> > Please note my only concern is about dmi_early_remap(), not
-> > dmi_remap(). The later one can be safely left backended by the
-> > ioremap_cache() method because at the stage it's utilized MIPS32
-> > version of ioremap_prot() will be able to create any mapping it's
-> > requested to. The dmi_early_remap() function is called very early with
-> > no paging or VM or even cache stuff initialized. So currently AFAICS
-> > it just doesn't work on _all_ _MIPS32_ platform, because
-> > ioremap_prot() relies on VM and slab being available to have any
-> > cacheable mapping, which aren't at the moment of the dmi_setup()
-> > function invocation. Seeing the ioremap_cache() is just a stub on
-> > MIPS64 which always performs the uncached mapping, it will be
-> > completely safe to just convert dmi_early_remap() to ioremap() with
-> > no risk to beak anything. dmi_early_remap() semantics won't be
-> > actually changed, it will work as before on MIPS64 and will be fixed
-> > on MIPS32. This (AFAICS) is a completely safe fix of the problem with
-> > just a few affected platforms around.
-> >
+> Hmm, looks like it was this thread:
 > 
-
-> The only platform enabled DMI in upstream kernel is Loongson64, which
-> I'm perfectly sure that the mapping for DMI tables *should* be Cached.
-
-Then it looks like it must have been broken in the first place.
-
-> It is an accident that ioremap_cache is misused here, so I'm proposing
-> to replace it with CKSEG0/TO_CAC. Also as per MIPS UHI spec, all the
-> data passed from bootloader to firmware should lay in KSEG0,
-
-I failed to find the MIPS UHI spec. The only link google freely
-provide is
-http://prplfoundation.org/wiki/MIPS_documentation
-but it's broken. Could you please share the doc somehow?
-Anyway AFAICS from the MIPS arch code it only concerns the dtb pointer
-passed to the kernel. Does it really mandate all the data being in KSEG0?
-
-> please
-> let me know if your platform is an exception here.
-
-No, it's not. U-boot is executed in kseg0 anyway.
-
+>  https://lore.kernel.org/r/0-v1-33906a626da1+16b0-vfio_kvm_no_group_jgg@nvidia.com
 > 
-> Using ioremap_cache at dmi_early_remap does not sound safe to me as well.
-> What if DMI code tried to remap something beyond KSEG range at this place?
-
-Right. I've found out that for the safety sake the generic version of the
-ioremap_prot() has been recently updated not to do any mapping if the
-slab hasn't been initialized:
-Link: https://lore.kernel.org/lkml/20230515090848.833045-7-bhe@redhat.com/
-I'll add a similar fix to the MIPS-version of the ioremap_prop()
-method to make sure no early cached remapping is attempted.
-
+> Your rational looks a little better to me.
 > 
-> The safest option here is just bypassing ioremap framework, which does
-> not give you any advantage but only burden.
+> > > The the normal kvm get/put don't have to exported symbols at all?
+> > 
+> > The export of kvm_get_kvm_safe() can go away (I forgot to do that in this series),
+> > but kvm_get_kvm() will hang around as it's needed by KVM sub-modules (PPC and x86),
+> > KVMGT (x86), and drivers/s390/crypto/vfio_ap_ops.c (no idea what to call that beast).
 > 
-> I'll propose a patch later.
+> My thought would be to keep it as an inline, there should be some way
+> to do that without breaking your desire to hide the bulk of the kvm
+> struct content. Like put the refcount as the first element in the
+> struct and just don't ifdef it away?.
 
-Ok. I see. I'll resubmit my series today as is then. Should you need
-to have the problem fixed differently, please either re-base your
-patch on top of it, or add your explicit comment that you'll have a
-better fix so Thomas could be able to consider to postpone this patch
-mergein until your fix is ready.
+That doesn't work because of the need to invoke kvm_destroy_vm() when the last
+reference is put, i.e. all of kvm_destroy_vm() would need to be inlined (LOL) or
+VFIO would need to do a symbol lookup on kvm_destroy_vm(), which puts back us at
+square one.
 
--Serge(y)
+There's one more wrinkle: this patch is buggy in that it doesn't ensure the liveliness
+of KVM-the-module, i.e. nothing prevents userspace from unloading kvm.ko while VFIO
+still holds a reference to a kvm structure, and so invoking ->put_kvm() could jump
+into freed code.  To fix that, KVM would also need to pass along a module pointer :-(
 
-> -- 
-> - Jiaxun
+One thought would be to have vac.ko (tentative name), which is the "base" module
+that will hold the KVM/virtualization bits that need to be singletons, i.e. can't
+be per-KVM, provide the symbols needed for VFIO to manage references.  But that
+just ends up moving the module reference trickiness into VAC+KVM, e.g. vac.ko would
+still need to be handed a function pointer in order to call back into the correct
+kvm.ko code.
+
+Hrm, but I suspect the vac.ko <=> kvm.ko interactions will need to deal with
+module shenanigans anyways, and the shenanigans would only affect crazy people
+like us that actually want multiple KVM modules.
+
+I'll plan on going that route.  The very worst case scenario is that it just punts
+this conversation down to a possibile future.  Dropping this patch and the previous
+prep patch won't meaningful affect the goals of this series, as only kvm_get_kvm_safe()
+and kvm_get_kvm() would need to be exposed outside of #ifdef __KVM__.  Then we can
+figure out what to do with them if/when the whole multi-KVM thing comes along.
 
