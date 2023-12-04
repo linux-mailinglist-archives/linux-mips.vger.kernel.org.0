@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-515-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-524-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2424B803CC1
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 19:23:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7E03803CE9
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 19:24:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD4351F211B2
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 18:23:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8133A2811BF
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 18:24:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB852F859;
-	Mon,  4 Dec 2023 18:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321F72FE0B;
+	Mon,  4 Dec 2023 18:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="LhKWzbfY"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="JBeVn6LS"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192D107;
-	Mon,  4 Dec 2023 10:23:44 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3B4IMvRR034905;
-	Mon, 4 Dec 2023 12:22:57 -0600
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47341130;
+	Mon,  4 Dec 2023 10:23:50 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3B4IMwk7034910;
+	Mon, 4 Dec 2023 12:22:58 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1701714177;
-	bh=K3M9sI7ldpwxKdZlqbzDASUN2Gy2vGqDMV0YI/zfTo4=;
+	s=ti-com-17Q1; t=1701714178;
+	bh=PWj0D2WMvRJ11gnfwf0SZ44vgMNZaHz/OZM54jmoFVs=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=LhKWzbfYWjT1F5hObqdlNp9OGRrOkOC1MZ1sOlO2q+qlHo2l7emzxdttOL2jUwO1S
-	 sFOHrBoe16idBQShEpvNqLN5L0FgOB2np1GTdGDHIqSSgva3PL4gTDy0qy70pLTf8q
-	 RBIwP5qok6UXXJhcKcikL+aesw/Kivgnh0XxyI7E=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3B4IMv7q013602
+	b=JBeVn6LSLGMkNjL+d/YkWu4H0o6fxo2MdR5Fms74roq7LZv8+Z2jnVYCFSJbjrLwz
+	 V59XS90IBgp+WehEBwrM7H8jiDTGvWpjxKoJf4rRAmU8SBURe4NRt7gXlIBTMHhfBL
+	 /oEAueViMAEbU6Bl8TZbxfVCw7h7jOSA6ZoVDWiU=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3B4IMw6W091872
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 4 Dec 2023 12:22:57 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 4 Dec 2023 12:22:58 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 4
  Dec 2023 12:22:57 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 4 Dec 2023 12:22:56 -0600
+ Frontend Transport; Mon, 4 Dec 2023 12:22:57 -0600
 Received: from fllv0039.itg.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3B4IMkxC042313;
-	Mon, 4 Dec 2023 12:22:55 -0600
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3B4IMkxD042313;
+	Mon, 4 Dec 2023 12:22:56 -0600
 From: Andrew Davis <afd@ti.com>
 To: Frank Binns <frank.binns@imgtec.com>,
         Donald Robson
@@ -74,9 +74,9 @@ CC: <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
         <linux-mips@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH RFC 09/10] ARM: dts: sun6i: Add device tree entry for SGX GPU
-Date: Mon, 4 Dec 2023 12:22:44 -0600
-Message-ID: <20231204182245.33683-10-afd@ti.com>
+Subject: [PATCH RFC 10/10] MIPS: DTS: jz4780: Add device tree entry for SGX GPU
+Date: Mon, 4 Dec 2023 12:22:45 -0600
+Message-ID: <20231204182245.33683-11-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204182245.33683-1-afd@ti.com>
 References: <20231204182245.33683-1-afd@ti.com>
@@ -90,33 +90,35 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Add SGX GPU device entry to base sun6i-a31 dtsi file.
+Add SGX GPU device entry to base jz4780 dtsi file.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm/boot/dts/allwinner/sun6i-a31.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm/boot/dts/allwinner/sun6i-a31.dtsi b/arch/arm/boot/dts/allwinner/sun6i-a31.dtsi
-index 5cce4918f84c9..e6998783b89aa 100644
---- a/arch/arm/boot/dts/allwinner/sun6i-a31.dtsi
-+++ b/arch/arm/boot/dts/allwinner/sun6i-a31.dtsi
-@@ -962,6 +962,15 @@ mdio: mdio {
- 			};
- 		};
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index 18affff85ce38..5ea6833f5e872 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -460,6 +460,17 @@ hdmi: hdmi@10180000 {
+ 		status = "disabled";
+ 	};
  
-+		gpu: gpu@1c40000 {
-+			compatible = "allwinner,sun6i-a31-gpu", "img,powervr-sgx544";
-+			reg = <0x01c40000 0x10000>;
-+			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_GPU_CORE>, <&ccu CLK_GPU_MEMORY>;
-+			clock-names = "core", "mem";
-+			status = "disabled";
-+		};
++	gpu: gpu@13040000 {
++		compatible = "ingenic,jz4780-gpu", "img,powervr-sgx540";
++		reg = <0x13040000 0x4000>;
 +
- 		crypto: crypto-engine@1c15000 {
- 			compatible = "allwinner,sun6i-a31-crypto",
- 				     "allwinner,sun4i-a10-crypto";
++		clocks = <&cgu JZ4780_CLK_GPU>;
++		clock-names = "core";
++
++		interrupt-parent = <&intc>;
++		interrupts = <63>;
++	};
++
+ 	lcdc0: lcdc0@13050000 {
+ 		compatible = "ingenic,jz4780-lcd";
+ 		reg = <0x13050000 0x1800>;
 -- 
 2.39.2
 
