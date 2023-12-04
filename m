@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-484-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-485-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D0378031D8
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 12:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DA118031D9
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 12:57:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18931280F12
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 11:57:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2742A280F24
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 11:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81EE422EFC;
-	Mon,  4 Dec 2023 11:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E567922F14;
+	Mon,  4 Dec 2023 11:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5WjEPhO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pUskY87v"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6744114F9C
-	for <linux-mips@vger.kernel.org>; Mon,  4 Dec 2023 11:57:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AC6C433C8;
-	Mon,  4 Dec 2023 11:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98CE22F10
+	for <linux-mips@vger.kernel.org>; Mon,  4 Dec 2023 11:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8E3C433CB;
+	Mon,  4 Dec 2023 11:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701691045;
-	bh=GVPJo8uO9T+V60ClpxXsIQariQDInjL+tl05cbLyqws=;
+	s=k20201202; t=1701691047;
+	bh=bYK15xB2ytVHbb2n+GAjb9+qJ0IKJuMx6deotQJ5QHM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J5WjEPhOrZxIpNezsV3u/mxLcK7Hlo3/HZCu5+pDjyw6ptaF74uL9RVDwGkDMVor0
-	 IBgGfGNu43qo+2Nz5Nwe6S3pJ6eGqcEp6wfpH2lQPcnfl7dWDkNEmFh5sMQo8LdBe4
-	 /cNu7OXGtEXqtM5WTAQSy8Ae45cUF+QVK3dKvuA8d5nOL1zx3r6dJRowDoXqMJnIV/
-	 aHUWTkM7i+MBIrm/vc4oxH7L0qg33oNbbRXYlgtLRh7be7tAAsEa42v95fyTk8R/Gl
-	 f8RXvSy68dKBpvArRPQbhCllvCazfanqRt1cELSmlpKwd5/8fw4iksMGd4lt50xo5i
-	 QiFCJ8zOsQUfQ==
+	b=pUskY87vBF60hK9aIEAt+QS0uxWl+d8yqh+vB1rNFa5tCPcB1nVNU2xouUhVSWRYT
+	 QrGULGl3xtt9ik9oAaqSQdF5Aur/ON4iNB0wFxdeq2oG9+PFBJSPooGbmOjjQoZRif
+	 W+mJcmTkeynW7TIMiaiE5h5Uvg7hLOTUb8aSgiutEpw13EmupBFUHTi3/+Yozqfsof
+	 G06QdLFYU5Thu3KXXba3mhvxn30pJBQboP2qTo493jllAnzHgO+Cv2oSrpPnPEBz0+
+	 oIKpK/1JKzpFSesSvtuWCylh7kTNWONeaLb4KX1nY/umzQjBHYu5C+Kvdhdulj0GzB
+	 zXfxSkOLZ2Dew==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-mips@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -39,9 +39,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	"Stephen Rothwell" <sfr@rothwell.id.au>,
 	"Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
 	"Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Subject: [PATCH 03/20] mips: add missing declarations for trap handlers
-Date: Mon,  4 Dec 2023 12:56:53 +0100
-Message-Id: <20231204115710.2247097-4-arnd@kernel.org>
+Subject: [PATCH 04/20] mips: rs870e: stop exporting local functions
+Date: Mon,  4 Dec 2023 12:56:54 +0100
+Message-Id: <20231204115710.2247097-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204115710.2247097-1-arnd@kernel.org>
 References: <20231204115710.2247097-1-arnd@kernel.org>
@@ -55,109 +55,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-These exception handlers are all called from assembly code, so they don't
-normally need a declaration, but without one we now get warnings:
+These four functions are exported, but don't have any users, and no prototypes,
+which now causes warnings:
 
-arch/mips/mm/fault.c:323:17: error: no previous prototype for 'do_page_fault' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:447:17: error: no previous prototype for 'do_be' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:752:17: error: no previous prototype for 'do_ov' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:874:17: error: no previous prototype for 'do_fpe' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1027:17: error: no previous prototype for 'do_bp' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1114:17: error: no previous prototype for 'do_tr' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1151:17: error: no previous prototype for 'do_ri' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1402:17: error: no previous prototype for 'do_cpu' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1507:17: error: no previous prototype for 'do_msa_fpe' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1527:17: error: no previous prototype for 'do_msa' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1548:17: error: no previous prototype for 'do_mdmx' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1560:17: error: no previous prototype for 'do_watch' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1587:17: error: no previous prototype for 'do_mcheck' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1612:17: error: no previous prototype for 'do_mt' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1648:17: error: no previous prototype for 'do_dsp' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1656:17: error: no previous prototype for 'do_reserved' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1832:17: error: no previous prototype for 'cache_parity_error' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1880:17: error: no previous prototype for 'do_ftlb' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1909:17: error: no previous prototype for 'do_gsexc' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1944:6: error: no previous prototype for 'ejtag_exception_handler' [-Werror=missing-prototypes]
-arch/mips/kernel/traps.c:1989:17: error: no previous prototype for 'nmi_exception_handler' [-Werror=missing-prototypes]
-arch/mips/kernel/unaligned.c:1516:17: error: no previous prototype for 'do_ade' [-Werror=missing-prototypes]
+drivers/platform/mips/rs780e-acpi.c:35:6: error: no previous prototype for 'pm_iowrite' [-Werror=missing-prototypes]
+drivers/platform/mips/rs780e-acpi.c:41:4: error: no previous prototype for 'pm_ioread' [-Werror=missing-prototypes]
+drivers/platform/mips/rs780e-acpi.c:47:6: error: no previous prototype for 'pm2_iowrite' [-Werror=missing-prototypes]
+drivers/platform/mips/rs780e-acpi.c:53:4: error: no previous prototype for 'pm2_ioread' [-Werror=missing-prototypes]
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/include/asm/traps.h | 23 +++++++++++++++++++++++
- arch/mips/kernel/r4k-bugs64.c |  1 +
- arch/mips/kernel/unaligned.c  |  1 +
- arch/mips/mm/fault.c          |  1 +
- 4 files changed, 26 insertions(+)
+ drivers/platform/mips/rs780e-acpi.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
-index d4d9f8a8fdea..1e63d7d04404 100644
---- a/arch/mips/include/asm/traps.h
-+++ b/arch/mips/include/asm/traps.h
-@@ -41,5 +41,28 @@ extern char except_vec_nmi[];
+diff --git a/drivers/platform/mips/rs780e-acpi.c b/drivers/platform/mips/rs780e-acpi.c
+index bb0e8ae0eefd..5b8f9cc32589 100644
+--- a/drivers/platform/mips/rs780e-acpi.c
++++ b/drivers/platform/mips/rs780e-acpi.c
+@@ -32,29 +32,25 @@ static u8 pmio_read_index(u16 index, u8 reg)
+ 	return inb(index + 1);
+ }
  
- asmlinkage void do_page_fault(struct pt_regs *regs,
- 	unsigned long write, unsigned long address);
-+asmlinkage void do_ade(struct pt_regs *regs);
-+asmlinkage void do_be(struct pt_regs *regs);
-+asmlinkage void do_ov(struct pt_regs *regs);
-+asmlinkage void do_fpe(struct pt_regs *regs, unsigned long fcr31);
-+asmlinkage void do_bp(struct pt_regs *regs);
-+asmlinkage void do_tr(struct pt_regs *regs);
-+asmlinkage void do_ri(struct pt_regs *regs);
-+asmlinkage void do_cpu(struct pt_regs *regs);
-+asmlinkage void do_msa_fpe(struct pt_regs *regs, unsigned int msacsr);
-+asmlinkage void do_msa(struct pt_regs *regs);
-+asmlinkage void do_mdmx(struct pt_regs *regs);
-+asmlinkage void do_watch(struct pt_regs *regs);
-+asmlinkage void do_mcheck(struct pt_regs *regs);
-+asmlinkage void do_mt(struct pt_regs *regs);
-+asmlinkage void do_dsp(struct pt_regs *regs);
-+asmlinkage void do_reserved(struct pt_regs *regs);
-+asmlinkage void do_ftlb(void);
-+asmlinkage void do_gsexc(struct pt_regs *regs, u32 diag1);
-+asmlinkage void do_daddi_ov(struct pt_regs *regs);
-+
-+asmlinkage void cache_parity_error(void);
-+asmlinkage void ejtag_exception_handler(struct pt_regs *regs);
-+asmlinkage void __noreturn nmi_exception_handler(struct pt_regs *regs);
+-void pm_iowrite(u8 reg, u8 value)
++static void pm_iowrite(u8 reg, u8 value)
+ {
+ 	pmio_write_index(PM_INDEX, reg, value);
+ }
+-EXPORT_SYMBOL(pm_iowrite);
  
- #endif /* _ASM_TRAPS_H */
-diff --git a/arch/mips/kernel/r4k-bugs64.c b/arch/mips/kernel/r4k-bugs64.c
-index 6ffefb2c6971..1e300330078d 100644
---- a/arch/mips/kernel/r4k-bugs64.c
-+++ b/arch/mips/kernel/r4k-bugs64.c
-@@ -14,6 +14,7 @@
- #include <asm/fpu.h>
- #include <asm/mipsregs.h>
- #include <asm/setup.h>
-+#include <asm/traps.h>
+-u8 pm_ioread(u8 reg)
++static u8 pm_ioread(u8 reg)
+ {
+ 	return pmio_read_index(PM_INDEX, reg);
+ }
+-EXPORT_SYMBOL(pm_ioread);
  
- static char bug64hit[] __initdata =
- 	"reliable operation impossible!\n%s";
-diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
-index f4cf94e92ec3..db652c99b72e 100644
---- a/arch/mips/kernel/unaligned.c
-+++ b/arch/mips/kernel/unaligned.c
-@@ -91,6 +91,7 @@
- #include <asm/inst.h>
- #include <asm/unaligned-emul.h>
- #include <asm/mmu_context.h>
-+#include <asm/traps.h>
- #include <linux/uaccess.h>
+-void pm2_iowrite(u8 reg, u8 value)
++static void pm2_iowrite(u8 reg, u8 value)
+ {
+ 	pmio_write_index(PM2_INDEX, reg, value);
+ }
+-EXPORT_SYMBOL(pm2_iowrite);
  
- #include "access-helper.h"
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index d7878208bd3f..aaa9a242ebba 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -26,6 +26,7 @@
- #include <asm/mmu_context.h>
- #include <asm/ptrace.h>
- #include <asm/highmem.h>		/* For VMALLOC_END */
-+#include <asm/traps.h>
- #include <linux/kdebug.h>
+-u8 pm2_ioread(u8 reg)
++static u8 pm2_ioread(u8 reg)
+ {
+ 	return pmio_read_index(PM2_INDEX, reg);
+ }
+-EXPORT_SYMBOL(pm2_ioread);
  
- int show_unhandled_signals = 1;
+ static void acpi_hw_clear_status(void)
+ {
 -- 
 2.39.2
 
