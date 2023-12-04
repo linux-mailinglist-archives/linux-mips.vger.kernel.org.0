@@ -1,49 +1,59 @@
-Return-Path: <linux-mips+bounces-479-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-480-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AEE0803147
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 12:11:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 794CF8031A4
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 12:40:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 426231C20992
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 11:11:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 245FC1F20FFB
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 11:40:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F696224D6;
-	Mon,  4 Dec 2023 11:11:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BECE22F0C;
+	Mon,  4 Dec 2023 11:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Avl3ztQ8"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ZiElWQBW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C44CF2;
-	Mon,  4 Dec 2023 03:11:52 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B46Mno0020040;
-	Mon, 4 Dec 2023 11:11:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=e+ho6pr3AQa/V47Hgoe+tRla8f7dmqrQ7ZH/7sAQc2s=;
- b=Avl3ztQ8UI4sHvHFI3a8kOjnwbmsn1yPFbf5ErcptHImeHSjtlUdyq6j7OsNXHq4v8qm
- c8Bf/qwaYUaUy1xr5xmF2dQxtsq9EwPfaFHqQT1oqbGQYgaZ7ohdqZ9QaoDrRKyBDxjq
- L27izBCcyTDL7fCW/e4Ku0EXgkBoZ9YhNPkIqzOYgNXOP9FvjjGMeASBH4XBbKYG7NQz
- rpJv4E4LGmobkc1VoJKhHn47cuvufG60fi6awe2GucUI52CT3ki8HsvU3YhNkVbLaWaL
- JptkPs6+5gJJfdkQAZSE8dvDpKFyJ+GiWYQ1US6TxpvvDx34YIahXMwmf4mC+8iZUWVe Kg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3us81ygtwa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Dec 2023 11:11:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B4BBUZk002169
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 4 Dec 2023 11:11:30 GMT
-Received: from [10.214.229.15] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 4 Dec
- 2023 03:11:24 -0800
-Message-ID: <6c52882c-c189-4a67-b8c0-0963ba856659@quicinc.com>
-Date: Mon, 4 Dec 2023 16:41:19 +0530
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADCAB0;
+	Mon,  4 Dec 2023 03:40:41 -0800 (PST)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20231204114040euoutp02292a0127f27ad873afe25d97659f31a9~dnhNdbYt51544815448euoutp02O;
+	Mon,  4 Dec 2023 11:40:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20231204114040euoutp02292a0127f27ad873afe25d97659f31a9~dnhNdbYt51544815448euoutp02O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1701690040;
+	bh=qoSlDlAlmyMO1fD/zESFlbZVGoR0yDyo5RovorKXLGU=;
+	h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
+	b=ZiElWQBWoN/gMkxnTbl4EIJxJaE/qWzC15BE8zltHkDgiAkzy4jcRQQtE89lZJRFE
+	 y0CAFQMH/8r3YrWb6vhMFfNnjlRU4OQG3F1D5CcUm6baAXYgCF3nBRHZq0UuUfINyM
+	 b9rZMUmPEL+y10xZs8D85HkEGozViYSZ4VZGZ/5w=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20231204114040eucas1p22e4e9d56a0f68b1e4d48c13f2cc13892~dnhNR4TKl1052710527eucas1p2C;
+	Mon,  4 Dec 2023 11:40:40 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 47.26.09814.7BABD656; Mon,  4
+	Dec 2023 11:40:39 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20231204114039eucas1p29c6f8a162191e58ff658d3a1c44429bf~dnhM11-r21052710527eucas1p2B;
+	Mon,  4 Dec 2023 11:40:39 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231204114039eusmtrp2aa892cf8db8bcd9cc62f775c443bc043~dnhMyrE4x3101831018eusmtrp2K;
+	Mon,  4 Dec 2023 11:40:39 +0000 (GMT)
+X-AuditID: cbfec7f4-711ff70000002656-67-656dbab7ff2e
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 1A.00.09146.7BABD656; Mon,  4
+	Dec 2023 11:40:39 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20231204114037eusmtip1af7cdf53ae21703af228f6e129f28260~dnhLNXjH_2303523035eusmtip1g;
+	Mon,  4 Dec 2023 11:40:37 +0000 (GMT)
+Message-ID: <9e4e65de-7234-4234-8091-796277a1f1c5@samsung.com>
+Date: Mon, 4 Dec 2023 12:40:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -51,131 +61,144 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/8] CMDLINE: add generic builtin command line
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v4 12/23] pinctrl: mediatek: Make use of
+ PINCTRL_GROUP_DESC()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Linus Walleij
+	<linus.walleij@linaro.org>, Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>, Rasmus Villemoes
+	<linux@rasmusvillemoes.dk>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?=
+	<j.neuschaefer@gmx.net>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+	<u.kleine-koenig@pengutronix.de>, Geert Uytterhoeven
+	<geert+renesas@glider.be>, Biju Das <biju.das.jz@bp.renesas.com>, Claudiu
+	Beznea <claudiu.beznea.uj@bp.renesas.com>, Jianlong Huang
+	<jianlong.huang@starfivetech.com>, linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+	linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list
+	<bcm-kernel-feedback-list@broadcom.com>, Dong Aisheng
+	<aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, Shawn Guo
+	<shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, Pengutronix Kernel Team
+	<kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, NXP Linux
+	Team <linux-imx@nxp.com>, Sean Wang <sean.wang@kernel.org>, Paul Cercueil
+	<paul@crapouillou.net>, Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Emil Renner Berthing
+	<kernel@esmil.dk>, Hal Feng <hal.feng@starfivetech.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>
 Content-Language: en-US
-To: Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring
-	<robh@kernel.org>,
-        Daniel Gimpelevich
-	<daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton
-	<akpm@linux-foundation.org>,
-        Pratyush Brahma <quic_pbrahma@quicinc.com>,
-        Tomas Mudrunka <tomas.mudrunka@gmail.com>,
-        Sean Anderson
-	<sean.anderson@seco.com>, <x86@kernel.org>,
-        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-CC: <xe-linux-external@cisco.com>, Ruslan Bilovol <rbilovol@cisco.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20231110013817.2378507-1-danielwa@cisco.com>
- <20231110013817.2378507-2-danielwa@cisco.com>
-From: Jaskaran Singh <quic_jasksing@quicinc.com>
-In-Reply-To: <20231110013817.2378507-2-danielwa@cisco.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20231129161459.1002323-13-andriy.shevchenko@linux.intel.com>
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: q6cxTo-435Y9FN1c34c0ojxeDLpAcLU4
-X-Proofpoint-GUID: q6cxTo-435Y9FN1c34c0ojxeDLpAcLU4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-04_06,2023-11-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 adultscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0 clxscore=1011
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2312040085
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0xTZxjed87hnAOueKxsfEEJCQGjC3JZAL8NgmOT5EzdJpOxuBs2coZC
+	uaSF1REWG0GETgTacStQNBCuCqzcK6bKBg0wLlZhpEMZ4yJggHUSN0B0tgc3/j3v+z7P97zP
+	m3w0LlwgnegzcYmcJE4kdiXtiNae1cH9bbpYznvDfAANTq0TaCVPh6PWjECUdb4AQ9VPrmHo
+	elY3gTTtTzD0fXedDZoc+QiVFisBMl7owlDJ+TYKZa72AzR9rQig2rwOAmWo2gg0NNRIoZuP
+	Wii0rBmj0A9PqzCknRq1Qbn6AQo1lT0FSLFWg6O7uhIS3U29A1CmtgWglvklDE2pNSTqS5sj
+	UHa5kUB1g7dJNFPURKKNNi2BluqmAVLVv4/mmh3Rb7kq8M4etmaumGLVEwMkW2e8SLIZl58R
+	bO7AfrZDfZ9iy7V6ki3vnMdYbW0myY6PdpKspjeUbao4xw4VXgXsj0vtGJu94c0OK2KOCT+z
+	C4zkxGe+4SReQSftTqfNPiQTftp+tnW9gZKDvlcVwJaGjC+c1KzaKIAdLWSqAbxU30jwxQqA
+	Ff/c35w8BnAmdYN4KZFf7yD5QRWAFxYqMb4wAzhSc+sFi6YFTBB8oAIWAcG4wZnVAdKCBcwO
+	2Fs0bX3oNcYFTpgKKQsmGR+oWFRYOTuZ4/Dn8QdWAwfmFxLeK222GuBMDgkbeu5Z1TjjCE3T
+	ZZgF2zKH4aRy1obvu8C2xRLcIoCMfBvMX36+ufchqDT0kzzeCRcMzRSPd8PnHWUYL7gI4JX1
+	ic0iB0D5QxPgWQFwfHCNtGTDmX2wQefFt4PhLd2yNTJk7OHY4g5+CXuobC3A+bYAZqQLefYe
+	qDbU/2d7e9iI5wBX9ZbDqLdEU2+Jo/7f9wogaoEjlySNjeKkb8ZxMk+pKFaaFBfleSo+Vgte
+	fIf+Z4aVdlC1YPbsAhgNugCkcVcHgcYUwwkFkaJvkzlJfIQkScxJu8AumnB1FLhHunBCJkqU
+	yMVwXAIneTnFaFsnOVZj2q7sVh4Z85jpOfFK/Agnya/3EZszsuTy90aDvgpwp+cpMjPiQOhs
+	aVjKTffdic75Rx8Fiw4ZZB59Rv1JcU9kchf3eW/649+VMb5npz/9YFdIxK8uDmF3ZI3V7wZM
+	pWDLxUkHjc4H3ZzsQ4ZLR+3OReQ3OPVFJ4evb4CpTwL9C3NEl96O2isPNZRXJvy1z+DjvLJU
+	o0+LNoccSdSd8vvicGXn8VWpSe3fd/RPuUtHoD7ULXjc71gWIwv/o7TZIUUm/rgiKvDyiWy3
+	70K8C0zFVV+m9/ukKh23JYf7/e3lm2f8Gn3YemNNp/IQ+5r1BWGvJ/vfoIvfqotURbP1NriT
+	2ZWQnhb5vIFLpKJ/Ac8KBzB9BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1CTdRzH+T579mxQq6eJ7HtcRO66PPGY29zoixHVJfVQaSZedmhHU5/A
+	Y2PcNrDsrIVU41GkbZJj4KjwFwxkbcCALHKhHHiAwsURTBAYAwowI7yQyQWs7vjvdZ/P+/35
+	fO5zby6L/4AdyT2cpaM1WQqlkAjDbyy13Y51N6to8bwXoq6xRRz9XdzMQg2GBFSYdwZDl+5X
+	Y6im8BqObI33MXTimp2NRn59C50tNQHU87kHQ2V5bg4qWLgBkK+6BKCq4iYcGcxuHHV3Ozjo
+	xz/qOeiurZ+DTgcuYsg51sdGxpZODnKVBwBiHlSyUG9zGYF6j98CqMBZD1D91CyGxqw2AnXk
+	T+KoqKIHR/auqwQaL3ER6KHbiaNZuw8g8+VkNFknQINGM3jpWapyspRDWYc7Ccre8yVBGU4t
+	4ZSxM5Zqst7mUBXOFoKquDKFUc6qAoLy9l0hKFv725Tr3KdUt+VbQH0/24hRRQ/F1E0mcxc/
+	VZSgUefo6Kcz1FrdC8J9EiQVSeKRSCqLF0m2PvfeNqlcuCUx4RCtPJxLa7Ykvi/KyPdPENm/
+	PP5hw2ItRw86HmVAKBeSMqivaSIYEMblk+cBHG0rx4ONJ2H713p2kNfBQB/zn+gugIsDo4AB
+	XC6PTIRDZrCiwcln4PhCJ7HCPPIJ2F7iW52znoyGwwMWzgoTpAQyM8yqZh2ZAlu9Q6scTnYR
+	0GhJW2EWaSLg8Jg0uMsA4NVbJ7FgQwAHfOWrHEq+DkdMfnawHgeZegYEORq6Z8pYXwG+dc0d
+	1jV26xqLdY3lG4BXgXA6R6tKV2klIq1Cpc3JShcdVKucYDmEDdcXXI3A9vs9kQdgXOABkMsS
+	hvNsA5k0n3dI8dFRWqNO0+Qoaa0HyJefYWRFrj+oXk5xli5NEieWS2Rx8WJ5fNxWoYCXnG1Q
+	8Ml0hY7OpOlsWvO/D+OGRuox9lL3u7uVNdKW0rCZs+7vilJvxso29qeM7KhLntjwmqPK8lf2
+	xiOj4qN5S09FDbp/cM+fsCd9cuQNSWrl5tqXDR6f75jjz4shJrKxS2baMdi2Vxohn5tXO1oP
+	6PIddz6uLX5Tb88P+BsDnL3nXIK6uk61xJ9k3u5Mn1OcDszlbst1CKriJl717vlg/2M7LYk7
+	W8v4l6XdPp/hWLUs5foj4v3eL2Yu9LuizpMXPBFNuy8l9b4yrRrMihiPjqmImRhNn/+tY1fI
+	0ELE9uMgtbmwuta/iR7+h+39Wft81FTIHlgUual8X8p02b2ozfq66QMbfjqDFU++46NPmV50
+	f9anvENUCnFthkISw9JoFf8CmRY9FQ0EAAA=
+X-CMS-MailID: 20231204114039eucas1p29c6f8a162191e58ff658d3a1c44429bf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20231204114039eucas1p29c6f8a162191e58ff658d3a1c44429bf
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231204114039eucas1p29c6f8a162191e58ff658d3a1c44429bf
+References: <20231129161459.1002323-1-andriy.shevchenko@linux.intel.com>
+	<20231129161459.1002323-13-andriy.shevchenko@linux.intel.com>
+	<CGME20231204114039eucas1p29c6f8a162191e58ff658d3a1c44429bf@eucas1p2.samsung.com>
+
+On 29.11.2023 17:06, Andy Shevchenko wrote:
+> Make use of PINCTRL_GROUP_DESC() instead of open coding it.
+>
+> Signed-off-by: Andy Shevchenko<andriy.shevchenko@linux.intel.com>
+
+This patch landed in linux-next as commit 1949e4630c3b ("pinctrl: 
+mediatek: Make use of PINCTRL_GROUP_DESC()"). Unfortunately it causes a 
+build break of ARM64 arch with standard defconfig.
+
+> ---
+>   drivers/pinctrl/mediatek/pinctrl-moore.h | 7 +------
+>   drivers/pinctrl/mediatek/pinctrl-paris.h | 7 +------
+>   2 files changed, 2 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.h b/drivers/pinctrl/mediatek/pinctrl-moore.h
+> index e1b4b82b9d3d..22ef1ffbcdcb 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-moore.h
+> +++ b/drivers/pinctrl/mediatek/pinctrl-moore.h
+> @@ -38,12 +38,7 @@
+>   	}
+>   
+>   #define PINCTRL_PIN_GROUP(name, id)			\
+> -	{						\
+> -		name,					\
+> -		id##_pins,				\
+> -		ARRAY_SIZE(id##_pins),			\
+> -		id##_funcs,				\
+> -	}
+> +	PINCTRL_GROUP_DESC(name, id##_pins, ARRAY_SIZE(id##_pins), id##_funcs)
+>   int mtk_moore_pinctrl_probe(struct platform_device *pdev,
+>   			    const struct mtk_pin_soc *soc);
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.h b/drivers/pinctrl/mediatek/pinctrl-paris.h
+> index 8762ac599329..f208a904c4a8 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-paris.h
+> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.h
+> @@ -50,12 +50,7 @@
+>   	}
+>   
+>   #define PINCTRL_PIN_GROUP(name, id)			\
+> -	{						\
+> -		name,					\
+> -		id##_pins,				\
+> -		ARRAY_SIZE(id##_pins),			\
+> -		id##_funcs,				\
+> -	}
+> +	PINCTRL_GROUP_DESC(name, id##_pins, ARRAY_SIZE(id##_pins), id##_funcs)
+>   
+>   int mtk_paris_pinctrl_probe(struct platform_device *pdev);
 
 
+PINCTRL_GROUP_DESC() macro from drivers/pinctrl/core.h contains a cast 
+to (struct group_desc), what breaks users of the above macros.
 
-On 11/10/2023 7:08 AM, Daniel Walker wrote:
-> diff --git a/lib/generic_cmdline.S b/lib/generic_cmdline.S
-> new file mode 100644
-> index 000000000000..223763f9eeb6
-> --- /dev/null
-> +++ b/lib/generic_cmdline.S
-> @@ -0,0 +1,53 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/export.h>
-> +#include <linux/init.h>
-> +
-> +#include <asm/setup.h>
-> +
-> +        __INITDATA
-> +
-> +       .align 8
-> +       .global cmdline_prepend
-> +cmdline_prepend:
-> +       .ifnc CONFIG_CMDLINE_PREPEND,""
-> +       .ascii CONFIG_CMDLINE_PREPEND
-> +       .string " "
-> +       .else
-> +       .byte 0x0
-> +       .endif
-> +#ifdef CONFIG_CMDLINE_EXTRA
-> +       .space COMMAND_LINE_SIZE - (.-cmdline_prepend)
-> +       .size cmdline_prepend, COMMAND_LINE_SIZE
-> +#endif /* CONFIG_CMDLINE_EXTRA */
-> +
-> +cmdline_prepend_end:
-> +       .size cmdline_prepend, (cmdline_prepend_end - cmdline_prepend)
-> +
-> +       .align 8
-> +       .global cmdline_tmp
-> +cmdline_tmp:
-> +       .ifnc CONFIG_CMDLINE_PREPEND,""
-> +       .size cmdline_tmp, COMMAND_LINE_SIZE
-> +       .space COMMAND_LINE_SIZE
-> +       .else
-> +       .byte 0x0
-> +       .endif
-> +cmdline_tmp_end:
-> +       .size cmdline_tmp, (cmdline_tmp_end - cmdline_tmp)
-> +
-> +       .align 8
-> +       .global cmdline_append
-> +       .size cmdline_append, COMMAND_LINE_SIZE
-> +cmdline_append:
-> +       .ifnc CONFIG_CMDLINE_APPEND,""
-> +       .ascii " "
-> +       .string CONFIG_CMDLINE_APPEND
-> +       .else
-> +       .byte 0x0
-> +       .endif
-> +#ifdef CONFIG_CMDLINE_EXTRA
-> +       .space COMMAND_LINE_SIZE - (.-cmdline_append)
-> +#endif /* CONFIG_CMDLINE_EXTRA */
-> +cmdline_append_end:
-> +       .size cmdline_append, (cmdline_append_end - cmdline_append)
-> +
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-Hi Daniel,
-
-I picked these patches to test a usecase of ours. generic_cmdline.S does
-not escape semicolons in the CMDLINE_APPEND and CMDLINE_PREPEND strings.
-Take this config snippet for example:
-
-CONFIG_CMDLINE_APPEND="slub_debug=FZP,zs_handle,zspage;FZPU page_owner=on"
-CONFIG_CMDLINE_BOOL=y
-# CONFIG_CMDLINE_EXTRA is not set
-# CONFIG_CMDLINE_OVERRIDE is not set
-# CONFIG_CMDLINE_PREPEND is not set
-# CONFIG_TEST_CMDLINE is not set
-
-While compiling, the word FZPU is considered as a mnemonic because of
-the semicolon preceding it causing parsing to fail:
-
-kernel/lib/generic_cmdline.S: Assembler messages:
-kernel/lib/generic_cmdline.S:42: Warning: missing closing `"'
-kernel/lib/generic_cmdline.S:42: Error: unknown mnemonic `fzpu' -- `fzpu
-page_owner=on",""'
-
-Maybe Christophe's suggestion of moving this code to a C file and using
-inline assembly helps mitigate similar problems?
-
-Thanks,
-Jaskaran.
 
