@@ -1,131 +1,144 @@
-Return-Path: <linux-mips+bounces-514-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-522-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 748C8803B32
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 18:12:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64913803CE1
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 19:24:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28A8F281124
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 17:12:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA576B20A10
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Dec 2023 18:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1B2D2E651;
-	Mon,  4 Dec 2023 17:12:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600602FC51;
+	Mon,  4 Dec 2023 18:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="syULo6DI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69282C0
-	for <linux-mips@vger.kernel.org>; Mon,  4 Dec 2023 09:12:44 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rACUr-0008FR-FW; Mon, 04 Dec 2023 18:12:41 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rACUr-00DZDG-0q; Mon, 04 Dec 2023 18:12:41 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rACUq-00EBIe-Nz; Mon, 04 Dec 2023 18:12:40 +0100
-Date: Mon, 4 Dec 2023 18:12:40 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>, linux-pwm@vger.kernel.org,
-	linux-mips@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] pwm: jz4740: Add trailing \n to error messages
-Message-ID: <20231204171240.3gnvz3mghhz53cjj@pengutronix.de>
-References: <20231123083322.405390-1-u.kleine-koenig@pengutronix.de>
- <ZWCaVQXjlBHMW8Jf@orome.fritz.box>
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1C188;
+	Mon,  4 Dec 2023 10:23:47 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3B4IMmEF056511;
+	Mon, 4 Dec 2023 12:22:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1701714168;
+	bh=+UzfahhmDwBPCn7TWWajz5gUYl9JjiSSOpzMGjXxwzA=;
+	h=From:To:CC:Subject:Date;
+	b=syULo6DI3uaKA7PmxusECJJaNHtLh0LWj7cBqvHZLyr5oA7ej6Zi1pfTkGRZREXir
+	 IvUunMquSdI56ECGXuVQVIVV9tNQ1GkzrN5m96ZM8oLXKlHa52FXcnOqEYS6uTuaMN
+	 yAy7NX5FY23zAUFvLf0eft+Cp+cZ0QOJZhp+bnh0=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3B4IMmjx013404
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 4 Dec 2023 12:22:48 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 4
+ Dec 2023 12:22:48 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 4 Dec 2023 12:22:48 -0600
+Received: from fllv0039.itg.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3B4IMkx3042313;
+	Mon, 4 Dec 2023 12:22:46 -0600
+From: Andrew Davis <afd@ti.com>
+To: Frank Binns <frank.binns@imgtec.com>,
+        Donald Robson
+	<donald.robson@imgtec.com>,
+        Matt Coster <matt.coster@imgtec.com>,
+        "H .
+ Nikolaus Schaller" <hns@goldelico.com>,
+        Adam Ford <aford173@gmail.com>,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec
+	<jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren
+	<tony@atomide.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Paul Cercueil
+	<paul@crapouillou.net>
+CC: <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH RFC 00/10] Device tree support for Imagination Series5 GPU
+Date: Mon, 4 Dec 2023 12:22:35 -0600
+Message-ID: <20231204182245.33683-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5e5aqrtd3x4uevh2"
-Content-Disposition: inline
-In-Reply-To: <ZWCaVQXjlBHMW8Jf@orome.fritz.box>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
+Hello all,
 
---5e5aqrtd3x4uevh2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I know this has been tried before[0], but given the recent upstreaming of
+the Series6+ GPU bindings I figured it might be time to give the Series5
+bindings another try.
 
-Hello,
+While there is currently no mainline driver for these binding, there is an
+open source out-of-tree kernel-side driver available[1]. Having a stable
+and upstream binding for these devices allows us to describe this hardware
+in device tree.
 
-On Fri, Nov 24, 2023 at 01:43:01PM +0100, Thierry Reding wrote:
-> On Thu, Nov 23, 2023 at 09:33:23AM +0100, Uwe Kleine-K=F6nig wrote:
-> > Error messages are supposed to end in \n. Add the line terminator to the
-> > two error messages that lack this.
-> >=20
-> > Suggested-by: Paul Cercueil <paul@crapouillou.net>
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > Hello,
-> >=20
-> > this was noticed by Paul in
-> > https://lore.kernel.org/linux-pwm/ba21c20b20364a39d5ffff81dac8bd300a746=
-dbb.camel@crapouillou.net.
-> > Instead of sneaking this into a patch that probably won't get applied
-> > quickly, make this explicit.
-> >=20
-> > I based it on top of my PR that can be found at
-> > https://lore.kernel.org/linux-pwm/20231121112029.gyv3gqirlycysyr4@pengu=
-tronix.de,
-> > but applies just fine to v6.7-rc1.
-> >=20
-> > If you want a fixes-line, that would be:
-> >=20
-> > Fixes: 485b56f08f33 ("pwm: jz4740: Improve algorithm of clock calculati=
-on")
-> >=20
-> > for the first hunk and
-> >=20
-> > Fixes: ce1f9cece057 ("pwm: jz4740: Use clocks from TCU driver")
-> >=20
-> > for the second. If this is backported to something before
-> > v5.10-rc1~57^2~11, there is another instance with a missing \n.
-> >=20
-> > Best regards
-> > Uwe
->=20
-> My recollection is that the newlines aren't strictly required because
-> printk will typically insert them itself (unless KERN_CONT is involved
-> at some point). So I don't think this really fixes anything, but I'm
-> willing to pick this up for consistency.
+This is my vision for how these bindings should look, along with some
+example uses in several SoC DT files. The compatible names have been
+updated to match what was decided on for Series6+, but otherwise most
+is the same as we have been using in our vendor tree for many years.
 
-Well, they will behave if the next printk (on the same CPU?) doesn't use
-KERN_CONT. So this change fixes a really unlikely race condition.
+Thanks,
+Andrew
 
-Best regards
-Uwe
+Based on next-20231204.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+[0]: https://lkml.org/lkml/2020/4/24/1222
+[1]: https://github.com/openpvrsgx-devgroup
 
---5e5aqrtd3x4uevh2
-Content-Type: application/pgp-signature; name="signature.asc"
+Andrew Davis (10):
+  dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
+  ARM: dts: omap3: Add device tree entry for SGX GPU
+  ARM: dts: omap4: Add device tree entry for SGX GPU
+  ARM: dts: omap5: Add device tree entry for SGX GPU
+  ARM: dts: AM33xx: Add device tree entry for SGX GPU
+  ARM: dts: AM437x: Add device tree entry for SGX GPU
+  ARM: dts: DRA7xx: Add device tree entry for SGX GPU
+  arm64: dts: ti: k3-am654-main: Add device tree entry for SGX GPU
+  ARM: dts: sun6i: Add device tree entry for SGX GPU
+  MIPS: DTS: jz4780: Add device tree entry for SGX GPU
 
------BEGIN PGP SIGNATURE-----
+ .../devicetree/bindings/gpu/img,powervr.yaml  | 69 +++++++++++++++++--
+ arch/arm/boot/dts/allwinner/sun6i-a31.dtsi    |  9 +++
+ arch/arm/boot/dts/ti/omap/am33xx.dtsi         |  9 +--
+ arch/arm/boot/dts/ti/omap/am3517.dtsi         | 11 +--
+ arch/arm/boot/dts/ti/omap/am4372.dtsi         |  6 ++
+ arch/arm/boot/dts/ti/omap/dra7.dtsi           |  9 ++-
+ arch/arm/boot/dts/ti/omap/omap34xx.dtsi       | 11 +--
+ arch/arm/boot/dts/ti/omap/omap36xx.dtsi       |  9 +--
+ arch/arm/boot/dts/ti/omap/omap4.dtsi          |  9 +--
+ arch/arm/boot/dts/ti/omap/omap5.dtsi          |  9 +--
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi      |  7 ++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        | 11 +++
+ 12 files changed, 136 insertions(+), 33 deletions(-)
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVuCIcACgkQj4D7WH0S
-/k4fUQf+JgcgbwtAzbnsGGxjCu0m+N5Y7/39rrWiFJEX+MiHD1wSke4kVGPE4DDO
-h9myIG1MAoZAAYX1FYG5/fzCs9B0D0KdaG52chkejOQ9+0ZEGRvfaEfCLmJsUoM/
-CRwhS95IiAbwuAVhQk0Qtn5KEBpIrIDUWyOdikVtXflTUQEu9N+vGFHyyL73uHXf
-aLmEq01f2FK7Z1y7BRK8+BCN+jyygMKTFufDeMesSko8YrydO2PbZ8t8YIQxv8YT
-zdX64t5osuGzZ0vCMgWBMjXWb6920Hi4x1OAAeKw8mU+3PvTPAJwDFmFlrWcThU0
-3AdFt8Kyzo7XgGGy+odixBybDO3cCw==
-=7t6b
------END PGP SIGNATURE-----
+-- 
+2.39.2
 
---5e5aqrtd3x4uevh2--
 
