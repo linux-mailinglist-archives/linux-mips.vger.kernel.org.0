@@ -1,71 +1,84 @@
-Return-Path: <linux-mips+bounces-547-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-550-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0002A805CB6
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Dec 2023 19:01:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C24EA805CBF
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Dec 2023 19:02:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA0341F213A2
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Dec 2023 18:01:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EBFCB2111B
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Dec 2023 18:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C266A347;
-	Tue,  5 Dec 2023 18:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AC236A329;
+	Tue,  5 Dec 2023 18:01:52 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB8651BC;
-	Tue,  5 Dec 2023 10:01:44 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFDA21BD
+	for <linux-mips@vger.kernel.org>; Tue,  5 Dec 2023 10:01:44 -0800 (PST)
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rAZjr-0003nO-00; Tue, 05 Dec 2023 19:01:43 +0100
+	id 1rAZjs-0003nQ-00; Tue, 05 Dec 2023 19:01:44 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id BCBD4C0A2B; Tue,  5 Dec 2023 18:52:36 +0100 (CET)
-Date: Tue, 5 Dec 2023 18:52:36 +0100
+	id A282FC0A5A; Tue,  5 Dec 2023 18:53:48 +0100 (CET)
+Date: Tue, 5 Dec 2023 18:53:48 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	linux-kernel@vger.kernel.org,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	Aurelien Jarno <aurel32@debian.org>
-Subject: Re: [PATCH] MIPS: kernel: Clear FPU states when setting up kernel
- threads
-Message-ID: <ZW9jZDTkw3T9dBtS@alpha.franken.de>
-References: <20231130163601.185270-1-tsbogend@alpha.franken.de>
- <6f290f4b-5dc2-44f3-9f2d-01496f78d629@app.fastmail.com>
+To: Stefan Wiehler <stefan.wiehler@nokia.com>
+Cc: linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] mips/smp: Call rcutree_report_cpu_starting() earlier
+Message-ID: <ZW9jrPnM4/OXZzz/@alpha.franken.de>
+References: <20231106121206.62650-1-stefan.wiehler@nokia.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6f290f4b-5dc2-44f3-9f2d-01496f78d629@app.fastmail.com>
+In-Reply-To: <20231106121206.62650-1-stefan.wiehler@nokia.com>
 
-On Fri, Dec 01, 2023 at 11:12:21AM +0000, Jiaxun Yang wrote:
+On Mon, Nov 06, 2023 at 01:12:07PM +0100, Stefan Wiehler wrote:
+> rcutree_report_cpu_starting() must be called before
+> clockevents_register_device() to avoid the following lockdep splat triggered by
+> calling list_add() when CONFIG_PROVE_RCU_LIST=y:
 > 
+>   WARNING: suspicious RCU usage
+>   ...
+>   -----------------------------
+>   kernel/locking/lockdep.c:3680 RCU-list traversed in non-reader section!!
 > 
-> 在2023年11月30日十一月 下午4:36，Thomas Bogendoerfer写道：
-> > io_uring sets up the io worker kernel thread via a syscall out of an
-> > user space prrocess. This process might have used FPU and since
-> > copy_thread() didn't clear FPU states for kernel threads a BUG()
-> > is triggered for using FPU inside kernel. Move code around
-> > to always clear FPU state for user and kernel threads.
-> >
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Aurelien Jarno <aurel32@debian.org>
-> > Closes: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1055021
-> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>   other info that might help us debug this:
 > 
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>   RCU used illegally from offline CPU!
+>   rcu_scheduler_active = 1, debug_locks = 1
+>   no locks held by swapper/1/0.
+>   ...
+>   Call Trace:
+>   [<ffffffff8012a434>] show_stack+0x64/0x158
+>   [<ffffffff80a93d98>] dump_stack_lvl+0x90/0xc4
+>   [<ffffffff801c9e9c>] __lock_acquire+0x1404/0x2940
+>   [<ffffffff801cbf3c>] lock_acquire+0x14c/0x448
+>   [<ffffffff80aa4260>] _raw_spin_lock_irqsave+0x50/0x88
+>   [<ffffffff8021e0c8>] clockevents_register_device+0x60/0x1e8
+>   [<ffffffff80130ff0>] r4k_clockevent_init+0x220/0x3a0
+>   [<ffffffff801339d0>] start_secondary+0x50/0x3b8
 > 
-> Perhaps
-> Suggested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> raw_smp_processor_id() is required in order to avoid calling into lockdep
+> before RCU has declared the CPU to be watched for readers.
 > 
-> As well :-)
+> See also commit 29368e093921 ("x86/smpboot:  Move rcu_cpu_starting() earlier"),
+> commit de5d9dae150c ("s390/smp: move rcu_cpu_starting() earlier") and commit
+> 99f070b62322 ("powerpc/smp: Call rcu_cpu_starting() earlier").
+> 
+> Signed-off-by: Stefan Wiehler <stefan.wiehler@nokia.com>
+> ---
+> - Rename rcu_cpu_starting() to rcutree_report_cpu_starting() due to commit
+> 448e9f34d91d ("rcu: Standardize explicit CPU-hotplug calls")
+> ---
+>  arch/mips/kernel/smp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've added both
+applied to mips-fixes.
 
 Thomas.
 
