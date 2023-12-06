@@ -1,118 +1,315 @@
-Return-Path: <linux-mips+bounces-565-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-566-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 273AC807694
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 18:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4751807AB9
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 22:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D37061F2109E
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 17:26:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AC0A1F219A2
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 21:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C889463DF8;
-	Wed,  6 Dec 2023 17:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72D870993;
+	Wed,  6 Dec 2023 21:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IBkeXZF1"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="bthvfYeE";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="YhrSAsLm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9311711F;
-	Wed,  6 Dec 2023 09:26:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=zaZMCfpXWHDewSKfYQmdUR7glYYV0yHmqBv04S10bVk=; b=IBkeXZF15BDRNRFf9NMuJ/0yUO
-	qdy1IhDZ+H3egZn8hxUb4s5eJuCWOyvPy80Y9UjXaKMONiMfQIu3NePzrtpjUqCgs+hD/exMKD6Hu
-	+feC0hk4/mH+e2Id1sCR4ptvm40J8VJzdyWqrqCTLb8V+ZCMPSLzob5atCI3TK57Q0h7ErbsRhUOB
-	vydFCGEL2ZvQilLozlkxSW6Fifv/icDIdrQuD42COGiA3wwr/ILWWu80gLENtHg9DGQcHdMS6pN+N
-	kFH6JFsPFSaMgjSXucdcDxj90cy0IwcRAWcDOihSDLq/VP8mj9ei7Bwekh39zBp/M+u0F/VtycciH
-	2zBD6xZw==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAvew-00Astm-1O;
-	Wed, 06 Dec 2023 17:26:06 +0000
-Message-ID: <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
-Date: Wed, 6 Dec 2023 09:26:06 -0800
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87CE98;
+	Wed,  6 Dec 2023 13:44:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1701899020; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=mY1EpRkbVxlRgu9zZqHTd56JQXX9iAG0liqyRMYLdkaydBQIAEF+HVAjGzOHFsdIkY
+    FjdLWovG0YfpdGUR9t06JYqh2t7uaJIa1aNKskN+SuLiYCfR6AU/5oxFFRxDh99RdrGf
+    kw9f3dnjfOu2P8K6wOfOgM7xsIiJcEq81itq937GrKaS3sPV7Y+rTj07m90mZd6jIPnd
+    Biys3oyEIl2pAJMOo7WpcwhFpA2sDd7Sy795ediSzpIQT9ogsljLqJBrwS/WJv3DRdZX
+    4+npj0RDrhbcT+VWWSGu+YOrmbQfavB8SgCKANur2A5vyqjMhseF3uSuU/KwS0lDWFz2
+    ib5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1701899020;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Cg5evnYKreV1OBQkmtI5cwBccAfdbjnTgIyjumKDKfE=;
+    b=AZr6aD1ByyWDi3MQrUorQAEtTS1R4s/SpWLgq4vID8Laycwuh0kfWkRDKnIWKdplnp
+    sPaVlJznl0y7VUjP4yPr8bZ47RrsD2lDDrTbM4WUw+MDEXwwJIKQ7THcZPK4YWglpZCq
+    GPgocmzuuMenswYwOzcoP7DHapmJX6BW79fLHjYdu9WKdDHaxT1TiZdSjEV9iADL/01u
+    e/Pgc/AFXVZV/Yx2C1ZAiVhiQoAfr7q9UdWSqSGY8WqY4X3p/G5WwZBq5dS+r2NyjaU1
+    fUTeSoCovFn/NkWuVvZKgHHjbUHoxfbIgsGxcJZxc1uumMi5IdVWmH4uKdzE3swVHsah
+    aDaA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1701899020;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Cg5evnYKreV1OBQkmtI5cwBccAfdbjnTgIyjumKDKfE=;
+    b=bthvfYeErmbD8OtUEa3s8nII3I7vuFW1ga5BliPGl0vZJ2taLjD5CESTt8Vzu31agl
+    3R3RBZqjPD8OprQITw0pCoBl/Gg6HX70tI2BB/w+QBGusGTdSwnc62RVnD9kSq/tLFIg
+    cbnEzCUFscxF1IuXjrlsLF9OZhYIpnVezJ5hL2JXMB4KYYoCibTrjwo/PKkWSeq+Fx2y
+    HQs6FN/+3yPNCfmRWOfMqVA1cqD7YWN2yQ/Gea8FU4/RiFHDXKpmaA+QNvKhNbXn4CL9
+    yR5859IGQ6i0TNoL3lR/ie8OFvnvQDNOz/LkXIiawAuqD7arPW5crqXUVVVP7I5pu3rg
+    iWlw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1701899020;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Cg5evnYKreV1OBQkmtI5cwBccAfdbjnTgIyjumKDKfE=;
+    b=YhrSAsLmlIf0+R9YsctQrUq2bg0/06nzIhHC0zOU7zJRtQmejw2pdeAUDnBnA31jck
+    VGDiLbHrJifX5Sc2EkCw==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeqHQ="
+Received: from smtpclient.apple
+    by smtp.strato.de (RZmta 49.10.0 DYNA|AUTH)
+    with ESMTPSA id wfeb35zB6Lhc9Px
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+	(Client did not present a certificate);
+    Wed, 6 Dec 2023 22:43:38 +0100 (CET)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: pm.c:undefined reference to `i8042_command'
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
- Masahiro Yamada <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- Nicolas Schier <nicolas@fjasle.eu>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.200.91.1.1\))
+Subject: Re: [PATCH RFC 01/10] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
+From: "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20231206-wolverine-paprika-0674ca01e1f2@spud>
+Date: Wed, 6 Dec 2023 22:43:27 +0100
+Cc: Andrew Davis <afd@ti.com>,
+ Frank Binns <frank.binns@imgtec.com>,
+ Donald Robson <donald.robson@imgtec.com>,
+ Matt Coster <matt.coster@imgtec.com>,
+ Adam Ford <aford173@gmail.com>,
+ Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+ Tony Lindgren <tony@atomide.com>,
+ Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>,
+ Tero Kristo <kristo@kernel.org>,
+ Paul Cercueil <paul@crapouillou.net>,
+ dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev,
+ linux-omap@vger.kernel.org,
  linux-mips@vger.kernel.org
-References: <202312041909.lwhcU35R-lkp@intel.com>
- <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
- <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <07CB504D-F4B7-425A-A24C-D0DC079ED48E@goldelico.com>
+References: <20231204182245.33683-1-afd@ti.com>
+ <20231204182245.33683-2-afd@ti.com>
+ <CFF198DA-5C42-425E-86F4-759629489ECB@goldelico.com>
+ <cb590a13-e0ff-49d9-8583-be613ad50dc5@ti.com>
+ <FE0DBA5E-95A5-4C27-9F69-D1D8BDF56EC3@goldelico.com>
+ <20231206-wolverine-paprika-0674ca01e1f2@spud>
+To: Conor Dooley <conor@kernel.org>
+X-Mailer: Apple Mail (2.3774.200.91.1.1)
 
 
 
-On 12/5/23 22:52, Arnd Bergmann wrote:
-> On Wed, Dec 6, 2023, at 06:24, Randy Dunlap wrote:
->>> All errors (new ones prefixed by >>):
->>>
->>>    mips64el-linux-ld: arch/mips/loongson2ef/lemote-2f/pm.o: in function `setup_wakeup_events':
->>>>> pm.c:(.text+0x118): undefined reference to `i8042_command'
->>>>> mips64el-linux-ld: pm.c:(.text+0x154): undefined reference to `i8042_command'
->>
->>
->> How do we feel about this?
->> I suppose that an ARCH or mach or board should know what it requires.
->>
->>
->> ---
->>  arch/mips/loongson2ef/Kconfig |    3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff -- a/arch/mips/loongson2ef/Kconfig b/arch/mips/loongson2ef/Kconfig
->> --- a/arch/mips/loongson2ef/Kconfig
->> +++ b/arch/mips/loongson2ef/Kconfig
->> @@ -40,6 +40,9 @@ config LEMOTE_MACH2F
->>  	select ARCH_HAS_PHYS_TO_DMA
->>  	select ARCH_MIGHT_HAVE_PC_PARPORT
->>  	select ARCH_MIGHT_HAVE_PC_SERIO
->> +	select INPUT
->> +	select SERIO
->> +	select SERIO_I8042
->>  	select BOARD_SCACHE
->>  	select BOOT_ELF32
-> 
-> I think it's bad style to force-select an optional subsystem.
-> How about making the entire file optional? It seems that there
-> are already __weak functions in its place.
+> Am 06.12.2023 um 17:02 schrieb Conor Dooley <conor@kernel.org>:
+>=20
+> On Tue, Dec 05, 2023 at 07:04:05PM +0100, H. Nikolaus Schaller wrote:
+>>> Am 05.12.2023 um 18:33 schrieb Andrew Davis <afd@ti.com>:
+>>>=20
+>>> On 12/5/23 2:17 AM, H. Nikolaus Schaller wrote:
+>>>>> +          - enum:
+>>>>> +              - ti,omap3430-gpu # Rev 121
+>>>>> +              - ti,omap3630-gpu # Rev 125
+>>>> Is the "Rev 121" and "Rev 125" a property of the SoC integration =
+(clock/reset/power
+>>>> hookup etc.) or of the integrated SGX core?
+>>>=20
+>>> The Rev is a property of the SGX core, not the SoC integration.
+>>=20
+>> Then, it should belong there and not be a comment of the ti,omap*-gpu =
+record.
+>> In this way it does not seem to be a proper hardware description.
+>>=20
+>> BTW: there are examples where the revision is part of the compatible =
+string, even
+>> if the (Linux) driver makes no use of it:
+>>=20
+>> drivers/net/ethernet/xilinx/xilinx_emaclite.c
+>=20
+> AFAICT these Xilinx devices that put the revisions in the compatible =
+are
+> a different case - they're "soft" IP intended for use in the fabric of
+> an FPGA, and assigning a device specific compatible there does not =
+make
+> sense.
+>=20
+> In this case it appears that the revision is completely known once you
+> see "ti,omap3630-gpu", so encoding the extra "121" into the compatible
+> string is not required.
 
-Yes, I agree in general.
+Well, I would not put my hand in the fire for this assumption.
 
-Hopefully the maintainer will opine your suggestion.
-Jiaxun?
+And I am a friend of explicitly stating what is instead ot encoding =
+indirectly.
 
-Thanks.
+>=20
+>>=20
+>>> But it seems that
+>>> compatible string is being used to define both (as we see being =
+debated in the other
+>>> thread on this series).
+>>>=20
+>>>> In my understanding the Revs are different variants of the SGX core =
+(errata
+>>>> fixes, instruction set, pipeline size etc.). And therefore the =
+current driver code
+>>>> has to be configured by some macros to handle such cases.
+>>>> So the Rev should IMHO be part of the next line:
+>>>>> +          - const: img,powervr-sgx530
+>>>> +          - enum:
+>>>> +              - img,powervr-sgx530-121
+>>>> +              - img,powervr-sgx530-125
+>>>> We have a similar definition in the openpvrsgx code.
+>>>> Example: compatible =3D "ti,omap3-sgx530-121", "img,sgx530-121", =
+"img,sgx530";
+>>>> (I don't mind about the powervr- prefix).
+>>>> This would allow a generic and universal sgx driver (loaded through =
+just matching
+>>>> "img,sgx530") to handle the errata and revision specifics at =
+runtime based on the
+>>>> compatible entry ("img,sgx530-121") and know about SoC integration =
+("ti,omap3-sgx530-121").
+>=20
+> The "raw" sgx530 compatible does not seem helpful if the sgx530-121 or
+> sgx530-125 compatibles are also required to be present for the driver =
+to
+> actually function.
 
-> 
-> --- a/arch/mips/loongson2ef/lemote-2f/Makefile
-> +++ b/arch/mips/loongson2ef/lemote-2f/Makefile
-> @@ -8,5 +8,6 @@ obj-y += clock.o machtype.o irq.o reset.o dma.o ec_kb3310b.o
->  #
->  # Suspend Support
->  #
-> -
-> +ifdef CONFIG_SERIO_I8042
->  obj-$(CONFIG_SUSPEND) += pm.o
-> +endif
-> 
->      Arnd
+Indeed. This seems to be redundant (but may need some pattern =
+processing).
 
--- 
-~Randy
+> The revision specific compatibles I would not object
+> to, but everything in here has different revisions anyway - does the
+> same revision actually appear in multiple devices? If it doesn't then =
+I
+> don't see any value in the suffixed compatibles either.
+
+Well, we don't know.
+
+So far only a subset of SoC with the SGX GPU core variants has been =
+considered
+(mainly because lack of user space code and device owners).
+
+Maybe someone with insider knowledge can give a hint if the SGX version =
+numbers
+were assigned uniquely for each SoC integration project.
+
+>=20
+>>>> And user-space can be made to load the right firmware variant based =
+on "img,sgx530-121"
+>>>> I don't know if there is some register which allows to discover the =
+revision long
+>>>> before the SGX subsystem is initialized and the firmware is up and =
+running.
+>>>> What I know is that it is possible to read out the revision after =
+starting the firmware
+>>>> but it may just echo the version number of the firmware binary =
+provided from user-space.
+>>>=20
+>>> We should be able to read out the revision (register =
+EUR_CR_CORE_REVISION), the problem is
+>>> today the driver is built for a given revision at compile time.
+>>=20
+>> Yes, that is something we had planned to get rid of for a long time =
+by using different compatible
+>> strings and some variant specific struct like many others drivers are =
+doing it.
+>> But it was a to big task so nobody did start with it.
+>>=20
+>>> That is a software issue,
+>>> not something that we need to encode in DT. While the core ID =
+(SGX5xx) can be also detected
+>>> (EUR_CR_CORE_ID), the location of that register changes, and so it =
+does need encoded in
+>>> DT compatible.
+>>=20
+>> Ok, I didn't know about such registers as there is not much public =
+information available.
+>> Fair enough, there are some error reports about in different forums.
+>>=20
+>> On the other hand we then must read out this register in more or less =
+early initialization
+>> stages. Even if we know this information to be static and it could be =
+as simple as a list
+>> of compatible strings in the driver.
+>>=20
+>>> The string "ti,omap3430-gpu" tells us the revision if we cannot =
+detect it (as in the current
+>>> driver), and the SoC integration is generic anyway (just a reg and =
+interrupt).
+>>=20
+>> It of course tells, but may need a translation table that needs to be =
+maintained in a
+>> different format. Basically the same what the comments show in a =
+non-machine readable
+>> format.
+>>=20
+>> I just wonder why the specific version can or should not become =
+simply part of the DTS
+>> and needs this indirection.
+>>=20
+>> Basically it is a matter of openness for future (driver) development =
+and why it needs
+>> careful decisions.
+>>=20
+>> So in other words: I would prefer to see the comments about versions =
+encoded in the device
+>> tree binary to make it machine readable.
+>=20
+> It's already machine readable if it is invariant on an SoC given the
+> patch had SoC-specific compatibles.
+
+But needs a translation table to get to the revision number.
+
+I have not yet brought into discussion that there are different =
+firmwares for sgx530-121,
+sgx530-125, sgx544-116 etc. And user-space code may also depend on to be =
+able to chose
+the right one if multiple firmware packages are installed. Currently =
+this is not the case
+but would be a major benfit for OS packages.
+
+To automate this we need a mechanism to scan the device tree for a =
+compatible string that
+tells which firmware variant to load.
+
+But why force this to depend on the SoC compatible if it only depends =
+indirectly?
+
+By the way, there is a tested and working driver using the scheme with =
+the sub-versions:
+
+=
+https://github.com/openpvrsgx-devgroup/linux_openpvrsgx/blob/11cc7876ba39b=
+6172d19ee0bf0a872c1d3d745e1/drivers/gpu/drm/pvrsgx/pvr-drv.c#L306
+
+On the other hand As far as I see this will can of course be adapted to =
+the newly
+proposed scheme.
+
+But it still seems a bit twisted to me. Maybe because we for example =
+define LCD panel
+compatibles not by the compatible of the device they are installed in.
+
+BR,
+Nikolaus=
 
