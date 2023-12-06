@@ -1,482 +1,247 @@
-Return-Path: <linux-mips+bounces-555-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-557-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A6DB806606
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 05:11:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4553A806682
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 06:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD7721C21166
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 04:11:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0B7E28231E
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 05:25:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0CAE574;
-	Wed,  6 Dec 2023 04:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4D5FC19;
+	Wed,  6 Dec 2023 05:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eXNpuY6N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGidZ4iR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BD31B9;
-	Tue,  5 Dec 2023 20:11:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701835900; x=1733371900;
-  h=date:from:to:cc:subject:message-id;
-  bh=CVFGsSsfUy62FhgnFw/WQA+qWzDe203shlMH+YoZmOQ=;
-  b=eXNpuY6NcEYhwkNmHnlqjsd3/AMP+tHnykCV9KGpR+6a/GSA8c5PPcHN
-   7OHOc+k05gjK/sSjppL4wWW3Edw+0SY3rEjLPIMHV4EhhF9yjoCf5eHlg
-   pWWGoVJ8HCYudlT0vOdEX8geiE/sL8uT+rBl+NxOCj5ZadjrIuDNJZk6H
-   kXrtz9ktl5LEoG33/nAQTS3hPY+jkeDWPpHWHkJhohfjw/GmrZ5XqiVvw
-   fxJfF7qwTgPwEoPm5iqbFt7GbQkuU6nHHBgVe5vLwGJE+PHD+M4SOP6ZW
-   Rzi/CaK4m/Kx9VWKgz7wPhATCgcd8ZabaAe9KjM9D6/NfVbJDEKoeK5DI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="460492260"
-X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
-   d="scan'208";a="460492260"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 20:11:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="1102684530"
-X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
-   d="scan'208";a="1102684530"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Dec 2023 20:11:34 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAjG0-000AEW-1I;
-	Wed, 06 Dec 2023 04:11:32 +0000
-Date: Wed, 06 Dec 2023 12:11:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- intel-gfx@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-bcachefs@vger.kernel.org,
- linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
- linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-Subject: [linux-next:master] BUILD REGRESSION
- 0f5f12ac05f36f117e793656c3f560625e927f1b
-Message-ID: <202312061258.nAVYPFq2-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F7618F;
+	Tue,  5 Dec 2023 21:25:16 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6ce6dd83945so1359304b3a.3;
+        Tue, 05 Dec 2023 21:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701840315; x=1702445115; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6huBbZbAII0X6eZV6S+b7knvK6KuHJo8Bh0bkLgUxxE=;
+        b=QGidZ4iRu5/YncLQwNVlWgTHz7jez7T2YHYyySJDAUl1LybKELv67VrH6KN+e8TxRh
+         /s5VSFFVvQRiwkXNmKLJi/wEnIBiOGQwnngb6oYZMoG6eQc0QbJ/T0Ec0db6vzr1k+Dx
+         srQWLLbmQFs5EhWEp5zC/IaHKoTJiY8bXU5IS602EgbG9LYXq+G5ffcY+0jnsGCyRyAk
+         7+ZWoAymYRZSRJgPK/kil/e23SdlpEsI7jueZ//dM4yB7IHleHRJ+/PQQLHSiUNJ84tI
+         tOtIp+BHegPALNw4/RtwVHj2rBou199ZGUBCDO3mLTFwdzB+80PTnm4Fc0QdTZHYALAf
+         NEJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701840315; x=1702445115;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6huBbZbAII0X6eZV6S+b7knvK6KuHJo8Bh0bkLgUxxE=;
+        b=J2b0FKDZyCK+e5YG3hPYVqsm96iXFc1DuCjGft3nU29htWngmgXURBAKy6LSskvXsc
+         OlwaUaL+5EN/6u7FgAONCyt94/N94DvXh3D4HeMkqLpjiugMkbh9I8T/h8ecFBGT6oo+
+         bBF7PUATUXLdMVYFO7IvwjBNP0iu5NE6arIG4eYzZ8D+aFktqrYfj6JhEcs9DQMBWBDf
+         kbBFrkua9jujvMMFVH6lL8lpzV+nmnybr/z6ilzjRywIN/dJlnLy2pCqZ+YCTKLfpKDl
+         b87csaO4/TXV8CcKaJT3HFSgWjWds5g9kbrD67w6oNhQhjh5fZK0GbncA1Te8IJg3p16
+         SAoQ==
+X-Gm-Message-State: AOJu0YyH7TAIz+i+HfbrAQNnJb8M6GbmVheSEHS7vLvZsf7l4/8SFM7S
+	B7EPEUC20m7UnlvO5u56YqE=
+X-Google-Smtp-Source: AGHT+IFMxfqg8FxPkhbWeYw87iiXO3hRoVhFhH1xtCbWG3FZaVDEj9UfTpo1oYq4IqfLZ3ft2t7YHQ==
+X-Received: by 2002:a05:6a00:98e:b0:6ce:6420:e174 with SMTP id u14-20020a056a00098e00b006ce6420e174mr407397pfg.36.1701840315262;
+        Tue, 05 Dec 2023 21:25:15 -0800 (PST)
+Received: from localhost ([216.228.127.130])
+        by smtp.gmail.com with ESMTPSA id ka32-20020a056a0093a000b006ce455a7faasm5350125pfb.150.2023.12.05.21.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 21:25:14 -0800 (PST)
+Date: Tue, 5 Dec 2023 21:22:59 -0800
+From: Yury Norov <yury.norov@gmail.com>
+To: Jan Kara <jack@suse.cz>
+Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Akinobu Mita <akinobu.mita@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Chaitanya Kulkarni <kch@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Disseldorp <ddiss@suse.de>,
+	Edward Cree <ecree.xilinx@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Hugh Dickins <hughd@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+	Jiri Pirko <jiri@resnulli.us>, Jiri Slaby <jirislaby@kernel.org>,
+	Kalle Valo <kvalo@kernel.org>, Karsten Graul <kgraul@linux.ibm.com>,
+	Karsten Keil <isdn@linux-pingi.de>,
+	Kees Cook <keescook@chromium.org>,
+	Leon Romanovsky <leon@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Martin Habets <habetsm.xilinx@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Oliver Neukum <oneukum@suse.com>, Paolo Abeni <pabeni@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ping-Ke Shih <pkshih@realtek.com>, Rich Felker <dalias@libc.org>,
+	Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	GR-QLogic-Storage-Upstream@marvell.com, alsa-devel@alsa-project.org,
+	ath10k@lists.infradead.org, dmaengine@vger.kernel.org,
+	iommu@lists.linux.dev, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-net-drivers@amd.com, linux-pci@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org,
+	Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+	Matthew Wilcox <willy@infradead.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+	Alexey Klimov <klimov.linux@gmail.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH v2 00/35] bitops: add atomic find_bit() operations
+Message-ID: <ZXAFM2VZugdhM3oE@yury-ThinkPad>
+References: <20231203192422.539300-1-yury.norov@gmail.com>
+ <20231204185101.ddmkvsr2xxsmoh2u@quack3>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204185101.ddmkvsr2xxsmoh2u@quack3>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 0f5f12ac05f36f117e793656c3f560625e927f1b  Add linux-next specific files for 20231205
+On Mon, Dec 04, 2023 at 07:51:01PM +0100, Jan Kara wrote:
+> Hello Yury!
+> 
+> On Sun 03-12-23 11:23:47, Yury Norov wrote:
+> > Add helpers around test_and_{set,clear}_bit() that allow to search for
+> > clear or set bits and flip them atomically.
+> > 
+> > The target patterns may look like this:
+> > 
+> > 	for (idx = 0; idx < nbits; idx++)
+> > 		if (test_and_clear_bit(idx, bitmap))
+> > 			do_something(idx);
+> > 
+> > Or like this:
+> > 
+> > 	do {
+> > 		bit = find_first_bit(bitmap, nbits);
+> > 		if (bit >= nbits)
+> > 			return nbits;
+> > 	} while (!test_and_clear_bit(bit, bitmap));
+> > 	return bit;
+> > 
+> > In both cases, the opencoded loop may be converted to a single function
+> > or iterator call. Correspondingly:
+> > 
+> > 	for_each_test_and_clear_bit(idx, bitmap, nbits)
+> > 		do_something(idx);
+> > 
+> > Or:
+> > 	return find_and_clear_bit(bitmap, nbits);
+> 
+> These are fine cleanups but they actually don't address the case that has
+> triggered all these changes - namely the xarray use of find_next_bit() in
+> xas_find_chunk().
+> 
+> ...
+> > This series is a result of discussion [1]. All find_bit() functions imply
+> > exclusive access to the bitmaps. However, KCSAN reports quite a number
+> > of warnings related to find_bit() API. Some of them are not pointing
+> > to real bugs because in many situations people intentionally allow
+> > concurrent bitmap operations.
+> > 
+> > If so, find_bit() can be annotated such that KCSAN will ignore it:
+> > 
+> >         bit = data_race(find_first_bit(bitmap, nbits));
+> 
+> No, this is not a correct thing to do. If concurrent bitmap changes can
+> happen, find_first_bit() as it is currently implemented isn't ever a safe
+> choice because it can call __ffs(0) which is dangerous as you properly note
+> above. I proposed adding READ_ONCE() into find_first_bit() / find_next_bit()
+> implementation to fix this issue but you disliked that. So other option we
+> have is adding find_first_bit() and find_next_bit() variants that take
+> volatile 'addr' and we have to use these in code like xas_find_chunk()
+> which cannot be converted to your new helpers.
 
-Error/Warning reports:
+Here is some examples when concurrent operations with plain find_bit()
+are acceptable:
 
-https://lore.kernel.org/oe-kbuild-all/202312051416.YiRWCYmp-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312051418.JkBRBDyP-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312051419.DsbnPGym-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312051913.e5iif8Qz-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312051935.IXiYU8Kn-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312052245.yFpBSgNH-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312060025.BdeqZrWx-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312060311.Tnsv2fl2-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312060355.M0eJtq4X-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202312061137.QgjJ4nTc-lkp@intel.com
+ - two threads running find_*_bit(): safe wrt ffs(0) and returns correct
+   value, because underlying bitmap is unchanged;
+ - find_next_bit() in parallel with set or clear_bit(), when modifying
+   a bit prior to the start bit to search: safe and correct;
+ - find_first_bit() in parallel with set_bit(): safe, but may return wrong
+   bit number;
+ - find_first_zero_bit() in parallel with clear_bit(): same as above.
 
-Error/Warning: (recently discovered and may have been fixed)
+In last 2 cases find_bit() may not return a correct bit number, but
+it may be OK if caller requires any (not exactly first) set or clear
+bit, correspondingly.
 
-aarch64-linux-ld: qcom_stats.c:(.text+0x470): undefined reference to `qmp_send'
-arch/mips/kernel/crash.c:96:6: warning: no previous prototype for 'default_machine_crash_shutdown' [-Wmissing-prototypes]
-arch/mips/kernel/machine_kexec.c:161:6: warning: no previous prototype for 'kexec_nonboot_cpu_jump' [-Wmissing-prototypes]
-arch/mips/kernel/machine_kexec.c:170:6: warning: conflicting types for 'kexec_reboot'; have 'void(void)'
-arch/mips/kernel/machine_kexec.c:170:6: warning: no previous prototype for 'kexec_reboot' [-Wmissing-prototypes]
-arch/mips/kernel/machine_kexec.c:77:17: error: 'kexec_args' undeclared (first use in this function)
-drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_process.c:1671:9: sparse:    struct dma_fence *
-drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_process.c:1671:9: sparse:    struct dma_fence [noderef] __rcu *
-drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c:2765:36: sparse:    struct dma_fence *
-drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c:2765:36: sparse:    struct dma_fence [noderef] __rcu *
-drivers/leds/leds-sun50i-a100.c:309:12: error: call to __compiletime_assert_280 declared with 'error' attribute: FIELD_PREP: value too large for the field
-drivers/media/i2c/saa6752hs.c:598:18: error: implicit declaration of function 'v4l2_subdev_state_get_format' [-Werror=implicit-function-declaration]
-qcom_stats.c:(.text+0x33c): undefined reference to `qmp_send'
-qcom_stats.c:(.text+0x398): undefined reference to `__aeabi_uldivmod'
-qcom_stats.c:(.text+0x6c4): undefined reference to `__udivdi3'
-qcom_stats.c:(.text+0x8a0): undefined reference to `qmp_get'
-qcom_stats.c:(.text.qcom_ddr_stats_show+0x14c): undefined reference to `__udivdi3'
+In such cases, KCSAN may be safely silenced.
+ 
+> > This series addresses the other important case where people really need
+> > atomic find ops. As the following patches show, the resulting code
+> > looks safer and more verbose comparing to opencoded loops followed by
+> > atomic bit flips.
+> > 
+> > In [1] Mirsad reported 2% slowdown in a single-thread search test when
+> > switching find_bit() function to treat bitmaps as volatile arrays. On
+> > the other hand, kernel robot in the same thread reported +3.7% to the
+> > performance of will-it-scale.per_thread_ops test.
+> 
+> It was actually me who reported the regression here [2] but whatever :)
+> 
+> [2] https://lore.kernel.org/all/20231011150252.32737-1-jack@suse.cz
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+My apologize.
 
-drivers/gpu/drm/i915/display/intel_fbdev_fb.c:111 intel_fbdev_fb_fill_info() error: uninitialized symbol 'vaddr'.
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-randconfig-r013-20211213
-|   |-- (.init.text):undefined-reference-to-__auxiliary_driver_register
-|   |-- (.text):undefined-reference-to-auxiliary_device_init
-|   |-- alpha-linux-ld:(.init.text):undefined-reference-to-__auxiliary_driver_register
-|   |-- alpha-linux-ld:(.text):undefined-reference-to-__auxiliary_device_add
-|   `-- alpha-linux-ld:(.text):undefined-reference-to-auxiliary_device_init
-|-- arc-randconfig-c031-20221114
-|   `-- drivers-media-i2c-saa6752hs.c:error:implicit-declaration-of-function-v4l2_subdev_state_get_format
-|-- arm-allyesconfig
-|   `-- qcom_stats.c:(.text):undefined-reference-to-__aeabi_uldivmod
-|-- arm64-randconfig-r034-20230701
-|   |-- aarch64-linux-ld:qcom_stats.c:(.text):undefined-reference-to-qmp_send
-|   |-- qcom_stats.c:(.text):undefined-reference-to-qmp_get
-|   `-- qcom_stats.c:(.text):undefined-reference-to-qmp_send
-|-- i386-randconfig-061-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- i386-randconfig-063-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- i386-randconfig-141-20231205
-|   |-- block-bdev.c-bdev_open_by_dev()-warn:possible-memory-leak-of-handle
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_connectors.c-amdgpu_connector_dvi_detect()-warn:inconsistent-indenting
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c-amdgpu_ras_query_error_status_helper()-error:we-previously-assumed-info-could-be-null-(see-line-)
-|   |-- drivers-gpu-drm-drm_gpuvm.c-drm_gpuvm_exec_lock_range()-error:uninitialized-symbol-ret-.
-|   |-- drivers-hwtracing-stm-core.c-stm_register_device()-error:double-free-of-stm
-|   |-- fs-bcachefs-btree_update_interior.c-bch2_btree_update_start()-warn:inconsistent-returns-c-gc_lock-.
-|   |-- fs-bcachefs-btree_write_buffer.c-bch2_btree_write_buffer_flush_locked()-error:we-previously-assumed-iter.path-could-be-null-(see-line-)
-|   |-- fs-bcachefs-recovery.c-bch2_journal_replay()-error:uninitialized-symbol-ret-.
-|   |-- lib-zstd-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
-|   |-- lib-zstd-common-bits.h-ZSTD_countTrailingZeros32()-warn:inconsistent-indenting
-|   |-- lib-zstd-compress-..-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
-|   |-- lib-zstd-compress-..-common-bits.h-ZSTD_countLeadingZeros64()-warn:inconsistent-indenting
-|   |-- lib-zstd-compress-..-common-bits.h-ZSTD_countTrailingZeros32()-warn:inconsistent-indenting
-|   |-- lib-zstd-compress-..-common-bits.h-ZSTD_countTrailingZeros64()-warn:inconsistent-indenting
-|   |-- lib-zstd-decompress-..-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
-|   |-- lib-zstd-decompress-..-common-bits.h-ZSTD_countTrailingZeros32()-warn:inconsistent-indenting
-|   `-- lib-zstd-decompress-..-common-bits.h-ZSTD_countTrailingZeros64()-warn:inconsistent-indenting
-|-- mips-allyesconfig
-|   `-- qcom_stats.c:(.text.qcom_ddr_stats_show):undefined-reference-to-__udivdi3
-|-- mips-randconfig-r006-20221108
-|   `-- cache.c:(.text):undefined-reference-to-r3k_cache_init
-|-- mips-randconfig-r021-20230305
-|   |-- arch-mips-kernel-crash.c:warning:no-previous-prototype-for-default_machine_crash_shutdown
-|   |-- arch-mips-kernel-machine_kexec.c:warning:conflicting-types-for-kexec_reboot-have-void(void)
-|   |-- arch-mips-kernel-machine_kexec.c:warning:no-previous-prototype-for-kexec_nonboot_cpu_jump
-|   `-- arch-mips-kernel-machine_kexec.c:warning:no-previous-prototype-for-kexec_reboot
-|-- mips-randconfig-r032-20220731
-|   `-- arch-mips-kernel-machine_kexec.c:error:kexec_args-undeclared-(first-use-in-this-function)
-|-- mips-randconfig-s051-20220905
-|   `-- arch-mips-mm-cache.c:(.text.cpu_cache_init):undefined-reference-to-r3k_cache_init
-|-- nios2-randconfig-r112-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- parisc-randconfig-r133-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- powerpc-randconfig-003-20231205
-|   `-- qcom_stats.c:(.text):undefined-reference-to-__udivdi3
-|-- powerpc-randconfig-r111-20231205
-|   |-- lib-raid6-altivec4.c:sparse:incomplete-type-static-toplevel-unative_t
-|   |-- lib-raid6-altivec4.c:sparse:int-static-signed-toplevel-__preempt_count_sub(-...-)
-|   |-- lib-raid6-altivec4.c:sparse:int-static-signed-toplevel-disable_kernel_altivec(-...-)
-|   |-- lib-raid6-altivec4.c:sparse:int-static-toplevel-unative_t
-|   |-- lib-raid6-altivec8.c:sparse:incomplete-type-static-toplevel-unative_t
-|   |-- lib-raid6-altivec8.c:sparse:int-static-signed-toplevel-__preempt_count_sub(-...-)
-|   |-- lib-raid6-altivec8.c:sparse:int-static-signed-toplevel-disable_kernel_altivec(-...-)
-|   |-- lib-raid6-altivec8.c:sparse:int-static-toplevel-unative_t
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- powerpc-randconfig-r123-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- powerpc64-randconfig-002-20231205
-|   `-- arch-powerpc-include-asm-book3s-pgtable-64k.h:warning:no-return-statement-in-function-returning-non-void
-|-- sh-randconfig-r035-20230105
-|   `-- standard-input:Error:missing-expression-in-.size-directive
-|-- sh-randconfig-r112-20231205
-|   `-- include-drm-bridge-aux-bridge.h:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- sparc-allmodconfig
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
-|-- sparc-allnoconfig
-|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
-|   `-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
-|-- sparc-defconfig
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
-|   `-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
-|-- sparc-randconfig-001-20231205
-|   `-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|-- sparc-randconfig-r006-20230514
-|   `-- parport_pc.c:(.text):undefined-reference-to-ebus_dma_prepare
-|-- sparc-randconfig-r036-20230809
-|   `-- sparc-linux-ld:arch-sparc-include-asm-parport.h:(.text):undefined-reference-to-ebus_dma_enable
-|-- sparc-randconfig-r062-20231205
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   `-- arch-sparc-mm-init_64.c:warning:variable-pagecv_flag-set-but-not-used
-|-- sparc-randconfig-r121-20231205
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   |-- arch-sparc-mm-leon_mm.c:warning:variable-paddrbase-set-but-not-used
-|   |-- arch-sparc-mm-srmmu.c:warning:variable-clear-set-but-not-used
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- sparc-sparc64_defconfig
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
-|-- sparc64-allmodconfig
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
-|-- sparc64-allyesconfig
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
-|-- sparc64-defconfig
-|   |-- arch-sparc-kernel-module.c:warning:variable-strtab-set-but-not-used
-|   `-- arch-sparc-mm-init_64.c:warning:variable-hv_pgsz_idx-set-but-not-used
-`-- x86_64-randconfig-161-20231205
-    |-- drivers-hwtracing-stm-core.c-stm_register_device()-error:double-free-of-stm
-    |-- lib-zstd-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
-    |-- lib-zstd-common-bits.h-ZSTD_countTrailingZeros32()-warn:inconsistent-indenting
-    |-- lib-zstd-decompress-..-common-bits.h-ZSTD_countLeadingZeros32()-warn:inconsistent-indenting
-    `-- lib-zstd-decompress-..-common-bits.h-ZSTD_countTrailingZeros64()-warn:inconsistent-indenting
-clang_recent_errors
-|-- arm-randconfig-r133-20231204
-|   `-- arch-arm-kernel-machine_kexec.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-const-volatile-noderef-__user-ptr-got-restricted-__be32-usertype
-|-- arm64-allmodconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- arm64-allyesconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- hexagon-allmodconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- hexagon-allyesconfig
-|   |-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmnewmap
-|   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmsetvec
-|   `-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-memset
-|-- hexagon-randconfig-r113-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- i386-allmodconfig
-|   |-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|   `-- fs-bcachefs-replicas.c:error:builtin-functions-must-be-directly-called
-|-- i386-allyesconfig
-|   |-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|   `-- fs-bcachefs-replicas.c:error:builtin-functions-must-be-directly-called
-|-- i386-randconfig-061-20231206
-|   |-- drivers-soc-qcom-pmic_pdcharger_ulog.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-restricted-__le32-usertype-opcode-got-int
-|   |-- drivers-soc-qcom-pmic_pdcharger_ulog.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-restricted-__le32-usertype-owner-got-int
-|   `-- drivers-soc-qcom-pmic_pdcharger_ulog.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-restricted-__le32-usertype-type-got-int
-|-- powerpc-allmodconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- powerpc-allyesconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- powerpc64-randconfig-r123-20231126
-|   `-- drivers-leds-leds-sun50i-a100.c:error:call-to-__compiletime_assert_NNN-declared-with-error-attribute:FIELD_PREP:value-too-large-for-the-field
-|-- powerpc64-randconfig-r131-20231205
-|   |-- lib-raid6-altivec4.c:sparse:incomplete-type-static-toplevel-unative_t
-|   |-- lib-raid6-altivec4.c:sparse:int-static-signed-toplevel-__preempt_count_sub(-...-)
-|   |-- lib-raid6-altivec4.c:sparse:int-static-signed-toplevel-disable_kernel_altivec(-...-)
-|   |-- lib-raid6-altivec4.c:sparse:int-static-toplevel-unative_t
-|   |-- lib-raid6-altivec8.c:sparse:incomplete-type-static-toplevel-unative_t
-|   |-- lib-raid6-altivec8.c:sparse:int-static-signed-toplevel-__preempt_count_sub(-...-)
-|   |-- lib-raid6-altivec8.c:sparse:int-static-signed-toplevel-disable_kernel_altivec(-...-)
-|   |-- lib-raid6-altivec8.c:sparse:int-static-toplevel-unative_t
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- s390-randconfig-001-20231205
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- s390-randconfig-002-20231205
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- x86_64-allmodconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- x86_64-allyesconfig
-|   `-- drivers-leds-leds-max5970.c:warning:variable-num_leds-set-but-not-used
-|-- x86_64-randconfig-121-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- x86_64-randconfig-122-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- x86_64-randconfig-123-20231203
-|   |-- drivers-gpu-drm-amd-amdgpu-..-amdkfd-kfd_process.c:sparse:sparse:incompatible-types-in-comparison-expression-(different-address-spaces):
-|   |-- drivers-gpu-drm-amd-amdgpu-..-amdkfd-kfd_process.c:sparse:struct-dma_fence
-|   |-- drivers-gpu-drm-amd-amdgpu-..-amdkfd-kfd_process.c:sparse:struct-dma_fence-noderef-__rcu
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_amdkfd_gpuvm.c:sparse:sparse:incompatible-types-in-comparison-expression-(different-address-spaces):
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_amdkfd_gpuvm.c:sparse:struct-dma_fence
-|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_amdkfd_gpuvm.c:sparse:struct-dma_fence-noderef-__rcu
-|-- x86_64-randconfig-123-20231205
-|   `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|-- x86_64-randconfig-161-20231206
-|   `-- drivers-gpu-drm-i915-display-intel_fbdev_fb.c-intel_fbdev_fb_fill_info()-error:uninitialized-symbol-vaddr-.
-`-- x86_64-randconfig-r132-20231205
-    `-- lib-zstd-compress-zstd_fast.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-
-elapsed time: 1453m
-
-configs tested: 177
-configs skipped: 3
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231205   gcc  
-arc                   randconfig-002-20231205   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                     am200epdkit_defconfig   clang
-arm                         axm55xx_defconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20231205   gcc  
-arm                   randconfig-002-20231205   gcc  
-arm                   randconfig-003-20231205   gcc  
-arm                   randconfig-004-20231205   gcc  
-arm                           sunxi_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231205   gcc  
-arm64                 randconfig-002-20231205   gcc  
-arm64                 randconfig-003-20231205   gcc  
-arm64                 randconfig-004-20231205   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231205   gcc  
-csky                  randconfig-002-20231205   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231205   clang
-hexagon               randconfig-002-20231205   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231205   gcc  
-i386         buildonly-randconfig-002-20231205   gcc  
-i386         buildonly-randconfig-003-20231205   gcc  
-i386         buildonly-randconfig-004-20231205   gcc  
-i386         buildonly-randconfig-005-20231205   gcc  
-i386         buildonly-randconfig-006-20231205   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231205   gcc  
-i386                  randconfig-002-20231205   gcc  
-i386                  randconfig-003-20231205   gcc  
-i386                  randconfig-004-20231205   gcc  
-i386                  randconfig-005-20231205   gcc  
-i386                  randconfig-006-20231205   gcc  
-i386                  randconfig-011-20231205   clang
-i386                  randconfig-012-20231205   clang
-i386                  randconfig-013-20231205   clang
-i386                  randconfig-014-20231205   clang
-i386                  randconfig-015-20231205   clang
-i386                  randconfig-016-20231205   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231205   gcc  
-loongarch             randconfig-002-20231205   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                           xway_defconfig   gcc  
-nios2                            alldefconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231205   gcc  
-nios2                 randconfig-002-20231205   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                       virt_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-64bit_defconfig   gcc  
-parisc                randconfig-001-20231205   gcc  
-parisc                randconfig-002-20231205   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                 canyonlands_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                 mpc8315_rdb_defconfig   clang
-powerpc               randconfig-001-20231205   gcc  
-powerpc               randconfig-002-20231205   gcc  
-powerpc               randconfig-003-20231205   gcc  
-powerpc64             randconfig-001-20231205   gcc  
-powerpc64             randconfig-002-20231205   gcc  
-powerpc64             randconfig-003-20231205   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231205   gcc  
-riscv                 randconfig-002-20231205   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231205   clang
-s390                  randconfig-002-20231205   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                          r7780mp_defconfig   gcc  
-sh                    randconfig-001-20231205   gcc  
-sh                    randconfig-002-20231205   gcc  
-sh                           se7751_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231205   gcc  
-sparc64               randconfig-002-20231205   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231205   gcc  
-um                    randconfig-002-20231205   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231205   gcc  
-x86_64       buildonly-randconfig-002-20231205   gcc  
-x86_64       buildonly-randconfig-003-20231205   gcc  
-x86_64       buildonly-randconfig-004-20231205   gcc  
-x86_64       buildonly-randconfig-005-20231205   gcc  
-x86_64       buildonly-randconfig-006-20231205   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231205   clang
-x86_64                randconfig-002-20231205   clang
-x86_64                randconfig-003-20231205   clang
-x86_64                randconfig-004-20231205   clang
-x86_64                randconfig-005-20231205   clang
-x86_64                randconfig-006-20231205   clang
-x86_64                randconfig-011-20231205   gcc  
-x86_64                randconfig-012-20231205   gcc  
-x86_64                randconfig-013-20231205   gcc  
-x86_64                randconfig-014-20231205   gcc  
-x86_64                randconfig-015-20231205   gcc  
-x86_64                randconfig-016-20231205   gcc  
-x86_64                randconfig-071-20231205   gcc  
-x86_64                randconfig-072-20231205   gcc  
-x86_64                randconfig-073-20231205   gcc  
-x86_64                randconfig-074-20231205   gcc  
-x86_64                randconfig-075-20231205   gcc  
-x86_64                randconfig-076-20231205   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-002-20231205   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > Assuming that our compilers are sane and generate better code against
+> > properly annotated data, the above discrepancy doesn't look weird. When
+> > running on non-volatile bitmaps, plain find_bit() outperforms atomic
+> > find_and_bit(), and vice-versa.
+> > 
+> > So, all users of find_bit() API, where heavy concurrency is expected,
+> > are encouraged to switch to atomic find_and_bit() as appropriate.
+> 
+> Well, all users where any concurrency can happen should switch. Otherwise
+> they are prone to the (admittedly mostly theoretical) data race issue.
+> 
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
 
