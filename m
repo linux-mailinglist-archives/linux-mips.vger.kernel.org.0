@@ -1,135 +1,138 @@
-Return-Path: <linux-mips+bounces-558-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-559-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3C6E8067CC
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 07:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6EAB80699A
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 09:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D2EE1F214F1
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 06:53:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515A41F2135B
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 08:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580E8125CF;
-	Wed,  6 Dec 2023 06:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A0F719441;
+	Wed,  6 Dec 2023 08:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QfPx6a9G";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GH+CucaS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgM84tow"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B632C135;
-	Tue,  5 Dec 2023 22:53:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id DC3203200B13;
-	Wed,  6 Dec 2023 01:53:30 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 06 Dec 2023 01:53:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1701845610; x=1701932010; bh=PW
-	66L1dPgZW8LDxXB4sVa/5vk2EkvICnU+1XTg3NMCw=; b=QfPx6a9GTa1f8QF0e9
-	lEuKcFsJPTVPzqFVzdlUGuPbTX1bXF+m0OSM+YNNfRN1dBbSz3fYmLlgBf+4qu50
-	MSc3XV6QJBw/wNLDMYH0KHgRRX++edlijcqtOR4DqA4Ea4CgvszljPYzldmUD26q
-	X3QGbL/vfndBP62fcpHygQeXYNT4laXNuAZ9+yI/mu2Zr1wAHJzcWNi/vCh6laQS
-	zIadvRovi+y6hW9eDsJ4ps08lv51m+a/UswS+91VJGQW3/7P5fGNEGyNm7mmao6Y
-	VYt6MlBaRPA0p7V67U8kA+AsECGyy9Vy4akvg0ruNp+JfnaQjW1PN3/7Fop5WikR
-	fb/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701845610; x=1701932010; bh=PW66L1dPgZW8L
-	DxXB4sVa/5vk2EkvICnU+1XTg3NMCw=; b=GH+CucaS/2CicMAeMT4S2qz+0QUxW
-	siBhRM00FdK7bQYs0lqFqLWVH9ZhljqfelKYSu8lZZkIjExFiG4mE5HSbFn9TVcb
-	btqbpsjRCPqgqFDCm8m1HhMEB1avddz+lKBrKr5XHAhwMwrTuXU51xCEwPXtAqzh
-	s13xg4Mjp0wQ8tFG0xuX7CYR5Z8RYQ5pM7u4P6puIwTGKTpHlN6yAwiynTfzeQVT
-	d6r8qyJ362D6BWSC1M5lh3CmkQeFxV+pI63VXlBDG6vvZlJlrbOu+aHT68GwQNrJ
-	YmdSSyJWOGUJffDa9EAVThSRmPpUSy4a+g3N182uNx7YNX6SYa1XicWYA==
-X-ME-Sender: <xms:aRpwZR_vUtWbJQM2foiiiZyKFQR3HaPMIprLyJIT7duQYU_vi8kxSw>
-    <xme:aRpwZVvGr_Fh3c2gmaIvLahauUx3siYA3pFKtK_HJCaw2eLIFeH6xVVemPJn8brff
-    3HX3_tbFcpcQM3WdvI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejledgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:aRpwZfCOUZHZkntdpX7ADkGLEOJJ-EDgM_1SmHXZ6mf2Np6EmQi0ZQ>
-    <xmx:aRpwZVfoSFCHWUo_VIyqeD5DKi5Tg8Bt0cLOGDJSd2C1Wnih5_wCJA>
-    <xmx:aRpwZWPbQI4CiTpCOsJ6vNoQRmxO0vRyePMO8I6SXlp9Y24mCU3trw>
-    <xmx:ahpwZd2ZWm_fEU9gcGqpRlAFAr7FWC0RGK6dqA6-uokNMj0btiqozQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 5AAB1B60089; Wed,  6 Dec 2023 01:53:29 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19CE18D;
+	Wed,  6 Dec 2023 00:27:54 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-58d439e3e15so304386eaf.1;
+        Wed, 06 Dec 2023 00:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701851274; x=1702456074; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X1sLit740GBBRQL8zggDwdmRF3hDduJsMAShvja4R2M=;
+        b=fgM84towgSAi4Fo8IC2l55RoGKfhOPgaq5A9V/GSqEgljzmIPug70h7LrenPPl6PTd
+         PDAqfC++BmmUtYWTtc4cTPJ4UZdvcycBtjJZxoVJm2qUPREaywSBBNNA11XHq1O8nhww
+         JtVo2SxAsxQCbkiFPsfze4rv6SMEDVPnAE//Fl9rvb9DZQS7HmEyXsecybMVR8PHqGrW
+         W0SzpSOBf7lQnQ2ognddU+5lCBH2XhXMAw1Tasr92jajZQTHBYOlxWti2wvsVImJ5rCr
+         nIc5g44ZpbweIwao94kizIGQatGazsNpgdMXv844AUjmigrJuRDeyOFrGH0W5NjtH8RC
+         JsTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701851274; x=1702456074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X1sLit740GBBRQL8zggDwdmRF3hDduJsMAShvja4R2M=;
+        b=xAG3i80GWN6Y3oe2L4gRIncz7tILyU5RUp6bA3Do7ztiGeFwghGC/vMZHioG95Ifqx
+         YIJtEQmXMZVufR4wrOb6gFJbjPBrFR/Js4BqmqVuUZUEbjF6A8R7Sn9b4+mO/Aj+BxmI
+         D5Mo/Ry+x7CiZxSA3kJqL2XrJZCi4EjA7laEyeIQ+HdOhtytcNOfUeUG6sg7LAie2HYK
+         B5g9nRj9BKMRLTKIPfbVwM8jjSwlaJ0qKnD4aVEcnDqrKCQX3upOqWheZmIcwpCrvCre
+         MBi77rVGwtlhlBoaxu2VLeGW7lOmlLr5qW9PqruPqkfqgG3gI9WzR9WXHCTuGBM+dha8
+         TJRA==
+X-Gm-Message-State: AOJu0YzWj8bGxOS9jLVm53Aerw2XXzpGcw3A4JzsyYiin5LLo1yYpYH0
+	DkaH8ItoHs6mS7EUO4d1lMVQUHISgj6vVeeNNBQ=
+X-Google-Smtp-Source: AGHT+IFbwC82objqk/yZRySWvh7dDm4eJDRrlhHPkv0gM+1Twv7yvk3J0MOW2D1+Gz5b3T9qzMg8k64/Wrw9NGx+Xd0=
+X-Received: by 2002:a05:6870:8194:b0:1fa:ef9d:3f45 with SMTP id
+ k20-20020a056870819400b001faef9d3f45mr302490oae.18.1701851273991; Wed, 06 Dec
+ 2023 00:27:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
-In-Reply-To: <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
-References: <202312041909.lwhcU35R-lkp@intel.com>
- <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
-Date: Wed, 06 Dec 2023 07:52:58 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Randy Dunlap" <rdunlap@infradead.org>,
- "kernel test robot" <lkp@intel.com>, "Masahiro Yamada" <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "Jiaxun Yang" <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Subject: Re: pm.c:undefined reference to `i8042_command'
-Content-Type: text/plain
+References: <20231022090633.792831-1-sergio.paracuellos@gmail.com>
+ <513bc341-25b8-5a57-d760-861a3e88a4a1@linaro.org> <CAMhs-H8A0p=nFSnU9pRn=rTC_=CH6jXFQdYgZdimFNq9+dVqSw@mail.gmail.com>
+ <ZVxlRE0tcAv1iaoA@alpha.franken.de> <CAMhs-H8bs89SFWPVOEJFT6B+zYh2Anf=DqCJXNaq=Tjiq5X5Ow@mail.gmail.com>
+ <CAMhs-H_ojHprCxsRwfXo_xavSYv9YH0eppg9ZobscvQamcDNxg@mail.gmail.com> <ZW+LwrhW9m/vrmnN@alpha.franken.de>
+In-Reply-To: <ZW+LwrhW9m/vrmnN@alpha.franken.de>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Wed, 6 Dec 2023 09:27:42 +0100
+Message-ID: <CAMhs-H_uK+0n-1GwyMegU2x5zNuP7yyAZRzkW4p+OkXiKmK=mw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add myself as maintainer of the Ralink architecture
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>, 
+	linux-mips@vger.kernel.org, john@phrozen.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 6, 2023, at 06:24, Randy Dunlap wrote:
->> All errors (new ones prefixed by >>):
->> 
->>    mips64el-linux-ld: arch/mips/loongson2ef/lemote-2f/pm.o: in function `setup_wakeup_events':
->>>> pm.c:(.text+0x118): undefined reference to `i8042_command'
->>>> mips64el-linux-ld: pm.c:(.text+0x154): undefined reference to `i8042_command'
+On Tue, Dec 5, 2023 at 11:29=E2=80=AFPM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
 >
+> On Tue, Dec 05, 2023 at 08:58:29PM +0100, Sergio Paracuellos wrote:
+> > On Tue, Nov 21, 2023 at 1:43=E2=80=AFPM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > >
+> > > On Tue, Nov 21, 2023 at 10:02=E2=80=AFAM Thomas Bogendoerfer
+> > > <tsbogend@alpha.franken.de> wrote:
+> > > >
+> > > > On Mon, Nov 20, 2023 at 08:59:25PM +0100, Sergio Paracuellos wrote:
+> > > > > On Wed, Oct 25, 2023 at 2:58=E2=80=AFPM Philippe Mathieu-Daud=C3=
+=A9
+> > > > > <philmd@linaro.org> wrote:
+> > > > > >
+> > > > > > On 22/10/23 11:06, Sergio Paracuellos wrote:
+> > > > > > > Its been a while since I am making contributions to this arch=
+itecture.
+> > > > > > > Hence add myself as maintainer.
+> > > > > > >
+> > > > > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.c=
+om>
+> > > > > > > ---
+> > > > > > > Hi John, if you are not ok with this please let me know. In o=
+ther case
+> > > > > > > please ack this patch. I can add myself as Reviewer if you pr=
+efer to
+> > > > > > > maintain alone this.
+> > > > > > >
+> > > > > > > Thanks in advance for your time!
+> > > > > > >
+> > > > > > > Best regards,
+> > > > > > >      Sergio Paracuellos
+> > > > > > >
+> > > > > > >   MAINTAINERS | 1 +
+> > > > > > >   1 file changed, 1 insertion(+)
+> > > > > >
+> > > > > > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> > > > > >
+> > > > >
+> > > > > Thomas, can you take this patch through the mips tree?
+> > > >
+> > > > sure
+> > >
+> > > Thanks!
+> >
+> > Gentle ping for this patch :)
 >
-> How do we feel about this?
-> I suppose that an ARCH or mach or board should know what it requires.
->
->
-> ---
->  arch/mips/loongson2ef/Kconfig |    3 +++
->  1 file changed, 3 insertions(+)
->
-> diff -- a/arch/mips/loongson2ef/Kconfig b/arch/mips/loongson2ef/Kconfig
-> --- a/arch/mips/loongson2ef/Kconfig
-> +++ b/arch/mips/loongson2ef/Kconfig
-> @@ -40,6 +40,9 @@ config LEMOTE_MACH2F
->  	select ARCH_HAS_PHYS_TO_DMA
->  	select ARCH_MIGHT_HAVE_PC_PARPORT
->  	select ARCH_MIGHT_HAVE_PC_SERIO
-> +	select INPUT
-> +	select SERIO
-> +	select SERIO_I8042
->  	select BOARD_SCACHE
->  	select BOOT_ELF32
+> I've not forgotten it
 
-I think it's bad style to force-select an optional subsystem.
-How about making the entire file optional? It seems that there
-are already __weak functions in its place.
+Thanks for letting me know. I thought it might be lost since I saw
+activity in mips-next branch.
 
---- a/arch/mips/loongson2ef/lemote-2f/Makefile
-+++ b/arch/mips/loongson2ef/lemote-2f/Makefile
-@@ -8,5 +8,6 @@ obj-y += clock.o machtype.o irq.o reset.o dma.o ec_kb3310b.o
- #
- # Suspend Support
- #
--
-+ifdef CONFIG_SERIO_I8042
- obj-$(CONFIG_SUSPEND) += pm.o
-+endif
+Best regards,
+    Sergio Paracuellos
 
-     Arnd
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
