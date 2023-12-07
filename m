@@ -1,152 +1,169 @@
-Return-Path: <linux-mips+bounces-568-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-569-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B8F807D8D
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 02:03:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21EB5807DDC
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 02:24:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C457B1F20F0A
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 01:03:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0355128159D
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 01:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E234F655;
-	Thu,  7 Dec 2023 01:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB241103;
+	Thu,  7 Dec 2023 01:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VBXdf5Cn"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="UXG5U8G5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FA3hlhIv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704BCD72
-	for <linux-mips@vger.kernel.org>; Wed,  6 Dec 2023 17:03:17 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-db53919e062so556794276.0
-        for <linux-mips@vger.kernel.org>; Wed, 06 Dec 2023 17:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701910996; x=1702515796; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kNsTQFENpLV0yAX5x5gNndSdmWF67ocLDbukBVvw4Ho=;
-        b=VBXdf5CnxCVBGP34y2jrZgUXAB3D+Etu2qzxQ7x4Iiqlzlrr3TrdiGUia7gbUt0OJz
-         bxjsnsxC30jqgOBckgOzD4xi2ND/Qv/VAuSXcHUYPkB8Wru/eENwPE7DKRlWC6npfx9t
-         46tkl86j8NKQSyJwMVC4wVWrE9qq07mPx3ObBigFWvSf1E/oUclgXmjFDOVcnGHyv7Hx
-         gzIVTGRUh1IoH6iP40sTPPU3YlV0dQiBRTut12QJ9OqWU34MLj5t6gZ7HmWGjD475rKJ
-         Q7HozIdE7JBNkkt35QLZVgn6s1NNUtCQRX0Y8iopRkepZNn4jslNci1YOgQ1pNV7ijE3
-         Ms9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701910996; x=1702515796;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kNsTQFENpLV0yAX5x5gNndSdmWF67ocLDbukBVvw4Ho=;
-        b=jFuevSj2WgN2b1U9clFWhuQ34S23R0OpMMJpp8rzTCHNjsSReU7BqwlELuK+nChSI8
-         5TbmKc7YMLUr6yw3gHFhDxFGzIUukNRDcV8AA80H1nk2Q3P8gEoEIvgNSbSSI7z0kAPt
-         HqnpJx6NxJ/DEkGfLe+wzhWA386zrKlJz3Gp/kWX6+xGZ5Rrd/q3I/D2I0XEdy7514JS
-         advzXizcWjMnSdmimmM1vDAeJeWOYd5uAZCk6Wo9zAjl87/noj4sVSrdogQla24azsq1
-         aheeB0vN4/IG++x5As6XXdKXPMT1esqHFe1vkNPQqru+zNnoOFXCtfeip/H8qQ6TBrH3
-         xlig==
-X-Gm-Message-State: AOJu0Yxlx/XcYE2CV4+htBr9rCbZqbcIabaOAIwjJ3LJ+C0yorsylbN3
-	4H0myKLw858qvsA0jeygTGCO1BPpL1u7Bg==
-X-Google-Smtp-Source: AGHT+IEeNrOu3itFc+M9ynsd08u9d5b33h7Ph3dWYLMht1q/VwgbdO1TO2ezXuPbPGpyVmgh4Cp2D8u2f11e3g==
-X-Received: from loggerhead.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:29a])
- (user=jmattson job=sendgmr) by 2002:a25:2981:0:b0:dbc:3553:efe with SMTP id
- p123-20020a252981000000b00dbc35530efemr3380ybp.4.1701910996183; Wed, 06 Dec
- 2023 17:03:16 -0800 (PST)
-Date: Wed,  6 Dec 2023 17:03:02 -0800
-In-Reply-To: <20220921003201.1441511-11-seanjc@google.com>
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E70D4ECA;
+	Wed,  6 Dec 2023 17:23:39 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 670B25C00A4;
+	Wed,  6 Dec 2023 20:22:07 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 06 Dec 2023 20:22:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+	1701912127; x=1701998527; bh=7yABB6tw1NhELwxCFkAM3G6hbihCudob0wd
+	ZkRFYHT8=; b=UXG5U8G5mrSji73MNOV06fEgfnLQge3pzavPqi6NyVil+bZM0NT
+	IwKYJkXg2azvrr4SWmwu4oFUPG1sPxCYpVgsFreOROjXWG+UocLdBEgMLu7Snsff
+	+RRYfVH0Ag3VCaG7WjgNdBtCCWPcv+RLXJKmNMXq3s2GzFR1kkUUpjWLChcvNiEm
+	OudAvHUeYWN3wu65cCvqf3omsnaENbxuPynwjbSuszjz3LueMBCfx3cU4fYnHnFD
+	H9mxXDdhSgZn+5mLsvyL+Kj+ecO/8EUjXKoinbCOFbi/LQypD/40ADzoRa+RU7vz
+	2wcMHji2Y0kOGaPKV4hAFWxOGncQWI/55ig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701912127; x=1701998527; bh=7yABB6tw1NhELwxCFkAM3G6hbihCudob0wd
+	ZkRFYHT8=; b=FA3hlhIvv/0YvU3lBKgigY56SS3Oprf+x825gqxV5xhSzYgChZ8
+	auKPbdzKktukw/0iw2LffHWAhtx+5gE91I8fByxOse0XGBu1ueTNwvsnELoq/r3H
+	dD0HVzvHdsoPNDVUVSSR+PStI4lRqk6y1hV+F7Xok3mURaqpUnYZQ6/NFGezuVrp
+	ySkWpO1RLAw2jQKjLObayz63jrxIzImc/vZkwyngS62OHIHNohPTNBEPY8LzeBaB
+	6aG5L46zZYWyz23jZIKjF9kPLaAIx6XYR4RF73JVa+Ac3On5VZ95NKGw33HarJeZ
+	YenFtOJUoKHIWVjOlM2gUIm65CXkqu+YESg==
+X-ME-Sender: <xms:PR5xZWzw3-00DcV31e4_BinHR67q9FRk0FN0B2Saq1jTyJ2QQUrw_w>
+    <xme:PR5xZSSC4A3Z0sm-Kk4NvG9Oz4BEWRwnBFTsezKOaTzeDvkFOyYnHpYWXfHmhHdy5
+    z8JoR5Pp6TtMTR29KU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekuddgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:PR5xZYUZFMZNVt8D8FSzGc6K_wQ1Bq0K0Idmu7tM1z4GrTg8jwhcKg>
+    <xmx:PR5xZcjH-4aPIi-pJApztAxNGoYMFqLAeQHg93XpUbJq0JxsSUCUew>
+    <xmx:PR5xZYCEVYeV7O06d9uqfrTTEvseK-hfgjidFpiBneqi1VGNWH6o6Q>
+    <xmx:Px5xZX4u29WvImTimkJQK95PNVSo8nq-vsb9u9xxLC01_SMcmXOccg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id D316E36A0075; Wed,  6 Dec 2023 20:22:05 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20220921003201.1441511-11-seanjc@google.com>
-X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
-Message-ID: <20231207010302.2240506-1-jmattson@google.com>
-Subject: [PATCH v4 10/12] KVM: x86: never write to memory from kvm_vcpu_check_block()
-From: Jim Mattson <jmattson@google.com>
-To: seanjc@google.com
-Cc: aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com, 
-	anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org, 
-	borntraeger@linux.ibm.com, chenhuacai@kernel.org, david@redhat.com, 
-	frankja@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	maz@kernel.org, mlevitsk@redhat.com, oliver.upton@linux.dev, 
-	palmer@dabbelt.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
-	suzuki.poulose@arm.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <40b5e438-22f4-43e5-9663-db44dd402a35@app.fastmail.com>
+In-Reply-To: <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
+References: <202312041909.lwhcU35R-lkp@intel.com>
+ <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
+ <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
+ <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
+Date: Thu, 07 Dec 2023 01:21:48 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Randy Dunlap" <rdunlap@infradead.org>, "Arnd Bergmann" <arnd@arndb.de>,
+ "kernel test robot" <lkp@intel.com>, "Masahiro Yamada" <masahiroy@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "Nicolas Schier" <nicolas@fjasle.eu>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: pm.c:undefined reference to `i8042_command'
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
-it cannot sleep.  Writing to guest memory is therefore forbidden, but it
-can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
 
-Fortunately, all events that are caught by kvm_check_nested_events() are
-also recognized by kvm_vcpu_has_events() through vendor callbacks such as
-kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
-remove the call and postpone the actual processing to vcpu_block().
 
-Opportunistically honor the return of kvm_check_nested_events().  KVM
-punted on the check in kvm_vcpu_running() because the only error path is
-if vmx_complete_nested_posted_interrupt() fails, in which case KVM exits
-to userspace with "internal error" i.e. the VM is likely dead anyways so
-it wasn't worth overloading the return of kvm_vcpu_running().
+=E5=9C=A82023=E5=B9=B412=E6=9C=886=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =E4=
+=B8=8B=E5=8D=885:26=EF=BC=8CRandy Dunlap=E5=86=99=E9=81=93=EF=BC=9A
+> On 12/5/23 22:52, Arnd Bergmann wrote:
+>> On Wed, Dec 6, 2023, at 06:24, Randy Dunlap wrote:
+>>>> All errors (new ones prefixed by >>):
+>>>>
+>>>>    mips64el-linux-ld: arch/mips/loongson2ef/lemote-2f/pm.o: in func=
+tion `setup_wakeup_events':
+>>>>>> pm.c:(.text+0x118): undefined reference to `i8042_command'
+>>>>>> mips64el-linux-ld: pm.c:(.text+0x154): undefined reference to `i8=
+042_command'
+>>>
+>>>
+>>> How do we feel about this?
+>>> I suppose that an ARCH or mach or board should know what it requires.
+>>>
+>>>
+>>> ---
+>>>  arch/mips/loongson2ef/Kconfig |    3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff -- a/arch/mips/loongson2ef/Kconfig b/arch/mips/loongson2ef/Kcon=
+fig
+>>> --- a/arch/mips/loongson2ef/Kconfig
+>>> +++ b/arch/mips/loongson2ef/Kconfig
+>>> @@ -40,6 +40,9 @@ config LEMOTE_MACH2F
+>>>  	select ARCH_HAS_PHYS_TO_DMA
+>>>  	select ARCH_MIGHT_HAVE_PC_PARPORT
+>>>  	select ARCH_MIGHT_HAVE_PC_SERIO
+>>> +	select INPUT
+>>> +	select SERIO
+>>> +	select SERIO_I8042
+>>>  	select BOARD_SCACHE
+>>>  	select BOOT_ELF32
+>>=20
+>> I think it's bad style to force-select an optional subsystem.
+>> How about making the entire file optional? It seems that there
+>> are already __weak functions in its place.
+>
+> Yes, I agree in general.
+>
+> Hopefully the maintainer will opine your suggestion.
+> Jiaxun?
 
-Add the check mostly so that KVM is consistent with itself; the return of
-the call via kvm_apic_accept_events()=>kvm_check_nested_events() that
-immediately follows  _is_ checked.
+LGTM, PM is not an essential function here.
+Arnd, do you mind making it a patch?
 
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[sean: check and handle return of kvm_check_nested_events()]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+Thanks
+- Jiaxun
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index dcc675d4e44b..8aeacbc2bff9 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10815,6 +10815,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
- 			return 1;
- 	}
- 
-+	/*
-+	 * Evaluate nested events before exiting the halted state.  This allows
-+	 * the halt state to be recorded properly in the VMCS12's activity
-+	 * state field (AMD does not have a similar field and a VM-Exit always
-+	 * causes a spurious wakeup from HLT).
-+	 */
-+	if (is_guest_mode(vcpu)) {
-+		if (kvm_check_nested_events(vcpu) < 0)
-+			return 0;
-+	}
-+
- 	if (kvm_apic_accept_events(vcpu) < 0)
- 		return 0;
- 	switch(vcpu->arch.mp_state) {
-@@ -10837,9 +10848,6 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
- 
- static inline bool kvm_vcpu_running(struct kvm_vcpu *vcpu)
- {
--	if (is_guest_mode(vcpu))
--		kvm_check_nested_events(vcpu);
--
- 	return (vcpu->arch.mp_state == KVM_MP_STATE_RUNNABLE &&
- 		!vcpu->arch.apf.halted);
- }
+>
+> Thanks.
+>
+>>=20
+>> --- a/arch/mips/loongson2ef/lemote-2f/Makefile
+>> +++ b/arch/mips/loongson2ef/lemote-2f/Makefile
+>> @@ -8,5 +8,6 @@ obj-y +=3D clock.o machtype.o irq.o reset.o dma.o ec_=
+kb3310b.o
+>>  #
+>>  # Suspend Support
+>>  #
+>> -
+>> +ifdef CONFIG_SERIO_I8042
+>>  obj-$(CONFIG_SUSPEND) +=3D pm.o
+>> +endif
+>>=20
+>>      Arnd
+>
+> --=20
+> ~Randy
 
-This commit breaks delivery of a (virtualized) posted interrupt from
-an L1 vCPU to a halted L2 vCPU.
-
-Looking back at commit e6c67d8cf117 ("KVM: nVMX: Wake blocked vCPU in
-guest-mode if pending interrupt in virtual APICv"), Liran wrote:
-
-    Note that this also handles the case of nested posted-interrupt by the
-    fact RVI is updated in vmx_complete_nested_posted_interrupt() which is
-    called from kvm_vcpu_check_block() -> kvm_arch_vcpu_runnable() ->
-    kvm_vcpu_running() -> vmx_check_nested_events() ->
-    vmx_complete_nested_posted_interrupt().
-
-Clearly, that is no longer the case.
+--=20
+- Jiaxun
 
