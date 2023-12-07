@@ -1,305 +1,152 @@
-Return-Path: <linux-mips+bounces-567-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-568-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 474C8807AFF
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 23:03:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23B8F807D8D
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 02:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3A28282341
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Dec 2023 22:03:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C457B1F20F0A
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 01:03:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509F75638A;
-	Wed,  6 Dec 2023 22:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E234F655;
+	Thu,  7 Dec 2023 01:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="cQiqp85C";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="M72ksU6R"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VBXdf5Cn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D46512F;
-	Wed,  6 Dec 2023 14:03:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1701900157; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=qEtNFithtbtbT5kvCB1bcxft1JwKxupkuyxYYSM8jR0psds9sYyQqrT+QQiRWE5Ei+
-    QLMwNxuOkdnFZC6FJec4IBt7DaRZ9TbchK2oTIfzBoCJdvlVOJHxzglFrXaX7uAi8WCy
-    T6uj3FmCjHZOJNp8PlO+zhZ6nzpLIhViVVUfa5Zhq4K3V5yEQ64DB+6StbFex2Zm/cwv
-    mRz0cHXoGKYsCkWqRpvAVTg90o/C+g8Q0o7eyCm5M0rPRByuoFj2AO3rIH3dF4CJifsx
-    JioC4Ejz8zqglJg+lRxYyqiXgknEIrFwmbrHk+oS5q9yk9UXwJut+Fje17m4ivNuaA8k
-    1wOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1701900157;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=b7N6TMTtL9mF/E7SNl70t4vsVFtL/VG18eTOiMqO3Zs=;
-    b=mY0WpbOYHU5VFRwWF2qFIZ2lW2lye0PvYheCAyS/z2+7mmEqFfHjHw92JmhynzBwqk
-    +wN8UfJDIXI9rD3eTUYKoSx4/qutvNDah8BJ1qh3HzHaTI8+wZqipElijW3CXZVbaWkt
-    c6SuYUN62vvWL0aHJbeTaKb+VDyfjStEGYm8VLkOX+iJvnTJzr9DkoBtxZ5Tu/DJgKDq
-    WZ34vd6GV7enYLj6V2KkIklUC1nQd7c4//AIXAqBpB5tXZwwLTcpDRCI4VaHDE6PiJZC
-    Aav+SWydOhdgvgdiv0XDLJlaOT7X2H4UGHP5zehjNUAa8oEIDkt31LY36J3lPRUFo4sL
-    SlcA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1701900157;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=b7N6TMTtL9mF/E7SNl70t4vsVFtL/VG18eTOiMqO3Zs=;
-    b=cQiqp85CU2Ka7mIca5N1sRlcb6Kku1JkKzAAWwrpJ3LetadQbqTxwj3r2+Cs9+xXmC
-    drjlPQker7TIlaPtYDdcJjzap4CBrWcDp2ADveKOc8i2xXOeSWk6a16XOInNwWcQWHAT
-    /pEr3AUVqe2eJ+z7ZyXaG/b94JGqa7wFEJuWjNMJMymTFPtL7ANLqnr8btfxW/LXfeRm
-    WlFxMlBYCf1/cbuIfrm8O0qxglex7FAU5yG9mpjfhPTnwZghFcM41k6E7FUmH8Kxr0t/
-    3pPTyeU/uCxZ/4K0NAeDvejC1TAEe8X1HZxzmkCM8osWM9EiRrESeM8Z10SBXG5WjM2z
-    OJtA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1701900157;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=b7N6TMTtL9mF/E7SNl70t4vsVFtL/VG18eTOiMqO3Zs=;
-    b=M72ksU6RC6fuhk40KEhoUlPYg0CI4JkdBtFnjGH9gwxLnUxhJRA5teP1qqWVe20ffT
-    Qf5LthSt2quR3uJKH5CQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeqHQ="
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 49.10.0 DYNA|AUTH)
-    with ESMTPSA id wfeb35zB6M2a9SZ
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Wed, 6 Dec 2023 23:02:36 +0100 (CET)
-Content-Type: text/plain;
-	charset=us-ascii
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704BCD72
+	for <linux-mips@vger.kernel.org>; Wed,  6 Dec 2023 17:03:17 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-db53919e062so556794276.0
+        for <linux-mips@vger.kernel.org>; Wed, 06 Dec 2023 17:03:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701910996; x=1702515796; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kNsTQFENpLV0yAX5x5gNndSdmWF67ocLDbukBVvw4Ho=;
+        b=VBXdf5CnxCVBGP34y2jrZgUXAB3D+Etu2qzxQ7x4Iiqlzlrr3TrdiGUia7gbUt0OJz
+         bxjsnsxC30jqgOBckgOzD4xi2ND/Qv/VAuSXcHUYPkB8Wru/eENwPE7DKRlWC6npfx9t
+         46tkl86j8NKQSyJwMVC4wVWrE9qq07mPx3ObBigFWvSf1E/oUclgXmjFDOVcnGHyv7Hx
+         gzIVTGRUh1IoH6iP40sTPPU3YlV0dQiBRTut12QJ9OqWU34MLj5t6gZ7HmWGjD475rKJ
+         Q7HozIdE7JBNkkt35QLZVgn6s1NNUtCQRX0Y8iopRkepZNn4jslNci1YOgQ1pNV7ijE3
+         Ms9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701910996; x=1702515796;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kNsTQFENpLV0yAX5x5gNndSdmWF67ocLDbukBVvw4Ho=;
+        b=jFuevSj2WgN2b1U9clFWhuQ34S23R0OpMMJpp8rzTCHNjsSReU7BqwlELuK+nChSI8
+         5TbmKc7YMLUr6yw3gHFhDxFGzIUukNRDcV8AA80H1nk2Q3P8gEoEIvgNSbSSI7z0kAPt
+         HqnpJx6NxJ/DEkGfLe+wzhWA386zrKlJz3Gp/kWX6+xGZ5Rrd/q3I/D2I0XEdy7514JS
+         advzXizcWjMnSdmimmM1vDAeJeWOYd5uAZCk6Wo9zAjl87/noj4sVSrdogQla24azsq1
+         aheeB0vN4/IG++x5As6XXdKXPMT1esqHFe1vkNPQqru+zNnoOFXCtfeip/H8qQ6TBrH3
+         xlig==
+X-Gm-Message-State: AOJu0Yxlx/XcYE2CV4+htBr9rCbZqbcIabaOAIwjJ3LJ+C0yorsylbN3
+	4H0myKLw858qvsA0jeygTGCO1BPpL1u7Bg==
+X-Google-Smtp-Source: AGHT+IEeNrOu3itFc+M9ynsd08u9d5b33h7Ph3dWYLMht1q/VwgbdO1TO2ezXuPbPGpyVmgh4Cp2D8u2f11e3g==
+X-Received: from loggerhead.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:29a])
+ (user=jmattson job=sendgmr) by 2002:a25:2981:0:b0:dbc:3553:efe with SMTP id
+ p123-20020a252981000000b00dbc35530efemr3380ybp.4.1701910996183; Wed, 06 Dec
+ 2023 17:03:16 -0800 (PST)
+Date: Wed,  6 Dec 2023 17:03:02 -0800
+In-Reply-To: <20220921003201.1441511-11-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.200.91.1.1\))
-Subject: Re: [PATCH RFC 01/10] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
-From: H. Nikolaus Schaller <hns@goldelico.com>
-In-Reply-To: <8328bec9-a963-4f8a-ae03-a531749a30db@ti.com>
-Date: Wed, 6 Dec 2023 23:02:26 +0100
-Cc: Conor Dooley <conor@kernel.org>,
- Frank Binns <frank.binns@imgtec.com>,
- Donald Robson <donald.robson@imgtec.com>,
- Matt Coster <matt.coster@imgtec.com>,
- Adam Ford <aford173@gmail.com>,
- Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>,
- =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
- Tony Lindgren <tony@atomide.com>,
- Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>,
- Tero Kristo <kristo@kernel.org>,
- Paul Cercueil <paul@crapouillou.net>,
- dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev,
- linux-omap@vger.kernel.org,
- linux-mips@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <65992757-0A28-48AE-89D1-212E115265B8@goldelico.com>
-References: <20231204182245.33683-1-afd@ti.com>
- <20231204182245.33683-2-afd@ti.com>
- <CFF198DA-5C42-425E-86F4-759629489ECB@goldelico.com>
- <cb590a13-e0ff-49d9-8583-be613ad50dc5@ti.com>
- <FE0DBA5E-95A5-4C27-9F69-D1D8BDF56EC3@goldelico.com>
- <20231206-wolverine-paprika-0674ca01e1f2@spud>
- <8328bec9-a963-4f8a-ae03-a531749a30db@ti.com>
-To: Andrew Davis <afd@ti.com>
-X-Mailer: Apple Mail (2.3774.200.91.1.1)
+Mime-Version: 1.0
+References: <20220921003201.1441511-11-seanjc@google.com>
+X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
+Message-ID: <20231207010302.2240506-1-jmattson@google.com>
+Subject: [PATCH v4 10/12] KVM: x86: never write to memory from kvm_vcpu_check_block()
+From: Jim Mattson <jmattson@google.com>
+To: seanjc@google.com
+Cc: aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com, 
+	anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org, 
+	borntraeger@linux.ibm.com, chenhuacai@kernel.org, david@redhat.com, 
+	frankja@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com, 
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	maz@kernel.org, mlevitsk@redhat.com, oliver.upton@linux.dev, 
+	palmer@dabbelt.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
+	suzuki.poulose@arm.com
+Content-Type: text/plain; charset="UTF-8"
 
-(non-html)
+kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
+it cannot sleep.  Writing to guest memory is therefore forbidden, but it
+can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
 
-> Am 06.12.2023 um 17:15 schrieb Andrew Davis <afd@ti.com>:
->=20
-> On 12/6/23 10:02 AM, Conor Dooley wrote:
->> On Tue, Dec 05, 2023 at 07:04:05PM +0100, H. Nikolaus Schaller wrote:
->>>> Am 05.12.2023 um 18:33 schrieb Andrew Davis <afd@ti.com>:
->>>>=20
->>>> On 12/5/23 2:17 AM, H. Nikolaus Schaller wrote:
->>>>>> +          - enum:
->>>>>> +              - ti,omap3430-gpu # Rev 121
->>>>>> +              - ti,omap3630-gpu # Rev 125
->>>>> Is the "Rev 121" and "Rev 125" a property of the SoC integration =
-(clock/reset/power
->>>>> hookup etc.) or of the integrated SGX core?
->>>>=20
->>>> The Rev is a property of the SGX core, not the SoC integration.
->>>=20
->>> Then, it should belong there and not be a comment of the =
-ti,omap*-gpu record.
->>> In this way it does not seem to be a proper hardware description.
->>>=20
->>> BTW: there are examples where the revision is part of the compatible =
-string, even
->>> if the (Linux) driver makes no use of it:
->>>=20
->>> drivers/net/ethernet/xilinx/xilinx_emaclite.c
->> AFAICT these Xilinx devices that put the revisions in the compatible =
-are
->> a different case - they're "soft" IP intended for use in the fabric =
-of
->> an FPGA, and assigning a device specific compatible there does not =
-make
->> sense.
->> In this case it appears that the revision is completely known once =
-you
->> see "ti,omap3630-gpu", so encoding the extra "121" into the =
-compatible
->> string is not required.
->>>=20
->>>> But it seems that
->>>> compatible string is being used to define both (as we see being =
-debated in the other
->>>> thread on this series).
->>>>=20
->>>>> In my understanding the Revs are different variants of the SGX =
-core (errata
->>>>> fixes, instruction set, pipeline size etc.). And therefore the =
-current driver code
->>>>> has to be configured by some macros to handle such cases.
->>>>> So the Rev should IMHO be part of the next line:
->>>>>> +          - const: img,powervr-sgx530
->>>>> +          - enum:
->>>>> +              - img,powervr-sgx530-121
->>>>> +              - img,powervr-sgx530-125
->>>>> We have a similar definition in the openpvrsgx code.
->>>>> Example: compatible =3D "ti,omap3-sgx530-121", "img,sgx530-121", =
-"img,sgx530";
->>>>> (I don't mind about the powervr- prefix).
->>>>> This would allow a generic and universal sgx driver (loaded =
-through just matching
->>>>> "img,sgx530") to handle the errata and revision specifics at =
-runtime based on the
->>>>> compatible entry ("img,sgx530-121") and know about SoC integration =
-("ti,omap3-sgx530-121").
->> The "raw" sgx530 compatible does not seem helpful if the sgx530-121 =
-or
->> sgx530-125 compatibles are also required to be present for the driver =
-to
->> actually function. The revision specific compatibles I would not =
-object
->> to, but everything in here has different revisions anyway - does the
->> same revision actually appear in multiple devices? If it doesn't then =
-I
->> don't see any value in the suffixed compatibles either.
->=20
-> Everything here has different revisions because any device that uses
-> the same revision can also use the same base compatible string. For
-> instance AM335x SoCs use the SGX530 revision 125, same as OMAP3630,
-> so I simply reuse that compatible in their DT as you can see in
-> patch [5/10]. I didn't see the need for a new compatible string
-> for identical (i.e. "compatible") IP and integration.
+Fortunately, all events that are caught by kvm_check_nested_events() are
+also recognized by kvm_vcpu_has_events() through vendor callbacks such as
+kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
+remove the call and postpone the actual processing to vcpu_block().
 
-Ok, this is a point. As long as there is no SoC which can come with =
-different
-SGX revisions the SoC compatible is enough for everything.
+Opportunistically honor the return of kvm_check_nested_events().  KVM
+punted on the check in kvm_vcpu_running() because the only error path is
+if vmx_complete_nested_posted_interrupt() fails, in which case KVM exits
+to userspace with "internal error" i.e. the VM is likely dead anyways so
+it wasn't worth overloading the return of kvm_vcpu_running().
 
-I never looked it that way.
+Add the check mostly so that KVM is consistent with itself; the return of
+the call via kvm_apic_accept_events()=>kvm_check_nested_events() that
+immediately follows  _is_ checked.
 
->=20
-> The first device to use that IP/revision combo gets the named
-> compatible, all others re-use the same compatible where possible.
+Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+[sean: check and handle return of kvm_check_nested_events()]
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/x86.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-Hm. If we take this rule, we can even completely leave out all
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index dcc675d4e44b..8aeacbc2bff9 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10815,6 +10815,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+ 			return 1;
+ 	}
+ 
++	/*
++	 * Evaluate nested events before exiting the halted state.  This allows
++	 * the halt state to be recorded properly in the VMCS12's activity
++	 * state field (AMD does not have a similar field and a VM-Exit always
++	 * causes a spurious wakeup from HLT).
++	 */
++	if (is_guest_mode(vcpu)) {
++		if (kvm_check_nested_events(vcpu) < 0)
++			return 0;
++	}
++
+ 	if (kvm_apic_accept_events(vcpu) < 0)
+ 		return 0;
+ 	switch(vcpu->arch.mp_state) {
+@@ -10837,9 +10848,6 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+ 
+ static inline bool kvm_vcpu_running(struct kvm_vcpu *vcpu)
+ {
+-	if (is_guest_mode(vcpu))
+-		kvm_check_nested_events(vcpu);
+-
+ 	return (vcpu->arch.mp_state == KVM_MP_STATE_RUNNABLE &&
+ 		!vcpu->arch.apf.halted);
+ }
 
-+          - const: img,powervr-sgx530
-+          - const: img,powervr-sgx540
-+          - const: img,powervr-sgx544
+This commit breaks delivery of a (virtualized) posted interrupt from
+an L1 vCPU to a halted L2 vCPU.
 
-and just have a list of allsgx compatible SoC:
+Looking back at commit e6c67d8cf117 ("KVM: nVMX: Wake blocked vCPU in
+guest-mode if pending interrupt in virtual APICv"), Liran wrote:
 
-+      - items:
-+          - enum:
-+              - ti,am62-gpu # IMG AXE GPU model/revision is fully =
-discoverable
-+              - ti,omap3430-gpu # sgx530 Rev 121
-+              - ti,omap3630-gpu # sgx530 Rev 125
-+              - ingenic,jz4780-gpu # sgx540 Rev 130
-+              - ti,omap4430-gpu # sgx540 Rev 120
-+              - allwinner,sun6i-a31-gpu # sgx544 MP2 Rev 115
-+              - ti,omap4470-gpu # sgx544 MP1 Rev 112
-+              - ti,omap5432-gpu # sgx544 MP2 Rev 105
-+              - ti,am5728-gpu # sgx544 MP2 Rev 116
-+              - ti,am6548-gpu # sgx544 MP1 Rev 117
-+              - more to come
+    Note that this also handles the case of nested posted-interrupt by the
+    fact RVI is updated in vmx_complete_nested_posted_interrupt() which is
+    called from kvm_vcpu_check_block() -> kvm_arch_vcpu_runnable() ->
+    kvm_vcpu_running() -> vmx_check_nested_events() ->
+    vmx_complete_nested_posted_interrupt().
 
->=20
-> Andrew
->=20
->>>>> And user-space can be made to load the right firmware variant =
-based on "img,sgx530-121"
->>>>> I don't know if there is some register which allows to discover =
-the revision long
->>>>> before the SGX subsystem is initialized and the firmware is up and =
-running.
->>>>> What I know is that it is possible to read out the revision after =
-starting the firmware
->>>>> but it may just echo the version number of the firmware binary =
-provided from user-space.
->>>>=20
->>>> We should be able to read out the revision (register =
-EUR_CR_CORE_REVISION), the problem is
->>>> today the driver is built for a given revision at compile time.
->>>=20
->>> Yes, that is something we had planned to get rid of for a long time =
-by using different compatible
->>> strings and some variant specific struct like many others drivers =
-are doing it.
->>> But it was a to big task so nobody did start with it.
->>>=20
->>>> That is a software issue,
->>>> not something that we need to encode in DT. While the core ID =
-(SGX5xx) can be also detected
->>>> (EUR_CR_CORE_ID), the location of that register changes, and so it =
-does need encoded in
->>>> DT compatible.
->>>=20
->>> Ok, I didn't know about such registers as there is not much public =
-information available.
->>> Fair enough, there are some error reports about in different forums.
->>>=20
->>> On the other hand we then must read out this register in more or =
-less early initialization
->>> stages. Even if we know this information to be static and it could =
-be as simple as a list
->>> of compatible strings in the driver.
->>>=20
->>>> The string "ti,omap3430-gpu" tells us the revision if we cannot =
-detect it (as in the current
->>>> driver), and the SoC integration is generic anyway (just a reg and =
-interrupt).
->>>=20
->>> It of course tells, but may need a translation table that needs to =
-be maintained in a
->>> different format. Basically the same what the comments show in a =
-non-machine readable
->>> format.
->>>=20
->>> I just wonder why the specific version can or should not become =
-simply part of the DTS
->>> and needs this indirection.
->>>=20
->>> Basically it is a matter of openness for future (driver) development =
-and why it needs
->>> careful decisions.
->>>=20
->>> So in other words: I would prefer to see the comments about versions =
-encoded in the device
->>> tree binary to make it machine readable.
->> It's already machine readable if it is invariant on an SoC given the
->> patch had SoC-specific compatibles.
->=20
-
+Clearly, that is no longer the case.
 
