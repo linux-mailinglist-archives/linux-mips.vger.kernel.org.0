@@ -1,169 +1,129 @@
-Return-Path: <linux-mips+bounces-569-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-570-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21EB5807DDC
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 02:24:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0193F8080E4
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 07:39:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0355128159D
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 01:24:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A12FC1F20F5F
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Dec 2023 06:39:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB241103;
-	Thu,  7 Dec 2023 01:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED4F9101E0;
+	Thu,  7 Dec 2023 06:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="UXG5U8G5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FA3hlhIv"
+	dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b="NB5K6bbG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E70D4ECA;
-	Wed,  6 Dec 2023 17:23:39 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 670B25C00A4;
-	Wed,  6 Dec 2023 20:22:07 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Wed, 06 Dec 2023 20:22:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1701912127; x=1701998527; bh=7yABB6tw1NhELwxCFkAM3G6hbihCudob0wd
-	ZkRFYHT8=; b=UXG5U8G5mrSji73MNOV06fEgfnLQge3pzavPqi6NyVil+bZM0NT
-	IwKYJkXg2azvrr4SWmwu4oFUPG1sPxCYpVgsFreOROjXWG+UocLdBEgMLu7Snsff
-	+RRYfVH0Ag3VCaG7WjgNdBtCCWPcv+RLXJKmNMXq3s2GzFR1kkUUpjWLChcvNiEm
-	OudAvHUeYWN3wu65cCvqf3omsnaENbxuPynwjbSuszjz3LueMBCfx3cU4fYnHnFD
-	H9mxXDdhSgZn+5mLsvyL+Kj+ecO/8EUjXKoinbCOFbi/LQypD/40ADzoRa+RU7vz
-	2wcMHji2Y0kOGaPKV4hAFWxOGncQWI/55ig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701912127; x=1701998527; bh=7yABB6tw1NhELwxCFkAM3G6hbihCudob0wd
-	ZkRFYHT8=; b=FA3hlhIvv/0YvU3lBKgigY56SS3Oprf+x825gqxV5xhSzYgChZ8
-	auKPbdzKktukw/0iw2LffHWAhtx+5gE91I8fByxOse0XGBu1ueTNwvsnELoq/r3H
-	dD0HVzvHdsoPNDVUVSSR+PStI4lRqk6y1hV+F7Xok3mURaqpUnYZQ6/NFGezuVrp
-	ySkWpO1RLAw2jQKjLObayz63jrxIzImc/vZkwyngS62OHIHNohPTNBEPY8LzeBaB
-	6aG5L46zZYWyz23jZIKjF9kPLaAIx6XYR4RF73JVa+Ac3On5VZ95NKGw33HarJeZ
-	YenFtOJUoKHIWVjOlM2gUIm65CXkqu+YESg==
-X-ME-Sender: <xms:PR5xZWzw3-00DcV31e4_BinHR67q9FRk0FN0B2Saq1jTyJ2QQUrw_w>
-    <xme:PR5xZSSC4A3Z0sm-Kk4NvG9Oz4BEWRwnBFTsezKOaTzeDvkFOyYnHpYWXfHmhHdy5
-    z8JoR5Pp6TtMTR29KU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekuddgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:PR5xZYUZFMZNVt8D8FSzGc6K_wQ1Bq0K0Idmu7tM1z4GrTg8jwhcKg>
-    <xmx:PR5xZcjH-4aPIi-pJApztAxNGoYMFqLAeQHg93XpUbJq0JxsSUCUew>
-    <xmx:PR5xZYCEVYeV7O06d9uqfrTTEvseK-hfgjidFpiBneqi1VGNWH6o6Q>
-    <xmx:Px5xZX4u29WvImTimkJQK95PNVSo8nq-vsb9u9xxLC01_SMcmXOccg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D316E36A0075; Wed,  6 Dec 2023 20:22:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B5810CB;
+	Wed,  6 Dec 2023 22:39:06 -0800 (PST)
+Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
+	by mail5.25mail.st (Postfix) with ESMTPSA id 25AE36045F;
+	Thu,  7 Dec 2023 06:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
+	s=25mailst; t=1701931146;
+	bh=WJ0wR74d+mkwm+IUhYNno9dDAtwE/eqL/spvRAJBdfs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NB5K6bbGCpg41F4Y2JGI/TNwe3RGFW3Rb4TSnkoscLAJWyiJiI9oXkVCYi5gJHMUE
+	 rec/JKiVE0yT1vYJQYhdXWSOpHIN54QGzL6WqfqoxkLv91onW6Dz79NJ6Vdb3udRhT
+	 g4HB3bZFTntDqubO+X3JvKDCdaKA0DekPQ4uWpzaKpeKqvgHMCIg8HwkhVRqCravtn
+	 YeFizvmnz0qBvGZ2CbSPVnG4I+Gr9T0sxFMTO9tFLKvsPkuLc89p9Vr2tw7BtmLd1j
+	 PUVaUSKJDGuguxsfKpyxZIFKGKz5PBUnOl4Ij7KZmXv3Ryh00sxy2R/JOPY1RyCIZ1
+	 XKfEq9e8Lqa+Q==
+Date: Thu, 7 Dec 2023 08:38:02 +0200
+From: Tony Lindgren <tony@atomide.com>
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Andrew Davis <afd@ti.com>, Frank Binns <frank.binns@imgtec.com>,
+	Donald Robson <donald.robson@imgtec.com>,
+	Matt Coster <matt.coster@imgtec.com>,
+	"H . Nikolaus Schaller" <hns@goldelico.com>,
+	Adam Ford <aford173@gmail.com>,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+	Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH RFC 01/10] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
+Message-ID: <20231207063802.GR5169@atomide.com>
+References: <b97f04f6-cda2-4e9b-b729-a5149e36f978@linaro.org>
+ <20231205075657.GN5169@atomide.com>
+ <df7dd7b0-f315-4033-985a-175f75568a8c@linaro.org>
+ <20231205081031.GO5169@atomide.com>
+ <efcd64f4-00d2-4671-af3a-e27764f70e8d@linaro.org>
+ <20231205083001.GP5169@atomide.com>
+ <27f2e3a3-0791-4278-adb2-55ed76820a3a@linaro.org>
+ <20231205100246.5db0d6a1@aktux>
+ <78a81d54-f12c-401e-9a26-5125eb0b1c65@linaro.org>
+ <20231205104343.2e3c4105@aktux>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <40b5e438-22f4-43e5-9663-db44dd402a35@app.fastmail.com>
-In-Reply-To: <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
-References: <202312041909.lwhcU35R-lkp@intel.com>
- <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
- <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
- <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
-Date: Thu, 07 Dec 2023 01:21:48 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Randy Dunlap" <rdunlap@infradead.org>, "Arnd Bergmann" <arnd@arndb.de>,
- "kernel test robot" <lkp@intel.com>, "Masahiro Yamada" <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: pm.c:undefined reference to `i8042_command'
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231205104343.2e3c4105@aktux>
 
+* Andreas Kemnade <andreas@kemnade.info> [231205 09:43]:
+> On Tue, 5 Dec 2023 10:27:56 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+> > On 05/12/2023 10:02, Andreas Kemnade wrote:
+> > > On Tue, 5 Dec 2023 09:45:44 +0100
+> > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > >   
+> > >>> Sure the clock nodes can be there for the child IP, but they won't do
+> > >>> anything. And still need to be managed separately by the device driver if
+> > >>> added.    
+> > >>
+> > >> So if OS does not have runtime PM, the bindings are wrong? Bindings
+> > >> should not depend on some particular feature of some particular OS.  
+> > > 
+> > > Any user of the devicetree sees that there is a parent and the parent needs
+> > > to be enabled by some mechanism.
+> > > E.g. I2c devices do not specify the clocks of the parent (the i2c master)  
 
+Yeah the interconnect target module needs to be enabled before the child
+IP can be probed for any OS. That is unless the target module is left on
+from the bootloader.
 
-=E5=9C=A82023=E5=B9=B412=E6=9C=886=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =E4=
-=B8=8B=E5=8D=885:26=EF=BC=8CRandy Dunlap=E5=86=99=E9=81=93=EF=BC=9A
-> On 12/5/23 22:52, Arnd Bergmann wrote:
->> On Wed, Dec 6, 2023, at 06:24, Randy Dunlap wrote:
->>>> All errors (new ones prefixed by >>):
->>>>
->>>>    mips64el-linux-ld: arch/mips/loongson2ef/lemote-2f/pm.o: in func=
-tion `setup_wakeup_events':
->>>>>> pm.c:(.text+0x118): undefined reference to `i8042_command'
->>>>>> mips64el-linux-ld: pm.c:(.text+0x154): undefined reference to `i8=
-042_command'
->>>
->>>
->>> How do we feel about this?
->>> I suppose that an ARCH or mach or board should know what it requires.
->>>
->>>
->>> ---
->>>  arch/mips/loongson2ef/Kconfig |    3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff -- a/arch/mips/loongson2ef/Kconfig b/arch/mips/loongson2ef/Kcon=
-fig
->>> --- a/arch/mips/loongson2ef/Kconfig
->>> +++ b/arch/mips/loongson2ef/Kconfig
->>> @@ -40,6 +40,9 @@ config LEMOTE_MACH2F
->>>  	select ARCH_HAS_PHYS_TO_DMA
->>>  	select ARCH_MIGHT_HAVE_PC_PARPORT
->>>  	select ARCH_MIGHT_HAVE_PC_SERIO
->>> +	select INPUT
->>> +	select SERIO
->>> +	select SERIO_I8042
->>>  	select BOARD_SCACHE
->>>  	select BOOT_ELF32
->>=20
->> I think it's bad style to force-select an optional subsystem.
->> How about making the entire file optional? It seems that there
->> are already __weak functions in its place.
->
-> Yes, I agree in general.
->
-> Hopefully the maintainer will opine your suggestion.
-> Jiaxun?
+But like I said, I have no objection to also having the clocks for the
+child SGX device here. I think two out of the tree SGX clocks are merged,
+so one of the three clocks would repeat twice in the binding.
 
-LGTM, PM is not an essential function here.
-Arnd, do you mind making it a patch?
+We do provide some of the clock aliases, like fck and ick, for the child
+ip automatically by the ti-sysc interconnect target module. But likely we
+don't want to clock name specific handling in the driver so best to
+standardize on SGX specific clock names. That is if the clock properties
+are not set optional.
 
-Thanks
-- Jiaxun
+> > If you use this analogy, then compare it with an I2C device which has
+> > these clock inputs. Such device must have clocks in the bindings.
+> > 
+> I would see target-module = i2c master.
+> 
+> Well, if there is a variant of the i2c device which does not require
+> external clocks and a variant which requires it, then clock can be
+> optional.
 
->
-> Thanks.
->
->>=20
->> --- a/arch/mips/loongson2ef/lemote-2f/Makefile
->> +++ b/arch/mips/loongson2ef/lemote-2f/Makefile
->> @@ -8,5 +8,6 @@ obj-y +=3D clock.o machtype.o irq.o reset.o dma.o ec_=
-kb3310b.o
->>  #
->>  # Suspend Support
->>  #
->> -
->> +ifdef CONFIG_SERIO_I8042
->>  obj-$(CONFIG_SUSPEND) +=3D pm.o
->> +endif
->>=20
->>      Arnd
->
-> --=20
-> ~Randy
+Yes that sounds about right for an analogy :)
 
---=20
-- Jiaxun
+Regards,
+
+Tony
 
