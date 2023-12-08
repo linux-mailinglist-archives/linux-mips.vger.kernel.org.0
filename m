@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-610-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-611-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC57380A857
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 17:13:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D838580A859
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 17:13:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 980C1281833
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 16:13:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 164011C20B19
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 16:13:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EDEA374D5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7870374DE;
 	Fri,  8 Dec 2023 16:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e1DVOJMb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BgBDek+l"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6B51995;
-	Fri,  8 Dec 2023 08:12:58 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 92239C0004;
-	Fri,  8 Dec 2023 16:12:56 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30E4199D;
+	Fri,  8 Dec 2023 08:12:59 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A174320002;
+	Fri,  8 Dec 2023 16:12:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1702051977;
+	t=1702051978;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AagYqurduAd05kHY0ow9kHcvI+mUo3FUEEyQW1aeXWI=;
-	b=e1DVOJMbQHAws2a4sJYGD+cU8txY0fD0/bnYzlRUqTuAocj9D/GDKqV13DlDIdi8cP7TX/
-	RqoQg9b65l0xcSt71ElN/z3aURY5EDE9wjcX4XXvb/FzyUigMrz18aCqowHugUJWYbDdKe
-	Cj8KrRZ5GPgpe3ynTZGxw1lFTT4lbVHMhczeIGs3+rhViw5paJ1zNfBCUiRHKcTPLxt5vY
-	+zHK+470tVAGMqc92Ei7tpb1ktcwaytCbV03usp5+78wopLnHTo83p06jJtfBQ5b83uU4N
-	+DPFD7qgzdNTnuFRn+p9UFZxBASmApB0bOZ8t9HcXSsqhaGntCrkUoxXshbjag==
+	bh=p5Y4+QQx6IQCL0sfRkqEobRfltIrsUFlmPw44Fo9wsE=;
+	b=BgBDek+lHk8Bpj4cTc9PRqbI7zUVzeW3FrPoj/em51nDGBxq/hJRlYrswt7JH3U16LmPUP
+	7OcuJpBXfg5BNautwb3tkcMppVHrjGL2UBr0upJBv61qVzFLSraqD81lkFd+DilwEjjsyE
+	beiwHotLU4X0t0IO4KroTrZ8pVo8lnXmjdXbMtT50LSWUlNY9k0vR26hmzAVMm1IXgGNhf
+	ibUlZ+LH7GAmibJLiCx4UvTW2VWODK/RoxuY2Cx/yPg+jKU3sjd6rwuO5l75COuhmA8gRr
+	MGm4hfceUVAvwSjZEClpiBEPDQqTHZXlc2XrXRv5u1LFT/S8NVO5uAnWI+QjEg==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 To: Paul Burton <paulburton@kernel.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -48,9 +48,9 @@ Cc: Vladimir  Kondratiev <vladimir.kondratiev@mobileye.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
 	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v4 04/22] MIPS: genex: Fix except_vec_vi for kernel in XKPHYS
-Date: Fri,  8 Dec 2023 17:12:20 +0100
-Message-ID: <20231208161249.1827174-5-gregory.clement@bootlin.com>
+Subject: [PATCH v4 05/22] MIPS: Fix set_uncached_handler for ebase in XKPHYS
+Date: Fri,  8 Dec 2023 17:12:21 +0100
+Message-ID: <20231208161249.1827174-6-gregory.clement@bootlin.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231208161249.1827174-1-gregory.clement@bootlin.com>
 References: <20231208161249.1827174-1-gregory.clement@bootlin.com>
@@ -65,9 +65,12 @@ X-GND-Sasl: gregory.clement@bootlin.com
 
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Use {highest, higher, hi, lo} immediate loading sequence
-to load 64 bit jump address for handler when kernel is
-loaded to XKPHYS.
+ebase may be in XKPHYS if memblock unable to allocate memory
+within KSEG0 physical range.
+
+To map ebase into uncached space we just convert it back to
+physical address and then use platform's TO_UNCAC helper
+to create mapping.
 
 Co-developed-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
 Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
@@ -75,99 +78,22 @@ Co-developed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/kernel/genex.S | 19 +++++++++++++++----
- arch/mips/kernel/traps.c | 34 ++++++++++++++++++++++++----------
- 2 files changed, 39 insertions(+), 14 deletions(-)
+ arch/mips/kernel/traps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index b6de8e88c1bd4..fd765ad9ecac0 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -272,11 +272,22 @@ NESTED(except_vec_vi, 0, sp)
- 	.set	push
- 	.set	noreorder
- 	PTR_LA	v1, except_vec_vi_handler
--FEXPORT(except_vec_vi_lui)
--	lui	v0, 0		/* Patched */
-+#if defined(CONFIG_32BIT) || defined(KBUILD_64BIT_SYM32)
-+FEXPORT(except_vec_vi_hi)
-+	lui	v0, 0			/* Patched */
-+#else
-+FEXPORT(except_vec_vi_highest)
-+	lui	v0, 0			/* Patched */
-+FEXPORT(except_vec_vi_higher)
-+	daddiu	v0, 0			/* Patched */
-+	dsll	v0, 16
-+FEXPORT(except_vec_vi_hi)
-+	daddiu	v0, 0			/* Patched */
-+	dsll	v0, 16
-+#endif
- 	jr	v1
--FEXPORT(except_vec_vi_ori)
--	 ori	v0, 0		/* Patched */
-+FEXPORT(except_vec_vi_lo)
-+	PTR_ADDIU	v0, 0		/* Patched */
- 	.set	pop
- 	END(except_vec_vi)
- EXPORT(except_vec_vi_end)
 diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 246c6a6b02614..60c513c51684f 100644
+index 60c513c51684f..230728d76d11f 100644
 --- a/arch/mips/kernel/traps.c
 +++ b/arch/mips/kernel/traps.c
-@@ -2091,18 +2091,26 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
- 		 * If no shadow set is selected then use the default handler
- 		 * that does normal register saving and standard interrupt exit
- 		 */
--		extern const u8 except_vec_vi[], except_vec_vi_lui[];
--		extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
-+		extern const u8 except_vec_vi[], except_vec_vi_hi[];
-+		extern const u8 except_vec_vi_lo[], except_vec_vi_end[];
-+#if defined(CONFIG_64BIT) && !defined(KBUILD_64BIT_SYM32)
-+		extern const u8 except_vec_vi_highest[], except_vec_vi_higher[];
-+#endif
- 		extern const u8 rollback_except_vec_vi[];
- 		const u8 *vec_start = using_rollback_handler() ?
- 				      rollback_except_vec_vi : except_vec_vi;
- #if defined(CONFIG_CPU_MICROMIPS) || defined(CONFIG_CPU_BIG_ENDIAN)
--		const int lui_offset = except_vec_vi_lui - vec_start + 2;
--		const int ori_offset = except_vec_vi_ori - vec_start + 2;
-+		const int imm_offset = 2;
- #else
--		const int lui_offset = except_vec_vi_lui - vec_start;
--		const int ori_offset = except_vec_vi_ori - vec_start;
-+		const int imm_offset = 0;
-+#endif
-+#if defined(CONFIG_64BIT) && !defined(KBUILD_64BIT_SYM32)
-+		const int highest_offset = except_vec_vi_highest - vec_start + imm_offset;
-+		const int higher_offset = except_vec_vi_higher - vec_start + imm_offset;
- #endif
-+		const int hi_offset = except_vec_vi_hi - vec_start + imm_offset;
-+		const int lo_offset = except_vec_vi_lo - vec_start + imm_offset;
-+
- 		const int handler_len = except_vec_vi_end - vec_start;
+@@ -2346,7 +2346,7 @@ static const char panic_null_cerr[] =
+ void set_uncached_handler(unsigned long offset, void *addr,
+ 	unsigned long size)
+ {
+-	unsigned long uncached_ebase = CKSEG1ADDR(ebase);
++	unsigned long uncached_ebase = TO_UNCAC(__pa(ebase));
  
- 		if (handler_len > VECTORSPACING) {
-@@ -2119,10 +2127,16 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
- #else
- 				handler_len);
- #endif
--		h = (u16 *)(b + lui_offset);
--		*h = (handler >> 16) & 0xffff;
--		h = (u16 *)(b + ori_offset);
--		*h = (handler & 0xffff);
-+#if defined(CONFIG_64BIT) && !defined(KBUILD_64BIT_SYM32)
-+		h = (u16 *)(b + highest_offset);
-+		*h = uasm_rel_highest(handler);
-+		h = (u16 *)(b + higher_offset);
-+		*h = uasm_rel_higher(handler);
-+#endif
-+		h = (u16 *)(b + hi_offset);
-+		*h = uasm_rel_hi(handler);
-+		h = (u16 *)(b + lo_offset);
-+		*h = uasm_rel_lo(handler);
- 		local_flush_icache_range((unsigned long)b,
- 					 (unsigned long)(b+handler_len));
- 	}
+ 	if (!addr)
+ 		panic(panic_null_cerr);
 -- 
 2.42.0
 
