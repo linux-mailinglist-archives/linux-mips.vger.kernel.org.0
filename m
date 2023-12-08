@@ -1,25 +1,25 @@
-Return-Path: <linux-mips+bounces-632-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-633-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C21380AA9D
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 18:22:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADB2B80AA9F
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 18:22:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 476A51F21037
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 17:22:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF0E81C20889
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 17:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299DB39842;
-	Fri,  8 Dec 2023 17:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAA439846;
+	Fri,  8 Dec 2023 17:22:29 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B611BF9;
-	Fri,  8 Dec 2023 09:22:12 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8D21BDD;
+	Fri,  8 Dec 2023 09:22:25 -0800 (PST)
 Received: from [192.168.1.104] (178.176.72.145) by msexch01.omp.ru
  (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Fri, 8 Dec
- 2023 20:22:04 +0300
+ 2023 20:22:17 +0300
 Subject: Re: [PATCH v4 05/22] MIPS: Fix set_uncached_handler for ebase in
  XKPHYS
 To: Gregory CLEMENT <gregory.clement@bootlin.com>, Paul Burton
@@ -37,8 +37,8 @@ References: <20231208161249.1827174-1-gregory.clement@bootlin.com>
  <20231208161249.1827174-6-gregory.clement@bootlin.com>
 From: Sergey Shtylyov <s.shtylyov@omp.ru>
 Organization: Open Mobile Platform
-Message-ID: <4865a68e-48b7-3b91-b4e5-94e35301b5f9@omp.ru>
-Date: Fri, 8 Dec 2023 20:22:04 +0300
+Message-ID: <84c0be90-a4f6-98b4-3011-8e3efbf6d5c5@omp.ru>
+Date: Fri, 8 Dec 2023 20:22:16 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 Precedence: bulk
@@ -70,7 +70,7 @@ X-KSE-AntiSpam-Info: {SMTP from is not routable}
 X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.145 in (user)
  b.barracudacentral.org}
 X-KSE-AntiSpam-Info:
-	127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+	omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
 X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.145
 X-KSE-AntiSpam-Info: {DNS response errors}
 X-KSE-AntiSpam-Info: Rate: 59
@@ -108,7 +108,7 @@ On 12/8/23 7:12 PM, Gregory CLEMENT wrote:
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-  Hm, too many decelopers for such simple patch... :-)
+  Hm, too many developers for such simple patch... :-)
 
 [...]
 
