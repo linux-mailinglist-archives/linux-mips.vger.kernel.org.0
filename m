@@ -1,129 +1,371 @@
-Return-Path: <linux-mips+bounces-601-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-602-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DA3F80A54B
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 15:20:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E760180A575
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 15:28:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42F191F212FB
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 14:20:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADCC9B20C2E
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Dec 2023 14:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C372A1DFCE;
-	Fri,  8 Dec 2023 14:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708C31DFCF;
+	Fri,  8 Dec 2023 14:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xqAI9Q7p";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5/kaQb7/"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Co4oXzV/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFD8171D;
-	Fri,  8 Dec 2023 06:20:07 -0800 (PST)
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1702045206;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xflaWiDw7kr8d/dlbv/fd4pzj3NI4pM3Ha1Gv1hGpME=;
-	b=xqAI9Q7p3eiImDPsYb3EgsmFw2FY4OUext9dxB4kvC+RGzJDOzzxV8/A1wrZAtU/f5dKS8
-	MaZPEr64Dqr691qS0QXo/2FsEo+hSSEU/blc0/lmaDDaTSS13dyEDHpBmd7lR2wQ61VTXO
-	5kevTVfzsbLzZh1XBlIOGO32ogydca3CgoFIBnw14Ia/+6AQzLdqhGWiEsa+PUsUFc7e9e
-	Bep+2+JbDnQPz32EFRTOl09He+JIs74SI23GBxDA/zIYiGwR1Df/FUHbkCOaLCw5xnXKx7
-	gkVTiApYhHW+vhswvyD3q/4YUfbMYl1ikBVJiWP/Kqmq9BqLeGFSsm0/78i+Hw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1702045206;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xflaWiDw7kr8d/dlbv/fd4pzj3NI4pM3Ha1Gv1hGpME=;
-	b=5/kaQb7/CisTC8SQuhbs5tQNRgtR1GoYBHF2P6cjQpotgD6wB8Rrfhb6lX+oh5uEnpcYP9
-	VVagnqz7i2+sTyDA==
-To: Binbin Zhou <zhoubinbin@loongson.cn>, Binbin Zhou
- <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>, Rob
- Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, loongson-kernel@lists.loongnix.cn,
- devicetree@vger.kernel.org, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-mips@vger.kernel.org, lvjianmin@loongson.cn, WANG Xuerui
- <git@xen0n.name>, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: Re: [PATCH v5 4/5] irqchip/loongson-liointc: Fix
- 'loongson,parent_int_map' parse
-In-Reply-To: <fc9b3afaf8826fd437ba91397eb7fa231db2c05c.1700449792.git.zhoubinbin@loongson.cn>
-References: <cover.1700449792.git.zhoubinbin@loongson.cn>
- <fc9b3afaf8826fd437ba91397eb7fa231db2c05c.1700449792.git.zhoubinbin@loongson.cn>
-Date: Fri, 08 Dec 2023 15:20:06 +0100
-Message-ID: <87lea4srmx.ffs@tglx>
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052B8173B
+	for <linux-mips@vger.kernel.org>; Fri,  8 Dec 2023 06:28:19 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-32f8441dfb5so1975841f8f.0
+        for <linux-mips@vger.kernel.org>; Fri, 08 Dec 2023 06:28:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702045697; x=1702650497; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PAMbjbUeNExg3jR9YfrOXqq7gkqmjKC91Dm2N2JHQ/A=;
+        b=Co4oXzV/8LIMPdV5udqQbJ18Gm0wp/Bp8cTk5RxP9kpAn7h5mtic8IHrj/o7T2TAiK
+         Or/CvHtohvLa2wOAiuMtHCuVLVF2c5wbCX8quRpjoyhUByB5HoHl9y7RC1EeORoXrPpj
+         6d/M8nZOEnlHBeRkfCV2hspG2WfSbCKOqlS7bZ2SqIcDSnXF4HMjjb/kLTcJ2RzQxppd
+         vYDsIT2sORIBD6xP2KxCrC2avYa5Tgy50u3ZedGMlDu0Wv9Xw5c6AR1XI0Sf5AWVtIoH
+         qls5BqICCXS8Dhz6W6ykBOGRMuXwd90/FeeUqMoE1Q/YEvOIn9webgIePD7OIK22la1f
+         6I2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702045697; x=1702650497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PAMbjbUeNExg3jR9YfrOXqq7gkqmjKC91Dm2N2JHQ/A=;
+        b=fnZuBjS+yPyk5onsc1tN/MgGHv9W+0k/omlqZpblVdhDo59oLByx6as5ZQme7bYpLr
+         h0mf4YC3f5F922ipxhn64yb9TegKwbn0uU4et7HVoLdgFI7LDOCC7nLgJa66g+KOnT/R
+         Rm2J+riZX/kK/ZzLygZE3cbuFaJI3/atWWfWru2t62AlJkL2jAvXlWJfcAgrD17X965U
+         oDE1nM77D9it/TJJRFYPHQNjTeGN4MoZYex6fLqO7njS8wY21Cu1hbTcVOndDrPBAjAI
+         6BARj+J6YqaGiSsSk/WASpd8NADnCz7rENmjCUderkCYbGRzFesk7axKvH3YVSs3xm/N
+         6Fqw==
+X-Gm-Message-State: AOJu0YzSsnw/D7jImIMebbrI/zn5gRb7gm/UnpbL08JGpHOClaH4XPvF
+	hMCsRjYWtrPtQcIAm2++FR2cm3mp0f6yDof45maMcA==
+X-Google-Smtp-Source: AGHT+IHoNadDPxIQtoDc8XaaVyQXJ8+RUUbaGefZZOgCrfyo3ePXP/MyaDv0pS1NmtW4EZmBlWmjUfpYXwwfiE4fKLo=
+X-Received: by 2002:a05:6000:1a4f:b0:333:2fd2:6f74 with SMTP id
+ t15-20020a0560001a4f00b003332fd26f74mr59420wry.126.1702045696879; Fri, 08 Dec
+ 2023 06:28:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20231207150348.82096-1-alexghiti@rivosinc.com>
+ <20231207150348.82096-2-alexghiti@rivosinc.com> <27d8dffc-cfd8-4f07-9c0a-b7101963c2ae@csgroup.eu>
+In-Reply-To: <27d8dffc-cfd8-4f07-9c0a-b7101963c2ae@csgroup.eu>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Fri, 8 Dec 2023 15:28:06 +0100
+Message-ID: <CAHVXubjtb-bq1o=jxAavMc5h9T-a_Z0=xxkPgerycQEDdhLd3Q@mail.gmail.com>
+Subject: Re: [PATCH RFC/RFT 1/4] riscv: Stop emitting preventive sfence.vma
+ for new vmalloc mappings
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ved Shanbhogue <ved@rivosinc.com>, 
+	Matt Evans <mev@rivosinc.com>, Dylan Jhong <dylan@andestech.com>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 20 2023 at 17:06, Binbin Zhou wrote:
+Hi Christophe,
 
-$Subject: s/parse/parsing/
-
-> In keeping with naming standards, 'loongson,parent_int_map' is renamed
-> to 'loongson,parent-int-map'. But for the driver, we need to make sure
-> that both forms can be parsed.
-
-Please keep changelogs in neutral or imperative tone:
-
-  For backwards compatibility it is required to parse the original
-  string too.
-
-Makes it entirely clear what this is about without 'we'. See also:
-
-  https://www.kernel.org/doc/html/latest/process/submitting-patches.rst 
-
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/irqchip/irq-loongson-liointc.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+On Thu, Dec 7, 2023 at 4:52=E2=80=AFPM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
 >
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index e4b33aed1c97..add2e0a955b8 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -330,6 +330,7 @@ static int __init liointc_of_init(struct device_node *node,
->  	bool have_parent = FALSE;
->  	int sz, i, index, revision, err = 0;
->  	struct resource res;
-> +	const char *prop_name = "loongson,parent-int-map";
+>
+>
+> Le 07/12/2023 =C3=A0 16:03, Alexandre Ghiti a =C3=A9crit :
+> > In 6.5, we removed the vmalloc fault path because that can't work (see
+> > [1] [2]). Then in order to make sure that new page table entries were
+> > seen by the page table walker, we had to preventively emit a sfence.vma
+> > on all harts [3] but this solution is very costly since it relies on IP=
+I.
+> >
+> > And even there, we could end up in a loop of vmalloc faults if a vmallo=
+c
+> > allocation is done in the IPI path (for example if it is traced, see
+> > [4]), which could result in a kernel stack overflow.
+> >
+> > Those preventive sfence.vma needed to be emitted because:
+> >
+> > - if the uarch caches invalid entries, the new mapping may not be
+> >    observed by the page table walker and an invalidation may be needed.
+> > - if the uarch does not cache invalid entries, a reordered access
+> >    could "miss" the new mapping and traps: in that case, we would actua=
+lly
+> >    only need to retry the access, no sfence.vma is required.
+> >
+> > So this patch removes those preventive sfence.vma and actually handles
+> > the possible (and unlikely) exceptions. And since the kernel stacks
+> > mappings lie in the vmalloc area, this handling must be done very early
+> > when the trap is taken, at the very beginning of handle_exception: this
+> > also rules out the vmalloc allocations in the fault path.
+> >
+> > Note that for now, we emit a sfence.vma even for uarchs that do not
+> > cache invalid entries as we have no means to know that: that will be
+> > fixed in the next patch.
+> >
+> > Link: https://lore.kernel.org/linux-riscv/20230531093817.665799-1-bjorn=
+@kernel.org/ [1]
+> > Link: https://lore.kernel.org/linux-riscv/20230801090927.2018653-1-dyla=
+n@andestech.com [2]
+> > Link: https://lore.kernel.org/linux-riscv/20230725132246.817726-1-alexg=
+hiti@rivosinc.com/ [3]
+> > Link: https://lore.kernel.org/lkml/20200508144043.13893-1-joro@8bytes.o=
+rg/ [4]
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > ---
+> >   arch/riscv/include/asm/cacheflush.h  | 19 +++++-
+> >   arch/riscv/include/asm/thread_info.h |  5 ++
+> >   arch/riscv/kernel/asm-offsets.c      |  5 ++
+> >   arch/riscv/kernel/entry.S            | 94 +++++++++++++++++++++++++++=
++
+> >   arch/riscv/mm/init.c                 |  2 +
+> >   5 files changed, 124 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/a=
+sm/cacheflush.h
+> > index 3cb53c4df27c..a916cbc69d47 100644
+> > --- a/arch/riscv/include/asm/cacheflush.h
+> > +++ b/arch/riscv/include/asm/cacheflush.h
+> > @@ -37,7 +37,24 @@ static inline void flush_dcache_page(struct page *pa=
+ge)
+> >       flush_icache_mm(vma->vm_mm, 0)
+> >
+> >   #ifdef CONFIG_64BIT
+> > -#define flush_cache_vmap(start, end) flush_tlb_kernel_range(start, end=
+)
+> > +extern u64 new_vmalloc[];
+>
+> Can you have the table size here ? Would help GCC static analysis for
+> boundary checking.
 
-Please don't glue variables randomly into the declaration section:
+Yes, I'll do
 
-  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#variable-declarations
+>
+> > +extern char _end[];
+> > +#define flush_cache_vmap flush_cache_vmap
+> > +static inline void flush_cache_vmap(unsigned long start, unsigned long=
+ end)
+> > +{
+> > +     if ((start < VMALLOC_END && end > VMALLOC_START) ||
+> > +         (start < MODULES_END && end > MODULES_VADDR)) {
+>
+> Can you use is_vmalloc_or_module_addr() instead ?
 
->  	if (!of_device_is_compatible(node, "loongson,liointc-2.0")) {
->  		index = 0;
-> @@ -350,8 +351,12 @@ static int __init liointc_of_init(struct device_node *node,
->  	if (!have_parent)
->  		return -ENODEV;
->  
-> +	if (!of_find_property(node, prop_name, &i))
-> +		/* Fallback to 'loongson,parent_int_map'. */
-> +		prop_name = "loongson,parent_int_map";
+Yes, I'll do
 
-This lacks curly brackets:
+>
+>
+> > +             int i;
+> > +
+> > +             /*
+> > +              * We don't care if concurrently a cpu resets this value =
+since
+> > +              * the only place this can happen is in handle_exception(=
+) where
+> > +              * an sfence.vma is emitted.
+> > +              */
+> > +             for (i =3D 0; i < NR_CPUS / sizeof(u64) + 1; ++i)
+>
+> Use ARRAY_SIZE() ?
 
-  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#bracket-rules
+And that too :)
 
->  	sz = of_property_read_variable_u32_array(node,
-> -						"loongson,parent_int_map",
-> +						prop_name,
->  						&parent_int_map[0],
->  						LIOINTC_NUM_PARENT,
->  						LIOINTC_NUM_PARENT);
+Thanks for the review,
 
-Thanks,
+Alex
 
-        tglx
+>
+> > +                     new_vmalloc[i] =3D -1ULL;
+> > +     }
+> > +}
+> >   #endif
+> >
+> >   #ifndef CONFIG_SMP
+> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/=
+asm/thread_info.h
+> > index 1833beb00489..8fe12fa6c329 100644
+> > --- a/arch/riscv/include/asm/thread_info.h
+> > +++ b/arch/riscv/include/asm/thread_info.h
+> > @@ -60,6 +60,11 @@ struct thread_info {
+> >       long                    user_sp;        /* User stack pointer */
+> >       int                     cpu;
+> >       unsigned long           syscall_work;   /* SYSCALL_WORK_ flags */
+> > +     /*
+> > +      * Used in handle_exception() to save a0, a1 and a2 before knowin=
+g if we
+> > +      * can access the kernel stack.
+> > +      */
+> > +     unsigned long           a0, a1, a2;
+> >   };
+> >
+> >   /*
+> > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-of=
+fsets.c
+> > index d6a75aac1d27..340c1c84560d 100644
+> > --- a/arch/riscv/kernel/asm-offsets.c
+> > +++ b/arch/riscv/kernel/asm-offsets.c
+> > @@ -34,10 +34,15 @@ void asm_offsets(void)
+> >       OFFSET(TASK_THREAD_S9, task_struct, thread.s[9]);
+> >       OFFSET(TASK_THREAD_S10, task_struct, thread.s[10]);
+> >       OFFSET(TASK_THREAD_S11, task_struct, thread.s[11]);
+> > +
+> > +     OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> >       OFFSET(TASK_TI_FLAGS, task_struct, thread_info.flags);
+> >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_co=
+unt);
+> >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> > +     OFFSET(TASK_TI_A0, task_struct, thread_info.a0);
+> > +     OFFSET(TASK_TI_A1, task_struct, thread_info.a1);
+> > +     OFFSET(TASK_TI_A2, task_struct, thread_info.a2);
+> >
+> >       OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+> >       OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index 143a2bb3e697..3a3c7b563816 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -14,6 +14,88 @@
+> >   #include <asm/asm-offsets.h>
+> >   #include <asm/errata_list.h>
+> >
+> > +.macro new_vmalloc_check
+> > +     REG_S   a0, TASK_TI_A0(tp)
+> > +     REG_S   a1, TASK_TI_A1(tp)
+> > +     REG_S   a2, TASK_TI_A2(tp)
+> > +
+> > +     csrr    a0, CSR_CAUSE
+> > +     /* Exclude IRQs */
+> > +     blt     a0, zero, _new_vmalloc_restore_context
+> > +     /* Only check new_vmalloc if we are in page/protection fault */
+> > +     li      a1, EXC_LOAD_PAGE_FAULT
+> > +     beq     a0, a1, _new_vmalloc_kernel_address
+> > +     li      a1, EXC_STORE_PAGE_FAULT
+> > +     beq     a0, a1, _new_vmalloc_kernel_address
+> > +     li      a1, EXC_INST_PAGE_FAULT
+> > +     bne     a0, a1, _new_vmalloc_restore_context
+> > +
+> > +_new_vmalloc_kernel_address:
+> > +     /* Is it a kernel address? */
+> > +     csrr    a0, CSR_TVAL
+> > +     bge     a0, zero, _new_vmalloc_restore_context
+> > +
+> > +     /* Check if a new vmalloc mapping appeared that could explain the=
+ trap */
+> > +
+> > +     /*
+> > +      * Computes:
+> > +      * a0 =3D &new_vmalloc[BIT_WORD(cpu)]
+> > +      * a1 =3D BIT_MASK(cpu)
+> > +      */
+> > +     REG_L   a2, TASK_TI_CPU(tp)
+> > +     /*
+> > +      * Compute the new_vmalloc element position:
+> > +      * (cpu / 64) * 8 =3D (cpu >> 6) << 3
+> > +      */
+> > +     srli    a1, a2, 6
+> > +     slli    a1, a1, 3
+> > +     la      a0, new_vmalloc
+> > +     add     a0, a0, a1
+> > +     /*
+> > +      * Compute the bit position in the new_vmalloc element:
+> > +      * bit_pos =3D cpu % 64 =3D cpu - (cpu / 64) * 64 =3D cpu - (cpu =
+>> 6) << 6
+> > +      *         =3D cpu - ((cpu >> 6) << 3) << 3
+> > +      */
+> > +     slli    a1, a1, 3
+> > +     sub     a1, a2, a1
+> > +     /* Compute the "get mask": 1 << bit_pos */
+> > +     li      a2, 1
+> > +     sll     a1, a2, a1
+> > +
+> > +     /* Check the value of new_vmalloc for this cpu */
+> > +     ld      a2, 0(a0)
+> > +     and     a2, a2, a1
+> > +     beq     a2, zero, _new_vmalloc_restore_context
+> > +
+> > +     ld      a2, 0(a0)
+> > +     not     a1, a1
+> > +     and     a1, a2, a1
+> > +     sd      a1, 0(a0)
+> > +
+> > +     /* Only emit a sfence.vma if the uarch caches invalid entries */
+> > +     la      a0, tlb_caching_invalid_entries
+> > +     lb      a0, 0(a0)
+> > +     beqz    a0, _new_vmalloc_no_caching_invalid_entries
+> > +     sfence.vma
+> > +_new_vmalloc_no_caching_invalid_entries:
+> > +     // debug
+> > +     la      a0, nr_sfence_vma_handle_exception
+> > +     li      a1, 1
+> > +     amoadd.w    a0, a1, (a0)
+> > +     // end debug
+> > +     REG_L   a0, TASK_TI_A0(tp)
+> > +     REG_L   a1, TASK_TI_A1(tp)
+> > +     REG_L   a2, TASK_TI_A2(tp)
+> > +     csrw    CSR_SCRATCH, x0
+> > +     sret
+> > +
+> > +_new_vmalloc_restore_context:
+> > +     REG_L   a0, TASK_TI_A0(tp)
+> > +     REG_L   a1, TASK_TI_A1(tp)
+> > +     REG_L   a2, TASK_TI_A2(tp)
+> > +.endm
+> > +
+> > +
+> >   SYM_CODE_START(handle_exception)
+> >       /*
+> >        * If coming from userspace, preserve the user thread pointer and=
+ load
+> > @@ -25,6 +107,18 @@ SYM_CODE_START(handle_exception)
+> >
+> >   _restore_kernel_tpsp:
+> >       csrr tp, CSR_SCRATCH
+> > +
+> > +     /*
+> > +      * The RISC-V kernel does not eagerly emit a sfence.vma after eac=
+h
+> > +      * new vmalloc mapping, which may result in exceptions:
+> > +      * - if the uarch caches invalid entries, the new mapping would n=
+ot be
+> > +      *   observed by the page table walker and an invalidation is nee=
+ded.
+> > +      * - if the uarch does not cache invalid entries, a reordered acc=
+ess
+> > +      *   could "miss" the new mapping and traps: in that case, we onl=
+y need
+> > +      *   to retry the access, no sfence.vma is required.
+> > +      */
+> > +     new_vmalloc_check
+> > +
+> >       REG_S sp, TASK_TI_KERNEL_SP(tp)
+> >
+> >   #ifdef CONFIG_VMAP_STACK
+> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> > index 0798bd861dcb..379403de6c6f 100644
+> > --- a/arch/riscv/mm/init.c
+> > +++ b/arch/riscv/mm/init.c
+> > @@ -36,6 +36,8 @@
+> >
+> >   #include "../kernel/head.h"
+> >
+> > +u64 new_vmalloc[NR_CPUS / sizeof(u64) + 1];
+> > +
+> >   struct kernel_mapping kernel_map __ro_after_init;
+> >   EXPORT_SYMBOL(kernel_map);
+> >   #ifdef CONFIG_XIP_KERNEL
 
