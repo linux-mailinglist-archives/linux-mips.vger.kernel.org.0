@@ -1,50 +1,74 @@
-Return-Path: <linux-mips+bounces-657-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-658-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D47A380CCCE
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 15:04:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AD3C80CE71
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 15:32:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1786AB20A87
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 14:04:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A02AB20E9D
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 14:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75885482F4;
-	Mon, 11 Dec 2023 14:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34AFC3B7AB;
+	Mon, 11 Dec 2023 14:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="eraxT1UA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hadUpPsk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAC34C3B;
-	Mon, 11 Dec 2023 06:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=Oq7uN0UA4e29OD1T/vJ5LTgmVczpGSvVwmcHIE/xouM=; b=eraxT1UAAa6Sj6qX+sOaBE8kHv
-	fce9Pos6BoTdmvZDq+hOl4chP+zWCLsbnvjLCgt6qaMBnYfO3mHSY/2WcMU7Q9qZdHAyLKebQ8nVn
-	52Vc0fgtZKOmHXVqHDAxJA1qV94bRxsow/e/230BJgXz3O2lMmI6DnyZU6SjtWZvfKIQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rCgsq-002coy-7j; Mon, 11 Dec 2023 15:03:44 +0100
-Date: Mon, 11 Dec 2023 15:03:44 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Yanteng Si <siyanteng@loongson.cn>
-Cc: tsbogend@alpha.franken.de, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-	joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-	chenhuacai@loongson.cn, netdev@vger.kernel.org,
-	loongarch@lists.linux.dev, chris.chenfeiyang@gmail.com
-Subject: Re: [PATCH v1 net 1/3] stmmac: dwmac-loongson: Make sure MDIO is
- initialized before use
-Message-ID: <0fb4ecea-9db9-4cea-b8f0-3f3b210b1ced@lunn.ch>
-References: <cover.1702289232.git.siyanteng@loongson.cn>
- <b6059c83049c7a4c97b2c9dfd348b198a8ec1b14.1702289232.git.siyanteng@loongson.cn>
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B679DC3;
+	Mon, 11 Dec 2023 06:32:30 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-28aabe4a728so220606a91.3;
+        Mon, 11 Dec 2023 06:32:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702305150; x=1702909950; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M4T42pMM+lOegJCe1HFIlB1ZP3arDImtXfzEjv6FDZc=;
+        b=hadUpPsk75xdo1BdTPC6mh1dbht08J5g49dL0r71RVXc0p45dy+3/Kgf8ydTXsFXcC
+         QXbml0a27k4/yc3wG1/14BxJp50XM/QrtNGJmd5MCNiqm/Ul/S2alFwk/455QTCfJ9NZ
+         m0aTUgZt92Aa/odjWU+zENx6h47xku+lJypPLxoTr2BZa+fQFIWmase/Q3bzjbB4q1hU
+         xGab5LJMmdReWkdS0plFkCkcb56ptH7h7/JVEgJx4uWDfzpqQk5kN7IKoBlXR80GC+Wh
+         I31/JB0sgHDgR37mjFOBzXn7MSzq4gcdkBTqhKYTEac+oTSqcRZaqvfd+PWnrAQvsw6Y
+         Iwhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702305150; x=1702909950;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M4T42pMM+lOegJCe1HFIlB1ZP3arDImtXfzEjv6FDZc=;
+        b=SZvUtZ7VmytkmJT8gjR/uCIZoMHBSQ2cSVtlGVoXxuV+1UQsn6tXO8cA0lMkgUD4rz
+         bUw4oeMFS8idZFSvyO4YW0MB+w6qqgs4rFo4kOHPC8MwtroqhyQOlUZMvstb04rGKqY6
+         uCHoFopNGMqnMvSnGmrx2qT/DNXDJDlEvogh6KmDLutwzFpa1sXdTbTCdTdluV54pqra
+         Hy3S78r+BpSKXoc4/ZDVMStSurs9v/XTudq9fb3UyBwyREi6cwsImc9XKjoGQ+/skqZY
+         spAupVkMiQebReWxgM+vTc2CTyTWZFaD0K8pQ5Y4tRXF/2SCrxAqjDi1vOvwNZEVozV1
+         l/8Q==
+X-Gm-Message-State: AOJu0YzbON625sXbFBiqMeVA7e6HpSBz7LNw3QwSzOOK2PeBaEbSiNbk
+	mOAJkiSOHabuLYFirqr33xo=
+X-Google-Smtp-Source: AGHT+IEQkYkTZC+r8SjpiBendOi3zHCvQ4uKeqztoZtzBJofctThTRrwnsZ9xq6Ag8OLvBeGRoQaUQ==
+X-Received: by 2002:a17:90a:f487:b0:286:6cc0:884c with SMTP id bx7-20020a17090af48700b002866cc0884cmr1817096pjb.57.1702305150102;
+        Mon, 11 Dec 2023 06:32:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id st8-20020a17090b1fc800b0028656e226efsm7051238pjb.1.2023.12.11.06.32.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 06:32:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 11 Dec 2023 06:32:28 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] MAINTAINERS: Add maintainer for Baikal-T1 PVT hwmon
+ driver
+Message-ID: <1ab63238-5411-4e31-9248-b494c29f2182@roeck-us.net>
+References: <20231122170506.27267-1-Sergey.Semin@baikalelectronics.ru>
+ <20231122170506.27267-2-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,17 +77,14 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b6059c83049c7a4c97b2c9dfd348b198a8ec1b14.1702289232.git.siyanteng@loongson.cn>
+In-Reply-To: <20231122170506.27267-2-Sergey.Semin@baikalelectronics.ru>
 
-On Mon, Dec 11, 2023 at 06:33:11PM +0800, Yanteng Si wrote:
-> Generic code will use mdio. If it is not initialized before use,
-> the kernel will Oops.
+On Wed, Nov 22, 2023 at 08:04:50PM +0300, Serge Semin wrote:
+> Add myself as a maintainer of the Baikal-T1 PVT sensors driver.
 > 
-> Fixes: 30bba69d7db4 ("stmmac: pci: Add dwmac support for Loongson")
-> Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Applied.
 
-    Andrew
+Guenter
 
