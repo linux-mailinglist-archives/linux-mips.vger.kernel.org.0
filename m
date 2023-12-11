@@ -1,153 +1,102 @@
-Return-Path: <linux-mips+bounces-645-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-646-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B613680C480
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 10:26:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0901080C640
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 11:21:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E45041C209C9
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 09:26:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1419EB209F4
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 10:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D60FE2134D;
-	Mon, 11 Dec 2023 09:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ltLkHTRQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0vUG3E/x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 157C224A00;
+	Mon, 11 Dec 2023 10:20:57 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-X-Greylist: delayed 474 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Dec 2023 01:26:09 PST
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B025B4;
-	Mon, 11 Dec 2023 01:26:09 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id BBC975803D6;
-	Mon, 11 Dec 2023 04:18:14 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Mon, 11 Dec 2023 04:18:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1702286294; x=1702293494; bh=A/DCVjFaGMYmi2WhMoCUU3PEn5wAnq6lCN+
-	5giiP81c=; b=ltLkHTRQRUic1cqalUyRviBoUOuRC7dMlreLaWd2b+OHp5grrqL
-	tdrX7uKZtyx/zNvtC3pe1BYnPCelpW7nbHmAr4opAv/cGT/4x1OTvyfavnVi8YII
-	aom74TCQ8edYvyhjw2n44nkh76QcVFIH2T7gNAlvTQOLfU6ZyS2oGh1Lcok/9g0w
-	//fIaOaVMKw0RySJ3DVqlwDrh13uKGtKEj0nKb6ltTwUxjaUFuDqDV/vxpTYXdlS
-	6ydx1cblz2LTb5ZoUeYJaSvu8A+xwUXePeaNLA6o+/Pc6vHRBacOog79TRMxvZ+y
-	E7EZFTCDDcrCO6CYTLNwPZQqlG3fWaGYm1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1702286294; x=1702293494; bh=A/DCVjFaGMYmi2WhMoCUU3PEn5wAnq6lCN+
-	5giiP81c=; b=0vUG3E/xGPNoBYuKcw5mRHhNDLdcw5oLYU6xSMWwnPaBWqkFgGm
-	jt+Lh+L1+qHzc19RoFC1Rg6dBxX7h5HySyJJTkHJNFUnFs0LbSHR+8ufAxGMj+Kb
-	cwrvZ3u5LCH3YF46k91xRr40wl7s6MeYcqglABZ/nY1q/poaBPx+8vE6qRv3gNIz
-	EOeWDJ7ftDEk/MZy0iLTlxCQ+p5wfYgvIU5qXUCsKY2c/OTgnG76JEC7fmeGEYpv
-	Xnoenh+BD/1Dr/VLaCCnViUD0Xw5VKDnllo/aX4wuDrRMwa2pynkp1c5uT8JwmK1
-	2B//noszdkE4gon06cEIf9ylFLoEOhfOzUA==
-X-ME-Sender: <xms:1tN2ZS65lef-ZNRjLMtSmX7o3vxqDAIVvYNZxchXLUQNjyP-5U5Pzw>
-    <xme:1tN2Zb5IfQGktnmdWPvujOHjDTnL_UFhTZy7vgx23pn05Ax1F-C8_MenoD2ao0yk6
-    _5dWxWK1cfs7hEIvbo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelvddgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeekleevffehtdeigfekfefhffdtudffvdeuvedtffet
-    heeuiefhgfetleekleekjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdih
-    rghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:1tN2ZRcFO_wiTtf9wHjWypQBhdEolJ50womexLgkYMT62G6kstJBIw>
-    <xmx:1tN2ZfJAy1O0xALLtSIvSXCM2GFvSO-KZC9P9AXg47YdI7bH7q_XNw>
-    <xmx:1tN2ZWLXP0FdipNKYgpMLxIdEsonjAox48onlX9jCJeYG2rm-taKIQ>
-    <xmx:1tN2Za-pKa0tIwg6EcJd263YbfhBNJQnQWEeX-btOduNBcYcpspDWw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id F34B736A0075; Mon, 11 Dec 2023 04:18:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F25591;
+	Mon, 11 Dec 2023 02:20:52 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.109.254])
+	by gateway (Coremail) with SMTP id _____8CxhfCD4nZllAEAAA--.38S3;
+	Mon, 11 Dec 2023 18:20:51 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.109.254])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxjd6A4nZlgnBbAA--.7604S2;
+	Mon, 11 Dec 2023 18:20:49 +0800 (CST)
+From: Yanteng Si <siyanteng@loongson.cn>
+To: andrew@lunn.ch,
+	tsbogend@alpha.franken.de
+Cc: Yanteng Si <siyanteng@loongson.cn>,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	peppe.cavallaro@st.com,
+	alexandre.torgue@foss.st.com,
+	joabreu@synopsys.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	mcoquelin.stm32@gmail.com,
+	devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	chenhuacai@loongson.cn,
+	netdev@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	chris.chenfeiyang@gmail.com
+Subject: [PATCH v1 net 0/3] Some bug fixes
+Date: Mon, 11 Dec 2023 18:20:32 +0800
+Message-Id: <cover.1702289232.git.siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.31.4
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9bdcd491-5ee5-48b3-844c-d6c0092bfc73@app.fastmail.com>
-In-Reply-To: <93b41b72-a6ac-4d7f-95f0-ba42399729fc@loongson.cn>
-References: <20230616103127.285608-1-krzysztof.kozlowski@linaro.org>
- <20230616-activity-shed-be3c13e5ac71@spud>
- <93b41b72-a6ac-4d7f-95f0-ba42399729fc@loongson.cn>
-Date: Mon, 11 Dec 2023 09:17:54 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Yanteng Si" <siyanteng@loongson.cn>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Andrew Lunn" <andrew@lunn.ch>, "Conor Dooley" <conor@kernel.org>
-Cc: "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Jose Abreu" <joabreu@synopsys.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Maxime Coquelin" <mcoquelin.stm32@gmail.com>, devicetree@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFT PATCH 1/2] stmmac: dwmac-loongson: drop useless check for compatible
- fallback
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Cxjd6A4nZlgnBbAA--.7604S2
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtrW5GFy8tF1kXrW5AF43urX_yoWfWFX_CF
+	Z3K348GF4fWFW7J3s29Fs8Zr1agrWDG3W5CFW5JF4fW39rtrnxZrWUCFZ7WF17WFWa9rs3
+	Jr4vgr1rCwn7WosvyTuYvTs0mTUanT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+	6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
+
+* Put Krzysztof's patch into my thread, pick Conor's Reviewed-by
+  tag and Jiaxun's Acked-by tag.(prev version is RFC patch)
+
+* I fixed an Oops related to mdio, mainly to ensure that
+  mdio is initialized before use, because it will be used
+  in a series of patches I am working on.
+
+see <https://lore.kernel.org/loongarch/cover.1699533745.git.siyanteng@loongson.cn/T/#t>
 
 
+Krzysztof Kozlowski (2):
+  stmmac: dwmac-loongson: drop useless check for compatible fallback
+  MIPS: dts: loongson: drop incorrect dwmac fallback compatible
 
-=E5=9C=A82023=E5=B9=B412=E6=9C=8810=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =
-=E4=B8=8A=E5=8D=886:48=EF=BC=8CYanteng Si=E5=86=99=E9=81=93=EF=BC=9A
-> =E5=9C=A8 2023/6/17 02:52, Conor Dooley =E5=86=99=E9=81=93:
->> On Fri, Jun 16, 2023 at 12:31:26PM +0200, Krzysztof Kozlowski wrote:
->>> Device binds to proper PCI ID (LOONGSON, 0x7a03), already listed in =
-DTS,
->>> so checking for some other compatible does not make sense.  It canno=
-t be
->>> bound to unsupported platform.
->>>
->>> Drop useless, incorrect (space in between) and undocumented compatib=
-le.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Might be worth noting that dropping it is required to allow the
->> new loongarch dts stuff to be functional with a sane set of compatibl=
-es.
->>
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Thank you Krzysztof for your work. when I am
-> adding more devices support to stmmac, I found that your
-> two patches seemed to be forgotten.
-> Thomas, Jiaxun. Can the two patches get an Acked-by?
-> My stmmac patch thread:
-> <https://lore.kernel.org/loongarch/cover.1699533745.git=20
-> .siyanteng@loongson.cn/T/#md3108d29a5efe71b27f4c5ccf5d0217571bf6586>
+Yanteng Si (1):
+  stmmac: dwmac-loongson: Make sure MDIO is initialized before use
 
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |  3 +--
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |  3 +--
+ .../ethernet/stmicro/stmmac/dwmac-loongson.c  | 19 ++++++-------------
+ 3 files changed, 8 insertions(+), 17 deletions(-)
 
-Better to resend without RFC :-)
+-- 
+2.31.4
 
-Thanks
-
-> Thanks,
-> Yanteng
->
->>
->> Cheers,
->> Conor.
-
---=20
-- Jiaxun
 
