@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-653-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-654-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96F8480CBA3
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 14:53:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FEAF80CBFD
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 14:56:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51A8D281FA3
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 13:53:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE1B228214E
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 13:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC43547781;
-	Mon, 11 Dec 2023 13:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BEF547A4C;
+	Mon, 11 Dec 2023 13:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajiqL3gD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RnKkYg0U"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF34A4776B;
-	Mon, 11 Dec 2023 13:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577E0C433C8;
-	Mon, 11 Dec 2023 13:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DF4358A9;
+	Mon, 11 Dec 2023 13:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643C4C433C7;
+	Mon, 11 Dec 2023 13:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702302811;
-	bh=YsRlnuUe4K9wHZHF9mJAsvi2nDDK8UcmxqE7+XJC5K8=;
+	s=k20201202; t=1702302998;
+	bh=tUwhSQ0MnlY3X/Klwwizqwrr4QqE+T/3H1wVR3q2ljI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ajiqL3gD8ZT0pzzKGH8o4cMWIIJq8fwsWtFBABB0fI5YaDHTkjldZIMxgTX8gXM3c
-	 QfVTOMIw/HuhRVz8jfG3MtL3pvUsgP2AZ8EbQujds6Q4ekB7sbxmgn0BEknKCTTt7T
-	 OzKLC+SWLkfQjuZpPMsfwJjf+2iUeHCBE7xLiEwM4PlG9UmpUw6Dqi6aaS1fkK7c1/
-	 k2vOOJ7IrQXIGOo8hm+cfW6/Ib11fR7LHIewiulatZpi5OlPORFvjCTZXZvOl9CuRm
-	 xSbkLmMMfKSkV0bL8WOerf9/qmw5VvlT7MEF/NrxIGnrnOUg3K9fd9l3XO9rSsovWS
-	 IHdBcCL61zwmQ==
+	b=RnKkYg0U/ZMcmUye+MzUKx0SYAPacRtt4O4TMmqSUGvNOqg4x+e97kJGTUZnWJqZR
+	 a3UJUDY3p459in65ZNFDktulTzVd031+AS2xU88d7lLGbzVyRQHYc0e3c4Zm1mOc7A
+	 OZrCMPCdoOacSLeXH7ZYM+AWUT8DPTYHhT3kEj5firtpk3jV+gRquEsVhm4SRMYnoi
+	 pQBQQ6qPZBdiTy7nTSS8QgnKsAh98fJaw25XGob+S6GcIIn5XnFOk2fxTqBVW4XGdJ
+	 qW2u1Staz28AVj+TCgJ1BSta8bxhkcUVJW388cVAowWa4F6NGoXnL7XKI1D5XDDuQh
+	 Y5GtXW1JQEnIQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -39,17 +39,16 @@ Cc: Stefan Wiehler <stefan.wiehler@nokia.com>,
 	Huacai Chen <chenhuacai@loongson.cn>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	peterz@infradead.org,
-	jiaxun.yang@flygoat.com,
 	chenhuacai@kernel.org,
 	tglx@linutronix.de,
+	jiaxun.yang@flygoat.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 36/47] mips/smp: Call rcutree_report_cpu_starting() earlier
-Date: Mon, 11 Dec 2023 08:50:37 -0500
-Message-ID: <20231211135147.380223-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 22/29] mips/smp: Call rcutree_report_cpu_starting() earlier
+Date: Mon, 11 Dec 2023 08:54:06 -0500
+Message-ID: <20231211135457.381397-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231211135147.380223-1-sashal@kernel.org>
-References: <20231211135147.380223-1-sashal@kernel.org>
+In-Reply-To: <20231211135457.381397-1-sashal@kernel.org>
+References: <20231211135457.381397-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -58,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.5
+X-stable-base: Linux 6.1.66
 Content-Transfer-Encoding: 8bit
 
 From: Stefan Wiehler <stefan.wiehler@nokia.com>
@@ -106,10 +105,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 8fbef537fb885..82e2e051b4161 100644
+index 1d93b85271ba8..b951ce3a53ab0 100644
 --- a/arch/mips/kernel/smp.c
 +++ b/arch/mips/kernel/smp.c
-@@ -351,10 +351,11 @@ early_initcall(mips_smp_ipi_init);
+@@ -333,10 +333,11 @@ early_initcall(mips_smp_ipi_init);
   */
  asmlinkage void start_secondary(void)
  {
@@ -122,7 +121,7 @@ index 8fbef537fb885..82e2e051b4161 100644
  	mips_clockevent_init();
  	mp_ops->init_secondary();
  	cpu_report();
-@@ -366,7 +367,6 @@ asmlinkage void start_secondary(void)
+@@ -348,7 +349,6 @@ asmlinkage void start_secondary(void)
  	 */
  
  	calibrate_delay();
