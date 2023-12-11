@@ -1,175 +1,138 @@
-Return-Path: <linux-mips+bounces-642-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-643-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 987D280BF34
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 03:37:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D64D180C316
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 09:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41F7E280C7F
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 02:37:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91360280C31
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Dec 2023 08:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74922125DA;
-	Mon, 11 Dec 2023 02:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fwc8nMCN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00DB20DCC;
+	Mon, 11 Dec 2023 08:25:41 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3C106;
-	Sun, 10 Dec 2023 18:37:51 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9caf5cc948so3846094276.0;
-        Sun, 10 Dec 2023 18:37:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702262270; x=1702867070; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rG4sHl1+Rg4Z/xgVyvuBLnRm0lugzakZ3vwchsyrEQc=;
-        b=Fwc8nMCNVsTokkj9WvE4jzKr8MGrYqc/fiUlx5BNpxjYBV/jw5nJwkMcYGroVS7THL
-         z4MM/luHfId1fzNuu9E1cmjms9+NY9OP+moKi/wDWf5lk2i4FE8Q7zcCjEiOZ7hPW0jN
-         68Y2TadfXn15bJnaOwU5CSvP2vDibsJuzvvFAuu7aZDyVDRoMpJlpXVOl4IU40a2Ynke
-         IsOOZBK+MyythyQMf+Gum1GwWOus3QeO4qwOckvFnmkE3g/Mm+DhbuL/J/ihJ8gVYGqH
-         PquQYiWoHQ6tCyWPC3VxgkYzE9CFmynl1OXdWee5uuuRXe4s6vASm5vdt9FLlFDtNXm8
-         vJNQ==
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3764510A;
+	Mon, 11 Dec 2023 00:25:38 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5d6b9143782so35674707b3.0;
+        Mon, 11 Dec 2023 00:25:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702262270; x=1702867070;
+        d=1e100.net; s=20230601; t=1702283137; x=1702887937;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rG4sHl1+Rg4Z/xgVyvuBLnRm0lugzakZ3vwchsyrEQc=;
-        b=sw14j2c3BYFMVQhAXgflLdPmhu/7u3wVC7zR//FF+Eqea56P2hzelZhmRoN5hSAGhR
-         8lzWsKb27a7Wd/Vktnpfw/57PQ2lC6CKe0oUS1UfGAoJj5tD6FFL7BMAg/2RxYvWYwAW
-         VGV8FPt/BsmHrXC+KVS5KW/+MhrkNji4VjKHcXbtZRZYiQRK2EDiV7uLGXTT7VWMuPsV
-         DAtlUW/tVXYUI79YNGA+Ni6njpsY8FntvMCxyHWCby9fFYSNVUxYR/jVaq6iZGYt+2Wn
-         4gYYJnQp8yH91Ud5Ayf/OEWNK9ZZe5hb7HliPb2uFG6TifTehc1ykAxT0RRr4gjwTh+2
-         0MEg==
-X-Gm-Message-State: AOJu0Yybu6UjG1YTGdibRfUyLmutD5EbI1RACVhPdT17XvQvK5/2Gs0R
-	V6RkQ6v9YJiQ/epU3/LUXnaf4k7IDWsgU2xPdMBLf2qq5h/Xwg==
-X-Google-Smtp-Source: AGHT+IF5P/iRJXIlAzvwBf7PlGge0Qd7ZNb+KBmDfz5v6QcSS3pTlCPdnzoEou5vtd60K+6uQEkZ2WmQPidVPiSRUjA=
-X-Received: by 2002:a25:5f02:0:b0:dbc:6a10:5186 with SMTP id
- t2-20020a255f02000000b00dbc6a105186mr1240189ybb.41.1702262270533; Sun, 10 Dec
- 2023 18:37:50 -0800 (PST)
+        bh=j2eWe2oiRzSTkXAZdruL7FMLjSewImdzh7HyKdRxUqI=;
+        b=wt3Rq5OOiqu/yBHspSUY8gYpz2jKqNuD+wQmqfsrOE2IB2pr5KQw0CVNSKsYMfJg/R
+         mIV6FEIbf0QvNyR7BocY27xzU49XdRbh0ZtoLTJx5qw0VUBOM5RQX3dLgb2PiwBogaqa
+         uSL9I8AA2kLk44qIzJNMDSrcLPrUMW3fPEWbUUHSLcr/UNYEqLB+erVtXYQYghMkywhT
+         moS+KBbbIbTAuqGnbkBgf8fFDYuZwct5gwAMR2B1nvPmRnI8TOgVp06Rtl7OkFcBSIwG
+         3KXbzitAbhUipCQ6Fgkk9xZBhxBZCy4nC4/yqObD8nOUv1hfArEeA7yYCzrTZTojuEDc
+         5sJg==
+X-Gm-Message-State: AOJu0YwWOOb6kl9Utfo6YW9W23Ulsiu1YgsEL14CeoDx3eus8iOCD76F
+	r5dEla+HZ2ApE+ZiFBL9URxiktQlunAiQg==
+X-Google-Smtp-Source: AGHT+IGznTimJA4mSAu8adt3wu2sAMV0tN8lU0584QstnoDzM3+BXIPuN8HqHTzSSYsZE0s4uvfy5A==
+X-Received: by 2002:a0d:d48c:0:b0:5d3:e835:bd67 with SMTP id w134-20020a0dd48c000000b005d3e835bd67mr3107076ywd.41.1702283136935;
+        Mon, 11 Dec 2023 00:25:36 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id q68-20020a818047000000b005d580a1fd70sm2796876ywf.75.2023.12.11.00.25.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Dec 2023 00:25:36 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5d6b9143782so35674547b3.0;
+        Mon, 11 Dec 2023 00:25:35 -0800 (PST)
+X-Received: by 2002:a81:7285:0:b0:5d8:74e6:e4c5 with SMTP id
+ n127-20020a817285000000b005d874e6e4c5mr2853116ywc.98.1702283135734; Mon, 11
+ Dec 2023 00:25:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1700449792.git.zhoubinbin@loongson.cn> <fc9b3afaf8826fd437ba91397eb7fa231db2c05c.1700449792.git.zhoubinbin@loongson.cn>
- <87lea4srmx.ffs@tglx>
-In-Reply-To: <87lea4srmx.ffs@tglx>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Mon, 11 Dec 2023 08:37:39 +0600
-Message-ID: <CAMpQs4+dLk5KG3L0vF4ZBGqbCLKWtCCkQz4wER3yKfsii5GeEA@mail.gmail.com>
-Subject: Re: [PATCH v5 4/5] irqchip/loongson-liointc: Fix 'loongson,parent_int_map'
- parse
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, loongson-kernel@lists.loongnix.cn, 
-	devicetree@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, lvjianmin@loongson.cn, 
-	WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20231208073036.7884-1-bhe@redhat.com> <ZXLI748b85be459B@fedora>
+In-Reply-To: <ZXLI748b85be459B@fedora>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 11 Dec 2023 09:25:24 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
+Message-ID: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
+To: Baoquan He <bhe@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	loongarch@lists.linux.dev, kexec@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-sh@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org, 
+	eric_devolder@yahoo.com, sfr@canb.auug.org.au, ignat@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 8, 2023 at 10:20=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
-> wrote:
+Hi Baoquan,
+
+On Fri, Dec 8, 2023 at 8:43=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
+> Forgot adding kexec to CC, add it now.
 >
-> On Mon, Nov 20 2023 at 17:06, Binbin Zhou wrote:
->
-> $Subject: s/parse/parsing/
->
-> > In keeping with naming standards, 'loongson,parent_int_map' is renamed
-> > to 'loongson,parent-int-map'. But for the driver, we need to make sure
-> > that both forms can be parsed.
->
-> Please keep changelogs in neutral or imperative tone:
->
->   For backwards compatibility it is required to parse the original
->   string too.
->
-> Makes it entirely clear what this is about without 'we'. See also:
->
->   https://www.kernel.org/doc/html/latest/process/submitting-patches.rst
->
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  drivers/irqchip/irq-loongson-liointc.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> On 12/08/23 at 03:30pm, Baoquan He wrote:
+> > The select of KEXEC for CRASH_DUMP in kernel/Kconfig.kexec will be
+> > dropped, then compiling errors will be triggered if below config
+> > items are set:
 > >
-> > diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/i=
-rq-loongson-liointc.c
-> > index e4b33aed1c97..add2e0a955b8 100644
-> > --- a/drivers/irqchip/irq-loongson-liointc.c
-> > +++ b/drivers/irqchip/irq-loongson-liointc.c
-> > @@ -330,6 +330,7 @@ static int __init liointc_of_init(struct device_nod=
-e *node,
-> >       bool have_parent =3D FALSE;
-> >       int sz, i, index, revision, err =3D 0;
-> >       struct resource res;
-> > +     const char *prop_name =3D "loongson,parent-int-map";
->
-> Please don't glue variables randomly into the declaration section:
->
->   https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#vari=
-able-declarations
->
-> >       if (!of_device_is_compatible(node, "loongson,liointc-2.0")) {
-> >               index =3D 0;
-> > @@ -350,8 +351,12 @@ static int __init liointc_of_init(struct device_no=
-de *node,
-> >       if (!have_parent)
-> >               return -ENODEV;
+> > =3D=3D=3D
+> > CONFIG_CRASH_CORE=3Dy
+> > CONFIG_KEXEC_CORE=3Dy
+> > CONFIG_CRASH_DUMP=3Dy
+> > =3D=3D=3D
 > >
-> > +     if (!of_find_property(node, prop_name, &i))
-> > +             /* Fallback to 'loongson,parent_int_map'. */
-> > +             prop_name =3D "loongson,parent_int_map";
->
-> This lacks curly brackets:
->
->   https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#brac=
-ket-rules
+> > E.g on mips, below link error are seen:
+> > --------------------------------------------------------------------
+> > mipsel-linux-ld: kernel/kexec_core.o: in function `kimage_free':
+> > kernel/kexec_core.c:(.text+0x2200): undefined reference to `machine_kex=
+ec_cleanup'
+> > mipsel-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
+> > kernel/kexec_core.c:(.text+0x2480): undefined reference to `machine_cra=
+sh_shutdown'
+> > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x2488): undefined referenc=
+e to `machine_kexec'
+> > mipsel-linux-ld: kernel/kexec_core.o: in function `kernel_kexec':
+> > kernel/kexec_core.c:(.text+0x29b8): undefined reference to `machine_shu=
+tdown'
+> > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x29c0): undefined referenc=
+e to `machine_kexec'
+> > --------------------------------------------------------------------
+> >
+> > Here, change the incorrect dependency of building kexec_core related ob=
+ject
+> > files, and the ifdeffery on architectures from CONFIG_KEXEC to
+> > CONFIG_KEXEC_CORE.
+> >
+> > Testing:
+> > =3D=3D=3D=3D=3D=3D=3D=3D
+> > Passed on mips and loognarch with the LKP reproducer.
+> >
+> > Baoquan He (5):
+> >   loongarch, kexec: change dependency of object files
+> >   m68k, kexec: fix the incorrect ifdeffery and build dependency of
+> >     CONFIG_KEXEC
+> >   mips, kexec: fix the incorrect ifdeffery and dependency of
+> >     CONFIG_KEXEC
+> >   sh, kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
+> >   x86, kexec: fix the wrong ifdeffery CONFIG_KEXEC
 
-Hi Thomas:
+I understand this series is v3 of "[PATCH v2] kexec_core: change
+dependency of object files"? As this series does not contain a
+changelog, can you please summarize what was changed?
+Thanks!
 
-Thanks for the detailed review.
+Gr{oetje,eeting}s,
 
-Rob suggested in the V5 patchset to remove the
-'loongson,parent-int-map' renaming operation as an ABI breakage[1]. I
-had tried to explain that the driver would be compatible with the
-parsing of both naming styles[2], but unfortunately did not get a
-response from Rob.
-As a result, I removed the renaming-related patches in the V6
-patchset, including this one[3].
+                        Geert
 
-However, how the 'loongson,parent-int-map' renaming operation is
-finally going to be handled needs to be decided together, and if it
-remains needed, I will fix the above issue and submit it as part of
-the V7 patchset.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-[1]: https://lore.kernel.org/all/20231127182836.GA2150516-robh@kernel.org/
-[2]: https://lore.kernel.org/all/CAMpQs4LSTV6PgZSuyQx2Nq+87OHxSa=3D-Wz5nbhF=
-VsmmvHubQFQ@mail.gmail.com/
-[3]: https://lore.kernel.org/all/cover.1701933946.git.zhoubinbin@loongson.c=
-n/
-
-Thanks.
-Binbin
->
-> >       sz =3D of_property_read_variable_u32_array(node,
-> > -                                             "loongson,parent_int_map"=
-,
-> > +                                             prop_name,
-> >                                               &parent_int_map[0],
-> >                                               LIOINTC_NUM_PARENT,
-> >                                               LIOINTC_NUM_PARENT);
->
-> Thanks,
->
->         tglx
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
