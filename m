@@ -1,119 +1,120 @@
-Return-Path: <linux-mips+bounces-680-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-681-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37FBB80E1C6
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 03:30:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0953680E4A2
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 08:09:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8466282757
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 02:30:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A24E1C222C9
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 07:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E7315ACC;
-	Tue, 12 Dec 2023 02:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94BD9168A3;
+	Tue, 12 Dec 2023 07:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a8xtZAqn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JrXOSA1r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEA3B5;
-	Mon, 11 Dec 2023 18:28:05 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5e1a2253045so6489357b3.2;
-        Mon, 11 Dec 2023 18:28:05 -0800 (PST)
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C71DB;
+	Mon, 11 Dec 2023 23:09:34 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1fab887fab8so4053376fac.0;
+        Mon, 11 Dec 2023 23:09:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702348084; x=1702952884; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1702364974; x=1702969774; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Tx1ZYksYJvVzuOD+JQP20UpTW3NnHVR2BOmbC32l24=;
-        b=a8xtZAqnpZmxgaldmGbl8zDfw4wGIe4uHry2UiKo2zru/lOtfdVstM7hB700pxlKYW
-         3H9Ia6HB7n2jiNIZ9mB2RKeNktz8q/qFk3RxdklUxh2VVT2y7b/VF1CmOlFPxRncWnPH
-         mHJj4OzALSXwXiHojrjyXNZyucPR+I0BTZfzqu+mx6TonaYZy6nryn2P3WA/Qjs6J/Bn
-         sYOCyoXCweuD2oVc1tcP6LcK8ixwdpMswad98wl4m/inTvYQBQKV/c5lpqH1sNWcS2HV
-         ydziDWwQIP440jviJbloUYBEzZr3WW9bEqIbIjoje1Qgch+n4+MzzHKmFTaQYrupfJns
-         tDWg==
+        bh=+BLa1ACTMhoL5sxIMxyJMrp9FEUdpmwAC3VuqFAsyHM=;
+        b=JrXOSA1rLeI/1SEpPekq1VDfBbov9Q7HaQXiBhPFEADXXVYnZmLXjJ/0LY0lEVo93g
+         P1bI2YrXakuJdVji7+3Xw7zAKs5/JbbVcGoIDY3jArrwwUk9L/R6FdtupPHAmnM+K8l4
+         z8qnHrR8p2teQ5Zok8ND2+DZrpDIw7Ky2khJQMXX2hvbPTFvWczprYcK7p8s5DHJBBG0
+         GAvoQ550YTLONefxHFDTfU2i7JbK+nSDPk/FuJ1HpLmjeBiillaHyXgu3GhXcoLZ4A+y
+         VIYFO+xaWnuIzjPTpv0npL7vzY6gUJmIQ/kwMDSJI1e8DbaqOhynzY0RMEK6vm607Cba
+         7CeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702348084; x=1702952884;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1702364974; x=1702969774;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5Tx1ZYksYJvVzuOD+JQP20UpTW3NnHVR2BOmbC32l24=;
-        b=eaXO6BQrUfnzhHbI9TNw3NjZ9fa+jOcvyvSrcfl7XaoqE5JAvp/ekqPqDf6r7w8akp
-         Pm7bTSJ8t2VGmwdaw2+A+T3VnlwMOch23OvaQ2ffMEYjg3B1SbkZTOsVVQ7xib2sGa5Z
-         l4eWFsVEUreJYymF5Bb1arUK1uRQytsh8xQYqeOW3zBJJwdBsOu6tX7UOWNmYOEYcdSE
-         gb8KG9V9Db3KBnjapl8e9SX/Mz9XodDdFqCRc2eWmbPupsQdPwx6uzcgUndRkETC6tSU
-         7vtVY5hs0SicVxxdAXWpxuNH9P2NQaIyLfY2X9K49cWCubkDxyV+CaGnW6Nw3W01NZKh
-         g8iA==
-X-Gm-Message-State: AOJu0YyPOsDtzqPgeWM/1mbCI60hPoU7rpsff9db+KKFjjtY2XGBRsik
-	bqpfyOqDp2yGdn45TgxhqCAY2U8mxLcKaw==
-X-Google-Smtp-Source: AGHT+IFbwgCjyr+symSCwmcMVav+/mrWq62DYtu0MzRNEMdwEGE9s7dNj9rtNAhSKnWPycQvxu7lTQ==
-X-Received: by 2002:a0d:cc8e:0:b0:5d3:8400:ba9 with SMTP id o136-20020a0dcc8e000000b005d384000ba9mr4160559ywd.48.1702348084007;
-        Mon, 11 Dec 2023 18:28:04 -0800 (PST)
-Received: from localhost ([2601:344:8301:57f0:38aa:1c88:df05:9b73])
-        by smtp.gmail.com with ESMTPSA id k7-20020a0dc807000000b0059a34cfa2a5sm3422328ywd.67.2023.12.11.18.28.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 18:28:03 -0800 (PST)
-From: Yury Norov <yury.norov@gmail.com>
-To: linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Yury Norov <yury.norov@gmail.com>,
-	linux-mips@vger.kernel.org
-Cc: Jan Kara <jack@suse.cz>,
-	Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-	Matthew Wilcox <willy@infradead.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-	Alexey Klimov <klimov.linux@gmail.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v3 06/35] mips: sgi-ip30: optimize heart_alloc_int() by using find_and_set_bit()
-Date: Mon, 11 Dec 2023 18:27:20 -0800
-Message-Id: <20231212022749.625238-7-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231212022749.625238-1-yury.norov@gmail.com>
-References: <20231212022749.625238-1-yury.norov@gmail.com>
+        bh=+BLa1ACTMhoL5sxIMxyJMrp9FEUdpmwAC3VuqFAsyHM=;
+        b=IglEBqQgkXZzQytzOkNsb+TVpHBipeM8/iKenybchSz1cqO7HNR11KkIvDoO0cHPdx
+         aI1X1NauoGEhCv/Z33Ki2B4zRn+2m/SSUnVybglz6fkclIIed01Mdke9nL0+LIjuyaGz
+         HI2WMNNRDyGo+14FF+ppdRwPMClBGIQiNycu6+Wv6ltvIMtv41oyBt+EQwOIcRPtDcT4
+         fkONvVf98vY/cRqiITL4t1hroE6TswK7sn9T9GiQt4OtqYvcrDbX9LIikkjT6heiWpgk
+         vJ8+WVhfWnOkYlhGaV5T39AjOrDWvrODs6rMqFsjth2Ua8QtC7Cx22NC1/e0HR5RCVhQ
+         X4Pw==
+X-Gm-Message-State: AOJu0Yxy0ncXxfhuWxE2EyZypQlxK5Q1KyAmNf7fvac2d99RYV8DQ/Ka
+	xcbsEqU4tNilCPAD6VelYobp9hRN1/eI4WOA7o6ukzZ/
+X-Google-Smtp-Source: AGHT+IGIpDBuTK/4FnzR2uULLjG/np1grQx6jbWRwpjYaxfhigRvyIbHoDdhMLBibonboWXPER9D/eQMOZDGMxMr3Cc=
+X-Received: by 2002:a05:6871:4390:b0:1fb:75c:3fe9 with SMTP id
+ lv16-20020a056871439000b001fb075c3fe9mr8152885oab.73.1702364973988; Mon, 11
+ Dec 2023 23:09:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231022090633.792831-1-sergio.paracuellos@gmail.com> <ZXd3dhsc3HXbj7SR@alpha.franken.de>
+In-Reply-To: <ZXd3dhsc3HXbj7SR@alpha.franken.de>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Tue, 12 Dec 2023 08:09:20 +0100
+Message-ID: <CAMhs-H-ejOPeO-4gamajT-GupCnNu0K7vgsdR6vwqyEXB40qSA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add myself as maintainer of the Ralink architecture
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, john@phrozen.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-heart_alloc_int() opencodes find_and_set_bit(). Simplify it by using the
-dedicated function, and make an nice one-liner.
+On Mon, Dec 11, 2023 at 10:01=E2=80=AFPM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Sun, Oct 22, 2023 at 11:06:33AM +0200, Sergio Paracuellos wrote:
+> > Its been a while since I am making contributions to this architecture.
+> > Hence add myself as maintainer.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> > Hi John, if you are not ok with this please let me know. In other case
+> > please ack this patch. I can add myself as Reviewer if you prefer to
+> > maintain alone this.
+> >
+> > Thanks in advance for your time!
+> >
+> > Best regards,
+> >     Sergio Paracuellos
+> >
+> >  MAINTAINERS | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 2894f0777537..406c26a6f5d8 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -17914,6 +17914,7 @@ F:    drivers/media/cec/usb/rainshadow/
+> >
+> >  RALINK MIPS ARCHITECTURE
+> >  M:   John Crispin <john@phrozen.org>
+> > +M:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> >  L:   linux-mips@vger.kernel.org
+> >  S:   Maintained
+> >  F:   arch/mips/ralink
+> > --
+> > 2.25.1
+>
+> applied to mips-next
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- arch/mips/sgi-ip30/ip30-irq.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+Thanks!
 
-diff --git a/arch/mips/sgi-ip30/ip30-irq.c b/arch/mips/sgi-ip30/ip30-irq.c
-index 423c32cb66ed..3c4d4e947817 100644
---- a/arch/mips/sgi-ip30/ip30-irq.c
-+++ b/arch/mips/sgi-ip30/ip30-irq.c
-@@ -28,17 +28,9 @@ static DEFINE_PER_CPU(unsigned long, irq_enable_mask);
- 
- static inline int heart_alloc_int(void)
- {
--	int bit;
-+	int bit = find_and_set_bit(heart_irq_map, HEART_NUM_IRQS);
- 
--again:
--	bit = find_first_zero_bit(heart_irq_map, HEART_NUM_IRQS);
--	if (bit >= HEART_NUM_IRQS)
--		return -ENOSPC;
--
--	if (test_and_set_bit(bit, heart_irq_map))
--		goto again;
--
--	return bit;
-+	return bit < HEART_NUM_IRQS ? bit : -ENOSPC;
- }
- 
- static void ip30_error_irq(struct irq_desc *desc)
--- 
-2.40.1
-
+Best regards,
+    Sergio Paracuellos
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
