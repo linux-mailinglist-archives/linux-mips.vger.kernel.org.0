@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-704-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-706-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39BA280F311
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 17:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 444D580F318
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 17:36:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDF6EB20DE1
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 16:36:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9DD1B20D98
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 16:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DD57A20E;
-	Tue, 12 Dec 2023 16:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B157B3A7;
+	Tue, 12 Dec 2023 16:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TIDEvDgw"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ECU3izDz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5F713A;
-	Tue, 12 Dec 2023 08:35:41 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 33D8AE0016;
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C972D182;
+	Tue, 12 Dec 2023 08:35:42 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EEDE0C0002;
 	Tue, 12 Dec 2023 16:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1702398940;
+	t=1702398941;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PyCSrF1JgQ4iScyRiIk/6IapzgqC+RV3b88nNkBvQYI=;
-	b=TIDEvDgw2yuYZbXXFk0d6ROsLrMNBOvNBM4JO52VcOElKGJVIY03bvidKHC1s9B+KBPhAD
-	ZJ/OJ3gIfx3BhfEp9ffb0X3tC098J2nkgdHMeqr4UoDec1wN4ZvtWfw0VYqQmWok7DdzXD
-	6f4x4E4A40tMGajywikPIDdmva2B6JptlcA9hYshHCk1PFLSzcLBE7ywPEnOhy+tfZbApS
-	MOoG3CjdSWwiLDGA6YhZzmnbvkZnCLUQn1FpjO6oyN5zKBmBVrS5slYzn4RLIH4rN8e0d9
-	jCDSUGnfRTyG3KvLdldZxj9Jiqh1s8cDKJiw77nWXlGF1GeXqKkWR6T1jnDXNw==
+	bh=4e+9fOmpE4/IwZbJIJGAaMmx3iR6uUYWvdhHh8JnvMg=;
+	b=ECU3izDzrr5b8h90ffNyzCOwGcNweM42CctUvGlGzXcaSc3afQ86TVHIDYdAUZMNV7n2Ia
+	FrCwj3J/4BSaUh9omYPL7W9ZaHSftFNdCz9U/HBwWkFcnr3k1FYSwES3XgkND9+hdS+HE8
+	ePWvCmi1UrYoif0YNX1TIdP4KyRznjV+FbMOd2/jBgYHhSmmlVxV9FCKUs8HaW+aps7nHt
+	9o/sj/CxcDr2ZzNNgstM2ifAMq8c1G94+V7RsFrsjVDGrhwOU6ujOu56wXm5zrITEs8U/b
+	z/0gSi8HfBt/OwTMCLh9hvCgfDmMYYcjRaTSh13vEF/7tL1WNYcLZTBCN3hjhw==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 To: Paul Burton <paulburton@kernel.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -47,9 +47,9 @@ Cc: Vladimir  Kondratiev <vladimir.kondratiev@mobileye.com>,
 	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v5 20/22] MIPS: mobileye: Add EPM5 device tree
-Date: Tue, 12 Dec 2023 17:34:52 +0100
-Message-ID: <20231212163459.1923041-21-gregory.clement@bootlin.com>
+Subject: [PATCH v5 21/22] MIPS: generic: Add support for Mobileye EyeQ5
+Date: Tue, 12 Dec 2023 17:34:53 +0100
+Message-ID: <20231212163459.1923041-22-gregory.clement@bootlin.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231212163459.1923041-1-gregory.clement@bootlin.com>
 References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
@@ -62,54 +62,136 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: gregory.clement@bootlin.com
 
-Add a device tree for the Mobileye EPM5 evaluation board.
+Introduce support for the MIPS based Mobileye EyeQ5 SoCs.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/Makefile       |  4 ++++
- arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 24 ++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 arch/mips/boot/dts/mobileye/Makefile
- create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+ arch/mips/configs/generic/board-eyeq5.config | 42 ++++++++++++++++++++
+ arch/mips/generic/Kconfig                    | 15 +++++++
+ arch/mips/generic/Platform                   |  2 +
+ arch/mips/generic/board-epm5.its.S           | 24 +++++++++++
+ 4 files changed, 83 insertions(+)
+ create mode 100644 arch/mips/configs/generic/board-eyeq5.config
+ create mode 100644 arch/mips/generic/board-epm5.its.S
 
-diff --git a/arch/mips/boot/dts/mobileye/Makefile b/arch/mips/boot/dts/mobileye/Makefile
+diff --git a/arch/mips/configs/generic/board-eyeq5.config b/arch/mips/configs/generic/board-eyeq5.config
 new file mode 100644
-index 0000000000000..b6fa261f0a3a0
+index 0000000000000..d94e408145389
 --- /dev/null
-+++ b/arch/mips/boot/dts/mobileye/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright 2023 Mobileye Vision Technologies Ltd.
++++ b/arch/mips/configs/generic/board-eyeq5.config
+@@ -0,0 +1,42 @@
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_TASKSTATS=y
++CONFIG_FIT_IMAGE_FDT_EPM5=y
++CONFIG_BOARD_EYEQ5=y
++CONFIG_PHYSICAL_START=0xa800000808000000
++CONFIG_CPU_HAS_MSA=y
++CONFIG_SPARSEMEM_MANUAL=y
++CONFIG_NET_KEY=y
++CONFIG_CAN=y
++CONFIG_PCI=y
++CONFIG_PCI_MSI=y
++CONFIG_PCI_DEBUG=y
++CONFIG_PCI_ENDPOINT=y
++CONFIG_CONNECTOR=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_RAM=y
++CONFIG_MTD_ROM=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_BLOCK2MTD=y
++CONFIG_MTD_UBI=y
++CONFIG_MTD_UBI_BLOCK=y
++CONFIG_NETDEVICES=y
++CONFIG_MACVLAN=y
++CONFIG_IPVLAN=y
++CONFIG_MACB=y
++CONFIG_MARVELL_PHY=y
++CONFIG_MICREL_PHY=y
++CONFIG_CAN_M_CAN=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_PINCTRL=y
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_CADENCE=y
++CONFIG_RESET_CONTROLLER=y
++CONFIG_FANOTIFY=y
++CONFIG_ROMFS_FS=y
++CONFIG_ROMFS_BACKED_BY_BOTH=y
++CONFIG_PAGE_SIZE_16KB=y
+\ No newline at end of file
+diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
+index 7dc5b3821cc6e..04e1fc6f789b5 100644
+--- a/arch/mips/generic/Kconfig
++++ b/arch/mips/generic/Kconfig
+@@ -48,6 +48,13 @@ config SOC_VCOREIII
+ config MSCC_OCELOT
+ 	bool
+ 
++config SOC_EYEQ5
++	select ARM_AMBA
++	select WEAK_ORDERING
++	select WEAK_REORDERING_BEYOND_LLSC
++	select PHYSICAL_START_BOOL
++	bool
 +
-+dtb-$(CONFIG_SOC_EYEQ5)		+= eyeq5-epm5.dtb
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+ comment "FIT/UHI Boards"
+ 
+ config FIT_IMAGE_FDT_BOSTON
+@@ -124,4 +131,12 @@ config VIRT_BOARD_RANCHU
+ 	  Android emulator. Android emulator is based on Qemu, and contains
+ 	  the support for the same set of virtual devices.
+ 
++config FIT_IMAGE_FDT_EPM5
++	bool "Include FDT for Mobileye EyeQ5 development platforms"
++	select SOC_EYEQ5
++	default n
++	help
++	  Enable this to include the FDT for the EyeQ5 development platforms
++	  from Mobileye in the FIT kernel image.
++	  This requires u-boot on the platform.
+ endif
+diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+index 0c03623f38970..45db9824a11d6 100644
+--- a/arch/mips/generic/Platform
++++ b/arch/mips/generic/Platform
+@@ -24,3 +24,5 @@ its-$(CONFIG_FIT_IMAGE_FDT_JAGUAR2)	+= board-jaguar2.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_SERVAL)	+= board-serval.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= board-xilfpga.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_MARDUK)	+= board-marduk.its.S
++its-$(CONFIG_FIT_IMAGE_FDT_EPM5)	+= board-epm5.its.S
++
+diff --git a/arch/mips/generic/board-epm5.its.S b/arch/mips/generic/board-epm5.its.S
 new file mode 100644
-index 0000000000000..ff16c3c760a19
+index 0000000000000..08e8c4f183d63
 --- /dev/null
-+++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
++++ b/arch/mips/generic/board-epm5.its.S
 @@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Copyright 2023 Mobileye Vision Technologies Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "eyeq5.dtsi"
-+
++/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
 +/ {
-+	compatible = "mobileye,eyeq5-epm5", "mobileye,eyeq5";
-+	model = "Mobile EyeQ5 MP5 Evaluation board";
-+
-+	chosen {
-+		bootargs = "earlycon";
-+		stdout-path = "serial2:115200n8";
++	images {
++		fdt-mobileye-epm5 {
++			description = "Mobileeye MP5 Device Tree";
++			data = /incbin/("boot/dts/mobileye/eyeq5-epm5.dtb");
++			type = "flat_dt";
++			arch = "mips";
++			compression = "none";
++			hash {
++				algo = "sha1";
++			};
++		};
 +	};
 +
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x08000000 0x0 0x08000000>,
-+		      <0x8 0x00000000 0x0 0x78000000>;
++    configurations {
++		default = "conf-1";
++		conf-1 {
++			description = "Mobileye EPM5 Linux kernel";
++			kernel = "kernel";
++			fdt = "fdt-mobileye-epm5";
++		};
 +	};
 +};
 -- 
