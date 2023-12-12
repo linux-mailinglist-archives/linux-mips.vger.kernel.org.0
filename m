@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-697-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-698-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E84E580F2FD
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 17:35:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE5680F2FF
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 17:35:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9ADA21F215F3
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 16:35:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 607921C20F54
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Dec 2023 16:35:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B9778E8E;
-	Tue, 12 Dec 2023 16:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B47478E99;
+	Tue, 12 Dec 2023 16:35:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YbcdPJ4z"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="i/TqscSh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4435E113;
-	Tue, 12 Dec 2023 08:35:36 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6CB22FF817;
-	Tue, 12 Dec 2023 16:35:34 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8542011D;
+	Tue, 12 Dec 2023 08:35:37 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3B2E3240007;
+	Tue, 12 Dec 2023 16:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1702398934;
+	t=1702398935;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=7XY5RosXYCLwcWB1g4w/xI8Tyluf+oMKzZZFQCrss2s=;
-	b=YbcdPJ4zbavgv4jdwBSz0ZDghLADAlyp17PeUykF/oogpxrztDatpkFG9+jDAu6NO/WL+C
-	Qjr58YFL2xpy7DS10OV2aytcLP3Gv1bk9NUgh4U2Hlvya3glyMpNge9OJyunPYyNCuI/KY
-	aPZ+KflXA9kcjQg9AVQFdRuq2wjxhgmUIum+hmyUVJrQVSj/YWSqmoQvTAo+NuaeC4nlnA
-	t08SySZ4cau+sgrdudi5CI6ki9Fr7c1LYOzuwFcBBmLB0FmHBlEnpqw/XtkIzgsSfMKTRo
-	KXBYMdbYwWweEB+48LtTqm8t8yTqEqC/sjyzdRJq+RysWmVJWR4zzvcX9hY9kw==
+	bh=gZ7oKcw0eqw6lprpX+dDIOb31hPprI1Sem1ITgrbMiU=;
+	b=i/TqscShoWirFV4LQ9T1aqY64nGNRhC5H7PYstoLwNdsGWs4TAaJoGfj7f+k20cJiU0fL1
+	dCeSyLhzwMSkK5vORdafkBseYAM+6oJlSKVSrSehnH2Mpn7WU/Js+gK1QHUSuEmY6nq/Nr
+	OJCmwdlkD+5KqYcCaF6uGiwBd2EVDN7T6CmnJkddLWmlxb3wreEfOI8mOmF2JOugOrU0S7
+	Kg5wcax+1sJ7tFhyxwILZaZ7SaFeIXc8Lct6NMNbYAMms1p4wEtk8Eom2uqZ0lD34B9ibZ
+	/X9v/9+dFMxgiLlMkIs8J4x3bQ/vAT6GKfbyPRd2uX2LCcsIZCmysPpxZo/+vA==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 To: Paul Burton <paulburton@kernel.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -46,10 +46,12 @@ Cc: Vladimir  Kondratiev <vladimir.kondratiev@mobileye.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v5 13/22] MIPS: traps: Give more explanations if ebase doesn't belong to KSEG0
-Date: Tue, 12 Dec 2023 17:34:45 +0100
-Message-ID: <20231212163459.1923041-14-gregory.clement@bootlin.com>
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 14/22] dt-bindings: Add vendor prefix for Mobileye Vision Technologies Ltd.
+Date: Tue, 12 Dec 2023 17:34:46 +0100
+Message-ID: <20231212163459.1923041-15-gregory.clement@bootlin.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231212163459.1923041-1-gregory.clement@bootlin.com>
 References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
@@ -59,40 +61,34 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: gregory.clement@bootlin.com
 
-With the expanded support for placing the kernel in XPHYS rather than
-just KSEG0, scenarios where ebase doesn't belong to KSEG0 are more
-likely to occur. In such cases, we currently experience a substantial
-and perplexing stack dump without any accompanying explanation. To
-rectify this, we aim to replace the uninformative stack dump with a
-warning that offers a clear explanation of the issue.
+Mobileye Vision Technologies Ltd. is a company developing autonomous
+driving technologies and advanced driver-assistance systems (ADAS)
+including cameras, computer chips and software.
 
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/kernel/traps.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 089247555c752..67c7c23fe4f73 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -2420,10 +2420,13 @@ void __init trap_init(void)
- 		 * EVA is special though as it allows segments to be rearranged
- 		 * and to become uncached during cache error handling.
- 		 */
--		if (!IS_ENABLED(CONFIG_EVA) && !WARN_ON(ebase_pa >= 0x20000000))
-+		if (!IS_ENABLED(CONFIG_EVA) && ebase_pa < 0x20000000)
- 			ebase = CKSEG0ADDR(ebase_pa);
- 		else
- 			ebase = (unsigned long)phys_to_virt(ebase_pa);
-+		if (ebase_pa >= 0x20000000)
-+			pr_warn("ebase(%pa) should better be in KSeg0",
-+				&ebase_pa);
- 	}
- 
- 	if (cpu_has_mmips) {
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 309b94c328c84..b45279bc97c14 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -897,6 +897,8 @@ patternProperties:
+     description: Miyoo
+   "^mntre,.*":
+     description: MNT Research GmbH
++  "^mobileye,.*":
++    description: Mobileye Vision Technologies Ltd.
+   "^modtronix,.*":
+     description: Modtronix Engineering
+   "^moortec,.*":
 -- 
 2.42.0
 
