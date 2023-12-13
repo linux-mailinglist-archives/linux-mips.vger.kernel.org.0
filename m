@@ -1,30 +1,31 @@
-Return-Path: <linux-mips+bounces-711-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-712-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B66D810B10
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Dec 2023 08:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D00810B42
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Dec 2023 08:15:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD8271F21594
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Dec 2023 07:10:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24CC41F215A2
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Dec 2023 07:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D08156F8;
-	Wed, 13 Dec 2023 07:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7C9171A3;
+	Wed, 13 Dec 2023 07:15:32 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id D79CAAD
-	for <linux-mips@vger.kernel.org>; Tue, 12 Dec 2023 23:10:47 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE377181
+	for <linux-mips@vger.kernel.org>; Tue, 12 Dec 2023 23:15:25 -0800 (PST)
 Received: from loongson.cn (unknown [111.9.175.10])
-	by gateway (Coremail) with SMTP id _____8Cx+uj2WHllQZgAAA--.3656S3;
-	Wed, 13 Dec 2023 15:10:46 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8CxO+kMWnllyJgAAA--.3662S3;
+	Wed, 13 Dec 2023 15:15:24 +0800 (CST)
 Received: from localhost.localdomain (unknown [111.9.175.10])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxfuHoWHllv_wBAA--.518S2;
-	Wed, 13 Dec 2023 15:10:45 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLOH9WXllp_4BAA--.494S2;
+	Wed, 13 Dec 2023 15:15:22 +0800 (CST)
 From: Huang Pei <huangpei@loongson.cn>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Bibo Mao <maobibo@loongson.cn>,
+	loongarch@lists.linux.dev,
 	linux-mips@vger.kernel.org,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	Paul Burton <paulburton@kernel.org>,
@@ -33,8 +34,8 @@ Cc: Bibo Mao <maobibo@loongson.cn>,
 	Gao Juxin <gaojuxin@loongson.cn>,
 	Huacai Chen <chenhuacai@loongson.cn>
 Subject: [PATCH] selftests/rseq: add LoongArch64 support
-Date: Wed, 13 Dec 2023 15:10:26 +0800
-Message-Id: <20231213071026.466949-1-huangpei@loongson.cn>
+Date: Wed, 13 Dec 2023 15:15:03 +0800
+Message-Id: <20231213071503.467163-1-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -43,24 +44,25 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8AxfuHoWHllv_wBAA--.518S2
+X-CM-TRANSID:AQAAf8DxLOH9WXllp_4BAA--.494S2
 X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 X-Coremail-Antispam: 1Uk129KBj9fXoWfWw4ktr4DurWkXw1xJry3WrX_yoW8Kw4kuo
 	ZrGF1xK3W2gw1j9an5CFy7tFWrJay7GFWUAFZxKrykCF1xur17Gw17Zr48twsxuaykGa48
-	XFyUJ393Wr9rAwn5l-sFpf9Il3svdjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf
+	XFyUJ393Wr9rAwn5l-sFpf9Il3svdjkaLaAFLSUrUUUU5b8apTn2vfkv8UJUUUU8wcxFpf
 	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
+	UjIYCTnIWjp_UUUYA7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
 	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
-	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
-	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
+	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+	Jw0_WrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
+	0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+	xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8v_M3UUUUU==
 
 Use same test infrastructure as MIPS and RISC-V, rseq-MRL-bits.h,
 here MRL stands for MIPS-RISCV-LoongArch.
