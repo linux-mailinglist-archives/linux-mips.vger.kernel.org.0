@@ -1,697 +1,822 @@
-Return-Path: <linux-mips+bounces-724-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-725-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C673E8127D5
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 07:20:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C2B8128BF
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 08:08:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E6971F21B49
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 06:20:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2605B281CBF
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 07:08:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87658CA57;
-	Thu, 14 Dec 2023 06:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="0UEl7hEn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7A0D52C;
+	Thu, 14 Dec 2023 07:08:17 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988CCF4
-	for <linux-mips@vger.kernel.org>; Wed, 13 Dec 2023 22:20:12 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-28aec2f2b74so840340a91.1
-        for <linux-mips@vger.kernel.org>; Wed, 13 Dec 2023 22:20:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1702534812; x=1703139612; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=usZae7pl3MvjhAJt7mCoCrwHfAUEYl7EAGJsUOY2M9Q=;
-        b=0UEl7hEnmHewb4O8ASNBzTGkknehTWU5Uw9n6gWjGeJgkMWXcv5d0P/KL74BRXatkt
-         xhp72shDPZR40SuoEkfZHoggCy6WAP+xvPT9aTqVjmXdVIaBh5Iy5A39xXSljsKAy3rK
-         5ohxDj8TYiHTojIa2srOF3kEkQ0mTQVWTrbpmfUriK05YeDgR1ED0oI7NFEXSehJUH41
-         98StfR1tVUHMhkVxPwgS1MGiWuAivPX6qL0RlHtF5U7pKB7vkMgOeb4dVYShJGsnnDeb
-         r56ZxPZfNeBvtJ5BLwORZzBj43vTZm5m4oOJe6bzl3tpnJiIpaYqZCAqkMmTAEILmkd1
-         7gkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702534812; x=1703139612;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=usZae7pl3MvjhAJt7mCoCrwHfAUEYl7EAGJsUOY2M9Q=;
-        b=vnHWEADHQs4xvMjnE0mroE4/UpLzIrvTOVWcft2ehnVbZugeXMAL+T47oZt6PjSkjh
-         s3KnN2b3qDwC75R9CpjFM4YjlUnNU9ULIAGsVbSNcN/XDBa/NjaN+yQjpy7Av8+5RB4G
-         Esw+xGGo5JgQH8almcxNXD3LzISddul7dkGi8AQMCPHhqMXWn32UGGlVw3oqHEAtlRlk
-         8RbQSx2He3b5EaYXlnckPuU2CpcFsUaTiQTZ9AnaiLQ0IQZUVACxzAC1FFZ/4Zhqsn4S
-         wnzYuVXVS3jtBx519wZmyKAAwgxAeafcuoLdZrXjFR2Sqay22+H9fYK79a7UR95XVJ0v
-         PQTA==
-X-Gm-Message-State: AOJu0Yy9/jbe6bF52/4pHFkfgDcf4YbPJbYbK8I5XrhgzxORyfAmeCoW
-	G114xokRBxC8Z11paa4CL4ivk54f0qshHpjdCxxkJA==
-X-Google-Smtp-Source: AGHT+IHoDEzaeNTBz3an7Avgk3ETv+Yw0lQ+h7PpO6QDmPdjjkoy+XCzIThEdNUah62czl7MeVMvKdc99zVQSiKEZvk=
-X-Received: by 2002:a17:90a:b012:b0:28a:e58d:fbd0 with SMTP id
- x18-20020a17090ab01200b0028ae58dfbd0mr864277pjq.72.1702534811859; Wed, 13 Dec
- 2023 22:20:11 -0800 (PST)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 716E7133
+	for <linux-mips@vger.kernel.org>; Wed, 13 Dec 2023 23:08:07 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+	by gateway (Coremail) with SMTP id _____8CxhfDVqXplj_AAAA--.5391S3;
+	Thu, 14 Dec 2023 15:08:05 +0800 (CST)
+Received: from Board-3A3000 (unknown [111.9.175.10])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnnPRqXplRM8DAA--.775S2;
+	Thu, 14 Dec 2023 15:08:03 +0800 (CST)
+Date: Thu, 14 Dec 2023 15:08:01 +0800
+From: Huang Pei <huangpei@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Li Xuefeng <lixuefeng@loongson.cn>,
+	Yang Tiezhu <yangtiezhu@loongson.cn>,
+	Gao Juxin <gaojuxin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH] selftests/rseq: add LoongArch64 support
+Message-ID: <20231214025623.db6qzzmkawvqyp4e@Board-3A3000>
+Received: from huangpei@loongson.cn (unknown [111.9.175.10:47358]) by IMAP
+ (Coremail) with SMTP id I001/U05ANxtemX+pwEA; Thu, 14 Dec 2023 10:56:47
+ +0800 (CST)
+References: <20231213071026.466949-1-huangpei@loongson.cn>
+ <CAAhV-H6uFNdtLbqeayF3yLxkUs=FPRGPvxyYaRJ2Zccj87TRTg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230916003118.2540661-1-seanjc@google.com> <20230916003118.2540661-27-seanjc@google.com>
-In-Reply-To: <20230916003118.2540661-27-seanjc@google.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Thu, 14 Dec 2023 11:50:00 +0530
-Message-ID: <CAAhSdy1mxY23+AU99wSmbCcr6yGHrdRGDqAVehzuD-TEJuK_OQ@mail.gmail.com>
-Subject: Re: [PATCH 26/26] KVM: Hide KVM internal data structures and values
- from kernel at-large
-To: Sean Christopherson <seanjc@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Tony Krowiak <akrowiak@linux.ibm.com>, 
-	Halil Pasic <pasic@linux.ibm.com>, Jason Herne <jjherne@linux.ibm.com>, 
-	Harald Freudenberger <freude@linux.ibm.com>, Alex Williamson <alex.williamson@redhat.com>, 
-	Andy Lutomirski <luto@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	Anish Ghulati <aghulati@google.com>, Venkatesh Srinivas <venkateshs@chromium.org>, 
-	Andrew Thornton <andrewth@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H6uFNdtLbqeayF3yLxkUs=FPRGPvxyYaRJ2Zccj87TRTg@mail.gmail.com>
+X-CM-TRANSID:AQAAf8BxnnPRqXplRM8DAA--.775S2
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9fXoWfZF1UKw4UurWUAF4UAr1fAFc_yoW5Gw45Ao
+	ZrGF1xKF1fKw129r1kua47tFWfJa47GFW7AFW3Kr1DCF1xWa4UCr1UAw40qrsxuFZ2g34U
+	XFyUJ395uasrJwn5l-sFpf9Il3svdjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf
+	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
+	UjIYCTnIWjp_UUUYU7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
+	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
+	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7V
+	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
+	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
 
-On Sat, Sep 16, 2023 at 6:02=E2=80=AFAM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> Wrap all KVM internal APIs, data structures, values, etc. in public
-> headers with "#ifdef __KVM__" to effectively hide KVM's internal details
-> from other subsystems and the kernel at-large.  Hiding KVM details for
-> all architectures will, in the very distant future, allow loading a new
-> (or old) KVM module without needing to rebuild and reboot the entire
-> kernel, or to even allow loading and running multiple versions of KVM
-> simultaneously on a single host.
->
-> To allow different instances of KVM modules to freely modify KVM data
-> structures, enums, #defines, etc., e.g. the struct kvm_vcpu layout, there
-> must be exactly zero dereferences of KVM-defined structures/values in
-> non-KVM code (excepting code for architectures that don't support such
-> shenanigans).  Any such references could lead to latent bugs, e.g. as the
-> kernel would think a KVM structure has layout X, but in reality the
-> current incarnation of KVM uses layout Y.
->
-> In KVM x86, all remaining non-KVM references to KVM details have been now
-> eliminated.  To harden KVM against new references being introduced, hide
-> KVM's details to ensure that KVM doesn=E2=80=99t create a de facto ABI wi=
-th the
-> rest of the kernel.
->
-> Use #ifdeffery to hide KVM details as doing so requires, by far, the leas=
-t
-> amount of churn and impact on architectures that freely share select KVM
-> details with the rest of the kernel, e.g. s390, ARM64 and PPC, have
-> significant usage of KVM-defined APIs, structures, values, etc.  E.g.
-> attempting to extract the "private" chunks into dedicated KVM-internal
-> headers would require massive churn, even on x86, and it's not obvious th=
-e
-> end result would be a net positive (all attempts at moving code around
-> failed long before getting anywhere near compiling cleanly).
->
-> Another (bad) alternative that would be relative churn-free would be to
-> move the KVM headers to a dedicated KVM-specific path while maintaining
-> the generic layout, e.g. something like virt/kvm/include/linux.  That
-> would allow x86 to simply omit the KVM-specific include path.  But that
-> would require modifying the global include path, i.e. would make KVM a
-> really special snowflake and set the awful precedent that it's "ok" to
-> add subsystem specific directories to the global include path.
->
-> Grant exceptions to asm-offsets.c as needed, and to s390's VFIO AP driver=
-.
-> Creating a KVM-specific asm-offsets, as was done for x86, adds no value
-> (x86 did so to avoid exposing vendor specific headers) and doesn't create
-> much of a "slippery slope" risk.  s390's VFIO AP driver on the other hand
-> is simply too intertwined with KVM to realistically treat it as anything
-> other than KVM code, despite it living in crypto drivers, e.g. the driver
-> has some rather crazy lock ordering rules between the device and KVM.
->
-> Add a static assert that __KVM__ is defined in trace/events/kvm.h, as tha=
-t
-> is effectively a private KVM header that just happens to live in a public
-> path.
->
-> Shuffle a few PPC includes and an s390 declaration as needed, and
-> opportunistically include kvm_host.h in trace/events.kvm.h instead of
-> relying on the parent to provide the right includes.
->
-> Cc: Anish Ghulati <aghulati@google.com>
-> Cc: Venkatesh Srinivas <venkateshs@chromium.org>
-> Cc: Andrew Thornton <andrewth@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Wed, Dec 13, 2023 at 03:52:19PM +0800, Huacai Chen wrote:
+> On Wed, Dec 13, 2023 at 3:11 PM Huang Pei <huangpei@loongson.cn> wrote:
+> >
+> > Use same test infrastructure as MIPS and RISC-V, rseq-MRL-bits.h,
+> > here MRL stands for MIPS-RISCV-LoongArch.
+> You can consider the name rseq-generic-bits.h, there is also similar
+> naming in this directory.
+> 
+this file is for MIPS/RISC-V/LoongArch, not that "general"
+> >
+> > Tested on 3A5000+7A1000+ArchLinux Loong64, no errors(need latest
+> > upstream binutils).
+> You needn't highlight you have tested. OTOH you can refer the related
+> commit of binutils.
+> 
+got it.
+> >
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  tools/testing/selftests/rseq/param_test.c     |  20 +
+> >  ...rseq-mips-riscv-bits.h => rseq-MRL-bits.h} |   0
+> >  .../selftests/rseq/rseq-loongarch-bits.h      | 410 ++++++++++++++++++
+> >  .../rseq/rseq-loongarch-thread-pointer.h      |  22 +
+> >  tools/testing/selftests/rseq/rseq-loongarch.h | 196 +++++++++
+> >  .../selftests/rseq/rseq-thread-pointer.h      |   2 +
+> >  tools/testing/selftests/rseq/rseq.h           |   2 +
+> >  7 files changed, 652 insertions(+)
+> >  rename tools/testing/selftests/rseq/{rseq-mips-riscv-bits.h => rseq-MRL-bits.h} (100%)
+> >  create mode 100644 tools/testing/selftests/rseq/rseq-loongarch-bits.h
+> >  create mode 100644 tools/testing/selftests/rseq/rseq-loongarch-thread-pointer.h
+> >  create mode 100644 tools/testing/selftests/rseq/rseq-loongarch.h
+> >
+> > diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
+> > index 20403d58345c..724dd07ecc73 100644
+> > --- a/tools/testing/selftests/rseq/param_test.c
+> > +++ b/tools/testing/selftests/rseq/param_test.c
+> > @@ -227,7 +227,27 @@ unsigned int yield_mod_cnt, nr_abort;
+> >         "bnez " INJECT_ASM_REG ", 222b\n\t"                     \
+> >         "333:\n\t"
+> >
+> > +#elif defined(__loongarch__)
+> > +#define RSEQ_INJECT_INPUT \
+> > +       , [loop_cnt_1]"m"(loop_cnt[1]) \
+> > +       , [loop_cnt_2]"m"(loop_cnt[2]) \
+> > +       , [loop_cnt_3]"m"(loop_cnt[3]) \
+> > +       , [loop_cnt_4]"m"(loop_cnt[4]) \
+> > +       , [loop_cnt_5]"m"(loop_cnt[5]) \
+> > +       , [loop_cnt_6]"m"(loop_cnt[6])
+> > +
+> > +#define INJECT_ASM_REG  "$r16"
+> > +
+> > +#define RSEQ_INJECT_CLOBBER \
+> > +       , INJECT_ASM_REG
+> >
+> > +#define RSEQ_INJECT_ASM(n)                                      \
+> > +       "ld.w " INJECT_ASM_REG ", %[loop_cnt_" #n "]\n\t"         \
+> > +       "beqz " INJECT_ASM_REG ", 333f\n\t"                     \
+> > +       "222:\n\t"                                              \
+> > +       "addi.w  " INJECT_ASM_REG "," INJECT_ASM_REG ", -1\n\t"   \
+> > +       "bnez " INJECT_ASM_REG ", 222b\n\t"                     \
+> > +       "333:\n\t"
+> >  #else
+> >  #error unsupported target
+> >  #endif
+> > diff --git a/tools/testing/selftests/rseq/rseq-mips-riscv-bits.h b/tools/testing/selftests/rseq/rseq-MRL-bits.h
+> > similarity index 100%
+> > rename from tools/testing/selftests/rseq/rseq-mips-riscv-bits.h
+> > rename to tools/testing/selftests/rseq/rseq-MRL-bits.h
+> > diff --git a/tools/testing/selftests/rseq/rseq-loongarch-bits.h b/tools/testing/selftests/rseq/rseq-loongarch-bits.h
+> > new file mode 100644
+> > index 000000000000..de31a0143139
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/rseq/rseq-loongarch-bits.h
+> > @@ -0,0 +1,410 @@
+> > +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
+> > +
+> > +#include "rseq-bits-template.h"
+> > +
+> > +#if defined(RSEQ_TEMPLATE_MO_RELAXED) && \
+> > +       (defined(RSEQ_TEMPLATE_CPU_ID) || defined(RSEQ_TEMPLATE_MM_CID))
+> > +
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_storev)(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[cmpfail]")
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[cmpfail]")
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_FINAL_STORE(newv, v, 3)
+> > +                                 RSEQ_INJECT_ASM(5)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]            "r" (cpu),
+> > +                                   [current_cpu_id]    "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]           "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [v]                 "m" (*v),
+> > +                                   [expect]            "r" (expect),
+> > +                                   [newv]              "r" (newv)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort, cmpfail
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1, error2
+> > +#endif
+> > +       );
+> > +
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +cmpfail:
+> > +       return 1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +error2:
+> > +       rseq_bug("expected value comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpnev_storeoffp_load)(intptr_t *v, intptr_t expectnot,
+> > +                              off_t voffp, intptr_t *load, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[cmpfail]")
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +                                 RSEQ_ASM_OP_CMPNE(v, expectnot, "%l[cmpfail]")
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +                                 RSEQ_ASM_OP_CMPNE(v, expectnot, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_R_LOAD(v)
+> > +                                 RSEQ_ASM_OP_R_STORE(load)
+> > +                                 RSEQ_ASM_OP_R_LOAD_OFF(voffp)
+> > +                                 RSEQ_ASM_OP_R_FINAL_STORE(v, 3)
+> > +                                 RSEQ_INJECT_ASM(5)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]            "r" (cpu),
+> > +                                   [current_cpu_id]    "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]           "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [v]                 "m" (*v),
+> > +                                   [expectnot]         "r" (expectnot),
+> > +                                   [load]              "m" (*load),
+> > +                                   [voffp]             "r" (voffp)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort, cmpfail
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1, error2
+> > +#endif
+> > +       );
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +cmpfail:
+> > +       return 1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +error2:
+> > +       rseq_bug("expected value comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_addv)(intptr_t *v, intptr_t count, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_R_LOAD(v)
+> > +                                 RSEQ_ASM_OP_R_ADD(count)
+> > +                                 RSEQ_ASM_OP_R_FINAL_STORE(v, 3)
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]            "r" (cpu),
+> > +                                   [current_cpu_id]    "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]           "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [v]                 "m" (*v),
+> > +                                   [count]             "r" (count)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1
+> > +#endif
+> > +       );
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_cmpeqv_storev)(intptr_t *v, intptr_t expect,
+> > +                             intptr_t *v2, intptr_t expect2,
+> > +                             intptr_t newv, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[cmpfail]")
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error2]")
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error3]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[cmpfail]")
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +                                 RSEQ_ASM_OP_CMPEQ(v2, expect2, "%l[cmpfail]")
+> > +                                 RSEQ_INJECT_ASM(5)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[error2]")
+> > +                                 RSEQ_ASM_OP_CMPEQ(v2, expect2, "%l[error3]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_FINAL_STORE(newv, v, 3)
+> > +                                 RSEQ_INJECT_ASM(6)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]            "r" (cpu),
+> > +                                   [current_cpu_id]    "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]           "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [v]                 "m" (*v),
+> > +                                   [expect]            "r" (expect),
+> > +                                   [v2]                        "m" (*v2),
+> > +                                   [expect2]           "r" (expect2),
+> > +                                   [newv]              "r" (newv)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort, cmpfail
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1, error2, error3
+> > +#endif
+> > +       );
+> > +
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +cmpfail:
+> > +       return 1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +error2:
+> > +       rseq_bug("expected value comparison failed");
+> > +error3:
+> > +       rseq_bug("2nd expected value comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +#define RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV
+> > +
+> > +/*
+> > + *   pval = *(ptr+off)
+> > + *  *pval += inc;
+> > + */
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_offset_deref_addv)(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_R_DEREF_ADDV(ptr, off, 3)
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]                    "r" (cpu),
+> > +                                   [current_cpu_id]            "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]                   "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [ptr]                       "r" (ptr),
+> > +                                   [off]                       "er" (off),
+> > +                                   [inc]                       "er" (inc)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1
+> > +#endif
+> > +       );
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +#endif /* #if defined(RSEQ_TEMPLATE_MO_RELAXED) &&
+> > +       (defined(RSEQ_TEMPLATE_CPU_ID) || defined(RSEQ_TEMPLATE_MM_CID)) */
+> > +
+> > +#if (defined(RSEQ_TEMPLATE_MO_RELAXED) || defined(RSEQ_TEMPLATE_MO_RELEASE)) && \
+> > +       (defined(RSEQ_TEMPLATE_CPU_ID) || defined(RSEQ_TEMPLATE_MM_CID))
+> > +
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_trystorev_storev)(intptr_t *v, intptr_t expect,
+> > +                                intptr_t *v2, intptr_t newv2,
+> > +                                intptr_t newv, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[cmpfail]")
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[cmpfail]")
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_STORE(newv2, v2)
+> > +                                 RSEQ_INJECT_ASM(5)
+> > +#ifdef RSEQ_TEMPLATE_MO_RELEASE
+> > +                                 RSEQ_ASM_OP_FINAL_STORE_RELEASE(newv, v, 3)
+> > +#else
+> > +                                 RSEQ_ASM_OP_FINAL_STORE(newv, v, 3)
+> > +#endif
+> > +                                 RSEQ_INJECT_ASM(6)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]                    "r" (cpu),
+> > +                                   [current_cpu_id]            "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]                   "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [expect]                    "r" (expect),
+> > +                                   [v]                         "m" (*v),
+> > +                                   [newv]                      "r" (newv),
+> > +                                   [v2]                        "m" (*v2),
+> > +                                   [newv2]                     "r" (newv2)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort, cmpfail
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1, error2
+> > +#endif
+> > +       );
+> > +
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +cmpfail:
+> > +       return 1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +error2:
+> > +       rseq_bug("expected value comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +static inline __always_inline
+> > +int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_trymemcpy_storev)(intptr_t *v, intptr_t expect,
+> > +                                void *dst, void *src, size_t len,
+> > +                                intptr_t newv, int cpu)
+> > +{
+> > +       RSEQ_INJECT_C(9)
+> > +       __asm__ __volatile__ goto(RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[cmpfail]")
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error1]")
+> > +                                 RSEQ_ASM_DEFINE_EXIT_POINT(2f, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+> > +                                 RSEQ_INJECT_ASM(3)
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[cmpfail]")
+> > +                                 RSEQ_INJECT_ASM(4)
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                 RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
+> > +                                 RSEQ_ASM_OP_CMPEQ(v, expect, "%l[error2]")
+> > +#endif
+> > +                                 RSEQ_ASM_OP_R_BAD_MEMCPY(dst, src, len)
+> > +                                 RSEQ_INJECT_ASM(5)
+> > +#ifdef RSEQ_TEMPLATE_MO_RELEASE
+> > +                                 RSEQ_ASM_OP_FINAL_STORE_RELEASE(newv, v, 3)
+> > +#else
+> > +                                 RSEQ_ASM_OP_FINAL_STORE(newv, v, 3)
+> > +#endif
+> > +                                 RSEQ_INJECT_ASM(6)
+> > +                                 RSEQ_ASM_DEFINE_ABORT(4, abort)
+> > +                                 : /* gcc asm goto does not allow outputs */
+> > +                                 : [cpu_id]                    "r" (cpu),
+> > +                                   [current_cpu_id]            "m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
+> > +                                   [rseq_cs]                   "m" (rseq_get_abi()->rseq_cs.arch.ptr),
+> > +                                   [expect]                    "r" (expect),
+> > +                                   [v]                         "m" (*v),
+> > +                                   [newv]                      "r" (newv),
+> > +                                   [dst]                       "r" (dst),
+> > +                                   [src]                       "r" (src),
+> > +                                   [len]                       "r" (len)
+> > +                                   RSEQ_INJECT_INPUT
+> > +                                 : "memory", RSEQ_ASM_TMP_REG_1, RSEQ_ASM_TMP_REG_2,
+> > +                                   RSEQ_ASM_TMP_REG_3, RSEQ_ASM_TMP_REG_4
+> > +                                   RSEQ_INJECT_CLOBBER
+> > +                                 : abort, cmpfail
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +                                   , error1, error2
+> > +#endif
+> > +       );
+> > +
+> > +       return 0;
+> > +abort:
+> > +       RSEQ_INJECT_FAILED
+> > +       return -1;
+> > +cmpfail:
+> > +       return 1;
+> > +#ifdef RSEQ_COMPARE_TWICE
+> > +error1:
+> > +       rseq_bug("cpu_id comparison failed");
+> > +error2:
+> > +       rseq_bug("expected value comparison failed");
+> > +#endif
+> > +}
+> > +
+> > +#endif /* #if (defined(RSEQ_TEMPLATE_MO_RELAXED) || defined(RSEQ_TEMPLATE_MO_RELEASE)) &&
+> > +       (defined(RSEQ_TEMPLATE_CPU_ID) || defined(RSEQ_TEMPLATE_MM_CID)) */
+> > +
+> > +#include "rseq-bits-reset.h"
+> > diff --git a/tools/testing/selftests/rseq/rseq-loongarch-thread-pointer.h b/tools/testing/selftests/rseq/rseq-loongarch-thread-pointer.h
+> > new file mode 100644
+> > index 000000000000..7dc990687982
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/rseq/rseq-loongarch-thread-pointer.h
+> > @@ -0,0 +1,22 @@
+> > +/* SPDX-License-Identifier: MIT */
+> > +/* SPDX-FileCopyrightText: 2023 Huang Pei <huangpei@loongson.cn> */
+> > +
+> > +#ifndef _RSEQ_LOONGARCH_THREAD_POINTER
+> > +#define _RSEQ_LOONGARCH_THREAD_POINTER
+> > +
+> > +#ifdef __cplusplus
+> > +extern "C" {
+> > +#endif
+> > +
+> > +static inline void *rseq_thread_pointer(void)
+> > +{
+> > +       register void *__result asm ("$2");
+> > +       asm ("" : "=r" (__result));
+> > +       return __result;
+> > +}
+> Since you have already refer the latest toolchain in commit message,
+> you don't need to define a local version of rseq_thread_pointer().
+> 
+> Huacai
+> 
+> > +
+> > +#ifdef __cplusplus
+> > +}
+> > +#endif
+> > +
+> > +#endif
+> > diff --git a/tools/testing/selftests/rseq/rseq-loongarch.h b/tools/testing/selftests/rseq/rseq-loongarch.h
+> > new file mode 100644
+> > index 000000000000..1359d28c48a4
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/rseq/rseq-loongarch.h
+> > @@ -0,0 +1,196 @@
+> > +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
+> > +/*
+> > + * Author: Huang Pei <huangpei@loongson.cn>
+> > + * (C) Copyright 2023 Loongson Technology Corporation Limited
+> > + * (C) Copyright 2016-2022 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > + * (C) Copyright 2018 MIPS Tech LLC
+> > + * (C) Copyright 2018 - Paul Burton <paul.burton@mips.com>
+> > + */
+> > +
+> > +/*
+> > + * RSEQ_SIG use "break 0x10" instruction.
+> > + */
+> > +
+> > +# define RSEQ_SIG      0x002a0010
+> > +
+> > +
+> > +
+> > +#define rseq_smp_mb()  __asm__ __volatile__ ("dbar 0x10" ::: "memory")
+> > +#define rseq_smp_rmb() __asm__ __volatile__ ("dbar 0x15" ::: "memory")
+> > +#define rseq_smp_wmb() __asm__ __volatile__ ("dbar 0x1a" ::: "memory")
+> > +#define RSEQ_ASM_TMP_REG_1     "$r12"
+> > +#define RSEQ_ASM_TMP_REG_2     "$r13"
+> > +#define RSEQ_ASM_TMP_REG_3     "$r14"
+> > +#define RSEQ_ASM_TMP_REG_4     "$r15"
+> > +
+> > +#define rseq_smp_load_acquire(p)                                       \
+> > +__extension__ ({                                                       \
+> > +       rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));  \
+> > +       __asm__ __volatile__("dbar 0x14" :::  "memory");                \
+> > +       ____p1;                                                         \
+> > +})
+> > +
+> > +#define rseq_smp_acquire__after_ctrl_dep()     rseq_smp_rmb()
+> > +
+> > +#define rseq_smp_store_release(p, v)                                   \
+> > +do {                                                                   \
+> > +       __asm__ __volatile__("dbar 0x12" :::  "memory");                \
+> > +       RSEQ_WRITE_ONCE(*(p), v);                                       \
+> > +} while (0)
+> > +
+> > +# define LONG                  ".dword "
+> > +# define LONG_LA               "la.local "
+> > +# define LONG_L                        "ld.d "
+> > +# define LONG_S                        "st.d "
+> > +# define LONG_ADDI             "addi.d "
+> > +# define LONG_ADDU             "add.d "
+> > +# define U32_U64_PAD(x)                x
+> > +
+> > +#define __RSEQ_ASM_DEFINE_TABLE(label, version, flags, start_ip, \
+> > +                               post_commit_offset, abort_ip) \
+> > +               ".pushsection __rseq_cs, \"aw\"\n\t" \
+> > +               ".balign 32\n\t" \
+> > +               __rseq_str(label) ":\n\t"                                       \
+> > +               ".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
+> > +               LONG " " U32_U64_PAD(__rseq_str(start_ip)) "\n\t" \
+> > +               LONG " " U32_U64_PAD(__rseq_str(post_commit_offset)) "\n\t" \
+> > +               LONG " " U32_U64_PAD(__rseq_str(abort_ip)) "\n\t" \
+> > +               ".popsection\n\t" \
+> > +               ".pushsection __rseq_cs_ptr_array, \"aw\"\n\t" \
+> > +               LONG " " U32_U64_PAD(__rseq_str(label) "b") "\n\t" \
+> > +               ".popsection\n\t"
+> > +
+> > +#define RSEQ_ASM_DEFINE_TABLE(label, start_ip, post_commit_ip, abort_ip) \
+> > +       __RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,               \
+> > +                               ((post_commit_ip) - (start_ip)), abort_ip)
+> > +
+> > +/*
+> > + * Exit points of a rseq critical section consist of all instructions outside
+> > + * of the critical section where a critical section can either branch to or
+> > + * reach through the normal course of its execution. The abort IP and the
+> > + * post-commit IP are already part of the __rseq_cs section and should not be
+> > + * explicitly defined as additional exit points. Knowing all exit points is
+> > + * useful to assist debuggers stepping over the critical section.
+> > + */
+> > +#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip) \
+> > +               ".pushsection __rseq_exit_point_array, \"aw\"\n\t" \
+> > +               LONG " " U32_U64_PAD(__rseq_str(start_ip)) "\n\t" \
+> > +               LONG " " U32_U64_PAD(__rseq_str(exit_ip)) "\n\t" \
+> > +               ".popsection\n\t"
+> > +
+> > +#define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs) \
+> > +               RSEQ_INJECT_ASM(1) \
+> > +               LONG_LA  RSEQ_ASM_TMP_REG_1 "," __rseq_str(cs_label) "\n\t" \
+> > +               LONG_S   RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(rseq_cs) "]\n\t" \
+> > +               __rseq_str(label) ":\n\t"
+> > +
+> > +#define RSEQ_ASM_DEFINE_ABORT(label, abort_label)                      \
+> > +               "b      222f\n"                                                 \
+> > +               ".balign        4\n"                                            \
+> > +               ".long "        __rseq_str(RSEQ_SIG) "\n"                       \
+> > +               __rseq_str(label) ":\n"                                         \
+> > +               "b      %l[" __rseq_str(abort_label) "]\n"                      \
+> > +               "222:\n"
+> > +
+> > +#define RSEQ_ASM_OP_STORE(value, var)                                  \
+> > +       LONG_S  "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n"
+> > +
+> > +#define RSEQ_ASM_OP_CMPEQ(var, expect, label)                          \
+> > +               LONG_L  RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"         \
+> > +               "bne    " RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"    \
+> > +               __rseq_str(label) "\n"
+> > +
+> > +#define RSEQ_ASM_OP_CMPEQ32(var, expect, label)                                \
+> > +               "ld.w   " RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"       \
+> > +               "bne    " RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"    \
+> > +               __rseq_str(label) "\n"
+> > +
+> > +#define RSEQ_ASM_OP_CMPNE(var, expect, label)                          \
+> > +               LONG_L  RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"         \
+> > +               "beq    " RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"    \
+> > +               __rseq_str(label) "\n"
+> > +
+> > +#define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label) \
+> > +               RSEQ_INJECT_ASM(2) \
+> > +               RSEQ_ASM_OP_CMPEQ32(current_cpu_id, cpu_id, label)
+> > +
+> > +#define RSEQ_ASM_OP_R_LOAD(var)                                                \
+> > +               LONG_L  RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"
+> > +
+> > +#define RSEQ_ASM_OP_R_STORE(var)                                       \
+> > +               LONG_S  RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"
+> > +
+> > +#define RSEQ_ASM_OP_R_LOAD_OFF(offset)                                 \
+> > +               LONG_ADDU RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(offset) "], "    \
+> > +                RSEQ_ASM_TMP_REG_1 "\n"                                \
+> > +               LONG_L  RSEQ_ASM_TMP_REG_1 ", " RSEQ_ASM_TMP_REG_1 ", 0\n"
+> > +
+> > +#define RSEQ_ASM_OP_R_ADD(count)                                       \
+> > +               LONG_ADDU RSEQ_ASM_TMP_REG_1 ", " RSEQ_ASM_TMP_REG_1            \
+> > +               ", %[" __rseq_str(count) "]\n"
+> > +
+> > +#define RSEQ_ASM_OP_FINAL_STORE(value, var, post_commit_label)         \
+> > +               RSEQ_ASM_OP_STORE(value, var)                                   \
+> > +               __rseq_str(post_commit_label) ":\n"
+> > +
+> > +#define RSEQ_ASM_OP_FINAL_STORE_RELEASE(value, var, post_commit_label) \
+> > +               "dbar  0x12\t\n"                                                \
+> > +               RSEQ_ASM_OP_STORE(value, var)                                   \
+> > +               __rseq_str(post_commit_label) ":\n"
+> > +
+> > +#define RSEQ_ASM_OP_R_FINAL_STORE(var, post_commit_label)              \
+> > +               LONG_S  RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"         \
+> > +               __rseq_str(post_commit_label) ":\n"
+> > +
+> > +#define RSEQ_ASM_OP_R_BAD_MEMCPY(dst, src, len)                                \
+> > +               "beqz   %[" __rseq_str(len) "], 333f\n"                         \
+> > +               "move   " RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(len) "]\n"       \
+> > +               "move   " RSEQ_ASM_TMP_REG_2 ", %[" __rseq_str(src) "]\n"       \
+> > +               "move   " RSEQ_ASM_TMP_REG_3 ", %[" __rseq_str(dst) "]\n"       \
+> > +               "222:\n"                                                        \
+> > +               "ld.b   " RSEQ_ASM_TMP_REG_4 ", " RSEQ_ASM_TMP_REG_2 ", 0\n"    \
+> > +               "st.b   " RSEQ_ASM_TMP_REG_4 ", " RSEQ_ASM_TMP_REG_3 ", 0\n"    \
+> > +               LONG_ADDI RSEQ_ASM_TMP_REG_1 ", " RSEQ_ASM_TMP_REG_1 ", -1\n"   \
+> > +               LONG_ADDI RSEQ_ASM_TMP_REG_2 ", " RSEQ_ASM_TMP_REG_2 ", 1\n"    \
+> > +               LONG_ADDI RSEQ_ASM_TMP_REG_3 ", " RSEQ_ASM_TMP_REG_3 ", 1\n"    \
+> > +               "bnez   " RSEQ_ASM_TMP_REG_1 ", 222b\n"                         \
+> > +               "333:\n"
+> > +
+> > +#define RSEQ_ASM_OP_R_DEREF_ADDV(ptr, off, post_commit_label)          \
+> > +               "move   " RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(ptr) "]\n"       \
+> > +               RSEQ_ASM_OP_R_ADD(off)                                          \
+> > +               LONG_L    RSEQ_ASM_TMP_REG_1 ", " RSEQ_ASM_TMP_REG_1 ", 0 \n"   \
+> > +               RSEQ_ASM_OP_R_ADD(inc)                                          \
+> > +               __rseq_str(post_commit_label) ":\n"
+> > +
+> > +/* Per-cpu-id indexing. */
+> > +
+> > +#define RSEQ_TEMPLATE_CPU_ID
+> > +#define RSEQ_TEMPLATE_MO_RELAXED
+> > +#include "rseq-MRL-bits.h"
+> > +#undef RSEQ_TEMPLATE_MO_RELAXED
+> > +
+> > +#define RSEQ_TEMPLATE_MO_RELEASE
+> > +#include "rseq-MRL-bits.h"
+> > +#undef RSEQ_TEMPLATE_MO_RELEASE
+> > +#undef RSEQ_TEMPLATE_CPU_ID
+> > +
+> > +/* Per-mm-cid indexing. */
+> > +
+> > +#define RSEQ_TEMPLATE_MM_CID
+> > +#define RSEQ_TEMPLATE_MO_RELAXED
+> > +#include "rseq-MRL-bits.h"
+> > +#undef RSEQ_TEMPLATE_MO_RELAXED
+> > +
+> > +#define RSEQ_TEMPLATE_MO_RELEASE
+> > +#include "rseq-MRL-bits.h"
+> > +#undef RSEQ_TEMPLATE_MO_RELEASE
+> > +#undef RSEQ_TEMPLATE_MM_CID
+> > +
+> > +/* APIs which are not based on cpu ids. */
+> > +
+> > +#define RSEQ_TEMPLATE_CPU_ID_NONE
+> > +#define RSEQ_TEMPLATE_MO_RELAXED
+> > +#include "rseq-MRL-bits.h"
+> > +#undef RSEQ_TEMPLATE_MO_RELAXED
+> > +#undef RSEQ_TEMPLATE_CPU_ID_NONE
+> > diff --git a/tools/testing/selftests/rseq/rseq-thread-pointer.h b/tools/testing/selftests/rseq/rseq-thread-pointer.h
+> > index 977c25d758b2..b9c8fe7c4683 100644
+> > --- a/tools/testing/selftests/rseq/rseq-thread-pointer.h
+> > +++ b/tools/testing/selftests/rseq/rseq-thread-pointer.h
+> > @@ -12,6 +12,8 @@
+> >  #include "rseq-x86-thread-pointer.h"
+> >  #elif defined(__PPC__)
+> >  #include "rseq-ppc-thread-pointer.h"
+> > +#elif defined(__loongarch__)
+> > +#include "rseq-loongarch-thread-pointer.h"
+> >  #else
+> >  #include "rseq-generic-thread-pointer.h"
+> >  #endif
+> > diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+> > index d7364ea4d201..75c4bbe013d3 100644
+> > --- a/tools/testing/selftests/rseq/rseq.h
+> > +++ b/tools/testing/selftests/rseq/rseq.h
+> > @@ -128,6 +128,8 @@ static inline struct rseq_abi *rseq_get_abi(void)
+> >  #include <rseq-s390.h>
+> >  #elif defined(__riscv)
+> >  #include <rseq-riscv.h>
+> > +#elif defined(__loongarch__)
+> > +#include <rseq-loongarch.h>
+> >  #else
+> >  #error unsupported target
+> >  #endif
+> > --
+> > 2.30.2
+> >
+> >
 
-For KVM RISC-V:
-Anup Patel <anup@brainfault.org>
-
-Regards,
-Anup
-
-> ---
->  arch/arm64/include/asm/kvm_emulate.h     | 3 +++
->  arch/arm64/include/asm/kvm_host.h        | 2 ++
->  arch/arm64/include/asm/kvm_mmu.h         | 4 ++++
->  arch/arm64/kernel/asm-offsets.c          | 2 ++
->  arch/arm64/kvm/hyp/Makefile              | 2 +-
->  arch/arm64/kvm/hyp/nvhe/Makefile         | 3 ++-
->  arch/arm64/kvm/hyp/vhe/Makefile          | 2 +-
->  arch/mips/include/asm/kvm_host.h         | 2 ++
->  arch/mips/kernel/asm-offsets.c           | 2 ++
->  arch/powerpc/include/asm/kvm_book3s.h    | 3 +++
->  arch/powerpc/include/asm/kvm_book3s_64.h | 2 ++
->  arch/powerpc/include/asm/kvm_booke.h     | 4 ++++
->  arch/powerpc/include/asm/kvm_host.h      | 7 ++++---
->  arch/powerpc/include/asm/kvm_ppc.h       | 2 ++
->  arch/powerpc/kernel/asm-offsets.c        | 1 +
->  arch/riscv/include/asm/kvm_host.h        | 3 +++
->  arch/riscv/kernel/asm-offsets.c          | 1 +
->  arch/s390/include/asm/kvm_host.h         | 7 +++++--
->  arch/s390/kernel/asm-offsets.c           | 1 +
->  arch/x86/include/asm/kvm_host.h          | 3 +++
->  drivers/s390/crypto/vfio_ap_drv.c        | 1 +
->  drivers/s390/crypto/vfio_ap_ops.c        | 2 ++
->  include/linux/kvm_host.h                 | 4 ++++
->  include/linux/kvm_types.h                | 3 +++
->  include/trace/events/kvm.h               | 5 +++++
->  virt/kvm/Makefile.kvm                    | 2 +-
->  26 files changed, 64 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/as=
-m/kvm_emulate.h
-> index 3d6725ff0bf6..5861fa00763b 100644
-> --- a/arch/arm64/include/asm/kvm_emulate.h
-> +++ b/arch/arm64/include/asm/kvm_emulate.h
-> @@ -21,6 +21,8 @@
->  #include <asm/cputype.h>
->  #include <asm/virt.h>
->
-> +#ifdef __KVM__
-> +
->  #define CURRENT_EL_SP_EL0_VECTOR       0x0
->  #define CURRENT_EL_SP_ELx_VECTOR       0x200
->  #define LOWER_EL_AArch64_VECTOR                0x400
-> @@ -615,4 +617,5 @@ static __always_inline void kvm_reset_cptr_el2(struct=
- kvm_vcpu *vcpu)
->
->         kvm_write_cptr_el2(val);
->  }
-> +#endif /* __KVM__ */
->  #endif /* __ARM64_KVM_EMULATE_H__ */
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/k=
-vm_host.h
-> index 89b40c34f0af..ba4065db5d5c 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -93,6 +93,7 @@ static inline bool kvm_pmu_counter_deferred(struct perf=
-_event_attr *attr)
->         return (!has_vhe() && attr->exclude_host);
->  }
->
-> +#ifdef __KVM__
->  DECLARE_STATIC_KEY_FALSE(userspace_irqchip_in_use);
->
->  extern unsigned int __ro_after_init kvm_sve_max_vl;
-> @@ -1149,4 +1150,5 @@ int kvm_trng_call(struct kvm_vcpu *vcpu);
->  void kvm_arm_vcpu_power_off(struct kvm_vcpu *vcpu);
->  bool kvm_arm_vcpu_stopped(struct kvm_vcpu *vcpu);
->
-> +#endif /* __KVM__ */
->  #endif /* __ARM64_KVM_HOST_H__ */
-> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kv=
-m_mmu.h
-> index 96a80e8f6226..9d8c92cda3b6 100644
-> --- a/arch/arm64/include/asm/kvm_mmu.h
-> +++ b/arch/arm64/include/asm/kvm_mmu.h
-> @@ -125,6 +125,8 @@ void kvm_update_va_mask(struct alt_instr *alt,
->  void kvm_compute_layout(void);
->  void kvm_apply_hyp_relocations(void);
->
-> +#ifdef __KVM__
-> +
->  #define __hyp_pa(x) (((phys_addr_t)(x)) + hyp_physvirt_offset)
->
->  static __always_inline unsigned long __kern_hyp_va(unsigned long v)
-> @@ -314,5 +316,7 @@ static inline struct kvm *kvm_s2_mmu_to_kvm(struct kv=
-m_s2_mmu *mmu)
->  {
->         return container_of(mmu->arch, struct kvm, arch);
->  }
-> +
-> +#endif /* __KVM__ */
->  #endif /* __ASSEMBLY__ */
->  #endif /* __ARM64_KVM_MMU_H__ */
-> diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offs=
-ets.c
-> index 5ff1942b04fc..dc02ea9a002c 100644
-> --- a/arch/arm64/kernel/asm-offsets.c
-> +++ b/arch/arm64/kernel/asm-offsets.c
-> @@ -7,6 +7,8 @@
->   * Copyright (C) 2012 ARM Ltd.
->   */
->
-> +#define __KVM__
-> +
->  #include <linux/arm_sdei.h>
->  #include <linux/sched.h>
->  #include <linux/ftrace.h>
-> diff --git a/arch/arm64/kvm/hyp/Makefile b/arch/arm64/kvm/hyp/Makefile
-> index 4ce8c86967b5..99982b75671a 100644
-> --- a/arch/arm64/kvm/hyp/Makefile
-> +++ b/arch/arm64/kvm/hyp/Makefile
-> @@ -5,6 +5,6 @@
->
->  incdir :=3D $(srctree)/$(src)/include
->  subdir-asflags-y :=3D -I$(incdir) -I$(srctree)/arch/arm64/kvm
-> -subdir-ccflags-y :=3D -I$(incdir) -I$(srctree)/arch/arm64/kvm
-> +subdir-ccflags-y :=3D -I$(incdir) -I$(srctree)/arch/arm64/kvm -D__KVM__
->
->  obj-$(CONFIG_KVM) +=3D vhe/ nvhe/ pgtable.o
-> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/M=
-akefile
-> index 2250253a6429..b5f4750fa16e 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
-> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-> @@ -9,7 +9,8 @@ asflags-y :=3D -D__KVM_NVHE_HYPERVISOR__ -D__DISABLE_EXPO=
-RTS
->  # there is no way to execute them and any such MMIO access from nVHE KVM
->  # will explode instantly (Words of Marc Zyngier). So introduce a generic=
- flag
->  # __DISABLE_TRACE_MMIO__ to disable MMIO tracing for nVHE KVM.
-> -ccflags-y :=3D -D__KVM_NVHE_HYPERVISOR__ -D__DISABLE_EXPORTS -D__DISABLE=
-_TRACE_MMIO__
-> +ccflags-y :=3D -D__KVM_NVHE_HYPERVISOR__ -D__DISABLE_EXPORTS \
-> +            -D__DISABLE_TRACE_MMIO__  -D__KVM__
->  ccflags-y +=3D -fno-stack-protector      \
->              -DDISABLE_BRANCH_PROFILING \
->              $(DISABLE_STACKLEAK_PLUGIN)
-> diff --git a/arch/arm64/kvm/hyp/vhe/Makefile b/arch/arm64/kvm/hyp/vhe/Mak=
-efile
-> index 3b9e5464b5b3..54cd3c444102 100644
-> --- a/arch/arm64/kvm/hyp/vhe/Makefile
-> +++ b/arch/arm64/kvm/hyp/vhe/Makefile
-> @@ -4,7 +4,7 @@
->  #
->
->  asflags-y :=3D -D__KVM_VHE_HYPERVISOR__
-> -ccflags-y :=3D -D__KVM_VHE_HYPERVISOR__
-> +ccflags-y :=3D -D__KVM_VHE_HYPERVISOR__ -D__KVM__
->
->  obj-y :=3D timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o
->  obj-y +=3D ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entr=
-y.o \
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm=
-_host.h
-> index f8f63d0aa399..6fd7c998d7b9 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -25,6 +25,7 @@
->  #include <asm/inst.h>
->  #include <asm/mipsregs.h>
->
-> +#ifdef __KVM__
->  /* MIPS KVM register ids */
->  #define MIPS_CP0_32(_R, _S)                                    \
->         (KVM_REG_MIPS_CP0 | KVM_REG_SIZE_U32 | (8 * (_R) + (_S)))
-> @@ -897,4 +898,5 @@ static inline void kvm_arch_vcpu_unblocking(struct kv=
-m_vcpu *vcpu) {}
->
->  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
->
-> +#endif /* __KVM__ */
->  #endif /* __MIPS_KVM_HOST_H__ */
-> diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offset=
-s.c
-> index d1b11f66f748..8a233bddfea0 100644
-> --- a/arch/mips/kernel/asm-offsets.c
-> +++ b/arch/mips/kernel/asm-offsets.c
-> @@ -9,6 +9,8 @@
->   * Kevin Kissell, kevink@mips.com and Carsten Langgaard, carstenl@mips.c=
-om
->   * Copyright (C) 2000 MIPS Technologies, Inc.
->   */
-> +#define __KVM__
-> +
->  #include <linux/compat.h>
->  #include <linux/types.h>
->  #include <linux/sched.h>
-> diff --git a/arch/powerpc/include/asm/kvm_book3s.h b/arch/powerpc/include=
-/asm/kvm_book3s.h
-> index bbf5e2c5fe09..8880bc7c8a32 100644
-> --- a/arch/powerpc/include/asm/kvm_book3s.h
-> +++ b/arch/powerpc/include/asm/kvm_book3s.h
-> @@ -13,6 +13,8 @@
->  #include <linux/kvm_host.h>
->  #include <asm/kvm_book3s_asm.h>
->
-> +#ifdef __KVM__
-> +
->  struct kvmppc_bat {
->         u64 raw;
->         u32 bepi;
-> @@ -483,4 +485,5 @@ static inline u32 kvmppc_pack_vcpu_id(struct kvm *kvm=
-, u32 id)
->         return packed_id;
->  }
->
-> +#endif /* __KVM__ */
->  #endif /* __ASM_KVM_BOOK3S_H__ */
-> diff --git a/arch/powerpc/include/asm/kvm_book3s_64.h b/arch/powerpc/incl=
-ude/asm/kvm_book3s_64.h
-> index d49065af08e9..a807716ccae6 100644
-> --- a/arch/powerpc/include/asm/kvm_book3s_64.h
-> +++ b/arch/powerpc/include/asm/kvm_book3s_64.h
-> @@ -16,6 +16,7 @@
->  #include <asm/ppc-opcode.h>
->  #include <asm/pte-walk.h>
->
-> +#ifdef __KVM__
->  /*
->   * Structure for a nested guest, that is, for a guest that is managed by
->   * one of our guests.
-> @@ -679,4 +680,5 @@ extern pte_t *find_kvm_nested_guest_pte(struct kvm *k=
-vm, unsigned long lpid,
->
->  #endif /* CONFIG_KVM_BOOK3S_HV_POSSIBLE */
->
-> +#endif /* __KVM__ */
->  #endif /* __ASM_KVM_BOOK3S_64_H__ */
-> diff --git a/arch/powerpc/include/asm/kvm_booke.h b/arch/powerpc/include/=
-asm/kvm_booke.h
-> index 0c3401b2e19e..85ebc0314539 100644
-> --- a/arch/powerpc/include/asm/kvm_booke.h
-> +++ b/arch/powerpc/include/asm/kvm_booke.h
-> @@ -12,6 +12,8 @@
->  #include <linux/types.h>
->  #include <linux/kvm_host.h>
->
-> +#ifdef __KVM__
-> +
->  /*
->   * Number of available lpids. Only the low-order 6 bits of LPID rgister =
-are
->   * implemented on e500mc+ cores.
-> @@ -105,4 +107,6 @@ static inline bool kvmppc_supports_magic_page(struct =
-kvm_vcpu *vcpu)
->         return false;
->  #endif
->  }
-> +
-> +#endif /* __KVM__ */
->  #endif /* __ASM_KVM_BOOKE_H__ */
-> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/a=
-sm/kvm_host.h
-> index 14ee0dece853..1e7a008ce085 100644
-> --- a/arch/powerpc/include/asm/kvm_host.h
-> +++ b/arch/powerpc/include/asm/kvm_host.h
-> @@ -14,6 +14,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/types.h>
->  #include <linux/kvm_types.h>
-> +#include <linux/mmu_notifier.h>
->  #include <linux/threads.h>
->  #include <linux/spinlock.h>
->  #include <linux/kvm_para.h>
-> @@ -25,13 +26,14 @@
->  #include <asm/cacheflush.h>
->  #include <asm/hvcall.h>
->  #include <asm/mce.h>
-> +#include <asm/cputhreads.h>
->
-> +#ifdef __KVM__
->  #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
->
->  #define KVM_MAX_VCPUS          NR_CPUS
->  #define KVM_MAX_VCORES         NR_CPUS
->
-> -#include <asm/cputhreads.h>
->
->  #ifdef CONFIG_KVM_BOOK3S_HV_POSSIBLE
->  #include <asm/kvm_book3s_asm.h>                /* for MAX_SMT_THREADS */
-> @@ -60,8 +62,6 @@
->  #define KVM_REQ_EPR_EXIT       KVM_ARCH_REQ(1)
->  #define KVM_REQ_PENDING_TIMER  KVM_ARCH_REQ(2)
->
-> -#include <linux/mmu_notifier.h>
-> -
->  #define KVM_ARCH_WANT_MMU_NOTIFIER
->
->  #define HPTEG_CACHE_NUM                        (1 << 15)
-> @@ -883,4 +883,5 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu =
-*vcpu, int cpu) {}
->  static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
->  static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->
-> +#endif /* __KVM__ */
->  #endif /* __POWERPC_KVM_HOST_H__ */
-> diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/as=
-m/kvm_ppc.h
-> index ead2ad892ebc..03d9998d0111 100644
-> --- a/arch/powerpc/include/asm/kvm_ppc.h
-> +++ b/arch/powerpc/include/asm/kvm_ppc.h
-> @@ -183,6 +183,7 @@ static inline void kvmppc_clear_host_ipi(int cpu)
->  static inline bool kvm_hv_mode_active(void)            { return false; }
->  #endif
->
-> +#ifdef __KVM__
->  /*
->   * KVMPPC_INST_SW_BREAKPOINT is debug Instruction
->   * for supporting software breakpoint.
-> @@ -1076,4 +1077,5 @@ static inline ulong kvmppc_get_ea_indexed(struct kv=
-m_vcpu *vcpu, int ra, int rb)
->         return ea;
->  }
->
-> +#endif /* __KVM__ */
->  #endif /* __POWERPC_KVM_PPC_H__ */
-> diff --git a/arch/powerpc/kernel/asm-offsets.c b/arch/powerpc/kernel/asm-=
-offsets.c
-> index 9f14d95b8b32..872d44971536 100644
-> --- a/arch/powerpc/kernel/asm-offsets.c
-> +++ b/arch/powerpc/kernel/asm-offsets.c
-> @@ -8,6 +8,7 @@
->   * compile this file to assembler, and then extract the
->   * #defines from the assembly-language output.
->   */
-> +#define __KVM__
->
->  #include <linux/compat.h>
->  #include <linux/signal.h>
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/k=
-vm_host.h
-> index 1ebf20dfbaa6..a81ae8c4b739 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -22,6 +22,8 @@
->  #include <asm/kvm_vcpu_timer.h>
->  #include <asm/kvm_vcpu_pmu.h>
->
-> +#ifdef __KVM__
-> +
->  #define KVM_MAX_VCPUS                  1024
->
->  #define KVM_HALT_POLL_NS_DEFAULT       500000
-> @@ -354,4 +356,5 @@ bool kvm_riscv_vcpu_has_interrupts(struct kvm_vcpu *v=
-cpu, u64 mask);
->  void kvm_riscv_vcpu_power_off(struct kvm_vcpu *vcpu);
->  void kvm_riscv_vcpu_power_on(struct kvm_vcpu *vcpu);
->
-> +#endif /* __KVM__ */
->  #endif /* __RISCV_KVM_HOST_H__ */
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offs=
-ets.c
-> index d6a75aac1d27..476263e78f39 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -5,6 +5,7 @@
->   */
->
->  #define GENERATING_ASM_OFFSETS
-> +#define __KVM__
->
->  #include <linux/kbuild.h>
->  #include <linux/mm.h>
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm=
-_host.h
-> index 427f9528a7b6..9153420bb5ac 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -380,6 +380,10 @@ struct sie_page {
->         __u8 reserved700[2304];         /* 0x0700 */
->  };
->
-> +extern char sie_exit;
-> +
-> +#ifdef __KVM__
-> +
->  struct kvm_vcpu_stat {
->         struct kvm_vcpu_stat_generic generic;
->         u64 exit_userspace;
-> @@ -1028,8 +1032,6 @@ static inline int sie64a(struct kvm_s390_sie_block =
-*sie_block, u64 *rsa)
->         return __sie64a(virt_to_phys(sie_block), sie_block, rsa);
->  }
->
-> -extern char sie_exit;
-> -
->  bool kvm_s390_pv_is_protected(struct kvm *kvm);
->  bool kvm_s390_pv_cpu_is_protected(struct kvm_vcpu *vcpu);
->
-> @@ -1049,6 +1051,7 @@ static inline void kvm_arch_vcpu_unblocking(struct =
-kvm_vcpu *vcpu) {}
->
->  #define __KVM_HAVE_ARCH_VM_FREE
->  void kvm_arch_free_vm(struct kvm *kvm);
-> +#endif /* __KVM__ */
->
->  struct zpci_kvm_hook {
->         int (*kvm_register)(void *opaque, struct kvm *kvm);
-> diff --git a/arch/s390/kernel/asm-offsets.c b/arch/s390/kernel/asm-offset=
-s.c
-> index fa5f6885c74a..22ed673871ee 100644
-> --- a/arch/s390/kernel/asm-offsets.c
-> +++ b/arch/s390/kernel/asm-offsets.c
-> @@ -6,6 +6,7 @@
->   */
->
->  #define ASM_OFFSETS_C
-> +#define __KVM__
->
->  #include <linux/kbuild.h>
->  #include <linux/kvm_host.h>
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
-ost.h
-> index 29db870dbaae..eda45a937666 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -37,6 +37,8 @@
->  #include <asm/kvm_vcpu_regs.h>
->  #include <asm/hyperv-tlfs.h>
->
-> +#ifdef __KVM__
-> +
->  #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
->
->  #define KVM_MAX_VCPUS 1024
-> @@ -2229,4 +2231,5 @@ int memslot_rmap_alloc(struct kvm_memory_slot *slot=
-, unsigned long npages);
->   */
->  #define KVM_EXIT_HYPERCALL_MBZ         GENMASK_ULL(31, 1)
->
-> +#endif /* __KVM__ */
->  #endif /* _ASM_X86_KVM_HOST_H */
-> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio=
-_ap_drv.c
-> index a5ab03e42ff1..55744f0f4758 100644
-> --- a/drivers/s390/crypto/vfio_ap_drv.c
-> +++ b/drivers/s390/crypto/vfio_ap_drv.c
-> @@ -7,6 +7,7 @@
->   * Author(s): Tony Krowiak <akrowiak@linux.ibm.com>
->   *           Pierre Morel <pmorel@linux.ibm.com>
->   */
-> +#define __KVM__
->
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
-> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio=
-_ap_ops.c
-> index 4db538a55192..0dd98f42e9d5 100644
-> --- a/drivers/s390/crypto/vfio_ap_ops.c
-> +++ b/drivers/s390/crypto/vfio_ap_ops.c
-> @@ -8,6 +8,8 @@
->   *           Halil Pasic <pasic@linux.ibm.com>
->   *           Pierre Morel <pmorel@linux.ibm.com>
->   */
-> +#define __KVM__
-> +
->  #include <linux/string.h>
->  #include <linux/vfio.h>
->  #include <linux/device.h>
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index d520d6801070..f0afe549c0d6 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -45,6 +45,8 @@
->  #include <asm/kvm_host.h>
->  #include <linux/kvm_dirty_ring.h>
->
-> +#ifdef __KVM__
-> +
->  #ifndef KVM_MAX_VCPU_IDS
->  #define KVM_MAX_VCPU_IDS KVM_MAX_VCPUS
->  #endif
-> @@ -2329,4 +2331,6 @@ static inline void kvm_account_pgtable_pages(void *=
-virt, int nr)
->  /* Max number of entries allowed for each kvm dirty ring */
->  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
->
-> +#endif /* __KVM__ */
-> +
->  #endif
-> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> index 6f4737d5046a..4804bce2a655 100644
-> --- a/include/linux/kvm_types.h
-> +++ b/include/linux/kvm_types.h
-> @@ -48,6 +48,8 @@ typedef u64            hfn_t;
->
->  typedef hfn_t kvm_pfn_t;
->
-> +#ifdef __KVM__
-> +
->  enum pfn_cache_usage {
->         KVM_GUEST_USES_PFN =3D BIT(0),
->         KVM_HOST_USES_PFN  =3D BIT(1),
-> @@ -123,4 +125,5 @@ struct kvm_vcpu_stat_generic {
->
->  #define KVM_STATS_NAME_SIZE    48
->
-> +#endif /* __KVM__ */
->  #endif /* __KVM_TYPES_H__ */
-> diff --git a/include/trace/events/kvm.h b/include/trace/events/kvm.h
-> index 3bd31ea23fee..aee85527bb74 100644
-> --- a/include/trace/events/kvm.h
-> +++ b/include/trace/events/kvm.h
-> @@ -2,8 +2,13 @@
->  #if !defined(_TRACE_KVM_MAIN_H) || defined(TRACE_HEADER_MULTI_READ)
->  #define _TRACE_KVM_MAIN_H
->
-> +#include <linux/kvm_host.h>
->  #include <linux/tracepoint.h>
->
-> +#ifndef __KVM__
-> +static_assert(0, "Do not include trace/events/kvm.h from non-KVM code");
-> +#endif
-> +
->  #undef TRACE_SYSTEM
->  #define TRACE_SYSTEM kvm
->
-> diff --git a/virt/kvm/Makefile.kvm b/virt/kvm/Makefile.kvm
-> index e85079ad245d..4de10d447ef3 100644
-> --- a/virt/kvm/Makefile.kvm
-> +++ b/virt/kvm/Makefile.kvm
-> @@ -3,7 +3,7 @@
->  # Makefile for Kernel-based Virtual Machine module
->  #
->
-> -ccflags-y +=3D -I$(srctree)/$(src)
-> +ccflags-y +=3D -I$(srctree)/$(src) -D__KVM__
->
->  KVM ?=3D ../../../virt/kvm
->
-> --
-> 2.42.0.459.ge4e396fd5e-goog
->
 
