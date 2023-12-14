@@ -1,71 +1,75 @@
-Return-Path: <linux-mips+bounces-726-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-727-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78DEB812BE9
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 10:46:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2013813B1B
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 20:55:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1CFDB210FD
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 09:46:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C66E1F2227B
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 19:55:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02DE30F96;
-	Thu, 14 Dec 2023 09:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B05A6AB91;
+	Thu, 14 Dec 2023 19:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="CynJzwHV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="28hSaxdB"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ySvXgOp3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MnsXmnTF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B94E0;
-	Thu, 14 Dec 2023 01:46:49 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id F299B5C029E;
-	Thu, 14 Dec 2023 04:46:48 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 14 Dec 2023 04:46:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A186A32A;
+	Thu, 14 Dec 2023 19:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id 8B9505C0225;
+	Thu, 14 Dec 2023 14:54:38 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 14 Dec 2023 14:54:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1702547208;
-	 x=1702633608; bh=uzaZ2T/iq1KIJxlVF1wV39ljPwWnMmto9XWBVN4kLn4=; b=
-	CynJzwHVkWnoMJVasBPRJb76XXUT1mkeepZdxfLOLIC7J1iJlOG4DWQX8TQ+5QXk
-	oi7DwmL9PfsdGmgw47Hf88ll1B+P2P5IOWMLcHfzC8tU1J9gQtukXcuon3NpPhgm
-	RNaoZlAAAG0l2fDK8RbUb3vBtZXRIIJt6sfHWL/c4PPsBYzfHuseBQLVkC+tlqMN
-	koGkLfksgOjqSKSQCf4uwgYSQtnOutIixwObYT/7yKfOtNzTNHPfNfzwXdhagdhF
-	V5UlZ6WGaLf9MTUMsGrKz3PQ/vIdXoTOJNoxRCepDriySkqU4QkWBPm09eAa89/H
-	v9CrpinH5+M4VkyCTplYFQ==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1702583678;
+	 x=1702670078; bh=mN5qbRfsXf8A4df0Um6vbI+Vk/gTSPo9T1qldcDY91w=; b=
+	ySvXgOp3x1Aa1QhcpGaVQKVQd16RvIO14MfFE0QsHNNj7SFXSVoiaQI0rEED2fa3
+	l7QmFTd/e9zOuE/YcW8UoTpkmiipghNqfOruYQ9U3IQVg0ELDxi8L4s53ig/+ypk
+	uV2l0rh5hzDXXSYWbHI28ceQrBYdsQCqH23rdt2W+6wf3BdgbBuHru+tYpozHMyZ
+	GFvmp5DOLLmb6SP1koutbH1OtKte1z+3y8xacXbV1qL7OdbUkAKV+78uXD9TEy2K
+	gs4DwmxD78Qfz2BUai4eZOVWowoH2y9z4VOEM/ZCdV106ZvBOFZcMvOLzvLO+gZ2
+	tX/SLh4evNIElY/kUYB7dw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702547208; x=
-	1702633608; bh=uzaZ2T/iq1KIJxlVF1wV39ljPwWnMmto9XWBVN4kLn4=; b=2
-	8hSaxdBH5/teyrfv+9soeV/vlb2oGsIMNal/+egvw/vw8jmeVHfp1FYDrTDgWDss
-	lrErdvn2NxWPNbT+lJ0Ae+QsL35BrskzkOQi5MiE1k9b9k2fFhyiOeVhhfKh+iJU
-	q/PG197jsnLqpguWzhgN9+EIwHwoFfa0e19lfaX9VUMdriFKi8yWkknANYecEVhb
-	Lh+DvginZFPJ4GECe4FokPfTSBYdVxkR8PSMP4VA/SwJZJU0pVjH9N6ELH5iComu
-	dL8BFhBa2WJ90PKurvy997yV1x9QVG8MlZiaTVs0K/EYgcnBg1WyolcwFXtDabtf
-	8lRFqJdWiKhFw42dcC9SA==
-X-ME-Sender: <xms:CM96Zdzceq6mjRYH1j0jopqDubCshEwosezBumHmScWW60Rl70h-IQ>
-    <xme:CM96ZdTNg1d_KxRMdSu2nEIEBq6y3dW-6TKlX38kEg0T3TGFS5y80sr-Hph0US-qH
-    _nYn9F6l_D4CD6cXec>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelledgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:CM96ZXVz2zwSvX7VM4qd-wbHNl9c6GwCgDRSWCC9RxaTd1AkJGEzdQ>
-    <xmx:CM96Zfiy6j2pawsE-j3Sd4I-ml8cORRqQJRn3IeE7Y30fSmLacUAew>
-    <xmx:CM96ZfDHnIIpSbI_21UJvl-0OrbT3BDeoeIUU7dgzOnIWvIj2WemWw>
-    <xmx:CM96ZT42hYzmv4iikYb8qZRlmrUt_qG5p0BQ6hvJr1CpKh94_4ep7g>
-Feedback-ID: ifd894703:Fastmail
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702583678; x=
+	1702670078; bh=mN5qbRfsXf8A4df0Um6vbI+Vk/gTSPo9T1qldcDY91w=; b=M
+	nsXmnTFeuFSmtHXcJuoIf+miHePv4/nEeq+VGUVXOSScD4airPv/gtCkudk3Sz4T
+	v0jAI3K5pnbKJIm/fdFNHkeTkyviHnlMz8/iOqvS0NJ/lhHalVXx/Fq8f7pZZDO0
+	aQ/GqtxfUcbdTyD/RK+ZvJvomXKHQ6ufGTfDbscnDBQR0cncGLq9zgsERCr+vH4N
+	1HoEpD5NPBB/TIB8cH4ulPrRXmHy0vbzQ7jfDBEmihcbRHw+a4UiPyZjxLNPPiVT
+	91r1hiGBN1YESzebexL0uEDE2J0o1Iy7gVoJKshTQ2WCOOB4T2pciwPzwDXyofkj
+	u1M+bkChNMncc3uQoiCTA==
+X-ME-Sender: <xms:fV17ZeGwNMtPe72n5TpoFipkaJKY2cDig1I9td9fF4AM3IonpDyZaA>
+    <xme:fV17ZfWRu1ENroOPkl6zIMEXRrFCNRoub5KmQZiFUYRrxN_c9EZei1ZK-G3HKNod9
+    IWYI_a5JljNIXD013g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelledguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:fV17ZYKbO00xaR0gcox4H-y3vZYWtQebjOjp6IxIchZHK-rXWN0Aeg>
+    <xmx:fV17ZYFu08xG3R_pXScrXksrOrnt514XUi4SmmKbVUtHH7hPod3z_w>
+    <xmx:fV17ZUW3fSTBDdV-ii8ONTVGCjKYC7zbjADSoe0O2UB2vP1Lp8cFGw>
+    <xmx:fl17ZednEFxH-L8oKmKaeRO1e3JX0MfrelOBoXRVpqA69eS-3KSgKA>
+Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 4047836A0076; Thu, 14 Dec 2023 04:46:48 -0500 (EST)
+	id C0A4AB6008F; Thu, 14 Dec 2023 14:54:37 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1283-g327e3ec917-fm-20231207.002-g327e3ec9
 Precedence: bulk
@@ -74,64 +78,50 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6b747f3b-f0d7-4e40-a331-8d2323e4874c@app.fastmail.com>
-In-Reply-To: <20231212163459.1923041-22-gregory.clement@bootlin.com>
-References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
- <20231212163459.1923041-22-gregory.clement@bootlin.com>
-Date: Thu, 14 Dec 2023 09:46:27 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "paulburton@kernel.org" <paulburton@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 21/22] MIPS: generic: Add support for Mobileye EyeQ5
+Message-Id: <374978b4-9bed-4d5c-90e2-344e46dedaf8@app.fastmail.com>
+In-Reply-To: <40b5e438-22f4-43e5-9663-db44dd402a35@app.fastmail.com>
+References: <202312041909.lwhcU35R-lkp@intel.com>
+ <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
+ <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
+ <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
+ <40b5e438-22f4-43e5-9663-db44dd402a35@app.fastmail.com>
+Date: Thu, 14 Dec 2023 19:54:18 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+ "Randy Dunlap" <rdunlap@infradead.org>, "kernel test robot" <lkp@intel.com>,
+ "Masahiro Yamada" <masahiroy@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "Nicolas Schier" <nicolas@fjasle.eu>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: pm.c:undefined reference to `i8042_command'
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
+On Thu, Dec 7, 2023, at 01:21, Jiaxun Yang wrote:
+> =E5=9C=A82023=E5=B9=B412=E6=9C=886=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88=
+ =E4=B8=8B=E5=8D=885:26=EF=BC=8CRandy Dunlap=E5=86=99=E9=81=93=EF=BC=9A
+>> On 12/5/23 22:52, Arnd Bergmann wrote:
+>>> On Wed, Dec 6, 2023, at 06:24, Randy Dunlap wrote:
 
-
-=E5=9C=A82023=E5=B9=B412=E6=9C=8812=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =
-=E4=B8=8B=E5=8D=884:34=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> Introduce support for the MIPS based Mobileye EyeQ5 SoCs.
+>>> I think it's bad style to force-select an optional subsystem.
+>>> How about making the entire file optional? It seems that there
+>>> are already __weak functions in its place.
+>>
+>> Yes, I agree in general.
+>>
+>> Hopefully the maintainer will opine your suggestion.
+>> Jiaxun?
 >
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  arch/mips/configs/generic/board-eyeq5.config | 42 ++++++++++++++++++++
->  arch/mips/generic/Kconfig                    | 15 +++++++
->  arch/mips/generic/Platform                   |  2 +
->  arch/mips/generic/board-epm5.its.S           | 24 +++++++++++
->  4 files changed, 83 insertions(+)
->  create mode 100644 arch/mips/configs/generic/board-eyeq5.config
->  create mode 100644 arch/mips/generic/board-epm5.its.S
+> LGTM, PM is not an essential function here.
+> Arnd, do you mind making it a patch?
 >
-> diff --git a/arch/mips/configs/generic/board-eyeq5.config=20
-> b/arch/mips/configs/generic/board-eyeq5.config
-> new file mode 100644
-> index 0000000000000..d94e408145389
-> --- /dev/null
-> +++ b/arch/mips/configs/generic/board-eyeq5.config
-> @@ -0,0 +1,42 @@
-> +CONFIG_HIGH_RES_TIMERS=3Dy
-> +CONFIG_TASKSTATS=3Dy
-> +CONFIG_FIT_IMAGE_FDT_EPM5=3Dy
-> +CONFIG_BOARD_EYEQ5=3Dy
-> +CONFIG_PHYSICAL_START=3D0xa800000808000000
 
-^ I still think by doing this you are risking overriding starting address
-for all other generic systems. make 32r6_defconfig will load config files
-of all boards.
+I just tried it out and my version doesn't actually work since
+we still end up building the file with SERIO_I82042=3Dm.
 
-Perhaps just provide an eqm5_defconfig will work better?
+We could still make it work by checking for serio being
+built-in here, but in the end I think that's worse than
+Randy's patch, so let's just go with his original version.
 
-Thanks.
---=20
-- Jiaxun
+      Arnd
 
