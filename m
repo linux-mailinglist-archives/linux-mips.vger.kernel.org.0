@@ -1,106 +1,159 @@
-Return-Path: <linux-mips+bounces-730-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-731-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA777813E73
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Dec 2023 00:57:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 430CA814956
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Dec 2023 14:33:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AA3D1C21ED5
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Dec 2023 23:57:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3199B20910
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Dec 2023 13:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E30D12DB74;
-	Thu, 14 Dec 2023 23:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740352DB7E;
+	Fri, 15 Dec 2023 13:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lV6Vokk9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJcTttLW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA732DB81;
-	Thu, 14 Dec 2023 23:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=BaJCsCfijs7GuDBKTrIWbe4mzrObKT7MV71UU5ZCbZI=; b=lV6Vokk9qA9LV1JxhmI1jaKIiu
-	Ez3QbwTc6QyJJwweVy0QrKzsK56LfExa8KhtpvXwDP4wdCq9fGFIk+eJ0A2zx3Pj2n5HwBp6umEZy
-	naBywZPbRyfhYQo7RwzQidTGDtq9CFX/ZNw/iQgOwWUwJvJHYBSyA3f9CrF+JWSi2bGBuzyA/MWo2
-	QhF+mMZVp8V7W2pCFQNDqQ3tACEL3mJ3+ESC/gDjx3VM3O/h74/Q8b4gcQ/5v63eyc/91K37psgkj
-	FZitV4YP+l0c3rK7eZNCHJCBrMz3XI8hzo+BSUA04/91AZ8wScvnjiSkwdlclKGYDzlR9Z8Gg1Pyr
-	itWCHZHg==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rDva2-001aYl-1m;
-	Thu, 14 Dec 2023 23:57:26 +0000
-Message-ID: <8bddc464-a2f3-47e5-85e6-d4067db67ccd@infradead.org>
-Date: Thu, 14 Dec 2023 15:57:26 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4490B2DB71;
+	Fri, 15 Dec 2023 13:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44711C433C7;
+	Fri, 15 Dec 2023 13:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702647194;
+	bh=tGUhZ8a1wsbx0GalNAANJzpCwpQC3QW2iHSYADKeSd0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BJcTttLW46h1AIr8fYhPxXp/T5lrnGXfSuuj1cYQJ8Vp3lwBUMrFQ/RFMGzBVoHRl
+	 XQEItc18liqK+qYbS2F+dntRyrr3ZwLueXZTw33eYCOIG7WrKiTs7XBDORhUYF5dn0
+	 4dDOSP2CxoXqCAyAN3XJ3X15F7RkwLrcvLY5WObqXn+zvG53DTpV+58W1oUkT3B+mB
+	 czKFhXsk4126nHSzSxrRd8yCS3V8JygX/BwifVKxD2D1gbt1LDkU/d8Cg60y9l3qyI
+	 p5MRLg3p95hkUVScbzuNXtOur0zq/Qr578Jr3MsvB0ZJqvbRZnlXg0cPVwRHeSQF3v
+	 gJ6z1AliF5MIA==
+Date: Fri, 15 Dec 2023 14:33:12 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc: Andrew Davis <afd@ti.com>, Frank Binns <frank.binns@imgtec.com>, 
+	Donald Robson <donald.robson@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
+	Adam Ford <aford173@gmail.com>, Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>, Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH RFC 01/10] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
+Message-ID: <oobcl2kfsuph27er7rflfqvt3lu6athufomxv5chf3uctx4emh@x6rzjtlskhbf>
+References: <20231204182245.33683-1-afd@ti.com>
+ <20231204182245.33683-2-afd@ti.com>
+ <23livt5mcc64bb6lkeec2uxp5cyn4wfekwaj6wzrjnrkndvwgj@6tveqglqpr4v>
+ <B3A1B8A7-0363-4ECB-AFBF-576FECA569FA@goldelico.com>
+ <vawv2mwhonuyvgmp7uox4rfgdcjwg5fa7hmbcfgl3wiase6e4p@tyavpclppfvu>
+ <6BC60156-89E2-4734-BD00-B49A9A6C1D7A@goldelico.com>
+ <6gpehpoz54f5lxhmvirqbfwmq7dpgiroy27cljpvu66wtn7aqy@lgrh7wysyxnp>
+ <D8AB6CC4-DCA5-40DD-A311-94A16FF59254@goldelico.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: pm.c:undefined reference to `i8042_command'
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- kernel test robot <lkp@intel.com>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- Nicolas Schier <nicolas@fjasle.eu>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-References: <202312041909.lwhcU35R-lkp@intel.com>
- <5f1caaf8-1edf-444a-b017-c4d08e52213b@infradead.org>
- <f712a65b-4984-46e8-bd43-1309b5cd41f0@app.fastmail.com>
- <c10194f2-097f-4455-9932-19961edbf990@infradead.org>
- <40b5e438-22f4-43e5-9663-db44dd402a35@app.fastmail.com>
- <374978b4-9bed-4d5c-90e2-344e46dedaf8@app.fastmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <374978b4-9bed-4d5c-90e2-344e46dedaf8@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jgmzzpd4kephm2k6"
+Content-Disposition: inline
+In-Reply-To: <D8AB6CC4-DCA5-40DD-A311-94A16FF59254@goldelico.com>
 
 
+--jgmzzpd4kephm2k6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/14/23 11:54, Arnd Bergmann wrote:
-> On Thu, Dec 7, 2023, at 01:21, Jiaxun Yang wrote:
->> 在2023年12月6日十二月 下午5:26，Randy Dunlap写道：
->>> On 12/5/23 22:52, Arnd Bergmann wrote:
->>>> On Wed, Dec 6, 2023, at 06:24, Randy Dunlap wrote:
-> 
->>>> I think it's bad style to force-select an optional subsystem.
->>>> How about making the entire file optional? It seems that there
->>>> are already __weak functions in its place.
->>>
->>> Yes, I agree in general.
->>>
->>> Hopefully the maintainer will opine your suggestion.
->>> Jiaxun?
->>
->> LGTM, PM is not an essential function here.
->> Arnd, do you mind making it a patch?
->>
-> 
-> I just tried it out and my version doesn't actually work since
-> we still end up building the file with SERIO_I82042=m.
-> 
-> We could still make it work by checking for serio being
-> built-in here, but in the end I think that's worse than
-> Randy's patch, so let's just go with his original version.
-> 
->       Arnd
+On Thu, Dec 07, 2023 at 11:33:53AM +0100, H. Nikolaus Schaller wrote:
+> Hi Maxime,
+>=20
+> > Am 07.12.2023 um 10:20 schrieb Maxime Ripard <mripard@kernel.org>:
+> >=20
+> > On Tue, Dec 05, 2023 at 02:50:08PM +0100, H. Nikolaus Schaller wrote:
+> >> Hi,
+> >>=20
+> >>> Am 05.12.2023 um 14:29 schrieb Maxime Ripard <mripard@kernel.org>:
+> >>>=20
+> >>> Hi,
+> >>>=20
+> >>> On Tue, Dec 05, 2023 at 09:18:58AM +0100, H. Nikolaus Schaller wrote:
+> >>>>> Am 05.12.2023 um 07:57 schrieb Maxime Ripard <mripard@kernel.org>:
+> >>>>>=20
+> >>>>> On Mon, Dec 04, 2023 at 12:22:36PM -0600, Andrew Davis wrote:
+> >>>>>> The Imagination PowerVR Series5 "SGX" GPU is part of several SoCs =
+=66rom
+> >>>>>> multiple vendors. Describe how the SGX GPU is integrated in these =
+SoC,
+> >>>>>> including register space and interrupts. Clocks, reset, and power =
+domain
+> >>>>>> information is SoC specific.
+> >>>>>>=20
+> >>>>>> Signed-off-by: Andrew Davis <afd@ti.com>
+> >>>>>> ---
+> >>>>>> .../devicetree/bindings/gpu/img,powervr.yaml  | 69 +++++++++++++++=
+++--
+> >>>>>> 1 file changed, 63 insertions(+), 6 deletions(-)
+> >>>>>=20
+> >>>>> I think it would be best to have a separate file for this, img,sgx.=
+yaml
+> >>>>> maybe?
+> >>>>=20
+> >>>> Why?
+> >>>=20
+> >>> Because it's more convenient?
+> >>=20
+> >> Is it?
+> >=20
+> > It's for a separate architecture, with a separate driver, maintained out
+> > of tree by a separate community, with a separate set of requirements as
+> > evidenced by the other thread. And that's all fine in itself, but
+> > there's very little reason to put these two bindings in the same file.
+> >=20
+> > We could also turn this around, why is it important that it's in the
+> > same file?
+>=20
+> Same vendor. And enough similarity in architectures, even a logical seque=
+nce
+> of development of versions (SGX =3D Version 5, Rogue =3D Version 6+) behi=
+nd.
+> (SGX and Rogue seem to be just trade names for their architecture develop=
+ment).
 
-I think that we should look for yet another alternative then.
-I don't believe that adding "select INPUT" is a good idea.
-It would be the only "select INPUT" in the entire kernel tree.
+Again, none of that matters for *where* the binding is stored.
 
+> AFAIK bindings should describe hardware and not communities or drivers
+> or who is currently maintaining it. The latter can change, the first not.
 
-thanks.
--- 
-#Randy
-https://people.kernel.org/tglx/notes-about-netiquette
-https://subspace.kernel.org/etiquette.html
+Bindings are supposed to describe hardware indeed. Nothing was ever said
+about where those bindings are supposed to be located.
+
+There's hundreds of other YAML bindings describing devices of the same
+vendors and different devices from the same generation. If anything
+it'll make it easier for you. I'm really not sure why it is
+controversial and you're fighting this so hard.
+
+Maxime
+
+--jgmzzpd4kephm2k6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZXxVmAAKCRDj7w1vZxhR
+xVw8AP41gJoEr4Iyn/S1Hezu3iKztXGS3daC3u3QCuAGL/pTzwD9HOO3pcwNEL/E
+pFq4wYajjL/ypoQuClzjpZ6kW6ckSgs=
+=YYGh
+-----END PGP SIGNATURE-----
+
+--jgmzzpd4kephm2k6--
 
