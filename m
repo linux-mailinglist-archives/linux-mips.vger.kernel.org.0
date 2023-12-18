@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-772-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-773-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5281817864
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 18:17:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7563817871
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 18:20:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B68461C2297E
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 17:17:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 413711F24728
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 17:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C46B71440;
-	Mon, 18 Dec 2023 17:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42DD15BF8C;
+	Mon, 18 Dec 2023 17:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RAeIWHuO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CmTZp2PG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376A04878F;
-	Mon, 18 Dec 2023 17:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747EE5A85A;
+	Mon, 18 Dec 2023 17:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B2036E0003;
-	Mon, 18 Dec 2023 17:16:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30F2B20004;
+	Mon, 18 Dec 2023 17:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1702919784;
+	t=1702920007;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AnnAQjcyIF9Cs8OrT6bO/hAWsFXPLbUDnfzTG6zDbb4=;
-	b=RAeIWHuOBSZNy6aUoUEJ1m+lDofL18Hho5MmLlTLpmXiEuv5SIocCLbx38JGfeikipg/T1
-	FBLxvRGnCNaUs8vqkd8M+HhgrLzpQlthJd+4EGQWaNzaBAet5Vqdrz0LXhLX77cDuLbjMf
-	wPfSSqn9LXZ69cgxt96RA8/9D9FlGIh6g+ug2PMlqk8J2dJruGkqt61Nz8hWPvZSoCyav9
-	Ad5xm69jOqJGHwPtyPQcSFiNh4BmtzZKBlNAWfnCVlW2DMvBffTiLOGzxeuOiB/SLvIwd/
-	a7O2Jyk8zFdO6tACfuboCPXsedExGY8dxtAUfnmfHJmnQP0/PHeeKabIuUZ6lA==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ti36AdyiFQvN3/eY4vcX7OOVTVxOSw0U3/0TkVosSso=;
+	b=CmTZp2PGXgK4u4XpIXG7p/+mZ69OemtMncx3up09ozpyP4QhtvKSzx5kQgZO8Pl61ZcpDb
+	uj9rLR5Iz4LEhjsuxnkK8qpwtyVT+gzLUziclCy25VqYnrhfWB3yHRQOjIdZlV5KcnGbXb
+	ZlDyTYi4nMZ9D8jdHZkJC0rPXc6AZdHSyfAkGsPgOwPt0CeYKhJUBgGzLQkKamNjtrr1cz
+	nOffJZr7CuED37AFBFrAGgtx5U7vQoBJbr8SPPcJi+c5NBjQ9i6CvLVwQazjlqYrDBbIj5
+	JzDj8Sga+F+ZzHFxJowhcq0jFTPkJC22+JXNvlYXtfZYnphhnBb5TKFjCHfZlg==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Mon, 18 Dec 2023 18:16:15 +0100
-Subject: [PATCH 4/4] MIPS: mobileye: eyeq5: add reset properties to uarts
+Subject: [PATCH 0/4] Add support for Mobileye EyeQ5 pin controller
+Date: Mon, 18 Dec 2023 18:19:45 +0100
+Message-Id: <20231218-mbly-pinctrl-v1-0-2f7d366c2051@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -47,62 +47,74 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231218-mbly-reset-v1-4-b4688b916213@bootlin.com>
-References: <20231218-mbly-reset-v1-0-b4688b916213@bootlin.com>
-In-Reply-To: <20231218-mbly-reset-v1-0-b4688b916213@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIADF/gGUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDINbNTcqp1C3IzEsuKcrRNU9MS7VMNje2sDQ2UwJqKShKTcusABsXHVt
+ bCwBMJ+pmXgAAAA==
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
  Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
  Conor Dooley <conor+dt@kernel.org>, 
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
+Cc: linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
  =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
 X-Mailer: b4 0.12.4
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-UART nodes have been added to the devicetree by the initial platform
-support patch series. Add reset properties now that the reset node is
-declared.
+Hi,
+
+This series adds pinctrl support to the Mobileye EyeQ5 platform,
+following up on the platform support series by Grégory Clement [1].
+
+All registers involved live in a shared register region called OLB
+("Other Logic Block"). We have control over bias, drive strength and
+muxing. The latter allows two functions per pin; the first function is
+always GPIO while the second one is pin-dependent. Functions are
+statically declared in the driver, associated to compatibles. Two
+compatibles exist, one for each bank.
+
+The pin controller's functionality is not limited so each pin maps to
+one group. That makes pin & group indexes the same, simplifying logic.
+Having two instances, one per bank, also is done to simplify the
+driver's logic.
+
+The series ends by adding the two banks as devicetree nodes and
+declaring a pin-mux node for each function. We also add pinctrl
+references to the existing UART nodes. We are based on the reset
+series [2] for the sole reason of avoiding merge conflicts in the
+devicetree.
+
+[1]: https://lore.kernel.org/lkml/20231212163459.1923041-1-gregory.clement@bootlin.com/
+[2]: https://lore.kernel.org/lkml/20231218-mbly-reset-v1-0-b4688b916213@bootlin.com/
+
+Have a nice day,
+Théo Lebrun
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq5.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+Théo Lebrun (4):
+      dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add bindings
+      pinctrl: eyeq5: add driver
+      MIPS: mobileye: eyeq5: add pinctrl nodes & pinmux function nodes
+      MIPS: mobileye: eyeq5: add pinctrl properties to uarts
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index b7da037ef324..746148eb423f 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -51,6 +51,7 @@ uart0: serial@800000 {
- 			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
-+			resets = <&reset 0 EQ5R_D0_UART0>;
- 		};
- 
- 		uart1: serial@900000 {
-@@ -61,6 +62,7 @@ uart1: serial@900000 {
- 			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
-+			resets = <&reset 0 EQ5R_D0_UART1>;
- 		};
- 
- 		uart2: serial@a00000 {
-@@ -71,6 +73,7 @@ uart2: serial@a00000 {
- 			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
-+			resets = <&reset 0 EQ5R_D0_UART2>;
- 		};
- 
- 		olb: olb@e00000 {
+ .../bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml   | 125 +++++
+ MAINTAINERS                                        |   2 +
+ arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi        | 128 +++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  17 +
+ drivers/pinctrl/Kconfig                            |  15 +
+ drivers/pinctrl/Makefile                           |   1 +
+ drivers/pinctrl/pinctrl-eyeq5.c                    | 593 +++++++++++++++++++++
+ 7 files changed, 881 insertions(+)
+---
+base-commit: cfa954ebcdc3504dbf38ff5ba1589ed0cdfc8313
+change-id: 20231023-mbly-pinctrl-7afe9c738936
 
+Best regards,
 -- 
-2.43.0
+Théo Lebrun <theo.lebrun@bootlin.com>
 
 
