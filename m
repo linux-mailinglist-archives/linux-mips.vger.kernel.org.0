@@ -1,121 +1,123 @@
-Return-Path: <linux-mips+bounces-761-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-763-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6818816EF4
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 13:57:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 335FA817843
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 18:14:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 086441C22FB4
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 12:57:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3864B22BAB
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 17:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5BB79950;
-	Mon, 18 Dec 2023 12:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91555B1E6;
+	Mon, 18 Dec 2023 17:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YGW4egpk"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PiouGzl+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D8479948;
-	Mon, 18 Dec 2023 12:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A380C433C8;
-	Mon, 18 Dec 2023 12:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702903585;
-	bh=COVOWuG3yBU+XXom9ggK21fjpix1xoWvqSVtAX1u0vc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YGW4egpkCRmy3c8HeaRXkj9LtMAyeEO7PWsHrGwiDTYVdvJ51ssyjEQVn90V0LWdq
-	 BbGUqfHfQK8G0L+5/0fBP+Fs19MqH2qKA2MruS51WX5NZfEaIbbMw/8tTD0hhmBGb8
-	 BSMlauAZeEx29PxvLnfKyds7FdTFVYKj0RbrudE0sYDfqaDlssSEcxAXiA7NgLgAyN
-	 5dRbXOjUHQWkSvDGvmPVAbVBlAyl5Z3nSv7j7YenyA6d37Lj56wCMJpNhoWfds3d+x
-	 cGDUPACiEeO4unIyE5E++5/6+v5jV+Mj0KrSLfZThTHB/RNHgY3hyhdCSszBbcn3ri
-	 0KgoVq8JwAuiA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Sasha Levin <sashal@kernel.org>,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de,
-	zhoubinbin@loongson.cn,
-	git@xen0n.name,
-	devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 11/13] MIPS: dts: loongson: drop incorrect dwmac fallback compatible
-Date: Mon, 18 Dec 2023 07:45:44 -0500
-Message-ID: <20231218124557.1380724-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231218124557.1380724-1-sashal@kernel.org>
-References: <20231218124557.1380724-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A6B4FF6D;
+	Mon, 18 Dec 2023 17:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B6F21BF20A;
+	Mon, 18 Dec 2023 17:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1702919664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Lyt0fUA8qXAG186dpljc51Fb9nMcLd2wX7HB0Boh4IU=;
+	b=PiouGzl+MlgeZJG+Yp04/ynO3QZiEcefHG1cCb7Sy+fmU3VIBZgzYLBlJTf+rcA2PF0M1E
+	XmAgnL9Oq7v4a1GdTzLycAyg+sycBOHCAkhgzVWsAOyRi0T5FGlc/W//k8wqYKgoyF0RUt
+	SEz1ev8RaHhBnfzVkm7tD49rxO6oQUiyHq6ecOjbBgeDjwG9Pm/lm4PC8LH+zi6hRuohyH
+	PBlO1o/to+3ABoboosI+ed2UYAw4pSoIkLogbVMR+so4n8oZ55jkp9yoEWOYhngWSemPId
+	5q/PQmomsstB+AW8ZtxQUNjACkL69IiS31G2WmgF/QE0WkGJiwQDNCuJfIx87A==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH 0/5] Add support for Mobileye EyeQ5 clock controller
+Date: Mon, 18 Dec 2023 18:14:15 +0100
+Message-Id: <20231218-mbly-clk-v1-0-44ce54108f06@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.143
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOh9gGUC/3WMQQ6CMBREr0K6tqafChRW3sOwoO1HfgRqWkIkh
+ LtbcGFcuJjFm8y8lQX0hIFVyco8zhTIjRHglDDTNeMdOdnILBWphBg+6H7hpn9wVRjMTHqBVig
+ W50+PLb0O1a2O3FGYnF8O8wx7+5GAFF/JDFxwlesWoCwsSLxq56aexrNxw279c9ESRWZzXWpsf
+ i71tm1vTkSGx9UAAAA=
+To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.12.4
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-[ Upstream commit 4907a3f54b12b8209864572a312cf967befcae80 ]
+We replace fixed clocks as declared in the initial platform support
+series [1] by read-only clocks exposed by the clock driver implemented
+here. Write-ability is supported by the hardware but not implemented,
+it could be added later-on if the need appears.
 
-Device binds to proper PCI ID (LOONGSON, 0x7a03), already listed in DTS,
-so checking for some other compatible does not make sense.  It cannot be
-bound to unsupported platform.
+We expose ten PLLs that derive directly from the main crystal. Also, a divider
+clock is exposed as a child clock of one of the PLLs.
 
-Drop useless, incorrect (space in between) and undocumented compatible.
+The platform devicetree has many more clock nodes but those are
+fixed-factors that are not hardware controllable; we therefore do not
+deal with them.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This series starts with a fix for a fixed-rate clock registering macro that is
+broken. We are the first upstream users which explains why we found the typo.
+
+We end our patch series by adding the clock controller node to the
+platform devicetree & by replacing hardcoded devicetree clocks by the
+ones exposed by this driver. The controller driver addition is split in
+two commits to simplify reviewing.
+
+[1]: https://lore.kernel.org/lkml/20231212163459.1923041-1-gregory.clement@bootlin.com/
+
+Have a nice day,
+Théo Lebrun
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 3 +--
- arch/mips/boot/dts/loongson/ls7a-pch.dtsi          | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+Théo Lebrun (5):
+      clk: fixed-rate: fix clk_hw_register_fixed_rate_with_accuracy_parent_hw
+      dt-bindings: clock: mobileye,eyeq5-clk: add bindings
+      clk: eyeq5: add controller
+      clk: eyeq5: add OSPI table-based divider clock
+      MIPS: mobileye: eyeq5: add OLB clocks controller node & pinmux nodes
 
-diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index bfc3d3243ee7f..d73d8f4fd78e6 100644
---- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -118,8 +118,7 @@ gmac@3,0 {
- 				compatible = "pci0014,7a03.0",
- 						   "pci0014,7a03",
- 						   "pciclass0c0320",
--						   "pciclass0c03",
--						   "loongson, pci-gmac";
-+						   "pciclass0c03";
- 
- 				reg = <0x1800 0x0 0x0 0x0 0x0>;
- 				interrupts = <12 IRQ_TYPE_LEVEL_LOW>,
-diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-index 2f45fce2cdc4a..ed99ee316febb 100644
---- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-+++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-@@ -186,8 +186,7 @@ gmac@3,0 {
- 				compatible = "pci0014,7a03.0",
- 						   "pci0014,7a03",
- 						   "pciclass020000",
--						   "pciclass0200",
--						   "loongson, pci-gmac";
-+						   "pciclass0200";
- 
- 				reg = <0x1800 0x0 0x0 0x0 0x0>;
- 				interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
+ .../bindings/clock/mobileye,eyeq5-clk.yaml         |  83 +++++
+ MAINTAINERS                                        |   3 +
+ .../{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} |  56 +---
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |   9 +-
+ drivers/clk/Kconfig                                |  11 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-eyeq5.c                            | 346 +++++++++++++++++++++
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  22 ++
+ include/linux/clk-provider.h                       |   4 +-
+ 9 files changed, 493 insertions(+), 42 deletions(-)
+---
+base-commit: 0bb6b85cadabf93a754df740bd1b6c56ef41ac2c
+change-id: 20231023-mbly-clk-87ce5c241f08
+
+Best regards,
 -- 
-2.43.0
+Théo Lebrun <theo.lebrun@bootlin.com>
 
 
