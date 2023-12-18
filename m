@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-760-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-761-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 953E1816EB3
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 13:54:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6818816EF4
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 13:57:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D5682835F6
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 12:54:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 086441C22FB4
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Dec 2023 12:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5325C72066;
-	Mon, 18 Dec 2023 12:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5BB79950;
+	Mon, 18 Dec 2023 12:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gza/QDN4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YGW4egpk"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D9C72065;
-	Mon, 18 Dec 2023 12:45:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9EDC433C8;
-	Mon, 18 Dec 2023 12:45:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D8479948;
+	Mon, 18 Dec 2023 12:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A380C433C8;
+	Mon, 18 Dec 2023 12:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702903541;
-	bh=4+ufg4U6B7iRusa3p5Wt3FTx1kc9V97mZVSoGLfCtDs=;
+	s=k20201202; t=1702903585;
+	bh=COVOWuG3yBU+XXom9ggK21fjpix1xoWvqSVtAX1u0vc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gza/QDN4OnNzIxVDNVqCwSfFLJobDj+xGTSycJ3FB1i4d8nTVCqzvcIQjYTtMMNON
-	 DMGpN9/GxtZyXZjp4ci5nP2tuhDNYHPLFZRmcWd2SO+iJeB7p2MDB+Odd9uhAhlHE+
-	 WZesJAd9yBcTgNI84BIiN0pD5F/gEL7AJnFZo11ElUlOUo3sB4sZ8p1l+/nyfRg9+h
-	 7R73DUI1bO4Wp3v0zohcErl546UO1xXfaklu/p03i1DctXwXE/KUKfffofu3Z6E8eR
-	 44fYaw9rHVgaPBBsRY43nPRbqakIwsWEHWeEni0P8Mb0UqYo2RgK11/bd3UZsZD9N+
-	 jC3unz3d5a2uA==
+	b=YGW4egpkCRmy3c8HeaRXkj9LtMAyeEO7PWsHrGwiDTYVdvJ51ssyjEQVn90V0LWdq
+	 BbGUqfHfQK8G0L+5/0fBP+Fs19MqH2qKA2MruS51WX5NZfEaIbbMw/8tTD0hhmBGb8
+	 BSMlauAZeEx29PxvLnfKyds7FdTFVYKj0RbrudE0sYDfqaDlssSEcxAXiA7NgLgAyN
+	 5dRbXOjUHQWkSvDGvmPVAbVBlAyl5Z3nSv7j7YenyA6d37Lj56wCMJpNhoWfds3d+x
+	 cGDUPACiEeO4unIyE5E++5/6+v5jV+Mj0KrSLfZThTHB/RNHgY3hyhdCSszBbcn3ri
+	 0KgoVq8JwAuiA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -45,16 +45,16 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	krzysztof.kozlowski+dt@linaro.org,
 	conor+dt@kernel.org,
 	tsbogend@alpha.franken.de,
-	git@xen0n.name,
 	zhoubinbin@loongson.cn,
+	git@xen0n.name,
 	devicetree@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 13/15] MIPS: dts: loongson: drop incorrect dwmac fallback compatible
-Date: Mon, 18 Dec 2023 07:45:00 -0500
-Message-ID: <20231218124513.1380056-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 11/13] MIPS: dts: loongson: drop incorrect dwmac fallback compatible
+Date: Mon, 18 Dec 2023 07:45:44 -0500
+Message-ID: <20231218124557.1380724-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231218124513.1380056-1-sashal@kernel.org>
-References: <20231218124513.1380056-1-sashal@kernel.org>
+In-Reply-To: <20231218124557.1380724-1-sashal@kernel.org>
+References: <20231218124557.1380724-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.68
+X-stable-base: Linux 5.15.143
 Content-Transfer-Encoding: 8bit
 
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index 8143a61111e33..c16b521308cb1 100644
+index bfc3d3243ee7f..d73d8f4fd78e6 100644
 --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
 +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -123,8 +123,7 @@ gmac@3,0 {
+@@ -118,8 +118,7 @@ gmac@3,0 {
  				compatible = "pci0014,7a03.0",
  						   "pci0014,7a03",
  						   "pciclass0c0320",
