@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-781-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-782-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 370D1818254
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 08:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 50EB181825C
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 08:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D647728686B
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 07:35:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC2042868AE
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 07:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E9CAC135;
-	Tue, 19 Dec 2023 07:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2748A8F4D;
+	Tue, 19 Dec 2023 07:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W5SWEtxd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mpcQgBu/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8558BE8
-	for <linux-mips@vger.kernel.org>; Tue, 19 Dec 2023 07:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3A5125A8
+	for <linux-mips@vger.kernel.org>; Tue, 19 Dec 2023 07:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-552ff8d681aso5687039a12.1
-        for <linux-mips@vger.kernel.org>; Mon, 18 Dec 2023 23:34:55 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-54ba86ae133so3705071a12.2
+        for <linux-mips@vger.kernel.org>; Mon, 18 Dec 2023 23:36:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702971294; x=1703576094; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702971392; x=1703576192; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=P3hlpIDBqsqrYWXFJYqKY1bnRljFNGMm8+LBasOqKbg=;
-        b=W5SWEtxdWMUQPe9OmS6myUTaOMPC2SWdp6lI7xRgiZPw2WxxeZCpz7A31e+10P0DmX
-         IEbp5VYLCxVEceRmxlxpORUM0O+9lav//Uc6cuxOm2OinBKQ1tTg/jItRwXI6Gnc07Ck
-         26YzwVgFlKjV0HIiHUPGAcLTeWFHHimBiD7ynKgavWupDt4KYBFpLM4fFFBebuNZJ+G8
-         Ewcumwoea298HFcjUtqL7locA7V53+s94cxGm5eQqypVWaIllKbU4Hrc6nLeDRDXVskV
-         +E9BrdDfZ5ZYIbIr5BnBG68NHwT/mdFHtFuHpLAmcJR8+BdqlGw+7NxS969yVKpPpB7R
-         /wIw==
+        bh=S612VJc/VzazF980cJxPL5Db4rx/FlsOcAzDCo+GAw0=;
+        b=mpcQgBu/1JKZX7r+4nMt4QVUz3RrmQ6aRbrfnvlJ0qqkNd46v/fKDoEiN1a8xJ0jRW
+         yPGo7rLzmFe9tmhe0h+CzFJ8SNJsdyKg+7lTx96xcubdRPZCC6RahDBhWEP7/anBJg0u
+         Eu7S2xAl9ZRUkXeGzSqKkVHCTKgsTaYLqUoPFwqosAQEz0767i+f4yWqH5ZIajMXZcW/
+         xVN9x6U4Jwe4gNt7Xsp0uILBRNhrHblVyIw5oGlJQx8YsvWGYAXvWUUXnxImQh2Ubl8j
+         5NPElDoxfzIGiLDy8pcIE5+VW3CTroJ855HBocTgL8ESOHhyVN6dVCCE2XKHEidtt+rn
+         MoZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702971294; x=1703576094;
+        d=1e100.net; s=20230601; t=1702971392; x=1703576192;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3hlpIDBqsqrYWXFJYqKY1bnRljFNGMm8+LBasOqKbg=;
-        b=eBdESFUdJ1b8SNAT+5tfqcwQFOoBKFBUzkzjF2N8pzM1dUi2q6JkFtbaPeFAD4K3Wh
-         6j3mCz2NQXAP55Uv/jcJRCHJGZ9+liZODxxa9LCHTyEMXNPFY+JntH/o7sxd0h1WX7Zw
-         XMGaMocTOpCUjnJG+Fnko82s8oWXUbdqPnpRNm9QPH6qNnyEMfyuz2L0zVTt5QInt7e9
-         ZlH1o4ty5lg1KhVxCSnNok9UrXANEnVpHKwxzIwsn1+QcVpVS50Esgw6YzUFl4uTCRzF
-         63icQwg9Ihgq2gldszvnakv1rUfVEbvP4H/CXeSQJteJRXMhXdNbJ6ufDlqrQz0DaG3F
-         Q2cg==
-X-Gm-Message-State: AOJu0Yw6VR5kJR/My7O9CHRO64whg8Hxrx7fCViEEeSPfBalvrM7cPGG
-	xeUUIG9ATjZH6R93HcJdfbXiwA==
-X-Google-Smtp-Source: AGHT+IH0jo8MfBwop9wF/BGlQ9DF/Zbd2J7Agm46C3ofKqT0qPmQf59oD0h+bxKSHrppRs3T9DxsBQ==
-X-Received: by 2002:a50:9f4f:0:b0:553:5abb:457 with SMTP id b73-20020a509f4f000000b005535abb0457mr635030edf.8.1702971294228;
-        Mon, 18 Dec 2023 23:34:54 -0800 (PST)
+        bh=S612VJc/VzazF980cJxPL5Db4rx/FlsOcAzDCo+GAw0=;
+        b=utAu27+yoyysKlAY3ZDbB5TTCS2mjoJDiEMOg3GhvwGBEs2BCjFzW7ilg1/cjcRaj1
+         KbqpFLDfw7Jrks4Di+SRTYxJR11ZkUBKMcVOy+d4zjwyJCmkrMiRkCAk2s5wQGHGuULu
+         A9cMmtB4PYjVNaeVirP3WN6Y9YmHiod1y0EYBXDJ6qcNLLfVHiBtzth7Ttt7wmFoxCq/
+         vDjxBSRAw6o/FoFw76Q3Hjcjw+6yxL2gzcAtvDE0QxdZt073VEwXpUz/3OmeV4dGrjqP
+         JP7Pfv3DgA6zY/Ak/nZmdxl21KjahLpIeZN/2c4Ffdv7PIW4+HYeIYgVvoX6Uo7V0WzN
+         H9nA==
+X-Gm-Message-State: AOJu0YyjaKVFnEMYR+e8VeSlc3MQuPTFc6eSeHEJFR+x+/UDO9/5xCnP
+	aeYJeh8u3SjC+I2OaC49Nk+ZqQ==
+X-Google-Smtp-Source: AGHT+IFgC+gWbRfmqiQJJ2XKM9gEv5CAWcaztdlle8dpRyWXhL+j8I4igDgwrQ6TPg3amskkqttdoQ==
+X-Received: by 2002:a50:85cb:0:b0:54c:6d09:3e3d with SMTP id q11-20020a5085cb000000b0054c6d093e3dmr9589211edh.26.1702971392617;
+        Mon, 18 Dec 2023 23:36:32 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id x9-20020aa7cd89000000b0055289f60e3bsm4644445edv.79.2023.12.18.23.34.52
+        by smtp.gmail.com with ESMTPSA id x9-20020aa7cd89000000b0055289f60e3bsm4644445edv.79.2023.12.18.23.36.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 23:34:53 -0800 (PST)
-Message-ID: <0f0c0d16-f736-419e-9ffc-c3dc507b815c@linaro.org>
-Date: Tue, 19 Dec 2023 08:34:51 +0100
+        Mon, 18 Dec 2023 23:36:31 -0800 (PST)
+Message-ID: <6f9cb381-3ac7-4478-a763-e392180e9f36@linaro.org>
+Date: Tue, 19 Dec 2023 08:36:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -66,8 +66,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add
- bindings
+Subject: Re: [PATCH 2/4] pinctrl: eyeq5: add driver
 Content-Language: en-US
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
@@ -81,7 +80,7 @@ Cc: linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>
 References: <20231218-mbly-pinctrl-v1-0-2f7d366c2051@bootlin.com>
- <20231218-mbly-pinctrl-v1-1-2f7d366c2051@bootlin.com>
+ <20231218-mbly-pinctrl-v1-2-2f7d366c2051@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -127,190 +126,60 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231218-mbly-pinctrl-v1-1-2f7d366c2051@bootlin.com>
+In-Reply-To: <20231218-mbly-pinctrl-v1-2-2f7d366c2051@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 18/12/2023 18:19, Théo Lebrun wrote:
-> Add dt-schema type bindings for the Mobileye EyeQ5 pin controller.
+> Add the Mobileye EyeQ5 pinctrl (pinconf & pinmux) controller driver. See
+> the header comment for more information on how it works. This driver is
+> specific to this platform; it might grow to add later support of other
+> platforms from Mobileye.
+> 
+> Existing pins and their function live statically in the driver code
+> rather than in the devicetree, see compatible match data.
 > 
 > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 > ---
->  .../bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml   | 125 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  2 files changed, 126 insertions(+)
+>  MAINTAINERS                     |   1 +
+>  drivers/pinctrl/Kconfig         |  15 +
+>  drivers/pinctrl/Makefile        |   1 +
+>  drivers/pinctrl/pinctrl-eyeq5.c | 593 ++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 610 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..5faddebe2413
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml
-> @@ -0,0 +1,125 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mobileye EyeQ5 pinctrl (pinmux & pinconf) controller
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d8d9583a5a06..5272b61d51d5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14558,6 +14558,7 @@ F:	Documentation/devicetree/bindings/reset/mobileye,eyeq5-reset.yaml
+>  F:	arch/mips/boot/dts/mobileye/
+>  F:	arch/mips/configs/generic/board-eyeq5.config
+>  F:	arch/mips/generic/board-epm5.its.S
+> +F:	drivers/pinctrl/pinctrl-eyeq5.c
+>  F:	drivers/reset/reset-eyeq5.c
+>  F:	include/dt-bindings/reset/mobileye,eyeq5-reset.h
+>  F:	include/dt-bindings/soc/mobileye,eyeq5.h
+> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> index 1de4e1edede0..e05c59116215 100644
+> --- a/drivers/pinctrl/Kconfig
+> +++ b/drivers/pinctrl/Kconfig
+> @@ -195,6 +195,21 @@ config PINCTRL_EQUILIBRIUM
+>  	  desired pin functions, configure GPIO attributes for LGM SoC pins.
+>  	  Pin muxing and pin confi
 
-pinctrl means pin controller, so you basically wrote:
-pin controller pinmux and pin configuration controller
-
-Just "pin controller"
-
-
-> +
-> +description:
-> +  The EyeQ5 pin controller handles a pin bank. It is custom to this platform,
-
-Can part of SoC be not custom to given platform? I mean... describe the
-hardware, not write essay.
-
-> +  its registers live in a shared region called OLB.
-> +  There are two pin banks on the platform, each having a specific compatible.
-
-Instead of repeating something obvious - visible from the binding -
-explain why. Say something different than the binding is saying.
-
-
-> +  Pins and groups are bijective.
-> +
-> +maintainers:
-> +  - Grégory Clement <gregory.clement@bootlin.com>
-> +  - Théo Lebrun <theo.lebrun@bootlin.com>
-> +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^pinctrl([0-9]+)?$"
-> +    description:
-> +      We have no unique address, we rely on OLB; we therefore can't keep the
-> +      standard pattern and cannot inherit from pinctrl.yaml.
-
-No, instead fix pinctrl.yaml
+...
 
 > +
-> +  compatible:
-> +    enum:
-> +      - mobileye,eyeq5-a-pinctrl
-> +      - mobileye,eyeq5-b-pinctrl
+> +struct eq5p_match {
+> +	unsigned int regs[EQ5P_REG_MAX];
+> +	const struct pinctrl_pin_desc *pins;
+> +	unsigned int npins;
+> +	const struct eq5p_function *funcs;
+> +	unsigned int nfuncs;
+> +};
 
-Why two compatibles? Description provided no rationale for this.
-
-> +
-> +  "#pinctrl-cells":
-> +    const: 1
-> +
-> +  mobileye,olb:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      A phandle to the OLB syscon. This is a fallback to using the parent as
-> +      syscon node.
-
-So here is the explanation for missing unit address. If all registers,
-as you claim in description, belong to OLB, then this should be part of
-OLB. Drop the phandle.
-
-> +
-> +required:
-> +  - compatible
-> +  - "#pinctrl-cells"
-
-So now please test your code without olb phandle...
-
-> +
-> +patternProperties:
-
-patternProperties go after properties
-
-> +  "-pins?$":
-> +    type: object
-> +    description: Pin muxing configuration.
-> +    $ref: pinmux-node.yaml#
-> +    additionalProperties: false
-
-Why not unevaluatedProperties?
-
-> +    properties:
-> +      pins: true
-> +      function: true
-> +      bias-disable: true
-> +      bias-pull-down: true
-> +      bias-pull-up: true
-> +      drive-strength: true
-> +    required:
-> +      - pins
-> +      - function
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mobileye,eyeq5-a-pinctrl
-> +    then:
-> +      patternProperties:
-> +        "-pins?$":
-> +          properties:
-> +            function:
-> +              enum: [gpio, timer0, timer1, timer2, timer5, uart0, uart1, can0,
-> +                     can1, spi0, spi1, refclk0]
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mobileye,eyeq5-b-pinctrl
-> +    then:
-> +      patternProperties:
-> +        "-pins?$":
-> +          properties:
-> +            function:
-> +              enum: [gpio, timer3, timer4, timer6, uart2, can2, spi2, spi3,
-> +                     mclk0]
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    olb@e00000 {
-> +      compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
-
-Drop, not erlated.
-
-> +      reg = <0xe00000 0x400>;
-> +      reg-io-width = <4>;
-> +
-> +      pinctrl0 {
-
-Suffixes are always after -
-
-> +        compatible = "mobileye,eyeq5-a-pinctrl";
-> +        #pinctrl-cells = <1>;
-
-Where is the phandle?
-
-> +      };
-> +
-> +      pinctrl1 {
-> +        compatible = "mobileye,eyeq5-b-pinctrl";
-> +        #pinctrl-cells = <1>;
-> +      };
-> +    };
-> +  - |
-> +    olb: olb@e00000 {
-> +      compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
-> +      reg = <0xe00000 0x400>;
-> +      reg-io-width = <4>;
-> +    };
-> +
-> +    pinctrl0 {
-> +      compatible = "mobileye,eyeq5-a-pinctrl";
-> +      #pinctrl-cells = <1>;
-> +      mobileye,olb = <&olb>;
-
-Really, why? This is just confusing. There is no explanation for
-supporting both. Hardware is either this or that, not both!
+Do not declare types in the middle of the unit. This goes to the
+begining of the file.
 
 
 Best regards,
