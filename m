@@ -1,138 +1,252 @@
-Return-Path: <linux-mips+bounces-788-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-789-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD53A8184D3
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 10:52:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2263818E03
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 18:24:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53D2AB220F4
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 09:52:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E3451F26579
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 17:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2983914270;
-	Tue, 19 Dec 2023 09:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883932136B;
+	Tue, 19 Dec 2023 17:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="IW7wj7Po"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE22314267;
-	Tue, 19 Dec 2023 09:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8DxE_C_Z4FlrJECAA--.13018S3;
-	Tue, 19 Dec 2023 17:51:59 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxD+W+Z4FlvBkAAA--.798S2;
-	Tue, 19 Dec 2023 17:51:59 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Marc Zyngier <maz@kernel.org>
-Cc: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jianmin Lv <lvjianmin@loongson.cn>
-Subject: [PATCH] irqchip/loongson-eiointc: Refine irq affinity setting during resume
-Date: Tue, 19 Dec 2023 17:51:58 +0800
-Message-Id: <20231219095158.285408-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9349323766;
+	Tue, 19 Dec 2023 17:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3BJHJpf6080548;
+	Tue, 19 Dec 2023 11:19:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1703006391;
+	bh=RyxcIRcgKyTS7yxgKgGm+UNtTlWuJwcj/PQBca9YhiU=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=IW7wj7PoElrlicik/1xyNebkCcVKqsxJxxv9I7WlJmF60kW/gA8RKz+wVAN0gneHR
+	 0tqApPTF6SZOAIJCYW672Yuc3fgDKvi+dImw411U1MGCo5HxHu/p9rRbTbp5zU0Yua
+	 xATZ6Iv6CM5b+IOAaR3pl+21+jKrGWMN5/gV5QJE=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3BJHJpdY085233
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 19 Dec 2023 11:19:51 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 19
+ Dec 2023 11:19:51 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 19 Dec 2023 11:19:51 -0600
+Received: from [10.249.40.136] ([10.249.40.136])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3BJHJnkW122199;
+	Tue, 19 Dec 2023 11:19:49 -0600
+Message-ID: <a3feaf42-17fb-46e5-bbb0-3ffc4ad40bfd@ti.com>
+Date: Tue, 19 Dec 2023 11:19:49 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8AxD+W+Z4FlvBkAAA--.798S2
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw1UJrWDXw1xXw45ZrWfXrc_yoW5Xr4kpF
-	W3A3Z0yrW5JFyUXryakr4DX34avFn5X3y7KFZxWay7ZFs8J3WDKF4FyF1vvFW0kry7JF12
-	vF45Xr18ua15C3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URa0PUUUUU=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 01/10] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
+To: "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Maxime Ripard
+	<mripard@kernel.org>
+CC: Frank Binns <frank.binns@imgtec.com>,
+        Donald Robson
+	<donald.robson@imgtec.com>,
+        Matt Coster <matt.coster@imgtec.com>, Adam Ford
+	<aford173@gmail.com>,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann
+	<tzimmermann@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?=
+	<bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon
+	<nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo
+	<kristo@kernel.org>, Paul Cercueil <paul@crapouillou.net>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>
+References: <20231204182245.33683-1-afd@ti.com>
+ <20231204182245.33683-2-afd@ti.com>
+ <23livt5mcc64bb6lkeec2uxp5cyn4wfekwaj6wzrjnrkndvwgj@6tveqglqpr4v>
+ <B3A1B8A7-0363-4ECB-AFBF-576FECA569FA@goldelico.com>
+ <vawv2mwhonuyvgmp7uox4rfgdcjwg5fa7hmbcfgl3wiase6e4p@tyavpclppfvu>
+ <6BC60156-89E2-4734-BD00-B49A9A6C1D7A@goldelico.com>
+ <6gpehpoz54f5lxhmvirqbfwmq7dpgiroy27cljpvu66wtn7aqy@lgrh7wysyxnp>
+ <D8AB6CC4-DCA5-40DD-A311-94A16FF59254@goldelico.com>
+ <oobcl2kfsuph27er7rflfqvt3lu6athufomxv5chf3uctx4emh@x6rzjtlskhbf>
+ <F58855EC-D87D-4747-A363-0E7AA5DB1AEC@goldelico.com>
+ <22cny5aumc5wafsrjd3j55zcjbjf2viip64kfbjiqis2grtd6t@wg5dxeuzil6l>
+ <3E03E913-48E1-49EC-A6C9-EAC1612E65E7@goldelico.com>
+Content-Language: en-US
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <3E03E913-48E1-49EC-A6C9-EAC1612E65E7@goldelico.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-During suspend and resume, other CPUs are removed and IRQs are migrated
-to CPU0. So it is not necessary to restore irq affinity for eiointc.
+On 12/18/23 4:54 AM, H. Nikolaus Schaller wrote:
+> 
+> 
+>> Am 18.12.2023 um 11:14 schrieb Maxime Ripard <mripard@kernel.org>:
+>>
+>> On Mon, Dec 18, 2023 at 10:28:09AM +0100, H. Nikolaus Schaller wrote:
+>>> Hi Maxime,
+>>>
+>>>> Am 15.12.2023 um 14:33 schrieb Maxime Ripard <mripard@kernel.org>:
+>>>>
+>>>>>>
+>>>>>> It's for a separate architecture, with a separate driver, maintained out
+>>>>>> of tree by a separate community, with a separate set of requirements as
+>>>>>> evidenced by the other thread. And that's all fine in itself, but
+>>>>>> there's very little reason to put these two bindings in the same file.
+>>>>>>
+>>>>>> We could also turn this around, why is it important that it's in the
+>>>>>> same file?
+>>>>>
+>>>>> Same vendor. And enough similarity in architectures, even a logical sequence
+>>>>> of development of versions (SGX = Version 5, Rogue = Version 6+) behind.
+>>>>> (SGX and Rogue seem to be just trade names for their architecture development).
+>>>>
+>>>> Again, none of that matters for *where* the binding is stored.
+>>>
+>>> So what then speaks against extending the existing bindings file as proposed
+>>> here?
+>>
+>> I mean, apart from everything you quoted, then sure, nothing speaks
+>> against it.
+>>
+>>>>> AFAIK bindings should describe hardware and not communities or drivers
+>>>>> or who is currently maintaining it. The latter can change, the first not.
+>>>>
+>>>> Bindings are supposed to describe hardware indeed. Nothing was ever said
+>>>> about where those bindings are supposed to be located.
+>>>>
+>>>> There's hundreds of other YAML bindings describing devices of the same
+>>>> vendors and different devices from the same generation.
+>>>
+>>> Usually SoC seem to be split over multiple files by subsystem. Not by versions
+>>> or generations. If the subsystems are similar enough they share the same bindings
+>>> doc instead of having one for each generation duplicating a lot of code.
+>>>
+>>> Here is a comparable example that combines multiple vendors and generations:
+>>>
+>>> Documentation/devicetree/bindings/usb/generic-ehci.yaml
+>>
+>> EHCI is a single interface for USB2.0 controllers. It's a standard API,
+>> and is made of a single driver that requires minor modifications to deal
+>> with multiple devices.
+>>
+>> We're very far from the same situation here.
+> 
+> How far are we really? And, it is the purpose of the driver to handle different cases.
+> 
+> That there are currently two drivers is just a matter of history and not a necessity.
+> 
+>>
+>>>> If anything it'll make it easier for you. I'm really not sure why it is
+>>>> controversial and you're fighting this so hard.
+>>>
+>>> Well, you made it controversial by proposing to split what IMHO belongs together.
+>>
+>> No, reviews aren't controversial.
+>> The controversy started when you chose
+>> to oppose it while you could have just rolled with it.
+> 
+> Well, you asked
+> 
+> "I think it would be best to have a separate file for this, img,sgx.yaml
+> maybe?"
+> 
+> and
+> 
+> "Because it's more convenient?"
+> 
+> I understood that as an invitation for discussing the pros and cons and working out the
+> most convenient solution. And that involves playing the devil's advocate which of course
+> is controversial by principle.
+> 
+> Now, IMHO all the pros and cons are on the table and the question is who makes a decision
+> how to go.
+> 
 
-Also there is some optimization for function eiointc_irq_dispatch,
-in genral there are 256 IRQs supported for eiointc. When irq happens,
-eiointc irq handler reads the bitmap and find pending irqs. There are
-4 times of  consecutive iocsr_read64 operations for the total 256 bits,
-indeed in most scenario pending value is zero in 3 times, and not zero
-in one time. Here zero checking is added to avoid some useless
-operations sush as clearing hw ISR.
+As much as I would land on the side of same file for both, the answer to this question
+is simple: the maintainer makes the decision :) So I'll respin with separate binding files.
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- drivers/irqchip/irq-loongson-eiointc.c | 29 +++++++++++---------------
- 1 file changed, 12 insertions(+), 17 deletions(-)
+The hidden unaddressed issue here is that by making these bindings separate it implies
+they are not on equal footing (i.e. pre-series6 GPUs are not true "powervr" and so do not
+belong in img,powervr.yaml). So if no one objects I'd also like to do the rename of that
+file as suggested before and have:
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index 1623cd779175..b01be85b8ebc 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -198,6 +198,17 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
- 
- 	for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
- 		pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
-+
-+		/*
-+		 * Get pending eiointc irq from bitmap status, there are 4 times
-+		 * consecutive iocsr_read64 operations for 256 IRQs.
-+		 *
-+		 * In most scenario value of pending is 0 if no multiple IRQs
-+		 * happen at the same time
-+		 */
-+		if (!pending)
-+			continue;
-+
- 		iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
- 		while (pending) {
- 			int bit = __ffs(pending);
-@@ -241,7 +252,7 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 	int ret;
- 	unsigned int i, type;
- 	unsigned long hwirq = 0;
--	struct eiointc *priv = domain->host_data;
-+	struct eiointc_priv *priv = domain->host_data;
- 
- 	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
- 	if (ret)
-@@ -304,23 +315,7 @@ static int eiointc_suspend(void)
- 
- static void eiointc_resume(void)
- {
--	int i, j;
--	struct irq_desc *desc;
--	struct irq_data *irq_data;
--
- 	eiointc_router_init(0);
--
--	for (i = 0; i < nr_pics; i++) {
--		for (j = 0; j < eiointc_priv[0]->vec_count; j++) {
--			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
--			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
--				raw_spin_lock(&desc->lock);
--				irq_data = irq_domain_get_irq_data(eiointc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
--				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
--				raw_spin_unlock(&desc->lock);
--			}
--		}
--	}
- }
- 
- static struct syscore_ops eiointc_syscore_ops = {
--- 
-2.39.3
+img,powervr-sgx.yaml
+img,powervr-rogue.yaml
 
+>>
+>>> I feel that the original patch is good enough for its purpose and follows
+>>> some design pattern that can be deduced from other binding docs.
+>>
+>> [citation needed]
+> 
+> Joke: Documentation/devicetree/bindings/* - I am not aware of a formal analysis of course.
+> 
+> But see my example for ehci. It follows the pattern I mean. If clocks, regs, interrupts,
+> resets, and more properties are (almost) the same, then group them and just differentiate
+> by different compatible strings. If necessary use some - if: clauses.
+> 
+> It is the task of drivers to handle the details.
+> 
+> As my other (maybe more important) comment to this patch did indicate we IMHO can easily
+> live with something like
+> 
+> +      - items:
+> +          - enum:
+> +              - ti,am62-gpu # IMG AXE GPU model/revision is fully discoverable
+> +              - ti,omap3430-gpu # sgx530 Rev 121
+> +              - ti,omap3630-gpu # sgx530 Rev 125
+> +              - ingenic,jz4780-gpu # sgx540 Rev 130
+> +              - ti,omap4430-gpu # sgx540 Rev 120
+> +              - allwinner,sun6i-a31-gpu # sgx544 MP2 Rev 115
+> +              - ti,omap4470-gpu # sgx544 MP1 Rev 112
+> +              - ti,omap5432-gpu # sgx544 MP2 Rev 105
+> +              - ti,am5728-gpu # sgx544 MP2 Rev 116
+> +              - ti,am6548-gpu # sgx544 MP1 Rev 117
+> 
+
+While we could live with this, the "compatible" groupings makes life just a bit
+easier. This is true really for any DT compatible string and is not based on
+any technical reasoning.
+
+Andrew
+
+> And leave it to drivers using a table to deduce the generation and
+> revision or read it out from the chip. And there can even be different
+> drivers handling only a subset of the potential compatibles.
+> 
+> Then the currently-out-of-tree driver for the sgx5 can be reworked in
+> less than half an hour without loosing functionality.
+> 
+> BR,
+> Nikolaus
+> 
 
