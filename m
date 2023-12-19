@@ -1,198 +1,157 @@
-Return-Path: <linux-mips+bounces-785-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-786-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A44EC81826B
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 08:41:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED77D8182FA
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 09:06:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9533B1C235A4
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 07:41:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F420B220FE
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Dec 2023 08:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1DC8BE2;
-	Tue, 19 Dec 2023 07:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67710C8EC;
+	Tue, 19 Dec 2023 08:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DWnOjiMh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IvcTWN+4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D6E11702
-	for <linux-mips@vger.kernel.org>; Tue, 19 Dec 2023 07:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A634611710
+	for <linux-mips@vger.kernel.org>; Tue, 19 Dec 2023 08:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a2345aaeb05so285835366b.0
-        for <linux-mips@vger.kernel.org>; Mon, 18 Dec 2023 23:41:46 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5537114380bso1521264a12.3
+        for <linux-mips@vger.kernel.org>; Tue, 19 Dec 2023 00:06:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702971705; x=1703576505; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nXctI3I357roNP7qG6SksFhaE+Jk+2fn6B1riOMQudI=;
-        b=DWnOjiMhAak0Toua9XlmuXIwfIhunQCibPFOIvvoMFGtwheT3Po6656ffUIoXtOoXn
-         /pwjJ+t1AtBBl/iA3vgp1DwF0M02+PTYrk+xfWRVGVPDOSSyYR0VC+5yPZ8nRh+h/K7v
-         9lyPbGbnDwuISOKdlHgaHFc8H7uchds1I5BXmsh37FXB0nItJktFdfFQvvsCKdycjzAY
-         JnBkj8F5LYQB878iC2YQtu6ika6CpgReeMdlNMHBctzmmAwFnIdYUt8mwTAnGXBpvB+A
-         hRTQimyzU42vlYHgn+0I/ClNkYyZCAlE0VQ3KRDk6yg2UMCUlB7fjGwaQ5Ae0vhFUR4z
-         HWSA==
+        d=linaro.org; s=google; t=1702973177; x=1703577977; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zHZZ1qBFLYk5D7ybnvL0vNBwkKCdL+WfKJkMFR2G4jQ=;
+        b=IvcTWN+420WsmMQcZ+Ce8AZ7w11Au3LmG0wbK58RSbKxX63/cTJQkGx0xgCArXNcyP
+         yDDAuXZ7tXPRj5TNcOnoCSVzvJNu7mzM1tE8rV0WWWqEmC4i3N4EmWwKt95CVxtDKAEl
+         juyPD/IL8tHUIldkR03oaygtthIhQ9VFdpi/xPKnQStSiETd5YqGNzNc0co8NUWzLRQJ
+         dT8uMUhzkFUJlCUiMwAYNWpKLSh+u+dzQV2zQtIHmtmgbCCl1KIqgb/P2K5uPcM4AJhd
+         XHw4f6KIW5ub0VwNpe/SY2wciPVyu8k2zcX0DEJ9MnoE8olRVeGWfQhc0Hbgw5AnF/U5
+         cYPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702971705; x=1703576505;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nXctI3I357roNP7qG6SksFhaE+Jk+2fn6B1riOMQudI=;
-        b=w8Kr3vtn35QWAm7FSN1QXKr3/yEqeHiYjy9GIR3anpAPI8bEPbG79iGxdxCkU866pJ
-         /AtM3qU3WGb27mfcsidDL9qVlSoV+5CelJ/wI5q9tUr7oJMmfzjKHTQzFETMx2xM1w24
-         r8B9H8opQsyfiL3nR16/FLZw1BDinA6IeI0tqhglICuB6iYCi5S7vry3j5OTszJSx/0t
-         UbO7O/zHE5mjZS7hY0mU2ugh7RQxnnVE57J7XZVsRlHtT6RqEErVCj3KjJ/TleXUHt14
-         glIFU2JWoYKueZx8fg1Xbyo98eAz5EW18ymVj4hcoK+RS8eYB5mlKW7sZuV9mU6ldltY
-         +PmQ==
-X-Gm-Message-State: AOJu0YwM5Bf/WKuLxyCVIXF+IlRNWVvz7vQy236tZ3f0k0G2U6xLJr9w
-	V/Feebfpu/FvAzzB8S9UrWJ1jw==
-X-Google-Smtp-Source: AGHT+IG8UQ/3ALIZxBFYfozRFRKVqMqlgyNUXbK6yL0mYefZ60DRGpSJeMMoHHvQ3Ts6u2v6FqcSnw==
-X-Received: by 2002:a17:906:1316:b0:a23:57f3:95a9 with SMTP id w22-20020a170906131600b00a2357f395a9mr1571350ejb.2.1702971704816;
-        Mon, 18 Dec 2023 23:41:44 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id vi7-20020a170907d40700b00a1dc7e789fbsm14935769ejc.21.2023.12.18.23.41.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 23:41:44 -0800 (PST)
-Message-ID: <6dd6690e-8344-49c2-b389-66562a94114a@linaro.org>
-Date: Tue, 19 Dec 2023 08:41:42 +0100
+        d=1e100.net; s=20230601; t=1702973177; x=1703577977;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zHZZ1qBFLYk5D7ybnvL0vNBwkKCdL+WfKJkMFR2G4jQ=;
+        b=ODqOAhwDt5YmGrYVpf8ihJg25IohQDd7DO1veu7PfrY25gs2h/PKNgGyCTXugNc/jf
+         g+NngDQsXta0h12vAQ+nrAbTO0k1U76Iu8Ex3ki4QASBTQXKGnpcFh5LKNcVsToZ6V6w
+         toKoGeBnSOON+kOALwzjtX+Ho5fQLRuFusTnawwjwoNXXeNbwQ/bRxGCzTOLeGL0Bp4y
+         zrlAVlKZhziRID0CjFthdhwiuf+2b9REWV/bnTXERINe4G7FOlX61jz+vCwmg1KgKocm
+         0Jl/YlA+ijXlbgtRUvY7pPAsXJKLaTKY4emFR1Ju6TawG5l5lUQEQmNnioQwzswHih2p
+         ni2A==
+X-Gm-Message-State: AOJu0YwwfJmK7DjV/+Diff626bT8MGtI4L8zxyqOUUXn5adOV1qpQxdd
+	0mjzqOaRMkrxWVpVtBe4OxdaYw==
+X-Google-Smtp-Source: AGHT+IFk7nCwJ3Cgygcv0PPxf8Nmoq++kFT+oSJXnVr98jtfa/yztBLisAU2VWlBWmsiTo2oa5jg+Q==
+X-Received: by 2002:a50:cbc7:0:b0:54c:5d34:980c with SMTP id l7-20020a50cbc7000000b0054c5d34980cmr8989833edi.82.1702973176885;
+        Tue, 19 Dec 2023 00:06:16 -0800 (PST)
+Received: from krzk-bin.. ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id t16-20020aa7d710000000b00553533738f0sm1667914edq.57.2023.12.19.00.06.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 00:06:16 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	kernel@pengutronix.de,
+	Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-mips@vger.kernel.org,
+	Yong Wu <yong.wu@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Roger Quadros <rogerq@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	linux-omap@vger.kernel.org,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	Nick Alcock <nick.alcock@oracle.com>,
+	linux-tegra@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 00/15] memory: Convert to platform remove callback returning void
+Date: Tue, 19 Dec 2023 09:06:12 +0100
+Message-Id: <170297316309.10063.8435852209780151651.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] reset: eyeq5: add driver
-Content-Language: en-US
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20231218-mbly-reset-v1-0-b4688b916213@bootlin.com>
- <20231218-mbly-reset-v1-2-b4688b916213@bootlin.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231218-mbly-reset-v1-2-b4688b916213@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On 18/12/2023 18:16, Théo Lebrun wrote:
-> Add the Mobileye EyeQ5 reset controller driver. See the header comment
-> for more information on how it works. This driver is specific to this
-> platform; it might grow to add later support of other platforms from
-> Mobileye.
+
+On Sun, 17 Dec 2023 15:29:26 +0100, Uwe Kleine-König wrote:
+> this series converts the platform drivers below drivers/memory to make
+> use of .remove_new. See commit 5c5a7680e67b ("platform: Provide a remove
+> callback that returns no value") for an extended explanation and the
+> eventual goal. The TL;DR; is to make it harder for driver authors to
+> leak resources without noticing.
 > 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
+> This is merge window material. All patches are pairwise independent of
+> each other so they can be applied individually. Still it would be great
+> to let them go in all together.
+> 
+> [...]
 
+Applied, thanks!
 
-...
-
-> +static int eq5r_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct device_node *parent_np = of_get_parent(np);
-> +	struct eq5r_private *priv;
-> +	int ret, i;
-> +
-> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	dev_set_drvdata(dev, priv);
-> +
-> +	priv->olb = ERR_PTR(-ENODEV);
-> +	if (parent_np)
-> +		priv->olb = syscon_node_to_regmap(parent_np);
-> +	if (IS_ERR(priv->olb))
-> +		priv->olb = syscon_regmap_lookup_by_phandle(np, "mobileye,olb");
-> +	if (IS_ERR(priv->olb))
-> +		return PTR_ERR(priv->olb);
-
-NAK for such code. In all of your patches. This is part of the OLB, as
-you explained before, and cannot be anything else.
-
-> +
-> +	for (i = 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		mutex_init(&priv->mutexes[i]);
-> +
-> +	priv->rcdev.ops = &eq5r_ops;
-> +	priv->rcdev.owner = THIS_MODULE;
-> +	priv->rcdev.dev = dev;
-> +	priv->rcdev.of_node = np;
-> +	priv->rcdev.of_reset_n_cells = 2;
-> +	priv->rcdev.of_xlate = eq5r_of_xlate;
-> +
-> +	priv->rcdev.nr_resets = 0;
-> +	for (i = 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		priv->rcdev.nr_resets += __builtin_popcount(eq5r_valid_masks[i]);
-> +
-> +	ret = reset_controller_register(&priv->rcdev);
-> +	if (ret) {
-> +		dev_err(dev, "Failed registering reset controller: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	dev_info(dev, "probed\n");
-
-Drop
-
+[01/15] memory: brcmstb_dpfe: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/431187eadbc7b0f2650d4e55111b3fff4720f867
+[02/15] memory: brcmstb_memc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/f7754712ad6094de5be18674777b265ed4db2f45
+[03/15] memory: emif: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/c8a53461990cb697ca494d6671fab9e196d20ce4
+[04/15] memory: fsl-corenet-cf: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/021d044b0f9c9a09aa2f778e876e467a8810fb4a
+[05/15] memory: fsl_ifc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/f17130855d51f24563a24cd957add769ad59eee9
+[06/15] memory: jz4780-nemc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/9024fbbd77b4d73279bbbe2c748a4e4b414d50cc
+[07/15] memory: mtk-smi: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/08c1aeaa45ce0fd18912e92c6705586c8aa5240f
+[08/15] memory: omap-gpmc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/6a4edb1a4f61e28cc127cd06c470ce3599ee0d9c
+[09/15] memory: renesas-rpc-if: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/961abc9f7d6771e8f13db1f4d8b0ffff3f0f41a4
+[10/15] memory: exynos5422-dmc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/8013408e4912fb7e469bb8b14fd3a5c956257eec
+[11/15] memory: stm32-fmc2-ebi: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/1455b6b0c83132960826d0e527a79a355e096a80
+[12/15] memory: tegra186-emc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/dcefa0368458e9e20642dbd2608adae6b22e6464
+[13/15] memory: tegra210-emc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/622fa819a2f0f3e6d8322a0b6d3177302ae937b6
+[14/15] memory: ti-aemif: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/7852eb8c8ac7e0164b43cc5f8d8245cc3a037620
+[15/15] memory: ti-emif-pm: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/365fcc03b6321f36eb7cbda8baa737238c387907
 
 Best regards,
-Krzysztof
-
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
