@@ -1,34 +1,44 @@
-Return-Path: <linux-mips+bounces-798-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-799-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BA1981A8AD
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 23:02:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B034381A8B5
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 23:05:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7BA21C21EB4
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 22:02:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 516521F23332
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 22:05:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99684495DA;
-	Wed, 20 Dec 2023 22:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1838F495D0;
+	Wed, 20 Dec 2023 22:05:35 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB541495CE;
-	Wed, 20 Dec 2023 22:02:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47B2495EA;
+	Wed, 20 Dec 2023 22:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rG4Ro-0001hv-00; Wed, 20 Dec 2023 22:49:48 +0100
+	id 1rG4Ro-0001hx-00; Wed, 20 Dec 2023 22:49:48 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 74424C028A; Wed, 20 Dec 2023 22:18:14 +0100 (CET)
-Date: Wed, 20 Dec 2023 22:18:14 +0100
+	id 0075DC028A; Wed, 20 Dec 2023 22:49:33 +0100 (CET)
+Date: Wed, 20 Dec 2023 22:49:33 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] MIPS: Unify low-level debugging functionalities
-Message-ID: <ZYNaFhFp/+q+/Z0Z@alpha.franken.de>
-References: <20231029-mips_debug_ll-v1-0-d7a491e8c278@flygoat.com>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 00/22] Add support for the Mobileye EyeQ5 SoC
+Message-ID: <ZYNhbQjMbAH6I0kI@alpha.franken.de>
+References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
+ <878r5vctdg.fsf@BL-laptop>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -37,17 +47,53 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231029-mips_debug_ll-v1-0-d7a491e8c278@flygoat.com>
+In-Reply-To: <878r5vctdg.fsf@BL-laptop>
 
-On Sun, Oct 29, 2023 at 02:53:01AM +0000, Jiaxun Yang wrote:
-> The plan is to elimiate platform specific early_printk and
-> cps-vec-ns16550 by debug_ll and earlycon.
+On Fri, Dec 15, 2023 at 05:39:39PM +0100, Gregory CLEMENT wrote:
+> Hello Thomas,
+> 
+> > Hello,
+> >
+> > The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
+> > and features multiple controllers such as the classic UART, I2C, SPI,
+> > as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
+> > Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
+> > Security Module, Functional Safety Hardware, and MJPEG encoder.
+> >
+> > One peculiarity of this SoC is that the physical address of the DDDR
+> > exceeds 32 bits. Given that the architecture is 64 bits, this is not
+> > an issue, but it requires some changes in how the mips64 is currently
+> > managed during boot.
+> >
+> > In this fifth version, there aren't many changes, mostly just tweaking
+> > commit messages based on Sergey's feedback and fixing up the code
+> > style. But, the real reason for this series is a bit of a whoopsie on
+> > my end. It turns out, despite what I confidently claimed in the last
+> > round, some configuration tweaks were missing. All sorted now, though!
+> >
+> 
+> A few weeks ago, you were concerned about the introduction of the
+> specific kconfig CONFIG_USE_XKPHYS to support EyeQ5, and you wanted us
+> to set up a new platform instead. Since then, Jiaxun proposed a series
+> that was merged here to provide more generic support.
 
-https://xkcd.com/927/ ?
+well, there is more to improve and stuff I don't like in Jaixun series.
+For example misusing CONFIG_PHYSICAL_START to force a load address via config
+(IMHO it's already a hack for CRASH_DUMP).
 
-sorry I don't think that just another new function is good approach.
-Doing this will end up with another method for early debugging and
-all other will stay.
+As there is your series and Jiaxun series, where should I comment more
+detailed ?
+
+> I had other issues in the initial series, and I think that now I've
+> fixed all of them. So, I would like to know what your opinion is now
+> about this series.
+> 
+> Will you accept it, or do you still think that a new platform has to be
+> set up?
+
+things have improved, but I'm still in favor to use a new platform.
+And my main point stays. A "generic" kernel compiled for EyeQ5 will
+just run on that platform, which doesn't sound generic to me.
 
 Thomas.
 
