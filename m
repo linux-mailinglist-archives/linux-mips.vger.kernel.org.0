@@ -1,194 +1,127 @@
-Return-Path: <linux-mips+bounces-796-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-797-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55211819CD0
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 11:32:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0AC681A74C
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 20:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AC3E1C221B4
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 10:32:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BD9D28836D
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 19:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AE0208B3;
-	Wed, 20 Dec 2023 10:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7D448782;
+	Wed, 20 Dec 2023 19:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QY0iutfm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QN94mJiX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E807A20B06
-	for <linux-mips@vger.kernel.org>; Wed, 20 Dec 2023 10:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40d3352b525so6907075e9.1
-        for <linux-mips@vger.kernel.org>; Wed, 20 Dec 2023 02:32:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2E6482F6;
+	Wed, 20 Dec 2023 19:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d3e2972f65so333635ad.3;
+        Wed, 20 Dec 2023 11:32:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703068363; x=1703673163; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6qy0d4uW9Tfpch1YLxptDL8ZWZMP/oKYPuFpX1a7m+0=;
-        b=QY0iutfmO2p8Ubz1o3IYJLtOLIpTUDXPZtNcjSJs6rCoZ/L9JwlNwIeBW21nt/aKmm
-         /9heRAVONWfdzNxBieAN+n+X1ZMcATsSrHPr9RWRzaxaPqtRnDFVmlLtqblVbSF3FF85
-         v1IB9rIE1190da4oAu9Fm0kBgI7BDYbdkC6d0skuTbPhtakfwmSFwNu+PFKf+9u6+eUN
-         f2Mp6jx7Lgmb27pefilaP+j76Rg1lVJ83ugi1iy9r45thTXx79ps8C8BUBQg+cXJweWq
-         RbA0toBNUmUJc4fZlXeZDRblbsMxqk3QvocD+7Ld5Z/sdgSC7pZxjyE51XSx8X2Gd7fF
-         axDA==
+        d=gmail.com; s=20230601; t=1703100763; x=1703705563; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KgECJk4lhBej3qZS9B7ni4XfhAqSDLyonY4YHrV/xFg=;
+        b=QN94mJiXnU9oZ6MutgyQAjAmXidZF9qZrAbQKItStM/k3AUuA2MT+mXUO8qoEQRd+D
+         Qsu9QuGRnnjqNq8jc7TqAWowE47mLe0XNFq28xqazHA49Giq70vIy25AkuM/Btvo2Cn1
+         +WDyZOuO142zDoKj/s17tR62h46KfTKtsRoGWUNKNexSWw3LUS4K37kqCBwufgBylsYD
+         leULrahys5PXsclLFMmcKzsJptRiDIq7RT6LfdMdTMq0qDveFXBVvg9mApMNoFHjwy1c
+         59E4/9HQk4FHNmpxW52+ALzCH/lthTSL3Jy4mnP+k84fmOWowIF/UcGKx7POYr/Abmsp
+         /2iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703068363; x=1703673163;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6qy0d4uW9Tfpch1YLxptDL8ZWZMP/oKYPuFpX1a7m+0=;
-        b=Y+hKMlIww/OE3AaofCc9Aeb7u9OaSf+AfQb1hCX6TnRBmbOj6xJDqh85C8SZl621Yd
-         Ak9YF9xmjKXN+2oLxgIg63EJPuxfvsvrbAcmexozDWa5qYG4aqHNvGQlsZVQxe3gVVwj
-         0lAnkcVTiS8+coexy5+KA4buOSqC2kSW3zOg8sHDP72ZsVmvKym/sbbhmkuPzkY6+Ycs
-         1jGe4s5Dy4jA3k+pU22DGmad/imw9hwT7FYivWnADQzE5rzbDmPDeXZ+o1Ir5gEE3ove
-         OwDFzrXpZeV6aVjrum2LYmMeSCgJvRtUOX0qqX8q3rR+FKi8aFqiRdK8lIYifaYGFR5Z
-         ZnBQ==
-X-Gm-Message-State: AOJu0Yy/R6VmEArLltx7pyR88wwBgoqFBORmqUfTMeXkzv2egrbiIsMH
-	0nnDaXj6+DmSa0tssBFdKf7BxQ==
-X-Google-Smtp-Source: AGHT+IG3vRsIdbId3XtjN90S5yQC8jhQpzlZFY47XoIGVto4O61H+dsbqYf7+22ndmjirqxpaLfsww==
-X-Received: by 2002:a05:600c:ccf:b0:40d:3795:dad6 with SMTP id fk15-20020a05600c0ccf00b0040d3795dad6mr321925wmb.158.1703068363184;
-        Wed, 20 Dec 2023 02:32:43 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id bh20-20020a05600c3d1400b0040d15dcb77asm6807335wmb.23.2023.12.20.02.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Dec 2023 02:32:42 -0800 (PST)
-Message-ID: <568fb108-4f8c-49ff-a5a8-bc6da1bf7b82@linaro.org>
-Date: Wed, 20 Dec 2023 11:32:40 +0100
+        d=1e100.net; s=20230601; t=1703100763; x=1703705563;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KgECJk4lhBej3qZS9B7ni4XfhAqSDLyonY4YHrV/xFg=;
+        b=Ge1a+mVfcYP0WEFOsi5/yW/IzY+DGyMmSIXDsyaMCPYoCpuVXlnf7ppisBkw4IHWeh
+         1nkefkvjouMI4Z5l0GuvuWhtT5EYpJiRsgNWbX+9rIeAUbt1+mfPnx9U3Tk9zJup/7AW
+         7HMlnKxT2zSPGUHxo2z/239wlXBSQD72T6XBsQOtddoPZE2X8/qpZQh5zCQhmIgxSIlG
+         +zhi5LBfQUZg1eCCCW1K2ZFumHSA5Wl+fH+FBhWmypb6LcjLr9oYHxvt9JHm9K+2f1ki
+         NQipfZeCWtjOkpR7z1l4pFlfhPpLap1C3khC7n2PCj96snrohUHVtmy9i5ieDFrlu8dZ
+         GXpw==
+X-Gm-Message-State: AOJu0Yxm6iK1M2YCCzF6T9Rh6KK+WegZWlaE12Z24UDa5FU9dNd8DWuy
+	Z7uYcXqBZXhL7R4+zwNmgEQ=
+X-Google-Smtp-Source: AGHT+IHofIfWTJH3TIUobS3OxNvKFHYyhLLuQsRumkDQZd6+UBZp48HA7hMkCItu50SBR2LTbgmftA==
+X-Received: by 2002:a17:903:298d:b0:1d3:a29e:cd6f with SMTP id lm13-20020a170903298d00b001d3a29ecd6fmr5672999plb.34.1703100762777;
+        Wed, 20 Dec 2023 11:32:42 -0800 (PST)
+Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170903234600b001d3d9be4d5bsm92280plh.88.2023.12.20.11.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Dec 2023 11:32:42 -0800 (PST)
+From: Doug Berger <opendmb@gmail.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: bcm-kernel-feedback-list@broadcom.com,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Doug Berger <opendmb@gmail.com>
+Subject: [PATCH] irqchip/irq-brcmstb-l2: add write memory barrier before exit
+Date: Wed, 20 Dec 2023 11:32:07 -0800
+Message-Id: <20231220193207.1089469-1-opendmb@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: reset: mobileye,eyeq5-reset: add
- bindings
-Content-Language: en-US
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20231218-mbly-reset-v1-0-b4688b916213@bootlin.com>
- <20231218-mbly-reset-v1-1-b4688b916213@bootlin.com>
- <c6d8c1f2-082d-43c1-8768-c0004d3fe386@linaro.org>
- <CXT1WVQ3YTND.ICHBOMMNR837@bootlin.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CXT1WVQ3YTND.ICHBOMMNR837@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 20/12/2023 10:25, Théo Lebrun wrote:
-> Hello,
-> 
-> Thanks for your comments. I have a question for one:
-> 
-> On Tue Dec 19, 2023 at 8:40 AM CET, Krzysztof Kozlowski wrote:
->> On 18/12/2023 18:16, Théo Lebrun wrote:
->>> Add DT-Schema bindings for the EyeQ5 reset controller.
->>>
->>> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->>> ---
->>>  .../bindings/reset/mobileye,eyeq5-reset.yaml       | 69 +++++++++++++++++++
->>>  MAINTAINERS                                        |  2 +
->>>  include/dt-bindings/reset/mobileye,eyeq5-reset.h   | 80 ++++++++++++++++++++++
->>>  3 files changed, 151 insertions(+)
->>>
-> 
-> [...]
-> 
->>> diff --git a/include/dt-bindings/reset/mobileye,eyeq5-reset.h b/include/dt-bindings/reset/mobileye,eyeq5-reset.h
->>> new file mode 100644
->>> index 000000000000..ce59fe5409ac
->>> --- /dev/null
->>> +++ b/include/dt-bindings/reset/mobileye,eyeq5-reset.h
->>> @@ -0,0 +1,80 @@
->>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->>> +/*
->>> + * Copyright (C) 2023 Mobileye Vision Technologies Ltd.
->>> + */
->>> +
->>> +#ifndef _DT_BINDINGS_RESET_MOBILEYE_EYEQ5_RESET_H
->>> +#define _DT_BINDINGS_RESET_MOBILEYE_EYEQ5_RESET_H
->>> +
->>> +/* Domain 0 */
->>> +
->>> +/* 0..2 are reserved */
->>
->> No, they are not. IDs cannot be reserved. IDs start from 0 and are
->> incremented by 1. Reserving an ID contradicts to entire point of that
->> ID, so either drop entire file or make this proper IDs.
-> 
-> Those are hardware IDs. I get what you mean is that they should not leak
+It was observed on Broadcom devices that use GIC v3 architecture
+L1 interrupt controllers as the parent of brcmstb-l2 interrupt
+controllers that the deactivation of the parent irq could happen
+before the brcmstb-l2 deasserted its output. This would lead the
+GIC to reactivate the irq only to find that no L2 interrupt was
+pending. The result was a spurious interrupt invoking the
+handle_bad_irq() with its associated messaging. While this did
+not create a functional problem it is a waste of cycles.
 
-There is no such thing as "hardware ID". It is some value passed to
-hardware/firmware or hardware register address/offset.
+The hazard exists because the memory mapped bus writes to the
+brcmstb-l2 registers are buffered and the GIC v3 architecture
+uses a very efficient system register write to deactivate the
+interrupt. This commit adds a write memory barrier prior to
+invoking chained_irq_exit() to introduce a dsb(st) on those
+systems to ensure the system register write cannot be executed
+until the memory mapped writes are visible to the system.
 
-There is no point to store hardware register values/offsets in the bindings.
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+---
+ drivers/irqchip/irq-brcmstb-l2.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> into bindings. That implies a mapping operation from bindings IDs to
-> understood-by-hardware IDs. Can you confirm this is what you expect?
-
-https://en.wikipedia.org/wiki/Language_binding
-Bindings is an abstraction layer, not hardware, therefore my expectation
-is not having some sort of register values or offsets in the binding.
-Drop the header from bindings.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/irqchip/irq-brcmstb-l2.c b/drivers/irqchip/irq-brcmstb-l2.c
+index 5559c943f03f..63aed60dd3f1 100644
+--- a/drivers/irqchip/irq-brcmstb-l2.c
++++ b/drivers/irqchip/irq-brcmstb-l2.c
+@@ -2,7 +2,7 @@
+ /*
+  * Generic Broadcom Set Top Box Level 2 Interrupt controller driver
+  *
+- * Copyright (C) 2014-2017 Broadcom
++ * Copyright (C) 2014-2023 Broadcom
+  */
+ 
+ #define pr_fmt(fmt)	KBUILD_MODNAME	": " fmt
+@@ -112,6 +112,9 @@ static void brcmstb_l2_intc_irq_handle(struct irq_desc *desc)
+ 		generic_handle_domain_irq(b->domain, irq);
+ 	} while (status);
+ out:
++	/* Don't ack parent before all device writes are done */
++	wmb();
++
+ 	chained_irq_exit(chip, desc);
+ }
+ 
+-- 
+2.34.1
 
 
