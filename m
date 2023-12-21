@@ -1,35 +1,37 @@
-Return-Path: <linux-mips+bounces-808-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-809-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D3DF81B6B6
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 13:59:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C49BB81B6BA
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 13:59:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2376BB20A7F
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 12:59:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 794DD282830
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 12:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A051078E6B;
-	Thu, 21 Dec 2023 12:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A217773489;
+	Thu, 21 Dec 2023 12:54:30 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80F078E69;
-	Thu, 21 Dec 2023 12:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1987319C;
+	Thu, 21 Dec 2023 12:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=alpha.franken.de
 Received: from hutton.arch.nue2.suse.org (unknown [10.168.144.140])
-	by smtp-out1.suse.de (Postfix) with ESMTP id F40F421E19;
-	Thu, 21 Dec 2023 12:54:04 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTP id 881EF21E29;
+	Thu, 21 Dec 2023 12:54:25 +0000 (UTC)
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] MIPS: Allow vectored interrupt handler to reside everywhere for 64bit
-Date: Thu, 21 Dec 2023 13:54:03 +0100
-Message-Id: <20231221125405.229100-1-tsbogend@alpha.franken.de>
+Subject: [PATCH 2/2] MIPS: Remove unused shadow GPR support from vector irq setup
+Date: Thu, 21 Dec 2023 13:54:04 +0100
+Message-Id: <20231221125405.229100-2-tsbogend@alpha.franken.de>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20231221125405.229100-1-tsbogend@alpha.franken.de>
+References: <20231221125405.229100-1-tsbogend@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,87 +59,154 @@ Authentication-Results: smtp-out1.suse.de;
 X-Spam-Level: ****
 X-Spam-Flag: NO
 
-Setting up vector interrupts worked only with handlers, which resided
-in CKSEG0 space. This limits the kernel placement for 64bit platforms.
-By patching in the offset into vi_handlers[] instead of the full
-handler address, the vectored exception handler can load the
-address by itself and jump to it.
+Using shadow GPRs for vectored interrupts has never been used,
+time to remove it.
 
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- arch/mips/kernel/genex.S | 8 ++++----
- arch/mips/kernel/traps.c | 9 +++------
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ arch/mips/kernel/traps.c | 94 +++++++++++++---------------------------
+ 1 file changed, 30 insertions(+), 64 deletions(-)
 
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index b6de8e88c1bd..a572ce36a24f 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -272,18 +272,17 @@ NESTED(except_vec_vi, 0, sp)
- 	.set	push
- 	.set	noreorder
- 	PTR_LA	v1, except_vec_vi_handler
--FEXPORT(except_vec_vi_lui)
--	lui	v0, 0		/* Patched */
- 	jr	v1
- FEXPORT(except_vec_vi_ori)
--	 ori	v0, 0		/* Patched */
-+	 ori	v0, zero, 0		/* Offset in vi_handlers[] */
- 	.set	pop
- 	END(except_vec_vi)
- EXPORT(except_vec_vi_end)
- 
- /*
-  * Common Vectored Interrupt code
-- * Complete the register saves and invoke the handler which is passed in $v0
-+ * Complete the register saves and invoke the handler, $v0 holds
-+ * offset into vi_handlers[]
-  */
- NESTED(except_vec_vi_handler, 0, sp)
- 	SAVE_TEMP
-@@ -331,6 +330,7 @@ NESTED(except_vec_vi_handler, 0, sp)
- 	/* Save task's sp on IRQ stack so that unwinding can follow it */
- 	LONG_S	s1, 0(sp)
- 2:
-+	PTR_L	v0, vi_handlers(v0)
- 	jalr	v0
- 
- 	/* Restore sp */
 diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 246c6a6b0261..d90b18908692 100644
+index d90b18908692..c1b2b18b0505 100644
 --- a/arch/mips/kernel/traps.c
 +++ b/arch/mips/kernel/traps.c
-@@ -2091,16 +2091,14 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
- 		 * If no shadow set is selected then use the default handler
- 		 * that does normal register saving and standard interrupt exit
- 		 */
--		extern const u8 except_vec_vi[], except_vec_vi_lui[];
-+		extern const u8 except_vec_vi[];
- 		extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
- 		extern const u8 rollback_except_vec_vi[];
- 		const u8 *vec_start = using_rollback_handler() ?
- 				      rollback_except_vec_vi : except_vec_vi;
- #if defined(CONFIG_CPU_MICROMIPS) || defined(CONFIG_CPU_BIG_ENDIAN)
--		const int lui_offset = except_vec_vi_lui - vec_start + 2;
- 		const int ori_offset = except_vec_vi_ori - vec_start + 2;
- #else
--		const int lui_offset = except_vec_vi_lui - vec_start;
- 		const int ori_offset = except_vec_vi_ori - vec_start;
- #endif
- 		const int handler_len = except_vec_vi_end - vec_start;
-@@ -2119,10 +2117,9 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
- #else
- 				handler_len);
- #endif
--		h = (u16 *)(b + lui_offset);
--		*h = (handler >> 16) & 0xffff;
-+		/* insert offset into vi_handlers[] */
- 		h = (u16 *)(b + ori_offset);
--		*h = (handler & 0xffff);
-+		*h = n * sizeof(handler);
- 		local_flush_icache_range((unsigned long)b,
- 					 (unsigned long)(b+handler_len));
+@@ -2055,105 +2055,71 @@ static void do_default_vi(void)
+ 	panic("Caught unexpected vectored interrupt.");
+ }
+ 
+-static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
++void *set_vi_handler(int n, vi_handler_t addr)
+ {
++	extern const u8 except_vec_vi[];
++	extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
++	extern const u8 rollback_except_vec_vi[];
+ 	unsigned long handler;
+ 	unsigned long old_handler = vi_handlers[n];
+ 	int srssets = current_cpu_data.srsets;
+ 	u16 *h;
+ 	unsigned char *b;
++	const u8 *vec_start;
++	int ori_offset;
++	int handler_len;
+ 
+ 	BUG_ON(!cpu_has_veic && !cpu_has_vint);
+ 
+ 	if (addr == NULL) {
+ 		handler = (unsigned long) do_default_vi;
+-		srs = 0;
+ 	} else
+ 		handler = (unsigned long) addr;
+ 	vi_handlers[n] = handler;
+ 
+ 	b = (unsigned char *)(ebase + 0x200 + n*VECTORSPACING);
+ 
+-	if (srs >= srssets)
+-		panic("Shadow register set %d not supported", srs);
+-
+ 	if (cpu_has_veic) {
+ 		if (board_bind_eic_interrupt)
+-			board_bind_eic_interrupt(n, srs);
++			board_bind_eic_interrupt(n, 0);
+ 	} else if (cpu_has_vint) {
+ 		/* SRSMap is only defined if shadow sets are implemented */
+ 		if (srssets > 1)
+-			change_c0_srsmap(0xf << n*4, srs << n*4);
++			change_c0_srsmap(0xf << n*4, 0 << n*4);
  	}
+ 
+-	if (srs == 0) {
+-		/*
+-		 * If no shadow set is selected then use the default handler
+-		 * that does normal register saving and standard interrupt exit
+-		 */
+-		extern const u8 except_vec_vi[];
+-		extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
+-		extern const u8 rollback_except_vec_vi[];
+-		const u8 *vec_start = using_rollback_handler() ?
+-				      rollback_except_vec_vi : except_vec_vi;
++	vec_start = using_rollback_handler() ? rollback_except_vec_vi :
++					       except_vec_vi;
+ #if defined(CONFIG_CPU_MICROMIPS) || defined(CONFIG_CPU_BIG_ENDIAN)
+-		const int ori_offset = except_vec_vi_ori - vec_start + 2;
++	ori_offset = except_vec_vi_ori - vec_start + 2;
+ #else
+-		const int ori_offset = except_vec_vi_ori - vec_start;
++	ori_offset = except_vec_vi_ori - vec_start;
+ #endif
+-		const int handler_len = except_vec_vi_end - vec_start;
++	handler_len = except_vec_vi_end - vec_start;
+ 
+-		if (handler_len > VECTORSPACING) {
+-			/*
+-			 * Sigh... panicing won't help as the console
+-			 * is probably not configured :(
+-			 */
+-			panic("VECTORSPACING too small");
+-		}
+-
+-		set_handler(((unsigned long)b - ebase), vec_start,
+-#ifdef CONFIG_CPU_MICROMIPS
+-				(handler_len - 1));
+-#else
+-				handler_len);
+-#endif
+-		/* insert offset into vi_handlers[] */
+-		h = (u16 *)(b + ori_offset);
+-		*h = n * sizeof(handler);
+-		local_flush_icache_range((unsigned long)b,
+-					 (unsigned long)(b+handler_len));
+-	}
+-	else {
++	if (handler_len > VECTORSPACING) {
+ 		/*
+-		 * In other cases jump directly to the interrupt handler. It
+-		 * is the handler's responsibility to save registers if required
+-		 * (eg hi/lo) and return from the exception using "eret".
++		 * Sigh... panicing won't help as the console
++		 * is probably not configured :(
+ 		 */
+-		u32 insn;
+-
+-		h = (u16 *)b;
+-		/* j handler */
+-#ifdef CONFIG_CPU_MICROMIPS
+-		insn = 0xd4000000 | (((u32)handler & 0x07ffffff) >> 1);
+-#else
+-		insn = 0x08000000 | (((u32)handler & 0x0fffffff) >> 2);
+-#endif
+-		h[0] = (insn >> 16) & 0xffff;
+-		h[1] = insn & 0xffff;
+-		h[2] = 0;
+-		h[3] = 0;
+-		local_flush_icache_range((unsigned long)b,
+-					 (unsigned long)(b+8));
++		panic("VECTORSPACING too small");
+ 	}
+ 
++	set_handler(((unsigned long)b - ebase), vec_start,
++#ifdef CONFIG_CPU_MICROMIPS
++			(handler_len - 1));
++#else
++			handler_len);
++#endif
++	/* insert offset into vi_handlers[] */
++	h = (u16 *)(b + ori_offset);
++	*h = n * sizeof(handler);
++	local_flush_icache_range((unsigned long)b,
++				 (unsigned long)(b+handler_len));
++
+ 	return (void *)old_handler;
+ }
+ 
+-void *set_vi_handler(int n, vi_handler_t addr)
+-{
+-	return set_vi_srs_handler(n, addr, 0);
+-}
+-
+ extern void tlb_init(void);
+ 
+ /*
 -- 
 2.35.3
 
