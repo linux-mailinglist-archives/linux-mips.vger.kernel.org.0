@@ -1,154 +1,93 @@
-Return-Path: <linux-mips+bounces-813-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-812-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A488681B9F7
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 15:56:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C97F81B9F4
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 15:56:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 431101F24566
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 14:56:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED2C7288ACB
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 14:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 325D3360B1;
-	Thu, 21 Dec 2023 14:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A14B482EA;
+	Thu, 21 Dec 2023 14:56:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07753360AE;
-	Thu, 21 Dec 2023 14:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD17360B4;
+	Thu, 21 Dec 2023 14:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rGKSq-0002PT-00; Thu, 21 Dec 2023 15:55:56 +0100
+	id 1rGKSr-0002PV-00; Thu, 21 Dec 2023 15:55:57 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id F34F9C028A; Thu, 21 Dec 2023 15:38:01 +0100 (CET)
-Date: Thu, 21 Dec 2023 15:38:01 +0100
+	id AD3D4C0A2B; Thu, 21 Dec 2023 15:38:20 +0100 (CET)
+Date: Thu, 21 Dec 2023 15:38:20 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
-	Aleksandar Rikalo <arikalo@gmail.com>,
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Baoquan He <bhe@redhat.com>, Chao-ying Fu <cfu@wavecomp.com>,
-	Yinglu Yang <yangyinglu@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Mike Rapoport <rppt@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>, Marc Zyngier <maz@kernel.org>,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] MIPS: mm: Fix some memory-related issues
-Message-ID: <ZYRNyX+SnNh3LkC0@alpha.franken.de>
-References: <20231202111430.18059-1-fancer.lancer@gmail.com>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>
+Subject: Re: [PATCH v5 01/22] MIPS: compressed: Use correct instruction for
+ 64 bit code
+Message-ID: <ZYRN3FMH4od3QX+i@alpha.franken.de>
+References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
+ <20231212163459.1923041-2-gregory.clement@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20231202111430.18059-1-fancer.lancer@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231212163459.1923041-2-gregory.clement@bootlin.com>
 
-On Sat, Dec 02, 2023 at 02:14:17PM +0300, Serge Semin wrote:
-> Just recently I've rebased my MIPS32-related work from kernel 6.5-rc4 onto
-> the latest kernel 6.7-rc1 and immediately got into a bootup-time
-> mm-related bug (see patches 3-4 in this series). After fixing it I decided
-> it was time to submit for review the generic MIPS code fixes which I have
-> been collecting in my local repo for the last year. I was going to submit
-> them a bit later after I finished working on a patchset with my SoC
-> arch-specific changes, but since it was getting bigger and bigger, it
-> turned to be reasonable to spill out the generic part of series right away
-> especially seeing it might get to be useful in the most recent kernel.
+On Tue, Dec 12, 2023 at 05:34:33PM +0100, Gregory CLEMENT wrote:
+> The code clearing BSS already use macro or use correct instruction
+> depending if the CPU is 32 bits or 64 bits. However, a few
+> instructions remained 32 bits only.
 > 
-> So this series starts with the MIPS-specific dmi_early_remap()
-> implementation fix. It is utilized by the DMI driver in the framework of
-> the dmi_setup() method, which is called at the very early boot stage - in
-> setup_arch((). No VM and slab available at that stage which is required
-> for the ioremap_cache() to properly work. Thus it was a mistake to have
-> the dmi_early_remap() macro-function defined as ioremap_cache(). It should
-> have been ioremap() in first place.
+> By using the accurate MACRO, it is now possible to deal with memory
+> address beyond 32 bits. As a side effect, when using 64bits processor,
+> it also divides the loop number needed to clear the BSS by 2.
 > 
-> After that goes a fix for the high-memory zone PFNs calculation procedure
-> on MIPS. It turned out that after some not that recent commit the
-> IO-memory or just non-memory PFNs got to the high-memory even though they
-> were directly reachable, thus should have been left in the normal zone.
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  arch/mips/boot/compressed/head.S | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Then a series of fixes for the recently discovered mm-bug is presented.
-> Any attempt to re-map the IO-memory with the cached attribute caused the
-> bootup procedure to crash with the "Unhandled kernel unaligned access"
-> message. After some digging I found out that the problem was in the
-> uninitialized IO-memory pages. Please see the patch "mips: Fix max_mapnr
-> being uninitialized on early stages" description for the detailed
-> explanation of the problem and suggested fix.
-> 
-> After that goes a patch which adds the slab availability check into the
-> ioremap_prot() method. Indeed VM mapping performs the slab allocation in
-> the framework of the get_vm_area() method. Thus any other than uncached
-> IO-remappings must be proceeded only at the stages when slab is available.
-> A similar fix was just recently added to the generic version of
-> ioremap_prot() in the framework of commit a5f616483110 ("mm/ioremap: add
-> slab availability checking in ioremap_prot").
-> 
-> The patchset is closed with a small improvement which sets the MIPS
-> board/machine name to the dump-stack module in order to print
-> arch-personalized oopses in the same way as it's done on ARM, ARM64,
-> RISC-V, etc.
-> 
-> That's it for today.) Thanks for review in advance. Any tests are very
-> welcome.
-> 
-> Link: https://lore.kernel.org/linux-mips/20231122182419.30633-1-fancer.lancer@gmail.com/
-> Changelog v2:
-> - Drop the patches:
->   [PATCH 5/7] mm/mm_init.c: Extend init unavailable range doc info
->   [PATCH 6/7] mm/mm_init.c: Append '\n' to the unavailable ranges log-message
->   since they have been picked up by Andrew. (@Andrew)
-> - Replace ioremap_uc() with using ioremap() due to having the former one
->   deprecated. (@Arnd)
-> - Add a new patch:
->   [PATCH v2 5/6] mips: mm: add slab availability checking in ioremap_prot
->   picked up from the generic ioremap_prot() implementation.
-> - Extend early DMI mem remapping patch log with a note regarding the unsynched
->   caches concern. (@Jiaxun)
-> 
-> Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
-> Cc: Aleksandar Rikalo <arikalo@gmail.com>
-> Cc: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Baoquan He <bhe@redhat.com>
-> Cc: Chao-ying Fu <cfu@wavecomp.com>
-> Cc: Yinglu Yang <yangyinglu@loongson.cn>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (6):
->   mips: dmi: Fix early remap on MIPS32
->   mips: Fix incorrect max_low_pfn adjustment
->   mips: Fix max_mapnr being uninitialized on early stages
->   mips: Optimize max_mapnr init procedure
->   mips: mm: add slab availability checking in ioremap_prot
->   mips: Set dump-stack arch description
-> 
->  arch/mips/include/asm/dmi.h |  2 +-
->  arch/mips/kernel/prom.c     |  2 ++
->  arch/mips/kernel/setup.c    |  4 ++--
->  arch/mips/mm/init.c         | 16 +++++++++-------
->  arch/mips/mm/ioremap.c      |  4 ++++
->  5 files changed, 18 insertions(+), 10 deletions(-)
+> diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
+> index 5795d0af1e1b2..d237a834b85ee 100644
+> --- a/arch/mips/boot/compressed/head.S
+> +++ b/arch/mips/boot/compressed/head.S
+> @@ -25,8 +25,8 @@
+>  	/* Clear BSS */
+>  	PTR_LA	a0, _edata
+>  	PTR_LA	a2, _end
+> -1:	sw	zero, 0(a0)
+> -	addiu	a0, a0, 4
+> +1:	PTR_S	zero, 0(a0)
+> +	PTR_ADDIU a0, a0, PTRSIZE
+>  	bne	a2, a0, 1b
+>  
+>  	PTR_LA	a0, (.heap)	     /* heap address */
+> -- 
+> 2.42.0
 
-series applied to mips-next.
+applied to mips-next.
 
 Thomas.
 
