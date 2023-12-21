@@ -1,28 +1,28 @@
-Return-Path: <linux-mips+bounces-812-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-810-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C97F81B9F4
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 15:56:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEFAE81B9EE
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 15:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED2C7288ACB
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 14:56:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BAC11F23DB3
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 14:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A14B482EA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A608360B3;
 	Thu, 21 Dec 2023 14:56:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD17360B4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B7F360AF;
 	Thu, 21 Dec 2023 14:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rGKSr-0002PV-00; Thu, 21 Dec 2023 15:55:57 +0100
+	id 1rGKSr-0002PX-00; Thu, 21 Dec 2023 15:55:57 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id AD3D4C0A2B; Thu, 21 Dec 2023 15:38:20 +0100 (CET)
-Date: Thu, 21 Dec 2023 15:38:20 +0100
+	id 27AA2C0A1E; Thu, 21 Dec 2023 15:40:08 +0100 (CET)
+Date: Thu, 21 Dec 2023 15:40:08 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>
 Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
@@ -34,60 +34,33 @@ Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: Re: [PATCH v5 01/22] MIPS: compressed: Use correct instruction for
- 64 bit code
-Message-ID: <ZYRN3FMH4od3QX+i@alpha.franken.de>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 00/22] Add support for the Mobileye EyeQ5 SoC
+Message-ID: <ZYROSGUGk7h8conA@alpha.franken.de>
 References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
- <20231212163459.1923041-2-gregory.clement@bootlin.com>
+ <878r5vctdg.fsf@BL-laptop>
+ <ZYNhbQjMbAH6I0kI@alpha.franken.de>
+ <87frzwasxo.fsf@BL-laptop>
+ <87cyuzc3zi.fsf@BL-laptop>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231212163459.1923041-2-gregory.clement@bootlin.com>
+In-Reply-To: <87cyuzc3zi.fsf@BL-laptop>
 
-On Tue, Dec 12, 2023 at 05:34:33PM +0100, Gregory CLEMENT wrote:
-> The code clearing BSS already use macro or use correct instruction
-> depending if the CPU is 32 bits or 64 bits. However, a few
-> instructions remained 32 bits only.
+On Thu, Dec 21, 2023 at 10:13:53AM +0100, Gregory CLEMENT wrote:
+> > However, while waiting for your feedback on Jiaxun's part, I will
+> > attempt to add a new platform to assess exactly what the implications
+> > are.
 > 
-> By using the accurate MACRO, it is now possible to deal with memory
-> address beyond 32 bits. As a side effect, when using 64bits processor,
-> it also divides the loop number needed to clear the BSS by 2.
-> 
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  arch/mips/boot/compressed/head.S | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
-> index 5795d0af1e1b2..d237a834b85ee 100644
-> --- a/arch/mips/boot/compressed/head.S
-> +++ b/arch/mips/boot/compressed/head.S
-> @@ -25,8 +25,8 @@
->  	/* Clear BSS */
->  	PTR_LA	a0, _edata
->  	PTR_LA	a2, _end
-> -1:	sw	zero, 0(a0)
-> -	addiu	a0, a0, 4
-> +1:	PTR_S	zero, 0(a0)
-> +	PTR_ADDIU a0, a0, PTRSIZE
->  	bne	a2, a0, 1b
->  
->  	PTR_LA	a0, (.heap)	     /* heap address */
-> -- 
-> 2.42.0
+> Is it possible for you to apply the first patch of this series, which is
+> only a fix?
 
-applied to mips-next.
+I had this already in my mind and done it just a few minutes ago.
 
 Thomas.
 
