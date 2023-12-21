@@ -1,234 +1,125 @@
-Return-Path: <linux-mips+bounces-805-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-806-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1823881B1B6
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 10:10:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BC8F81B223
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 10:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CFCC1C20D88
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 09:10:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A65111C24113
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 09:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC5BC20DFD;
-	Thu, 21 Dec 2023 09:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C5F4C3D6;
+	Thu, 21 Dec 2023 09:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e1Q8ENqa"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OfzQ+ypJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00F64A995;
-	Thu, 21 Dec 2023 09:02:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7F4C433C8;
-	Thu, 21 Dec 2023 09:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703149377;
-	bh=p5dHoof6CpVRm8H51oSiaRXPqfim6y17RnxB7xY56tk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e1Q8ENqaz4vYwDVkG3agH8Y4nWY+t+vf+dRK4CWAox6pMkmw0lE5CiewwHUcSFbp4
-	 RkWIsVyItgSe8hLDbVe7XR+8+z2jsXtz39K9l++LNfCrEsMCoGDX4J/MON0Esni2Wq
-	 iqrEvVOXEmgR6BzB7qFtyB6TBQUBqZsN45F0aj+iNwKZJOMYPXJ+ALJKqxfvUPDBQl
-	 rhlhXxneBAsPHxzhYuLmXAXUstbegLTSelvwcYG7NV5MOIsYEKj9nW+wOHWTOrkTWg
-	 ptmFIbWZj+VriBf6p9Woko7ugLT2AK5cwSkli+QHtfdeHxaYVqcZc5AQiBUtk0h6/e
-	 /8F23EhrD4POQ==
-Date: Thu, 21 Dec 2023 10:02:54 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Andrew Davis <afd@ti.com>
-Cc: "H. Nikolaus Schaller" <hns@goldelico.com>, 
-	Frank Binns <frank.binns@imgtec.com>, Donald Robson <donald.robson@imgtec.com>, 
-	Matt Coster <matt.coster@imgtec.com>, Adam Ford <aford173@gmail.com>, 
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>, Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH RFC 01/10] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
-Message-ID: <3dggaesvunebogkqvclz4imruhynrftkhsvmndm75vfccqwpa6@3zp3dgzpzta6>
-References: <B3A1B8A7-0363-4ECB-AFBF-576FECA569FA@goldelico.com>
- <vawv2mwhonuyvgmp7uox4rfgdcjwg5fa7hmbcfgl3wiase6e4p@tyavpclppfvu>
- <6BC60156-89E2-4734-BD00-B49A9A6C1D7A@goldelico.com>
- <6gpehpoz54f5lxhmvirqbfwmq7dpgiroy27cljpvu66wtn7aqy@lgrh7wysyxnp>
- <D8AB6CC4-DCA5-40DD-A311-94A16FF59254@goldelico.com>
- <oobcl2kfsuph27er7rflfqvt3lu6athufomxv5chf3uctx4emh@x6rzjtlskhbf>
- <F58855EC-D87D-4747-A363-0E7AA5DB1AEC@goldelico.com>
- <22cny5aumc5wafsrjd3j55zcjbjf2viip64kfbjiqis2grtd6t@wg5dxeuzil6l>
- <3E03E913-48E1-49EC-A6C9-EAC1612E65E7@goldelico.com>
- <a3feaf42-17fb-46e5-bbb0-3ffc4ad40bfd@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCEF4C3DD;
+	Thu, 21 Dec 2023 09:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D18CB60005;
+	Thu, 21 Dec 2023 09:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1703150034;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wHNg0+IPAbNxP2IwWFqfBhWUeZ9oQWypKm/SCO/8EJo=;
+	b=OfzQ+ypJt2+Ay8YJbRhwHqyhv7uq4kuuvyHx6hjUc2/VSJyTKS4Dy+t6AmTtUHva92dnpI
+	yn0KQyk0tBbOipnmbLwVRnGmmKlsIH5qJzAI4qOLwt8J815Y+icUTnOYGWJetMw52bsVI0
+	KmZM8dbdxjMhmrKS9+2+WGJqGDuYG4J/mrjAv7dkSzg0yksW0JTloyzXCahc68NdfJNfeV
+	bRYAlgqYRp4pvUEHcA87OI3J7NzXl4+7OVBSzhJVRxblO9+vTHfp/3T0tNRH+5h/DHdYR2
+	Tus15f+qcHrC//oAMXrc37KAZ2qjr9FgJlt2ZcBftfaRV82bK89yjvZBeomxvw==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org, Jiaxun
+ Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Vladimir
+ Kondratiev <vladimir.kondratiev@mobileye.com>, Tawfik Bayouk
+ <tawfik.bayouk@mobileye.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 00/22] Add support for the Mobileye EyeQ5 SoC
+In-Reply-To: <87frzwasxo.fsf@BL-laptop>
+References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
+ <878r5vctdg.fsf@BL-laptop> <ZYNhbQjMbAH6I0kI@alpha.franken.de>
+ <87frzwasxo.fsf@BL-laptop>
+Date: Thu, 21 Dec 2023 10:13:53 +0100
+Message-ID: <87cyuzc3zi.fsf@BL-laptop>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xdjqplvcfzg6bqbd"
-Content-Disposition: inline
-In-Reply-To: <a3feaf42-17fb-46e5-bbb0-3ffc4ad40bfd@ti.com>
+Content-Type: text/plain
+X-GND-Sasl: gregory.clement@bootlin.com
 
+Gregory CLEMENT <gregory.clement@bootlin.com> writes:
 
---xdjqplvcfzg6bqbd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
 
-On Tue, Dec 19, 2023 at 11:19:49AM -0600, Andrew Davis wrote:
-> On 12/18/23 4:54 AM, H. Nikolaus Schaller wrote:
-> >=20
-> >=20
-> > > Am 18.12.2023 um 11:14 schrieb Maxime Ripard <mripard@kernel.org>:
-> > >=20
-> > > On Mon, Dec 18, 2023 at 10:28:09AM +0100, H. Nikolaus Schaller wrote:
-> > > > Hi Maxime,
-> > > >=20
-> > > > > Am 15.12.2023 um 14:33 schrieb Maxime Ripard <mripard@kernel.org>:
-> > > > >=20
-> > > > > > >=20
-> > > > > > > It's for a separate architecture, with a separate driver, mai=
-ntained out
-> > > > > > > of tree by a separate community, with a separate set of requi=
-rements as
-> > > > > > > evidenced by the other thread. And that's all fine in itself,=
- but
-> > > > > > > there's very little reason to put these two bindings in the s=
-ame file.
-> > > > > > >=20
-> > > > > > > We could also turn this around, why is it important that it's=
- in the
-> > > > > > > same file?
-> > > > > >=20
-> > > > > > Same vendor. And enough similarity in architectures, even a log=
-ical sequence
-> > > > > > of development of versions (SGX =3D Version 5, Rogue =3D Versio=
-n 6+) behind.
-> > > > > > (SGX and Rogue seem to be just trade names for their architectu=
-re development).
-> > > > >=20
-> > > > > Again, none of that matters for *where* the binding is stored.
-> > > >=20
-> > > > So what then speaks against extending the existing bindings file as=
- proposed
-> > > > here?
-> > >=20
-> > > I mean, apart from everything you quoted, then sure, nothing speaks
-> > > against it.
-> > >=20
-> > > > > > AFAIK bindings should describe hardware and not communities or =
-drivers
-> > > > > > or who is currently maintaining it. The latter can change, the =
-first not.
-> > > > >=20
-> > > > > Bindings are supposed to describe hardware indeed. Nothing was ev=
-er said
-> > > > > about where those bindings are supposed to be located.
-> > > > >=20
-> > > > > There's hundreds of other YAML bindings describing devices of the=
- same
-> > > > > vendors and different devices from the same generation.
-> > > >=20
-> > > > Usually SoC seem to be split over multiple files by subsystem. Not =
-by versions
-> > > > or generations. If the subsystems are similar enough they share the=
- same bindings
-> > > > doc instead of having one for each generation duplicating a lot of =
-code.
-> > > >=20
-> > > > Here is a comparable example that combines multiple vendors and gen=
-erations:
-> > > >=20
-> > > > Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> > >=20
-> > > EHCI is a single interface for USB2.0 controllers. It's a standard AP=
-I,
-> > > and is made of a single driver that requires minor modifications to d=
-eal
-> > > with multiple devices.
-> > >=20
-> > > We're very far from the same situation here.
-> >=20
-> > How far are we really? And, it is the purpose of the driver to handle d=
-ifferent cases.
-> >=20
-> > That there are currently two drivers is just a matter of history and no=
-t a necessity.
-> >=20
-> > >=20
-> > > > > If anything it'll make it easier for you. I'm really not sure why=
- it is
-> > > > > controversial and you're fighting this so hard.
-> > > >=20
-> > > > Well, you made it controversial by proposing to split what IMHO bel=
-ongs together.
-> > >=20
-> > > No, reviews aren't controversial.
-> > > The controversy started when you chose
-> > > to oppose it while you could have just rolled with it.
-> >=20
-> > Well, you asked
-> >=20
-> > "I think it would be best to have a separate file for this, img,sgx.yaml
-> > maybe?"
-> >=20
-> > and
-> >=20
-> > "Because it's more convenient?"
-> >=20
-> > I understood that as an invitation for discussing the pros and cons and=
- working out the
-> > most convenient solution. And that involves playing the devil's advocat=
-e which of course
-> > is controversial by principle.
-> >=20
-> > Now, IMHO all the pros and cons are on the table and the question is wh=
-o makes a decision
-> > how to go.
-> >=20
->=20
-> As much as I would land on the side of same file for both, the answer to =
-this question
-> is simple: the maintainer makes the decision :) So I'll respin with separ=
-ate binding files.
+>>> 
+>>> A few weeks ago, you were concerned about the introduction of the
+>>> specific kconfig CONFIG_USE_XKPHYS to support EyeQ5, and you wanted us
+>>> to set up a new platform instead. Since then, Jiaxun proposed a series
+>>> that was merged here to provide more generic support.
+>>
+>> well, there is more to improve and stuff I don't like in Jaixun series.
+>> For example misusing CONFIG_PHYSICAL_START to force a load address via config
+>> (IMHO it's already a hack for CRASH_DUMP).
+>>
+>> As there is your series and Jiaxun series, where should I comment more
+>> detailed ?
 >
-> The hidden unaddressed issue here is that by making these bindings separa=
-te it implies
-> they are not on equal footing (i.e. pre-series6 GPUs are not true "powerv=
-r" and so do not
-> belong in img,powervr.yaml).
+> I think you could start on Jiaxun series but the one merged in my
+> series, because I already had a few fixes for it.
 
-No, not really. As far as I'm concerned, the only unequal footing here
-is that one driver is in-tree and the other isn't, but this situation
-was handled nicely for Mali GPUs and lima that used to be in the same
-situation for example.
+This sentence was not very clear, let me rephrase it: I recommend
+starting the review with Jiaxun's series, specifically examining the
+code that has been incorporated into my series. This is important as I
+have already made several modifications to his original code
 
-The situation is simple, really: bindings are supposed to be backward
-compatible, period. If we ever make a change to that binding that isn't,
-you will be well within your right to complain because your driver is
-now broken.
 
-> So if no one objects I'd also like to do the rename of that
-> file as suggested before and have:
->=20
-> img,powervr-sgx.yaml
-> img,powervr-rogue.yaml
+>>
+>>> I had other issues in the initial series, and I think that now I've
+>>> fixed all of them. So, I would like to know what your opinion is now
+>>> about this series.
+>>> 
+>>> Will you accept it, or do you still think that a new platform has to be
+>>> set up?
+>>
+>> things have improved, but I'm still in favor to use a new platform.
+>> And my main point stays. A "generic" kernel compiled for EyeQ5 will
+>> just run on that platform, which doesn't sound generic to me.
+>
+> I do not oppose the addition of a new platform, even though, like
+> Jiaxun, I would prefer to avoid duplicating code. The only thing
+> preventing the use of the same kernel for EyeQ5 and other platforms is
+> the starting address. Therefore, if it were possible to have a
+> relocatable kernel, this issue would disappear.
+>
+> However, while waiting for your feedback on Jiaxun's part, I will
+> attempt to add a new platform to assess exactly what the implications
+> are.
 
-Sounds good to me.
+Is it possible for you to apply the first patch of this series, which is
+only a fix? This would enable me to have a slightly shorter
+series. Additionally, it would facilitate dividing the entire series
+into two parts: the first part for XKPHYS support and the second part
+for EyeQ5 support.
 
-Maxime
+Gregory
 
---xdjqplvcfzg6bqbd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZYP/PgAKCRDj7w1vZxhR
-xecAAQCmVXhaAl7fZ7g76z9w82Bf0j4pTMmQspV3lIhk356FHgEA/xGS5jxCtd+G
-824sqakZ7+v2m4QT6HsRgxUigbfQcQ8=
-=eukR
------END PGP SIGNATURE-----
-
---xdjqplvcfzg6bqbd--
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
 
